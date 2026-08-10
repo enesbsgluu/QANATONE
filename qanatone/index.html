@@ -4457,7 +4457,7 @@ a.ktcard:hover{background:#131317}
         </a>
         <div class="ktcard" data-i="1">
           <span class="ktnum">02</span>
-          <h3 data-t="kt6">Görünürlük</h3>
+          <h3 data-t="kt6">Kanal</h3>
           <span class="ktq" data-t="kt7">O talebin önüne nasıl çıkılır?</span>
           <p data-t="kt8">Arayan da arayamayan da bulunur. Arama sonucunda, yapay zekâ yanıtında, akışta — talebin geçtiği her yerde.</p>
           <span class="ktsvc"><a href="/hizmetler/seo" data-sd="seo">SEO</a><a href="/hizmetler/geo" data-sd="geo">GEO</a><a href="/hizmetler/google-ads" data-sd="google-ads">Google Ads</a><a href="/hizmetler/meta-ads" data-sd="meta-ads">Meta Ads</a></span>
@@ -6207,7 +6207,7 @@ kt2:'Agencies sell you a menu and leave you to work out which item you need. We 
 kt3:'Data',
 kt4:'Where is the demand?',
 kt5:'Sector ratios, customs and market data, your own numbers. Which market, which month, which price band — with data, not instinct.',
-kt6:'Visibility',
+kt6:'Channel',
 kt7:'How do you get in front of it?',
 kt8:'Both the searcher and the one who never searched. In results, in AI answers, in the feed — wherever demand passes.',
 kt9:'Surface',
@@ -8433,7 +8433,12 @@ function renderAll(){
        kalıyordu (yalnız sektör seçilince yeniden kuruluyordu). */
     if(window.__flowBuild)guvenli(()=>window.__flowBuild(
       SEC.active?(C.sectors||[]).find(x=>x.k===SEC.active)||null:null),'akis motoru');
-    if(window.__flowWire)setTimeout(window.__flowWire,120); };
+    if(window.__flowWire)setTimeout(window.__flowWire,120);
+    /* heavy, dil geçidinden SONRA (idle) koşabiliyor ve vitrini TR
+       href'lerle yeniden basıyor — geçit burada bir daha koşmazsa EN
+       sayfada TR bağlantı kalıyor (2026-08, /en/projeler'de 7 bağlantı
+       yakalandı; kural 'EN sayfalar EN'e bağlanıyor' düşürdü). İdempotent. */
+    guvenli(baglantilariDilleUyumla,'baglanti dili (heavy)'); };
   if(onHome)idle(heavy,{timeout:1400}); else heavy();
   if(window.__tstRender)guvenli(window.__tstRender,'musteri sozleri');
   guvenli(baglantilariDilleUyumla,'baglanti dili');
@@ -11343,6 +11348,6 @@ async function kabugu_tamamla(){
   window.__contentReady=true;
 })();
 </script>
-<script>window.__QBUILD='128';console.log('QANATONE build',window.__QBUILD)</script>
+<script>window.__QBUILD='130';console.log('QANATONE build',window.__QBUILD)</script>
 </body>
 </html>

@@ -1,14 +1,14 @@
-# DEVİR — QANATONE build 128
+# DEVİR — QANATONE build 130
 
 > **Bu dosyayı ÜRETEÇ yazdı** (`build.js`, her derlemede). Elle
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-10 21:27 UTC
+> Üretim tarihi: 2026-08-10 21:48 UTC
 
 ## Yeni sohbete geçerken
 
-1. Bu dosyayı ve `qanatone-build128-YAYIN.zip` paketini ver.
+1. Bu dosyayı ve `qanatone-build130-YAYIN.zip` paketini ver.
 2. Paket **tam** — aşağıdaki dosya listesi neyin içinde olduğunu gösteriyor.
 3. Mimari, kurallar ve kararlar hafızada (`/areas/qanatone.md`) duruyor;
    burada YALNIZ paketin o anki fiziksel durumu var.
@@ -28,7 +28,7 @@
 | `admin.html` |  | 56 KB | `7026865a` |
 | `build.js` |  | 29 KB | `6aef2519` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 785 KB | `f29da36e` |
+| `index.html` |  | 786 KB | `18c62824` |
 | `js/` | 4 dosya | 889 KB |  |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
@@ -37,19 +37,19 @@
 | `package.json` |  | 0 KB | `2ee81a62` |
 | `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
-| `qanat-tek-dosya_128.html` |  | 3501 KB | `4d607ca1` |
+| `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 28 KB | `8664d963` |
+| `test/denetim.js` |  | 31 KB | `6f04b056` |
 
 ## Üretim durumu
 
 | | |
 |---|---|
-| build damgası | **128** |
+| build damgası | **130** |
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 36 sn (basılan 0, önbellekten 58) |
+| son derleme | 117 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 46.1 MB |
 
 ## Çalıştırma

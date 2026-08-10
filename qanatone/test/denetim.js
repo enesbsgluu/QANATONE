@@ -365,6 +365,33 @@ function ciktiDenetimi() {
     ol('huni ana sayfa DOM\'unda değil (yanlış yeşil tuzağı)',
        !!dAna && !dAna.getElementById('hsSec'), '');
   }
+  /* 63 · katman sahnesi — B kararı (2026-08): sahne durdu, tek rötuş
+     02 'Görünürlük' → 'Kanal' (EN 'Channel'; marka: qanat = kanal).
+     Kural yapıyı (4 kart) ve karara bağlanan adı kilitler; ad bilinçli
+     değişirse bu kural da bilinçli güncellenir. */
+  {
+    const oku2 = p => fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
+    const dom2 = h => h ? new JSDOM(h).window.document : null;
+    const kart = d => d ? [...d.querySelectorAll('#ktSec .ktcard h3')].map(x => x.textContent.trim()) : [];
+    const tr = kart(dom2(oku2(path.join(DIST, 'index.html'))));
+    const en = kart(dom2(oku2(path.join(DIST, 'en', 'index.html'))));
+    ol('katman sahnesi: 4 kart + 02 Kanal (TR+EN)',
+       tr.length === 4 && en.length === 4 && tr[1] === 'Kanal' && en[1] === 'Channel',
+       `${tr[1] || '-'} · ${en[1] || '-'}`);
+  }
+  /* 64 · dil geçidi heavy'nin SON adımı olmalı (2026-08 yarışı):
+     ertelenmiş heavy vitrini TR href'lerle yeniden basar; ardında geçit
+     yoksa EN sayfada TR bağlantı kalır ve bu YALNIZ bazen yakalanır.
+     Çıktı kuralı (EN→EN) belirtiyi tutar; bu kural sebebi kilitler. */
+  {
+    const kaynakS = fs.readFileSync(SRC, 'utf8');
+    /* regex burada kendi etiketindeki paranteze takıldı — sıra kontrolü
+       indexOf ile: flowWire satırı → ≤600 karakter içinde heavy geçidi */
+    const iF = kaynakS.indexOf("if(window.__flowWire)setTimeout(window.__flowWire,120);");
+    const iG = kaynakS.indexOf("guvenli(baglantilariDilleUyumla,'baglanti dili (heavy)')");
+    ol('dil geçidi heavy sonunda (yarış kilidi)',
+       iF > -1 && iG > iF && iG - iF < 600, iF + '→' + iG);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
@@ -471,6 +498,17 @@ function guvenlik() {
     }
   })(KOK, 0);
 
+  /* 65 · posix haritaya path.join anahtariyla bakilamaz — bu dosyanin
+     kendisi denetleniyor: 'dosyalar[' ile 'path.join' BITISIK gorunurse
+     kirmizi. (Desen bu yorumda bile bitisik yazilamaz — ilk iki deneme
+     kuralin kendi metnine takildi: once includes() dizesi, sonra yorum.) */
+  const benimKaynak = fs.readFileSync(__filename, 'utf8');
+  /* desen calisma aninda birlesir; yoksa kuralin KENDISI desene eslesip
+     kendine kirmizi yakiyordu (kosulmadan yakalandi) */
+  const yasakDesen = 'dosyalar[' + 'path.join';
+  ol('güvenlik haritasına posix anahtarla bakılıyor',
+     !benimKaynak.includes(yasakDesen), '');
+
   const sirKalip = /(bearer\s+[A-Za-z0-9._-]{20,}|sk-[A-Za-z0-9]{24,}|ghp_[A-Za-z0-9]{28,}|xox[baprs]-[A-Za-z0-9-]{12,})/i;
   const sirli = Object.entries(dosyalar).filter(([, s]) => sirKalip.test(s)).map(([p]) => p);
   ol('gömülü sır yok', sirli.length === 0, sirli.join(' '));
@@ -478,6 +516,10 @@ function guvenlik() {
   const idx = dosyalar['index.html'] || '';
   ol('postMessage origin doğrulaması var', /ayniKaynak|e\.origin\s*===\s*location\.origin/.test(idx), '');
   ol('dış CDN betiği yok', !/<script[^>]+src=["']https?:\/\//.test(idx), '');
+  /* harita anahtarlari posixYol'dan geciyor; arama da posix olmali.
+     2026-08: Windows'ta path.join '\\' uretti, anahtar bulunamadi, IKI
+     SSRF kurali birden dustu — korumalar kaynakta durdugu halde.
+     Ayni sinifin ucuncu ornegi: yazici duzeltilmis, okuyucu taranmamisti. */
   const dg = dosyalar['netlify/functions/diagnose.js'] || '';
   ol('SSRF: yönlendirme elle takip ediliyor', dg.includes("redirect: 'manual'"), '');
   ol('SSRF: özel IP denetimi var', /isPrivate/.test(dg), '');
