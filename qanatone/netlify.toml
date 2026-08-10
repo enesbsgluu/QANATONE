@@ -1,0 +1,12 @@
+# QANATONE — Netlify yapilandirmasi
+[build]
+  command = "npm install && node build.js"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Artimli derleme icin onbellek: .onbellek klasoru derlemeler arasinda
+# tasinir. Olmazsa her yayinda 58 sayfa bastan render edilir (~100 sn).
+[[plugins]]
+  package = "/plugins/onbellek"

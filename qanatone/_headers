@@ -1,0 +1,35 @@
+# QANATONE — güvenlik başlıkları (Netlify bu dosyayı kendiliğinden okur)
+#
+# X-Frame-Options SAMEORIGIN: siteyi başka bir alan adı iframe'e alamaz.
+#   Yönetim paneli (admin.html) siteyi kendi iframe'inde gösteriyor, o aynı
+#   kaynakta olduğu için SAMEORIGIN yeterli. Bu başlık aynı zamanda
+#   postMessage saldırısının en kolay yolunu kapatır.
+# nosniff: tarayıcı içerik türünü tahmin etmeye çalışmaz.
+# Referrer-Policy: dış sitelere tam adres sızmaz.
+# Permissions-Policy: kullanmadığımız donanım izinleri kapalı.
+#
+# CSP şimdilik YALNIZCA RAPOR modunda. Sebebi: site tek dosya mimarisinde,
+# bütün betik ve stiller satır içi ('unsafe-inline' zorunlu) ve web tasarım
+# vitrini müşteri sitelerini canlı iframe'de gösteriyor (frame-src listesi
+# içerikle birlikte değişiyor). Önce tarayıcı konsolunda ihlalleri izle;
+# liste oturunca başlığın adını Content-Security-Policy yapıp raporu kaldır.
+
+# shell.html'e ayrica noindex basligi: robots.txt taramayi engeller ama
+# baska bir yerden baglanti gelirse yine de indekslenebilir. Baslik kesin.
+/shell.html
+  X-Robots-Tag: noindex
+
+# Yonetim paneli: indekslenmesin. (Erisim korumasi DEGIL — Yayinla dugmesi
+# gelince panele gercek bir giris ekrani gerekecek.)
+/admin.html
+  X-Robots-Tag: noindex
+
+/404.html
+  X-Robots-Tag: noindex
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+  Content-Security-Policy-Report-Only: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src https:; form-action 'self'

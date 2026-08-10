@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>QANATONE — Yönetim Paneli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505;--card:#0d0d0d;--card2:#131313;
+  --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.17);
+  --red:#ef233c;--red-soft:#ff4d63;--red-dim:rgba(239,35,60,.12);
+  --tx:#fff;--tx2:rgba(255,255,255,.62);--tx3:rgba(255,255,255,.50);--tx4:rgba(255,255,255,.40);
+  --r:14px;--e:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;
+  font-size:14px;overflow:hidden}
+.mono{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--tx3)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:var(--red-soft)}
+h2,h3,h4{font-family:Manrope;letter-spacing:-.03em}
+
+#top{display:flex;align-items:center;gap:14px;height:58px;padding:0 18px;
+  border-bottom:1px solid var(--line);background:#0a0a0a}
+#top .brand{display:flex;align-items:center;gap:10px;font-family:Manrope;font-weight:800;
+  font-size:1rem;letter-spacing:-.04em}
+#top .brand i{width:16px;height:16px;background:var(--red);border-radius:4px;
+  transform:rotate(45deg);box-shadow:0 0 14px rgba(239,35,60,.6);font-style:normal}
+#top .brand em{font-style:normal;color:var(--red-soft);font-weight:800}
+#top .brand span{color:var(--tx3);font-weight:400;font-size:.82rem;letter-spacing:0}
+#top .sp{flex:1}
+#state{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--tx4)}
+#state.dirty{color:var(--red-soft)}
+.tb{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:500;
+  padding:9px 16px;border-radius:999px;border:1px solid var(--line2);
+  background:rgba(255,255,255,.04);transition:.24s var(--e);white-space:nowrap}
+.tb:hover{border-color:var(--red);color:var(--red-soft)}
+.tb.p{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+.tb.p:hover{filter:brightness(1.12);color:#fff}
+
+#lay{display:grid;grid-template-columns:224px minmax(430px,620px) 1fr;height:calc(100% - 58px)}
+#side{border-right:1px solid var(--line);background:#0a0a0a;overflow-y:auto;padding:16px 10px}
+#side .g{margin:16px 8px 8px;font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--tx4)}
+#side button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px;border-radius:10px;color:var(--tx3);font-size:.85rem;font-weight:500;
+  text-align:left;transition:.2s}
+#side button:hover{color:var(--tx);background:rgba(255,255,255,.04)}
+#side button.on{color:var(--red-soft);background:var(--red-dim)}
+#side button em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--tx4)}
+
+#ed{overflow-y:auto;padding:26px 26px 90px;border-right:1px solid var(--line)}
+#ed h2{font-size:1.2rem;margin-bottom:6px}
+#ed .sub{color:var(--tx3);font-size:.82rem;margin-bottom:22px;line-height:1.6;font-weight:300}
+.f{margin-bottom:15px}
+.f label{display:block;font-size:.74rem;font-weight:600;color:var(--tx2);margin-bottom:6px}
+.f label i{font-style:normal;color:var(--tx4);font-weight:400}
+input[type=text],input[type=date],input[type=number],textarea,select{width:100%;
+  background:var(--card);border:1px solid var(--line);border-radius:11px;color:var(--tx);
+  font:inherit;font-size:.87rem;padding:11px 13px;transition:.2s}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--tx4) 50%),
+  linear-gradient(135deg,var(--tx4) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+textarea{min-height:78px;resize:vertical;line-height:1.6}
+textarea.big{min-height:150px;font-family:'JetBrains Mono',monospace;font-size:.78rem}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--red)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.item{border:1px solid var(--line);border-radius:var(--r);background:var(--card);
+  padding:16px;margin-bottom:13px}
+.ih{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.ih .mono{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{width:28px;height:28px;border-radius:9px;border:1px solid var(--line);
+  background:var(--card2);color:var(--tx3);font-size:.78rem;display:grid;place-items:center;
+  transition:.2s;flex:none}
+.ib:hover{color:var(--tx);border-color:var(--line2)}
+.ib.del:hover{color:var(--red);border-color:var(--red)}
+.add{width:100%;padding:12px;border-radius:var(--r);border:1px dashed var(--line2);
+  color:var(--tx3);font-size:.84rem;font-weight:500;transition:.2s}
+.add:hover{color:var(--red-soft);border-color:var(--red)}
+.pks{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 4px}
+.pk{font-size:.74rem;font-weight:600;letter-spacing:.04em;padding:7px 13px;border-radius:999px;
+  border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--tx3);transition:.2s var(--e)}
+.pk:hover{color:var(--red-soft);border-color:var(--red)}
+.pk.on{background:var(--red);border-color:var(--red);color:#fff}
+.imgup{display:flex;gap:13px;align-items:center}
+.imgup .pv{width:76px;height:76px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card2);display:grid;place-items:center;color:var(--tx4);font-size:.62rem;
+  overflow:hidden;flex-shrink:0}
+.imgup .pv img{width:100%;height:100%;object-fit:cover}
+.imgup .col{flex:1;display:flex;flex-direction:column;gap:7px}
+.hint{font-size:.68rem;color:var(--tx4);line-height:1.5}
+.up{align-self:flex-start;font-size:.76rem;padding:7px 13px;border-radius:9px;
+  border:1px solid var(--line2);transition:.2s}
+.up:hover{border-color:var(--red);color:var(--red-soft)}
+.rm{align-self:flex-start;font-size:.7rem;color:var(--tx4);text-decoration:underline}
+.rm:hover{color:var(--red)}
+.note{border:1px solid rgba(239,35,60,.3);background:rgba(239,35,60,.07);color:var(--tx2);
+  border-radius:var(--r);padding:13px 15px;font-size:.79rem;line-height:1.6;margin-bottom:18px;
+  font-weight:300}
+.note b{color:var(--red-soft);font-weight:600}
+.note.calm{border-color:var(--line2);background:rgba(255,255,255,.03)}
+.note.calm b{color:#fff}
+h4.sec{font-size:.86rem;margin:20px 0 9px;color:var(--tx2);
+  padding-top:14px;border-top:1px solid var(--line)}
+h4.sec:first-of-type{border-top:0;padding-top:0}
+
+/* kaydırıcı + anahtar + renk */
+.rw{display:grid;grid-template-columns:1fr 66px;gap:11px;align-items:center;margin-bottom:13px}
+.rw label{display:block;font-size:.74rem;font-weight:600;color:var(--tx2);margin-bottom:6px}
+.rw label i{font-style:normal;color:var(--tx4);font-weight:400}
+.rw input[type=range]{width:100%;accent-color:var(--red);height:3px}
+.rw output{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--red-soft);
+  text-align:right;padding-top:16px}
+.sws{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.sw{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:11px;
+  border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:.82rem;
+  color:var(--tx2);transition:.2s}
+.sw:hover{border-color:var(--line2)}
+.sw.on{border-color:rgba(239,35,60,.45);background:var(--red-dim);color:#fff}
+.sw i{width:32px;height:18px;border-radius:99px;background:rgba(255,255,255,.12);
+  position:relative;flex:none;transition:.24s var(--e)}
+.sw i::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;
+  border-radius:50%;background:var(--tx3);transition:.24s var(--e)}
+.sw.on i{background:var(--red)}
+.sw.on i::after{left:16px;background:#fff}
+.cw{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.cw input[type=color]{width:46px;height:38px;padding:2px;border-radius:10px;
+  border:1px solid var(--line);background:var(--card);cursor:pointer}
+.cw .col{flex:1}
+.cw .col label{display:block;font-size:.74rem;font-weight:600;color:var(--tx2);margin-bottom:4px}
+.cw .col span{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--tx4)}
+
+#pv{display:flex;flex-direction:column;background:#020202}
+#pvbar{display:flex;align-items:center;gap:9px;padding:9px 15px;border-bottom:1px solid var(--line)}
+#pvbar .mono{flex:1}
+.dev button{padding:6px 12px;border-radius:9px;border:1px solid var(--line);
+  color:var(--tx4);font-size:.72rem;transition:.2s}
+.dev button.on{color:var(--red-soft);border-color:var(--red)}
+#fw{flex:1;display:flex;justify-content:center;overflow:auto}
+#frame{border:0;width:100%;height:100%;background:#050505;transition:width .3s var(--e)}
+#fw.mob{padding:18px}
+#fw.mob #frame{width:392px;border:1px solid var(--line2);border-radius:20px}
+@media(max-width:1180px){#lay{grid-template-columns:200px 1fr}#pv{display:none}}
+</style>
+</head>
+<body>
+<div id="top">
+  <span class="brand"><i></i>QANAT<em>ONE</em><span>Panel</span></span>
+  <span id="state" class="mono">hazır</span>
+  <span class="sp"></span>
+  <button class="tb" id="bImport">İçe aktar</button>
+  <button class="tb" id="bReset">Varsayılana dön</button>
+  <button class="tb p" id="bExport">content.json indir</button>
+  <input type="file" id="fImport" accept="application/json" hidden>
+</div>
+<div id="lay">
+  <aside id="side"></aside>
+  <main id="ed"></main>
+  <section id="pv">
+    <div id="pvbar"><span class="mono">Canlı önizleme</span>
+      <span class="dev"><button data-w="d" class="on">Masaüstü</button><button data-w="m">Mobil</button></span>
+      <button class="tb" style="padding:6px 12px;font-size:.72rem" id="bReload">Yenile</button>
+    </div>
+    <div id="fw"><iframe id="frame" src="/index.html"></iframe></div>
+  </section>
+</div>
+<script>
+const DRAFT='qanat-admin-draft', LIVE='qanat-content';
+let C=null, DEF=null, cur='genel', pvT=null, curSvc='';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const get=p=>p.split('.').reduce((o,k)=>o?.[k],C);
+function set(p,v){const k=p.split('.');let o=C;
+  for(let i=0;i<k.length-1;i++){if(o[k[i]]==null)o[k[i]]=isNaN(+k[i+1])?{}:[];o=o[k[i]];}
+  o[k.at(-1)]=v;touch();}
+function touch(){
+  $('#state').textContent='kaydedilmemiş';$('#state').classList.add('dirty');
+  clearTimeout(pvT);
+  pvT=setTimeout(()=>{
+    try{localStorage.setItem(DRAFT,JSON.stringify(C))}catch(e){}
+    push();$('#state').textContent='taslak kaydedildi';$('#state').classList.remove('dirty');
+  },340);
+}
+function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',content:C},'*')}catch(e){}}
+
+/* ================= ALAN YARDIMCILARI ================= */
+function fld(label,path,o={}){
+  const v=get(path)??'';
+  const inner=o.area?`<textarea${o.big?' class="big"':''} data-p="${path}">${esc(v)}</textarea>`
+    :`<input type="${o.type||'text'}" data-p="${path}" value="${esc(v)}">`;
+  return `<div class="f"><label>${label}${o.hint?` <i>— ${o.hint}</i>`:''}</label>${inner}</div>`;
+}
+function opt(label,path,list,hint){
+  const v=String(get(path)??'');
+  return `<div class="f"><label>${label}${hint?` <i>— ${hint}</i>`:''}</label>
+    <select data-p="${path}">${list.map(([k,t])=>
+      `<option value="${esc(k)}"${String(k)===v?' selected':''}>${esc(t)}</option>`).join('')}</select></div>`;
+}
+function rng(label,path,min,max,step,unit,hint){
+  const v=get(path)??min;
+  return `<div class="rw"><div><label>${label}${hint?` <i>— ${hint}</i>`:''}</label>
+    <input type="range" data-rng="${path}" data-u="${unit||''}" min="${min}" max="${max}" step="${step}" value="${v}"></div>
+    <output>${v}${unit||''}</output></div>`;
+}
+function sw(label,path){
+  const on=!(get(path)===0||get(path)==='0'||get(path)===false);
+  return `<button type="button" class="sw${on?' on':''}" data-sw="${path}"><i></i>${label}</button>`;
+}
+function col(label,path,hint){
+  let v=String(get(path)||'#ef233c');
+  if(!/^#[0-9a-f]{6}$/i.test(v))v='#ef233c';
+  return `<div class="cw"><input type="color" data-col="${path}" value="${v}">
+    <span class="col"><label>${label}</label><span>${esc(v)}${hint?' · '+hint:''}</span></span></div>`;
+}
+function img(path,hint){
+  const v=get(path)||'', id='u'+Math.random().toString(36).slice(2,8);
+  setTimeout(()=>{
+    const b=document.getElementById(id);if(!b)return;
+    b.querySelector('.up').onclick=()=>b.querySelector('input').click();
+    b.querySelector('input').onchange=e=>{
+      const f=e.target.files[0];if(!f)return;
+      if(f.size>400*1024&&!confirm('Görsel '+Math.round(f.size/1024)+' KB. content.json içine gömülür, sayfayı ağırlaştırır. Devam?'))return;
+      const r=new FileReader();r.onload=()=>{set(path,r.result);show(cur)};r.readAsDataURL(f);
+    };
+    const rm=b.querySelector('.rm');if(rm)rm.onclick=()=>{set(path,'');show(cur)};
+  });
+  return `<div class="imgup" id="${id}"><span class="pv">${v?`<img src="${v}">`:'yok'}</span>
+    <span class="col"><button class="up" type="button">Görsel yükle</button>
+    ${v?'<button class="rm" type="button">Kaldır</button>':''}
+    <span class="hint">${hint||'300 KB altı önerilir.'}</span></span>
+    <input type="file" accept="image/*" hidden></div>`;
+}
+function nfld(label,path,o={}){
+  const v=get(path)??'';
+  return `<div class="f"><label>${label}${o.hint?` <i>— ${o.hint}</i>`:''}</label>
+    <input type="number" data-n="${path}"${o.step?` step="${o.step}"`:''} value="${esc(v)}"></div>`;
+}
+function bsw(label,path){
+  const on=get(path)!==false;
+  return `<button type="button" class="sw${on?' on':''}" data-b="${path}"><i></i>${label}</button>`;
+}
+function blankFor(p){
+  if(BLANK[p]!==undefined)return BLANK[p];
+  const t=p.replace(/^services\.\d+\.det\./,'det.');
+  if(BLANK[t]!==undefined)return BLANK[t];
+  return '';
+}
+function buildSitemap(){
+  const O='https://qanatone.com', today=new Date().toISOString().slice(0,10);
+  const U=[], add=(pth,mod)=>U.push({p:pth,m:/^\d{4}-\d{2}-\d{2}$/.test(String(mod||''))?mod:today});
+  ['/','/bulten','/hizmetler','/otomasyon','/projeler','/sss','/surec'].forEach(x=>add(x));
+  (C.projects||[]).forEach(x=>{if(x&&x.slug)add('/projeler/'+x.slug)});
+  (C.services||[]).forEach(x=>{if(x&&x.det&&x.slug)add('/hizmetler/'+x.slug)});
+  (C.posts||[]).forEach(x=>{if(x&&x.slug)add('/bulten/'+x.slug,x.date)});
+  const rows=U.map(u=>{const a=O+u.p;
+    return '  <url><loc>'+a+'</loc><xhtml:link rel="alternate" hreflang="tr" href="'+a+
+      '"/><xhtml:link rel="alternate" hreflang="en" href="'+a+'?lang=en"/><lastmod>'+u.m+'</lastmod></url>';
+  }).join('\n');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n'+
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'+
+    rows+'\n</urlset>';
+}
+function list(path,title,fields,label){
+  const arr=get(path)||[];
+  return arr.map((it,i)=>`<div class="item">
+    <div class="ih"><span class="mono">${title} ${String(i+1).padStart(2,'0')}${label?' · '+esc(label(it)):''}</span>
+      <button class="ib" data-mv="${path}|${i}|-1">↑</button>
+      <button class="ib" data-mv="${path}|${i}|1">↓</button>
+      <button class="ib del" data-del="${path}|${i}">✕</button></div>
+    ${fields(it,i,path+'.'+i)}</div>`).join('')
+    +`<button class="add" data-add="${path}">+ ${title} ekle</button>`;
+}
+const BLANK={
+ partners:'Yeni firma',
+ sectors:{k:'yeni',icon:'gear',n:{tr:'Yeni sektör',en:''},d:{tr:'',en:''},
+   head:{tr:['',''],en:['','']},finance:{budget:40000,ticket:12000,miss:38},
+   ch:{google:22,seo:19,meta:18,tiktok:14,linkedin:11,reddit:7,site:9},
+   market:{cpc:12,lead:.04,close:.08},act:{tr:[],en:[]},
+   q:{tr:['','nitelikli'],en:['','qualified']}},
+ services:{tag:'YENİ',icon:'zap',size:'',title:{tr:'',en:''},text:{tr:'',en:''}},
+ agents:{icon:'chat',size:'',title:{tr:'',en:''},text:{tr:'',en:''}},
+ steps:{n:'06',t:{tr:'',en:''},p:{tr:'',en:''},m:[]},
+ projects:{name:'Yeni proje',year:'2026',slug:'',image:'',tag:{tr:'',en:''},text:{tr:'',en:''},
+   res:[],meta:{role:{tr:'',en:''},dur:{tr:'',en:''},ch:{tr:'',en:''}},blocks:{tr:[],en:[]}},
+ posts:{slug:'yeni-yazi',date:new Date().toISOString().slice(0,10),read:3,sector:'talep',image:'',
+   tag:{tr:'Veri · ',en:'Data · '},title:{tr:'',en:''},lede:{tr:'',en:''},
+   body:{tr:[],en:[]},sources:[]},
+ testimonials:{name:'',role:{tr:'',en:''},image:'',q:{tr:'',en:''}},
+ faq:{q:{tr:'',en:''},a:{tr:'',en:''}},
+ 'founder.links':{label:'',url:''},
+ socials:{label:'',url:''},
+ 'det.faq':{q:{tr:'',en:''},a:{tr:'',en:''}},
+ 'det.trade.steps':{tr:'',en:''},
+ 'det.trade.filters':{tr:'',en:''},
+ 'det.trade.sum':{tr:'',en:''},
+ 'det.trade.buyers':{n:'',c:'',s:'',v:'',d:''},
+ 'det.steps':{n:'05',t:{tr:'',en:''},d:{tr:'',en:''}},
+ 'det.met':{v:'',l:{tr:'',en:''}},
+ 'det.fun.rows':{t:{tr:'',en:''},v:50},
+ 'det.flow.rows':{i:'zap',t:{tr:'',en:''},d:{tr:'',en:''}},
+ 'det.ai.msgs':{r:'u',t:{tr:'',en:''}},
+ 'det.story.sites':{u:'https://',ps:'',t:{tr:'',en:''},frame:false}
+};
+const ICONS='chat, camera, globe, phone, calendar, clipboard, folder, users, chart, gear, refresh, building, plane, box, wrench, site, layout, handoff, seo, bot, zap, target, layers, search';
+const BKCATS=[['talep','Talep yönetimi'],['reklam','Reklam & bütçe'],
+              ['arama','Arama & yapay zekâ'],['sektor','Sektör verisi']];
+
+/* ================= PANELLER ================= */
+const P={
+genel:{t:'Genel & İletişim',n:()=>'',f:()=>`
+  <h2>Genel & İletişim</h2><p class="sub">WhatsApp numarası sitedeki bütün butonları besler: hero, alt çağrı, footer, teşhis aracı ve demo formu.</p>
+  ${String(get('settings.whatsapp')||'').indexOf('90500000')===0?'<div class="note"><b>Numara hâlâ yer tutucu.</b> Site bu haliyle talep üretemez.</div>':''}
+  ${fld('WhatsApp numarası','settings.whatsapp',{hint:'ülke koduyla, örn. 905326291508'})}
+  ${fld('WhatsApp açılış mesajı','settings.waMessage',{area:1})}
+  ${fld('E-posta','settings.email',{hint:'boşsa footer bağlantısı görünmez'})}
+  <h4 class="sec">Ölçüm & yasal</h4>
+  ${fld('Ölçüm kimliği','settings.gtm',{hint:'GTM-XXXXXXX veya G-XXXXXXXXXX — boşsa hiç istek atılmaz'})}
+  <div class="note calm">Ölçüm açtığında KVKK için çerez onayı gerekebilir. Onay bandı kurulmadan
+  bu alanı doldurmak riskli.</div>
+  ${fld('Footer şirket satırı','legal.line',{hint:'örn. QANATONE Dijital · İstanbul'})}
+  ${fld('KVKK metni','legal.kvkk',{area:1,hint:'boş bırakılabilir'})}`},
+
+gorunum:{t:'Görünüm & Hareket',n:()=>'yeni',f:()=>`
+  <h2>Görünüm & Hareket</h2><p class="sub">Renkler ve animasyonlar. Değişiklikler sağdaki önizlemeye anında yansır.</p>
+  <div class="note calm"><b>Hareket seviyesi</b> tek anahtarla her şeyi kısar: <b>tam</b> her şey açık,
+  <b>sakin</b> dekoratif katmanlar (tanecik, yıldız, tüpler, salınım) kapanır,
+  <b>kapalı</b> tüm animasyonları durdurur. Ziyaretçinin cihazında "hareketi azalt"
+  açıksa site zaten kendiliğinden kapalı davranır.</div>
+  ${opt('Hareket seviyesi','theme.motion.level',[['full','Tam'],['soft','Sakin'],['off','Kapalı']])}
+  <h4 class="sec">Katmanlar</h4>
+  <div class="sws">
+    ${sw('Tanecik dokusu','theme.motion.grain')}
+    ${sw('Yıldız alanı','theme.motion.stars')}
+    ${sw('Hero 3B tüpler','theme.motion.tubes')}
+    ${sw('Qanatone ajanı (imleç)','theme.motion.cursor')}
+    ${sw('Sistem imlecini gizle','theme.motion.hideCursor')}
+    ${sw('Ajan turu düğmesi','theme.motion.tour')}
+  </div>
+  <div class="note calm"><b>Sistem imlecini gizle</b> kapatılırsa nokta kalır ama normal fare imleci
+  de görünür — bağlantılarda el işareti geri gelir.</div>
+  <div class="note"><b>Hero 3B tüpler 756 KB.</b> Sitedeki en ağır dosya (Three.js).
+  Kapalıyken tek bayt inmiyor — açtığın anda yükleniyor. Mobilde zaten hiç yüklenmiyor.
+  Dekoratif bir katman; kapatmak sayfayı belirgin şekilde hafifletir.</div>
+
+  <h4 class="sec">Renkler</h4>
+  ${col('Ana kırmızı','theme.colors.red','butonlar, vurgular, parıltılar')}
+  ${col('Açık kırmızı','theme.colors.redSoft','başlık vurgusu, bağlantı hover')}
+  ${col('Zemin','theme.colors.bg','sayfa arka planı')}
+  ${rng('Soluk metin kontrastı','theme.colors.tx3',30,70,1,'%','WCAG AA için en az 50')}
+  ${rng('Etiket kontrastı','theme.colors.tx4',20,60,1,'%','en az 40 önerilir')}
+
+  <h4 class="sec">Hero elleri</h4>
+  ${rng('İnsan eli genişlik','theme.hero.hw',16,70,1,'vw')}
+  ${rng('İnsan eli sol','theme.hero.hx',-34,8,1,'vw')}
+  ${rng('İnsan eli üst','theme.hero.hy',-30,8,1,'vw')}
+  ${rng('Robot eli genişlik','theme.hero.rw',16,70,1,'vw')}
+  ${rng('Robot eli sağ','theme.hero.rx',-34,8,1,'vw')}
+  ${rng('Robot eli alt','theme.hero.ry',-30,8,1,'vw')}
+  ${rng('Sis maskesi','theme.hero.mask',0,46,1,'%','yükseldikçe eller merkeze doğru silinir')}
+
+  <h4 class="sec">Hero düğmesi — kenar ışığı</h4>
+  ${rng('Tur süresi','theme.hero.ringSpd',1.2,9,.1,'s')}
+  ${rng('Şerit kalınlığı','theme.hero.ringW',1,5,1,'px')}
+  ${rng('Kuyruk uzunluğu','theme.hero.ringTail',15,95,1,'%')}
+  ${rng('Parlama','theme.hero.ringGlow',0,20,1,'px')}
+
+  <h4 class="sec">Talep akış haritası</h4>
+  ${rng('Paket hızı','theme.map.speed',.3,2.5,.1,'×')}
+  ${rng('Paket yoğunluğu','theme.map.packets',.3,2.5,.1,'×')}
+  ${rng('Merkez ışını sayısı','theme.map.rays',0,40,1,'')}
+
+  <h4 class="sec">Söz bandı (ince)</h4>
+  ${rng('Geçiş süresi','theme.testi.interval',3,30,1,' sn','kanal kartlarının altındaki ince kırmızı bant')}`},
+
+ortak:{t:'Ortaklar (şerit)',n:()=>(get('partners')||[]).length,f:()=>`
+  <h2>Birlikte çalıştıklarımız</h2><p class="sub">Ana sayfadaki yatay akan şeritte görünen isimler. En az üç isim olmalı.</p>
+  <div class="note"><b>Yayına çıkmadan temizlenmeli.</b> Listedeki Mercedes-Benz, Charles Schwab,
+  Berkshire Hathaway, Vestel ve Arçelik izinsiz marka kullanımı — Reklam Kurulu'nun ceza kestiği kalem.</div>
+  ${list('partners','İsim',(it,i,p)=>fld('Firma adı',p),it=>String(it))}`},
+
+sektor:{t:'Endüstriler',n:()=>(get('sectors')||[]).length,f:()=>`
+  <h2>Sektör profilleri</h2><p class="sub">Ziyaretçi sektörünü seçince pano, hesap makinesi, iş akışı ve harita bu değerlere göre kurulur.</p>
+  <div class="note calm"><b>Pazar oranları hesabın çekirdeği:</b><br>
+  <b>TBM</b> — ücretli kanallarda ortalama tıklama maliyeti (₺). Kendi Google Ads panelindeki rakamı yaz.<br>
+  <b>Tıklama → talep</b> — gelen tıklamanın kaçı form/arama/mesaja dönüyor (0,04 = %4).<br>
+  <b>Talep → satış</b> — gelen talebin kaçı satışa dönüyor (0,06 = %6).<br>
+  Kanal ağırlıkları yalnızca "talep nereden gelir" grafiğini besler, hesaba girmez.</div>
+  ${list('sectors','Sektör',(it,i,p)=>`
+    <div class="r3">${fld('Anahtar',p+'.k')}${fld('İkon',p+'.icon',{hint:'building, plane…'})}${fld('Ad (TR)',p+'.n.tr')}</div>
+    <div class="r2">${fld('Ad (EN)',p+'.n.en')}${fld('Alt cümle (TR)',p+'.d.tr',{hint:'kartta görünen dert'})}</div>
+    ${fld('Alt cümle (EN)',p+'.d.en')}
+    <h4 class="sec">Pano metni</h4>
+    ${fld('Pano başlığı (TR)',p+'.head.tr.0')}
+    ${fld('Pano açıklaması (TR)',p+'.head.tr.1',{area:1})}
+    ${fld('Pano başlığı (EN)',p+'.head.en.0')}
+    ${fld('Pano açıklaması (EN)',p+'.head.en.1',{area:1})}
+    <h4 class="sec">Hesap varsayılanları</h4>
+    <div class="r3">${fld('Aylık bütçe (₺)',p+'.finance.budget')}${fld('Satış tutarı (₺)',p+'.finance.ticket')}${fld('Yanıtsız kalan %',p+'.finance.miss')}</div>
+    <div class="r3">${fld('TBM (₺)',p+'.market.cpc')}${fld('Tıklama → talep',p+'.market.lead',{hint:'0,04'})}${fld('Talep → satış',p+'.market.close',{hint:'0,06'})}</div>
+    <h4 class="sec">Kanal ağırlıkları</h4>
+    <div class="r3">${fld('Google',p+'.ch.google')}${fld('SEO',p+'.ch.seo')}${fld('Meta',p+'.ch.meta')}</div>
+    <div class="r3">${fld('TikTok',p+'.ch.tiktok')}${fld('LinkedIn',p+'.ch.linkedin')}${fld('Reddit',p+'.ch.reddit')}</div>
+    ${fld('Web sitesi',p+'.ch.site')}
+    <h4 class="sec">Tipik talep</h4>
+    <div class="r2">${fld('Soru (TR)',p+'.q.tr.0')}${fld('Karar (TR)',p+'.q.tr.1',{hint:'nitelikli / elendi / devir'})}</div>
+    <div class="r2">${fld('Soru (EN)',p+'.q.en.0')}${fld('Karar (EN)',p+'.q.en.1')}</div>
+    <div class="f"><label>İlk 30 gün — maddeler (TR) <i>— her satıra bir madde</i></label>
+      <textarea data-lines="${p}.act.tr">${esc(((it.act||{}).tr||[]).join('\n'))}</textarea></div>
+    <div class="f"><label>İlk 30 gün (EN)</label>
+      <textarea data-lines="${p}.act.en">${esc(((it.act||{}).en||[]).join('\n'))}</textarea></div>`,
+    it=>(it.n&&it.n.tr)||it.k)}`,
+  bind(r){
+    r.querySelectorAll('[data-lines]').forEach(el=>el.oninput=()=>
+      set(el.dataset.lines,el.value.split('\n').map(s=>s.trim()).filter(Boolean)));
+  }},
+
+hizmet:{t:'Hizmetler',n:()=>(get('services')||[]).length,f:()=>`
+  <h2>Hizmetler</h2><p class="sub">Hizmetler sayfasındaki bento ızgara. <b>Boyut</b> alanı kartın kapladığı yeri belirler.</p>
+  <div class="note calm"><b>Boyut:</b> boş = 1 birim · <span class="mono">b2</span> = iki kat geniş · <span class="mono">b2x2</span> = büyük kare.
+  Izgara 4 sütun — toplam birim sayısını 4'ün katı tutarsan alt sıra boş kalmaz.
+  <b>Vurgu</b> alanına 1 yazarsan kart tamamen kırmızı olur (sayfada bir tane önerilir).<br>
+  <b>İkonlar:</b> ${ICONS}</div>
+  ${list('services','Hizmet',(it,i,p)=>`
+    <div class="r3">${fld('Etiket',p+'.tag')}${fld('İkon',p+'.icon')}${fld('Boyut',p+'.size',{hint:'b2 / b2x2'})}</div>
+    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
+    ${fld('Açıklama (TR)',p+'.text.tr',{area:1})}
+    ${fld('Açıklama (EN)',p+'.text.en',{area:1})}
+    ${fld('Vurgu kartı',p+'.hi',{hint:'1 = kırmızı'})}`,it=>it.tag)}`},
+
+kanal:{t:'Kanal kartları',n:()=>6,f:()=>{
+  const K=[['1','Sol üst — büyük, desenli'],['2','Sol alt — kızıl'],
+    ['3','Orta üst — koyu'],['4','Orta alt — koyu'],
+    ['5','Sağ üst — kızıl'],['6','Sağ alt — büyük, desenli']];
+  return `
+  <h2>Kanal kartları</h2><p class="sub">"Kanal genişliği" bölümü: başlık + 6 kart.
+  İlk görünümde yalnız ikon ve kart başlığı durur; açıklama fare ya da klavye odağıyla açılır.
+  Boş bırakılan alan sitedeki varsayılan metne düşer. İkonlar ve dizilim kodda sabittir.</p>
+  <h4 class="sec">Bölüm başlığı</h4>
+  ${fld('Etiket (TR)','strings.tr.che')}
+  ${fld('Etiket (EN)','strings.en.che')}
+  ${fld('Başlık (TR)','strings.tr.chh',{hint:'&lt;em&gt;…&lt;/em&gt; içi kızıl vurgulanır'})}
+  ${fld('Başlık (EN)','strings.en.chh',{hint:'&lt;em&gt;…&lt;/em&gt; içi kızıl vurgulanır'})}
+  ${fld('Alt paragraf (TR)','strings.tr.chp',{area:1})}
+  ${fld('Alt paragraf (EN)','strings.en.chp',{area:1})}
+  ${K.map(([n,pos])=>`
+  <h4 class="sec">Kart ${n.padStart(2,'0')} · ${pos}</h4>
+  ${fld('Başlık (TR)','strings.tr.ch'+n+'t')}
+  ${fld('Başlık (EN)','strings.en.ch'+n+'t')}
+  ${fld('Açıklama (TR)','strings.tr.ch'+n+'d',{area:1})}
+  ${fld('Açıklama (EN)','strings.en.ch'+n+'d',{area:1})}
+  ${img('chimg.'+(+n-1),'kartın arka planı · 3:2 · koyu kartta karanlık, kızıl kartta kızıl hâkim görsel kullan · boş bırakılırsa düz zemin kalır')}`).join('')}
+  <div class="note"><b>Kart görselleri.</b> Konusu SAĞ tarafta olan görsel seç: metin sol yarıya
+  biniyor, perde de soldan açılıyor. Kart fareyle üstüne gelince boyu iki katına çıktığı için
+  görsel kırpılır — kenarlarda kritik detay bırakma. Mobilde perde sertleşir ve odak daha sağa
+  kayar, orada açıklama hep açık durur. Görsel <b>content.json içine gömülür</b>, 150 KB altı tut.</div>
+  <div class="note calm">Önizleme sağdaki <span class="mono">index.html</span>'den beslenir —
+  panelle aynı klasörde <b>güncel</b> index durmalı; eski sürümde alanlar boş görünür ama
+  yazdıkların yine dışa aktarıma girer.</div>`;}},
+
+ajan:{t:'AI Ajanları',n:()=>(get('agents')||[]).length,f:()=>`
+  <h2>AI Ajanları</h2><p class="sub">Otomasyon sayfasındaki ajan kartları. Merkez diyagramın uyduları sabittir.</p>
+  ${list('agents','Ajan',(it,i,p)=>`
+    <div class="r2">${fld('İkon',p+'.icon')}${fld('Boyut',p+'.size',{hint:'b2 / boş'})}</div>
+    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
+    ${fld('Açıklama (TR)',p+'.text.tr',{area:1})}
+    ${fld('Açıklama (EN)',p+'.text.en',{area:1})}`,it=>(it.title&&it.title.tr)||'')}`},
+
+surec:{t:'Süreç',n:()=>(get('steps')||[]).length,f:()=>`
+  <h2>Süreç aşamaları</h2><p class="sub">Süreç sayfasındaki kartlar. Üstteki çizilen hat sabittir.</p>
+  ${list('steps','Aşama',(it,i,p)=>`
+    <div class="r3">${fld('No',p+'.n')}${fld('Başlık (TR)',p+'.t.tr')}${fld('Başlık (EN)',p+'.t.en')}</div>
+    ${fld('Açıklama (TR)',p+'.p.tr',{area:1})}
+    ${fld('Açıklama (EN)',p+'.p.en',{area:1})}
+    <div class="f"><label>Etiketler <i>— virgülle</i></label>
+      <input type="text" data-tags="${p}.m" value="${esc((it.m||[]).join(', '))}"></div>`,
+    it=>(it.t&&it.t.tr)||it.n)}`,
+  bind(r){r.querySelectorAll('[data-tags]').forEach(el=>el.oninput=()=>
+    set(el.dataset.tags,el.value.split(',').map(s=>s.trim()).filter(Boolean)));}},
+
+proje:{t:'Projeler',n:()=>(get('projects')||[]).length,f:()=>`
+  <h2>Projeler</h2><p class="sub">Ana sayfada kayan deste, <span class="mono">/projeler</span> adresinde masonry arşiv, her proje <span class="mono">/projeler/adres</span> ile kendi sayfasında.</p>
+  <div class="note"><b>İlk üç kayıt uydurma.</b> Mercedes-Benz, Charles Schwab ve Berkshire Hathaway
+  vaka çalışmaları ispatlanamaz referans — yayına çıkmadan gerçek işlerinle değiştir.</div>
+  ${list('projects','Proje',(it,i,p)=>`
+    <div class="r3">${fld('İsim',p+'.name')}${fld('Yıl',p+'.year')}${fld('Adres',p+'.slug',{hint:'bab-ic-mimarlik'})}</div>
+    <div class="r2">${fld('Etiket (TR)',p+'.tag.tr',{hint:'İlk kelime arşiv filtresi olur'})}${fld('Etiket (EN)',p+'.tag.en')}</div>
+    ${fld('Kısa anlatım (TR)',p+'.text.tr',{area:1})}
+    ${fld('Kısa anlatım (EN)',p+'.text.en',{area:1})}
+    <div class="f"><label>Kapak görseli</label>${img(p+'.image')}</div>
+    <h4 class="sec">Künye</h4>
+    <div class="r2">${fld('Kapsam (TR)',p+'.meta.role.tr')}${fld('Kapsam (EN)',p+'.meta.role.en')}</div>
+    <div class="r2">${fld('Süre (TR)',p+'.meta.dur.tr')}${fld('Süre (EN)',p+'.meta.dur.en')}</div>
+    <div class="r2">${fld('Kanallar (TR)',p+'.meta.ch.tr')}${fld('Kanallar (EN)',p+'.meta.ch.en')}</div>
+    <h4 class="sec">Rakamlar</h4>
+    <p class="hint" style="margin-bottom:8px">Her satır: <span class="mono">%64 :: daha hızlı dönüş :: faster response</span></p>
+    <div class="f"><textarea data-res="${p}.res">${esc((it.res||[]).map(r=>r.v+' :: '+((r.l||{}).tr||'')+' :: '+((r.l||{}).en||'')).join('\n'))}</textarea></div>
+    <h4 class="sec">Detay bölümleri</h4>
+    <p class="hint" style="margin-bottom:8px">Her satır: <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span></p>
+    <div class="f"><label>Bölümler (TR)</label>
+      <textarea class="big" data-blocks="${p}.blocks.tr">${esc(((it.blocks||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    <div class="f"><label>Bölümler (EN)</label>
+      <textarea class="big" data-blocks="${p}.blocks.en">${esc(((it.blocks||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>`,
+    it=>it.name)}`,
+  bind(r){
+    r.querySelectorAll('[data-res]').forEach(el=>el.oninput=()=>
+      set(el.dataset.res,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
+        const q=l.split('::').map(x=>x.trim());
+        return {v:q[0]||'',l:{tr:q[1]||'',en:q[2]||q[1]||''}};})));
+    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
+      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
+        const i=l.indexOf('::');
+        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
+  }},
+
+bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
+  <h2>Bülten yazıları</h2><p class="sub"><span class="mono">/bulten</span> listesi ve her yazı <span class="mono">/bulten/adres</span> sayfası. Kategori filtresi <b>Konu</b> alanından çıkar.</p>
+  <div class="note"><b>Yazı ekledikten sonra <span class="mono">node build-bulten.js</span> çalıştırmayı unutma.</b>
+  Statik sürüm üretilmezse yazı yapay zekâ tarayıcılarına görünmez — GEO tarafı çalışmaz.</div>
+  <div class="note calm"><b>Gövde biçimi:</b> her satır <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span>.
+  Veri vurgusu için: <span class="mono">&lt;div class="nfig"&gt;&lt;b&gt;%39&lt;/b&gt;&lt;span&gt;açıklama&lt;/span&gt;&lt;/div&gt;</span>.
+  Madde listesi için <span class="mono">&lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;</span>.<br>
+  <b>Kaynaklar:</b> her satır <span class="mono">Kaynak adı :: https://adres</span> — adres boş bırakılabilir.</div>
+  ${list('posts','Yazı',(it,i,p)=>`
+    <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
+    <div class="r2">${opt('Konu',p+'.sector',BKCATS)}${fld('Etiket (TR)',p+'.tag.tr',{hint:'Veri · Talep yönetimi'})}</div>
+    ${fld('Etiket (EN)',p+'.tag.en')}
+    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
+    ${fld('Giriş cümlesi (TR)',p+'.lede.tr',{area:1})}
+    ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
+    <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
+    <h4 class="sec">Gövde</h4>
+    <div class="f"><label>Bölümler (TR)</label>
+      <textarea class="big" data-blocks="${p}.body.tr">${esc(((it.body||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    <div class="f"><label>Bölümler (EN)</label>
+      <textarea class="big" data-blocks="${p}.body.en">${esc(((it.body||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    <h4 class="sec">Kaynaklar</h4>
+    <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
+    it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
+  bind(r){
+    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
+      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
+        const i=l.indexOf('::');
+        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
+    r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
+      set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
+        const i=l.indexOf('::');
+        return i<0?{n:l,u:''}:{n:l.slice(0,i).trim(),u:l.slice(i+2).trim()};})));
+  }},
+
+soz:{t:'Müşteri sözleri',n:()=>(get('testimonials')||[]).length,f:()=>`
+  <h2>Müşteri sözleri</h2><p class="sub">Kanal kartlarının altındaki <b>ince kırmızı bantta</b> sırayla döner. Hiç kayıt yoksa bant kendini gizler. Geçiş süresi <b>Görünüm & Hareket</b> sekmesinde.</p>
+  <div class="note calm"><b>En ikna edici biçim:</b> tek cümlelik somut bir an. "Çok memnun kaldık" değil,
+  "ilk kez tanımadığım biri sitemizden bulup aradı" gibi.</div>
+  <div class="note"><b>Mevcut sözler uydurma.</b> Gerçek müşteri cümleleriyle değiştirilmeden yayına çıkmamalı.</div>
+  ${list('testimonials','Söz',(it,i,p)=>`
+    <div class="r2">${fld('İsim',p+'.name')}${fld('Ünvan (TR)',p+'.role.tr')}</div>
+    ${fld('Ünvan (EN)',p+'.role.en')}
+    ${fld('Söz (TR)',p+'.q.tr',{area:1})}
+    ${fld('Söz (EN)',p+'.q.en',{area:1})}
+    <div class="f"><label>Fotoğraf <i>— kare</i></label>${img(p+'.image')}</div>`,it=>it.name)}`},
+
+sss:{t:'SSS',n:()=>(get('faq')||[]).length,f:()=>`
+  <h2>Sık sorulan sorular</h2><p class="sub">Akordeon liste. Cevaplarda HTML kullanabilirsin.</p>
+  <div class="note calm">Bu bölüm <span class="mono">/sss</span> sayfasında <b>FAQPage şeması</b> üretiyor —
+  Google zengin sonuç olarak gösterebiliyor. Soruları gerçekten sorulan hâliyle yaz.</div>
+  ${list('faq','Soru',(it,i,p)=>`
+    <div class="r2">${fld('Soru (TR)',p+'.q.tr')}${fld('Soru (EN)',p+'.q.en')}</div>
+    ${fld('Cevap (TR)',p+'.a.tr',{area:1,big:1})}
+    ${fld('Cevap (EN)',p+'.a.en',{area:1,big:1})}`,it=>(it.q&&it.q.tr||'').slice(0,38))}`},
+
+kurucu:{t:'Kurucu & Sosyal',n:()=>'',f:()=>`
+  <h2>Kurucu</h2><p class="sub">Fotoğraf yoksa baş harf gösterilir. Bio alanı HTML kabul eder.</p>
+  <div class="f"><label>Fotoğraf <i>— dikey 4:5</i></label>${img('founder.photo')}</div>
+  ${fld('İsim','founder.name')}
+  <div class="r2">${fld('Unvan (TR)','founder.role.tr')}${fld('Unvan (EN)','founder.role.en')}</div>
+  ${fld('Bio (TR)','founder.bio.tr',{area:1,big:1})}
+  ${fld('Bio (EN)','founder.bio.en',{area:1,big:1})}
+  <h4 class="sec">Bağlantılar</h4>
+  ${list('founder.links','Bağlantı',(it,i,p)=>`<div class="r2">${fld('Etiket',p+'.label')}${fld('URL',p+'.url')}</div>`,it=>it.label)}
+  <h4 class="sec">Footer sosyal medya</h4>
+  <p class="hint" style="margin-bottom:10px">Buraya eklediğin adresler Organization şemasındaki <span class="mono">sameAs</span> alanını da besler.</p>
+  ${list('socials','Link',(it,i,p)=>`<div class="r2">${fld('Etiket',p+'.label')}${fld('URL',p+'.url')}</div>`,it=>it.label)}`},
+
+hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det).length,f:()=>{
+  const A=get('services')||[];
+  const D=A.map((s,j)=>({s,j})).filter(o=>o.s&&o.s.det);
+  const noDet=A.filter(s=>s&&s.slug&&!s.det).map(s=>s.tag||s.slug);
+  if(!D.length)return `<h2>Hizmet detayları</h2>
+    <div class="note"><b>Detay sayfası olan hizmet yok.</b> Hizmet kartları ancak <span class="mono">det</span>
+    verisi olduğunda tıklanabilir hale gelir.</div>`;
+  const hit=D.find(o=>o.s.slug===curSvc)||D[0];
+  const s=hit.s, p='services.'+hit.j+'.det', det=s.det||{}, fam=s.fam||'';
+  const P2=(l,q,o)=>`<div class="r2">${fld(l+' (TR)',q+'.tr',o)}${fld(l+' (EN)',q+'.en',o)}</div>`;
+  const lines=(l,q,arr)=>`<div class="f"><label>${l}</label>
+    <textarea data-lines="${q}">${esc((arr||[]).join('\n'))}</textarea></div>`;
+
+  let sahne='';
+  if(fam==='funnel'){
+    sahne=`<h4 class="sec">Sahne — huni basamakları</h4>
+    <div class="note calm">Barlar yukarıdan aşağıya daralır. <b>Değer</b> barın genişliği (100 tabanlı),
+    ilk basamağı 100 tutmak en okunaklısı. Rakam iddia değil, oran anlatır.</div>
+    ${P2('Sahne notu',p+'.fun.note',{area:1})}
+    ${list(p+'.fun.rows','Basamak',(it,k,q)=>`
+      <div class="r3">${fld('Etiket (TR)',q+'.t.tr')}${fld('Etiket (EN)',q+'.t.en')}${nfld('Değer',q+'.v')}</div>`,
+      it=>((it.t||{}).tr||'')+' · '+(it.v??''))}`;
+  } else if(fam==='flow'){
+    sahne=`<h4 class="sec">Sahne — akış zinciri</h4>
+    <div class="note calm">Düğümler soldan sağa dizilir, paket aralarında akar.<br><b>İkonlar:</b> ${ICONS}</div>
+    ${P2('Sahne notu',p+'.flow.note',{area:1})}
+    ${list(p+'.flow.rows','Düğüm',(it,k,q)=>`
+      ${fld('İkon',q+'.i')}
+      <div class="r2">${fld('Başlık (TR)',q+'.t.tr')}${fld('Başlık (EN)',q+'.t.en')}</div>
+      ${fld('Açıklama (TR)',q+'.d.tr',{area:1})}
+      ${fld('Açıklama (EN)',q+'.d.en',{area:1})}`,it=>(it.t||{}).tr)}`;
+  } else if(det.serp){
+    sahne=`<h4 class="sec">Sahne — arama sonucu tırmanışı</h4>
+    <div class="note calm">Rakip satırları (“Rakip Firma 1-4”) kodda üretilir; buradan yalnız aranan kelime
+    ve senin satırın yönetilir.</div>
+    ${P2('Sahne notu',p+'.serp.note',{area:1})}
+    ${P2('Arama kutusundaki kelime',p+'.serp.q')}
+    ${fld('Senin alan adın',p+'.serp.you.dom',{hint:'örn. seninfirman.com'})}
+    ${P2('Senin sonuç satırın',p+'.serp.you.t')}`;
+  } else if(det.ai){
+    sahne=`<h4 class="sec">Sahne — yapay zekâ sohbeti</h4>
+    <div class="note calm">Metin içinde <span class="mono">{b}</span> yazarsan marka adıyla değişir.
+    Satır başına <b>•</b> koyarsan madde gibi görünür. Sıra: kullanıcı → AI → kullanıcı → AI.</div>
+    ${P2('Sahne notu',p+'.ai.note',{area:1})}
+    ${P2('Marka adı ({b})',p+'.ai.b')}
+    ${fld('Kaynak alan adı',p+'.ai.src',{hint:'AI cevabının altında kaynak rozeti olarak çıkar'})}
+    ${list(p+'.ai.msgs','Mesaj',(it,k,q)=>`
+      ${opt('Kim yazıyor',q+'.r',[['u','Kullanıcı'],['a','Yapay zekâ']])}
+      ${fld('Metin (TR)',q+'.t.tr',{area:1,big:1})}
+      ${fld('Metin (EN)',q+'.t.en',{area:1,big:1})}`,it=>it.r==='a'?'yapay zekâ':'kullanıcı')}`;
+  } else if(fam==='trade'){
+    sahne=`<h4 class="sec">Sahne — TradeSelf platform akışı</h4>
+    <div class="note calm">Dört perde tek pencerede yatay kayar: <b>arama → alıcı listesi →
+    karar verici → ilk temas</b>. Arayüz temsilîdir; gerçek ekran görüntüsü kullanılmıyor.
+    Firma adları ve rakamlar ÖRNEKTİR — veri kapsamı iddiası değildir, o yüzden alttaki
+    not satırında bunu açıkça yazmayı sürdür.</div>
+    ${P2('Sahne notu',p+'.trade.note',{area:1})}
+    <div class="r2">${P2('Aranan ürün',p+'.trade.q')}</div>
+    <div class="r2">${fld('HS kodu',p+'.trade.hs')}${fld('Sonuç sayısı',p+'.trade.found',{hint:'sahne içi örnek — kapsam iddiası değil'})}</div>
+    <h4 class="sec">Adım rayı (üstteki dört durak)</h4>
+    ${list(p+'.trade.steps','Durak',(it,k,q)=>`
+      <div class="r2">${fld('Ad (TR)',q+'.tr')}${fld('Ad (EN)',q+'.en')}</div>`,it=>it.tr)}
+    <h4 class="sec">Arama süzgeçleri</h4>
+    ${list(p+'.trade.filters','Süzgeç',(it,k,q)=>`
+      ${fld('Metin (TR)',q+'.tr')}${fld('Metin (EN)',q+'.en')}`,it=>it.tr)}
+    <h4 class="sec">Alıcı listesi</h4>
+    <div class="note calm">Gerçek firma adı yazma — bunlar örnek kayıtlar. Seçilecek satırın
+    sırasını aşağıdaki <b>seçili satır</b> alanıyla belirliyorsun (0 = ilk satır).</div>
+    ${list(p+'.trade.buyers','Alıcı',(it,k,q)=>`
+      <div class="r2">${fld('Firma',q+'.n')}${fld('Ülke · şehir',q+'.c')}</div>
+      <div class="r3">${fld('Sevkiyat',q+'.s')}${fld('Hacim',q+'.v')}${fld('Son alım',q+'.d')}</div>`,
+      it=>it.n)}
+    <div class="r2">${nfld('Seçili satır',p+'.trade.pickIdx',{hint:'0 = ilk satır'})}
+      ${fld('Seçilen firma (kart başlığı)',p+'.trade.pick')}</div>
+    ${fld('Seçilen firma alt satırı',p+'.trade.pickc',{hint:'örn. BAE · Dubai · 2014'})}
+    <h4 class="sec">AI firma özeti</h4>
+    ${list(p+'.trade.sum','Özet satırı',(it,k,q)=>`
+      ${fld('Metin (TR)',q+'.tr',{area:1})}${fld('Metin (EN)',q+'.en',{area:1})}`,it=>it.tr)}
+    <h4 class="sec">Karar verici</h4>
+    ${P2('Ünvan',p+'.trade.dm.role')}
+    <div class="r2">${fld('Ad',p+'.trade.dm.name')}${fld('E-posta',p+'.trade.dm.mail')}</div>
+    <div class="r2">${fld('Telefon',p+'.trade.dm.tel',{hint:'kısmen maskeli yaz'})}${fld('LinkedIn',p+'.trade.dm.li')}</div>
+    <h4 class="sec">İlk temas e-postası</h4>
+    ${P2('Konu',p+'.trade.mail.sub')}
+    ${fld('Metin (TR)',p+'.trade.mail.body.tr',{area:1,big:1,hint:'paragraf ayırmak için satır atla — alıcının kendi alım geçmişine atıf yapmalı'})}
+    ${fld('Metin (EN)',p+'.trade.mail.body.en',{area:1,big:1})}
+    ${P2('Yanıt satırı',p+'.trade.mail.reply')}`;
+  } else if(det.story&&det.story.tools){
+    sahne=`<h4 class="sec">Sahne — araç perdeleri</h4>
+    <div class="note calm"><b>Bu sahne tamamen çizimdir.</b> Dört perde (hero → anında teklif →
+    rezervasyon → müşteri paneli) kodda üretilir; proje ekran görüntüsü bilinçli olarak kullanılmaz.
+    Buradan yalnız üstteki not ve tarayıcı çubuğundaki alan adı değişir.</div>
+    ${P2('Sahne notu',p+'.story.note',{area:1})}
+    ${fld('Tarayıcı çubuğundaki alan adı',p+'.story.dom')}`;
+  } else if(det.story){
+    sahne=`<h4 class="sec">Sahne — canlı site vitrini</h4>
+    <div class="note calm"><b>Canlı göm</b> açıkken masaüstünde sitenin kendisi çerçeve içinde açılır.
+    Site <span class="mono">X-Frame-Options</span> ile gömülmeyi reddediyorsa kapat — o zaman
+    proje görselinden posterli kart gösterilir. Mobilde her hâlükârda kart görünür.</div>
+    ${P2('Sahne notu',p+'.story.note',{area:1})}
+    ${fld('Örnek alan adı (mini tarayıcı çubuğu)',p+'.story.dom')}
+    ${list(p+'.story.sites','Site',(it,k,q)=>`
+      <div class="r2">${fld('Adres',q+'.u',{hint:'https:// ile'})}${fld('Proje slug',q+'.ps',{hint:'poster görseli bu projeden alınır'})}</div>
+      <div class="r2">${fld('Ad (TR)',q+'.t.tr')}${fld('Ad (EN)',q+'.t.en')}</div>
+      <div class="sws">${bsw('Masaüstünde canlı göm',q+'.frame')}</div>`,it=>(it.t||{}).tr)}`;
+  } else {
+    sahne=`<h4 class="sec">Sahne</h4>
+    <div class="note">Bu hizmetin şablon ailesi (<span class="mono">${esc(fam||'—')}</span>) tanınmadı.
+    Sahne verisi kodda tanımlı değil.</div>`;
+  }
+
+  return `<h2>Hizmet detayları</h2>
+  <p class="sub">Her hizmetin kendi sayfası: sahne → 3 vuruş cümlesi → 6'lı kart ızgarası → çağrı.
+  Üstten hizmet seç, altındaki her şey o hizmete aittir.</p>
+  <div class="pks">${D.map(o=>`<button class="pk${o.s.slug===s.slug?' on':''}" data-svc="${esc(o.s.slug)}">${esc(o.s.tag||o.s.slug)}</button>`).join('')}</div>
+  <div class="note calm">Düzenlenen: <b>${esc(s.tag||s.slug)}</b> ·
+  adres <span class="mono">/hizmetler/${esc(s.slug)}</span> · şablon ailesi <span class="mono">${esc(fam||'—')}</span>.
+  ${noDet.length?`<br><b>${esc(noDet.join(', '))}</b> için detay sayfası yok — kartı bilinçli olarak tıklanamaz bırakıldı.`:''}</div>
+
+  <h4 class="sec">Sayfa başı</h4>
+  ${P2('Başlık',p+'.h')}
+  ${P2('Giriş paragrafı',p+'.lede',{area:1})}
+  ${[0,1,2].map(k=>P2('Vuruş cümlesi '+(k+1),p+'.hits.'+k)).join('')}
+  ${img(p+'.img','sahnenin altındaki geniş bant — boşsa hiç görünmez')}
+
+  ${sahne}
+
+  <h4 class="sec">Ağrı kartları (ilk 3 kart)</h4>
+  <div class="note calm">Kartın yüzünde başlık ve kısa cümle durur; uzun metin ancak karta tıklanınca
+  açılan panelde görünür. Uzun metinde <b>satır atlayarak</b> paragraf ayır.</div>
+  ${[0,1,2].map(k=>`
+    <div class="item"><div class="ih"><span class="mono">Ağrı ${String(k+1).padStart(2,'0')}${(((det.pains||[])[k]||{}).t||{}).tr?' · '+esc(det.pains[k].t.tr):''}</span></div>
+    ${P2('Kart başlığı',p+'.pains.'+k+'.t')}
+    ${P2('Kart yüzündeki kısa cümle',p+'.pains.'+k+'.d',{area:1})}
+    ${fld('Panel metni (TR)',p+'.pains.'+k+'.x.tr',{area:1,big:1})}
+    ${fld('Panel metni (EN)',p+'.pains.'+k+'.x.en',{area:1,big:1})}
+    ${img(p+'.pains.'+k+'.img','panelin içinde görünür — boşsa hiç çıkmaz')}</div>`).join('')}
+
+  <h4 class="sec">Nasıl yürütürüz (4. kart)</h4>
+  ${list(p+'.steps','Adım',(it,k,q)=>`
+    ${fld('Numara',q+'.n',{hint:'01, 02…'})}
+    <div class="r2">${fld('Başlık (TR)',q+'.t.tr')}${fld('Başlık (EN)',q+'.t.en')}</div>
+    ${fld('Açıklama (TR)',q+'.d.tr',{area:1})}
+    ${fld('Açıklama (EN)',q+'.d.en',{area:1})}`,it=>(it.n||'')+' · '+((it.t||{}).tr||''))}
+
+  <h4 class="sec">Eline geçenler (5. kart)</h4>
+  ${lines('Maddeler (TR) — her satıra bir madde',p+'.del.tr',(det.del||{}).tr)}
+  ${lines('Maddeler (EN)',p+'.del.en',(det.del||{}).en)}
+
+  <h4 class="sec">Peşine düştüğümüz hedefler (6. kartın üstü)</h4>
+  <div class="note"><b>Burada kanıtlanmamış başarı iddiası yazılmaz.</b> Bunlar hedef, geçmiş sonuç değil —
+  “%300 büyüme” gibi bir satır hem yanlış hem risklidir.</div>
+  ${list(p+'.met','Hedef',(it,k,q)=>`
+    ${fld('Rakam / ifade',q+'.v',{hint:'örn. İlk sayfa · 30 gün · Aylık'})}
+    <div class="r2">${fld('Alt satır (TR)',q+'.l.tr')}${fld('Alt satır (EN)',q+'.l.en')}</div>`,it=>it.v)}
+
+  <h4 class="sec">Sık sorulanlar (6. kartın altı)</h4>
+  <div class="note calm">Bu sorular sayfanın <b>FAQPage</b> yapısal verisine de basılır — arama sonuçlarında
+  açılır cevap olarak çıkabilir. Kısa ve dürüst cevap yaz.</div>
+  ${list(p+'.faq','Soru',(it,k,q)=>`
+    <div class="r2">${fld('Soru (TR)',q+'.q.tr')}${fld('Soru (EN)',q+'.q.en')}</div>
+    ${fld('Cevap (TR)',q+'.a.tr',{area:1})}
+    ${fld('Cevap (EN)',q+'.a.en',{area:1})}`,it=>(it.q||{}).tr)}
+
+  <h4 class="sec">Sayfa sonu çağrısı</h4>
+  ${P2('Çağrı başlığı',p+'.cta.t')}
+  ${P2('Çağrı alt metni',p+'.cta.s',{area:1})}`;
+},
+bind(r){
+  r.querySelectorAll('[data-svc]').forEach(b=>b.onclick=()=>{curSvc=b.dataset.svc;show(cur);});
+  r.querySelectorAll('[data-lines]').forEach(el=>el.oninput=()=>
+    set(el.dataset.lines,el.value.split('\n').map(x=>x.trim()).filter(Boolean)));
+  r.querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>
+    set(el.dataset.n,el.value===''?'':+el.value));
+  r.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{
+    const on=!b.classList.contains('on');b.classList.toggle('on',on);set(b.dataset.b,on);});
+}},
+
+yayin:{t:'Yayınlama',n:()=>'',f:()=>`
+  <h2>Yayınlama</h2>
+  <div class="note calm"><b>Akış:</b> düzenle → <b>content.json indir</b> → dosyayı sitenin kök klasörüne
+  koy → klasörü yükle. Site açılışta <span class="mono">content.json</span> dosyasını okuyup üstüne uyguluyor.</div>
+  <h4 class="sec">sitemap.xml — arama motoru haritası</h4>
+  <div class="note calm">Site haritası <b>elle güncellenmez</b>: aşağıdaki düğme, panelde o an duran
+  içeriğe bakıp haritayı baştan üretir. Sabit sayfalar + projeler + <b>detay sayfası olan</b> hizmetler +
+  bülten yazıları, TR/EN <span class="mono">hreflang</span> etiketleriyle birlikte yazılır.
+  Bülten yazılarında tarih olarak yazının kendi tarihi kullanılır.<br>
+  Yeni yazı eklediğinde <b>content.json ile birlikte bunu da indir</b> ve ikisini de kök klasöre koy.</div>
+  <div class="sws"><button class="tb p" type="button" id="bSitemap">sitemap.xml indir</button>
+    <span class="hint">şu an <b id="sitemapCount">—</b> adres yazılacak</span></div>
+  <div class="note calm"><span class="mono">robots.txt</span> değişmez; içinde zaten
+  <span class="mono">Sitemap: https://qanatone.com/sitemap.xml</span> satırı var.
+  Yayın sonrası Search Console'da <b>“indeksleme iste”</b> demeyi unutma.</div>
+  <h4 class="sec">Neyin ne zaman değiştiği</h4>
+  <div class="note calm">
+  <b>content.json ile değişenler:</b> tüm metinler, görseller, sektör rakamları, bülten yazıları,
+  renkler ve hareket ayarları.<br><br>
+  <b>Kod değişikliği gerektirenler:</b> yeni bölüm eklemek, sayfa yapısını değiştirmek,
+  yeni bir animasyon türü.</div>
+  <h4 class="sec">Taslak nerede duruyor</h4>
+  <div class="note calm">Yaptığın değişiklikler bu tarayıcının belleğinde (<span class="mono">localStorage</span>)
+  tutuluyor — sayfayı kapatsan da durur, ama <b>başka bilgisayarda görünmez</b> ve
+  <b>siteye yansımaz</b>. Yansıması için content.json indirip yüklemen gerekir.
+  Bilgisayar değiştireceksen indirdiğin dosyayı <b>İçe aktar</b> ile geri yükleyebilirsin.</div>
+  <h4 class="sec">Otomatik yayın</h4>
+  <div class="note calm">Panelden tek tuşla canlıya basmak mümkün ama bir sunucu fonksiyonu gerektiriyor
+  (GitHub token + şifre). Barındırma kararın netleşince kurabiliriz — bugünkü akış her yerde çalışıyor,
+  hiçbir servise bağlı değil.</div>`,
+  bind(r){
+    const c=r.querySelector('#sitemapCount');
+    if(c)c.textContent=(buildSitemap().match(/<loc>/g)||[]).length;
+    const b=r.querySelector('#bSitemap');
+    if(b)b.onclick=()=>{
+      const bl=new Blob([buildSitemap()],{type:'application/xml'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='sitemap.xml';a.click();
+      URL.revokeObjectURL(a.href);
+      $('#state').textContent='sitemap.xml indirildi — kök klasöre koy';
+    };
+  }}
+};
+const NAV=[['İçerik',['genel','ortak','sektor']],
+  ['Bölümler',['hizmet','hizmetdet','ajan','surec','kanal','proje','bulten','soz','sss','kurucu']],
+  ['Site',['gorunum','yayin']]];
+
+/* ================= ÇEKİRDEK ================= */
+function show(k){
+  cur=k;
+  document.querySelectorAll('#side [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===k));
+  const ed=$('#ed');
+  ed.innerHTML=P[k].f();
+  ed.querySelectorAll('[data-p]').forEach(el=>el.oninput=()=>set(el.dataset.p,el.value));
+  ed.querySelectorAll('[data-p]').forEach(el=>{if(el.tagName==='SELECT')el.onchange=()=>set(el.dataset.p,el.value);});
+  ed.querySelectorAll('[data-rng]').forEach(el=>{
+    const out=el.parentElement.parentElement.querySelector('output');
+    el.oninput=()=>{set(el.dataset.rng,+el.value);if(out)out.textContent=el.value+(el.dataset.u||'');};
+  });
+  ed.querySelectorAll('[data-sw]').forEach(b=>b.onclick=()=>{
+    const on=!b.classList.contains('on');
+    b.classList.toggle('on',on);set(b.dataset.sw,on?1:0);
+  });
+  ed.querySelectorAll('[data-col]').forEach(el=>el.oninput=()=>{
+    set(el.dataset.col,el.value);
+    const s=el.parentElement.querySelector('.col span');
+    if(s)s.textContent=el.value;
+  });
+  ed.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const[p,i]=b.dataset.del.split('|');get(p).splice(+i,1);touch();show(cur);buildSide();});
+  ed.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{
+    const[p,i,d]=b.dataset.mv.split('|');const a=get(p),j=+i+ +d;
+    if(j<0||j>=a.length)return;[a[+i],a[j]]=[a[j],a[+i]];touch();show(cur);});
+  ed.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
+    const p=b.dataset.add;
+    if(!get(p))set(p,[]);
+    get(p).push(JSON.parse(JSON.stringify(blankFor(p))));touch();show(cur);buildSide();});
+  if(P[k].bind)P[k].bind(ed);
+  ed.scrollTop=0;
+}
+function buildSide(){
+  $('#side').innerHTML=NAV.map(([g,ids])=>`<div class="g">${g}</div>`+
+    ids.map(id=>{const n=P[id].n?P[id].n():'';
+      return `<button data-go="${id}" class="${id===cur?'on':''}">${P[id].t}${n!==''?`<em>${n}</em>`:''}</button>`;
+    }).join('')).join('');
+  document.querySelectorAll('#side [data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+}
+function merge(b,o){
+  if(Array.isArray(o))return JSON.parse(JSON.stringify(o));
+  if(o&&typeof o==='object'){
+    const r=(b&&typeof b==='object'&&!Array.isArray(b))?b:{};
+    for(const k of Object.keys(o))r[k]=merge(r[k],o[k]);
+    return r;}
+  return o!==undefined?o:b;
+}
+const frame=$('#frame');let seeded=false;
+frame.addEventListener('load',()=>{
+  if(seeded){setTimeout(push,400);return;}
+  const wait=(t=0)=>new Promise(r=>{const tick=()=>{
+    let ok=false;try{ok=!!frame.contentWindow.__contentReady}catch(e){}
+    if(ok||t>6000)return r();t+=120;setTimeout(tick,120);};tick();});
+  wait().then(()=>{
+    try{DEF=frame.contentWindow.__qanatDefaults();}catch(e){DEF=null;}
+    if(!DEF){$('#ed').innerHTML='<div class="note"><b>Önizlemeye erişilemedi.</b> Paneli sunucu üzerinden aç — yerelde klasörde <span class="mono">python3 -m http.server 8000</span> çalıştırıp <span class="mono">localhost:8000/admin.html</span> adresini kullan. index.html ile admin.html aynı klasörde olmalı.</div>';return;}
+    let saved=null;
+    try{saved=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){}
+    if(!saved){try{saved=JSON.parse(localStorage.getItem(LIVE)||'null')}catch(e){}}
+    C=merge(JSON.parse(JSON.stringify(DEF)),saved||{});
+    seeded=true;buildSide();show('genel');setTimeout(push,300);
+  });
+});
+$('#bExport').onclick=()=>{
+  const bl=new Blob([JSON.stringify(C,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='content.json';a.click();
+  URL.revokeObjectURL(a.href);
+  $('#state').textContent='indirildi — kök klasöre koy';
+};
+$('#bImport').onclick=()=>$('#fImport').click();
+$('#fImport').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{C=merge(JSON.parse(JSON.stringify(DEF)),JSON.parse(r.result));touch();buildSide();show(cur);}
+    catch(x){alert('JSON okunamadı')}};
+  r.readAsText(f);
+};
+$('#bReset').onclick=()=>{
+  if(!confirm('Tüm değişiklikler silinip varsayılana dönülecek. Emin misin?'))return;
+  localStorage.removeItem(DRAFT);C=JSON.parse(JSON.stringify(DEF));touch();buildSide();show(cur);
+};
+$('#bReload').onclick=()=>{frame.src='/index.html?r='+Date.now()};
+document.querySelectorAll('.dev button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.dev button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');$('#fw').classList.toggle('mob',b.dataset.w==='m');});
+addEventListener('beforeunload',e=>{
+  if($('#state').classList.contains('dirty')){e.preventDefault();e.returnValue='';}
+});
+</script>
+</body>
+</html>
