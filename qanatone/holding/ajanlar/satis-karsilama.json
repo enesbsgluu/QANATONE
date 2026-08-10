@@ -1,0 +1,9 @@
+{
+  "ajan": "satis-karsilama",
+  "yetki": {
+    "okur": ["instagram_dm", "whatsapp", "linkedin_msg", "email", "tiktok_dm", "crm.kisi"],
+    "yazar": ["crm.not", "crm.gorev"],
+    "gonderir": ["taslak_yanit"],
+    "asla": ["fiyat_verme", "sozlesme", "odeme", "veri_disari"]
+  }
+}
