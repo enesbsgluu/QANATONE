@@ -108,11 +108,11 @@ olduğunu söyle. Ayrıntı `qanatone-doktrin` becerisinde.
 
 - Spesifikasyon: `AJAN-HOLDING.md` — ajan işine girerken **önce onu oku.**
   İnşa sırası dokuz fazdır, **faz atlanmaz**, Faz 0 omurgadır.
+- **Faz 0 kapandı (2026-08-11)** — omurga sözleşmesi `holding/CLAUDE.md`'de,
+  AJAN-HOLDING'den `ajan-yazimi` ilkeleriyle türetildi; ajan yazmadan önce
+  o dosyayı oku.
 - Omurga: Node + Postgres(pgvector) + Redis; model API ile başlar ve
   değiştirilebilir kalır — model emtiadır, fark yöntem + veridedir.
-- **Faz 0'ın ilk çıktısı `sistem/CLAUDE.md`'dir** — AJAN-HOLDING'den
-  `ajan-yazimi` becerisinin ilkeleriyle türetilir; ajan belgeleri o klasörde
-  kendi talimatını taşır.
 - Ajan, kurum belleğine tek başına yazamaz. Obsidian kasası tek yönlü
   okunur: kasa → gömü → ajan; ajan kasaya yazamaz.
 - Her faz ancak çalışırken kanıtlandığında kapanır: `docker compose up` +

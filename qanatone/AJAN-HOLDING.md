@@ -441,7 +441,7 @@ yoksa iki gerçek doğar ve biri yanlış olur.
 
 | faz | ne kurulur | ne zaman biter |
 |---|---|---|
-| **0** | Ortak omurga (bölüm 2) — kimlik, olay, hafıza, kayıt, onay | omurga olmadan hiçbir ajan kalıcı değil |
+| **0** | Ortak omurga (bölüm 2) — kimlik, olay, hafıza, kayıt, onay | **kapandı 2026-08-11** — 26/26 omurga testi temiz (`npm run test:holding`); sözleşme `holding/CLAUDE.md`'de |
 | **1** | **KAPI + NİYET + KARŞILAMA + DEVİR** tek kanalda (WhatsApp) | bir müşteride gölge modu geçtiğinde |
 | **2** | Kanalları çoğalt (Instagram, e-posta, LinkedIn, TikTok) | adaptör başına |
 | **3** | NİTELEME + RANDEVU + TAKİPÇİ | ilk müşteride ölçülebilir sonuç çıkınca |

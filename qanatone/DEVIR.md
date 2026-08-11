@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-10 21:59 UTC
+> Üretim tarihi: 2026-08-11 09:23 UTC
 
 ## Yeni sohbete geçerken
 
@@ -18,8 +18,8 @@
 | dosya | | boyut | özet |
 |---|---|---|---|
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
-| `AJAN-HOLDING.md` |  | 22 KB | `387d46fb` |
-| `CLAUDE.md` |  | 7 KB | `1e2f6d45` |
+| `AJAN-HOLDING.md` |  | 22 KB | `f886aec6` |
+| `CLAUDE.md` |  | 7 KB | `c02f6311` |
 | `DEVIR.md` | bu dosya | 3 KB |  |
 | `NETLIFY-KURULUM.md` |  | 4 KB | `995201c6` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
@@ -28,8 +28,9 @@
 | `admin.html` |  | 56 KB | `7026865a` |
 | `build.js` |  | 29 KB | `6aef2519` |
 | `holding/.veri/iliski.json` |  | 0 KB | `f9ad6d60` |
-| `holding/.veri/kayit.jsonl` |  | 3 KB | `c5d761ab` |
-| `holding/.veri/kurum.json` |  | 0 KB | `243532d9` |
+| `holding/.veri/kayit.jsonl` |  | 3 KB | `3e4b7514` |
+| `holding/.veri/kurum.json` |  | 0 KB | `618266f1` |
+| `holding/CLAUDE.md` |  | 3 KB | `c542ddbb` |
 | `holding/ajanlar/satis-karsilama.json` |  | 0 KB | `a268ca24` |
 | `holding/arac.js` |  | 1 KB | `5e0745a9` |
 | `holding/butce.js` |  | 2 KB | `d1a565be` |
@@ -63,7 +64,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 28 sn (basılan 0, önbellekten 58) |
+| son derleme | 29 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 46.1 MB |
 
 ## Çalıştırma
