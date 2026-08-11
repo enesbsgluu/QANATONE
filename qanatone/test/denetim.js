@@ -482,6 +482,68 @@ function ciktiDenetimi() {
 }
 
 /* =====================================================================
+   3b · STATİK DOĞRUDAN YÜKLEME — dist sayfası GERÇEKTEN betikleriyle açılır
+   ---------------------------------------------------------------------
+   2026-08 BULUNDU: "2 · çalışma zamanı" YALNIZ kaynağı (index.html) açar —
+   orada tüm bölümler zaten DOM'da olduğundan kabugu_tamamla() parse'ta
+   hemen döner, shell.html'e hiç dokunmaz. "3 · yayın çıktısı" ise dist
+   sayfalarını `new JSDOM(html)` ile SCRIPT ÇALIŞTIRMADAN okur — statik
+   metin/attribute'a bakar. İkisi arasında kör nokta vardı: dist'teki bir
+   sayfayı GERÇEK tarayıcı gibi açıp betiklerini çalıştıran hiçbir ölçüm
+   yoktu. O yolda kabugu_tamamla'nın main.innerHTML'i baştan yazması (eski
+   hâli) huni kaydırıcılarının dinleyicilerini koparıyordu, __chanBuild ve
+   __tstRender gibi geç bayraklar hiç atanmıyordu — 69/0 yeşil, site
+   çalışmıyordu. Kanıt döngüsü: ../harness-hidrasyon.js (aynı ortam()
+   burada tekrar kullanılıyor, ikinci bir mock seti YOK).             */
+async function statikDogrudanYukleme() {
+  if (!fs.existsSync(DIST)) { bolum('3b · statik doğrudan yükleme (dist yok, atlandı)'); return; }
+  bolum('3b · statik doğrudan yükleme (gerçek betik çalıştırma)');
+  const ROTA = 'otomasyon';   // huni (#hsSec) burada gömülü basılıyor
+  const otomasyonYolu = path.join(DIST, ROTA, 'index.html');
+  const shellYolu = path.join(DIST, 'shell.html');
+  if (!fs.existsSync(otomasyonYolu) || !fs.existsSync(shellYolu)) {
+    ol('dist/otomasyon doğrudan yüklemede huni ₺500.000 verir (gerçek betik)', false, 'dist/otomasyon veya shell.html yok');
+    return;
+  }
+  const otomasyonHtml = fs.readFileSync(otomasyonYolu, 'utf8');
+  const shellHtml = fs.readFileSync(shellYolu, 'utf8');
+  const fetchMock = (u) => {
+    const s = String(u);
+    if (s.includes('shell.html')) return Promise.resolve({ ok: true, text: () => Promise.resolve(shellHtml) });
+    return Promise.reject(new Error('ag yok (denetim — kasıtlı)'));
+  };
+  const { dom } = ortam(otomasyonHtml, ORIGIN + '/' + ROTA, { fetch: fetchMock });
+  const w = dom.window, d = w.document;
+  const t0 = Date.now();
+  while (!w.__contentReady && Date.now() - t0 < 4000) await dur(40);
+  await dur(200);
+
+  const el = i => d.getElementById(i);
+  const R = [0, 1, 2, 3, 4, 5].map(i => el('hsR' + i));
+  let huniDogru = false, huniAyrinti = 'huni kaydırıcıları DOM\'da yok';
+  if (R.every(x => x)) {
+    const kur = [100, 50, 0, 0, 0, 10];
+    R.forEach((r, i) => { r.value = String(kur[i]); r.dispatchEvent(new w.Event('input', { bubbles: true })); });
+    await dur(120);
+    const m = id => (el(id) || {}).textContent || '';
+    huniDogru = m('hsPara') === '₺500.000';
+    huniAyrinti = `hsLost=${m('hsLost')} hsPara=${m('hsPara')} hsParaY=${m('hsParaY')}`;
+  }
+  ol('dist/otomasyon doğrudan yüklemede huni ₺500.000 verir (gerçek betik)', huniDogru, huniAyrinti);
+
+  ol('dist/otomasyon doğrudan yüklemede __chanBuild/__tstRender tanımlı',
+     typeof w.__chanBuild === 'function' && typeof w.__tstRender === 'function',
+     `chanBuild=${typeof w.__chanBuild} tstRender=${typeof w.__tstRender}`);
+
+  const tbNavBtn = d.querySelectorAll('#tbNav button').length;
+  const chanNodes = d.querySelectorAll('#chanNodes .cnode').length;
+  ol('dist/otomasyon doğrudan yüklemede kabuktan gelen bölümler dolu (söz bandı + süreç hattı)',
+     tbNavBtn > 0 && chanNodes > 0, `tbNav düğme=${tbNavBtn} chanNodes düğüm=${chanNodes}`);
+
+  dom.window.close();
+}
+
+/* =====================================================================
    4 · GÜVENLİK — statik tarama
    ===================================================================== */
 function guvenlik() {
@@ -611,6 +673,7 @@ function tasarim(s) {
   const s = kaynakBut();
   await calisma();
   ciktiDenetimi();
+  await statikDogrudanYukleme();
   guvenlik();
   tasarim(s);
 

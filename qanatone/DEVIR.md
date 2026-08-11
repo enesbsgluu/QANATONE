@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-11 14:49 UTC
+> Üretim tarihi: 2026-08-11 21:30 UTC
 
 ## Yeni sohbete geçerken
 
@@ -21,12 +21,13 @@
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 7 KB | `73b4546a` |
 | `DEVIR.md` | bu dosya | 4 KB |  |
-| `NETLIFY-KURULUM.md` |  | 4 KB | `995201c6` |
+| `NETLIFY-KURULUM.md` |  | 7 KB | `4a94ad7d` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 57 KB | `6c2ab0e8` |
 | `build.js` |  | 29 KB | `77c7eae2` |
+| `harness-hidrasyon.js` |  | 10 KB | `2582d77a` |
 | `holding/CLAUDE.md` |  | 6 KB | `e44ca0c3` |
 | `holding/ajan/devir.js` |  | 2 KB | `0bb0282a` |
 | `holding/ajan/kapi.js` |  | 1 KB | `bdb9328f` |
@@ -54,13 +55,15 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 786 KB | `18c62824` |
+| `index.html` |  | 788 KB | `bb4d1368` |
+| `index.html.fixed.bak` |  | 788 KB | `bb4d1368` |
+| `index.html.orig.bak` |  | 786 KB | `18c62824` |
 | `js/` | 4 dosya | 889 KB |  |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
-| `netlify/functions/yayinla.js` |  | 6 KB | `adc4a240` |
+| `netlify/functions/yayinla.js` |  | 6 KB | `b7f8e6b6` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
-| `netlify.toml` |  | 0 KB | `4faf049a` |
+| `netlify.toml` |  | 0 KB | `3792c4f8` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 27 KB | `d607ad8f` |
 | `package.json` |  | 1 KB | `7660ac26` |
@@ -68,8 +71,8 @@
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 31 KB | `baa97028` |
-| `test/yayinla.test.js` |  | 8 KB | `459b966f` |
+| `test/denetim.js` |  | 33 KB | `47e7273c` |
+| `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
 
@@ -78,9 +81,9 @@
 | build damgası | **130** |
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
-| denetim suite | temiz |
-| son derleme | 35 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 46.1 MB |
+| denetim suite | ATLANDI |
+| son derleme | 90 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 46.3 MB |
 
 ## Çalıştırma
 

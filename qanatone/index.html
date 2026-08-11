@@ -9651,10 +9651,21 @@ window.__chImg=chImg;
   },{threshold:.16});
   io.observe(sec);
 })();
+/* 2026-08 BULUNDU: eskiden `const band=$('#sozband');if(!band)return;`
+   EN ÜSTTE idi — /otomasyon gibi başka bir rota doğrudan açıldığında bant
+   DOM'da olmadığından IIFE parse zamanında hemen dönüyor, window.__tstRender
+   HİÇ ATANMIYORDU. kabugu_tamamla eksik bölümü sonradan ekleseydi bile,
+   renderAll()'daki `if(window.__tstRender)guvenli(...)` çağrısı flag hiç
+   var olmadığı için sessizce atlanıyordu; söz bandı hiçbir zaman basılmıyordu.
+   Şimdi window.__tstRender HER ZAMAN atanıyor; ilk çağrıda bant yoksa no-op
+   döner, kabuk tamamlanınca renderAll()'un ikinci çağrısında bant artık
+   DOM'da olur ve basım o turda gerçekleşir. Tek seferlik bağlar (resize/
+   ResizeObserver/fonts.ready/start) `kur()` içinde `hazir` bayrağıyla
+   korunuyor — ikinci çağrıda tekrar bağlanmıyor. */
 (function testi(){
-  const band=$('#sozband'); if(!band)return;
-  let i=0,timer=null;
+  let i=0,timer=null,hazir=false;
   function render(){
+    const band=$('#sozband'); if(!band)return;
     const P=C.testimonials||[];
     if(!P.length){band.style.setProperty('display','none','important');return;}
     band.style.removeProperty('display');
@@ -9686,12 +9697,19 @@ window.__chImg=chImg;
     const v=+t.interval; return (v>=2&&v<=60?v:7)*1000;}
   function start(){if(REDUCE)return;clearInterval(timer);
     timer=setInterval(()=>{i++;render();},secs());}
+  function kur(){
+    if(hazir)return true;
+    const band=$('#sozband'); if(!band)return false;
+    let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(fitQ,180)},{passive:true});
+    if('ResizeObserver' in window)new ResizeObserver(()=>fitQ()).observe(band);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitQ);
+    hazir=true;
+    start();
+    return true;
+  }
   window.__tstTiming=()=>{if(timer)start();};
-  window.__tstRender=render;
-  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(fitQ,180)},{passive:true});
-  if('ResizeObserver' in window)new ResizeObserver(()=>fitQ()).observe(band);
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitQ);
-  render();start();
+  window.__tstRender=()=>{if(kur())render();};
+  window.__tstRender();
 })();
 
 /* =================== İŞ AKIŞI (sektöre göre, akan) =================== */
@@ -10061,17 +10079,25 @@ window.__chImg=chImg;
 })();
 
 /* =================== SÜREÇ HATTI =================== */
+/* 2026-08 BULUNDU: eskiden `const box=$('#chan');if(!box)return;` EN
+   ÜSTTE idi — #chan yalnız /surec'te var; /otomasyon gibi başka bir rota
+   doğrudan açıldığında bu IIFE parse zamanında hemen dönüyor ve
+   window.__chanBuild HİÇ ATANMIYORDU. kabugu_tamamla eksik bölümü
+   (surec) sonradan eklese bile, renderAll()'daki
+   `if(window.__chanBuild)guvenli(window.__chanBuild,...)` çağrısı flag
+   hiç var olmadığı için sessizce atlanıyordu.
+   Şimdi kurulum (`kur`) kendi içinde #chan'ı arıyor ve window.__chanBuild
+   HER ZAMAN atanıyor; kur() tekrar çağrılabilir (hazir bayrağıyla tek
+   seferlik dinleyici bağlıyor), böylece kabuk tamamlandıktan sonra
+   renderAll() aynı fonksiyonu ikinci kez çağırdığında #chan artık DOM'da
+   olur ve kurulum o turda gerçekten biter. */
 (function chan(){
-  const box=$('#chan');if(!box)return;
-  const bg=$('#chanBg'),ln=$('#chanLn'),dot=$('#chanDot'),nodes=$('#chanNodes');
+  let bg,ln,dot,nodes,box,len=0,raf=null,hazir=false;
   const LB={tr:['Fark ediliyor','Arıyor','Soruyor','Karşılaştırıyor','Satın alıyor'],
             en:['Notices','Searches','Asks','Compares','Buys']};
   const W=1000,N=5,xs=[...Array(N)].map((_,i)=>62+i*(W-124)/(N-1)),ys=[98,60,84,46,74];
-  let d='M'+xs[0]+','+ys[0];
-  for(let i=1;i<N;i++){const cx=(xs[i-1]+xs[i])/2;d+=` C${cx},${ys[i-1]} ${cx},${ys[i]} ${xs[i]},${ys[i]}`;}
-  bg.setAttribute('d',d);ln.setAttribute('d',d);
-  let len=0;
   function build(){
+    if(!hazir)return;
     const L=LB[LG()];
     nodes.innerHTML=xs.map((x,i)=>
       `<circle class="cnode" data-n="${i}" cx="${x}" cy="${ys[i]}" r="7"/>
@@ -10080,6 +10106,7 @@ window.__chImg=chImg;
     ln.style.strokeDasharray=len;ln.style.strokeDashoffset=len;
   }
   function paint(t){
+    if(!hazir)return;
     ln.style.strokeDashoffset=(len*(1-t)).toFixed(1);
     if(t>.02){const p=ln.getPointAtLength(len*t);
       dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);
@@ -10090,17 +10117,26 @@ window.__chImg=chImg;
       const lb=nodes.querySelector(`[data-l="${i}"]`);if(lb)lb.classList.toggle('on',on);
     });
   }
-  let raf=null;
   function draw(){
-    if(window.__motionOn){raf=null;return;}
+    if(!hazir||window.__motionOn){raf=null;return;}
     const r=box.getBoundingClientRect();
     paint(Math.min(1,Math.max(0,(innerHeight*.92-r.top)/(innerHeight*.58))));
     raf=null;
   }
-  addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(draw)},{passive:true});
-  build();draw();
-  window.__chanBuild=()=>{build();draw();};
+  function kur(){
+    if(hazir)return true;
+    box=$('#chan');if(!box)return false;
+    bg=$('#chanBg');ln=$('#chanLn');dot=$('#chanDot');nodes=$('#chanNodes');
+    let d='M'+xs[0]+','+ys[0];
+    for(let i=1;i<N;i++){const cx=(xs[i-1]+xs[i])/2;d+=` C${cx},${ys[i-1]} ${cx},${ys[i]} ${xs[i]},${ys[i]}`;}
+    bg.setAttribute('d',d);ln.setAttribute('d',d);
+    addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(draw)},{passive:true});
+    hazir=true;
+    return true;
+  }
+  window.__chanBuild=()=>{if(kur()){build();draw();}};
   window.__chanDraw=paint;
+  window.__chanBuild();
 })();
 
 /* =================== TÜM PROJELER (masonry arşiv) ===================
@@ -11316,7 +11352,22 @@ async function kabugu_tamamla(){
     if(!r.ok)return;
     const kabuk=await r.text();
     if(kabuk.length<500)return;
-    ana.innerHTML=kabuk;
+    /* 2026-08 BULUNDU: burada `ana.innerHTML=kabuk` main'in TAMAMINI
+       baştan yazıyordu. Statik çıktıda ZATEN duran bölüm (ör. /otomasyon)
+       da bu yazımla siliniyor, yerine kabuktan TAZE ve KURULUMDAN GEÇMEMİŞ
+       bir kopya geliyordu — parse zamanında o bölüme bağlanmış dinleyiciler
+       (ör. huni kaydırıcıları) artık DOM'da olmayan eski düğümlerde kalıyor,
+       kaydırıcıyı hareket ettirmek hiçbir şey yapmıyordu (yanlış yeşil:
+       derleme temiz, site huni tarifini vermiyordu).
+       Şimdi yalnız EKSİK bölümler ekleniyor; id'si main'de zaten olan
+       bölüme HİÇ dokunulmuyor — canlı düğüm, bağlı dinleyicisiyle birlikte
+       olduğu gibi kalıyor. */
+    const gecici=document.createElement('div');
+    gecici.innerHTML=kabuk;
+    [...gecici.children].forEach(el=>{
+      if(el.id&&document.getElementById(el.id))return;   // zaten canlı, dokunma
+      ana.appendChild(el);
+    });
     document.body.dataset.tam='1';
   }catch(e){ /* kabuk gelmezse sayfa tek rotalık kalır, çökmez */ }
 }
