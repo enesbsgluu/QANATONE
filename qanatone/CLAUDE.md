@@ -125,6 +125,8 @@ olduğunu söyle. Ayrıntı `qanatone-doktrin` becerisinde.
 - `TEST.md` — denetim felsefesi; kural yazarken oku.
 - `NETLIFY-KURULUM.md` — deploy/ortam işine girerken oku.
 - `AJAN-HOLDING.md` — ajan sistemi işine girerken oku.
+- `olcum-sozlugu.md` — ÖLÇÜM/red-flag/metrik işine girerken oku; tek
+  doğruluk kaynağı orası, bağlanır, kopyalanmaz.
 - `OBSIDIAN-KURULUM.md` — kasa işine girerken oku.
 
 ## Üslup
