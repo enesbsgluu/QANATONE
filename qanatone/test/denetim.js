@@ -523,6 +523,21 @@ function guvenlik() {
   const dg = dosyalar['netlify/functions/diagnose.js'] || '';
   ol('SSRF: yönlendirme elle takip ediliyor', dg.includes("redirect: 'manual'"), '');
   ol('SSRF: özel IP denetimi var', /isPrivate/.test(dg), '');
+
+  /* yayinla.js — parola korumalı yayın hattı (bkz. test/yayinla.test.js
+     davranışı ağa çıkmadan sahte adaptörle kanıtlıyor; burası yalnız
+     kaynakta yapısal olarak doğru desenlerin durduğunu ölçüyor) */
+  const yy = dosyalar['netlify/functions/yayinla.js'] || '';
+  ol('yayinla: sabit parola/hash yok',
+     !/PANEL_PAROLA_HASH\s*\|\|/.test(yy) && !/[0-9a-f]{32,}/i.test(yy), '');
+  ol('yayinla: timingSafeEqual kullanılıyor', /timingSafeEqual/.test(yy), '');
+  ol('yayinla: parola loglanmıyor',
+     !/console\.(log|error|warn)\([^)]*\bparola\b/i.test(yy), '');
+  const ad = dosyalar['admin.html'] || '';
+  const parolaAlani = (ad.match(/<input[^>]*id="yayinParola"[^>]*>/) || [''])[0];
+  ol('admin.html: parola alanı password + autocomplete kapalı',
+     /type="password"/.test(parolaAlani) && /autocomplete="off"/.test(parolaAlani),
+     parolaAlani.slice(0, 70));
   /* Yorum satırlarını AT: ilk yazımda `hd.includes(...)` kullanmıştım ve
      başlık silinmiş olmasına rağmen aynı kelime yorumda geçtiği için kural
      yeşil kaldı. Yanlış YEŞİL, yanlış kırmızıdan tehlikelidir — bir daha

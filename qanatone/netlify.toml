@@ -1,6 +1,6 @@
 # QANATONE — Netlify yapilandirmasi
 [build]
-  command = "npm install && node build.js"
+  command = "npm ci && node build.js"
   publish = "dist"
 
 [build.environment]

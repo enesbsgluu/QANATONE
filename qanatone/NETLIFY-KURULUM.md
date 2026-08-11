@@ -4,9 +4,14 @@
 
 | Alan | Değer |
 |---|---|
-| Build command | `npm install && node build.js` |
+| Build command | `npm ci && node build.js` |
 | Publish directory | **`dist`** |
 | Node version | 20 veya üstü |
+
+**Repo bağlama:** Netlify > Add new site > Import an existing project >
+GitHub > `enesbsgluu/QANATONE`, branch `main`. Ayarlar zaten
+`netlify.toml`'da (build command, publish dir, Node sürümü) — panelden
+elle girmeye gerek yok, yalnız ortam değişkenlerini gir (aşağıda).
 
 `dist` şart. Üreteç kaynağa dokunmuyor; çıktı ayrı klasöre yazılıyor.
 (Bir kez çıktı kaynağın üzerine yazıldı ve ikinci koşuda "önceden
@@ -17,9 +22,16 @@ kaynak ve çıktı artık asla aynı yerde durmuyor.)
 
 | Değişken | Ne için | Zorunlu mu |
 |---|---|---|
+| `PANEL_PAROLA_HASH` | admin.html'deki "Yayınla" düğmesinin parola kapısı — `salt:hash` (scrypt) | otomatik yayın isteniyorsa; yoksa fonksiyon 503 ile kapalı durur |
+| `GITHUB_TOKEN` | `yayinla` fonksiyonunun `content.json`'ı commit etmek için kullandığı GitHub PAT (yalnız bu repoya Contents yazma izni yeterli) | `PANEL_PAROLA_HASH` ile birlikte |
 | `INDEXNOW_KEY` | Bing/Yandex/Naver/Seznam/Yep'e anında bildirim | hayır ama tavsiye |
 | `WA_TOKEN` `WA_PHONE_ID` `WA_TO` | form → WhatsApp | form bildirimi isteniyorsa |
 | `WA_TEMPLATE` `WA_LANG` | onaylı şablon kullanılacaksa | hayır |
+
+**`PANEL_PAROLA_HASH` nasıl üretilir:** yerelde
+`node netlify/parola-hash.js` çalıştır, parolayı yaz/yapıştır, çıkan
+`salt:hash` satırını olduğu gibi Netlify'a yapıştır. Parolanın kendisi
+hiçbir dosyaya yazılmaz, yalnız bu çıktı ortam değişkeninde durur.
 
 **IndexNow anahtarı nasıl üretilir:** 8–128 karakter, harf ve rakam.
 Örneğin `openssl rand -hex 16` çıktısı. Netlify'a `INDEXNOW_KEY` olarak
@@ -92,4 +104,43 @@ Kod değişince her şeyin yeniden basılması **doğru** — kabuk her sayfada.
 ## netlify.toml
 
 Artık ayarlar dosyada; panelden girmeye gerek yok. Sadece ortam
-değişkenlerini (`INDEXNOW_KEY`, `WA_*`) arayüzden gir.
+değişkenlerini (`PANEL_PAROLA_HASH`, `GITHUB_TOKEN`, `INDEXNOW_KEY`,
+`WA_*`) arayüzden gir.
+
+---
+
+# Panel yayın hattı — parola korumalı otomatik commit
+
+admin.html'deki **Yayınla** düğmesi `netlify/functions/yayinla.js`
+fonksiyonuna parola + o an panelde duran içeriği (`content.json`) POST
+eder. Netlify Identity **kullanılmıyor** — giriş tek parola, fonksiyon
+tarafında `PANEL_PAROLA_HASH` ile `scryptSync` + `timingSafeEqual`
+üzerinden doğrulanıyor (zamanlama saldırısına kapalı).
+
+Akış: **panel → parola doğru mu? → doğruysa `GITHUB_TOKEN` ile
+`content.json`'ı `main`'e commit et → Netlify bu commit'i görüp
+otomatik yeniden derler.**
+
+Yanlış parola genel bir "giriş reddedildi" ile döner (hangi kısmın
+yanlış olduğu söylenmez) ve ~300ms sabit gecikme uygulanır. Parola,
+hash ve `GITHUB_TOKEN` hiçbir yanıt gövdesine, hata mesajına ya da log
+satırına yazılmaz — bkz. `netlify/functions/yayinla.js` üst bilgisi.
+
+**`PANEL_PAROLA_HASH` tanımlı değilse fonksiyon 503 ile kapalı davranır**
+— yani ortam değişkeni girilmeden bu düğme hiçbir işe yaramaz, açık bir
+parola kapısı hâlâ yoktur.
+
+**Suite kalırsa deploy düşer:** panelden atılan commit doğrudan `main`'e
+gidiyor, gözden geçirme (PR) yok — bu yüzden güvenlik ağı `build.js`'in
+sonunda otomatik koşan `test/denetim.js`. Commit sonrası Netlify'ın
+tetiklediği derlemede suite'te tek kural bile kalırsa `build.js` `exit 1`
+ile döner ve Netlify derlemeyi **başarısız** sayar — yayın çıkmaz, site
+eski hâlinde kalır. Panelin kendisi `test/yayinla.test.js` ile ayrıca
+kanıtlanıyor (ağa çıkmadan, sahte GitHub adaptörüyle).
+
+**Yerel kurulum adımları:**
+1. `node netlify/parola-hash.js` çalıştır, parolanı yaz, çıkan
+   `salt:hash` satırını Netlify'a `PANEL_PAROLA_HASH` olarak gir.
+2. GitHub'da bu repoya yalnız Contents (read/write) izni olan bir
+   fine-grained PAT üret, Netlify'a `GITHUB_TOKEN` olarak gir.
+3. admin.html'i aç, içeriği düzenle, **Yayınla**'ya bas, parolanı gir.

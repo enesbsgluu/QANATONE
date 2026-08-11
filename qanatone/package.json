@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node build.js",
     "test": "node test/denetim.js",
+    "test:yayinla": "node test/yayinla.test.js",
     "test:holding": "node holding/test/omurga.test.js",
     "test:faz1": "node holding/test/faz1.test.js",
     "test:denetci": "node holding/test/denetci.test.js",

@@ -796,9 +796,13 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
   <b>siteye yansımaz</b>. Yansıması için content.json indirip yüklemen gerekir.
   Bilgisayar değiştireceksen indirdiğin dosyayı <b>İçe aktar</b> ile geri yükleyebilirsin.</div>
   <h4 class="sec">Otomatik yayın</h4>
-  <div class="note calm">Panelden tek tuşla canlıya basmak mümkün ama bir sunucu fonksiyonu gerektiriyor
-  (GitHub token + şifre). Barındırma kararın netleşince kurabiliriz — bugünkü akış her yerde çalışıyor,
-  hiçbir servise bağlı değil.</div>`,
+  <div class="note calm">Parola bir sunucu fonksiyonuna gidip (Netlify Identity KULLANILMIYOR)
+  doğrulanıyor; doğruysa <span class="mono">content.json</span> doğrudan GitHub'a commit ediliyor.
+  Parola tarayıcıda hiçbir yere kaydedilmez, gönderim sonrası alan temizlenir.</div>
+  <div class="f"><label>Panel parolası</label>
+    <input type="password" id="yayinParola" autocomplete="off"></div>
+  <div class="sws"><button class="tb p" type="button" id="bYayinla">Yayınla</button>
+    <span class="hint" id="yayinDurum"></span></div>`,
   bind(r){
     const c=r.querySelector('#sitemapCount');
     if(c)c.textContent=(buildSitemap().match(/<loc>/g)||[]).length;
@@ -808,6 +812,22 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
       const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='sitemap.xml';a.click();
       URL.revokeObjectURL(a.href);
       $('#state').textContent='sitemap.xml indirildi — kök klasöre koy';
+    };
+    const by=r.querySelector('#bYayinla'), pf=r.querySelector('#yayinParola'), du=r.querySelector('#yayinDurum');
+    if(by)by.onclick=async()=>{
+      const parola=pf.value;
+      if(!parola){du.textContent='parola gerekli';return;}
+      by.disabled=true;du.textContent='gönderiliyor…';
+      try{
+        const res=await fetch('/.netlify/functions/yayinla',{method:'POST',
+          headers:{'content-type':'application/json'},body:JSON.stringify({parola,content:C})});
+        const j=await res.json().catch(()=>({}));
+        if(res.ok&&j.ok)du.textContent='yayınlandı — GitHub\'a commit edildi';
+        else if(res.status===401)du.textContent='parola reddedildi';
+        else if(res.status===503)du.textContent='fonksiyon kapalı (sunucu tarafı kurulmamış)';
+        else du.textContent='başarısız (kod '+res.status+')';
+      }catch(e){du.textContent='ağ hatası, tekrar dene';}
+      finally{pf.value='';by.disabled=false;}
     };
   }}
 };
