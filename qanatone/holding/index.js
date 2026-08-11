@@ -18,7 +18,7 @@ function omurgaKur(secenek = {}) {
   const kimlik = new Kimlik();
   const hafiza = new Hafiza(kayit);
   const arac = new AracKaydi(kayit);
-  const onay = new OnayKapisi(kayit, olay);
+  const onay = new OnayKapisi(kayit, olay, kimlik);
   const butce = new Butce(kayit, olay);
   const guvenlik = new Guvenlik(kayit);
 

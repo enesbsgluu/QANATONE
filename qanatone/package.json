@@ -7,7 +7,9 @@
     "build": "node build.js",
     "test": "node test/denetim.js",
     "test:holding": "node holding/test/omurga.test.js",
-    "test:faz1": "node holding/test/faz1.test.js"
+    "test:faz1": "node holding/test/faz1.test.js",
+    "test:denetci": "node holding/test/denetci.test.js",
+    "test:doa": "node holding/test/doa.test.js"
   },
   "dependencies": {
     "jsdom": "^24.0.0"

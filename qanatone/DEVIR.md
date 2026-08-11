@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-11 09:56 UTC
+> Üretim tarihi: 2026-08-11 10:29 UTC
 
 ## Yeni sohbete geçerken
 
@@ -18,16 +18,16 @@
 | dosya | | boyut | özet |
 |---|---|---|---|
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
-| `AJAN-HOLDING.md` |  | 22 KB | `f886aec6` |
+| `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 7 KB | `c02f6311` |
-| `DEVIR.md` | bu dosya | 3 KB |  |
+| `DEVIR.md` | bu dosya | 4 KB |  |
 | `NETLIFY-KURULUM.md` |  | 4 KB | `995201c6` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 56 KB | `7026865a` |
 | `build.js` |  | 29 KB | `77c7eae2` |
-| `holding/CLAUDE.md` |  | 3 KB | `c9945631` |
+| `holding/CLAUDE.md` |  | 6 KB | `e44ca0c3` |
 | `holding/ajan/devir.js` |  | 2 KB | `0bb0282a` |
 | `holding/ajan/kapi.js` |  | 1 KB | `bdb9328f` |
 | `holding/ajan/karsilama.js` |  | 2 KB | `005c53b9` |
@@ -36,17 +36,21 @@
 | `holding/ajanlar/kapi.json` |  | 0 KB | `1ebf9c54` |
 | `holding/ajanlar/niyet-siniflandirici.json` |  | 0 KB | `23bcf395` |
 | `holding/ajanlar/satis-karsilama.json` |  | 0 KB | `a268ca24` |
+| `holding/ajanlar/teklif-hazirlayici.json` |  | 0 KB | `d4c2a482` |
 | `holding/arac.js` |  | 1 KB | `5e0745a9` |
 | `holding/butce.js` |  | 2 KB | `d1a565be` |
+| `holding/denetci.js` |  | 6 KB | `4cb02877` |
 | `holding/faz1.js` |  | 1 KB | `c7e86989` |
 | `holding/guvenlik.js` |  | 2 KB | `b289dd7e` |
 | `holding/hafiza.js` |  | 2 KB | `14e8bc0f` |
-| `holding/index.js` |  | 1 KB | `453512bf` |
+| `holding/index.js` |  | 1 KB | `e9ea65bf` |
 | `holding/kanal/whatsapp-sahte.js` |  | 1 KB | `f7a069b0` |
 | `holding/kayit.js` |  | 1 KB | `7edb00df` |
 | `holding/kimlik.js` |  | 1 KB | `f7851bb4` |
 | `holding/olay.js` |  | 1 KB | `e8573dc7` |
-| `holding/onay.js` |  | 2 KB | `424efd08` |
+| `holding/onay.js` |  | 3 KB | `a8c09431` |
+| `holding/test/denetci.test.js` |  | 4 KB | `14e8162f` |
+| `holding/test/doa.test.js` |  | 3 KB | `63338127` |
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
@@ -55,8 +59,9 @@
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
 | `netlify.toml` |  | 0 KB | `4faf049a` |
+| `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 27 KB | `d607ad8f` |
-| `package.json` |  | 0 KB | `2b3220a3` |
+| `package.json` |  | 0 KB | `2a7cac2f` |
 | `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
@@ -71,7 +76,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 34 sn (basılan 0, önbellekten 58) |
+| son derleme | 29 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 46.1 MB |
 
 ## Çalıştırma

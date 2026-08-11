@@ -1,0 +1,10 @@
+{
+  "ajan": "teklif-hazirlayici",
+  "yetki": {
+    "okur": ["crm.kisi", "fiyat.politikasi"],
+    "yazar": ["crm.teklif"],
+    "gonderir": ["teklif_taslagi"],
+    "asla": ["sozlesme", "odeme", "veri_disari"]
+  },
+  "tutarEsigi": 10000
+}

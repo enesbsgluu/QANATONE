@@ -471,3 +471,83 @@ sattığı hikâyenin devamı:
 Ve senin kapanış vuruşun burada bir kez daha çalışıyor:
 
 > **"Ürettiğimiz aracı değil, işletmede oluşturduğun sonucu satıyoruz."**
+
+---
+
+## 15 · Ölçüm — red-flag eşikleri ve haftalık rapor
+
+*Kaynak: Gemini holding diyagramları (Gelir Operasyonu tarafı) ve Enes'in
+metrik tablosu — bkz. `olcum-sozlugu.md` (pazarlama/yaşam döngüsü tarafı).
+İkisi de 11 Ağustos 2026.*
+
+İki parça: **(a)** anlık red-flag eşikleri — bir şey koktuğunda hemen
+olay + bildirim; **(b)** haftalık konsolide rapor — trendi insan
+gözüyle okunur hale getirir. İkisi de `holding/denetci.js`'in
+(3. savunma hattı, bölüm 3'teki DENETÇİ'nin uzantısı) doğal devamı.
+
+### 15.1 Üç pazarlıksız ilke (kaynak: `olcum-sozlugu.md`)
+
+Bu üç ilke aşağıdaki HER iki kategori için de geçerli — Gelir Operasyonu
+red-flag'leri dahil:
+
+1. **Metrik ajan doğurmaz; var olan ajanın SÖZLÜĞÜNE girer.** Metrik
+   başına ajan = 45-betik tuzağının metrik hâli (bölüm 0).
+2. **Eşik değeri uydurulmaz.** Her red-flag hesabın/sistemin KENDİ taban
+   çizgisine göre sapmadır (7 ve 28 günlük ortalamaya kıyas), mutlak
+   "sektörde iyi olan X" değeri yazılmaz.
+3. **Kaynağı bağlanmamış metrik karta girmez.** Ajan o metrik sorulduğunda
+   "rakam yok" der (bölüm 12, kırmızı çizgi 6 — uydurma rakam yasağı).
+
+### 15.2 Gelir Operasyonu red-flag'leri — KAPI/NİYET/DEVİR hattı
+
+Bu kategori `olcum-sozlugu.md`'nin kapsamı DIŞINDA (o pazarlama/yaşam
+döngüsü metriklerini kapsar) — burada gelen talep hattının kendi sağlığı
+ölçülüyor. Kaynak: Faz 1'in ürettiği kayıt satırları (`niyet.siniflandi`,
+`devir.karti`, `kapi.durduruldu`); NİTELEME'nin sıcaklık skorunu (Faz 3)
+beklemiyor.
+
+| sinyal | kaynak kayıt | eşik (taban çizgisine göre — ilke 2) | tetiklenen |
+|---|---|---|---|
+| sınıflandırma güveni düşüşü | `niyet.siniflandi.guven` haftalık ortalama | 7/28 günlük kendi ortalamasına göre >%15 düşüş | `denetim.red-flag` olayı + insana bildirim |
+| devir oranı sıçraması | `devir.karti` / toplam `niyet.siniflandi` | kendi 28 günlük ortalamasına göre +10 puan veya fazlası | `denetim.red-flag` olayı + insana bildirim |
+| durdurma oranı artışı | `kapi.durduruldu` / toplam `mesaj.geldi.ham` | kendi 28 günlük ortalamasına göre 2× veya fazlası | `denetim.red-flag` olayı + insana bildirim (olası spam/saldırı dalgası sinyali) |
+
+Her tetiklenme olay yolu üzerinden (bölüm 2.2) `denetim.red-flag`
+yayınlar; onay seviyesi B — insan görür, ajan durmaz, sadece uyarır.
+
+### 15.3 Pazarlama + yaşam döngüsü + yüzey red-flag'leri
+
+Tam sözlük ve tablolar `olcum-sozlugu.md`'de — burada TEKRAR EDİLMEZ,
+tek doğruluk kaynağı orası. Üç alan, üç ayrı faza bağlı:
+
+- **Kampanya Analisti sözlüğü** (ROAS, CAC/CPA, CPL, CTR, CPC/CPM,
+  Frequency, Reach, CPR) → **Faz 5**, ads verisi bağlandığında.
+- **Yüzey ölçümü** (CR, Bounce Rate, Session Duration/Pages) → kendi
+  fazında, analytics + form/lead kaydı bağlandığında; `diagnose.js`
+  zaten teknik yüzeyi ölçüyor, bu ayrı davranış katmanı.
+- **Yaşam döngüsü** (CLV/AOV, Churn/Retention, NPS/CSAT) → **Faz 3**
+  (randevu/takip) + **Faz 6** (muhasebe denetçisi); Churn/Retention
+  müşterinin KENDİ CRM'inden okunur, kopyalanmaz.
+- Market Share, Brand Awareness → **karta hiç girmez** (ilke 3, KOBİ
+  ölçeğinde güvenilir kaynak yok).
+
+### 15.4 Haftalık konsolide rapor
+
+Gelir Operasyonu alanları: talep sayısı (toplam `talep.geldi`), sınıf
+dağılımı (`niyet.siniflandi.sinif` histogramı), devir oranı, durdurma
+oranı, bütçe kullanımı (ajan başına `butce.harcama` toplamı / limit,
+aşım sayısı). Pazarlama/yaşam döngüsü alanları `olcum-sozlugu.md`'deki
+sözlükten, yalnız kaynağı bağlanmış metrikler (ilke 3) — rapor bir
+rakamı değil, adlandırılmış bir davranış değişimini anlatır (bkz.
+`olcum-sozlugu.md`, "Kapı 2" doktrini). Format ve dağıtım kanalı
+(e-posta / panel) bu aşamada belirlenmedi.
+
+### 15.5 İnşa fazı
+
+Gelir Operasyonu red-flag'leri (15.2) ayrı bir müşteri-fazına bağlı
+**değil** — omurga ve `denetci.js` gibi fazlar arası altyapı, bölüm 13'ün
+numaralı tablosuna girmiyor. **Gölge modu sırasında/sonrasında kurulur:**
+eşiklerin anlamı olması için gerçek trafik (baseline) gerekiyor; test
+verisiyle eşik ayarlamak uydurma rakam olur (ilke 2). Pazarlama/yaşam
+döngüsü red-flag'leri (15.3) kendi fazlarına bağlı (Faz 3/5/6) — kaynak
+API'ler bağlandığında, ilke 3 gereği daha önce değil.
