@@ -10,8 +10,13 @@ Ajan yazarken mimariyi AJAN-HOLDING.md'de oku, kuralı burada uygula.
 kimlik, hafiza, arac, onay, butce, guvenlik. Yeni bir ajan bunları YENİDEN
 YAZMAZ, `omurgaKur()`'dan alır.
 
-Kanıt: `npm run test:holding` → 26/26 geçti, 0 kaldı (son koşu: 2026-08-11).
+Kanıt: `npm run test:holding` → 28/28 geçti, 0 kaldı (son koşu: 2026-08-11).
 Kanıtsız faz açık kalır kuralı gereği bu satır kapanış belgesidir.
+
+**`holding/.veri/` git'te asla izlenmez** — kurum belleği, ilişki belleği ve
+kayıt jsonl'i gerçek müşteri verisi taşıyacak, depo herkese açık (kırmızı
+çizgi 3). `.gitignore`'da durur; omurga testi her koşuda `git check-ignore`
+ve `git ls-files` ile bunu doğrular — biri kayarsa test kırmızı olur.
 
 ## Ajan yazarken pazarlıksız kurallar
 

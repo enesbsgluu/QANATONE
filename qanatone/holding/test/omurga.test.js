@@ -6,7 +6,25 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { omurgaKur } = require('../index');
+
+const PROJE_KOK = path.join(__dirname, '..', '..');
+
+function gitYokSayiyorMu(yol) {
+  try {
+    execFileSync('git', ['check-ignore', '-q', yol], { cwd: PROJE_KOK });
+    return true;
+  } catch (e) {
+    if (e.status === 1) return false;
+    throw e;
+  }
+}
+
+function gitIzleneniVar(yol) {
+  const cikti = execFileSync('git', ['ls-files', yol], { cwd: PROJE_KOK }).toString().trim();
+  return cikti.length > 0;
+}
 
 let gecti = 0, kaldi = 0;
 function ol(ad, kosul, ayrinti) {
@@ -93,6 +111,10 @@ async function calistir() {
   ol('kişisel veri tespit edilip maskeleniyor', pii.kisiselVeri && !pii.temizMetin.includes('12345678901'));
   const temiz = o.guvenlik.degerlendir({ metin: 'merhaba, fiyat bilgisi alabilir miyim', kaynak: 'instagram', kisiId: 'kisi-4' });
   ol('sıradan mesaj güvenli sayılıyor', temiz.guvenli && !temiz.durdur && !temiz.kisiselVeri);
+
+  // 2.9 — .veri git'te izlenmiyor (kırmızı çizgi 3: müşteri verisi paylaşılan depoda durmaz)
+  ol('.veri .gitignore ile yok sayılıyor', gitYokSayiyorMu('holding/.veri'));
+  ol('.veri altında izlenen dosya yok', !gitIzleneniVar('holding/.veri'));
 
   console.log(`\n  ${gecti} geçti · ${kaldi} kaldı\n`);
   console.log(kaldi === 0 ? '  omurga temiz.' : '  OMURGA KALDI — Faz 1 buna kurulmaz.');
