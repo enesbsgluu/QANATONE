@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-11 09:23 UTC
+> Üretim tarihi: 2026-08-11 09:46 UTC
 
 ## Yeni sohbete geçerken
 
@@ -26,11 +26,8 @@
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 56 KB | `7026865a` |
-| `build.js` |  | 29 KB | `6aef2519` |
-| `holding/.veri/iliski.json` |  | 0 KB | `f9ad6d60` |
-| `holding/.veri/kayit.jsonl` |  | 3 KB | `3e4b7514` |
-| `holding/.veri/kurum.json` |  | 0 KB | `618266f1` |
-| `holding/CLAUDE.md` |  | 3 KB | `c542ddbb` |
+| `build.js` |  | 29 KB | `77c7eae2` |
+| `holding/CLAUDE.md` |  | 3 KB | `c9945631` |
 | `holding/ajanlar/satis-karsilama.json` |  | 0 KB | `a268ca24` |
 | `holding/arac.js` |  | 1 KB | `5e0745a9` |
 | `holding/butce.js` |  | 2 KB | `d1a565be` |
@@ -41,7 +38,7 @@
 | `holding/kimlik.js` |  | 1 KB | `f7851bb4` |
 | `holding/olay.js` |  | 1 KB | `e8573dc7` |
 | `holding/onay.js` |  | 2 KB | `424efd08` |
-| `holding/test/omurga.test.js` |  | 5 KB | `1e4c2551` |
+| `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
 | `index.html` |  | 786 KB | `18c62824` |
 | `js/` | 4 dosya | 889 KB |  |
@@ -64,7 +61,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 29 sn (basılan 0, önbellekten 58) |
+| son derleme | 111 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 46.1 MB |
 
 ## Çalıştırma

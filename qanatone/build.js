@@ -251,7 +251,7 @@ function devir(bilgi) {
   const dosyalar = [];
   (function tara(d, on) {
     for (const f of fs.readdirSync(d).sort()) {
-      if (['node_modules', 'dist', '.onbellek', '.git'].includes(f)) continue;
+      if (['node_modules', 'dist', '.onbellek', '.git', '.veri'].includes(f)) continue;
       const p = path.join(d, f), rel = on + f;
       const st = fs.statSync(p);
       if (st.isDirectory()) {
