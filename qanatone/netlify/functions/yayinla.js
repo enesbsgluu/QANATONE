@@ -28,7 +28,19 @@ const crypto = require('crypto');
 
 const REPO = 'enesbsgluu/QANATONE';
 const BRANCH = 'main';
-const DOSYA_YOLU = 'content.json';
+/* GitHub Contents API yolu HER ZAMAN depo KÖKÜNE göredir — Netlify
+   arayüzündeki "Base directory" ayarını (bu sitede: qanatone) BİLMEZ.
+   build.js ise kendi __dirname'inden okur; Netlify o çalışmayı base
+   directory'nin İÇİNDE başlatır. İkisi aynı __dirname'i paylaşmadığı
+   için TEMEL_DIZIN burada AÇIKÇA yazılıyor ve DOSYA_YOLU ondan türüyor.
+   2026-08 BULUNDU: burada 'content.json' yazıyordu (depo köküne), build.js
+   qanatone/content.json okuyordu — panel 200 dönüyor, commit atılıyor,
+   derleme yeşil bitiyordu ama site hiç değişmiyordu (yanlış yeşil).
+   test/denetim.js 'yayinla yazdığı yol = build.js okuduğu yol' kuralı
+   TEMEL_DIZIN'i gerçek git deposuna karşı doğrular — buradaki değer
+   yanlışsa (ör. depo yeniden düzenlenirse) derleme kırmızı yanar. */
+const TEMEL_DIZIN = 'qanatone';
+const DOSYA_YOLU = TEMEL_DIZIN + '/content.json';
 const SABIT_GECIKME_MS = 300;
 
 const dur = ms => new Promise(r => setTimeout(r, ms));

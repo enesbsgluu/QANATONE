@@ -533,6 +533,34 @@ function guvenlik() {
   ol('yayinla: timingSafeEqual kullanılıyor', /timingSafeEqual/.test(yy), '');
   ol('yayinla: parola loglanmıyor',
      !/console\.(log|error|warn)\([^)]*\bparola\b/i.test(yy), '');
+
+  /* 66 · yayinla.js'in GitHub Contents API'ye YAZDIĞI yol ile build.js'in
+     diskten OKUDUĞU yol aynı dosyayı mı gösteriyor?
+     GitHub Contents API yolu HER ZAMAN depo KÖKÜNE göredir. build.js'in
+     ROOT'u ise kendi __dirname'i — Netlify'da bu, arayüzde ayarlı "Base
+     directory" sayesinde depo kökünden FARKLI bir alt klasör olabilir.
+     2026-08 BULUNDU: DOSYA_YOLU='content.json' depo KÖKÜNE yazıyordu,
+     build.js ise <base>/content.json okuyordu — panel 200 dönüyor, commit
+     atılıyor, denetim yeşil bitiyordu ama site hiç değişmiyordu (yanlış
+     yeşil). Kural git'ten GERÇEK depo kökünü sorup DOSYA_YOLU'nu ona karşı
+     doğruluyor — 'qanatone' burada sabit YAZILMIYOR, böylece depo yeniden
+     düzenlenirse kural kendiliğinden güncel kalır (64/65'in kendi metnine
+     takılma hatasını tekrarlamamak için: desen burada da yok, gerçek git
+     durumuna karşı hesaplanıyor). */
+  {
+    const { execFileSync } = require('child_process');
+    let depoKoku = null;
+    try {
+      depoKoku = execFileSync('git', ['rev-parse', '--show-toplevel'],
+        { cwd: KOK, encoding: 'utf8' }).trim();
+    } catch (e) { depoKoku = null; }
+    const { DOSYA_YOLU } = require(path.join(KOK, 'netlify', 'functions', 'yayinla.js'));
+    const depoGoreli = depoKoku !== null ? posixYol(path.relative(depoKoku, KOK)) : null;
+    const beklenen = depoKoku !== null ? (depoGoreli ? depoGoreli + '/content.json' : 'content.json') : null;
+    ol('yayinla yazdığı yol = build.js okuduğu yol (depo kökü üzerinden)',
+       depoKoku !== null && DOSYA_YOLU === beklenen,
+       `yazılan="${DOSYA_YOLU}" · build ROOT depo-göreli="${depoGoreli}" · beklenen="${beklenen}" · depoKöku=${depoKoku}`);
+  }
   const ad = dosyalar['admin.html'] || '';
   const parolaAlani = (ad.match(/<input[^>]*id="yayinParola"[^>]*>/) || [''])[0];
   ol('admin.html: parola alanı password + autocomplete kapalı',

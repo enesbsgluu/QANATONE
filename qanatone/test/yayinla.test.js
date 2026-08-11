@@ -6,7 +6,7 @@
    izleniyor. crypto.scryptSync gerçek — parola doğrulama gerçek yol. */
 
 const crypto = require('crypto');
-const { handlerOlustur, dogrula } = require('../netlify/functions/yayinla.js');
+const { handlerOlustur, dogrula, DOSYA_YOLU } = require('../netlify/functions/yayinla.js');
 
 let gecti = 0, kaldi = 0;
 function ol(ad, kosul, ayrinti) {
@@ -91,7 +91,7 @@ const olay = (govde, method) => ({
     if (cagrilar.length === 1) {
       const c = cagrilar[0];
       ol('commit: repo doğru', c.repo === 'enesbsgluu/QANATONE', c.repo);
-      ol('commit: yol content.json', c.yol === 'content.json', c.yol);
+      ol('commit: yol DOSYA_YOLU ile eşleşiyor (tek doğruluk kaynağı)', c.yol === DOSYA_YOLU, c.yol);
       ol('commit: içerik gövdedeki content.json ile eşleşiyor',
          JSON.parse(c.icerik).settings.whatsapp === '905000000000', c.icerik.slice(0, 40));
       ol('commit: token adaptöre iletiliyor (env\'den)', c.token === process.env.GITHUB_TOKEN, '');
