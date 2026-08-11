@@ -442,7 +442,7 @@ yoksa iki gerçek doğar ve biri yanlış olur.
 | faz | ne kurulur | ne zaman biter |
 |---|---|---|
 | **0** | Ortak omurga (bölüm 2) — kimlik, olay, hafıza, kayıt, onay | **kapandı 2026-08-11** — 26/26 omurga testi temiz (`npm run test:holding`); sözleşme `holding/CLAUDE.md`'de |
-| **1** | **KAPI + NİYET + KARŞILAMA + DEVİR** tek kanalda (WhatsApp) | bir müşteride gölge modu geçtiğinde |
+| **1** | **KAPI + NİYET + KARŞILAMA + DEVİR** tek kanalda (WhatsApp) | **kod kanıtlandı 2026-08-11** (20/20 uçtan uca test, `npm run test:faz1`), **faz kendisi açık** — kapanış şartı bir müşteride gölge modu geçmesi, o henüz yok; gerçek WhatsApp bağlantısı da bilerek yok (bkz. `holding/CLAUDE.md`) |
 | **2** | Kanalları çoğalt (Instagram, e-posta, LinkedIn, TikTok) | adaptör başına |
 | **3** | NİTELEME + RANDEVU + TAKİPÇİ | ilk müşteride ölçülebilir sonuç çıkınca |
 | **4** | YORUM TAKİPÇİSİ + reklam tetikleyici | reklam bütçesi olan müşteri geldiğinde |

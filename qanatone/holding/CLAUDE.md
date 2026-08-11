@@ -53,8 +53,25 @@ ve `git ls-files` ile bunu doğrular — biri kayarsa test kırmızı olur.
 ## Faz durumu
 
 - **Faz 0 — kapandı.** Ortak omurga (bölüm 2) çalışıyor, testli, kanıtlı.
-- **Faz 1 — açık.** KAPI + NİYET + KARŞILAMA + DEVİR, tek kanal (WhatsApp),
-  bölüm 9.1'deki akışa göre. Bir müşteride gölge modu geçtiğinde kapanır.
+- **Faz 1 — kod kanıtlandı, faz açık.** KAPI + NİYET + KARŞILAMA + DEVİR,
+  tek kanal (WhatsApp), bölüm 9.1'deki akışa göre. `npm run test:faz1` →
+  20/20, sahte webhook → KAPI → NİYET → KARŞILAMA/DEVİR zincirini uçtan uca
+  kayıt satırlarıyla kanıtlıyor. **Ama fazın kendisi kapanmadı** — bölüm 13
+  kapanış şartı bir müşteride gölge modunun geçmesi; o henüz olmadı ve
+  **gerçek WhatsApp Cloud API bağlantısı bu fazda bilerek yok**
+  (`holding/kanal/whatsapp-sahte.js` hiçbir ağ çağrısı yapmaz). Gerçek
+  bağlantı + gölge modu ayrı, sonraki iştir.
+- Faz 1 mimarisi: kanal adaptörü `mesaj.geldi.ham` yayınlar (kanal-agnostik,
+  yeni kanal = yeni adaptör). KAPI tek dinleyicisi; temizse `talep.geldi`
+  yayınlar. NİYET onu dinler, `niyet.siniflandi` yayınlar. KARŞILAMA ve
+  DEVİR MEMURU aynı olayı birlikte dinler — biri taslak kurar, diğeri
+  gerekirse devir kararı verir; ikisi de birbirini çağırmaz.
+- **DEVİR MEMURU'nun eşiği Faz 1'de basitleştirildi.** Bölüm 7'deki gerçek
+  tetik NİTELEME'nin sıcaklık skoru — o Faz 3'te kuruluyor. Burada yerine
+  düşük güven skoru (bölüm 9.1 kritik kural: "güven düşükse sınıflandırmaz,
+  sorar") ve sabit bir sınıf→departman haritası kullanılıyor
+  (`holding/ajan/devir.js`). NİTELEME kurulunca bu eşik değişir, harita
+  kalır — sonraki fazda kırılacak bir yer burasıdır.
 - Yeni ajan yazarken önce `holding/ajanlar/<ad>.json` yetki kartını kur,
   sonra davranışı yaz — sıra tersine çevrilmez (bkz. bölüm 10, kurulum
   protokolü: şirket kartı → doğruluk kaynağı → ton/sınır → kadro →

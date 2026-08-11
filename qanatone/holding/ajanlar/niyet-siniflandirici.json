@@ -1,0 +1,9 @@
+{
+  "ajan": "niyet-siniflandirici",
+  "yetki": {
+    "okur": ["talep.geldi"],
+    "yazar": ["crm.etiket"],
+    "gonderir": [],
+    "asla": ["fiyat_verme", "sozlesme", "odeme", "veri_disari", "disari_yanit"]
+  }
+}
