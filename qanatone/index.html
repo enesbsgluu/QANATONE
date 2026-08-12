@@ -7551,6 +7551,53 @@ function deliverStage(d,L,tx){
   document.addEventListener('focusin',e=>{
     const b=e.target.closest&&e.target.closest('.tpchip'); if(b)goster(b);});
 
+  /* 2026-08 TELLER KARTLARLA BİRLEŞMİYORDU:
+     deliverStage teller için y=(100/n)*(i+.5) kullanıyor, yani kartların
+     EŞİT YÜKSEKLİKTE ve ARALIKSIZ olduğunu varsayıyordu ("düzen ölçmeye
+     gerek yok" notu). İkisi de yanlış: .tpcards flex sütun + gap taşıyor
+     ve kart yükseklikleri içerik uzunluğuna göre değişiyor (TR/EN metin
+     farkı bile kaydırıyor). Sonuç: telin ucu kartın ortasını ıskalıyor.
+     Artık ucu gerçek kart merkezine taşıyoruz. Ölçüm TEK ATIŞ: kurulum,
+     yeniden boyutlandırma ve #sdBody değişimi. Kaydırmada ölçüm YOK —
+     kart yükseklikleri kaydırmayla değişmiyor, rAF döngüsünde düzen
+     okuma tuzağına girmemek için bilerek böyle.                        */
+  const telHizala = box => {
+    const mid = box.querySelector('.tpmid');
+    const svg = box.querySelector('.tpwires');
+    if (!mid || !svg) return;
+    const kartlar = [].slice.call(box.querySelectorAll('.tpcard'));
+    const yollar = [].slice.call(svg.querySelectorAll('path'));
+    if (!kartlar.length || yollar.length !== kartlar.length) return;
+    const mr = mid.getBoundingClientRect();
+    if (mr.height < 1) return;               /* henüz düzen yok, dokunma */
+    kartlar.forEach((k, i) => {
+      const kr = k.getBoundingClientRect();
+      if (kr.height < 1) return;
+      const y = ((kr.top + kr.height / 2) - mr.top) / mr.height * 100;
+      yollar[i].setAttribute('d',
+        'M0,50 C46,50 54,' + y.toFixed(1) + ' 100,' + y.toFixed(1));
+    });
+  };
+  const tumTeller = () => {
+    const kutular = document.querySelectorAll('.tpbox');
+    for (let i = 0; i < kutular.length; i++) telHizala(kutular[i]);
+  };
+  window.__telHizala = tumTeller;
+  let telBekliyor = false;
+  const telKisitli = () => {
+    if (telBekliyor) return;
+    telBekliyor = true;
+    requestAnimationFrame(() => { telBekliyor = false; tumTeller(); });
+  };
+  addEventListener('resize', telKisitli, { passive: true });
+  if (window.visualViewport)
+    visualViewport.addEventListener('resize', telKisitli, { passive: true });
+  const tpGovde = document.getElementById('sdBody');
+  if (tpGovde && 'MutationObserver' in window)
+    new MutationObserver(telKisitli).observe(tpGovde, { childList: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(telKisitli);
+  telKisitli();
+
   /* Beliriş: detay sayfalarında .rv anında açıldığı için kendi gözlemcimiz.
      Şema kadraja girince bulanık pikseller netleşiyor. */
   if(!('IntersectionObserver' in window))return;
@@ -8501,7 +8548,7 @@ function renderAll(){
      elementine kur-damgası basar; ikinci çağrı ve dil değişimi no-op olur. */
   ['__akLiveKur','__akisScrollKur','__clockKur','__tubesKur','__kanalKur',
    '__flowKur','__sizintiKur','__hesapKur','__projectsArchiveKur',
-   '__subscribeKur','__diagKur','__demandMapKur','__tara'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
+   '__subscribeKur','__diagKur','__demandMapKur','__tara','__telHizala'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
   if(window.__stRefresh)setTimeout(window.__stRefresh,140);
 }
 
