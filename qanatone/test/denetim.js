@@ -541,6 +541,42 @@ async function statikDogrudanYukleme() {
      tbNavBtn > 0 && chanNodes > 0, `tbNav düğme=${tbNavBtn} chanNodes düğüm=${chanNodes}`);
 
   dom.window.close();
+
+  /* 2026-08 BULUNDU (gece denetimi): eksik bölümler main'in SONUNA eklenince
+     statik hizmet sayfasından ana sayfaya geçen ziyaretçi #lead formunu en
+     ÜSTTE görüyordu; ayrıca flow/sizinti/hesap/tubes/projectsArchive gibi
+     kurucular parse'ta bölümlerini bulamayınca kaydolmadan dönüyor, kabuk
+     bölümü getirse de kimse onları çağıramıyordu (kadro görünmez, harita 0).
+     İki kural: sıra + kayıt. Sayfa: hizmet detayı — kabuğa en muhtaç rota. */
+  {
+    const seoYolu = path.join(DIST, 'hizmetler', 'seo', 'index.html');
+    if (!fs.existsSync(seoYolu)) {
+      ol('dist/hizmetler/seo doğrudan yüklemede bölüm sırası: detay → kabuk → #lead', false, 'dist/hizmetler/seo yok');
+      ol('dist/hizmetler/seo doğrudan yüklemede geç kurucular kayıtlı', false, 'dist/hizmetler/seo yok');
+    } else {
+      const seoHtml = fs.readFileSync(seoYolu, 'utf8');
+      const { dom: dom2 } = ortam(seoHtml, ORIGIN + '/hizmetler/seo', { fetch: fetchMock });
+      const w2 = dom2.window, d2 = w2.document;
+      const t1 = Date.now();
+      while (!w2.__contentReady && Date.now() - t1 < 4000) await dur(40);
+      await dur(300);
+
+      const hepsi = [...d2.querySelectorAll('main *')];
+      const yeri = id => hepsi.findIndex(e => e.id === id);
+      const iDet = yeri('hizmetdetay'), iHero = yeri('hero'), iLead = yeri('lead');
+      ol('dist/hizmetler/seo doğrudan yüklemede bölüm sırası: detay → kabuk → #lead',
+         iDet > -1 && iHero > -1 && iLead > -1 && iDet < iHero && iHero < iLead,
+         `detay@${iDet} hero@${iHero} lead@${iLead}`);
+
+      const gec = ['__flowBuild','__flowWire','__flowReveal','__szDraw',
+                   '__hsRefresh','__tubesInit','__prjAllRender'];
+      const eksik = gec.filter(a => typeof w2[a] !== 'function');
+      ol('dist/hizmetler/seo doğrudan yüklemede geç kurucular kayıtlı',
+         eksik.length === 0, eksik.length ? 'eksik: ' + eksik.join(',') : gec.length + ' kurucu tamam');
+
+      dom2.window.close();
+    }
+  }
 }
 
 /* =====================================================================
