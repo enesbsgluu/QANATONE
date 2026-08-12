@@ -3175,9 +3175,15 @@ a.ktcard:hover{background:#131317}
 .tpwires{position:absolute;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:1;overflow:visible}
 .tpwires path{fill:none;stroke:rgba(255,255,255,.22);stroke-width:1.1;
-  vector-effect:non-scaling-stroke;stroke-dasharray:200;stroke-dashoffset:200;
+  vector-effect:non-scaling-stroke;stroke-dasharray:900;stroke-dashoffset:900;
   transition:stroke-dashoffset 1.1s var(--e);transition-delay:calc(.25s + var(--i)*.09s)}
-.tpbox.in .tpwires path{stroke-dashoffset:0}
+/* 900 = JS ÖLÇÜMÜ ÇALIŞMAZSA yedek. Eskiden 200'dü ve non-scaling-stroke
+   yüzünden 200 EKRAN PİKSELİ anlamına geliyordu: uzun teller (en üst ve
+   en alttaki) yarıda kesiliyordu. Gerçek uzunluk telHizala içinde
+   getTotalLength ile ölçülüp satır içi yazılıyor; buradaki değer yalnız
+   ölçüm yapılamadığı durumda devreye giriyor. !important şart: satır içi
+   dashoffset'i yenmesi gerekiyor, yoksa teller hiç açılmaz.           */
+.tpbox.in .tpwires path{stroke-dashoffset:0 !important}
 
 .tpcards{position:relative;z-index:2;display:flex;flex-direction:column;
   gap:clamp(8px,1vw,13px)}
@@ -3242,7 +3248,7 @@ a.ktcard:hover{background:#131317}
 @media(prefers-reduced-motion:reduce){
   .tppx{opacity:0}
   .tpleft,.tpcard{filter:none;opacity:1;transform:none}
-  .tpwires path{stroke-dashoffset:0}
+  .tpwires path{stroke-dashoffset:0 !important}
 }
 
 /* ============ PAZAR ZEKÂSI SAHNESİ (mk*) ============
@@ -7576,6 +7582,21 @@ function deliverStage(d,L,tx){
       const y = ((kr.top + kr.height / 2) - mr.top) / mr.height * 100;
       yollar[i].setAttribute('d',
         'M0,50 C46,50 54,' + y.toFixed(1) + ' 100,' + y.toFixed(1));
+      /* 2026-08 TELLER HAVADA KESİLİYORDU: CSS'te stroke-dasharray:200
+         sabiti vardı ve vector-effect:non-scaling-stroke yüzünden bu 200
+         EKRAN PİKSELİ demek. 200'den uzun teller (en üstteki ve en
+         alttaki) yalnız ilk 200 piksel boyunca çiziliyor, gerisi hiç
+         görünmüyordu. Merkez hizalaması dış telleri daha da uzattığı için
+         belirginleşti. Sabit varsayım yerine ölçüm: her telin kendi
+         uzunluğu. +4 pay, yuvarlama hatası ucu kırpmasın diye.        */
+      if (yollar[i].getTotalLength) {
+        try {
+          const uz = Math.ceil(yollar[i].getTotalLength()) + 4;
+          yollar[i].style.strokeDasharray = uz;
+          yollar[i].style.strokeDashoffset =
+            box.classList.contains('in') ? 0 : uz;
+        } catch (e) {}
+      }
     });
   };
   const tumTeller = () => {
