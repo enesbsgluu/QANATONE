@@ -7582,16 +7582,31 @@ function deliverStage(d,L,tx){
       const y = ((kr.top + kr.height / 2) - mr.top) / mr.height * 100;
       yollar[i].setAttribute('d',
         'M0,50 C46,50 54,' + y.toFixed(1) + ' 100,' + y.toFixed(1));
-      /* 2026-08 TELLER HAVADA KESİLİYORDU: CSS'te stroke-dasharray:200
-         sabiti vardı ve vector-effect:non-scaling-stroke yüzünden bu 200
-         EKRAN PİKSELİ demek. 200'den uzun teller (en üstteki ve en
-         alttaki) yalnız ilk 200 piksel boyunca çiziliyor, gerisi hiç
-         görünmüyordu. Merkez hizalaması dış telleri daha da uzattığı için
-         belirginleşti. Sabit varsayım yerine ölçüm: her telin kendi
-         uzunluğu. +4 pay, yuvarlama hatası ucu kırpmasın diye.        */
-      if (yollar[i].getTotalLength) {
+      /* 2026-08 İKİNCİ DÜZELTME — BİRİM UYUŞMAZLIĞI (zoom belirtisi):
+         İlk düzeltme getTotalLength() kullanıyordu; o değer VIEWBOX
+         BİRİMİ (0-100'lük kutuda ~114) döndürür. Oysa non-scaling-stroke
+         yüzünden stroke-dasharray EKRAN PİKSELİ cinsinden yorumlanır.
+         İki birim yalnız belli bir zoom'da tesadüfen örtüşür — Enes'in
+         gördüğü tam buydu: bir zoom'da uç değmiyor, yakınlaştırınca
+         orta kesiliyor. Doğrusu: yolu viewBox'ta örnekleyip her noktayı
+         .tpmid'in GERÇEK ekran boyutuyla ölçekleyerek ekran-uzayı
+         uzunluğunu toplamak. Zoom/resize telKisitli'yi tetikleyip
+         yeniden ölçtürür. +6 pay: örnekleme eğriyi kirişlerle izlediği
+         için hafif KISA ölçer, pay ucu garantiye alır.               */
+      if (yollar[i].getTotalLength && yollar[i].getPointAtLength) {
         try {
-          const uz = Math.ceil(yollar[i].getTotalLength()) + 4;
+          const p = yollar[i];
+          const Lvb = p.getTotalLength();          /* viewBox birimi */
+          const ADIM = 24;
+          let uzPx = 0, once = null;
+          for (let j = 0; j <= ADIM; j++) {
+            const n = p.getPointAtLength(Lvb * j / ADIM);
+            const sx = n.x / 100 * mr.width;       /* ekran pikseli   */
+            const sy = n.y / 100 * mr.height;
+            if (once) uzPx += Math.hypot(sx - once.x, sy - once.y);
+            once = { x: sx, y: sy };
+          }
+          const uz = Math.ceil(uzPx) + 6;
           yollar[i].style.strokeDasharray = uz;
           yollar[i].style.strokeDashoffset =
             box.classList.contains('in') ? 0 : uz;

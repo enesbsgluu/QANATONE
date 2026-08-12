@@ -462,24 +462,27 @@ function ciktiDenetimi() {
        hizalaVar && merkezOlcumu && kurulumda,
        `hizala=${hizalaVar} merkez=${merkezOlcumu} kurulumTuru=${kurulumda}`);
   }
-  /* 82 · tel uzunluğu ölçülür, sabit varsayılmaz (2026-08):
-     .tpwires path'te vector-effect:non-scaling-stroke var, yani
-     stroke-dasharray EKRAN PİKSELİ. Sabit 200 vardı ve 200'den uzun
-     teller (en üst/en alttaki) yarıda kesiliyordu. Üç şart: JS gerçek
-     uzunluğu ölçüyor · CSS yedeği ≥600 · .in kuralı satır içi değeri
-     yenecek önceliğe sahip (yoksa teller HİÇ açılmaz — bu ters yönde
-     bir tuzak, önceliği düşüren biri sessiz kırılma yaratır). */
+  /* 82 · tel uzunluğu EKRAN uzayında ölçülür (2026-08, iki aşamada):
+     non-scaling-stroke yüzünden stroke-dasharray EKRAN PİKSELİ.
+     1. hata: sabit 200 → uzun teller kesildi. 2. hata: getTotalLength()
+     doğrudan yazıldı — o değer VIEWBOX BİRİMİ, ekran pikseli değil;
+     yalnız belli bir zoom'da tesadüfen tutuyor (Enes'in zoom belirtisi).
+     Şartlar: getPointAtLength örneklemesi + mr.width/height ölçekleme
+     var · viewBox birimi DOĞRUDAN dasharray'e yazılmıyor · CSS yedeği
+     ≥600 · .in kuralı !important (yoksa teller hiç açılmaz). */
   {
     const kaynakD = fs.readFileSync(SRC, 'utf8');
     const iTH = kaynakD.indexOf('const telHizala');
-    const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 2200) : '';
-    const olcum = bolge.indexOf('getTotalLength()') > -1
-               && bolge.indexOf('strokeDasharray') > -1;
+    const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 3400) : '';
+    const ornekleme = bolge.indexOf('getPointAtLength(') > -1
+                   && bolge.indexOf('mr.width') > -1
+                   && bolge.indexOf('strokeDasharray') > -1;
+    const dogrudanDegil = !/Math\.ceil\(yollar\[i\]\.getTotalLength\(\)\)/.test(bolge);
     const yedek = ((kaynakD.match(/\.tpwires path\{[^}]*stroke-dasharray:(\d+)/) || [, '0'])[1] * 1) >= 600;
     const oncelik = /\.tpbox\.in \.tpwires path\{stroke-dashoffset:0 !important\}/.test(kaynakD);
-    ol('klasör telleri: uzunluk ölçülür, sabit varsayılmaz',
-       olcum && yedek && oncelik,
-       `olcum=${olcum} yedek=${yedek} oncelik=${oncelik}`);
+    ol('klasör telleri: uzunluk EKRAN uzayında ölçülür',
+       ornekleme && dogrudanDegil && yedek && oncelik,
+       `ornekleme=${ornekleme} viewBoxDogrudanDegil=${dogrudanDegil} yedek=${yedek} oncelik=${oncelik}`);
   }
   const sayfalar = [];
   (function tara(d) {
