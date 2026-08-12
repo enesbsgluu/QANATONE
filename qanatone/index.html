@@ -7536,12 +7536,22 @@ function deliverStage(d,L,tx){
   /* Beliriş: detay sayfalarında .rv anında açıldığı için kendi gözlemcimiz.
      Şema kadraja girince bulanık pikseller netleşiyor. */
   if(!('IntersectionObserver' in window))return;
+  /* 2026-08 GÜÇLENDİRİLDİ (canlı turda kanıtlandı): eski eşik (.12 +
+     -40px kenar) zıplayarak gelen ziyaretçide .in'i geciktiriyor, kadro
+     çipleri ve klasör şablonu "yok" görünüyordu. Yeni ilke: içerik
+     animasyonsuz da görünür — IO yaklaşırken açar (200px pay), kemer ise
+     eleman ZATEN ekrandaysa beklemeden .in basar; geçiş animasyonu yine
+     sınıfla oynar. tara dışa açık: kabuk-sonrası kurulum turu yeniden
+     çağırır (statik sayfada sdBody sonradan basılıyor).                 */
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
-  }),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  }),{threshold:.01,rootMargin:'200px 0px 200px 0px'});
   const tara=()=>document.querySelectorAll('.tpbox:not(.in),.kdbox:not(.in)').forEach(b=>{
     if(typeof REDUCE!=='undefined'&&REDUCE){b.classList.add('in');return;}
-    io.observe(b);});
+    io.observe(b);
+    const r=b.getBoundingClientRect();
+    if(r.top<innerHeight&&r.bottom>0)b.classList.add('in');});
+  window.__tara=tara;
   const body=document.getElementById('sdBody');
   if(body&&'MutationObserver' in window)
     new MutationObserver(tara).observe(body,{childList:true});
@@ -8449,7 +8459,7 @@ function renderAll(){
      elementine kur-damgası basar; ikinci çağrı ve dil değişimi no-op olur. */
   ['__akLiveKur','__akisScrollKur','__clockKur','__tubesKur','__kanalKur',
    '__flowKur','__sizintiKur','__hesapKur','__projectsArchiveKur',
-   '__subscribeKur','__diagKur'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
+   '__subscribeKur','__diagKur','__demandMapKur','__tara'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
   if(window.__stRefresh)setTimeout(window.__stRefresh,140);
 }
 
@@ -8818,9 +8828,12 @@ QG.grid=function(){
   return QG._g=g;
 };
 QG._rle='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';
-(function demandMap(){
+function demandMapKur(){
   const box=document.querySelector('#globe'), cv=document.querySelector('#gcv');
-  if(!box||!cv)return;
+  if(!box||!cv||box.__kur)return;box.__kur=1;/* kur-damgası JS özelliği — dataset serileşir (2026-08 dersi) */
+  /* 2026-08: bekçi İKİ değişkenli olduğu için F3 süpürmesinden kaçan tek
+     IIFE buydu; statik iç sayfadan gelen ziyaretçide globe hiç kurulmuyor,
+     bölüm 16px'e çöküyordu. Artık Kur deseninde, kurulum turu çağırır.   */
   const cx=cv.getContext('2d');
   const q=s=>document.querySelector(s);
   const LOW=(typeof LOWFX!=='undefined')&&LOWFX;
@@ -9434,7 +9447,8 @@ QG._rle='f39/f39/f39/f39/XxFbAlECUQFJAlYMYytSD0AJRgFGAH9pAEkAf39/WoBPgH9/YgF/f39
            box.classList.add('live'); }
   window.__globeShow=(on)=>{box.classList.toggle('hide',!on);
     if(on){requestAnimationFrame(()=>{size();start();});}else stop();};
-})();
+}
+demandMapKur();window.__demandMapKur=demandMapKur;
 
 /* =================== SEKTÖR MOTORU =================== */
 const SEC=(function(){
@@ -10346,6 +10360,12 @@ function projectsArchiveKur(){
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(relayout);
 
   window.__prjAllRender=render;
+  /* 2026-08: rota açılış garantisi — kur turu bölüm GİZLİYKEN koşunca
+     giriş animasyonunun tetiklenme anı belirsiz kalıyor, kartlar bir süre
+     opacity:0'da görünmez duruyordu (canlı turda ölçüldü). show('projeler')
+     bu kancayı çağırır: layout(false) kartları ANINDA görünür kılar;
+     animasyon varsa üstüne süs olarak biner.                            */
+  window.__prjAllGiris=()=>layout(false);
   render();
 }
 projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
@@ -10765,6 +10785,7 @@ const ROUTER=(function(){
        ilk açıldığında içi boş panel görünüyordu */
     $$('section.pg').forEach(s=>s.classList.toggle('on',
       own.has(s.id)&&(s.id!=='sekpanel'||!!SEC.active)));
+    if(own.has('prjall')&&window.__prjAllGiris)window.__prjAllGiris();
     document.body.classList.toggle('sub',key!=='home');
     $$('#nl a[data-r]').forEach(a=>a.classList.toggle('here',a.dataset.r===key));
     const p=PAGES[key],L=LG();
@@ -11393,16 +11414,21 @@ async function kabugu_tamamla(){
        ve içeriden ana sayfaya geçen ziyaretçi formu en üstte görüyordu.
        Eksikler artık #lead'i taşıyan main-seviye bloğun ÖNÜNE, kabuk
        sırası korunarak giriyor: detay önde, form her rotada en sonda. */
-    let dayanak=null;
-    const leadEl=document.getElementById('lead');
-    if(leadEl){
-      dayanak=leadEl;
-      while(dayanak.parentElement&&dayanak.parentElement!==ana)dayanak=dayanak.parentElement;
-      if(dayanak.parentElement!==ana)dayanak=null;
-    }
+    /* 2026-08 BULUNDU (üçüncü tur): "#lead'in önüne tek blok" yaklaşımı
+       bölümlerin KENDİ aralarındaki sırayı korudu ama mevcut bölümlerle
+       İÇ İÇE GEÇME sırasını bozdu — sekpanel kaynakta sektor'un hemen
+       ardında (7.) durur, bu kodla sayfanın dibine (12.) düşüyordu;
+       sektör seçen ziyaretçi en alta kaydırılıyordu, hizmet rotası da
+       "ortadan" başlıyordu. Kabuk zaten KANONİK main'in tamamı (22 bölüm,
+       kaynakla birebir aynı sıra). Doğrusu: kabuk sırasıyla yürü; id
+       sayfada VARSA canlı düğümü TAŞI (appendChild taşımadır — dinleyiciler
+       düğümle birlikte gider), yoksa kabuk kopyasını ekle. Sonuç: main her
+       statik sayfada kaynakla birebir aynı dizi. Kurulumlar zaten
+       yeniden-çağrılabilir (…Kur) ve sahne motoru kabuğu beklediği için
+       taşıma güvenli. */
     [...gecici.children].forEach(el=>{
-      if(el.id&&document.getElementById(el.id))return;   // zaten canlı, dokunma
-      if(dayanak)ana.insertBefore(el,dayanak); else ana.appendChild(el);
+      const canli=el.id&&document.getElementById(el.id);
+      ana.appendChild(canli||el);
     });
     document.body.dataset.tam='1';
   }catch(e){ /* kabuk gelmezse sayfa tek rotalık kalır, çökmez */ }
