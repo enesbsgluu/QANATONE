@@ -462,6 +462,25 @@ function ciktiDenetimi() {
        hizalaVar && merkezOlcumu && kurulumda,
        `hizala=${hizalaVar} merkez=${merkezOlcumu} kurulumTuru=${kurulumda}`);
   }
+  /* 82 · tel uzunluğu ölçülür, sabit varsayılmaz (2026-08):
+     .tpwires path'te vector-effect:non-scaling-stroke var, yani
+     stroke-dasharray EKRAN PİKSELİ. Sabit 200 vardı ve 200'den uzun
+     teller (en üst/en alttaki) yarıda kesiliyordu. Üç şart: JS gerçek
+     uzunluğu ölçüyor · CSS yedeği ≥600 · .in kuralı satır içi değeri
+     yenecek önceliğe sahip (yoksa teller HİÇ açılmaz — bu ters yönde
+     bir tuzak, önceliği düşüren biri sessiz kırılma yaratır). */
+  {
+    const kaynakD = fs.readFileSync(SRC, 'utf8');
+    const iTH = kaynakD.indexOf('const telHizala');
+    const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 2200) : '';
+    const olcum = bolge.indexOf('getTotalLength()') > -1
+               && bolge.indexOf('strokeDasharray') > -1;
+    const yedek = ((kaynakD.match(/\.tpwires path\{[^}]*stroke-dasharray:(\d+)/) || [, '0'])[1] * 1) >= 600;
+    const oncelik = /\.tpbox\.in \.tpwires path\{stroke-dashoffset:0 !important\}/.test(kaynakD);
+    ol('klasör telleri: uzunluk ölçülür, sabit varsayılmaz',
+       olcum && yedek && oncelik,
+       `olcum=${olcum} yedek=${yedek} oncelik=${oncelik}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {

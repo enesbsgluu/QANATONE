@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-12 21:12 UTC
+> Üretim tarihi: 2026-08-12 21:48 UTC
 
 ## Yeni sohbete geçerken
 
@@ -58,9 +58,9 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 813 KB | `a886d60b` |
+| `index.html` |  | 814 KB | `5b4b8a60` |
 | `js/` | 4 dosya | 889 KB |  |
-| `klasor-telleri.diff` |  | 5 KB | `d5dba13a` |
+| `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
@@ -76,7 +76,7 @@
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `reveal-kaydirma.diff` |  | 3 KB | `d2317e57` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 47 KB | `4eed09d1` |
+| `test/denetim.js` |  | 48 KB | `85a55143` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -87,8 +87,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 33 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 47.0 MB |
+| son derleme | 35 sn (basılan 0, önbellekten 58) |
+| dist boyutu | 47.1 MB |
 
 ## Çalıştırma
 
