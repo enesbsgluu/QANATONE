@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-12 18:14 UTC
+> Üretim tarihi: 2026-08-12 18:53 UTC
 
 ## Yeni sohbete geçerken
 
@@ -20,7 +20,7 @@
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 7 KB | `73b4546a` |
-| `CODE-TALIMAT.md` |  | 4 KB | `fac7a89f` |
+| `CODE-TALIMAT.md` |  | 4 KB | `f7664a40` |
 | `DEVIR.md` | bu dosya | 4 KB |  |
 | `NETLIFY-KURULUM.md` |  | 7 KB | `4a94ad7d` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
@@ -58,7 +58,7 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 808 KB | `c8d5034a` |
+| `index.html` |  | 809 KB | `5f40c00a` |
 | `js/` | 4 dosya | 889 KB |  |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
@@ -72,8 +72,9 @@
 | `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
+| `reveal-kaydirma.diff` |  | 3 KB | `d2317e57` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 44 KB | `4c2264eb` |
+| `test/denetim.js` |  | 45 KB | `34bf3cdb` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -84,8 +85,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 121 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 46.8 MB |
+| son derleme | 118 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 46.9 MB |
 
 ## Çalıştırma
 
