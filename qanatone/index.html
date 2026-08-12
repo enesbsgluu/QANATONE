@@ -3503,7 +3503,17 @@ a.ktcard:hover{background:#131317}
 @media(max-width:860px){
   .mkrail{width:100%;margin-left:0;gap:5px}
   .mkstep span{display:none}
-  .mkview{height:clamp(360px,86vw,460px)}
+  /* 2026-08 MOTOR TAŞMASI: mobilde .mkeng tek sütuna düşüyor (girdi
+     kartları + çekirdek + hipotezler alt alta) ama sahne yüksekliği
+     sabitti (86vw ≈ 335px → 360'a kırpılıyordu) ve .mkact overflow:hidden
+     olduğu için hipotez satırları alttan KESİLİYORDU. Enes'in kararı:
+     sahne uzasın. Üst sınır ekran yüksekliğine bağlı — .mkstage'in
+     max-height:calc(100vh - 60px) tavanını aşıp yeniden kırpmasın diye
+     masaüstündeki formülün aynısı (100vh - 210px) kullanılıyor.
+     Ölçüm notu: bu kapta yerleşim ölçülemedi (tarayıcı indirilemiyor),
+     yükseklik içerik yığınından hesaplanarak seçildi — küçük ekranlarda
+     (SE boyu) 100vh sınırı devreye girer ve taşma dönebilir.          */
+  .mkview{height:clamp(380px,min(150vw,calc(100vh - 210px)),620px)}
   .mksplit,.mksplit2,.mkeng,.mkjump{grid-template-columns:1fr}
   .mkeng .mkcore{max-height:110px}
   .mkcurves{grid-template-columns:1fr;gap:7px}

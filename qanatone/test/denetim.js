@@ -431,6 +431,22 @@ function ciktiDenetimi() {
        iT > -1 && kaydirma && boyut && kisit,
        `scroll=${kaydirma} resize=${boyut} rAF=${kisit}`);
   }
+  /* 80 · mobil pazar sahnesi yüksekliği (2026-08, motor taşması):
+     .mkeng mobilde tek sütuna düşüyor, .mkact overflow:hidden — sahne
+     yüksekliği sabit ve kısa olursa hipotez satırları alttan kesiliyor.
+     İki şart: üst sınır ≥600px VE ekran yüksekliğine bağlı bir tavan
+     (100vh) — yoksa .mkstage'in max-height'ı devreye girip yeniden
+     kırpar. Sabit küçük bir clamp geri konursa kural düşer. */
+  {
+    const kaynakV = fs.readFileSync(SRC, 'utf8');
+    const iV = kaynakV.indexOf('.mkview{height:clamp(', kaynakV.indexOf('@media(max-width:860px){\n  .mkrail'));
+    const satir = iV > -1 ? kaynakV.slice(iV, kaynakV.indexOf('}', iV) + 1) : '';
+    const ekranaBagli = satir.indexOf('100vh') > -1;
+    const ustSinir = (satir.match(/,(\d+)px\)\}$/) || [, '0'])[1] * 1 >= 600;
+    ol('mobil pazar sahnesi yüksekliği (ekrana bağlı + üst sınır ≥600px)',
+       iV > -1 && ekranaBagli && ustSinir,
+       `${satir || 'kural bulunamadı'} · vh=${ekranaBagli} ust=${ustSinir}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
