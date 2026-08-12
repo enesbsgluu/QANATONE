@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-12 20:42 UTC
+> Üretim tarihi: 2026-08-12 21:12 UTC
 
 ## Yeni sohbete geçerken
 
@@ -20,7 +20,7 @@
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 7 KB | `73b4546a` |
-| `CODE-TALIMAT.md` |  | 3 KB | `d7f447ef` |
+| `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DEVIR.md` | bu dosya | 4 KB |  |
 | `NETLIFY-KURULUM.md` |  | 7 KB | `4a94ad7d` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
@@ -58,8 +58,9 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 810 KB | `ccb98906` |
+| `index.html` |  | 813 KB | `a886d60b` |
 | `js/` | 4 dosya | 889 KB |  |
+| `klasor-telleri.diff` |  | 5 KB | `d5dba13a` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
@@ -75,7 +76,7 @@
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `reveal-kaydirma.diff` |  | 3 KB | `d2317e57` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 46 KB | `263ab719` |
+| `test/denetim.js` |  | 47 KB | `4eed09d1` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -86,8 +87,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 35 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 46.9 MB |
+| son derleme | 33 sn (basılan 0, önbellekten 58) |
+| dist boyutu | 47.0 MB |
 
 ## Çalıştırma
 

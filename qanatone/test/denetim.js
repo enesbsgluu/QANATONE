@@ -447,6 +447,21 @@ function ciktiDenetimi() {
        iV > -1 && ekranaBagli && ustSinir,
        `${satir || 'kural bulunamadı'} · vh=${ekranaBagli} ust=${ustSinir}`);
   }
+  /* 81 · klasör telleri ölçülmüş kart merkezine hizalanır (2026-08):
+     deliverStage teller için y=(100/n)*(i+.5) basıyor — kartların eşit
+     yükseklikte ve aralıksız olduğu varsayımı. .tpcards flex sütun + gap
+     taşıyor ve kart yükseklikleri içeriğe göre değişiyor, o yüzden telin
+     ucu kartın ortasını ıskalıyordu (ölçümde 5.8 puana kadar sapma).
+     Hizalama kodu ve kurulum turuna kaydı birlikte kilitleniyor. */
+  {
+    const kaynakT = fs.readFileSync(SRC, 'utf8');
+    const hizalaVar = kaynakT.indexOf('const telHizala') > -1;
+    const merkezOlcumu = kaynakT.indexOf('kr.top + kr.height / 2') > -1;
+    const kurulumda = kaynakT.indexOf("'__telHizala'") > -1;
+    ol('klasör telleri ölçülmüş kart merkezine hizalanır',
+       hizalaVar && merkezOlcumu && kurulumda,
+       `hizala=${hizalaVar} merkez=${merkezOlcumu} kurulumTuru=${kurulumda}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
