@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-12 09:25 UTC
+> Üretim tarihi: 2026-08-12 16:25 UTC
 
 ## Yeni sohbete geçerken
 
@@ -26,6 +26,7 @@
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 57 KB | `6c2ab0e8` |
+| `birlesik.diff` |  | 17 KB | `5c309081` |
 | `build.js` |  | 29 KB | `77c7eae2` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `harness-hidrasyon.js` |  | 10 KB | `2582d77a` |
@@ -56,7 +57,7 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 804 KB | `681197a7` |
+| `index.html` |  | 806 KB | `446dea1b` |
 | `js/` | 4 dosya | 889 KB |  |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
@@ -70,7 +71,7 @@
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
-| `test/denetim.js` |  | 39 KB | `277b71ca` |
+| `test/denetim.js` |  | 43 KB | `d4696c1e` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -81,8 +82,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 127 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 46.6 MB |
+| son derleme | 132 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 46.7 MB |
 
 ## Çalıştırma
 

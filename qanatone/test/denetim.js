@@ -561,12 +561,20 @@ async function statikDogrudanYukleme() {
       while (!w2.__contentReady && Date.now() - t1 < 4000) await dur(40);
       await dur(300);
 
-      const hepsi = [...d2.querySelectorAll('main *')];
-      const yeri = id => hepsi.findIndex(e => e.id === id);
-      const iDet = yeri('hizmetdetay'), iHero = yeri('hero'), iLead = yeri('lead');
-      ol('dist/hizmetler/seo doğrudan yüklemede bölüm sırası: detay → kabuk → #lead',
-         iDet > -1 && iHero > -1 && iLead > -1 && iDet < iHero && iHero < iLead,
-         `detay@${iDet} hero@${iHero} lead@${iLead}`);
+      /* 2026-08 GÜÇLENDİRİLDİ (üçüncü tur): "detay → kabuk → lead" kısmi
+         iddiası, blokların iç içe geçme sırasındaki bozulmayı (sekpanel
+         dipte, sektör seçimi en alta kaydırıyor) GÖRMÜYORDU. Artık dizinin
+         TAMAMI kabuğun kanonik dizisiyle karşılaştırılıyor — kabuk kaynağın
+         birebir kopyası olduğundan tek doğruluk kaynağı yine kabuk. */
+      const kanonik = [...(new (require('jsdom').JSDOM)(shellHtml).window.document.querySelectorAll('body > section, section'))]
+        .filter(x => x.parentElement && x.parentElement.tagName !== 'SECTION')
+        .map(x => x.id).filter(Boolean);
+      const dizi = [...d2.querySelectorAll('main > section')].map(x => x.id || '?');
+      const ayni = dizi.length === kanonik.length && dizi.every((x, i) => x === kanonik[i]);
+      const ilkFark = dizi.findIndex((x, i) => x !== kanonik[i]);
+      ol('dist/hizmetler/seo doğrudan yüklemede main dizisi kabuğun kanonik dizisiyle birebir',
+         ayni, ayni ? dizi.length + ' bölüm, sıra birebir'
+                    : `ilk fark @${ilkFark}: beklenen=${kanonik[ilkFark]} gelen=${dizi[ilkFark]} (dizi ${dizi.length}/${kanonik.length})`);
 
       const gec = ['__flowBuild','__flowWire','__flowReveal','__szDraw',
                    '__hsRefresh','__tubesInit','__prjAllRender'];
@@ -575,6 +583,54 @@ async function statikDogrudanYukleme() {
          eksik.length === 0, eksik.length ? 'eksik: ' + eksik.join(',') : gec.length + ' kurucu tamam');
 
       dom2.window.close();
+    }
+  }
+
+  /* 2026-08 (tur4, canlı Chrome turunda ölçülerek bulundu): kurulum turu
+     bölüm GİZLİYKEN koştuğunda giriş animasyonları tetiklenmiyor, içerik
+     DOM'da olduğu hâlde opacity:0'da kalıyordu — proje arşivi 7 kart
+     görünmez, kadro 19 çipten 1'i görünür. İlke: içerik animasyonsuz da
+     görünür. İki kural bunu ölçer. */
+  {
+    const cift = [
+      ['projeler', path.join(DIST, 'projeler', 'index.html'), '/projeler',
+       'dist/projeler doğrudan yüklemede tüm .mi kartları görünür',
+       (w, d) => {
+         const k = [...d.querySelectorAll('#msn .mi')];
+         const gizli = k.filter(x => Number(w.getComputedStyle(x).opacity) < .99);
+         return [k.length > 0 && gizli.length === 0,
+                 `${k.length} kart, gizli=${gizli.length}`];
+       }],
+      ['ai-ajan', path.join(DIST, 'hizmetler', 'ai-ajan', 'index.html'), '/hizmetler/ai-ajan',
+       'dist/hizmetler/ai-ajan doğrudan yüklemede kadro çipleri açık (.kdbox.in)',
+       (w, d) => {
+         const box = d.querySelector('.kdbox');
+         const cip = d.querySelectorAll('.kdc').length;
+         const acik = box && box.classList.contains('in');
+         return [!!box && acik && cip > 1, `kdbox=${!!box} .in=${!!acik} çip=${cip}`];
+       }]
+    ];
+    for (const [ad, yol, rota, baslik, olc] of cift) {
+      if (!fs.existsSync(yol)) { ol(baslik, false, yol + ' yok'); continue; }
+      const { dom: d3 } = ortam(fs.readFileSync(yol, 'utf8'), ORIGIN + rota, { fetch: fetchMock });
+      const w3 = d3.window;
+      const t = Date.now();
+      while (!w3.__contentReady && Date.now() - t < 4000) await dur(40);
+      await dur(400);
+      /* jsdom'da clientWidth daima 0 döner; masonry layout() ilk satırda
+         "bölüm gizliyken genişlik 0 gelir" bekçisine takılıp çıkar. Genişliği
+         gerçekçi kılıp rota-açılış kancasını çağırıyoruz: kanca yoksa ya da
+         kartları görünür kılmıyorsa kural kırmızı yanar. */
+      Object.defineProperty(w3.Element.prototype, 'clientWidth',
+        { configurable: true, get() { return 1200; } });
+      Object.defineProperty(w3.HTMLElement.prototype, 'offsetHeight',
+        { configurable: true, get() { return 300; } });
+      if (ad === 'projeler' && typeof w3.__prjAllGiris === 'function') w3.__prjAllGiris();
+      if (ad === 'ai-ajan' && typeof w3.__tara === 'function') w3.__tara();
+      await dur(200);
+      const [gecti, detay] = olc(w3, w3.document);
+      ol(baslik, gecti, detay);
+      d3.window.close();
     }
   }
 }
