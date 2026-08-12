@@ -7560,6 +7560,30 @@ function deliverStage(d,L,tx){
     const r=b.getBoundingClientRect();
     if(r.top<innerHeight&&r.bottom>0)b.classList.add('in');});
   window.__tara=tara;
+  /* 2026-08 MOBİL DİYAGRAM BOŞLUĞU (kadro + klasör şeması):
+     .in yalnız IO'dan ya da kurulum anındaki TEK ATIŞLIK geometri
+     kontrolünden geliyordu — kaydırmaya bağlı yedek YOKTU. Kutu kurulum
+     anında ekranın çok altındaysa ve IO herhangi bir sebeple tetiklenmezse
+     (mobilde adres çubuğu açılıp kapanırken yaşanan viewport değişimi
+     bunu yapabiliyor) içerik KALICI olarak görünmez kalıyordu: başlık ve
+     kök çip duruyor, .kdrow/.tpcard satırları opacity:0'da ölüyordu.
+     Artık kullanıcı o bölgeye geldiğinde senkron kontrol .in'i basıyor.
+     Tasarım ve animasyon aynı — yalnız "hiç açılmama" ihtimali kapandı.
+     rAF kısıtı zorunlu: ölçme aracının maliyeti kare bütçesinin altında
+     kalmalı (harita turunun dersi). Kalan kutu yoksa hiç ölçüm yapılmaz. */
+  let taraBekliyor = false;
+  const taraKisitli = () => {
+    if (taraBekliyor) return;
+    taraBekliyor = true;
+    requestAnimationFrame(() => {
+      taraBekliyor = false;
+      if (document.querySelector('.tpbox:not(.in),.kdbox:not(.in)')) tara();
+    });
+  };
+  addEventListener('scroll', taraKisitli, { passive: true });
+  addEventListener('resize', taraKisitli, { passive: true });
+  if (window.visualViewport)
+    visualViewport.addEventListener('resize', taraKisitli, { passive: true });
   const body=document.getElementById('sdBody');
   if(body&&'MutationObserver' in window)
     new MutationObserver(tara).observe(body,{childList:true});

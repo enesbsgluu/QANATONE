@@ -415,6 +415,22 @@ function ciktiDenetimi() {
        varsayilanAnlik && geriYukleme && ikiliSifirlama,
        `anlık=${varsayilanAnlik} manual=${geriYukleme} ikili=${ikiliSifirlama}`);
   }
+  /* 79 · reveal ailesi kaydırmaya bağlı (2026-08, mobil diyagram boşluğu):
+     .kdrow/.tpcard varsayılan opacity:0; görünürlük kutuya inen .in'e
+     bağlı. .in yalnız IO'dan ve kurulum anındaki tek atışlık geometri
+     kontrolünden geliyordu — IO tetiklenmezse içerik KALICI görünmez
+     kalıyordu. Kaydırma bağlaması olmadan bu sınıf geri döner. */
+  {
+    const kaynakR = fs.readFileSync(SRC, 'utf8');
+    const iT = kaynakR.indexOf('window.__tara=tara;');
+    const pencere = iT > -1 ? kaynakR.slice(iT, iT + 1400) : '';
+    const kaydirma = pencere.indexOf("addEventListener('scroll'") > -1;
+    const boyut = pencere.indexOf("addEventListener('resize'") > -1;
+    const kisit = pencere.indexOf('requestAnimationFrame') > -1;
+    ol('reveal ailesi kaydırmaya bağlı (tek atışlık değil)',
+       iT > -1 && kaydirma && boyut && kisit,
+       `scroll=${kaydirma} resize=${boyut} rAF=${kisit}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
