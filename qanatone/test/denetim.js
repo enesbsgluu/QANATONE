@@ -392,6 +392,29 @@ function ciktiDenetimi() {
     ol('dil geçidi heavy sonunda (yarış kilidi)',
        iF > -1 && iG > iF && iG - iF < 600, iF + '→' + iG);
   }
+  /* 78 · mobil kaydırma sözleşmesi (2026-08, Enes'in telefon turu):
+     Lenis yalnız innerWidth>880'de kuruluyor; scroll-behavior ise
+     'html' üzerinde açık, 'html.lenis' ile kapanıyordu. Sonuç: yumuşak
+     kaydırma SADECE mobilde aktifti, her programatik scrollTo animasyona
+     dönüşüyor ve açılıştaki düzen değişikliği onu kesince sayfa rastgele
+     bir noktada duruyordu. Üç şart birlikte kilitleniyor. */
+  {
+    const kaynakM = fs.readFileSync(SRC, 'utf8');
+    const varsayilanAnlik = kaynakM.indexOf('html{scroll-behavior:' + 'auto') > -1
+                         && kaynakM.indexOf('html{scroll-behavior:' + 'smooth') === -1;
+    const geriYukleme = kaynakM.indexOf("history.scrollRestoration='manual'") > -1;
+    const iSif = kaynakM.indexOf('if(!keep){');
+    const govde = iSif > -1 ? kaynakM.slice(iSif, iSif + 260) : '';
+    /* DİKKAT: yalnız "ikisi de geçiyor mu" diye bakmak YANLIŞ YEŞİL verir —
+       eski kod da her iki dizgeyi taşıyordu, ama biri else dalındaydı
+       (yani ikisinden yalnız BİRİ koşuyordu). Ayırt edici koşul: else yok. */
+    const ikiliSifirlama = govde.indexOf('scrollTo(0,0)') > -1
+                        && govde.indexOf('__lenis') > -1
+                        && govde.indexOf('else scrollTo(0,0)') === -1;
+    ol('mobil kaydırma sözleşmesi (varsayılan anlık + manual + ikili sıfırlama)',
+       varsayilanAnlik && geriYukleme && ikiliSifirlama,
+       `anlık=${varsayilanAnlik} manual=${geriYukleme} ikili=${ikiliSifirlama}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {

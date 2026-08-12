@@ -68,7 +68,15 @@
   --e2:cubic-bezier(.4,0,.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+/* 2026-08 MOBIL KAYDIRMA HATASI: burada 'smooth' vardı ve yalnız
+   html.lenis ile (yani innerWidth>880'de) 'auto'ya dönüyordu. Lenis
+   mobilde hiç kurulmadığı için smooth SADECE mobilde açık kalıyordu:
+   her programatik scrollTo bir animasyona dönüşüyor, açılış sırasındaki
+   düzen değişikliği onu yarıda kesince sayfa rastgele bir noktada
+   duruyordu ("her sayfa farklı yerden başlıyor"). Varsayılan artık
+   anlık; yumuşak kaydırma gereken yerde scrollToY zaten
+   behavior:'smooth' ile açıkça istiyor.                              */
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
 
 /* ============ KARŞILAMA EKRANI ============
    Görsel logo yok: yalnızca QANATONE yazısı ve devre izleri.
@@ -10827,7 +10835,15 @@ const ROUTER=(function(){
     /* Detay sayfaları show() içinde basılıyor; oradaki yeni bağlantılar da
        dile uysun.                                                       */
     try{baglantilariDilleUyumla();}catch(e){}
-    if(!keep){if(window.__lenis)window.__lenis.scrollTo(0,{immediate:true});else scrollTo(0,0);}
+    /* 2026-08: eskiden yalnız BİRİ yazılıyordu. Lenis'in iç konumu
+       pencereyle ayrışırsa (native scroll araya girdiğinde olur)
+       lenis.scrollTo(0) kendini zaten 0'da sanıp hiçbir şey yapmıyor
+       ve sayfa olduğu yerde kalıyordu. Artık ikisine birden yazılıyor;
+       ikisi de anlık, çünkü rota değişimi bir animasyon değildir.     */
+    if(!keep){
+      try{scrollTo(0,0);}catch(e){}
+      if(window.__lenis){try{window.__lenis.scrollTo(0,{immediate:true});}catch(e){}}
+    }
     $$('.rv').forEach(el=>{const s=el.closest('section.pg');
       if(!s||s.classList.contains('on'))el.classList.add('in');});
     observeRv();
@@ -10946,7 +10962,20 @@ const ROUTER=(function(){
             const pre=document.getElementById('pre'); if(pre)pre.remove();
             const lp=document.getElementById('ldpre'); if(lp)lp.remove();
             $$('section.pre').forEach(x=>x.classList.remove('pre'));
+            /* 2026-08 MOBIL: iç sayfa ilk kez açıldığında show() keep=true
+               ile çağrılıyor, yani sıfırlama BİLEREK atlanıyordu — kod
+               tarayıcının zaten 0'da başlamasına güveniyordu. Bir şey
+               konumu kaydırırsa (kabuk bölümleri eklenirken oluşan düzen
+               değişikliği + tarayıcının konum hafızası) düzelten kimse
+               yoktu. Artık açılışta konum garanti altında: adreste bölüm
+               çapası (#...) varsa ona dokunulmuyor.                    */
+            try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}
             const k=fromLoc();show(k,false,true);
+            if(!location.hash){
+              const uste=()=>{try{scrollTo(0,0);}catch(e){}
+                if(window.__lenis){try{window.__lenis.scrollTo(0,{immediate:true});}catch(e){}}};
+              uste(); requestAnimationFrame(uste); setTimeout(uste,120);
+            }
             if(k==='ajan'||k==='surec')setTimeout(()=>window.__introFor&&window.__introFor(k),700);},
           go:k=>show(k,true),
           /* HATA (eskiden beri vardı, /en yolu ortaya çıkardı):
