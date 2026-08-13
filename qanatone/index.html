@@ -2091,8 +2091,15 @@ html.lowfx #globe .gov{backdrop-filter:none;-webkit-backdrop-filter:none;backgro
    avatar. Veri yine C.testimonials; boşsa bant kendini gizler.         */
 /* 2026-08: panelden kapatılabilir. Varsayılan KAPALI — sitedeki üç söz
    uydurmaydı. Gizleme display:none ile; bölüm DOM'da kalıyor, çünkü
-   kanonik bölüm dizisi (kural 74) main'in çocuklarını sayıyor.        */
-html.t-nosoz #sozband{display:none}
+   kanonik bölüm dizisi (kural 74) main'in çocuklarını sayıyor.
+   !important ZORUNLU — pazarlık konusu değil: #sozband bir rota bölümü
+   (`section.pg.on`) ve satır 2429'daki `display:block!important` bunu
+   ezer. !important'siz yazıldığında kural sessizce ölür; özgüllük daha
+   yüksek olsa bile !important her zaman kazanır. Bu yamanın ilk hâli
+   tam olarak böyle ölü çıktı: veri on:0'dı, sınıf basılıyordu, bant
+   yine de görünüyordu. Aynı sebeple render() boş veri gizlemesini
+   setProperty(...,'important') ile yapıyor (bkz. satır ~9854).       */
+html.t-nosoz #sozband{display:none!important}
 .tband{background:var(--red);padding:clamp(28px,3.6vw,50px) 0;
   position:relative;overflow:hidden}
 .tband::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.14;
