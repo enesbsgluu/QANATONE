@@ -590,6 +590,56 @@ function ciktiDenetimi() {
        filtreYok && sayiTamam && miTemiz,
        `filtreYok=${filtreYok} sayi=${bildirimler.length} miTemiz=${miTemiz}`);
   }
+  /* 87 · GSAP gecikme koruması açık kalır (2026-08):
+     `gsap.ticker.lagSmoothing(0)` Lenis belgelerinden kopyalanmış hazır
+     satırdı ve GSAP'ın gecikme telafisini KAPATIYORDU: uzun bir kareden
+     sonra GSAP açığı kapatmaya çalışıp bir sonraki kareyi de uzatıyor.
+     ÖLÇÜM: elle kaydırma koşumları %15 → %9 → %8 gitti — o düşüş ayarın
+     değil sayfa ısınmasının eseriydi, kontrol koşumu bunu çürüttü.
+     Nedenselliği programlı kaydırma kurdu (Lenis.scrollTo, birebir aynı
+     girdi, ayar dönüşümlü, iki bağımsız çift):
+       (0)      → 19 ve 38 geç kare
+       (500,33) → 10 ve 16 geç kare
+     Kazanç mütevazı ama tekrarlanabilir; ayrıca GSAP'ın kendi
+     varsayılanına dönüş. Biri `(0)`'a geri döndürürse bu kural yakalar. */
+  {
+    const kaynakL = fs.readFileSync(SRC, 'utf8');
+    /* YORUMLAR AYIKLANIR: yukarıdaki açıklama ve index.html'deki yama
+       yorumu eski `lagSmoothing(0)` satırını birebir alıntılıyor; ham
+       aramada kural kendi belgesine takılıp yanlış kırmızı verir.
+       (Bugün üçüncü kez yaşandı — bkz. kural 82 ve 86.) */
+    const kod = kaynakL.replace(/\/\*[\s\S]*?\*\//g, '');
+    const kapaliDegil = !/lagSmoothing\(\s*0\s*\)/.test(kod);
+    const korumaVar = /gsap\.ticker\.lagSmoothing\(\s*500\s*,\s*33\s*\)/.test(kod);
+    ol('GSAP gecikme koruması açık (lagSmoothing kapatılmamış)',
+       kapaliDegil && korumaVar,
+       `kapaliDegil=${kapaliDegil} korumaVar=${korumaVar}`);
+  }
+  /* 88 · içerik dürüstlüğü kapısı (2026-08, mimari Faz 1 ön şartı):
+     Kurucu bio'su yapılandırılmış veride Person olarak kodlanacak;
+     yer tutucu bir metin şemaya yazıldığında yanlış beyan olur. Müşteri
+     sözleri de Review olarak kodlanabilir — uydurma söz + şema, Google'ın
+     yapılandırılmış veri politikasının doğrudan ihlali (cezası manuel
+     işlem). Bu yüzden ikisi de kaynak seviyesinde kilitleniyor:
+       · bio'da yer tutucu kalıbı geçmeyecek
+       · sözler uydurma olduğu sürece bant KAPALI kalacak (testi.on:0)
+       · kurucunun en az bir sameAs bağlantısı olacak (varlık eşleştirmesi)
+     Sözler gerçekleriyle değişince Enes panelden açar; o gün bu kuralın
+     `bantKapali` şartı düşer ve kural güncellenir — bilinçli kapı. */
+  {
+    const kaynakI = fs.readFileSync(SRC, 'utf8');
+    const kod = kaynakI.replace(/\/\*[\s\S]*?\*\//g, '');
+    const yerTutucuYok = kod.indexOf('Bu bölüm panelden düzenlenecek') === -1
+                      && kod.indexOf('This section will be edited from the panel') === -1;
+    const bantKapali = /testi:\{[^}]*on:0/.test(kod);
+    const iF = kod.indexOf('founder:{');
+    const fBlok = iF > -1 ? kod.slice(iF, iF + 3000) : '';
+    const kurucuBagi = /links:\[\{label:'[^']+',url:'https?:\/\/[^']+'/.test(fBlok);
+    const kurumBagi = /socials:\[\{label:'[^']+',url:'https?:\/\/[^']+'/.test(kod);
+    ol('içerik dürüstlüğü (yer tutucu yok · uydurma bant kapalı · sameAs var)',
+       yerTutucuYok && bantKapali && kurucuBagi && kurumBagi,
+       `yerTutucuYok=${yerTutucuYok} bantKapali=${bantKapali} kurucuBagi=${kurucuBagi} kurumBagi=${kurumBagi}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
