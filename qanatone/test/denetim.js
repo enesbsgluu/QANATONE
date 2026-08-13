@@ -551,9 +551,18 @@ function ciktiDenetimi() {
     const oranTutarli = bolen !== '' && bolen === yuzde;
     const korumalar = kaynakT.indexOf('@supports not ((-webkit-mask-composite:xor)') > -1
       && /prefers-reduced-motion:reduce\)\{\.void \.ring::before\{animation:none/.test(kaynakT);
-    ol('tarama yayı: hero halkası aralıklı + markup bağlı + oran tutarlı',
-       markupBagli && aralikli && oranTutarli && korumalar,
-       `markup=${markupBagli} aralikli=${aralikli} oran=${oranTutarli}(${bolen}/${yuzde}) korumalar=${korumalar}`);
+    /* 2026-08: lowfx halkayı SUSTURMAMALI. Canlıda ölçüldü — Enes'in
+       8 çekirdekli makinesinde lowfx açıktı (Chrome deviceMemory'yi ≤2
+       bildiriyor) ve `html.lowfx .void .ring::before{animation:none}`
+       yüzünden halka hiç dönmedi. Dönen şey bir sözde-elemanın
+       transform'u: derleyici katmanında koşar. Pahalı olan drop-shadow
+       parıltısıdır — lowfx onu kaldırır, animasyonu değil. */
+    const lowfxSusturmuyor =
+      kaynakT.indexOf('html.lowfx .void .ring::before{animation:none}') === -1
+      && kaynakT.indexOf('html.lowfx .void .ring{filter:none}') > -1;
+    ol('tarama yayı: hero halkası aralıklı + markup bağlı + oran tutarlı + lowfx susturmuyor',
+       markupBagli && aralikli && oranTutarli && korumalar && lowfxSusturmuyor,
+       `markup=${markupBagli} aralikli=${aralikli} oran=${oranTutarli}(${bolen}/${yuzde}) korumalar=${korumalar} lowfx=${lowfxSusturmuyor}`);
   }
   const sayfalar = [];
   (function tara(d) {
