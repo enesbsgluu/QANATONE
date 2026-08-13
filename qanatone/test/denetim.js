@@ -528,16 +528,19 @@ function ciktiDenetimi() {
        `arsiv[ritim=${ritimYok} varsayilan=${arsivVarsayilan} eager=${arsivEager}] ` +
        `deste[akistanCikti=${dkAkistanCikti} eager=${dkEager}]`);
   }
-  /* 85 · tarama yayı (2026-08, Enes'in kararı "taramalı"): hero CTA'nın
-     halkası SÜREKLİ dönmez — turlar, söner, bekler.
-     Bu kuralın önceki taslağı yalnız CSS metninde dizi arıyordu: ayrı bir
-     .btn[data-t="cta1"]::after bloğu yazılmıştı, ama hero butonunun sınıfı
-     .void ve data-t iç span'de olduğu için kural HİÇBİR elemana inmeyen
-     CSS'i yeşil sayıyordu. O yüzden burada MARKUP EŞLEŞMESİ ölçülür:
-     cta1 metnini taşıyan buton gerçekten .void mü ve içinde .ring var mı.
-     Ayrıca tur/bekleme oranı iki yerde yaşıyor (animasyon böleni +
-     keyframe yüzdesi); ayrışırlarsa tur hızı --ring-spd'den sessizce
-     kayar, o yüzden ikisinin eşitliği de kontrol edilir. */
+  /* 85 · hero halkası SÜREKLİ döner (2026-08, Enes'in düzeltilmiş kararı):
+     Önce "taramalı" seçilmişti (tur at, sön, bekle) ve kural onu
+     kilitliyordu. Enes canlıda görüp fikrini değiştirdi: kuyruklu kıvılcım
+     DURMADAN dönsün. Kural da yeni sözleşmeyi kilitliyor.
+     MARKUP EŞLEŞMESİ (Code'un yazdığı, korunuyor): kuralın ilk taslağı
+     yalnız CSS metninde dizi arıyordu — ayrı bir .btn[data-t="cta1"]::after
+     bloğu yazılmıştı ama hero butonunun sınıfı .void ve data-t iç span'de,
+     yani kural HİÇBİR elemana inmeyen CSS'i yeşil sayıyordu. Bu yüzden
+     buton gerçekten .void mü ve içinde .ring var mı diye bakılır.
+     TEK HIZ KAYNAĞI: eski tasarımda tur/bekleme oranı iki yerde birden
+     yaşıyordu (bölen + keyframe yüzdesi) ve ayrışırlarsa hız sessizce
+     kayıyordu. Sürekli dönüşte bölen kalktı; kural bölenin geri
+     gelmediğini ve keyframe'de sönme evresi olmadığını da ölçer. */
   {
     const kaynakT = fs.readFileSync(SRC, 'utf8');
     const iB = kaynakT.indexOf('<button class="void"');
@@ -545,10 +548,10 @@ function ciktiDenetimi() {
     const markupBagli = /class="ring"/.test(btn) && /data-t="cta1"/.test(btn);
     const iKF = kaynakT.indexOf('@keyframes voidring');
     const kf = iKF > -1 ? kaynakT.slice(iKF, kaynakT.indexOf('}}', iKF) + 2) : '';
-    const aralikli = kf.indexOf('opacity:0') > -1 && kf.indexOf('rotate(1turn)') > -1;
-    const bolen = (kaynakT.match(/voidring calc\(var\(--ring-spd\)\/\.(\d+)\)/) || [, ''])[1];
-    const yuzde = (kf.match(/(\d+)%\{transform:translate\(-50%,-50%\) rotate\(1turn\)/) || [, ''])[1];
-    const oranTutarli = bolen !== '' && bolen === yuzde;
+    const surekli = kf.indexOf('rotate(1turn)') > -1 && kf.indexOf('opacity:0') === -1;
+    const tekHizKaynagi =
+      /animation:voidring var\(--ring-spd\) linear infinite/.test(kaynakT)
+      && !/voidring calc\(var\(--ring-spd\)\//.test(kaynakT);
     const korumalar = kaynakT.indexOf('@supports not ((-webkit-mask-composite:xor)') > -1
       && /prefers-reduced-motion:reduce\)\{\.void \.ring::before\{animation:none/.test(kaynakT);
     /* 2026-08: lowfx halkayı SUSTURMAMALI. Canlıda ölçüldü — Enes'in
@@ -560,9 +563,9 @@ function ciktiDenetimi() {
     const lowfxSusturmuyor =
       kaynakT.indexOf('html.lowfx .void .ring::before{animation:none}') === -1
       && kaynakT.indexOf('html.lowfx .void .ring{filter:none}') > -1;
-    ol('tarama yayı: hero halkası aralıklı + markup bağlı + oran tutarlı + lowfx susturmuyor',
-       markupBagli && aralikli && oranTutarli && korumalar && lowfxSusturmuyor,
-       `markup=${markupBagli} aralikli=${aralikli} oran=${oranTutarli}(${bolen}/${yuzde}) korumalar=${korumalar} lowfx=${lowfxSusturmuyor}`);
+    ol('hero halkası: sürekli dönüş + markup bağlı + tek hız kaynağı + lowfx susturmuyor',
+       markupBagli && surekli && tekHizKaynagi && korumalar && lowfxSusturmuyor,
+       `markup=${markupBagli} surekli=${surekli} tekHiz=${tekHizKaynagi} korumalar=${korumalar} lowfx=${lowfxSusturmuyor}`);
   }
   const sayfalar = [];
   (function tara(d) {

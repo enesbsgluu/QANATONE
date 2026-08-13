@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 14:50 UTC
+> Üretim tarihi: 2026-08-13 15:28 UTC
 
 ## Yeni sohbete geçerken
 
@@ -33,6 +33,7 @@
 | `build.js` |  | 29 KB | `77c7eae2` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
+| `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
 | `harness-hidrasyon.js` |  | 10 KB | `2582d77a` |
 | `holding/CLAUDE.md` |  | 6 KB | `e44ca0c3` |
 | `holding/ajan/devir.js` |  | 2 KB | `0bb0282a` |
@@ -61,7 +62,7 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 819 KB | `6d936fa0` |
+| `index.html` |  | 819 KB | `583e6409` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
@@ -83,7 +84,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 54 KB | `9e2f8191` |
+| `test/denetim.js` |  | 54 KB | `a10f2ea3` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -94,7 +95,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 127 sn (basılan 58, önbellekten 0) |
+| son derleme | 406 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 47.4 MB |
 
 ## Çalıştırma
