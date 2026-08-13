@@ -636,9 +636,18 @@ function ciktiDenetimi() {
     const fBlok = iF > -1 ? kod.slice(iF, iF + 3000) : '';
     const kurucuBagi = /links:\[\{label:'[^']+',url:'https?:\/\/[^']+'/.test(fBlok);
     const kurumBagi = /socials:\[\{label:'[^']+',url:'https?:\/\/[^']+'/.test(kod);
+    /* GİZLEME GERÇEKTEN KAZANIYOR MU — kuralın ilk hâlinin kaçırdığı şey.
+       `testi.on:0` yalnız ANAHTARI ölçer; bandın görünüp görünmediğini
+       değil. İlk yamada dördü de yeşildi ama bant sitede duruyordu:
+       `html.t-nosoz #sozband{display:none}` !important'sizdi ve
+       `section.pg.on{display:block!important}` onu eziyordu. Etkiyi
+       ölçmenin kaynak seviyesindeki karşılığı bu: kural !important
+       taşımalı, yoksa sessizce ölü. */
+    const gizlemeKazaniyor =
+      /html\.t-nosoz\s+#sozband\s*\{[^}]*display\s*:\s*none\s*!important/.test(kod);
     ol('içerik dürüstlüğü (yer tutucu yok · uydurma bant kapalı · sameAs var)',
-       yerTutucuYok && bantKapali && kurucuBagi && kurumBagi,
-       `yerTutucuYok=${yerTutucuYok} bantKapali=${bantKapali} kurucuBagi=${kurucuBagi} kurumBagi=${kurumBagi}`);
+       yerTutucuYok && bantKapali && kurucuBagi && kurumBagi && gizlemeKazaniyor,
+       `yerTutucuYok=${yerTutucuYok} bantKapali=${bantKapali} kurucuBagi=${kurucuBagi} kurumBagi=${kurumBagi} gizlemeKazaniyor=${gizlemeKazaniyor}`);
   }
   const sayfalar = [];
   (function tara(d) {

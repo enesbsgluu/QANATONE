@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 21:48 UTC
+> Üretim tarihi: 2026-08-13 22:17 UTC
 
 ## Yeni sohbete geçerken
 
@@ -63,7 +63,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 826 KB | `c8a362e8` |
+| `index.html` |  | 827 KB | `84d96699` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
@@ -88,7 +88,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 59 KB | `e52cd09d` |
+| `test/denetim.js` |  | 59 KB | `8d872927` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -99,7 +99,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 38 sn (basılan 0, önbellekten 58) |
+| son derleme | 40 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 48.0 MB |
 
 ## Çalıştırma
