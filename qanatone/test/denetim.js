@@ -516,6 +516,33 @@ function ciktiDenetimi() {
        ritimYok && varsayilanDuruyor && eagerVar,
        `ritimYok=${ritimYok} varsayilan=${varsayilanDuruyor} eager=${eagerVar}`);
   }
+  /* 85 · tarama yayı (2026-08, Enes'in kararı "taramalı"): hero CTA'nın
+     halkası SÜREKLİ dönmez — turlar, söner, bekler.
+     Bu kuralın önceki taslağı yalnız CSS metninde dizi arıyordu: ayrı bir
+     .btn[data-t="cta1"]::after bloğu yazılmıştı, ama hero butonunun sınıfı
+     .void ve data-t iç span'de olduğu için kural HİÇBİR elemana inmeyen
+     CSS'i yeşil sayıyordu. O yüzden burada MARKUP EŞLEŞMESİ ölçülür:
+     cta1 metnini taşıyan buton gerçekten .void mü ve içinde .ring var mı.
+     Ayrıca tur/bekleme oranı iki yerde yaşıyor (animasyon böleni +
+     keyframe yüzdesi); ayrışırlarsa tur hızı --ring-spd'den sessizce
+     kayar, o yüzden ikisinin eşitliği de kontrol edilir. */
+  {
+    const kaynakT = fs.readFileSync(SRC, 'utf8');
+    const iB = kaynakT.indexOf('<button class="void"');
+    const btn = iB > -1 ? kaynakT.slice(iB, kaynakT.indexOf('</button>', iB)) : '';
+    const markupBagli = /class="ring"/.test(btn) && /data-t="cta1"/.test(btn);
+    const iKF = kaynakT.indexOf('@keyframes voidring');
+    const kf = iKF > -1 ? kaynakT.slice(iKF, kaynakT.indexOf('}}', iKF) + 2) : '';
+    const aralikli = kf.indexOf('opacity:0') > -1 && kf.indexOf('rotate(1turn)') > -1;
+    const bolen = (kaynakT.match(/voidring calc\(var\(--ring-spd\)\/\.(\d+)\)/) || [, ''])[1];
+    const yuzde = (kf.match(/(\d+)%\{transform:translate\(-50%,-50%\) rotate\(1turn\)/) || [, ''])[1];
+    const oranTutarli = bolen !== '' && bolen === yuzde;
+    const korumalar = kaynakT.indexOf('@supports not ((-webkit-mask-composite:xor)') > -1
+      && /prefers-reduced-motion:reduce\)\{\.void \.ring::before\{animation:none/.test(kaynakT);
+    ol('tarama yayı: hero halkası aralıklı + markup bağlı + oran tutarlı',
+       markupBagli && aralikli && oranTutarli && korumalar,
+       `markup=${markupBagli} aralikli=${aralikli} oran=${oranTutarli}(${bolen}/${yuzde}) korumalar=${korumalar}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
