@@ -3310,7 +3310,11 @@ a.ktcard:hover{background:#131317}
   border-bottom:1px solid var(--line);background:rgba(255,255,255,.03)}
 .mklogo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:-.02em;
   font-size:clamp(11.5px,1vw,13.5px);color:#fff;flex:none}
-.mklogo b{width:15px;height:15px;border-radius:5px;background:var(--red);
+/* 2026-08: eskiden düz kırmızı kareydi. Artık ortadaki amblemin dişli
+   silueti — aynı form, iki ölçek. 15px'te doku okunmaz, siluet okunur;
+   o yüzden görsel değil satır içi SVG: her ekran yoğunluğunda keskin,
+   ek dosya inmiyor, marka kırmızısını (--red) doğrudan alıyor.       */
+.mklogo b{width:15px;height:15px;display:block;color:var(--red);
   box-shadow:0 0 14px -2px var(--red-glow)}
 .mkrail{display:flex;align-items:center;gap:clamp(6px,.9vw,13px);flex-wrap:wrap;margin-left:auto;
   font-family:'JetBrains Mono',monospace;font-size:clamp(8.4px,.72vw,10px);
@@ -3461,18 +3465,50 @@ a.ktcard:hover{background:#131317}
   border:1px solid var(--line2);color:var(--tx2);font-size:clamp(9.4px,.8vw,11.2px);
   opacity:0;transform:translateX(-10px);transition:opacity .4s var(--e),transform .4s var(--e)}
 .mkin.on{opacity:1;transform:none}
+/* ============ TRADESELF AMBLEMİ (2026-08) ============
+   Eskiden burada iki ince halka + kırmızı ışıma + <b>TradeSelf</b> vardı.
+   Yerine üç katmanlı amblem geldi: dış dişli · beyin simidi · iç dişli.
+
+   KUTU 190 → 320: orta sütunun gerçek genişliği ~396px, sahnenin iç
+   yüksekliği ~372px ölçüldü; 190'lık sınır o alanın yarısını boş
+   bırakıyordu. Sol sütundaki beş girdi kartı ~176px, sağdaki üç hipotez
+   kartı benzer — kimse sıkışmıyor.
+
+   YAZI KALDIRILDI: sahnenin başlığı (.mkbar2) zaten "TradeSelf · pazar
+   motoru" yazıyor, amblemin içindeki ikinci "TradeSelf" tekrardı. Üstelik
+   12,4px'lik yazı ≈58px genişlik istiyor, ortadaki delik en fazla 34px —
+   hiçbir ölçekte sığmıyordu. engineLab verisi silinmedi: amblemin
+   aria-label'ı olarak duruyor, ekran okuyucu okuyor.
+
+   DÖNÜŞ ORANI ÖLÇÜLDÜ, seçilmedi: yarıçap profilinin Fourier dönüşümüyle
+   dış dişli ~20, iç dişli 12 diş çıktı. Kavrayan dişlilerde periyot diş
+   sayısıyla doğru orantılıdır: T_iç/T_dış = 12/20 = 0,6. Dış 20 sn ise iç
+   12 sn. Başka bir oran mekanizmayı sahte gösterirdi.
+   Yan sonuç: EKOK(20,12)=60 → ikisi tam 60 saniyede bir başlangıç
+   konumuna aynı anda dönüyor.
+
+   PERFORMANS: yalnız transform döner — derleyici katmanında koşar, düzen
+   ve boyama üretmez. Perde etkin değilken animasyon DURUR (.mkact.on
+   olmayan yerde play-state:paused) — görünmeyen şey dönmesin.        */
 .mkcore{position:relative;display:grid;place-items:center;aspect-ratio:1;
-  max-height:100%;max-width:min(100%,190px);margin:0 auto;width:100%;
+  max-height:100%;max-width:min(100%,320px);margin:0 auto;width:100%;
   opacity:0;transition:opacity .5s var(--e)}
 .mkcore.on{opacity:1}
-.mkcore b{position:relative;z-index:2;text-align:center;color:#fff;font-weight:650;
-  font-size:clamp(10px,.88vw,12.4px);line-height:1.25;max-width:74%}
-.mkring{position:absolute;inset:8%;border-radius:50%;border:1px solid rgba(239,35,60,.35);
-  animation:mkPulse 3.4s var(--e) infinite}
-.mkring.r2{inset:22%;border-color:rgba(239,35,60,.55);animation-delay:1.1s}
-.mkcore::before{content:'';position:absolute;inset:30%;border-radius:50%;
-  background:radial-gradient(circle,rgba(239,35,60,.4),transparent 70%)}
-@keyframes mkPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.06);opacity:.45}}
+.mkcore i{position:absolute;inset:0;display:block;background:center/contain no-repeat;
+  animation-play-state:paused}
+.mkcore .amDis{background-image:url(img/ts-dis.webp);
+  animation:amCCW 20s linear infinite}
+.mkcore .amBeyin{inset:20%;background-image:url(img/ts-beyin.webp)}
+.mkcore .amIc{inset:29%;background-image:url(img/ts-ic.webp);
+  animation:amCW 12s linear infinite}
+.mkact.on .mkcore i{animation-play-state:running}
+@keyframes amCCW{to{transform:rotate(-360deg)}}
+@keyframes amCW{to{transform:rotate(360deg)}}
+/* hareket azaltma ve düşük performans: DÖNÜŞÜ değil pahalı olanı kes.
+   Burada pahalı bir filtre yok, dönüş zaten ucuz — ama kullanıcı açıkça
+   "hareketi azalt" dediyse saygı duyulur.                            */
+@media(prefers-reduced-motion:reduce){.mkcore i{animation:none!important}}
+html.t-mo-off .mkcore i{animation:none!important}
 .mkhyps{display:flex;flex-direction:column;gap:8px;justify-content:center}
 .mkhy{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:9px 13px;border-radius:10px;background:rgba(255,255,255,.04);
@@ -3568,7 +3604,10 @@ a.ktcard:hover{background:#131317}
      (SE boyu) 100vh sınırı devreye girer ve taşma dönebilir.          */
   .mkview{height:clamp(380px,min(150vw,calc(100vh - 210px)),620px)}
   .mksplit,.mksplit2,.mkeng,.mkjump{grid-template-columns:1fr}
-  .mkeng .mkcore{max-height:110px}
+  /* 2026-08: yalnız yükseklik kısıtlıydı, genişlik 190'da kalıyordu →
+     kutu 190×110 elipse eziliyordu. Amblem YUVARLAK olduğu için mobilde
+     de kare olmalı; ikisi birden sınırlanıyor.                        */
+  .mkeng .mkcore{max-height:150px;max-width:150px}
   .mkcurves{grid-template-columns:1fr;gap:7px}
   .mkmc:nth-child(3){display:none}
   .mkdecs,.mkchs{grid-template-columns:repeat(2,1fr)}
@@ -3578,7 +3617,7 @@ a.ktcard:hover{background:#131317}
   .mkact,.mkcount span,.mkfr,.mksec,.mksig,.mkit,.mkarrow,.mkmade,.mkmc,.mkline,
   .mkcomp,.mkrk,.mkin,.mkcore,.mkhy,.mkdc,.mkjc,.mkch,.mkinf,.mkhand{
     opacity:1;transform:none;transition:none}
-  .mkring{animation:none}
+  /* .mkring kaldırıldı — amblem geldi, halkalar artık yok */
   .mkcv polyline{stroke-dashoffset:0}
 }
 
@@ -7814,7 +7853,7 @@ function marketStage(d,L,tx){
   return '<div class="sdsec"><span class="mono">'
     +E('Pazar zekâsı — kaydırdıkça çözülür','Market intelligence — solved as you scroll')+'</span>'
     +'<div class="mkstage" id="mkStage">'
-      +'<div class="mkbar2"><span class="mklogo"><b></b>'
+      +'<div class="mkbar2"><span class="mklogo"><b><svg viewBox=\'0 0 24 24\' fill=\'currentColor\' aria-hidden=\'true\'><path d=\'M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm0 5.8a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z\'/><path d=\'M21.2 13.6a9.6 9.6 0 0 0 0-3.2l1.9-1.4-1.9-3.3-2.2.8a9.4 9.4 0 0 0-2.8-1.6L15.8 2h-3.8l-.4 2.9c-1 .3-2 .9-2.8 1.6l-2.2-.8-1.9 3.3 1.9 1.4a9.6 9.6 0 0 0 0 3.2l-1.9 1.4 1.9 3.3 2.2-.8c.8.7 1.8 1.3 2.8 1.6l.4 2.9h3.8l.4-2.9c1-.3 2-.9 2.8-1.6l2.2.8 1.9-3.3-1.9-1.4Z\' opacity=\'.92\'/></svg></b>'
         +E('TradeSelf · pazar motoru','TradeSelf · market engine')+'</span>'
         +'<span class="mkrail">'+steps+'</span></div>'
       +'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
@@ -7857,8 +7896,8 @@ function marketStage(d,L,tx){
       /* 5 — davranışsal motor */
       +'<section class="mkact" data-a="4">'
         +'<div class="mkeng"><div class="mkins">'+ins+'</div>'
-          +'<div class="mkcore"><span class="mkring"></span><span class="mkring r2"></span>'
-            +'<b>'+tx(m.engineLab)+'</b></div>'
+          +'<div class="mkcore" role="img" aria-label="'+tx(m.engineLab)+'">'
+            +'<i class="amDis"></i><i class="amBeyin"></i><i class="amIc"></i></div>'
           +'<div class="mkhyps">'+hyp+'</div></div>'
       +'</section>'
 

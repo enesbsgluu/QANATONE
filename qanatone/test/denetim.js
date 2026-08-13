@@ -649,6 +649,32 @@ function ciktiDenetimi() {
        yerTutucuYok && bantKapali && kurucuBagi && kurumBagi && gizlemeKazaniyor,
        `yerTutucuYok=${yerTutucuYok} bantKapali=${bantKapali} kurucuBagi=${kurucuBagi} kurumBagi=${kurumBagi} gizlemeKazaniyor=${gizlemeKazaniyor}`);
   }
+  /* 89 · TradeSelf amblemi sözleşmesi (2026-08):
+     Üç katman (dış dişli · beyin · iç dişli) ve dönüş yönleri.
+     · YÖN: dış saat yönünün TERSİ (amCCW), iç saat yönünde (amCW).
+       İkisi aynı yöne dönerse mekanik his kaybolur.
+     · ORAN: diş sayıları Fourier ile ölçüldü — dış ~20, iç 12.
+       Kavrayan dişlide periyot diş sayısıyla doğru orantılı:
+       20 sn / 12 sn = 20/12. Süreler bu oranı korumalı.
+     · DURMA: perde etkin değilken animasyon paused — görünmeyen dönmesin.
+     · YAZI: amblemin içinde metin YOK (başlıkta zaten var, ayrıca
+       ortadaki delik 34px, 58px'lik yazı sığmıyor); erişilebilirlik
+       aria-label ile sağlanıyor. */
+  {
+    const kaynakA = fs.readFileSync(SRC, 'utf8');
+    const kod = kaynakA.replace(/\/\*[\s\S]*?\*\//g, '');
+    const uc = ['amDis', 'amBeyin', 'amIc'].every(k => kod.indexOf(k) > -1);
+    const tersYon = /\.amDis\{[^}]*animation:amCCW\s+(\d+)s/.exec(kod);
+    const icYon = /\.amIc\{[^}]*animation:amCW\s+(\d+)s/.exec(kod);
+    const yonDogru = !!tersYon && !!icYon;
+    const oran = yonDogru ? (+tersYon[1] / +icYon[1]) : 0;
+    const oranDogru = Math.abs(oran - 20 / 12) < 0.02;
+    const durur = kod.indexOf('.mkact.on .mkcore i{animation-play-state:running}') > -1;
+    const etiket = kod.indexOf('role="img" aria-label=') > -1;
+    ol('TradeSelf amblemi (ters yön · ölçülen oran · perde dışında durur)',
+       uc && yonDogru && oranDogru && durur && etiket,
+       `katman=${uc} yon=${yonDogru} oran=${oran.toFixed(3)}(hedef 1.667) durur=${durur} etiket=${etiket}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
