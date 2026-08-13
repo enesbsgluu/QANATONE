@@ -8438,9 +8438,7 @@ window.__sdMotion=function(s){
          Kilitlenen şey #...Stage değil onu saran .sdsec — etiket ve not da
          birlikte dursun, yoksa üstteki başlık kayıp altındaki sahne sabit
          kalır ve blok kırık görünür.
-         Sınır innerWidth>880: Lenis'in açıldığı çizginin AYNISI. Altında
-         yumuşak kaydırma da yok, kilit de yok — adres çubuğu oynayan
-         mobilde pin sarsıntının ana kaynağıdır. */
+         Pin her genişlikte kurulur; mobil gerekçesi hemen aşağıda. */
       const pEl=document.querySelector(trg), pWrap=(pEl&&pEl.closest('.sdsec'))||pEl;
       /* 2026-08 ANİMASYON HIZ SÖZLEŞMESİ (2/2): innerWidth>880 şartı
          kaldırıldı — pin artık MOBİLDE DE kurulur. Eski gerekçe "adres
