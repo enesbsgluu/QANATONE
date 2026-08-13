@@ -525,7 +525,15 @@ html.lowfx #hero .hfloat::before,html.lowfx #hero .hfloat::after{display:none}
 /* maske farkı desteklenmiyorsa halkayı hiç gösterme — yoksa düğmeyi doldurur */
 @supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
   .void .ring{display:none}}
-html.lowfx .void .ring::before{animation:none}
+/* 2026-08 HALKA LOWFX'TE SUSUYORDU: burada `animation:none` vardı ve
+   Enes'in 8 çekirdekli makinesinde bile lowfx açıldığı için (Chrome'un
+   deviceMemory'yi ≤2 bildirmesi yeterli) halka HİÇ dönmüyordu — canlıda
+   ölçüldü: lowfx:true, anim:none, sure:0s, reduce:false. Oysa dönen şey
+   bir sözde-elemanın transform'u; derleyici katmanında koşar, düzen ve
+   boyama üretmez. Pahalı olan kısım halkanın üstündeki drop-shadow
+   parıltısıydı — her karede yeniden boyama ister. Artık lowfx animasyonu
+   değil PARILTIYI kaldırıyor: efekt görünür kalıyor, maliyet düşüyor.  */
+html.lowfx .void .ring{filter:none}
 @media(prefers-reduced-motion:reduce){.void .ring::before{animation:none}}
 .hmeta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:52px;
   flex-wrap:wrap;opacity:0;animation:fadeup 1s var(--e) 1s forwards;
