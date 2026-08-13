@@ -486,6 +486,21 @@ function ciktiDenetimi() {
        tekBirim && ucNoktada && cihazUzayiYok && yedek && oncelik,
        `tekBirim=${tekBirim} ucNoktada=${ucNoktada} cihazUzayiYok=${cihazUzayiYok} yedek=${yedek} oncelik=${oncelik}`);
   }
+  /* 83 · animasyon hız sözleşmesi (2026-08): sahne pin'i mobilde de kurulur.
+     Eskiden canPin innerWidth>880 taşıyordu → mobil, ekrandan geçen kısa
+     pencerede scrub'lanıyor, GEO/TradeSelf sahneleri okunamadan bitiyordu.
+     Pin'in mobilde güvenli olması ignoreMobileResize'a bağlı (adres çubuğu
+     resize'ı pin'i bozmasın). İkisi birlikte kilitlenir. */
+  {
+    const kaynakP = fs.readFileSync(SRC, 'utf8');
+    const iCP = kaynakP.indexOf('const canPin=');
+    const cpSatir = iCP > -1 ? kaynakP.slice(iCP, kaynakP.indexOf(';', iCP)) : '';
+    const mobildeAcik = iCP > -1 && cpSatir.indexOf('innerWidth') === -1;
+    const resizeBagisik = kaynakP.indexOf('ignoreMobileResize:true') > -1;
+    ol('sahne pin mobilde açık + ignoreMobileResize yapılandırılmış',
+       mobildeAcik && resizeBagisik,
+       `mobildeAcik=${mobildeAcik} resizeBagisik=${resizeBagisik}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
