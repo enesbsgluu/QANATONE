@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 11:07 UTC
+> Üretim tarihi: 2026-08-13 11:31 UTC
 
 ## Yeni sohbete geçerken
 
@@ -21,12 +21,13 @@
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 7 KB | `73b4546a` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
-| `DEVIR.md` | bu dosya | 4 KB |  |
+| `DEVIR.md` | bu dosya | 5 KB |  |
 | `NETLIFY-KURULUM.md` |  | 7 KB | `4a94ad7d` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 57 KB | `6c2ab0e8` |
+| `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
 | `build.js` |  | 29 KB | `77c7eae2` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
@@ -58,7 +59,7 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 815 KB | `689c52d8` |
+| `index.html` |  | 816 KB | `41a8dea3` |
 | `js/` | 4 dosya | 889 KB |  |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
@@ -78,7 +79,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 49 KB | `a034e6b1` |
+| `test/denetim.js` |  | 50 KB | `735b8250` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -89,8 +90,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 120 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 47.2 MB |
+| son derleme | 121 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 47.3 MB |
 
 ## Çalıştırma
 

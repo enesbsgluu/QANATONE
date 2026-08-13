@@ -8442,7 +8442,18 @@ window.__sdMotion=function(s){
          yumuşak kaydırma da yok, kilit de yok — adres çubuğu oynayan
          mobilde pin sarsıntının ana kaynağıdır. */
       const pEl=document.querySelector(trg), pWrap=(pEl&&pEl.closest('.sdsec'))||pEl;
-      const canPin=pin>0&&innerWidth>880&&pWrap;
+      /* 2026-08 ANİMASYON HIZ SÖZLEŞMESİ (2/2): innerWidth>880 şartı
+         kaldırıldı — pin artık MOBİLDE DE kurulur. Eski gerekçe "adres
+         çubuğu oynayan mobilde pin sarsıntı yapar" idi; asıl kaynak
+         ignoreMobileResize'ın yapılandırılmamış olmasıydı (yukarıda
+         kapatıldı). Pinsiz mobil dalda sahne, ekrandan geçen kısacık
+         pencerede scrub'lanıyordu: hızlı kaydıran GEO/TradeSelf
+         animasyonlarını okuyamadan geçiyordu (Enes'in şikâyeti).
+         Enes'in istediği davranış: kaydırdıkça sahne sabit kalır,
+         animasyon anlaşılır hızda akar, bitince sayfa devam eder —
+         bu tam olarak pin+scrub. Pinsiz dal yalnız REDUCE ve pin=0
+         durumlarına kaldı.                                          */
+      const canPin=pin>0&&pWrap;
       window.__sdST=ScrollTrigger.create(canPin?{
         trigger:pWrap,
         start:()=>(pWrap.getBoundingClientRect().height<innerHeight-24?'center center':'top top'),
@@ -11396,6 +11407,14 @@ function initHeroHands(gsap, ST, REDUCE){
     window.__motionOn=true;
     const gsap=window.gsap,ST=window.ScrollTrigger;
     gsap.registerPlugin(ST);
+    /* 2026-08 ANİMASYON HIZ SÖZLEŞMESİ (1/2): mobilde adres çubuğu her
+       açılıp kapandığında viewport yüksekliği değişir; ScrollTrigger
+       varsayılan olarak bunda tam refresh yapar — pin başlangıç/bitiş
+       noktaları yeniden hesaplanır, sahne atlar/sarsılır. Kaynaktaki
+       "mobilde pin sarsıntının ana kaynağı" notunun asıl sebebi buydu.
+       Bu ayar o refresh'i keser; gerçek döndürme/boyut değişimi yine
+       yakalanır.                                                     */
+    try{ST.config({ignoreMobileResize:true});}catch(e){}
 
     if(!REDUCE&&innerWidth>880){
       const lenis=new window.Lenis({duration:1.05,
