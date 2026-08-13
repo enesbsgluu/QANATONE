@@ -506,8 +506,21 @@ html.lowfx #hero .hfloat::before,html.lowfx #hero .hfloat::after{display:none}
     #ffe6ea calc(100% - var(--ring-tail)*.15),
     rgba(255,77,99,.85) calc(100% - var(--ring-tail)*.04),
     transparent 100%);
-  animation:voidring var(--ring-spd) linear infinite}
-@keyframes voidring{to{transform:translate(-50%,-50%) rotate(1turn)}}
+  /* 2026-08 TARAMA: Enes'in isteği "sürekli parlayan halka değil, birkaç
+     saniyede bir turlayan kuyruklu kıvılcım". Halka artık turluyor, sönüyor,
+     bekliyor. TURUN SÜRESİ hâlâ --ring-spd (panelden ayarlanır, anlamı
+     değişmedi); döngüye bekleme evresi eklendiği için toplam süre /.58 ile
+     uzatıldı → tur döngünün %58'i, kalan %42 sessizlik. DİKKAT: bu oran iki
+     yerde birden yaşıyor (aşağıdaki bölen + keyframe'deki %58). Biri
+     değişip öteki kalırsa tur hızı --ring-spd'den sessizce kayar — kural 85
+     tam da bu ayrışmayı ölçüyor. Tempo ayarı: /.58 ve %58 birlikte. */
+  animation:voidring calc(var(--ring-spd)/.58) linear infinite}
+@keyframes voidring{
+  0%{transform:translate(-50%,-50%) rotate(0turn);opacity:0}
+  4%{opacity:1}
+  54%{opacity:1}
+  58%{transform:translate(-50%,-50%) rotate(1turn);opacity:0}
+  100%{transform:translate(-50%,-50%) rotate(1turn);opacity:0}}
 .void:hover .ring{filter:drop-shadow(0 0 calc(var(--ring-glow)*1.7) rgba(239,35,60,.95))}
 /* maske farkı desteklenmiyorsa halkayı hiç gösterme — yoksa düğmeyi doldurur */
 @supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
