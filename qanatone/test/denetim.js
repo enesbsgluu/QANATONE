@@ -501,20 +501,32 @@ function ciktiDenetimi() {
        mobildeAcik && resizeBagisik,
        `mobildeAcik=${mobildeAcik} resizeBagisik=${resizeBagisik}`);
   }
-  /* 84 · proje kartları standart boyut (2026-08, Enes'in kararı):
-     VH ritim dizisi karta sıraya göre 7 farklı görsel yüksekliği
-     veriyordu; kaldırıldı — --vh atanmaz, CSS varsayılanı (220px)
-     her kartta aynı. Ayrıca ilk kartlar eager: hepsi lazy olunca
-     kartlar görsel yüklendikçe "sırayla geliyor"du. */
+  /* 84 · proje kartları standart boyut — İKİ BİLEŞEN (2026-08):
+     Bu sitede iki ayrı proje kartı var, ortak kodları yok:
+       arşiv (/projeler) → projectsArchiveKur → .mi/.mi-t, masonry
+       ana sayfa        → renderProjects     → .dk/.dkin, sticky deste
+     İlk yazımda yalnız arşiv kilitlenmişti; belirti ana sayfada da
+     vardı ve kural sessiz kaldı. Artık ikisi birden:
+     ARŞİV: VH ritim dizisi yok, --vh atanmaz, CSS varsayılanı 220px.
+     ANA SAYFA: .dkimg img MUTLAKA absolute — relative+height:100%
+     iken görsel doğal yüksekliğiyle akışa katkı verip kart boyutunu
+     kendi belirliyordu. Her ikisinde ilk kartlar eager. */
   {
     const kaynakK = fs.readFileSync(SRC, 'utf8');
+    /* arşiv */
     const ritimYok = kaynakK.indexOf('VH[i%VH.length]') === -1
                   && !/setProperty\('--vh'/.test(kaynakK);
-    const varsayilanDuruyor = kaynakK.indexOf('height:var(--vh,220px)') > -1;
-    const eagerVar = /i<3\?'decoding/.test(kaynakK);
-    ol('proje kartları standart boyut (+ilk kartlar eager)',
-       ritimYok && varsayilanDuruyor && eagerVar,
-       `ritimYok=${ritimYok} varsayilan=${varsayilanDuruyor} eager=${eagerVar}`);
+    const arsivVarsayilan = kaynakK.indexOf('height:var(--vh,220px)') > -1;
+    const arsivEager = /i<3\?'decoding/.test(kaynakK);
+    /* ana sayfa destesi */
+    const dkKural = (kaynakK.match(/\.dkimg img\{[^}]*\}/) || [''])[0];
+    const dkAkistanCikti = dkKural.indexOf('position:absolute') > -1
+                        && dkKural.indexOf('inset:0') > -1;
+    const dkEager = /i<2\?'decoding="async"'/.test(kaynakK);
+    ol('proje kartları standart boyut — arşiv + ana sayfa destesi',
+       ritimYok && arsivVarsayilan && arsivEager && dkAkistanCikti && dkEager,
+       `arsiv[ritim=${ritimYok} varsayilan=${arsivVarsayilan} eager=${arsivEager}] ` +
+       `deste[akistanCikti=${dkAkistanCikti} eager=${dkEager}]`);
   }
   /* 85 · tarama yayı (2026-08, Enes'in kararı "taramalı"): hero CTA'nın
      halkası SÜREKLİ dönmez — turlar, söner, bekler.
