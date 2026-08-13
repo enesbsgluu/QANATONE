@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 11:31 UTC
+> Üretim tarihi: 2026-08-13 11:36 UTC
 
 ## Yeni sohbete geçerken
 
@@ -59,7 +59,7 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 816 KB | `41a8dea3` |
+| `index.html` |  | 816 KB | `bec4abd0` |
 | `js/` | 4 dosya | 889 KB |  |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
@@ -90,7 +90,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 121 sn (basılan 58, önbellekten 0) |
+| son derleme | 114 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 47.3 MB |
 
 ## Çalıştırma
