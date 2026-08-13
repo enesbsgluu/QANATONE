@@ -3175,14 +3175,15 @@ a.ktcard:hover{background:#131317}
 .tpwires{position:absolute;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:1;overflow:visible}
 .tpwires path{fill:none;stroke:rgba(255,255,255,.22);stroke-width:1.1;
-  vector-effect:non-scaling-stroke;stroke-dasharray:900;stroke-dashoffset:900;
+  stroke-dasharray:900;stroke-dashoffset:900;
   transition:stroke-dashoffset 1.1s var(--e);transition-delay:calc(.25s + var(--i)*.09s)}
-/* 900 = JS ÖLÇÜMÜ ÇALIŞMAZSA yedek. Eskiden 200'dü ve non-scaling-stroke
-   yüzünden 200 EKRAN PİKSELİ anlamına geliyordu: uzun teller (en üst ve
-   en alttaki) yarıda kesiliyordu. Gerçek uzunluk telHizala içinde
-   getTotalLength ile ölçülüp satır içi yazılıyor; buradaki değer yalnız
-   ölçüm yapılamadığı durumda devreye giriyor. !important şart: satır içi
-   dashoffset'i yenmesi gerekiyor, yoksa teller hiç açılmaz.           */
+/* non-scaling-stroke BİLEREK YOK: o özellik çizgiyi ve dash'i CİHAZ
+   uzayında (zoom sonrası) çizer; JS ölçümü ise CSS pikseli. Zoom her
+   değiştiğinde ikisinin oranı bozulup teller kesiliyordu. viewBox artık
+   telHizala içinde SVG'nin kendi piksel boyutuna eşitlendiği için ölçek
+   1:1 — kalınlık bozulmaz, birim tektir, zoom her şeyi birlikte
+   ölçekler. 900: JS çalışmazsa yedek uzunluk. !important aşağıda şart:
+   satır içi dashoffset'i yenmesi gerekiyor, yoksa teller hiç açılmaz. */
 .tpbox.in .tpwires path{stroke-dashoffset:0 !important}
 
 .tpcards{position:relative;z-index:2;display:flex;flex-direction:column;
@@ -7574,41 +7575,43 @@ function deliverStage(d,L,tx){
     const kartlar = [].slice.call(box.querySelectorAll('.tpcard'));
     const yollar = [].slice.call(svg.querySelectorAll('path'));
     if (!kartlar.length || yollar.length !== kartlar.length) return;
-    const mr = mid.getBoundingClientRect();
-    if (mr.height < 1) return;               /* henüz düzen yok, dokunma */
+    /* 2026-08 ÜÇÜNCÜ VE KÖKLÜ DÜZELTME — TEK BİRİM:
+       İki yamadan sonra ortada ÜÇ birim olduğu anlaşıldı: viewBox
+       birimi (0-100), CSS pikseli (getBoundingClientRect) ve cihaz
+       pikseli (non-scaling-stroke dash'i ZOOM SONRASI uzayda çizer).
+       CSS-piksel ölçümü zoom'la değişmediği için tel her zoom'da
+       yeniden bozuluyordu. Çözüm birimleri teke indirmek: viewBox
+       SVG'nin kendi piksel boyutuna eşitlenir, tel piksel
+       koordinatlarında çizilir, non-scaling-stroke bu yollardan
+       kaldırıldı. Artık kalınlık, dasharray ve uzunluk aynı uzayda —
+       zoom hepsini birlikte ölçekler, bozulacak oran kalmadı.
+       Uç noktası da düzeldi: teller eskiden .tpmid'in sağ kenarında
+       (x=100) bitiyordu, noktalar ise .tpcard::before ile KARTIN SOL
+       KENARINDA duruyor — aradaki sütun boşluğuna tel hiç girmiyordu
+       ("uçlar değmiyor"). Şimdi uç, gerçek nokta konumuna çiziliyor;
+       overflow:visible zaten açık.                                  */
+    const sr = svg.getBoundingClientRect();
+    if (sr.height < 1 || sr.width < 1) return;   /* düzen yok, dokunma */
+    const W = Math.round(sr.width), H = Math.round(sr.height);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     kartlar.forEach((k, i) => {
       const kr = k.getBoundingClientRect();
       if (kr.height < 1) return;
-      const y = ((kr.top + kr.height / 2) - mr.top) / mr.height * 100;
-      yollar[i].setAttribute('d',
-        'M0,50 C46,50 54,' + y.toFixed(1) + ' 100,' + y.toFixed(1));
-      /* 2026-08 İKİNCİ DÜZELTME — BİRİM UYUŞMAZLIĞI (zoom belirtisi):
-         İlk düzeltme getTotalLength() kullanıyordu; o değer VIEWBOX
-         BİRİMİ (0-100'lük kutuda ~114) döndürür. Oysa non-scaling-stroke
-         yüzünden stroke-dasharray EKRAN PİKSELİ cinsinden yorumlanır.
-         İki birim yalnız belli bir zoom'da tesadüfen örtüşür — Enes'in
-         gördüğü tam buydu: bir zoom'da uç değmiyor, yakınlaştırınca
-         orta kesiliyor. Doğrusu: yolu viewBox'ta örnekleyip her noktayı
-         .tpmid'in GERÇEK ekran boyutuyla ölçekleyerek ekran-uzayı
-         uzunluğunu toplamak. Zoom/resize telKisitli'yi tetikleyip
-         yeniden ölçtürür. +6 pay: örnekleme eğriyi kirişlerle izlediği
-         için hafif KISA ölçer, pay ucu garantiye alır.               */
-      if (yollar[i].getTotalLength && yollar[i].getPointAtLength) {
+      const y = (kr.top + kr.height / 2) - sr.top;         /* piksel */
+      const ucX = (kr.left - sr.left) - 0.5;   /* ::before nokta merkezi */
+      const p = yollar[i];
+      p.setAttribute('d',
+        'M0,' + (H / 2).toFixed(1)
+        + ' C' + (ucX * 0.46).toFixed(1) + ',' + (H / 2).toFixed(1)
+        + ' ' + (ucX * 0.54).toFixed(1) + ',' + y.toFixed(1)
+        + ' ' + ucX.toFixed(1) + ',' + y.toFixed(1));
+      if (p.getTotalLength) {
         try {
-          const p = yollar[i];
-          const Lvb = p.getTotalLength();          /* viewBox birimi */
-          const ADIM = 24;
-          let uzPx = 0, once = null;
-          for (let j = 0; j <= ADIM; j++) {
-            const n = p.getPointAtLength(Lvb * j / ADIM);
-            const sx = n.x / 100 * mr.width;       /* ekran pikseli   */
-            const sy = n.y / 100 * mr.height;
-            if (once) uzPx += Math.hypot(sx - once.x, sy - once.y);
-            once = { x: sx, y: sy };
-          }
-          const uz = Math.ceil(uzPx) + 6;
-          yollar[i].style.strokeDasharray = uz;
-          yollar[i].style.strokeDashoffset =
+          /* viewBox artık piksel — getTotalLength ile dasharray AYNI
+             birimde, dönüşüm yok. +4 yuvarlama payı.                */
+          const uz = Math.ceil(p.getTotalLength()) + 4;
+          p.style.strokeDasharray = uz;
+          p.style.strokeDashoffset =
             box.classList.contains('in') ? 0 : uz;
         } catch (e) {}
       }
