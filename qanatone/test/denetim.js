@@ -501,6 +501,21 @@ function ciktiDenetimi() {
        mobildeAcik && resizeBagisik,
        `mobildeAcik=${mobildeAcik} resizeBagisik=${resizeBagisik}`);
   }
+  /* 84 · proje kartları standart boyut (2026-08, Enes'in kararı):
+     VH ritim dizisi karta sıraya göre 7 farklı görsel yüksekliği
+     veriyordu; kaldırıldı — --vh atanmaz, CSS varsayılanı (220px)
+     her kartta aynı. Ayrıca ilk kartlar eager: hepsi lazy olunca
+     kartlar görsel yüklendikçe "sırayla geliyor"du. */
+  {
+    const kaynakK = fs.readFileSync(SRC, 'utf8');
+    const ritimYok = kaynakK.indexOf('VH[i%VH.length]') === -1
+                  && !/setProperty\('--vh'/.test(kaynakK);
+    const varsayilanDuruyor = kaynakK.indexOf('height:var(--vh,220px)') > -1;
+    const eagerVar = /i<3\?'decoding/.test(kaynakK);
+    ol('proje kartları standart boyut (+ilk kartlar eager)',
+       ritimYok && varsayilanDuruyor && eagerVar,
+       `ritimYok=${ritimYok} varsayilan=${varsayilanDuruyor} eager=${eagerVar}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
