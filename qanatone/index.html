@@ -1170,7 +1170,16 @@ body:not(.sub) .dkin{border-radius:clamp(20px,2.4vw,30px)}
              radial-gradient(96% 84% at 80% 98%,var(--g2,rgba(255,255,255,.04)),transparent 68%),
              linear-gradient(150deg,rgba(239,35,60,.08),rgba(255,255,255,.03));
   transition:transform 1s var(--e)}
-.dkimg img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
+/* 2026-08 KART BOYUTU GÖRSELE GÖRE DEĞİŞİYORDU: img burada
+   position:relative + height:100% idi. .dkimg'in yüksekliği belirsiz
+   olduğunda (mobilde tek sütun; masaüstünde de ızgara satırı içeriğe
+   göre büyürken) height:100% "auto"ya çözülür ve görsel KENDİ DOĞAL
+   yüksekliğiyle akışa katkı verir → kart, görselin boyutuna göre
+   büyüyüp küçülür. absolute + inset:0 görseli intrinsik hesaplamadan
+   tamamen çıkarır: yüksekliği artık yalnız .dkimg'in min-height'ı ve
+   metin sütunu belirler, görsel object-fit:cover ile o alana
+   ölçeklenir — Enes'in istediği davranış.                           */
+.dkimg img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;
   filter:grayscale(1) contrast(1.1);transition:transform 1s var(--e),filter .6s var(--e)}
 .dkimg .mk{position:absolute;inset:0;z-index:1;display:grid;place-items:center;
   font-family:Manrope;font-size:clamp(2.4rem,5vw,4rem);font-weight:700;
@@ -6819,7 +6828,7 @@ function renderProjects(){
   box.innerHTML=P.map((p,i)=>{const h=hueVars(i);return `
     <div class="dk" style="--i:${i};--g1:${h.g1};--g2:${h.g2}">`+`
       <a class="dkin" href="/projeler/${p.slug}" data-pd="${p.slug}">
-        <span class="dkimg" data-pj="${p.slug}">${(p.imgc||p.image)?`<img src="${p.imgc||p.image}" alt="${p.name}" loading="lazy">`
+        <span class="dkimg" data-pj="${p.slug}">${(p.imgc||p.image)?`<img src="${p.imgc||p.image}" alt="${p.name}" ${i<2?'decoding="async"':'loading="lazy" decoding="async"'}>`
           :`<span class="mk">${p.name.slice(0,2).toUpperCase()}</span>`}
           <span class="yr">${p.year}</span></span>
         <span class="dktx">
