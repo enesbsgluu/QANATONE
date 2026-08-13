@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 15:28 UTC
+> Üretim tarihi: 2026-08-13 15:52 UTC
 
 ## Yeni sohbete geçerken
 
@@ -62,10 +62,11 @@
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 819 KB | `583e6409` |
+| `index.html` |  | 820 KB | `54181796` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
+| `layerize-willchange.diff` |  | 6 KB | `19452268` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
@@ -84,7 +85,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 54 KB | `a10f2ea3` |
+| `test/denetim.js` |  | 55 KB | `1f5cb616` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -95,7 +96,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 406 sn (basılan 58, önbellekten 0) |
+| son derleme | 120 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 47.4 MB |
 
 ## Çalıştırma

@@ -567,6 +567,29 @@ function ciktiDenetimi() {
        markupBagli && surekli && tekHizKaynagi && korumalar && lowfxSusturmuyor,
        `markup=${markupBagli} surekli=${surekli} tekHiz=${tekHizKaynagi} korumalar=${korumalar} lowfx=${lowfxSusturmuyor}`);
   }
+  /* 86 · will-change disiplini (2026-08, Performance kaydıyla ölçüldü):
+     24,3 sn'lik kayıtta **Layerize 3.325 ms (%21,5)** çıktı — kompozitör
+     zamanının beşte biri katman yönetiminde geçiyordu. Sebep kalıcı
+     will-change bildirimleriydi; en kötüsü `.mi{will-change:...,filter}`,
+     her arşiv kartına filtre destekli bir katman ayırtıyordu (kartlar
+     hareket etmediği anlarda bile). will-change bir ipucu değil, peşin
+     ödenen maliyettir: yalnız SÜREKLİ hareket eden elemanlarda durur.
+     Üç şart: `filter` hiçbir will-change'de geçmez · toplam bildirim
+     ≤10 · `.mi` bloğunda will-change yok. Yorumlar sayıma girmez —
+     bu dosyadaki yorumlar CSS metni alıntılıyor. */
+  {
+    const kaynakW = fs.readFileSync(SRC, 'utf8');
+    const stil = (kaynakW.match(/<style[^>]*>([\s\S]*?)<\/style>/) || [, ''])[1];
+    const temiz = stil.replace(/\/\*[\s\S]*?\*\//g, '');
+    const bildirimler = [...temiz.matchAll(/([^{}]+)\{[^}]*will-change\s*:\s*([^;}]+)/g)];
+    const filtreYok = bildirimler.every(m => m[2].indexOf('filter') === -1);
+    const sayiTamam = bildirimler.length <= 10;
+    const miBlok = (temiz.match(/\.mi\{[^}]*\}/) || [''])[0];
+    const miTemiz = miBlok.indexOf('will-change') === -1;
+    ol('will-change disiplini (filter yok · ≤10 bildirim · .mi temiz)',
+       filtreYok && sayiTamam && miTemiz,
+       `filtreYok=${filtreYok} sayi=${bildirimler.length} miTemiz=${miTemiz}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
