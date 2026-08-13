@@ -462,27 +462,29 @@ function ciktiDenetimi() {
        hizalaVar && merkezOlcumu && kurulumda,
        `hizala=${hizalaVar} merkez=${merkezOlcumu} kurulumTuru=${kurulumda}`);
   }
-  /* 82 · tel uzunluğu EKRAN uzayında ölçülür (2026-08, iki aşamada):
-     non-scaling-stroke yüzünden stroke-dasharray EKRAN PİKSELİ.
-     1. hata: sabit 200 → uzun teller kesildi. 2. hata: getTotalLength()
-     doğrudan yazıldı — o değer VIEWBOX BİRİMİ, ekran pikseli değil;
-     yalnız belli bir zoom'da tesadüfen tutuyor (Enes'in zoom belirtisi).
-     Şartlar: getPointAtLength örneklemesi + mr.width/height ölçekleme
-     var · viewBox birimi DOĞRUDAN dasharray'e yazılmıyor · CSS yedeği
-     ≥600 · .in kuralı !important (yoksa teller hiç açılmaz). */
+  /* 82 · klasör telleri TEK BİRİMDE yaşar (2026-08, üç aşamada öğrenildi):
+     1. hata: sabit dasharray:200 → uzun teller kesildi. 2. hata:
+     getTotalLength (viewBox birimi) dasharray'e (non-scaling-stroke →
+     cihaz pikseli) yazıldı → zoom'a bağlı kesilme. 3. teşhis: ölçüm CSS
+     pikselinde, dash cihaz pikselinde — zoom oranı ikisini ayırıyor.
+     KALICI İLKE: viewBox SVG'nin kendi piksel boyutuna eşitlenir (tek
+     birim), non-scaling-stroke bu yollarda YASAK, uç gerçek nokta
+     konumuna (kart sol kenarı) çizilir. Şartlar aşağıda. */
   {
     const kaynakD = fs.readFileSync(SRC, 'utf8');
     const iTH = kaynakD.indexOf('const telHizala');
     const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 3400) : '';
-    const ornekleme = bolge.indexOf('getPointAtLength(') > -1
-                   && bolge.indexOf('mr.width') > -1
-                   && bolge.indexOf('strokeDasharray') > -1;
-    const dogrudanDegil = !/Math\.ceil\(yollar\[i\]\.getTotalLength\(\)\)/.test(bolge);
-    const yedek = ((kaynakD.match(/\.tpwires path\{[^}]*stroke-dasharray:(\d+)/) || [, '0'])[1] * 1) >= 600;
+    const tekBirim = bolge.indexOf("svg.setAttribute('viewBox'") > -1
+                  && bolge.indexOf('getTotalLength') > -1
+                  && bolge.indexOf('strokeDasharray') > -1;
+    const ucNoktada = bolge.indexOf('kr.left - sr.left') > -1;
+    const cssBlok = (kaynakD.match(/\.tpwires path\{[^}]*\}/) || [''])[0];
+    const cihazUzayiYok = cssBlok.indexOf('non-scaling-stroke') === -1;
+    const yedek = ((cssBlok.match(/stroke-dasharray:(\d+)/) || [, '0'])[1] * 1) >= 600;
     const oncelik = /\.tpbox\.in \.tpwires path\{stroke-dashoffset:0 !important\}/.test(kaynakD);
-    ol('klasör telleri: uzunluk EKRAN uzayında ölçülür',
-       ornekleme && dogrudanDegil && yedek && oncelik,
-       `ornekleme=${ornekleme} viewBoxDogrudanDegil=${dogrudanDegil} yedek=${yedek} oncelik=${oncelik}`);
+    ol('klasör telleri tek birimde (piksel viewBox + uç noktada + cihaz-uzayı yasak)',
+       tekBirim && ucNoktada && cihazUzayiYok && yedek && oncelik,
+       `tekBirim=${tekBirim} ucNoktada=${ucNoktada} cihazUzayiYok=${cihazUzayiYok} yedek=${yedek} oncelik=${oncelik}`);
   }
   const sayfalar = [];
   (function tara(d) {
