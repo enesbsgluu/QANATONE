@@ -10361,7 +10361,12 @@ function projectsArchiveKur(){
 
   /* etiketin ilk parçası kategori olur: "Otomotiv · Bayi ağı" → "Otomotiv" */
   const cat=p=>String((typeof T==='function'?T(p.tag):'')||'').split('·')[0].trim();
-  const VH=[214,272,170,240,304,188,254];   /* görsel bloğu yükseklikleri — ritim */
+  /* 2026-08 STANDART KART: eskiden VH=[214,272,170,240,304,188,254]
+     dizisi karta SIRAYA göre 7 farklı görsel yüksekliği veriyordu
+     ("ritim"). Enes'in kararı: kartların standart bir boyutu olmalı,
+     görsel karta ölçeklenmeli (object-fit:cover zaten yapıyor).
+     --vh artık hiç atanmıyor → CSS varsayılanı (220px, mobilde ×.82)
+     her kartta aynı.                                                 */
 
   function render(){
     const P=(typeof C!=='undefined'&&C.projects)||[];
@@ -10373,13 +10378,15 @@ function projectsArchiveKur(){
       a.href='/projeler/'+p.slug;
       a.setAttribute('data-pd',p.slug);
       a.dataset.cat=cat(p);
-      a.style.setProperty('--vh',VH[i%VH.length]+'px');
       const hv=hueVars(i);
       a.style.setProperty('--g1',hv.g1); a.style.setProperty('--g2',hv.g2);
+      /* ilk 3 kart ekran üstünde: lazy bekletmesi "kartlar sırayla
+         geliyor" hissinin parçasıydı — onlar eager, gerisi lazy.     */
+      const yukle=(i<3?'decoding="async"':'loading="lazy" decoding="async"');
       a.innerHTML=
         '<span class="mi-t">'+
         '<span class="mv" data-pj="'+p.slug+'">'+((p.imgc||p.image)
-          ? '<img src="'+(p.imgc||p.image)+'" alt="" loading="lazy">'
+          ? '<img src="'+(p.imgc||p.image)+'" alt="" '+yukle+'>'
           : '<span class="mk"></span>')+
           '<span class="yr"></span></span>'+
         '<span class="mb"><span class="mt"></span><h3></h3><p></p>'+
