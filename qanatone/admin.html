@@ -559,9 +559,10 @@ bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
 
 soz:{t:'Müşteri sözleri',n:()=>(get('testimonials')||[]).length,f:()=>`
   <h2>Müşteri sözleri</h2><p class="sub">Kanal kartlarının altındaki <b>ince kırmızı bantta</b> sırayla döner. Hiç kayıt yoksa bant kendini gizler. Geçiş süresi <b>Görünüm & Hareket</b> sekmesinde.</p>
+  <div class="note"><b>Bant şu an KAPALI.</b> Sitedeki üç söz uydurmaydı; gerçek müşteri cümlesi girilmeden yayında görünmesin diye kapatıldı. Sözleri gerçekleriyle değiştirdikten sonra aşağıdaki anahtarla aç.</div>
+  <div class="sws">${sw('Bandı sitede göster','theme.testi.on')}</div>
   <div class="note calm"><b>En ikna edici biçim:</b> tek cümlelik somut bir an. "Çok memnun kaldık" değil,
   "ilk kez tanımadığım biri sitemizden bulup aradı" gibi.</div>
-  <div class="note"><b>Mevcut sözler uydurma.</b> Gerçek müşteri cümleleriyle değiştirilmeden yayına çıkmamalı.</div>
   ${list('testimonials','Söz',(it,i,p)=>`
     <div class="r2">${fld('İsim',p+'.name')}${fld('Ünvan (TR)',p+'.role.tr')}</div>
     ${fld('Ünvan (EN)',p+'.role.en')}

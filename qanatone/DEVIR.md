@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 15:52 UTC
+> Üretim tarihi: 2026-08-13 21:48 UTC
 
 ## Yeni sohbete geçerken
 
@@ -26,11 +26,11 @@
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
-| `admin.html` |  | 57 KB | `6c2ab0e8` |
+| `admin.html` |  | 58 KB | `b6cec20f` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
-| `build.js` |  | 29 KB | `77c7eae2` |
+| `build.js` |  | 30 KB | `a13aef2a` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
@@ -61,11 +61,13 @@
 | `holding/test/doa.test.js` |  | 3 KB | `63338127` |
 | `holding/test/faz1.test.js` |  | 6 KB | `1ce7ebb9` |
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
+| `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 22 dosya | 1194 KB |  |
-| `index.html` |  | 820 KB | `54181796` |
+| `index.html` |  | 826 KB | `c8a362e8` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
+| `lag-smoothing.diff` |  | 3 KB | `162af5ef` |
 | `layerize-willchange.diff` |  | 6 KB | `19452268` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
@@ -74,6 +76,7 @@
 | `netlify/functions/yayinla.js` |  | 6 KB | `b7f8e6b6` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
 | `netlify.toml` |  | 0 KB | `3792c4f8` |
+| `og.png` |  | 128 KB | `4bcf0d3e` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 27 KB | `d607ad8f` |
 | `package.json` |  | 1 KB | `7660ac26` |
@@ -85,7 +88,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 55 KB | `1f5cb616` |
+| `test/denetim.js` |  | 59 KB | `e52cd09d` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 
 ## Üretim durumu
@@ -96,8 +99,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 120 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 47.4 MB |
+| son derleme | 38 sn (basılan 0, önbellekten 58) |
+| dist boyutu | 48.0 MB |
 
 ## Çalıştırma
 

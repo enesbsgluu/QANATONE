@@ -73,7 +73,7 @@ const ozet = v => crypto.createHash('sha1')
    netlify/functions'tan derleniyor. Yayın klasörüne kopyalansaydı
    fonksiyon kaynak kodu /netlify/functions/diagnose.js adresinden
    herkese okunur hâle gelirdi — gereksiz bilgi ifşası.                */
-const KOPYA = ['img', 'js', 'admin.html', '_headers', 'content.json'];
+const KOPYA = ['img', 'js', 'admin.html', '_headers', 'content.json', 'og.png'];
 const BEKLE = 260;               // her rotadan sonra render'ın oturması için
 
 /* ---------- yardımcılar ---------- */

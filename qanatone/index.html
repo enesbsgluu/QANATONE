@@ -2089,6 +2089,10 @@ html.lowfx #globe .gov{backdrop-filter:none;-webkit-backdrop-filter:none;backgro
 /* ============ SÖZ BANDI (ince) ============
    Eski kırmızı bandın inceltilmiş hâli: yarı dolgu, küçük tip, küçük
    avatar. Veri yine C.testimonials; boşsa bant kendini gizler.         */
+/* 2026-08: panelden kapatılabilir. Varsayılan KAPALI — sitedeki üç söz
+   uydurmaydı. Gizleme display:none ile; bölüm DOM'da kalıyor, çünkü
+   kanonik bölüm dizisi (kural 74) main'in çocuklarını sayıyor.        */
+html.t-nosoz #sozband{display:none}
 .tband{background:var(--red);padding:clamp(28px,3.6vw,50px) 0;
   position:relative;overflow:hidden}
 .tband::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.14;
@@ -5289,7 +5293,12 @@ theme:{
  hero:{hw:33,hx:-2,hy:-2,rw:33,rx:-2,ry:-2,mask:10,
        ringW:2,ringSpd:3.6,ringTail:56,ringGlow:7},
  map:{speed:1,rays:22,packets:1},
- testi:{interval:7}
+ /* testi.on: müşteri sözleri bandı (#sozband) açık mı. VARSAYILAN KAPALI —
+    sitedeki üç söz uydurmaydı; gerçek müşteri cümlesi girilene kadar bant
+    görünmüyor. Veri ve panel sekmesi duruyor, silinmedi: Enes gerçek
+    sözleri yazınca panelden tek tıkla açılır. Bant kapalıyken tasarımda
+    boş kırmızı şerit kalmıyor.                                          */
+ testi:{interval:7,on:0}
 },
 settings:{whatsapp:'905326291508',waMessage:"Merhaba, QANATONE sitesinden yazıyorum.",email:'',demoWa:'',gtm:'',assistant:true},
 partners:['Mercedes-Benz','Charles Schwab','Bab İç Mimarlık'],
@@ -6233,10 +6242,33 @@ faq:[
 
 founder:{photo:'img/founder.webp',name:'Enes Başoğlu',
  role:{tr:'Kurucu — SEO, reklam ve yapay zekâ otomasyonu',en:'Founder — SEO, ads and AI automation'},
- bio:{tr:'<p>Bu bölüm panelden düzenlenecek. Kurucunun kim olduğu, hangi işlerden geçtiği ve bu stüdyoyu neden kurduğu burada anlatılacak.</p><p>Ajansların anonim olduğu bir sektörde ismiyle ve yüzüyle duran biri olmak, sitedeki en güçlü güven sinyalidir.</p>',
-      en:'<p>This section will be edited from the panel.</p>'},
- links:[{label:'LinkedIn',url:''},{label:'Instagram',url:''}]},
-socials:[],legal:{line:'',kvkk:''},
+ /* 2026-08: buradaki metin yer tutucuydu ("bu bölüm panelden düzenlenecek").
+    Yapılandırılmış veride Person olarak kodlanacağı için gerçek bilgiyle
+    değiştirildi — yer tutucu bir bio, şemaya yazıldığında yanlış beyan olur.
+    "4M$+ bütçe yönetimi" Enes'in doğruladığı ifadedir; devredilen
+    girişimlerin değerlemesi gizlilik gereği yazılmıyor.                  */
+ bio:{tr:'<p>Girişimciliğe kripto para sektöründe başladım; kriptografi ve yazılım o günden beri ilgi alanım. Kurduğum dört girişim gizlilik anlaşmasıyla devredildi, süreç boyunca <b>4M$+ bütçe</b> yönettim.</p>'+
+        '<p>Yaratıcı reklam süreçlerini teknolojiyi yakından izleyerek geliştirdim. 2023\'ten beri odağım yapay zekâ: Shopify, Amazon, Etsy, Gumroad ve TikTok Shop üzerinde kendi e-ticaret operasyonlarımı yürütüyorum ve bu operasyonlarda öğrendiğim her şeyi yapay zekâyla ölçekleme yöntemlerine dönüştürüyorum.</p>'+
+        '<p>QANATONE bu birikimin tek çatı altında toplanmış hâli: talebi yakalayan sistemleri kurar, ölçer ve işletmeye devrederiz. Ajansların anonim kaldığı bir sektörde ismiyle duran biri olmayı tercih ediyorum.</p>',
+      en:'<p>I started out in the crypto sector; cryptography and software have been my field ever since. Four ventures I founded were transferred under confidentiality agreements, and along the way I managed <b>$4M+ in budgets</b>.</p>'+
+        '<p>I built my creative advertising practice by tracking technology closely. Since 2023 my focus has been artificial intelligence: I run my own e-commerce operations across Shopify, Amazon, Etsy, Gumroad and TikTok Shop, and turn everything those operations teach me into methods for scaling with AI.</p>'+
+        '<p>QANATONE is that experience under one roof: we build the systems that capture demand, measure them, and hand them over to the business. In an industry where agencies stay anonymous, I would rather stand behind my own name.</p>'},
+ /* Kişisel LinkedIn — kurumsal sayfa henüz açılmadı. Şemada Person.sameAs
+    olarak kullanılacak; Instagram kurum hesabı olduğu için socials'ta.   */
+ links:[{label:'LinkedIn',url:'https://www.linkedin.com/in/enesbsgluu'}]},
+/* socials → şemada Organization.sameAs olarak basılıyor (schema(), soc) */
+socials:[{label:'Instagram',url:'https://www.instagram.com/qanatone'}],
+legal:{line:'© QANATONE',
+ kvkk:'<h3>Aydınlatma metni (KVKK)</h3>'+
+  '<p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, sitedeki formlar aracılığıyla paylaştığın bilgilerin nasıl işlendiğini açıklar.</p>'+
+  '<p><b>Veri sorumlusu:</b> Enes Başoğlu (gerçek kişi). İletişim: sitedeki e-posta ve WhatsApp bağlantıları.</p>'+
+  '<p><b>İşlenen veriler.</b> Demo talebi formunda ad soyad, e-posta adresi ve telefon numarası zorunlu; talebini anlatan serbest metin alanı isteğe bağlıdır. Bülten formunda yalnızca e-posta adresi alınır. Site kontrol aracına yazdığın alan adı bir kişisel veri değildir; yalnızca kontrolü çalıştırmak için kullanılır ve saklanmaz.</p>'+
+  '<p><b>Amaç.</b> Demo talebi verileri yalnızca o talebe dönüş yapmak için kullanılır; pazarlama listesine eklenmez. Bülten e-postası yalnızca yeni yazı bildirimi için kullanılır ve her bildirimde tek tıkla çıkabilirsin.</p>'+
+  '<p><b>Hukuki sebep.</b> Talebine cevap verilmesi için işleme, sözleşme öncesi görüşme kapsamındadır (KVKK m.5/2-c). Bülten kaydı açık rızaya dayanır ve rıza her zaman geri alınabilir.</p>'+
+  '<p><b>Yurt dışına aktarım.</b> Form kayıtları, sitenin barındırıldığı <b>Netlify</b> altyapısında (ABD) tutulur. Formu gönderdiğinde bu aktarımı da kabul etmiş olursun. Aktarım yalnızca talebinin iletilmesi ve saklanması amacıyla yapılır.</p>'+
+  '<p><b>Saklama.</b> Demo talepleri, görüşme kapanana kadar; en geç bir yıl içinde silinir. Bülten kaydı, sen çıkana kadar tutulur.</p>'+
+  '<p><b>Haklarınız.</b> KVKK m.11 uyarınca verine erişme, düzeltilmesini veya silinmesini isteme ve işlemeye itiraz etme hakkın var. Talebini sitedeki e-posta adresine iletmen yeterli; en geç otuz gün içinde yanıtlanır.</p>'+
+  '<p><b>Çerezler.</b> Site reklam veya takip çerezi kullanmaz. Yalnızca dil tercihi ve panel oturumu gibi işlevsel bilgiler tarayıcında tutulur.</p>'},
 chimg:['img/ch1.webp','img/ch2.webp','img/ch3.webp','img/ch4.webp','img/ch5.webp','img/ch6.webp'],
 pages:{}
 };
@@ -7094,6 +7126,10 @@ function applyTheme(t){
   cl.toggle('t-noagent',off(m.cursor));
   cl.toggle('t-mo-soft',m.level==='soft');
   cl.toggle('t-mo-off',m.level==='off');
+  /* Müşteri sözleri bandı — içerik anahtarı, hareket anahtarı değil.
+     Kapalıyken #sozband display:none; DOM'da duruyor, yalnız gizleniyor.
+     (Kaldırılsaydı kural 74'ün kanonik bölüm dizisi bozulurdu.)        */
+  cl.toggle('t-nosoz',off((t.testi||{}).on));
 
   /* sistem imlecini gizleme anahtarı — ajan modülü bu bayrağı okuyor */
   window.__noHideCursor=off(m.hideCursor);
@@ -11462,7 +11498,30 @@ function initHeroHands(gsap, ST, REDUCE){
         smoothWheel:true,wheelMultiplier:1,touchMultiplier:1.6});
       lenis.on('scroll',ST.update);
       gsap.ticker.add(t=>lenis.raf(t*1000));
-      gsap.ticker.lagSmoothing(0);
+      /* 2026-08 KASMA. Burada `lagSmoothing(0)` vardı: Lenis'in
+         belgelerindeki hazır entegrasyon satırı. Yaptığı şey GSAP'ın
+         gecikme korumasını KAPATMAK — kare uzadığında GSAP kaybettiği
+         zamanı telafi etmeye çalışır, bu da bir sonraki kareyi uzatır.
+         Varsayılan değerler geri getirildi: kare 500 ms'yi aşarsa GSAP
+         telafi etmeyi bırakır ve o kareyi 33 ms saymış gibi ilerler.
+         Lenis kendi zamanını rAF'tan aldığı için senkron bozulmaz.
+         ÖLÇÜM — nasıl ölçüldüğü sonucun kendisi kadar önemli:
+         Elle kaydırma koşumları %15 → %9 → %8 gitti; yani ilk turdaki
+         düşüş ayarın değil SAYFA ISINMASININ eseriydi. Nedenselliği
+         kuran şey programlı kaydırma oldu: Lenis.scrollTo ile birebir
+         aynı girdi, ayar dönüşümlü, iki bağımsız çift —
+           (0)        → 19 ve 38 geç kare
+           (500,33)   → 10 ve 16 geç kare
+         Girdi aynı olduğu için fark gerçek: kazanç mütevazı ama
+         tekrarlanabilir, üstelik GSAP'ın kendi varsayılanına dönüş.
+         Eşik notu: "geç kare > 16,7 ms" 60 Hz bütçesidir, ekran daha
+         hızlı olduğu için MUTLAK seviye yanıltıcı; karşılaştırma
+         geçerli çünkü iki taraf aynı cetveli kullandı.
+         Bu blok yalnız masaüstünde koşuyor (innerWidth>880).
+         NOT: kasmanın asıl kaynağı burada değil — elle kaydırmada geç
+         kare %8-15, programlı kaydırmada %1-3; tek fark farenin
+         hareket etmesi (pointerover + hit test).                      */
+      gsap.ticker.lagSmoothing(500,33);
       window.__lenis=lenis;
     }
 
