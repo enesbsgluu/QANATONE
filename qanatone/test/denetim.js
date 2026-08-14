@@ -219,6 +219,48 @@ async function calisma() {
     dom.window.close();
   }
 
+  /* 96 · KVKK onayı ŞART — onaysız gönderim POST üretmez (2026-08).
+     Bugün İKİ katman koruyor: kutudaki `required` (tarayıcı submit
+     olayını hiç ateşlemez, kendi baloncuğunu kutunun yanında gösterir —
+     Enes canlıda doğruladı) ve işleyicideki okTick kontrolü.
+     Kural İKİNCİ katmanı ölçüyor, çünkü birincisi tarayıcının işi ve
+     testte taklit edilemez: submit olayı ELLE tetikleniyor, yani native
+     doğrulama atlanıyor — `required` bir gün kalkarsa ya da JS başka bir
+     yerden submit ederse geriye kalan tek koruma budur. Bu kural onun
+     bekçisi: onaysız POST yok, onaylıyken tam bir POST.
+     Metin ölçülmüyor (panelden değişebilir), davranış ölçülüyor.
+     SINIR: burası istemci tarafı. Netlify Forms sunucu tarafı doğrulama
+     sunmadığı için hazırlanmış bir POST hiçbirine takılmaz — kural
+     "onay zorlanıyor" demiyor, "formu kullanan kişi için şart" diyor.
+     Kayıt tarafındaki gerçek: alan gelmediyse kayıtta yoktur. */
+  {
+    const { dom } = ortam(html, ORIGIN + '/');
+    const w = dom.window, d = w.document;
+    await dur(700);
+    let post = 0;
+    w.fetch = (u, o) => {                       /* boot bitti, sayacı tak */
+      if (o && String(o.method).toUpperCase() === 'POST') post++;
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    };
+    const f = d.querySelector('#leadForm'), kutu = d.querySelector('#ldOk');
+    const yaz = (sel, v) => { const e = d.querySelector(sel); if (e) e.value = v; };
+    yaz('#ldName', 'Deneme Kullanici');
+    yaz('#ldMail', 'deneme@ornek.com');
+    yaz('#ldTel', '+90 500 000 00 00');
+    if (kutu) kutu.checked = false;
+    if (f) f.dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true }));
+    await dur(200);
+    const onaysizDurdu = post === 0;
+    if (kutu) kutu.checked = true;
+    if (f) f.dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true }));
+    await dur(300);
+    const onayliGecti = post === 1;
+    ol('KVKK onayı şart: onaysız gönderim POST üretmiyor',
+       !!kutu && kutu.hasAttribute('required') && onaysizDurdu && onayliGecti,
+       `required=${!!kutu && kutu.hasAttribute('required')} onaysızPOST=${onaysizDurdu ? 0 : '>0'} onaylıPOST=${post}`);
+    dom.window.close();
+  }
+
   /* bozuk content.json dayanıklılığı */
   {
     const { dom, hata } = ortam(html, ORIGIN + '/');
