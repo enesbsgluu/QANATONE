@@ -18,9 +18,15 @@
 
 const dns = require('dns').promises;
 
-const TIMEOUT_MS = 9000;
-const MAX_REDIRECT = 3;
-const MAX_BYTES = 2 * 1024 * 1024;
+/* BÜTÇELER KOŞUM BAŞINA — istek başına DEĞİL.
+   Sıradaki iş (SEO/GEO skoru) robots.txt ve sitemap.xml'i de okuyacak,
+   yani bir analiz 2-3 istek atacak. Bütçe istek başına tanımlansaydı
+   sınır istek sayısıyla ÇARPILARAK aşılırdı. Yönlendirmeler de aynı
+   bütçeden yer: bugün 3 hop elle takip ediliyor, her hop kendi bütçesini
+   alsaydı 3 hop × 2 MB = 6 MB okunabilirdi.                            */
+const TOPLAM_SURE_MS = 9000;
+const TOPLAM_HOP = 3;
+const TOPLAM_BAYT = 2 * 1024 * 1024;
 const UA = 'QanatoneSiteCheck/1.0 (+https://qanatone.com)';
 
 /* --- ağırlıklar: toplam 100 --- */
@@ -63,10 +69,36 @@ async function safeUrl(raw) {
   return u;
 }
 
-/* ---------- sınırlı, süreli indirme ---------- */
-async function grab(url, method) {
+/* ---------- koşum bütçesi ----------
+   Tek bir analiz boyunca yaşar; bütün istekler aynı kasadan harcar. */
+function butceAc() {
+  const bas = Date.now();
+  const d = { bayt: 0, hop: 0 };
+  return {
+    kalanMs: () => TOPLAM_SURE_MS - (Date.now() - bas),
+    kalanBayt: () => TOPLAM_BAYT - d.bayt,
+    baytEkle: n => { d.bayt += n; },
+    hopHarca: () => ++d.hop,
+    okunan: () => d.bayt
+  };
+}
+
+/* ---------- sınırlı, süreli indirme ----------
+   2026-08 BULUNDU: gövde `arrayBuffer()` ile TAMAMEN belleğe alınıyor,
+   sınır ondan SONRA uygulanıyordu (`buf.slice(0, MAX_BYTES)`). Yani sınır
+   tüketimi önlemiyor, yalnız sonucu kırpıyordu: 500 MB'lık bir gövde
+   sunan adres, fonksiyonun belleğini o gövde kadar şişiriyordu.
+   İKİ KATMAN, biri yetmez:
+     1) Content-Length ön kontrolü — bildirilen boyut bütçeyi aşıyorsa
+        gövde HİÇ okunmaz (ucuz, tek başına güvenilmez).
+     2) Okuyucu sayaçla akıtılır, bütçe aşıldığı anda iptal — çünkü
+        Content-Length YALAN söyleyebilir ve chunked yanıtta HİÇ bulunmaz.
+   İptalden sonra gövde cancel + AbortController abort ile kapatılıyor:
+   yük altında sızdıran soket, kaçındığımız tüketimin aynısını üretir. */
+async function grab(url, method, butce) {
   const ac = new AbortController();
-  const t = setTimeout(() => ac.abort(), TIMEOUT_MS);
+  const sure = Math.max(1, butce.kalanMs());
+  const t = setTimeout(() => ac.abort(), sure);
   const started = Date.now();
   try {
     /* GÜVENLİK — yönlendirmeler elle takip ediliyor.
@@ -88,19 +120,53 @@ async function grab(url, method) {
       if (r.status < 300 || r.status >= 400) break;
       const loc = r.headers.get('location');
       if (!loc) break;
-      if (hop >= MAX_REDIRECT) { const e = new Error('too many redirects'); e.name = 'BlockedRedirect'; throw e; }
+      /* hop sayacı KOŞUM genelinde: robots.txt ve sitemap.xml çağrıları da
+         aynı kasadan harcıyor, yoksa her istek 3 hop daha alırdı */
+      if (butce.hopHarca() > TOPLAM_HOP) { const e = new Error('too many redirects'); e.name = 'BlockedRedirect'; throw e; }
       let sonraki = null;
       try { sonraki = await safeUrl(new URL(loc, hedef).href); } catch (e) {}
       if (!sonraki) { const e = new Error('redirect blocked'); e.name = 'BlockedRedirect'; throw e; }
       hedef = sonraki.href;
     }
-    let body = '';
-    if (method !== 'HEAD') {
-      const buf = await r.arrayBuffer();
-      body = Buffer.from(buf.slice(0, MAX_BYTES)).toString('utf8');
-      return { r, body, bytes: buf.byteLength, ms: Date.now() - started, finalUrl: hedef };
+    if (method === 'HEAD') {
+      try { if (r.body) await r.body.cancel(); } catch (e) {}
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: false };
     }
-    return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef };
+
+    const kalan = butce.kalanBayt();
+    /* 1) ön kontrol — bildirilen boyut bütçeyi aşıyorsa gövdeye hiç girme */
+    const bildirilen = Number(r.headers.get('content-length'));
+    if (Number.isFinite(bildirilen) && bildirilen > kalan) {
+      try { if (r.body) await r.body.cancel(); } catch (e) {}
+      ac.abort();
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: true };
+    }
+
+    /* 2) sayaçla akıt — Content-Length yalan söylemiş ya da hiç yoksa
+       gerçek fren burası. Bütçe aşıldığı anda okuma durur ve bağlantı
+       kapanır; okunan bayt bütçeyi en fazla son parça kadar aşar.     */
+    let okunan = 0, kesildi = false;
+    const parcalar = [];
+    if (r.body) {
+      const okuyucu = r.body.getReader();
+      try {
+        for (;;) {
+          const { done, value } = await okuyucu.read();
+          if (done) break;
+          if (value && value.length) {
+            parcalar.push(Buffer.from(value));
+            okunan += value.length;
+          }
+          if (okunan >= kalan) { kesildi = true; break; }
+        }
+      } finally {
+        if (kesildi) { try { await okuyucu.cancel(); } catch (e) {} ac.abort(); }
+        else { try { okuyucu.releaseLock(); } catch (e) {} }
+      }
+    }
+    butce.baytEkle(okunan);
+    const body = Buffer.concat(parcalar).toString('utf8');
+    return { r, body, bytes: okunan, ms: Date.now() - started, finalUrl: hedef, kesildi };
   } finally { clearTimeout(t); }
 }
 
@@ -191,8 +257,10 @@ exports.handler = async (event) => {
   const u = await safeUrl(raw);
   if (!u) return { statusCode: 200, headers: H, body: JSON.stringify({ ok: false, reason: 'blocked' }) };
 
+  /* tek kasa: ana sayfa + robots.txt + sitemap.xml aynı bütçeden harcar */
+  const butce = butceAc();
   let page;
-  try { page = await grab(u.href); }
+  try { page = await grab(u.href, undefined, butce); }
   catch (e) {
     const reason = (e && e.name === 'AbortError') ? 'timeout'
                  : (e && e.name === 'BlockedRedirect') ? 'blocked' : 'unreachable';
@@ -208,7 +276,7 @@ exports.handler = async (event) => {
   const origin = new URL(finalUrl).origin;
   let robotsBody = '';
   try {
-    const rb = await grab(origin + '/robots.txt');
+    const rb = await grab(origin + '/robots.txt', undefined, butce);
     const okR = rb.r.ok && /user-agent/i.test(rb.body);
     robotsBody = rb.body || '';
     items.push(S('robots', okR ? 'ok' : 'warn'));
@@ -217,7 +285,7 @@ exports.handler = async (event) => {
   try {
     if (/sitemap:/i.test(robotsBody)) items.push(S('sitemap', 'ok'));
     else {
-      const sm = await grab(origin + '/sitemap.xml', 'HEAD');
+      const sm = await grab(origin + '/sitemap.xml', 'HEAD', butce);
       items.push(S('sitemap', sm.r.ok ? 'ok' : 'warn'));
     }
   } catch (e) { items.push(S('sitemap', 'warn')); }
@@ -235,3 +303,10 @@ exports.handler = async (event) => {
     })
   };
 };
+
+/* test: akış sınırı ağa çıkmadan, yerel bir uç noktaya karşı ölçülebilsin
+   diye dışa veriliyor (safeUrl yerel adresi bilinçli reddettiği için
+   handler üzerinden ölçülemez). */
+exports.grab = grab;
+exports.butceAc = butceAc;
+exports.TOPLAM_BAYT = TOPLAM_BAYT;

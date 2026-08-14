@@ -1284,6 +1284,50 @@ async function guvenlik() {
   for (const b of ['X-Frame-Options', 'X-Content-Type-Options', 'Referrer-Policy', 'Permissions-Policy'])
     ol(`güvenlik başlığı: ${b}`, new RegExp('^\\s+' + b + '\\s*:\\s*\\S', 'm').test(hd), '');
 
+  /* 99 · teşhis aracı gövdeyi BELLEĞE ALMADAN sınırlıyor (2026-08):
+     Eski kod `arrayBuffer()` ile yanıtın TAMAMINI belleğe alıp sonra
+     `slice(0, MAX_BYTES)` yapıyordu — sınır tüketimi önlemiyor, yalnız
+     sonucu kırpıyordu. 500 MB gövde sunan bir adres fonksiyonun belleğini
+     o kadar şişirebiliyordu; burası herkese açık bir uç nokta.
+     İKİ KATMAN ayrı ayrı ölçülüyor, çünkü biri tek başına yetmez:
+       · Content-Length ön kontrolü ucuz ama YALAN söyleyebilir
+       · akış sayacı chunked yanıtta (Content-Length yok) tek frendir
+     Kural gerçek bir soket üzerinden ölçüyor: yerel sunucu sonsuz akıtıyor,
+     grab bütçe dolunca kesmeli. Ağa çıkmaz, deterministiktir.
+     safeUrl yerel adresi bilinçli reddettiği için handler üzerinden
+     ölçülemez; grab doğrudan çağrılıyor (fonksiyon bu yüzden dışa veriliyor). */
+  {
+    const http = require('http');
+    const D = require(path.join(KOK, 'netlify', 'functions', 'diagnose.js'));
+    let onKontrol = null, akis = null, hata = '';
+    try {
+      const parca = Buffer.alloc(64 * 1024, 'a');
+      const srv = http.createServer((req, res) => {
+        let dur = false;
+        const bitti = () => { dur = true; };
+        req.on('close', bitti); res.on('close', bitti);
+        if (req.url === '/buyuk') res.writeHead(200, { 'content-type': 'text/html', 'content-length': String(500 * 1024 * 1024) });
+        else res.writeHead(200, { 'content-type': 'text/html' });     /* chunked */
+        (function bas() {
+          if (dur) return;
+          if (res.write(parca)) setImmediate(bas); else res.once('drain', bas);
+        })();
+      });
+      await new Promise(r => srv.listen(0, '127.0.0.1', r));
+      const port = srv.address().port;
+      onKontrol = await D.grab('http://127.0.0.1:' + port + '/buyuk', undefined, D.butceAc());
+      akis = await D.grab('http://127.0.0.1:' + port + '/akis', undefined, D.butceAc());
+      await new Promise(r => srv.close(r));
+    } catch (e) { hata = String((e && e.message) || e).slice(0, 70); }
+    const onKontrolTuttu = !!onKontrol && onKontrol.bytes === 0 && onKontrol.kesildi === true;
+    /* aşım en fazla son parça kadar olabilir — "kırpıldı" değil "durduruldu" */
+    const akisTuttu = !!akis && akis.kesildi === true
+      && akis.bytes >= D.TOPLAM_BAYT && akis.bytes < D.TOPLAM_BAYT + 256 * 1024;
+    ol('teşhis: gövde belleğe alınmadan sınırlanıyor (ön kontrol + akış sayacı)',
+       onKontrolTuttu && akisTuttu,
+       hata || `onKontrol=${onKontrol ? onKontrol.bytes : '-'}B akış=${akis ? akis.bytes : '-'}B bütçe=${D.TOPLAM_BAYT}B`);
+  }
+
   /* 92 · panel kapısı (2026-08, canlıda ÖLÇÜLDÜ: ADMIN 200 anonim):
      `admin.html` yayın çıktısında duruyordu ve hiçbir kimlik kontrolü
      yoktu. Bugüne kadarki etkisi sınırlıydı çünkü yayın ucu zaten 503'tü;
