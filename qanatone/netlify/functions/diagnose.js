@@ -65,13 +65,39 @@ function istemciKimligi(event) {
    oluşmaz. Hiç geri dönmeyen bir anahtar depoda kalır ama içeriği ham IP
    değil, geri çözülemeyen bir özettir.                                  */
 function blobsDepo() {
-  let s = null;
-  const al = () => (s = s || require('@netlify/blobs').getStore({ name: 'kota', consistency: 'strong' }));
-  return {
-    async oku(anahtar) { return (await al().get(anahtar, { type: 'json' })) || null; },
-    async yaz(anahtar, deger) { await al().setJSON(anahtar, deger); },
-    async sil(anahtar) { await al().delete(anahtar); }
+  /* 2026-08 CANLIDA ÖLÇÜLDÜ: her çağrıda MissingBlobsEnvironmentError.
+     Sebep modül kapsamı değildi — getStore zaten istek anında çağrılıyordu
+     (casusla doğrulandı: içe alımda 0, istekte 1). Sebep bu fonksiyonun
+     LAMBDA UYUMLULUK KİPİNDE koşması: `exports.handler = (event) => …`
+     imzasında Netlify ortamı KENDİLİĞİNDEN kurmuyor, paketin kendi
+     belgesi bunu adıyla söylüyor. Ortam bilgisi event'in içinde geliyor
+     ve connectLambda(event) ile kuruluyor.
+     HER İSTEKTE çağrılır, modülde bir kez değil: bağlam event'e bağlı,
+     önceki isteğin event'iyle kurulmuş bağlam sonrakinde eski olur. Bu
+     yüzden store da önbelleğe ALINMIYOR.
+     Bu yol hesap kapsamlı bir API jetonu istemez — elle siteID+token
+     vermek halka açık bir uç nokta için kötü takas olurdu.            */
+  const al = (event) => {
+    const b = require('@netlify/blobs');
+    if (event && typeof b.connectLambda === 'function') b.connectLambda(event);
+    return b.getStore({ name: 'kota', consistency: 'strong' });
   };
+  return {
+    async oku(anahtar, event) { return (await al(event).get(anahtar, { type: 'json' })) || null; },
+    async yaz(anahtar, deger, event) { await al(event).setJSON(anahtar, deger); },
+    async sil(anahtar, event) { await al(event).delete(anahtar); }
+  };
+}
+
+/* PROB — yalnız VARLIK bilgisi, değer ASLA. connectLambda tutmazsa bir
+   sonraki çevrimde "Blobs sitede etkin mi" sorusunu ayırır. Yalnız depo
+   hatası düştüğünde yazılıyor: yama tutarsa log sessiz kalır, tutmazsa
+   sebep aynı satırda gelir. Event hiçbir loga girmez. */
+function ortamProbu() {
+  const v = ad => (process.env[ad] ? 'var' : 'yok');
+  return 'prob: NETLIFY_BLOBS_CONTEXT=' + v('NETLIFY_BLOBS_CONTEXT') +
+         ' SITE_ID=' + v('SITE_ID') +
+         ' NETLIFY_SITE_ID=' + v('NETLIFY_SITE_ID');
 }
 
 /* Yakalanan hatanın okunabilir özeti.
@@ -126,14 +152,15 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
   }
   const anahtar = kimAnahtari(kimlik, tuz);
   let kayit = null;
-  try { kayit = await depo.oku(anahtar); }
+  try { kayit = await depo.oku(anahtar, event); }
   catch (e) {
-    console.log(simdi(), 'diagnose: kota deposu OKUNAMADI — acik dusuldu ·', hataOzeti(e));
+    console.log(simdi(), 'diagnose: kota deposu OKUNAMADI — acik dusuldu ·', hataOzeti(e), '·', ortamProbu());
     return { gecer: true, kalan: null, isle: async () => {} };
   }
 
   if (kayit && simdiMs - (kayit.bas || 0) >= KOTA_PENCERE_MS) {
-    try { await depo.sil(anahtar); } catch (e) { console.log(simdi(), 'diagnose: kota kaydi SILINEMEDI ·', hataOzeti(e)); }
+    try { await depo.sil(anahtar, event); }
+    catch (e) { console.log(simdi(), 'diagnose: kota kaydi SILINEMEDI ·', hataOzeti(e), '·', ortamProbu()); }
     kayit = null;                                   /* penceresi dolan kayıt yaşamaz */
   }
 
@@ -153,8 +180,8 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
     : { hizliBas: simdiMs, hizliAdet: 1 };
 
   /* oran sayacı her istekte yazılır — hak yakılmadan  */
-  try { await depo.yaz(anahtar, Object.assign({ adet, bas }, yeniHizli)); }
-  catch (e) { console.log(simdi(), 'diagnose: oran sayaci YAZILAMADI ·', hataOzeti(e)); }
+  try { await depo.yaz(anahtar, Object.assign({ adet, bas }, yeniHizli), event); }
+  catch (e) { console.log(simdi(), 'diagnose: oran sayaci YAZILAMADI ·', hataOzeti(e), '·', ortamProbu()); }
 
   if (adet >= KOTA_HAK) {
     return { gecer: false, sebep: 'kota', kalan: 0, yenilenmeMs: bas + KOTA_PENCERE_MS, isle: async () => {} };
@@ -169,8 +196,8 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
        ziyaretçi cezalandırılırdı. Bu yüzden artırma handler'ın sonunda,
        sonuç üretildikten SONRA çağrılıyor. */
     isle: async () => {
-      try { await depo.yaz(anahtar, Object.assign({ adet: adet + 1, bas }, yeniHizli)); }
-      catch (e) { console.log(simdi(), 'diagnose: hak YAZILAMADI, kota artmadi ·', hataOzeti(e)); }
+      try { await depo.yaz(anahtar, Object.assign({ adet: adet + 1, bas }, yeniHizli), event); }
+      catch (e) { console.log(simdi(), 'diagnose: hak YAZILAMADI, kota artmadi ·', hataOzeti(e), '·', ortamProbu()); }
     }
   };
 }

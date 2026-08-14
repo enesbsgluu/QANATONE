@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 16:46 UTC
+> Üretim tarihi: 2026-08-14 17:29 UTC
 
 ## Yeni sohbete geçerken
 
@@ -31,7 +31,7 @@
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
 | `build.js` |  | 32 KB | `21172541` |
-| `content.json` |  | 235 KB | `abbb91df` |
+| `content.json` |  | 237 KB | `7034454c` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
@@ -74,7 +74,7 @@
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
-| `netlify/functions/diagnose.js` |  | 21 KB | `c3f354ef` |
+| `netlify/functions/diagnose.js` |  | 25 KB | `98b4082e` |
 | `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
@@ -82,8 +82,8 @@
 | `netlify.toml` |  | 1 KB | `97cb97fb` |
 | `og.png` |  | 128 KB | `4bcf0d3e` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
-| `package-lock.json` |  | 49 KB | `c6e087ad` |
-| `package.json` |  | 1 KB | `ba293467` |
+| `package-lock.json` |  | 50 KB | `baf52f2b` |
+| `package.json` |  | 1 KB | `7e45799a` |
 | `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
@@ -104,7 +104,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 54 sn (basılan 0, önbellekten 58) |
+| son derleme | 126 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 49.5 MB |
 
 ## Çalıştırma
