@@ -1,5 +1,6 @@
 {
-  "not": "FAZ 0 TABAN ÇİZGİSİ — sağlıklı site. Faz 0 sonunda skor, kb ve kalem durumları BİREBİR aynı çıkmalı; değişirse duvar işi sağlıklı yolu kirletmiş demektir. ms kaydın parçası DEĞİL: ağ gecikmesi koşumdan koşuma değişir ve tek başına speed kalemini warn'a düşürüp skoru 93'ten 89'a indirebiliyor (ölçüldü: 1900 ms -> 89, 505 ms -> 93). Bu yüzden karşılaştırma ms hariç yapılır.",
+  "not": "FAZ 0 TABAN ÇİZGİSİ — sağlıklı site, yama ÖNCESİ canlı ölçüm. ms kaydın parçası DEĞİL: ağ gecikmesi koşumdan koşuma değişir ve tek başına speed kalemini oynatıp skoru 93'ten 89'a (1900 ms) hatta 85'e (4729 ms) indiriyor. Bu yüzden karşılaştırma ms hariç yapılır.",
+  "canliArtikHareketli": "Faz 0 deploy'undan SONRA canlı sayfa 849 -> 855 KB oldu; büyüme durum ekranı metinlerinin ve CSS'inin kendisi. Yani 'canlıyı tekrar tara' iki değişkeni birden karıştırır (site değişti + ağ gecikmesi). KALICI KARŞILAŞTIRMA bu yüzden sabit girdiyle yapılıyor: aynı gövde iki diagnose.js sürümünden geçirilir. 2026-08-15 ölçümü — temel c8f5b2d ve Faz 0 sonrası, ikisi de skor 93, kb 859, 19 kalemin hepsi aynı. Sağlıklı yol dokunulmamış.",
   "olculdu": "2026-08-15",
   "url": "https://qanatone.netlify.app",
   "kosumAdedi": 3,

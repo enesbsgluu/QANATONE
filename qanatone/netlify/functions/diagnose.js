@@ -408,63 +408,77 @@ function cdnTani(res) {
   return CDN_BILINMIYOR;
 }
 
-/* ---------- ENGEL İMZASI ----------
-   Dönüş yine sabit sözlükten bir sağlayıcı adı ya da null — gövdeden
-   alınan hiçbir dize dışarı çıkmaz.
-   2xx AYRIMI BİLEREK VAR: gövde imzalarının bir kısmı (şirket adı geçen
-   kelimeler) sıradan bir yazıda da geçebilir. 2xx bir sayfada yalnız
-   TARTIŞMASIZ challenge iskeleti sayılır; gevşek kelimeler ancak durum
-   zaten 2xx dışıyken — yani sayfa hâlihazırda bir hata sayfasıyken —
-   dikkate alınır. Aşırı genelleme, eksik tespit kadar kötüdür.
-   `Attention Required! | Cloudflare` ve `cf-error-details` ÖLÇÜLEREK
-   eklendi: r10.net aynı saat içinde bu ikinci engel sayfasını da
-   döndürdü ve o sayfada ne `cf-mitigated` ne `_cf_chl_opt` vardı —
-   yalnız "Just a moment"a bakan bir liste onu kaçırırdı.               */
-function engelImzasi(res, govde, iyiDurum) {
-  /* MUAFİYETİN ÜSTÜ — yalnız MİTİGASYON UYGULANDIĞINDA gönderilen iki
-     başlık. `cf-mitigated` ve `server-timing: chlray` geçirilen trafikte
-     YOKTUR, o yüzden 2xx'te bile tek başlarına engel sayılır (Cloudflare
-     bazı kurulumlarda challenge'ı 200 ile döndürür).                   */
+/* ---------- ENGEL İMZASI — GÜÇ AYRIMI ----------
+   Dönüş sabit sözlükten bir sağlayıcı adı ya da null; gövdeden alınan
+   hiçbir dize dışarı çıkmaz.
+
+   BAŞLIK İMZASI GÜÇLÜ KANIT, GÖVDE METNİ ZAYIF. `cf-mitigated` bir
+   başlıktır — sunucu onu bilerek koyar. "Just a moment" ise sayfada
+   tesadüfen geçebilecek bir metindir. İkisi aynı sırada değerlendirilmez;
+   sıra `durumBelirle`de.                                               */
+function baslikImzasi(res) {
   if (basligiOku(res, 'cf-mitigated')) return 'cloudflare';
   if (/(^|[,\s])chlray/i.test(basligiOku(res, 'server-timing'))) return 'cloudflare';
+  /* `cf-error-details` BAŞLIK olarak burada duruyor çünkü sıralama onu
+     güçlü kanıt sayıyor. ÖLÇÜM NOTU: bugün Cloudflare bunu başlık olarak
+     GÖNDERMİYOR — yakalanan "Attention Required" sayfasında gövdedeki bir
+     CSS sınıfıydı. O yüzden bu satır bugün hiç ateşlenmiyor; gerçek
+     yakalama aşağıdaki gövde listesindeki `Attention Required` ile
+     oluyor. Sözleşme değişirse satır hazır. */
+  if (basligiOku(res, 'cf-error-details')) return 'cloudflare';
+  return null;
+}
 
+/* ZAYIF KANIT — yalnız durum kodunun kendi anlamı yokken konuşur.
+   `Attention Required` ÖLÇÜLEREK eklendi: r10.net aynı saat içinde bu
+   ikinci engel sayfasını da döndürdü ve üzerinde ne `cf-mitigated` ne
+   `_cf_chl_opt` vardı — yalnız "Just a moment"a bakan bir liste onu
+   kaçırırdı. */
+const GOVDE_IMZALARI = [
+  { desen: /_cf_chl_opt/, ad: 'cloudflare' },
+  { desen: /Just a moment/i, ad: 'cloudflare' },
+  { desen: /Attention Required/i, ad: 'cloudflare' },
+  { desen: /datadome/i, ad: 'datadome' },
+  { desen: /_Incapsula_/, ad: 'imperva' },
+  { desen: /_abck/, ad: 'akamai' },
+  { desen: /px-captcha/i, ad: 'perimeterx' }
+];
+function govdeImzasi(govde) {
   const g = String(govde || '').slice(0, 20000);
-  if (/_cf_chl_opt/.test(g)) return 'cloudflare';
-  if (iyiDurum) return null;                 /* 2xx'te gevşek imzaya bakılmaz */
-
-  /* MUAFİYETİN ALTI — bu imzalar VARLIK bildirir, engel değil.
-     DataDome `x-datadome` başlığını ve çerezini GEÇİRDİĞİ isteklerde de
-     gönderir; Imperva'nın `x-iinfo`su normal yanıtlarda durur. Yukarıya
-     konsalardı bu sağlayıcıları kullanan SAĞLIKLI her site "engel"
-     sayılırdı — düzelttiğimiz hatanın ters yönü. Ancak durum zaten
-     2xx dışıyken, yani sayfa hâlihazırda bir ret sayfasıyken anlam
-     kazanırlar ve sağlayıcıyı ADLANDIRMAYA yararlar.                  */
-  if (basligiOku(res, 'x-datadome') || /datadome/i.test(basligiOku(res, 'set-cookie'))) return 'datadome';
-  if (basligiOku(res, 'x-iinfo')) return 'imperva';
-  if (/Just a moment|cf-error-details|Attention Required! \| Cloudflare/i.test(g)) return 'cloudflare';
-  if (/datadome/i.test(g)) return 'datadome';
-  if (/_Incapsula_/.test(g)) return 'imperva';
-  if (/_abck/.test(g)) return 'akamai';
-  if (/px-captcha/i.test(g)) return 'perimeterx';
+  for (const i of GOVDE_IMZALARI) if (i.desen.test(g)) return i.ad;
   return null;
 }
 
 /* ---------- DURUM TAKSONOMİSİ — hepsi "duvar" değil ----------
-   Dört ayrı hâl, dört ayrı mesaj. 404'ü "engel" diye göstermek, engeli
-   hiç görmemek kadar yanlıştır.
-   SON SATIRIN GEREKÇESİ: imzasız bir 401/403/429 hâlâ "kapıda
-   durduruldu" demektir — 403'ün tanımı budur. İmza SAĞLAYICIYI
-   adlandırır, ENGELİN VARLIĞINI değil; o yüzden sağlayıcı null kalır ve
-   ekranda sağlayıcı adı geçmez.                                        */
+   BEŞ ayrı hâl, beş ayrı mesaj. 404'ü "engel" diye göstermek, engeli hiç
+   görmemek kadar yanlıştır.
+
+   BEŞİNCİ HÂL `reddedildi` — ilk yazımda imzasız bir 403 varsayılan
+   olarak `engel` sayılıyordu. Bu yanlış: imzasız 403 bir engel sistemi de
+   olabilir, bir yetki ayarı da. `engel` iddiası YALNIZ imza varken
+   kurulur, çünkü "AI tarayıcıları da aynı duvara çarpıyor" hükmü ancak o
+   zaman doğrudur. İmza yoksa ölçülen gerçek söylenir, konu sunucu
+   sahibine devredilir.
+
+   SIRA (bozulursa üç negatif test birden düşer):
+     0 · 2xx muafiyeti — HER ŞEYİN ÜSTÜNDE. `x-datadome`, `x-iinfo` gibi
+         başlıklar o sağlayıcıların GEÇİRDİKLERİ trafikte de gidiyor;
+         durum 2xx ise hiçbir imza duvar iddiası kuramaz.
+     1 · başlık imzaları (güçlü) → engel
+     2 · durum koduna özgü anlamlar (404/410, 5xx) → 3. adımı EZER,
+         yoksa her hata sayfasında geçen bir kelime adresi duvar ilan eder
+     3 · gövde metni imzaları (zayıf) → engel
+     4 · hiçbiri yoksa ve 2xx dışıysa → reddedildi                      */
 function durumBelirle(res, govde) {
   const kod = (res && res.status) || 0;
-  const iyi = kod >= 200 && kod < 300;
-  const saglayici = engelImzasi(res, govde, iyi);
-  if (saglayici) return { durum: 'engel', saglayici };
+  if (kod >= 200 && kod < 300) return { durum: 'saglikli', saglayici: null };
+  const guclu = baslikImzasi(res);
+  if (guclu) return { durum: 'engel', saglayici: guclu };
   if (kod === 404 || kod === 410) return { durum: 'bulunamadi', saglayici: null };
   if (kod >= 500) return { durum: 'sunucu-hatasi', saglayici: null };
-  if (!iyi) return { durum: 'engel', saglayici: null };
-  return { durum: 'saglikli', saglayici: null };
+  const zayif = govdeImzasi(govde);
+  if (zayif) return { durum: 'engel', saglayici: zayif };
+  return { durum: 'reddedildi', saglayici: null };
 }
 
 /* ---------- robots.txt AI ajanlarına kapalı mı ----------

@@ -1925,6 +1925,9 @@ html.lowfx #globe .gov{backdrop-filter:none;-webkit-backdrop-filter:none;backgro
 .dgdm{margin:0 0 12px;line-height:1.65}
 .dgde{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:rgba(239,35,60,.09);
   border:1px solid rgba(239,35,60,.28);font-size:.84rem;line-height:1.6}
+.dgdep{margin:0 0 7px}
+.dgdea{display:inline-block;font-size:.8rem;color:var(--tx3);
+  text-decoration:underline;text-underline-offset:3px}
 .dgdk{margin:0;font-size:.82rem;color:var(--tx3);line-height:1.6}
 
 /* ============ KANAL GENİŞLİĞİ (bento) ============
@@ -11612,16 +11615,31 @@ function diagKur(){
     durum:{engel:'Bu siteye otomatik erişim durduruluyor',
       bulunamadi:'Bu adreste sayfa yok',
       'sunucu-hatasi':'Site şu an arızalı',
-      ulasilamadi:'Bu adrese ulaşamadık'},
-    /* MEKANİZMA DİLİ — uydurma rakam yok, ne olduğu anlatılıyor */
+      ulasilamadi:'Bu adrese ulaşamadık',
+      reddedildi:'Site isteğimizi reddetti'},
+    /* MEKANİZMA DİLİ — uydurma rakam yok, ne olduğu anlatılıyor.
+       TEREDDÜT YOK: araç kendi hükmü hakkında belirsizlik ifade etmez.
+       "reddedildi" metnindeki sebep listesi tereddüt DEĞİL kapsamdır —
+       durum sitenin sunucusunda, bizim ölçümümüzde değil. */
     durumMek:{engel:'Bu site otomatik kontrolleri kapıda durduruyor. Bizim aldığımız sayfa ile senin gördüğün sayfa aynı değil — bu yüzden puan üretmedik. Üretseydik senin siteni değil, engel sayfasını puanlamış olurduk. Yapay zekâ tarayıcıları da aynı duvara çarpıyor ve erişilebilirlik, AI görünürlüğünün en belirleyici faktörü.',
       bulunamadi:'Sunucu bu adreste bir sayfa olmadığını söyledi. Yazımda hata olabilir; adres doğruysa sayfa kaldırılmış demektir.',
       'sunucu-hatasi':'Site ayakta ama isteği karşılayamadı. Şu anda ziyaretçi de aynı yanıtı alıyor.',
-      ulasilamadi:'Adrese hiç ulaşamadık — yanıt gelmedi. Ziyaretçi de bu kadar bekliyor.'},
+      ulasilamadi:'Adrese hiç ulaşamadık — yanıt gelmedi. Ziyaretçi de bu kadar bekliyor.',
+      reddedildi:d=>`Site isteğimizi reddetti (HTTP ${d.status}). Bot koruması, yetki ayarı ya da IP kısıtı olabilir; sunucu tarafında kontrol edilmesi gerekiyor.`},
     durumOlcum:'Ölçülen',
     durumYon:n=>'yönlendirme',
     durumKapsam:'Bu kontrol sitenin kendi altyapısını ölçer. Aramada kaçıncı sırada olduğun ve seni kimlerin andığı ayrı bir incelemenin konusu.',
-    durumEylul:'Cloudflare, 15 Eylül 2026 itibarıyla yeni katılan alan adlarında reklam gösteren sayfalarda Training ve Agent kategorilerini varsayılan olarak blokluyor; Search açık kalıyor.',
+    /* 15 EYLÜL — ONAYLANMIŞ METİN. İki sinyal yalnız ERİŞİM RİSKİNİ
+       kanıtlar; sitenin yeni katılan bir alan adı olduğunu ve reklam
+       gösteren sayfası bulunduğunu KANITLAMAZ. O yüzden "bu sizi
+       doğrudan ilgilendiriyor" seviyesine çıkılmıyor: ölçülen gerçek
+       doğrudan söyleniyor, politika etkisi ŞARTLARIYLA çerçeveleniyor,
+       hüküm yerine öneri veriliyor. İlk cümle hangi sinyalin ateşlediğine
+       göre değişiyor — "engellendi" demek robots yolunda yanlış olurdu. */
+    durumEylulBas:{engel:'İsteğimiz Cloudflare tarafından engellendi.',
+      robots:'robots.txt dosyanız AI tarayıcılarına kapalı.'},
+    durumEylul:'Cloudflare, 15 Eylül’den itibaren yeni eklenen alan adlarında, reklam gösteren sayfalarda Training ve Agent botları için varsayılanları sıkılaştırıyor; Search açık kalıyor. Cloudflare ayarlarınızı bu erişim sinyaliyle birlikte gözden geçirmenizi öneririz.',
+    durumEylulKaynak:'Cloudflare duyurusu',
     durumCta:'Bunu konuşalım',
     /* Mesaj HÂLE göre yazılır: 404 alan ziyaretçiye "site engelliyor"
        dedirtmek, düzelttiğimiz hatanın aynı sınıfı olurdu. */
@@ -11673,15 +11691,20 @@ function diagKur(){
     durum:{engel:'Automated access to this site is being stopped',
       bulunamadi:'There is no page at this address',
       'sunucu-hatasi':'The site is currently failing',
-      ulasilamadi:'We could not reach this address'},
+      ulasilamadi:'We could not reach this address',
+      reddedildi:'The site refused our request'},
     durumMek:{engel:'This site stops automated checks at the door. The page we received is not the page you see — so we produced no score. Producing one would have scored the block page, not your site. AI crawlers hit the same wall, and accessibility is the single strongest factor in AI visibility.',
       bulunamadi:'The server said there is no page at this address. It may be a typo; if the address is right, the page has been removed.',
       'sunucu-hatasi':'The site is up but could not serve the request. Your visitors are getting the same answer right now.',
-      ulasilamadi:'We never reached the address — no answer came back. Your visitors wait just as long.'},
+      ulasilamadi:'We never reached the address — no answer came back. Your visitors wait just as long.',
+      reddedildi:d=>`The site refused our request (HTTP ${d.status}). Bot protection, an access rule or an IP restriction; it needs to be checked on the server side.`},
     durumOlcum:'Measured',
     durumYon:n=>n===1?'redirect':'redirects',
     durumKapsam:'This check measures the site’s own infrastructure. Where you rank in search and who mentions you are the subject of a separate review.',
-    durumEylul:'From 15 September 2026 Cloudflare blocks the Training and Agent categories by default on newly onboarded domains that show ads; Search stays open.',
+    durumEylulBas:{engel:'Our request was blocked by Cloudflare.',
+      robots:'Your robots.txt is closed to AI crawlers.'},
+    durumEylul:'From 15 September Cloudflare is tightening the defaults for Training and Agent bots on newly added domains, on pages that display ads; Search stays open. We recommend reviewing your Cloudflare settings alongside this access signal.',
+    durumEylulKaynak:'Cloudflare announcement',
     durumCta:'Let us talk about this',
     durumMsg:d=>`Hi, I ran the live check for ${d.host||''} — result: ${d.bas}. I would like to talk about it.`,
     msg:d=>`Hi, I ran the check for ${d.host} — score ${d.score}.`}};
@@ -11715,6 +11738,30 @@ function diagKur(){
     setTimeout(()=>scan.classList.remove('on'),450);
   }
   function fail(m){endScan();err.classList.remove('dgdurum');err.textContent=m;err.classList.add('on');busy=false;go.disabled=false;}
+  /* 15 EYLÜL KUTUSU — iki yüzeyde de aynı yerden. Duvar ekranında ve skor
+     ekranında kullanılıyor; alan yanıta eklenip ekranda kullanılmasaydı
+     ölü veri olurdu.
+     KAYNAK BAĞLANTISI: iddianın yanında Cloudflare'ın kendi duyurusu
+     duruyor, kimse bize inanmak zorunda kalmasın. Adres DOĞRULANDI —
+     1 Temmuz 2026 tarihli, üç kategoriyi (Search/Agent/Training) ve
+     15 Eylül 2026 varsayılanını adıyla anlatan changelog. 2025'in
+     "Content Independence Day" yazısı DEĞİL: yanlış sayfaya giden bir
+     kaynak, kaynaksız iddiadan kötüdür. Blog sürümünün adresinde de
+     "content-independence-day" geçtiği için bilerek changelog seçildi. */
+  const CF_EYLUL_KAYNAK='https://developers.cloudflare.com/changelog/post/2026-07-01-ai-traffic-options/';
+  function eylulKutusu(D,sinyal){
+    const kutu=document.createElement('div');
+    kutu.className='dgde';
+    const p=document.createElement('p');
+    p.className='dgdep';
+    p.textContent=(D.durumEylulBas[sinyal]||D.durumEylulBas.engel)+' '+D.durumEylul;
+    kutu.appendChild(p);
+    const a=document.createElement('a');
+    a.className='dgdea';a.target='_blank';a.rel='noopener';
+    a.href=CF_EYLUL_KAYNAK;a.textContent=D.durumEylulKaynak;
+    kutu.appendChild(a);
+    return kutu;
+  }
   /* DURUM EKRANI — skor yerine bulgu.
      Durum kötüyse sunucu skor ÜRETMİYOR; burada da skor bileşeni ekrana
      hiç basılmaz — sıfır da değil, "N/A" de değil, yok. Ekrana çıkan her
@@ -11727,7 +11774,10 @@ function diagKur(){
   function durumGoster(d){
     const D=L[LG()];endScan();
     const bas=D.durum[d.durum]||D.durum.ulasilamadi;
-    const mek=D.durumMek[d.durum]||D.durumMek.ulasilamadi;
+    const mek0=D.durumMek[d.durum]||D.durumMek.ulasilamadi;
+    /* "reddedildi" metni HTTP kodunu içeriyor — sabit dize yerine
+       fonksiyon. Diğer dördü sabit; ikisi de aynı yerden okunuyor. */
+    const mek=typeof mek0==='function'?mek0(d):mek0;
     while(err.firstChild)err.removeChild(err.firstChild);
     err.classList.add('dgdurum');
     const ekle=(etiket,sinif,metin)=>{const e=document.createElement(etiket);
@@ -11744,8 +11794,10 @@ function diagKur(){
     if(d.finalUrl||d.host)ekle('div','dgdu',d.finalUrl||d.host);
     ekle('p','dgdm',mek);
     /* 15 Eylül: yalnız sunucu iki şartı birlikte doğrulamışsa. Skorla
-       hiçbir bağı yok — şartı sağlamayan ziyaretçi bu tarihi görmez. */
-    if(d.cfEylul)ekle('p','dgde',D.durumEylul);
+       hiçbir bağı yok — şartı sağlamayan ziyaretçi bu tarihi görmez.
+       Bu yolda tetikleyen sinyal her zaman engel: reddedildi/404/5xx'te
+       sunucu cfEylul'ü zaten false döndürüyor. */
+    if(d.cfEylul)err.appendChild(eylulKutusu(D,'engel'));
     ekle('p','dgdk',D.durumKapsam);
     const wa=String((C.settings||{}).whatsapp||'905326291508').replace(/\D/g,'');
     const a=document.createElement('a');
@@ -11812,6 +11864,12 @@ function diagKur(){
       : `<div class="dgfh">${D.fixh}</div><div class="dgfl"><span class="n">✓</span><span><b>${
           LG()==='en'?'Nothing critical found.':'Kritik bir eksik çıkmadı.'}</b><span>${
           LG()==='en'?'The basics are in place.':'Temel yerinde. Bundan sonraki kazanç tamirde değil, stratejide.'}</span></span></div>`;
+    /* 15 Eylül skor ekranında da: sağlıklı ama robots'u AI'a kapalı bir
+       Cloudflare sitesi ikinci şartı sağlıyor. Skorla bağı YOK — 95
+       puanlık site bloklanmak üzere olabilir; 40 puanlık site AI'a
+       tamamen açık olabilir. Buraya bağlanmasaydı sunucunun ürettiği
+       alan sağlıklı yolda hiç görünmez, yani ölü veri olurdu. */
+    if(d.cfEylul)fix.appendChild(eylulKutusu(D,'robots'));
     res.classList.add('on');busy=false;go.disabled=false;
     if(window.__stRefresh)setTimeout(window.__stRefresh,200);
   }
