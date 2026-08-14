@@ -223,6 +223,11 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
 const TOPLAM_SURE_MS = 9000;
 const TOPLAM_HOP = 3;
 const TOPLAM_BAYT = 2 * 1024 * 1024;
+/* KIRMIZI ÇİZGİ — DÜRÜST KİMLİK. Duvarı aşma yolu açılmayacak: sahte UA
+   yok, tarayıcı parmak izi taklidi yok. ÖLÇÜLDÜ: Chrome UA'sıyla da aynı
+   adresten 403 alındı, kazancı yok. Dürüst kimlik site sahibine izin
+   verme imkânı bırakıyor. Doğru çözüm görünmez olmak değil, GÖREMEMEYİ
+   SÖYLEYEBİLMEK — bu dosyanın Faz 0'da yaptığı şey tam olarak budur. */
 const UA = 'QanatoneSiteCheck/1.0 (+https://qanatone.com)';
 
 /* --- ağırlıklar: toplam 100 --- */
@@ -307,7 +312,10 @@ async function grab(url, method, butce) {
        çözdüğü IP arasında saniyeler var; saldırgan çok kısa TTL ile ikisini
        farklılaştırabilir. Tam çözüm IP'ye bağlanıp Host başlığı göndermek,
        o da TLS sertifika doğrulamasını bozuyor. Bilinçli olarak kabul edildi. */
-    let hedef = url, r = null;
+    /* takip edilen yönlendirme SAYISI — URL listesi DEĞİL. Liste yeni bir
+       saldırgan kontrollü dize sink'i açardı (yanıta girip ekrana kadar
+       gider); bu turda gereği yok, sayı yeterli bilgiyi taşıyor. */
+    let hedef = url, r = null, takip = 0;
     for (let hop = 0; ; hop++) {
       r = await fetch(hedef, {
         method: method || 'GET', redirect: 'manual', signal: ac.signal,
@@ -323,10 +331,11 @@ async function grab(url, method, butce) {
       try { sonraki = await safeUrl(new URL(loc, hedef).href); } catch (e) {}
       if (!sonraki) { const e = new Error('redirect blocked'); e.name = 'BlockedRedirect'; throw e; }
       hedef = sonraki.href;
+      takip++;
     }
     if (method === 'HEAD') {
       try { if (r.body) await r.body.cancel(); } catch (e) {}
-      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: false };
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: false, redirects: takip };
     }
 
     const kalan = butce.kalanBayt();
@@ -335,7 +344,7 @@ async function grab(url, method, butce) {
     if (Number.isFinite(bildirilen) && bildirilen > kalan) {
       try { if (r.body) await r.body.cancel(); } catch (e) {}
       ac.abort();
-      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: true };
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: true, redirects: takip };
     }
 
     /* 2) sayaçla akıt — Content-Length yalan söylemiş ya da hiç yoksa
@@ -362,7 +371,7 @@ async function grab(url, method, butce) {
     }
     butce.baytEkle(okunan);
     const body = Buffer.concat(parcalar).toString('utf8');
-    return { r, body, bytes: okunan, ms: Date.now() - started, finalUrl: hedef, kesildi };
+    return { r, body, bytes: okunan, ms: Date.now() - started, finalUrl: hedef, kesildi, redirects: takip };
   } finally { clearTimeout(t); }
 }
 
@@ -370,6 +379,124 @@ async function grab(url, method, butce) {
 const S = (k, state, v) => ({ k, state, v: v === undefined ? '' : String(v) });
 const band = (n, okMax, warnMax) => n <= okMax ? 'ok' : n <= warnMax ? 'warn' : 'fail';
 const between = (n, lo, hi) => n >= lo && n <= hi;
+
+/* ---------- CDN TANIMA — ham başlık ASLA yanıta girmez ----------
+   `server` ve `cf-ray` SALDIRGANIN KONTROLÜNDE: kötü niyetli bir sunucu
+   `server: <script>…` gönderip dizeyi istemciye kadar taşıtabilir.
+   Bu yüzden tespit sabit bir tanıma listesinden geçer ve yanıta yalnız
+   LİSTEDEN BİR DEĞER girer. Yeni sağlayıcı eklenecekse buraya eklenir;
+   ham başlığı geçiren bir yol hiç açılmaz.                             */
+const CDN_LISTESI = [
+  { ad: 'cloudflare', server: /cloudflare/i, baslik: ['cf-ray'] },
+  { ad: 'fastly', server: /fastly/i, baslik: ['fastly-debug-digest', 'x-fastly-request-id'] },
+  { ad: 'cloudfront', server: /cloudfront/i, baslik: ['x-amz-cf-id'] },
+  { ad: 'akamai', server: /akamai/i, baslik: ['x-akamai-transformed', 'x-akamai-request-id'] }
+];
+const CDN_BILINMIYOR = 'bilinmiyor';
+
+function basligiOku(res, ad) {
+  try { return String((res && res.headers && res.headers.get(ad)) || ''); }
+  catch (e) { return ''; }
+}
+
+function cdnTani(res) {
+  const srv = basligiOku(res, 'server');
+  for (const c of CDN_LISTESI) {
+    if (c.server.test(srv)) return c.ad;
+    if (c.baslik.some(b => basligiOku(res, b))) return c.ad;
+  }
+  return CDN_BILINMIYOR;
+}
+
+/* ---------- ENGEL İMZASI ----------
+   Dönüş yine sabit sözlükten bir sağlayıcı adı ya da null — gövdeden
+   alınan hiçbir dize dışarı çıkmaz.
+   2xx AYRIMI BİLEREK VAR: gövde imzalarının bir kısmı (şirket adı geçen
+   kelimeler) sıradan bir yazıda da geçebilir. 2xx bir sayfada yalnız
+   TARTIŞMASIZ challenge iskeleti sayılır; gevşek kelimeler ancak durum
+   zaten 2xx dışıyken — yani sayfa hâlihazırda bir hata sayfasıyken —
+   dikkate alınır. Aşırı genelleme, eksik tespit kadar kötüdür.
+   `Attention Required! | Cloudflare` ve `cf-error-details` ÖLÇÜLEREK
+   eklendi: r10.net aynı saat içinde bu ikinci engel sayfasını da
+   döndürdü ve o sayfada ne `cf-mitigated` ne `_cf_chl_opt` vardı —
+   yalnız "Just a moment"a bakan bir liste onu kaçırırdı.               */
+function engelImzasi(res, govde, iyiDurum) {
+  /* MUAFİYETİN ÜSTÜ — yalnız MİTİGASYON UYGULANDIĞINDA gönderilen iki
+     başlık. `cf-mitigated` ve `server-timing: chlray` geçirilen trafikte
+     YOKTUR, o yüzden 2xx'te bile tek başlarına engel sayılır (Cloudflare
+     bazı kurulumlarda challenge'ı 200 ile döndürür).                   */
+  if (basligiOku(res, 'cf-mitigated')) return 'cloudflare';
+  if (/(^|[,\s])chlray/i.test(basligiOku(res, 'server-timing'))) return 'cloudflare';
+
+  const g = String(govde || '').slice(0, 20000);
+  if (/_cf_chl_opt/.test(g)) return 'cloudflare';
+  if (iyiDurum) return null;                 /* 2xx'te gevşek imzaya bakılmaz */
+
+  /* MUAFİYETİN ALTI — bu imzalar VARLIK bildirir, engel değil.
+     DataDome `x-datadome` başlığını ve çerezini GEÇİRDİĞİ isteklerde de
+     gönderir; Imperva'nın `x-iinfo`su normal yanıtlarda durur. Yukarıya
+     konsalardı bu sağlayıcıları kullanan SAĞLIKLI her site "engel"
+     sayılırdı — düzelttiğimiz hatanın ters yönü. Ancak durum zaten
+     2xx dışıyken, yani sayfa hâlihazırda bir ret sayfasıyken anlam
+     kazanırlar ve sağlayıcıyı ADLANDIRMAYA yararlar.                  */
+  if (basligiOku(res, 'x-datadome') || /datadome/i.test(basligiOku(res, 'set-cookie'))) return 'datadome';
+  if (basligiOku(res, 'x-iinfo')) return 'imperva';
+  if (/Just a moment|cf-error-details|Attention Required! \| Cloudflare/i.test(g)) return 'cloudflare';
+  if (/datadome/i.test(g)) return 'datadome';
+  if (/_Incapsula_/.test(g)) return 'imperva';
+  if (/_abck/.test(g)) return 'akamai';
+  if (/px-captcha/i.test(g)) return 'perimeterx';
+  return null;
+}
+
+/* ---------- DURUM TAKSONOMİSİ — hepsi "duvar" değil ----------
+   Dört ayrı hâl, dört ayrı mesaj. 404'ü "engel" diye göstermek, engeli
+   hiç görmemek kadar yanlıştır.
+   SON SATIRIN GEREKÇESİ: imzasız bir 401/403/429 hâlâ "kapıda
+   durduruldu" demektir — 403'ün tanımı budur. İmza SAĞLAYICIYI
+   adlandırır, ENGELİN VARLIĞINI değil; o yüzden sağlayıcı null kalır ve
+   ekranda sağlayıcı adı geçmez.                                        */
+function durumBelirle(res, govde) {
+  const kod = (res && res.status) || 0;
+  const iyi = kod >= 200 && kod < 300;
+  const saglayici = engelImzasi(res, govde, iyi);
+  if (saglayici) return { durum: 'engel', saglayici };
+  if (kod === 404 || kod === 410) return { durum: 'bulunamadi', saglayici: null };
+  if (kod >= 500) return { durum: 'sunucu-hatasi', saglayici: null };
+  if (!iyi) return { durum: 'engel', saglayici: null };
+  return { durum: 'saglikli', saglayici: null };
+}
+
+/* ---------- robots.txt AI ajanlarına kapalı mı ----------
+   15 Eylül ibaresinin İKİNCİ şartı (bkz. handler). Grup ayrımı korunur:
+   ardışık user-agent satırları TEK grubu adresler, araya kural girince
+   yeni grup başlar. `*` grubunun `Disallow: /`si AI ajanlarını da kapatır.
+   Kapsam dar tutuldu: yalnız kökün tamamının kapalı olması sayılır,
+   dar yol yasakları AI'a kapalı sayılmaz.                              */
+const AI_AJAN = /^(gptbot|oai-searchbot|chatgpt-user|claudebot|anthropic-ai|claude-web|perplexitybot|ccbot|google-extended|applebot-extended|bytespider|meta-externalagent)$/i;
+function robotsAiKapali(metin) {
+  if (!metin) return false;
+  const gruplar = [];
+  let su = null;
+  for (const ham of String(metin).split(/\r?\n/)) {
+    const s = ham.replace(/#.*$/, '').trim();
+    if (!s) { su = null; continue; }
+    const i = s.indexOf(':');
+    if (i < 1) continue;
+    const ad = s.slice(0, i).trim().toLowerCase();
+    const deger = s.slice(i + 1).trim();
+    if (ad === 'user-agent') {
+      if (!su || su.kural) { su = { ajanlar: [], kural: false, kapali: false, acik: false }; gruplar.push(su); }
+      su.ajanlar.push(deger.toLowerCase());
+    } else if (su && (ad === 'disallow' || ad === 'allow')) {
+      su.kural = true;
+      if (ad === 'disallow' && deger === '/') su.kapali = true;
+      if (ad === 'allow' && deger === '/') su.acik = true;
+    }
+  }
+  return gruplar.some(g => g.kapali && !g.acik &&
+    g.ajanlar.some(a => a === '*' || AI_AJAN.test(a)));
+}
 
 function analyse(html, res, ms, bytes, finalUrl) {
   const h = html;
@@ -474,12 +601,52 @@ function handlerOlustur(depo) {
   catch (e) {
     const reason = (e && e.name === 'AbortError') ? 'timeout'
                  : (e && e.name === 'BlockedRedirect') ? 'blocked' : 'unreachable';
-    return { statusCode: 200, headers: H, body: JSON.stringify({ ok: false, reason }) };
+    /* zaman aşımı / DNS / bağlantı = "ulaşılamadı". `blocked` bizim KENDİ
+       reddimizdir (SSRF koruması), sitenin duvarı değil — ona durum
+       iliştirilmiyor, eski genel mesajı görüyor. */
+    const govde = { ok: false, reason };
+    if (reason !== 'blocked') { govde.durum = 'ulasilamadi'; govde.host = u.hostname; }
+    return { statusCode: 200, headers: H, body: JSON.stringify(govde) };
   }
 
   /* redirect:'manual' olduğu için r.url son adresi vermez; grab kendi takip
      ettiği son adresi finalUrl olarak döndürüyor.                        */
   const finalUrl = page.finalUrl || u.href;
+  const cdn = cdnTani(page.r);
+  const teshis = durumBelirle(page.r, page.body);
+
+  /* SKOR YERİNE BULGU — durum kötüyse analyse() HİÇ ÇALIŞMAZ.
+     Eski kod HTTP durumunu 19 kalemden biri sayıp analize devam ediyordu:
+     engel sayfası küçük ve hızlı olduğu için `speed` ve `weight` YEŞİL
+     çıkıyor, araç ziyaretçiye görmediği bir site hakkında rakam veriyordu.
+     Skor bileşeni bu yolda ekrana hiç basılmaz — sıfır da değil, "N/A" de
+     değil, YOK. Aşağıdaki alanların hepsi ölçülmüş gerçeklerdir.
+     KOTA: buradan hak YAKILMADAN dönülüyor (kapi.isle çağrılmıyor) —
+     analiz yapılmadı, "yalnız başarılı analiz hak yakar" kuralı kapsıyor.
+     BİLİNÇLİ KABUL EDİLEN AÇIK: sürekli duvarlı adres göndererek kotasız
+     istek yapılabilir. Ayrı çalışan oran sınırı bunu kapsıyor ve her
+     deneme yine bizim tarafımızda bir fetch'e mal oluyor; takas kullanıcı
+     deneyimi lehine yapıldı.                                            */
+  if (teshis.durum !== 'saglikli') {
+    return {
+      statusCode: 200, headers: H,
+      body: JSON.stringify({
+        ok: false,
+        durum: teshis.durum,
+        saglayici: teshis.saglayici,
+        host: u.hostname,
+        finalUrl,
+        status: page.r.status,
+        bytes: page.bytes,
+        redirects: page.redirects,
+        cdn,
+        /* 15 EYLÜL — koşullu, skora bağlı DEĞİL. Bu yolda skor zaten yok;
+           şart cdn=cloudflare + durum=engel. Diğer üç hâlde çıkmaz. */
+        cfEylul: cdn === 'cloudflare' && teshis.durum === 'engel'
+      })
+    };
+  }
+
   const items = analyse(page.body, page.r, page.ms, page.bytes, finalUrl);
 
   /* robots.txt ve site haritası — bulunamazsa uyarı, hata değil */
@@ -513,6 +680,17 @@ function handlerOlustur(depo) {
       ms: page.ms,
       kb: Math.round(page.bytes / 1024),
       kalan: kapi.kalan,
+      /* sağlıklı yolda da taşınıyor: istemci aynı alanları tek yerden
+         okusun, "durum" yalnız kötü hâlde var olan bir alan olmasın */
+      status: page.r.status,
+      bytes: page.bytes,
+      redirects: page.redirects,
+      cdn,
+      durum: teshis.durum,
+      /* 15 Eylül'ün ikinci şartı: robots AI ajanlarına kapalıysa site
+         sağlıklı olsa bile uyarı çıkar. Skorla hiçbir bağı yok — 95
+         puanlık bir site bloklanmak üzere olabilir. */
+      cfEylul: cdn === 'cloudflare' && robotsAiKapali(robotsBody),
       items
     })
   };

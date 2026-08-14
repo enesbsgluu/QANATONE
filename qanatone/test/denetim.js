@@ -367,6 +367,54 @@ async function calisma() {
     dom.window.close();
   }
 
+  /* 104 · FAZ 0 (+3) · DURUM EKRANI: TR ve EN'de var, aynı gösterim
+     kapısından geçiyor.
+     Yukarıdaki kural alan adını ve kota mesajını kilitliyordu; duvar
+     ekranı ÜÇÜNCÜ yüzey ve en risklisi: taranan adresi, HTTP durumunu ve
+     engel sağlayıcısını birlikte basıyor — üçü de karşı tarafın verdiği
+     veriden besleniyor. Kapı genişliyor: bu metin de textContent'ten
+     geçmeli, bağlantı kodlanmalı, skor bileşeni ekrana HİÇ basılmamalı.
+     İKİ DİL ŞART: metin tek dilde yerleşirse EN ziyaretçi ya boş kutu ya
+     Türkçe cümle görür — bu depoda /en/ ayrı dosya olduğu için sessizce
+     yayına çıkar. Kural iki dilde de metin ürediğini ve ikisinin AYNI
+     OLMADIĞINI ölçüyor (aynıysa çeviri değil kopyadır).                 */
+  {
+    const kotu = 'evil"><img src=x onerror=alert(1)>';
+    const { dom } = ortam(html, ORIGIN + '/');
+    const w = dom.window, d = w.document;
+    await dur(700);
+    const duvar = {
+      ok: false, durum: 'engel', host: kotu, finalUrl: 'https://' + kotu,
+      status: 403, bytes: 5269, redirects: 0, cdn: 'cloudflare', cfEylul: true
+    };
+    w.fetch = () => Promise.resolve({ status: 200, ok: true, json: () => Promise.resolve(duvar) });
+    const url = d.querySelector('#dgUrl'), go = d.querySelector('#dgGo');
+    const cek = async () => {
+      if (url) url.value = 'ornek.com';
+      if (go) go.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+      await dur(500);
+      const e = d.querySelector('#dgErr');
+      return { el: e, metin: e ? e.textContent.trim() : '' };
+    };
+    const tr = await cek();
+    d.documentElement.lang = 'en';
+    const en = await cek();
+
+    const acik = !!tr.el && tr.el.classList.contains('on');
+    const durumBasildi = /403/.test(tr.metin) && tr.metin.includes(kotu);
+    const enjekteYok = !d.querySelector('#dgErr img') && !d.querySelector('#dgErr script')
+      && !d.querySelector('img[onerror]');
+    const bag = tr.el && tr.el.querySelector('a[href^="https://wa.me/"]');
+    const bagKodlu = !!bag && !/["'<>]/.test(bag.getAttribute('href'));
+    const skorEkraniYok = !d.querySelector('#dgRes').classList.contains('on');
+    const ikiDil = tr.metin.length > 60 && en.metin.length > 60 && tr.metin !== en.metin;
+    ol('gösterim: durum ekranı TR ve EN, metin olarak, skor bileşeni yok',
+       acik && durumBasildi && enjekteYok && bagKodlu && skorEkraniYok && ikiDil,
+       `açık=${acik} durum=${durumBasildi} enjekteYok=${enjekteYok} bağKodlu=${bagKodlu} `
+       + `skorYok=${skorEkraniYok} tr=${tr.metin.length} en=${en.metin.length} ayrı=${tr.metin !== en.metin}`);
+    dom.window.close();
+  }
+
   /* bozuk content.json dayanıklılığı */
   {
     const { dom, hata } = ortam(html, ORIGIN + '/');
@@ -1440,6 +1488,154 @@ async function guvenlik() {
        && ucuncuRed && basarisizYakmadi && depoTemiz && tuzsuzCalisti,
        `tuz=${tuzKarisiyor} hamIpYok=${hamIpYok} xff=${xffYokSayiliyor}/${kaynaktaXffYok} ` +
        `ucuncuRed=${ucuncuRed} basarisizYakmadi=${basarisizYakmadi} depoTemiz=${depoTemiz} tuzsuz=${tuzsuzCalisti}`);
+  }
+
+  /* ---- FAZ 0 ortak koşucusu: teşhis fonksiyonunu AĞA ÇIKMADAN koştur.
+     fetch fikstürden servis edilir; safeUrl'in DNS çözümü de sahtelenir,
+     yoksa suite ağa bağımlı olur ve çevrimdışı makinede yanlış KIRMIZI
+     yakar. İkisi de finally'de geri konur — global bırakılan bir stub
+     sonraki kuralları sessizce zehirler.                                */
+  async function fazSifirKos(yanitUret, url) {
+    const D = require(path.join(KOK, 'netlify', 'functions', 'diagnose.js'));
+    const dnsP = require('dns').promises;
+    const eskiFetch = globalThis.fetch, eskiLookup = dnsP.lookup;
+    const eskiTuz = process.env.KOTA_TUZ, eskiLog = console.log;
+    const depo = { async oku() { return null; }, async yaz() {}, async sil() {} };
+    try {
+      dnsP.lookup = async () => [{ address: '93.184.216.34', family: 4 }];
+      globalThis.fetch = yanitUret;
+      delete process.env.KOTA_TUZ;
+      console.log = () => {};
+      const r = await D.handlerOlustur(depo)({
+        httpMethod: 'POST',
+        headers: { 'x-nf-client-connection-ip': '198.51.100.2' },
+        body: JSON.stringify({ url: url || 'https://www.r10.net/' })
+      });
+      return { kod: r.statusCode, d: JSON.parse(r.body) };
+    } catch (e) {
+      return { kod: 0, d: {}, hata: String((e && e.message) || e).slice(0, 90) };
+    } finally {
+      globalThis.fetch = eskiFetch;
+      dnsP.lookup = eskiLookup;
+      console.log = eskiLog;
+      if (eskiTuz === undefined) delete process.env.KOTA_TUZ; else process.env.KOTA_TUZ = eskiTuz;
+    }
+  }
+  const fazSifirYanit = (durum, govde, ek) => async () =>
+    new Response(govde, { status: durum, headers: Object.assign({ 'content-type': 'text/html; charset=utf-8' }, ek || {}) });
+
+  /* 102 · FAZ 0 (+1) · DURUM KÖTÜYKEN KALEM PUANLANMIYOR, SKOR ÜRETİLMİYOR.
+     2026-08 ÖLÇÜLDÜ (uydurma değil): r10.net'in Cloudflare challenge
+     gövdesine karşı koşturulan analiz skor 44 üretti ve şu kalemleri
+     YEŞİL yaptı — https · speed · weight · lang · viewport. Yani araç
+     "siteniz 0,3 saniyede açılıyor, 5 KB" diyordu; site 1,24 MB ve araç
+     onu HİÇ görmemişti. Engel sayfası küçük ve hızlı olduğu için ödül
+     alıyordu. Bu YANLIŞ YEŞİL — deponun kendi kuralına göre yanlış
+     kırmızıdan tehlikeli olan sınıf.
+     İKİNCİ ÖLÇÜM, daha kötüsü: aynı adres aynı saat içinde İKİ FARKLI
+     engel gövdesi döndürdü ve ikisi FARKLI puan aldı — "Just a moment"
+     managed challenge 44, "Attention Required! | Cloudflare" WAF sayfası
+     52. İki saat sonra hiç engel yoktu: 200 · 1,23 MB · 89. Yani üretilen
+     sayı sitenin değil, o an hangi duvarın servis edildiğinin özelliği;
+     kararlı bile değil. Kural bu yüzden tek bir sayıyı değil, SAYININ HİÇ
+     ÜRETİLMEMESİNİ kilitliyor.
+     Aşırı genelleme de eksik tespit kadar kötü: dört hâl ayrı ayrı
+     ölçülüyor, hepsi "engel" olmuyor.                                   */
+  {
+    const FIK = path.join(KOK, 'test', 'fikstur');
+    let meta = null, govde = null, fikVar = false;
+    try {
+      meta = JSON.parse(fs.readFileSync(path.join(FIK, 'r10-cf-challenge.json'), 'utf8'));
+      govde = fs.readFileSync(path.join(FIK, meta.govdeDosyasi));
+      fikVar = govde.length === meta.bytes && meta.status === 403;
+    } catch (e) {}
+
+    const engel = fikVar ? await fazSifirKos(fazSifirYanit(meta.status, govde, {
+      'cf-mitigated': meta.headers['cf-mitigated'],
+      'server-timing': meta.headers['server-timing'],
+      server: meta.headers.server
+    })) : { d: {} };
+    /* ikinci varyant: Cf-Mitigated YOK, _cf_chl_opt YOK — imza listesi
+       yalnız "Just a moment"a bakarsa bu gerçek engeli kaçırır */
+    const engel2 = await fazSifirKos(fazSifirYanit(403,
+      '<!DOCTYPE html><html lang="en-US"><head><title>Attention Required! | Cloudflare</title></head>'
+      + '<body><div class="cf-error-details">Ray ID: a2b1f73f485d1537</div></body></html>',
+      { server: 'cloudflare' }));
+    /* TERS YÖN — aynı hatanın ayna görüntüsü. DataDome `x-datadome`
+       başlığını ve çerezini GEÇİRDİĞİ isteklerde de gönderir, Imperva'nın
+       `x-iinfo`su normal yanıtlarda durur. Bu imzalar 2xx'te engel
+       sayılsaydı, bu sağlayıcıları kullanan HER SAĞLIKLI site duvar
+       ekranı görürdü ve skoru hiç üretilmezdi. Kural iki yönü de tutuyor:
+       duvarda skor YOK, sağlıklı-ama-korumalı sitede skor VAR.        */
+    const korumaliAmaSaglikli = await fazSifirKos(fazSifirYanit(200,
+      '<!DOCTYPE html><html lang="tr"><head><title>Yeterince uzun bir sayfa basligi burada</title>'
+      + '<meta name="viewport" content="width=device-width"></head><body><h1>Bir</h1></body></html>',
+      { 'x-datadome': 'protected', 'x-iinfo': '1-2-3', 'set-cookie': 'datadome=abc; Path=/' }));
+    const bulunamadi = await fazSifirKos(fazSifirYanit(404, '<html><body>yok</body></html>'));
+    const sunucu = await fazSifirKos(fazSifirYanit(503, '<html><body>arizali</body></html>'));
+    const zamanAsimi = await fazSifirKos(async () => {
+      const e = new Error('kesildi'); e.name = 'AbortError'; throw e;
+    });
+
+    const skorYok = o => o && o.score === undefined && o.items === undefined;
+    const engelTuttu = fikVar && engel.d.durum === 'engel' && skorYok(engel.d)
+      && engel.d.cdn === 'cloudflare' && engel.d.saglayici === 'cloudflare';
+    const engel2Tuttu = engel2.d.durum === 'engel' && skorYok(engel2.d);
+    const bulunamadiTuttu = bulunamadi.d.durum === 'bulunamadi' && skorYok(bulunamadi.d);
+    const sunucuTuttu = sunucu.d.durum === 'sunucu-hatasi' && skorYok(sunucu.d);
+    const ulasilamadiTuttu = zamanAsimi.d.durum === 'ulasilamadi' && skorYok(zamanAsimi.d);
+    const korumaliTuttu = korumaliAmaSaglikli.d.durum === 'saglikli'
+      && typeof korumaliAmaSaglikli.d.score === 'number';
+    ol('teşhis: 2xx dışında kalem puanlanmıyor, skor üretilmiyor (dört hâl ayrı)',
+       engelTuttu && engel2Tuttu && bulunamadiTuttu && sunucuTuttu && ulasilamadiTuttu
+       && korumaliTuttu,
+       `fikstür=${fikVar} engel=${engel.d.durum || '-'}/${skorYok(engel.d)} `
+       + `engel2=${engel2.d.durum || '-'} bulunamadı=${bulunamadi.d.durum || '-'} `
+       + `sunucu=${sunucu.d.durum || '-'} ulaşılamadı=${zamanAsimi.d.durum || '-'} `
+       + `korumalıAmaSağlıklı=${korumaliAmaSaglikli.d.durum || '-'} `
+       + `skor=${engel.d.score === undefined ? 'yok' : engel.d.score}`);
+  }
+
+  /* 103 · FAZ 0 (+2) · YANIT status/bytes/redirects/cdn/durum TAŞIYOR,
+     cdn TANIMA LİSTESİNDEN geliyor.
+     Bugün istemciye HTTP durumu hiçbir yerden ulaşmıyordu: S('status', …)
+     çağrısında `v` parametresi hiç verilmemişti, yani doğru veri üretilse
+     bile görünmezdi. Beş alan da eklendi.
+     GÜVENLİK — `cdn` HAM BAŞLIK TAŞIMAZ: `server` / `cf-ray` saldırganın
+     kontrolündedir, kötü niyetli bir sunucu `server: <script>…` gönderip
+     dizeyi ekrana kadar taşıtabilir. Kural bunu gerçekten deniyor: ham
+     dize yanıtın HİÇBİR yerinde geçmemeli, cdn sabit listeden bir değer
+     olmalı. `redirects` de SAYI olmalı — URL listesi yeni bir saldırgan
+     kontrollü dize sink'i açar ve bu turda gereği yok.                  */
+  {
+    const LISTE = ['cloudflare', 'fastly', 'cloudfront', 'akamai', 'bilinmiyor'];
+    const KOTU = '<script>alert(1)</script>';
+    const saglikli = await fazSifirKos(fazSifirYanit(200,
+      '<!DOCTYPE html><html lang="tr"><head><title>Yeterince uzun bir sayfa basligi burada</title>'
+      + '<meta name="viewport" content="width=device-width"></head><body><h1>Bir</h1></body></html>',
+      { server: 'cloudflare' }));
+    const kotuBaslik = await fazSifirKos(fazSifirYanit(403,
+      '<html><body>engellendi</body></html>', { server: KOTU }));
+    /* yönlendirme SAYI olarak dönmeli: iki hop takip edilen bir zincir */
+    let hop = 0;
+    const zincir = await fazSifirKos(async (u) => {
+      if (hop++ < 2) return new Response('', { status: 302, headers: { location: 'https://ornek' + hop + '.com/' } });
+      return new Response('<html><body>bitti</body></html>', { status: 403, headers: { server: 'fastly' } });
+    });
+
+    const s = saglikli.d, k = kotuBaslik.d, z = zincir.d;
+    const alanlarVar = o => typeof o.status === 'number' && typeof o.bytes === 'number'
+      && typeof o.redirects === 'number' && typeof o.cdn === 'string' && typeof o.durum === 'string';
+    const saglikliTasiyor = alanlarVar(s) && s.status === 200 && s.durum === 'saglikli'
+      && s.cdn === 'cloudflare' && typeof s.score === 'number';
+    const engelTasiyor = alanlarVar(k) && k.status === 403;
+    const listeden = LISTE.includes(k.cdn) && LISTE.includes(s.cdn) && LISTE.includes(z.cdn || '');
+    const hamSizmadi = !JSON.stringify(k).includes('script') && !JSON.stringify(k).includes('alert');
+    const yonlendirmeSayi = typeof z.redirects === 'number' && z.redirects === 2 && z.cdn === 'fastly';
+    ol('teşhis: yanıt status/bytes/redirects/cdn/durum taşıyor, cdn tanıma listesinden',
+       saglikliTasiyor && engelTasiyor && listeden && hamSizmadi && yonlendirmeSayi,
+       `sağlıklı=${saglikliTasiyor} engel=${engelTasiyor} listeden=${listeden} `
+       + `hamSızmadı=${hamSizmadi} yönlendirme=${z.redirects}(${typeof z.redirects}) cdn=${k.cdn}/${s.cdn}/${z.cdn}`);
   }
 
   /* 92 · panel kapısı (2026-08, canlıda ÖLÇÜLDÜ: ADMIN 200 anonim):

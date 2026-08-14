@@ -1912,6 +1912,20 @@ html.lowfx #globe .gov{backdrop-filter:none;-webkit-backdrop-filter:none;backgro
 /* kota mesajının yanındaki CTA: dar ekranda taşmasın diye satıra iner ve
    kendi genişliğini içerikten alır (max-width ile kutuyu aşamaz) */
 .dgkota-cta{display:inline-flex;margin-top:14px;max-width:100%;white-space:normal;text-align:left}
+/* DURUM EKRANI (skor yerine bulgu). Kutu aynı kutu ama kırmızı DEĞİL:
+   bu bir arıza değil, ölçülmüş bir bulgu — engel sayfasına kırmızı hata
+   rengi vermek, aracın "sende bir şey bozuk" dediği izlenimini verirdi.
+   Adres satırı dar ekranda taşımasın diye anywhere ile kırılıyor. */
+.dgerr.dgdurum{border-color:rgba(245,158,11,.42);background:rgba(245,158,11,.08)}
+.dgdb{font-family:Manrope;font-size:1.02rem;font-weight:600;letter-spacing:-.02em;
+  color:var(--tx);margin-bottom:10px;line-height:1.35}
+.dgdo{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;
+  color:var(--tx3);margin-bottom:4px;overflow-wrap:anywhere}
+.dgdu{font-size:.82rem;color:var(--tx3);margin-bottom:13px;overflow-wrap:anywhere;word-break:break-word}
+.dgdm{margin:0 0 12px;line-height:1.65}
+.dgde{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:rgba(239,35,60,.09);
+  border:1px solid rgba(239,35,60,.28);font-size:.84rem;line-height:1.6}
+.dgdk{margin:0;font-size:.82rem;color:var(--tx3);line-height:1.6}
 
 /* ============ KANAL GENİŞLİĞİ (bento) ============
    Kartlarda kanallar var (Insider referansı); statik markup — tarayıcı
@@ -11593,6 +11607,25 @@ function diagKur(){
     eOran:'Çok hızlı denedin, birkaç saniye sonra tekrar dene.',
     kotaCta:'Devamını konuşalım',
     kotaMsg:'Merhaba, canlı kontrol aracını kullandım. Devamını konuşmak istiyorum.',
+    /* DURUM EKRANI — dört ayrı hâl, dört ayrı mesaj. 404'ü "duvar" diye
+       göstermek, duvarı hiç görmemek kadar yanlış olurdu. */
+    durum:{engel:'Bu siteye otomatik erişim durduruluyor',
+      bulunamadi:'Bu adreste sayfa yok',
+      'sunucu-hatasi':'Site şu an arızalı',
+      ulasilamadi:'Bu adrese ulaşamadık'},
+    /* MEKANİZMA DİLİ — uydurma rakam yok, ne olduğu anlatılıyor */
+    durumMek:{engel:'Bu site otomatik kontrolleri kapıda durduruyor. Bizim aldığımız sayfa ile senin gördüğün sayfa aynı değil — bu yüzden puan üretmedik. Üretseydik senin siteni değil, engel sayfasını puanlamış olurduk. Yapay zekâ tarayıcıları da aynı duvara çarpıyor ve erişilebilirlik, AI görünürlüğünün en belirleyici faktörü.',
+      bulunamadi:'Sunucu bu adreste bir sayfa olmadığını söyledi. Yazımda hata olabilir; adres doğruysa sayfa kaldırılmış demektir.',
+      'sunucu-hatasi':'Site ayakta ama isteği karşılayamadı. Şu anda ziyaretçi de aynı yanıtı alıyor.',
+      ulasilamadi:'Adrese hiç ulaşamadık — yanıt gelmedi. Ziyaretçi de bu kadar bekliyor.'},
+    durumOlcum:'Ölçülen',
+    durumYon:n=>'yönlendirme',
+    durumKapsam:'Bu kontrol sitenin kendi altyapısını ölçer. Aramada kaçıncı sırada olduğun ve seni kimlerin andığı ayrı bir incelemenin konusu.',
+    durumEylul:'Cloudflare, 15 Eylül 2026 itibarıyla yeni katılan alan adlarında reklam gösteren sayfalarda Training ve Agent kategorilerini varsayılan olarak blokluyor; Search açık kalıyor.',
+    durumCta:'Bunu konuşalım',
+    /* Mesaj HÂLE göre yazılır: 404 alan ziyaretçiye "site engelliyor"
+       dedirtmek, düzelttiğimiz hatanın aynı sınıfı olurdu. */
+    durumMsg:d=>`Merhaba, ${d.host||''} için canlı kontrolü çalıştırdım — sonuç: ${d.bas}. Bunu konuşmak istiyorum.`,
     msg:d=>`Merhaba, ${d.host} için kontrolü yaptım — skor ${d.score}. Bunları konuşmak istiyorum.`},
   en:{
     https:'Secure connection',status:'Site is up',speed:'Load speed',weight:'Page weight',
@@ -11637,6 +11670,20 @@ function diagKur(){
     eOran:'That was too fast — try again in a few seconds.',
     kotaCta:'Let us talk about the rest',
     kotaMsg:'Hi, I used the live check tool. I would like to talk about the next step.',
+    durum:{engel:'Automated access to this site is being stopped',
+      bulunamadi:'There is no page at this address',
+      'sunucu-hatasi':'The site is currently failing',
+      ulasilamadi:'We could not reach this address'},
+    durumMek:{engel:'This site stops automated checks at the door. The page we received is not the page you see — so we produced no score. Producing one would have scored the block page, not your site. AI crawlers hit the same wall, and accessibility is the single strongest factor in AI visibility.',
+      bulunamadi:'The server said there is no page at this address. It may be a typo; if the address is right, the page has been removed.',
+      'sunucu-hatasi':'The site is up but could not serve the request. Your visitors are getting the same answer right now.',
+      ulasilamadi:'We never reached the address — no answer came back. Your visitors wait just as long.'},
+    durumOlcum:'Measured',
+    durumYon:n=>n===1?'redirect':'redirects',
+    durumKapsam:'This check measures the site’s own infrastructure. Where you rank in search and who mentions you are the subject of a separate review.',
+    durumEylul:'From 15 September 2026 Cloudflare blocks the Training and Agent categories by default on newly onboarded domains that show ads; Search stays open.',
+    durumCta:'Let us talk about this',
+    durumMsg:d=>`Hi, I ran the live check for ${d.host||''} — result: ${d.bas}. I would like to talk about it.`,
     msg:d=>`Hi, I ran the check for ${d.host} — score ${d.score}.`}};
   const PRIO=['https','viewport','contact','whatsapp','schema','desc','title','analytics',
     'speed','weight','og','local','h1','alt','sitemap','canonical','robots'];
@@ -11667,14 +11714,54 @@ function diagKur(){
     scan.querySelectorAll('.dgsr').forEach(r=>r.classList.add('on'));
     setTimeout(()=>scan.classList.remove('on'),450);
   }
-  function fail(m){endScan();err.textContent=m;err.classList.add('on');busy=false;go.disabled=false;}
+  function fail(m){endScan();err.classList.remove('dgdurum');err.textContent=m;err.classList.add('on');busy=false;go.disabled=false;}
+  /* DURUM EKRANI — skor yerine bulgu.
+     Durum kötüyse sunucu skor ÜRETMİYOR; burada da skor bileşeni ekrana
+     hiç basılmaz — sıfır da değil, "N/A" de değil, yok. Ekrana çıkan her
+     şey ölçülmüş bir gerçek: HTTP durumu, varsa engel sağlayıcısı, gövde
+     boyutu, son adres. Uydurma rakam yok.
+     GÜVENLİK: kota mesajıyla AYNI KAPI — innerHTML YOK, her metin
+     textContent, bağlantı createElement + encodeURIComponent. Burada kapı
+     daha da gerekli: basılan değerlerin hepsi KARŞI TARAFIN verisinden
+     besleniyor (adres, HTTP durumu, sağlayıcı). */
+  function durumGoster(d){
+    const D=L[LG()];endScan();
+    const bas=D.durum[d.durum]||D.durum.ulasilamadi;
+    const mek=D.durumMek[d.durum]||D.durumMek.ulasilamadi;
+    while(err.firstChild)err.removeChild(err.firstChild);
+    err.classList.add('dgdurum');
+    const ekle=(etiket,sinif,metin)=>{const e=document.createElement(etiket);
+      e.className=sinif;e.textContent=metin;err.appendChild(e);return e;};
+    ekle('div','dgdb',bas);
+    const par=[];
+    if(d.status)par.push('HTTP '+d.status);
+    if(d.saglayici)par.push(d.saglayici);
+    /* KB'ye yuvarlamak 400 baytlık bir engel sayfasını "1 KB" yapardı —
+       küçük ama uydurma bir rakam. 1 KB altı bayt olarak yazılıyor. */
+    if(typeof d.bytes==='number')par.push(d.bytes<1024?d.bytes+' B':Math.round(d.bytes/1024)+' KB');
+    if(d.redirects>0)par.push(d.redirects+' '+D.durumYon(d.redirects));
+    if(par.length)ekle('div','dgdo',D.durumOlcum+': '+par.join(' · '));
+    if(d.finalUrl||d.host)ekle('div','dgdu',d.finalUrl||d.host);
+    ekle('p','dgdm',mek);
+    /* 15 Eylül: yalnız sunucu iki şartı birlikte doğrulamışsa. Skorla
+       hiçbir bağı yok — şartı sağlamayan ziyaretçi bu tarihi görmez. */
+    if(d.cfEylul)ekle('p','dgde',D.durumEylul);
+    ekle('p','dgdk',D.durumKapsam);
+    const wa=String((C.settings||{}).whatsapp||'905326291508').replace(/\D/g,'');
+    const a=document.createElement('a');
+    a.className='btn btn-p dgkota-cta';a.target='_blank';a.rel='noopener';
+    a.href='https://wa.me/'+wa+'?text='+encodeURIComponent(D.durumMsg({host:d.host,bas:bas}));
+    a.textContent=D.durumCta;
+    err.appendChild(a);
+    err.classList.add('on');busy=false;go.disabled=false;
+  }
   /* Kota mesajı: genel bir hata DEĞİL. Kaç hakkı olduğu ve ne zaman
      yenileneceği yazılıyor, yanına mevcut WhatsApp CTA'sı konuyor —
      sınır böylece bir duvar değil dönüşüm noktası oluyor.
      GÜVENLİK: mesaj da ekrana basılan bir metindir. innerHTML YOK;
      metin textContent, bağlantı createElement + encodeURIComponent.  */
   function kotaGoster(d){
-    const D=L[LG()];endScan();
+    const D=L[LG()];endScan();err.classList.remove('dgdurum');
     const saat=Math.max(1,Math.ceil(((d.yenilenmeMs||0)-Date.now())/3600000));
     err.textContent=D.eKota({hak:2,saat});
     const wa=String((C.settings||{}).whatsapp||'905326291508').replace(/\D/g,'');
@@ -11743,6 +11830,10 @@ function diagKur(){
          arıza gibi görünür. */
       if(!d.ok&&d.reason==='kota'){kotaGoster(d);return;}
       if(!d.ok&&d.reason==='oran'){fail(D.eOran);return;}
+      /* Durum kötüyse ziyaretçi GENEL HATA değil, durum ekranını görür:
+         "ulaşamadık" demek ile "site otomatik erişimi durduruyor" demek
+         aynı şey değil ve ikincisi aracın verebileceği en kanıtlı teşhis. */
+      if(!d.ok&&d.durum){durumGoster(d);return;}
       if(!d.ok){fail(d.reason==='timeout'?D.eTime:D.eNo);return;}
       render(d);
     }catch(e){fail(D.eOff);}
