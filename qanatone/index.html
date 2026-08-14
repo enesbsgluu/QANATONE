@@ -5276,8 +5276,25 @@ html.t-mo-off .mkwire .kiv{animation:none;opacity:0}
              kontrolündedir, kanıt değil yanlış güven üretir. Güvenilir
              zaman Netlify'ın kendi created_at'idir. -->
         <label class="chk"><input type="checkbox" id="ldOk" name="kvkk_onay" value="evet" required>
-          <span data-t="ld4">Bilgilerimin bu talebe dönüş yapılması için işlenmesini kabul ediyorum.</span></label>
+          <span data-t="ld4">Bilgilerimin bu talebe dönüş yapılması için işlenmesini kabul ediyorum. Geliş bağlamım (kampanya işaretleri, indiğim sayfa, yönlendiren site) talep kaydıyla birlikte tutulur.</span></label>
         <input type="hidden" name="kvkk_metin_ozet" id="ldKvkkOzet" value="">
+        <!-- ATIF ALANLARI — talebin nereden geldiği. Değerleri JS dolduruyor
+             ama alanların KENDİSİ burada duruyor: Netlify formu derleme
+             anındaki statik HTML'den tanıyor, çalışma anında eklenen alan
+             kayda hiç girmez. Değerler burada BOŞ kalmalı — çıktıya pişmiş
+             bir değer bütün ziyaretçilere atfedilir, kayıt topluca yalan
+             söyler. Ad seçimi bilinçli: GTM kurulduğunda aynı adlar dönüşüm
+             olaylarına beslenecek, yeniden icat edilmeyecek. -->
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="utm_term" value="">
+        <input type="hidden" name="utm_content" value="">
+        <input type="hidden" name="gclid" value="">
+        <input type="hidden" name="fbclid" value="">
+        <input type="hidden" name="msclkid" value="">
+        <input type="hidden" name="inilen_sayfa" value="">
+        <input type="hidden" name="yonlendiren" value="">
         <button class="btn btn-p" type="submit" data-t="ld5">Demo talep et
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
         <span class="ldmsg" id="ldMsg" role="status" aria-live="polite"></span>
@@ -6545,7 +6562,7 @@ alHs4:'Percentage of no-shows',alHs5:'Average value of one job',hpSirket:'Compan
  ldk:'Demo request',ldh:'Leave your details, <em>we will show you the setup.</em>',
  ldp:'We walk you through a working setup built for your sector. Your details are used only for this request — no mailing list.',
  ld1:'Full name',ld2:'Email',ld3:'Phone',
- ld4:'I agree to my details being processed so you can reply to this request.',
+ ld4:'I agree to my details being processed so you can reply to this request. My arrival context (campaign markers, landing page, referring site) is kept with the request record.',
  ld5:'Request a demo',ld6:'What do you need? (briefly)',
 akk:'End to end',akh:'One channel system.<br><span class="thin">Every touch, one flow.</span>',
 akp:'Swipe the cards — each one opens its own page.',
@@ -10890,6 +10907,84 @@ projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
   document.addEventListener('visibilitychange',()=>document.hidden?stop():(seen&&start()));
 })();
 
+/* =================== ATIF — geliş bağlamı ===================
+   Talebin nereden geldiğini kaydeder: kampanya işaretleri, inilen sayfa,
+   yönlendiren site. Reklam → talep zinciri bunsuz kurulamıyor.
+
+   GÜVENLİK — bu bölümün tamamı GÜVENİLMEZ girdiyle çalışır. Kaynak
+   location.search ve document.referrer; ikisini de saldırgan hazırladığı
+   tek bir bağlantıyla tamamen belirler. Değer buradan gizli form alanına,
+   Netlify kaydına, WhatsApp bildirim gövdesine (Enes'in okuyup işlem
+   yaptığı metin), e-postaya ve fonksiyon loglarına gidiyor.
+     · İZİN LİSTESİ: yalnız aşağıdaki anahtarlar okunur, gerisi yok sayılır.
+     · KALIP: dar ve tek satır. Satır sonu/sekme dışarıda kalınca üç iş
+       birden oluyor: şablon parametresi bozulmuyor (Meta çok satırlı
+       parametreyi reddeder — hazırlanmış bir bağlantı HER bildirimi
+       düşürebilirdi), log satırı sahteciliği kapanıyor, gösterim
+       yüzeyleri korunuyor.
+     · UYMAYAN DEĞER ATILIR, KIRPILMAZ. Kırpma bozuk veriyi sessizce
+       geçerli gösterir; atmak okunabilir bir gerçektir.
+     · OKURKEN DE SÜZÜLÜR: sessionStorage bizim kökenimize ait, ama
+       kökende koşan herhangi bir kod ona yazabilir. Yazarken süzmek tek
+       başına yetmez.
+     · Yönlendirenin yalnız HOST'u alınır; tam URL başka sitenin sorgu
+       parametrelerini (ve olası hassas verisini) bizim kaydımıza taşırdı.
+     · İnilen sayfa yalnız yol; sorgu zaten anahtar anahtar toplanıyor.
+
+   KALICILIK sessionStorage: kişi ?gclid= ile ana sayfaya inip başka bir
+   sayfada form doldurabilir — hatta bölüm çapasına tıklamak bile adresi
+   sorgusuz hâle getiriyor (kaydir() replaceState'i pathname ile yazıyor).
+   Sekme kapanınca silinir; kalıcı profil kurulmaz, çerez kullanılmaz.
+   BİLİNEN BEDEL: bugün reklamdan gelip yarın doğrudan gelen ziyaretçinin
+   atfı kaybolur. Organik trafik sıfırken maliyeti sıfır; trafik oluşunca
+   yeniden değerlendirilecek.                                            */
+const ATIF_IZIN=['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','msclkid'];
+const ATIF_ALANLAR=ATIF_IZIN.concat(['inilen_sayfa','yonlendiren']);
+const ATIF_ANAHTAR='qanat-atif';          /* mevcut anahtarlardan ayrı: qanat-bit, qanat-sec, qanat-splash-seen */
+const ATIF_KALIP=/^[\w.\-]{1,128}$/;
+const ATIF_YOL_KALIP=/^\/[\w\-./]{0,127}$/;
+function atifSuz(k,v){
+  if(typeof v!=='string'||!v)return '';
+  const kalip=k==='inilen_sayfa'?ATIF_YOL_KALIP:ATIF_KALIP;
+  return kalip.test(v)?v:'';
+}
+function atifOku(){
+  let ham=null;
+  try{ham=JSON.parse(sessionStorage.getItem(ATIF_ANAHTAR)||'null');}catch(e){ham=null;}
+  const temiz={};
+  if(ham&&typeof ham==='object'&&!Array.isArray(ham))
+    for(const k of ATIF_ALANLAR){const v=atifSuz(k,ham[k]);if(v)temiz[k]=v;}
+  return temiz;
+}
+(function atifYakala(){
+  try{
+    if(location.protocol==='file:')return;
+    const p=new URLSearchParams(location.search);
+    const yeni={};
+    let dokunus=false;                     /* izin listesinden EN AZ BİR anahtar geldi mi */
+    for(const k of ATIF_IZIN){
+      const ham=p.get(k);
+      if(ham===null)continue;
+      dokunus=true;                        /* geldi ama kalıba uymadıysa da yeni dokunuştur */
+      const v=atifSuz(k,ham);
+      if(v)yeni[k]=v;
+    }
+    /* Kayıt varken parametresiz gezinme onu SİLMEZ; yeni bir işaretli
+       giriş ise kaydı tazeler (son dokunuş), çünkü dönüşüm o tıklamaya
+       yazılmalı. */
+    if(!dokunus&&Object.keys(atifOku()).length)return;
+    const yol=atifSuz('inilen_sayfa',location.pathname);
+    if(yol)yeni.inilen_sayfa=yol;
+    let host='';
+    try{host=document.referrer?new URL(document.referrer).hostname:'';}catch(e){host='';}
+    if(host&&host!==location.hostname){
+      const h=atifSuz('yonlendiren',host);
+      if(h)yeni.yonlendiren=h;
+    }
+    sessionStorage.setItem(ATIF_ANAHTAR,JSON.stringify(yeni));
+  }catch(e){}                              /* depo kapalıysa (gizli sekme) atıf yok, form çalışmaya devam eder */
+})();
+
 /* =================== DEMO TALEP FORMU ===================
    Kayıt Netlify Forms'a düşer (yönetim panelinde listelenir + e-posta bildirimi).
    Kayıt alındıktan sonra ziyaretçiye, bilgileri hazır yazılmış bir WhatsApp
@@ -10977,6 +11072,17 @@ projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
     if(ozetAlani){
       const oz=onayMetni?ozetle(onayMetni.textContent):'';
       ozetAlani.value=/^[0-9a-f]{12}$/.test(oz)?oz:'';
+    }
+    /* Atıf alanları: değerler depodan OKUNURKEN yeniden süzülüyor
+       (atifOku). Parametresiz sıradan ziyaretçide hepsi boş kalır —
+       bu doğal durum, hata değil: atıfsız çalışan form, bozuk formdan
+       iyidir. Alan bulunamazsa da sessizce geçilir. */
+    {
+      const atif=atifOku();
+      for(const k of ATIF_ALANLAR){
+        const el=f.querySelector('[name="'+k+'"]');
+        if(el)el.value=atif[k]||'';
+      }
     }
     let saved=false;
     try{

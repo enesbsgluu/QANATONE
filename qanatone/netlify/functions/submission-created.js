@@ -39,12 +39,37 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: 'ok' };
   }
 
+  /* ATIF — istemcide süzülmüş olması YETMEZ: istemci doğrulaması kullanıcı
+     deneyimidir, hazırlanmış bir POST onu atlar ve buraya ham değer
+     düşebilir. Bu satırlar Enes'in okuyup işlem yaptığı WhatsApp mesajına
+     ve fonksiyon loglarına gidiyor, yani yabancı metin buraya yazdırmak
+     bir sahtecilik yüzeyi. Aynı kalıp burada bir kez daha uygulanıyor;
+     uymayan değer ATILIYOR (kırpılmıyor) ve mesaja hiç girmiyor.
+     Kalıbın satır sonunu dışarıda bırakması ayrıca şart: çok satırlı bir
+     değer hem log satırını sahteleyebilir hem de şablon kullanılıyorsa
+     Meta'nın parametreyi reddetmesine yol açar — tek bir hazırlanmış
+     bağlantı bütün bildirimleri düşürebilirdi.                        */
+  const ATIF_ALANLAR = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term',
+                        'utm_content', 'gclid', 'fbclid', 'msclkid',
+                        'inilen_sayfa', 'yonlendiren'];
+  const ATIF_KALIP = /^[\w.\-]{1,128}$/;
+  const ATIF_YOL_KALIP = /^\/[\w\-./]{0,127}$/;
+  const atifSuz = (k, v) => {
+    if (typeof v !== 'string' || !v) return '';
+    return (k === 'inilen_sayfa' ? ATIF_YOL_KALIP : ATIF_KALIP).test(v) ? v : '';
+  };
+  const atifSatirlari = ATIF_ALANLAR
+    .map(k => [k, atifSuz(k, d[k])])
+    .filter(([, v]) => v)
+    .map(([k, v]) => k + ': ' + v);
+
   const line = [
     'QANATONE — yeni demo talebi',
     'Ad soyad: ' + (d.name || '-'),
     'E-posta: '  + (d.email || '-'),
     'Telefon: '  + (d.phone || '-')
-  ].join('\n');
+  ].concat(atifSatirlari.length ? ['—', 'Geliş bağlamı:'].concat(atifSatirlari) : [])
+   .join('\n');
 
   const payload = process.env.WA_TEMPLATE
     ? { messaging_product: 'whatsapp', to: TO, type: 'template',
