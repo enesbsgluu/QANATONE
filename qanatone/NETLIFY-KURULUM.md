@@ -22,7 +22,7 @@ kaynak ve çıktı artık asla aynı yerde durmuyor.)
 
 | Değişken | Ne için | Zorunlu mu |
 |---|---|---|
-| `PANEL_PAROLA_HASH` | admin.html'deki "Yayınla" düğmesinin parola kapısı — `salt:hash` (scrypt) | otomatik yayın isteniyorsa; yoksa fonksiyon 503 ile kapalı durur |
+| `PANEL_PAROLA_HASH` | hem panelin kapısı (`/admin.html`) hem "Yayınla" düğmesi — `tuz:hash` (scrypt) | **evet**; yoksa panel de yayın da 503 ile kapalı durur |
 | `GITHUB_TOKEN` | `yayinla` fonksiyonunun `content.json`'ı commit etmek için kullandığı GitHub PAT (yalnız bu repoya Contents yazma izni yeterli) | `PANEL_PAROLA_HASH` ile birlikte |
 | `INDEXNOW_KEY` | Bing/Yandex/Naver/Seznam/Yep'e anında bildirim | hayır ama tavsiye |
 | `WA_TOKEN` `WA_PHONE_ID` `WA_TO` | form → WhatsApp | form bildirimi isteniyorsa |
@@ -30,8 +30,22 @@ kaynak ve çıktı artık asla aynı yerde durmuyor.)
 
 **`PANEL_PAROLA_HASH` nasıl üretilir:** yerelde
 `node netlify/parola-hash.js` çalıştır, parolayı yaz/yapıştır, çıkan
-`salt:hash` satırını olduğu gibi Netlify'a yapıştır. Parolanın kendisi
+`tuz:hash` satırını olduğu gibi Netlify'a yapıştır. Parolanın kendisi
 hiçbir dosyaya yazılmaz, yalnız bu çıktı ortam değişkeninde durur.
+
+**Beklenen tam biçim** (fonksiyon bunu ölçüyor, tutmazsa 503):
+
+```
+<32 hex tuz>:<128 hex hash>      → toplam 161 karakter
+scrypt · keylen 64 bayt · Node varsayılanları N=16384 r=8 p=1 · kodlama hex
+```
+
+Tuz ayrı bir değişkende durmaz, aynı satırda gömülüdür; ilk `:` böler.
+**Kırpık yapıştırma sessizce kabul edilirdi** (scrypt çıktısı önek
+özelliği taşır, kısa hash uzunun ilk baytlarıdır) — biçim kontrolü tam
+bunun için var. Değer bozuksa fonksiyon 401 değil **503** döner ve
+log'a `bicimi beklenen kalibi tutmuyor` yazar; yanlış parola sanıp
+saatlerce doğru parolayı denemeyesin diye.
 
 **IndexNow anahtarı nasıl üretilir:** 8–128 karakter, harf ve rakam.
 Örneğin `openssl rand -hex 16` çıktısı. Netlify'a `INDEXNOW_KEY` olarak
@@ -140,7 +154,25 @@ kanıtlanıyor (ağa çıkmadan, sahte GitHub adaptörüyle).
 
 **Yerel kurulum adımları:**
 1. `node netlify/parola-hash.js` çalıştır, parolanı yaz, çıkan
-   `salt:hash` satırını Netlify'a `PANEL_PAROLA_HASH` olarak gir.
+   `tuz:hash` satırını Netlify'a `PANEL_PAROLA_HASH` olarak gir.
 2. GitHub'da bu repoya yalnız Contents (read/write) izni olan bir
    fine-grained PAT üret, Netlify'a `GITHUB_TOKEN` olarak gir.
-3. admin.html'i aç, içeriği düzenle, **Yayınla**'ya bas, parolanı gir.
+3. `https://<site>/admin.html` adresini aç — tarayıcı kullanıcı adı +
+   parola soracak, **kullanıcı adı boş bırakılabilir**, parola aynı
+   panel parolasıdır. İçeriği düzenle, **Yayınla**'ya bas.
+
+## Panelin kapısı (`/admin.html`)
+
+`admin.html` **yayın çıktısına kopyalanmıyor.** 2026-08'de ölçüldü:
+statik dosya olarak duruyordu ve anonim istek 200 alıyordu — panelin
+alan adları, yapısı ve içerik şeması herkese açıktı.
+
+Artık `/admin.html` isteği `_redirects` içindeki zorlamalı kuralla
+(`200!`) `netlify/functions/panel.js`'e düşüyor; fonksiyon HTTP Basic
+Auth ile **aynı** `PANEL_PAROLA_HASH` değerine karşı doğruluyor ve
+ancak ondan sonra panel gövdesini gönderiyor. İkinci bir sır yok.
+
+Panel gövdesi fonksiyon paketine `netlify.toml`'daki
+`[functions] included_files = ["admin.html"]` satırıyla giriyor.
+Paketleme bozulursa fonksiyon **503** döner (yarım sayfa dönmez) ve
+log'a `govde paketde bulunamadi (included_files?)` yazar.

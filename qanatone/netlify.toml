@@ -6,6 +6,13 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Panel govdesi fonksiyon paketine bu satirla giriyor: admin.html artik
+# dist e kopyalanmiyor (anonim 200 veriyordu), netlify/functions/panel.js
+# onu Basic Auth kapisinin ardindan okuyup servis ediyor. Yol base
+# directory ye goredir.
+[functions]
+  included_files = ["admin.html"]
+
 # Artimli derleme icin onbellek: .onbellek klasoru derlemeler arasinda
 # tasinir. Olmazsa her yayinda 58 sayfa bastan render edilir (~100 sn).
 [[plugins]]

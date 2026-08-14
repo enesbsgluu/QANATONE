@@ -2,8 +2,11 @@
    ---------------------------------------------------------------------
    Panelin "Yayınla" düğmesi buraya düşer: gövdedeki content.json'ı
    doğrudan GitHub'a commit eder. Netlify Identity KULLANILMAZ — giriş
-   kararı tek parola: PANEL_PAROLA_HASH ortam değişkeninde "salt:hash"
+   kararı tek parola: PANEL_PAROLA_HASH ortam değişkeninde "tuz:hash"
    biçiminde scrypt çıktısı durur (üretici: netlify/parola-hash.js).
+   Tam biçim: 32 hex tuz + ':' + 128 hex hash (scrypt, keylen 64, Node
+   varsayılanları N=16384 r=8 p=1) — toplam 161 karakter. Aynı değeri
+   panel kapısı da (netlify/functions/panel.js) kullanır; tek sır.
 
    ÇALIŞMASI İÇİN GEREKENLER — Netlify > Site settings > Environment variables:
      PANEL_PAROLA_HASH   "salt:hash" (parola-hash.js YEREL üretir, buraya yapıştırılır)
@@ -43,20 +46,36 @@ const TEMEL_DIZIN = 'qanatone';
 const DOSYA_YOLU = TEMEL_DIZIN + '/content.json';
 const SABIT_GECIKME_MS = 300;
 
+/* Saklanan değerin TEK geçerli biçimi — netlify/parola-hash.js'in
+   ürettiği biçim: 32 hex tuz + ':' + 128 hex (64 baytlık scrypt çıktısı).
+   Tuz ayrı bir değişkende DEĞİL, aynı satırda gömülü; ilk ':' böler.
+   2026-08 BULUNDU: keylen saklanan hash'in UZUNLUĞUNDAN türetiliyordu
+   (`beklenen.length || 64`). scrypt'in son adımı 1 turluk PBKDF2'dir,
+   yani kısa keylen çıktısı uzun keylen çıktısının İLK BAYTLARIDIR.
+   Ortam değişkenine kırpık bir hash düşerse (yapıştırırken satır
+   kesildi, kopya eksik alındı) doğrulama sessizce ilk N bayta iniyor,
+   hata da 401 de vermiyor — kabul ediyordu. Üretimde hiçbir belirti
+   ele vermez. Biçim artık ÖNCE ölçülüyor, keylen sabit.
+   trim(): Netlify arayüzünden yapıştırılan değer sonuna satır sonu
+   alabiliyor; bu güvenliği etkilemeyen tek toleransımız.            */
+const HASH_BICIMI = /^[0-9a-f]{32}:[0-9a-f]{128}$/i;
+const KEYLEN = 64;
+
 const dur = ms => new Promise(r => setTimeout(r, ms));
 const simdi = () => new Date().toISOString();
 
 /* "salt:hash" (hex) ile gelen parolayı zamanlama sızıntısız karşılaştırır. */
 function dogrula(parola, hashSatiri) {
   if (typeof parola !== 'string' || !parola || !hashSatiri) return false;
-  const ayrac = String(hashSatiri).indexOf(':');
-  if (ayrac < 0) return false;
-  const salt = hashSatiri.slice(0, ayrac);
-  const beklenenHex = hashSatiri.slice(ayrac + 1);
+  const satir = String(hashSatiri).trim();
+  if (!HASH_BICIMI.test(satir)) return false;
+  const ayrac = satir.indexOf(':');
+  const salt = satir.slice(0, ayrac);
+  const beklenenHex = satir.slice(ayrac + 1);
   let beklenen, uretilen;
   try {
     beklenen = Buffer.from(beklenenHex, 'hex');
-    uretilen = crypto.scryptSync(parola, salt, beklenen.length || 64);
+    uretilen = crypto.scryptSync(parola, salt, KEYLEN);
   } catch (e) { return false; }
   if (uretilen.length !== beklenen.length) return false;
   return crypto.timingSafeEqual(uretilen, beklenen);
@@ -102,6 +121,14 @@ function handlerOlustur(adaptor) {
     const hashSatiri = process.env.PANEL_PAROLA_HASH;
     if (!hashSatiri) {
       console.log(simdi(), 'yayinla: PANEL_PAROLA_HASH tanimli degil, fonksiyon kapali');
+      return { statusCode: 503, body: JSON.stringify({ ok: false, reason: 'kapali' }) };
+    }
+    /* Biçim bozuksa 401 DEĞİL 503: 401, "parolan yanlış" demektir ve
+       Enes doğru parolayı yazmaya devam eder — teşhis edilemeyen bir
+       kilitlenme. 503 + bu log satırı, sorunun ortam değişkeninde
+       olduğunu tek bakışta söyler. Değerin kendisi loglanmaz.        */
+    if (!HASH_BICIMI.test(String(hashSatiri).trim())) {
+      console.log(simdi(), 'yayinla: PANEL_PAROLA_HASH bicimi beklenen kalibi tutmuyor (32 hex + : + 128 hex), fonksiyon kapali');
       return { statusCode: 503, body: JSON.stringify({ ok: false, reason: 'kapali' }) };
     }
 
