@@ -17,6 +17,125 @@
    --------------------------------------------------------------------- */
 
 const dns = require('dns').promises;
+const crypto = require('crypto');
+
+/* ---------- KOTA ----------
+   Kişi başı 2 analiz / 24 saat. Kota bir ÜRÜN kuralıdır; oran sınırı ayrı
+   bir şeydir (kötüye kullanım koruması) ve aşağıda ayrı ayrı duruyorlar.
+
+   KİMLİK yalnız Netlify'ın kendi başlığından okunur. x-forwarded-for
+   İSTEMCİ TARAFINDAN yazılabilir: okunsaydı saldırgan her istekte başka
+   bir değer yazıp sınırı tamamen atlardı. Anahtar YALNIZ sunucunun
+   gördüğü kimlikten türer — istek gövdesinden ya da taranan adresten
+   hiçbir şey anahtara girmez.
+
+   GİZLİLİK: ham IP saklanmaz, saklanan şey gizli tuzla alınmış özetidir.
+   Tuz KOTA_TUZ ortam değişkeninden gelir ve bu ŞARTTIR: sabit ya da koda
+   gömülü bir tuzla özet almak gizlilik sağlamaz — IPv4 uzayı dört milyar
+   adres, tamamı kaba kuvvetle denenip özet geri çözülür. Gizli tuz
+   olmadan bu adım IP günlüğü tutmakla aynı şey olurdu.
+   Tuz tanımsızsa kota TUTULMAZ ve bu duruma log satırı düşer — bu depoda
+   dört ayrı özelliğin sessizce ölü olduğu bulundu, beşincisi olmasın.
+   Tuzun kendisi hiçbir yere loglanmaz.                                  */
+const KOTA_HAK = 2;
+const KOTA_PENCERE_MS = 24 * 60 * 60 * 1000;
+const ORAN_PENCERE_MS = 10 * 1000;
+const ORAN_SINIR = 5;
+
+const simdi = () => new Date().toISOString();
+
+/* SOYUT "KİM" ANAHTARI — bugün tuzlu IP özeti, yarın girişli kullanıcı
+   kimliği. O gün değişecek tek şey bu fonksiyonun içidir; kotanın geri
+   kalanı anahtarın nereden geldiğini bilmez. */
+function kimAnahtari(kimlik, tuz) {
+  return 'kim-' + crypto.createHmac('sha256', tuz).update(String(kimlik)).digest('hex').slice(0, 32);
+}
+
+function istemciKimligi(event) {
+  const h = (event && event.headers) || {};
+  const bul = ad => h[ad] || h[ad.toLowerCase()] || h[ad.toUpperCase()] || '';
+  return String(bul('x-nf-client-connection-ip') || '').trim();
+}
+
+/* DEPO ADAPTÖRÜ — yayinla.js'in githubCommit deseninin aynısı: gerçek
+   depo yalnız burada, test sahte adaptörle ağa çıkmadan koşar.
+   SEÇİM: Netlify Blobs. Fonksiyonlar durumsuz; Blobs bu yığında zaten
+   var olan, ek servis/parola gerektirmeyen tek kalıcı depo. TTL'i yok,
+   o yüzden süresi dolan kayıt OKUNDUĞU AN siliniyor — kota tutar, günlük
+   oluşmaz. Hiç geri dönmeyen bir anahtar depoda kalır ama içeriği ham IP
+   değil, geri çözülemeyen bir özettir.                                  */
+function blobsDepo() {
+  let s = null;
+  const al = () => (s = s || require('@netlify/blobs').getStore({ name: 'kota', consistency: 'strong' }));
+  return {
+    async oku(anahtar) { return (await al().get(anahtar, { type: 'json' })) || null; },
+    async yaz(anahtar, deger) { await al().setJSON(anahtar, deger); },
+    async sil(anahtar) { await al().delete(anahtar); }
+  };
+}
+
+/* Kota kapısı. Dönüş: {gecer, sebep, kalan, yenilenmeMs, isle}
+   BAŞARISIZLIK YÖNÜ — BİLİNÇLİ KARAR: depo erişilemezse fonksiyon AÇIK
+   düşer (kota sayılmaz, analiz çalışır). Gerekçe: bu bir kimlik doğrulama
+   değil, kullanım kotası; bir depo arızası yüzünden lead mıknatısını
+   kapatmak yanlış takas olur. Akış sınırı ve oran sınırı bağımsız
+   çalıştığı için kötüye kullanım yine sınırlı kalır. Gözden kaçmış
+   değil, kabul edilmiş bir risktir.                                     */
+async function kotaKapisi(event, depo, tuz, simdiMs) {
+  if (!tuz) {
+    console.log(simdi(), 'diagnose: KOTA_TUZ tanimli degil — kota TUTULMUYOR, arac aciktan calisiyor');
+    return { gecer: true, kalan: null, isle: async () => {} };
+  }
+  const kimlik = istemciKimligi(event);
+  if (!kimlik) {
+    console.log(simdi(), 'diagnose: istemci kimligi okunamadi — kota tutulmadi');
+    return { gecer: true, kalan: null, isle: async () => {} };
+  }
+  const anahtar = kimAnahtari(kimlik, tuz);
+  let kayit = null;
+  try { kayit = await depo.oku(anahtar); }
+  catch (e) { console.log(simdi(), 'diagnose: kota deposu okunamadi — acik dusuldu'); return { gecer: true, kalan: null, isle: async () => {} }; }
+
+  if (kayit && simdiMs - (kayit.bas || 0) >= KOTA_PENCERE_MS) {
+    try { await depo.sil(anahtar); } catch (e) {}
+    kayit = null;                                   /* penceresi dolan kayıt yaşamaz */
+  }
+
+  /* ORAN SINIRI — kotadan ayrı: kota ürün kuralı (2 hak/gün), bu kötüye
+     kullanım koruması (saniyede yüz istek). Başarısız koşumlar da sayılır,
+     çünkü korunan şey hak değil sunucu. */
+  const hizliBas = kayit && kayit.hizliBas || 0;
+  const hizliAdet = (kayit && kayit.hizliAdet) || 0;
+  if (kayit && simdiMs - hizliBas < ORAN_PENCERE_MS && hizliAdet >= ORAN_SINIR) {
+    return { gecer: false, sebep: 'oran', kalan: 0, yenilenmeMs: hizliBas + ORAN_PENCERE_MS, isle: async () => {} };
+  }
+
+  const adet = (kayit && kayit.adet) || 0;
+  const bas = (kayit && kayit.bas) || simdiMs;
+  const yeniHizli = (kayit && simdiMs - hizliBas < ORAN_PENCERE_MS)
+    ? { hizliBas, hizliAdet: hizliAdet + 1 }
+    : { hizliBas: simdiMs, hizliAdet: 1 };
+
+  /* oran sayacı her istekte yazılır — hak yakılmadan  */
+  try { await depo.yaz(anahtar, Object.assign({ adet, bas }, yeniHizli)); } catch (e) {}
+
+  if (adet >= KOTA_HAK) {
+    return { gecer: false, sebep: 'kota', kalan: 0, yenilenmeMs: bas + KOTA_PENCERE_MS, isle: async () => {} };
+  }
+
+  return {
+    gecer: true,
+    kalan: KOTA_HAK - adet - 1,
+    yenilenmeMs: bas + KOTA_PENCERE_MS,
+    /* YALNIZ BAŞARILI ANALİZ HAK YAKAR — geçersiz adres, ulaşılamayan
+       site ya da zaman aşımı hakkı tüketmez; yoksa yazım hatası yapan
+       ziyaretçi cezalandırılırdı. Bu yüzden artırma handler'ın sonunda,
+       sonuç üretildikten SONRA çağrılıyor. */
+    isle: async () => {
+      try { await depo.yaz(anahtar, Object.assign({ adet: adet + 1, bas }, yeniHizli)); } catch (e) {}
+    }
+  };
+}
 
 /* BÜTÇELER KOŞUM BAŞINA — istek başına DEĞİL.
    Sıradaki iş (SEO/GEO skoru) robots.txt ve sitemap.xml'i de okuyacak,
@@ -246,9 +365,23 @@ function score(items) {
   return tot ? Math.round(got / tot * 100) : 0;
 }
 
-exports.handler = async (event) => {
+/* Handler'ı depo adaptörüyle inşa eder — test sahte depoyla çağırır,
+   çalışma zamanı gerçek Blobs deposuyla (yayinla.js ile aynı desen). */
+function handlerOlustur(depo) {
+  return async function handler(event) {
   const H = { 'content-type': 'application/json', 'cache-control': 'no-store' };
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers: H, body: '{"ok":false}' };
+
+  /* Kapı EN BAŞTA: oran sınırı geçersiz gövdeli istekleri de kapsamalı,
+     yoksa saldırgan çöp gönderip sınırın etrafından dolanır. Hak ise
+     ancak analiz BAŞARILI olursa yakılıyor (aşağıda kapi.isle()). */
+  const kapi = await kotaKapisi(event, depo, process.env.KOTA_TUZ, Date.now());
+  if (!kapi.gecer) {
+    return {
+      statusCode: 429, headers: H,
+      body: JSON.stringify({ ok: false, reason: kapi.sebep, kalan: 0, yenilenmeMs: kapi.yenilenmeMs })
+    };
+  }
 
   let raw = '';
   try { raw = String((JSON.parse(event.body || '{}').url) || '').trim(); } catch (e) {}
@@ -290,6 +423,9 @@ exports.handler = async (event) => {
     }
   } catch (e) { items.push(S('sitemap', 'warn')); }
 
+  /* buraya gelindiyse analiz BAŞARILI — hak ancak şimdi yakılıyor */
+  await kapi.isle();
+
   return {
     statusCode: 200, headers: H,
     body: JSON.stringify({
@@ -299,14 +435,24 @@ exports.handler = async (event) => {
       score: score(items),
       ms: page.ms,
       kb: Math.round(page.bytes / 1024),
+      kalan: kapi.kalan,
       items
     })
   };
-};
+  };
+}
+
+exports.handler = handlerOlustur(blobsDepo());
 
 /* test: akış sınırı ağa çıkmadan, yerel bir uç noktaya karşı ölçülebilsin
    diye dışa veriliyor (safeUrl yerel adresi bilinçli reddettiği için
-   handler üzerinden ölçülemez). */
+   handler üzerinden ölçülemez). Kota da sahte depoyla, deterministik. */
 exports.grab = grab;
 exports.butceAc = butceAc;
 exports.TOPLAM_BAYT = TOPLAM_BAYT;
+exports.handlerOlustur = handlerOlustur;
+exports.kotaKapisi = kotaKapisi;
+exports.kimAnahtari = kimAnahtari;
+exports.istemciKimligi = istemciKimligi;
+exports.KOTA_HAK = KOTA_HAK;
+exports.KOTA_PENCERE_MS = KOTA_PENCERE_MS;

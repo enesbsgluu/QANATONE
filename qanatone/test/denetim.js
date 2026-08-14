@@ -1328,6 +1328,74 @@ async function guvenlik() {
        hata || `onKontrol=${onKontrol ? onKontrol.bytes : '-'}B akış=${akis ? akis.bytes : '-'}B bütçe=${D.TOPLAM_BAYT}B`);
   }
 
+  /* 100 · kota SOYUT KİMLİK anahtarıyla çalışıyor, ham IP saklanmıyor.
+     Üç şey birden kilitleniyor, çünkü üçü de sessizce bozulabilir:
+       · KİMLİK yalnız Netlify'ın kendi başlığından. x-forwarded-for
+         İSTEMCİ yazabilir; okunsaydı saldırgan her istekte başka değer
+         yazıp sınırı tamamen atlardı. Kural XFF'i değiştirip anahtarın
+         DEĞİŞMEDİĞİNİ ölçüyor.
+       · TUZ ortamdan. Sabit/gömülü tuzla özet gizlilik SAĞLAMAZ: IPv4
+         uzayı dört milyar adres, tamamı denenip özet geri çözülür. Kural
+         aynı IP'nin farklı tuzlarla farklı anahtar ürettiğini ölçüyor —
+         tuz gerçekten karışıma giriyor mu.
+       · HAM IP hiçbir yerde durmuyor: ne anahtarda ne değerde.
+     Depo sahte adaptörle veriliyor (yayinla.js deseni), ağa çıkılmaz. */
+  {
+    const D = require(path.join(KOK, 'netlify', 'functions', 'diagnose.js'));
+    const IP = '203.0.113.77';
+    /* kaynakta x-forwarded-for'a HİÇ bakılmıyor (yorumlar atılarak) */
+    const kaynak = (dosyalar['netlify/functions/diagnose.js'] || '')
+      .replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+    const kaynaktaXffYok = !/x-forwarded-for/i.test(kaynak);
+    let tuzKarisiyor = false, hamIpYok = false, xffYokSayiliyor = false;
+    let ucuncuRed = false, basarisizYakmadi = false, depoTemiz = false, tuzsuzCalisti = false;
+    const eskiTuz = process.env.KOTA_TUZ;
+    try {
+      const a1 = D.kimAnahtari(IP, 'tuz-bir');
+      const a2 = D.kimAnahtari(IP, 'tuz-iki');
+      tuzKarisiyor = a1 !== a2 && /^kim-[0-9a-f]{32}$/.test(a1);
+      hamIpYok = !a1.includes(IP) && !a1.includes('203');
+      /* XFF sahtelenirken kimlik değişmemeli */
+      const k1 = D.istemciKimligi({ headers: { 'x-nf-client-connection-ip': IP, 'x-forwarded-for': '1.2.3.4' } });
+      const k2 = D.istemciKimligi({ headers: { 'x-nf-client-connection-ip': IP, 'x-forwarded-for': '9.9.9.9' } });
+      xffYokSayiliyor = k1 === IP && k2 === IP;
+      const kutu = new Map();
+      const depo = {
+        async oku(k) { return kutu.has(k) ? JSON.parse(kutu.get(k)) : null; },
+        async yaz(k, v) { kutu.set(k, JSON.stringify(v)); },
+        async sil(k) { kutu.delete(k); }
+      };
+      process.env.KOTA_TUZ = 'denetim-tuzu';
+      const h = D.handlerOlustur(depo);
+      const olay = (ip, url) => ({ httpMethod: 'POST', headers: { 'x-nf-client-connection-ip': ip }, body: JSON.stringify({ url }) });
+      /* geçersiz adres: analiz başarısız → hak yakmamalı */
+      await h(olay('198.51.100.5', 'gecersiz adres!!'));
+      const s1 = JSON.parse((await h(olay('198.51.100.5', 'example.com'))).body);
+      basarisizYakmadi = s1.ok === true && s1.kalan === 1;
+      await h(olay('198.51.100.5', 'example.com'));
+      const r3 = await h(olay('198.51.100.5', 'example.com'));
+      ucuncuRed = r3.statusCode === 429 && JSON.parse(r3.body).reason === 'kota';
+      const hepsi = [...kutu.keys()].join(' ') + ' ' + [...kutu.values()].join(' ');
+      depoTemiz = !hepsi.includes('198.51.100') && !hepsi.includes('denetim-tuzu');
+      /* tuz yokken araç açık çalışmalı, depoya hiç yazmamalı */
+      delete process.env.KOTA_TUZ;
+      const kutu2 = new Map();
+      const depo2 = { async oku() { return null; }, async yaz(k, v) { kutu2.set(k, v); }, async sil() {} };
+      const eskiLog = console.log; console.log = () => {};
+      const rt = await D.handlerOlustur(depo2)(olay('198.51.100.9', 'example.com'));
+      console.log = eskiLog;
+      tuzsuzCalisti = JSON.parse(rt.body).ok === true && kutu2.size === 0;
+    } catch (e) {
+    } finally {
+      if (eskiTuz === undefined) delete process.env.KOTA_TUZ; else process.env.KOTA_TUZ = eskiTuz;
+    }
+    ol('kota: soyut kimlik anahtarı, ham IP yok, tuz ortamdan',
+       tuzKarisiyor && hamIpYok && xffYokSayiliyor && kaynaktaXffYok
+       && ucuncuRed && basarisizYakmadi && depoTemiz && tuzsuzCalisti,
+       `tuz=${tuzKarisiyor} hamIpYok=${hamIpYok} xff=${xffYokSayiliyor}/${kaynaktaXffYok} ` +
+       `ucuncuRed=${ucuncuRed} basarisizYakmadi=${basarisizYakmadi} depoTemiz=${depoTemiz} tuzsuz=${tuzsuzCalisti}`);
+  }
+
   /* 92 · panel kapısı (2026-08, canlıda ÖLÇÜLDÜ: ADMIN 200 anonim):
      `admin.html` yayın çıktısında duruyordu ve hiçbir kimlik kontrolü
      yoktu. Bugüne kadarki etkisi sınırlıydı çünkü yayın ucu zaten 503'tü;

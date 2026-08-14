@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 16:07 UTC
+> Üretim tarihi: 2026-08-14 16:27 UTC
 
 ## Yeni sohbete geçerken
 
@@ -27,7 +27,6 @@
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
 | `admin.html` |  | 58 KB | `b6cec20f` |
-| `akis-olcum.tmp.js` |  | 2 KB | `39a9dada` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
@@ -65,27 +64,28 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 845 KB | `d61d8c00` |
+| `index.html` |  | 847 KB | `c0e7301e` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
+| `kota-olcum.tmp.js` |  | 3 KB | `8700daf4` |
+| `kota-ui.tmp.js` |  | 3 KB | `f1f167d2` |
 | `lag-smoothing.diff` |  | 3 KB | `162af5ef` |
 | `layerize-willchange.diff` |  | 6 KB | `19452268` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
-| `netlify/functions/diagnose.js` |  | 14 KB | `1a68277c` |
+| `netlify/functions/diagnose.js` |  | 21 KB | `c3f354ef` |
 | `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
 | `netlify.toml` |  | 1 KB | `97cb97fb` |
 | `og.png` |  | 128 KB | `4bcf0d3e` |
-| `olc-c.tmp.js` |  | 4 KB | `ca2a8114` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
-| `package-lock.json` |  | 27 KB | `d607ad8f` |
-| `package.json` |  | 1 KB | `7660ac26` |
+| `package-lock.json` |  | 49 KB | `c6e087ad` |
+| `package.json` |  | 1 KB | `ba293467` |
 | `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
@@ -94,7 +94,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 85 KB | `224acd76` |
+| `test/denetim.js` |  | 89 KB | `ed617016` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -106,8 +106,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 44 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 49.4 MB |
+| son derleme | 136 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 49.5 MB |
 
 ## Çalıştırma
 
