@@ -3509,7 +3509,43 @@ a.ktcard:hover{background:#131317}
    "hareketi azalt" dediyse saygı duyulur.                            */
 @media(prefers-reduced-motion:reduce){.mkcore i{animation:none!important}}
 html.t-mo-off .mkcore i{animation:none!important}
+/* ============ MOTOR KABLOLARI (2026-08) ============
+   Girdi kartları → amblem → hipotez kartları. Sahnenin anlattığı
+   "girdi · motor · çıktı" zincirini görünür kılar.
+
+   KLASÖR TELLERİNDEN ÖĞRENİLENLER, BAŞTAN UYGULANDI:
+   · viewBox PİKSEL biriminde kurulur (JS ölçer, `0 0 W H` yazar) —
+     tek birim, dönüşüm yok, zoom hepsini birlikte ölçekler
+   · `vector-effect:non-scaling-stroke` KULLANILMAZ — o özellik çizgiyi
+     cihaz uzayında çizer, ölçüm ise CSS pikselinde; ikisi zoom'da ayrışır
+   · uzunluk `--L` özel değişkeniyle satır içi yazılır, dash ve offset
+     ikisi de CSS'ten okur → satır içi/CSS çakışması ve !important gerekmez
+   · konum ölçümü `offsetLeft/Top` ile yapılır, `getBoundingClientRect`
+     ile DEĞİL: kartlar açılmadan önce `translateX(-10px)` taşıyor,
+     rect bunu içerir ve uçlar kayardı. offset* düzen tabanlıdır,
+     dönüşümden etkilenmez
+   · ölçüm kaydırmada DEĞİL, yalnız kurulum ve yeniden boyutlandırmada  */
+.mkeng{position:relative}
+.mkwire{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  z-index:0;overflow:visible}
+.mkwire path{fill:none;stroke:rgba(239,35,60,.42);stroke-width:1.2;stroke-linecap:round;
+  stroke-dasharray:var(--L,300);stroke-dashoffset:var(--L,300);
+  transition:stroke-dashoffset .85s var(--e);transition-delay:var(--d,0s)}
+.mkwire circle{fill:var(--red);opacity:0;transition:opacity .4s var(--e) var(--d,0s)}
+.mkact.on .mkwire path.on{stroke-dashoffset:0}
+.mkact.on .mkwire circle.on{opacity:.85}
+/* akış darbesi: kablo boyunca yürüyen kıvılcım. offset-path desteği
+   yoksa JS hiç eklemez, kablolar yine çizilir.                       */
+.mkwire .kiv{fill:#ff8a9b;opacity:0;animation:kivGit 2.6s linear infinite;
+  animation-play-state:paused}
+.mkact.on .mkwire .kiv.on{opacity:.95;animation-play-state:running}
+@keyframes kivGit{from{offset-distance:0%}to{offset-distance:100%}}
+.mkins,.mkcore,.mkhyps{position:relative;z-index:1}
 .mkhyps{display:flex;flex-direction:column;gap:8px;justify-content:center}
+@media(prefers-reduced-motion:reduce){
+  .mkwire path{transition:none}
+  .mkwire .kiv{animation:none;opacity:0}}
+html.t-mo-off .mkwire .kiv{animation:none;opacity:0}
 .mkhy{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:9px 13px;border-radius:10px;background:rgba(255,255,255,.04);
   border:1px solid var(--line2);opacity:0;transform:translateX(10px);
@@ -7895,7 +7931,8 @@ function marketStage(d,L,tx){
 
       /* 5 — davranışsal motor */
       +'<section class="mkact" data-a="4">'
-        +'<div class="mkeng"><div class="mkins">'+ins+'</div>'
+        +'<div class="mkeng"><svg class="mkwire" aria-hidden="true"></svg>'
+          +'<div class="mkins">'+ins+'</div>'
           +'<div class="mkcore" role="img" aria-label="'+tx(m.engineLab)+'">'
             +'<i class="amDis"></i><i class="amBeyin"></i><i class="amIc"></i></div>'
           +'<div class="mkhyps">'+hyp+'</div></div>'
@@ -8197,6 +8234,60 @@ window.__sdMotion=function(s){
             mrail=$$('#mkStage .mkstep');
       const MN=Math.max(1,macts.length);
       const CL2=v=>Math.max(0,Math.min(1,v));
+      /* ---- motor kabloları: ölç, çiz, bağla ----------------------------
+         Girdi kartlarından amblemin çemberine, çemberden hipotez
+         kartlarına eğri kablolar. Ölçüm offsetLeft/Top ile yapılır —
+         kartlar açılmadan önce translateX(-10px) taşıdığı için
+         getBoundingClientRect uçları kaydırırdı. viewBox piksel
+         biriminde kurulur; tek birim olduğu için zoom bozmaz.        */
+      const kabloKur=()=>{
+        const eng=mk.querySelector('.mkeng'), svg=mk.querySelector('.mkwire'),
+              core=mk.querySelector('.mkcore');
+        if(!eng||!svg||!core)return;
+        const W=eng.offsetWidth, H=eng.offsetHeight;
+        if(W<40||H<40)return;                    /* düzen henüz yok */
+        svg.setAttribute('viewBox','0 0 '+W+' '+H);
+        const gir=[].slice.call(mk.querySelectorAll('.mkins .mkin')),
+              cik=[].slice.call(mk.querySelectorAll('.mkhyps .mkhy'));
+        const cx=core.offsetLeft+core.offsetWidth/2,
+              cy=core.offsetTop+core.offsetHeight/2,
+              R=core.offsetWidth/2*0.93;         /* dişlinin dış çemberi */
+        const destek=(typeof CSS!=='undefined'&&CSS.supports&&
+                      CSS.supports('offset-path','path("M0,0L1,1")'));
+        let ic='';
+        const yol=(sx,sy,ex,ey)=>{
+          /* karttan yatay çıkar, çembere ışınsal girer */
+          const dx=ex-sx, dy=ey-sy, u=Math.hypot(dx,dy)||1;
+          const c1x=sx+dx*0.42, c1y=sy;
+          const c2x=ex-(dx/u)*Math.abs(dx)*0.34, c2y=ey-(dy/u)*Math.abs(dx)*0.34;
+          return 'M'+sx.toFixed(1)+','+sy.toFixed(1)
+                +' C'+c1x.toFixed(1)+','+c1y.toFixed(1)
+                +' '+c2x.toFixed(1)+','+c2y.toFixed(1)
+                +' '+ex.toFixed(1)+','+ey.toFixed(1);
+        };
+        const ekle=(sx,sy,d,i,gecikme)=>{
+          const dx=sx-cx, dy=sy-cy, u=Math.hypot(dx,dy)||1;
+          const ex=cx+dx/u*R, ey=cy+dy/u*R;
+          const dd=yol(sx,sy,ex,ey);
+          ic+='<path class="kb'+d+'" data-i="'+i+'" style="--d:'+gecikme+'s" d="'+dd+'"/>'
+             +'<circle class="kbn'+d+'" data-i="'+i+'" style="--d:'+gecikme+'s" cx="'+sx.toFixed(1)+'" cy="'+sy.toFixed(1)+'" r="2.2"/>';
+          if(destek)ic+='<circle class="kiv kbk'+d+'" data-i="'+i+'" r="2.6" style="offset-path:path(\''+dd+'\');animation-delay:'+(gecikme+0.2).toFixed(2)+'s"/>';
+        };
+        gir.forEach((el,i)=>ekle(el.offsetLeft+el.offsetWidth, el.offsetTop+el.offsetHeight/2,'in',i,0.06*i));
+        cik.forEach((el,i)=>ekle(el.offsetLeft, el.offsetTop+el.offsetHeight/2,'out',i,0.06*i));
+        svg.innerHTML=ic;
+        /* uzunluk: viewBox piksel olduğu için dönüşüm gerekmez */
+        [].slice.call(svg.querySelectorAll('path')).forEach(pt=>{
+          try{pt.style.setProperty('--L',Math.ceil(pt.getTotalLength())+4);}catch(e){}
+        });
+      };
+      window.__mkKablo=kabloKur;
+      let kbBekle=false;
+      addEventListener('resize',()=>{
+        if(kbBekle)return; kbBekle=true;
+        requestAnimationFrame(()=>{kbBekle=false;kabloKur();});
+      },{passive:true});
+
       const mapDraw=mkMap(mk,(s.det&&s.det.market)||{},
         o=>o?(o[LG()]||o.tr||''):'',LG()==='en');
       const mdraw=p=>{
@@ -8245,7 +8336,17 @@ window.__sdMotion=function(s){
         /* 5 motor: girdiler akar, hipotezler yarışır, biri kalır */
         const a4=A(4);
         $$('#mkStage .mkin').forEach((x,i)=>x.classList.toggle('on',a4>.04+i*.055));
+        /* kablolar sahnenin ritmine dokunuyor: kart gelir → kablosu
+           motora uzanır → motor yanar → çıkış kabloları uzanır →
+           hipotezler belirir. Eşikler kartların eşiğinin hemen
+           ardında.                                                   */
+        $$('#mkStage .mkwire .kbin, #mkStage .mkwire .kbnin')
+          .forEach(x=>x.classList.toggle('on',a4>.10+(+x.dataset.i||0)*.055));
         const co=mk.querySelector('.mkcore'); if(co)co.classList.toggle('on',a4>.30);
+        $$('#mkStage .mkwire .kbout, #mkStage .mkwire .kbnout')
+          .forEach(x=>x.classList.toggle('on',a4>.40+(+x.dataset.i||0)*.07));
+        $$('#mkStage .mkwire .kiv')
+          .forEach(x=>x.classList.toggle('on',a4>.52));
         $$('#mkStage .mkhy').forEach((x,i)=>{
           x.classList.toggle('on',a4>.44+i*.07);
           x.classList.toggle('out',a4>.76&&!x.classList.contains('win'));
@@ -8272,6 +8373,13 @@ window.__sdMotion=function(s){
       };
       window.__sdDraw2=mdraw;
       mdraw(0);
+      /* kabloları düzen oturunca ölç: hemen bir kez, sonra bir kare
+         sonra (yazı tipi ve ızgara yerleşsin), bir de font hazır
+         olduğunda. Kaydırmada ölçüm YOK.                        */
+      kabloKur();
+      requestAnimationFrame(kabloKur);
+      setTimeout(kabloKur,180);
+      if(document.fonts&&document.fonts.ready)document.fonts.ready.then(kabloKur);
       if(!REDUCE&&window.ScrollTrigger){
         const mw=mk.closest('.sdsec')||mk;
         setTimeout(()=>{

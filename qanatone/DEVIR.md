@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-13 23:18 UTC
+> Üretim tarihi: 2026-08-14 08:39 UTC
 
 ## Yeni sohbete geçerken
 
@@ -63,13 +63,14 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 829 KB | `8c8b1b07` |
+| `index.html` |  | 836 KB | `4b87011c` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
 | `lag-smoothing.diff` |  | 3 KB | `162af5ef` |
 | `layerize-willchange.diff` |  | 6 KB | `19452268` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
+| `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
@@ -88,7 +89,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 61 KB | `eba4d0a7` |
+| `test/denetim.js` |  | 63 KB | `48b0d495` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -101,7 +102,7 @@
 | sitemap URL | 58 |
 | denetim suite | temiz |
 | son derleme | 113 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 48.3 MB |
+| dist boyutu | 48.7 MB |
 
 ## Çalıştırma
 

@@ -675,6 +675,36 @@ function ciktiDenetimi() {
        uc && yonDogru && oranDogru && durur && etiket,
        `katman=${uc} yon=${yonDogru} oran=${oran.toFixed(3)}(hedef 1.667) durur=${durur} etiket=${etiket}`);
   }
+  /* 90 · motor kabloları sözleşmesi (2026-08):
+     Klasör tellerinde üç tur kaybettiren hataların hepsi burada baştan
+     kilitleniyor.
+     · viewBox JS'ten PİKSEL biriminde kurulur (`0 0 W H`) — tek birim,
+       dönüşüm yok, zoom hepsini birlikte ölçekler
+     · `non-scaling-stroke` YASAK — çizgiyi cihaz uzayında çizer, ölçüm
+       CSS pikselinde; zoom'da ayrışırlar (tel hatasının asıl kökü)
+     · konum `offsetLeft/offsetTop` ile ölçülür, `getBoundingClientRect`
+       ile DEĞİL: kartlar açılmadan `translateX(-10px)` taşıyor, rect
+       bunu içerir ve uçlar kayardı
+     · ölçüm kaydırmada YOK — yalnız kurulum ve resize
+     · sınıf adları `kb…` önekli: hipotez kartı `win` sınıfı alabiliyor,
+       kablolara `win` demek çakışma olurdu (az kalsın yaşandı) */
+  {
+    const kaynakK = fs.readFileSync(SRC, 'utf8');
+    const kod = kaynakK.replace(/\/\*[\s\S]*?\*\//g, '');
+    const iK = kod.indexOf('const kabloKur=');
+    const bolge = iK > -1 ? kod.slice(iK, iK + 2600) : '';
+    const pikselViewBox = bolge.indexOf("setAttribute('viewBox','0 0 '+W+' '+H)") > -1;
+    const duzenOlcumu = bolge.indexOf('offsetLeft') > -1
+                     && bolge.indexOf('getBoundingClientRect') === -1;
+    const wireCss = (kod.match(/\.mkwire path\{[^}]*\}/) || [''])[0];
+    const cihazUzayiYok = wireCss.indexOf('non-scaling-stroke') === -1;
+    const ozelDegisken = wireCss.indexOf('var(--L') > -1;
+    const kaydirmaYok = bolge.indexOf("addEventListener('scroll'") === -1;
+    const onek = bolge.indexOf('class="kb') > -1;
+    ol('motor kabloları (piksel viewBox · düzen ölçümü · cihaz-uzayı yasak)',
+       iK > -1 && pikselViewBox && duzenOlcumu && cihazUzayiYok && ozelDegisken && kaydirmaYok && onek,
+       `viewBox=${pikselViewBox} offset=${duzenOlcumu} nonScalingYok=${cihazUzayiYok} degisken=${ozelDegisken} kaydirmaYok=${kaydirmaYok} onek=${onek}`);
+  }
   const sayfalar = [];
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
