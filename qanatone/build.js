@@ -73,7 +73,12 @@ const ozet = v => crypto.createHash('sha1')
    netlify/functions'tan derleniyor. Yayın klasörüne kopyalansaydı
    fonksiyon kaynak kodu /netlify/functions/diagnose.js adresinden
    herkese okunur hâle gelirdi — gereksiz bilgi ifşası.                */
-const KOPYA = ['img', 'js', 'admin.html', '_headers', 'content.json', 'og.png'];
+/* admin.html LİSTEDE YOK (2026-08): panel statik dosya olarak yayına
+   çıkarsa anonim 200 döner — ölçüldü, dönüyordu. Panel artık
+   netlify/functions/panel.js'ten, Basic Auth kapısının ardından
+   servis ediliyor; /admin.html adresi aşağıda zorlamalı yönlendirmeyle
+   o fonksiyona bağlanıyor. Kaynakta duruyor, yayın çıktısında durmuyor. */
+const KOPYA = ['img', 'js', '_headers', 'content.json', 'og.png'];
 const BEKLE = 260;               // her rotadan sonra render'ın oturması için
 
 /* ---------- yardımcılar ---------- */
@@ -451,6 +456,26 @@ function kopyala(src, dst) {
   await dur(500);
   const { svc, prj, pst } = rotalar(kesif.window, kesif.window.document);
   const C0 = kesif.window.__qanatExport();
+
+  /* content.json ZİNCİRİ — panel hiç yayınlamamışken bile geçerli bir
+     varsayılan bas. 2026-08 canlıda ölçüldü: /content.json 404 dönüyordu
+     (gövdesi Netlify'ın 257 KB'lık HTML 404 sayfası), çünkü dosya YALNIZ
+     panelden gelirse kopyalanıyordu ve panel PANEL_PAROLA_HASH tanımsız
+     olduğu için hiç yayın yapmamıştı. Sonuç: applyContent() panel
+     verisiyle hiç koşmadı, panelden yönetilen her ayar üretimde ölüydü.
+     ÖNCELİK KORUNUYOR: dosya kökte varsa (panel yayınlamış, commit gelmiş)
+     KOPYA turu onu zaten dist'e koydu, buraya girilmez — panelin ürünü
+     varsayılanı EZER, tersi değil.
+     Varsayılan elle yazılmıyor: sitenin kendi sözlüğü (__qanatExport)
+     basılıyor. İki üreteç doğurmamak için tek kaynak ilkesi burada da
+     geçerli — DATA değişince bu dosya kendiliğinden güncel kalır.
+     KAYNAK KLASÖRÜNE YAZILMIYOR: content.json panelin ürünüdür, pakette
+     durmaz; bu yalnız yayın çıktısındaki kopyadır.                    */
+  if (!fs.existsSync(path.join(OUT, 'content.json'))) {
+    yaz('content.json', JSON.stringify(C0, null, 2));
+    console.log('  (panel henuz yayinlamamis — varsayilan icerik basildi)');
+  }
+
   kesif.window.close();
   console.log(`  ${svc.length} hizmet detayi · ${prj.length} proje · ${pst.length} yazi\n`);
 
@@ -559,7 +584,12 @@ function kopyala(src, dst) {
       '# Uretec yaziyor (build.js) — elle duzenleme.\n' +
       '# Bilinen rotalar kendi on-render edilmis dosyasina gider.\n' +
       bilinen.join('\n') +
-      '\n\n# Taninmayan adres: gercek 404. Yumusak 404 uretmemek icin sart.\n' +
+      '\n\n# Panel kapisi: /admin.html artik statik dosya DEGIL, Basic Auth\n' +
+      '# ardindaki fonksiyondan geliyor. 200! zorlamali — ileride dist e\n' +
+      '# bir admin.html kopyasi sizarsa statik dosya kapiyi gecersiz\n' +
+      '# kilardi; force bunu imkansiz yapar.\n' +
+      '/admin.html  /.netlify/functions/panel  200!\n' +
+      '\n# Taninmayan adres: gercek 404. Yumusak 404 uretmemek icin sart.\n' +
       '/*  /404.html  404\n');
 
     /* 404 sayfası: ana sayfanın kabuğu + kısa mesaj, noindex */

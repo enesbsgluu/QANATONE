@@ -52,7 +52,13 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
-- `content.json` panelin ürünüdür, pakette durmaz — dışarıdan gelir.
+- `content.json` panelin ürünüdür, KAYNAKTA durmaz — ama derleme onu
+  `dist/`e her zaman basar (sitenin kendi varsayılanından); panel
+  yayınlarsa onun dosyası ezer. Yoksa `/content.json` 404 olur ve
+  panelden yönetilen her ayar sessizce ölür — 2026-08'de üç ay öyle döndü.
+- Panel yayın çıktısında statik dosya olarak DURMAZ: `/admin.html`
+  zorlamalı yönlendirmeyle `functions/panel.js`'e düşer, Basic Auth
+  aynı `PANEL_PAROLA_HASH`'i ölçer. Tek sır, iki kapı.
 
 ## Tuzaklar — hepsi yaşandı
 

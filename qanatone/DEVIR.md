@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 09:14 UTC
+> Üretim tarihi: 2026-08-14 13:09 UTC
 
 ## Yeni sohbete geçerken
 
@@ -19,10 +19,10 @@
 |---|---|---|---|
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
-| `CLAUDE.md` |  | 7 KB | `73b4546a` |
+| `CLAUDE.md` |  | 7 KB | `95c6c286` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DEVIR.md` | bu dosya | 5 KB |  |
-| `NETLIFY-KURULUM.md` |  | 7 KB | `4a94ad7d` |
+| `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
@@ -30,7 +30,7 @@
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
-| `build.js` |  | 30 KB | `a13aef2a` |
+| `build.js` |  | 32 KB | `21172541` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
@@ -74,10 +74,11 @@
 | `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
+| `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
 | `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
-| `netlify/functions/yayinla.js` |  | 6 KB | `b7f8e6b6` |
+| `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
-| `netlify.toml` |  | 0 KB | `3792c4f8` |
+| `netlify.toml` |  | 1 KB | `97cb97fb` |
 | `og.png` |  | 128 KB | `4bcf0d3e` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 27 KB | `d607ad8f` |
@@ -90,7 +91,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 64 KB | `a471446b` |
+| `test/denetim.js` |  | 70 KB | `69972e16` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -102,8 +103,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 131 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 48.8 MB |
+| son derleme | 126 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 48.9 MB |
 
 ## Çalıştırma
 

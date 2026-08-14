@@ -805,6 +805,34 @@ function ciktiDenetimi() {
   ol('shell.html taramadan çıkarılmış', rb.includes('Disallow: /shell.html'), '');
   ol('admin.html taramadan çıkarılmış', rb.includes('Disallow: /admin.html'), '');
   ol('fonksiyon kaynağı yayında değil', !fs.existsSync(path.join(DIST, 'netlify')), '');
+
+  /* 91 · content.json zinciri (2026-08, canlıda ÖLÇÜLDÜ):
+     `/content.json` üretimde 404 dönüyordu. Sebep tek bir eksik dosya
+     değil, kapalı bir zincirdi: PANEL_PAROLA_HASH tanımsız → yayinla 503
+     → panel bugüne kadar HİÇ yayın yapmadı → content.json hiç doğmadı →
+     KOPYA listesindeki `existsSync` guard'ı sessizce atladı → sitede
+     `applyContent()` panel verisiyle HİÇ koşmadı. Panelden yönetilen her
+     ayar (gtm dahil) üretimde ölüydü ve HİÇBİR kural bunu görmüyordu:
+     kaynak doğru, fonksiyon doğru, çıktı eksik. Klasik yanlış yeşil.
+     SÖZLEŞME: panel hiç yayınlamamış olsa bile derleme geçerli bir
+     varsayılan basar; panel yayınladığında onun dosyası bunun yerini
+     alır. Kural ÇIKTIYI ölçer (kaynağı değil) — dosya var mı, JSON
+     olarak ayrışıyor mu, omurga anahtarları duruyor mu. Boş bir `{}`
+     de 200 dönerdi ama zinciri kanıtlamazdı, o yüzden omurga aranıyor. */
+  {
+    const cy = path.join(DIST, 'content.json');
+    let veri = null, hata = '';
+    if (!fs.existsSync(cy)) hata = 'dosya yok';
+    else { try { veri = JSON.parse(fs.readFileSync(cy, 'utf8')); }
+           catch (e) { hata = 'JSON ayrıştırılamadı'; } }
+    const anahtar = (veri && typeof veri === 'object' && !Array.isArray(veri))
+      ? Object.keys(veri) : [];
+    const omurga = ['services', 'projects', 'posts', 'strings']
+      .filter(k => anahtar.includes(k));
+    ol('dist/content.json var ve geçerli JSON (varsayılan içerik)',
+       !!veri && omurga.length === 4,
+       hata || `${anahtar.length} anahtar · omurga ${omurga.length}/4`);
+  }
 }
 
 /* =====================================================================
@@ -964,7 +992,7 @@ async function statikDogrudanYukleme() {
 /* =====================================================================
    4 · GÜVENLİK — statik tarama
    ===================================================================== */
-function guvenlik() {
+async function guvenlik() {
   bolum('4 · güvenlik');
   const dosyalar = {};
   (function tara(d, derinlik) {
@@ -1056,6 +1084,89 @@ function guvenlik() {
     : '';
   for (const b of ['X-Frame-Options', 'X-Content-Type-Options', 'Referrer-Policy', 'Permissions-Policy'])
     ol(`güvenlik başlığı: ${b}`, new RegExp('^\\s+' + b + '\\s*:\\s*\\S', 'm').test(hd), '');
+
+  /* 92 · panel kapısı (2026-08, canlıda ÖLÇÜLDÜ: ADMIN 200 anonim):
+     `admin.html` yayın çıktısında duruyordu ve hiçbir kimlik kontrolü
+     yoktu. Bugüne kadarki etkisi sınırlıydı çünkü yayın ucu zaten 503'tü;
+     PANEL_PAROLA_HASH tanımlandığı AN aynı açık yüzey ciddileşiyor —
+     ikisi bu yüzden aynı turda hareket ediyor.
+     SEÇİLEN YOL: sunucu tarafı kapı. Statik panel dist'ten çıkarıldı,
+     /admin.html zorlamalı yönlendirmeyle (200!) panel fonksiyonuna
+     düşüyor, fonksiyon HTTP Basic Auth ile aynı scrypt hash'ine karşı
+     doğruluyor. Kimlik kanıtlanmadan panelin tek baytı gitmiyor.
+     Kural DAVRANIŞI ölçer, deseni değil: fonksiyon gerçekten çağrılıp
+     anonim/yanlış/doğru üç yol da koşturuluyor. Kaynakta 'Basic' geçmesi
+     yeşil saymaya yetmez — bu suite'te üç kez yanlış yeşil o yoldan
+     geldi. Statik kopyanın yokluğu da şart: kopya kalsaydı kapı
+     dururken herkes yan kapıdan girerdi. */
+  {
+    const crypto = require('crypto');
+    const eskiHash = process.env.PANEL_PAROLA_HASH;
+    let statikYok = false, yonlendirme = false;
+    let anonim = false, yanlisRed = false, dogruGecer = false, not = '';
+    try {
+      statikYok = !fs.existsSync(path.join(DIST, 'admin.html'));
+      const rdY = path.join(DIST, '_redirects');
+      const rd = fs.existsSync(rdY)
+        ? fs.readFileSync(rdY, 'utf8').split('\n')
+            .filter(l => l.trim() && !l.trim().startsWith('#')).join('\n')
+        : '';
+      yonlendirme = /^\/admin\.html\s+\/\.netlify\/functions\/panel\s+200!$/m.test(rd);
+
+      const parola = 'denetim-kapi-parolasi';
+      const tuz = crypto.randomBytes(16).toString('hex');
+      process.env.PANEL_PAROLA_HASH =
+        tuz + ':' + crypto.scryptSync(parola, tuz, 64).toString('hex');
+      const { handler } = require(path.join(KOK, 'netlify', 'functions', 'panel.js'));
+      const basic = p => 'Basic ' + Buffer.from('panel:' + p).toString('base64');
+
+      const rA = await handler({ httpMethod: 'GET', headers: {} });
+      anonim = rA.statusCode === 401 &&
+        Object.keys(rA.headers || {}).some(k => k.toLowerCase() === 'www-authenticate');
+      const rY = await handler({ httpMethod: 'GET', headers: { authorization: basic('yanlis') } });
+      yanlisRed = rY.statusCode === 401;
+      const rD = await handler({ httpMethod: 'GET', headers: { authorization: basic(parola) } });
+      dogruGecer = rD.statusCode === 200 && String(rD.body).includes('id="yayinParola"');
+      not = `anonim=${rA.statusCode} yanlis=${rY.statusCode} dogru=${rD.statusCode}`;
+    } catch (e) {
+      not = 'kapı yok/çalışmadı: ' + String((e && e.message) || e).slice(0, 60);
+    } finally {
+      if (eskiHash === undefined) delete process.env.PANEL_PAROLA_HASH;
+      else process.env.PANEL_PAROLA_HASH = eskiHash;
+    }
+    ol('panel kapısı: statik panel yayında yok + kimliksiz geçilmiyor',
+       statikYok && yonlendirme && anonim && yanlisRed && dogruGecer,
+       `statikYok=${statikYok} yonlendirme=${yonlendirme} ${not}`);
+  }
+
+  /* 93 · saklanan hash'in BİÇİMİ doğrulanıyor (2026-08):
+     dogrula() keylen'i saklanan hash'in UZUNLUĞUNDAN türetiyordu
+     (`beklenen.length || 64`). scrypt'in son adımı 1 turluk PBKDF2'dir:
+     kısa keylen çıktısı, uzun keylen çıktısının İLK BAYTLARIDIR. Yani
+     ortam değişkenine kırpık bir hash düşerse (yapıştırırken satır
+     kesildi, kopya eksik alındı) doğrulama sessizce ilk N bayta iner ve
+     zayıflar — 401 vermez, hata vermez, KABUL EDER. Kırpılmış hash'i
+     üretimde hiçbir belirti ele vermez; bu yüzden kural davranışı
+     ölçüyor: tam biçim geçer, kırpığı DÜŞER. Tek geçerli biçim
+     parola-hash.js'in ürettiğidir: 32 hex tuz + ':' + 128 hex (64 bayt). */
+  {
+    const crypto = require('crypto');
+    let tamGecer = false, kirpikRed = false, tekHexRed = false, not = '';
+    try {
+      const { dogrula } = require(path.join(KOK, 'netlify', 'functions', 'yayinla.js'));
+      const parola = 'denetim-bicim-parolasi';
+      const tuz = crypto.randomBytes(16).toString('hex');
+      const tam = crypto.scryptSync(parola, tuz, 64).toString('hex');
+      tamGecer = dogrula(parola, tuz + ':' + tam) === true;
+      /* 32 baytlık önek — eski kod bunu KABUL ediyordu */
+      kirpikRed = dogrula(parola, tuz + ':' + tam.slice(0, 64)) === false;
+      /* tek karakter eksik: Buffer.from(hex) sessizce kırpar */
+      tekHexRed = dogrula(parola, tuz + ':' + tam.slice(0, 127)) === false;
+      not = `tam=${tamGecer} kirpik=${kirpikRed} tekEksik=${tekHexRed}`;
+    } catch (e) { not = String((e && e.message) || e).slice(0, 60); }
+    ol('yayinla: hash biçimi doğrulanıyor (kırpık hash reddediliyor)',
+       tamGecer && kirpikRed && tekHexRed, not);
+  }
 }
 
 /* =====================================================================
@@ -1092,7 +1203,7 @@ function tasarim(s) {
   await calisma();
   ciktiDenetimi();
   await statikDogrudanYukleme();
-  guvenlik();
+  await guvenlik();          /* panel kapısı gerçekten çağrılıyor (92) */
   tasarim(s);
 
   console.log('');
