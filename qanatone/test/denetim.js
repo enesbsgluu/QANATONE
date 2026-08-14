@@ -736,6 +736,7 @@ function ciktiDenetimi() {
      rotaYap('bulten\\google-ads-maliyetleri-2026\\index.html'));
 
   let dupId = 0, altYok = 0, adsizLink = 0, h1Kotu = [], ldKotu = 0, viewportYok = 0;
+  const adsizAlan = [];   /* 94 · name'i olmayan form alanları */
   const kanon = {}, baslik = {}, aciklama = {}, gelen = {};
   const varOlan = new Set(sayfalar.map(yolu));
   let enEn = 0, enTr = 0;
@@ -760,6 +761,29 @@ function ciktiDenetimi() {
     (baslik[(d.title || '').trim()] ||= []).push(yol);
     (aciklama[g('meta[name=description]', 'content') || ''] ||= []).push(yol);
 
+    /* 94 · SINIF KURALI — name'i olmayan alan gönderimde HİÇ yer almaz.
+       2026-08 BULUNDU: KVKK onay kutusunda name yoktu; kullanıcı ekranda
+       onay veriyor, Netlify Forms kaydında teknik iz kalmıyordu. Belirti
+       tek kutuydu, sınıf ise "adsız alan"; kural sınıfı kapatıyor, çünkü
+       bir sonraki form (bülten) statik çıktıya girdiğinde aynı kapıdan
+       geçecek. Netlify alanları DERLEME ANINDAKİ statik HTML'den tanıdığı
+       için ölçüm çıktıda yapılıyor — kaynakta değil.
+       Honeypot hariç: adı formun kendi netlify-honeypot özniteliğinden
+       okunuyor, burada sabit yazılmıyor (form adı değişirse kural da
+       kendiliğinden uyar). Düğmeler dışarıda: submit/button/reset/image
+       gönderimde ad taşımak zorunda değil. */
+    for (const fr of d.querySelectorAll('form')) {
+      const tuzak = fr.getAttribute('netlify-honeypot') || '';
+      for (const el of fr.querySelectorAll('input, select, textarea')) {
+        const tip = (el.getAttribute('type') || '').toLowerCase();
+        if (['submit', 'button', 'reset', 'image'].includes(tip)) continue;
+        const ad = el.getAttribute('name') || '';
+        if (ad && ad === tuzak) continue;
+        if (!ad) adsizAlan.push(`${yol}:${fr.id || fr.getAttribute('name') || 'form'}` +
+          `/${el.id || el.tagName.toLowerCase()}${tip ? '[' + tip + ']' : ''}`);
+      }
+    }
+
     const linkler = [...d.querySelectorAll('a[href^="/"]')]
       .map(a => (a.getAttribute('href') || '').split(/[?#]/)[0].replace(/\/$/, '') || '/');
     for (const l of new Set(linkler)) if (varOlan.has(l)) (gelen[l] ||= new Set()).add(yol);
@@ -767,6 +791,42 @@ function ciktiDenetimi() {
       enEn += linkler.filter(l => l.startsWith('/en')).length;
       enTr += linkler.filter(l => !l.startsWith('/en') && varOlan.has(l)).length;
     }
+  }
+
+  ol('statik çıktıda adsız form alanı yok (honeypot hariç)',
+     adsizAlan.length === 0,
+     adsizAlan.length ? `${adsizAlan.length} alan · ` + [...new Set(adsizAlan.map(x => x.split(':')[1]))].slice(0, 3).join(' ') : '');
+
+  /* 95 · KVKK onay kaydı — iki alan da ÇIKTIDA olmalı.
+     Netlify formu ön-render edilmiş HTML'den tarıyor; çalışma anında
+     eklenen alan kayda hiç girmez (bugün iki kez bunun bedeli ödendi).
+     G1 KALICI KARARI BURADA KİLİTLENİYOR: forma istemci zaman damgası
+     EKLENMEZ. Gizli zaman alanı DOM'da durur, gönderen istediği değere
+     çevirir; kayda kanıt gibi görünen ama uydurulabilir bir alan girer —
+     kaydın kendisinden kötüsü, YANLIŞ GÜVEN veren kayıttır. Güvenilir
+     zaman Netlify'ın sunucu tarafında yazdığı created_at'tir. Kural bu
+     yüzden alanların varlığını DEĞİL, zaman alanının YOKLUĞUNU da ölçer:
+     ileride "kanıt güçlensin" diye eklenmek istenirse kırmızı yanar ve
+     tartışma koda değil bu yoruma döner. */
+  {
+    const oku = p => fs.existsSync(p) ? new JSDOM(fs.readFileSync(p, 'utf8')).window.document : null;
+    const bak = d => {
+      const fr = d && d.getElementById('leadForm');
+      if (!fr) return { var: false, not: 'form yok' };
+      const onay = fr.querySelector('input[type="checkbox"][name="kvkk_onay"]');
+      const ozet = fr.querySelector('input[type="hidden"][name="kvkk_metin_ozet"]');
+      const zaman = [...fr.querySelectorAll('[name]')]
+        .map(e => e.getAttribute('name'))
+        .filter(n => /zaman|time|tarih|_ts$|damga/i.test(n));
+      return {
+        var: !!onay && onay.getAttribute('value') === 'evet' && !!ozet && zaman.length === 0,
+        not: `onay=${!!onay}/${onay ? onay.getAttribute('value') : '-'} ozet=${!!ozet} zamanAlani=${zaman.join(',') || 'yok'}`
+      };
+    };
+    const tr = bak(oku(path.join(DIST, 'index.html')));
+    const en = bak(oku(path.join(DIST, 'en', 'index.html')));
+    ol('lead formu: onay + metin özeti alanları statik çıktıda (zaman alanı yok)',
+       tr.var && en.var, `TR[${tr.not}] EN[${en.not}]`);
   }
 
   ol('mükerrer id yok', dupId === 0, String(dupId));
