@@ -321,6 +321,52 @@ async function calisma() {
     dom.window.close();
   }
 
+  /* 101 · gösterim tarafı: taranan alan adı ve KOTA MESAJI metin olarak
+     basılır, adrese kodlanarak girer.
+     2026-08 ÖLÇÜLDÜ (yama değil, önce ölçüm): dört nokta soruldu —
+     (1) girdi anında ekrana yansımıyor, (2) #dgHost textContent ile
+     basılıyor, (3) wa.me adresi encodeURIComponent'ten geçiyor,
+     (4) sonuç ekranı paylaşılabilir adres üretmiyor. Yani bugün yansıyan
+     XSS YOK. Kural bulguyu değil, bu DURUMU kilitliyor: sayfada 67
+     innerHTML var; alan adı bir gün onlardan birine düşerse zincir
+     depolanmış XSS'e kapanır ve bunu hiçbir şey söylemez.
+     Kota mesajı da kapsamda: o da ekrana basılan bir metindir ve yanına
+     bir bağlantı koyuyoruz — en kolay innerHTML'e kayacak yer orasıdır. */
+  {
+    const kotu = 'evil"><img src=x onerror=alert(1)>';
+    const { dom } = ortam(html, ORIGIN + '/');
+    const w = dom.window, d = w.document;
+    await dur(700);
+    w.fetch = () => Promise.resolve({ status: 200, ok: true, json: () => Promise.resolve({
+      ok: true, host: kotu, finalUrl: 'https://' + kotu, score: 42, ms: 1200, kb: 100,
+      items: [{ k: 'https', state: 'fail', v: '' }, { k: 'desc', state: 'fail', v: '25' }] }) });
+    const url = d.querySelector('#dgUrl'), go = d.querySelector('#dgGo');
+    if (url) url.value = 'ornek.com';
+    if (go) go.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+    await dur(500);
+    const dh = d.querySelector('#dgHost');
+    const metinOlarak = !!dh && dh.children.length === 0 && dh.textContent.includes(kotu);
+    const enjekteYok = !d.querySelector('img[onerror]') && !d.querySelector('#dgRes script');
+    const waA = d.querySelector('#dgFix a[href*="wa.me"]');
+    const href = waA ? waA.getAttribute('href') : '';
+    const adresKodlu = !!href && !/["'<>]/.test(href) && href.includes(encodeURIComponent(kotu));
+
+    /* kota mesajı yolu — aynı ölçüm, ikinci yüzey */
+    w.fetch = () => Promise.resolve({ status: 429, ok: false, json: () => Promise.resolve({
+      ok: false, reason: 'kota', kalan: 0, yenilenmeMs: Date.now() + 7 * 3600 * 1000 }) });
+    if (go) go.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+    await dur(500);
+    const err = d.querySelector('#dgErr');
+    const kotaMetni = !!err && err.classList.contains('on')
+      && /\d/.test(err.textContent) && err.querySelectorAll('script,img').length === 0;
+    const kotaBag = err && err.querySelector('a[href^="https://wa.me/"]');
+    const kotaKodlu = !!kotaBag && !/["'<>]/.test(kotaBag.getAttribute('href'));
+    ol('gösterim: alan adı ve kota mesajı metin olarak, adres kodlanarak',
+       metinOlarak && enjekteYok && adresKodlu && kotaMetni && kotaKodlu,
+       `metin=${metinOlarak} enjekteYok=${enjekteYok} adresKodlu=${adresKodlu} kotaMetni=${kotaMetni} kotaCta=${kotaKodlu}`);
+    dom.window.close();
+  }
+
   /* bozuk content.json dayanıklılığı */
   {
     const { dom, hata } = ortam(html, ORIGIN + '/');
