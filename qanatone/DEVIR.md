@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 16:27 UTC
+> Üretim tarihi: 2026-08-14 16:46 UTC
 
 ## Yeni sohbete geçerken
 
@@ -69,8 +69,6 @@
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
 | `klasor-telleri.diff` |  | 8 KB | `cdf886ae` |
-| `kota-olcum.tmp.js` |  | 3 KB | `8700daf4` |
-| `kota-ui.tmp.js` |  | 3 KB | `f1f167d2` |
 | `lag-smoothing.diff` |  | 3 KB | `162af5ef` |
 | `layerize-willchange.diff` |  | 6 KB | `19452268` |
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
@@ -94,7 +92,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 89 KB | `ed617016` |
+| `test/denetim.js` |  | 92 KB | `e2fcc003` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -106,7 +104,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 136 sn (basılan 58, önbellekten 0) |
+| son derleme | 54 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 49.5 MB |
 
 ## Çalıştırma
