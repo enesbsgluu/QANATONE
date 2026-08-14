@@ -383,35 +383,87 @@ async function calisma() {
     const { dom } = ortam(html, ORIGIN + '/');
     const w = dom.window, d = w.document;
     await dur(700);
-    const duvar = {
-      ok: false, durum: 'engel', host: kotu, finalUrl: 'https://' + kotu,
-      status: 403, bytes: 5269, redirects: 0, cdn: 'cloudflare', cfEylul: true
-    };
-    w.fetch = () => Promise.resolve({ status: 200, ok: true, json: () => Promise.resolve(duvar) });
     const url = d.querySelector('#dgUrl'), go = d.querySelector('#dgGo');
-    const cek = async () => {
+    /* ÖLÇÜM ANINDA FOTOĞRAF ÇEK — `#dgErr` canlı bir elemandır ve her
+       koşumda baştan kuruluyor. İlk yazımda eleman referansı saklanmıştı
+       ve sonda okunduğunda İÇİNDE SON senaryonun içeriği vardı: 15 Eylül
+       bağlantısı "yok" göründü, oysa duvar ekranında basılmıştı. Yanlış
+       kırmızıydı ama aynı mekanizma yanlış yeşil de verebilirdi. */
+    const cek = async (yanit) => {
+      w.fetch = () => Promise.resolve({ status: 200, ok: true, json: () => Promise.resolve(yanit) });
       if (url) url.value = 'ornek.com';
       if (go) go.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
       await dur(500);
       const e = d.querySelector('#dgErr');
-      return { el: e, metin: e ? e.textContent.trim() : '' };
+      return {
+        acik: !!e && e.classList.contains('on'),
+        metin: e ? e.textContent.trim() : '',
+        baglar: e ? [...e.querySelectorAll('a')].map(a => a.getAttribute('href') || '') : [],
+        icErik: e ? e.querySelectorAll('img,script').length : -1,
+        skorEkrani: d.querySelector('#dgRes').classList.contains('on')
+      };
     };
-    const tr = await cek();
-    d.documentElement.lang = 'en';
-    const en = await cek();
+    const duvar = {
+      ok: false, durum: 'engel', saglayici: 'cloudflare', host: kotu,
+      finalUrl: 'https://' + kotu, status: 403, bytes: 5269, redirects: 0,
+      cdn: 'cloudflare', cfEylul: true
+    };
+    /* beşinci hâl AYRI ölçülüyor: metni yoksa bu ziyaretçi boş kutu görür */
+    const red = {
+      ok: false, durum: 'reddedildi', saglayici: null, host: 'ornek.com',
+      finalUrl: 'https://ornek.com/', status: 403, bytes: 120, redirects: 0,
+      cdn: 'bilinmiyor', cfEylul: false
+    };
 
-    const acik = !!tr.el && tr.el.classList.contains('on');
+    const tr = await cek(duvar);
+    const trRed = await cek(red);
+    d.documentElement.lang = 'en';
+    const en = await cek(duvar);
+    const enRed = await cek(red);
+
+    const acik = tr.acik;
     const durumBasildi = /403/.test(tr.metin) && tr.metin.includes(kotu);
-    const enjekteYok = !d.querySelector('#dgErr img') && !d.querySelector('#dgErr script')
-      && !d.querySelector('img[onerror]');
-    const bag = tr.el && tr.el.querySelector('a[href^="https://wa.me/"]');
-    const bagKodlu = !!bag && !/["'<>]/.test(bag.getAttribute('href'));
-    const skorEkraniYok = !d.querySelector('#dgRes').classList.contains('on');
+    const enjekteYok = tr.icErik === 0 && trRed.icErik === 0
+      && en.icErik === 0 && enRed.icErik === 0 && !d.querySelector('img[onerror]');
+    const waBag = tr.baglar.filter(h => h.indexOf('https://wa.me/') === 0);
+    const bagKodlu = waBag.length === 1 && !/["'<>]/.test(waBag[0]);
+    const skorEkraniYok = !tr.skorEkrani && !trRed.skorEkrani;
     const ikiDil = tr.metin.length > 60 && en.metin.length > 60 && tr.metin !== en.metin;
-    ol('gösterim: durum ekranı TR ve EN, metin olarak, skor bileşeni yok',
-       acik && durumBasildi && enjekteYok && bagKodlu && skorEkraniYok && ikiDil,
+    /* beşinci hâl iki dilde de metin üretiyor ve 403'ü söylüyor */
+    const besinciHal = /403/.test(trRed.metin) && trRed.metin.length > 60
+      && /403/.test(enRed.metin) && enRed.metin.length > 60 && trRed.metin !== enRed.metin
+      && trRed.metin !== tr.metin && enRed.metin !== en.metin;
+
+    /* METİN KURALI — araç KENDİ HÜKMÜ hakkında tereddüt etmez. Bir
+       pazarlama ajansının aracında "ayıramadık / emin değiliz" demek
+       ürünün kendisini zayıflatır. Ölçülen gerçek söylenir, konu sunucu
+       sahibine devredilir. Sebebin sunucu tarafında olduğunu söylemek
+       tereddüt DEĞİL kapsamdır, o yüzden yasak listesi dar tutuldu. */
+    const TEREDDUT_TR = /ayıramadık|ayırt edemedik|emin değil|olabilir de olmayabilir|net değil|kesin (?:olarak )?bilemiyoruz|anlayamadık/i;
+    const TEREDDUT_EN = /we (?:are not|aren't|were not|weren't) (?:sure|certain)|could not tell|couldn't tell|unable to tell|hard to say|we cannot determine/i;
+    const dortEkran = [tr.metin, trRed.metin, en.metin, enRed.metin];
+    const tereddutYok = !dortEkran.some(m => TEREDDUT_TR.test(m) || TEREDDUT_EN.test(m));
+
+    /* 15 EYLÜL KAYNAĞI — yanlış sayfaya giden bir kaynak, kaynaksız
+       iddiadan kötüdür. Bağlantı Temmuz 2026'daki ÜÇ KATEGORİLİ duyuruya
+       gitmeli; 2025'in "Content Independence Day" yazısına değil. */
+    const eylulBag = tr.baglar.filter(h => /cloudflare\.com/i.test(h));
+    const kaynakDogru = eylulBag.length === 1
+      && /^https:\/\/developers\.cloudflare\.com\/changelog\/post\/2026-07-01-ai-traffic-options\/?$/.test(eylulBag[0])
+      && !/content-independence-day/i.test(eylulBag[0]);
+    /* şartı sağlamayan ziyaretçi bu tarihi GÖRMEZ — reddedildi hâlinde
+       cfEylul false, ne metin ne bağlantı çıkmalı */
+    const eylulSizmadi = !/15 Eylül|15 September/i.test(trRed.metin)
+      && !/15 Eylül|15 September/i.test(enRed.metin)
+      && trRed.baglar.filter(h => /cloudflare\.com/i.test(h)).length === 0;
+
+    ol('gösterim: durum ekranı TR ve EN (beş hâl), tereddüt yok, 15 Eylül kaynağı doğru',
+       acik && durumBasildi && enjekteYok && bagKodlu && skorEkraniYok && ikiDil
+       && besinciHal && tereddutYok && kaynakDogru && eylulSizmadi,
        `açık=${acik} durum=${durumBasildi} enjekteYok=${enjekteYok} bağKodlu=${bagKodlu} `
-       + `skorYok=${skorEkraniYok} tr=${tr.metin.length} en=${en.metin.length} ayrı=${tr.metin !== en.metin}`);
+       + `skorYok=${skorEkraniYok} ikiDil=${ikiDil} beşinciHâl=${besinciHal} `
+       + `tereddütYok=${tereddutYok} kaynak=${kaynakDogru ? 'doğru' : (eylulBag && eylulBag[0]) || 'yok'} `
+       + `eylülSızmadı=${eylulSizmadi} · tr=${tr.metin.length}/${trRed.metin.length} en=${en.metin.length}/${enRed.metin.length}`);
     dom.window.close();
   }
 
@@ -1539,8 +1591,26 @@ async function guvenlik() {
      sayı sitenin değil, o an hangi duvarın servis edildiğinin özelliği;
      kararlı bile değil. Kural bu yüzden tek bir sayıyı değil, SAYININ HİÇ
      ÜRETİLMEMESİNİ kilitliyor.
-     Aşırı genelleme de eksik tespit kadar kötü: dört hâl ayrı ayrı
-     ölçülüyor, hepsi "engel" olmuyor.                                   */
+     Aşırı genelleme de eksik tespit kadar kötü: BEŞ hâl ayrı ayrı
+     ölçülüyor, hiçbiri varsayılan olarak "engel" olmuyor.
+
+     BEŞİNCİ HÂL — `reddedildi`. İlk yazımda imzasız bir 403 varsayılan
+     olarak `engel` sayılıyordu; bu yanlış: imzasız 403 bir engel sistemi
+     de olabilir, bir yetki ayarı da. `engel` iddiası YALNIZ imza varken
+     kurulur, çünkü "AI tarayıcıları da aynı duvara çarpıyor" hükmü ancak
+     o zaman doğrudur. İmza yoksa ölçülen gerçek söylenir ve konu sunucu
+     sahibine devredilir.
+
+     İMZA GÜCÜ AYRIMI — başlık imzası güçlü kanıt, gövde metni zayıf.
+     `cf-mitigated` bir başlıktır, sunucu onu bilerek koyar; "Just a
+     moment" sayfada tesadüfen geçebilecek bir metindir. Sıra:
+       0 · 2xx muafiyeti (her şeyin üstünde)
+       1 · başlık imzaları → engel
+       2 · durum koduna özgü anlamlar (404/410, 5xx) → 3. adımı EZER
+       3 · gövde metni imzaları → engel
+       4 · hiçbiri yoksa → reddedildi
+     Aşağıdaki dört negatif test bu sıranın kanıtıdır ve tek tek
+     ölçülüyor: sıra bozulursa üçü birden düşer.                       */
   {
     const FIK = path.join(KOK, 'test', 'fikstur');
     let meta = null, govde = null, fikVar = false;
@@ -1555,22 +1625,39 @@ async function guvenlik() {
       'server-timing': meta.headers['server-timing'],
       server: meta.headers.server
     })) : { d: {} };
-    /* ikinci varyant: Cf-Mitigated YOK, _cf_chl_opt YOK — imza listesi
-       yalnız "Just a moment"a bakarsa bu gerçek engeli kaçırır */
-    const engel2 = await fazSifirKos(fazSifirYanit(403,
+    /* GÖVDE İMZASI YOLU: başlık imzası YOK, durum kodunun kendi anlamı da
+       yok (403) — karar yalnız gövde metninden çıkmalı. Ölçülmüş gerçek
+       sayfa: r10.net aynı saat içinde bunu da döndürdü ve üzerinde ne
+       `cf-mitigated` ne `_cf_chl_opt` vardı.                            */
+    const govdeEngeli = await fazSifirKos(fazSifirYanit(403,
       '<!DOCTYPE html><html lang="en-US"><head><title>Attention Required! | Cloudflare</title></head>'
       + '<body><div class="cf-error-details">Ray ID: a2b1f73f485d1537</div></body></html>',
       { server: 'cloudflare' }));
-    /* TERS YÖN — aynı hatanın ayna görüntüsü. DataDome `x-datadome`
-       başlığını ve çerezini GEÇİRDİĞİ isteklerde de gönderir, Imperva'nın
-       `x-iinfo`su normal yanıtlarda durur. Bu imzalar 2xx'te engel
-       sayılsaydı, bu sağlayıcıları kullanan HER SAĞLIKLI site duvar
-       ekranı görürdü ve skoru hiç üretilmezdi. Kural iki yönü de tutuyor:
-       duvarda skor YOK, sağlıklı-ama-korumalı sitede skor VAR.        */
+
+    /* ---- ZORUNLU NEGATİF TESTLER (sürüm 5) ---- */
+    /* N1 · imzasız 403 → reddedildi, ASLA engel. Sürüm 1'in açığı buydu. */
+    const imzasiz403 = await fazSifirKos(fazSifirYanit(403,
+      '<html><body>Forbidden</body></html>', { server: 'nginx' }));
+    /* N2 · "Just a moment" metni taşıyan 404 → bulunamadı. Durum kodunun
+       kendi anlamı gövde metnini EZER; ezmeseydi her hata sayfasında
+       geçen bir kelime adresi duvar ilan ederdi. */
+    const metinli404 = await fazSifirKos(fazSifirYanit(404,
+      '<html><body><h1>Just a moment</h1>sayfa yok</body></html>'));
+    /* N3 · AYNI metni taşıyan 503 → sunucu hatası. İkisi aynı gövde, farklı
+       kod: kararı verenin kod olduğunu kanıtlar. */
+    const metinli503 = await fazSifirKos(fazSifirYanit(503,
+      '<html><body><h1>Just a moment</h1>sayfa yok</body></html>'));
+    /* N4 · 2xx MUAFİYETİ — her şeyin üstünde. `x-datadome` / `x-iinfo`
+       o sağlayıcıların GEÇİRDİKLERİ trafikte de gider; 2xx'te engel
+       sayılsalardı bu sağlayıcıları kullanan her SAĞLIKLI site duvar
+       ekranı görür ve skoru hiç üretilmezdi — düzelttiğimiz hatanın ters
+       yönü. Bu koşum normal skor üretmeli. */
     const korumaliAmaSaglikli = await fazSifirKos(fazSifirYanit(200,
       '<!DOCTYPE html><html lang="tr"><head><title>Yeterince uzun bir sayfa basligi burada</title>'
-      + '<meta name="viewport" content="width=device-width"></head><body><h1>Bir</h1></body></html>',
+      + '<meta name="viewport" content="width=device-width"></head><body><h1>Bir</h1>'
+      + '<p>Just a moment</p></body></html>',
       { 'x-datadome': 'protected', 'x-iinfo': '1-2-3', 'set-cookie': 'datadome=abc; Path=/' }));
+
     const bulunamadi = await fazSifirKos(fazSifirYanit(404, '<html><body>yok</body></html>'));
     const sunucu = await fazSifirKos(fazSifirYanit(503, '<html><body>arizali</body></html>'));
     const zamanAsimi = await fazSifirKos(async () => {
@@ -1580,20 +1667,26 @@ async function guvenlik() {
     const skorYok = o => o && o.score === undefined && o.items === undefined;
     const engelTuttu = fikVar && engel.d.durum === 'engel' && skorYok(engel.d)
       && engel.d.cdn === 'cloudflare' && engel.d.saglayici === 'cloudflare';
-    const engel2Tuttu = engel2.d.durum === 'engel' && skorYok(engel2.d);
+    const govdeEngeliTuttu = govdeEngeli.d.durum === 'engel' && skorYok(govdeEngeli.d);
     const bulunamadiTuttu = bulunamadi.d.durum === 'bulunamadi' && skorYok(bulunamadi.d);
     const sunucuTuttu = sunucu.d.durum === 'sunucu-hatasi' && skorYok(sunucu.d);
     const ulasilamadiTuttu = zamanAsimi.d.durum === 'ulasilamadi' && skorYok(zamanAsimi.d);
-    const korumaliTuttu = korumaliAmaSaglikli.d.durum === 'saglikli'
+    /* negatif testlerin hükmü */
+    const n1 = imzasiz403.d.durum === 'reddedildi' && skorYok(imzasiz403.d);
+    const n2 = metinli404.d.durum === 'bulunamadi' && skorYok(metinli404.d);
+    const n3 = metinli503.d.durum === 'sunucu-hatasi' && skorYok(metinli503.d);
+    const n4 = korumaliAmaSaglikli.d.durum === 'saglikli'
       && typeof korumaliAmaSaglikli.d.score === 'number';
-    ol('teşhis: 2xx dışında kalem puanlanmıyor, skor üretilmiyor (dört hâl ayrı)',
-       engelTuttu && engel2Tuttu && bulunamadiTuttu && sunucuTuttu && ulasilamadiTuttu
-       && korumaliTuttu,
+    ol('teşhis: 2xx dışında kalem puanlanmıyor, skor üretilmiyor (beş hâl, imza gücü sırası)',
+       engelTuttu && govdeEngeliTuttu && bulunamadiTuttu && sunucuTuttu && ulasilamadiTuttu
+       && n1 && n2 && n3 && n4,
        `fikstür=${fikVar} engel=${engel.d.durum || '-'}/${skorYok(engel.d)} `
-       + `engel2=${engel2.d.durum || '-'} bulunamadı=${bulunamadi.d.durum || '-'} `
-       + `sunucu=${sunucu.d.durum || '-'} ulaşılamadı=${zamanAsimi.d.durum || '-'} `
-       + `korumalıAmaSağlıklı=${korumaliAmaSaglikli.d.durum || '-'} `
-       + `skor=${engel.d.score === undefined ? 'yok' : engel.d.score}`);
+       + `gövdeEngeli=${govdeEngeli.d.durum || '-'} bulunamadı=${bulunamadi.d.durum || '-'} `
+       + `sunucu=${sunucu.d.durum || '-'} ulaşılamadı=${zamanAsimi.d.durum || '-'} · `
+       + `N1 imzasız403=${imzasiz403.d.durum || '-'} N2 metinli404=${metinli404.d.durum || '-'} `
+       + `N3 metinli503=${metinli503.d.durum || '-'} N4 xdatadome200=${korumaliAmaSaglikli.d.durum || '-'}`
+       + `/${korumaliAmaSaglikli.d.score === undefined ? 'skorYok' : 'skor' + korumaliAmaSaglikli.d.score} · `
+       + `duvarSkoru=${engel.d.score === undefined ? 'yok' : engel.d.score}`);
   }
 
   /* 103 · FAZ 0 (+2) · YANIT status/bytes/redirects/cdn/durum TAŞIYOR,
