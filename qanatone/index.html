@@ -5263,8 +5263,21 @@ html.t-mo-off .mkwire .kiv{animation:none;opacity:0}
         <label class="fld"><span data-t="ld6">Ne yaptırmak istiyorsun? (kısaca)</span>
           <textarea name="message" id="ldNote" maxlength="600" rows="3"
             data-tp="phNote" placeholder="Örn: sağlık turizmi için site + WhatsApp ajanı"></textarea></label>
-        <label class="chk"><input type="checkbox" id="ldOk" required>
+        <!-- KVKK onay kaydı: name OLMADAN alan gönderimde hiç yer almaz —
+             kullanıcı ekranda onay verir, kayıtta teknik iz kalmaz.
+             value sabit: kabul edilen değer kümesi tek elemanlı ("evet"),
+             işaretli değilse alan gönderime hiç girmez.
+             SINIR (bilinçli): required kullanıcı deneyimidir, hazırlanmış
+             bir POST onu atlar; Netlify Forms sunucu tarafı doğrulama
+             sunmuyor, yani onayı ZORLAMAK bu mimaride mümkün değil. Hedef
+             zorlamak değil KAYDETMEK: alan gelmediyse kayıtta yoktur ve
+             bu okunabilir bir gerçektir.
+             Zaman alanı BİLEREK YOK: istemci zaman damgası gönderenin
+             kontrolündedir, kanıt değil yanlış güven üretir. Güvenilir
+             zaman Netlify'ın kendi created_at'idir. -->
+        <label class="chk"><input type="checkbox" id="ldOk" name="kvkk_onay" value="evet" required>
           <span data-t="ld4">Bilgilerimin bu talebe dönüş yapılması için işlenmesini kabul ediyorum.</span></label>
+        <input type="hidden" name="kvkk_metin_ozet" id="ldKvkkOzet" value="">
         <button class="btn btn-p" type="submit" data-t="ld5">Demo talep et
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
         <span class="ldmsg" id="ldMsg" role="status" aria-live="polite"></span>
@@ -10940,6 +10953,31 @@ projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
       msg.classList.add('err'); msg.textContent=t.bad; return;
     }
     msg.classList.remove('err'); msg.textContent=t.send;
+    /* KVKK metin özeti — "hangi metne onay verildi" sorusunun cevabı.
+       Sürüm ELLE tutulmuyor: gönderim anında sayfada GERÇEKTEN görünen
+       onay metninden türetiliyor. Elle sürüm tutulsaydı metin değişip
+       sürüm değişmediğinde kayıt sessizce yanlışa dönerdi; panel metni
+       değiştirdiğinde bu özet kendiliğinden değişir.
+       BU ALAN TANIMLAYICIDIR, KANIT DEĞİLDİR: istemcide üretiliyor,
+       gönderen değiştirebilir. Hangi metnin gösterildiğini eşleştirmeye
+       yarar, onayın verildiğini ispatlamaya değil.
+       Dar değer kümesi: yalnız 12 hex. Kalıba uymayan değer YOK SAYILIR,
+       kırpılmaz — kırpma bozuk veriyi sessizce geçerli gösterir. */
+    const ozetle=s=>{
+      const m=String(s==null?'':s).replace(/\s+/g,' ').trim();
+      let a=0x811c9dc5,b=0x9e3779b1;
+      for(let i=0;i<m.length;i++){
+        const c=m.charCodeAt(i);
+        a=Math.imul((a^c)>>>0,16777619)>>>0;
+        b=Math.imul((b+c*(i+1))>>>0,2654435761)>>>0;
+      }
+      return (a.toString(16).padStart(8,'0')+b.toString(16).padStart(8,'0')).slice(0,12);
+    };
+    const ozetAlani=$('#ldKvkkOzet'), onayMetni=f.querySelector('[data-t="ld4"]');
+    if(ozetAlani){
+      const oz=onayMetni?ozetle(onayMetni.textContent):'';
+      ozetAlani.value=/^[0-9a-f]{12}$/.test(oz)?oz:'';
+    }
     let saved=false;
     try{
       const r=await fetch('/',{method:'POST',

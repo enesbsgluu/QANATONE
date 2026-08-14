@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 13:09 UTC
+> Üretim tarihi: 2026-08-14 14:22 UTC
 
 ## Yeni sohbete geçerken
 
@@ -19,7 +19,7 @@
 |---|---|---|---|
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
-| `CLAUDE.md` |  | 7 KB | `95c6c286` |
+| `CLAUDE.md` |  | 7 KB | `e124238d` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DEVIR.md` | bu dosya | 5 KB |  |
 | `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
@@ -63,7 +63,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 837 KB | `abe59bf6` |
+| `index.html` |  | 839 KB | `3817b126` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -91,7 +91,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 70 KB | `69972e16` |
+| `test/denetim.js` |  | 74 KB | `c3f758cb` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -103,8 +103,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 126 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 48.9 MB |
+| son derleme | 123 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 49.1 MB |
 
 ## Çalıştırma
 

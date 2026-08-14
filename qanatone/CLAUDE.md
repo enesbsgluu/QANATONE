@@ -56,6 +56,9 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   `dist/`e her zaman basar (sitenin kendi varsayılanından); panel
   yayınlarsa onun dosyası ezer. Yoksa `/content.json` 404 olur ve
   panelden yönetilen her ayar sessizce ölür — 2026-08'de üç ay öyle döndü.
+- Forma istemci zaman damgası EKLENMEZ: gönderenin değiştirebildiği alan
+  kanıt değil yanlış güven üretir; güvenilir zaman Netlify'ın `created_at`'i.
+  Onay/sürüm gibi alanlar tanımlayıcıdır, kanıt değildir.
 - Panel yayın çıktısında statik dosya olarak DURMAZ: `/admin.html`
   zorlamalı yönlendirmeyle `functions/panel.js`'e düşer, Basic Auth
   aynı `PANEL_PAROLA_HASH`'i ölçer. Tek sır, iki kapı.
