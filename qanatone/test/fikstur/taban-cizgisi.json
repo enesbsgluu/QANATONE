@@ -1,0 +1,37 @@
+{
+  "not": "FAZ 0 TABAN ÇİZGİSİ — sağlıklı site. Faz 0 sonunda skor, kb ve kalem durumları BİREBİR aynı çıkmalı; değişirse duvar işi sağlıklı yolu kirletmiş demektir. ms kaydın parçası DEĞİL: ağ gecikmesi koşumdan koşuma değişir ve tek başına speed kalemini warn'a düşürüp skoru 93'ten 89'a indirebiliyor (ölçüldü: 1900 ms -> 89, 505 ms -> 93). Bu yüzden karşılaştırma ms hariç yapılır.",
+  "olculdu": "2026-08-15",
+  "url": "https://qanatone.netlify.app",
+  "kosumAdedi": 3,
+  "ucKosumAyni": true,
+  "status": 200,
+  "score": 93,
+  "kb": 849,
+  "finalUrl": "https://qanatone.netlify.app/",
+  "msAralik": [
+    609,
+    251,
+    191
+  ],
+  "items": {
+    "https": "ok",
+    "status": "ok",
+    "speed": "ok",
+    "weight": "warn",
+    "title": "ok",
+    "desc": "warn",
+    "h1": "ok",
+    "canonical": "ok",
+    "lang": "ok",
+    "schema": "ok",
+    "og": "ok",
+    "viewport": "ok",
+    "alt": "ok",
+    "contact": "ok",
+    "whatsapp": "ok",
+    "local": "warn",
+    "analytics": "ok",
+    "robots": "ok",
+    "sitemap": "ok"
+  }
+}

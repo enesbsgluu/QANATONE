@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 17:35 UTC
+> Üretim tarihi: 2026-08-14 21:46 UTC
 
 ## Yeni sohbete geçerken
 
@@ -31,7 +31,7 @@
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
 | `build.js` |  | 32 KB | `21172541` |
-| `content.json` |  | 237 KB | `7034454c` |
+| `content.json` |  | 238 KB | `5a852173` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
@@ -64,7 +64,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 847 KB | `c0e7301e` |
+| `index.html` |  | 854 KB | `6f4bf3ed` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -74,7 +74,7 @@
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
-| `netlify/functions/diagnose.js` |  | 26 KB | `73e804e8` |
+| `netlify/functions/diagnose.js` |  | 35 KB | `43cad5de` |
 | `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
@@ -92,7 +92,10 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 92 KB | `e2fcc003` |
+| `test/denetim.js` |  | 104 KB | `45d3a25f` |
+| `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
+| `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
+| `test/fikstur/taban-cizgisi.json` |  | 1 KB | `92cc24c7` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -104,8 +107,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 42 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 49.5 MB |
+| son derleme | 49 sn (basılan 0, önbellekten 58) |
+| dist boyutu | 49.9 MB |
 
 ## Çalıştırma
 
