@@ -74,6 +74,39 @@ function blobsDepo() {
   };
 }
 
+/* Yakalanan hatanın okunabilir özeti.
+   2026-08 BULUNDU: depo catch'i hatayı yutuyordu — logda yalnız "kota
+   deposu okunamadi" satırı vardı, altındaki istisna yoktu. Yedi canlı
+   çağrının hepsinde aynı satır düştü ve NEDEN olduğu ölçülemedi: teşhis
+   aracının teşhis edilememesi. Yutulan istisna, bu depoda tekrar eden
+   hata sınıfı (sessizce ölü özellik) ile aynı kökten.
+   SIR SIZDIRMAZ: yalnız name/message/code/status alınır, mesaj kısaltılır
+   ve jeton benzeri diziler <GIZLI> ile maskelenir — Blobs hataları imzalı
+   adres ya da Authorization parçası taşıyabilir. Tuz hiçbir yolda buraya
+   girmez, yine de maske son savunma olarak duruyor. */
+function hataOzeti(e) {
+  if (!e) return 'hata nesnesi yok';
+  /* Tuzun kendisi de maskeleniyor: bu fonksiyonun elindeki TEK sır o.
+     Kalıp tabanlı maske onu tanımaz (rastgele bir dizedir), o yüzden
+     değerin kendisi aranıp değiştiriliyor — regex kaçışı derdi olmasın
+     diye split/join ile. Test edilirken bulundu: uydurma bir hata mesajı
+     tuzu taşıyınca loga aynen düşüyordu. */
+  const tuz = process.env.KOTA_TUZ;
+  const maskele = s0 => String(
+    (tuz && String(tuz).length >= 8) ? String(s0).split(tuz).join('<GIZLI>') : s0)
+    .replace(/(bearer\s+)[^\s'"]+/gi, '$1<GIZLI>')
+    .replace(/((?:token|key|secret|sig|signature|password|auth)["'\s:=]+)[^\s,'"&]+/gi, '$1<GIZLI>')
+    .replace(/eyJ[A-Za-z0-9._~+/=-]{10,}/g, '<GIZLI>')
+    .replace(/[A-Za-z0-9_-]{40,}/g, '<GIZLI>');
+  const parca = [];
+  parca.push('name=' + maskele(e.name || 'Error').slice(0, 60));
+  parca.push('message=' + maskele(e.message || '').slice(0, 240));
+  if (e.code !== undefined) parca.push('code=' + maskele(e.code).slice(0, 60));
+  if (e.status !== undefined || e.statusCode !== undefined)
+    parca.push('status=' + maskele(e.status !== undefined ? e.status : e.statusCode).slice(0, 20));
+  return parca.join(' · ');
+}
+
 /* Kota kapısı. Dönüş: {gecer, sebep, kalan, yenilenmeMs, isle}
    BAŞARISIZLIK YÖNÜ — BİLİNÇLİ KARAR: depo erişilemezse fonksiyon AÇIK
    düşer (kota sayılmaz, analiz çalışır). Gerekçe: bu bir kimlik doğrulama
@@ -94,10 +127,13 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
   const anahtar = kimAnahtari(kimlik, tuz);
   let kayit = null;
   try { kayit = await depo.oku(anahtar); }
-  catch (e) { console.log(simdi(), 'diagnose: kota deposu okunamadi — acik dusuldu'); return { gecer: true, kalan: null, isle: async () => {} }; }
+  catch (e) {
+    console.log(simdi(), 'diagnose: kota deposu OKUNAMADI — acik dusuldu ·', hataOzeti(e));
+    return { gecer: true, kalan: null, isle: async () => {} };
+  }
 
   if (kayit && simdiMs - (kayit.bas || 0) >= KOTA_PENCERE_MS) {
-    try { await depo.sil(anahtar); } catch (e) {}
+    try { await depo.sil(anahtar); } catch (e) { console.log(simdi(), 'diagnose: kota kaydi SILINEMEDI ·', hataOzeti(e)); }
     kayit = null;                                   /* penceresi dolan kayıt yaşamaz */
   }
 
@@ -117,7 +153,8 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
     : { hizliBas: simdiMs, hizliAdet: 1 };
 
   /* oran sayacı her istekte yazılır — hak yakılmadan  */
-  try { await depo.yaz(anahtar, Object.assign({ adet, bas }, yeniHizli)); } catch (e) {}
+  try { await depo.yaz(anahtar, Object.assign({ adet, bas }, yeniHizli)); }
+  catch (e) { console.log(simdi(), 'diagnose: oran sayaci YAZILAMADI ·', hataOzeti(e)); }
 
   if (adet >= KOTA_HAK) {
     return { gecer: false, sebep: 'kota', kalan: 0, yenilenmeMs: bas + KOTA_PENCERE_MS, isle: async () => {} };
@@ -132,7 +169,8 @@ async function kotaKapisi(event, depo, tuz, simdiMs) {
        ziyaretçi cezalandırılırdı. Bu yüzden artırma handler'ın sonunda,
        sonuç üretildikten SONRA çağrılıyor. */
     isle: async () => {
-      try { await depo.yaz(anahtar, Object.assign({ adet: adet + 1, bas }, yeniHizli)); } catch (e) {}
+      try { await depo.yaz(anahtar, Object.assign({ adet: adet + 1, bas }, yeniHizli)); }
+      catch (e) { console.log(simdi(), 'diagnose: hak YAZILAMADI, kota artmadi ·', hataOzeti(e)); }
     }
   };
 }
