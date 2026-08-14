@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 14:22 UTC
+> Üretim tarihi: 2026-08-14 14:53 UTC
 
 ## Yeni sohbete geçerken
 
@@ -19,7 +19,7 @@
 |---|---|---|---|
 | `.gitignore` |  | 0 KB | `7ea7dfbc` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
-| `CLAUDE.md` |  | 7 KB | `e124238d` |
+| `CLAUDE.md` |  | 8 KB | `8315488e` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DEVIR.md` | bu dosya | 5 KB |  |
 | `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
@@ -31,6 +31,7 @@
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
 | `build.js` |  | 32 KB | `21172541` |
+| `content.json` |  | 235 KB | `abbb91df` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
@@ -91,7 +92,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 74 KB | `c3f758cb` |
+| `test/denetim.js` |  | 76 KB | `cf34decd` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -103,7 +104,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 123 sn (basılan 58, önbellekten 0) |
+| son derleme | 39 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 49.1 MB |
 
 ## Çalıştırma
