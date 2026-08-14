@@ -261,6 +261,66 @@ async function calisma() {
     dom.window.close();
   }
 
+  /* 98 · SINIF KURALI — dışarıdan gelen değer süzgeçsiz alana yazılmaz.
+     Kaynak location.search ve document.referrer; ikisini de saldırgan tek
+     bir hazırlanmış bağlantıyla TAMAMEN kontrol eder. Zincir kısa değil:
+       adres → sessionStorage → gizli alan → Netlify kaydı →
+       submission-created.js → WhatsApp gövdesi (Enes'in OKUYUP İŞLEM
+       YAPTIĞI metin) → e-posta → fonksiyon logu → ileride panel.
+     Satır sonu taşıyan tek bir parametre hem log satırı sahteciliği hem
+     de şablon reddi (Meta çok satırlı parametreyi reddeder → her bildirim
+     düşer) üretebilirdi. Kalıp bu yüzden dar ve kırpma YOK: uymayan değer
+     atılır, çünkü kırpma bozuk veriyi geçerli gösterir.
+     Kural İKİ yönü birden ölçüyor — yalnız yazarken süzmek yetmez:
+     sessionStorage bizim kökenimize ait ama kökende koşan herhangi bir
+     kod ona yazabilir, o yüzden OKURKEN de süzülüyor. İkinci yarı tam
+     olarak bunu kanıtlıyor: depo elle zehirlenip gönderim tetikleniyor. */
+  {
+    const kotu = encodeURIComponent('<script>alert(1)</script>');
+    const { dom } = ortam(html, ORIGIN + '/?utm_source=' + kotu +
+      '&gclid=ABC123&utm_medium=eposta&bilinmeyen=x');
+    const w = dom.window, d = w.document;
+    await dur(700);
+    let kayit = {};
+    try { kayit = JSON.parse(w.sessionStorage.getItem('qanat-atif') || '{}') || {}; } catch (e) { kayit = {}; }
+    const yazarkenSuzuldu = kayit.gclid === 'ABC123' && kayit.utm_medium === 'eposta'
+      && !('utm_source' in kayit) && !('bilinmeyen' in kayit);
+    const inilenVar = kayit.inilen_sayfa === '/';
+
+    /* okuma yönü: depoyu ELLE zehirle, gönderimde alana ne yazılıyor? */
+    /* Gönderilen GÖVDE ölçülüyor, DOM değil: başarılı gönderimden sonra
+       done() formun içeriğini siliyor (f.textContent=''), yani alanlar
+       okunmak istendiğinde artık yok. Zaten doğru ölçüm noktası da bu —
+       kayda ne düştüğü, alanda ne yazdığı değil. */
+    let post = 0, govde = '';
+    w.fetch = (u, o) => {
+      if (o && String(o.method).toUpperCase() === 'POST') { post++; govde = String(o.body || ''); }
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    };
+    try {
+      w.sessionStorage.setItem('qanat-atif', JSON.stringify({
+        gclid: 'satir\nsonlu deger', utm_source: 'temiz_deger',
+        inilen_sayfa: '/hizmetler/seo', yonlendiren: 'ornek.com'
+      }));
+    } catch (e) {}
+    const f = d.querySelector('#leadForm'), kutu = d.querySelector('#ldOk');
+    const yaz = (sel, v) => { const e = d.querySelector(sel); if (e) e.value = v; };
+    yaz('#ldName', 'Deneme Kullanici');
+    yaz('#ldMail', 'deneme@ornek.com');
+    yaz('#ldTel', '+90 500 000 00 00');
+    if (kutu) kutu.checked = true;
+    if (f) f.dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true }));
+    await dur(300);
+    const gonderilen = new URLSearchParams(govde);
+    const alan = ad => gonderilen.get(ad);
+    const okurkenSuzuldu = alan('gclid') === '' && alan('utm_source') === 'temiz_deger'
+      && alan('inilen_sayfa') === '/hizmetler/seo' && alan('yonlendiren') === 'ornek.com';
+    ol('atıf değerleri kalıp süzgecinden geçiyor (yazarken + okurken)',
+       yazarkenSuzuldu && inilenVar && okurkenSuzuldu && post === 1,
+       `yazarken=${yazarkenSuzuldu} inilen=${kayit.inilen_sayfa || '-'} okurken=${okurkenSuzuldu} post=${post}`);
+    dom.window.close();
+  }
+
   /* bozuk content.json dayanıklılığı */
   {
     const { dom, hata } = ortam(html, ORIGIN + '/');
@@ -869,6 +929,43 @@ function ciktiDenetimi() {
     const en = bak(oku(path.join(DIST, 'en', 'index.html')));
     ol('lead formu: onay + metin özeti alanları statik çıktıda (zaman alanı yok)',
        tr.var && en.var, `TR[${tr.not}] EN[${en.not}]`);
+  }
+
+  /* 97 · ATIF ALANLARI çıktıda ve İZİN LİSTESİYLE (2026-08):
+     Talebin nereden geldiği hiçbir yerde kayıtlı değildi; reklam → talep
+     zinciri kurulamıyordu. Alanlar gizli ve değerlerini JS dolduruyor,
+     ama Netlify formu DERLEME ANINDAKİ statik HTML'den tanıdığı için
+     alanların kendisi çıktıda DURMAK ZORUNDA — çalışma anında eklenen
+     alan kayda hiç girmez (bu depoda iki kez yaşandı).
+     Kural üç şey ölçüyor:
+       1) izin listesinin TAMAMI çıktıda (eksik alan = sessizce kaybolan veri)
+       2) listede olmayan atıf alanı YOK (izin listesi tek kapı; yenisi
+          eklenmek istenirse buradan geçer, sessizce sızmaz)
+       3) statik değerler BOŞ — bir değer çıktıya pişerse o sabit değer
+          bütün ziyaretçilere atfedilir, yani kayıt topluca yalan söyler. */
+  {
+    const IZIN = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+                  'gclid', 'fbclid', 'msclkid', 'inilen_sayfa', 'yonlendiren'];
+    const atifMi = ad => /^utm_|^gclid$|^fbclid$|^msclkid$|^inilen_sayfa$|^yonlendiren$/.test(ad);
+    const bak = p => {
+      if (!fs.existsSync(p)) return { ok: false, not: 'sayfa yok' };
+      const fr = new JSDOM(fs.readFileSync(p, 'utf8')).window.document.getElementById('leadForm');
+      if (!fr) return { ok: false, not: 'form yok' };
+      const gizli = [...fr.querySelectorAll('input[type="hidden"][name]')];
+      const adlar = gizli.map(e => e.getAttribute('name')).filter(atifMi);
+      const eksik = IZIN.filter(k => !adlar.includes(k));
+      const fazla = adlar.filter(k => !IZIN.includes(k));
+      const dolu = gizli.filter(e => atifMi(e.getAttribute('name')) && (e.getAttribute('value') || ''))
+        .map(e => e.getAttribute('name'));
+      return {
+        ok: eksik.length === 0 && fazla.length === 0 && dolu.length === 0,
+        not: `eksik=${eksik.join(',') || 'yok'} fazla=${fazla.join(',') || 'yok'} doluGelen=${dolu.join(',') || 'yok'}`
+      };
+    };
+    const tr = bak(path.join(DIST, 'index.html'));
+    const en = bak(path.join(DIST, 'en', 'index.html'));
+    ol('atıf alanları statik çıktıda, izin listesiyle, değerleri boş',
+       tr.ok && en.ok, `TR[${tr.not}] EN[${en.not}]`);
   }
 
   ol('mükerrer id yok', dupId === 0, String(dupId));

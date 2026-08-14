@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 14:53 UTC
+> Üretim tarihi: 2026-08-14 15:26 UTC
 
 ## Yeni sohbete geçerken
 
@@ -64,7 +64,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 839 KB | `3817b126` |
+| `index.html` |  | 845 KB | `d61d8c00` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -76,7 +76,7 @@
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
 | `netlify/functions/diagnose.js` |  | 10 KB | `8602c083` |
 | `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
-| `netlify/functions/submission-created.js` |  | 3 KB | `5052688a` |
+| `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
 | `netlify.toml` |  | 1 KB | `97cb97fb` |
@@ -92,7 +92,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 76 KB | `cf34decd` |
+| `test/denetim.js` |  | 82 KB | `1912d339` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 
@@ -104,8 +104,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 39 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 49.1 MB |
+| son derleme | 527 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 49.4 MB |
 
 ## Çalıştırma
 
