@@ -8240,6 +8240,19 @@ window.__sdMotion=function(s){
          kartlar açılmadan önce translateX(-10px) taşıdığı için
          getBoundingClientRect uçları kaydırırdı. viewBox piksel
          biriminde kurulur; tek birim olduğu için zoom bozmaz.        */
+      /* konum: offsetParent zincirini kök elemana kadar toplar.
+         DÜZELTME (14 Ağu): önce doğrudan el.offsetLeft okunuyordu ve
+         yanlış çıkıyordu — aynı yamada z-index için eklenen
+         `.mkins,.mkcore,.mkhyps{position:relative}` satırı kartların
+         offsetParent'ını .mkeng'den .mkins'e kaydırmıştı, yani offsetLeft
+         artık sütunun kendisine göreydi (≈0). Zinciri toplamak bu tuzağı
+         tamamen kaldırır: hangi ata konumlandırılmış olursa olsun sonuç
+         .mkeng'e göre doğru çıkar.                                    */
+      const konum=(el,kok)=>{
+        let x=0,y=0,n=el;
+        while(n&&n!==kok){x+=n.offsetLeft;y+=n.offsetTop;n=n.offsetParent;}
+        return {x:x,y:y,w:el.offsetWidth,h:el.offsetHeight};
+      };
       const kabloKur=()=>{
         const eng=mk.querySelector('.mkeng'), svg=mk.querySelector('.mkwire'),
               core=mk.querySelector('.mkcore');
@@ -8249,32 +8262,42 @@ window.__sdMotion=function(s){
         svg.setAttribute('viewBox','0 0 '+W+' '+H);
         const gir=[].slice.call(mk.querySelectorAll('.mkins .mkin')),
               cik=[].slice.call(mk.querySelectorAll('.mkhyps .mkhy'));
-        const cx=core.offsetLeft+core.offsetWidth/2,
-              cy=core.offsetTop+core.offsetHeight/2,
-              R=core.offsetWidth/2*0.93;         /* dişlinin dış çemberi */
+        const ck=konum(core,eng);
+        const cx=ck.x+ck.w/2, cy=ck.y+ck.h/2, R=ck.w/2*0.93;
         const destek=(typeof CSS!=='undefined'&&CSS.supports&&
                       CSS.supports('offset-path','path("M0,0L1,1")'));
         let ic='';
-        const yol=(sx,sy,ex,ey)=>{
-          /* karttan yatay çıkar, çembere ışınsal girer */
-          const dx=ex-sx, dy=ey-sy, u=Math.hypot(dx,dy)||1;
-          const c1x=sx+dx*0.42, c1y=sy;
-          const c2x=ex-(dx/u)*Math.abs(dx)*0.34, c2y=ey-(dy/u)*Math.abs(dx)*0.34;
+        const egri=(sx,sy,ex,ey)=>{
+          /* karttan yatay çıkar, hedefe yatay girer — S eğrisi */
+          const dx=ex-sx, k=Math.abs(dx)*0.45;
           return 'M'+sx.toFixed(1)+','+sy.toFixed(1)
-                +' C'+c1x.toFixed(1)+','+c1y.toFixed(1)
-                +' '+c2x.toFixed(1)+','+c2y.toFixed(1)
+                +' C'+(sx+k).toFixed(1)+','+sy.toFixed(1)
+                +' '+(ex-k).toFixed(1)+','+ey.toFixed(1)
                 +' '+ex.toFixed(1)+','+ey.toFixed(1);
         };
-        const ekle=(sx,sy,d,i,gecikme)=>{
-          const dx=sx-cx, dy=sy-cy, u=Math.hypot(dx,dy)||1;
-          const ex=cx+dx/u*R, ey=cy+dy/u*R;
-          const dd=yol(sx,sy,ex,ey);
+        const ekle=(d,i,gecikme,dd,nx,ny)=>{
           ic+='<path class="kb'+d+'" data-i="'+i+'" style="--d:'+gecikme+'s" d="'+dd+'"/>'
-             +'<circle class="kbn'+d+'" data-i="'+i+'" style="--d:'+gecikme+'s" cx="'+sx.toFixed(1)+'" cy="'+sy.toFixed(1)+'" r="2.2"/>';
+             +'<circle class="kbn'+d+'" data-i="'+i+'" style="--d:'+gecikme+'s" cx="'+nx.toFixed(1)+'" cy="'+ny.toFixed(1)+'" r="2.2"/>';
           if(destek)ic+='<circle class="kiv kbk'+d+'" data-i="'+i+'" r="2.6" style="offset-path:path(\''+dd+'\');animation-delay:'+(gecikme+0.2).toFixed(2)+'s"/>';
         };
-        gir.forEach((el,i)=>ekle(el.offsetLeft+el.offsetWidth, el.offsetTop+el.offsetHeight/2,'in',i,0.06*i));
-        cik.forEach((el,i)=>ekle(el.offsetLeft, el.offsetTop+el.offsetHeight/2,'out',i,0.06*i));
+        /* GİRDİ: her kartın SAĞ kenarının ortasından çıkar, çemberin
+           sol yarısına ışınsal girer.                                 */
+        gir.forEach((el,i)=>{
+          const k=konum(el,eng);
+          const sx=k.x+k.w, sy=k.y+k.h/2;
+          const dx=sx-cx, dy=sy-cy, u=Math.hypot(dx,dy)||1;
+          const ex=cx+dx/u*R, ey=cy+dy/u*R;
+          ekle('in',i,0.06*i,egri(sx,sy,ex,ey),sx,sy);
+        });
+        /* ÇIKIŞ: dış çarkın SAĞINDA TEK nokta; oradan üç karta dağılır.
+           Enes'in isteği: "tek çıkış noktasından çıkıp dağılmalı."     */
+        const qx=cx+R, qy=cy;
+        cik.forEach((el,i)=>{
+          const k=konum(el,eng);
+          const ex=k.x, ey=k.y+k.h/2;
+          ekle('out',i,0.06*i,egri(qx,qy,ex,ey),ex,ey);
+        });
+        if(cik.length)ic+='<circle class="kbnout kbcik" data-i="0" style="--d:0s" cx="'+qx.toFixed(1)+'" cy="'+qy.toFixed(1)+'" r="3"/>';
         svg.innerHTML=ic;
         /* uzunluk: viewBox piksel olduğu için dönüşüm gerekmez */
         [].slice.call(svg.querySelectorAll('path')).forEach(pt=>{

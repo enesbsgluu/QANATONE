@@ -691,19 +691,32 @@ function ciktiDenetimi() {
   {
     const kaynakK = fs.readFileSync(SRC, 'utf8');
     const kod = kaynakK.replace(/\/\*[\s\S]*?\*\//g, '');
-    const iK = kod.indexOf('const kabloKur=');
-    const bolge = iK > -1 ? kod.slice(iK, iK + 2600) : '';
+    /* bölge `const konum=` yardımcısından başlar — o, kabloKur'un ÜSTÜNDE
+       tanımlı ve zincir toplama şartı orada yaşıyor. İlk yazımda bölge
+       kabloKur'dan başlıyordu ve yardımcıyı hiç görmüyordu. */
+    const iK = kod.indexOf('const konum=');
+    const bolge = iK > -1 ? kod.slice(iK, iK + 3600) : '';
     const pikselViewBox = bolge.indexOf("setAttribute('viewBox','0 0 '+W+' '+H)") > -1;
+    /* 14 Ağu — DÜZELTİLDİ: yalnız 'offsetLeft geçiyor mu' bakmak YETMEDİ.
+       İlk sürüm el.offsetLeft'i DOĞRUDAN okuyordu; aynı yamada z-index için
+       eklenen `.mkins,.mkcore,.mkhyps{position:relative}` satırı kartların
+       offsetParent'ını .mkeng'den sütuna kaydırınca ölçüm sütuna göreye
+       düştü ve kablolar 81px yukarıdan başladı. Artık offsetParent ZİNCİRİ
+       toplanmalı — kural bunu arıyor. */
     const duzenOlcumu = bolge.indexOf('offsetLeft') > -1
-                     && bolge.indexOf('getBoundingClientRect') === -1;
+                     && bolge.indexOf('getBoundingClientRect') === -1
+                     && /n\.offsetParent/.test(bolge)
+                     && bolge.indexOf('const konum=') > -1;
+    /* çıkış kabloları TEK noktadan dağılmalı (Enes'in isteği) */
+    const tekCikis = /const qx=cx\+R/.test(bolge) && /egri\(qx,qy/.test(bolge);
     const wireCss = (kod.match(/\.mkwire path\{[^}]*\}/) || [''])[0];
     const cihazUzayiYok = wireCss.indexOf('non-scaling-stroke') === -1;
     const ozelDegisken = wireCss.indexOf('var(--L') > -1;
     const kaydirmaYok = bolge.indexOf("addEventListener('scroll'") === -1;
     const onek = bolge.indexOf('class="kb') > -1;
     ol('motor kabloları (piksel viewBox · düzen ölçümü · cihaz-uzayı yasak)',
-       iK > -1 && pikselViewBox && duzenOlcumu && cihazUzayiYok && ozelDegisken && kaydirmaYok && onek,
-       `viewBox=${pikselViewBox} offset=${duzenOlcumu} nonScalingYok=${cihazUzayiYok} degisken=${ozelDegisken} kaydirmaYok=${kaydirmaYok} onek=${onek}`);
+       iK > -1 && pikselViewBox && duzenOlcumu && tekCikis && cihazUzayiYok && ozelDegisken && kaydirmaYok && onek,
+       `viewBox=${pikselViewBox} zincir=${duzenOlcumu} tekCikis=${tekCikis} nonScalingYok=${cihazUzayiYok} degisken=${ozelDegisken} kaydirmaYok=${kaydirmaYok} onek=${onek}`);
   }
   const sayfalar = [];
   (function tara(d) {
