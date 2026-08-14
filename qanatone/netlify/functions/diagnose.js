@@ -77,10 +77,22 @@ function blobsDepo() {
      yüzden store da önbelleğe ALINMIYOR.
      Bu yol hesap kapsamlı bir API jetonu istemez — elle siteID+token
      vermek halka açık bir uç nokta için kötü takas olurdu.            */
+  /* GÜÇLÜ TUTARLILIK BİLEREK YOK. İlk yazımda `consistency:'strong'`
+     vardı; connectLambda düzeldikten sonra canlıda ikinci hata çıktı:
+     BlobsConsistencyError — "the environment has not been configured with
+     a 'uncachedEdgeURL' property". Paketin kaynağı da bunu söylüyor: güçlü
+     tutarlılık okuması ortamda uncachedEdgeURL ister, Lambda uyumluluk
+     bağlamı onu VERMİYOR. Yani bu kipte seçilebilir bir şey değil.
+     BEDELİ (kabul edildi): yazmadan hemen sonraki okuma bayat gelebilir,
+     yani çok hızlı ardışık tıklamada kişi bir hak fazla kullanabilir.
+     Kota bir ürün kuralı — kimlik doğrulama değil; kötüye kullanımı
+     tutan şey oran sınırı ve akış sınırı, ikisi de bundan bağımsız.
+     Bayat okuma yüzünden kotanın gevşemesi, deponun hiç çalışmamasından
+     iyidir; bugünkü durum tam olarak oydu.                            */
   const al = (event) => {
     const b = require('@netlify/blobs');
     if (event && typeof b.connectLambda === 'function') b.connectLambda(event);
-    return b.getStore({ name: 'kota', consistency: 'strong' });
+    return b.getStore({ name: 'kota' });
   };
   return {
     async oku(anahtar, event) { return (await al(event).get(anahtar, { type: 'json' })) || null; },

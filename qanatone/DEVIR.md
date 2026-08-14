@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-14 17:29 UTC
+> Üretim tarihi: 2026-08-14 17:35 UTC
 
 ## Yeni sohbete geçerken
 
@@ -74,7 +74,7 @@
 | `mobil-kaydirma.diff` |  | 5 KB | `a83fa8ae` |
 | `motor-kablolari.diff` |  | 11 KB | `9a10c923` |
 | `motor-tasma.diff` |  | 3 KB | `f721665b` |
-| `netlify/functions/diagnose.js` |  | 25 KB | `98b4082e` |
+| `netlify/functions/diagnose.js` |  | 26 KB | `73e804e8` |
 | `netlify/functions/panel.js` |  | 5 KB | `aa12a6b1` |
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
@@ -104,7 +104,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 126 sn (basılan 58, önbellekten 0) |
+| son derleme | 42 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 49.5 MB |
 
 ## Çalıştırma
