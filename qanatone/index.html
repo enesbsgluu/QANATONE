@@ -1909,6 +1909,9 @@ html.lowfx #globe .gov{backdrop-filter:none;-webkit-backdrop-filter:none;backgro
   border:1px solid rgba(239,35,60,.4);background:rgba(239,35,60,.08);
   font-size:.88rem;color:var(--tx2);line-height:1.6;display:none;font-weight:300}
 .dgerr.on{display:block}
+/* kota mesajının yanındaki CTA: dar ekranda taşmasın diye satıra iner ve
+   kendi genişliğini içerikten alır (max-width ile kutuyu aşamaz) */
+.dgkota-cta{display:inline-flex;margin-top:14px;max-width:100%;white-space:normal;text-align:left}
 
 /* ============ KANAL GENİŞLİĞİ (bento) ============
    Kartlarda kanallar var (Insider referansı); statik markup — tarayıcı
@@ -11586,6 +11589,10 @@ function diagKur(){
     eNo:'Bu adrese ulaşamadık. Site kapalı olabilir ya da dışarıdan gelen kontrolleri engelliyor.',
     eTime:'Site zamanında yanıt vermedi — bu da bir bulgu: ziyaretçi de bu kadar bekliyor.',
     eOff:'Canlı kontrol yalnızca yayındaki sitede çalışır.',
+    eKota:s=>`Günlük ${s.hak} kontrol hakkını kullandın. Hakkın ${s.saat} saat sonra yenilenir.`,
+    eOran:'Çok hızlı denedin, birkaç saniye sonra tekrar dene.',
+    kotaCta:'Devamını konuşalım',
+    kotaMsg:'Merhaba, canlı kontrol aracını kullandım. Devamını konuşmak istiyorum.',
     msg:d=>`Merhaba, ${d.host} için kontrolü yaptım — skor ${d.score}. Bunları konuşmak istiyorum.`},
   en:{
     https:'Secure connection',status:'Site is up',speed:'Load speed',weight:'Page weight',
@@ -11626,6 +11633,10 @@ function diagKur(){
     eNo:'We could not reach that address.',
     eTime:'The site did not answer in time — that is a finding in itself.',
     eOff:'The live check only runs on the published site.',
+    eKota:s=>`You have used your ${s.hak} checks for today. Your allowance renews in ${s.saat} hours.`,
+    eOran:'That was too fast — try again in a few seconds.',
+    kotaCta:'Let us talk about the rest',
+    kotaMsg:'Hi, I used the live check tool. I would like to talk about the next step.',
     msg:d=>`Hi, I ran the check for ${d.host} — score ${d.score}.`}};
   const PRIO=['https','viewport','contact','whatsapp','schema','desc','title','analytics',
     'speed','weight','og','local','h1','alt','sitemap','canonical','robots'];
@@ -11657,6 +11668,24 @@ function diagKur(){
     setTimeout(()=>scan.classList.remove('on'),450);
   }
   function fail(m){endScan();err.textContent=m;err.classList.add('on');busy=false;go.disabled=false;}
+  /* Kota mesajı: genel bir hata DEĞİL. Kaç hakkı olduğu ve ne zaman
+     yenileneceği yazılıyor, yanına mevcut WhatsApp CTA'sı konuyor —
+     sınır böylece bir duvar değil dönüşüm noktası oluyor.
+     GÜVENLİK: mesaj da ekrana basılan bir metindir. innerHTML YOK;
+     metin textContent, bağlantı createElement + encodeURIComponent.  */
+  function kotaGoster(d){
+    const D=L[LG()];endScan();
+    const saat=Math.max(1,Math.ceil(((d.yenilenmeMs||0)-Date.now())/3600000));
+    err.textContent=D.eKota({hak:2,saat});
+    const wa=String((C.settings||{}).whatsapp||'905326291508').replace(/\D/g,'');
+    const a=document.createElement('a');
+    a.className='btn btn-p dgkota-cta';a.target='_blank';a.rel='noopener';
+    a.href='https://wa.me/'+wa+'?text='+encodeURIComponent(D.kotaMsg);
+    a.textContent=D.kotaCta;
+    err.appendChild(document.createElement('br'));
+    err.appendChild(a);
+    err.classList.add('on');busy=false;go.disabled=false;
+  }
 
   function render(d){
     const D=L[LG()];endScan();
@@ -11709,6 +11738,11 @@ function diagKur(){
         headers:{'content-type':'application/json'},body:JSON.stringify({url:raw})});
       if(r.status===404||r.status===501){fail(D.eOff);return;}
       const d=await r.json();
+      /* Fonksiyon yeni bir durum döndürüyorsa (kota/oran) burada tanınmalı;
+         tanınmazsa ziyaretçi genel bir hata görür ve sertleştirme kullanıcıya
+         arıza gibi görünür. */
+      if(!d.ok&&d.reason==='kota'){kotaGoster(d);return;}
+      if(!d.ok&&d.reason==='oran'){fail(D.eOran);return;}
       if(!d.ok){fail(d.reason==='timeout'?D.eTime:D.eNo);return;}
       render(d);
     }catch(e){fail(D.eOff);}
