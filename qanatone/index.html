@@ -11568,13 +11568,22 @@ function diagKur(){
         err=$('#dgErr'),grid=$('#dgGrid'),fix=$('#dgFix'),arc=$('#dgArc');
   if(!inp||inp.__kur)return;inp.__kur=1;/* kur-damgası JS özelliği: dataset SERİLEŞİR ve statik HTML'e data-kur olarak basılıp tarayıcıda kurulumun atlanmasına yol açıyordu (2026-08'de yaşandı); __kur serileşmez */
   const L={tr:{
-    https:'Güvenli bağlantı',status:'Site ayakta',speed:'Açılış hızı',weight:'Sayfa ağırlığı',
+    https:'Güvenli bağlantı',status:'Site ayakta',weight:'Sayfa ağırlığı',
     title:'Sekme başlığı',desc:'Arama açıklaması',h1:'Ana başlık',canonical:'Adres tekrarı koruması',
     lang:'Sayfa dili',schema:'Yapay zekânın okuduğu veri',og:'Paylaşım kartı',viewport:'Mobil uyum',
     alt:'Görsel açıklamaları',contact:'Ulaşma yolları',whatsapp:'WhatsApp bağlantısı',
     local:'Harita / yerel kayıt',analytics:'Ölçüm kurulumu',robots:'robots.txt',sitemap:'site haritası',
-    unit:{speed:v=>(v/1000).toFixed(1)+' sn',weight:v=>v+' KB',title:v=>v+' karakter',
-      desc:v=>v+' karakter',h1:v=>v+' adet',alt:v=>v+' görselde alt yok',contact:v=>v+' yol'},
+    /* FAZ 1 — yapı kalemleri: "açılış hızı"nın yerine gelen belirlenimci
+       ölçümler. Her biri bir DÜZELTMEYE karşılık geliyor; süre gibi
+       koşumdan koşuma değişen bir sayı değil. */
+    inline:'Sayfa içine gömülü kod',blocking:'Açılışı geciktiren kaynak',
+    fonts:'Yazı tipi yükü',imgdim:'Boyutu yazılmamış görsel',
+    imgfmt:'Eski formatlı görsel',compress:'Sıkıştırma',
+    cache:'Belge önbellek başlığı',reqs:'Dış kaynak sayısı',
+    unit:{weight:v=>v+' KB',title:v=>v+' karakter',
+      desc:v=>v+' karakter',h1:v=>v+' adet',alt:v=>v+' görselde alt yok',contact:v=>v+' yol',
+      inline:v=>'%'+v,blocking:v=>v+' kaynak',fonts:v=>v+' yazı tipi kaynağı',
+      imgdim:v=>v+' görselde boyut yok',imgfmt:v=>'%'+v,cache:v=>v+' sn',reqs:v=>v+' referans'},
     verdict:[[80,'Sağlam bir temel var.'],[60,'Çalışıyor ama para kaçıran boşluklar var.'],
       [40,'Talep geliyor olabilir — çoğu yolda kayboluyor.'],[0,'Site şu an satış yapmıyor.']],
     sum:{hi:'Birkaç ince ayarla belirgin fark alınır.',
@@ -11587,8 +11596,18 @@ function diagKur(){
       contact:['Ulaşmak zor','Ziyaretçi sana ulaşmak için uğraşıyor. En az iki yol olmalı.'],
       whatsapp:['WhatsApp yok','Türkiye’de talebin çoğu WhatsApp’tan gelir.'],
       analytics:['Ölçüm yok','Hangi kanaldan kaç kişi geliyor bilinmiyor.'],
-      speed:['Site geç açılıyor','Mobilde her saniye ziyaretçi kaybettirir.'],
       weight:['Sayfa fazla ağır','Görseller sıkıştırılmamış.'],
+      /* FAZ 1 · METİN KURALI: her kalem bir DÜZELTMEYE karşılık gelir.
+         "1,9 saniyede açıldı" kimseye ne yapacağını söylemez; bunlar
+         söyler. Tereddüt cümlesi yok, ölçülen gerçek söylenir. */
+      inline:['Sayfanın büyük kısmı gömülü kod','Bu kod önbelleğe alınamıyor — ikinci sayfaya geçen ziyaretçi aynı yükü tekrar indiriyor.'],
+      blocking:['Açılış kapıda bekliyor','Head içindeki stil ve betikler ilk boyamayı geciktiriyor.'],
+      fonts:['Yazı tipi yükü fazla','Her aile ve varyant ayrı bir istek; dışarıdan gelenler ayrıca dış bağımlılık.'],
+      imgdim:['Görsellerin boyutu yazılmamış','Sayfa yüklenirken içerik zıplıyor, ziyaretçi yanlış yere tıklıyor.'],
+      imgfmt:['Görseller eski formatta','WebP/AVIF aynı görseli belirgin daha küçük indirir.'],
+      compress:['Sıkıştırma kapalı','Sunucu metni sıkıştırmadan gönderiyor — en ucuz kazanç burada.'],
+      cache:['Belge önbelleğe alınmıyor','Bu sayfanın kendi başlığı saklanmasını engelliyor; her ziyaret sıfırdan iniyor.'],
+      reqs:['Çok fazla dış kaynak','Her referans ayrı bir istek; sayfa parça parça açılıyor.'],
       viewport:['Mobil ayarı yok','Ziyaretçinin çoğu telefondan geliyor.'],
       og:['Paylaşınca kart boş','Link görselsiz görünüyor — güven kaybı.'],
       local:['Yerel kayıt görünmüyor','"Yakınımda" aramalarında çıkmazsın.'],
@@ -11646,13 +11665,21 @@ function diagKur(){
     durumMsg:d=>`Merhaba, ${d.host||''} için canlı kontrolü çalıştırdım — sonuç: ${d.bas}. Bunu konuşmak istiyorum.`,
     msg:d=>`Merhaba, ${d.host} için kontrolü yaptım — skor ${d.score}. Bunları konuşmak istiyorum.`},
   en:{
-    https:'Secure connection',status:'Site is up',speed:'Load speed',weight:'Page weight',
+    https:'Secure connection',status:'Site is up',weight:'Page weight',
     title:'Page title',desc:'Search description',h1:'Main heading',canonical:'Duplicate-URL guard',
     lang:'Page language',schema:'Data that AI reads',og:'Share card',viewport:'Mobile ready',
     alt:'Image descriptions',contact:'Ways to reach you',whatsapp:'WhatsApp link',
     local:'Map / local listing',analytics:'Measurement',robots:'robots.txt',sitemap:'sitemap',
-    unit:{speed:v=>(v/1000).toFixed(1)+'s',weight:v=>v+' KB',title:v=>v+' chars',
-      desc:v=>v+' chars',h1:v=>v+' found',alt:v=>v+' without alt',contact:v=>v+' paths'},
+    inline:'Inline code',blocking:'Render-blocking resources',
+    fonts:'Font load',imgdim:'Images without dimensions',
+    imgfmt:'Legacy image formats',compress:'Compression',
+    cache:'Document cache header',reqs:'External resources',
+    unit:{weight:v=>v+' KB',title:v=>v+' chars',
+      desc:v=>v+' chars',h1:v=>v+' found',alt:v=>v+' without alt',contact:v=>v+' paths',
+      inline:v=>v+'%',blocking:v=>v+(+v===1?' resource':' resources'),
+      fonts:v=>v+(+v===1?' font source':' font sources'),
+      imgdim:v=>v+' without dimensions',imgfmt:v=>v+'%',cache:v=>v+'s',
+      reqs:v=>v+(+v===1?' reference':' references')},
     verdict:[[80,'Solid foundation.'],[60,'It works, but it leaks money.'],
       [40,'Demand may arrive — most of it gets lost.'],[0,'This site is not selling right now.']],
     sum:{hi:'A few refinements would make a clear difference.',
@@ -11665,8 +11692,15 @@ function diagKur(){
       contact:['Hard to reach you','Visitors have to work to contact you.'],
       whatsapp:['No WhatsApp','Most enquiries arrive on WhatsApp.'],
       analytics:['No measurement','You cannot see which channel brings whom.'],
-      speed:['The site loads slowly','Every second costs visitors on mobile.'],
       weight:['Page is too heavy','Images are not compressed.'],
+      inline:['Most of the page is inline code','This code cannot be cached — a visitor moving to a second page downloads the same weight again.'],
+      blocking:['The first paint is held at the door','Stylesheets and scripts in the head delay it.'],
+      fonts:['Too much font weight','Every family and variant is a separate request; external ones add a dependency.'],
+      imgdim:['Images have no dimensions','Content jumps while the page loads and visitors tap the wrong thing.'],
+      imgfmt:['Images use legacy formats','WebP/AVIF deliver the same image noticeably smaller.'],
+      compress:['Compression is off','The server sends text uncompressed — the cheapest win is here.'],
+      cache:['The document is not cacheable','This page’s own header blocks storage; every visit downloads it from scratch.'],
+      reqs:['Too many external resources','Each reference is a separate request; the page arrives in pieces.'],
       viewport:['No mobile setup','Most visitors are on phones.'],
       og:['Empty share card','Your link shows no image.'],
       local:['No local footprint','You miss "near me" searches.'],
@@ -11708,8 +11742,13 @@ function diagKur(){
     durumCta:'Let us talk about this',
     durumMsg:d=>`Hi, I ran the live check for ${d.host||''} — result: ${d.bas}. I would like to talk about it.`,
     msg:d=>`Hi, I ran the check for ${d.host} — score ${d.score}.`}};
+  /* ÖNCELİK — "önce şu üçü" listesi buradan seçiliyor, kalem ızgarasından
+     değil. FAZ 1: `speed` çıkarıldı (ölü girdi kalırdı), yapı kalemleri
+     eski `speed` mevkiine kondu. Sıra küçük işletmenin kazanç sırasına
+     göre: erişim ve iletişim önce, yapı sonra, biçimsel olanlar en sonda. */
   const PRIO=['https','viewport','contact','whatsapp','schema','desc','title','analytics',
-    'speed','weight','og','local','h1','alt','sitemap','canonical','robots'];
+    'inline','blocking','compress','weight','imgdim','imgfmt','cache','fonts','reqs',
+    'og','local','h1','alt','sitemap','canonical','robots'];
   let busy=false,scanT=null;
 
   function showScan(){
@@ -11832,8 +11871,11 @@ function diagKur(){
     const v=D.verdict.find(([n])=>d.score>=n);
     $('#dgVerdict').textContent=v?v[1]:'';
     $('#dgSummary').textContent=d.score>=75?D.sum.hi:d.score>=50?D.sum.mid:D.sum.lo;
+    /* FAZ 1 — `ms` EKRANDAN KALKTI. Puana girmeyen ve bir düzeltmeye
+       karşılık gelmeyen bir sayı, ekranda gürültüdür; üstelik koşumdan
+       koşuma değiştiği için aracın kendi güvenilirliğini yiyordu.
+       Ölçülmeye devam ediyor, yanıtın teşhis bölgesinde duruyor. */
     $('#dgMeta').innerHTML=
-      `<span>${LG()==='en'?'Load':'Açılış'} <b>${(d.ms/1000).toFixed(1)}${LG()==='en'?'s':' sn'}</b></span>`+
       `<span>${LG()==='en'?'Weight':'Ağırlık'} <b>${d.kb} KB</b></span>`+
       `<span>${LG()==='en'?'Checks':'Kontrol'} <b>${d.items.length}</b></span>`;
     const CC=2*Math.PI*43;
