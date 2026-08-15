@@ -5377,6 +5377,38 @@ const LG=()=>document.documentElement.lang==='en'?'en':'tr';
 const T=o=>typeof o==='string'?o:(o&&(o[LG()]||o.tr))||'';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
+/* =================== GENİŞLİK KAPISI ===================
+   MOBİLDE `resize` BİR YENİDEN KURULUM SİNYALİ DEĞİL. Adres çubuğu her
+   açılıp kapandığında yalnız YÜKSEKLİK oynar ve pencere `resize` atar —
+   ve bu tam olarak kaydırma YÖNÜ değişince olur: aşağı inerken çubuk
+   gizlenir, yukarı çıkarken geri gelir. Enes'in "yukarı çıkınca tekrar
+   donuyor" belirtisinin mekanizması bu.
+
+   Ölçüldü, varsayılmadı: ham `resize`'a bağlı yedi sistem vardı ve
+   hepsi yüksekliğe DUYARSIZ işler yapıyordu — wordmark tuvalini baştan
+   inşa etmek, harita ızgarasını yeniden rasterize etmek, yıldız
+   noktalarını yeniden üretmek, masonry'de kart başına offsetHeight
+   okumak. Hiçbiri yükseklikten etkilenmiyor; hepsi genişlikten
+   etkileniyor. ScrollTrigger bu tuzağa karşı zaten korunuyordu
+   (`ST.config({ignoreMobileResize:true})`), gerisi korunmuyordu.
+
+   Kapı `innerWidth`e bakar — LAYOUT genişliği. Gerçek yön çevirme
+   (portre↔yatay) onu değiştirir, abone yeniden kurar. Adres çubuğu,
+   klavye ve parmakla yakınlaştırma değiştirmez, abone hiç uyanmaz.
+   Aboneler kendi kısıtlarını (debounce / rAF) KORUYOR: buradaki tek
+   değişiklik, çağrının hiç yapılmaması.                              */
+const genislikDegisince=(function(){
+  let son=innerWidth;
+  const abone=[];
+  addEventListener('resize',()=>{
+    const w=innerWidth;
+    if(w===son)return;          /* yalnız yükseklik oynadı — dokunma */
+    son=w;
+    for(const f of abone){try{f()}catch(e){}}
+  },{passive:true});
+  return f=>{abone.push(f);return f;};
+})();
+
 /* ---------- ikonlar ---------- */
 const IC=(()=>{const w=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 return{
@@ -7854,9 +7886,10 @@ function deliverStage(d,L,tx){
     telBekliyor = true;
     requestAnimationFrame(() => { telBekliyor = false; tumTeller(); });
   };
-  addEventListener('resize', telKisitli, { passive: true });
-  if (window.visualViewport)
-    visualViewport.addEventListener('resize', telKisitli, { passive: true });
+  /* Teller kutunun İÇ geometrisine bağlı (offsetParent zinciri); viewport
+     yüksekliği onu oynatmaz. visualViewport bağı da kalktı: o zaten yalnız
+     adres çubuğu ve klavye için ateşliyordu. */
+  genislikDegisince(telKisitli);
   const tpGovde = document.getElementById('sdBody');
   if (tpGovde && 'MutationObserver' in window)
     new MutationObserver(telKisitli).observe(tpGovde, { childList: true });
@@ -7902,10 +7935,12 @@ function deliverStage(d,L,tx){
       if (document.querySelector('.tpbox:not(.in),.kdbox:not(.in)')) tara();
     });
   };
+  /* KAYDIRMA BAĞI DURUYOR — asıl yedek o. Yukarıdaki notun anlattığı
+     "kutu hiç açılmıyor" hatası ekranın altında kalan kutulardan geliyordu;
+     onu kaydırma yakalar, adres çubuğu değil. resize bağı genişlik kapısına
+     alındı, visualViewport bağı kalktı. */
   addEventListener('scroll', taraKisitli, { passive: true });
-  addEventListener('resize', taraKisitli, { passive: true });
-  if (window.visualViewport)
-    visualViewport.addEventListener('resize', taraKisitli, { passive: true });
+  genislikDegisince(taraKisitli);
   const body=document.getElementById('sdBody');
   if(body&&'MutationObserver' in window)
     new MutationObserver(tara).observe(body,{childList:true});
@@ -8961,7 +8996,9 @@ function observeRv(){
     pts=[...Array(n)].map(()=>({x:Math.random()*W,y:Math.random()*H,
       r:Math.random()*1.1+.25,s:Math.random()*.16+.03,a:Math.random()*.5+.15}));}
   sprite();size();
-  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,180)},{passive:true});
+  /* size() tuvali yeniden ayırıp 120 noktayı baştan üretiyor; yükseklik
+     oynadığında noktalar zaten rastgele, görünür bir kazanç yok. */
+  let rt;genislikDegisince(()=>{clearTimeout(rt);rt=setTimeout(size,180)});
   let raf=null,pause=false,last=0;
   document.addEventListener('visibilitychange',()=>pause=document.hidden);
   /* IIFE değil: aşağıdaki __starsInit çağırana kadar başlamıyor. */
@@ -9895,7 +9932,12 @@ function demandMapKur(){
   }
   function stop(){ if(raf){cancelAnimationFrame(raf);raf=null;} }
   size(); secLabel();
-  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,180)},{passive:true});
+  /* En pahalısı bu: size() tuvali yeniden ayırıyor, üç ışıma sprite'ını
+     yeniden çiziyor ve buildStatic/buildRoutes/buildDust/buildRays ile
+     400×142 ızgarayı baştan rasterize ediyor. Kadraj hesabı yalnız
+     genişliğe bakıyor (W<640 mobil dalı). Yükseklikte koşmasının bir
+     sebebi yoktu ve harita ana sayfanın tam ortasında duruyor.        */
+  let rt; genislikDegisince(()=>{clearTimeout(rt);rt=setTimeout(size,180)});
   if('IntersectionObserver' in window){
     new IntersectionObserver(es=>es.forEach(e=>{seen=e.isIntersecting;
       e.isIntersecting?start():stop()}),{threshold:.05}).observe(box);
@@ -10346,7 +10388,7 @@ function flowKur(){
   function start(){if(!raf&&!REDUCE)raf=requestAnimationFrame(tick);}
   function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}}
   build(null);
-  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(wire,180)},{passive:true});
+  let rt;genislikDegisince(()=>{clearTimeout(rt);rt=setTimeout(wire,180)});
   if('IntersectionObserver' in window)
     new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?start():stop()),{threshold:.04}).observe(box);
   else start();
@@ -10820,8 +10862,11 @@ function projectsArchiveKur(){
     raf=requestAnimationFrame(()=>{raf=null;layout(false);});
   };
   /* bölüm görünür olunca genişlik 0'dan artar → giriş animasyonu burada tetiklenir */
+  /* ResizeObserver DURUYOR: host'un KENDİ genişliği değişince (bölüm
+     açılınca, sütun sayısı kayınca) yerleşim şart. Kalkan yalnız pencere
+     bağı — o, yükseklik oynadığında kart başına offsetHeight okuyordu. */
   if('ResizeObserver' in window){ro=new ResizeObserver(relayout);ro.observe(host);}
-  addEventListener('resize',relayout,{passive:true});
+  genislikDegisince(relayout);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(relayout);
 
   window.__prjAllRender=render;
@@ -10942,10 +10987,22 @@ projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
 
   boot();
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(boot);
-  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{stop();boot();},200)},{passive:true});
+  /* İKİ KAPI. (1) Genişlik: build() "QANATONE"u tuvale örnekleyip bit
+     matrisini baştan üretiyor — yükseklikten etkilenmiyor.
+     (2) Görünürlük: bu tuval FOOTER'da ve `.pg` damgası yok, yani hiçbir
+     rotada gizlenmiyor; eski hâli ziyaretçi sayfanın en üstündeyken bile
+     yeniden inşa ediyordu. Artık görünmezken yalnız BAYAT işaretleniyor,
+     asıl inşa kadraja girdiği anda bir kez yapılıyor. */
+  let rt, bayat=false;
+  genislikDegisince(()=>{clearTimeout(rt);rt=setTimeout(()=>{
+    if(!seen){bayat=true;return;}
+    stop();boot();
+  },200)});
   if('IntersectionObserver' in window){
     new IntersectionObserver(es=>es.forEach(e=>{seen=e.isIntersecting;
-      e.isIntersecting?start():stop();}),{threshold:.02}).observe(cv);
+      if(!e.isIntersecting){stop();return;}
+      if(bayat){bayat=false;stop();boot();return;}
+      start();}),{threshold:.02}).observe(cv);
   }else{seen=true;start();}
   document.addEventListener('visibilitychange',()=>document.hidden?stop():(seen&&start()));
 })();
