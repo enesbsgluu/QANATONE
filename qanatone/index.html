@@ -5410,6 +5410,24 @@ return{
 };})();
 const ic=k=>IC[String(k||'').trim()]||IC.zap;
 
+/* KURUM KİMLİĞİ — #org düğümünün iki alanı, TEK KAYNAK.
+   Buradalar çünkü DATA'dan ÖNCE tanımlanmaları gerekiyor: aşağıdaki
+   `settings` bu sabitleri referansla alıyor, böylece metin dosyada
+   iki yerde durmuyor. Zincirin tamamı:
+     KURUM_TANIMI / KURUM_KONULARI  →  DATA.settings.orgDesc/knowsAbout
+       →  panel (admin.html "Genel & İletişim")  →  content.json
+       →  deepMerge(DATA, content.json)  →  schema() #org
+   Panel alanı boşsa ya da content.json eski kalırsa schema() gene bu
+   sabitlere düşer; yani üretim ilk günden doğru, panel yalnız ezebilir.
+   KURAL 107 KORUNUYOR: bu iki alan sayfaya göre DEĞİŞMİYOR — 58 sayfanın
+   hepsinde aynı `https://qanatone.com/#org` kimliği birebir aynı gövdeyi
+   taşıyor, /en/ dahil. Dile göre ayrışan bir tanım kuralı ihlal ederdi. */
+const KURUM_TANIMI='QANATONE, talebi yakalayan sistemleri kuran, ölçen ve işletmeye devreden bir performans pazarlama ve yapay zekâ otomasyonu şirketidir. SEO, GEO, Google ve Meta reklamlarını tek bir ölçüm altında toplar; uluslararası ticari veriyi ve alıcı davranışını ölçen davranışsal motoruyla firmaya özel operasyonu bu ölçüme dayandırarak kurar ve ölçekler. İstanbul ve Dubai.';
+const KURUM_KONULARI=['performans pazarlama','SEO','GEO','Google Ads','Meta Ads',
+  'influencer pazarlaması','pazar ve rakip veri analizi','yapay zekâ ajanları',
+  'pazarlama otomasyonu','uluslararası ticaret verisi','tedarik ve lojistik operasyonu',
+  'ürün ve pazar geliştirme'];
+
 /* =================== İÇERİK =================== */
 const DATA={
 /* Görünüm ve hareket ayarları — panelden yönetilir, applyTheme() uygular.
@@ -5432,7 +5450,12 @@ theme:{
     boş kırmızı şerit kalmıyor.                                          */
  testi:{interval:7,on:0}
 },
-settings:{whatsapp:'905326291508',waMessage:"Merhaba, QANATONE sitesinden yazıyorum.",email:'',demoWa:'',gtm:'',assistant:true},
+/* orgDesc / knowsAbout: değer burada DURUYOR (boş yer tutucu değil) çünkü
+   panelin alanı `get('settings.…')` okuyor — anahtar DATA'da yoksa kutu
+   boş açılır ve Enes on iki maddeyi elle yazmak zorunda kalırdı. Metin
+   kopyalanmadı, yukarıdaki tek kaynak referansla alındı.               */
+settings:{whatsapp:'905326291508',waMessage:"Merhaba, QANATONE sitesinden yazıyorum.",email:'',demoWa:'',gtm:'',assistant:true,
+  orgDesc:KURUM_TANIMI,knowsAbout:KURUM_KONULARI.slice()},
 partners:['Mercedes-Benz','Charles Schwab','Bab İç Mimarlık'],
 
 sectors:[
@@ -11175,14 +11198,11 @@ const SEO=(function(){
      modelleri bir kurumu tek varlıkta birleştirirken tam bu alana bakar;
      GEO ölçümü satan bir sitenin kendi varlık tanımının parçalanmış
      olması tek bulguda bütün tanıtımı götürür.
-     KAYNAK — ÖLÇÜLDÜ, VARSAYILMADI: panelde böyle bir alan YOK
-     (admin.html ayarlar formu ve canlı content.json'ın `settings`i altı
-     anahtar taşıyor, kurum tanımı yok). Bu yüzden kaynak KODDA: panelden
-     okuyup koda varsayılan koymayan bir yama üretimde hiçbir şey
-     değiştirmezdi — bu tuzağa bir kez düşüldü (KVKK metni kodda değişti,
-     üretimde değişmedi). Panel isterse ezebilsin diye `settings.orgDesc`
-     okunuyor; boşsa aşağıdaki metin geçerli, yani üretim ilk günden
-     doğru çalışıyor.
+     KAYNAK — YUKARI TAŞINDI: metin artık DATA'dan önce, dosyanın tek
+     yerinde (`KURUM_TANIMI` / `KURUM_KONULARI`) duruyor ve oradan hem
+     `DATA.settings`e hem buraya besleniyor. Eskiden yalnız burada
+     durduğu için panelde kutu boş açılıyordu; artık panel alanı dolu
+     geliyor, aşağıdaki `||` yalnız içi boşaltılırsa devreye giriyor.
      METİN UYDURULMADI: her parçası sitede zaten yayında olan onaylı
      metinden alındı — kurucu biyografisi ("talebi yakalayan sistemleri
      kurar, ölçer ve işletmeye devrederiz"), hero rozeti ("Performans
@@ -11191,7 +11211,6 @@ const SEO=(function(){
      TEK DİL: kural aynı @id'nin 58 sayfada BİREBİR aynı olmasını
      istiyor, /en/ dahil. Dile göre değişen bir tanım o kuralı ihlal
      ederdi; kurum tek varlık, tanımı da tek. */
-  const KURUM_TANIMI='QANATONE, talebi yakalayan sistemleri kuran, ölçen ve işletmeye devreden bir performans pazarlama ve yapay zekâ otomasyonu ekibi. SEO, GEO, Google & Meta Ads, yapay zekâ ajanları ve otomasyon. İstanbul ve Dubai.';
 
   function schema(path,title,desc,en,post,xt){
     const st=C.settings||{};
@@ -11204,6 +11223,13 @@ const SEO=(function(){
       /* sayfaya özel açıklama KAYBOLMADI — aşağıdaki WebPage.description'da
          duruyor; yalnız yanlış yere yazılan şey doğru yerde kaldı */
       description:String(st.orgDesc||'').trim()||KURUM_TANIMI,
+      /* knowsAbout — kurumun uzmanlık alanları, description ile aynı
+         kurallara tabi: aynı @id, aynı gövde, dile göre değişmez.
+         Boş/eksik dizide alan hiç yazılmıyor (`undefined` JSON.stringify'da
+         düşer) — yarım bir liste, hiç liste olmamasından daha kötü. */
+      knowsAbout:(()=>{const a=Array.isArray(st.knowsAbout)?st.knowsAbout:null;
+        const l=(a&&a.length?a:KURUM_KONULARI).map(x=>String(x||'').trim()).filter(Boolean);
+        return l.length?l:undefined;})(),
       sameAs:soc.length?soc:undefined,
       areaServed:['TR','AE'],
       contactPoint:tel?[{'@type':'ContactPoint',contactType:'sales',

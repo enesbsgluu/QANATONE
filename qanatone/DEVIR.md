@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-15 17:58 UTC
+> Üretim tarihi: 2026-08-15 22:16 UTC
 
 ## Yeni sohbete geçerken
 
@@ -26,7 +26,7 @@
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `_headers` |  | 2 KB | `70fce80d` |
-| `admin.html` |  | 59 KB | `00f250fd` |
+| `admin.html` |  | 60 KB | `d25ad94c` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
@@ -64,7 +64,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 865 KB | `230240e5` |
+| `index.html` |  | 867 KB | `8f7e3a96` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -107,8 +107,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 57 sn (basılan 0, önbellekten 58) |
-| dist boyutu | 50.5 MB |
+| son derleme | 151 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 50.7 MB |
 
 ## Çalıştırma
 
