@@ -11168,6 +11168,31 @@ const SEO=(function(){
      hepsi buradan besleniyor, tek satırlık değişiklik üçünü de düzeltir. */
   const abs=(path,en)=>ORIGIN+(en?'/en':'')+(path||'/');
 
+  /* KURUM TANIMI — TEK VE DEĞİŞMEZ, 58 sayfada birebir aynı.
+     Önceden `Organization.description` her sayfada O SAYFANIN
+     açıklamasıyla eziliyordu: aynı `https://qanatone.com/#org` kimliği
+     için 58 farklı kurum tanımı üretiliyordu. Bilgi grafiği ve dil
+     modelleri bir kurumu tek varlıkta birleştirirken tam bu alana bakar;
+     GEO ölçümü satan bir sitenin kendi varlık tanımının parçalanmış
+     olması tek bulguda bütün tanıtımı götürür.
+     KAYNAK — ÖLÇÜLDÜ, VARSAYILMADI: panelde böyle bir alan YOK
+     (admin.html ayarlar formu ve canlı content.json'ın `settings`i altı
+     anahtar taşıyor, kurum tanımı yok). Bu yüzden kaynak KODDA: panelden
+     okuyup koda varsayılan koymayan bir yama üretimde hiçbir şey
+     değiştirmezdi — bu tuzağa bir kez düşüldü (KVKK metni kodda değişti,
+     üretimde değişmedi). Panel isterse ezebilsin diye `settings.orgDesc`
+     okunuyor; boşsa aşağıdaki metin geçerli, yani üretim ilk günden
+     doğru çalışıyor.
+     METİN UYDURULMADI: her parçası sitede zaten yayında olan onaylı
+     metinden alındı — kurucu biyografisi ("talebi yakalayan sistemleri
+     kurar, ölçer ve işletmeye devrederiz"), hero rozeti ("Performans
+     pazarlama · Yapay zekâ otomasyonu"), hizmetler açıklaması ve
+     "İstanbul · Dubai". Rakam, müşteri sözü ya da kapasite iddiası yok.
+     TEK DİL: kural aynı @id'nin 58 sayfada BİREBİR aynı olmasını
+     istiyor, /en/ dahil. Dile göre değişen bir tanım o kuralı ihlal
+     ederdi; kurum tek varlık, tanımı da tek. */
+  const KURUM_TANIMI='QANATONE, talebi yakalayan sistemleri kuran, ölçen ve işletmeye devreden bir performans pazarlama ve yapay zekâ otomasyonu ekibi. SEO, GEO, Google & Meta Ads, yapay zekâ ajanları ve otomasyon. İstanbul ve Dubai.';
+
   function schema(path,title,desc,en,post,xt){
     const st=C.settings||{};
     const soc=(C.socials||[]).map(x=>x&&x.url).filter(Boolean);
@@ -11176,26 +11201,38 @@ const SEO=(function(){
     const g=[{
       '@type':'Organization','@id':ORIGIN+'/#org',
       name:'QANATONE',url:ORIGIN+'/',logo:ORIGIN+'/img/qanatone.webp',
-      description:desc,
+      /* sayfaya özel açıklama KAYBOLMADI — aşağıdaki WebPage.description'da
+         duruyor; yalnız yanlış yere yazılan şey doğru yerde kaldı */
+      description:String(st.orgDesc||'').trim()||KURUM_TANIMI,
       sameAs:soc.length?soc:undefined,
       areaServed:['TR','AE'],
       contactPoint:tel?[{'@type':'ContactPoint',contactType:'sales',
         telephone:'+'+tel,availableLanguage:['tr','en']}]:undefined
     },{
-      '@type':'WebSite','@id':ORIGIN+'/#site',url:ORIGIN+'/',name:'QANATONE',
+      /* KİMLİK DİLE BAĞLANDI. Ölçüldü: aynı `/#site` kimliği TR ve EN'de
+         iki farklı gövde taşıyordu (`inLanguage` tr/en) — #org ile aynı
+         hata sınıfı, yalnız 58 yerine 2 gövdeyle. Düğümün ALANLARI
+         değişmedi; değişen yalnız kimliğin dile göre ayrışması, çünkü
+         /en/ bu sitede ayrı bir dosya ağacı. */
+      '@type':'WebSite','@id':abs('/',en)+'#site',url:abs('/',en),name:'QANATONE',
       publisher:{'@id':ORIGIN+'/#org'},inLanguage:en?'en':'tr'
     },{
       '@type':'WebPage','@id':abs(path,en)+'#page',url:abs(path,en),
-      name:title,description:desc,isPartOf:{'@id':ORIGIN+'/#site'},
+      name:title,description:desc,isPartOf:{'@id':abs('/',en)+'#site'},
       inLanguage:en?'en':'tr'
     }];
     if(path==='/sss'&&(C.faq||[]).length){
-      g.push({'@type':'FAQPage','@id':ORIGIN+'/sss#faq',
+      /* TR ve EN aynı `/sss#faq` kimliğini paylaşıyordu ve içerikleri
+         farklıydı — üstelik EN sayfası kendini TÜRKÇE adresin altındaki
+         bir kimlikle tanıtıyordu. Kimlik sayfanın kendi adresine bağlandı;
+         soru/cevap alanlarına dokunulmadı. */
+      g.push({'@type':'FAQPage','@id':abs(path,en)+'#faq',
         mainEntity:C.faq.map(f=>({'@type':'Question',name:strip(f.q),
           acceptedAnswer:{'@type':'Answer',text:strip(f.a)}}))});
     }
     if(path==='/hizmetler'&&(C.services||[]).length){
-      g.push({'@type':'ItemList','@id':ORIGIN+'/hizmetler#list',
+      /* aynı sebep, aynı düzeltme: kimlik sayfanın kendi adresine bağlandı */
+      g.push({'@type':'ItemList','@id':abs(path,en)+'#list',
         itemListElement:C.services.map((sv,i)=>({'@type':'ListItem',position:i+1,
           item:{'@type':'Service',name:strip(sv.title),description:strip(sv.text),
                 provider:{'@id':ORIGIN+'/#org'},areaServed:['TR','AE']}}))});
