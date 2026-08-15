@@ -1,38 +1,52 @@
 {
-  "not": "FAZ 0 TABAN ÇİZGİSİ — sağlıklı site, yama ÖNCESİ canlı ölçüm. ms kaydın parçası DEĞİL: ağ gecikmesi koşumdan koşuma değişir ve tek başına speed kalemini oynatıp skoru 93'ten 89'a (1900 ms) hatta 85'e (4729 ms) indiriyor. Bu yüzden karşılaştırma ms hariç yapılır.",
-  "canliArtikHareketli": "Faz 0 deploy'undan SONRA canlı sayfa 849 -> 855 KB oldu; büyüme durum ekranı metinlerinin ve CSS'inin kendisi. Yani 'canlıyı tekrar tara' iki değişkeni birden karıştırır (site değişti + ağ gecikmesi). KALICI KARŞILAŞTIRMA bu yüzden sabit girdiyle yapılıyor: aynı gövde iki diagnose.js sürümünden geçirilir. 2026-08-15 ölçümü — temel c8f5b2d ve Faz 0 sonrası, ikisi de skor 93, kb 859, 19 kalemin hepsi aynı. Sağlıklı yol dokunulmamış.",
+  "not": "TABAN ÇİZGİSİ — Faz 1 (yapı katmanı) turunda bilerek değişti. Bir kalem (`speed`) yerini sekiz yapı kalemine bıraktı; bu dosya eski ve yeni beklenen değeri BİRLİKTE taşıyor ki değişim sessiz olmasın.",
+
+  "nedenDegisti": "`speed` tek bir soğuk isteğin süresini puanlıyordu ve skoru tekrarlanamaz yapıyordu: AYNI sağlıklı site soğuk 1900 ms → 89, ısınmış 505 ms → 93, ağ gecikmesi 4729 ms → 85. Süre bir belirti; sebepler belirlenimci ve hepsi elimizdeki tek fetch'ten okunuyor. 8 puan sekiz yapı kalemine eşit bölündü, toplam yine 100.",
+
+  "olcumYontemi": "SABİT GİRDİ — canlı istek DEĞİL. Faz 0'da kanıtlandı: canlı taban çizgisi hareketli hedeftir (deploy sayfayı 849→855 KB büyüttü, ayrıca ağ gecikmesi tek başına skoru oynatıyordu). Aynı gövde iki diagnose.js sürümünden geçirildi: temel commit `91a9329` ve Faz 1 sonrası. Gövde: `dist/index.html` (883.464 bayt). Yanıt başlıkları uydurma değil, 2026-08-15'te qanatone.netlify.app'ten ölçüldü: `content-encoding: br`, `cache-control: public,max-age=0,must-revalidate`.",
+
   "olculdu": "2026-08-15",
-  "url": "https://qanatone.netlify.app",
-  "kosumAdedi": 3,
-  "ucKosumAyni": true,
-  "status": 200,
-  "score": 93,
-  "kb": 849,
-  "finalUrl": "https://qanatone.netlify.app/",
-  "msAralik": [
-    609,
-    251,
-    191
-  ],
-  "items": {
-    "https": "ok",
-    "status": "ok",
-    "speed": "ok",
-    "weight": "warn",
-    "title": "ok",
-    "desc": "warn",
-    "h1": "ok",
-    "canonical": "ok",
-    "lang": "ok",
-    "schema": "ok",
-    "og": "ok",
-    "viewport": "ok",
-    "alt": "ok",
-    "contact": "ok",
-    "whatsapp": "ok",
-    "local": "warn",
-    "analytics": "ok",
-    "robots": "ok",
-    "sitemap": "ok"
+  "temelCommit": "91a9329",
+  "girdi": "dist/index.html",
+  "girdiBayt": 883464,
+
+  "eski": {
+    "surum": "temel commit 91a9329 — `speed` var",
+    "score": 93,
+    "kb": 863,
+    "kalemSayisi": 19,
+    "speed": "ok (64 ms — bu sayı sabit girdide fetch gerçek ağa çıkmadığı için düşük; canlıda 191-4729 ms arasında geziyordu ve skoru 85 ile 93 arasında oynatıyordu. Kaldırılma sebebi tam olarak bu.)"
+  },
+
+  "yeni": {
+    "surum": "Faz 1 — `speed` yok, sekiz yapı kalemi var",
+    "score": 88,
+    "kb": 863,
+    "kalemSayisi": 26,
+    "yapiKalemleri": {
+      "inline": { "state": "fail", "v": 92, "birim": "%" },
+      "blocking": { "state": "ok", "v": 1, "birim": "kaynak" },
+      "fonts": { "state": "warn", "v": 3, "birim": "yazı tipi kaynağı" },
+      "imgdim": { "state": "fail", "v": 5, "birim": "boyutsuz görsel" },
+      "imgfmt": { "state": "fail", "v": 78, "birim": "%" },
+      "compress": { "state": "ok", "v": null },
+      "cache": { "state": "ok", "v": null, "not": "max-age=0, must-revalidate — başlık var ve saklamayı yasaklamıyor; sayı bilgi taşımadığı için yazılmıyor" },
+      "reqs": { "state": "fail", "v": 62, "birim": "referans" }
+    }
+  },
+
+  "skorFarkiNereden": "93 → 88. `speed` 8 puanın 8'ini alıyordu (ok). Yapı kalemleri aynı 8 puanın 3,5'ini alıyor: blocking+compress+cache ok (3), fonts warn (0,5), inline+imgdim+imgfmt+reqs fail (0). Fark tam olarak 4,5 puan ve tamamı ÖLÇÜLMÜŞ bir eksikliğe karşılık geliyor — eskisi ise ağ gecikmesine karşılık geliyordu.",
+
+  "degismeyen": "18 kalemin 18'i BİREBİR AYNI: https ok · status ok · weight warn · title ok · desc warn · h1 ok · canonical ok · lang ok · schema ok · og ok · viewport ok · alt ok · contact ok · whatsapp ok · local warn · analytics ok · robots ok · sitemap ok. Değişen yalnız `speed` ve onun yerine gelenler.",
+
+  "bulgu": "Yeni kalemler QANATONE'un KENDİ sitesinde dört kırmızı buldu ve dördü de gerçek: sayfanın %92'si satır içi kod (tek dosya mimarisinin bilinçli sonucu), 5 görselde width/height yok, görsellerin %78'i eski formatta, 62 dış kaynak referansı. Bunlar bu turun kapsamı değil — ölçüm doğru çalıştığının kanıtı ve ayrı bir işin konusu.",
+
+  "degerler": {
+    "weight": 863,
+    "title": 37,
+    "desc": 55,
+    "h1": 1,
+    "alt": 0,
+    "contact": 3
   }
 }

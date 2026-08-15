@@ -230,12 +230,35 @@ const TOPLAM_BAYT = 2 * 1024 * 1024;
    SÖYLEYEBİLMEK — bu dosyanın Faz 0'da yaptığı şey tam olarak budur. */
 const UA = 'QanatoneSiteCheck/1.0 (+https://qanatone.com)';
 
-/* --- ağırlıklar: toplam 100 --- */
+/* --- ağırlıklar: toplam 100 ---
+   FAZ 1: `speed` kalemi kaldırıldı. Tek bir soğuk isteğin süresini
+   puanlıyordu ve skoru tekrarlanamaz yapıyordu — AYNI sağlıklı site
+   soğukta 1900 ms → 89, ısınmışta 505 ms → 93, gecikmede 4729 ms → 85.
+   8 puanı, aynı fetch'ten belirlenimci okunan sekiz YAPI kalemine
+   dağıtıldı; toplam yine 100, ağırlık dağılımına dokunulmadı.
+   PAY NEDEN EŞİT: hangi yapı kaleminin ötekinden kaç kat önemli olduğu
+   ölçülmüş bir şey değil. Uydurma bir fark koymak bu deponun "ölçmediğin
+   rakamı yazma" kuralına girer. Bütün ağırlıkların kanıta bağlanması
+   Faz 3'ün işi; bu tur bozuk aletin yerine çalışan aletleri koyuyor. */
 const W = {
-  https: 8, status: 6, speed: 8, weight: 4, title: 7, desc: 7, h1: 4,
+  https: 8, status: 6, weight: 4, title: 7, desc: 7, h1: 4,
   canonical: 4, lang: 3, schema: 10, og: 5, viewport: 8, alt: 4,
-  contact: 7, whatsapp: 5, local: 4, analytics: 4, robots: 1, sitemap: 1
+  contact: 7, whatsapp: 5, local: 4, analytics: 4, robots: 1, sitemap: 1,
+  /* speed'in 8 puanı — sekize eşit bölündü */
+  inline: 1, blocking: 1, fonts: 1, imgdim: 1, imgfmt: 1, compress: 1, cache: 1, reqs: 1
 };
+
+/* YANITIN İKİ BÖLGESİ — sınır kodda açıkça duruyor, tahmine bırakılmadı.
+     · PUANLANAN YÜK: ok/host/finalUrl/score/kb/status/bytes/redirects/
+       cdn/durum/cfEylul/items. Belirlenimcilik kuralı BUNU karşılaştırır;
+       aynı girdi → birebir aynı yük.
+     · TEŞHİS BÖLGESİ (`teshis`): zamana bağlı gözlemler. `ms` burada
+       yaşıyor — ölçülmeye devam ediyor çünkü kendi teşhisimiz için
+       değerli, ama puanlanmıyor ve ekrana çıkmıyor.
+   Sürüm 1'de `ms` yanıtın gövdesinde duruyordu ve "çıktı birebir aynı
+   olmalı" kuralıyla çelişiyordu: her koşumda değişen bir alan, aynı
+   çıktı iddiasını imkânsız kılar. Bölge ayrımı o çelişkiyi kaldırıyor. */
+const TESHIS_ALANI = 'teshis';
 
 /* ---------- SSRF koruması ---------- */
 function isPrivate(ip) {
@@ -512,7 +535,142 @@ function robotsAiKapali(metin) {
     g.ajanlar.some(a => a === '*' || AI_AJAN.test(a)));
 }
 
-function analyse(html, res, ms, bytes, finalUrl) {
+/* ====================== YAPI ÖLÇÜMÜ (FAZ 1) ======================
+   Hepsi elimizdeki TEK fetch'ten okunuyor — ek istek yok.
+
+   GÜVENLİK — SAYIM EVET, İÇERİK HAYIR: yazı tipi adları, görsel ve betik
+   adresleri, dış alan adları ne döndürülür ne saklanır. Bunlar karşı
+   tarafın kontrolündeki dizelerdir; gösterildikleri anda mevcut zincire
+   yeni bir uç eklerler. Bu fonksiyondan yalnız SAYI çıkar.
+
+   ZAMAN TABANLI KORUMA YOK ve olmayacak. "Ayrıştırma X ms'yi aşarsa
+   vazgeç" cazip görünür ama aynı siteye makine yüküne göre farklı skor
+   verir — bu turda düzelttiğimiz kusurun aynısı. Sınır GİRDİ BOYUTUNDAN
+   gelir: gövde zaten 2 MB'ta kesiliyor, tarama tek geçişli ve O(n).
+
+   DESENLER SINIRLI: iç içe nicelleyici yok. Etiket taraması tek bir
+   `[^>]*` kullanıyor (geri izleme patlaması üretemez), satır içi içerik
+   ise regex'le DEĞİL, kapanış etiketinin indeksi bulunup ATLANARAK
+   geçiliyor — hem tek geçiş korunuyor hem betik gövdesindeki `<img`
+   benzeri diziler yanlışlıkla etiket sayılmıyor.
+   Kapanış araması küçük harfe çevrilmiş kopyada DEĞİL, özgün metinde
+   yapılıyor: Türkçe 'İ' JS'te iki koda düşer ve toLowerCase() indeksleri
+   kaydırır — kopya üzerinden bulunan indeks özgün metinde yanlış yeri
+   gösterirdi.                                                          */
+const ESKI_GORSEL = /\.(?:jpe?g|png|gif|bmp)(?:[?#]|$)/i;
+const YAZI_TIPI_DOSYA = /\.(?:woff2?|ttf|otf|eot)(?:[?#]|$)/i;
+const FONT_SERVISI = /fonts\.googleapis\.com|fonts\.gstatic\.com|use\.typekit\.net|fonts\.bunny\.net|fast\.fonts\.net/i;
+const ETIKET = /<(script|style|link|img|source|iframe)\b([^>]*)>/gi;
+const KAPANIS = { script: /<\/script/gi, style: /<\/style/gi };
+const N_SRC = /\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i;
+const N_SRCSET = /\bsrcset\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i;
+const N_HREF = /\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i;
+const N_REL = /\brel\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i;
+const N_MEDIA = /\bmedia\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i;
+const oku = (re, s) => {
+  const m = re.exec(s);
+  if (!m) return '';
+  return (m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : m[3]) || '';
+};
+
+/* Belgenin KENDİ önbellek başlığı. SINIR DÜRÜSTÇE YAZILIYOR: yalnız
+   belgenin başlığını görüyoruz, varlıkların değil — varlık başlıkları ek
+   istek ister ve bu turda yok. Rapor metni de bunu ima etmiyor.        */
+function belgeOnbellegi(res) {
+  const cc = basligiOku(res, 'cache-control').toLowerCase();
+  if (!cc) return { durum: 'warn', saniye: null };
+  if (/\bno-store\b/.test(cc)) return { durum: 'fail', saniye: 0 };
+  const m = /\bmax-age\s*=\s*(\d{1,9})/.exec(cc);
+  return { durum: 'ok', saniye: m ? Number(m[1]) : null };
+}
+
+function yapiOlc(h, res, finalUrl) {
+  const n = h.length;
+  const kafa = /<\/head\s*>/i.exec(h);
+  const kafaSonu = kafa ? kafa.index : n;
+  let belgeHost = '';
+  try { belgeHost = new URL(finalUrl).hostname.toLowerCase(); } catch (e) {}
+  /* yalnız "dışarıda mı" sorusunun EVET/HAYIR'ı tutuluyor; alan adının
+     kendisi hiçbir değişkende yaşamıyor */
+  const disarida = u => {
+    if (!u) return false;
+    const mutlak = /^https?:\/\//i.test(u) ? u : (u.slice(0, 2) === '//' ? 'https:' + u : '');
+    if (!mutlak) return false;
+    try { return new URL(mutlak).hostname.toLowerCase() !== belgeHost; } catch (e) { return false; }
+  };
+
+  let satirIci = 0, engelleyen = 0, yaziTipi = 0, disFont = false;
+  let gorsel = 0, boyutsuz = 0, eski = 0, disKaynak = 0;
+
+  ETIKET.lastIndex = 0;
+  let m;
+  while ((m = ETIKET.exec(h))) {
+    const ad = m[1].toLowerCase();
+    const nit = m[2] || '';
+    const kafada = m.index < kafaSonu;
+
+    if (ad === 'script' || ad === 'style') {
+      const src = ad === 'script' ? oku(N_SRC, nit) : '';
+      if (src) {
+        disKaynak++;
+        /* type=module varsayılan olarak ertelenir; async/defer da öyle */
+        if (kafada && !/\b(?:async|defer)\b/i.test(nit) &&
+            !/\btype\s*=\s*["']?module/i.test(nit)) engelleyen++;
+        if (YAZI_TIPI_DOSYA.test(src)) { yaziTipi++; if (disarida(src)) disFont = true; }
+      } else {
+        /* satır içi: içeriği ÖLÇ ve ATLA — tek geçiş korunur */
+        const kre = KAPANIS[ad];
+        kre.lastIndex = ETIKET.lastIndex;
+        const km = kre.exec(h);
+        const son = km ? km.index : n;
+        const ic = h.slice(ETIKET.lastIndex, son);
+        satirIci += ic.length;
+        if (ad === 'style') {
+          const ff = ic.match(/@font-face/gi);
+          if (ff) yaziTipi += ff.length;
+        }
+        ETIKET.lastIndex = son;
+      }
+      continue;
+    }
+
+    if (ad === 'link') {
+      const href = oku(N_HREF, nit);
+      const rel = oku(N_REL, nit).toLowerCase();
+      if (href) disKaynak++;
+      if (rel.indexOf('stylesheet') !== -1) {
+        const media = oku(N_MEDIA, nit).toLowerCase().trim();
+        const engelsiz = media && media !== 'all' && media !== 'screen';
+        if (kafada && !engelsiz) engelleyen++;
+      }
+      const fontBaglantisi = FONT_SERVISI.test(href) || YAZI_TIPI_DOSYA.test(href) ||
+        (rel.indexOf('preload') !== -1 && /\bas\s*=\s*["']?font/i.test(nit));
+      if (fontBaglantisi) { yaziTipi++; if (disarida(href)) disFont = true; }
+      continue;
+    }
+
+    const kaynak = oku(N_SRC, nit) || oku(N_SRCSET, nit);
+    if (ad === 'img') {
+      gorsel++;
+      if (!/\bwidth\s*=/i.test(nit) || !/\bheight\s*=/i.test(nit)) boyutsuz++;
+      if (ESKI_GORSEL.test(kaynak)) eski++;
+    }
+    if (kaynak) disKaynak++;
+  }
+
+  return {
+    satirIciOran: n ? Math.round(satirIci / n * 100) : 0,
+    engelleyen,
+    yaziTipi, disFont,
+    gorsel, boyutsuz,
+    eskiOran: gorsel ? Math.round(eski / gorsel * 100) : 0,
+    disKaynak,
+    sikistirma: /\b(?:gzip|br|deflate|zstd)\b/i.test(basligiOku(res, 'content-encoding')),
+    onbellek: belgeOnbellegi(res)
+  };
+}
+
+function analyse(html, res, bytes, finalUrl) {
   const h = html;
   const low = h.toLowerCase();
   const head = low.slice(0, 60000);
@@ -521,10 +679,30 @@ function analyse(html, res, ms, bytes, finalUrl) {
   items.push(S('https', finalUrl.startsWith('https://') ? 'ok' : 'fail'));
   items.push(S('status', res.status >= 200 && res.status < 300 ? 'ok'
     : res.status < 400 ? 'warn' : 'fail'));
-  items.push(S('speed', band(ms, 1500, 3500), ms));
 
   const kb = Math.round(bytes / 1024);
   items.push(S('weight', band(kb, 500, 1500), kb));
+
+  /* ---- YAPI KALEMLERİ — `speed`in yerine gelenler ---- */
+  const y = yapiOlc(h, res, finalUrl);
+  /* satır içi kod ÖNBELLEĞE ALINAMAZ: ikinci sayfaya geçen ziyaretçi
+     aynı yükü tekrar indirir. Oran, belge boyutunun yüzdesi. */
+  items.push(S('inline', band(y.satirIciOran, 20, 50), y.satirIciOran));
+  items.push(S('blocking', band(y.engelleyen, 2, 5), y.engelleyen));
+  /* dış alan adından gelen yazı tipi ek istek + dış bağımlılıktır:
+     sayı yeşil bandda olsa bile en iyi ihtimalle uyarı */
+  const fontBandi = band(y.yaziTipi, 2, 5);
+  items.push(S('fonts', y.disFont && fontBandi === 'ok' ? 'warn' : fontBandi, y.yaziTipi));
+  items.push(S('imgdim', band(y.boyutsuz, 0, 2), y.boyutsuz));
+  items.push(S('imgfmt', y.gorsel === 0 ? 'ok' : band(y.eskiOran, 20, 60), y.eskiOran));
+  items.push(S('compress', y.sikistirma ? 'ok' : 'fail'));
+  /* saniye YALNIZ pozitifken gösteriliyor: `max-age=0, must-revalidate`
+     geçerli ve ucuz bir ayardır (304 ile döner), ama yanında "0 sn"
+     yazan YEŞİL bir kutu kendi kendisiyle çelişir gibi okunur. Sayı
+     bilgi taşımıyorsa yazılmaz. */
+  items.push(S('cache', y.onbellek.durum,
+    y.onbellek.saniye > 0 ? y.onbellek.saniye : undefined));
+  items.push(S('reqs', band(y.disKaynak, 30, 60), y.disKaynak));
 
   const title = (h.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]
     .replace(/\s+/g, ' ').trim();
@@ -661,7 +839,7 @@ function handlerOlustur(depo) {
     };
   }
 
-  const items = analyse(page.body, page.r, page.ms, page.bytes, finalUrl);
+  const items = analyse(page.body, page.r, page.bytes, finalUrl);
 
   /* robots.txt ve site haritası — bulunamazsa uyarı, hata değil */
   const origin = new URL(finalUrl).origin;
@@ -691,7 +869,6 @@ function handlerOlustur(depo) {
       host: u.hostname,
       finalUrl,
       score: score(items),
-      ms: page.ms,
       kb: Math.round(page.bytes / 1024),
       kalan: kapi.kalan,
       /* sağlıklı yolda da taşınıyor: istemci aynı alanları tek yerden
@@ -705,7 +882,11 @@ function handlerOlustur(depo) {
          sağlıklı olsa bile uyarı çıkar. Skorla hiçbir bağı yok — 95
          puanlık bir site bloklanmak üzere olabilir. */
       cfEylul: cdn === 'cloudflare' && robotsAiKapali(robotsBody),
-      items
+      items,
+      /* ---- TEŞHİS BÖLGESİ — buradan aşağısı puanlanmaz, gösterilmez ve
+         belirlenimcilik karşılaştırmasına GİRMEZ. Zamana bağlı gözlemler
+         yalnız burada yaşar; ön yüz bu nesneye hiç dokunmuyor. ---- */
+      [TESHIS_ALANI]: { ms: page.ms }
     })
   };
   };
@@ -725,3 +906,7 @@ exports.kimAnahtari = kimAnahtari;
 exports.istemciKimligi = istemciKimligi;
 exports.KOTA_HAK = KOTA_HAK;
 exports.KOTA_PENCERE_MS = KOTA_PENCERE_MS;
+/* Faz 1: ağırlık tablosu ve bölge sınırı denetimden okunabilsin — kural
+   "toplam 100 · yapı payı 8" dengesini tahminle değil, kaynaktan ölçüyor. */
+exports.W = W;
+exports.TESHIS_ALANI = TESHIS_ALANI;

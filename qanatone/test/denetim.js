@@ -1731,6 +1731,219 @@ async function guvenlik() {
        + `hamSızmadı=${hamSizmadi} yönlendirme=${z.redirects}(${typeof z.redirects}) cdn=${k.cdn}/${s.cdn}/${z.cdn}`);
   }
 
+  /* ======================= FAZ 1 · YAPI KATMANI =======================
+     KUSUR: `speed` tek bir soğuk isteğin süresini puanlıyordu ve skor bu
+     yüzden tekrarlanabilir değildi. AYNI sağlıklı site üç kez ölçüldü:
+     soğuk 1900 ms → 89 · ısınmış 505 ms → 93 · gecikmeli 4729 ms → 85.
+     Ziyaretçi aracı iki kez çalıştırıp iki rakam görürse raporun geri
+     kalanı ne kadar doğru olursa olsun tartışma orada biter.
+     Süre bir BELİRTİ; sebepler belirlenimci ve hepsi elimizdeki tek
+     fetch'ten okunabiliyor. `speed`'in 8 puanı yapı kalemlerine dağıtıldı,
+     toplam yine 100.                                                    */
+
+  /* 105 · FAZ 1 (+1) · YAPI KALEMLERİ ÖLÇÜLÜYOR, `speed` SÜREYE BAĞLI
+     PUANLAMIYOR.
+     Kural üç şeyi birden kilitliyor, çünkü üçü ayrı ayrı yanlış yeşil
+     üretebilir:
+       a) kalem VAR mı — `speed` gitti, sekiz yapı kalemi geldi, ağırlık
+          toplamı yine 100 ve yeni kalemlerin payı tam 8;
+       b) kalem GERÇEKTEN ölçüyor mu — iki uçtan gövde veriliyor (temiz /
+          bozuk) ve sekiz kalemin sekizi de yön değiştirmeli. Sabit yeşil
+          dönen bir kalem "ölçülüyor" değildir; bu depoda `status` kalemi
+          tam olarak o hâle düştü ve bir tur boyunca kimse görmedi;
+       c) EKRANA yalnız sayı çıkıyor mu — yazı tipi adları, görsel ve
+          betik adresleri saldırganın kontrolündeki dizelerdir. Sayım
+          güvenli, içerik değil. Ayrıca `ms` ekrandan kalkmalı: puana
+          girmeyen ve bir düzeltmeye karşılık gelmeyen sayı gürültüdür. */
+  {
+    const D = require(path.join(KOK, 'netlify', 'functions', 'diagnose.js'));
+    const YAPI = ['inline', 'blocking', 'fonts', 'imgdim', 'imgfmt', 'compress', 'cache', 'reqs'];
+    const BAS = '<!DOCTYPE html><html lang="tr"><head>'
+      + '<title>Yeterince uzun bir sayfa basligi burada</title>'
+      + '<meta name="viewport" content="width=device-width">';
+
+    /* TEMİZ UÇ — her yapı kalemi yeşil olmalı */
+    const temiz = BAS + '<link rel="stylesheet" href="/s.css" media="print">'
+      + '</head><body><h1>Bir</h1>'
+      + '<img src="/a.webp" width="10" height="10" alt="a">'
+      + '<a href="tel:+900000000000">ara</a><a href="mailto:a@b.com">yaz</a>'
+      + '</body></html>';
+    /* BOZUK UÇ — her yapı kalemi kırmızı olmalı */
+    const govdeliBetik = '<script>var q=' + JSON.stringify('d'.repeat(6000)) + ';</' + 'script>';
+    const engel = Array.from({ length: 6 }, (_, i) => `<link rel="stylesheet" href="/e${i}.css">`).join('')
+      + '<script src="/b.js"></' + 'script>';
+    const fontlar = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter">'
+      + '<style>' + Array.from({ length: 6 }, (_, i) =>
+        `@font-face{font-family:F${i};src:url(/f${i}.woff2)}`).join('') + '</style>';
+    const gorseller = Array.from({ length: 8 }, (_, i) => `<img src="/g${i}.jpg" alt="g">`).join('');
+    const cokKaynak = Array.from({ length: 70 }, (_, i) => `<img src="/k${i}.jpg" alt="k">`).join('');
+    const bozuk = BAS + engel + fontlar + '</head><body><h1>Bir</h1>'
+      + govdeliBetik + gorseller + cokKaynak + '</body></html>';
+
+    const IYI_BASLIK = { 'content-encoding': 'br', 'cache-control': 'public, max-age=31536000, immutable' };
+    const KOTU_BASLIK = { 'cache-control': 'no-store' };
+
+    const rT = await fazSifirKos(fazSifirYanit(200, temiz, IYI_BASLIK));
+    const rB = await fazSifirKos(fazSifirYanit(200, bozuk, KOTU_BASLIK));
+    const durumu = (o, k) => { const i = (o.items || []).find(x => x.k === k); return i ? i.state : '-'; };
+
+    /* a) kalem varlığı + ağırlık dengesi */
+    const anahtarlar = (rT.d.items || []).map(i => i.k);
+    const speedGitti = !anahtarlar.includes('speed') && !(D.W && 'speed' in D.W);
+    const yapiVar = YAPI.every(k => anahtarlar.includes(k));
+    const agirlik = D.W || {};
+    const toplamAgirlik = Object.keys(agirlik).reduce((t, k) => t + agirlik[k], 0);
+    const yapiPayi = YAPI.reduce((t, k) => t + (agirlik[k] || 0), 0);
+    const agirlikDengesi = toplamAgirlik === 100 && yapiPayi === 8;
+
+    /* b) gerçekten ölçüyor mu — sekizinin sekizi de yön değiştirmeli */
+    const temizYesil = YAPI.filter(k => durumu(rT.d, k) === 'ok');
+    const bozukKirmizi = YAPI.filter(k => durumu(rB.d, k) === 'fail');
+    const olcuyor = temizYesil.length === YAPI.length && bozukKirmizi.length === YAPI.length;
+
+    /* c) yalnız SAYI — `v` ya boş ya rakam; hiçbir yerde dize yok.
+       Adres/yazı tipi adı sızarsa bu ölçüm yakalar: gövdedeki bütün
+       kaynak adları benzersiz ve aranabilir seçildi.                   */
+    const yapiDegerleri = (rB.d.items || []).filter(i => YAPI.includes(i.k)).map(i => i.v);
+    const yalnizSayi = yapiDegerleri.every(v => v === '' || /^\d+$/.test(String(v)));
+    const yanitMetni = JSON.stringify(rB.d);
+    const dizeSizmadi = !/fonts\.googleapis|\.woff2|\/g0\.jpg|\/e0\.css|\/b\.js|Inter/i.test(yanitMetni);
+    const msPuanlanmiyor = rT.d.ms === undefined && !anahtarlar.includes('speed');
+
+    /* c-2) EKRAN — gerçek sayfa, gerçek render. Kaynağa bakmak yetmez:
+       bu suite'te üç kez yanlış yeşil kaynak taramasından geldi.       */
+    let tileSayisi = 0, cevrilmemis = [], metaTemiz = false, duzeltmeVar = false, enCevrilmemis = [];
+    {
+      const kaynakHtml = fs.readFileSync(SRC, 'utf8');
+      const { dom } = ortam(kaynakHtml, ORIGIN + '/');
+      const w = dom.window, dd = w.document;
+      await dur(700);
+      const sahteYanit = {
+        ok: true, host: 'ornek.com', finalUrl: 'https://ornek.com/', score: 61,
+        kb: 120, status: 200, bytes: 122880, redirects: 0, cdn: 'bilinmiyor',
+        durum: 'saglikli', cfEylul: false,
+        items: (rB.d.items || []).map(i => ({ k: i.k, state: i.state, v: i.v }))
+      };
+      const cek = async () => {
+        w.fetch = () => Promise.resolve({ status: 200, ok: true, json: () => Promise.resolve(sahteYanit) });
+        const inp = dd.querySelector('#dgUrl'), go = dd.querySelector('#dgGo');
+        if (inp) inp.value = 'ornek.com';
+        if (go) go.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+        await dur(500);
+        return [...dd.querySelectorAll('#dgGrid .dgi')].map(el => ({
+          etiket: (el.querySelector('.l') || {}).textContent || '',
+          deger: (el.querySelector('.v') || {}).textContent || ''
+        }));
+      };
+      const tr = await cek();
+      tileSayisi = tr.length;
+      /* çeviri denetimi YAPI kalemlerinde: `sitemap` gibi bazı eski
+         kalemlerin İngilizce etiketi zaten anahtarın kendisidir ve o
+         bilinçli — kural yeni kalemlerin etiketsiz kalmasını kilitliyor */
+      const keyler = YAPI.slice();
+      cevrilmemis = tr.filter(t => keyler.includes(t.etiket.trim())).map(t => t.etiket.trim());
+      const meta = (dd.querySelector('#dgMeta') || {}).textContent || '';
+      /* `ms` ekrandan kalktı: ne "Açılış"/"Load" kutusu ne saniye birimi */
+      metaTemiz = !/Açılış|Load/i.test(meta) && !/\bsn\b/i.test(meta) && /KB/.test(meta);
+      duzeltmeVar = dd.querySelectorAll('#dgFix .dgfl').length === 3
+        && ![...dd.querySelectorAll('#dgFix .dgfl b')]
+             .some(b => sahteYanit.items.some(i => i.k === b.textContent.trim()));
+      dd.documentElement.lang = 'en';
+      const en = await cek();
+      enCevrilmemis = en.filter(t => keyler.includes(t.etiket.trim())).map(t => t.etiket.trim());
+      dom.window.close();
+    }
+    const gosterimTemiz = tileSayisi === (rB.d.items || []).length
+      && cevrilmemis.length === 0 && enCevrilmemis.length === 0 && metaTemiz && duzeltmeVar;
+
+    /* PRIO — ayrı bir sabit liste. `speed` orada kalırsa ölü girdi olur,
+       yeni kalemler eklenmezse öncelik sıralaması onları hiç göstermez. */
+    const prioSatiri = (fs.readFileSync(SRC, 'utf8').match(/const PRIO=\[[\s\S]{0,400}?\];/) || [''])[0];
+    const prioGuncel = !!prioSatiri && !/'speed'/.test(prioSatiri)
+      && YAPI.every(k => prioSatiri.includes(`'${k}'`));
+
+    ol('teşhis: yapı kalemleri ölçülüyor, speed süreye bağlı puanlamıyor',
+       speedGitti && yapiVar && agirlikDengesi && olcuyor && yalnizSayi
+       && dizeSizmadi && msPuanlanmiyor && gosterimTemiz && prioGuncel,
+       `speedGitti=${speedGitti} yapıVar=${yapiVar} ağırlık=${toplamAgirlik}/yapı=${yapiPayi} `
+       + `temizYeşil=${temizYesil.length}/8 bozukKırmızı=${bozukKirmizi.length}/8 `
+       + `yalnızSayı=${yalnizSayi} dizeSızmadı=${dizeSizmadi} msYok=${msPuanlanmiyor} `
+       + `ızgara=${tileSayisi} çevrilmemiş=${cevrilmemis.concat(enCevrilmemis).join(',') || 'yok'} `
+       + `meta=${metaTemiz} düzeltme=${duzeltmeVar} PRIO=${prioGuncel}`);
+  }
+
+  /* 106 · FAZ 1 (+2) · BELİRLENİMCİLİK: AYNI GİRDİ → AYNI ÇIKTI.
+     Bu turun asıl kazancı ve bilerek SINIF kuralı.
+     Sabit fikstürü beş kez koşturmak neredeyse hiçbir şey kanıtlamaz —
+     girdi inşa gereği aynı, çıktının aynı olması beklenen şey. Gerçek
+     test AYNI gövdeyi FARKLI ölçülen süreyle vermektir: 120 ms'de ve
+     3800 ms'de alınmış gibi. Puanlanan yük birebir aynı çıkmalı.
+     Süreler bilerek eski `speed` bandının iki yakasından seçildi
+     (band 1500/3500): temel commit'te biri `ok`, öteki `fail` üretir ve
+     kural orada DÜŞER — kuralın kırmızı tarafı budur.
+     YANIT İKİ BÖLGE: puanlanan yük (items/score/yapı) karşılaştırılır;
+     teşhis bölgesi (`ms` ve zamana bağlı gözlemler) karşılaştırmanın
+     DIŞINDADIR ve ekrana çıkmaz. Sınır kodda açıkça duruyor
+     (`diagnose.TESHIS_ALANI`), tahmine bırakılmadı.
+     ZAMAN TABANLI KORUMA YASAK: "ayrıştırma X ms'yi aşarsa vazgeç" gibi
+     bir koruma aynı siteye makine yüküne göre farklı skor verirdi —
+     düzelttiğimiz kusurun aynısı. Sınır girdi boyutundan gelir. */
+  {
+    const D = require(path.join(KOK, 'netlify', 'functions', 'diagnose.js'));
+    const GOVDE = '<!DOCTYPE html><html lang="tr"><head>'
+      + '<title>Yeterince uzun bir sayfa basligi burada</title>'
+      + '<meta name="viewport" content="width=device-width">'
+      + '<link rel="stylesheet" href="/a.css"><style>@font-face{font-family:F;src:url(/f.woff2)}</style>'
+      + '</head><body><h1>Bir</h1><script>var q=1;</' + 'script>'
+      + '<img src="/a.jpg" alt="a"><img src="/b.webp" width="4" height="4" alt="b">'
+      + '<a href="tel:+900000000000">ara</a><a href="mailto:a@b.com">yaz</a></body></html>';
+
+    /* YALNIZ BELGE isteği gecikir; robots/sitemap anında döner. Onları da
+       geciktirmek 3800 ms'lik koşumda bütçeyi tüketip robots kalemini
+       oynatırdı — o zaman ölçtüğümüz şey belirlenimcilik değil, zaman
+       aşımı olurdu. */
+    const gecikmeliKoscu = (msGec) => {
+      let ilk = true;
+      return async (hedef) => {
+        const u = String(hedef);
+        if (/robots\.txt$/i.test(u))
+          return new Response('User-agent: *\nAllow: /\nSitemap: https://ornek.com/sitemap.xml\n',
+            { status: 200, headers: { 'content-type': 'text/plain' } });
+        if (/sitemap\.xml$/i.test(u)) return new Response('', { status: 200 });
+        if (ilk) { ilk = false; await dur(msGec); }
+        return new Response(GOVDE, { status: 200, headers: {
+          'content-type': 'text/html; charset=utf-8',
+          'content-encoding': 'br', 'cache-control': 'public, max-age=600' } });
+      };
+    };
+
+    const hizli = await fazSifirKos(gecikmeliKoscu(120));
+    const yavas = await fazSifirKos(gecikmeliKoscu(3800));
+    const BOLGE = D.TESHIS_ALANI || 'teshis';
+    const puanlanan = o => {
+      const k = Object.assign({}, o || {});
+      delete k[BOLGE];
+      return JSON.stringify(k);
+    };
+    const okunanMs = o => ((o && o[BOLGE]) || {}).ms;
+    /* deneyin kendisi geçerli mi: süreler GERÇEKTEN ayrıştıysa iddia
+       sınanmış olur; ayrışmadıysa test hiçbir şey kanıtlamaz */
+    const sureAyristi = Number(okunanMs(yavas.d)) - Number(okunanMs(hizli.d)) > 2000;
+    const yukAyni = puanlanan(hizli.d) === puanlanan(yavas.d) && hizli.d.ok === true;
+    const bolgeAyri = okunanMs(hizli.d) !== undefined && hizli.d.ms === undefined;
+
+    /* ikincil, tek başına zayıf: aynı fikstür beş koşum */
+    const besKosum = [];
+    for (let i = 0; i < 5; i++) besKosum.push(puanlanan((await fazSifirKos(gecikmeliKoscu(0))).d));
+    const besiAyni = besKosum.every(x => x === besKosum[0]);
+
+    ol('teşhis: belirlenimcilik — aynı gövde, farklı süre, birebir aynı puanlanan yük',
+       sureAyristi && yukAyni && bolgeAyri && besiAyni,
+       `süreAyrıştı=${sureAyristi} (${okunanMs(hizli.d)} ms / ${okunanMs(yavas.d)} ms) `
+       + `yükAynı=${yukAyni} teşhisBölgesiAyrı=${bolgeAyri} beşKoşum=${besiAyni} `
+       + `skor=${hizli.d.score}/${yavas.d.score}`);
+  }
+
   /* 92 · panel kapısı (2026-08, canlıda ÖLÇÜLDÜ: ADMIN 200 anonim):
      `admin.html` yayın çıktısında duruyordu ve hiçbir kimlik kontrolü
      yoktu. Bugüne kadarki etkisi sınırlıydı çünkü yayın ucu zaten 503'tü;
