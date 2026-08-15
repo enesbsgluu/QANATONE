@@ -984,6 +984,9 @@ function ciktiDenetimi() {
      rotaYap('bulten\\google-ads-maliyetleri-2026\\index.html'));
 
   let dupId = 0, altYok = 0, adsizLink = 0, h1Kotu = [], ldKotu = 0, viewportYok = 0;
+  /* @id → (düğüm imzası → o imzayı taşıyan sayfalar). Aynı kimliğin
+     birden çok gövdesi varsa çelişki vardır. */
+  const kimlikler = new Map();
   const adsizAlan = [];   /* 94 · name'i olmayan form alanları */
   const kanon = {}, baslik = {}, aciklama = {}, gelen = {};
   const varOlan = new Set(sayfalar.map(yolu));
@@ -1002,7 +1005,20 @@ function ciktiDenetimi() {
     if (h1 !== 1) h1Kotu.push(`${yol}:${h1}`);
     if (!d.querySelector('meta[name=viewport]')) viewportYok++;
     for (const x of d.querySelectorAll('script[type="application/ld+json"]')) {
-      try { JSON.parse(x.textContent); } catch (e) { ldKotu++; }
+      let veri = null;
+      try { veri = JSON.parse(x.textContent); } catch (e) { ldKotu++; continue; }
+      /* KİMLİK TOPLAMA — sınıf kuralının verisi. Düğüm DOM'dan geliyor
+         (script içeriği), ham metin regex'inden değil: bu suite'te üç kez
+         yanlış yeşil ham metin taramasından geldi. */
+      for (const dugum of (veri && veri['@graph']) || []) {
+        const kimlik = dugum && dugum['@id'];
+        if (!kimlik) continue;
+        const imza = JSON.stringify(dugum);
+        if (!kimlikler.has(kimlik)) kimlikler.set(kimlik, new Map());
+        const govdeler = kimlikler.get(kimlik);
+        if (!govdeler.has(imza)) govdeler.set(imza, []);
+        govdeler.get(imza).push(yol);
+      }
     }
     const g = (sel, at) => { const e = d.querySelector(sel); return e ? e.getAttribute(at) : null; };
     (kanon[g('link[rel=canonical]', 'href')] ||= []).push(yol);
@@ -1120,6 +1136,32 @@ function ciktiDenetimi() {
   ol('her sayfada tam 1 h1', h1Kotu.length === 0, h1Kotu.slice(0, 4).join(' '));
   ol('viewport her sayfada', viewportYok === 0, String(viewportYok));
   ol('JSON-LD geçerli', ldKotu === 0, String(ldKotu));
+  /* 107 · SINIF KURALI — AYNI `@id`, AYNI DÜĞÜM.
+     Mevcut "JSON-LD geçerli" kuralı yalnız SÖZDİZİMİNE bakıyor: her
+     sayfanın ld+json'u tek tek ayrıştırılabiliyorsa yeşil. Aynı kimliğin
+     sayfadan sayfaya ÇELİŞMESİ onun göremediği bir hata sınıfı ve saha
+     denetiminin bulduğu boşluk tam oradaydı.
+     ÖLÇÜLDÜ (yama öncesi, 58 sayfa): dört kimlik çelişiyordu —
+       · `/#org`            → 58 sayfada 58 FARKLI gövde
+       · `/#site`           → 58 sayfada 2 gövde (inLanguage tr/en)
+       · `/hizmetler#list`  → 2 sayfada 2 gövde (TR ve EN aynı kimliği
+                              paylaşıyor, içerik farklı)
+       · `/sss#faq`         → 2 sayfada 2 gövde (aynısı)
+     Bilgi grafiği ve dil modelleri bir kurumu tek varlıkta birleştirirken
+     tam bu alana bakar; 58 parçaya bölünmüş bir kurum tanımı tek bulguda
+     bütün tanıtımı götürür.
+     Kural TEK SAYFAYA BAKMAZ: 58 sayfanın hepsi karşılaştırılıyor, çünkü
+     bu sınıf ancak sayfalar arası karşılaştırmayla görünür. */
+  {
+    const catisan = [...kimlikler.entries()].filter(([, g]) => g.size > 1);
+    const ozet = catisan.slice(0, 4).map(([id, g]) => {
+      const sayfa = [...g.values()].reduce((t, v) => t + v.length, 0);
+      return `${id.replace('https://qanatone.com', '')}→${g.size} gövde/${sayfa} sayfa`;
+    }).join(' · ');
+    ol('şema: aynı @id\'yi taşıyan düğüm bütün sayfalarda birebir aynı',
+       catisan.length === 0,
+       `kimlik=${kimlikler.size} çatışan=${catisan.length}${ozet ? ' · ' + ozet : ''}`);
+  }
   ol('mükerrer canonical yok', Object.values(kanon).every(v => v.length === 1),
      Object.entries(kanon).filter(([, v]) => v.length > 1).map(([k]) => k).slice(0, 2).join(' '));
   ol('mükerrer meta description yok', Object.values(aciklama).every(v => v.length === 1),
