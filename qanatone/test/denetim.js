@@ -667,17 +667,30 @@ function ciktiDenetimi() {
      .kdrow/.tpcard varsayılan opacity:0; görünürlük kutuya inen .in'e
      bağlı. .in yalnız IO'dan ve kurulum anındaki tek atışlık geometri
      kontrolünden geliyordu — IO tetiklenmezse içerik KALICI görünmez
-     kalıyordu. Kaydırma bağlaması olmadan bu sınıf geri döner. */
+     kalıyordu. Kaydırma bağlaması olmadan bu sınıf geri döner.
+     2026-08 GÜNCELLENDİ (kural 108): şart HAM `resize` değil, GENİŞLİK
+     KAPISI. Kuralın ilk hâli ham `resize` bağını arıyordu; o bağ mobilde
+     adres çubuğu her oynadığında `tara()`yı uyandırıyor, kalan her kutu
+     için getBoundingClientRect okutuyordu. Kuralın KORUDUĞU şey kaybolmuş
+     değil: "kutu ekranın altında kaldı ve hiç açılmadı" hatasını yakalayan
+     KAYDIRMA bağı, adres çubuğu değil. Kaydırma bağı zorunlu kalıyor,
+     boyut bağı kapıdan geçmek zorunda.                                 */
   {
-    const kaynakR = fs.readFileSync(SRC, 'utf8');
+    /* YORUMLAR AYIKLANIR — pencere sabit bayt genişliğinde olduğu için
+       yorum eklemek kuralı sessizce kaydırıyordu: 108 yamasının açıklama
+       bloğu `genislikDegisince(taraKisitli)`yi 1400 baytlık pencerenin
+       31 bayt dışına itti ve kural KOD değişmediği hâlde kırmızı yandı.
+       Ölçülen şey artık yalnız kod.                                    */
+    const kaynakR = fs.readFileSync(SRC, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
     const iT = kaynakR.indexOf('window.__tara=tara;');
     const pencere = iT > -1 ? kaynakR.slice(iT, iT + 1400) : '';
     const kaydirma = pencere.indexOf("addEventListener('scroll'") > -1;
-    const boyut = pencere.indexOf("addEventListener('resize'") > -1;
+    const boyut = pencere.indexOf('genislikDegisince(taraKisitli)') > -1;
+    const hamYok = pencere.indexOf("addEventListener('resize'") === -1;
     const kisit = pencere.indexOf('requestAnimationFrame') > -1;
     ol('reveal ailesi kaydırmaya bağlı (tek atışlık değil)',
-       iT > -1 && kaydirma && boyut && kisit,
-       `scroll=${kaydirma} resize=${boyut} rAF=${kisit}`);
+       iT > -1 && kaydirma && boyut && hamYok && kisit,
+       `scroll=${kaydirma} genislikKapisi=${boyut} hamResizeYok=${hamYok} rAF=${kisit}`);
   }
   /* 80 · mobil pazar sahnesi yüksekliği (2026-08, motor taşması):
      .mkeng mobilde tek sütuna düşüyor, .mkact overflow:hidden — sahne
@@ -862,6 +875,73 @@ function ciktiDenetimi() {
     ol('GSAP gecikme koruması açık (lagSmoothing kapatılmamış)',
        kapaliDegil && korumaVar,
        `kapaliDegil=${kapaliDegil} korumaVar=${korumaVar}`);
+  }
+  /* 108 · ADRES ÇUBUĞU YENİDEN KURULUM YAPTIRMAZ (2026-08 mobil kasma).
+     Mobilde `resize` bir yeniden kurulum sinyali DEĞİL: adres çubuğu her
+     açılıp kapandığında yalnız yükseklik oynar ve pencere `resize` atar.
+     Bu tam olarak kaydırma YÖNÜ değişince olur (aşağı inerken çubuk
+     gizlenir, yukarı çıkarken geri gelir) — Enes'in "yukarı çıkınca
+     tekrar donuyor" belirtisinin mekanizması buydu.
+     ÖLÇÜLDÜ (yama öncesi kaynak): yedi sistem ham `resize`e bağlıydı ve
+     hepsi yüksekliğe DUYARSIZ iş yapıyordu — wordmark bit matrisini,
+     harita 400×142 ızgarasını, yıldız noktalarını baştan üretmek;
+     masonry'de kart başına offsetHeight okumak; tel ve kutu geometrisini
+     yeniden ölçmek. ScrollTrigger bu tuzağa karşı zaten korunuyordu
+     (`ST.config({ignoreMobileResize:true})`), gerisi korunmuyordu.
+     Kural üç şeyi birden tutuyor, çünkü ikisi tek başına yanlış yeşil
+     verir: kapı VAR ama kimse kullanmıyorsa, ya da kapı var ve biri
+     yanına yeni bir ham bağ eklerse belirti geri gelir. Bu yüzden ham
+     bağların tamamı sayılıyor ve YALNIZ bilinçli izinliler geçiyor;
+     listede olmayan her yeni bağ kuralı kırmızıya düşürür ve metnini
+     raporda gösterir. `visualViewport` resize'ı hiç kalmamalı: o zaten
+     SADECE adres çubuğu ve klavye için ateşliyordu.                    */
+  {
+    const kaynakR = fs.readFileSync(SRC, 'utf8');
+    /* YORUMLAR AYIKLANIR: index.html'deki yama yorumu `resize` sözcüğünü
+       ve eski satırları anlatıyor; ham arama kendi belgesine takılır.
+       (Kural 82, 86 ve 87'nin dersi — bu depoda dördüncü kez.)         */
+    const kod = kaynakR.replace(/\/\*[\s\S]*?\*\//g, '');
+
+    const kapiVar = /const\s+genislikDegisince\s*=/.test(kod);
+    /* Kapı GENİŞLİĞE bakmalı. `innerWidth` layout genişliğidir: gerçek
+       yön çevirme onu değiştirir, adres çubuğu ve parmakla yakınlaştırma
+       değiştirmez. Yüksekliğe bakan bir kapı hiçbir şey çözmezdi.      */
+    const kapiGenislik = /const\s+w\s*=\s*innerWidth;\s*if\s*\(\s*w\s*===\s*son\s*\)\s*return;/.test(kod);
+    const vvYok = kod.indexOf("visualViewport.addEventListener('resize'") === -1;
+
+    /* Bilinçli izinliler — her biri ya genişliğe zaten şartlı, ya da
+       görünmezken/veri yokken anında dönüyor. Yeni bir satır eklemek
+       serbest DEĞİL: buraya yazılması, yani gerekçelendirilmesi gerek. */
+    const IZIN = [
+      'const w=innerWidth',                          /* kapının kendisi */
+      'innerWidth>980&&m&&m.classList.contains',      /* mobil menü kapanışı — zaten genişlik şartlı */
+      'kbBekle',                                      /* hizmet detay kabloları (#sdBody) */
+      'window.__stlvFit&&window.__stlvFit()',         /* hizmet detay hikâye kadrajı */
+      'rt=setTimeout(fitQ,180)'                       /* söz bandı — offsetParent yoksa anında döner */
+    ];
+    const ham = [];
+    const re = /addEventListener\(\s*'resize'/g;
+    let m;
+    while ((m = re.exec(kod))) {
+      const parca = kod.slice(m.index, m.index + 190).replace(/\s+/g, '');
+      if (IZIN.some(k => parca.indexOf(k.replace(/\s+/g, '')) > -1)) continue;
+      ham.push(kod.slice(m.index, m.index + 58).replace(/\s+/g, ' '));
+    }
+    /* Kapı gerçekten KULLANILIYOR mu — korunan yedi sistem. Tanım satırı
+       `genislikDegisince=(` olduğu için bu sayıma girmiyor.            */
+    const abone = (kod.match(/genislikDegisince\(/g) || []).length;
+
+    /* #wmk ayrıca GÖRÜNÜRLÜĞE bağlı: footer'da ve `.pg` damgası yok, yani
+       hiçbir rotada gizlenmiyor. Eski hâli ziyaretçi sayfanın en üstünde
+       dururken bile tuvali baştan inşa ediyordu. Görünmezken yalnız bayat
+       işaretlenmeli, inşa kadraja girişte olmalı.                       */
+    const wmkGorunurluk = /if\(!seen\)\{bayat=true;return;\}/.test(kod.replace(/\s+/g, ''))
+                       && /if\(bayat\)\{bayat=false;stop\(\);boot\(\);return;\}/.test(kod.replace(/\s+/g, ''));
+
+    ol('adres çubuğu (yalnız yükseklik) yeniden kurulum tetiklemiyor',
+       kapiVar && kapiGenislik && vvYok && ham.length === 0 && abone >= 7 && wmkGorunurluk,
+       `kapi=${kapiVar}/${kapiGenislik} vvYok=${vvYok} abone=${abone} wmkGorunurluk=${wmkGorunurluk}` +
+       (ham.length ? ` · IZINSIZ HAM BAG=${ham.length}: ${ham.slice(0, 3).join(' | ')}` : ' · izinsiz ham bag yok'));
   }
   /* 88 · içerik dürüstlüğü kapısı (2026-08, mimari Faz 1 ön şartı):
      Kurucu bio'su yapılandırılmış veride Person olarak kodlanacak;

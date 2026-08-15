@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-15 22:16 UTC
+> Üretim tarihi: 2026-08-15 23:39 UTC
 
 ## Yeni sohbete geçerken
 
@@ -64,7 +64,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 25 dosya | 1387 KB |  |
-| `index.html` |  | 867 KB | `8f7e3a96` |
+| `index.html` |  | 870 KB | `0c811eb5` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -92,7 +92,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 125 KB | `b168fe57` |
+| `test/denetim.js` |  | 131 KB | `cd370127` |
 | `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
 | `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
@@ -107,8 +107,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 151 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 50.7 MB |
+| son derleme | 146 sn (basılan 58, önbellekten 0) |
+| dist boyutu | 50.8 MB |
 
 ## Çalıştırma
 
