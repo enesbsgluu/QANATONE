@@ -194,11 +194,21 @@ function touch(){
 function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',content:C},'*')}catch(e){}}
 
 /* ================= ALAN YARDIMCILARI ================= */
+/* TUTAMAK — `data-p` tek başına yetmiyordu. Kutu her zaman basılıyordu ama
+   dışarıdan (denetim aracı, erişilebilirlik ağacı, tarayıcı konsolu) bakan
+   biri için YOKTU: `[name]`, `[id]`, `[for]` üçü de boştu, yani alan ne
+   seçilebiliyor ne de etikete bağlıydı. `settings.orgDesc` tam bu yüzden
+   "panelde yok" diye raporlandı — halbuki oradaydı.
+   id noktasız üretiliyor (querySelector'da `#f-settings.orgDesc` sınıf
+   seçicisi gibi okunur), name yol'un kendisi kalıyor; formda değiliz,
+   name hiçbir yere gönderilmiyor, yalnız kimlik.                        */
 function fld(label,path,o={}){
   const v=get(path)??'';
-  const inner=o.area?`<textarea${o.big?' class="big"':''} data-p="${path}">${esc(v)}</textarea>`
-    :`<input type="${o.type||'text'}" data-p="${path}" value="${esc(v)}">`;
-  return `<div class="f"><label>${label}${o.hint?` <i>— ${o.hint}</i>`:''}</label>${inner}</div>`;
+  const id='f-'+String(path).replace(/\W+/g,'-');
+  const at=` id="${id}" name="${esc(path)}" data-p="${path}"`;
+  const inner=o.area?`<textarea${o.big?' class="big"':''}${at}>${esc(v)}</textarea>`
+    :`<input type="${o.type||'text'}"${at} value="${esc(v)}">`;
+  return `<div class="f"><label for="${id}">${label}${o.hint?` <i>— ${o.hint}</i>`:''}</label>${inner}</div>`;
 }
 function opt(label,path,list,hint){
   const v=String(get(path)??'');
@@ -282,6 +292,7 @@ function list(path,title,fields,label){
 }
 const BLANK={
  partners:'Yeni firma',
+ 'settings.knowsAbout':'',
  sectors:{k:'yeni',icon:'gear',n:{tr:'Yeni sektör',en:''},d:{tr:'',en:''},
    head:{tr:['',''],en:['','']},finance:{budget:40000,ticket:12000,miss:38},
    ch:{google:22,seo:19,meta:18,tiktok:14,linkedin:11,reddit:7,site:9},
@@ -323,7 +334,19 @@ genel:{t:'Genel & İletişim',n:()=>'',f:()=>`
   ${fld('WhatsApp numarası','settings.whatsapp',{hint:'ülke koduyla, örn. 905326291508'})}
   ${fld('WhatsApp açılış mesajı','settings.waMessage',{area:1})}
   ${fld('E-posta','settings.email',{hint:'boşsa footer bağlantısı görünmez'})}
-  ${fld('Kurum tanımı (şema)','settings.orgDesc',{area:1,hint:'boşsa koddaki sabit tanım geçerli — 58 sayfanın hepsinde AYNI metin görünür; bilgi grafiği ve dil modelleri kurumu bu alandan tanır'})}
+  <h4 class="sec">Kurum kimliği (şema)</h4>
+  <div class="note calm">Bu iki alan sitenin <b>tek kurum kartını</b> yazıyor: 58 sayfanın
+  hepsinde (İngilizcesi dahil) birebir aynı metin görünür, sayfaya göre değişmez.
+  Google'ın bilgi grafiği ve dil modelleri QANATONE'un ne iş yaptığını buradan okur —
+  sayfa açıklamaları değil, burası. İkisini de boş bırakırsan koddaki onaylı metin geçerli
+  olur; site tanımsız kalmaz.</div>
+  ${fld('Kurum tanımı','settings.orgDesc',{area:1,hint:'tek paragraf, rakam ve müşteri adı olmadan'})}
+  ${list('settings.knowsAbout','Konu',(it,i,p)=>fld('Uzmanlık konusu',p),it=>String(it))}
+  <div class="note calm">Konular <b>hizmet adı</b> değil, kurumun bildiği alanlar —
+  küçük harfle ve tekil yazılır ("performans pazarlama", "uluslararası ticaret verisi").
+  Listeyi tamamen boşaltırsan alan şemaya hiç yazılmaz; yarım liste, hiç liste
+  olmamasından daha kötü okunur.</div>
+
   <h4 class="sec">Ölçüm & yasal</h4>
   ${fld('Ölçüm kimliği','settings.gtm',{hint:'GTM-XXXXXXX veya G-XXXXXXXXXX — boşsa hiç istek atılmaz'})}
   <div class="note calm">Ölçüm açtığında KVKK için çerez onayı gerekebilir. Onay bandı kurulmadan
