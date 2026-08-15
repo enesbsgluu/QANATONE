@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-15 17:53 UTC
+> Üretim tarihi: 2026-08-15 17:58 UTC
 
 ## Yeni sohbete geçerken
 
@@ -107,7 +107,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 176 sn (basılan 58, önbellekten 0) |
+| son derleme | 57 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 50.5 MB |
 
 ## Çalıştırma
