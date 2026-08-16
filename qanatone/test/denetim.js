@@ -943,6 +943,114 @@ function ciktiDenetimi() {
        `kapi=${kapiVar}/${kapiGenislik} vvYok=${vvYok} abone=${abone} wmkGorunurluk=${wmkGorunurluk}` +
        (ham.length ? ` · IZINSIZ HAM BAG=${ham.length}: ${ham.slice(0, 3).join(' | ')}` : ' · izinsiz ham bag yok'));
   }
+  /* 109 · MOBİL DESTE KARTI: GÖRSEL KART BOYUTUNDA GELİR (2026-08).
+     Belirti: ana sayfada proje kartları geçilirken mobilde takılma —
+     kural 108'den (adres çubuğu) SONRA da sürdü, yani ayrı bir sebep.
+     ÖLÇÜLDÜ: destenin dört görseli 1,07–1,70 MP (1600px genişlik) ve
+     mobilde ~350×186 CSS'lik kutuya giriyor. Dosyalar küçük (546 KB
+     toplam) — "indirme değil" elemesi bu yüzden doğruydu. Pahalı olan
+     ÇÖZÜLMÜŞ BİTMAP: dört kart 33 MB RGBA. deviceMemory ≤2 bir telefonda
+     tarayıcı bunları bellek baskısında atıp yeniden çözer; kartları
+     geçerken VE yukarı dönünce yeniden takılmanın ikisi de buradan.
+     Kural dört şeyi birden tutuyor, çünkü üçü tek başına yanlış yeşil
+     verir:
+       (a) alan var mı — `imgk` tanımlı mı;
+       (b) DOSYA GERÇEKTEN VAR MI — `<picture>` içinde 404 veren bir
+           `<source>` `<img>`e GERİ DÜŞMEZ, görsel tamamen kırılır.
+           Bu kuralın asıl varlık sebebi bu satır;
+       (c) KAZANÇ GERÇEK Mİ — kart görseli kaynaktan en az 2× daha az
+           piksel taşımalı, yoksa alan doldurulmuş ama iş yapılmamış olur;
+       (d) KIRILMA NOKTASI UYUYOR MU — `<source media>` ile filtreyi
+           kapatan CSS aynı px'te olmalı. Ayrışırlarsa aradaki bantta ya
+           gri pişmiş görsele filtre İKİNCİ KEZ uygulanır (kapkara kart)
+           ya da renkli görsel filtresiz kalır.
+     Ayrıca `<source>` yalnız alan varsa basılmalı: panelden eklenen yeni
+     projede `imgk` olmaz, eski davranışa düşmesi gerekir.              */
+  {
+    const kaynakK = fs.readFileSync(SRC, 'utf8');
+    const kod = kaynakK.replace(/\/\*[\s\S]*?\*\//g, '');
+
+    /* webp başlığından ölçü — üç gövde biçimi de okunuyor */
+    const olcu = p => {
+      if (!fs.existsSync(p)) return null;
+      const b = fs.readFileSync(p);
+      if (b.slice(0, 4).toString() !== 'RIFF' || b.slice(8, 12).toString() !== 'WEBP') return null;
+      const t = b.slice(12, 16).toString();
+      if (t === 'VP8X') return [b.readUIntLE(24, 3) + 1, b.readUIntLE(27, 3) + 1];
+      if (t === 'VP8 ') return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+      if (t === 'VP8L') { const n = b.readUInt32LE(21); return [(n & 0x3fff) + 1, ((n >> 14) & 0x3fff) + 1]; }
+      return null;
+    };
+
+    /* deste yalnız ilk DESTE_PROJE projeyi basıyor; kural ONLARI tutuyor */
+    const mD = kod.match(/const\s+DESTE_PROJE\s*=\s*(\d+)/);
+    const kacKart = mD ? +mD[1] : 4;
+    const iP = kod.indexOf('projects:[');
+    const pBlok = iP > -1 ? kod.slice(iP, kod.indexOf('\nposts:', iP) > -1 ? kod.indexOf('\nposts:', iP) : iP + 60000) : '';
+    const kartlar = [...pBlok.matchAll(/slug:'([a-z0-9-]+)',image:'([^']+)'(,imgk:'([^']+)')?(,imgc:'([^']+)')?/g)]
+      .slice(0, kacKart)
+      .map(m => ({ slug: m[1], image: m[2], imgk: m[4] || null, imgc: m[6] || null }));
+
+    /* CANLI ZİNCİR DE ÖLÇÜLÜYOR — bu satırlar kuralın ilk hâlinin
+       kaçırdığı şey. `deepMerge` dizileri BÜTÜN OLARAK değiştiriyor
+       (`if(Array.isArray(over))return copy(over)`), yani content.json'ın
+       `projects`i DATA'yı tamamen eziyor. İlk yamada DATA'ya `imgk`
+       yazıldı, kural yeşil yandı ve site `<picture>`ı HİÇ basmadı —
+       tarayıcıda ölçülünce yakalandı. Bu depoda aynı sınıf üçüncü kez
+       (KVKK metni, kurum tanımı, şimdi kart görseli): kaynağa yazmak
+       yayına yazmak DEĞİLDİR. Kural artık iki tarafı da tutuyor.      */
+    const cYol = path.join(KOK, 'content.json');
+    let cProje = null;
+    try { cProje = JSON.parse(fs.readFileSync(cYol, 'utf8')).projects || null; } catch (e) { cProje = null; }
+
+    const eksikAlan = [], eksikDosya = [], zayif = [], canliEksik = [];
+    const bak = (k, nereden, kayit) => {
+      if (k.imgc) return;                   /* kendi kart görseli olan (bab logosu) muaf */
+      if (!k.imgk) { kayit.push(k.slug); return; }
+      const yK = olcu(path.join(KOK, k.imgk)), yB = olcu(path.join(KOK, k.image));
+      if (!yK) { eksikDosya.push(nereden + ':' + k.imgk); return; }
+      if (yB && (yB[0] * yB[1]) < (yK[0] * yK[1]) * 2) zayif.push(`${k.slug} ${yB[0]}x${yB[1]}→${yK[0]}x${yK[1]}`);
+    };
+    for (const k of kartlar) bak(k, 'DATA', eksikAlan);
+    if (cProje) for (const p of cProje.slice(0, kacKart)) bak(p, 'content.json', canliEksik);
+
+    /* `<source>` yalnız alan varsa — 404 tuzağına karşı tek koruma */
+    const sartli = /p\.imgk&&!p\.imgc\s*\?/.test(kod.replace(/\s+/g, m => m.includes('\n') ? '' : m).replace(/\s/g, ''))
+                || kod.replace(/\s/g, '').indexOf('p.imgk&&!p.imgc?') > -1;
+
+    /* kırılma noktası: <source media> ile CSS aynı px */
+    const mS = kod.match(/<source media="\(max-width:(\d+)px\)"/);
+    /* Aynı kırılma noktasında YEDİ ayrı @media bloğu var; ilkine bakmak
+       yanlış kırmızı verir. Hepsi taranıyor, biri hepsini taşıyorsa yeter.
+       Blok sonu süslü parantez sayarak bulunuyor — sabit bayt penceresi
+       yorum/kural eklendikçe kayıyordu (kural 79'un bu turdaki dersi).  */
+    const css = kaynakK.replace(/\/\*[\s\S]*?\*\//g, '');
+    const blok = i => {
+      let d = 0, j = css.indexOf('{', i);
+      for (let k = j; k < css.length; k++) {
+        if (css[k] === '{') d++;
+        else if (css[k] === '}') { d--; if (d === 0) return css.slice(i, k + 1).replace(/\s/g, ''); }
+      }
+      return '';
+    };
+    const isaret = mS ? '@media(max-width:' + mS[1] + 'px){' : null;
+    const bloklar = [];
+    if (isaret) for (let i = css.indexOf(isaret); i > -1; i = css.indexOf(isaret, i + 1)) bloklar.push(blok(i));
+    const tasiyan = bloklar.filter(b =>
+      b.indexOf('.dkimgimg{filter:none}') > -1 &&
+      b.indexOf('.dkin:hover.dkimgimg{filter:none}') > -1 &&
+      b.indexOf('.dkimg.yr{backdrop-filter:none}') > -1);
+    const filtreKapali = tasiyan.length > 0;
+    const bulanikKapali = tasiyan.length > 0;
+
+    ol('mobil deste kartı: görsel kart boyutunda + kare başına filtre yok',
+       kartlar.length > 0 && !!cProje && eksikAlan.length === 0 && canliEksik.length === 0 &&
+       eksikDosya.length === 0 && zayif.length === 0 && sartli && !!mS && filtreKapali && bulanikKapali,
+       `kart=${kartlar.length} kodEksik=${eksikAlan.join(',') || 'yok'} CANLI(content.json)Eksik=${cProje ? (canliEksik.join(',') || 'yok') : 'DOSYA YOK'}` +
+       ` eksikDosya=${eksikDosya.join(',') || 'yok'}` +
+       ` zayifKazanc=${zayif.join(' | ') || 'yok'} sartliSource=${sartli} kirilma=${mS ? mS[1] + 'px' : 'YOK'}` +
+       ` filtreKapali=${filtreKapali} bulanikKapali=${bulanikKapali}`);
+  }
   /* 88 · içerik dürüstlüğü kapısı (2026-08, mimari Faz 1 ön şartı):
      Kurucu bio'su yapılandırılmış veride Person olarak kodlanacak;
      yer tutucu bir metin şemaya yazıldığında yanlış beyan olur. Müşteri
