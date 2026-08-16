@@ -1051,6 +1051,222 @@ function ciktiDenetimi() {
        ` zayifKazanc=${zayif.join(' | ') || 'yok'} sartliSource=${sartli} kirilma=${mS ? mS[1] + 'px' : 'YOK'}` +
        ` filtreKapali=${filtreKapali} bulanikKapali=${bulanikKapali}`);
   }
+  /* 110 · MOBİLDE PERDE SAF CSS, KÜTÜPHANEDEN ÖNCE DOĞAR (2026-08).
+     Belirti: perde mobilde SIFIR KARE oynuyordu — açılıp hemen kapanmış
+     gibi. Sebep animasyonun kendisi değil, SIRAYDI: `#boot`
+     `html:not(.boot-on)` ile display:none duruyor ve o sınıfı ekleyen
+     betik, 36 bin jetonluk satır içi motion kütüphanesinin ARDINDAN
+     geliyordu. Kütüphane derlenirken ana iş parçacığı bloke; perde o
+     süre boyunca HENÜZ DOĞMAMIŞ oluyor, ilk stil çözümü ancak blokaj
+     bitince yapılıyordu. WAAPI de kompozitörde koşar — mesele motor
+     değil, o motoru başlatacak betiğin ne zaman koştuğuydu.
+     SÖZLEŞME (mobilde):
+       (a) SIRA — görünürlüğü açan kapı motion kütüphanesinden ÖNCE;
+       (b) TEK YER — `boot-on` yalnız o kapıda ekleniyor; iki yerde
+           olsaydı biri kalkınca diğeri sessizce doğru görünmeye devam
+           ederdi (yanlış yeşil);
+       (c) KÜTÜPHANESİZ — giriş bloğu `!MOBIL` ile kapalı, yani mobilde
+           ne `M.animate` ne `getTotalLength` (ikincisi altı SVG yolunda
+           zorunlu yerleşim okutuyordu) ve çağrı o bloğun İÇİNDE kalıyor;
+       (d) `.js` YOK — `#boot:not(.js)` kuralları girişi VE çıkış
+           süpürmesini o sınıfın YOKLUĞUNDA taşıyor; çıkış dalı da
+           bunu şart koşuyor;
+       (e) ASGARİ SÜRE 2700 → 800 ms (masaüstü 2700'de kalıyor);
+       (f) KIRILMA NOKTASI TEK — JS'teki matchMedia ile mobil perde
+           @media bloğu aynı px. Ayrışırlarsa aradaki bantta perde iki
+           zaman çizelgesinden birini yarım alır (kural 109(d)'nin dersi);
+       (g) ÇİZELGE PENCEREYE SIĞIYOR MU — asıl yanlış yeşil koruması.
+           Blok var diye hareket doğru olmuyor: masaüstü çizelgesi
+           (harfler 1,41 sn'de oturuyor) 0,8 sn'lik pencereye sığmaz,
+           perde harfler düşerken çekilir. En geç biten GİRİŞ animasyonu
+           (gecikme + süre; harflerde `--i`nin en büyük değeriyle) MIN'i
+           geçmemeli. Sonsuz `bsig` sayıma girmez — o oturma değil
+           sürekli akış. */
+  {
+    const kaynakP = fs.readFileSync(SRC, 'utf8');
+    const iKapi = kaynakP.indexOf('PERDE KAPISI');
+    const iLib = kaynakP.indexOf('/* motion v12');
+    const siraDogru = iKapi > -1 && iLib > -1 && iKapi < iLib;
+
+    const kodP = kaynakP.replace(/\/\*[\s\S]*?\*\//g, '');
+    const sikis = kodP.replace(/\s/g, '');
+    const tekYer = (sikis.match(/classList\.add\('boot-on'\)/g) || []).length === 1;
+    const iBlok = sikis.indexOf('if(M&&!RDC&&!MOBIL){');
+    const kutuphanesiz = iBlok > -1;
+    /* getTotalLength o bloğun İÇİNDE mi — perdenin BÖLGESİNE bakıyoruz
+       (denetleyicinin başından ilerleme çubuğuna kadar), sayfanın geri
+       kalanındaki çağrılar bu kuralın konusu değil. Bölgede tek çağrı
+       olmalı ve `!MOBIL` kapısından SONRA gelmeli; kapıdan önceye ya da
+       ikinci bir yere kayarsa mobilde yine koşar, (c) yeşil yanarken. */
+    const iAnahtar = "varel=document.getElementById('boot'),R=document.documentElement;";
+    const iDen = sikis.indexOf(iAnahtar, sikis.indexOf(iAnahtar) + 1);  /* 2. = denetleyici */
+    const iBar = sikis.indexOf("varbar=document.getElementById('bootBar')");
+    const bolge = iDen > -1 && iBar > iDen ? sikis.slice(iDen, iBar) : '';
+    const gtlBolge = (bolge.match(/getTotalLength\(\)/g) || []).length;
+    const gtlIcerde = gtlBolge === 1 && iBlok > iDen && iBlok < iBar
+      && bolge.indexOf('getTotalLength()') + iDen > iBlok;
+    const jsKalkiyor = /\}else\{el\.classList\.remove\('js'\);\}/.test(sikis);
+    const cikisSarti = sikis.indexOf("if(RDC||!M||!el.classList.contains('js')){") > -1;
+    const mMIN = sikis.match(/varMIN=MOBIL\?(\d+):(\d+);/);
+    const MIN = mMIN ? +mMIN[1] : null;
+    const sureIndi = MIN !== null && MIN <= 800 && +mMIN[2] === 2700;
+
+    /* kırılma noktası: JS'teki sayı ile perdeyi taşıyan @media aynı mı */
+    const mJs = sikis.match(/__bootMobil=matchMedia\('\(max-width:(\d+)px\)'\)/);
+    const pxJs = mJs ? +mJs[1] : null;
+    const stilP = (kaynakP.match(/<style[^>]*>([\s\S]*?)<\/style>/) || [, ''])[1]
+      .replace(/\/\*[\s\S]*?\*\//g, '');
+    const kesP = i => {                       /* parantez sayarak blok */
+      let d = 0;
+      for (let k = stilP.indexOf('{', i); k < stilP.length; k++) {
+        if (stilP[k] === '{') d++;
+        else if (stilP[k] === '}') { d--; if (d === 0) return stilP.slice(i, k + 1); }
+      }
+      return '';
+    };
+    let perdeBlok = '';
+    if (pxJs) {
+      const ara = new RegExp('@media\\s*\\(max-width:' + pxJs + 'px\\)\\s*\\{', 'g');
+      let m;
+      while ((m = ara.exec(stilP))) {
+        const b = kesP(m.index);
+        if (b.indexOf('#boot:not(.js) .bword span') > -1) { perdeBlok = b; break; }
+      }
+    }
+    const kirilmaAyni = !!pxJs && perdeBlok !== '';
+
+    /* (g) en geç biten giriş animasyonu */
+    const iMax = Math.max(0, (kaynakP.match(/<span style="--i:\d+">/g) || []).length - 1);
+    const sn = t => t.endsWith('ms') ? parseFloat(t) / 1000 : parseFloat(t);
+    const gecikme = ifade => {                /* düz süre ya da calc(...) */
+      const c = ifade.match(/calc\(([^)]*\([^)]*\))?[^)]*\)/);
+      if (ifade.indexOf('calc(') === -1) {
+        const t = ifade.match(/-?[\d.]+m?s/); return t ? sn(t[0]) : 0;
+      }
+      void c;
+      const taban = ifade.match(/calc\(\s*(-?[\d.]+m?s)/);
+      const adim = ifade.match(/var\(--i\)\s*\*\s*(-?[\d.]+m?s)/);
+      return (taban ? sn(taban[1]) : 0) + (adim ? sn(adim[1]) * iMax : 0);
+    };
+    const kurallar = [...perdeBlok.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .map(m => ({ sec: m[1].trim(), gov: m[2] }))
+      .filter(r => r.sec.startsWith('#boot') && r.sec.indexOf('.out') === -1);
+    let enGec = 0; let sigBase = 0;
+    for (const r of kurallar) {
+      const kisa = r.gov.match(/animation\s*:\s*([^;]+)/);
+      if (kisa) {
+        for (const parca of kisa[1].split(',')) {
+          if (parca.indexOf('bsig') > -1) continue;      /* sonsuz akış */
+          const t = parca.match(/-?[\d.]+m?s/g) || [];
+          const sure = t[0] ? sn(t[0]) : 0, gec = t[1] ? sn(t[1]) : 0;
+          if (r.sec.indexOf('.sig') > -1) sigBase = sure;
+          if (sure + gec > enGec) enGec = sure + gec;
+        }
+        continue;
+      }
+      const d = r.gov.match(/animation-duration\s*:\s*([^;]+)/);
+      const g = r.gov.match(/animation-delay\s*:\s*([^;]+)/);
+      if (!d && !g) continue;
+      /* yalnız gecikme yazan kural (.sig.s2/.s3) süresini temel
+         kuraldan devralır — o yüzden sigBase ekleniyor. */
+      const sure = d ? sn(d[1].trim()) : (r.sec.indexOf('.sig') > -1 ? sigBase : 0);
+      const bit = sure + (g ? gecikme(g[1]) : 0);
+      if (bit > enGec) enGec = bit;
+    }
+    const cizelgeSigiyor = enGec > 0 && MIN !== null && enGec <= MIN / 1000;
+
+    /* (h) ÇIKTIDA DONMUŞ ARA KARE YOK — gerçek Chrome'da yakalandı,
+       kaynağa bakan hiçbir şart görmüyordu. Ön derleme jsdom'da açılış
+       denetleyicisini KOŞTURUYOR ve `#boot` içine satır içi stil yazıyor:
+       izlere `stroke-dasharray:100 100;stroke-dashoffset:-100` — üstelik
+       uydurma, çünkü `getTotalLength` o ortamda sabit 100 döndürüyor
+       (gerçek yollar 142–176). Masaüstünde görünmüyordu: aynı betik
+       değerleri milisaniyeler içinde doğrusuyla eziyordu. Perde saf CSS'e
+       geçince ezen kalmıyor — CSS yalnız `opacity` animasyonluyor — ve
+       izler yarım çizili donuyor. Kaynak temiz + kural yeşil + çıktı
+       bozuk: tam olarak bu suite'in var oluş sebebi olan sınıf.
+       `--i` KAYNAKTA yazılı, o kalmalı; kural onun silinmediğini de
+       ölçüyor, yoksa "hepsini sil" düzeltmesi harfleri sıraya sokan
+       değişkeni de götürür. */
+    const dPerde = path.join(DIST, 'index.html');
+    let ciktiTemiz = false, ciktiIVar = false, ciktiOzet = 'dist yok';
+    if (fs.existsSync(dPerde)) {
+      const dh = fs.readFileSync(dPerde, 'utf8');
+      const a = dh.indexOf('<div id="boot"');
+      const z = a > -1 ? dh.indexOf('</div>', dh.indexOf('</div>', a) + 1) : -1;
+      const blokD = a > -1 ? dh.slice(a, dh.indexOf('<script', a)) : '';
+      void z;
+      const kirli = [...blokD.matchAll(/style="([^"]*)"/g)]
+        .map(m => m[1])
+        .filter(v => /stroke-dash|transform|will-change|(^|;)\s*opacity|--p\s*:/.test(v));
+      ciktiTemiz = blokD !== '' && kirli.length === 0;
+      ciktiIVar = /style="\s*--i:\s*\d+\s*;?\s*"/.test(blokD);
+      ciktiOzet = `kirliStil=${kirli.length}${kirli.length ? ' örn:' + kirli[0].slice(0, 46) : ''} --iKorundu=${ciktiIVar}`;
+    }
+
+    ol('mobil perde: saf CSS · kütüphaneden önce doğuyor · çizelge asgari süreye sığıyor · çıktıda donmuş kare yok',
+       siraDogru && tekYer && kutuphanesiz && gtlIcerde && jsKalkiyor && cikisSarti &&
+       sureIndi && kirilmaAyni && cizelgeSigiyor && ciktiTemiz && ciktiIVar,
+       `sira=${siraDogru} tekYer=${tekYer} kutuphanesiz=${kutuphanesiz} getTotalLengthIcerde=${gtlIcerde}` +
+       ` jsKalkiyor=${jsKalkiyor} cikisSarti=${cikisSarti} MIN=${MIN}ms kirilma=${pxJs}px/${kirilmaAyni}` +
+       ` enGecGiris=${enGec.toFixed(2)}s (--i max ${iMax}) sigiyor=${cizelgeSigiyor} · ${ciktiOzet}`);
+  }
+  /* 111 · MOBİLDE DESTE KARTINDA KALICI KATMAN + GÖLGE YOK (2026-08).
+     Belirti: mobilde kart geçişleri takılıyordu — kural 108 (adres
+     çubuğu) ve 109 (kart görseli) kapandıktan SONRA da sürdü.
+     MEKANİZMA DOĞRULANDI, KURALIN ASIL TUTTUĞU ŞEY BU: gölge ölçeklenen
+     elemanın KENDİSİNDE, ebeveyninde değil. `.dkin` tek bildirimde üçünü
+     birden taşıyor — `transform:scale(var(--s,1))` + `will-change` +
+     100px bulanıklı `box-shadow` — ve deck() de aynı elemana yazıyor
+     (`it.querySelector('.dkin')` → `card.style.transform='scale(...)'`).
+     will-change kalıcı bir kompozit katman ayırtıyor; gölge o katmanın
+     İÇERİĞİ, dolayısıyla ölçek her değiştiğinde gölge yeni ölçekte
+     baştan rasterleşiyor. Gölge EBEVEYNDE olsaydı mekanizma bambaşka
+     olurdu (ölçeklenen katman gölgeyi hiç taşımaz, yeniden rasterleşme
+     de olmaz), o yüzden kural "gölge var mı" değil "gölge ölçeklenen
+     elemanda mı" ölçüyor.
+     Beş şart: mobilde ikisi de kapalı · MASAÜSTÜ İKİSİNİ DE KORUYOR
+     (talep mobildi; orada gölge tasarımın parçası) · deck() gerçekten
+     `.dkin`e transform yazıyor · kırılma noktası destenin diğer mobil
+     kurallarıyla aynı blok. */
+  {
+    const kaynakD = fs.readFileSync(SRC, 'utf8');
+    const cssD = kaynakD.replace(/\/\*[\s\S]*?\*\//g, '');
+    const sikisD = cssD.replace(/\s/g, '');
+
+    /* masaüstü temel kuralı — üçü de duruyor mu */
+    const temel = (cssD.match(/\n\.dkin\{[\s\S]*?\}/) || [''])[0].replace(/\s/g, '');
+    const masaustuKoruyor = temel.indexOf('will-change:transform,opacity') > -1
+                         && temel.indexOf('box-shadow:046px100px-50px#000') > -1
+                         && temel.indexOf('transform:scale(var(--s,1))') > -1;
+
+    /* mekanizma: ölçeği YAZAN eleman gerçekten .dkin mi */
+    const olcekAyniEleman = sikisD.indexOf("constcard=it.querySelector('.dkin');") > -1
+                         && sikisD.indexOf("card.style.transform='scale('") > -1;
+
+    /* mobil blok — destenin diğer mobil kurallarıyla AYNI blokta */
+    const kesD = i => {
+      let d = 0;
+      for (let k = cssD.indexOf('{', i); k < cssD.length; k++) {
+        if (cssD[k] === '{') d++;
+        else if (cssD[k] === '}') { d--; if (d === 0) return cssD.slice(i, k + 1).replace(/\s/g, ''); }
+      }
+      return '';
+    };
+    const araD = /@media\s*\(max-width:(\d+)px\)\s*\{/g;
+    let mD2, destePx = null, mobilBlok = '';
+    while ((mD2 = araD.exec(cssD))) {
+      const b = kesD(mD2.index);
+      if (b.indexOf('.dkimgimg{filter:none}') > -1) { destePx = +mD2[1]; mobilBlok = b; break; }
+    }
+    const katmanKalkti = /\.dkin\{[^}]*will-change:auto/.test(mobilBlok);
+    const golgeKalkti = /\.dkin\{[^}]*box-shadow:none/.test(mobilBlok);
+
+    ol('mobil deste kartı: ölçeklenen elemanda kalıcı katman + gölge yok (masaüstü korunuyor)',
+       masaustuKoruyor && olcekAyniEleman && katmanKalkti && golgeKalkti && destePx === 900,
+       `masaustuKoruyor=${masaustuKoruyor} olcekAyniEleman=${olcekAyniEleman}` +
+       ` katmanKalkti=${katmanKalkti} golgeKalkti=${golgeKalkti} kirilma=${destePx}px`);
+  }
   /* 88 · içerik dürüstlüğü kapısı (2026-08, mimari Faz 1 ön şartı):
      Kurucu bio'su yapılandırılmış veride Person olarak kodlanacak;
      yer tutucu bir metin şemaya yazıldığında yanlış beyan olur. Müşteri

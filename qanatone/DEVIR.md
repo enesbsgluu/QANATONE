@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-16 00:11 UTC
+> Üretim tarihi: 2026-08-16 10:35 UTC
 
 ## Yeni sohbete geçerken
 
@@ -30,7 +30,7 @@
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
-| `build.js` |  | 32 KB | `21172541` |
+| `build.js` |  | 33 KB | `fec8a86d` |
 | `content.json` |  | 233 KB | `332649dc` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
@@ -64,7 +64,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 31 dosya | 1571 KB |  |
-| `index.html` |  | 873 KB | `66e529bb` |
+| `index.html` |  | 878 KB | `2b8525a8` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -92,7 +92,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 137 KB | `faca8f5b` |
+| `test/denetim.js` |  | 150 KB | `18da07ad` |
 | `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
 | `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
@@ -108,7 +108,7 @@
 | sitemap URL | 58 |
 | denetim suite | temiz |
 | son derleme | 136 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 51.2 MB |
+| dist boyutu | 51.4 MB |
 
 ## Çalıştırma
 

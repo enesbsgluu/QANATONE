@@ -205,6 +205,30 @@ async function sayfa(rota, dil) {
   });
   const metin = acik.map(id => (d.getElementById(id).textContent || '')
     .replace(/\s+/g, ' ').trim()).join(' ');
+
+  /* PERDE ÇALIŞMA ZAMANI KATMANIDIR — donmuş ara karesi çıktıya yazılmaz.
+     jsdom'da açılış denetleyicisi koşuyor ve `#boot` içine satır içi stil
+     yazıyor: harflere `transform:translateY(-64px);opacity:0`, izlere
+     `stroke-dasharray:100 100;stroke-dashoffset:-100`. Dasharray değerleri
+     UYDURMA — `getTotalLength` bu ortamda sabit 100 döndürüyor (yukarıdaki
+     saplama), gerçek yol uzunlukları 142–176.
+     Bugüne kadar görünmedi çünkü gerçek tarayıcıda aynı betik değerleri
+     milisaniyeler içinde doğrusuyla eziyordu. Perde mobilde saf CSS'e
+     geçince ezen kalmadı: CSS yalnız `opacity` animasyonluyor, dasharray'e
+     dokunmuyor — izler yarım çizili donardı.
+     Kaynakta YAZILI olan stiller (harflerdeki `--i`) korunuyor; yalnız
+     çalışma zamanının yazdığı özellikler siliniyor. `<html>`den açılış
+     sınıflarını temizleyen `temizle()` ile aynı gerekçe, aynı katman.   */
+  const perde = d.getElementById('boot');
+  if (perde) {
+    const runtimeOzellik = ['stroke-dasharray', 'stroke-dashoffset',
+                            'opacity', 'transform', 'will-change', '--p'];
+    for (const el of [perde, ...perde.querySelectorAll('[style]')]) {
+      for (const oz of runtimeOzellik) el.style.removeProperty(oz);
+      if (!(el.getAttribute('style') || '').trim()) el.removeAttribute('style');
+    }
+  }
+
   const cikti = temizle(dom.serialize());
   dom.window.close();
   return { html: cikti, acik, metin: metin.length, hata, url: rota.url };
