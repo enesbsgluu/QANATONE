@@ -1239,6 +1239,26 @@ body:not(.sub) .dkin{border-radius:clamp(20px,2.4vw,30px)}
 .dkgo:hover{color:var(--red);border-color:var(--red);gap:16px}
 .dkgo svg{width:15px;height:15px}
 @media(max-width:900px){
+  /* KART GEÇİLİRKEN KARE BAŞINA GPU İŞİ — deste kaydırılırken `.dkin`in
+     ölçeği ve opaklığı HER KAREDE değişiyor (deck(), scroll+rAF). Bir
+     katmanın opaklığı değişirken içindeki `filter` ve `backdrop-filter`
+     yeniden koşmak zorunda; dört kart aynı anda sahnede olduğu için bu
+     maliyet dörde katlanıyor.
+     · filter: mobilde `imgk` görseli ZATEN gri pişmiş geliyor, yani bu
+       satır aynı sonucu ikinci kez hesaplıyordu — kaldırıldı, görünüm
+       birebir aynı.
+     · backdrop-filter: yıl rozeti arkasındaki bulanıklık her karede
+       arka planı okuyup yeniden bulanıklaştırıyordu. Rozetin altında
+       zaten rgba(5,5,5,.66) zemin var; okunurluk bundan geliyor.
+     Masaüstünde ikisi de duruyor: hover'da renge dönüş ve buzlu cam
+     orada tasarımın parçası, sorun da orada değil.                    */
+  .dkimg img{filter:none}
+  /* Dokunmatikte :hover TAKILI KALIR (karta bir kez dokunduktan sonra
+     kart hover'da sayılır). Bu satır olmadan daha yüksek özgüllükteki
+     hover kuralı filtreyi mobilde geri açardı — tam da kaldırdığımız
+     kare başına maliyeti, üstelik yalnız dokunulan kartta. */
+  .dkin:hover .dkimg img{filter:none}
+  .dkimg .yr{backdrop-filter:none}
   /* mobilde de deste hissi: kartlar üst üste kayarak biner (masaüstüyle aynı ruh) */
   .dk{position:sticky;top:calc(72px + var(--i,0)*10px);margin-bottom:18px}
   body:not(.sub) .dk{top:calc(72px + var(--i,0)*10px)}
@@ -6236,7 +6256,7 @@ steps:[
 ],
 
 projects:[
-{name:'Mercedes-Benz',year:'2026',slug:'mercedes-benz',image:'img/pj-mercedes-benz.webp',
+{name:'Mercedes-Benz',year:'2026',slug:'mercedes-benz',image:'img/pj-mercedes-benz.webp',imgk:'img/pj-mercedes-benz-k.webp',
  tag:{tr:'Otomotiv · Bayi ağı',en:'Automotive · Dealer network'},
  text:{tr:'Bayi ağına gelen test sürüşü taleplerini tek hatta topladık; her talep otomatik olarak en yakın bayiye ve doğru danışmana düştü.',
        en:'Test-drive requests across the dealer network pooled into one pipeline and routed automatically.'},
@@ -6244,7 +6264,7 @@ projects:[
  meta:{role:{tr:'Talep yönlendirme + ajan',en:'Lead routing + agent'},dur:{tr:'14 hafta',en:'14 weeks'},ch:{tr:'Arama, Meta, bayi siteleri',en:'Search, Meta, dealer sites'}},
  blocks:{tr:[['Sorun','<p>Talep bol ama dağınıktı. Aynı müşteri üç ayrı bayiden aranıyor, bazı talepler ise hiç açılmıyordu.</p>'],['Yaklaşım','<p>Bütün kanalları tek hatta bağladık. Gelen her talep konum, model ve aciliyet bilgisine göre sınıflandırıldı.</p><p>Yanıtsız kalan talep 20 dakika sonra bir üst kademeye düşüyor.</p>'],['Sonuç','<p>İlk dönüş süresi üçte iki oranında kısaldı, mükerrer arama neredeyse sıfıra indi.</p>']],
          en:[['The problem','<p>Plenty of demand, but scattered.</p>'],['The approach','<p>Every channel pooled into one pipeline with automatic escalation.</p>'],['The result','<p>First-response time fell by two thirds.</p>']]}},
-{name:'Charles Schwab',year:'2025',slug:'charles-schwab',image:'img/pj-charles-schwab.webp',
+{name:'Charles Schwab',year:'2025',slug:'charles-schwab',image:'img/pj-charles-schwab.webp',imgk:'img/pj-charles-schwab-k.webp',
  tag:{tr:'Finans · İçerik otoritesi',en:'Finance · Content authority'},
  text:{tr:'Yatırım sorularının yapay zekâ yanıtlarında markanın anılması için yapılandırılmış veri ve kaynak otoritesi kurduk.',
        en:'Structured data and source authority so the brand is cited when AI answers investment questions.'},
@@ -6252,28 +6272,28 @@ projects:[
  meta:{role:{tr:'GEO + içerik mimarisi',en:'GEO + content architecture'},dur:{tr:'9 ay',en:'9 months'},ch:{tr:'Organik arama, AI yanıtları',en:'Organic search, AI answers'}},
  blocks:{tr:[['Sorun','<p>Müşteri artık soruyu arama kutusuna değil, yapay zekâya soruyordu. O yanıtlarda marka hiç geçmiyordu.</p>'],['Yaklaşım','<p>Finansal içerikleri makinenin okuyabileceği biçime taşıdık: tanım, kaynak, güncellenme tarihi ve yazar otoritesi.</p>'],['Sonuç','<p>Test edilen sorularda anılma oranı dokuz ayda dörtte bire yaklaştı.</p>']],
          en:[['The problem','<p>Customers ask AI, not a search box.</p>'],['The approach','<p>Content restructured for machines.</p>'],['The result','<p>Citation rate approached one in four.</p>']]}},
-{name:'Kononenko Group',year:'2025',slug:'kononenko-group',image:'img/pj-kononenko-group.webp',
+{name:'Kononenko Group',year:'2025',slug:'kononenko-group',image:'img/pj-kononenko-group.webp',imgk:'img/pj-kononenko-group-k.webp',
  tag:{tr:'Kurumsal · Web tasarım',en:'Corporate · Web design'},
  text:{tr:'Grup şirketinin kurumsal yüzünü sıfırdan tasarladık: hareketle anlatan, yatırımcıya ve iş ortağına güven veren ödül düzeyinde bir vitrin.',
        en:'A corporate face designed from scratch: motion-driven, built to earn the trust of investors and partners.'},
  meta:{role:{tr:'Web tasarım',en:'Web design'},ch:{tr:'Kurumsal site',en:'Corporate site'}},
  blocks:{tr:[['Sorun','<p>Grubun dijital yüzü, temsil ettiği ölçeğin gerisindeydi; ilk izlenim kurumun ağırlığını taşımıyordu.</p>'],['Yaklaşım','<p>Kimliği hareketle anlatan, bölüm bölüm akan tek bir hikâye kurduk. Tipografi ve tempo, grup dilinin uzantısı olarak tasarlandı.</p>'],['Sonuç','<p>Site, grubun kendisini anlattığı ilk ve en güçlü temas noktası hâline geldi.</p>']],
          en:[['The problem','<p>The digital face lagged behind the scale it represented.</p>'],['The approach','<p>One motion-driven story, section by section.</p>'],['The result','<p>The site became the strongest first touchpoint.</p>']]}},
-{name:'SkyClinics',year:'2026',slug:'skyclinics',image:'img/pj-skyclinics.webp',
+{name:'SkyClinics',year:'2026',slug:'skyclinics',image:'img/pj-skyclinics.webp',imgk:'img/pj-skyclinics-k.webp',
  tag:{tr:'Sağlık turizmi · Web + Otomasyon',en:'Health tourism · Web + Automation'},
  text:{tr:'Tiran merkezli premium diş turizmi kliniği: "uçuş" temalı marka sitesi ve gelen hasta talebini karşılayıp randevuya bağlayan otomasyon hattı.',
        en:'Premium dental tourism in Tirana: a flight-themed brand site plus an automation line that catches enquiries and books them.'},
  meta:{role:{tr:'Web tasarım + Otomasyon',en:'Web design + Automation'},ch:{tr:'Site, WhatsApp, e-posta',en:'Site, WhatsApp, email'}},
  blocks:{tr:[['Sorun','<p>Yurt dışından gelen hasta talebi farklı saat dilimlerinden, farklı kanallardan düşüyordu; klinik saatleri dışında kalan sorular bekliyordu.</p>'],['Yaklaşım','<p>Hasta yolculuğunu tek akışta anlatan bir site kurduk. Gelen talep, kanaldan bağımsız tek hatta toplanıp otomasyonla karşılanıyor ve randevu adımına taşınıyor.</p>'],['Sonuç','<p>Klinik kapalıyken de talep karşılanır oldu; ekip yalnızca randevuya hazır hastayla konuşuyor.</p>']],
          en:[['The problem','<p>International enquiries arrived across time zones and channels.</p>'],['The approach','<p>One patient journey, one pipeline, automated intake.</p>'],['The result','<p>Enquiries are answered even when the clinic is closed.</p>']]}},
-{name:'CMBlu Energy',year:'2025',slug:'cmblu-energy',image:'img/pj-cmblu-energy.webp',
+{name:'CMBlu Energy',year:'2025',slug:'cmblu-energy',image:'img/pj-cmblu-energy.webp',imgk:'img/pj-cmblu-energy-k.webp',
  tag:{tr:'Enerji · Web tasarım',en:'Energy · Web design'},
  text:{tr:'Büyük ölçekli enerji depolama teknolojisini şebeke operatörüne ve yatırımcıya anlaşılır kılan kurumsal site.',
        en:'A corporate site that makes large-scale energy storage legible to grid operators and investors.'},
  meta:{role:{tr:'Web tasarım',en:'Web design'},ch:{tr:'Kurumsal site',en:'Corporate site'}},
  blocks:{tr:[['Sorun','<p>Derin bir mühendislik hikâyesi vardı ama teknik dil, karar vericiye ulaşmadan yoruyordu.</p>'],['Yaklaşım','<p>Teknolojiyi katman katman açan bir anlatı kurduk: önce sorun, sonra çözümün ilkesi, en sonda derinlik. Her katman kendi ziyaretçisine konuşuyor.</p>'],['Sonuç','<p>Site hem mühendisin hem yatırımcının aynı sayfada ilerleyebildiği bir zemin oldu.</p>']],
          en:[['The problem','<p>A deep engineering story buried in technical language.</p>'],['The approach','<p>A layered narrative: problem, principle, depth.</p>'],['The result','<p>Engineers and investors move through the same page.</p>']]}},
-{name:'TeraWulf',year:'2026',slug:'terawulf',image:'img/pj-terawulf.webp',
+{name:'TeraWulf',year:'2026',slug:'terawulf',image:'img/pj-terawulf.webp',imgk:'img/pj-terawulf-k.webp',
  tag:{tr:'Enerji · Web + Otomasyon',en:'Energy · Web + Automation'},
  text:{tr:'Veri merkezi altyapısını anlatan kurumsal site; gelen iş ortaklığı ve yatırımcı taleplerini sınıflandırıp doğru ekibe düşüren otomasyon.',
        en:'A corporate site for data-center infrastructure, with automation that classifies partnership and investor enquiries.'},
@@ -7054,14 +7074,38 @@ function renderSteps(){
    Hangi dördü olduğu proje sırasına bağlı — panelin Projeler sekmesinden
    sırayı değiştirerek seçilir. Sayaç yine TOPLAM proje sayısını gösterir. */
 const DESTE_PROJE=4;
+/* MOBİL KART GÖRSELİ — `imgk`. Ölçüldü: destenin dört görseli 1,1–1,7
+   megapiksel (1600px genişlik) ve mobilde ~350×186 CSS'lik bir kutuya
+   giriyor. Dosyalar küçük olduğu için "indirme değil" elemesi doğruydu;
+   pahalı olan DOSYA değil, ÇÖZÜLMÜŞ BİTMAP: dört kart için 33 MB RGBA.
+   deviceMemory ≤2 olan bir telefonda tarayıcı bu bitmap'leri bellek
+   baskısı altında atıp yeniden çözüyor — kartlar geçilirken takılmanın
+   ve YUKARI dönünce yeniden takılmanın ikisi de buradan.
+   `imgk` 960px genişlikte, dikeyden ORTADAN kırpılmış (cover zaten aynı
+   kırpımı yapıyor; slug bazlı object-position hep yatay olduğu için tam
+   genişlik korundu) ve `grayscale(1) contrast(1.1)` TUVALDE PİŞİRİLMİŞ —
+   böylece mobilde her yeniden rasterleşmede filtre yeniden koşmuyor.
+   Toplam: 8,21 MP → 2,84 MP (33 MB → 11 MB).
+   `<source>` yalnız alan VARSA basılıyor: panelden eklenen yeni bir
+   projede `imgk` olmaz ve `<img src>` eski davranışa düşer. Bu şart
+   şart: 404 veren bir `<source>`, `<picture>` içinde `<img>`e GERİ
+   DÜŞMEZ, görsel tamamen kırılırdı.
+   Masaüstü bilerek dokunulmadı: orada renkli görsel ve hover'daki renge
+   dönüş sürüyor, sorun da orada değil.                                */
 function renderProjects(){
   const box=$('#prjDeck');if(!box)return;
   const TUM=C.projects||[], P=TUM.slice(0,DESTE_PROJE);
-  box.innerHTML=P.map((p,i)=>{const h=hueVars(i);return `
+  box.innerHTML=P.map((p,i)=>{const h=hueVars(i);
+    const src=p.imgc||p.image, yukle=i<2?'decoding="async"':'loading="lazy" decoding="async"';
+    const gorsel=src
+      ? (p.imgk&&!p.imgc
+          ? `<picture><source media="(max-width:900px)" srcset="${p.imgk}"><img src="${src}" alt="${p.name}" ${yukle}></picture>`
+          : `<img src="${src}" alt="${p.name}" ${yukle}>`)
+      : `<span class="mk">${p.name.slice(0,2).toUpperCase()}</span>`;
+    return `
     <div class="dk" style="--i:${i};--g1:${h.g1};--g2:${h.g2}">`+`
       <a class="dkin" href="/projeler/${p.slug}" data-pd="${p.slug}">
-        <span class="dkimg" data-pj="${p.slug}">${(p.imgc||p.image)?`<img src="${p.imgc||p.image}" alt="${p.name}" ${i<2?'decoding="async"':'loading="lazy" decoding="async"'}>`
-          :`<span class="mk">${p.name.slice(0,2).toUpperCase()}</span>`}
+        <span class="dkimg" data-pj="${p.slug}">${gorsel}
           <span class="yr">${p.year}</span></span>
         <span class="dktx">
           <span class="dknum">${String(i+1).padStart(2,'0')} / ${String(TUM.length).padStart(2,'0')}</span>
