@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-16 10:35 UTC
+> Üretim tarihi: 2026-08-17 22:08 UTC
 
 ## Yeni sohbete geçerken
 
@@ -21,21 +21,22 @@
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 8 KB | `8315488e` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
-| `DEVIR.md` | bu dosya | 5 KB |  |
+| `DEVIR.md` | bu dosya | 6 KB |  |
 | `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
+| `PERFORMANS-MIMARI-INCELEME-2026-08-16.md` |  | 17 KB | `12e3bdde` |
 | `PROJE-KURULUMU.md` |  | 4 KB | `c4b21bb8` |
 | `TEST.md` |  | 2 KB | `fe469648` |
-| `_headers` |  | 2 KB | `70fce80d` |
+| `_headers` |  | 2 KB | `b9ae1448` |
 | `admin.html` |  | 60 KB | `d25ad94c` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
-| `build.js` |  | 33 KB | `fec8a86d` |
+| `build.js` |  | 37 KB | `74eec687` |
 | `content.json` |  | 233 KB | `332649dc` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
-| `harness-hidrasyon.js` |  | 10 KB | `2582d77a` |
+| `harness-hidrasyon.js` |  | 11 KB | `be5b65f9` |
 | `holding/CLAUDE.md` |  | 6 KB | `e44ca0c3` |
 | `holding/ajan/devir.js` |  | 2 KB | `0bb0282a` |
 | `holding/ajan/kapi.js` |  | 1 KB | `bdb9328f` |
@@ -64,7 +65,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 31 dosya | 1571 KB |  |
-| `index.html` |  | 878 KB | `2b8525a8` |
+| `index.html` |  | 816 KB | `ddf7905b` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `kart-standart.diff` |  | 3 KB | `9c3ba604` |
@@ -92,7 +93,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 150 KB | `18da07ad` |
+| `test/denetim.js` |  | 160 KB | `9a9d0f5b` |
 | `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
 | `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
@@ -107,8 +108,8 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 136 sn (basılan 58, önbellekten 0) |
-| dist boyutu | 51.4 MB |
+| son derleme | 50 sn (basılan 0, önbellekten 58) |
+| dist boyutu | 20.8 MB |
 
 ## Çalıştırma
 
