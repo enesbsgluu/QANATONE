@@ -466,6 +466,50 @@ function kopyala(src, dst) {
 (async function main() {
   console.log('QANATONE statik uretec\n');
   const t0 = Date.now();
+
+  /* ── 2a · ORTAK VARLIK AYRIŞTIRMA: ana betik dışarı ──────────────────
+     Satır içi betik tarayıcının derleme önbelleğine giremez (V8 belgeli
+     davranış): 58 sayfanın her biri aynı ~490 KB'lık ana betiği her
+     gezinmede sıfırdan indirip ayrıştırıp DERLİYORDU. Dış + hash'li
+     dosyada bir kez derlenir, sonraki sayfalarda önbellekten gelir
+     (_headers: /varlik/* immutable — varlik/ ayrı klasör BİLEREK:
+     js/*'a immutable bassak hash'siz gsap/lenis de kapsanır ve
+     güncellenemez olurdu).
+     KAYNAK DEĞİŞMEZ — tek dosya kuralı kaynak hakkındadır; ayrıştırma
+     yalnız ÇIKTIDA. Ön-render de değişmez: jsdom kaynağı olduğu gibi
+     açar (betik ESKİ yerinde satır içi koşar), dış referans yalnız diske
+     yazılan HTML'e girer — içerik ham HTML'de kalır, GEO/SEO etkilenmez.
+     Kesim çapası deterministik: src'siz + gövdesi 100 KB üzeri satır içi
+     betik ANA BETİKTİR; tam BİR tane bulunmazsa derleme burada — dist'e
+     dokunmadan — durur. Kaynağa işaret yorumu eklenmez, regex
+     kırılganlığı yok.
+     İçerik LF'e normalize: git blob LF, Windows çalışma kopyası CRLF —
+     hash iki ortamda da AYNI dosya adını versin. Referans defer + belge
+     sırasında eski yerinde: gsap → ScrollTrigger → lenis → app (defer
+     koşum sırası belge sırasıdır); ana betik zaten içerikten sonra
+     duruyordu, defer koşumu asla İLERİ almaz.                          */
+  const ANA_ESIK = 100 * 1024;
+  const anaAdaylar = html => [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)]
+    .filter(m => Buffer.byteLength(m[1]) > ANA_ESIK);
+  const anaAday = anaAdaylar(fs.readFileSync(SRC, 'utf8'));
+  if (anaAday.length !== 1)
+    throw new Error(`ana betik kesimi: 100 KB üzeri satır içi betik tam 1 olmalı, ` +
+      `${anaAday.length} bulundu — çapa belirsiz, derleme DURDU (dist'e dokunulmadı)`);
+  const anaBetik = anaAday[0][1].replace(/\r\n/g, '\n');
+  const anaHash = crypto.createHash('sha256').update(anaBetik).digest('hex').slice(0, 10);
+  const anaRef = `<script src="varlik/app.${anaHash}.js" defer></script>`;
+  /* sayfa HTML'inde ana betiği dış referansla değiştir. Bulunamıyorsa ya
+     da gövde kaynaktan sapmışsa (serialize farkı vb.) SESSİZ GEÇME — dur:
+     sessiz atlanan sayfa ayrıştırılmamış 836 KB olarak yayına giderdi. */
+  const anaAyristir = (html, ad) => {
+    const a = anaAdaylar(html);
+    if (a.length !== 1)
+      throw new Error(`${ad}: çıktıda 100 KB üzeri satır içi betik ${a.length} adet (beklenen 1) — ayrıştırma güvensiz`);
+    if (a[0][1].replace(/\r\n/g, '\n') !== anaBetik)
+      throw new Error(`${ad}: çıktıdaki ana betik kaynaktakiyle denk değil — ayrıştırma güvensiz`);
+    return html.slice(0, a[0].index) + anaRef + html.slice(a[0].index + a[0][0].length);
+  };
+
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   let kn = 0;
@@ -473,7 +517,9 @@ function kopyala(src, dst) {
     const src = path.join(ROOT, k);
     if (fs.existsSync(src)) { kopyala(src, path.join(OUT, k)); kn++; }
   }
-  console.log(`  ${kn} varlik dist/ altina kopyalandi\n`);
+  console.log(`  ${kn} varlik dist/ altina kopyalandi`);
+  yaz(`varlik/app.${anaHash}.js`, anaBetik);
+  console.log('');
 
   /* 1) slug listelerini siteden oku */
   const { dom: kesif } = ortam(fs.readFileSync(SRC, 'utf8'), ORIGIN + '/');
@@ -571,7 +617,7 @@ function kopyala(src, dst) {
       continue;
     }
     const s = await sayfa(r, r.dil);
-    yaz(r.rel, s.html);
+    yaz(r.rel, anaAyristir(s.html, r.rel));   /* 2a: ana betik dış dosyaya */
     basilan++;
     console.log(`           bolum:[${s.acik.join(',')}] · ham metin ${s.metin} karakter` +
                 (s.hata.length ? `  !! ${s.hata.length} hata` : ''));
@@ -620,7 +666,9 @@ function kopyala(src, dst) {
     const ham404 = fs.readFileSync(SRC, 'utf8')
       .replace(/<title>[\s\S]*?<\/title>/, '<title>Sayfa bulunamadi — QANATONE</title>')
       .replace('</head>', '<meta name="robots" content="noindex">\n</head>');
-    yaz('404.html', ham404);
+    /* 2a: 404 da ham kaynağın kopyası — ana betik burada da dışarı,
+       yoksa tek başına 836 KB'lık ayrıştırılmamış bir sayfa kalırdı. */
+    yaz('404.html', anaAyristir(ham404, '404.html'));
   }
 
   /* 6) yan dosyalar */

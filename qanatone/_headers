@@ -27,6 +27,14 @@
 /404.html
   X-Robots-Tag: noindex
 
+# Ortak varlıklar (2a): ana betik varlik/app.<hash>.js — ad İÇERİKTEN
+# türetilen hash taşıdığı için sonsuz önbellek güvenli: içerik değişince
+# ad değişir, eski ad zaten hiçbir sayfadan çağrılmaz. varlik/ ayrı klasör
+# BİLEREK: Netlify kısmi dosya jokeri desteklemez; js/*'a immutable
+# bassak hash'siz gsap/lenis de kapsanır ve güncellenemez olurdu.
+/varlik/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff

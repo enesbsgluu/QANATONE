@@ -100,6 +100,21 @@ const tikla = (w, d, sec) => {
   return !!a;
 };
 
+/* 2a — dist sayfaları ana betiği dış dosyadan alır (varlik/app.<hash>.js).
+   jsdom dış kaynak yüklemez (resources ayarlı değil) — betik ÇALIŞTIRAN her
+   dist ölçümü dosyayı diskten okuyup ESKİ yerine satır içi geri koyar:
+   belge sırası ve koşum anı, ayrıştırma öncesi hâlle birebir. Referans
+   yoksa HTML olduğu gibi döner — 3b hidrasyonu ölçer, paketleme sözleşmesi
+   kural 113/114'ün işi; oradaki kırmızı buraya taşınmaz. */
+function anaBetigiGeriGom(html) {
+  const m = html.match(/<script src="(varlik\/app\.[0-9a-f]{10}\.js)" defer><\/script>/);
+  if (!m) return html;
+  const yol = path.join(DIST, m[1]);
+  if (!fs.existsSync(yol)) return html;
+  return html.slice(0, m.index) + '<script>' + fs.readFileSync(yol, 'utf8') + '</script>'
+       + html.slice(m.index + m[0].length);
+}
+
 /* =====================================================================
    1 · KAYNAK BÜTÜNLÜĞÜ — sözdizimi, CSS dengesi, çeviri
    ===================================================================== */
@@ -1651,6 +1666,115 @@ function ciktiDenetimi() {
        !!veri && omurga.length === 4,
        hata || `${anahtar.length} anahtar · omurga ${omurga.length}/4`);
   }
+
+  /* 113 · ORTAK BETİK AYRIŞTI (2a, 2026-08). Satır içi betik tarayıcının
+     derleme önbelleğine giremez (V8 belgeli davranış): 58 sayfanın her biri
+     aynı ~490 KB'lık ana betiği her gezinmede sıfırdan ayrıştırıp
+     DERLİYORDU. build.js ana betiği ÇIKTIDA varlik/app.<hash>.js'e ayırır
+     (kaynak tek dosya kalır, ön-render değişmez). Kesim çapası
+     deterministik: src'siz + gövdesi 100 KB üzeri = ana betik; işaret
+     yorumu yok, regex kırılganlığı yok. Kural iki sayfada DOM'dan ölçer
+     (kök + iç sayfa — ham metin regex'i script kaynağına takılır, üç kez
+     yaşandı): büyük satır içi blok kalmadı · referans defer'li ve lenis'ten
+     SONRA (defer koşum sırası belge sırasıdır: gsap → ST → lenis → app) ·
+     iki sayfa AYNI dosyaya işaret ediyor · dosya diskte ve varlik/ altında
+     TEK · içerik kaynaktaki ana blokla bayt-denk (satır sonu normalize:
+     git blob LF, Windows çalışma kopyası CRLF) · addaki hash içeriğin
+     GERÇEK sha256'sının ilk 10 hex'i. */
+  {
+    const crypto = require('crypto');
+    const ESIK = 100 * 1024;
+    const kaynakBlok = [...fs.readFileSync(SRC, 'utf8')
+      .matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)]
+      .map(m => m[1]).filter(g => Buffer.byteLength(g) > ESIK);
+    const bak = rel => {
+      const p = path.join(DIST, rel);
+      if (!fs.existsSync(p)) return { yok: true };
+      const d = new JSDOM(fs.readFileSync(p, 'utf8')).window.document;
+      const scr = [...d.querySelectorAll('script')];
+      return {
+        buyukIcli: scr.filter(x => !x.getAttribute('src')
+          && Buffer.byteLength(x.textContent) > ESIK).length,
+        iRef: scr.findIndex(x => /^varlik\/app\.[0-9a-f]{10}\.js$/.test(x.getAttribute('src') || '')),
+        iLenis: scr.findIndex(x => (x.getAttribute('src') || '').endsWith('lenis.min.js')),
+        get ad() { return this.iRef > -1 ? scr[this.iRef].getAttribute('src') : ''; },
+        get defer() { return this.iRef > -1 && scr[this.iRef].hasAttribute('defer'); }
+      };
+    };
+    const kok = bak('index.html'), ic = bak('hizmetler/index.html');
+    let dosyaVar = false, tek = false, hashDogru = false, denk = false;
+    const klasor = path.join(DIST, 'varlik');
+    if (fs.existsSync(klasor)) {
+      tek = fs.readdirSync(klasor).filter(f => /^app\.[0-9a-f]{10}\.js$/.test(f)).length === 1;
+      if (kok.ad && fs.existsSync(path.join(DIST, kok.ad))) {
+        dosyaVar = true;
+        const icerik = fs.readFileSync(path.join(DIST, kok.ad), 'utf8');
+        hashDogru = kok.ad === 'varlik/app.'
+          + crypto.createHash('sha256').update(icerik).digest('hex').slice(0, 10) + '.js';
+        denk = kaynakBlok.length === 1
+          && kaynakBlok[0].replace(/\r\n/g, '\n') === icerik.replace(/\r\n/g, '\n');
+      }
+    }
+    const sayfaTamam = s => !s.yok && s.buyukIcli === 0 && s.iRef > -1 && s.defer
+      && s.iLenis > -1 && s.iRef > s.iLenis;
+    ol('ortak betik ayrıştı: ana betik varlik/app.<hash>.js, sayfada gömü yok',
+       kaynakBlok.length === 1 && sayfaTamam(kok) && sayfaTamam(ic) && kok.ad === ic.ad
+         && dosyaVar && tek && hashDogru && denk,
+       `kaynakBlok=${kaynakBlok.length} kök[gömü=${kok.yok ? '-' : kok.buyukIcli}` +
+       ` ref=${kok.ad || 'yok'} defer=${kok.defer} lenisSonra=${kok.iRef > kok.iLenis}]` +
+       ` iç[gömü=${ic.yok ? '-' : ic.buyukIcli} aynıAd=${kok.ad === ic.ad}]` +
+       ` dosya=${dosyaVar} tek=${tek} hash=${hashDogru} denk=${denk}`);
+  }
+
+  /* 114 · SATIR İÇİ ENVANTER KİLİDİ (2a bekçisi). Ayrıştırmadan sonra
+     sayfada ÇALIŞAN gömülü betik olarak yalnız bilinen dörtlü kalır:
+     base document.write (~65 B) · perde kapısı (~1,8 KB) · karşılama
+     denetleyicisi (~7 KB) · damga (~67 B). Her yuvaya kimlik imzası +
+     üst tavan: listede olmayan ya da tavanı aşan HER gömü kırmızı —
+     "küçük bir şey gömüvereyim" yarınki ayrıştırma vergisinin tohumudur,
+     buradan geçemez; yeni gömü gerekiyorsa bu kural bilinçle güncellenir.
+     ld+json gibi ÇALIŞTIRILMAYAN tipler envanter dışı (veri, betik değil).
+     404.html da listede: ham kaynaktan yazılır, ayrıştırma onu da kapsar. */
+  {
+    const ENV = [
+      ['base',  '<base href=',  200],
+      ['perde', 'qanat-splash', 4096],
+      ['boot',  '__bootMobil',  12288],
+      ['damga', '__QBUILD',     200]
+    ];
+    const bak = rel => {
+      const p = path.join(DIST, rel);
+      if (!fs.existsSync(p)) return rel + ' yok';
+      const d = new JSDOM(fs.readFileSync(p, 'utf8')).window.document;
+      const calisan = [...d.querySelectorAll('script:not([src])')]
+        .filter(x => { const t = x.getAttribute('type');
+                       return !t || /javascript|^module$/.test(t); })
+        .map(x => x.textContent);
+      if (calisan.length !== ENV.length)
+        return `${rel}: ${calisan.length} gömü (beklenen ${ENV.length})`;
+      return ENV.map(([ad, imza, tavan], i) =>
+        calisan[i].indexOf(imza) === -1 ? `${rel}:${ad} imzasız`
+        : Buffer.byteLength(calisan[i]) > tavan
+          ? `${rel}:${ad} ${Buffer.byteLength(calisan[i])}B>${tavan}B` : '')
+        .filter(Boolean).join(' · ');
+    };
+    const kusur = ['index.html', 'hizmetler/index.html', '404.html'].map(bak).filter(Boolean);
+    ol('satır içi envanter kilidi: yalnız bilinen dörtlü, tavan içinde',
+       kusur.length === 0, kusur.join(' | ') || '3 sayfa × 4 gömü, tavanlar içinde');
+  }
+
+  /* 115 · SAYFA İNCELDİ (2a sonuç kilidi). Ayrıştırma öncesi
+     dist/index.html 836.563 B idi; sonrası ÖLÇÜLDÜ: 346.918 B
+     (gzip-9 81.243 B). Tavan = ölçüm + %10 pay = 381.610. Sayfa yeniden
+     şişerse (betik geri gömülür, büyük varlık satır içine sızar) kural
+     yanar; bilinçli büyüme bu sayıyı bilinçle günceller. */
+  {
+    const TAVAN = 381610;
+    const p = path.join(DIST, 'index.html');
+    const boy = fs.existsSync(p) ? fs.statSync(p).size : -1;
+    ol('dist/index.html boyut tavanı (ana betik dışarıda)',
+       boy > 0 && boy <= TAVAN, `${boy} B ≤ ${TAVAN} B`);
+  }
 }
 
 /* =====================================================================
@@ -1677,7 +1801,7 @@ async function statikDogrudanYukleme() {
     ol('dist/otomasyon doğrudan yüklemede huni ₺500.000 verir (gerçek betik)', false, 'dist/otomasyon veya shell.html yok');
     return;
   }
-  const otomasyonHtml = fs.readFileSync(otomasyonYolu, 'utf8');
+  const otomasyonHtml = anaBetigiGeriGom(fs.readFileSync(otomasyonYolu, 'utf8'));
   const shellHtml = fs.readFileSync(shellYolu, 'utf8');
   const fetchMock = (u) => {
     const s = String(u);
@@ -1726,7 +1850,7 @@ async function statikDogrudanYukleme() {
       ol('dist/hizmetler/seo doğrudan yüklemede bölüm sırası: detay → kabuk → #lead', false, 'dist/hizmetler/seo yok');
       ol('dist/hizmetler/seo doğrudan yüklemede geç kurucular kayıtlı', false, 'dist/hizmetler/seo yok');
     } else {
-      const seoHtml = fs.readFileSync(seoYolu, 'utf8');
+      const seoHtml = anaBetigiGeriGom(fs.readFileSync(seoYolu, 'utf8'));
       const { dom: dom2 } = ortam(seoHtml, ORIGIN + '/hizmetler/seo', { fetch: fetchMock });
       const w2 = dom2.window, d2 = w2.document;
       const t1 = Date.now();
@@ -1784,7 +1908,7 @@ async function statikDogrudanYukleme() {
     ];
     for (const [ad, yol, rota, baslik, olc] of cift) {
       if (!fs.existsSync(yol)) { ol(baslik, false, yol + ' yok'); continue; }
-      const { dom: d3 } = ortam(fs.readFileSync(yol, 'utf8'), ORIGIN + rota, { fetch: fetchMock });
+      const { dom: d3 } = ortam(anaBetigiGeriGom(fs.readFileSync(yol, 'utf8')), ORIGIN + rota, { fetch: fetchMock });
       const w3 = d3.window;
       const t = Date.now();
       while (!w3.__contentReady && Date.now() - t < 4000) await dur(40);
@@ -1804,6 +1928,29 @@ async function statikDogrudanYukleme() {
       ol(baslik, gecti, detay);
       d3.window.close();
     }
+  }
+
+  /* 116 · HİDRASYON DIŞ DOSYAYLA (2a). Yukarıdaki 3b ölçümleri app.js'i
+     geri gömme yardımcısından geçiyor; bu kural AYRICA kanıt döngüsünün
+     (../harness-hidrasyon.js) tamamını çocuk süreçte koşturur: dist
+     sayfası dış ana betikle gerçekten hidre oluyor mu (huni ₺500.000,
+     bayraklar, kabuk bölümleri). Harness dist sayfasında varlik/app.<hash>
+     referansını ŞART koşar — ayrıştırılmamış (eski biçim) çıktıda kırmızı
+     yanar; kuralın kırmızı tarafı böyle kanıtlandı. */
+  {
+    const { execFileSync } = require('child_process');
+    let cikti = '', temiz = false;
+    try {
+      cikti = execFileSync(process.execPath, [path.join(KOK, 'harness-hidrasyon.js')],
+        { stdio: 'pipe', cwd: KOK }).toString();
+      temiz = true;
+    } catch (e) {
+      cikti = String(e.stdout || '') + String(e.stderr || '');
+    }
+    const m = cikti.match(/(\d+) geçti · (\d+) kaldı/);
+    ol('hidrasyon kanıt döngüsü dış ana betikle temiz (harness-hidrasyon)',
+       temiz, m ? `${m[1]} geçti · ${m[2]} kaldı`
+                : (cikti.trim().split('\n').pop() || 'çıktı yok'));
   }
 }
 

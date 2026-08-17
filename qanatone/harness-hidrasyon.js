@@ -127,8 +127,28 @@ async function hazirOlBekle(w, limitMs) {
     console.error(`  !! dist eksik — önce 'node build.js' çalıştır.\n     aranan: ${otomasyonYolu}\n     aranan: ${shellYolu}`);
     process.exit(1);
   }
-  const otomasyonHtml = fs.readFileSync(otomasyonYolu, 'utf8');
+  let otomasyonHtml = fs.readFileSync(otomasyonYolu, 'utf8');
   const shellHtml = fs.readFileSync(shellYolu, 'utf8');
+
+  /* 2a — dist sayfaları ana betiği dış dosyadan alır (varlik/app.<hash>.js).
+     jsdom dış kaynak yüklemez (resources ayarlı değil); dosya diskten
+     okunup ESKİ yerine satır içi geri konur — belge sırası ve koşum anı
+     ayrıştırma öncesiyle birebir. Referans YOKSA bu harness kırmızıdır:
+     ölçtüğü sözleşme "statik sayfa + DIŞ ana betik hidre olur"
+     sözleşmesidir, eski gömülü biçim değil (denetim kural 116 buna yaslanır). */
+  const ref = otomasyonHtml.match(/<script src="(varlik\/app\.[0-9a-f]{10}\.js)" defer><\/script>/);
+  if (!ref) {
+    console.error('  !! dist sayfasında varlik/app.<hash>.js referansı yok — ana betik ayrıştırması (2a) bekleniyordu.');
+    process.exit(1);
+  }
+  const appYolu = path.join(DIST, ref[1]);
+  if (!fs.existsSync(appYolu)) {
+    console.error(`  !! ${ref[1]} diskte yok — sayfa referans veriyor, dosya eksik.`);
+    process.exit(1);
+  }
+  otomasyonHtml = otomasyonHtml.slice(0, ref.index)
+    + '<script>' + fs.readFileSync(appYolu, 'utf8') + '</script>'
+    + otomasyonHtml.slice(ref.index + ref[0].length);
 
   const fetchMock = (u) => {
     const s = String(u);
