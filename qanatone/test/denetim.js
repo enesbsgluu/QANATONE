@@ -876,6 +876,30 @@ function ciktiDenetimi() {
        kapaliDegil && korumaVar,
        `kapaliDegil=${kapaliDegil} korumaVar=${korumaVar}`);
   }
+  /* 112 · TEK HAREKET MOTORU — Motion One gömüsü söküldü (2026-08).
+     63.678 baytlık sarmalayıcı yalnız iki yerde kullanılıyordu (perde
+     masaüstü girişi/çıkışı + kadro hover kartı) ve kendisi de altında
+     WAAPI koşturuyordu; mobil onu HİÇ çalıştırmadığı hâlde her sayfa
+     yüklemesinde ayrıştırıyordu (belgenin %7,1'i). Söküm sonrası aynı
+     motor (Element.animate) boot içindeki anim()/kademe() yardımcıları
+     üzerinden doğrudan çağrılıyor; raporların ortak "tek motor" hükmü.
+     DİKKAT: sondaki On'lu bayrak (sahne motoru kapısı) AYRI bir şeydir,
+     desen onu bilerek dışlar. Aranan adlar bu yoruma bitişik yazılmadı
+     (kural 65 dersi: kaynağı tarayan kural kendi metnine takılır) —
+     çalışma anında birleştiriliyor; SRC tarafında da yorumlar atılıyor. */
+  {
+    const kaynakM = fs.readFileSync(SRC, 'utf8');
+    const kod = kaynakM.replace(/\/\*[\s\S]*?\*\//g, '');
+    const mtn = '__mo' + 'tion';
+    const tanimYok = !new RegExp('window\\.' + mtn + '\\s*=').test(kod);
+    const cagriYok = !new RegExp('window\\.' + mtn + '\\s*[.)]').test(kod)
+                  && !new RegExp('\\bM\\.ani' + 'mate\\(').test(kod);
+    const yerliVar = /function anim\(/.test(kod) && /function kademe\(/.test(kod)
+                  && /inr\.animate\(/.test(kod);
+    ol('tek hareket motoru: Motion gömüsü yok, perde yerli WAAPI',
+       tanimYok && cagriYok && yerliVar,
+       `tanimYok=${tanimYok} cagriYok=${cagriYok} yerliVar=${yerliVar}`);
+  }
   /* 108 · ADRES ÇUBUĞU YENİDEN KURULUM YAPTIRMAZ (2026-08 mobil kasma).
      Mobilde `resize` bir yeniden kurulum sinyali DEĞİL: adres çubuğu her
      açılıp kapandığında yalnız yükseklik oynar ve pencere `resize` atar.
@@ -1085,13 +1109,16 @@ function ciktiDenetimi() {
   {
     const kaynakP = fs.readFileSync(SRC, 'utf8');
     const iKapi = kaynakP.indexOf('PERDE KAPISI');
-    const iLib = kaynakP.indexOf('/* motion v12');
-    const siraDogru = iKapi > -1 && iLib > -1 && iKapi < iLib;
+    /* Motion sökümünden (kural 112) sonra sıra çapası kütüphane değil
+       DENETLEYİCİNİN kendisi: kapı, perdeyi doğuran sınıfları hâlâ her
+       şeyden önce eklemeli. Eski çapa (gömülü paket işareti) artık yok. */
+    const iDenet = kaynakP.indexOf('Karşılama denetleyicisi');
+    const siraDogru = iKapi > -1 && iDenet > -1 && iKapi < iDenet;
 
     const kodP = kaynakP.replace(/\/\*[\s\S]*?\*\//g, '');
     const sikis = kodP.replace(/\s/g, '');
     const tekYer = (sikis.match(/classList\.add\('boot-on'\)/g) || []).length === 1;
-    const iBlok = sikis.indexOf('if(M&&!RDC&&!MOBIL){');
+    const iBlok = sikis.indexOf('if(WA&&!RDC&&!MOBIL){');
     const kutuphanesiz = iBlok > -1;
     /* getTotalLength o bloğun İÇİNDE mi — perdenin BÖLGESİNE bakıyoruz
        (denetleyicinin başından ilerleme çubuğuna kadar), sayfanın geri
@@ -1106,7 +1133,7 @@ function ciktiDenetimi() {
     const gtlIcerde = gtlBolge === 1 && iBlok > iDen && iBlok < iBar
       && bolge.indexOf('getTotalLength()') + iDen > iBlok;
     const jsKalkiyor = /\}else\{el\.classList\.remove\('js'\);\}/.test(sikis);
-    const cikisSarti = sikis.indexOf("if(RDC||!M||!el.classList.contains('js')){") > -1;
+    const cikisSarti = sikis.indexOf("if(RDC||!WA||!el.classList.contains('js')){") > -1;
     const mMIN = sikis.match(/varMIN=MOBIL\?(\d+):(\d+);/);
     const MIN = mMIN ? +mMIN[1] : null;
     const sureIndi = MIN !== null && MIN <= 800 && +mMIN[2] === 2700;
@@ -1204,7 +1231,7 @@ function ciktiDenetimi() {
       ciktiOzet = `kirliStil=${kirli.length}${kirli.length ? ' örn:' + kirli[0].slice(0, 46) : ''} --iKorundu=${ciktiIVar}`;
     }
 
-    ol('mobil perde: saf CSS · kütüphaneden önce doğuyor · çizelge asgari süreye sığıyor · çıktıda donmuş kare yok',
+    ol('mobil perde: saf CSS · denetleyiciden önce doğuyor · çizelge asgari süreye sığıyor · çıktıda donmuş kare yok',
        siraDogru && tekYer && kutuphanesiz && gtlIcerde && jsKalkiyor && cikisSarti &&
        sureIndi && kirilmaAyni && cizelgeSigiyor && ciktiTemiz && ciktiIVar,
        `sira=${siraDogru} tekYer=${tekYer} kutuphanesiz=${kutuphanesiz} getTotalLengthIcerde=${gtlIcerde}` +
