@@ -69,7 +69,10 @@ function ortam(html, url, ek) {
     beforeParse(w) {
       w.innerWidth = (ek && ek.w) || 1440; w.innerHeight = 900; w.devicePixelRatio = 1;
       w.onerror = (m) => hata.push('[onerror] ' + String(m).slice(0, 140));
-      w.matchMedia = q => ({ matches: false, media: q, addListener() {}, removeListener() {},
+      /* ek.mm: eşleşecek sorgu parçaları (ör. ['pointer:coarse']) — mobil
+         eşleme kuralları için; verilmezse eski davranış (hepsi false). */
+      w.matchMedia = q => ({ matches: !!(ek && ek.mm && ek.mm.some(x => q.includes(x))),
+        media: q, addListener() {}, removeListener() {},
         addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; } });
       w.IntersectionObserver = class { constructor(c) { this.c = c; }
         observe(e) { this.c([{ target: e, isIntersecting: true, intersectionRatio: 1 }], this); }
@@ -89,6 +92,8 @@ function ortam(html, url, ek) {
       w.HTMLCanvasElement.prototype.getContext = t => (t === '2d' ? sahteCtx() : null);
       w.scrollTo = () => {};
       w.fetch = (u) => (ek && ek.fetch) ? ek.fetch(u) : Promise.reject(new Error('ag yok'));
+      /* ek.kur: kurala özgü ek kurulum (saplama, sayaç) — parse'tan önce */
+      if (ek && ek.kur) ek.kur(w);
     }
   });
   return { dom, hata };
@@ -599,6 +604,105 @@ async function calisma() {
     ol('yabancı origin postMessage reddediliyor', yabanci, '');
     ol('panel önizlemesi (aynı origin) çalışıyor', /905551112233/.test(oku()), '');
     dom.window.close();
+  }
+
+  /* 117 · DESTE MOBİLDE BAĞLANMAZ (2026-08, Enes'in 58 sn'lik ekran kaydı,
+     kare-fark analizi): dört büyük kaydırma donmasının DÖRDÜ de deste
+     bölgesindeydi (2,1–4,7 sn donma + ışınlanma). deck() her kaydırma
+     karesinde getBoundingClientRect okuyor; mobilde scale/opacity zaten
+     hissedilmiyor, maliyeti hissediliyor. Kapı: innerWidth<=900 ||
+     pointer:coarse → scroll dinleyicisi HİÇ eklenmez, ilk deck() çağrısı
+     yapılmaz; sticky yığın kalır. Ölçüm İKİ TARAFLI tek kuralda: mobil
+     eşlemede deck'e dokunan scroll dinleyicisi 0, masaüstü eşlemede 1 —
+     masaüstü davranışı da aynı kuralla kilitli, iki yönde de regresyon
+     yanar. gsap/ST/Lenis saplamayla veriliyor: jsdom dış betik yüklemez;
+     ölçülen şey kütüphane değil, bağlanma KAPISI. */
+  {
+    const stub = w => {
+      const yok = () => {};
+      w.gsap = { registerPlugin: yok, to: yok, from: yok, set: yok, fromTo: yok,
+                 ticker: { add: yok, remove: yok, lagSmoothing: yok } };
+      w.ScrollTrigger = { create: () => ({}), config: yok, refresh: yok,
+                          update: yok, getAll: () => [] };
+      w.Lenis = class { on() {} raf() {} scrollTo() {} };
+      const say = { deck: 0 };
+      const eski = w.addEventListener.bind(w);
+      w.addEventListener = (tip, fn, o) => {
+        if (tip === 'scroll' && String(fn).indexOf('deck(') > -1) say.deck++;
+        return eski(tip, fn, o);
+      };
+      w.__deckSay = say;
+    };
+    const olc = async (px, coarse) => {
+      const { dom } = ortam(html, ORIGIN + '/',
+        { w: px, mm: coarse ? ['pointer:coarse'] : [], kur: stub });
+      await dur(1200);            /* boot(load) + karşılama + motion boot */
+      const n = dom.window.__deckSay.deck;
+      dom.window.close();
+      return n;
+    };
+    const mobil = await olc(390, true);
+    const masa = await olc(1440, false);
+    ol('deste mobilde bağlanmaz (deck scroll dinleyicisi: mobil 0 · masaüstü 1)',
+       mobil === 0 && masa === 1, `mobil=${mobil} masaüstü=${masa}`);
+  }
+
+  /* 118 · DESTE GÖRSELLERİ MOBİLDE EAGER + 640 TÜREV (aynı 58 sn'lik kayıt:
+     kartlar arasında 2,1–4,7 sn donma). İki mekanizma: (1) `loading="lazy"`
+     karta gelindiği anda indirme+çözme başlatıyor — tam kaydırma ortasında;
+     mobilde deste görselleri EAGER olmalı ki iş açılışta, boştayken yapılsın.
+     Masaüstü mevcut davranışı korur (ilk 2 eager, kalanı lazy) — orada
+     sorun yok, kural onu da kilitler. (2) `imgk` 960px; kutu ~350 CSS px.
+     640 türevi (`-k-640.webp`) çözülmüş bitmap'i tekrar düşürür. Türev
+     AÇIK ALANDIR (`imgk6`): panelden eklenen projede alan yoksa imgk'ye
+     düşer — 404 veren <source> <img>'e GERİ DÜŞMEZ, o yüzden ad türetme
+     (replace) değil alan. content.json (kökte, panel yayını) da imgk6
+     taşımalı: content dizileri DATA'yı BÜTÜN olarak ezer (üç kez yaşandı) —
+     alan yalnız DATA'da kalırsa canlıda kaybolur. */
+  {
+    const olc = async (px, coarse) => {
+      const { dom } = ortam(html, ORIGIN + '/',
+        { w: px, mm: coarse ? ['pointer:coarse'] : [] });
+      await dur(900);
+      const d2 = dom.window.document;
+      const img = [...d2.querySelectorAll('#prjDeck .dk img')];
+      const kaynaklar = [...d2.querySelectorAll('#prjDeck picture source')]
+        .map(s => s.getAttribute('srcset') || '');
+      const DATA2 = dom.window.__qanatDefaults();
+      dom.window.close();
+      return { img, kaynaklar, DATA2 };
+    };
+    const m = await olc(390, true);
+    const ms = await olc(1440, false);
+    const mobilEager = m.img.length > 0 && m.img.every(i => !i.hasAttribute('loading'));
+    const mobil640 = m.kaynaklar.length > 0 && m.kaynaklar.every(s => /-k-640\.webp$/.test(s));
+    const masaEski = ms.img.length > 2
+      && ms.img.every((i, x) => (x < 2) === !i.getAttribute('loading')
+                             && (x < 2 || i.getAttribute('loading') === 'lazy'));
+    /* disk + alan: DATA'da imgk taşıyan her proje imgk6 da taşır; dosya
+       diskte ve -k orijinalinden KÜÇÜK (küçültme gerçekleşmiş). */
+    const prj = (m.DATA2.projects || []).filter(p => p.imgk);
+    const alanKusur = prj.filter(p => !p.imgk6 || !/-k-640\.webp$/.test(p.imgk6)).map(p => p.slug);
+    const dosyaKusur = prj.filter(p => p.imgk6 &&
+      (!fs.existsSync(path.join(KOK, p.imgk6)) || !fs.existsSync(path.join(KOK, p.imgk)) ||
+       fs.statSync(path.join(KOK, p.imgk6)).size >= fs.statSync(path.join(KOK, p.imgk)).size))
+      .map(p => p.slug);
+    /* canlı zincir: kökteki content.json (panel yayını) da alanı taşımalı */
+    const cj = path.join(KOK, 'content.json');
+    let icerikKusur = [];
+    if (fs.existsSync(cj)) {
+      try {
+        icerikKusur = (JSON.parse(fs.readFileSync(cj, 'utf8')).projects || [])
+          .filter(p => p.imgk && !p.imgk6).map(p => p.slug);
+      } catch (e) { icerikKusur = ['content.json ayrıştırılamadı']; }
+    }
+    ol('deste görselleri: mobil eager + 640 türev, masaüstü eski, alan zinciri tam',
+       mobilEager && mobil640 && masaEski
+         && prj.length > 0 && alanKusur.length === 0
+         && dosyaKusur.length === 0 && icerikKusur.length === 0,
+       `mobilEager=${mobilEager}(${m.img.length}) mobil640=${mobil640} masaEski=${masaEski}` +
+       ` alan=${alanKusur.join(',') || 'tam'} dosya=${dosyaKusur.join(',') || 'tam'}` +
+       ` content=${icerikKusur.join(',') || 'tam'}`);
   }
 }
 
@@ -1951,6 +2055,56 @@ async function statikDogrudanYukleme() {
     ol('hidrasyon kanıt döngüsü dış ana betikle temiz (harness-hidrasyon)',
        temiz, m ? `${m[1]} geçti · ${m[2]} kaldı`
                 : (cikti.trim().split('\n').pop() || 'çıktı yok'));
+  }
+
+  /* 119 · AÇILIŞ TEK RENDER + İÇERİK ÖNCE (2026-08, röntgenin "1 no'lu
+     tekrarlayıcısı"): renderAll açılışta İKİ kez koşuyordu — önce C=DATA
+     ile, sonra content.json gelince applyContent ile bir daha. Artık
+     içerik ÖNCE alınır (2,5 sn sigortalı yarış), C bir kez birleşir,
+     renderAll BİR kez koşar. İkinci taraf KRİTİK ve bu kuralın asıl
+     bekçiliği: content DATA'dan AYRIŞMIŞSA (ölçüldü: settings/legal/
+     strings/projects dört anahtarda ayrık) tek render İÇERİĞİ basmalı —
+     "aynıysa atla" tarzı bir kapı ekranda DATA bırakır, panelin yayını
+     sessizce kaybolurdu (yanlış yeşilin dik âlâsı). İki senaryo tek
+     kuralda: içerik geliyor → __renderN=1 VE DOM sentinel'i taşıyor;
+     içerik gelmiyor → __renderN=1 VE DOM gömülü varsayılanı taşıyor. */
+  {
+    const anaYolu = path.join(DIST, 'index.html');
+    const cjYolu = path.join(DIST, 'content.json');
+    if (!fs.existsSync(anaYolu) || !fs.existsSync(cjYolu)) {
+      ol('açılış tek render: içerik önce, renderAll bir kez (içerikli + içeriksiz)',
+         false, 'dist/index.html veya dist/content.json yok');
+    } else {
+      const anaHtml = anaBetigiGeriGom(fs.readFileSync(anaYolu, 'utf8'));
+      const sentinel = JSON.parse(fs.readFileSync(cjYolu, 'utf8'));
+      if (sentinel.projects && sentinel.projects[0]) sentinel.projects[0].name = 'SENTINELX';
+      const kos = async (icerikVer) => {
+        const fm = (u) => {
+          const s2 = String(u);
+          if (s2.includes('shell.html'))
+            return Promise.resolve({ ok: true, text: () => Promise.resolve(shellHtml) });
+          if (s2.includes('content.json') && icerikVer)
+            return Promise.resolve({ ok: true,
+              json: () => Promise.resolve(JSON.parse(JSON.stringify(sentinel))) });
+          return Promise.reject(new Error('ag yok (kural 119 — kasıtlı)'));
+        };
+        const { dom } = ortam(anaHtml, ORIGIN + '/', { fetch: fm });
+        const w = dom.window;
+        const t = Date.now();
+        while (!w.__contentReady && Date.now() - t < 5000) await dur(40);
+        await dur(300);
+        const ad = (w.document.querySelector('#prjDeck .dk h3') || {}).textContent || '(yok)';
+        const n = w.__renderN;
+        dom.window.close();
+        return { n, ad };
+      };
+      const a = await kos(true);
+      const b = await kos(false);
+      ol('açılış tek render: içerik önce, renderAll bir kez (içerikli + içeriksiz)',
+         a.n === 1 && a.ad === 'SENTINELX' && b.n === 1
+           && b.ad !== 'SENTINELX' && b.ad !== '(yok)',
+         `içerikli[n=${a.n} ad=${a.ad}] içeriksiz[n=${b.n} ad=${b.ad}]`);
+    }
   }
 }
 
