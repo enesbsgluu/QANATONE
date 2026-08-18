@@ -33,6 +33,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
   {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
   {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
+  <slot name="bas" />
 </head>
 <body>
   <header class="ust">
