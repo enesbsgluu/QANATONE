@@ -245,8 +245,9 @@ html.t-mo-off *,html.t-mo-off *::before,html.t-mo-off *::after{
    masaüstünde sorun değil, dokunmatik ekranda kaydırmayı takıyor. Dokunmatik
    ve dar ekranlarda tanecik katmanını tamamen kapatıyoruz.              */
 @media(pointer:coarse),(max-width:900px){
-  #noise{display:none}
-  #stars{opacity:.4}
+  /* 2026-08: yıldız tuvali de statik garantiyle yok — betik geç kalsa
+     ya da patlasa bile süs katmanı doğmaz (JS yolu ayrıca lowfx'te). */
+  #stars,#noise{display:none}
 }
 main{position:relative;z-index:2}
 
@@ -4365,6 +4366,63 @@ html.t-mo-off .mkwire .kiv{animation:none;opacity:0}
 .nrcard .m,
 .nrcard span.d,
 #mmenu .mlg button{font-size:12px}
+
+/* ============ MOBİL SAHNE BÜTÇESİ (2026-08) ============
+   Doktrin: mobilde süs varsayılan KAPALI, içerik varsayılan GÖRÜNÜR.
+   İçerik JS gözlemcisinden izin beklemez — hızlı savurmada gözlemci geç
+   kalır, ekran boş görünür. Aile listesi sitenin kendi
+   prefers-reduced-motion sözleşmesinin mobil karşılığı; kaydırma-ilerleme
+   bağlı sahneler (st/ai/fl — kaydırmayla senkron, gözlemci gecikmesi yok)
+   ve etkileşim durumları (menü, akordeon, sektör paneli) bilinçli dışarıda.
+   Bloğun SONDA durması kasıtlı: aynı özgüllükte son kural kazanır.      */
+@media(pointer:coarse),(max-width:900px){
+  /* -- içerik görünür doğar (Madde 1) -- */
+  .rv{opacity:1;transform:none;transition:none}
+  #tespit h2 .lt i{transform:none;opacity:1;animation:none}
+  .tlsay,.tldd,.tlsl,.tlok{opacity:1;transform:none;transition:none}
+  .tlptr{display:none}
+  .tcard,.tcard.big,.tcard.sml{opacity:1;transform:none;filter:none}
+  .mfg{opacity:1;transform:none;transition:none}
+  .szlab,.szleak,.szout,.szend,.szarrow{opacity:1;transform:none;transition:none}
+  .gnrow{opacity:1;transform:none;transition:none}
+  .kdrow{opacity:1;transform:none;transition:none}
+  .tppx{opacity:0}
+  .tpleft,.tpcard{filter:none;opacity:1;transform:none}
+  .tpwires path{stroke-dashoffset:0!important}
+  .mkact,.mkcount span,.mkfr,.mksec,.mksig,.mkit,.mkarrow,.mkmade,.mkmc,.mkline,
+  .mkcomp,.mkrk,.mkin,.mkcore,.mkhy,.mkdc,.mkjc,.mkch,.mkinf,.mkhand{
+    opacity:1;transform:none;transition:none}
+  .mkcv polyline{stroke-dashoffset:0}
+  .qtact,.qtchip,.qtrow,.qtsum li,.qtcon i,.qtver,.qtsend,.qtreply{
+    opacity:1;transform:none;transition:none}
+  /* akış mini sahneleri: dokuz animasyonlu demo mobilde son karesinde
+     durur (reduced-motion sözleşmesiyle birebir) — içerik poster gibi  */
+  .akd *{animation:none!important}
+  .aktype{max-width:100%}
+  .akd-ads .akrw,.akmini>span,.akaud i,.aksum{opacity:1;transform:none}
+  .akq,.aka,.aksrc,.akstp{opacity:1;transform:none}
+  .akjob i{transform:translateX(1.4cqw);color:#fff}
+  .akjob b,.aktrw b{background:var(--red);border-color:var(--red)}
+  .akjob b::after,.aktrw b::after{transform:rotate(-45deg) scale(1)}
+  .akrw.hot{transform:translateY(calc(-3*(100% + 1.6cqw)))}
+  .akrw:not(.hot){transform:translateY(calc(100% + 1.6cqw))}
+  .akd-ads .akrw{transform:none}
+  .aktr b{transform:scaleX(.78)}
+  .aktr u{transform:translateX(calc(86cqw*.78))}
+  .akm2{--akm:120}
+  .akpr{opacity:1;transform:none}
+  .akcur,.akdone{opacity:0}
+  /* -- backdrop-filter mobilde sıfır (Madde 4): iOS'ta kaydırma başına
+     en pahalı kompozit sınıfı; evrensel + !important, gelecekte eklenen
+     blur da ölür. Blur'a yaslanan panellere düz zemin aşağıda.         -- */
+  *,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .navin{background:rgba(10,10,11,.97)}
+  #xcOv{background:rgba(5,5,6,.88)}
+  .dkimg .yr{background:rgba(5,5,5,.92)}
+  .szbeat{background:rgba(10,10,11,.92)}
+  .mkhud{background:rgba(10,10,11,.92)}
+  #globe .gov{background:rgba(9,9,10,.86)}
+}
 </style>
 </head>
 <body>
@@ -5477,7 +5535,12 @@ html.t-mo-off .mkwire .kiv{animation:none;opacity:0}
    Tek dosya, sıfır çerçeve. Veriler DATA içinde; panel bunu değiştirir.
    ===================================================================== */
 const CORES=navigator.hardwareConcurrency||4, MEM=navigator.deviceMemory||4;
-const LOWFX=(CORES>1&&CORES<=3)||MEM<=2||/Android [4-8]\./.test(navigator.userAgent);
+/* 2026-08 iOS körlüğü: Safari deviceMemory VERMEZ (varsayılan 4), iPhone
+   çekirdeği 4+ — eski koşul her iPhone'da daima yanlıştı, sekiz kalemlik
+   hafif-mod koruması mobilde hiç açılmıyordu. Tahmin değil ölçüm:
+   dokunmatik ya da dar ekran = hafif mod. */
+const COARSE=matchMedia('(pointer:coarse)').matches||innerWidth<=900;
+const LOWFX=COARSE||(CORES>1&&CORES<=3)||MEM<=2||/Android [4-8]\./.test(navigator.userAgent);
 if(LOWFX)document.documentElement.classList.add('lowfx');
 const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const LG=()=>document.documentElement.lang==='en'?'en':'tr';
