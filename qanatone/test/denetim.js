@@ -120,6 +120,47 @@ function anaBetigiGeriGom(html) {
        + html.slice(m.index + m[0].length);
 }
 
+/* Mobil sahne bütçesi (120-123) — mobil eşlemeli, JS'SİZ statik ortam.
+   jsdom medya sorgusunu KASKADDA değerlendirmez (ölçüldü: 390px pencerede
+   max-width:900 bloğu hesaplanmış stile girmiyor) — bu yüzden eşleşen
+   mobil @media blokları metinde AÇILIR (unwrap), eşleşmeyenler düşer,
+   betikler sökülür. Kalan saf CSS'i jsdom sırayla/özgüllükle uygular;
+   hesaplanmış stil gerçek "JS hiç koşmadan mobil" hâlidir. */
+function mobilStatikDOM(html) {
+  const W = 390, H = 844;
+  const kosul = q => q.split(',').some(kol => {
+    const ozler = [...kol.matchAll(/\(([^)]+)\)/g)].map(m => m[1].replace(/\s/g, '').toLowerCase());
+    if (!ozler.length) return false;
+    return ozler.every(oz => {
+      if (oz === 'pointer:coarse' || oz === 'hover:none' || oz === 'any-pointer:coarse') return true;
+      if (oz.startsWith('max-width:')) return W <= parseInt(oz.slice(10), 10);
+      if (oz.startsWith('min-width:')) return W >= parseInt(oz.slice(10), 10);
+      if (oz.startsWith('max-height:')) return H <= parseInt(oz.slice(11), 10);
+      if (oz.startsWith('min-height:')) return H >= parseInt(oz.slice(11), 10);
+      return false;   /* prefers-*, pointer:fine, hover:hover, bilinmeyen */
+    });
+  });
+  const donustur = css => {
+    let out = '', i = 0;
+    while (i < css.length) {
+      const m = css.slice(i).match(/@media([^{]*)\{/);
+      if (!m) { out += css.slice(i); break; }
+      out += css.slice(i, i + m.index);
+      /* blok sonunu parantez SAYARAK bul — [^}]* iç bloğun ilk }'inde durur */
+      let d = 1, k = i + m.index + m[0].length;
+      for (; k < css.length && d > 0; k++) { if (css[k] === '{') d++; else if (css[k] === '}') d--; }
+      const ic = css.slice(i + m.index + m[0].length, k - 1);
+      if (kosul(m[1])) out += donustur(ic);   /* eşleşti: blok açılır */
+      i = k;                                   /* eşleşmedi: blok düşer */
+    }
+    return out;
+  };
+  const jssiz = html.replace(/<script[\s\S]*?<\/script>/g, '')
+    .replace(/<style([^>]*)>([\s\S]*?)<\/style>/g,
+      (t, oz, css) => '<style' + oz + '>' + donustur(css.replace(/\/\*[\s\S]*?\*\//g, '')) + '</style>');
+  return new JSDOM(jssiz).window;
+}
+
 /* =====================================================================
    1 · KAYNAK BÜTÜNLÜĞÜ — sözdizimi, CSS dengesi, çeviri
    ===================================================================== */
@@ -703,6 +744,137 @@ async function calisma() {
        `mobilEager=${mobilEager}(${m.img.length}) mobil640=${mobil640} masaEski=${masaEski}` +
        ` alan=${alanKusur.join(',') || 'tam'} dosya=${dosyaKusur.join(',') || 'tam'}` +
        ` content=${icerikKusur.join(',') || 'tam'}`);
+  }
+
+  /* 120 · İÇERİK GÖRÜNÜR DOĞAR (2026-08 mobil sahne bütçesi, Madde 1):
+     .rv ve gözlemci-gecikmeli içerik aileleri opacity:0 doğup JS
+     gözlemcisinden izin bekliyordu; hızlı savurmada gözlemci geç kalır,
+     ekran boş görünür. Mobilde içerik JS HİÇ KOŞMADAN tam opak olmalı.
+     Aile listesi sitenin KENDİ prefers-reduced-motion sözleşmesinden
+     türedi (animasyonsuz içerik dürüstlüğünün tek kaynağı). Kaydırma-
+     ilerleme bağlı sahneler (st/ai/fl: senkron, gözlemci yok), etkileşim
+     durumları (menü, akordeon, sektör paneli) ve dekoratifler kapsam
+     dışı. Ölçüm: mobil eşlemeli JS'siz statik DOM'da hesaplanmış stil —
+     eleman statik yoksa sonda (probe) ile, CSS ölçülür, işaretleme değil. */
+  {
+    const w2 = mobilStatikDOM(html); const d2 = w2.document;
+    const sonda = sec => {
+      let el = d2.querySelector(sec);
+      if (!el) {   /* seçici zincirini kur: '#tespit h2 .lt i' → iç içe */
+        let ust = d2.body;
+        for (const p of sec.split(/\s+/)) {
+          const e = d2.createElement(p === 'i' ? 'i' : p === 'h2' ? 'h2' : 'div');
+          if (p.startsWith('#')) e.id = p.slice(1);
+          else if (p.startsWith('.')) e.className = p.slice(1).split('.').join(' ');
+          ust.appendChild(e); ust = e;
+        }
+        el = ust;
+      }
+      return w2.getComputedStyle(el);
+    };
+    const aile = ['.rv', '#tespit h2 .lt i', '.tlsay', '.tlok', '.tcard', '.mfg',
+                  '.szleak', '.szout', '.gnrow', '.kdrow', '.tpcard', '.mkfr',
+                  '.mkhy', '.qtrow', '.qtreply', '.akq', '.aksum'];
+    const kusur = aile.filter(sec => {
+      const cs = sonda(sec);
+      return cs.opacity !== '1' || (cs.transform && cs.transform !== 'none');
+    });
+    ol('mobil içerik görünür doğar (JS koşmadan .rv + gözlemci aileleri tam opak)',
+       kusur.length === 0, kusur.join(',') || `${aile.length} aile tam`);
+  }
+
+  /* 121 · LOWFX DOKUNMATİK GERÇEĞİYLE AÇILIR (Madde 2): eski koşul
+     (CORES 2-3 || MEM<=2 || eski Android) her iPhone'da DAİMA yanlıştı —
+     Safari deviceMemory VERMEZ (varsayılan 4), iPhone çekirdeği 4+;
+     sekiz kalemlik hafif-mod koruması mobilde hiç açılmıyordu. Koşula
+     tahmin değil ölçüm eklendi: pointer:coarse || innerWidth<=900.
+     İki taraflı kilit: mobil eşlemede html.lowfx VAR ve stars kurulumu
+     KOŞMAZ (#stars'a getContext çağrısı yok); masaüstü eşlemede lowfx
+     YOK ve stars koşar — masaüstü davranışı da aynı kuralla kilitli. */
+  {
+    const kaynakL = fs.readFileSync(SRC, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const tanim = /const COARSE=matchMedia\('\(pointer:coarse\)'\)\.matches\|\|innerWidth<=900/.test(kaynakL)
+               && /const LOWFX=COARSE\|\|/.test(kaynakL);
+    const stub = w => {
+      const yok = () => {};
+      w.gsap = { registerPlugin: yok, to: yok, from: yok, set: yok, fromTo: yok,
+                 ticker: { add: yok, remove: yok, lagSmoothing: yok } };
+      w.ScrollTrigger = { create: () => ({}), config: yok, refresh: yok,
+                          update: yok, getAll: () => [] };
+      w.Lenis = class { on() {} raf() {} scrollTo() {} };
+      const eski = w.HTMLCanvasElement.prototype.getContext;
+      w.__ctxKim = [];
+      w.HTMLCanvasElement.prototype.getContext = function (t) {
+        w.__ctxKim.push(this.id || ''); return eski.call(this, t);
+      };
+    };
+    const olc = async (px, coarse) => {
+      const { dom } = ortam(html, ORIGIN + '/',
+        { w: px, mm: coarse ? ['pointer:coarse'] : [], kur: stub });
+      await dur(1200);
+      const s = { lowfx: dom.window.document.documentElement.classList.contains('lowfx'),
+                  stars: dom.window.__ctxKim.includes('stars') };
+      dom.window.close();
+      return s;
+    };
+    const mob = await olc(390, true);
+    const mas = await olc(1440, false);
+    ol('lowfx dokunmatikte açık (mobil: lowfx+stars yok · masaüstü: lowfx\'siz+stars var)',
+       tanim && mob.lowfx && !mob.stars && !mas.lowfx && mas.stars,
+       `tanim=${tanim} mob=${mob.lowfx}/${mob.stars} mas=${mas.lowfx}/${mas.stars}`);
+  }
+
+  /* 122 · YILDIZ + TANECİK MOBİLDE STATİK GARANTİYLE YOK (Madde 3):
+     kural 121 bunları JS yoluyla kapatır; betik geç kalsa ya da patlasa
+     bile süs katmanı doğmamalı — JS'ten bağımsız CSS garantisi. Eski
+     mobil blok #noise'u kapatıp #stars'ı opacity:.4'te BIRAKIYORDU. */
+  {
+    const w3 = mobilStatikDOM(html); const d3 = w3.document;
+    const gor = id => {
+      let el = d3.getElementById(id);
+      if (!el) { el = d3.createElement('canvas'); el.id = id; d3.body.appendChild(el); }
+      return w3.getComputedStyle(el).display;
+    };
+    const stars = gor('stars'), noise = gor('noise');
+    ol('mobilde #stars ve #noise hesaplanmış display:none (JS\'siz)',
+       stars === 'none' && noise === 'none', `stars=${stars} noise=${noise}`);
+  }
+
+  /* 123 · BACKDROP-FILTER MOBİLDE SIFIR (Madde 4): kaynakta 18
+     backdrop-filter vardı (sabit menü zemini 20px blur dahil) — iOS'ta
+     kaydırma başına en pahalı kompozit sınıfı. Mobil blokta kapsayıcı
+     kapatma (evrensel, !important — gelecekte eklenen blur da ölür) +
+     blur'a yaslanan panel yüzeylerine düz, okunur zemin (alfa ≥ .85).
+     #bitsay/#bitback mobilde zaten display:none — sayılmaz. Çipler
+     (.pill, .void, sthdr rozetleri) tek renkli sayfa zemini üstünde:
+     tonları kalır, zemin şartı panellere. */
+  {
+    const kaynakB = fs.readFileSync(SRC, 'utf8');
+    const sikB = kaynakB.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s/g, '');
+    const kapsayici = sikB.includes(
+      '*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}');
+    const w4 = mobilStatikDOM(html); const d4 = w4.document;
+    const alfa = sec => {
+      let el = d4.querySelector(sec);
+      if (!el) {
+        let ust = d4.body;
+        for (const p of sec.split(/\s+/)) {
+          const e = d4.createElement('div');
+          if (p.startsWith('#')) e.id = p.slice(1); else e.className = p.replace(/^\./, '');
+          ust.appendChild(e); ust = e;
+        }
+        el = ust;
+      }
+      const m = (w4.getComputedStyle(el).backgroundColor || '').match(/rgba?\(([^)]+)\)/);
+      if (!m) return 0;
+      const par = m[1].split(',').map(x => parseFloat(x));
+      return par.length === 4 ? par[3] : 1;
+    };
+    const yuzey = ['.navin', '.dkimg .yr', '.szbeat', '.mkhud', '#xcOv'];
+    const ince = yuzey.filter(s => alfa(s) < 0.85);
+    ol('mobilde backdrop-filter sıfır (kapsayıcı) + panel zeminleri opak (alfa ≥ .85)',
+       kapsayici && ince.length === 0,
+       `kapsayici=${kapsayici} ince=${ince.join(',') || 'yok'}`);
   }
 }
 
