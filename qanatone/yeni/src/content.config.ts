@@ -12,4 +12,10 @@ const hizmetler = defineCollection({
   })
 });
 
-export const collections = { hizmetler };
+const yazilar = defineCollection({
+  loader: file('../content.json', {
+    parser: t => JSON.parse(t).posts.map((p: any) => ({ id: p.slug, ...p }))
+  })
+});
+
+export const collections = { hizmetler, yazilar };

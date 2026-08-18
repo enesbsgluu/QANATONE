@@ -1,0 +1,35 @@
+---
+/* Yazı gövdesi — panelin HTML'i (güvenilir kaynak) derleme anında
+   basılır; bölümler [başlık, html] çiftleri. */
+import { T, type Dil } from '../icerik';
+interface Props { p: any; dil: Dil }
+const { p, dil } = Astro.props;
+const bolumler: [string, string][] = (p.body && (p.body[dil] || p.body.tr)) || [];
+const tarih = new Date(p.date + 'T00:00:00');
+const ay = dil === 'en'
+  ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  : ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYear()}`;
+---
+<article>
+  <h1>{T(p.title, dil)}</h1>
+  <div class="yazimeta">
+    <time datetime={p.date}>{tarihYazi}</time>
+    {p.read && <span>{p.read} {dil === 'en' ? 'min read' : 'dk okuma'}</span>}
+    {p.tag && <span>{T(p.tag, dil)}</span>}
+  </div>
+  <p class="lede">{T(p.lede, dil)}</p>
+  <div class="govde">
+    {bolumler.map(([h, html]) => (
+      <><h2>{h}</h2><div set:html={html} /></>
+    ))}
+  </div>
+  {p.sources?.length > 0 && <div class="kaynaklar">
+    <h2>{dil === 'en' ? 'Sources' : 'Kaynaklar'}</h2>
+    <ul>
+      {p.sources.map((k: any) => (
+        <li>{k.u ? <a href={k.u} rel="noopener">{k.n}</a> : k.n}</li>
+      ))}
+    </ul>
+  </div>}
+</article>
