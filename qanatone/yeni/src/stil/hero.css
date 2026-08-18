@@ -1,0 +1,250 @@
+/* ============================================================
+   S-H · HERO — Goc Anayasasi madde 3: DOKUNULMAZ, BIREBIR.
+   Kaynak: kok index.html · markup 4685-4723 · CSS 383-585 · saat 9276.
+   Adlandirma sozlesmesi (denetim H ailesi bunlari olcer):
+     .sh-*   icerik — gorunur dogar, opacity:0 YASAK (H2)
+     .sus-*  sus    — cihaz kisiti yalnizca bunu sondurebilir (H4)
+
+   BU ADADA ALINAN SAPMALAR (madde 6: hepsi adiyla ve gerekcesiyle):
+   1) atmo blur(70/90/100px) KALKTI -> radyal degrade (madde 7). Katmanlar
+      zaten degradeydi, blur yalnizca dis kenari yumusatiyordu; duraklar
+      %5-8 disari cekilerek ayni yumusaklik filtresiz kuruldu.
+   2) #tubes (756 KB three.js tuplemesi) TASINMADI — Anayasa "tasinmayan
+      kalemler" listesi.
+   3) rise GORUNUR baslar: eski `translateY(114%)` basligi ilk karede
+      TAMAMEN kirpiyordu; madde 5 "LCP elemani gizli veya ekran disi
+      baslamaz" der. Perde araligi %30'a indi — hareket duruyor, metin
+      ilk kareden boyali.
+   4) lede/cta/meta girisleri `opacity:0 + fadeup` yerine yalniz transform
+      (madde 5 · H2). Zamanlama ve mesafe aynen.
+   5) Panel degiskenleri (--hh-x, --h-mask, --t-ring-*) sabite dondu:
+      yeni tarafta panel yok, degerler eskinin varsayilani.
+   6) GSAP el paralaksi (fare + kaydirma yPercent) TASINMADI — Anayasa'nin
+      hero listesinde yok, ada JS'i 0 kalsin diye. Enes veto edebilir.
+   7) pill/void cam bulanikligi yalniz masaustunde ve 12px (madde 7).
+   8) will-change tasinmadi (gerekcesi asagida, .sus-el basinda).
+   9) Rozetteki nokta iki ust uste <i> yerine tek eleman: eskide iki
+      ayni daire vardi, alttaki %75 opaklikta — nabiz kaldirildiginda
+      geriye kalan sey tek bir noktanin biraz parlak hali. Tek eleman
+      %85 opaklikla ayni goruntuyu veriyor.
+   ============================================================ */
+
+.sh-sahne{position:relative;min-height:calc(100svh - 4rem);
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(56px,9vh,110px) 0 clamp(64px,10vh,110px);
+  overflow:hidden;text-align:center}
+
+/* ---------- kizil atmosfer (blursuz, sapma 1) ---------- */
+.sus-atmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.sus-atmo span{position:absolute;display:block;border-radius:50%}
+.sus-a1{left:50%;top:34%;transform:translate(-50%,-50%);
+  width:min(1500px,150vw);height:min(1100px,120vw);
+  background:radial-gradient(closest-side,rgba(190,22,44,.13) 0 22%,
+    rgba(203,26,52,.40) 52%,rgba(120,12,28,.17) 72%,transparent 93%)}
+.sus-a2{left:-10%;top:-14%;width:70vw;height:60vw;
+  background:radial-gradient(closest-side,rgba(239,35,60,.30),transparent 84%)}
+.sus-a3{right:-14%;bottom:-20%;width:66vw;height:58vw;
+  background:radial-gradient(closest-side,rgba(160,16,36,.36),transparent 86%)}
+.sus-a4{inset:0;border-radius:0;
+  background:linear-gradient(180deg,transparent 34%,rgba(5,5,5,.6) 78%,#050505 100%)}
+
+/* ---------- eller ----------
+   Uc katman, her katmanin TEK transform sahibi var:
+     .sus-el     -> yerlesim (transform yok; eski GSAP sahibiydi, sapma 6)
+     .sus-suzul  -> CSS sakin salinim
+     img         -> CSS giris
+   Katman hero'nun tamamina degil ILK EKRANA sabitlenir: bolum icerik
+   uzunsa 100svh'yi asiyor ve alta yasli robot eli katlamanin altina
+   dusuyordu (eski kaynagin kendi notu, 405-410).                      */
+.sus-eller{position:absolute;left:0;right:0;top:0;height:100svh;z-index:2;
+  pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,
+    transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%);
+  mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,
+    transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%)}
+/* will-change TASINMADI (sapma 8): eskide .hand'i her karede GSAP
+   suruyordu, katmani onden ayirmak dogruydu. Burada .sus-el'in HIC
+   animasyonu yok (paralaks tasinmadi) ve .sus-suzul 13-17 sn'lik
+   transform'la doner — tarayici basladiginda kendisi katmana alir.
+   Onden vermek ilk boyada iki dev katman ayirtiyordu. */
+.sus-el{position:absolute}
+.sus-suzul{position:relative;display:block}
+.sus-el img{display:block;width:100%;height:auto;opacity:0;position:relative;z-index:1;
+  animation:sh-elgiris 1.6s var(--e) forwards}
+/* Isik gorselin ARKASINDA iki statik gradyan: kizil hale + zemin golgesi.
+   Eskiden img uzerinde 56px+80px iki drop-shadow vardi; gorsel hem CSS
+   salinimi hem paralaksla oynadigi icin filtreli dev katman her karede
+   yeniden rasterize oluyordu — giris kasmasinin olculmus kaynagi.     */
+.sus-suzul::before{content:'';position:absolute;inset:-14%;z-index:0;pointer-events:none;
+  background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%);
+  opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
+.sus-suzul::after{content:'';position:absolute;left:6%;right:6%;top:16%;bottom:-6%;
+  z-index:0;pointer-events:none;
+  background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%);
+  opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
+
+/* capraz yerlesim: insan eli ustte-solda, robot altta-sagda; parmak
+   uclari ekranin kosegeni boyunca birbirine bakar */
+.sus-el-h{left:-2vw;top:-2vw;width:33vw}
+.sus-el-r{right:-2vw;bottom:-2vw;width:33vw}
+/* donus merkezi omuz tarafinda: kol disaridan salaniyormus gibi */
+.sus-el-h .sus-suzul{transform-origin:0 6%;animation:sh-suzulA 13s ease-in-out infinite}
+.sus-el-r .sus-suzul{transform-origin:100% 94%;animation:sh-suzulB 17.5s ease-in-out -4s infinite}
+.sus-el-h img{transform-origin:0 0;animation-delay:.28s}
+.sus-el-r img{transform-origin:100% 100%;animation-delay:.5s}
+
+@keyframes sh-elgiris{from{opacity:0;transform:scale(1.055)}to{opacity:.94;transform:scale(1)}}
+@keyframes sh-hale{to{opacity:1}}
+@keyframes sh-suzulA{0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  50%{transform:translate3d(3px,-8px,0) rotate(-1deg)}}
+@keyframes sh-suzulB{0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  50%{transform:translate3d(-5px,12px,0) rotate(.8deg)}}
+
+/* ---------- metin adasi ---------- */
+.sh-ic{position:relative;z-index:4;max-width:940px;margin:0 auto;
+  padding:0 clamp(20px,4vw,40px)}
+/* metnin altindaki zemin koyulasir: kizil sis yazinin icinden degil
+   cevresinden gecer, boylece beyaz beyaz kirmizi kirmizi okunur */
+.sh-ic::before{content:'';position:absolute;left:50%;top:47%;z-index:-1;
+  transform:translate(-50%,-50%);width:min(1220px,124%);height:120%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(3,3,4,.56),rgba(3,3,4,.3) 54%,transparent 78%)}
+
+.sh-rozet{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);margin-bottom:34px}
+.sh-nokta{position:relative;display:flex;width:7px;height:7px;border-radius:50%;
+  background:var(--red);opacity:.85}
+.sh-rozet span:last-child{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.78);line-height:1.4}
+
+/* referans tipografisi: serif, ince, isikli */
+.sh-h1{font-family:var(--f-baslik);font-weight:500;
+  font-size:clamp(2.8rem,7.6vw,5.9rem);line-height:1.06;letter-spacing:-.028em;
+  color:#fff;margin-bottom:26px;
+  text-shadow:0 1px 22px rgba(0,0,0,.5),0 0 34px rgba(255,198,204,.28)}
+.sh-l{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
+.sh-l i{display:block;font-style:normal;animation:sh-rise 1.2s var(--e) backwards}
+.sh-l:nth-child(2) i{animation-delay:.12s}
+.sh-h1 em{font-style:italic;font-weight:500;color:rgba(255,255,255,.8)}
+.sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic;
+  text-shadow:0 0 10px rgba(255,47,77,.55),0 0 46px rgba(239,35,60,.8)}
+/* sapma 3: perde araligi %114 -> %30, metin ilk kareden boyali */
+@keyframes sh-rise{from{transform:translateY(30%)}}
+
+.sh-lede{font-size:clamp(.98rem,1.5vw,1.12rem);color:rgba(255,255,255,.78);font-weight:300;
+  line-height:1.75;max-width:600px;margin:0 auto 44px;
+  text-shadow:0 1px 16px rgba(0,0,0,.55);
+  animation:sh-yukari 1s var(--e) .68s backwards}
+/* sapma 4: eski fadeup opaklikla geliyordu; artik yalniz transform */
+@keyframes sh-yukari{from{transform:translateY(18px)}}
+
+.sh-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;
+  animation:sh-yukari 1s var(--e) .84s backwards}
+
+/* --- ince cerceveli ana dugme: ayirt edici olan yazi degil yuzey --- */
+.sh-void{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 30px;border-radius:999px;border:1px solid rgba(255,255,255,.26);
+  background:rgba(255,255,255,.05);text-decoration:none;
+  font-size:.92rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;
+  color:var(--tx);
+  transition-property:transform,background,color,border-color,box-shadow;
+  transition-duration:.26s;transition-timing-function:var(--e)}
+.sh-void::before{content:'';position:absolute;inset:0;border-radius:999px;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(239,35,60,.55),transparent 72%);
+  opacity:0;transition:opacity .45s var(--e)}
+.sh-void:hover{border-color:rgba(239,35,60,.7);transform:translateY(-2px);
+  box-shadow:0 14px 44px -14px var(--red-glow)}
+.sh-void:hover::before{opacity:1}
+.sh-void:active{transform:scale(.965);transition-duration:.08s}
+.sh-void span{position:relative;z-index:1}
+
+/* --- kenarda dolasan kirmizi isik ---
+   Donen koni gradyani, maske farkiyla yalniz 2px'lik kenar bandina
+   kirpiliyor. Tur suresi TEK yerde (--sh-halka-spd): eskiden bolenle
+   ikinci bir oran vardi ve ayrisiyordu.                              */
+.sus-halka{--sh-halka-spd:3.6s;--sh-halka-kuyruk:56%;
+  position:absolute;inset:-1px;border-radius:999px;padding:2px;
+  pointer-events:none;z-index:0;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 7px rgba(239,35,60,.7));transition:filter .34s var(--e)}
+.sus-halka::before{content:'';position:absolute;left:50%;top:50%;
+  width:260%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,
+    transparent 0 calc(100% - var(--sh-halka-kuyruk)),
+    rgba(239,35,60,.30) calc(100% - var(--sh-halka-kuyruk)*.72),
+    rgba(255,77,99,.88) calc(100% - var(--sh-halka-kuyruk)*.34),
+    #ffe6ea calc(100% - var(--sh-halka-kuyruk)*.15),
+    rgba(255,77,99,.85) calc(100% - var(--sh-halka-kuyruk)*.04),
+    transparent 100%);
+  animation:sh-halka var(--sh-halka-spd) linear infinite}
+@keyframes sh-halka{
+  from{transform:translate(-50%,-50%) rotate(0turn)}
+  to{transform:translate(-50%,-50%) rotate(1turn)}}
+.sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px rgba(239,35,60,.95))}
+/* maske farki desteklenmiyorsa halkayi hic gosterme — yoksa dugmeyi doldurur */
+@supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
+  .sus-halka{display:none}}
+
+.sh-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 26px;border-radius:999px;font-size:.92rem;font-weight:600;
+  white-space:nowrap;letter-spacing:-.01em;text-decoration:none;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.16);color:var(--tx);
+  transition-property:transform,background,color,border-color,box-shadow;
+  transition-duration:.26s;transition-timing-function:var(--e)}
+.sh-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
+.sh-btn:active{transform:scale(.965);transition-duration:.08s}
+
+.sh-meta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:52px;
+  flex-wrap:wrap;font-family:var(--f-tek);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(255,255,255,.34);
+  animation:sh-yukari 1s var(--e) 1s backwards}
+.sh-meta i{width:1px;height:11px;background:rgba(255,255,255,.2);font-style:normal}
+.sh-meta b{color:rgba(255,255,255,.56);font-weight:400}
+.sh-saat{font-variant-numeric:tabular-nums}
+
+/* ---------- kaydir isareti (sus: mobilde hic yok) ---------- */
+.sus-kaydir{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;
+  animation:sh-yukari-sus 1s var(--e) 1.35s forwards;pointer-events:none}
+@keyframes sh-yukari-sus{from{opacity:0;transform:translate(-50%,18px)}
+  to{opacity:1;transform:translate(-50%,0)}}
+.sus-kaydir span{font-family:var(--f-tek);font-size:9px;letter-spacing:.26em;
+  text-transform:uppercase;color:rgba(255,255,255,.3)}
+.sus-kaydir i{position:relative;width:1px;height:44px;font-style:normal;overflow:hidden;
+  background:linear-gradient(180deg,rgba(239,35,60,.22),rgba(239,35,60,.04))}
+.sus-kaydir i::after{content:'';position:absolute;left:0;right:0;height:16px;
+  background:linear-gradient(180deg,transparent,var(--red-soft),transparent);
+  animation:sh-akis 2.1s var(--e2) infinite}
+@keyframes sh-akis{0%{transform:translateY(-18px);opacity:0}
+  22%{opacity:1}78%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+
+/* ---------- mobil sozlesme (madde 4) ----------
+   Blur zaten yok · pin yok · suzulme transform-only oldugu icin kalir ·
+   kaydir isareti eskide de mobilde kapaliydi.                        */
+@media(max-width:900px){
+  .sus-kaydir{display:none}
+  .sus-eller{
+    -webkit-mask-image:radial-gradient(ellipse 62% 42% at 50% 50%,
+      transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%);
+    mask-image:radial-gradient(ellipse 62% 42% at 50% 50%,
+      transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%)}
+  .sus-el-h{left:-5vw;top:82px;width:57vw}
+  .sus-el-r{right:-4vw;bottom:-3vw;width:64vw}
+  .sh-meta{margin-top:38px;gap:12px}
+}
+/* cam malzeme yalniz isaretleme cihazi olan masaustunde ve <=12px */
+@media(hover:hover) and (pointer:fine){
+  .sh-rozet{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .sh-void{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .sus-suzul{animation:none}
+  .sus-el img{animation:none;opacity:.94}
+  .sus-suzul::before,.sus-suzul::after{animation:none;opacity:1}
+  .sh-l i,.sh-lede,.sh-cta,.sh-meta{animation:none}
+  .sus-kaydir{animation:none;opacity:1}
+  .sus-halka::before,.sus-kaydir i::after{animation:none}
+}

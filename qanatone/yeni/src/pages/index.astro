@@ -1,10 +1,12 @@
 ---
-/* ANA SAYFA (Faz 2) — storyboard: iddia → kayıp → mekanizma → kanıt →
-   süreç → sektör → araç → çağrı. Her sahne kendi bileşeni; hareket
-   bütçesi ve görünürlük sözleşmesi yeni/denetim.cjs H ailesinde. */
+/* ANA SAYFA — göç sırası: hero → (kayıp → mekanizma → kanıt → süreç →
+   sektör → araç → çağrı). Baştaki S-H hero eski siteden taşınan ilk
+   sahne (Göç Anayasası madde 3, dokunulmaz); geri kalanı Faz 2'nin
+   anlatısı, sahne sahne göç ediyor. Hareket bütçesi ve görünürlük
+   sözleşmesi yeni/denetim.cjs H ailesinde. */
 import '../stil/ana.css';
 import Temel from '../layouts/Temel.astro';
-import S1Acilis from '../sahneler/S1Acilis.astro';
+import SHHero from '../sahneler/SHHero.astro';
 import S2Kayip from '../sahneler/S2Kayip.astro';
 import S3Mekanizma from '../sahneler/S3Mekanizma.astro';
 import S4Kanit from '../sahneler/S4Kanit.astro';
@@ -17,12 +19,31 @@ import { KOK } from '../icerik';
 <Temel dil="tr" baslik="QANATONE — Talebi yakalayan sistem"
   aciklama="Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında."
   canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
-  {/* Govde fontu on yuklenir: `font-display:optional` engelleme
-      penceresi ~100 ms, on yukleme tam o pencereyi kazandirir. */}
+  {/* ON YUKLEME: yalniz GOVDE fontu. LCP elemani hero'nun lede'si
+      (Lighthouse ile olculdu) ve o Nunito ile boyanir. Nunito
+      `font-display:optional` — engelleme suresi ~100 ms: bu pencerede
+      gelirse kullanilir, gelmezse o yukleme sistem fontuyla biter.
+      On yukleme tam bu pencereyi kazandirir; onsuz lede FCP'den 375 ms
+      sonra boyandi (olculdu).
+      Playfair ve JetBrains yuzleri LCP icin degil CLS icin on yuklenir:
+      `swap` ile gelen her yuz ilk boyadan SONRA gelirse metni yeniden
+      diziyor. Lighthouse iki kaynagi da adiyla gosterdi — once h1'in
+      `<b>yok.</b>` dugumu (Playfair, 0,0015), o kapaninca rozet satiri
+      (JetBrains, 0,0004). Ikisi on yuklenince CLS 0. `swap` karari
+      duruyor (Anayasa madde 4); on yukleme takasi ilk boyadan ONCE
+      bitirir, kurali degistirmez.
+      TR altkumeleri (~7 KB) on YUKLENMEZ: gec gelirse yalniz bes glif
+      etkilenir ve olcumde kayma uretmediler. */}
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
     href="/yeni/font/nunito-sans-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/yeni/font/playfair-display-500-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/yeni/font/playfair-display-500i-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/yeni/font/jetbrains-mono-400-latin.woff2" />
   <div class="ana">
-    <S1Acilis />
+    <SHHero />
     <S2Kayip />
     <S3Mekanizma />
     <S4Kanit />

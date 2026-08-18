@@ -7,29 +7,31 @@
    · cihaz kısıtı yalnız .sus- önekini söndürebilir (H4)
    · marka fontları /yeni/font/ — üçüncü parti yok (F1/F1b)              */
 
+/* Kabuk kisiti ana sayfada acilir: hero tam ekran bir sahne, 840px'lik
+   yazi olcusune sigmaz. Yatay dolgu artik BOLUMUN kendisinde (.icgen /
+   .sh-ic) — main'de kalsaydi tam genislikli sahne yine kirpilirdi. */
+body:has(.ana) main{max-width:none;padding:0}
 .ana{font-family:var(--f-govde)}
-.ana h1,.ana h2{font-family:var(--f-baslik);font-weight:600}
+.ana h1,.ana h2{font-family:var(--f-baslik);font-weight:500}
 .ana .tek{font-family:var(--f-tek)}
 .ana section{margin-bottom:0;padding:11vh 0}
-.ana .icgen{max-width:840px;margin:0 auto}
+.ana .icgen{max-width:840px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 
 /* etiket satırı — her sahnenin künyesi */
 .kunye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;
   letter-spacing:.22em;color:var(--red-soft);margin-bottom:18px;text-transform:uppercase}
 .kunye i{font-style:normal;color:var(--tx3);margin-right:10px}
 
-/* ============ S1 · AÇILIŞ ============ */
-.s1-sahne{min-height:78vh;display:flex;align-items:center}
+/* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
+   Faz 2'nin "iddia" sahnesi ile göçün S-H hero'su aynı sözü söylüyordu
+   ("Talep var. / Yakalayan yok.") ve iki h1 doğuruyordu. Anayasa madde 3
+   hero'yu dokunulmaz saydığı için açılış hero'ya devredildi: S1Acilis
+   bileşeni ve .s1-sahne/.s1-giris kuralları kaldırıldı.
+   .s1-buyuk / .s1-alt KALIYOR — S2-S7 başlık ve alt metinleri bu iki
+   sınıfı kullanıyor (ölçüldü, 11 kullanım). */
 .s1-buyuk{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.06;letter-spacing:-.02em;margin-bottom:22px}
 .s1-buyuk em{font-style:normal;color:var(--red-soft)}
 .s1-alt{color:var(--tx2);font-size:clamp(1rem,2vw,1.18rem);max-width:56ch;line-height:1.7}
-/* giriş: taban OPAK ve keyframe de opaklığa DOKUNMAZ — yalnız transform.
-   İlk deneme opacity 0'dan başlıyordu; LCP tam animasyon payı kadar
-   (2.021 ms, ölçüldü) itildi. Metin ilk kareden boyalı, hareket süs. */
-.s1-giris{animation:s1dogus .38s cubic-bezier(.22,1,.36,1) backwards}
-.s1-giris.g2{animation-delay:.09s}
-@keyframes s1dogus{from{transform:translateY(14px)}}
-@media(prefers-reduced-motion:reduce){.s1-giris{animation:none}}
 
 /* ============ S2 · KAYIP ============ */
 .s2-yol{position:relative;padding-left:34px;display:flex;flex-direction:column;gap:34px}

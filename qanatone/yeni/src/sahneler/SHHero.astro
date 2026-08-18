@@ -1,0 +1,98 @@
+---
+/* S-H · HERO — Goc Anayasasi madde 3 (dokunulmaz, birebir).
+   Kaynak: kok index.html markup 4685-4723, CSS 383-585, saat 9276.
+   Sapmalarin listesi ve gerekceleri stil/hero.css basinda.
+
+   Icerik content.json -> strings[dil] (tek kaynak); h1'in ikinci satiri
+   panelde <em>/<b> tasir, TEK suzgecten gecer (Anayasa madde 6).
+   Ada JS'i: yalniz saat — gorunurken kosan tek setInterval.            */
+import '../stil/hero.css';
+import { icerik, T } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+
+/* Panelden gelen tek HTML parcasi bu satir. Once HER SEY kacar, sonra
+   yalniz <em>/<b> geri acilir — beyaz liste, kara liste degil. */
+const suz = (m: string): string => String(m)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/&lt;(\/?(?:em|b))&gt;/g, '<$1>');
+---
+<section class="sh-sahne" data-sahne="h">
+  <div class="sus-atmo" aria-hidden="true">
+    <span class="sus-a1"></span><span class="sus-a2"></span>
+    <span class="sus-a3"></span><span class="sus-a4"></span>
+  </div>
+
+  <div class="sus-eller" aria-hidden="true">
+    <div class="sus-el sus-el-h"><span class="sus-suzul">
+      <picture>
+        <source media="(max-width:900px)" type="image/avif" srcset="/yeni/img/hand-human-m.avif" />
+        <source media="(max-width:900px)" type="image/webp" srcset="/yeni/img/hand-human-m.webp" />
+        <source type="image/avif" srcset="/yeni/img/hand-human.avif" />
+        <img src="/yeni/img/hand-human.webp" alt="" width="888" height="774"
+          fetchpriority="high" decoding="async" />
+      </picture>
+    </span></div>
+    <div class="sus-el sus-el-r"><span class="sus-suzul">
+      <picture>
+        <source media="(max-width:900px)" type="image/avif" srcset="/yeni/img/hand-robot-m.avif" />
+        <source media="(max-width:900px)" type="image/webp" srcset="/yeni/img/hand-robot-m.webp" />
+        <source type="image/avif" srcset="/yeni/img/hand-robot.avif" />
+        <img src="/yeni/img/hand-robot.webp" alt="" width="1244" height="855"
+          fetchpriority="high" decoding="async" />
+      </picture>
+    </span></div>
+  </div>
+
+  <div class="sh-ic">
+    <p class="sh-rozet"><span class="sh-nokta"></span><span>{g('badge')}</span></p>
+    <h1 class="sh-h1">
+      <span class="sh-l"><i>{g('h1a')}</i></span>
+      <span class="sh-l"><i set:html={suz(g('h1b'))}></i></span>
+    </h1>
+    <p class="sh-lede">{g('lede')}</p>
+    <div class="sh-cta">
+      <a class="sh-void" href="#tespit"><i class="sus-halka" aria-hidden="true"></i><span
+        >{g('cta1')}</span></a>
+      <a class="sh-btn" href="#cagri">{g('cta2')}</a>
+    </div>
+    <p class="sh-meta">
+      <span class="sh-saat" id="shSaat">--:--</span><i></i>
+      <span>{g('hm2')}</span><i></i><b>{g('hm3')}</b>
+    </p>
+  </div>
+
+  <div class="sus-kaydir" aria-hidden="true"><span>{g('scr')}</span><i></i></div>
+</section>
+
+<script>
+  /* Saat adasi. Yanindaki yazi "Istanbul · Dubai" — ziyaretcinin cihaz
+     saatini degil ISTANBUL saatini gosterir (Londra'daki adam kendi
+     saatini gorup "bunlar neyi olcuyor" demesin). Tek setInterval, 30 sn,
+     ve YALNIZ hero ekrandayken kosar; ekrandan cikinca durur.
+     Yedek yol eski kaynaktan duzeltilerek geldi: orada UTC+3 saati
+     24'e gore sarilmiyordu, gece yarisindan sonra "24:10" yaziyordu. */
+  const el = document.getElementById('shSaat');
+  if (el) {
+    const yaz = () => {
+      let t: string;
+      try {
+        t = new Date().toLocaleTimeString('tr-TR',
+          { timeZone: 'Europe/Istanbul', hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        const d = new Date();
+        t = String((d.getUTCHours() + 3) % 24).padStart(2, '0') + ':' +
+            String(d.getUTCMinutes()).padStart(2, '0');
+      }
+      el.textContent = t;
+    };
+    let sayac = 0;
+    new IntersectionObserver((g) => {
+      if (g[0].isIntersecting) { yaz(); sayac = sayac || window.setInterval(yaz, 30000); }
+      else { clearInterval(sayac); sayac = 0; }
+    }).observe(el);
+  }
+</script>
