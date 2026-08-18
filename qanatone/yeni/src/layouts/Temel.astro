@@ -39,7 +39,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 </head>
 <body>
   <header class="ust">
-    <a class="logo" href="/">QANATONE</a>
+    <a class="logo" href="/" data-astro-prefetch="false">QANATONE</a>
     {etiket && <span class="tag">{etiket}</span>}
   </header>
   <main>
@@ -49,7 +49,11 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     <span>{T(icerik.legal?.line, dil) || '© QANATONE'}</span>
     <span class="fright">
       <a href={B + '/hukuki'}>{dil === 'en' ? 'Legal' : 'Hukuki'}</a> ·
-      <a href="/">{dil === 'en' ? 'main site' : 'ana site'}</a>
+      {/* Kok siteye giden bag PREFETCH EDILMEZ: Astro'nun viewport
+          stratejisi eski ana sayfayi (28 KB, olculdu) ilk ekran hala
+          inerken cekiyordu. Gocte yeni sayfadan eski sayfayi onden
+          indirmek saf israf — hedef zaten terk edilecek. */}
+      <a href="/" data-astro-prefetch="false">{dil === 'en' ? 'main site' : 'ana site'}</a>
     </span>
   </footer>
 </body>

@@ -1,14 +1,36 @@
-/* Fontlar (Goc Anayasasi 1.4): Nunito Sans govde (optional) · Playfair
-   YALNIZ hero (swap) · JetBrains Mono kunye (swap). Manrope ve Inter
-   EMEKLI. optional/swap ayrimi LCP olcumuyle ogrenildi (2.079->1.810). */
-   itiyordu (2.079 ms olculdu): ilk boyada hazirsa kullanilir, degilse o
-   yukleme sistem fontuyla biter, onbellekten sonraki gezinme markali.
-   Baslik (Playfair) swap kalir - sahne kimligi. Icerik once, sus sonra. */
-@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(/yeni/font/jetbrains-mono-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+/* Fontlar (Goc Anayasasi madde 4): Nunito Sans govde (optional) ·
+   Playfair YALNIZ hero (swap) · JetBrains Mono kunye (swap).
+   Manrope ve Inter EMEKLI. optional/swap ayrimi LCP olcumuyle ogrenildi:
+   govde fontunun takas boyamasi LCP'yi 2 sn uzerine itiyordu (2.079 ms
+   olculdu), artik ilk boyada hazirsa kullanilir; baslik (Playfair) swap
+   kalir — sahne kimligi. Icerik once, sus sonra.
+
+   BOLME: 'latin' + 'tr'. Anayasa "TR+Latin alt kume" der; Google'in
+   hazir bolmesi bunu tutmuyordu. Iki kalem olculdu: (1) 'latin-ext'
+   dosyasi 43,6 KB'ti ve sayfada YALNIZ BES glif icin iniyordu
+   (G g I S s) — bes glife indirildi; (2) 'latin' altkumesi 229 glif
+   tasiyordu, site Turkce+Ingilizce — TR+EN kumesine kirpildi.
+   Hepsi 190 KB -> 77 KB, sayfa font trafigi 123 KB -> ~77 KB.
+   Kapsam bekcisi denetimde: F1c her derlemede sayfalardaki her kod
+   noktasinin bir altkumede karsiligi var mi diye bakar.
+
+   NUNITO TEK DOSYA: Nunito Sans DEGISKEN font (fvar wght 200-1000).
+   Google'in '400' ve '700' adresleri bayt bayt AYNI dosyaydi (md5 esit)
+   ama iki ayri adres oldugu icin ayni 49,6 KB iki kez iniyordu. Tek ad,
+   tek indirme, agirlik araligi bildirimde: `font-weight:300 800`.
+
+   Dosyalar `font-uret.py` uretir — elle duzenlenmez.
+   DIKKAT: yorum blogu TEK yerde kapanir; 2026-08-19'da kapanistan sonra
+   kalan yorum govdesi ilk @font-face kuralini yutuyordu (CSS ayristirici
+   hatayi ilk { ile eslestirip o blogu atlar). */
+
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:300 800;font-display:optional;src:url(/yeni/font/nunito-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:300 800;font-display:optional;src:url(/yeni/font/nunito-sans-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
+
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500i-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
+
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(/yeni/font/jetbrains-mono-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:600;font-display:swap;src:url(/yeni/font/playfair-display-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:600;font-display:swap;src:url(/yeni/font/playfair-display-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:optional;src:url(/yeni/font/nunito-sans-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:optional;src:url(/yeni/font/nunito-sans-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:700;font-display:optional;src:url(/yeni/font/nunito-sans-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:700;font-display:optional;src:url(/yeni/font/nunito-sans-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:swap;src:url(/yeni/font/jetbrains-mono-400-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
