@@ -1,0 +1,50 @@
+---
+/* S-T · ŞERİT (ticker) — göçün ikinci sahnesi.
+   Kaynak: kök index.html markup 4724-4726, CSS 589-615, renderTicker 7150.
+   Sapmalar ve gerekçeleri stil/serit.css başında.
+
+   İÇERİK NEREDEN: eski tarafta liste renderTicker içinde SABİT bir JS
+   dizisiydi (content.json'da karşılığı yok — panelin "partners" alanı
+   başka yerde kullanılıyor). Burada da kodda duruyor; farkı, artık
+   HTML'de doğuyor: bot JS koşmadan araç adlarını görüyor (madde 1).
+   Panelden yönetilmesi istenirse o panel tarafının işi — Enes'in kararı.
+
+   Ölçüler `src/veri/serit-logolari.json`'dan gelir; o dosyayı
+   gorsel-uret.cjs görsellerle BİRLİKTE üretir, elle yazılmaz.
+
+   Ada JS'i: YOK. Hareket saf CSS. */
+import '../stil/serit.css';
+import logolar from '../veri/serit-logolari.json';
+
+/* Üç özdeş tur: biri gerçek içerik, ikisi görsel tekrar. Tekrarlar
+   ekran okuyucudan ve erişilebilirlik ağacından gizlenir — aynı dokuz
+   isim üç kez okunmasın (eski tarafta dört kopyanın dördü de alt metin
+   taşıyordu). */
+const TURLAR = [0, 1, 2];
+---
+<section class="st-sahne" data-sahne="t" aria-label="Birlikte çalıştığımız araçlar">
+  <div class="st-pencere">
+    <div class="st-ray"><div class="st-akis">
+      {TURLAR.map((t) => (
+        <div class="st-tur" aria-hidden={t > 0 ? 'true' : undefined}>
+          <span class="st-etiket">Powered by</span>
+          {logolar.map((l: { ad: string; etiket: string; w: number; h: number }) => (
+            <span class="st-logo">
+              <picture>
+                <source media="(max-width:760px)" type="image/webp"
+                  srcset={`/yeni/img/powered/${l.ad}-m.webp`} />
+                <img src={`/yeni/img/powered/${l.ad}.webp`}
+                  alt={t === 0 ? l.etiket : ''} width={l.w} height={l.h}
+                  loading="lazy" decoding="async" />
+              </picture>
+            </span>
+          ))}
+          <svg class="sus-dalga" viewBox="0 0 120 40" fill="none" aria-hidden="true">
+            <path d="M2 20 Q30 2 60 20 T118 20" stroke="currentColor"
+              stroke-width="2.4" stroke-linecap="round" />
+          </svg>
+        </div>
+      ))}
+    </div></div>
+  </div>
+</section>
