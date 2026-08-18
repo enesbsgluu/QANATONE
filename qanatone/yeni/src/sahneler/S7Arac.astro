@@ -1,0 +1,65 @@
+---
+/* S7 · Araç — ücretsiz teşhis: kendi siteni tara, skorunu gör.
+   Sayfanın en güçlü kanıtı; çağrıdan hemen önce durur.
+   Betik bu bileşenin adasıdır (Astro module, sayfa başına bir kez);
+   fetch KULLANICI EYLEMİYLE koşar — V1'in açık istisnası (form/araç
+   gönderimi veri-çekme yasağına girmez). Mevcut diagnose fonksiyonuna
+   bağlanır; sözleşme: {ok, score, kb, durum, items:[{k,state}]}. */
+---
+<section data-sahne="7">
+  <div class="icgen">
+    <p class="kunye"><i>07</i>ARAÇ</p>
+    <div class="s7-kutu">
+      <h2 class="s1-buyuk" style="font-size:clamp(1.5rem,4.4vw,2.2rem)">Kendi siteni tara.</h2>
+      <p class="s1-alt">Sitenin yapısını gerçek ölçümle puanlıyoruz — laf değil, kalem kalem.
+      Adresini yaz, skorunu gör.</p>
+      <form class="s7-form" id="s7f">
+        <input type="url" id="s7u" name="url" placeholder="https://siteniz.com"
+          required autocomplete="url" inputmode="url" />
+        <button class="dugme" type="submit">Tara</button>
+      </form>
+      <div class="s7-sonuc" id="s7s" aria-live="polite"></div>
+      <p class="s7-not">Ölçüm sunucuda yapılır; site verisi kaydedilmez, günlük kota vardır.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* ada: yalnız bu sahnenin işi. fetch kullanıcı eylemiyle (V1 istisnası). */
+  const f = document.getElementById('s7f') as HTMLFormElement;
+  const giris = document.getElementById('s7u') as HTMLInputElement;
+  const sonuc = document.getElementById('s7s') as HTMLElement;
+  const AD: Record<string, string> = {
+    https: 'HTTPS', title: 'Başlık', desc: 'Açıklama', h1: 'H1', canonical: 'Canonical',
+    schema: 'Şema', og: 'Paylaşım kartı', lang: 'Dil', robots: 'robots.txt',
+    sitemap: 'Sitemap', alt: 'Görsel alt', imgdim: 'Görsel ölçü', imgfmt: 'Görsel biçim',
+    fonts: 'Yazı tipi', inline: 'Satır içi yük', blocking: 'Engelleyici kaynak',
+    compress: 'Sıkıştırma', cache: 'Önbellek', reqs: 'İstek sayısı',
+    analytics: 'Ölçümleme', contact: 'İletişim', local: 'Yerel işaret'
+  };
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    sonuc.textContent = 'Taranıyor…';
+    try {
+      const r = await fetch('/.netlify/functions/diagnose', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url: giris.value })
+      });
+      const j = await r.json();
+      if (!j.ok) {
+        const sebep: Record<string, string> = {
+          blocked: 'Bu adres taranamıyor.', unreachable: 'Siteye ulaşılamadı.',
+          quota: 'Günlük tarama hakkı doldu — yarın yine dene.' };
+        sonuc.textContent = sebep[j.reason] || 'Tarama tamamlanamadı: ' + (j.reason || 'bilinmeyen');
+        return;
+      }
+      const kalemler = (j.items || []).map((it: any) =>
+        `<li class="${it.state === 'ok' ? 'iyi' : it.state === 'fail' ? 'kotu' : ''}">${AD[it.k] || it.k}</li>`).join('');
+      sonuc.innerHTML =
+        `<div class="s7-skor"><b>${j.score}</b><span>/ 100 · ${j.host} · ${j.kb} KB</span></div>` +
+        `<ul class="s7-kalemler">${kalemler}</ul>`;
+    } catch (err) {
+      sonuc.textContent = 'Bağlantı hatası — tekrar dener misin?';
+    }
+  });
+</script>
