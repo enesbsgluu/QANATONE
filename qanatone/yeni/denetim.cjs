@@ -116,6 +116,47 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.slice(0, 3).join(' ') || `en büyük ${enBuyuk} B`);
 }
 
+/* F1c · font kapsamı: sayfalarda GEÇEN her kod noktasının bir
+   @font-face'in unicode-range'inde karşılığı olmalı. Alt küme daraltmak
+   (Anayasa madde 4 "TR+Latin") baytı yarıya indirdi ama sessiz bir risk
+   doğurdu: panelden yeni bir karakter gelirse (ör. "č", "≥") o glif
+   sistem fontuna düşer ve satır iki yazı tipiyle karışık dizilir.
+   Bu kural o riski kırmızıya çevirir — kapsam listesi font-uret.py'de,
+   düzeltme oraya karakter eklemek. */
+{
+  const ana = path.join(KOK, 'index.html');
+  let menziller = [];
+  if (fs.existsSync(ana)) {
+    let css = [...oku(ana).matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
+    for (const m of oku(ana).matchAll(/<link rel="stylesheet" href="([^"]+)"/g)) {
+      const d = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      if (fs.existsSync(d)) css += '\n' + fs.readFileSync(d, 'utf8');
+    }
+    for (const m of css.matchAll(/unicode-range:([^;}]+)/g))
+      for (const p of m[1].split(','))
+        if (/U\+([0-9A-Fa-f]+)(?:-([0-9A-Fa-f]+))?/.test(p.trim())) {
+          const [, a, b] = p.trim().match(/U\+([0-9A-Fa-f]+)(?:-([0-9A-Fa-f]+))?/);
+          menziller.push([parseInt(a, 16), parseInt(b || a, 16)]);
+        }
+  }
+  const kapsar = c => menziller.some(([a, b]) => c >= a && c <= b);
+  const eksik = new Map();
+  for (const p of sayfalar) {
+    const metin = oku(p)
+      .replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '')
+      .replace(/<[^>]+>/g, ' ');
+    for (const ch of metin) {
+      const c = ch.codePointAt(0);
+      if (c < 0x20 || kapsar(c)) continue;
+      if (!eksik.has(ch)) eksik.set(ch, rel(p));
+    }
+  }
+  ol('F1c · sayfadaki her karakterin alt kümede karşılığı var',
+     menziller.length > 0 && eksik.size === 0,
+     eksik.size ? [...eksik].slice(0, 4).map(([c, s]) => `U+${c.codePointAt(0).toString(16).toUpperCase()}(${s})`).join(' ')
+                : `${menziller.length} menzil`);
+}
+
 /* S1 · baş sözleşmesi: title/description menzilde, canonical var,
    hizmet+bülten sayfalarında hreflang çifti + geçerli şema. */
 {
@@ -194,8 +235,19 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     };
     const duzKurallar = duzlestir(css);
 
-    /* H1 · hareket bütçesi: animation/transition yalnız S1-S3 sahne
-       sınıflarında (s1- s2- s3- öneki) ve etkileşim geri bildiriminde.
+    /* GÖÇ ÖNEKLERİ (Göç Anayasası madde 3: "H1 yeni sahne önekleriyle
+       GENİŞLETİLİR — sessizce silinmez, gevşetilmez").
+         s1- s2- s3-  Faz 2 anlatı sahneleri
+         sh-          S-H hero (göçün ilk sahnesi)
+         sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
+                      yaşadığı yer burası, cihaz kısıtının söndürebildiği
+                      tek yer de burası. İkisi aynı sözlüğü kullanmalı.
+       Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|sus-)/; /* + süs katmanı */
+
+    /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
+       öneklerinde ve etkileşim geri bildiriminde.
        BİLİNÇLİ İSTİSNA (kurala yazıldı): .dugme ve .s4-kart üzerindeki
        `transition` — hover geri bildiriminin mekanik parçası (bileşen
        kimliği, H4'ün diliyle); `animation` bu istisnaya girmez. */
@@ -205,27 +257,99 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         const animVar = /(?:^|[^a-z-])animation\s*:/.test(gov);
         const gecisVar = /(?:^|[^a-z-])transition\s*:/.test(gov);
         if (!animVar && !gecisVar) continue;
-        const sahneli = /(^|[\s,.>(])s[123]-/.test(sec);
+        const sahneli = HAREKET_ONEK.test(sec);
         const etkilesim = /:hover|:focus|:active/.test(sec);
         const kimlik = !animVar && /\.(dugme|s4-kart)\b/.test(sec);
         if (!sahneli && !etkilesim && !kimlik) kusur.push(sec.slice(0, 40));
       }
-      ol('H1 · hareket bütçesi: hareket yalnız S1-S3 + etkileşim geri bildirimi',
+      ol('H1 · hareket bütçesi: hareket yalnız sahne/süs öneki + etkileşim',
          kusur.length === 0, kusur.slice(0, 3).join(' | '));
     }
 
-    /* H2 · görünür doğar: içerik sınıflarına (s\d- öneki) hover dışı
-       opacity:0 / visibility:hidden YAZILAMAZ — giriş hareketi keyframe
-       from{}'dan gelir, taban her zaman opak. Savurmada boş ekran yok. */
+    /* H2 · görünür doğar: İÇERİK sınıflarına (s1-/s2-/s3-/sh- öneki)
+       hover dışı opacity:0 / visibility:hidden YAZILAMAZ — giriş hareketi
+       keyframe from{}'dan gelir, taban her zaman opak. Savurmada boş ekran
+       yok. .sus- bilinçli DIŞARIDA: süs sönük doğabilir, içerik doğamaz. */
     {
+      /* BOŞ SÖZDE-ELEMAN İSTİSNASI (2026-08-19, hero turunda kural
+         keskinleştirildi — gevşetilmedi): `content:''` taşıyan
+         ::before/::after'ın içeriği YOKTUR; boyadığı şey zemin, çerçeve
+         veya parıltıdır. .sh-void::before hover parıltısıdır ve sönük
+         doğması doğru davranıştır. Kural metin ve görselin görünür
+         doğmasını ölçer; içeriksiz katman ölçünün konusu değil.
+         Sınır dar tutuldu: content'i boş OLMAYAN sözde-eleman (ör.
+         content:'→') hâlâ kuralın içinde. Astro çıktısı tek iki nokta
+         basıyor (:before) — ikisi de yakalanır. */
+      const bosSozde = (sec, gov) =>
+        /:{1,2}(before|after)\b/.test(sec) && /content\s*:\s*(''|"")/.test(gov);
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
-        if (!/(^|[\s,.>(])s\d-/.test(sec) || /:hover|:focus/.test(sec)) continue;
+        if (!SAHNE_ONEK.test(sec) || /:hover|:focus/.test(sec)) continue;
+        if (bosSozde(sec, gov)) continue;
         if (/opacity\s*:\s*0(?![.\d])/.test(gov) || /visibility\s*:\s*hidden/.test(gov))
           kusur.push(sec.slice(0, 40));
       }
       ol('H2 · içerik görünür doğar (sahne sınıfında opacity:0/hidden yok)',
          kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* H5 · giriş keyframe'i opaklığa dokunmaz (madde 5'in ikinci yarısı).
+       H2 taban kuralı; bu onun tamamlayıcısı: İÇERİK sınıfının çağırdığı
+       keyframe `opacity` taşıyorsa eleman gene animasyon payı kadar
+       görünmez kalır — LCP tam o kadar itilir (2.021 ms, ölçüldü).
+       Süs keyframe'leri (sh-hale, sh-yukari-sus) serbest: onları içerik
+       sınıfı çağırmaz. */
+    {
+      const kareler = {};
+      for (const m of css.matchAll(/@keyframes\s+([\w-]+)\s*\{/g)) {
+        let d = 1, k = m.index + m[0].length;
+        for (; k < css.length && d > 0; k++) { if (css[k] === '{') d++; else if (css[k] === '}') d--; }
+        kareler[m[1]] = css.slice(m.index + m[0].length, k - 1);
+      }
+      const kusur = [];
+      for (const { sec, gov } of duzKurallar) {
+        if (!SAHNE_ONEK.test(sec) || /:hover|:focus/.test(sec)) continue;
+        for (const a of gov.matchAll(/animation\s*:\s*([^;]+)/g))
+          for (const ad of a[1].split(/\s+/))
+            if (kareler[ad] && /opacity\s*:/.test(kareler[ad]))
+              kusur.push(sec.slice(0, 28) + '→' + ad);
+      }
+      ol('H5 · içerik giriş keyframe\'i opaklığa dokunmaz (yalnız transform)',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* H6 · hero görsel hattı — KOŞULLU kural: hero sahnesi sayfada varsa
+       ölçer, yoksa ölçecek şey yoktur (göç sırasında sahne bir commit'te
+       gelir; kural sahneyle birlikte kendiliğinden devreye girer).
+       Ölçtüğü: ilk ekranın iki eli mobil kaynağını taşıyor mu (kural 109
+       dersi — çözülmüş bitmap ≤ 2× CSS kutusu) ve mobil ilk ekran görsel
+       yükü 300 KB tavanının altında mı (Anayasa madde 3).
+       Ölçü gerçek dosya boyutundan; "ürettim" demek yetmez. */
+    if (/class="sh-sahne"/.test(h)) {
+      const TAVAN = 300 * 1024;
+      const kusur = [];
+      let mobilYuk = 0;
+      const eller = [...h.matchAll(/<source[^>]*media="\(max-width:900px\)"[^>]*srcset="([^"]+)"/g)]
+        .map(m => m[1]);
+      for (const el of ['hand-human', 'hand-robot'])
+        if (!eller.some(u => u.includes(el + '-m.avif'))) kusur.push(el + ':mobil-kaynak-yok');
+      /* mobil ilk ekran: her el icin EN IYI bicim (avif) sayilir */
+      for (const u of eller.filter(x => x.endsWith('.avif'))) {
+        const dosya = path.join(KOK, u.replace(/^\/yeni\//, ''));
+        if (fs.existsSync(dosya)) mobilYuk += fs.statSync(dosya).size;
+        else kusur.push('kayıp:' + u);
+      }
+      if (mobilYuk > TAVAN) kusur.push('mobil-yük:' + mobilYuk + 'B');
+      ol(`H6 · hero elleri mobil kaynaklı + ilk ekran ≤ ${TAVAN} B`,
+         kusur.length === 0, kusur.slice(0, 3).join(' ') || `mobil ilk ekran ${mobilYuk} B`);
+    }
+
+    /* H7 · tek h1: göç sırasında sahne devri iki h1 doğurabilir (S1Acilis
+       ile hero aynı sözü söylüyordu — yaşandı). Parite sözleşmesinin
+       (madde 5) ana sayfa ayağı. */
+    {
+      const sayi = (h.match(/<h1[\s>]/g) || []).length;
+      ol('H7 · ana sayfada tek h1', sayi === 1, `${sayi} adet`);
     }
 
     /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).
