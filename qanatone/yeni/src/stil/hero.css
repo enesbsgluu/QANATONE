@@ -29,10 +29,26 @@
       %85 opaklikla ayni goruntuyu veriyor.
    ============================================================ */
 
-.sh-sahne{position:relative;min-height:calc(100svh - 4rem);
+.ana .sh-sahne{position:relative;min-height:calc(100svh - 4rem);
   display:flex;align-items:center;justify-content:center;
   padding:clamp(56px,9vh,110px) 0 clamp(64px,10vh,110px);
   overflow:hidden;text-align:center}
+/* ALT DOLGU MASAUSTUNDE KAYNAKTAKI DEGER (110px) — clamp DEGIL.
+   Kaydir isareti bolume gore konumlanir: alttan 26px + ~62px boy = 88px'lik
+   bir bant kaplar. Alt dolgu bu banttan kucuk olursa isaret hmeta satirinin
+   USTUNE biner. Gercek tarayicida yakalandi: 730px yuksek pencerede
+   clamp(64px,10vh,110px) 73px veriyordu ve "KAYDIR" ile "DUBAI" ust uste
+   dusuyordu. Eski kaynak 110px sabit yaziyordu — sebebi tam buymus.
+   Mobilde isaret zaten yok (<=900px), orada clamp kaliyor. */
+@media(min-width:901px){.ana .sh-sahne{padding-bottom:110px}}
+
+/* NEDEN `.ana .sh-sahne` — sade `.sh-sahne` DEGIL (gercek tarayicida
+   yakalandi, 19 Agu): ana.css'te `.ana section{padding:11vh 0}` var ve
+   ozgullugu (0,1,1) sinif seciciyi (0,1,0) yeniyor. Sahnenin kendi dolgu
+   sozlesmesi HIC yururluge girmiyordu — kaynak dogru okunuyor, tarayici
+   baska sey uyguluyordu; denetim de goremiyordu cunku kural metinde
+   duruyor. Goc eden her sahne dolgusunu `.ana` ile nitelemeli; bekcisi
+   denetimdeki H10. */
 
 /* ---------- kizil atmosfer (blursuz, sapma 1) ---------- */
 .sus-atmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -241,7 +257,11 @@
 }
 
 @media(prefers-reduced-motion:reduce){
-  .sus-suzul{animation:none}
+  /* Durdurma seciciSI, hareketi VEREN seciciyle ayni ozgullukte olmali:
+     suzulme `.sus-el-h .sus-suzul` (0,2,0) uzerinde tanimli, sade
+     `.sus-suzul` (0,1,0) onu YENEMEZ — kullanici hareket azaltma dese de
+     eller salanmaya devam ediyordu. Denetim H11 yakaladi. */
+  .sus-el-h .sus-suzul,.sus-el-r .sus-suzul{animation:none}
   .sus-el img{animation:none;opacity:.94}
   .sus-suzul::before,.sus-suzul::after{animation:none;opacity:1}
   .sh-l i,.sh-lede,.sh-cta,.sh-meta{animation:none}
