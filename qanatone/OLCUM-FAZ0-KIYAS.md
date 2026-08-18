@@ -34,6 +34,25 @@ Sayfa: 7 KB HTML + ~3 KB hash'li CSS, **0 JS**, sistem yazı yığını.
 **GEÇİLDİ.** Aynı içerik, aynı CDN, aynı gün: 42 → 100 puan; LCP 7,2 s →
 1,2 s (6 kat); TBT 1.260 ms → 0. Göç sürer — Faz 1 başlayabilir.
 
+---
+
+# FAZ 1 ÖLÇÜMÜ — 32 sayfa (18 Ağu 2026, f26e630)
+
+Doğrulama şartı: Faz 0'ın 100 / 1,2 sn / 0 ms çizgisinden aşağı düşen
+sayfa kabul edilmez. Düşen olmadı.
+
+| Sayfa (canlı, /yeni) | Puan | FCP | LCP | TBT | CLS | HTML | JS |
+|---|---|---|---|---|---|---|---|
+| hizmet/seo | **100** | 1,0 s | 1,0 s | 10 ms | 0 | 9,9 KB | 2.253 B |
+| bulten/talebe-bes-dakikada-donmek | **100** | 0,9 s | 0,9 s | 10 ms | 0 | 8,1 KB | 2.253 B |
+| hukuki | **100** | 0,9 s | 0,9 s | 10 ms | 0 | 7,6 KB | 2.253 B |
+| (404.html) | — | — | — | — | — | 4,8 KB | 2.253 B |
+
+JS'in tamamı Astro'nun prefetch betiği (gezinme ısıtması, J1 tavanı
+10 KB'ın içinde). Mevcut sitede aynı sayfalar 79-102 KB HTML + 485 KB
+betik zinciri taşıyor. Kural bekçileri: yeni/denetim.cjs (F1 G1 V1 J1
+S1 N1) her deploy'da koşuyor; kırmızı = yayın düşer.
+
 ## Kıyas dürüstlüğü
 
 - Yeni sayfa henüz marka tipografisini (Playfair/Manrope) taşımıyor;
