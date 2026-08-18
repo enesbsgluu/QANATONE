@@ -802,6 +802,14 @@ async function calisma() {
       w.ScrollTrigger = { create: () => ({}), config: yok, refresh: yok,
                           update: yok, getAll: () => [] };
       w.Lenis = class { on() {} raf() {} scrollTo() {} };
+      /* jsdom hardwareConcurrency'yi GERÇEK makineden geçirir; Netlify
+         konteyneri 2-3 çekirdek raporlayınca eski CORES kolu masaüstü
+         eşlemede de lowfx açtı ve kural CI'da kızardı (2026-08 yaşandı).
+         Kural COARSE kapısını ölçer, CI donanımını değil — sabitle. */
+      Object.defineProperty(w.navigator, 'hardwareConcurrency',
+        { get: () => 8, configurable: true });
+      Object.defineProperty(w.navigator, 'deviceMemory',
+        { get: () => 8, configurable: true });
       const eski = w.HTMLCanvasElement.prototype.getContext;
       w.__ctxKim = [];
       w.HTMLCanvasElement.prototype.getContext = function (t) {

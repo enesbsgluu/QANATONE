@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-18 11:21 UTC
+> Üretim tarihi: 2026-08-18 11:35 UTC
 
 ## Yeni sohbete geçerken
 
@@ -93,7 +93,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 177 KB | `0569bbe3` |
+| `test/denetim.js` |  | 178 KB | `dbcc15ff` |
 | `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
 | `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
@@ -108,7 +108,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 142 sn (basılan 58, önbellekten 0) |
+| son derleme | 62 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 21.0 MB |
 
 ## Çalıştırma
