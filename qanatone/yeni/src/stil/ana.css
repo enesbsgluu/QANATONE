@@ -1,0 +1,140 @@
+/* QANATONE ana sayfa (Faz 2) — sahne stilleri.
+   SÖZLEŞMELER (yeni/denetim.cjs H ailesi bunları ölçer):
+   · animation/transition YALNIZ s1- s2- s3- önekli seçicilerde ve
+     :hover/:focus geri bildiriminde (H1)
+   · s*-  sınıflarında hover dışı opacity:0 YOK — giriş hareketi keyframe
+     from{}'dan gelir, taban hep opak (H2)
+   · cihaz kısıtı yalnız .sus- önekini söndürebilir (H4)
+   · marka fontları /yeni/font/ — üçüncü parti yok (F1/F1b)              */
+
+.ana{font-family:'Manrope',system-ui,sans-serif}
+.ana h1,.ana h2{font-family:'Playfair Display',Georgia,serif;font-weight:600}
+.ana .tek{font-family:'JetBrains Mono',ui-monospace,monospace}
+.ana section{margin-bottom:0;padding:11vh 0}
+.ana .icgen{max-width:840px;margin:0 auto}
+
+/* etiket satırı — her sahnenin künyesi */
+.kunye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;
+  letter-spacing:.22em;color:var(--red-soft);margin-bottom:18px;text-transform:uppercase}
+.kunye i{font-style:normal;color:var(--tx3);margin-right:10px}
+
+/* ============ S1 · AÇILIŞ ============ */
+.s1-sahne{min-height:78vh;display:flex;align-items:center}
+.s1-buyuk{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.06;letter-spacing:-.02em;margin-bottom:22px}
+.s1-buyuk em{font-style:normal;color:var(--red-soft)}
+.s1-alt{color:var(--tx2);font-size:clamp(1rem,2vw,1.18rem);max-width:56ch;line-height:1.7}
+/* giriş: taban OPAK; hareket keyframe'den, ≤400ms, yalnız transform+opacity */
+.s1-giris{animation:s1dogus .38s cubic-bezier(.22,1,.36,1) backwards}
+.s1-giris.g2{animation-delay:.09s}
+@keyframes s1dogus{from{opacity:0;transform:translateY(14px)}}
+@media(prefers-reduced-motion:reduce){.s1-giris{animation:none}}
+
+/* ============ S2 · KAYIP ============ */
+.s2-yol{position:relative;padding-left:34px;display:flex;flex-direction:column;gap:34px}
+.s2-yol::before{content:'';position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:var(--line)}
+.s2-cizgi{position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--red),var(--red-soft));transform-origin:top}
+.s2-durak{position:relative}
+.s2-durak::before{content:'';position:absolute;left:-30px;top:6px;width:10px;height:10px;
+  border-radius:50%;background:var(--bg);border:2px solid var(--tx3)}
+.s2-durak.kirmizi::before{border-color:var(--red);background:var(--red-dim,rgba(239,35,60,.15))}
+.s2-durak b{display:block;font-size:1.05rem;margin-bottom:4px}
+.s2-durak p{color:var(--tx2);font-size:.94rem;max-width:52ch}
+.s2-durak .tek{font-size:.66rem;letter-spacing:.18em;color:var(--tx3);display:block;margin-bottom:6px}
+.s2-son b{color:var(--red-soft)}
+/* kaydırma-güdümlü dolum: destekleyen tarayıcıda çizgi kaydırmayla dolar;
+   desteklemeyende çizgi tam durur — içerik iki hâlde de eksiksiz (süs). */
+.s2-cizgi{transform:scaleY(1)}
+@supports (animation-timeline: view()){
+  .s2-cizgi{transform:scaleY(0);animation:s2dolum linear both;
+    animation-timeline:view();animation-range:entry 15% exit 85%}
+}
+@keyframes s2dolum{to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.s2-cizgi{animation:none;transform:scaleY(1)}}
+
+/* ============ S3 · MEKANİZMA ============ */
+.s3-dizi{display:flex;flex-direction:column;gap:12px;counter-reset:s3}
+.s3-adim{position:relative;display:flex;gap:16px;align-items:flex-start;
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card);
+  overflow:hidden}
+.s3-adim::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--red);transform-origin:top;transform:scaleY(1)}
+.s3-adim b{display:block;margin-bottom:3px}
+.s3-adim p{color:var(--tx2);font-size:.92rem}
+.s3-adim .tek{color:var(--red-soft);font-size:.72rem;letter-spacing:.14em;padding-top:4px}
+/* aydınlanma: ray kaydırmayla çizilir; metin HEP tam opak (H2) */
+@supports (animation-timeline: view()){
+  .s3-adim::before{transform:scaleY(0);animation:s3ray linear both;
+    animation-timeline:view();animation-range:entry 25% entry 85%}
+}
+@keyframes s3ray{to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.s3-adim::before{animation:none;transform:scaleY(1)}}
+
+/* ============ S4 · KANIT (hareketsiz) ============ */
+.s4-kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.s4-kart{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.s4-kart img{display:block;width:100%;height:auto}
+.s4-icerik{padding:16px 18px 18px}
+.s4-kart h3{font-size:1.05rem;display:flex;justify-content:space-between;gap:8px}
+.s4-kart h3 span{color:var(--tx3);font-size:.8rem;font-family:'JetBrains Mono',monospace}
+.s4-cipler{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
+.s4-cip{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.12em;
+  color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+  text-transform:uppercase}
+.s4-kart p{color:var(--tx2);font-size:.9rem}
+.s4-yorumlar{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.s4-yorum{border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.s4-yorum p{color:var(--tx2);font-size:.92rem;margin-bottom:10px}
+.s4-yorum span{color:var(--tx3);font-size:.78rem;font-family:'JetBrains Mono',monospace}
+
+/* ============ S5 · SÜREÇ (hareketsiz) ============ */
+.s5-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.s5-adim{border:1px solid var(--line);border-radius:14px;padding:18px}
+.s5-adim .tek{color:var(--red-soft);font-size:.8rem;display:block;margin-bottom:8px}
+.s5-adim b{display:block;margin-bottom:6px}
+.s5-adim p{color:var(--tx2);font-size:.9rem}
+.s5-soz{margin-top:22px;border:1px solid rgba(239,35,60,.4);border-radius:14px;
+  padding:16px 18px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.s5-soz b{color:var(--red-soft);white-space:nowrap}
+.s5-soz span{color:var(--tx2);font-size:.92rem}
+
+/* ============ S6 · SEKTÖR (hareketsiz) ============ */
+.s6-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.s6-kart{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+.s6-kart b{display:block;margin-bottom:6px}
+.s6-kart p{color:var(--tx2);font-size:.9rem}
+
+/* ============ S7 · ARAÇ ============ */
+.s7-kutu{border:1px solid rgba(239,35,60,.4);border-radius:18px;padding:26px;
+  background:linear-gradient(180deg,rgba(239,35,60,.07),transparent)}
+.s7-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.s7-form input{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--line);
+  border-radius:10px;padding:12px 14px;color:var(--tx);font-size:.95rem}
+.s7-form input:focus-visible{outline:2px solid var(--red-soft)}
+.s7-sonuc{margin-top:18px;min-height:1em}
+.s7-skor{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.s7-skor b{font-size:2.6rem;color:var(--red-soft);font-family:'JetBrains Mono',monospace}
+.s7-skor span{color:var(--tx2)}
+.s7-kalemler{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;list-style:none}
+.s7-kalemler li{border:1px solid var(--line);border-radius:8px;padding:7px 10px;
+  font-size:.78rem;color:var(--tx2);font-family:'JetBrains Mono',monospace}
+.s7-kalemler li.iyi{border-color:rgba(90,200,120,.35)}
+.s7-kalemler li.kotu{border-color:rgba(239,35,60,.5);color:var(--red-soft)}
+.s7-not{color:var(--tx3);font-size:.82rem;margin-top:12px}
+
+/* ============ S8 · ÇAĞRI (hareketsiz) ============ */
+.s8-sahne{text-align:center;padding-bottom:16vh}
+.s8-sahne h2{font-size:clamp(1.6rem,5vw,2.6rem);margin-bottom:14px}
+.s8-sahne p{color:var(--tx2);max-width:52ch;margin:0 auto 26px}
+
+/* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
+.ana .dugme{transition:transform .15s ease,box-shadow .15s ease}
+.ana .dugme:hover{transform:translateY(-1px);box-shadow:0 8px 26px -12px var(--red)}
+.s4-kart{transition:border-color .2s ease}
+.s4-kart:hover{border-color:rgba(239,35,60,.45)}
+
+@media(max-width:640px){
+  .ana section{padding:8vh 0}
+  .s2-yol{gap:26px}
+}

@@ -1,0 +1,21 @@
+---
+/* ANA SAYFA (Faz 2) — storyboard: iddia → kayıp → mekanizma → kanıt →
+   süreç → sektör → araç → çağrı. Her sahne kendi bileşeni; hareket
+   bütçesi ve görünürlük sözleşmesi yeni/denetim.cjs H ailesinde. */
+import '../stil/font.css';
+import '../stil/ana.css';
+import Temel from '../layouts/Temel.astro';
+import S1Acilis from '../sahneler/S1Acilis.astro';
+import { KOK } from '../icerik';
+---
+<Temel dil="tr" baslik="QANATONE — Talebi yakalayan sistem"
+  aciklama="Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında."
+  canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/yeni/font/playfair-display-600-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/yeni/font/manrope-400-latin.woff2" />
+  <div class="ana">
+    <S1Acilis />
+  </div>
+</Temel>

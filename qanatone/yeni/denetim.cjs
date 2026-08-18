@@ -37,7 +37,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 /* sayfa sayısı content.json'dan türetilir — rota sessiz düşmesin */
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-  const beklenen = c.services.length * 2 + c.posts.length * 2 + 2; /* +hukuki +404 */
+  const beklenen = c.services.length * 2 + c.posts.length * 2 + 3; /* +hukuki +404 +ana */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -140,6 +140,131 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const kusur = sayfalar.filter(p => !/name="robots" content="noindex"/.test(oku(p)));
   ol('N1 · göç bekçisi: her sayfa noindex (Faz 4\'te tersine döner)',
      kusur.length === 0, kusur.slice(0, 3).map(rel).join(' '));
+}
+
+/* ---- FAZ 2 · ana sayfa kuralları (H ailesi) ------------------------- */
+{
+  const ana = path.join(KOK, 'index.html');
+  const anaVar = fs.existsSync(ana);
+  ol('H0 · ana sayfa üretilmiş (/yeni/)', anaVar, anaVar ? '' : 'index.html yok');
+  if (anaVar) {
+    const h = oku(ana);
+    /* CSS iki yerde yaşayabilir: satır içi <style> + bağlı _astro/*.css
+       (Astro eşiği aşınca dışarı çıkarır) — İKİSİ de okunur; yalnız
+       satır içine bakmak H kurallarını sessizce boşa düşürür (yaşandı). */
+    let css = [...h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
+    for (const m of h.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)) {
+      const dosya = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      if (fs.existsSync(dosya)) css += '\n' + fs.readFileSync(dosya, 'utf8');
+    }
+
+    /* düzleştirici: @media/@supports sarmalları AÇILIR (iç kurallar düz
+       listeye iner — parantez sayarak, [^}]* tuzağı değil), @keyframes/
+       @font-face bütünüyle atlanır. H1/H2 düz kural listesinde ölçer. */
+    const duzlestir = txt => {
+      const out = [];
+      let i = 0;
+      while (i < txt.length) {
+        const ac = txt.indexOf('{', i);
+        if (ac === -1) break;
+        const bas = txt.slice(i, ac).trim();
+        if (/^@(media|supports)/.test(bas)) {
+          let d = 1, k = ac + 1;
+          for (; k < txt.length && d > 0; k++) { if (txt[k] === '{') d++; else if (txt[k] === '}') d--; }
+          out.push(...duzlestir(txt.slice(ac + 1, k - 1)));
+          i = k;
+        } else if (bas.startsWith('@')) {
+          let d = 1, k = ac + 1;
+          for (; k < txt.length && d > 0; k++) { if (txt[k] === '{') d++; else if (txt[k] === '}') d--; }
+          i = k;
+        } else {
+          const kap = txt.indexOf('}', ac);
+          if (kap === -1) break;
+          out.push({ sec: bas, gov: txt.slice(ac + 1, kap) });
+          i = kap + 1;
+        }
+      }
+      return out;
+    };
+    const duzKurallar = duzlestir(css);
+
+    /* H1 · hareket bütçesi: animation/transition yalnız S1-S3 sahne
+       sınıflarında (s1- s2- s3- öneki) ve etkileşim geri bildiriminde.
+       BİLİNÇLİ İSTİSNA (kurala yazıldı): .dugme ve .s4-kart üzerindeki
+       `transition` — hover geri bildiriminin mekanik parçası (bileşen
+       kimliği, H4'ün diliyle); `animation` bu istisnaya girmez. */
+    {
+      const kusur = [];
+      for (const { sec, gov } of duzKurallar) {
+        const animVar = /(?:^|[^a-z-])animation\s*:/.test(gov);
+        const gecisVar = /(?:^|[^a-z-])transition\s*:/.test(gov);
+        if (!animVar && !gecisVar) continue;
+        const sahneli = /(^|[\s,.>(])s[123]-/.test(sec);
+        const etkilesim = /:hover|:focus|:active/.test(sec);
+        const kimlik = !animVar && /\.(dugme|s4-kart)\b/.test(sec);
+        if (!sahneli && !etkilesim && !kimlik) kusur.push(sec.slice(0, 40));
+      }
+      ol('H1 · hareket bütçesi: hareket yalnız S1-S3 + etkileşim geri bildirimi',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* H2 · görünür doğar: içerik sınıflarına (s\d- öneki) hover dışı
+       opacity:0 / visibility:hidden YAZILAMAZ — giriş hareketi keyframe
+       from{}'dan gelir, taban her zaman opak. Savurmada boş ekran yok. */
+    {
+      const kusur = [];
+      for (const { sec, gov } of duzKurallar) {
+        if (!/(^|[\s,.>(])s\d-/.test(sec) || /:hover|:focus/.test(sec)) continue;
+        if (/opacity\s*:\s*0(?![.\d])/.test(gov) || /visibility\s*:\s*hidden/.test(gov))
+          kusur.push(sec.slice(0, 40));
+      }
+      ol('H2 · içerik görünür doğar (sahne sınıfında opacity:0/hidden yok)',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).
+       Ölçü: dış src dosyaları + ld+json dışı satır içi gömüler. */
+    {
+      const TAVAN = 50 * 1024;
+      let toplam = 0;
+      for (const m4 of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) {
+        const dosya = path.join(KOK, m4[1].replace(/^\/yeni\//, ''));
+        if (fs.existsSync(dosya)) toplam += fs.statSync(dosya).size;
+      }
+      for (const m4 of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
+        if (!/application\/ld\+json/.test(m4[1])) toplam += Buffer.byteLength(m4[2]);
+      ol(`H3 · ana sayfa toplam JS ≤ ${TAVAN} B`, toplam <= TAVAN && toplam >= 0,
+         `ölçülen ${toplam} B`);
+    }
+
+    /* H4 · süs/kimlik ayrımı: cihaz-yeteneği medya blokları (pointer/
+       width) animation:none'ı yalnız .sus- önekli süs sınıflarına
+       basabilir; bileşen kimliği her cihazda yaşar. prefers-reduced-motion
+       kullanıcı TERCİHİDİR, istisna. */
+    {
+      const kusur = [];
+      for (const m5 of css.matchAll(/@media([^{]*)\{((?:[^{}]*\{[^}]*\})*)\}/g)) {
+        if (/prefers-reduced-motion/.test(m5[1])) continue;
+        if (!/pointer|hover|max-width|min-width/.test(m5[1])) continue;
+        for (const r of m5[2].matchAll(/([^{}]+)\{([^}]*)\}/g))
+          if (/animation\s*:\s*none/.test(r[2]) && !/(^|[\s,.])sus-/.test(r[1]))
+            kusur.push(r[1].trim().slice(0, 40));
+      }
+      ol('H4 · süs/kimlik ayrı: cihaz kısıtı yalnız .sus- söndürür',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* fontlar: yalnız kendi alandan (F1 zaten üçüncü partiyi yasaklıyor);
+       burada marka fontunun GERÇEKTEN yerelden geldiği kilitlenir. */
+    {
+      const yuzler = [...css.matchAll(/@font-face\{[^}]*src:url\(([^)]+)\)/g)].map(m => m[1]);
+      const yerel = yuzler.length > 0 && yuzler.every(u => u.startsWith('/yeni/font/'));
+      const dosyalar = yuzler.every(u =>
+        fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, ''))));
+      ol('F1b · marka fontları kendi alandan + dosyalar diskte',
+         yerel && dosyalar, `${yuzler.length} yüz`);
+    }
+  }
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
