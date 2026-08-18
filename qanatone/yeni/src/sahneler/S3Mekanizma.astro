@@ -1,0 +1,28 @@
+---
+/* S3 · Mekanizma — ajan devrede: niyet → uygunluk → eşleştirme → doğru
+   kişiye → CRM/takvim. Adımların rayı kaydırmayla çizilir (CSS
+   scroll-driven); metin HEP tam opak (H2). Mevcut "canlı iş akışı"
+   sahnesinin sadeleşmiş hâli — süs yok, mekanizmanın kendisi var. */
+const adimlar = [
+  { n: '01', b: 'Niyet okundu', p: 'Talep hangi kanaldan gelirse gelsin ajan mesajı okur: ne istiyor, ne kadar acil, bütçesi ne söylüyor.' },
+  { n: '02', b: 'Uygunluk', p: 'İş tanımına uyuyor mu? Uymuyorsa nazikçe yönlendirilir — kimsenin vakti çalınmaz.' },
+  { n: '03', b: 'Eşleştirme', p: 'Uygun talep doğru hizmete, doğru pakete, doğru önceliğe bağlanır.' },
+  { n: '04', b: 'Doğru kişiye', p: 'Talep, cevabı verebilecek kişiye düşer — fiyatı ve takvimi bilen kişiye. Dakikalar içinde.' },
+  { n: '05', b: 'CRM + takvim', p: 'Her adım kayıt altında: kim, ne zaman, hangi cevap. Hiçbir talep gelen kutusunda kaybolmaz.' }
+];
+---
+<section data-sahne="3">
+  <div class="icgen">
+    <p class="kunye"><i>03</i>MEKANİZMA</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Aynı talep, sistem varken.</h2>
+    <p class="s1-alt" style="margin-bottom:44px">Ajan devreye girer; talep beklemez, kaybolmaz, yanlış kişiye düşmez.</p>
+    <div class="s3-dizi">
+      {adimlar.map(a => (
+        <div class="s3-adim">
+          <span class="tek">{a.n}</span>
+          <div><b>{a.b}</b><p>{a.p}</p></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
