@@ -2,7 +2,11 @@
    Tek dosya, bütün sayfalar paylaşır → Astro tek hash'li CSS basar,
    sayfadan sayfaya önbellekten gelir. Marka koyu; şölen Faz 2'de. */
 :root{--bg:#050505;--tx:#f5f5f5;--tx2:rgba(255,255,255,.72);--tx3:rgba(255,255,255,.5);
-  --red:#ef233c;--red-soft:#ff4d63;--line:rgba(255,255,255,.1);--card:#101010}
+  --red:#ef233c;--red-soft:#ff4d63;--line:rgba(255,255,255,.1);--card:#101010;
+  /* S-H hero ile geldi: eski kaynagin :root'undaki yumusama egrileri ve
+     kizil parilti — sahne sahne kopyalanmasin diye kabukta duruyor. */
+  --red-glow:rgba(239,35,60,.45);
+  --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--tx);
   font-family:var(--f-govde);line-height:1.65}
