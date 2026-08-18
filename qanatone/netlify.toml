@@ -2,7 +2,7 @@
 [build]
   # Faz 0 (Astro karari): yeni kabuk dist/yeni altina basar, /yeni/* den
   # yayinlanir. Mevcut site aynen yasar; kok adrese alma Faz 4 un isi.
-  command = "npm ci && node build.js && npm --prefix yeni ci && npm --prefix yeni run build"
+  command = "npm ci && node build.js && npm --prefix yeni ci && npm --prefix yeni run build && node yeni/denetim.cjs"
   publish = "dist"
 
 [build.environment]
