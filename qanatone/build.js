@@ -510,6 +510,120 @@ function kopyala(src, dst) {
     return html.slice(0, a[0].index) + anaRef + html.slice(a[0].index + a[0][0].length);
   };
 
+  /* ── 2b · ORTAK VARLIK AYRIŞTIRMA: CSS dışarı ────────────────────────
+     2a'nın stil eşi: 268 KB satır içi CSS her sayfada boyama engeliydi ve
+     tarayıcı önbelleğine giremiyordu. Tam küme varlik/app.<hash>.css'e
+     çıkar (_headers: /varlik/* immutable), sayfada yalnız İLK EKRAN
+     kritik kümesi satır içi kalır; dış dosya preload+onload ile boyamayı
+     ENGELLEMEDEN gelir, noscript yedeği render-blocking. KAYNAK DEĞİŞMEZ;
+     ön-render kaynağı olduğu gibi açar (stil eski yerinde satır içi),
+     ayrıştırma yalnız diske yazılan HTML'de. Kesim çapası deterministik:
+     100 KB üzeri <style> tam BİR tane.
+     Kritik küme elle seçilmez, ÖLÇÜLÜR: ön-render DOM'unda ilk ekran
+     ağaçları (boot, menü, perde, hero, sabit katmanlar, sayfa başlığı)
+     gezilip sınıf/kimlik kümesi çıkarılır; kural listesindeki HERHANGİ
+     seçici kümeye dokunuyorsa ya da sınıfsız taban kuralıysa girer.
+     @font-face/@property bütünüyle; MOBİL SAHNE BÜTÇESİ bloğu imzasından
+     tanınıp BÜTÜN olarak; kritik gövdelerin andığı @keyframes'ler sona.
+     Tavan 40 KB — aşarsa derleme dist'e dokunmadan durur (bekçi: 125). */
+  const STIL_ESIK = 100 * 1024, KRITIK_TAVAN = 40 * 1024;
+  const stilAdaylar = html => [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+    .filter(m => Buffer.byteLength(m[1]) > STIL_ESIK);
+  const stilAday = stilAdaylar(fs.readFileSync(SRC, 'utf8'));
+  if (stilAday.length !== 1)
+    throw new Error(`stil kesimi: 100 KB üzeri <style> tam 1 olmalı, ` +
+      `${stilAday.length} bulundu — çapa belirsiz, derleme DURDU (dist'e dokunulmadı)`);
+  const tamCss = stilAday[0][1].replace(/\r\n/g, '\n');
+  const cssHash = crypto.createHash('sha256').update(tamCss).digest('hex').slice(0, 10);
+  const cssRef = `<link rel="preload" as="style" href="varlik/app.${cssHash}.css" ` +
+    `onload="this.onload=null;this.rel='stylesheet'">` +
+    `<noscript><link rel="stylesheet" href="varlik/app.${cssHash}.css"></noscript>`;
+  function kritikTokenTopla(doc) {
+    const S = new Set();
+    /* #bit* bilerek yok: ajan imleci JS gelene kadar opacity:0 — ilk
+       karenin parçası değil, kritiğe girmesi tavanı aşırıyordu. */
+    const kokler = ['#boot', 'nav', '#mmenu', '.topfade', '#hero', '#stars', '#noise',
+                    '#tubes', '.shead'];
+    for (const kok of kokler) for (const el of doc.querySelectorAll(kok)) {
+      for (const e of [el, ...el.querySelectorAll('*')]) {
+        if (e.id) S.add('#' + e.id);
+        if (e.classList) for (const c of e.classList) S.add('.' + c);
+      }
+    }
+    return S;
+  }
+  function kritikCssUret(css, tok) {
+    css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    const kf = {};                              /* @keyframes adı → tam metin */
+    const govdeler = [];                        /* animasyon adları buradan */
+    const uygun = sel => {
+      const s = sel.trim();
+      if (!s) return false;
+      if (!/[.#\[]/.test(s)) return true;       /* taban: yalnız etiket/sözde */
+      const par = s.match(/[.#][A-Za-z0-9_-]+/g) || [];
+      return par.length > 0 && par.some(p => tok.has(p));
+    };
+    const blokSonu = (txt, ac) => {             /* parantez SAYARAK — [^}]* tuzağı değil */
+      let d = 1, k = ac + 1;
+      for (; k < txt.length && d > 0; k++) { if (txt[k] === '{') d++; else if (txt[k] === '}') d--; }
+      return k;
+    };
+    function isle(txt) {
+      let out = '', i = 0;
+      while (i < txt.length) {
+        const ac = txt.indexOf('{', i);
+        if (ac === -1) break;
+        const bas = txt.slice(i, ac).trim();
+        if (/^@(media|supports)/.test(bas)) {
+          const k = blokSonu(txt, ac), ic = txt.slice(ac + 1, k - 1);
+          if (ic.indexOf('backdrop-filter:none!important') > -1) {
+            out += bas + '{' + ic + '}'; govdeler.push(ic);   /* mobil sahne bütçesi: bütün */
+          } else {
+            const alt = isle(ic);
+            if (alt) out += bas + '{' + alt + '}';
+          }
+          i = k;
+        } else if (/^@keyframes/.test(bas)) {
+          const k = blokSonu(txt, ac);
+          kf[bas.replace(/^@keyframes\s+/, '').trim()] = txt.slice(i, k);
+          i = k;
+        } else if (/^@(font-face|property)/.test(bas)) {
+          const k = blokSonu(txt, ac);
+          out += txt.slice(i, k); i = k;
+        } else if (bas.startsWith('@')) {
+          const kap = txt.indexOf(';', i); i = (kap === -1 ? txt.length : kap + 1);
+        } else {
+          const kap = txt.indexOf('}', ac);
+          if (kap === -1) break;
+          const kalan = bas.split(',').filter(uygun);
+          if (kalan.length) {
+            const gov = txt.slice(ac + 1, kap);
+            out += kalan.map(s => s.trim()).join(',') + '{' + gov + '}';
+            govdeler.push(gov);
+          }
+          i = kap + 1;
+        }
+      }
+      return out;
+    }
+    let kritik = isle(css);
+    const adlar = new Set();
+    for (const g of govdeler)
+      for (const m of g.matchAll(/animation(?:-name)?\s*:([^;}]+)/g))
+        for (const parca of m[1].split(',')) {
+          const ad = parca.trim().split(/\s+/).find(x => kf[x]);
+          if (ad) adlar.add(ad);
+        }
+    for (const ad of adlar) kritik += kf[ad];
+    /* satır sonu + girinti sıkıştırması: bildirimler ';' ile bittiğinden
+       satırları birleştirmek güvenli; satır İÇİ boşluklara dokunulmaz */
+    return kritik.replace(/\n\s*/g, '');
+  }
+  /* ön-render sırasında prefetchKur'un yarattığı link'ler DOM'a girer ve
+     serileşirdi — statik sayfaya onlarca prefetch basmak her ziyarette o
+     kadar sayfa indirtir. Çalışma zamanı zaten kendisi kurar; temizle. */
+  const prefetchTemizle = html => html.replace(/<link rel="prefetch"[^>]*>/g, '');
+
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   let kn = 0;
@@ -519,6 +633,7 @@ function kopyala(src, dst) {
   }
   console.log(`  ${kn} varlik dist/ altina kopyalandi`);
   yaz(`varlik/app.${anaHash}.js`, anaBetik);
+  yaz(`varlik/app.${cssHash}.css`, tamCss);
   console.log('');
 
   /* 1) slug listelerini siteden oku */
@@ -526,6 +641,24 @@ function kopyala(src, dst) {
   await dur(500);
   const { svc, prj, pst } = rotalar(kesif.window, kesif.window.document);
   const C0 = kesif.window.__qanatExport();
+
+  /* 2b: kritik küme ön-render DOM'undan ölçülür (yukarıdaki NEDEN'e bak) */
+  const kritikCss = kritikCssUret(tamCss, kritikTokenTopla(kesif.window.document));
+  const kritikBoy = Buffer.byteLength(kritikCss);
+  if (kritikBoy > KRITIK_TAVAN)
+    throw new Error(`kritik CSS ${kritikBoy} B > ${KRITIK_TAVAN} B tavanı — ` +
+      `kesim daraltılmadan derleme sürmez (dist'e dokunulmadı)`);
+  console.log(`  kritik CSS ${Math.round(kritikBoy / 1024)} KB satır içi · ` +
+    `tam küme varlik/app.${cssHash}.css (${Math.round(Buffer.byteLength(tamCss) / 1024)} KB)`);
+  const stilAyristir = (html, ad) => {
+    const a = stilAdaylar(html);
+    if (a.length !== 1)
+      throw new Error(`${ad}: çıktıda 100 KB üzeri <style> ${a.length} adet (beklenen 1) — ayrıştırma güvensiz`);
+    if (a[0][1].replace(/\r\n/g, '\n') !== tamCss)
+      throw new Error(`${ad}: çıktıdaki stil kaynaktakiyle denk değil — ayrıştırma güvensiz`);
+    return html.slice(0, a[0].index) + '<style>' + kritikCss + '</style>' + cssRef
+         + html.slice(a[0].index + a[0][0].length);
+  };
 
   /* content.json ZİNCİRİ — panel hiç yayınlamamışken bile geçerli bir
      varsayılan bas. 2026-08 canlıda ölçüldü: /content.json 404 dönüyordu
@@ -617,7 +750,7 @@ function kopyala(src, dst) {
       continue;
     }
     const s = await sayfa(r, r.dil);
-    yaz(r.rel, anaAyristir(s.html, r.rel));   /* 2a: ana betik dış dosyaya */
+    yaz(r.rel, stilAyristir(prefetchTemizle(anaAyristir(s.html, r.rel)), r.rel));   /* 2a betik + 2b stil dışarı */
     basilan++;
     console.log(`           bolum:[${s.acik.join(',')}] · ham metin ${s.metin} karakter` +
                 (s.hata.length ? `  !! ${s.hata.length} hata` : ''));
@@ -668,7 +801,7 @@ function kopyala(src, dst) {
       .replace('</head>', '<meta name="robots" content="noindex">\n</head>');
     /* 2a: 404 da ham kaynağın kopyası — ana betik burada da dışarı,
        yoksa tek başına 836 KB'lık ayrıştırılmamış bir sayfa kalırdı. */
-    yaz('404.html', anaAyristir(ham404, '404.html'));
+    yaz('404.html', stilAyristir(prefetchTemizle(anaAyristir(ham404, '404.html')), '404.html'));
   }
 
   /* 6) yan dosyalar */

@@ -9157,9 +9157,71 @@ function renderAll(){
      elementine kur-damgası basar; ikinci çağrı ve dil değişimi no-op olur. */
   ['__akLiveKur','__akisScrollKur','__clockKur','__tubesKur','__kanalKur',
    '__flowKur','__sizintiKur','__hesapKur','__projectsArchiveKur',
-   '__subscribeKur','__diagKur','__demandMapKur','__tara','__telHizala'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
+   '__subscribeKur','__diagKur','__demandMapKur','__prefetchKur','__tara','__telHizala'].forEach(a=>{ if(window[a])guvenli(window[a],a); });
   if(window.__stRefresh)setTimeout(window.__stRefresh,140);
 }
+
+/* =================== GÖRÜNÜRLÜK KAPISI (2026-08) ===================
+   Ana sayfada 12 kurulum ayrıştırma anında arka arkaya koşuyordu; ekran
+   altındaki bölümlerin tuvalleri, gözlemcileri ve olayları ilk boya ile
+   yarışıyordu. Ekran dışı kurulum artık bölüm yaklaşınca (600px pay) BİR
+   kez koşar; fonksiyonların kendi __kur damgası ikinci çağrıyı zaten
+   no-op yapar. Hedef DOM'da yoksa gözlem de kurulmaz — kabuk-sonrası tur
+   (window.__xKur) kapılı sarmalayıcıyı yeniden çağırır; bölüm yeniden
+   basılmışsa gözlem tazelenir (kapı damgası ELEMANDA durur, JS özelliği:
+   dataset serileşir, __kapi serileşmez). İlk ekran istisnaları kapıya
+   girmez: akLiveKur, akisScrollKur, clockKur, tubesKur.
+   REDUCE ya da gözlemsiz tarayıcı: bugünkü davranış — hemen kur. */
+const __kapiDurum={};window.__kapiDurum=__kapiDurum;
+function gorunceKur(ad,secici,kur){
+  const el=document.querySelector(secici);
+  if(!el)return;
+  if(REDUCE||!('IntersectionObserver' in window)){__kapiDurum[ad]='kostu';kur();return;}
+  if(el.__kapi)return;el.__kapi=1;
+  if(__kapiDurum[ad]!=='kostu')__kapiDurum[ad]='bekliyor';
+  const io=new IntersectionObserver(es=>{
+    if(es.some(e=>e.isIntersecting)){io.disconnect();__kapiDurum[ad]='kostu';kur();}
+  },{rootMargin:'600px 0px'});
+  io.observe(el);
+}
+function kapiliKur(ad,secici,kur){const g=()=>gorunceKur(ad,secici,kur);g();return g;}
+
+/* =================== PREFETCH (2026-08) ===================
+   "Her sayfa yeniden yükleniyor" hissinin ilk yarısı: görünür iç
+   bağlantıların HTML'i tıklamadan önce insin — app.js/app.css zaten
+   immutable önbellekte, sayfa HTML'i küçük. Kısıtlar: yalnız aynı
+   kaynak (dışa ASLA), panel/kabuk yolları hariç, veri tasarrufu ya da
+   2g'de kapalı, en çok 30 sayfa, bağlantı başına bir deneme. */
+const __pf=new Set();
+function prefetchKur(){
+  const c=navigator.connection;
+  if(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||'')))return;
+  const cek=a=>{
+    if(!a||a.__pf)return;a.__pf=1;
+    const h=a.getAttribute('href')||'';
+    if(!h||h[0]==='#')return;
+    let u;try{u=new URL(h,location.href)}catch(e){return}
+    if(u.origin!==location.origin)return;
+    if(u.pathname===location.pathname)return;
+    if(/^\/(admin|shell)/.test(u.pathname))return;
+    if(__pf.has(u.pathname)||__pf.size>=30)return;
+    __pf.add(u.pathname);
+    const l=document.createElement('link');
+    l.rel='prefetch';l.href=u.pathname+u.search;
+    document.head.appendChild(l);
+  };
+  if(!document.__pfOlay){document.__pfOlay=1;
+    const yakala=e=>{const a=e.target&&e.target.closest&&e.target.closest('a[href]');if(a)cek(a)};
+    document.addEventListener('pointerover',yakala,{passive:true});
+    document.addEventListener('touchstart',yakala,{passive:true});
+  }
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(x=>{
+      if(x.isIntersecting){io.unobserve(x.target);cek(x.target)}}),{rootMargin:'200px 0px'});
+    $$('a[href]').forEach(a=>{if(!a.__pfg){a.__pfg=1;io.observe(a)}});
+  }
+}
+prefetchKur();window.__prefetchKur=prefetchKur;
 
 /* =================== REVEAL =================== */
 let rvObs=null;
@@ -10153,7 +10215,7 @@ function demandMapKur(){
   window.__globeShow=(on)=>{box.classList.toggle('hide',!on);
     if(on){requestAnimationFrame(()=>{size();start();});}else stop();};
 }
-demandMapKur();window.__demandMapKur=demandMapKur;
+window.__demandMapKur=kapiliKur('demandMap','#globe',demandMapKur);
 
 /* =================== SEKTÖR MOTORU =================== */
 const SEC=(function(){
@@ -10379,7 +10441,7 @@ function kanalKur(){
   },{threshold:.16});
   io.observe(sec);
 }
-kanalKur();window.__kanalKur=kanalKur;
+window.__kanalKur=kapiliKur('kanal','#sozler',kanalKur);
 /* 2026-08 BULUNDU: eskiden `const band=$('#sozband');if(!band)return;`
    EN ÜSTTE idi — /otomasyon gibi başka bir rota doğrudan açıldığında bant
    DOM'da olmadığından IIFE parse zamanında hemen dönüyor, window.__tstRender
@@ -10603,7 +10665,7 @@ function flowKur(){
   window.__flowWire=wire;
   if(REDUCE)reveal(1);
 }
-flowKur();window.__flowKur=flowKur;
+window.__flowKur=kapiliKur('flow','#flow',flowKur);
 
 /* ── SIZINTI HUNİSİ ───────────────────────────────────────────────────
    İki motor: kaydırma AŞAMAYI sürer (hangi sızıntı göründü, hangisi
@@ -10758,7 +10820,7 @@ function sizintiKur(){
   window.__szDraw=v=>{P=CL(v);if(RDC||!RAF)render(2600);};
   if(RDC){P=1;render(2600);}
 }
-sizintiKur();window.__sizintiKur=sizintiKur;
+window.__sizintiKur=kapiliKur('sizinti','#szStage',sizintiKur);
 
 /* ── KENDİ RAKAMINLA HUNİ ─────────────────────────────────────────────
    Ziyaretçi kendi sayılarını girer, huni onun rakamıyla akar.
@@ -10808,7 +10870,7 @@ function hesapKur(){
   /* dil değişince sayı biçimi de değişsin */
   window.__hsRefresh=hesapla;
 }
-hesapKur();window.__hesapKur=hesapKur;
+window.__hesapKur=kapiliKur('hesap','#hsSec',hesapKur);
 
 /* =================== SÜREÇ HATTI =================== */
 /* 2026-08 BULUNDU: eskiden `const box=$('#chan');if(!box)return;` EN
@@ -11083,7 +11145,7 @@ function projectsArchiveKur(){
   window.__prjAllGiris=()=>layout(false);
   render();
 }
-projectsArchiveKur();window.__projectsArchiveKur=projectsArchiveKur;
+window.__projectsArchiveKur=kapiliKur('projectsArchive','#msn',projectsArchiveKur);
 
 /* =================== FOOTER BİT DAMGASI ===================
    QANATONE yazısı bir kez çevrimdışı canvas'a çiziliyor, ızgaraya
@@ -11430,7 +11492,7 @@ function subscribeKur(){
     if(ok&&el){el.value='';el.disabled=true;}
   });
 }
-subscribeKur();window.__subscribeKur=subscribeKur;
+window.__subscribeKur=kapiliKur('subscribe','#subForm',subscribeKur);
 
 /* =================== SEO: şema, canonical, hreflang, ölçüm ===================
    Kendi teşhis aracımız "yapılandırılmış veri yok", "adres tekrarı riski",
@@ -12277,7 +12339,7 @@ function diagKur(){
     setTimeout(()=>{const n=$('#ldName');if(n)n.focus({preventScroll:true});},700);
   };
 }
-diagKur();window.__diagKur=diagKur;
+window.__diagKur=kapiliKur('diag','#dgUrl',diagKur);
 
 /* ---- hero elleri: kaydırma + fare paralaksı ----------------------------
    Giriş animasyonu ve salınım CSS'te; burada sadece paralaks var.

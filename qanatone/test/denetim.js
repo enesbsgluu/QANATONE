@@ -884,12 +884,61 @@ async function calisma() {
        kapsayici && ince.length === 0,
        `kapsayici=${kapsayici} ince=${ince.join(',') || 'yok'}`);
   }
+
+  /* 124 · GÖRÜNÜRLÜK KAPISI (2026-08 sayfa yükü C): ana sayfada 12
+     kurulum ayrıştırma anında arka arkaya koşuyordu — ekran altındaki
+     bölümlerin tuvalleri, gözlemcileri ve olayları ilk boya ile
+     yarışıyordu. Sekiz kurulum artık bölüm yaklaşınca (600px pay) koşar;
+     ilk ekran istisnaları (akLive, akisScroll, clock, tubes) kapıya
+     girmez. Ölçüm: ATEŞLEMEYEN gözlemci saplaması altında ertelenenler
+     'bekliyor' ve damgasız; gözlemciler elle tetiklenince hepsi 'kostu';
+     istisna (akis) her hâlde kurulu. Normal (kendiliğinden ateşleyen)
+     ortamdaki tüm eski kurallar da bugünkü davranışı ayrıca kilitler. */
+  {
+    const stub = w => {
+      const yok = () => {};
+      w.gsap = { registerPlugin: yok, to: yok, from: yok, set: yok, fromTo: yok,
+                 ticker: { add: yok, remove: yok, lagSmoothing: yok } };
+      w.ScrollTrigger = { create: () => ({}), config: yok, refresh: yok,
+                          update: yok, getAll: () => [] };
+      w.Lenis = class { on() {} raf() {} scrollTo() {} };
+      w.__ioKayit = [];
+      w.IntersectionObserver = class {
+        constructor(cb) { this.cb = cb; this.els = []; w.__ioKayit.push(this); }
+        observe(el) { this.els.push(el); }   /* ATEŞLEMEZ — görünürlük yokmuş gibi */
+        unobserve() {} disconnect() {} takeRecords() { return []; }
+      };
+    };
+    const { dom } = ortam(html, ORIGIN + '/', { kur: stub });
+    const w = dom.window, d = w.document;
+    await dur(1200);
+    const ertelenen = ['demandMap', 'kanal', 'flow', 'sizinti', 'hesap',
+                       'projectsArchive', 'subscribe', 'diag'];
+    const K = w.__kapiDurum || {};
+    const bekleyen = ertelenen.filter(a => K[a] === 'bekliyor');
+    const damgasiz = !(d.querySelector('#globe') || {}).__kur
+                  && !(d.querySelector('#msn') || {}).__kur;
+    const istisna = (d.getElementById('akis') || {}).__kur === 1;
+    /* gözlemcileri elle tetikle: bölümler kadraja girmiş gibi */
+    w.__ioKayit.forEach(o => { try {
+      o.cb(o.els.map(el => ({ target: el, isIntersecting: true, intersectionRatio: 1 })), o);
+    } catch (e) {} });
+    await dur(250);
+    const kosan = ertelenen.filter(a => (w.__kapiDurum || {})[a] === 'kostu');
+    const kuruldu = (d.querySelector('#globe') || {}).__kur === 1;
+    dom.window.close();
+    ol('görünürlük kapısı: 8 kurulum ertelenir, tetikte kurulur, ilk ekran hep kurulu',
+       bekleyen.length === 8 && damgasiz && istisna
+         && kosan.length === 8 && kuruldu,
+       `bekleyen=${bekleyen.length}/8 damgasiz=${damgasiz} istisna=${istisna}` +
+       ` kosan=${kosan.length}/8 globe=${kuruldu}`);
+  }
 }
 
 /* =====================================================================
    3 · YAYIN ÇIKTISI — dist/ varsa
    ===================================================================== */
-function ciktiDenetimi() {
+async function ciktiDenetimi() {
   if (!fs.existsSync(DIST)) { bolum('3 · yayın çıktısı (dist yok, atlandı)'); return; }
   bolum('3 · yayın çıktısı');
   /* huni ₺ bloğu botun gördüğü HAM HTML'de olmalı (bot JS çalıştırmaz).
@@ -2059,6 +2108,81 @@ function ciktiDenetimi() {
     ol('dist/index.html boyut tavanı (ana betik dışarıda)',
        boy > 0 && boy <= TAVAN, `${boy} B ≤ ${TAVAN} B`);
   }
+
+  /* 125 · CSS AYRIŞTI + KRİTİK SATIR İÇİ (2026-08 sayfa yükü D, 2a'nın
+     CSS eşi): 268 KB satır içi CSS her sayfada boyama engeliydi ve
+     tarayıcı önbelleğine giremiyordu. Dist'te tam küme varlik/
+     app.<hash>.css'e çıkar (immutable), sayfada yalnız İLK EKRAN kritik
+     kümesi satır içi kalır. Kilitler: kritik blok 40 KB tavanının
+     altında; ilk ekran seçicilerini (kök değişkenler, boot, menü, hero,
+     mobil sahne bütçesi) İÇERİYOR — FOUC bekçisi; dış dosya diskte, adı
+     içeriğin sha256'sı, gövdesi kaynak CSS'in LF hâliyle denk; noscript
+     yedeği var; iç sayfa da aynı referansı taşıyor. */
+  {
+    const KRITIK_TAVAN = 40 * 1024;
+    const oku5 = rel => { const p = path.join(DIST, rel);
+      return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : ''; };
+    const ana5 = oku5('index.html'), ic5 = oku5('bulten/index.html');
+    const stiller = [...ana5.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]);
+    const kritik = stiller.sort((a, b) => b.length - a.length)[0] || '';
+    const kBoy = Buffer.byteLength(kritik);
+    const kucuk = kBoy > 0 && kBoy <= KRITIK_TAVAN;
+    const ornekler = [':root', '#boot', '.navin', '#hero', 'backdrop-filter:none!important']
+      .filter(s => kritik.indexOf(s) === -1);
+    const ref = ana5.match(/<link rel="preload" as="style" href="varlik\/(app\.([0-9a-f]{10})\.css)"/);
+    const noscript = /<noscript><link rel="stylesheet" href="varlik\/app\.[0-9a-f]{10}\.css"><\/noscript>/.test(ana5);
+    let dosyaOk = false, hashOk = false, buyuk = false;
+    if (ref) {
+      const p = path.join(DIST, 'varlik', ref[1]);
+      if (fs.existsSync(p)) {
+        dosyaOk = true;
+        const gov = fs.readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+        hashOk = require('crypto').createHash('sha256').update(gov)
+          .digest('hex').slice(0, 10) === ref[2];
+        buyuk = Buffer.byteLength(gov) > 150 * 1024;
+      }
+    }
+    const icAyni = !!ref && ic5.indexOf(ref[0]) > -1;
+    ol('CSS ayrıştı: kritik ≤40KB + ilk ekran örneklemi + hash\'li dış dosya + iç sayfa',
+       kucuk && ornekler.length === 0 && !!ref && noscript && dosyaOk && hashOk && buyuk && icAyni,
+       `kritik=${kBoy}B eksik=[${ornekler.join(',')}] ref=${!!ref} noscript=${noscript}` +
+       ` dosya=${dosyaOk} hash=${hashOk} tam>150KB=${buyuk} ic=${icAyni}`);
+  }
+
+  /* 126 · PREFETCH VAR, YALNIZ İÇE (2026-08 sayfa yükü E): "her sayfa
+     yeniden yükleniyor" hissine ilk cevap — görünür iç bağlantıların
+     HTML'i tıklamadan önce iner (app.js/css zaten immutable önbellekte).
+     Ölçüm çalışma zamanında: dist ana sayfa jsdom'da koşar (gözlemci
+     kendiliğinden ateşler), head'e prefetch link'leri düşmeli; her biri
+     kök-göreli (dış kaynağa ASLA). Kaynak tarafında aynı-kaynak bekçisi
+     (origin karşılaştırması) metinde de aranır — çift kilit. */
+  {
+    const kaynakP = fs.readFileSync(SRC, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s/g, '');
+    const bekci = kaynakP.indexOf('u.origin!==location.origin') > -1;
+    const ana6 = fs.existsSync(path.join(DIST, 'index.html'))
+      ? anaBetigiGeriGom(fs.readFileSync(path.join(DIST, 'index.html'), 'utf8')) : '';
+    let say = -1, disari = [];
+    if (ana6) {
+      const stub = w => {
+        const yok = () => {};
+        w.gsap = { registerPlugin: yok, to: yok, from: yok, set: yok, fromTo: yok,
+                   ticker: { add: yok, remove: yok, lagSmoothing: yok } };
+        w.ScrollTrigger = { create: () => ({}), config: yok, refresh: yok,
+                            update: yok, getAll: () => [] };
+        w.Lenis = class { on() {} raf() {} scrollTo() {} };
+      };
+      const { dom } = ortam(ana6, ORIGIN + '/', { kur: stub });
+      await dur(1200);
+      const linkler = [...dom.window.document.querySelectorAll('link[rel="prefetch"]')]
+        .map(l => l.getAttribute('href') || '');
+      say = linkler.length;
+      disari = linkler.filter(h => !/^\/[^/]/.test(h));
+      dom.window.close();
+    }
+    ol('prefetch: iç bağlantılar önceden iner, dışa asla (origin bekçisi kaynakta)',
+       bekci && say >= 3 && disari.length === 0,
+       `bekci=${bekci} sayi=${say} disari=${disari.join(',') || 'yok'}`);
+  }
 }
 
 /* =====================================================================
@@ -3014,7 +3138,7 @@ function tasarim(s) {
   console.log('QANATONE denetim suite\n');
   const s = kaynakBut();
   await calisma();
-  ciktiDenetimi();
+  await ciktiDenetimi();
   await statikDogrudanYukleme();
   await guvenlik();          /* panel kapısı gerçekten çağrılıyor (92) */
   tasarim(s);
