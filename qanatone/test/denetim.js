@@ -1788,6 +1788,12 @@ async function ciktiDenetimi() {
   (function tara(d) {
     for (const f of fs.readdirSync(d)) {
       const p = path.join(d, f);
+      /* dist/yeni BİLEREK dışarıda (2026-08 Astro kararı, Faz 0): yeni
+         kabuk ayrı evren — kendi başlığı, kendi rotası, sitemap'e ve eski
+         sitenin SEO sözleşmesine girmez (sayfaları noindex). Göç Faz 4'te
+         kök adrese alınınca bu muafiyet kalkar, kurallar yeni kabuğu
+         denetler olur. */
+      if (d === DIST && f === 'yeni') continue;
       if (fs.statSync(p).isDirectory()) tara(p);
       else if (f === 'index.html') sayfalar.push(p);
     }

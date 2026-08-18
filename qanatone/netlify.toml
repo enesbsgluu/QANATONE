@@ -1,6 +1,8 @@
 # QANATONE — Netlify yapilandirmasi
 [build]
-  command = "npm ci && node build.js"
+  # Faz 0 (Astro karari): yeni kabuk dist/yeni altina basar, /yeni/* den
+  # yayinlanir. Mevcut site aynen yasar; kok adrese alma Faz 4 un isi.
+  command = "npm ci && node build.js && npm --prefix yeni ci && npm --prefix yeni run build"
   publish = "dist"
 
 [build.environment]
