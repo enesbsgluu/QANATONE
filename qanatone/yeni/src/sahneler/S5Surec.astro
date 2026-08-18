@@ -1,0 +1,28 @@
+---
+/* S5 · Süreç — Enes'in kendi işleyişi (talimat metni, dört adım) +
+   marka kimliği 14 gün taahhüdü. Hareket yok (H1). */
+const adimlar = [
+  { n: '01', b: 'Talebi inceleme', p: 'Website, SEO, GEO ya da reklam dönüşüm durumu — mevcut fotoğraf çekilir.' },
+  { n: '02', b: 'Teşhis', p: 'Mimari ve yapılan hatalar, firmanın iş süreçleri, hedef kitle analizi.' },
+  { n: '03', b: 'Çözüm önerisi', p: 'Neyin, hangi sırayla, neden kurulacağı — tek sayfada, gerekçesiyle.' },
+  { n: '04', b: 'Uygulama', p: 'Bazen yalnız reklam, bazen website, bazen otomasyon; büyük şirketlerde veri analizi.' }
+];
+---
+<section data-sahne="5">
+  <div class="icgen">
+    <p class="kunye"><i>05</i>SÜREÇ</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Nasıl çalışıyoruz.</h2>
+    <p class="s1-alt" style="margin-bottom:44px">Dört adım; her biri bir öncekinin çıktısıyla başlar.</p>
+    <div class="s5-dizi">
+      {adimlar.map(a => (
+        <div class="s5-adim">
+          <span class="tek">{a.n}</span>
+          <b>{a.b}</b>
+          <p>{a.p}</p>
+        </div>
+      ))}
+    </div>
+    <p class="s5-soz"><b>Marka kimliği teslimi: 14 gün.</b>
+      <span>Logo, renk, tipografi ve temel kullanım seti — söz verilen tarihte elinde.</span></p>
+  </div>
+</section>
