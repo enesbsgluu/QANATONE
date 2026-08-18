@@ -23,10 +23,12 @@
 .s1-buyuk{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.06;letter-spacing:-.02em;margin-bottom:22px}
 .s1-buyuk em{font-style:normal;color:var(--red-soft)}
 .s1-alt{color:var(--tx2);font-size:clamp(1rem,2vw,1.18rem);max-width:56ch;line-height:1.7}
-/* giriş: taban OPAK; hareket keyframe'den, ≤400ms, yalnız transform+opacity */
+/* giriş: taban OPAK ve keyframe de opaklığa DOKUNMAZ — yalnız transform.
+   İlk deneme opacity 0'dan başlıyordu; LCP tam animasyon payı kadar
+   (2.021 ms, ölçüldü) itildi. Metin ilk kareden boyalı, hareket süs. */
 .s1-giris{animation:s1dogus .38s cubic-bezier(.22,1,.36,1) backwards}
 .s1-giris.g2{animation-delay:.09s}
-@keyframes s1dogus{from{opacity:0;transform:translateY(14px)}}
+@keyframes s1dogus{from{transform:translateY(14px)}}
 @media(prefers-reduced-motion:reduce){.s1-giris{animation:none}}
 
 /* ============ S2 · KAYIP ============ */
