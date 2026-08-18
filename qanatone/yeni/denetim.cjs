@@ -71,18 +71,24 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 }
 
 /* V1 · veri derlemede pişer: sayfa içi çalışan betiklerde fetch/XHR yok.
-   İstisna: Astro'nun gezinme prefetch betiği (_astro/page.*.js) — veri
-   değil, sonraki sayfanın HTML'ini ısıtır; J1 tavanına dahildir. */
+   İKİ istisna (talimatın kendi metni: "form gönderimi hariç; o kullanıcı
+   eylemidir"): (1) Astro'nun gezinme prefetch betiği (_astro/page.*.js) —
+   veri değil, sonraki sayfanın HTML'ini ısıtır; (2) fetch'i YALNIZ bir
+   submit dinleyicisi içinde taşıyan betik (S7 teşhis aracı) — betikte
+   addEventListener('submit') YOKSA fetch yine kırmızıdır. İkisi de J1
+   tavanına dahildir. */
 {
   const kusur = [];
   for (const p of sayfalar) {
     for (const m of oku(p).matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) {
       if (/application\/ld\+json/.test(m[1])) continue;
-      if (/\bfetch\s*\(|XMLHttpRequest/.test(m[2])) kusur.push(rel(p));
+      if (!/\bfetch\s*\(|XMLHttpRequest/.test(m[2])) continue;
+      if (/addEventListener\(["']submit["']/.test(m[2])) continue;   /* kullanıcı eylemi */
+      kusur.push(rel(p));
     }
   }
-  ol('V1 · istemci tarafı veri çekme sıfır (satır içi)', kusur.length === 0,
-     kusur.slice(0, 3).join(' '));
+  ol('V1 · istemci veri çekme sıfır (fetch yalnız submit eyleminde yaşar)',
+     kusur.length === 0, kusur.slice(0, 3).join(' '));
 }
 
 /* J1 · sayfa başına JS tavanı. ÖLÇÜLDÜ (18 Ağu 2026): prefetch betiği
