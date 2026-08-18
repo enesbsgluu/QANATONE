@@ -1,0 +1,31 @@
+---
+/* S2 · Kayıp — TEK talebin yolu: arama → form/WhatsApp/DM → yanıtsız
+   bekleme → yanlış kişi → kayıp. Kaydırmaya bağlı tek çizgi dolumu
+   (CSS scroll-driven, JS yok); desteklemeyen tarayıcıda çizgi dolu
+   durur — içerik iki hâlde de eksiksiz. Mobil: aynı beş durak, daha
+   kısa dikey mesafe (yol sıkışık, adım atlanmaz). */
+const duraklar = [
+  { e: 'ARAMA', b: 'Müşteri seni arıyor', p: 'Google\'a, ChatGPT\'ye, Instagram\'a soruyor: "kim yapar?" Talep bu anda doğdu.' },
+  { e: 'TEMAS', b: 'Form, WhatsApp, DM', p: 'Bir kanaldan yazıyor. Mesaj bir gelen kutusuna düşüyor — kimin baktığı belirsiz.' },
+  { e: 'BEKLEME', b: 'Yanıt gecikiyor', p: 'Saatler geçiyor. Talep sıcakken kimse dönmüyor; müşteri ikinci firmaya yazıyor.' },
+  { e: 'YÖNLENDİRME', b: 'Yanlış kişiye düşüyor', p: 'Dönen olsa da talep yanlış kişide: fiyat bilmiyor, takvim bilmiyor, tekrar soruyor.' },
+  { e: 'SONUÇ', b: 'Talep kayboldu', p: 'Müşteri cevabı hızlı verenle çalışıyor. Bu yol her gün, her sektörde aynı biter.', son: true }
+];
+---
+<section data-sahne="2">
+  <div class="icgen">
+    <p class="kunye"><i>02</i>KAYIP</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Bir talebin yolunu izle.</h2>
+    <p class="s1-alt" style="margin-bottom:44px">Soyut bir istatistik değil — tek bir talebin bugün başına gelenler.</p>
+    <div class="s2-yol">
+      <i class="s2-cizgi" aria-hidden="true"></i>
+      {duraklar.map(d => (
+        <div class={'s2-durak' + (d.son ? ' kirmizi s2-son' : '')}>
+          <span class="tek">{d.e}</span>
+          <b>{d.b}</b>
+          <p>{d.p}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
