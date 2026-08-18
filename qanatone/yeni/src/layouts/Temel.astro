@@ -1,0 +1,53 @@
+---
+/* Ortak kabuk (Faz 1). Şölen yok — bilinçli (Faz 2'nin işi).
+   Baş sözleşmesi: title/description/canonical/hreflang/şema mevcut
+   sitedekiyle eşdeğer; kesmeye kadar noindex (N1) ve canonical canlı
+   kök karşılığına (kopya içerik doğmaz). Fontlar: sistem yığını —
+   marka yazı tipi Faz 2'de KENDİ alanımızdan gelecek (F1 bunu şimdiden
+   kilitliyor: üçüncü parti font sunucusu yasak). */
+import '../stil/temel.css';
+import { icerik, T } from '../icerik';
+
+interface Props {
+  dil?: 'tr' | 'en';
+  baslik: string;
+  aciklama: string;
+  canonical: string;          /* canlı kök karşılığı */
+  heleftr?: string; helefen?: string;  /* hreflang çifti (canlı kök) */
+  sema?: object | null;
+  etiket?: string;            /* başlıktaki rozet (ör. GEO) */
+}
+const { dil = 'tr', baslik, aciklama, canonical,
+        heleftr, helefen, sema = null, etiket } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<html lang={dil}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>{baslik}</title>
+  <meta name="description" content={aciklama} />
+  <link rel="canonical" href={canonical} />
+  {heleftr && <link rel="alternate" hreflang="tr" href={heleftr} />}
+  {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
+  {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
+  {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
+</head>
+<body>
+  <header class="ust">
+    <a class="logo" href="/">QANATONE</a>
+    {etiket && <span class="tag">{etiket}</span>}
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer>
+    <span>{T(icerik.legal?.line, dil) || '© QANATONE'}</span>
+    <span class="fright">
+      <a href={B + '/hukuki'}>{dil === 'en' ? 'Legal' : 'Hukuki'}</a> ·
+      <a href="/">{dil === 'en' ? 'main site' : 'ana site'}</a>
+    </span>
+  </footer>
+</body>
+</html>
