@@ -772,9 +772,11 @@ async function calisma() {
       }
       return w2.getComputedStyle(el);
     };
+    /* ak ailesi BİLEREK yok (2026-08 regresyon dersi): akış demoları
+       bileşen kimliğidir, mobilde animasyonları yaşar — kural 127. */
     const aile = ['.rv', '#tespit h2 .lt i', '.tlsay', '.tlok', '.tcard', '.mfg',
                   '.szleak', '.szout', '.gnrow', '.kdrow', '.tpcard', '.mkfr',
-                  '.mkhy', '.qtrow', '.qtreply', '.akq', '.aksum'];
+                  '.mkhy', '.qtrow', '.qtreply'];
     const kusur = aile.filter(sec => {
       const cs = sonda(sec);
       return cs.opacity !== '1' || (cs.transform && cs.transform !== 'none');
@@ -932,6 +934,43 @@ async function calisma() {
          && kosan.length === 8 && kuruldu,
        `bekleyen=${bekleyen.length}/8 damgasiz=${damgasiz} istisna=${istisna}` +
        ` kosan=${kosan.length}/8 globe=${kuruldu}`);
+  }
+
+  /* 127 · BİLEŞEN KİMLİĞİ SÜSTEN AYRI YAŞAR (2026-08 regresyon dersi,
+     Astro kararı belgesindeki "bu turun en pahalı dersi"): mobil bütçe +
+     lowfx genişletmesi, tam ekran süsle birlikte KART İÇİ anlatım
+     animasyonlarını da öldürdü — Enes akış kartlarını "bozulmuş" gördü.
+     Karar: süs (yıldız/tanecik/hfloat katmanları) lowfx'te ÖLÜR, bileşen
+     kimliği (akış demoları, beyin nabzı, parıltı, ajan halkası) HER
+     cihazda yaşar. İki yön tek kuralda: kimlik kapatmaları kaynakta YOK
+     + süs kapatmaları duruyor — biri geri gelirse ya da süs kalkarsa
+     aynı kural yanar. */
+  {
+    const kaynakK = fs.readFileSync(SRC, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const sikK = kaynakK.replace(/\s/g, '');
+    /* mobil bütçe bloğu imzasından bulunur (parantez sayarak — kural 109
+       dersi); .akd yasağı YALNIZ oraya bakar: prefers-reduced-motion
+       bloğundaki .akd kapatması kullanıcı TERCİHİDİR, yaşar. */
+    let butce = '';
+    const iB = kaynakK.indexOf('backdrop-filter:none!important');
+    if (iB > -1) {
+      let bas = kaynakK.lastIndexOf('@media', iB), d = 0, k = kaynakK.indexOf('{', bas);
+      for (let j = k; j < kaynakK.length; j++) {
+        if (kaynakK[j] === '{') d++;
+        else if (kaynakK[j] === '}') { d--; if (d === 0) { butce = kaynakK.slice(bas, j + 1); break; } }
+      }
+    }
+    const kimlikOlmez = ['html.lowfx.fbrain.bi{animation:none',
+                         'html.lowfx.shiny{animation:none',
+                         'html.lowfx#bit.ring{animation:none']
+      .filter(k2 => sikK.indexOf(k2) > -1);
+    if (/\.akd\b/.test(butce)) kimlikOlmez.push('butcede.akd');
+    if (!butce) kimlikOlmez.push('butce-blogu-bulunamadi');
+    const susOlur = sikK.indexOf('html.lowfx#stars,html.lowfx#noise{display:none}') > -1
+                 && sikK.indexOf('html.lowfx#hero.hfloat{animation:none}') > -1;
+    ol('bileşen kimliği süsten ayrı: kimlik kapatması yok, süs kapatması duruyor',
+       kimlikOlmez.length === 0 && susOlur,
+       `kimlikKacagi=[${kimlikOlmez.join('|')}] sus=${susOlur}`);
   }
 }
 
