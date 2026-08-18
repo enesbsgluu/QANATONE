@@ -239,12 +239,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        GENİŞLETİLİR — sessizce silinmez, gevşetilmez").
          s1- s2- s3-  Faz 2 anlatı sahneleri
          sh-          S-H hero (göçün ilk sahnesi)
+         st-          S-T şerit (ticker)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -350,6 +351,89 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     {
       const sayi = (h.match(/<h1[\s>]/g) || []).length;
       ol('H7 · ana sayfada tek h1', sayi === 1, `${sayi} adet`);
+    }
+
+    /* H10 · göç sahnesinin dolgusu gerçekten uygulanıyor mu.
+       ana.css'te `.ana section{padding:11vh 0}` var; özgüllüğü (0,1,1)
+       düz sınıf seçicisini (0,1,0) YENER. `.sh-sahne{padding:...}` yazan
+       sahne kaynakta doğru okunuyor ama tarayıcıda hiç yürürlüğe
+       girmiyordu — hero'da yaşandı, ancak GERÇEK TARAYICIDA ekran
+       görüntüsüyle görüldü (kaydır işareti hmeta satırının üstüne
+       biniyordu). Denetim metni okuduğu için göremezdi; kural bu yüzden
+       özgüllüğü ölçer, görüntüyü değil: `-sahne` ile biten bir sınıfa
+       padding yazan her kural `.ana` ile nitelenmiş olmalı.
+       Yanlış yeşilden korunmanın yolu: kuralı belirtiye değil SEBEBE
+       bağlamak. */
+    {
+      const kusur = [];
+      for (const { sec, gov } of duzKurallar) {
+        if (!/(^|[\s,.>(])s[a-z0-9]*-sahne\b/.test(sec)) continue;
+        if (!/(?:^|[^a-z-])padding(?:-(?:top|bottom|block|inline))?\s*:/.test(gov)) continue;
+        /* her virgüllü parça ayrı ayrı nitelenmiş olmalı */
+        for (const parca of sec.split(','))
+          if (/-sahne\b/.test(parca) && !/\.ana\s/.test(parca))
+            kusur.push(parca.trim().slice(0, 40));
+      }
+      ol('H10 · göç sahnesi dolgusu `.ana` ile nitelenmiş (özgüllük yenilmiyor)',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
+    /* H8 · şerit dikişi: marquee'nin tur SAYISI ile kaydırma BÖLENİ aynı
+       sayı olmak zorunda — üç tur varsa kaydırma bir tur, yani -100%/3.
+       İkisi ayrı yerde yaşadığı için ayrışabilir ve ayrıştığında hata
+       sessizdir: şerit her turda biraz kayar, bir süre sonra boşluk
+       geçer. Bu depoda "iki yerde yaşayan oran" üç kez ısırdı (tel
+       birimi, halka tur süresi, şeridin kendi 84/42 sn yorumu).
+       KOŞULLU: şerit sahnesi yoksa ölçecek şey yok. */
+    if (/class="st-sahne"/.test(h)) {
+      const tur = (h.match(/class="st-tur"/g) || []).length;
+      /* NOT: derleyici (lightningcss) `translateX(...)` -> `translate(...)`
+         yazıyor; kural ÇIKTIYI okuduğu için ikisini de kabul eder.
+         Kaynağa göre yazılmış regex burada sessizce null döndürdü. */
+      const kare = css.match(/@keyframes\s+st-akis\s*\{[^}]*translate(?:X)?\(\s*calc\(\s*-100%\s*\/\s*(\d+)\s*\)/);
+      const bolen = kare ? Number(kare[1]) : null;
+      ol('H8 · şerit dikişi: tur sayısı = kaydırma böleni',
+         tur >= 2 && bolen === tur, `tur ${tur} · bölen ${bolen}`);
+    }
+
+    /* H11 · sonsuz hareketin durdurma sözleşmesi: `infinite` koşan her
+       animasyonun `prefers-reduced-motion:reduce` altında karşılığı
+       olmalı. Anayasa bunu S-T için açıkça yazıyor ("marquee ...
+       prefers-reduced-motion durdurur") ama kural sahneye değil
+       DAVRANIŞA bağlandı: süreklilik nerede olursa olsun kullanıcının
+       beyanına uymalı. Tek seferlik giriş animasyonları kapsam dışı —
+       onlar zaten biter.
+       NOT: derleyici `::before` -> `:before` yazabiliyor, iki taraf da
+       normalleştirilerek karşılaştırılır. */
+    {
+      const norm = s => s.trim().replace(/::/g, ':').replace(/\s+/g, ' ');
+      const duran = new Set();
+      for (const m of css.matchAll(/@media[^{]*prefers-reduced-motion[^{]*\{((?:[^{}]*\{[^}]*\})*)\}/g))
+        for (const r of m[1].matchAll(/([^{}]+)\{([^}]*)\}/g))
+          if (/animation(?:-play-state)?\s*:\s*(none|paused)/.test(r[2]))
+            for (const p of r[1].split(',')) duran.add(norm(p));
+      const kusur = [];
+      for (const { sec, gov } of duzKurallar) {
+        if (!/animation\s*:[^;]*\binfinite\b/.test(gov)) continue;
+        for (const p of sec.split(','))
+          if (!duran.has(norm(p))) kusur.push(norm(p).slice(0, 36));
+      }
+      ol('H11 · sonsuz hareketin prefers-reduced-motion karşılığı var',
+         kusur.length === 0, kusur.slice(0, 3).join(' | ') || `${duran.size} durdurma`);
+    }
+
+    /* H9 · şeridin görsel tekrarı erişilebilirlik ağacında bir kez:
+       dikiş için tur üç kez basılıyor ama isimler ÜÇ KEZ okunmamalı.
+       Eski tarafta dört kopyanın dördü de alt metin taşıyordu — botlara
+       ve ekran okuyucuya aynı dokuz ad dört kez gidiyordu. */
+    if (/class="st-sahne"/.test(h)) {
+      const bolum = h.slice(h.indexOf('class="st-sahne"'));
+      const son = bolum.indexOf('</section>');
+      const altlar = [...bolum.slice(0, son).matchAll(/<img[^>]*\salt="([^"]*)"/g)]
+        .map(m => m[1]).filter(Boolean);
+      const tekrar = altlar.filter((a, i) => altlar.indexOf(a) !== i);
+      ol('H9 · şerit alt metinleri tekrarlanmıyor (tekrar turları gizli)',
+         tekrar.length === 0, tekrar.slice(0, 3).join(' ') || `${altlar.length} ad`);
     }
 
     /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).
