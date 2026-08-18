@@ -1,0 +1,14 @@
+---
+/* Hukuki metinler — content.json legal.kvkk (panelin HTML'i, TR).
+   Mevcut sitede ayrı sayfası yok (modalda yaşıyor); burada sayfa olur.
+   Canonical kendine — kök karşılığı olmayan tek Faz 1 sayfası. */
+import Temel from '../layouts/Temel.astro';
+import { icerik } from '../icerik';
+const canon = 'https://qanatone.netlify.app/yeni/hukuki';
+---
+<Temel dil="tr" baslik="Hukuki metinler — QANATONE"
+  aciklama="QANATONE aydınlatma metni (KVKK): formlar aracılığıyla paylaşılan bilgilerin nasıl işlendiği."
+  canonical={canon} etiket="HUKUKİ">
+  <h1>Hukuki metinler</h1>
+  <div class="govde" set:html={icerik.legal?.kvkk || ''} />
+</Temel>
