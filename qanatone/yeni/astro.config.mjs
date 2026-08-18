@@ -10,5 +10,8 @@ export default defineConfig({
   base: '/yeni',
   output: 'static',
   outDir: '../dist/yeni',
-  trailingSlash: 'ignore'
+  trailingSlash: 'ignore',
+  /* Faz 1 / J1: ic baglantilara prefetch — Astro'nun kucuk betigi,
+     sayfa basina JS tavaninin icinde; olcusu yeni/denetim.js'te. */
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' }
 });

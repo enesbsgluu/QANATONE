@@ -1,0 +1,26 @@
+---
+/* 9 hizmet sayfası (TR). Faz 0'ın geo sayfası da buradan üretilir —
+   URL değişmedi. Baş sözleşmesi mevcut sitedekiyle eşdeğer (S1). */
+import { getCollection } from 'astro:content';
+import Temel from '../../layouts/Temel.astro';
+import HizmetGovde from '../../parcalar/HizmetGovde.astro';
+import { T, KOK, kes, basAd } from '../../icerik';
+
+export async function getStaticPaths() {
+  return (await getCollection('hizmetler')).map(e => ({ params: { slug: e.id }, props: { s: e.data } }));
+}
+const { s } = Astro.props;
+const canon = `${KOK}/hizmetler/${s.slug}`;
+const sema = {
+  '@context': 'https://schema.org', '@type': 'Service',
+  name: T(s.title), description: T(s.text).slice(0, 300),
+  url: canon, inLanguage: 'tr',
+  provider: { '@id': `${KOK}/#org` }
+};
+---
+<Temel dil="tr" baslik={basAd(s.det.h)}
+  aciklama={kes(s.text)} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/hizmetler/${s.slug}`}
+  sema={sema} etiket={s.tag}>
+  <HizmetGovde s={s} dil="tr" />
+</Temel>

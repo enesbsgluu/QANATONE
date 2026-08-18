@@ -1,0 +1,70 @@
+---
+/* Hizmet sayfası gövdesi — TR ve EN sayfaları aynı parçayı kullanır.
+   Bütün metin content.json'dan; sayı/liste derleme anında pişer (V1). */
+import { T, type Dil } from '../icerik';
+interface Props { s: any; dil: Dil }
+const { s, dil } = Astro.props;
+const d = s.det;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+---
+<section class="giris">
+  <h1>{T(d.h, dil)}</h1>
+  <p class="lede">{T(d.lede, dil)}</p>
+  {d.hits?.length > 0 && <ul class="hits">
+    {d.hits.map((h: any) => <li>{T(h, dil)}</li>)}
+  </ul>}
+</section>
+
+{d.pains?.length > 0 && <section>
+  <h2>{M('Dert nerede', 'Where it hurts')}</h2>
+  <div class="kartlar">
+    {d.pains.map((p: any) => (
+      <article class="kart">
+        <h3>{T(p.t, dil)}</h3>
+        <p>{T(p.d, dil)}</p>
+        {p.x && <p class="not">{T(p.x, dil)}</p>}
+      </article>
+    ))}
+  </div>
+</section>}
+
+{d.steps?.length > 0 && <section>
+  <h2>{M('Nasıl çalışırız', 'How we work')}</h2>
+  <ol class="adimlar">
+    {d.steps.map((a: any) => (
+      <li>
+        <b>{a.n}</b>
+        <div><h3>{T(a.t, dil)}</h3><p>{T(a.d, dil)}</p></div>
+      </li>
+    ))}
+  </ol>
+</section>}
+
+{(d.del?.[dil] || d.del?.tr)?.length > 0 && <section>
+  <h2>{M('Eline ne geçer', 'What you get')}</h2>
+  <ul class="teslim">
+    {(d.del[dil] || d.del.tr).map((t: string) => <li>{t}</li>)}
+  </ul>
+</section>}
+
+{d.met?.length > 0 && <section class="olcu">
+  {d.met.map((m: any) => (
+    <div class="mk"><b>{T(m.v, dil)}</b><span>{T(m.l, dil)}</span></div>
+  ))}
+</section>}
+
+{d.faq?.length > 0 && <section>
+  <h2>{M('Sık sorulanlar', 'Common questions')}</h2>
+  {d.faq.map((f: any) => (
+    <details>
+      <summary>{T(f.q, dil)}</summary>
+      <p>{T(f.a, dil)}</p>
+    </details>
+  ))}
+</section>}
+
+{d.cta && <section class="cta">
+  <h2>{T(d.cta.t, dil)}</h2>
+  <p>{T(d.cta.s, dil)}</p>
+  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : '/#iletisim'}>{M('Konuşalım', "Let's talk")}</a>
+</section>}
