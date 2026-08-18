@@ -7,9 +7,9 @@
    · cihaz kısıtı yalnız .sus- önekini söndürebilir (H4)
    · marka fontları /yeni/font/ — üçüncü parti yok (F1/F1b)              */
 
-.ana{font-family:'Manrope',system-ui,sans-serif}
-.ana h1,.ana h2{font-family:'Playfair Display',Georgia,serif;font-weight:600}
-.ana .tek{font-family:'JetBrains Mono',ui-monospace,monospace}
+.ana{font-family:var(--f-govde)}
+.ana h1,.ana h2{font-family:var(--f-baslik);font-weight:600}
+.ana .tek{font-family:var(--f-tek)}
 .ana section{margin-bottom:0;padding:11vh 0}
 .ana .icgen{max-width:840px;margin:0 auto}
 
