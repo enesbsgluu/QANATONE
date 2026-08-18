@@ -10,6 +10,14 @@ export default defineConfig({
   base: '/yeni',
   output: 'static',
   outDir: '../dist/yeni',
+  /* CSS SATIR ICINE (19 Agu, hero turunda olculdu): Astro'nun 'auto'
+     esigi ana sayfanin stilini (16 KB ham) disarida birakiyordu ve
+     Lighthouse engelleyici zinciri FCP/LCP'ye 1.200 ms yaziyordu —
+     6 KB'lik iki dosya icin iki tur. 'always' ile sifir engelleyici
+     istek kaliyor; bedeli sayfa basina ~2 KB gzip fazladan HTML ve
+     CSS'in sayfalar arasi onbelleklenememesi. Olcum ikisini de gordu,
+     tur maliyeti agir basti. */
+  build: { inlineStylesheets: 'always' },
   trailingSlash: 'ignore',
   /* Faz 1 / J1: ic baglantilara prefetch — Astro'nun kucuk betigi,
      sayfa basina JS tavaninin icinde; olcusu yeni/denetim.js'te. */
