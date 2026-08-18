@@ -53,6 +53,29 @@ JS'in tamamı Astro'nun prefetch betiği (gezinme ısıtması, J1 tavanı
 betik zinciri taşıyor. Kural bekçileri: yeni/denetim.cjs (F1 G1 V1 J1
 S1 N1) her deploy'da koşuyor; kırmızı = yayın düşer.
 
+---
+
+# FAZ 2 ÖLÇÜMÜ — yeni ana sayfa (18 Ağu 2026, fb61631)
+
+Kapı: Lighthouse mobil ≥90, LCP <2 sn, Enes'in savurma testi.
+
+| Sürüm | Puan | FCP | LCP (ham) | TBT | CLS | Not |
+|---|---|---|---|---|---|---|
+| v1 | 98 | 1,6 s | 2.021 ms | 0 | 0 | giriş animasyonu LCP'yi itiyordu (opacity 0'dan) |
+| v2 | 97 | 1,5 s | 2.079 ms | 0 | 0 | font takası boyaması LCP'yi itiyordu |
+| **v3** | **99** | **1,5 s** | **1.810 ms** | **0** | **0** | giriş yalnız transform + gövde fontu `optional` |
+
+Sayfa: 15,4 KB HTML + 9 KB CSS + **3,6 KB JS** (hedef 50 KB — %7'si;
+kökteki ana sayfa 496 KB betik taşıyordu) + 141 KB öz-barındırılan font
+(8 woff2, 3 aile, Inter yok; unicode-range bölmeli, immutable değil ama
+statik). Sekiz sahne, hareketli üç (S1 tipografi girişi ≤400 ms yalnız
+transform; S2/S3 CSS scroll-driven — 0 JS); H1-H4 + F1b kuralları her
+deploy'da. İki LCP dersi kurul kayıtlı: giriş animasyonu opaklığa
+dokunamaz; gövde fontu takas boyaması ilk görüşte LCP sayılır.
+
+**Rakam ayağı GEÇİLDİ. Faz 2'nin kapanışı Enes'in savurma testine bağlı**
+(hiçbir bölge boş kalmayacak) — hüküm onda.
+
 ## Kıyas dürüstlüğü
 
 - Yeni sayfa henüz marka tipografisini (Playfair/Manrope) taşımıyor;
