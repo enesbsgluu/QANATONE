@@ -35,6 +35,10 @@
 /varlik/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Yeni kabuk (Astro, Faz 0): _astro varliklari icerik-hash'li — sonsuz onbellek
+/yeni/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
