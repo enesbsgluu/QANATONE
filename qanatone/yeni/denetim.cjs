@@ -37,7 +37,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 /* sayfa sayısı content.json'dan türetilir — rota sessiz düşmesin */
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-  const beklenen = c.services.length * 2 + c.posts.length * 2 + 5; /* +hukuki +404 +ana +hizmetler dizini (tr/en) */
+  const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
+    + 7; /* +hukuki +404 +ana +hizmetler dizini (tr/en) +projeler dizini (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -168,7 +169,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|hizmetler|bulten)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -219,6 +220,66 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     }
   }
   ol('R1 · hizmetler dizini: her hizmet ad+metin+bağlantı ile ham HTML\'de',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R2 · PROJELER DIZINI BUTUNLUGU: R1'in projeler esi — 7 isin adi,
+   anlatimi, rakamlari (res) ve detay baglantisi dizinde (TR ve EN). */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/projeler' : 'projeler', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const ham = oku(p), duz = coz(ham);
+    for (const pr of c.projects) {
+      if (!duz.includes(coz(pr.name))) kusur.push(`${dil}:${pr.slug}:ad`);
+      if (!duz.includes(coz(D(pr.text, dil)))) kusur.push(`${dil}:${pr.slug}:metin`);
+      for (const r of pr.res || [])
+        if (!duz.includes(coz(r.v))) kusur.push(`${dil}:${pr.slug}:rakam(${r.v})`);
+      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/projeler/${pr.slug}`))
+        kusur.push(`${dil}:${pr.slug}:bağlantı`);
+    }
+  }
+  ol('R2 · projeler dizini: her iş ad+metin+rakam+bağlantı ile ham HTML\'de',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R3 · PROJE DETAYI BUTUNLUGU: her detay sayfasi kendi blocks basliklarini
+   ve govdelerini, res degerlerini ve kunye alanlarini (yil/rol/sure/kanal)
+   ham HTML'de tasimali. Eski tarafta bunlar JS'le doguyordu ve bot HIC
+   gormuyordu; yenide derlemede basiliyor — bir alan sessizce dusmesin. */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    for (const pr of c.projects) {
+      const p = path.join(KOK, dil === 'en' ? 'en' : '', 'projeler', pr.slug, 'index.html');
+      if (!fs.existsSync(p)) { kusur.push(`${dil}:${pr.slug}:sayfa yok`); continue; }
+      const duz = coz(oku(p));
+      for (const [bas, gov] of (pr.blocks && (pr.blocks[dil] || pr.blocks.tr)) || []) {
+        if (!duz.includes(coz(bas))) kusur.push(`${dil}:${pr.slug}:blok(${bas})`);
+        if (!duz.includes(coz(gov))) kusur.push(`${dil}:${pr.slug}:blok-gövde(${bas})`);
+      }
+      for (const r of pr.res || [])
+        if (!duz.includes(coz(r.v))) kusur.push(`${dil}:${pr.slug}:rakam(${r.v})`);
+      for (const alan of ['role', 'dur', 'ch'])
+        if (pr.meta && pr.meta[alan] && !duz.includes(coz(D(pr.meta[alan], dil))))
+          kusur.push(`${dil}:${pr.slug}:künye(${alan})`);
+      if (!duz.includes(String(pr.year))) kusur.push(`${dil}:${pr.slug}:yıl`);
+    }
+  }
+  ol('R3 · proje detayları: blok+rakam+künye alanları ham HTML\'de (7×2 sayfa)',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 

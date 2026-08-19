@@ -62,6 +62,42 @@ export function anaSema(icerik, sayfa) {
    Service{name, description, provider#org, areaServed}). Eski item'da
    url YOKTU; hizmet detay sayfalarının Service.url'iyle tutarlılık
    için eklendi — bilinçli süperküme. */
+/* PROJELER ŞEMALARI — eski taraf: dizin @graph üçlü (ItemList YOKTU),
+   detay @graph üçlü + CreativeWork{@id #work, name, url, creator#org}.
+   Dizine ItemList(7×CreativeWork) eklendi, detaya description —
+   hizmetler dizini/detayıyla tutarlılık, bilinçli süperküme. */
+export function projeDizinSema(icerik, sayfa) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  g['@graph'].push({
+    '@type': 'ItemList', '@id': sayfa.url + '#list',
+    itemListElement: (icerik.projects || []).map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'CreativeWork', name: p.name, description: T(p.text),
+        url: `${KOK}${dil === 'en' ? '/en' : ''}/projeler/${p.slug}`,
+        creator: { '@id': KOK + '/#org' },
+      },
+    })),
+  });
+  return g;
+}
+
+export function projeSema(icerik, sayfa, proje) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  g['@graph'].push({
+    '@type': 'CreativeWork', '@id': sayfa.url + '#work',
+    name: proje.name, url: sayfa.url, description: T(proje.text),
+    creator: { '@id': KOK + '/#org' },
+  });
+  return g;
+}
+
 export function dizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
   const KOK = 'https://qanatone.com';

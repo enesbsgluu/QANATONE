@@ -1,0 +1,62 @@
+---
+/* Proje detay gövdesi — TR ve EN aynı parçayı kullanır (rota turu).
+   Eski sayfada bu içerik JS'le doğuyordu (pdHero/pdMeta/pdBlocks);
+   burada tamamı derleme anında basılır. blocks panelden HTML geliyor
+   (yalnız <p> ölçüldü) — suz süzgecinden geçer (Anayasa madde 6).
+   Taşınmayan: hero görseli (giydirme turu — eski tarafta da bot
+   görmüyordu, JS basıyordu). */
+import { icerik, T, suz, type Dil } from '../icerik';
+interface Props { p: any; dil: Dil }
+const { p, dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const on = dil === 'en' ? '/en' : '';
+const bloklar: [string, string][] = (p.blocks && (p.blocks[dil] || p.blocks.tr)) || [];
+/* sonraki proje: kaynak sırasında bir sonraki, sonda başa döner */
+const sira = (icerik.projects || []).map((x: any) => x.slug);
+const i = sira.indexOf(p.slug);
+const sonraki = (icerik.projects || [])[(i + 1) % sira.length];
+---
+<p class="geri"><a href={`${B}${on}/projeler`}>{M('Tüm projeler', 'All projects')}</a></p>
+
+<section class="giris">
+  <h1>{p.name}</h1>
+  <p class="lede">{T(p.text, dil)}</p>
+</section>
+
+<dl class="kunye">
+  <div><dt>{M('Yıl', 'Year')}</dt><dd>{p.year}</dd></div>
+  {p.meta?.role && <div><dt>{M('Kapsam', 'Scope')}</dt><dd>{T(p.meta.role, dil)}</dd></div>}
+  {p.meta?.dur && <div><dt>{M('Süre', 'Duration')}</dt><dd>{T(p.meta.dur, dil)}</dd></div>}
+  {p.meta?.ch && <div><dt>{M('Kanallar', 'Channels')}</dt><dd>{T(p.meta.ch, dil)}</dd></div>}
+</dl>
+
+{bloklar.map(([baslik, govde]) => (
+  <section class="govde">
+    <h2>{baslik}</h2>
+    <Fragment set:html={suz(govde, ['p', 'em', 'b', 'br'])} />
+  </section>
+))}
+
+{p.res?.length > 0 && <section class="olcu">
+  {p.res.map((r: any) => (
+    <div class="mk"><b>{r.v}</b><span>{T(r.l, dil)}</span></div>
+  ))}
+</section>}
+
+{sonraki && <p class="sonraki">
+  <span>{M('Sonraki proje', 'Next project')}</span>
+  <a href={`${B}${on}/projeler/${sonraki.slug}`}>{sonraki.name}</a>
+</p>}
+
+<style>
+  .geri { margin-bottom: 18px; font-size: .85rem; }
+  .kunye { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; margin: 22px 0 6px; }
+  .kunye div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; }
+  .kunye dt { color: var(--tx3); font-size: .74rem; margin-bottom: 3px; }
+  .kunye dd { color: var(--tx2); font-size: .9rem; margin: 0; }
+  .olcu { margin-top: 22px; }
+  .sonraki { margin-top: 34px; display: flex; gap: 10px; align-items: baseline; }
+  .sonraki span { color: var(--tx3); font-size: .82rem; }
+</style>
