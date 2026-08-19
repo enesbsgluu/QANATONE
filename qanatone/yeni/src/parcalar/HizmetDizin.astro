@@ -1,0 +1,51 @@
+---
+/* Hizmetler dizini gövdesi — TR ve EN aynı parçayı kullanır (rota turu).
+   Bütün metin content.json'dan; sıra da oradan: numaralar (01..09)
+   services dizisinin sırasından doğar, koleksiyon deposunun iç sırasına
+   güvenilmez. Eski sayfanın iskeleti: başlık + sayı + giriş + 9 kalem
+   (num/ad/metin/İncele). Eski #lead formu taşınmadı — ada tek formu
+   ana sayfada tutuyor (S-IL), dizin oraya bağlanır. */
+import { getCollection } from 'astro:content';
+import { icerik, T, type Dil } from '../icerik';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sira = (icerik.services || []).map((s: any) => s.slug);
+const hizmetler = (await getCollection('hizmetler')).map(e => e.data)
+  .sort((a: any, b: any) => sira.indexOf(a.slug) - sira.indexOf(b.slug));
+const on = dil === 'en' ? '/en' : '';
+---
+<section class="giris">
+  <h1>{M('Her hizmet bir sorunu çözer.', 'Every service solves one problem.')}
+    <span class="say">({hizmetler.length})</span></h1>
+  <p class="lede">{M(
+    'Hepsini birden satmıyoruz. Önce nerede para kaybettiğine bakar, bu çeyrekte hangisinin en hızlı geri döneceğine birlikte karar veririz.',
+    'We do not sell all of them at once. We look at where you are losing money first, then decide together which one pays back fastest this quarter.')}</p>
+</section>
+
+<ol class="adimlar">
+  {hizmetler.map((s: any, i: number) => (
+    <li>
+      <b>{String(i + 1).padStart(2, '0')}</b>
+      <div>
+        <h2>{T(s.title, dil)}</h2>
+        <p>{T(s.text, dil)}</p>
+        <a class="git" href={`${B}${on}/hizmet/${s.slug}`}>{M('İncele', 'Explore')}</a>
+      </div>
+    </li>
+  ))}
+</ol>
+
+{/* EN adası ana sayfa henüz yok — EN düğmesi kesmeye kadar kök /en'e
+    çıkar (bilinçli kaçak, envanterde kayıtlı). */}
+<p class="son">
+  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+</p>
+
+<style>
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  .adimlar h2 { font-size: 1.05rem; margin: 0 0 6px; }
+  .git { display: inline-block; margin-top: 10px; font-size: .85rem; }
+  .son { margin-top: 34px; text-align: center; }
+</style>
