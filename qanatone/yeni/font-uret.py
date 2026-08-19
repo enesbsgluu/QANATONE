@@ -56,7 +56,10 @@ TREN = ','.join([
 
 # 'latin-ext' kaynaklarindan yalnizca bunlar tasinir (olculdu: sayfalarda
 # latin disinda gecen TEK kume bu). Yenisi cikarsa denetim F1c kirmizi verir.
-TR_GLIF = 'U+011E-011F,U+0130,U+015E-015F'
+# U+20BA (lira isareti) S-SE sektor panosuyla geldi: para rakamlari
+# govde fontuyla basiliyor ve bu glif YALNIZ 'latin-ext' kaynaginda
+# var (olculdu: latin altkumesinde yok). Denetimdeki F1c yakaladi.
+TR_GLIF = 'U+011E-011F,U+0130,U+015E-015F,U+20BA'
 
 # (kaynak, hedef, kume, eksen daraltma)
 ISLER = [
