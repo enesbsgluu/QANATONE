@@ -100,23 +100,11 @@ body:has(.ana) main{max-width:none;padding:0}
 .s6-kart b{display:block;margin-bottom:6px}
 .s6-kart p{color:var(--tx2);font-size:.9rem}
 
-/* ============ S7 · ARAÇ ============ */
-.s7-kutu{border:1px solid rgba(239,35,60,.4);border-radius:18px;padding:26px;
-  background:linear-gradient(180deg,rgba(239,35,60,.07),transparent)}
-.s7-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.s7-form input{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--line);
-  border-radius:10px;padding:12px 14px;color:var(--tx);font-size:.95rem}
-.s7-form input:focus-visible{outline:2px solid var(--red-soft)}
-.s7-sonuc{margin-top:18px;min-height:1em}
-.s7-skor{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
-.s7-skor b{font-size:2.6rem;color:var(--red-soft);font-family:'JetBrains Mono',monospace}
-.s7-skor span{color:var(--tx2)}
-.s7-kalemler{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;list-style:none}
-.s7-kalemler li{border:1px solid var(--line);border-radius:8px;padding:7px 10px;
-  font-size:.78rem;color:var(--tx2);font-family:'JetBrains Mono',monospace}
-.s7-kalemler li.iyi{border-color:rgba(90,200,120,.35)}
-.s7-kalemler li.kotu{border-color:rgba(239,35,60,.5);color:var(--red-soft)}
-.s7-not{color:var(--tx3);font-size:.82rem;margin-top:12px}
+/* ============ S7 · ARAÇ — DEVREDİLDİ ============
+   Faz 2'nin teşhis aracı ile göçün S-TE tespit sahnesi AYNI aracı
+   gösteriyordu (aynı diagnose fonksiyonu, aynı iş). Araç S-TE'ye
+   devredildi: S7Arac bileşeni ve .s7-* kuralları kaldırıldı, künye
+   numarası (07) S-TE'de yaşıyor. */
 
 /* ============ S8 · ÇAĞRI (hareketsiz) ============ */
 /* `.ana` ile nitelenir: yukarıdaki `.ana section{padding:11vh 0}` kuralı

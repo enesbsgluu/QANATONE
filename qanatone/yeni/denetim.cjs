@@ -244,12 +244,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          sk-          S-K katman (dort katman)
          sa-          S-A akis (hizmet seridi)
          sse-         S-SE sektor + pano
+         ste-         S-TE tespit (teshis araci)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -878,6 +879,37 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
           if (!metin.includes(coz(a).trim())) { kusur.push(x.k + ':is-yok'); break; }
       }
       ol(`H20 · sektor panosu ham HTML'de tam (${sek.length} sektor)`,
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* H21 · TESPIT ARACI: form + sonuc iskeleti ham HTML'de, ISKELE
+       SIZINTISI yok — KOSULLU.
+       Iki sey olculur:
+       (a) Anayasa'nin sarti: "form ve sonuc iskeleti STATIK HTML" — yani
+           halka, skor, kunye ve izgara kaplari JS'siz de sayfada olmali.
+           JS yalniz deger yazar; yapiyi kurarsa bot bos gorur.
+       (b) `strings.tr.dgh` content.json'da BOZUK: eski istemci harf-harf
+           dusme iskelesini (span.lt + i[--k]) verinin icine geri yazmis,
+           ustelik iki kez ic ice (2.825 bayt / 31 karakter). Bilesen
+           ayikliyor; kural o ayiklamanin calistigini kilitler — iskele
+           ciktiya sizarsa kullanici ham HTML okur (19 Agu'da ekran
+           goruntusunde goruldu). */
+    if (/class="ste-sahne"/.test(h)) {
+      const kusur = [];
+      const bolum = h.slice(h.indexOf('class="ste-sahne"'));
+      const ham = bolum.slice(0, bolum.indexOf('</section>'));
+      for (const [ad, desen] of [
+        ['form', /<form[^>]*id="steForm"/], ['giris', /id="steUrl"/],
+        ['dugme', /id="steGo"/], ['durum', /id="steDurum"/],
+        ['sonuc-kabi', /id="steSonuc"/], ['halka', /id="steYay"/],
+        ['skor', /id="steSkor"/], ['izgara', /id="steIzgara"/],
+      ]) if (!desen.test(ham)) kusur.push(ad + '-yok');
+      /* iskele sizintisi: ne etiket olarak ne de kacmis metin olarak */
+      if (/class="lt"/.test(ham) || /&lt;span class=&#34;lt&#34;/.test(ham) ||
+          /--k:\s*\d/.test(ham)) kusur.push('harf-iskelesi-sizmis');
+      /* aria-live: sonuc ekran okuyucuya duyurulmali */
+      if (!/aria-live="polite"/.test(ham)) kusur.push('aria-live-yok');
+      ol("H21 · tespit araci: form + sonuc iskeleti statik, iskele sizintisi yok",
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
