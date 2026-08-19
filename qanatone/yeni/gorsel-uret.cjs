@@ -77,6 +77,81 @@ async function logolar() {
               ` · masaustu ${kb(masaToplam)} · künye ${path.relative(__dirname, KUNYE)}`);
 }
 
+/* --- S-P destesi: proje kart gorselleri --------------------------------
+   Kaynak kokteki `img/pj-<slug>.webp` renkli asillar (1600 px genis).
+   Iki varyant, ikisi de CSS kutusundan turetildi (elle olcek YOK):
+
+     MASAUSTU  kutu 1120 * .92/2 = 515 CSS px genis, ~440 px yuksek.
+       Olcek `max(1030/w, 480/h)` — yani en az 1030 genis YA DA 480 yuksek;
+       hangisi baglayiciysa o. `cover` kirpmasi iki eksende de kutuyu
+       doldurmali, tek eksene bakmak dar tarafta bosluk birakir. Kirpma YOK:
+       slug bazli `object-position` odaklari asil orana gore ayarlandi,
+       uretecte kirpmak onlari gecersiz kilardi. Renkli kalir — gri filtre
+       masaustunde CSS'te ve hover'da renge doner.
+
+     MOBIL     kutu ~372 CSS px genis (412 px ekran - 2*20 dolgu), 186 yuksek.
+       640 px varyant = 1,72x (kural 109 tavani 2x). En/boy 16:9'da kapanir:
+       daha uzun asillarda ust/alt kirpilir, genislik tam kalir — kokteki
+       `-k` turevlerinin olculmus davranisi (960x540 kononenko 1102x1356'dan).
+       Gri + kontrast TUVALDE PISIRILIR: mobilde kalici katmanda `filter`
+       yasak (Anayasa madde 7) ve her yeniden rasterlesmede filtre yeniden
+       kosuyordu (kural 109).
+
+   Kunye `src/veri/deste-gorselleri.json`: hangi projeler destede ve
+   olculeri ne. Bilesen onu okur, olcuyu ELLE yazmaz; denetimdeki H15
+   kunye ile content.json'i karsilastirir, panel degisirse kirmizi doner.  */
+const DESTE_ADET = 6;                      /* destede kac is duruyor */
+const MASA_GEN = 1030, MASA_YUK = 480;     /* masaustu alt sinirlar */
+const MOBIL_GEN = 640, MOBIL_ORAN = 9 / 16;
+const KART_HEDEF = path.join(HEDEF, 'pj');
+const KART_KUNYE = path.join(__dirname, 'src', 'veri', 'deste-gorselleri.json');
+
+async function kartlar() {
+  fs.mkdirSync(KART_HEDEF, { recursive: true });
+  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  /* Deste kurali TEK yerde: fotografi olan isler, kaynak sirasiyla, ilk
+     DESTE_ADET tanesi. `imgc` (logo) tasiyan is destede degil — logo kart
+     penceresini dolduramaz, arsivde yasar. */
+  const secim = (icerik.projects || []).filter(p => p.image && !p.imgc).slice(0, DESTE_ADET);
+  const kunye = [];
+  let masaToplam = 0, mobilToplam = 0, kaynakToplam = 0;
+  for (const p of secim) {
+    const giris = path.join(__dirname, '..', p.image);
+    const m = await sharp(giris).metadata();
+    kaynakToplam += fs.statSync(giris).size;
+
+    const s = Math.min(1, Math.max(MASA_GEN / m.width, MASA_YUK / m.height));
+    const mg = Math.round(m.width * s), my = Math.round(m.height * s);
+    const masa = path.join(KART_HEDEF, `${p.slug}.webp`);
+    await sharp(giris).resize({ width: mg, height: my })
+      .webp({ quality: 80, effort: 6 }).toFile(masa);
+
+    const my2 = Math.min(Math.round(MOBIL_GEN * m.height / m.width),
+                         Math.round(MOBIL_GEN * MOBIL_ORAN));
+    const mob = path.join(KART_HEDEF, `${p.slug}-m.webp`);
+    /* CSS `grayscale(1) contrast(1.1)` karsiligi: gri + lineer kontrast
+       (a=1.1, b=-0.5*(1.1-1)*255) — ayni egri, tuvalde bir kez. */
+    await sharp(giris).resize({ width: MOBIL_GEN, height: my2, fit: 'cover', position: 'centre' })
+      .grayscale().linear(1.1, -12.75)
+      /* q74 OLCUYLE secildi: ilk yukte destenin ilk iki karti lazy
+         esigin icinde kaliyor (Lighthouse ag dokumu), yani bu iki dosya
+         dogrudan sahne kapisinin "152 KB'i yukari cekme" sartina
+         giriyor. Ayni iki gorsel q78'de 23,9 KB, q74'te 21,5 KB, kokteki
+         eski `-k-640` turevlerinde 23,1 KB. Gri fotograf q74'te de
+         temiz; secim tahmin degil olcum. */
+      .webp({ quality: 74, effort: 6 }).toFile(mob);
+
+    masaToplam += fs.statSync(masa).size;
+    mobilToplam += fs.statSync(mob).size;
+    kunye.push({ slug: p.slug, w: mg, h: my, mw: MOBIL_GEN, mh: my2 });
+    console.log(`  + pj/${p.slug}  ${m.width}x${m.height} -> masa ${mg}x${my} ` +
+                `${kb(fs.statSync(masa).size)} · mobil ${MOBIL_GEN}x${my2} ${kb(fs.statSync(mob).size)}`);
+  }
+  fs.writeFileSync(KART_KUNYE, JSON.stringify(kunye, null, 2) + '\n');
+  console.log(`  = deste: kaynak ${kb(kaynakToplam)} · masaustu ${kb(masaToplam)}` +
+              ` · mobil ${kb(mobilToplam)} · künye ${path.relative(__dirname, KART_KUNYE)}`);
+}
+
 (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama
@@ -99,4 +174,5 @@ async function logolar() {
                 `  webp ${kb(fs.statSync(wp).size)} · avif ${kb(fs.statSync(av).size)}`);
   }
   await logolar();
+  await kartlar();
 })();

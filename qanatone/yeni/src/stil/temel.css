@@ -6,6 +6,10 @@
   /* S-H hero ile geldi: eski kaynagin :root'undaki yumusama egrileri ve
      kizil parilti — sahne sahne kopyalanmasin diye kabukta duruyor. */
   --red-glow:rgba(239,35,60,.45);
+  /* S-P destesi ile geldi: eski :root'un ikinci kademe cizgi ve yazi
+     tonlari (kaynak index.html 40 ve 62) — rozet cercevesi, sayac ve
+     kart kunyesi bunlari kullaniyor. */
+  --line2:rgba(255,255,255,.16);--tx4:rgba(255,255,255,.48);
   --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--tx);
