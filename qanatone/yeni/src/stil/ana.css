@@ -75,22 +75,13 @@ body:has(.ana) main{max-width:none;padding:0}
 @keyframes s3ray{to{transform:scaleY(1)}}
 @media(prefers-reduced-motion:reduce){.s3-adim::before{animation:none;transform:scaleY(1)}}
 
-/* ============ S4 · KANIT (hareketsiz) ============ */
-.s4-kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.s4-kart{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
-.s4-kart img{display:block;width:100%;height:auto}
-.s4-icerik{padding:16px 18px 18px}
-.s4-kart h3{font-size:1.05rem;display:flex;justify-content:space-between;gap:8px}
-.s4-kart h3 span{color:var(--tx3);font-size:.8rem;font-family:'JetBrains Mono',monospace}
-.s4-cipler{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
-.s4-cip{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.12em;
-  color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;
-  text-transform:uppercase}
-.s4-kart p{color:var(--tx2);font-size:.9rem}
-.s4-yorumlar{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
-.s4-yorum{border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-.s4-yorum p{color:var(--tx2);font-size:.92rem;margin-bottom:10px}
-.s4-yorum span{color:var(--tx3);font-size:.78rem;font-family:'JetBrains Mono',monospace}
+/* ============ S4 · KANIT — DEVREDİLDİ ============
+   Faz 2'nin "kanıt" sahnesi ile göçün S-P destesi aynı işi yapıyordu
+   (aynı altı proje kartı, aynı content.json alanları) ve ikisi birden
+   sayfada dururken içerik iki kez basılıyordu. Kanıt yüzeyi desteye
+   devredildi: S4Kanit bileşeni ve .s4-* kuralları kaldırıldı, künye
+   numarası (04) destede yaşıyor. Kart görselleri de o turda kendi
+   alanımıza taşındı (/yeni/img/pj/). */
 
 /* ============ S5 · SÜREÇ (hareketsiz) ============ */
 .s5-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
@@ -138,8 +129,6 @@ body:has(.ana) main{max-width:none;padding:0}
 /* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
 .ana .dugme{transition:transform .15s ease,box-shadow .15s ease}
 .ana .dugme:hover{transform:translateY(-1px);box-shadow:0 8px 26px -12px var(--red)}
-.s4-kart{transition:border-color .2s ease}
-.s4-kart:hover{border-color:rgba(239,35,60,.45)}
 
 @media(max-width:640px){
   .ana section{padding:8vh 0}

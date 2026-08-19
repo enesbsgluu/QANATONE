@@ -1,16 +1,24 @@
 ---
-/* ANA SAYFA — göç sırası: hero → şerit → (kayıp → mekanizma → kanıt →
-   süreç → sektör → araç → çağrı). Baştaki S-H hero ve S-T şerit eski
-   siteden taşındı (kanonik dizi: hero · ticker · projeler · ...);
-   geri kalanı Faz 2'nin anlatısı, sahne sahne göç ediyor. Hareket bütçesi ve görünürlük
-   sözleşmesi yeni/denetim.cjs H ailesinde. */
+/* ANA SAYFA — göç sırası: hero → şerit → (kayıp → mekanizma) → deste →
+   (süreç → sektör → araç → çağrı). Hero, şerit ve deste eski siteden
+   taşındı; geri kalanı Faz 2'nin anlatısı, sahne sahne göç ediyor.
+   Hareket bütçesi ve görünürlük sözleşmesi yeni/denetim.cjs H ailesinde.
+
+   DESTE NEDEN 3. DEĞİL 4. SIRADA: kanonik dizi `hero · ticker ·
+   projeler · ...` diyor, yani deste şeridin hemen ardına düşerdi. ÖLÇÜM
+   başka söyledi: oraya alınınca altı kart görseli ilk yükün lazy
+   eşiğinin İÇİNE giriyor ve S-T turunda ölçülen 152 KB transfer
+   yukarı çıkıyor (sahne kapısının "ilk ekran bütçesi" şartı). Deste
+   Faz 2'nin "kanıt" sahnesinin (S4Kanit) yerini aldı: aynı iş, aynı
+   künye numarası, eşiğin dışında. Sıralamanın son hâli Enes'in kararı;
+   kesmede (Faz 4) kanonik diziye alınırsa bedeli bu ~44 KB'dir. */
 import '../stil/ana.css';
 import Temel from '../layouts/Temel.astro';
 import SHHero from '../sahneler/SHHero.astro';
 import STSerit from '../sahneler/STSerit.astro';
 import S2Kayip from '../sahneler/S2Kayip.astro';
 import S3Mekanizma from '../sahneler/S3Mekanizma.astro';
-import S4Kanit from '../sahneler/S4Kanit.astro';
+import SPDeste from '../sahneler/SPDeste.astro';
 import S5Surec from '../sahneler/S5Surec.astro';
 import S6Sektor from '../sahneler/S6Sektor.astro';
 import S7Arac from '../sahneler/S7Arac.astro';
@@ -48,7 +56,7 @@ import { KOK } from '../icerik';
     <STSerit />
     <S2Kayip />
     <S3Mekanizma />
-    <S4Kanit />
+    <SPDeste />
     <S5Surec />
     <S6Sektor />
     <S7Arac />

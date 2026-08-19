@@ -240,18 +240,22 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          s1- s2- s3-  Faz 2 anlatı sahneleri
          sh-          S-H hero (göçün ilk sahnesi)
          st-          S-T şerit (ticker)
+         sp-          S-P deste (projeler)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
-       BİLİNÇLİ İSTİSNA (kurala yazıldı): .dugme ve .s4-kart üzerindeki
-       `transition` — hover geri bildiriminin mekanik parçası (bileşen
-       kimliği, H4'ün diliyle); `animation` bu istisnaya girmez. */
+       BİLİNÇLİ İSTİSNA (kurala yazıldı): .dugme üzerindeki `transition`
+       — hover geri bildiriminin mekanik parçası (bileşen kimliği,
+       H4'ün diliyle); `animation` bu istisnaya girmez.
+       `.s4-kart` istisnası KALKTI: S4 kanıt sahnesi S-P destesine
+       devredildi, sınıf artık hiçbir sayfada yok (kural gevşemedi,
+       daraldı). */
     {
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
@@ -260,7 +264,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         if (!animVar && !gecisVar) continue;
         const sahneli = HAREKET_ONEK.test(sec);
         const etkilesim = /:hover|:focus|:active/.test(sec);
-        const kimlik = !animVar && /\.(dugme|s4-kart)\b/.test(sec);
+        const kimlik = !animVar && /\.dugme\b/.test(sec);
         if (!sahneli && !etkilesim && !kimlik) kusur.push(sec.slice(0, 40));
       }
       ol('H1 · hareket bütçesi: hareket yalnız sahne/süs öneki + etkileşim',
@@ -299,7 +303,21 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        keyframe `opacity` taşıyorsa eleman gene animasyon payı kadar
        görünmez kalır — LCP tam o kadar itilir (2.021 ms, ölçüldü).
        Süs keyframe'leri (sh-hale, sh-yukari-sus) serbest: onları içerik
-       sınıfı çağırmaz. */
+       sınıfı çağırmaz.
+
+       KESKİNLEŞTİRME (19 Ağu, S-P destesi turunda — GEVŞETME DEĞİL):
+       kural "opacity geçiyor mu" diye bakıyordu, oysa koruduğu şey
+       "eleman GÖRÜNMEZ mi başlıyor". Destenin küçülme eğrisi
+       `from{opacity:1} → to{opacity:.72}`: ilk kareden itibaren tam
+       opak, üstelik zaman değil KAYDIRMA güdümlü (sayfa açılırken
+       ilerleme 0). Kural artık başlangıç durağına bakıyor: opacity
+       taşıyan bir içerik keyframe'i, `from`/`0%` durağında açıkça
+       `opacity:1` yazmak zorunda. Yazmıyorsa (ya da 1'den küçükse)
+       kırmızı — yani "sönük doğan içerik" hâlâ hata, "sönükleşen
+       içerik" değil. Açık `from` şartı bilinçli: niyet CSS'in kendi
+       metninde okunsun.
+       DOĞRULANDI: dist'teki `sp-cek`in `from` durağı `opacity:1`den
+       `opacity:.99`a çevrildiğinde kural kırmızıya döndü. */
     {
       const kareler = {};
       for (const m of css.matchAll(/@keyframes\s+([\w-]+)\s*\{/g)) {
@@ -307,12 +325,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         for (; k < css.length && d > 0; k++) { if (css[k] === '{') d++; else if (css[k] === '}') d--; }
         kareler[m[1]] = css.slice(m.index + m[0].length, k - 1);
       }
+      /* Bir keyframe gövdesinin BAŞLANGIÇ durağı: `from` ya da `0%`.
+         Duraklar `from,50%{...}` gibi birleşik yazılabildiği için
+         seçici listesi parçalanarak aranır. Derleyici `from`u `0%`e
+         çevirebiliyor — ikisi de kabul. */
+      const opakBaslar = (govde) => {
+        for (const d of govde.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+          const duraklar = d[1].split(',').map(x => x.trim());
+          if (!duraklar.some(x => x === 'from' || x === '0%')) continue;
+          const o = d[2].match(/opacity\s*:\s*([\d.]+)/);
+          if (o && Number(o[1]) >= 1) return true;
+        }
+        return false;
+      };
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
         if (!SAHNE_ONEK.test(sec) || /:hover|:focus/.test(sec)) continue;
         for (const a of gov.matchAll(/animation\s*:\s*([^;]+)/g))
           for (const ad of a[1].split(/\s+/))
-            if (kareler[ad] && /opacity\s*:/.test(kareler[ad]))
+            if (kareler[ad] && /opacity\s*:/.test(kareler[ad]) && !opakBaslar(kareler[ad]))
               kusur.push(sec.slice(0, 28) + '→' + ad);
       }
       ol('H5 · içerik giriş keyframe\'i opaklığa dokunmaz (yalnız transform)',
@@ -414,11 +445,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
             for (const p of r[1].split(',')) duran.add(norm(p));
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
-        if (!/animation\s*:[^;]*\binfinite\b/.test(gov)) continue;
+        const anim = gov.match(/animation\s*:\s*([^;]+)/);
+        if (!anim || /^\s*none\b/.test(anim[1])) continue;
+        /* GENISLETME (19 Agu, S-P turu): kural yalniz `infinite` kosani
+           olcuyordu. Deste kaydirma-gudumlu — `infinite` degil ama
+           kullanici kaydirdikca surekli, ve durdurmasi OZGULLUKTE
+           kaybediyordu: `.sp-govde` (0,1,0) karsi hareketi veren
+           `.sp-kart:not(:last-child) .sp-govde` (0,3,0). Denetim goremedi,
+           gercek Chrome'da hareket-azaltma emulasyonu gordu (+1000 px'te
+           kartlar hala 0,94/0,72 okuyordu). Olcut artik: SAHNE sinifinda
+           yasayan her animasyonun, hareketi VEREN seciciyle AYNI secici
+           uzerinde bir `prefers-reduced-motion` karsiligi olmali.
+           Gevsetme degil, H11'in kendi dersinin genellestirilmesi. */
+        if (!/\binfinite\b/.test(anim[1]) && !SAHNE_ONEK.test(sec)) continue;
         for (const p of sec.split(','))
           if (!duran.has(norm(p))) kusur.push(norm(p).slice(0, 36));
       }
-      ol('H11 · sonsuz hareketin prefers-reduced-motion karşılığı var',
+      ol('H11 · her sahne hareketinin AYNI seçicide reduced-motion karşılığı var',
          kusur.length === 0, kusur.slice(0, 3).join(' | ') || `${duran.size} durdurma`);
     }
 
@@ -434,6 +477,188 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       const tekrar = altlar.filter((a, i) => altlar.indexOf(a) !== i);
       ol('H9 · şerit alt metinleri tekrarlanmıyor (tekrar turları gizli)',
          tekrar.length === 0, tekrar.slice(0, 3).join(' ') || `${altlar.length} ad`);
+    }
+
+    /* ---- S-P destesiyle gelen kurallar (H12-H15 + G2) --------------
+       Sahne talimatinin kendi sartlari: "kaydirma sirasinda uzun gorev
+       uretme", "ilk ekran butcesi", "mobilde pin YOK", "icerik uc halde
+       de eksiksiz". Dordu de burada rakama baglandi; dordu de dist'e
+       hata enjekte edilerek kirmiziya donduruldu (H8'in sessizce null
+       donmesi dersi: kirmiziya donmeyen kural yesil sayilmaz). */
+
+    /* H12 · kaydirmanin kendisi is uretmez: ana sayfanin HICBIR betigi
+       kaydirma dinleyicisi kurmaz ve duzen okumaz. Eski deste tam
+       tersiydi — `scroll` + rAF + kart basina `getBoundingClientRect`;
+       58 sn'lik kayitta dort buyuk donmanin dordu de o bolgedeydi.
+       Kural belirtiye (donma) degil SEBEBE bakar: dinleyici ve okuma
+       yoksa kaydirma karesi bizden is almaz.
+       Olcu hem satir ici hem dis (_astro/*.js) betikleri kapsar —
+       yalniz satir icine bakmak kurali sessizce bosa dusururdu. */
+    {
+      const OKUMA = /getBoundingClientRect|getClientRects|\boffset(Width|Height|Top|Left)\b|\bscroll(Top|Left|Height|Width)\b|getComputedStyle/;
+      const DINLEYICI = /addEventListener\s*\(\s*["']scroll["']|\bonscroll\s*=/;
+      const kusur = [];
+      const betikler = [];
+      for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) {
+        const dosya = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+        if (fs.existsSync(dosya)) betikler.push([m[1], fs.readFileSync(dosya, 'utf8')]);
+      }
+      for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
+        if (!/application\/ld\+json/.test(m[1])) betikler.push(['satir ici', m[2]]);
+      for (const [ad, kod] of betikler) {
+        if (DINLEYICI.test(kod)) kusur.push(ad + ':kaydirma-dinleyicisi');
+        const o = kod.match(OKUMA);
+        if (o) kusur.push(ad + ':duzen-okuma:' + o[0]);
+      }
+      ol('H12 · ana sayfa betiklerinde kaydirma dinleyicisi ve duzen okumasi yok',
+         kusur.length === 0, kusur.slice(0, 3).join(' ') || `${betikler.length} betik`);
+    }
+
+    /* G2 · gorsel hatti kendi alanimizdan: yeni kabugun bastigi her
+       <img src> ve <source srcset> `/yeni/` altinda olmali ve dosyasi
+       diskte durmali. ACIK KALEMI KAPATIR: S4'un kart gorselleri kokteki
+       `/img/pj-*-k-640.webp`e bagliydi — mobil icin pisirilmis turev
+       masaustune de iniyordu ve Faz 4 kesmesinde kok yeni ciktiya
+       donunce o yol kimsenin garantisi degildi. Font tarafindaki F1b'nin
+       gorsel karsiligi. */
+    {
+      const kusur = [];
+      for (const p2 of sayfalar) {
+        const g = oku(p2);
+        const yollar = [...g.matchAll(/<img[^>]*\bsrc="([^"]+)"/g)].map(m => m[1])
+          .concat([...g.matchAll(/<source[^>]*\bsrcset="([^"]+)"/g)]
+            .map(m => m[1].split(',')[0].trim().split(/\s+/)[0]));
+        for (const u of yollar) {
+          if (!u.startsWith('/yeni/')) { kusur.push(rel(p2) + ':yabanci:' + u); continue; }
+          if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, ''))))
+            kusur.push(rel(p2) + ':kayip:' + u);
+        }
+      }
+      ol('G2 · gorseller kendi alanimizdan (/yeni/) + dosyalar diskte',
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* H13 · deste gorsel hatti — KOSULLU (sahne yoksa olcecek sey yok).
+       Sahne kapisinin "ilk ekran butcesi" sarti: kartlar ilk ekranin
+       altinda, hepsi lazy, ve her kartin MOBIL kaynagi var (kural 109:
+       cozulmus bitmap <= 2x CSS kutusu). Mobil kutu olculdu: 412 px
+       ekranda kart genisligi 372 CSS px (ekran - 2x20 dolgu), tavan
+       744 px. Olcu dosyanin kendi basligindan okunur, "urettim" demek
+       yetmez. */
+    if (/class="sp-sahne"/.test(h)) {
+      const TAVAN = 744;
+      const bolum0 = h.slice(h.indexOf('class="sp-deste"'));
+      const deste = bolum0.slice(0, bolum0.indexOf('</section>'));
+      const kusur = [];
+      const kartlar = [...deste.matchAll(/<picture>([\s\S]*?)<\/picture>/g)].map(m => m[1]);
+      for (const kart of kartlar) {
+        const img = (kart.match(/<img[^>]*>/) || [''])[0];
+        if (!/loading="lazy"/.test(img)) kusur.push('eager:' + img.slice(0, 40));
+        const mob = kart.match(/<source[^>]*media="\(max-width:900px\)"[^>]*srcset="([^"]+)"/);
+        if (!mob) { kusur.push('mobil-kaynak-yok'); continue; }
+        const dosya = path.join(KOK, mob[1].replace(/^\/yeni\//, ''));
+        if (!fs.existsSync(dosya)) { kusur.push('kayip:' + mob[1]); continue; }
+        /* webp basligindan gercek piksel genisligi (VP8/VP8L/VP8X) */
+        const b = fs.readFileSync(dosya);
+        const tur = b.slice(12, 16).toString();
+        let gen = null;
+        if (tur === 'VP8 ') gen = b.readUInt16LE(26) & 0x3fff;
+        else if (tur === 'VP8L') gen = (b.readUInt32LE(21) & 0x3fff) + 1;
+        else if (tur === 'VP8X') gen = (b.readUIntLE(24, 3) & 0xffffff) + 1;
+        if (gen === null) kusur.push('okunmadi:' + mob[1]);
+        else if (gen > TAVAN) kusur.push(`genis:${mob[1]}:${gen}px`);
+      }
+      if (!kartlar.length) kusur.push('kart-yok');
+      ol(`H13 · deste kartlari lazy + mobil kaynak <= ${TAVAN} px`,
+         kusur.length === 0, kusur.slice(0, 3).join(' ') || `${kartlar.length} kart`);
+    }
+
+    /* H14 · mobilde pin YOK (Anayasa madde 4, Faz 2 kurali). Eski
+       kaynakta pinler mobilde bilincli ACIKTI ve kasmanin bas
+       supheliydi. Kural sahneye degil DAVRANISA bagli: `position:
+       sticky` yalniz `min-width:901px` tasiyan bir medya blogunun
+       icinde dogabilir. Boylece "mobil taban sade, masaustu ekliyor"
+       dizilimi kilitlenir; kimse tabana sticky yazip mobil blokta
+       kapatamaz (o yol H4'un de konusu). */
+    {
+      const kusur = [];
+      const yuru = (txt, kosul) => {
+        let i = 0;
+        while (i < txt.length) {
+          const ac = txt.indexOf('{', i);
+          if (ac === -1) break;
+          const bas = txt.slice(i, ac).trim();
+          if (/^@(media|supports)/.test(bas)) {
+            let d = 1, k = ac + 1;
+            for (; k < txt.length && d > 0; k++) { if (txt[k] === '{') d++; else if (txt[k] === '}') d--; }
+            yuru(txt.slice(ac + 1, k - 1), kosul + ' ' + bas);
+            i = k;
+          } else if (bas.startsWith('@')) {
+            let d = 1, k = ac + 1;
+            for (; k < txt.length && d > 0; k++) { if (txt[k] === '{') d++; else if (txt[k] === '}') d--; }
+            i = k;
+          } else {
+            const kap = txt.indexOf('}', ac);
+            if (kap === -1) break;
+            if (/position\s*:\s*sticky/.test(txt.slice(ac + 1, kap)) &&
+                !/min-width\s*:\s*901px/.test(kosul))
+              kusur.push(bas.slice(0, 30) + (kosul.trim() ? ' @' + kosul.trim().slice(0, 22) : ' @taban'));
+            i = kap + 1;
+          }
+        }
+      };
+      yuru(css, '');
+      /* NOT: mesaj SAYIYI yazar. Onceki hali kusur yokken 'sticky yok'
+         diyordu ve bu, kural hic sticky bulamadiginda da ayni cumleydi —
+         yanlis yesilin ta kendisi (H8 dersi). Sayi 0 gorunurse kural
+         olcmuyor demektir. */
+      const stickySayi = (css.match(/position\s*:\s*sticky/g) || []).length;
+      ol('H14 · pin yalniz masaustunde dogar (position:sticky min-width:901px icinde)',
+         kusur.length === 0 && stickySayi > 0,
+         kusur.slice(0, 3).join(' | ') || `${stickySayi} sticky bildirimi`);
+    }
+
+    /* H15 · destenin icerigi ham HTML'de TAM — sahne talimatinin
+       cekirdek sarti: "bu sahnenin kartlari sitenin tek kanit yuzeyi,
+       bot bos gorurse E-E-A-T kaybi olur". Eski tarafta kartlari
+       `renderProjects` basiyordu; JS kosmayan bot destede hicbir is
+       gormuyordu.
+       Kural ayni zamanda URETEC BEKCISI: kunye (`deste-gorselleri.json`)
+       content.json'un fotografli ilk alti isiyle ortusmezse kirmizi —
+       panelden proje eklenip `gorsel-uret.cjs` kosmadiysa sessizce eski
+       liste yayina cikmaz. */
+    if (/class="sp-sahne"/.test(h)) {
+      const c2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const kunye = JSON.parse(fs.readFileSync(
+        path.join(__dirname, 'src', 'veri', 'deste-gorselleri.json'), 'utf8'));
+      /* Kunye, content.json'un fotografli isler dizisinin BASTAN
+         kesilmis hali olmali (deste kurali: fotografi olan ilk N is).
+         Uzunlugu kunyeden alip ayni diziyi kesmek dairesel olurdu —
+         her kunye kendini dogrulardi; olculen sey SIRA ve KIMLIK. */
+      const fotograflilar = (c2.projects || []).filter(x => x.image && !x.imgc);
+      const beklenen = fotograflilar.slice(0, kunye.length);
+      const onek = kunye.every((k, i) => beklenen[i] && beklenen[i].slug === k.slug);
+      const bolum1 = h.slice(h.indexOf('class="sp-sahne"'));
+      const deste = bolum1.slice(0, bolum1.indexOf('</section>'));
+      /* Karsilastirma COZULMUS metinle: hangi kacis bicimi kullanildigi
+         (&quot; mi &#34; mu) derleyicinin isi, kuralin degil. Once
+         etiketler atilir, sonra varliklar cozulur — bot da metni boyle
+         gorur. */
+      const coz = (t) => String(t).replace(/<[^>]+>/g, '')
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+        .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      const T2 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
+      const kusur = [];
+      if (!onek || kunye.length === 0)
+        kusur.push('kunye != content.json onek (gorsel-uret.cjs kosmadi?)');
+      const metin = coz(deste);
+      for (const x of beklenen)
+        for (const [ad, deger] of [['ad', x.name], ['yil', String(x.year)],
+                                   ['etiket', T2(x.tag)], ['anlatim', T2(x.text)]])
+          if (!metin.includes(String(deger))) kusur.push(`${x.slug}:${ad}-yok`);
+      ol(`H15 · deste icerigi ham HTML'de tam (${beklenen.length} is x ad/yil/etiket/anlatim)`,
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
     /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).
