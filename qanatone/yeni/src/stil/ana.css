@@ -106,13 +106,10 @@ body:has(.ana) main{max-width:none;padding:0}
    devredildi: S7Arac bileşeni ve .s7-* kuralları kaldırıldı, künye
    numarası (07) S-TE'de yaşıyor. */
 
-/* ============ S8 · ÇAĞRI (hareketsiz) ============ */
-/* `.ana` ile nitelenir: yukarıdaki `.ana section{padding:11vh 0}` kuralı
-   özgüllükçe (0,1,1) düz sınıfı (0,1,0) yener — bu satırın alt dolgusu
-   Faz 2'den beri hiç uygulanmıyordu, H10 kuralı yazılınca ortaya çıktı. */
-.ana .s8-sahne{text-align:center;padding-bottom:16vh}
-.s8-sahne h2{font-size:clamp(1.6rem,5vw,2.6rem);margin-bottom:14px}
-.s8-sahne p{color:var(--tx2);max-width:52ch;margin:0 auto 26px}
+/* ============ S8 · ÇAĞRI — DEVREDİLDİ ============
+   Faz 2'nin kapanış çağrısı ile göçün S-IL sahnesi aynı işi yapıyordu.
+   S-IL yerini aldı ve yanına lead formunu getirdi; .s8-* kuralları
+   kaldırıldı, künye numarası (08) S-IL'de yaşıyor. */
 
 /* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
 .ana .dugme{transition:transform .15s ease,box-shadow .15s ease}

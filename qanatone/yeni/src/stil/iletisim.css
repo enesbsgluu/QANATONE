@@ -1,0 +1,85 @@
+/* ============================================================
+   S-IL · İLETİŞİM / ÇAĞRI + LEAD FORMU
+   Kaynak: kök index.html · CTA 5347-5359 · form 5415-5474 ·
+   CSS `.cta/.ldbox/.ldf/.fld/.chk/.hp` (2400 civarı).
+
+   Adlandırma: .sil-* içerik · .sus-* süs.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) HONEYPOT GİZLEME BİÇİMİ: kaynakta `.hp{position:absolute;left:-9999px}`
+      idi. Burada da ekran dışına alınıyor ama `aria-hidden` YOK ve
+      `tabindex="-1"` korunuyor — Netlify'ın honeypot'u alanın GÖNDERİMDE
+      dolu gelmesine bakar; alanı erişilebilirlik ağacından silmek
+      gerekmiyor, klavye sırasından çıkarmak yetiyor.
+   2) `#ctaCheck` düğmesi ("Demo talep et") eskiden JS ile forma
+      kaydırıyordu; burada `href="#lead"` — yerli çapa, JS yok.
+   3) WhatsApp bağlantısı derlemede pişiyor. Kaynakta numarayı JS
+      yazıyordu (`#waMain` href="#" doğuyordu), yani JS koşmayan
+      ziyaretçi ölü bir düğme görüyordu. Artık bağlantı HTML'de doğuyor.
+   4) Gönderim sonrası WhatsApp'a düşme metinleri (iki dilli sözlük)
+      sadeleşti: tek cümle + bağlantı. Kaynaktaki dört ayrı durum metni
+      (send/bad/okh/okp/offh/offp) yerine üç durum var; "bad" hâli
+      artık tarayıcının kendi doğrulamasına bırakıldı (required + type),
+      çünkü kaynak da aynı alanları `required` ile işaretliyordu.
+   ============================================================ */
+
+.sil-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+
+/* ---- çağrı ---- */
+.sil-cagri{text-align:center;max-width:60ch;margin:0 auto clamp(28px,4vw,52px)}
+.sil-cagri .kunye{display:inline-flex;align-items:center;gap:10px}
+.sil-cagri h2{font-size:clamp(1.7rem,4.4vw,3.2rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.sil-cagri h2 em{font-style:normal;color:var(--red)}
+.sil-cagri>p{margin:clamp(11px,1.3vw,18px) auto 0}
+.sil-dugmeler{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-top:clamp(18px,2.4vw,28px)}
+.sil-dugmeler .dugme{display:inline-flex;align-items:center;gap:10px}
+.sil-dugmeler svg{width:16px;height:16px}
+.sil-ikincil{display:inline-flex;align-items:center;padding:12px 26px;
+  border-radius:999px;border:1px solid var(--line2);color:var(--tx);
+  text-decoration:none;font-weight:600;background:rgba(255,255,255,.045)}
+
+/* ---- form kutusu ---- */
+.sil-kutu{display:grid;gap:clamp(18px,2.6vw,34px);
+  border:1px solid var(--line);border-radius:20px;background:var(--card);
+  padding:clamp(20px,2.8vw,36px);scroll-margin-top:24px}
+.sil-yazi h3{font-size:clamp(1.2rem,2.4vw,1.8rem);line-height:1.12;
+  letter-spacing:-.03em;margin:0 0 10px}
+.sil-yazi h3 em{font-style:normal;color:var(--red-soft)}
+.sil-yazi>p{color:var(--tx2);font-size:.94rem;line-height:1.65;max-width:56ch}
+.sil-yazi .kunye{display:inline-flex;align-items:center;gap:8px}
+.sil-yazi .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+
+.sil-form{display:grid;gap:12px}
+.sil-alan{display:grid;gap:6px}
+.sil-alan>span{font-size:.82rem;color:var(--tx3)}
+.sil-alan input,.sil-alan textarea{width:100%;background:var(--bg);
+  border:1px solid var(--line2);border-radius:12px;padding:12px 14px;
+  color:var(--tx);font:inherit;font-size:.94rem}
+.sil-alan textarea{resize:vertical;min-height:84px}
+.sil-alan input:focus-visible,.sil-alan textarea:focus-visible{
+  outline:2px solid var(--red);outline-offset:1px}
+.sil-onay{display:flex;gap:10px;align-items:flex-start;
+  color:var(--tx3);font-size:.82rem;line-height:1.5}
+.sil-onay input{flex:none;margin-top:2px;width:16px;height:16px;accent-color:var(--red)}
+.sil-form .dugme{justify-self:start;display:inline-flex;align-items:center;gap:10px}
+.sil-form .dugme svg{width:16px;height:16px}
+.sil-durum{min-height:1.2em;color:var(--red-soft);font-size:.88rem}
+.sil-durum a{color:var(--tx);text-decoration:underline}
+
+/* Honeypot: gerçek kullanıcı görmez, klavye sırasına girmez, bot doldurur. */
+.sus-tuzak{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+@media(min-width:861px){
+  .sil-kutu{grid-template-columns:1fr 1fr;align-items:start}
+}
+
+@media (hover:hover) and (pointer:fine){
+  .sil-ikincil{transition:border-color .3s var(--e),background-color .3s var(--e)}
+  .sil-ikincil:hover{border-color:var(--red);background:rgba(239,35,60,.1)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sil-ikincil{transition:none}
+}
