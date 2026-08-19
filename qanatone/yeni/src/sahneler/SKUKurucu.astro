@@ -1,0 +1,71 @@
+---
+/* S-KU · KURUCU — göçün onuncu sahnesi.
+   Kaynak: kök index.html · markup 5333-5339 · üreteç 7364-7386 ·
+   CSS `.kteam/.krow/.kph/.kbio` 2215-2300.
+   Anayasa: "S-KU kurucu · S-IL iletisim/CTA · lead formu: statik + tek
+   seferlik reveal." Sapmalar stil/kurucu.css başında.
+
+   İÇERİK: content.json `founder` (fotoğraf, ad, unvan, biyografi,
+   bağlantılar) + başlık `strings.s9e/s9h`. Eski tarafta satırı JS
+   basıyordu; artık derlemede HTML'e pişiyor.
+
+   AKORDEON `<details>/<summary>` — ada JS'i 0. Native olduğu için
+   klavye, ekran okuyucu ve JS'siz tarayıcı bedava geliyor: JS'siz
+   kullanıcı üçgene basıp biyografiyi AÇABİLİYOR. JS'le kurulan bir
+   akordeon bunu ancak yazarak elde ederdi.
+
+   Liste veri güdümlü kaldı: panelden ikinci kişi eklenirse satır sayısı
+   kendiliğinden uzar (kaynağın kendi davranışı). */
+import '../stil/kurucu.css';
+import { icerik, T, suz } from '../icerik';
+import gorsel from '../veri/kurucu-gorsel.json';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+/* Kaynaktaki kural: `founder` tek kişi ama liste olarak işleniyor. */
+const kisiler = [icerik.founder].filter((p: any) => p && p.name);
+const iki = (n: number) => String(n).padStart(2, '0');
+---
+<section class="sku-sahne" data-sahne="ku">
+  <div class="sku-ic">
+    <div class="sku-bas">
+      <p class="kunye"><i></i>{g('s9e')}</p>
+      <h2 class="s1-buyuk">{g('s9h')}</h2>
+    </div>
+
+    <div class="sku-liste">
+      {kisiler.map((k: any, i: number) => (
+        <details class="sku-satir" open={i === 0 ? undefined : undefined}>
+          <summary class="sku-bas-satir">
+            <span class="sku-no">{iki(i + 1)}</span>
+            <span class="sku-ad">{k.name}</span>
+            <span class="sku-unvan">{T(k.role, dil)}</span>
+            <span class="sus-tog" aria-hidden="true"><i></i><i></i></span>
+          </summary>
+          <div class="sku-govde">
+            {k.photo && (
+              <span class="sku-foto">
+                <img src="/yeni/img/founder.webp" width={gorsel.w} height={gorsel.h}
+                  alt={k.name} loading="lazy" decoding="async" />
+              </span>
+            )}
+            <div class="sku-yazi">
+              {/* Biyografi panelden HTML taşır (<p>, <b>) — tek beyaz
+                  liste süzgecinden geçer (icerik.ts `suz`, madde 6). */}
+              <div class="sku-bio" set:html={suz(T(k.bio, dil), ['p', 'b', 'em'])} />
+              {(k.links || []).filter((l: any) => l && l.url).length > 0 && (
+                <p class="sku-baglar">
+                  {(k.links || []).filter((l: any) => l && l.url).map((l: any) => (
+                    <a href={l.url} target="_blank" rel="noopener">{l.label || l.url}</a>
+                  ))}
+                </p>
+              )}
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
