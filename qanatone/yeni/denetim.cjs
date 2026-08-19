@@ -246,12 +246,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          sse-         S-SE sektor + pano
          ste-         S-TE tespit (teshis araci)
          ssz-         S-SZ sozler (kanal kartlari)
+         ssb-         S-SB soz bandi
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -912,6 +913,55 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       if (!/aria-live="polite"/.test(ham)) kusur.push('aria-live-yok');
       ol("H21 · tespit araci: form + sonuc iskeleti statik, iskele sizintisi yok",
          kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* H22 · SOZ BANDI KAPISI — Anayasa'nin bu sahneye dusen cumlesi
+       KURALA cevrildi: "`testi.on` bayragi ... kapaliyken bolum
+       DERLEMEDE HIC BASILMAZ (eski `display:none` cozumu ham HTML'de
+       uydurma sozleri botlara gosteriyordu)".
+       IDDIA OLCULDU (19 Agu): canli kok sayfa cekildi, ham HTML'inde
+       ucundan birincisi arandi — VARDI. Yani eski tarafta bant CSS ile
+       gizliyken metin sayfada duruyor. Kaynagin kendi yorumu sozlerin
+       UYDURMA oldugunu yaziyor.
+       Kural iki yonlu:
+         bayrak KAPALI  -> hicbir sayfada soz metni ve .ssb- bolumu YOK
+         bayrak ACIK    -> bant basili ve sozlerin metni ham HTML'de VAR
+       Boylece "acilinca calisiyor mu" da olculur, kural tek yone
+       calisan bir yasak olmaz. */
+    {
+      const c6 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const bayrak = !!((c6.settings || {}).testi || {}).on;
+      const T6 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
+      const sozler = (c6.testimonials || [])
+        .map(x => T6(x.q).trim()).filter(Boolean);
+      /* Karsilastirma COZULMUS metinle: sozlerde tirnak var ve HTML'de
+         `&quot;` olarak duruyor; ham karsilastirma yanlis kirmizi verir
+         (bu kural ilk yazildiginda tam bunu yapti, acik-bayrak denemesi
+         yakaladi). Etiketler atilir, varliklar cozulur — bot da metni
+         boyle gorur. */
+      const coz6 = (t) => String(t).replace(/<[^>]+>/g, '')
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+        .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ');
+      const kusur = [];
+      const bandVar = sayfalar.filter(p2 => /class="ssb-sahne"/.test(oku(p2)));
+      if (!bayrak) {
+        if (bandVar.length) kusur.push('kapaliyken bant basili: ' + rel(bandVar[0]));
+        for (const p2 of sayfalar) {
+          const g = coz6(oku(p2).replace(/<script[\s\S]*?<\/script>/g, ''));
+          for (const q of sozler)
+            if (g.includes(coz6(q).slice(0, 40))) { kusur.push('kapaliyken soz metni: ' + rel(p2)); break; }
+        }
+      } else {
+        if (!bandVar.length) kusur.push('acikken bant basilmamis');
+        const ana2 = bandVar[0] ? coz6(oku(bandVar[0])) : '';
+        for (const q of sozler)
+          if (!ana2.includes(coz6(q).slice(0, 40))) { kusur.push('acikken soz metni yok: ' + coz6(q).slice(0, 24)); break; }
+      }
+      ol(`H22 · soz bandi kapisi (bayrak ${bayrak ? 'ACIK' : 'KAPALI'})`,
+         kusur.length === 0,
+         kusur.slice(0, 2).join(' ') || `${sozler.length} soz · ${bandVar.length} sayfada bant`);
     }
 
     /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).
