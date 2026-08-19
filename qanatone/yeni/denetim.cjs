@@ -241,12 +241,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          sh-          S-H hero (göçün ilk sahnesi)
          st-          S-T şerit (ticker)
          sp-          S-P deste (projeler)
+         sk-          S-K katman (dort katman)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -675,6 +676,61 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
                                    ['etiket', T2(x.tag)], ['anlatim', T2(x.text)]])
           if (!metin.includes(String(deger))) kusur.push(`${x.slug}:${ad}-yok`);
       ol(`H15 · deste icerigi ham HTML'de tam (${beklenen.length} is x ad/yil/etiket/anlatim)`,
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* ---- S-K katmaniyla gelen kurallar (H16, H17) -------------------
+
+       H16 · IC BAGLANTI BUTUNLUGU: yeni kabuktaki her `/yeni/...` baglantisi
+       gercekten uretilmis bir sayfaya (ya da diskteki bir dosyaya) gitmeli.
+       Sahne dokuz hizmet sayfasinin tamamina baglaniyor — sayfanin ic
+       baglanti omurgasi burada. Bir slug yanlis yazilirsa ya da rota adi
+       degisirse (ornek: /hizmet vs /hizmetler) hata SESSIZDIR: sayfa
+       yayinlanir, baglanti 404 verir, hem kullanici hem tarayici kaybeder.
+       Kural bunu derlemede kirmiziya cevirir. */
+    {
+      const kusur = [];
+      let sayi = 0;
+      for (const p2 of sayfalar) {
+        for (const m of oku(p2).matchAll(/<a[^>]*\bhref="(\/yeni\/[^"#?]*)/g)) {
+          sayi++;
+          const yol = m[1].replace(/^\/yeni\//, '').replace(/\/$/, '');
+          const adaylar = [path.join(KOK, yol), path.join(KOK, yol, 'index.html'),
+                           path.join(KOK, yol + '.html')];
+          if (!adaylar.some(a => fs.existsSync(a) && fs.statSync(a).isFile()))
+            kusur.push(rel(p2) + ' -> ' + m[1]);
+        }
+      }
+      ol('H16 · ic baglantilarin hepsi uretilmis bir sayfaya gidiyor',
+         kusur.length === 0, kusur.slice(0, 3).join(' | ') || `${sayi} baglanti`);
+    }
+
+    /* H17 · KATMAN ICERIGI ham HTML'de tam — KOSULLU (sahne yoksa olcecek
+       sey yok). Sahnenin 21 metin anahtarinin (kt0..ktg) 21'i de
+       content.json'un `strings` alaninda yasiyor; sahne onlari derlemede
+       basar. Panelden bir anahtar bosaltilirsa ya da bilesen bir alani
+       basmayi unutursa bot eksik sayfa gorur ve bu SESSIZ bir kayiptir
+       (madde 1 + madde 5). Karsilastirma cozulmus metinle yapilir:
+       etiketler atilir, varliklar cozulur — bot da boyle gorur. */
+    if (/class="sk-sahne"/.test(h)) {
+      const c3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const str = (c3.strings && c3.strings.tr) || {};
+      const ANAHTAR = ['kt0','kt1','kt2','kt3','kt4','kt5','kt6','kt7','kt8','kt9',
+                       'kta','ktb','kth','kti','ktc','ktd','kte','ktj','ktm','ktf','ktg'];
+      const coz = (t) => String(t).replace(/<[^>]+>/g, '')
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+        .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ');
+      const bolum = h.slice(h.indexOf('class="sk-sahne"'));
+      const metin = coz(bolum.slice(0, bolum.indexOf('</section>')));
+      const kusur = [];
+      for (const k of ANAHTAR) {
+        const deger = coz(typeof str[k] === 'string' ? str[k] : (str[k] && str[k].tr) || '');
+        if (!deger) { kusur.push(k + ':content.json-bos'); continue; }
+        if (!metin.includes(deger.trim())) kusur.push(k + ':sayfada-yok');
+      }
+      ol(`H17 · katman icerigi ham HTML'de tam (${ANAHTAR.length} anahtar)`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
