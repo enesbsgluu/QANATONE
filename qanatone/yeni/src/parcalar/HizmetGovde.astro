@@ -6,6 +6,7 @@ interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
 const d = s.det;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="giris">
   <h1>{T(d.h, dil)}</h1>
@@ -66,5 +67,7 @@ const M = (tr: string, en: string) => dil === 'en' ? en : tr;
 {d.cta && <section class="cta">
   <h2>{T(d.cta.t, dil)}</h2>
   <p>{T(d.cta.s, dil)}</p>
-  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : '/#iletisim'}>{M('Konuşalım', "Let's talk")}</a>
+  {/* TR formu adada (S-IL); EN adası ana sayfa henüz yok — EN kesmeye
+      kadar kök /en'e çıkar (bilinçli kaçak, envanterde kayıtlı). */}
+  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
 </section>}

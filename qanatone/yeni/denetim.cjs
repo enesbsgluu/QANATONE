@@ -37,7 +37,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 /* sayfa sayısı content.json'dan türetilir — rota sessiz düşmesin */
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-  const beklenen = c.services.length * 2 + c.posts.length * 2 + 3; /* +hukuki +404 +ana */
+  const beklenen = c.services.length * 2 + c.posts.length * 2 + 5; /* +hukuki +404 +ana +hizmetler dizini (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -168,13 +168,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|bulten)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|bulten)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
       let sema = null;
       try { sema = ld && JSON.parse(ld[1]); } catch (e) {}
-      if (!sema || !sema['@type']) kusur.push(r + ':şema');
+      /* iki geçerli biçim var: tekil düğüm (@type — hizmet/bülten) ve
+         @graph (dizin sayfaları, ana sayfayla aynı üçlü + liste) */
+      if (!sema || !(sema['@type'] || Array.isArray(sema['@graph']))) kusur.push(r + ':şema');
     }
   }
   ol('S1 · title/desc menzilde + canonical + hreflang çifti + şema',
@@ -187,6 +189,37 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const kusur = sayfalar.filter(p => !/name="robots" content="noindex"/.test(oku(p)));
   ol('N1 · göç bekçisi: her sayfa noindex (Faz 4\'te tersine döner)',
      kusur.length === 0, kusur.slice(0, 3).map(rel).join(' '));
+}
+
+/* ---- ROTA TURU · R ailesi ------------------------------------------
+
+   R1 · HIZMETLER DIZINI BUTUNLUGU: dizin sayfasi (TR ve EN) content.json'daki
+   HER hizmetin basligini, tanitim metnini ve detay sayfasina baglantiyi
+   ham HTML'de tasimali. Panel hizmet ekleyince dizin kendiliginden
+   buyumeli; bir alan bos kalir ya da bilesen basmayi unutursa bot eksik
+   dizin gorur ve bu SESSIZ bir kayiptir (madde 1 + madde 5).
+   Karsilastirma cozulmus metinle yapilir — bot da boyle gorur. */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, '')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/hizmetler' : 'hizmetler', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const ham = oku(p), duz = coz(ham);
+    for (const s of c.services) {
+      if (!duz.includes(coz(D(s.title, dil)))) kusur.push(`${dil}:${s.slug}:ad`);
+      if (!duz.includes(coz(D(s.text, dil)))) kusur.push(`${dil}:${s.slug}:metin`);
+      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/hizmet/${s.slug}`))
+        kusur.push(`${dil}:${s.slug}:bağlantı`);
+    }
+  }
+  ol('R1 · hizmetler dizini: her hizmet ad+metin+bağlantı ile ham HTML\'de',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
 /* ---- FAZ 2 · ana sayfa kuralları (H ailesi) ------------------------- */

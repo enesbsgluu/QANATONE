@@ -1,0 +1,19 @@
+---
+/* Hizmetler dizini (EN) — aynı gövde parçası, dil='en'. Eski EN desc
+   25 karakterdi ve S1 tabanının (50) altındaydı; hizmet listesinden
+   türeyen daha uzun desc bilinçli süperküme. */
+import Temel from '../../layouts/Temel.astro';
+import HizmetDizin from '../../parcalar/HizmetDizin.astro';
+import { icerik, KOK } from '../../icerik';
+import { dizinSema } from '../../sema.mjs';
+
+const canon = `${KOK}/en/hizmetler`;
+const baslik = 'Services — QANATONE';
+const aciklama = 'SEO, GEO, Google & Meta Ads, AI agents, automation, web design and working tools — nine services, each solving one problem.';
+const sema = dizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
+---
+<Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={`${KOK}/hizmetler`} helefen={canon} sema={sema}
+  etiket="What we do">
+  <HizmetDizin dil="en" />
+</Temel>

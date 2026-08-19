@@ -55,3 +55,28 @@ export function anaSema(icerik, sayfa) {
     ],
   };
 }
+
+/* HİZMETLER DİZİNİ ŞEMASI — eski /hizmetler @graph'ının göçü:
+   anaSema üçlüsü + ItemList(9×Service). Kaynak: dist/hizmetler
+   `#ldjson` (Organization + WebSite + WebPage + ItemList; item =
+   Service{name, description, provider#org, areaServed}). Eski item'da
+   url YOKTU; hizmet detay sayfalarının Service.url'iyle tutarlılık
+   için eklendi — bilinçli süperküme. */
+export function dizinSema(icerik, sayfa) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  g['@graph'].push({
+    '@type': 'ItemList', '@id': sayfa.url + '#list',
+    itemListElement: (icerik.services || []).map((s, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'Service', name: T(s.title), description: T(s.text),
+        url: `${KOK}${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`,
+        provider: { '@id': KOK + '/#org' }, areaServed: ['TR', 'AE'],
+      },
+    })),
+  });
+  return g;
+}

@@ -1,0 +1,20 @@
+---
+/* Hizmetler dizini (TR) — rota turunun ilk sayfası. Baş sözleşmesi
+   eski /hizmetler ile eşdeğer (S1): title/desc birebir, canonical
+   canlı kök karşılığı, hreflang çifti. Şema eski @graph'ın göçü
+   (dizinSema). Bekçisi R1. */
+import Temel from '../layouts/Temel.astro';
+import HizmetDizin from '../parcalar/HizmetDizin.astro';
+import { icerik, KOK } from '../icerik';
+import { dizinSema } from '../sema.mjs';
+
+const canon = `${KOK}/hizmetler`;
+const baslik = 'Hizmetler — QANATONE';
+const aciklama = 'SEO, GEO, Google & Meta Ads, AI ajanları ve otomasyon.';
+const sema = dizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/hizmetler`} sema={sema}
+  etiket="Ne yapıyoruz">
+  <HizmetDizin dil="tr" />
+</Temel>

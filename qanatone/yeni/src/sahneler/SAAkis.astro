@@ -75,7 +75,8 @@ const kartlar = (icerik.services || []).slice(0, AKIS_KART);
     {/* Kalan hizmetler kaybolmasın: şeridin sonunda arşive giden kart.
         Kök sitenin /hizmetler ızgarası — yeni kabukta henüz o rota yok,
         deste sahnesindeki /projeler kararının aynısı. */}
-    <a class="sa-kart sa-tum" href="/hizmetler" data-astro-prefetch="false">
+    {/* Dizin artık adada — rota turu 1. sayfa; H16 bekçiliyor. */}
+    <a class="sa-kart sa-tum" href={`${B}/hizmetler`}>
       <span class="sa-yazi">
         <h3>{en ? 'All services' : 'Tüm hizmetler'}<Ikon ad="arrow" sinif="sa-ok" /></h3>
         <p>{en ? 'Nine services, one line. See the whole list.'
