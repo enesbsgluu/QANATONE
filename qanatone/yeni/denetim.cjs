@@ -242,12 +242,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          st-          S-T şerit (ticker)
          sp-          S-P deste (projeler)
          sk-          S-K katman (dort katman)
+         sa-          S-A akis (hizmet seridi)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -731,6 +732,66 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         if (!metin.includes(deger.trim())) kusur.push(k + ':sayfada-yok');
       }
       ol(`H17 · katman icerigi ham HTML'de tam (${ANAHTAR.length} anahtar)`,
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* ---- S-A akisiyla gelen kurallar (H18, H19) -------------------
+
+       H18 · ANA SAYFA GZIP HTML BUTCESI. Bu tur bir esik OLCULDU: sayfanin
+       gzip'li HTML'i, TCP'nin ilk tikanma penceresini (yaklasik 10 segment
+       ~ 14,6 KB) asinca LCP bir tam GIDIS-DONUS kadar itiliyor. Olcum,
+       Lighthouse mobil, kosum duzeyinde donusumlu:
+         14,3 KB gz (S-A oncesi)  -> LCP 1.692 ms
+         15,1 KB gz (S-A markup)  -> LCP 1.828 ms   (+136 ms = 1 RTT)
+         15,6 KB gz (S-A tam)     -> LCP 1.833 ms   (+5 ms; ADIM, dogrusal degil)
+       Sebep dogrulandi: RTT 150 -> 75 ms yapilinca fark 130 -> 72 ms'e
+       dustu, yani maliyet bant genisligi ya da CPU degil, TEK BIR
+       gidis-donus. Sonraki esik cwnd katlandigi icin ~29 KB gz.
+       TAVAN 28 KB: bir sonraki ucurumdan ONCE kirmiziya doner, boylece
+       "hangi sahne butceyi patlatti" sorusu derlemede cevaplanir. Tavana
+       yaklasildiginda cozum sahne kismak degil, satir ici CSS kararini
+       (`inlineStylesheets:'always'`) olculu bir turda yeniden acmaktir. */
+    {
+      const zlib = require('zlib');
+      const TAVAN = 28 * 1024;
+      const gz = zlib.gzipSync(fs.readFileSync(ana), { level: 9 }).length;
+      ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B`, gz <= TAVAN,
+         `${gz} B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)`);
+    }
+
+    /* H19 · AKIS SERIDININ ICERIGI ham HTML'de tam — KOSULLU.
+       Eski tarafta bu bolumun markup'i TEK SATIRDI (`<div id="akTrack">`)
+       ve kartlarin tamamini `__akisRender` basiyordu: JS kosmayan bot bes
+       hizmetin ne adini, ne anlatimini, ne de sayfalarina giden bes
+       baglantiyi goruyordu. Kural o kaybin geri gelmesini engeller:
+       serittteki her hizmetin ADI, ILK CUMLESI ve BAGLANTISI ham HTML'de
+       olmali. Kart sayisi da content.json'dan turetilir; panelden hizmet
+       sirasi degisirse serit sessizce eskimez. */
+    if (/class="sa-sahne"/.test(h)) {
+      const c4 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const AKIS_KART = 5;
+      const hiz = (c4.services || []).slice(0, AKIS_KART);
+      const coz = (t) => String(t).replace(/<[^>]+>/g, '')
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+        .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ');
+      const T4 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
+      const ilkCumle = (t) => {
+        const m = String(t || '').match(/^[\s\S]*?[.!?](?=\s+[A-ZÇĞİÖŞÜ])/);
+        return m ? m[0] : String(t || '');
+      };
+      const bolum = h.slice(h.indexOf('class="sa-sahne"'));
+      const ham = bolum.slice(0, bolum.indexOf('</section>'));
+      const metin = coz(ham);
+      const kusur = [];
+      for (const x of hiz) {
+        if (!metin.includes(coz(T4(x.title)).trim())) kusur.push(x.slug + ':ad-yok');
+        const c = coz(ilkCumle(T4(x.text))).trim();
+        if (c && !metin.includes(c)) kusur.push(x.slug + ':cumle-yok');
+        if (!ham.includes(`/hizmet/${x.slug}"`)) kusur.push(x.slug + ':baglanti-yok');
+      }
+      ol(`H19 · akis seridinde ${hiz.length} hizmetin adi/cumlesi/baglantisi ham HTML'de`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
