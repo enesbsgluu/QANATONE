@@ -243,12 +243,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          sp-          S-P deste (projeler)
          sk-          S-K katman (dort katman)
          sa-          S-A akis (hizmet seridi)
+         sse-         S-SE sektor + pano
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -792,6 +793,69 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         if (!ham.includes(`/hizmet/${x.slug}"`)) kusur.push(x.slug + ':baglanti-yok');
       }
       ol(`H19 · akis seridinde ${hiz.length} hizmetin adi/cumlesi/baglantisi ham HTML'de`,
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
+    }
+
+    /* ---- S-SE sektor panosuyla gelen kurallar (T1, H20) -------------
+
+       T1 · PARA ARITMETIGI TESTLI (Anayasa: "₺ hesap aritmetigi testli").
+       Pano her sektorun kazanc rakamini DERLEME ANINDA hesaplayip HTML'e
+       basiyor; formul kaynaktan tasindi. Yanlis tasinmis bir carpan
+       sessizdir — sayfa yayinlanir, rakam yanlistir. `test/hesap.test.mjs`
+       eski `calc()`i satir satir kopyalayip ikisini alti sektor ve
+       kaydirici uclarinda karsilastirir; bu kural o testi KOSAR.
+       Testin kendisi kirmizi donerse denetim de kirmizi doner. */
+    {
+      const { execFileSync } = require('child_process');
+      let ciktiMetni = '', gecti = false;
+      try {
+        ciktiMetni = execFileSync(process.execPath,
+          ['--test', path.join(__dirname, 'test', 'hesap.test.mjs')],
+          { encoding: 'utf8', cwd: __dirname });
+        gecti = /# fail 0/.test(ciktiMetni) || /\bfail 0\b/.test(ciktiMetni);
+      } catch (e) {
+        ciktiMetni = (e.stdout || '') + (e.stderr || '');
+        gecti = false;
+      }
+      const ge = (ciktiMetni.match(/pass (\d+)/) || [, '0'])[1];
+      const ka = (ciktiMetni.match(/fail (\d+)/) || [, '?'])[1];
+      ol('T1 · sektor para aritmetigi testleri geciyor', gecti,
+         `${ge} gecti · ${ka} kaldi`);
+    }
+
+    /* H20 · SEKTOR PANOSU ICERIGI ham HTML'de tam — KOSULLU.
+       Eski tarafta secici de pano da BOS kaptı (`#secBox`, `#skGrid`,
+       `#skCh`, `#skQ`, `#skAct`) ve hepsini JS dolduruyordu: bot alti
+       sektorun HICBIRINI gormuyordu. Yeni tarafta altisi da HTML'de
+       dogar ve gecis saf CSS'tir. Kural bunu kilitler: her sektorun ADI,
+       BASLIGI, TIPIK TALEBI ve ILK 30 GUN maddeleri ham HTML'de olmali,
+       ayrica sektor sayisi content.json ile ortusmeli. */
+    if (/class="sse-sahne"/.test(h)) {
+      const c5 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const sek = c5.sectors || [];
+      const coz = (t) => String(t).replace(/<[^>]+>/g, '')
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+        .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ');
+      const T5 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
+      const bolum = h.slice(h.indexOf('class="sse-sahne"'));
+      const ham = bolum.slice(0, bolum.lastIndexOf('</section>'));
+      const metin = coz(ham);
+      const kusur = [];
+      const pano = (ham.match(/class="sse-pano /g) || []).length;
+      if (pano !== sek.length) kusur.push(`pano ${pano} != sektor ${sek.length}`);
+      for (const x of sek) {
+        if (!metin.includes(coz(T5(x.n)).trim())) kusur.push(x.k + ':ad-yok');
+        const bas = (x.head && (x.head.tr || x.head.en)) || [];
+        if (bas[0] && !metin.includes(coz(bas[0]).trim())) kusur.push(x.k + ':baslik-yok');
+        const q = (x.q && (x.q.tr || x.q.en)) || [];
+        if (q[0] && !metin.includes(coz(q[0]).trim())) kusur.push(x.k + ':talep-yok');
+        const act = (x.act && (x.act.tr || x.act.en)) || [];
+        for (const a of act)
+          if (!metin.includes(coz(a).trim())) { kusur.push(x.k + ':is-yok'); break; }
+      }
+      ol(`H20 · sektor panosu ham HTML'de tam (${sek.length} sektor)`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 

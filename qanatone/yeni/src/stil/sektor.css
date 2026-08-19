@@ -1,0 +1,165 @@
+/* ============================================================
+   S-SE · SEKTÖR + PANO
+   Kaynak: kök index.html · markup 4820-4940 · `renderSectors` 7172 ·
+   `panel()` 10229 · `calc()` 10286.
+
+   Adlandırma: .sse-* içerik · .sus-* süs.
+
+   MEKANİZMA — SIFIR JS. Altı sektörün panosu da HTML'de duruyor; geçiş
+   `input[type=radio]:checked ~ .sse-panolar .sse-pano-<k>` kardeş
+   seçicisiyle. Radyo native olduğu için klavye (ok tuşları) ve ekran
+   okuyucu bedava geliyor; JS ile kurulan bir sekme bileşeni aynı
+   davranışı ancak yazarak elde ederdi.
+   S-K turunun ölçülmüş dersi arkada duruyor: 233 baytlık bir ada betiği
+   bile açılışta LCP'yi 158 ms itebiliyor.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) GLOBE (dünya) BU TURDA TAŞINMADI. Kaynakta bölümün altında bir
+      canvas simülasyonu var (`#gcv` + `gSpark`/`gDonut`/`gArea`
+      grafikleri, `gpulse` keyframe'i). Envanterin kararı zaten "kendi
+      adasında, yalnız görünürken"; iskelet turunda hiç inmiyor.
+      Sahnenin İŞİ — sektörü seçtirmek ve o sektörün rakamlarını
+      göstermek — globe olmadan tam çalışıyor.
+   2) KAYDIRICILAR (bütçe / satış tutarı / yanıtsız oran) BU TURDA YOK.
+      Rakamlar duruyor ama sabit: her sektörün kendi başlangıç
+      değerleriyle hesaplanıp derlemede basılıyor. Hesap modülü
+      (`src/hesap.ts`) istemci tarafına da hazır — kaydırıcılar geldiğinde
+      aynı fonksiyon kullanılır, ikinci bir üreteç doğmaz.
+   3) `szStage` GSAP PİNİ TAŞINMADI ve merdivenin ilk basamağı bile
+      gerekmedi: pano artık kaydırmaya bağlı bir sahne değil, seçime
+      bağlı bir pano. Pin, sekiz kartlık bir yığını kaydırma boyunca
+      sırayla göstermek içindi; radyo + panolar aynı işi kaydırma
+      kilitlemeden yapıyor. GSAP bu adaya İNMEDİ (~35 KB gzip kazanç).
+   4) Panoların giriş kademeleri (`setTimeout` ile 60/110/240 ms'lik
+      sıralı `on` sınıfları) taşınmadı — hepsi JS'e bağlıydı.
+   5) Kanal satırlarında ikon yok: kaynakta her kanalın ikonu vardı,
+      iskelet turunda ad + çubuk + yüzde yetiyor (bayt eşiği dersi).
+   ============================================================ */
+
+.sse-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.sse-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
+.sse-bas .kunye{display:inline-flex;align-items:center;gap:8px}
+.sse-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sse-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.sse-bas p{margin-top:clamp(11px,1.3vw,18px)}
+
+/* Radyolar görünmez ama ERİŞİLEBİLİR kalır: `display:none` odak
+   alamamalarına ve ok tuşlarının çalışmamasına yol açardı. */
+.sus-radyo{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+.sse-secici{display:grid;gap:10px;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  margin-bottom:clamp(18px,2.4vw,30px)}
+.sse-sec{display:flex;flex-direction:column;gap:4px;cursor:pointer;
+  padding:clamp(14px,1.6vw,18px);border:1px solid var(--line);
+  border-radius:16px;background:var(--card)}
+.sse-sec-ik{display:grid;place-items:center;width:34px;height:34px;
+  border-radius:10px;border:1px solid var(--line);color:var(--red-soft);
+  margin-bottom:6px}
+.sse-sec-ik svg{width:18px;height:18px}
+.sse-sec b{font-size:.98rem;letter-spacing:-.01em}
+.sse-sec span{color:var(--tx3);font-size:.84rem;line-height:1.4}
+
+/* Seçili sektörün düğmesi ve panosu — `:checked ~` kardeş zinciri:
+   radyolar kabın başında, seçici ve panolar sonunda. */
+.sse-pano{display:none}
+#sse-insaat:checked ~ .sse-panolar .sse-pano-insaat,
+#sse-saglik:checked ~ .sse-panolar .sse-pano-saglik,
+#sse-eticaret:checked ~ .sse-panolar .sse-pano-eticaret,
+#sse-esnaf:checked ~ .sse-panolar .sse-pano-esnaf,
+#sse-uretim:checked ~ .sse-panolar .sse-pano-uretim,
+#sse-finans:checked ~ .sse-panolar .sse-pano-finans{display:block}
+#sse-insaat:checked ~ .sse-secici label[for="sse-insaat"],
+#sse-saglik:checked ~ .sse-secici label[for="sse-saglik"],
+#sse-eticaret:checked ~ .sse-secici label[for="sse-eticaret"],
+#sse-esnaf:checked ~ .sse-secici label[for="sse-esnaf"],
+#sse-uretim:checked ~ .sse-secici label[for="sse-uretim"],
+#sse-finans:checked ~ .sse-secici label[for="sse-finans"]{
+  border-color:var(--sA,var(--red));background:rgba(255,255,255,.04)}
+/* klavyeyle gezerken hangi düğmede olduğun görünsün */
+#sse-insaat:focus-visible ~ .sse-secici label[for="sse-insaat"],
+#sse-saglik:focus-visible ~ .sse-secici label[for="sse-saglik"],
+#sse-eticaret:focus-visible ~ .sse-secici label[for="sse-eticaret"],
+#sse-esnaf:focus-visible ~ .sse-secici label[for="sse-esnaf"],
+#sse-uretim:focus-visible ~ .sse-secici label[for="sse-uretim"],
+#sse-finans:focus-visible ~ .sse-secici label[for="sse-finans"]{
+  outline:2px solid var(--red);outline-offset:3px}
+
+/* ---- pano ---- */
+.sse-pano{border:1px solid var(--line);border-radius:20px;
+  background:var(--card);padding:clamp(18px,2.4vw,32px)}
+.sse-pano-bas{display:flex;gap:14px;align-items:flex-start;
+  margin-bottom:clamp(16px,2vw,24px)}
+.sse-pano-ik{flex:none;display:grid;place-items:center;width:44px;height:44px;
+  border-radius:13px;border:1px solid var(--line);color:var(--sA,var(--red))}
+.sse-pano-ik svg{width:22px;height:22px}
+.sse-etiket{display:block;font-family:var(--f-tek);font-size:10px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--tx4);margin-bottom:6px}
+.sse-pano-bas h3{font-size:clamp(1.16rem,2vw,1.6rem);line-height:1.14;
+  letter-spacing:-.03em;margin-bottom:6px}
+.sse-pano-bas p{color:var(--tx2);font-size:.94rem;line-height:1.6;max-width:62ch}
+
+.sse-kutular{display:grid;gap:10px;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  margin-bottom:clamp(14px,1.8vw,22px)}
+.sse-kutular>div{border:1px solid var(--line);border-radius:14px;
+  padding:14px 16px}
+.sse-kutular b{display:block;font-size:clamp(1.1rem,1.8vw,1.45rem);
+  letter-spacing:-.02em;margin-bottom:4px}
+.sse-kutular span{color:var(--tx3);font-size:.8rem;line-height:1.35}
+/* ok ikonu: U+2192 hiçbir kaynak yüzde yok (F1c), yerine tek SVG */
+.sse-ok{width:14px;height:14px;margin:0 6px;vertical-align:-1px;color:var(--tx4)}
+.sse-kutular .iyi b{color:var(--red-soft)}
+.sse-kutular .uyari b{color:var(--tx)}
+.sse-kutular .uyari{border-color:rgba(239,35,60,.34)}
+
+.sse-kazanc{display:flex;gap:clamp(14px,2vw,26px);flex-wrap:wrap;
+  align-items:center;justify-content:space-between;
+  border:1px solid rgba(239,35,60,.34);border-radius:16px;
+  padding:clamp(14px,1.8vw,20px);margin-bottom:clamp(14px,1.8vw,22px);
+  background:linear-gradient(180deg,rgba(239,35,60,.08),transparent)}
+.sse-kazanc p{color:var(--tx2);font-size:.88rem;line-height:1.55;max-width:64ch}
+.sse-kazanc span{display:flex;flex-direction:column;gap:2px;flex:none}
+.sse-kazanc em{font-style:normal;color:var(--tx3);font-size:.78rem}
+.sse-kazanc b{font-size:clamp(1.2rem,2.2vw,1.7rem);color:var(--red-soft);
+  letter-spacing:-.02em}
+
+.sse-sutunlar{display:grid;gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.sse-kutu{border:1px solid var(--line);border-radius:16px;
+  padding:clamp(14px,1.8vw,20px)}
+.sse-kutu-bas{font-family:var(--f-tek);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--tx4);margin-bottom:10px}
+.sse-kutu-bas+.sse-kutu-bas,.sse-soru+.sse-kutu-bas{margin-top:16px}
+.sse-kanal{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sse-kanal-ad{flex:none;width:34%;font-size:.86rem;color:var(--tx2)}
+.sse-kanal-cubuk{flex:1;height:6px;border-radius:999px;
+  background:rgba(255,255,255,.06);overflow:clip}
+.sse-kanal-cubuk i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--sA,var(--red)),var(--red-soft))}
+.sse-kanal-pay{flex:none;font-family:var(--f-tek);font-size:.78rem;color:var(--tx3)}
+.sse-soru{color:var(--tx);font-size:.94rem;line-height:1.55}
+.sse-soru span{display:block;margin-top:8px;font-family:var(--f-tek);
+  font-size:10px;letter-spacing:.16em;color:var(--red-soft)}
+.sse-isler{list-style:none;counter-reset:sse}
+.sse-isler li{counter-increment:sse;position:relative;padding-left:30px;
+  margin-bottom:8px;color:var(--tx2);font-size:.88rem;line-height:1.5}
+.sse-isler li::before{content:'0' counter(sse);position:absolute;left:0;top:1px;
+  font-family:var(--f-tek);font-size:10px;letter-spacing:.1em;color:var(--tx4)}
+
+.sse-varsayim{margin-top:clamp(12px,1.6vw,18px);color:var(--tx4);
+  font-size:.78rem;line-height:1.55;max-width:78ch}
+.sse-cagri{margin-top:clamp(14px,1.8vw,22px)}
+
+/* ---- hover: yalnız gerçek imleçte ---- */
+@media (hover:hover) and (pointer:fine){
+  .sse-sec{transition:border-color .3s var(--e),background-color .3s var(--e)}
+  .sse-sec:hover{border-color:var(--line2);background:rgba(255,255,255,.03)}
+}
+
+/* ---- hareket azaltma ---- */
+@media (prefers-reduced-motion: reduce){
+  .sse-sec{transition:none}
+}

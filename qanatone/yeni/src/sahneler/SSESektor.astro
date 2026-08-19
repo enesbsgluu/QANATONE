@@ -1,0 +1,165 @@
+---
+/* S-SE · SEKTÖR + PANO — göçün altıncı sahnesi.
+   Kaynak: kök index.html · markup 4820-4940 · seçici üreteci
+   `renderSectors` 7172 · pano `panel()` 10229 · para hesabı `calc()`
+   10286 · sabitler 10285 (REACH .55 · LATE .6 · BAND .3).
+   Sapmalar ve gerekçeler stil/sektor.css başında.
+
+   İÇERİK: content.json'un `sectors` dizisi (6 sektör, panelin ürünü).
+   Eski tarafta seçici de pano da BOŞ kaplardı (`#secBox`, `#skGrid`,
+   `#skCh`, `#skQ`, `#skAct`…) ve hepsini JS dolduruyordu — bot altı
+   sektörün hiçbirini görmüyordu. Bu sahne ALTISINI DA derlemede HTML'e
+   pişiriyor; geçiş saf CSS (radyo + kardeş seçici), ada JS'i 0.
+
+   PARA HESABI DERLEME ANINDA. Kaydırıcılar bu turda gelmedi (sapma 3),
+   ama rakamlar duruyor: her sektörün kendi başlangıç değerleriyle
+   (finance.budget/ticket/miss + market.cpc/lead/close) aynı formül
+   burada koşuyor. Formül birebir kaynaktan; testi `test/hesap.test.mjs`. */
+import '../stil/sektor.css';
+import Ikon from '../parcalar/Ikon.astro';
+import { icerik, T, suz } from '../icerik';
+import { sektorHesap, bicimKisa } from '../hesap';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+const en = dil === 'en';
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const sektorler = icerik.sectors || [];
+/* Kanal adları — kaynak `NM` (10207). Kod tarafında, content.json'da
+   karşılığı yok (şeritteki araç listesiyle aynı durum). */
+const KANAL: Record<string, string> = {
+  google: 'Google Ads', seo: 'SEO / GEO', meta: 'Meta Ads',
+  tiktok: 'TikTok Ads', linkedin: 'LinkedIn', reddit: 'Reddit',
+  site: en ? 'Website' : 'Web sitesi',
+};
+const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+
+/* Her sektör için pano verisi derleme anında hazırlanır. */
+const panolar = sektorler.map((x: any, i: number) => {
+  const h = sektorHesap(x);
+  const dil2 = dil;
+  const bas = (x.head && (x.head[dil2] || x.head.tr)) || ['', ''];
+  const soru = (x.q && (x.q[dil2] || x.q.tr)) || ['', ''];
+  const isler = (x.act && (x.act[dil2] || x.act.tr)) || [];
+  const toplam = Object.values(x.ch || {}).reduce((a: number, b: any) => a + (+b || 0), 0) || 1;
+  const sirali = Object.entries(x.ch || {}).sort((a: any, b: any) => b[1] - a[1]).slice(0, 4);
+  const enBuyuk = sirali.length ? Number(sirali[0][1]) : 1;
+  return {
+    k: x.k, ad: T(x.n, dil2), ozet: T(x.d, dil2), ikon: x.icon,
+    ton: `--sA:hsl(${HUE[i % HUE.length][0]} 78% 46%)`,
+    baslik: bas[0] || '', anlatim: bas[1] || '',
+    kutular: [
+      { s: '', b: h.talep.toLocaleString(en ? 'en-US' : 'tr-TR'),
+        a: en ? 'enquiries a month at this budget' : 'bu bütçeyle aylık gelen talep' },
+      { s: 'iyi', b: bicimKisa(h.ciroSimdi, dil2),
+        a: en ? 'revenue today at this miss rate' : 'bugünkü aylık ciro, bu kaçırma oranıyla' },
+      { s: 'uyari', b: bicimKisa(h.kayip, dil2),
+        a: en ? 'revenue lost in silence' : 'yanıtsız kalanın ciro karşılığı' },
+      /* Ok KARAKTERİ (U+2192) yok: hiçbir kaynak yüz taşımıyor (ölçüldü,
+         F1c yakaladı). Yerine ok İKONU — anlam aynı, glif borcu yok. */
+      { s: 'iyi', b: h.satisSimdi, b2: h.satisAjan,
+        a: en ? 'sales now vs with the agent' : 'satış: şimdi ve ajanla' },
+    ],
+    kazanc: `${bicimKisa(h.kazancAlt, dil2)} – ${bicimKisa(h.kazancUst, dil2)}`,
+    kanallar: sirali.map(([ad, w]: any) => ({
+      ad: KANAL[ad] || ad,
+      pay: Math.round((Number(w) / toplam) * 100),
+      bar: Math.round((Number(w) / enBuyuk) * 100),
+    })),
+    soru: soru[0] || '', karar: String(soru[1] || '').toUpperCase(),
+    isler,
+  };
+});
+---
+<section class="sse-sahne" data-sahne="se">
+  <div class="sse-ic">
+    <div class="sse-bas">
+      <p class="kunye"><i></i>{g('spe')}</p>
+      <h2 class="s1-buyuk" set:html={suz(g('sph'), ['em', 'b'])} />
+      <p class="s1-alt">{g('spp')}</p>
+    </div>
+
+    {/* Seçici + panolar TEK kap içinde: radyo `:checked` kardeş seçiciyle
+        panoyu açar, JS yok. Radyolar native olduğu için klavye (ok
+        tuşları) ve ekran okuyucu kendiliğinden çalışır. */}
+    <div class="sse-kap">
+      {panolar.map((p: any, i: number) => (
+        <input class="sus-radyo" type="radio" name="sse" id={`sse-${p.k}`}
+          checked={i === 0} />
+      ))}
+
+      <div class="sse-secici" role="radiogroup"
+        aria-label={en ? 'Choose your industry' : 'Sektörünü seç'}>
+        {panolar.map((p: any) => (
+          <label class="sse-sec" for={`sse-${p.k}`} style={p.ton}>
+            <span class="sse-sec-ik"><Ikon ad={p.ikon} /></span>
+            <b>{p.ad}</b><span>{p.ozet}</span>
+          </label>
+        ))}
+      </div>
+
+      <div class="sse-panolar">
+        {panolar.map((p: any) => (
+          <article class={`sse-pano sse-pano-${p.k}`} style={p.ton}>
+            <div class="sse-pano-bas">
+              <span class="sse-pano-ik"><Ikon ad={p.ikon} /></span>
+              <div>
+                <span class="sse-etiket">{p.ad}</span>
+                <h3>{p.baslik}</h3>
+                <p>{p.anlatim}</p>
+              </div>
+            </div>
+
+            <div class="sse-kutular">
+              {p.kutular.map((k: any) => (
+                <div class={k.s}>
+                  <b>{k.b}{k.b2 && <><Ikon ad="arrow" sinif="sse-ok" />{k.b2}</>}</b>
+                  <span>{k.a}</span>
+                </div>
+              ))}
+            </div>
+
+            <div class="sse-kazanc">
+              <p>{en
+                ? 'This money does not come from a bigger ad budget — it comes out of the "revenue lost in silence" pile above. The agent brings back roughly a third of it.'
+                : 'Bu para yeni reklam bütçesinden gelmiyor — yukarıdaki "yanıtsız kalanın ciro karşılığı" yığınının içinden geliyor. Ajan o yığının yaklaşık üçte birini geri getiriyor.'}</p>
+              <span><em>{en ? 'Monthly revenue the agent can recover' : 'Ajanla kurtarılabilecek aylık ciro'}</em><b>{p.kazanc}</b></span>
+            </div>
+
+            <div class="sse-sutunlar">
+              <div class="sse-kutu">
+                <p class="sse-kutu-bas">{en ? 'Where the demand will come from' : 'Talebin geleceği kanallar'}</p>
+                {p.kanallar.map((c: any) => (
+                  <div class="sse-kanal">
+                    <span class="sse-kanal-ad">{c.ad}</span>
+                    <span class="sse-kanal-cubuk"><i style={`width:${c.bar}%`}></i></span>
+                    <span class="sse-kanal-pay">%{c.pay}</span>
+                  </div>
+                ))}
+              </div>
+              <div class="sse-kutu">
+                <p class="sse-kutu-bas">{en ? 'A typical enquiry the agent will handle' : 'Ajanın karşılayacağı tipik talep'}</p>
+                <blockquote class="sse-soru">“{p.soru}”<span>{(en ? 'AGENT VERDICT: ' : 'AJAN KARARI: ') + p.karar}</span></blockquote>
+                <p class="sse-kutu-bas">{en ? 'First 30 days' : 'İlk 30 gün'}</p>
+                <ol class="sse-isler">
+                  {p.isler.map((a: string) => <li>{a}</li>)}
+                </ol>
+              </div>
+            </div>
+
+            <p class="sse-varsayim">{en
+              ? 'Assumptions: the whole budget goes to ads and clicks get more expensive as the budget grows. The agent reaches ~55% of unanswered enquiries; a late reply closes at ~60% of a live one. The figure is revenue, not profit.'
+              : 'Varsayımlar: bütçenin tamamı reklama gidiyor ve bütçe büyüdükçe tıklama maliyeti artıyor. Ajan yanıtsız kalan talebin ~%55\'ine ulaşıyor; geç dönülen talep canlı karşılananın %60\'ı kadar kapanıyor. Çıkan rakam ciro, kâr değil.'}</p>
+
+            <div class="sse-cagri">
+              <a class="dugme" href={`${B}/hizmet/otomasyon`}>{en ? 'See this setup running' : 'Bu kurulumu çalışırken gör'}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
