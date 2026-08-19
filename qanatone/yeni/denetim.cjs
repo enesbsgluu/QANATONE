@@ -503,7 +503,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        Olcu hem satir ici hem dis (_astro/*.js) betikleri kapsar —
        yalniz satir icine bakmak kurali sessizce bosa dusururdu. */
     {
-      const OKUMA = /getBoundingClientRect|getClientRects|\boffset(Width|Height|Top|Left)\b|\bscroll(Top|Left|Height|Width)\b|getComputedStyle/;
+      /* getTotalLength perde turunda eklendi: Anayasa'nin perde icin
+         adiyla yasakladigi maliyet (iz basina zorunlu yerlesim okumasi);
+         kural artik onu da tarar. */
+      const OKUMA = /getBoundingClientRect|getClientRects|\boffset(Width|Height|Top|Left)\b|\bscroll(Top|Left|Height|Width)\b|getComputedStyle|getTotalLength/;
       const DINLEYICI = /addEventListener\s*\(\s*["']scroll["']|\bonscroll\s*=/;
       const kusur = [];
       const betikler = [];
@@ -964,6 +967,43 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       ol(`H22 · soz bandi kapisi (bayrak ${bayrak ? 'ACIK' : 'KAPALI'})`,
          kusur.length === 0,
          kusur.slice(0, 2).join(' ') || `${sozler.length} soz · ${bandVar.length} sayfada bant`);
+    }
+
+    /* H23 · PERDE SOZLESMESI — KOSULLU (perde yoksa olcecek sey yok).
+       Anayasa'nin dort sarti olculebilir kalemlere cevrildi:
+         a) icerigi BEKLETMEZ: perde `pointer-events:none` tasir ve eski
+            `overflow:hidden` kaydirma kilidi (html.booting) ciktida HIC
+            gecmez — kilit geri gelirse kirmizi.
+         b) dokunma/kaydirma IPTAL EDER: kapi betiginde pointerdown ve
+            wheel dinleyicileri olmali (scroll dinleyicisi degil — H12).
+         c) oturumda BIR KEZ: sessionStorage anahtari betikte olmali.
+         d) guvenlik: kosulsuz kaldirma zamanlayicisi olmali — betik
+            nerede patlarsa patlasin sayfa acik kalir (eski kaynagin
+            kendi dersi, 4610).
+       Ayrica: perde varsayilan GIZLI dogmali (`html:not(...)` kurali) —
+       gorunurluk karari betiginse, betik kosmadan perde gorunmemeli. */
+    if (/class="sus-perde"/.test(h)) {
+      const kusur = [];
+      if (!/class="sus-perde"[^>]*aria-hidden="true"|aria-hidden="true"[^>]*class="sus-perde"/.test(h)
+          && !/<div class="sus-perde" id="perde" aria-hidden="true">/.test(h))
+        kusur.push('aria-hidden-yok');
+      if (!/html:not\(\.prd\)\s*\.sus-perde\{display:none\}/.test(css))
+        kusur.push('varsayilan-gizli-degil');
+      /* butun .sus-perde bloklarini tara (ilki `display:none` yedegi) */
+      if (!(css.match(/\.sus-perde\{[^}]*\}/g) || []).some(b => /pointer-events:\s*none/.test(b)))
+        kusur.push('pointer-events-none-yok');
+      if (/overflow\s*:\s*hidden/.test((css.match(/html\.[a-z-]+(,[^{]*)?\{[^}]*\}/g) || [])
+          .filter(k => /booting|prd/.test(k)).join('')))
+        kusur.push('kaydirma-kilidi-geri-gelmis');
+      /* kapi betigi: satir ici script'lerde ara */
+      let kapi = '';
+      for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
+        if (!/application\/ld\+json/.test(m[1]) && /perde/.test(m[2])) kapi += m[2];
+      if (!/sessionStorage/.test(kapi)) kusur.push('oturum-kapisi-yok');
+      if (!/pointerdown/.test(kapi) || !/wheel/.test(kapi)) kusur.push('etkilesim-iptali-yok');
+      if (!/setTimeout\(kaldir,\s*\d{4}\)/.test(kapi)) kusur.push('guvenlik-zamanlayicisi-yok');
+      ol('H23 · perde sozlesmesi (bekletmez · iptal edilir · oturumda bir kez · guvenlikli)',
+         kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
     /* H3 · sahne bütçesi: ana sayfa toplam JS ≤ 50 KB (bugünkü kökte 496 KB).

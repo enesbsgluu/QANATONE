@@ -35,6 +35,7 @@ import SSZSozler from '../sahneler/SSZSozler.astro';
 import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
+import Perde from '../parcalar/Perde.astro';
 import { KOK } from '../icerik';
 ---
 <Temel dil="tr" baslik="QANATONE — Talebi yakalayan sistem"
@@ -63,6 +64,11 @@ import { KOK } from '../icerik';
     href="/yeni/font/playfair-display-500i-latin.woff2" />
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
     href="/yeni/font/jetbrains-mono-400-latin.woff2" />
+  {/* PERDE — yalnız ana sayfada (bilinçli sapma): oturumda bir kez
+      görünen bir marka selamını her sayfaya ~1 KB gzip taşımak J1/H18
+      bütçesini 33 sayfaya yayar; girişlerin ezici çoğunluğu ana sayfa.
+      İç sayfaya doğrudan giren perde görmez — karar Enes'te. */}
+  <Perde />
   <div class="ana">
     <SHHero />
     <STSerit />
