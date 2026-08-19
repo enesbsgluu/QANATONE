@@ -1,0 +1,203 @@
+---
+/* S-TE · TESPİT (ücretsiz teşhis aracı) — göçün yedinci sahnesi.
+   Kaynak: kök index.html · markup 4945-4980 · sonuç üreteci `render()`
+   12240 · kota/hata yolu 12220 · CSS `.dg*` 4290-4380.
+   Sapmalar ve gerekçeler stil/tespit.css başında.
+
+   Anayasa: "form ve sonuç iskeleti statik HTML, etkileşim JS'i
+   client:visible. Bu bizim canlı demomuz: ada bütçesi cömert olabilir
+   ama YALNIZ kendi sahnesinde."
+
+   Faz 2'nin S7Arac sahnesinin yerini alır: aynı aracı iki kez göstermek
+   içeriği ikilerdi. Künye numarası (07) burada yaşıyor.
+
+   İÇERİK: başlık/alt metin/düğme/not content.json `strings`ten
+   (dge · dgh · dgp · dgbtn · dgnote) — eski tarafta da öyleydi, parite
+   korundu. Sonuç iskeleti (halka, künye, ızgara) HTML'de doğar; JS
+   yalnız DEĞER yazar, yapı kurmaz.
+
+   ADA JS'İ: tek submit dinleyicisi. `fetch` KULLANICI EYLEMİYLE koşar —
+   V1'in adıyla yazılmış istisnası. Açılışta hiçbir iş yapmaz: sınıf
+   yazmaz, düzen okumaz (S-K turunun 158 ms'lik dersi). */
+import '../stil/tespit.css';
+import { icerik, T, suz } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+const en = dil === 'en';
+/* Halkanın çevresi: r=43 → 2πr. JS aynı sayıyı yeniden hesaplamasın diye
+   burada bir kez yazılır ve stroke-dasharray olarak basılır. */
+const CEVRE = (2 * Math.PI * 43).toFixed(1);
+
+/* KAYNAK VERİSİNDE BOZULMA — `strings.tr.dgh` 2.825 BAYT (31 karakterlik
+   cümle için). İçinde eski sitenin harf-harf düşme iskelesi var ve İKİ
+   KEZ İÇ İÇE: `<span class="lt"><i style="--k: 0;"><span class="lt">
+   <i style="--k: 0;">Ö</i></span></i></span>` — yani eski istemci kendi
+   DOM'unu content.json'a geri yazmış. EN karşılığı temiz (69 bayt).
+   Bozulma TEK anahtarda (tarandı); onarımı panelin işi, rapora yazıldı.
+   Burada iskele AYIKLANIR: `lt` span'ları ve `--k` taşıyan `<i>`ler
+   atılır, tasarımın kendi etiketleri (`<br>`, `span.thin`) KALIR.
+   Yığın tutulur çünkü `</span>` iki farklı açılışı kapatabiliyor. */
+const iskeleAyikla = (m: string): string => {
+  const yigin: string[] = [];
+  return String(m ?? '').replace(/<[^>]+>/g, (etiket) => {
+    if (/^<span class="lt">$/.test(etiket)) { yigin.push('lt'); return ''; }
+    if (/^<span class="thin">$/.test(etiket)) { yigin.push('thin'); return etiket; }
+    if (/^<\/span>$/.test(etiket)) return yigin.pop() === 'thin' ? etiket : '';
+    if (/^<i style="--k/.test(etiket) || /^<\/i>$/.test(etiket)) return '';
+    return etiket;
+  });
+};
+---
+<section class="ste-sahne" data-sahne="te" id="tespit">
+  <div class="ste-ic">
+    <div class="ste-bas">
+      <p class="kunye"><i>07</i>{g('dge')}</p>
+      <h2 class="s1-buyuk" set:html={suz(iskeleAyikla(g('dgh')), ['em', 'b', 'br', 'span.thin'])} />
+      <p class="s1-alt">{g('dgp')}</p>
+    </div>
+
+    <div class="ste-kutu">
+      <form class="ste-form" id="steForm">
+        <label class="ste-giris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+            stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg>
+          <input id="steUrl" name="url" type="text" inputmode="url" autocomplete="url"
+            spellcheck="false" required placeholder={en ? 'yoursite.com' : 'siteniz.com'}
+            aria-label={en ? 'Site address' : 'Site adresi'} />
+        </label>
+        <button class="dugme" type="submit" id="steGo">{g('dgbtn')}</button>
+      </form>
+      <p class="ste-not" set:html={suz(g('dgnote'), ['em', 'b'])} />
+
+      {/* Durum satırı: tarama, hata ve kota mesajları burada yaşar.
+          `aria-live` ile ekran okuyucu sonucu duyar. */}
+      <p class="ste-durum" id="steDurum" role="status" aria-live="polite"></p>
+
+      {/* SONUÇ İSKELETİ — HTML'de doğar, `hidden` ile bekler. JS yalnız
+          değer yazar ve `hidden`i kaldırır; yapı kurmaz (Anayasa). */}
+      <div class="ste-sonuc" id="steSonuc" hidden>
+        <div class="ste-ust">
+          <div class="ste-halka">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="ste-halka-zemin" cx="50" cy="50" r="43" />
+              <circle class="ste-halka-yay" id="steYay" cx="50" cy="50" r="43"
+                stroke-dasharray={CEVRE} stroke-dashoffset={CEVRE} />
+            </svg>
+            <b id="steSkor">0</b>
+          </div>
+          <div class="ste-kunye">
+            <span class="ste-host" id="steHost"></span>
+            <h3 id="steHuküm"></h3>
+            <p id="steOzet"></p>
+            <p class="ste-meta" id="steMeta"></p>
+          </div>
+        </div>
+        <p class="ste-uyari" id="steUyari" hidden></p>
+        <ul class="ste-izgara" id="steIzgara"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* ADA — yalnız bu sahnenin işi. Açılışta SIFIR iş: tek dinleyici
+     bağlanır, o kadar. `fetch` submit içinde (V1 istisnası). */
+  const form = document.getElementById('steForm') as HTMLFormElement | null;
+  if (form) {
+    const url = document.getElementById('steUrl') as HTMLInputElement;
+    const dugme = document.getElementById('steGo') as HTMLButtonElement;
+    const durum = document.getElementById('steDurum') as HTMLElement;
+    const sonuc = document.getElementById('steSonuc') as HTMLElement;
+    const yay = document.getElementById('steYay') as unknown as SVGCircleElement;
+    const skor = document.getElementById('steSkor') as HTMLElement;
+    const host = document.getElementById('steHost') as HTMLElement;
+    const hukum = document.getElementById('steHuküm') as HTMLElement;
+    const ozet = document.getElementById('steOzet') as HTMLElement;
+    const meta = document.getElementById('steMeta') as HTMLElement;
+    const uyari = document.getElementById('steUyari') as HTMLElement;
+    const izgara = document.getElementById('steIzgara') as HTMLElement;
+
+    /* Kalem adları — kaynaktaki sözlüğün taşınan hâli. */
+    const AD: Record<string, string> = {
+      https: 'HTTPS', title: 'Başlık', desc: 'Açıklama', h1: 'H1', canonical: 'Canonical',
+      schema: 'Şema', og: 'Paylaşım kartı', lang: 'Dil', robots: 'robots.txt',
+      sitemap: 'Sitemap', alt: 'Görsel alt metni', imgdim: 'Görsel ölçüsü',
+      imgfmt: 'Görsel biçimi', fonts: 'Yazı tipi', inline: 'Satır içi yük',
+      blocking: 'Engelleyici kaynak', compress: 'Sıkıştırma', cache: 'Önbellek',
+      reqs: 'İstek sayısı', analytics: 'Ölçümleme', contact: 'İletişim',
+      local: 'Yerel işaret', viewport: 'Viewport', favicon: 'Favicon',
+      hreflang: 'hreflang', ssl: 'Sertifika',
+    };
+    /* Hüküm eşikleri kaynaktan (12244): 85/70/50/0. */
+    const HUKUM: [number, string, string][] = [
+      [85, 'Sistem çalışıyor.', 'Yapı sağlam. Buradan sonrası hız ve içerik işi.'],
+      [70, 'İyi ama açık var.', 'Temel yerinde; birkaç kalem talebi kaçırıyor.'],
+      [50, 'Yarısı eksik.', 'Site duruyor ama seni bulan da bulamayan da var.'],
+      [0, 'Talebi kaçırıyor.', 'Bu hâliyle gelen kişi seni bulamıyor ya da ulaşamıyor.'],
+    ];
+    const SEBEP: Record<string, string> = {
+      blocked: 'Bu adres taranamıyor (site otomatik erişimi engelliyor).',
+      unreachable: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
+      quota: 'Günlük tarama hakkı doldu. Yarın yine dene.',
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (dugme.disabled) return;
+      dugme.disabled = true;
+      sonuc.hidden = true;
+      durum.textContent = 'Taranıyor…';
+      try {
+        const r = await fetch('/.netlify/functions/diagnose', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ url: url.value }),
+        });
+        const j = await r.json();
+        if (!j.ok) {
+          durum.textContent = SEBEP[j.reason] || 'Tarama tamamlanamadı.';
+          return;
+        }
+        durum.textContent = typeof j.kalan === 'number'
+          ? `Bugün ${j.kalan} tarama hakkın kaldı.` : '';
+        host.textContent = j.finalUrl || j.host;
+        const h = HUKUM.find(([n]) => j.score >= n)!;
+        hukum.textContent = h[1];
+        ozet.textContent = h[2];
+        meta.textContent = `Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}`
+          + (j.cdn ? ` · ${j.cdn}` : '');
+        uyari.hidden = !j.cfEylul;
+        if (j.cfEylul) uyari.textContent =
+          'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
+        /* Halka ve sayı: renk eşikleri kaynaktan (70/45). */
+        const cevre = Number(yay.getAttribute('stroke-dasharray'));
+        yay.style.stroke = j.score >= 70 ? '#22c55e' : j.score >= 45 ? '#f59e0b' : 'var(--red)';
+        yay.setAttribute('stroke-dashoffset', (cevre * (1 - j.score / 100)).toFixed(1));
+        skor.textContent = String(j.score);
+        /* Sıra kaynaktaki gibi: önce kırmızılar, sonra sarılar, sonra yeşiller. */
+        const sira: Record<string, number> = { fail: 0, warn: 1, ok: 2 };
+        izgara.textContent = '';
+        for (const it of [...(j.items || [])].sort((a: any, b: any) => sira[a.state] - sira[b.state])) {
+          const li = document.createElement('li');
+          li.className = 'ste-kalem ' + it.state;
+          const ad = document.createElement('span');
+          ad.textContent = AD[it.k] || it.k;
+          li.appendChild(ad);
+          if (it.v !== undefined && it.v !== '') {
+            const v = document.createElement('em');
+            v.textContent = String(it.v);
+            li.appendChild(v);
+          }
+          izgara.appendChild(li);
+        }
+        sonuc.hidden = false;
+      } catch (err) {
+        durum.textContent = 'Bağlantı hatası — tekrar dener misin?';
+      } finally {
+        dugme.disabled = false;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,105 @@
+/* ============================================================
+   S-TE · TESPİT (ücretsiz teşhis aracı)
+   Kaynak: kök index.html · markup 4945-4980 · CSS `.dg*` 4290-4380 ·
+   sonuç üreteci 12240.
+
+   Adlandırma: .ste-* içerik · .sus-* süs.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) `ltdrop` HARF GİRİŞİ TAŞINMADI. Kaynakta başlık harf harf düşüyordu
+      (`#tespit .rv.in h2 .lt i`, keyframe `ltdrop`). İskelet turunda
+      başlık sayfanın kendi başlık dilini kullanıyor; harf animasyonu
+      giydirme turunun kalemi. Envanterdeki karşılığı: "S-TE · ltdrop —
+      CSS girişi", yani taşınacak ama süs olarak.
+   2) TARAMA ANİMASYONU (`.dgscan`, ışık süpürmesi) taşınmadı; yerine
+      `aria-live` taşıyan bir durum satırı var. Ekran okuyucu için de
+      daha iyi: eskiden tarama görsel bir çubuktu, şimdi metin.
+   3) ÖNERİ LİSTESİ (`.dgfix` — en kötü üç kalem + WhatsApp çağrısı)
+      taşınmadı. Kaynakta her kalem için iki cümlelik bir sözlük var
+      (`D.f`, i18n'li); onu taşımak sahnenin metin yükünü ikiye katlar.
+      Bayt eşiği dersi (H18) yüzünden iskelet turuna girmedi — kalemler
+      ve durumları zaten görünüyor, hangi kalemin kırmızı olduğu belli.
+   4) Skor sayacı (0'dan skora sayan rAF animasyonu) taşınmadı: sayı
+      doğrudan yazılıyor. Halkanın dolması CSS geçişiyle duruyor.
+   5) Kalem sözlüğü (AD) bileşenin içinde, content.json'da karşılığı yok
+      — şeritteki araç listesiyle aynı durum, panelin işi değil.
+   ============================================================ */
+
+.ste-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ste-bas{max-width:62ch;margin-bottom:clamp(20px,2.6vw,34px)}
+.ste-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.ste-bas h2 .thin{font-weight:300;color:var(--tx3)}
+.ste-bas p{margin-top:clamp(11px,1.3vw,18px)}
+
+.ste-kutu{border:1px solid var(--line);border-radius:20px;
+  background:var(--card);padding:clamp(18px,2.4vw,32px)}
+
+/* ---- form ---- */
+.ste-form{display:flex;gap:10px;flex-wrap:wrap}
+.ste-giris{flex:1 1 260px;display:flex;align-items:center;gap:10px;
+  border:1px solid var(--line2);border-radius:999px;
+  padding:0 18px;background:rgba(255,255,255,.03)}
+.ste-giris svg{flex:none;width:18px;height:18px;color:var(--tx4)}
+.ste-giris input{flex:1;background:none;border:0;color:var(--tx);
+  font:inherit;font-size:.95rem;padding:14px 0;min-width:0}
+.ste-giris input::placeholder{color:var(--tx4)}
+.ste-giris input:focus{outline:none}
+.ste-giris:focus-within{border-color:var(--red)}
+.ste-form .dugme{flex:none}
+.ste-not{margin-top:12px;color:var(--tx3);font-size:.82rem;line-height:1.5}
+.ste-not b{color:var(--tx2)}
+.ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
+
+/* ---- sonuç ---- */
+.ste-sonuc{margin-top:clamp(16px,2vw,24px);border-top:1px solid var(--line);
+  padding-top:clamp(16px,2vw,24px)}
+.ste-ust{display:flex;gap:clamp(16px,2.4vw,28px);align-items:center;flex-wrap:wrap}
+.ste-halka{position:relative;flex:none;width:104px;height:104px}
+.ste-halka svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ste-halka circle{fill:none;stroke-width:7;stroke-linecap:round}
+.ste-halka-zemin{stroke:rgba(255,255,255,.08)}
+.ste-halka-yay{stroke:var(--red)}
+.ste-halka b{position:absolute;inset:0;display:grid;place-items:center;
+  font-size:1.7rem;letter-spacing:-.03em}
+.ste-kunye{flex:1 1 240px;min-width:0}
+.ste-host{display:block;font-family:var(--f-tek);font-size:.76rem;
+  letter-spacing:.1em;color:var(--tx4);margin-bottom:6px;
+  overflow-wrap:anywhere}
+.ste-kunye h3{font-size:clamp(1.06rem,1.8vw,1.4rem);letter-spacing:-.02em;
+  margin-bottom:6px}
+.ste-kunye p{color:var(--tx2);font-size:.92rem;line-height:1.55}
+.ste-meta{margin-top:8px;font-family:var(--f-tek);font-size:.76rem;
+  color:var(--tx4)}
+.ste-uyari{margin-top:14px;border:1px solid rgba(239,35,60,.34);
+  border-radius:12px;padding:12px 14px;color:var(--tx2);font-size:.86rem;
+  line-height:1.5;background:rgba(239,35,60,.06)}
+
+.ste-izgara{list-style:none;display:grid;gap:8px;margin-top:clamp(14px,2vw,22px);
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.ste-kalem{display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  font-size:.86rem;color:var(--tx2)}
+/* durum noktası: renk TEK yerde, üç sınıf */
+.ste-kalem::before{content:'';flex:none;width:8px;height:8px;border-radius:50%;
+  background:var(--tx4)}
+.ste-kalem.ok::before{background:#22c55e}
+.ste-kalem.warn::before{background:#f59e0b}
+.ste-kalem.fail::before{background:var(--red)}
+.ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
+  font-size:.74rem;color:var(--tx4)}
+
+/* ---- hareket: yalnız halkanın dolması, transform/opacity dışı tek
+   istisna `stroke-dashoffset` — SVG'de uzunluk animasyonu düzen
+   hesabı üretmez, kompozitte kalır. ---- */
+.ste-halka-yay{transition:stroke-dashoffset .9s var(--e),stroke .3s var(--e)}
+
+@media (hover:hover) and (pointer:fine){
+  .ste-kalem{transition:border-color .3s var(--e)}
+  .ste-kalem:hover{border-color:var(--line2)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .ste-halka-yay{transition:none}
+  .ste-kalem{transition:none}
+}
