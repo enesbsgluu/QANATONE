@@ -167,9 +167,18 @@
 .sh-void::before{content:'';position:absolute;inset:0;border-radius:999px;
   background:radial-gradient(60% 100% at 50% 100%,rgba(239,35,60,.55),transparent 72%);
   opacity:0;transition:opacity .45s var(--e)}
-.sh-void:hover{border-color:rgba(239,35,60,.7);transform:translateY(-2px);
-  box-shadow:0 14px 44px -14px var(--red-glow)}
-.sh-void:hover::before{opacity:1}
+/* HOVER KAPISI (19 Agu, S-P turunda GERCEK TARAYICIDA olculdu):
+   dokunmatikte `:hover` dokununca TAKILIR ve bir daha birakmaz. Bu iki
+   satir kapisizken telefonda dugmeye bir kez dokunmak 44 px bulanik bir
+   golgeyi kalici hale getiriyordu (olcum: dokunmadan once box-shadow
+   `none`, dokunduktan sonra `rgba(239,35,60,.45) 0 14px 44px -14px`) —
+   Anayasa madde 7'nin mobilde yasakladigi kalici bulanik katmanin ta
+   kendisi. Masaustunde hicbir sey degismedi. Bekcisi H14. */
+@media(hover:hover) and (pointer:fine){
+  .sh-void:hover{border-color:rgba(239,35,60,.7);transform:translateY(-2px);
+    box-shadow:0 14px 44px -14px var(--red-glow)}
+  .sh-void:hover::before{opacity:1}
+}
 .sh-void:active{transform:scale(.965);transition-duration:.08s}
 .sh-void span{position:relative;z-index:1}
 
@@ -198,7 +207,13 @@
 @keyframes sh-halka{
   from{transform:translate(-50%,-50%) rotate(0turn)}
   to{transform:translate(-50%,-50%) rotate(1turn)}}
-.sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px rgba(239,35,60,.95))}
+/* Ayni gerekce: dokunmatikte takilan hover, halkanin filtresini 7 px'ten
+   12 px'e cikarip orada birakiyordu — donen bir elemanda kare basina
+   filtre demek. Halkanin TABAN filtresi (7 px) hala kapisiz ve mobilde
+   de kosuyor; o AYRI bir kalem, raporda acik duruyor (gorunum karari). */
+@media(hover:hover) and (pointer:fine){
+  .sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px rgba(239,35,60,.95))}
+}
 /* maske farki desteklenmiyorsa halkayi hic gosterme — yoksa dugmeyi doldurur */
 @supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
   .sus-halka{display:none}}
