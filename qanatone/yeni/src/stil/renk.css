@@ -1,0 +1,77 @@
+/* ============================================================
+   QANATONE RENK SİSTEMİ — tek kaynak.
+   Kaynak belge: RENK-SISTEMI.md (19 Ağu 2026, Enes onaylı).
+   Renk buradan çıkar; sahne CSS'inde ham hex yazılmaz.
+
+   DURUM: BU DOSYA HENÜZ HİÇBİR YERE BAĞLI DEĞİL (bilerek).
+   İskelet turunda sahneler mevcut renkleriyle kalır — sahne sahne renk
+   değiştirmek yarım bir dil üretir (belgenin "Sıra" bölümü). Giydirme
+   turu başlarken tek satırla devreye girer:
+       layouts/Temel.astro → import '../stil/renk.css';
+   O ana kadar burada durur, bayt maliyeti sıfırdır.
+
+   ROLLER (belgedeki tablo)
+     zemin      #1C1C28  Deep Navy — sayfanın tabanı
+     derinlik   #1A0A0F  Burgundy  — katman ve sıcaklık (hero atmosferi,
+                                     kart içi derinlik, bölüm geçişi)
+     aksan      #1EC1CB  Cyan      — TEK vurgu rengi (düğme, aktif durum,
+                                     veri çizgisi, imza öğe)
+     metin      #EDEDF2            — başlık ve gövde
+     metin-2    #8A8A99            — alt metin, künye, etiket, ince çizgi
+   Türevler (ayrı renk değil, hesaplanmış):
+     yuzey      #2A2A36  navy + %6 beyaz — kart zemini
+     cizgi      #3A3A47                  — sınır, ayraç
+     aksan-sonuk cyan %14              — odak halkası, seçili durum zemini
+
+   KULLANIM KURALLARI (belgeden, sahne notlarının bağlanacağı yer)
+   1. Navy ve burgundy ASLA doğrudan yan yana konmaz (kontrast 1,14:1 —
+      ölçüldü, sınır görünmez). Araya çizgi, geniş boşluk ya da yumuşak
+      degrade girer. İkisiyle bölüm ayrılmaz.
+   2. Cyan CİMRİ kullanılır: ekran başına en fazla iki cyan bölge.
+      Cömert kullanılırsa sıradan bir "yapay zekâ mavisi" olur.
+   3. Cyan zemin üstünde metin KOYU olur (zemin ya da derinlik), beyaz
+      değil. Ölçüm kuralı doğruluyor: navy/cyan 7,66:1 ve burgundy/cyan
+      8,72:1'e karşılık BEYAZ/cyan yalnızca 1,88:1.
+   4. Metin rengi palete dahildir: sahne CSS'inde `#fff`, `#eee`,
+      `rgba(255,255,255,…)` gibi serbest beyazlar yazılmaz.
+   5. Renk anlam taşır: cyan sistem/çözüm/akış anlarında, burgundy
+      kayıp/sıcaklık/derinlik anlarında. Hangi rolde olduğu sahne notuna
+      yazılır.
+   6. Kontrast tabanı: gövde metni ≥ 4,5:1, büyük başlık ≥ 3:1.
+
+   ÖLÇÜM (19 Ağu, WCAG 2.x bağıl parlaklık formülüyle burada hesaplandı;
+   belgedeki değerlerle iki yerde ayrışıyor, ikisi de rapora yazıldı):
+     aksan / zemin            7,66:1   (belge 7,7 — uyuyor)
+     aksan / derinlik         8,72:1   (belge 8,7 — uyuyor)
+     metin / zemin           14,44:1   (belge 15 — yuvarlama)
+     metin-2 / zemin          4,96:1   (belge 5,2 — taban 4,5'in üstünde)
+     metin / yuzey           12,14:1
+     metin-2 / yuzey          4,16:1   ⚠ TABANIN ALTINDA (kural 6: ≥4,5)
+     zemin / derinlik         1,14:1   (kural 1'in sebebi)
+   ⚠ AÇIK KALEM: ikincil metin KART ZEMİNİ üstünde 4,16:1 veriyor, yani
+   `--metin-2` + `--yuzey` birleşimi kural 6'yı KARŞILAMIYOR. Giydirme
+   turundan önce ikisinden biri karara bağlanmalı: ya `--metin-2` bir
+   tık açılır, ya ikincil metin kart üstünde kullanılmaz. Token değerleri
+   belgedeki hâliyle duruyor — palet kararı Enes'in, ben değiştirmedim.
+   (Belgedeki "navy metin / cyan 9,5:1" satırı ölçümle tutmuyor: kontrast
+   simetriktir, o çift `aksan / zemin` ile aynı orandır → 7,66:1. Sayı
+   düşse de kural değişmiyor, 7,66 zaten tabanın çok üstünde.)
+
+   GİYDİRME TURUNDA GELECEK DENETİM KURALI (şimdi AÇILAMAZ):
+   "sahne CSS'lerinde ham renk değeri (hex/rgb/hsl) bulunmaz; renk yalnız
+   var(--…) ile gelir; istisna token dosyası." Bugün açılırsa denetim
+   kırmızıya döner ve deploy düşer — sahneler hâlâ ham renkle dolu.
+   Renk göçüyle AYNI commit'te açılacak ve hata enjekte edilerek
+   kırmızıya döndürülmeden yeşil sayılmayacak.
+   ============================================================ */
+
+:root{
+  --zemin:#1C1C28;
+  --derinlik:#1A0A0F;
+  --aksan:#1EC1CB;
+  --metin:#EDEDF2;
+  --metin-2:#8A8A99;
+  --yuzey:#2A2A36;
+  --cizgi:#3A3A47;
+  --aksan-sonuk:rgb(30 193 203 / .14);
+}
