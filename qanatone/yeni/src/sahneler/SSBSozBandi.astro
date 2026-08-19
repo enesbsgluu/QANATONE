@@ -1,0 +1,67 @@
+---
+/* S-SB · SÖZ BANDI — göçün dokuzuncu sahnesi.
+   Kaynak: kök index.html · markup 5322-5330 · CSS 2178-2208 ·
+   bayrak `settings.testi.on` (5633-5638) · kapı `t-nosoz` (2178, 7507).
+
+   ANAYASA'NIN BU SAHNEYE DÜŞEN CÜMLESİ AYNEN:
+   "`testi.on` bayrağı sürer ama yeni mimaride iyileşir: kapalıyken bölüm
+   derlemede HİÇ basılmaz (eski `display:none` çözümü ham HTML'de uydurma
+   sözleri botlara gösteriyordu; artık göstermez, E-E-A-T kazancı)."
+
+   İDDİA ÖLÇÜLDÜ (19 Ağu): canlı kök sayfa çekildi ve ham HTML'inde üç
+   uydurma sözün BİRİNCİSİ ARANDI — VAR. Yani bant CSS ile gizliyken
+   metin sayfada duruyor ve JS koşmayan bot onu okuyor. Kaynağın kendi
+   yorumu da sözlerin uydurma olduğunu yazıyor ("sitedeki üç söz
+   uydurmaydı; gerçek müşteri cümlesi girilene kadar bant görünmüyor").
+
+   BU BİLEŞEN BAYRAK KAPALIYKEN HİÇBİR ŞEY BASMAZ — ne bölüm, ne metin,
+   ne de boş bir kap. Bayrak açılınca bant derlemede doğar.
+   Bekçisi denetimdeki H22.
+
+   Bayrağın bugünkü değeri: content.json `settings.testi` TANIMSIZ, eski
+   varsayılan da `on:0` — yani KAPALI. Enes panelden gerçek sözleri
+   yazıp açtığında bu dosyaya dokunmaya gerek yok. */
+import '../stil/sozband.css';
+import { icerik, T } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const ayar = (icerik.settings && icerik.settings.testi) || {};
+const acik = !!ayar.on;
+/* Sözü ve unvanı OLAN kayıtlar — yarım kayıt banda çıkmaz. */
+const sozler = acik
+  ? (icerik.testimonials || []).filter((t: any) => T(t.q, dil) && T(t.role, dil))
+  : [];
+const bas = (ad: string) => String(ad || '').trim().slice(0, 2).toUpperCase();
+---
+{sozler.length > 0 && (
+  <section class="ssb-sahne" data-sahne="sb">
+    {/* Sıra değişimi radyo + kardeş seçiciyle: ada JS'i 0. Otomatik
+        dönüş (kaynaktaki `interval:7`) bu turda gelmedi — sayfa açılışında
+        koşan bir zamanlayıcı demek; sözler el ile geziliyor. */}
+    <div class="ssb-kap">
+      {sozler.map((_: any, i: number) => (
+        <input class="sus-radyo" type="radio" name="ssb" id={`ssb-${i}`} checked={i === 0} />
+      ))}
+      <div class="ssb-ic">
+        {sozler.map((t: any, i: number) => (
+          <figure class={`ssb-soz ssb-soz-${i}`}>
+            <blockquote>{T(t.q, dil)}</blockquote>
+            <figcaption>
+              <span class="ssb-avatar" aria-hidden="true">{bas(t.name)}</span>
+              <span class="ssb-kim"><b>{t.name}</b><span>{T(t.role, dil)}</span></span>
+            </figcaption>
+          </figure>
+        ))}
+        {sozler.length > 1 && (
+          <div class="ssb-nokta" role="radiogroup"
+            aria-label={dil === 'en' ? 'Choose a quote' : 'Söz seç'}>
+            {sozler.map((t: any, i: number) => (
+              <label for={`ssb-${i}`}><span class="sus-gizli">{t.name}</span></label>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
