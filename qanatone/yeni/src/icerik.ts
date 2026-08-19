@@ -39,15 +39,18 @@ export const basAd = (v: unknown, dil: Dil = 'tr'): string => {
    Once HER SEY kacar, sonra yalniz izin verilen etiketler geri acilir —
    kara liste degil. Anayasa madde 6: "set:html YALNIZ content.json yazi
    govdesi icin ve TEK yardimci fonksiyondan gecerek".
-   Hero (em/b) ve S-K katman (em/b + span.thin) ayni fonksiyonu farkli
-   izin kumesiyle cagirir; kume genisletmek bilincli bir karardir, kaza
-   sonucu olamaz. */
-export type Izin = 'em' | 'b' | 'span.thin';
+   Hero (em/b), S-K katman (em/b + span.thin) ve S-A akis (+ br) ayni
+   fonksiyonu farkli izin kumesiyle cagirir; kume genisletmek bilincli
+   bir karardir, kaza sonucu olamaz. `br` tek basina kapali etiket
+   almadigi icin ayri ele alinir. */
+export type Izin = 'em' | 'b' | 'br' | 'span.thin';
 export const suz = (m: unknown, izin: Izin[] = ['em', 'b']): string => {
   let t = String(m ?? '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   for (const i of izin) {
-    if (i === 'span.thin') {
+    if (i === 'br') {
+      t = t.replace(/&lt;br\s*\/?&gt;/g, '<br>');
+    } else if (i === 'span.thin') {
       t = t.replace(/&lt;span class="thin"&gt;/g, '<span class="thin">')
            .replace(/&lt;\/span&gt;/g, '</span>');
     } else {

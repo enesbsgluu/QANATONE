@@ -1,0 +1,118 @@
+/* ============================================================
+   S-A · AKIŞ (hizmet şeridi) — turun en ağır kalemi.
+   Kaynak: kök index.html · CSS 2653-4290 (~927 satır ak-*, 27 keyframe)
+   · markup 4803-4818 · `__akisRender` 7064 · `akDemo` 6917.
+
+   Adlandırma: .sa-* içerik · .sus-* süs.
+
+   BU TURDA NE TAŞINDI: iskelet — şerit, kart, içerik, bağlantı, tonlar.
+   Ada JS'i 0.
+
+   ---- 1. SAPMA: SEKİZ MİNİ DEMO SAHNESİ BU TURDA TAŞINMADI ----
+   Kaynakta her kartın içinde kendi küçük canlandırması var:
+     akd-ads   (sorgu yazılır, ilan rakiplerin üstünde belirir)
+     akd-meta  (akışta reklam, ilgi → tıklama)
+     akd-agent (gece gelen mesaj, ajan yanıtı, CRM'e düşüş)
+     akd-chat  (yapay zekâ yanıtında marka anılır)
+     akd-serp  (arama sonucunda yükselme)
+     akd-tool  (fiyat/randevu aracı çalışır)
+     akd-site  (yüzey kurulur)
+     akd-trust (doğrulanmış alıcı künyesi)
+   Toplam 27 keyframe (akType akCaret akRise akChip akFeed akSpon akBlink
+   akJob akJobT akPk akPulse akStep akUp akDown akIn akScroll akCta akSend
+   akDone akCur akCount akPrIn akFill akKnob akRow akTick akTickIn) ve
+   ~927 satır CSS.
+   NEDEN ŞİMDİ DEĞİL: bu tur İSKELET turu (Enes, 19 Ağu) — amaç eski
+   görüntüyü birebir geri getirmek değil, yeni görsel dili taşıyacak ada
+   mimarisini kurmak; giydirme ayrı tur. Sahnenin İŞİ (beş hizmeti
+   tanıtmak ve sayfalarına götürmek) bu turda tam çalışıyor; canlandırma
+   o işin süsü değil ama şu an eksik olması içeriği eksiltmiyor.
+   Geldiğinde Anayasa'nın üç şartı hazır bekliyor: (a) durdurma
+   `animation-play-state` ile olacak, `animation-name` değiştirerek
+   DEĞİL (eskisi sıfırdan başlatıyordu) (b) play-state kart KÖKÜNE
+   yazılacak, `.akd *` evrensel seçicisiyle değil (tam alt ağaç stil
+   hesabı üretiyordu) (c) `content-visibility:auto` kullanılmayacak.
+   Görünürlük kapısı (IO + `aklive`) de o turda gelir — şu an dönen
+   hiçbir şey olmadığı için kapıya gerek yok, ada JS'i 0 kalıyor.
+
+   ---- 2. SAPMA: kart görseli yerine ton bandı ----
+   Demo yokken kartın üst yarısı kaynağın kendi kart tonuyla (--tA/--tB)
+   dolu bir bant ve hizmetin ikonu. Yer tutucu DEĞİL, geçerli bir sade
+   hâl: kart kimliğini renk taşıyor, giydirme turunda bandın yerine
+   sahne girer.
+
+   ---- 3. SAPMA: `.akpin` (yapışkan başlık) taşınmadı ----
+   Eski şerit pinli bir kabın içindeydi. Yatay kaydırma + dikey pin aynı
+   anda mobilde kaydırma yönü çakışması üretiyor; iskelet turunda şerit
+   sayfayla birlikte akıyor. Pin kararı giydirme turunun.
+
+   ---- 4. SAPMA: sürükleme ve ok düğmeleri taşınmadı ----
+   Kaynakta fare sürüklemesi + iki ok düğmesi vardı (`akisScrollKur`,
+   ~1,6 KB JS). S-K turunun ölçülmüş dersi: 233 baytlık bir ada betiği
+   bile açılışta LCP'yi 158 ms itebiliyor. Yerli kaydırma dokunmatikte
+   ve izleme yüzeyinde zaten çalışıyor; klavye için şerit odaklanabilir
+   (`tabindex="0"`, ok tuşlarıyla kayar). Fare tekerleği ile yatay
+   kaydırma masaüstünde eksik kalan tek yol — düğmeler istenirse
+   giydirme turunda ölçülerek eklenir.
+   ============================================================ */
+
+.sa-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.sa-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
+.sa-bas .kunye{display:inline-flex;align-items:center;gap:8px}
+.sa-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sa-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.sa-bas h2 .thin{font-weight:300;color:var(--tx3)}
+.sa-bas p{margin-top:clamp(11px,1.3vw,18px)}
+
+/* ---- şerit ----
+   Kabın kendisi tam genişlikte; iç dolgu `.sa-ic` ile aynı hizada
+   başlasın diye `scroll-padding-inline` ve ilk/son kartın payı
+   `::before/::after` yerine dolguyla veriliyor (fazladan eleman yok). */
+.sa-ray{display:flex;gap:clamp(12px,1.4vw,18px);
+  overflow-x:auto;overflow-y:hidden;
+  padding:2px clamp(20px,4vw,40px) clamp(14px,2vw,22px);
+  scroll-snap-type:x proximity;scroll-padding-inline:clamp(20px,4vw,40px);
+  scrollbar-width:none}
+.sa-ray::-webkit-scrollbar{display:none}
+/* klavyeyle odaklanınca görünür olsun (odak halkası bastırılmıyor) */
+.sa-ray:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+
+.sa-kart{flex:0 0 clamp(260px,78vw,360px);scroll-snap-align:start;
+  display:flex;flex-direction:column;
+  border:1px solid var(--line);border-radius:18px;overflow:clip;
+  background:var(--card);color:var(--tx);text-decoration:none}
+/* ton bandı — kartın kimliği (2. sapma) */
+.sa-gorsel{display:grid;place-items:center;aspect-ratio:16/9;
+  background:linear-gradient(140deg,var(--tA,#2a2a36),transparent 62%),
+             radial-gradient(80% 90% at 78% 8%,var(--tB,#444),transparent 70%),
+             var(--card)}
+.sa-ikon{width:34px;height:34px;color:#fff;opacity:.9}
+.sa-yazi{display:flex;flex-direction:column;gap:8px;
+  padding:clamp(16px,1.8vw,22px) clamp(16px,1.8vw,22px) clamp(18px,2vw,24px)}
+.sa-yazi h3{display:flex;align-items:center;gap:10px;
+  font-size:clamp(1.02rem,1.5vw,1.24rem);line-height:1.2;letter-spacing:-.02em}
+.sa-ok{flex:none;margin-left:auto;width:15px;height:15px;color:var(--tx4)}
+.sa-yazi p{color:var(--tx2);font-size:clamp(.86rem,.95vw,.95rem);line-height:1.55}
+/* son kart: görseli yok, yazı ortada dursun */
+.sa-tum .sa-yazi{justify-content:center;flex:1}
+
+@media(min-width:901px){
+  .sa-kart{flex-basis:clamp(300px,26vw,360px)}
+}
+
+/* ---- hover: yalnız gerçek imleçte ---- */
+@media (hover:hover) and (pointer:fine){
+  .sa-kart{transition:border-color .3s var(--e)}
+  .sa-ok{transition:color .3s var(--e),transform .3s var(--e)}
+  .sa-kart:hover{border-color:var(--line2)}
+  .sa-kart:hover .sa-ok{color:var(--red-soft);transform:translate(3px,-3px)}
+}
+
+/* ---- hareket azaltma: durduran seçici hareketi verenin aynısı ---- */
+@media (prefers-reduced-motion: reduce){
+  .sa-kart{transition:none}
+  .sa-ok{transition:none}
+  .sa-kart:hover .sa-ok{transform:none}
+  .sa-ray{scroll-behavior:auto}
+}

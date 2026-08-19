@@ -1,0 +1,86 @@
+---
+/* S-A · AKIŞ — göçün beşinci sahnesi, kaynağın en ağır bölümü.
+   Kaynak: kök index.html · markup 4803-4818 · CSS 2653-4290 (~927 satır,
+   27 `ak*` keyframe) · üreteç `__akisRender` 7064 · `akDemo` 6917 ·
+   `akLiveKur` 7092 · `akisScrollKur` 7099.
+
+   BU TURDA NE TAŞINDI: sahnenin İSKELETİ — beş hizmet kartı + "tüm
+   hizmetler" kartı, yatay şerit, içerik ve bağlantılar. Sekiz mini demo
+   sahnesi (27 keyframe) BU TURDA TAŞINMADI; gerekçesi ve listesi
+   stil/akis.css başında, kararı giydirme turunun.
+
+   EN BÜYÜK KAZANÇ İÇERİKTE: eski tarafta bu bölümün markup'ı tek satırdı
+   (`<div class="aktrack" id="akTrack"></div>`) ve kartların tamamını
+   `__akisRender` basıyordu — yani JS koşmayan bot BU BÖLÜMDE HİÇBİR ŞEY
+   görmüyordu: beş hizmetin adı da, anlatımı da, hizmet sayfalarına giden
+   beş bağlantı da yoktu. Artık derlemede HTML'e pişiyor (madde 1).
+
+   Ada JS'i: YOK. Yatay şerit yerli kaydırma + `scroll-snap`; klavye için
+   şerit odaklanabilir. Eski taraftaki sürükleme ve ok düğmeleri bu turda
+   gelmedi (aşağıda 4. sapma). */
+import '../stil/akis.css';
+import Ikon from '../parcalar/Ikon.astro';
+import { icerik, T, suz } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const en = dil === 'en';
+
+/* Şeritte kaç kart duracağı ve HANGİLERİ: kaynağın kuralı aynen —
+   hizmet sırasının ilk beşi, sıra panelden değiştirilebilir (kaynak
+   yorumu 7049). Dokuzunun tamamı burada dururken bölüm sayfanın en ağır
+   metin bloğuydu. */
+const AKIS_KART = 5;
+/* Kartta hizmet metninin YALNIZ ilk cümlesi durur (kaynak `ilkCumle`
+   7058): tamamı zaten hizmet sayfasında; kartta dört cümle okutmak aynı
+   metni ana sayfada üçüncü kez basmak demekti. Nokta + boşluk + büyük
+   harf aranır, "3,1×" gibi ondalıklarda kesmesin diye. */
+const ilkCumle = (t: string): string => {
+  const m = String(t || '').match(/^[\s\S]*?[.!?](?=\s+[A-ZÇĞİÖŞÜ])/);
+  return m ? m[0] : String(t || '');
+};
+/* Kart tonu — kaynak `HUE` (6889) ve `__akisRender`in --tA/--tB'si. */
+const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+const ton = (i: number) => {
+  const h = HUE[i % HUE.length][0];
+  return `--tA:hsl(${h} 72% 30%);--tB:hsl(${h} 85% 56%)`;
+};
+const kartlar = (icerik.services || []).slice(0, AKIS_KART);
+---
+<section class="sa-sahne" data-sahne="a">
+  <div class="sa-ic">
+    <div class="sa-bas">
+      <p class="kunye"><i></i>{g('akk')}</p>
+      <h2 class="s1-buyuk" set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
+      <p class="s1-alt">{g('akp')}</p>
+    </div>
+  </div>
+
+  {/* Şerit: yerli yatay kaydırma. `tabindex` klavyeyle kaydırılabilsin
+      diye (ada JS'i olmadan erişilebilirliğin karşılığı budur). */}
+  <div class="sa-ray" tabindex="0" role="group"
+    aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
+    {kartlar.map((h: any, i: number) => (
+      <a class="sa-kart" href={`${B}/hizmet/${h.slug}`} style={ton(i)}>
+        <span class="sa-gorsel" aria-hidden="true"><Ikon ad={h.icon} sinif="sa-ikon" /></span>
+        <span class="sa-yazi">
+          <h3>{T(h.title, dil)}<Ikon ad="arrow" sinif="sa-ok" /></h3>
+          <p>{ilkCumle(T(h.text, dil))}</p>
+        </span>
+      </a>
+    ))}
+    {/* Kalan hizmetler kaybolmasın: şeridin sonunda arşive giden kart.
+        Kök sitenin /hizmetler ızgarası — yeni kabukta henüz o rota yok,
+        deste sahnesindeki /projeler kararının aynısı. */}
+    <a class="sa-kart sa-tum" href="/hizmetler" data-astro-prefetch="false">
+      <span class="sa-yazi">
+        <h3>{en ? 'All services' : 'Tüm hizmetler'}<Ikon ad="arrow" sinif="sa-ok" /></h3>
+        <p>{en ? 'Nine services, one line. See the whole list.'
+               : 'Dokuz hizmet, tek hat. Listenin tamamını gör.'}</p>
+      </span>
+    </a>
+  </div>
+</section>
