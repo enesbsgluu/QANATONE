@@ -70,12 +70,19 @@
 
 .sp-deste{position:relative}
 
-/* TABAN = MOBİL (Anayasa madde 4: "(pointer:coarse) tarafında pin YOK").
-   Pin, ölçek animasyonu, gölge, blur ve gri filtre tabanda HİÇ YOK;
-   masaüstü onları ekliyor. Böylece cihaz kısıtı bir şeyi SÖNDÜRMÜYOR
-   (H4'ün konusu olan `animation:none` mobil blokta hiç geçmiyor) —
-   mobil zaten sade doğuyor, deste dikey akıyor. */
-.sp-kart{margin-bottom:18px}
+/* TABAN = MOBİL. Yığın MOBİLDE DE STICKY (Enes kararı, 19 Ağu):
+   Anayasa'nın "mobilde pin YOK" maddesi GSAP pinlerini kapsar — kaydırmayı
+   kilitleyip sahneyi elinde tutan, resize'da kendini baştan kuran, kare
+   başına iş üreten pin. CSS `position:sticky` o ailenin dışında: düzenin
+   kendi işi, JS yok, kaydırma dinleyicisi yok, yeniden kurulum yok.
+   Eski kaynak da mobilde sticky'ydi (CSS 1287-1288: `top:calc(72px +
+   var(--i)*10px)`), taşınan davranış bu.
+   Tabanda YOK olanlar mobil sağlamlık kalemleri, hepsi ÖLÇÜLMÜŞ sebeple:
+   gölge (ölçeklenen katmanda her karede yeniden rasterleşiyordu, kural
+   111), `filter` (mobil görsel gri PİŞMİŞ geliyor, kural 109),
+   `backdrop-filter` (Anayasa madde 7). Bunlar cihaz kısıtıyla
+   SÖNDÜRÜLMÜYOR — tabanda hiç doğmuyorlar, masaüstü ekliyor (H4). */
+.sp-kart{position:sticky;top:calc(72px + var(--i,0)*10px);margin-bottom:18px}
 .sp-govde{display:grid;grid-template-columns:1fr;overflow:hidden;
   border-radius:clamp(20px,2.4vw,30px);border:1px solid var(--line);
   background:var(--card);transform-origin:top center;
@@ -139,9 +146,12 @@
   color:var(--tx);text-decoration:none;font-weight:600;font-size:.92rem}
 .sp-tum svg{width:16px;height:16px}
 
-/* Dokunmatik geri bildirimi (kaynak CSS 2627). Mobilde ölçek
-   animasyonu yok, o yüzden burada gerçekten görünür. */
-.sp-kart:active .sp-govde{transform:scale(.985);transition:transform .1s ease-out}
+/* Dokunmatik geri bildirimi (kaynak CSS 2627). `transform` DEĞİL `scale`
+   özelliği: deste artık mobilde de kaydırma-güdümlü küçülme animasyonu
+   koşuyor ve koşan animasyon `transform`u kilitler — basma geri bildirimi
+   sessizce ölürdü. `scale`/`rotate`/`translate` ayrı özellikler, matrisle
+   ÇARPILARAK birleşirler; ikisi de yaşıyor. */
+.sp-kart:active .sp-govde{scale:.985;transition:scale .1s ease-out}
 
 /* ============ MASAÜSTÜ · GÖRSEL DİL ============
    Kapı yalnız GENİŞLİK: `<picture>`ın mobil kaynağı da 900 px'te
@@ -162,38 +172,42 @@
     display:block;overflow:visible}
 }
 
-/* ============ MASAÜSTÜ · PİN + HAREKET ============
-   Kapı `(min-width:901px) and (pointer:fine)` — eski JS'in kapısının
-   birebir CSS karşılığı (`innerWidth>900 && !matchMedia('(pointer:coarse)')`).
-   Dokunmatik geniş ekranda da pin yok: Faz 2 kuralı cihaza bakar,
-   piksele değil. Buzlu cam da burada: `backdrop-filter` mobil
-   sözleşmesinin (pointer:coarse) dışında kalmalı. */
+/* ============ MASAÜSTÜ · PİN ADIMLARI + BUZLU CAM ============
+   Pin her cihazda var; burada yalnız ÖLÇÜLERİ değişiyor (kaynağın
+   masaüstü değerleri) ve mobil sözleşmesinin dışında kalması gereken
+   buzlu cam ekleniyor: `backdrop-filter` (pointer:coarse) tarafında
+   yasak (madde 7), o yüzden kapı hem genişlik hem imleç. */
 @media (min-width:901px) and (pointer:fine){
-  .sp-kart{position:sticky;top:calc(96px + var(--i,0)*13px);
-    margin-bottom:clamp(24px,3.4vw,44px)}
+  .sp-kart{top:calc(96px + var(--i,0)*13px);margin-bottom:clamp(24px,3.4vw,44px)}
   .sp-yil{backdrop-filter:blur(8px)}
+}
 
-  /* 1. BASAMAK — CSS scroll-driven (hedef bu). */
-  @supports (animation-timeline: view()){
-    .sp-deste{view-timeline-name:--sp-deste;view-timeline-axis:block}
-    /* Son kartın ardından gelen yok: eski deck() de ona t=0 veriyordu.
-       Hareket, `animation:none` ile SÖNDÜRÜLMÜYOR — seçici onu hiç
-       kapsamıyor. Fark denetimde de var: cihaz kısıtlı bir blokta
-       `animation:none` yazmak H4'ün konusu, seçiciyi daraltmak değil. */
-    .sp-kart:not(:last-child) .sp-govde{animation:sp-cek linear both;
-      animation-timeline:--sp-deste;
-      animation-range:exit-crossing calc((var(--i) + 1)/var(--n)*100% - 100vh)
-                      exit-crossing calc((var(--i) + 1)/var(--n)*100% - 18vh)}
-  }
+/* ============ KART GEÇİŞİ — HER CİHAZDA ============
+   Cihaz kapısı YOK: geçiş destenin kimliği, süsü değil (H4'ün kendi
+   dili). Eski taraf onu mobilde kapatıyordu çünkü mekanizma kaydırma
+   dinleyicisi + kare başına düzen okumasıydı ve donmanın kaynağıydı;
+   o sebep ortadan kalktı — yeni mekanizma ana iş parçacığına dokunmuyor,
+   ölçüldü (mobil 412x823, CPU 4x: 0 uzun görev). */
 
-  /* 2. BASAMAK — desteklemeyen tarayıcıda IO tabanlı ADIM geçişi.
-     Keyframe değil TRANSITION (madde 7C): kaydırma yön değiştirince
-     mevcut değerden devam eder, sıfırdan başlamaz. Sınıfı ada betiği
-     yazar; betik de yalnız bu koşulda kurulur. */
-  @supports not (animation-timeline: view()){
-    .sp-govde{transition:transform .45s var(--e),opacity .45s var(--e)}
-    .sp-kart.sp-gecti .sp-govde{transform:scale(.94);opacity:.72}
-  }
+/* 1. BASAMAK — CSS scroll-driven (hedef bu). */
+@supports (animation-timeline: view()){
+  .sp-deste{view-timeline-name:--sp-deste;view-timeline-axis:block}
+  /* Son kartın ardından gelen yok: eski deck() de ona t=0 veriyordu.
+     Hareket `animation:none` ile SÖNDÜRÜLMÜYOR — seçici onu hiç
+     kapsamıyor. */
+  .sp-kart:not(:last-child) .sp-govde{animation:sp-cek linear both;
+    animation-timeline:--sp-deste;
+    animation-range:exit-crossing calc((var(--i) + 1)/var(--n)*100% - 100vh)
+                    exit-crossing calc((var(--i) + 1)/var(--n)*100% - 18vh)}
+}
+
+/* 2. BASAMAK — desteklemeyen tarayıcıda IO tabanlı ADIM geçişi.
+   Keyframe değil TRANSITION (madde 7C): kaydırma yön değiştirince
+   mevcut değerden devam eder, sıfırdan başlamaz. Sınıfı ada betiği
+   yazar; betik de yalnız bu koşulda kurulur. */
+@supports not (animation-timeline: view()){
+  .sp-govde{transition:transform .45s var(--e),opacity .45s var(--e)}
+  .sp-kart.sp-gecti .sp-govde{transform:scale(.94);opacity:.72}
 }
 
 /* Yedek yolun görünmez ölçüm izi: akışta duran sıfır yükseklikli
@@ -235,4 +249,5 @@
   .sp-govde{transition:none}
   .sp-kart.sp-gecti .sp-govde{transform:none;opacity:1}
   .sp-kart:active .sp-govde{transition:none}
+  /* deste artik mobilde de pinli: durdurma sozlesmesi de her cihazda */
 }

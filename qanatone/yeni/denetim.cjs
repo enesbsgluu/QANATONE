@@ -573,15 +573,32 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          kusur.length === 0, kusur.slice(0, 3).join(' ') || `${kartlar.length} kart`);
     }
 
-    /* H14 · mobilde pin YOK (Anayasa madde 4, Faz 2 kurali). Eski
-       kaynakta pinler mobilde bilincli ACIKTI ve kasmanin bas
-       supheliydi. Kural sahneye degil DAVRANISA bagli: `position:
-       sticky` yalniz `min-width:901px` tasiyan bir medya blogunun
-       icinde dogabilir. Boylece "mobil taban sade, masaustu ekliyor"
-       dizilimi kilitlenir; kimse tabana sticky yazip mobil blokta
-       kapatamaz (o yol H4'un de konusu). */
+    /* H14 · MOBIL SAGLAMLIK: mobil baglamda PAHALI KATMAN yok.
+       KURAL DEGISTI (19 Agu, Enes karari — sessizce degil, gerekcesiyle):
+       onceki hali `position:sticky` yalniz `min-width:901px` icinde
+       dogabilir diyordu ve mobilde pin'i tumden yasakliyordu. Enes sinirin
+       yanlis yere cizildigini soyledi: Anayasa'nin "mobilde pin YOK"
+       maddesi GSAP pinlerini kapsar — kaydirmayi kilitleyen, resize'da
+       kendini baştan kuran, kare basina is ureten pin. CSS `position:
+       sticky` o ailenin disinda: duzenin kendi isi, JS yok, dinleyici yok.
+       (Eski kaynak da mobilde sticky'ydi, CSS 1287.)
+
+       Kural o yuzden PIN'i degil MALIYETI olcuyor — mobilde kasmanin
+       olculmus dort kaynagi bir daha tabana yazilamaz:
+         filter / backdrop-filter  kural 109 + Anayasa madde 7
+         will-change               kalici kompozit katman
+         box-shadow                olceklenen katmanda her karede yeniden
+                                   rasterlesiyordu (kural 111)
+       "Mobil baglam" = medya sarmali olmayan taban VE telefonu disarida
+       birakmayan her sarmal. `min-width:901px`, `pointer:fine` ve
+       `hover:hover` telefonu disarida birakir, o yuzden gecerli kapi
+       sayilir; baska her yerde bu dort ozellik kirmizidir.
+       `none` degerleri serbest: kapatmak maliyet uretmez. */
     {
+      const PAHALI = /(?:^|[^a-z-])(filter|backdrop-filter|will-change|box-shadow)\s*:\s*([^;]+)/g;
+      const KAPI = /min-width\s*:\s*901px|pointer\s*:\s*fine|hover\s*:\s*hover/;
       const kusur = [];
+      let olculen = 0;
       const yuru = (txt, kosul) => {
         let i = 0;
         while (i < txt.length) {
@@ -600,22 +617,22 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
           } else {
             const kap = txt.indexOf('}', ac);
             if (kap === -1) break;
-            if (/position\s*:\s*sticky/.test(txt.slice(ac + 1, kap)) &&
-                !/min-width\s*:\s*901px/.test(kosul))
-              kusur.push(bas.slice(0, 30) + (kosul.trim() ? ' @' + kosul.trim().slice(0, 22) : ' @taban'));
+            const gov = txt.slice(ac + 1, kap);
+            if (SAHNE_ONEK.test(bas)) {
+              olculen++;
+              if (!KAPI.test(kosul))
+                for (const m of gov.matchAll(PAHALI))
+                  if (!/^\s*none\b/.test(m[2]))
+                    kusur.push(bas.slice(0, 24) + ':' + m[1]);
+            }
             i = kap + 1;
           }
         }
       };
       yuru(css, '');
-      /* NOT: mesaj SAYIYI yazar. Onceki hali kusur yokken 'sticky yok'
-         diyordu ve bu, kural hic sticky bulamadiginda da ayni cumleydi —
-         yanlis yesilin ta kendisi (H8 dersi). Sayi 0 gorunurse kural
-         olcmuyor demektir. */
-      const stickySayi = (css.match(/position\s*:\s*sticky/g) || []).length;
-      ol('H14 · pin yalniz masaustunde dogar (position:sticky min-width:901px icinde)',
-         kusur.length === 0 && stickySayi > 0,
-         kusur.slice(0, 3).join(' | ') || `${stickySayi} sticky bildirimi`);
+      ol('H14 · mobil baglamda pahali katman yok (filter/backdrop/will-change/golge)',
+         kusur.length === 0 && olculen > 0,
+         kusur.slice(0, 3).join(' | ') || `${olculen} sahne kurali tarandi`);
     }
 
     /* H15 · destenin icerigi ham HTML'de TAM — sahne talimatinin

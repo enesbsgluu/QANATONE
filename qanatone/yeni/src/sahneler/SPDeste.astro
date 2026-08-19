@@ -91,8 +91,9 @@ const en = dil === 'en';
 
 <script>
   /* ARAÇ MERDİVENİNİN 2. BASAMAĞI — yalnız `animation-timeline`
-     desteklemeyen tarayıcıda ve yalnız pin'in olduğu yerde kurulur.
-     Destekleyen tarayıcıda bu betik TEK SATIR bile iş yapmaz.
+     desteklemeyen tarayıcıda kurulur; destekleyen tarayıcıda bu betik
+     TEK SATIR bile iş yapmaz. Cihaz kapısı YOK: pin ve kart geçişi
+     artık her cihazda yaşıyor (Enes kararı, 19 Ağu), yedek yol da öyle.
 
      Neden IO: kaydırma dinleyicisi kurmak sahne talimatının açık
      yasağı ("kart geçişi kaydırma dinleyicisinde düzen okumamalı").
@@ -105,8 +106,7 @@ const en = dil === 'en';
      bir önceki kart küçülür, yukarı kaydırınca kendiliğinden geri
      döner (eski formülün t=1 eşiğinin aynısı). */
   const deste = document.getElementById('spDeste');
-  if (deste && !CSS.supports('animation-timeline', 'view()') &&
-      matchMedia('(min-width:901px) and (pointer:fine)').matches) {
+  if (deste && !CSS.supports('animation-timeline', 'view()')) {
     const kartlar = Array.from(deste.querySelectorAll('.sp-kart'));
     const izler = kartlar.slice(1).map((k) => {
       const iz = document.createElement('i');
