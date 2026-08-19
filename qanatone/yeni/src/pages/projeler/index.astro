@@ -1,0 +1,20 @@
+---
+/* Projeler dizini (TR) — rota turu. Rota adı eskiyle BİREBİR
+   (/projeler + /projeler/<slug>): kesmede bu aile redirect istemez.
+   Baş sözleşmesi eski /projeler ile eşdeğer (S1); şema eski üçlü
+   @graph + ItemList (bilinçli süperküme, projeDizinSema). Bekçisi R2. */
+import Temel from '../../layouts/Temel.astro';
+import ProjeDizin from '../../parcalar/ProjeDizin.astro';
+import { icerik, KOK } from '../../icerik';
+import { projeDizinSema } from '../../sema.mjs';
+
+const canon = `${KOK}/projeler`;
+const baslik = 'Tüm projeler — QANATONE';
+const aciklama = 'Kurduğumuz sistemlerin tamamı: ne çözdüğü ve çıkan rakamlar.';
+const sema = projeDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/projeler`} sema={sema}
+  etiket="Arşiv">
+  <ProjeDizin dil="tr" />
+</Temel>

@@ -1,0 +1,27 @@
+---
+/* 7 proje detay sayfası (TR). Rota adı eskiyle birebir:
+   /projeler/<slug>. Desc: anlatım S1 tabanının (50) altında kalırsa
+   ilk bloğun düz metniyle beslenir — kural deterministik, veri
+   düzelince kendiliğinden sadeleşir (bab-ic-mimarlik EN 43 kr, ölçüldü). */
+import { getCollection } from 'astro:content';
+import Temel from '../../layouts/Temel.astro';
+import ProjeGovde from '../../parcalar/ProjeGovde.astro';
+import { icerik, T, KOK, kes, basAd } from '../../icerik';
+import { projeSema } from '../../sema.mjs';
+
+export async function getStaticPaths() {
+  return (await getCollection('projeler')).map(e => ({ params: { slug: e.id }, props: { p: e.data } }));
+}
+const { p } = Astro.props;
+const canon = `${KOK}/projeler/${p.slug}`;
+const duz = (h: unknown) => String(h).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const oz = T(p.text, 'tr');
+const aciklama = kes(oz.length >= 50 ? oz
+  : oz + ' ' + duz((p.blocks?.tr || [['', '']])[0][1]), 'tr');
+const sema = projeSema(icerik, { url: canon, ad: basAd(p.name), aciklama, dil: 'tr' }, p);
+---
+<Temel dil="tr" baslik={basAd(p.name)} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/projeler/${p.slug}`}
+  sema={sema} etiket={T(p.tag, 'tr')}>
+  <ProjeGovde p={p} dil="tr" />
+</Temel>

@@ -1,0 +1,56 @@
+---
+/* Projeler dizini gövdesi — TR ve EN aynı parçayı kullanır (rota turu).
+   Bütün metin ve sıra content.json'dan. Eski sayfanın iskeleti: başlık +
+   sayı + giriş + 7 kart (yıl/etiket/ad/anlatım/rakamlar/Projeyi gör).
+   Taşınmayanlar (bilinçli, rapora yazıldı): sektör filtre çipleri —
+   sektörler anahtarsız metinden türediği için saf CSS filtre panelden
+   gelen yeni sektörde SESSİZCE bayatlar; etkileşimsiz çip basmak da
+   tıklanmayan düğmedir. Giriş cümlesinin "sektöre göre filtrele"
+   parçası bu yüzden kırpıldı. Kart görselleri de giydirme turunda
+   (S-SZ dersi: atmosfer, konu değil — bayt eşiği). */
+import { getCollection } from 'astro:content';
+import { icerik, T, type Dil } from '../icerik';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sira = (icerik.projects || []).map((p: any) => p.slug);
+const projeler = (await getCollection('projeler')).map(e => e.data)
+  .sort((a: any, b: any) => sira.indexOf(a.slug) - sira.indexOf(b.slug));
+const on = dil === 'en' ? '/en' : '';
+---
+<section class="giris">
+  <h1>{M('Tüm projeler.', 'All projects.')}
+    <span class="say">({projeler.length})</span></h1>
+  <p class="lede">{M(
+    'Kurduğumuz her sistem burada. Birine gir; neyi çözdüğümüzü ve ne çıktığını gör.',
+    'Every system we built. Open one, see what it solved and what came out.')}</p>
+</section>
+
+<div class="isler">
+  {projeler.map((p: any) => (
+    <article class="is">
+      <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
+      <h2>{p.name}</h2>
+      <p>{T(p.text, dil)}</p>
+      {p.res?.length > 0 && <ul class="rakamlar">
+        {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
+      </ul>}
+      <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
+    </article>
+  ))}
+</div>
+
+<style>
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  .isler { display: flex; flex-direction: column; gap: 14px; }
+  .is { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .is .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
+  .is .yil { font-family: ui-monospace, monospace; color: var(--red-soft); }
+  .is h2 { font-size: 1.05rem; margin: 0 0 6px; }
+  .is > p:not(.kunye) { color: var(--tx2); font-size: .92rem; }
+  .rakamlar { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
+  .rakamlar li { color: var(--tx3); font-size: .84rem; }
+  .rakamlar b { color: var(--red-soft); font-family: ui-monospace, monospace; margin-right: 4px; }
+  .git { display: inline-block; margin-top: 12px; font-size: .85rem; }
+</style>
