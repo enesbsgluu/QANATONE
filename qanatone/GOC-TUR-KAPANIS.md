@@ -6,7 +6,8 @@ birebir geri getirmek değil, yeni görsel dili taşıyacak ada mimarisi;
 sapmalar raporlanır, giydirme ayrı tur").**
 
 Bu rapor kesmenin (Faz 4) ön şartlarını üretir; kesme ayrı iştir.
-**Savurma hükmü Enes'in telefonunda.**
+**SAVURMA TESTİ GEÇİLDİ (Enes, 19 Ağu 2026): "savurmada problem yok" —
+ana sayfa turu ONAYLI ve kapalı.**
 
 ---
 
@@ -141,7 +142,7 @@ kapanmadan sağlanamaz. N1 (noindex) kesmeye kadar sürüyor — doğru durumda.
 | Ana sayfa şema paritesi | ✅ (S2 bekçili) |
 | Tüm rotalarda parite | ❌ 29 rota rota-turunda |
 | Rota sayfaları eski görsel dile giydirme | ❌ ayrı tur |
-| Enes'in savurma testi + onayı | ⏳ telefonda |
+| Enes'in savurma testi + onayı (ana sayfa) | ✅ 19 Ağu — "savurmada problem yok" |
 
 ## 7 · Enes'te bekleyen kararlar
 
