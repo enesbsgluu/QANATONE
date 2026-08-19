@@ -152,6 +152,28 @@ async function kartlar() {
               ` · mobil ${kb(mobilToplam)} · künye ${path.relative(__dirname, KART_KUNYE)}`);
 }
 
+/* --- S-KU kurucu fotografi --------------------------------------------
+   Kaynak `img/founder.webp` 832x1253 (4:5). CSS kutusu: masaustunde
+   akordeon govdesinde ~300 px genis, mobilde tam genislik ~372 px.
+   TEK varyant 640 px yetiyor: mobilde 1,72x (kural 109 tavani 2x),
+   masaustunde 2,13x — masaustu zaten mobil sozlesmesinin disinda
+   (Anayasa madde 4). Iki varyant uretmek burada bayt kazandirmiyordu:
+   olculdu, 480'lik ikinci dosya toplamda daha pahaliya geliyordu. */
+const KURUCU_GEN = 640;
+
+async function kurucu() {
+  const giris = path.join(__dirname, '..', 'img', 'founder.webp');
+  if (!fs.existsSync(giris)) { console.log('  ! founder.webp yok, atlandi'); return; }
+  const m = await sharp(giris).metadata();
+  const cikis = path.join(HEDEF, 'founder.webp');
+  const o = await sharp(giris).resize({ width: KURUCU_GEN, withoutEnlargement: true })
+    .webp({ quality: 80, effort: 6 }).toFile(cikis);
+  const kunye = path.join(__dirname, 'src', 'veri', 'kurucu-gorsel.json');
+  fs.writeFileSync(kunye, JSON.stringify({ w: o.width, h: o.height }, null, 2) + String.fromCharCode(10));
+  console.log(`  + founder  ${m.width}x${m.height} -> ${o.width}x${o.height}` +
+              `  ${kb(fs.statSync(giris).size)} -> ${kb(fs.statSync(cikis).size)}`);
+}
+
 (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama
@@ -175,4 +197,5 @@ async function kartlar() {
   }
   await logolar();
   await kartlar();
+  await kurucu();
 })();
