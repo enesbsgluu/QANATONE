@@ -11,19 +11,30 @@
      BAND  .30  gösterilen aralığın genişliği
    Çarpımları ≈ 1/3: kaçan cironun yaklaşık üçte biri geri gelir.
 
-   Testi `test/hesap.test.mjs` — Anayasa "₺ hesap aritmetiği testli". */
+   Testi `test/hesap.test.mjs` — Anayasa "₺ hesap aritmetiği testli".
+
+   NEDEN .mjs, .ts DEĞİL (19 Ağu, deploy düşerek öğrenildi): bu modülü
+   hem Astro derlemesi hem de `node --test` içe aktarıyor. Netlify
+   NODE_VERSION=20 ve Node 20 `.ts` dosyasını AÇAMIYOR
+   (ERR_UNKNOWN_FILE_EXTENSION); tür soyma Node 22.6+ işi. Yerelde Node 24
+   olduğu için test geçiyor, yayında düşüyordu. Türler JSDoc'ta duruyor,
+   editör yine tamamlıyor, çalışma zamanı her Node'da açıyor. */
 export const REACH = 0.55, LATE = 0.6, BAND = 0.3;
 
-export interface Hesap {
-  tiklamaMaliyeti: number; talep: number; kacirma: number;
-  satisSimdi: string; satisAjan: string;
-  ciroSimdi: number; kayip: number;
-  kazanc: number; kazancAlt: number; kazancUst: number;
-}
+/**
+ * @typedef {Object} Hesap
+ * @property {number} tiklamaMaliyeti @property {number} talep
+ * @property {number} kacirma @property {string} satisSimdi
+ * @property {string} satisAjan @property {number} ciroSimdi
+ * @property {number} kayip @property {number} kazanc
+ * @property {number} kazancAlt @property {number} kazancUst
+ */
 
 /* Sektörün KENDİ başlangıç değerleriyle hesap. `butce` verilirse onunla
-   (kaydırıcı turunda istemci tarafı bunu kullanır). */
-export function sektorHesap(s: any, girdi?: { butce?: number; tutar?: number; kacan?: number }): Hesap {
+   (kaydırıcı turunda istemci tarafı bunu kullanır).
+ * @param {any} s  @param {{butce?:number,tutar?:number,kacan?:number}} [girdi]
+ * @returns {Hesap} */
+export function sektorHesap(s, girdi) {
   const f = s.finance || {}, m = s.market || {};
   const ref = Math.max(f.budget || 40000, 1);
   const butce = Math.max(Number(girdi?.butce ?? f.budget) || 0, 0);
@@ -37,7 +48,7 @@ export function sektorHesap(s: any, girdi?: { butce?: number; tutar?: number; ka
   const satisSimdi = talep * (1 - kacirma) * kapanma;
   const geri = talep * kacirma * REACH * LATE * kapanma;
   const kazanc = geri * tutar;
-  const sf = (v: number) => (v < 10 ? v.toFixed(1) : String(Math.round(v)));
+  const sf = (v) => (v < 10 ? v.toFixed(1) : String(Math.round(v)));
   return {
     tiklamaMaliyeti: cpc, talep, kacirma,
     satisSimdi: sf(satisSimdi), satisAjan: sf(satisSimdi + geri),
@@ -47,8 +58,9 @@ export function sektorHesap(s: any, girdi?: { butce?: number; tutar?: number; ka
   };
 }
 
-/* Kısa para biçimi — kaynak `fmtS` 10312. Aralık gösterimi uzun olmasın. */
-export function bicimKisa(n: number, dil: 'tr' | 'en' = 'tr'): string {
+/* Kısa para biçimi — kaynak `fmtS` 10312. Aralık gösterimi uzun olmasın.
+ * @param {number} n  @param {'tr'|'en'} [dil]  @returns {string} */
+export function bicimKisa(n, dil = 'tr') {
   const birim = dil === 'en' ? '$' : '₺';
   const a = Math.abs(n);
   if (a >= 1e6) return birim + (n / 1e6).toFixed(1).replace('.', dil === 'en' ? '.' : ',') + (dil === 'en' ? 'M' : ' Mn');

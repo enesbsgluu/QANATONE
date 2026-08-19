@@ -807,6 +807,26 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        Testin kendisi kirmizi donerse denetim de kirmizi doner. */
     {
       const { execFileSync } = require('child_process');
+      /* YAYIN NODE'U 20 (netlify.toml NODE_VERSION). Node 20 `.ts`
+         dosyasini ACAMAZ — tur soyma 22.6+ isi. Bu yuzden testin ve
+         onun ictigi modullerin uzantisi .mjs/.js olmak ZORUNDA.
+         19 Agu'da tam bu yuzden deploy dustu: yerelde Node 24 tur
+         soydugu icin test geciyordu, Netlify'da
+         ERR_UNKNOWN_FILE_EXTENSION veriyordu. Kural artik once bunu
+         STATIK olarak olcer — hata Netlify'a kadar gitmez. */
+      const testYolu = path.join(__dirname, 'test', 'hesap.test.mjs');
+      const tsIthal = [];
+      const bakIthal = (dosya) => {
+        if (!fs.existsSync(dosya)) return [];
+        const kod = fs.readFileSync(dosya, 'utf8');
+        return [...kod.matchAll(/from\s+['"](\.[^'"]+)['"]/g)].map(m => m[1]);
+      };
+      for (const u of bakIthal(testYolu)) {
+        if (/\.ts$/.test(u)) tsIthal.push('test -> ' + u);
+        const cozulen = path.join(path.dirname(testYolu), u);
+        for (const v of bakIthal(cozulen))
+          if (/\.ts$/.test(v)) tsIthal.push(path.basename(u) + ' -> ' + v);
+      }
       let ciktiMetni = '', gecti = false;
       try {
         ciktiMetni = execFileSync(process.execPath,
@@ -819,8 +839,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       }
       const ge = (ciktiMetni.match(/pass (\d+)/) || [, '0'])[1];
       const ka = (ciktiMetni.match(/fail (\d+)/) || [, '?'])[1];
-      ol('T1 · sektor para aritmetigi testleri geciyor', gecti,
-         `${ge} gecti · ${ka} kaldi`);
+      ol('T1 · sektor para aritmetigi testleri geciyor (+ .ts ithali yok)',
+         gecti && tsIthal.length === 0,
+         tsIthal.length ? 'Node 20 .ts acamaz: ' + tsIthal.join(' ')
+                        : `${ge} gecti · ${ka} kaldi`);
     }
 
     /* H20 · SEKTOR PANOSU ICERIGI ham HTML'de tam — KOSULLU.
