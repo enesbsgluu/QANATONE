@@ -36,10 +36,18 @@ import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
 import Perde from '../parcalar/Perde.astro';
-import { KOK } from '../icerik';
+import { KOK, icerik } from '../icerik';
+import { anaSema } from '../sema.mjs';
+
+/* ŞEMA PARİTESİ (madde 5, tur kapanışında ölçülüp kapatıldı): eski ana
+   sayfa @graph'ı Organization + WebSite + WebPage taşıyor, yeni sayfada
+   HİÇ yoktu — fark kırmızıdır. Üçlü artık derlemede pişiyor; gövde
+   src/sema.mjs'te (kural 107: #org kimliği her sayfada birebir aynı). */
+const BASLIK = 'QANATONE — Talebi yakalayan sistem';
+const ACIKLAMA = 'Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında.';
+const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
 ---
-<Temel dil="tr" baslik="QANATONE — Talebi yakalayan sistem"
-  aciklama="Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında."
+<Temel dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
   canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
   {/* ON YUKLEME: yalniz GOVDE fontu. LCP elemani hero'nun lede'si
       (Lighthouse ile olculdu) ve o Nunito ile boyanir. Nunito
