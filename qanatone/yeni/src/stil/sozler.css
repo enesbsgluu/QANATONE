@@ -1,0 +1,151 @@
+/* ============================================================
+   S-SZ · SÖZLER (kanal genişliği kartları)
+   Kaynak: kök index.html · markup 5268-5320 · CSS 1989-2160.
+   Anayasa: "statik + reveal + hover".
+
+   Adlandırma: .ssz-* içerik · .sus-* süs.
+
+   MEKANİZMA — kaynağın kendi fikri korundu, ada JS'i 0:
+     · kartlar `flex-grow` ile büyür, komşusu daralır (JS'siz)
+     · açıklama `grid-template-rows: 0fr → 1fr` ile süzülür — yükseklik
+       hesabı yok, geçiş akıcı
+     · giriş kaydırma güdümlü (`animation-timeline: view()`), sınıf
+       yazan betik YOK (S-K turunun 158 ms'lik dersi)
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) GİRİŞ OPAKLIĞA VE FİLTREYE DOKUNMUYOR. Kaynak giriş
+      `opacity:0 + translateY(-18px) + blur(10px)` idi. İkisi de yasak:
+      madde 5/H2 içeriğin görünür doğmasını, madde 7 + H14 mobilde
+      `filter`i yasaklıyor (blur'lu giriş altı kartta altı filtre katmanı
+      demek). Giriş yalnız transform; mesafe ve süre aynı.
+   2) KART GÖRSELLERİ (content.json `chimg`, altı webp) BU TURDA GELMEDİ.
+      Kaynağın kendi yorumu "görsel kartın ATMOSFERİ, konusu değil" diyor;
+      altısı toplam 202 KB ve sahnenin işi (altı kanalı anlatmak) onlarsız
+      tam çalışıyor. Bayt eşiği dersi (H18: ~14,6 KB'ta bir RTT) tazeyken
+      atmosfer için 202 KB açmak iskelet turunun işi değil — kartın kimliği
+      şimdilik üç yüzden (desen / kızıl / koyu) geliyor. Giydirme turunda
+      gelirse mobil kaynak + G2 (kendi alanımız) şartıyla gelir.
+   3) `.tct` Manrope taşımıyor (madde 4: Manrope EMEKLİ).
+   4) Kart görselleriyle birlikte gelen perde katmanları (`.tbg::after`
+      üç ayrı degrade) da doğal olarak gelmedi.
+
+   MOBİL SÖZLEŞMESİ (kaynağın kendi kuralı, aynen): dokunmatikte ve dar
+   ekranda AÇIKLAMA HEP AÇIK ve artı işareti gizli. Hover'sız cihazda
+   açılır kutu, içeriği kimsenin göremeyeceği bir kutudur.
+   ============================================================ */
+
+.ssz-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ssz-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
+.ssz-bas .kunye{display:inline-flex;align-items:center;gap:8px}
+.ssz-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.ssz-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.ssz-bas h2 em{font-style:normal;color:var(--red)}
+.ssz-bas p{margin-top:clamp(11px,1.3vw,18px)}
+
+/* ---- TABAN = MOBİL: tek sütun, açıklama açık, artı yok ---- */
+.ssz-izgara{display:grid;grid-template-columns:1fr;gap:12px}
+.ssz-sutun{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ssz-kart{position:relative;display:flex;flex-direction:column;
+  border-radius:18px;border:1px solid var(--line);padding:22px 18px;
+  overflow:clip;min-width:0}
+.ssz-kart>*{position:relative;z-index:1}
+.ssz-arti{display:none}
+.ssz-ikon{flex:none;width:46px;height:46px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center}
+.ssz-ikon svg{width:22px;height:22px}
+.ssz-kart h3{font-size:clamp(1.06rem,1.15vw,1.2rem);letter-spacing:-.02em;
+  margin:16px 0 0}
+.ssz-acilir{display:grid;grid-template-rows:1fr}
+.ssz-acilir p{overflow:hidden;min-height:0;padding-top:8px;
+  font-size:clamp(.88rem,.95vw,.95rem);line-height:1.6}
+
+/* ---- üç yüz ---- */
+.ssz-desen{background:var(--card2,#141418)}
+/* ince çizgi ızgarası + tepeden kızıl ışık; ikisi de sözde elemanda,
+   içerik katmanına dokunmuyor */
+.ssz-desen::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:50px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%);
+  mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%)}
+.ssz-desen::after{content:'';position:absolute;inset:0 0 auto;height:60%;
+  pointer-events:none;opacity:.75;
+  background:radial-gradient(60% 70% at 50% 0%,var(--red-dim,rgba(239,35,60,.12)),transparent 72%)}
+.ssz-desen .ssz-ikon{background:var(--red-dim,rgba(239,35,60,.12));color:var(--red-soft);
+  border:1px solid rgba(239,35,60,.28)}
+.ssz-desen p{color:var(--tx2)}
+
+.ssz-kizil{background:var(--red);border-color:rgba(0,0,0,.18)}
+.ssz-kizil::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 42%)}
+.ssz-kizil h3{color:#0a0a0a}
+.ssz-kizil p{color:rgba(0,0,0,.72)}
+.ssz-kizil .ssz-ikon{background:#0a0a0a;color:#fff}
+
+.ssz-koyu{background:var(--card)}
+.ssz-koyu p{color:var(--tx2)}
+.ssz-koyu .ssz-ikon{background:var(--card2,#141418);border:1px solid var(--line2);
+  color:var(--tx2)}
+
+/* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule`) ---- */
+.sus-cetvel{position:relative;height:1px;background:var(--line2);
+  margin-top:clamp(30px,4vw,46px)}
+.sus-cetvel::before,.sus-cetvel::after{content:'';position:absolute;top:50%;
+  width:9px;height:9px;transform:translateY(-50%);
+  background:var(--bg);border:1px solid var(--line2)}
+.sus-cetvel::before{left:-4px}
+.sus-cetvel::after{right:-4px}
+
+/* ---- MASAÜSTÜ: üç sütun + açılır kutu ---- */
+@media (min-width:901px) and (hover:hover) and (pointer:fine){
+  .ssz-izgara{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;
+    align-items:stretch;min-height:clamp(400px,40vw,540px)}
+  .ssz-sutun{gap:14px}
+  .ssz-kart{flex:4 1 0;padding:24px;min-height:150px;cursor:default;
+    transition:flex-grow .55s var(--e),border-color .3s var(--e)}
+  .ssz-buyuk{flex:7 1 0}
+  .ssz-kucuk{flex:3 1 0}
+  .ssz-kart:hover,.ssz-kart:focus-visible{border-color:var(--line2);
+    flex-grow:7.4;outline:none}
+  .ssz-buyuk:hover,.ssz-buyuk:focus-visible{flex-grow:12}
+  .ssz-kucuk:hover,.ssz-kucuk:focus-visible{flex-grow:10.5}
+  .ssz-buyuk .ssz-ikon{margin-bottom:auto}
+  .ssz-buyuk h3{margin-top:20px}
+  /* açıklama kapalı başlar, açılırken süzülür */
+  .ssz-acilir{grid-template-rows:0fr;transition:grid-template-rows .55s var(--e)}
+  .ssz-acilir p{transform:translateY(8px);
+    transition:transform .38s var(--e)}
+  .ssz-kart:hover .ssz-acilir,.ssz-kart:focus-visible .ssz-acilir{grid-template-rows:1fr}
+  .ssz-kart:hover .ssz-acilir p,.ssz-kart:focus-visible .ssz-acilir p{
+    transform:none;transition-delay:.09s}
+  /* sağ üst artı: "burada dahası var" — açılınca 45° döner */
+  .ssz-arti{display:flex;position:absolute;top:20px;right:20px;
+    width:26px;height:26px;align-items:center;justify-content:center;
+    border-radius:50%;border:1px solid var(--line2);color:var(--tx3);
+    transition:transform .45s var(--e),color .3s var(--e),border-color .3s var(--e)}
+  .ssz-arti svg{width:12px;height:12px}
+  .ssz-kart:hover .ssz-arti,.ssz-kart:focus-visible .ssz-arti{
+    transform:rotate(45deg);color:var(--tx);border-color:var(--tx3)}
+  .ssz-kizil .ssz-arti{border-color:rgba(0,0,0,.3);color:rgba(0,0,0,.6)}
+  .ssz-kizil:hover .ssz-arti,.ssz-kizil:focus-visible .ssz-arti{
+    color:#0a0a0a;border-color:rgba(0,0,0,.55)}
+  .ssz-desen:hover::after{opacity:1}
+}
+
+/* ---- giriş: SIFIR JS, kaydırma güdümlü, YALNIZ transform ----
+   Taban bitmiş hâl: desteklemeyen tarayıcıda ve botta kartlar yerinde. */
+@supports (animation-timeline: view()){
+  .ssz-kart{animation:ssz-gir linear both;
+    animation-timeline:view();animation-range:entry 0% entry 100%}
+}
+@keyframes ssz-gir{from{transform:translateY(-18px)}}
+
+/* ---- hareket azaltma: durduran seçici hareketi verenin aynısı ---- */
+@media (prefers-reduced-motion: reduce){
+  .ssz-kart{animation:none;transition:none}
+  .ssz-acilir{transition:none}
+  .ssz-acilir p{transform:none;transition:none}
+  .ssz-arti{transition:none}
+}

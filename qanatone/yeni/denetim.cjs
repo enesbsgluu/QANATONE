@@ -245,12 +245,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          sa-          S-A akis (hizmet seridi)
          sse-         S-SE sektor + pano
          ste-         S-TE tespit (teshis araci)
+         ssz-         S-SZ sozler (kanal kartlari)
          sus-         süs katmanı; H4 zaten bu öneki tanıyor — hareketin
                       yaşadığı yer burası, cihaz kısıtının söndürebildiği
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
-    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|sus-)/; /* + süs katmanı */
+    const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-)/;      /* içerik sahneleri */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|sus-)/; /* + süs katmanı */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.

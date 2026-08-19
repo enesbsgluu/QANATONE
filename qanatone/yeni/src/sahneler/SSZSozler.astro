@@ -1,0 +1,65 @@
+---
+/* S-SZ · SÖZLER (kanal genişliği kartları) — göçün sekizinci sahnesi.
+   Kaynak: kök index.html · markup 5268-5320 · CSS 1989-2160.
+   Anayasa: "S-SZ sozler (kanal genişliği kartları): statik + reveal +
+   hover." Sapmalar ve gerekçeler stil/sozler.css başında.
+
+   İÇERİK: altı kanalın adı ve anlatımı content.json `strings`ten
+   (che · chh · chp · ch1t/ch1d … ch6t/ch6d). Eski tarafta da statik
+   markup'tı — kaynağın kendi yorumu "tarayıcı ve yapay zekâ okusun
+   (GEO)" diyor; parite korundu, hiçbir metin JS'e bağlı değil.
+
+   Ada JS'i: YOK. Giriş kaydırma güdümlü (CSS), açılma hover/odakla. */
+import '../stil/sozler.css';
+import Ikon from '../parcalar/Ikon.astro';
+import { icerik, T, suz } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+
+/* Bento düzeni kaynaktaki sırayla: üç sütun, her sütunda iki kart.
+   `deri` = kartın yüzü (desenli / kızıl / koyu), `boy` = flex payı.
+   Sütun dizilimi kaynağın markup'ından birebir (5276-5316). */
+const KARTLAR = [
+  { k: 1, ikon: 'seo',    deri: 'desen', boy: 'buyuk' },
+  { k: 2, ikon: 'camera', deri: 'kizil', boy: 'kucuk' },
+  { k: 3, ikon: 'globe',  deri: 'koyu',  boy: '' },
+  { k: 4, ikon: 'chart',  deri: 'koyu',  boy: '' },
+  { k: 5, ikon: 'chat',   deri: 'kizil', boy: 'kucuk' },
+  { k: 6, ikon: 'bot',    deri: 'desen', boy: 'buyuk' },
+];
+const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)];
+---
+<section class="ssz-sahne" data-sahne="sz">
+  <div class="ssz-ic">
+    <div class="ssz-bas">
+      <p class="kunye"><i></i>{g('che')}</p>
+      <h2 class="s1-buyuk" set:html={suz(g('chh'), ['em', 'b'])} />
+      <p class="s1-alt">{g('chp')}</p>
+    </div>
+
+    <div class="ssz-izgara">
+      {sutunlar.map((sutun) => (
+        <div class="ssz-sutun">
+          {sutun.map((c) => (
+            <article class={`ssz-kart ssz-${c.deri}${c.boy ? ' ssz-' + c.boy : ''}`}
+              style={`--i:${c.k - 1}`} tabindex="0">
+              <span class="ssz-arti" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+              <span class="ssz-ikon"><Ikon ad={c.ikon} /></span>
+              <h3>{g('ch' + c.k + 't')}</h3>
+              {/* Açıklama masaüstünde 0fr ızgarayla kapalı başlar, hover/odakta
+                  açılır; dokunmatikte ve dar ekranda HEP AÇIK (aşağıda). */}
+              <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
+            </article>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div class="sus-cetvel" aria-hidden="true"></div>
+  </div>
+</section>
