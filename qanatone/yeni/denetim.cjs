@@ -969,6 +969,28 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          kusur.slice(0, 2).join(' ') || `${sozler.length} soz · ${bandVar.length} sayfada bant`);
     }
 
+    /* S2 · ANA SAYFA SEMA PARITESI (madde 5: "rota basina JSON-LD tur
+       kumesi eski = yeni diff'lenir; fark kirmizidir"). Tur kapanisinda
+       OLCULDU: eski ana sayfa @graph'i Organization + WebSite + WebPage
+       tasiyor, yenide HIC yoktu. Kural o uclunun varligini VE #org
+       kimliginin degismezligini (kural 107) kilitler. */
+    {
+      const kusur = [];
+      const semalar = [];
+      for (const m of h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+        try { semalar.push(JSON.parse(m[1])); } catch (e) { kusur.push('sema-parse-hatasi'); }
+      }
+      const dugumler = semalar.flatMap(x => x['@graph'] || [x]);
+      const turler = new Set(dugumler.flatMap(n => [].concat(n['@type'] || [])));
+      for (const t of ['Organization', 'WebSite', 'WebPage'])
+        if (!turler.has(t)) kusur.push(t + '-yok');
+      const org = dugumler.find(n => n['@id'] === 'https://qanatone.com/#org');
+      if (!org) kusur.push('#org-kimligi-yok');
+      else if (!org.description || !(org.knowsAbout || []).length) kusur.push('#org-govdesi-eksik');
+      ol('S2 · ana sayfa semasi: Organization+WebSite+WebPage + #org govdesi',
+         kusur.length === 0, kusur.slice(0, 3).join(' ') || `${turler.size} tur`);
+    }
+
     /* H23 · PERDE SOZLESMESI — KOSULLU (perde yoksa olcecek sey yok).
        Anayasa'nin dort sarti olculebilir kalemlere cevrildi:
          a) icerigi BEKLETMEZ: perde `pointer-events:none` tasir ve eski
