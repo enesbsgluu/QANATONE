@@ -13,7 +13,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { sektorHesap, bicimKisa, REACH, LATE, BAND } from '../src/hesap.ts';
+import { sektorHesap, bicimKisa, REACH, LATE, BAND } from '../src/hesap.mjs';
 
 const kok = dirname(fileURLToPath(import.meta.url));
 const icerik = JSON.parse(readFileSync(join(kok, '..', '..', 'content.json'), 'utf8'));
