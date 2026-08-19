@@ -1,0 +1,153 @@
+/* ============================================================
+   S-K · KATMAN — Göç Anayasası: "4 kart; tek seferlik reveal
+   (IO + unobserve, ≤0,3 KB) veya scroll-driven; hover transition'ları
+   `(hover:hover)` kapılı."
+   Kaynak: kök index.html · markup 4757-4801 · CSS 2948-2999 ·
+   reveal gözlemcisi 9210-9218.
+
+   Adlandırma: .sk-* içerik (H2/H5/H14 kapsamında) · .sus-* süs (H4).
+
+   BU ADADA ALINAN SAPMALAR (madde 6 — hepsi adıyla ve gerekçesiyle):
+   1) Reveal OPAKLIĞA DOKUNMUYOR. Kaynak `.rv{opacity:0;translateY(26px)}`
+      yazıyordu; madde 5 ve H2 "içerik görünür doğar" diyor. Giriş yalnız
+      transform: mesafe ve süre aynı, taban her zaman opak.
+   2) Kart üstündeki kırmızı çubuk `width:0→100%` yerine
+      `transform:scaleX(0→1)`. Eskisi her karede DÜZEN hesabı tetikliyordu
+      (madde 7C: yalnız transform ve opacity). Görüntü birebir aynı,
+      kademeli gecikmeler (0 / .12 / .24 / .36 sn) korundu.
+   3) Giriş kaydırma güdümlü ve ADA JS'İ YOK (aşağıda 7. sapma).
+      Taban her hâlde bitmiş görüntü: desteklemeyen tarayıcıda ve botta
+      bölüm yerinde, çubuklar çizili — "içerik üç hâlde de eksiksiz".
+   4) Manrope EMEKLİ (madde 4): başlıklar sayfanın kendi ailesini
+      kullanır. Kaynaktaki `font-family:Manrope` taşınmadı.
+   5) Kart zemini `#0d0d10` yerine `var(--card)`, hover tonu tek ham
+      değer olarak kaldı — renk göçünde `--yuzey` tokenine bağlanacak
+      (RENK-SISTEMI.md, giydirme turu).
+   6) `text-wrap:balance` TAŞINMADI. Kaynakta iki yerde vardı (başlık ve
+      kapanış cümlesi) ve ÖLÇÜLDÜ: yalnız o iki bildirim, sahne kapısını
+      düşürecek kadar pahalı. Aynı yapı, iki koşum ortancasıyla:
+        balance VAR : LCP 1.836 ms · FCP 1.192 ms · 97 puan
+        balance YOK : LCP 1.721 ms · FCP 1.058 ms · 99 puan
+      Fark tek değişkenle daraltıldı (önce betik çıkarıldı — değişmedi;
+      sonra sahne CSS'i boşaltıldı — düzeldi; sonra CSS'te yalnız bu iki
+      satır çıkarıldı — düzeldi). Sebebi: `balance` blok başına çok
+      geçişli satır kırma çalıştırır, kısıtlı CPU'da bedeli ölçülebilir.
+      NOT: eski kaynakta bu bildirim 11 yerde geçiyor — göçün geri
+      kalanında ve giydirme turunda aynı ölçüm tekrarlanmalı; her biri
+      için "yazı dengesi mi, LCP mi" kararı ayrı verilir.
+   7) IO tabanlı tek seferlik reveal TAŞINMADI (Anayasa iki yolu da
+      tanıyor: "IO + unobserve ... VEYA scroll-driven"). Sebep ölçüm:
+      betikli ve betiksiz iki derleme, aynı dakikada koşum düzeyinde
+      dönüşümlü ölçüldü (A,B,A,B — makinenin setler arası kayması
+      ikisini de aynı yöne iter):
+        betiksiz : LCP 1.674 ms · FCP 1.053 ms · 98 puan
+        betikli  : LCP 1.832 ms · FCP 1.180 ms · 97 puan
+      233 baytlık betik açılışta `.sk-hazir` sınıfını yazıyor; bu, altı
+      elemanın stilini ve düzenini LCP penceresinin tam ortasında
+      yeniden hesaplatıyor. Ada JS'i 0'a indi, kapı geri geçti.
+   ============================================================ */
+
+.sk-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+
+/* ---- başlık ---- */
+.sk-bas{max-width:62ch;margin-bottom:clamp(20px,2.6vw,38px)}
+.sk-etiket{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--f-tek);font-size:clamp(9px,.76vw,10.6px);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--red-soft);
+  margin-bottom:12px}
+.sk-etiket i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sk-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
+  letter-spacing:-.035em;margin-bottom:0}
+.sk-bas h2 .thin{font-weight:300;color:var(--tx3)}
+.sk-bas p{margin-top:clamp(11px,1.3vw,18px)}
+
+/* ---- ızgara: 1 px'lik boşluklar zemin rengiyle kılcal çizgi üretir ---- */
+/* `overflow:clip`, `hidden` DEĞİL — GERÇEK TARAYICIDA ÖLÇÜLDÜ:
+   `hidden` ızgarayı kaydırma kabı (scrollport) yapıyor ve kartların
+   `view()` zaman çizelgesi sayfaya değil ızgaraya bağlanıyor; kartlar
+   kabın içinde hep "tam görünür" olduğu için giriş animasyonu HİÇ
+   koşmuyordu (ölçüm: kart y sabit 0, çubuk sabit scaleX(1)).
+   `clip` kaydırma kabı YARATMAZ ama yuvarlatılmış köşeyi aynı şekilde
+   kırpar. */
+.sk-izgara{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  border-radius:20px;overflow:clip}
+.sk-kart{position:relative;display:flex;flex-direction:column;gap:9px;
+  padding:clamp(20px,2.3vw,32px) clamp(18px,2vw,28px) clamp(18px,2vw,28px);
+  background:var(--card);color:var(--tx);text-decoration:none}
+/* Üstteki ilerleme çubuğu — scaleX, width DEĞİL (sapma 2).
+   TABAN = BİTMİŞ HÂL (çubuk çizili). Ötelenme gibi bunun da sıfır hâli
+   `.sk-hazir`e bağlı: JS koşmazsa sahne eksik değil, TAM görünür. */
+.sk-kart::before{content:'';position:absolute;left:0;top:0;height:2px;width:100%;
+  transform:scaleX(1);transform-origin:left;
+  background:linear-gradient(90deg,var(--red),transparent)}
+.sk-no{font-family:var(--f-tek);font-size:clamp(9.4px,.8vw,11px);
+  letter-spacing:.18em;color:var(--red-soft)}
+.sk-kart h3{font-size:clamp(1.24rem,1.9vw,1.72rem);line-height:1.1;
+  letter-spacing:-.03em}
+.sk-soru{color:var(--tx3);font-size:clamp(.86rem,.95vw,.98rem);line-height:1.35;
+  padding-bottom:9px;border-bottom:1px solid var(--line)}
+.sk-kart p{color:var(--tx2);font-size:clamp(.85rem,.92vw,.96rem);
+  line-height:1.58;flex:1}
+.sk-cipler{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.sk-cip{padding:5px 11px;border-radius:999px;
+  font-size:clamp(10.4px,.86vw,11.8px);font-weight:500;white-space:nowrap;
+  border:1px solid var(--line2);background:rgba(255,255,255,.035);
+  color:var(--tx3);text-decoration:none}
+/* bağlantı olmayan çip (Ölçüm): kesikli çerçeve — "hizmet değil, çıktı" */
+.sk-cip-yok{border-style:dashed;color:var(--tx4)}
+/* kartın kendisi bağlantıysa içindeki çip onun rengini taşır */
+a.sk-kart .sk-cip-yok{border-style:solid;border-color:rgba(239,35,60,.4);
+  color:var(--red-soft);background:rgba(239,35,60,.1)}
+
+/* ---- kapanış ---- */
+.sk-son{display:flex;align-items:center;gap:clamp(14px,2vw,26px);
+  margin-top:clamp(18px,2.2vw,30px);flex-wrap:wrap}
+.sus-cizgi{flex:1;min-width:60px;height:1px;
+  background:linear-gradient(90deg,var(--red),transparent)}
+.sk-son p{font-size:clamp(1.02rem,1.7vw,1.5rem);line-height:1.2;
+  font-weight:600;letter-spacing:-.025em}
+.sk-son p em{font-style:normal;color:var(--red-soft)}
+
+/* ---- giriş: SIFIR JS, kaydırma güdümlü ----
+   ADA BETİĞİ KALDIRILDI, sebebi ölçüldü (sapma 7): IO'lu sürüm 233 B'lık
+   bir betikti ama açılışta `.sk-hazir` sınıfını yazınca sahnenin tamamı
+   için stil+düzen hesabı tetikliyor ve bu, kısıtlı CPU'da LCP'yi
+   158 ms itiyordu (koşum düzeyinde dönüşümlü ölçüm, 4 tur).
+   Yerine merdivenin ÜST basamağı: her eleman kendi `view()` zaman
+   çizelgesiyle girer — kademe için gecikme yazmaya gerek yok, kartlar
+   ekrana sırayla girdiği için sıra kendiliğinden oluşur.
+   TABAN = BİTMİŞ HÂL: destekleyip desteklemediğine bakmaksızın içerik
+   yerinde ve tam; animasyon yalnız `@supports` içinde doğar. */
+@supports (animation-timeline: view()){
+  .sk-bas,.sk-kart,.sk-son{animation:sk-gir linear both;
+    animation-timeline:view();animation-range:entry 0% entry 100%}
+  .sk-kart::before{animation:sk-cubuk linear both;
+    animation-timeline:view();animation-range:entry 25% entry 100%}
+}
+@keyframes sk-gir{from{transform:translateY(26px)}}
+@keyframes sk-cubuk{from{transform:scaleX(0)}}
+
+/* ---- ızgara kırılımları (kaynağın kendi eşikleri) ---- */
+@media(max-width:980px){.sk-izgara{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.sk-izgara{grid-template-columns:1fr}}
+
+/* ---- hover: yalnız gerçek imleçte (dokunmatikte :hover takılır) ---- */
+@media (hover:hover) and (pointer:fine){
+  .sk-kart{transition:background-color .4s var(--e)}
+  .sk-kart:hover{background:rgba(255,255,255,.03)}
+  .sk-cip{transition:border-color .28s var(--e),color .28s var(--e),
+    background-color .28s var(--e)}
+  a.sk-cip:hover{border-color:rgba(239,35,60,.5);color:var(--tx);
+    background:rgba(239,35,60,.12)}
+}
+
+/* ---- hareket azaltma ----
+   Durduran seçiciler, hareketi VEREN seçicilerin AYNISI (H11 dersi).
+   İçerik son durumunda kalır: bölüm yerinde, çubuklar çizili. */
+@media (prefers-reduced-motion: reduce){
+  .sk-bas,.sk-kart,.sk-son{animation:none}
+  .sk-kart::before{animation:none}
+  .sk-kart{transition:none}
+  .sk-cip{transition:none}
+}

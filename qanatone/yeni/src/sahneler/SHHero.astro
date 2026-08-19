@@ -7,18 +7,17 @@
    panelde <em>/<b> tasir, TEK suzgecten gecer (Anayasa madde 6).
    Ada JS'i: yalniz saat — gorunurken kosan tek setInterval.            */
 import '../stil/hero.css';
-import { icerik, T } from '../icerik';
+import { icerik, T, suz } from '../icerik';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 
-/* Panelden gelen tek HTML parcasi bu satir. Once HER SEY kacar, sonra
-   yalniz <em>/<b> geri acilir — beyaz liste, kara liste degil. */
-const suz = (m: string): string => String(m)
-  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  .replace(/&lt;(\/?(?:em|b))&gt;/g, '<$1>');
+/* Panelden gelen tek HTML parcasi bu satir; suzgec artik icerik.ts'te
+   TEK yardimci fonksiyon (Anayasa madde 6). Hero'nun izin kumesi
+   degismedi: yalniz <em> ve <b> (suz'un varsayilani). Cikti bayti
+   birebir ayni oldugu dogrulandi. */
 ---
 <section class="sh-sahne" data-sahne="h">
   <div class="sus-atmo" aria-hidden="true">

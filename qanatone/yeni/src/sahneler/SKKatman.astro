@@ -1,0 +1,80 @@
+---
+/* S-K · KATMAN — göçün dördüncü sahnesi. "Dokuz hizmet değil. Dört
+   katman." Sayfanın hizmet sayfalarına açılan tek kapısı: dokuz rotanın
+   yedisine bu sahneden bağlanılıyor (iç bağlantı omurgası).
+   Kaynak: kök index.html · markup 4757-4801 · CSS 2948-2999.
+   Sapmalar ve gerekçeleri stil/katman.css başında.
+
+   İÇERİK NEREDEN: 21 anahtarın 21'i de content.json'un `strings` alanında
+   (panelin ürünü) — kt0..ktg. Yani metin zaten tek kaynakta yaşıyordu;
+   eski tarafta da HTML'de basılıydı, bu sahne o pariteyi bozmadan taşıyor.
+
+   ADA JS'İ YOK. Giriş hareketi CSS scroll-driven (`animation-timeline:
+   view()`), ölçülmüş gerekçesi stil/katman.css'in 7. sapmasında:
+   IO'lu sürüm 233 B'dı ama açılışta sınıf yazdığı için LCP'yi 158 ms
+   itiyordu. Kaydırma dinleyicisi de düzen okuması da hiç yok (H12). */
+import '../stil/katman.css';
+import { icerik, T, suz } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+/* content.json bu iki alanı HTML kaçışlı tutuyor (eski taraf innerHTML
+   basıyordu). Burada METİN olarak basılıyor, o yüzden kaçış çözülür —
+   yoksa ekranda "&amp;" görünür. Çözülen tek varlık `&amp;`. */
+const duz = (k: string): string => g(k).replace(/&amp;/g, '&');
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Kartların TEK tanımı. `yol` varsa kartın kendisi bağlantıdır (kaynakta
+   Veri kartı finans sayfasına gidiyordu); yoksa çipler bağlantı taşır. */
+const kartlar = [
+  { n: '01', ad: 'kt3', soru: 'kt4', p: 'kt5', yol: 'finans',
+    cipler: [{ ad: 'TradeSelf' }] },
+  { n: '02', ad: 'kt6', soru: 'kt7', p: 'kt8',
+    cipler: [{ ad: 'SEO', slug: 'seo' }, { ad: 'GEO', slug: 'geo' },
+             { ad: 'Google Ads', slug: 'google-ads' }, { ad: 'Meta Ads', slug: 'meta-ads' }] },
+  { n: '03', ad: 'kt9', soru: 'kta', p: 'ktb',
+    cipler: [{ k: 'kth', slug: 'web-tasarim' }, { k: 'kti', slug: 'web-sitesi-araclar' }] },
+  { n: '04', ad: 'ktc', soru: 'ktd', p: 'kte',
+    cipler: [{ k: 'ktj', slug: 'ai-ajan' }, { k: 'ktm', slug: 'otomasyon' }, { k: 'ktf' }] },
+];
+const cipAd = (c: any): string => (c.k ? duz(c.k) : c.ad);
+---
+<section class="sk-sahne" data-sahne="k" id="skKatman">
+  <div class="sk-ic">
+    <div class="sk-bas">
+      <p class="sk-etiket"><i aria-hidden="true"></i><span>{g('kt0')}</span></p>
+      {/* kt1 ve ktg panelden HTML parçası taşır — tek beyaz liste
+          süzgecinden geçer (icerik.ts `suz`, Anayasa madde 6). */}
+      <h2 class="s1-buyuk" set:html={suz(g('kt1'), ['em', 'b', 'span.thin'])} />
+      <p class="s1-alt">{g('kt2')}</p>
+    </div>
+
+    <div class="sk-izgara">
+      {kartlar.map((k) => {
+        const govde = (
+          <>
+            <span class="sk-no">{k.n}</span>
+            <h3>{g(k.ad)}</h3>
+            <span class="sk-soru">{g(k.soru)}</span>
+            <p>{g(k.p)}</p>
+            <span class="sk-cipler">
+              {k.cipler.map((c: any) => (c.slug
+                ? <a class="sk-cip" href={`${B}/hizmet/${c.slug}`}>{cipAd(c)}</a>
+                : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
+            </span>
+          </>
+        );
+        return k.yol
+          ? <a class="sk-kart" href={`${B}/hizmet/${k.yol}`}>{govde}</a>
+          : <div class="sk-kart">{govde}</div>;
+      })}
+    </div>
+
+    <div class="sk-son">
+      <span class="sus-cizgi" aria-hidden="true"></span>
+      <p set:html={suz(g('ktg'))} />
+    </div>
+  </div>
+</section>
