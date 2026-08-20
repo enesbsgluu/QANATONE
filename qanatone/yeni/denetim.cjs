@@ -38,7 +38,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 11; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss (tr/en) */
+    + 13; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss +surec (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -169,7 +169,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss|surec)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -351,6 +351,38 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     }
   }
   ol('R5 · sss: her soru+cevap ham HTML\'de + FAQPage şeması tam ve kimliği kendi adresinde',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R6 · SUREC BUTUNLUGU: sayfa (TR ve EN) HER adimin numarasini, adini,
+   anlatimini ve olcum kalemlerini (m — duz metin + dilli karisik) ham
+   HTML'de tasimali; musteri yolu cizgisinin BES etiketi de artik statik
+   dogmali (eski tarafta cizgi+etiket JS'le kuruluyordu, bot gormuyordu). */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const YOL = { tr: ['Fark ediliyor', 'Arıyor', 'Soruyor', 'Karşılaştırıyor', 'Satın alıyor'],
+                en: ['Notices', 'Searches', 'Asks', 'Compares', 'Buys'] };
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/surec' : 'surec', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const duz = coz(oku(p));
+    for (const a of c.steps) {
+      if (!duz.includes(a.n)) kusur.push(`${dil}:${a.n}:numara`);
+      if (!duz.includes(coz(D(a.t, dil)))) kusur.push(`${dil}:${a.n}:ad`);
+      if (!duz.includes(coz(D(a.p, dil)))) kusur.push(`${dil}:${a.n}:anlatım`);
+      for (const x of a.m || [])
+        if (!duz.includes(coz(D(x, dil)))) kusur.push(`${dil}:${a.n}:ölçüm(${coz(D(x, dil))})`);
+    }
+    for (const e of YOL[dil])
+      if (!duz.includes(e)) kusur.push(`${dil}:yol(${e})`);
+  }
+  ol('R6 · süreç: her adım n+ad+anlatım+ölçüm kalemleri + 5 yolculuk etiketi ham HTML\'de',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
