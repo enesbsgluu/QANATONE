@@ -38,7 +38,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 9; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri (tr/en) */
+    + 11; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -169,7 +169,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -313,6 +313,44 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       kusur.push(dil + ':abone formu statik değil');
   }
   ol('R4 · bülten dizini: her yazı ad+lede+tarih+bağlantı ham HTML\'de + statik abone formu',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R5 · SSS BUTUNLUGU: sayfa (TR ve EN) HER sorunun metnini ve cevabini
+   ham HTML'de tasimali (eski tarafta faq JS'le doguyordu, bot gormuyordu)
+   VE FAQPage semasi tam olmali: mainEntity sayisi content.json faq
+   sayisina esit, kimlik sayfanin KENDI adresindeki #faq (TR/EN kimlik
+   cakismasi duzeltmesi geri gelmesin). */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/sss' : 'sss', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const ham = oku(p), duz = coz(ham);
+    for (const f of c.faq) {
+      if (!duz.includes(coz(D(f.q, dil)))) kusur.push(`${dil}:soru(${coz(D(f.q, dil)).slice(0, 20)}…)`);
+      if (!duz.includes(coz(D(f.a, dil)))) kusur.push(`${dil}:cevap(${coz(D(f.q, dil)).slice(0, 20)}…)`);
+    }
+    const ld = ham.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    let sema = null;
+    try { sema = ld && JSON.parse(ld[1]); } catch (e) {}
+    const faqDugum = sema && Array.isArray(sema['@graph'])
+      && sema['@graph'].find((d) => d['@type'] === 'FAQPage');
+    if (!faqDugum) kusur.push(dil + ':FAQPage yok');
+    else {
+      if ((faqDugum.mainEntity || []).length !== c.faq.length)
+        kusur.push(`${dil}:mainEntity ${(faqDugum.mainEntity || []).length}/${c.faq.length}`);
+      const beklenenKimlik = `https://qanatone.com${dil === 'en' ? '/en' : ''}/sss#faq`;
+      if (faqDugum['@id'] !== beklenenKimlik) kusur.push(dil + ':kimlik(' + faqDugum['@id'] + ')');
+    }
+  }
+  ol('R5 · sss: her soru+cevap ham HTML\'de + FAQPage şeması tam ve kimliği kendi adresinde',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
