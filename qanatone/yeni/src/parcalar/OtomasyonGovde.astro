@@ -91,6 +91,21 @@ const KAYDIRICI = [
 const TELY = [50, 150, 250, 350];
 const telSol = TELY.map(y => `M0,${y} C55,${y} 45,200 100,200`);
 const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
+
+/* SIZINTI ŞEMASI (giydirme turu) — eski szCv canvas partikülleri
+   yerine yerli doku: aynı sabit-viewBox/ölçümsüz desen. Beş kanal
+   girişten ana boruya kavis; boruda dört sızıntı noktasından yana
+   damlayan KAYIP çıkışları (sol-sağ dönüşümlü); altta tek kalan çıkış.
+   Akan izler tellerle aynı teknik (pathLength=1 + dash döngüsü). */
+const GIRX = [100, 300, 500, 700, 900];
+const szGiris = GIRX.map(x => `M${x},14 C${x},70 500,52 500,104`);
+const SZY = [128, 152, 176, 200];
+const szDamla = SZY.map((y, i) => {
+  const yon = i % 2 ? 1 : -1; /* sağ-sol dönüşümlü */
+  const x2 = 500 + yon * 150, x3 = 500 + yon * 190;
+  return `M500,${y} C${500 + yon * 70},${y} ${x2},${y + 4} ${x3},${y + 34}`;
+});
+const szBoru = 'M500,104 L500,236';
 ---
 <section class="giris">
   <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
@@ -168,6 +183,19 @@ const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
   <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
   <p class="rozet"><b>{m('sz2', 'Aynı bütçe')}</b> · <i>{m('sz3', 'değişmeyen giriş')}</i></p>
   <p class="cipler">{KANALLAR.map((k) => <span class="cip">{k}</span>)}</p>
+  {/* Sızıntı şeması — süs (.sus-): içerik çipler+kartlarda eksiksiz;
+      şema kaybolursa bilgi kaybolmaz. Kayıp damlaları kızıl, akış izi
+      yumuşak kızıl; reduced-motion'da izler yok, şema statik durur. */}
+  <svg class="sus-szsema" viewBox="0 0 1000 240" aria-hidden="true">
+    {szGiris.map(d => <path class="tel" d={d} />)}
+    <path class="tel boru" d={szBoru} />
+    {szDamla.map(d => <path class="damla" d={d} />)}
+    {szGiris.map((d, i) => <path class={`tel-iz gz${i}`} d={d} pathLength="1" />)}
+    <path class="tel-iz boru-iz" d={szBoru} pathLength="1" />
+    {szDamla.map((d, i) => <path class={`damla-iz dz${i}`} d={d} pathLength="1" />)}
+    {GIRX.map(x => <circle class="giris-nokta" cx={x} cy="14" r="4" />)}
+    <circle class="cikis-nokta" cx="500" cy="236" r="5" />
+  </svg>
   <ul class="sizinti">
     {SIZINTI.map(([sorun, belirti, cozum]) => (
       <li><b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
@@ -297,6 +325,34 @@ const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
   }
   @media (prefers-reduced-motion: reduce) {
     .sus-tel .tel-iz { animation: none; opacity: 0; }
+  }
+
+  .sus-szsema { display: block; width: 100%; height: auto; margin: 18px 0 4px; }
+  .sus-szsema .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
+    vector-effect: non-scaling-stroke; }
+  .sus-szsema .damla { fill: none; stroke: rgba(239, 35, 60, .3); stroke-width: 1.2;
+    vector-effect: non-scaling-stroke; }
+  .sus-szsema .giris-nokta { fill: rgba(255, 255, 255, .25); }
+  .sus-szsema .cikis-nokta { fill: var(--red-soft); }
+  .sus-szsema .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
+    vector-effect: non-scaling-stroke; opacity: .9;
+    stroke-dasharray: .1 .9; stroke-dashoffset: 1.1;
+    animation: ak-iz 2.8s linear infinite; }
+  /* Damla izleri KAYIP kızılı; kısa parça hızla dışarı akar ve söner. */
+  .sus-szsema .damla-iz { fill: none; stroke: var(--red); stroke-width: 1.8;
+    vector-effect: non-scaling-stroke; opacity: .95;
+    stroke-dasharray: .22 .78; stroke-dashoffset: 1.22;
+    animation: ak-iz-damla 2.8s linear infinite; }
+  .sus-szsema .gz1 { animation-delay: .55s; } .sus-szsema .gz2 { animation-delay: 1.1s; }
+  .sus-szsema .gz3 { animation-delay: 1.65s; } .sus-szsema .gz4 { animation-delay: 2.2s; }
+  .sus-szsema .boru-iz { animation-delay: .3s; }
+  .sus-szsema .dz0 { animation-delay: .7s; } .sus-szsema .dz1 { animation-delay: 1.4s; }
+  .sus-szsema .dz2 { animation-delay: 2.1s; } .sus-szsema .dz3 { animation-delay: 2.7s; }
+  @keyframes ak-iz-damla {
+    0% { stroke-dashoffset: 1.22; opacity: .95; }
+    70%, 100% { stroke-dashoffset: .22; opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sus-szsema .tel-iz, .sus-szsema .damla-iz { animation: none; opacity: 0; }
   }
   .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
     letter-spacing: .08em; margin-bottom: 8px; }
