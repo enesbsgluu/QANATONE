@@ -1,0 +1,57 @@
+---
+/* SSS gövdesi — TR ve EN aynı parça (rota turu). Akordeon native
+   `<details>` (S-KU dersi: üç hâlde de çalışır — masaüstü, mobil,
+   JS kapalı), ada JS'i 0. Soru/cevap content.json `faq`ten, sıra
+   oradan. Metin düşüşü data-t düzeninin aynısı: strings[dil][k]
+   doluysa panelinki, boşsa varsayılan (TR varsayılanları eski
+   markup'ın kendisi — s5e/s5h strings.tr'de YOK, ölçüldü).
+   Sondaki "Konuşalım" düğmesi hizmetler dizinindeki kararla aynı
+   bilinçli süperküme: cevapların çoğu başlama kararına çıkıyor,
+   sayfa çıkışsız bırakılmaz; ada tek formu ana sayfada tutar. */
+import { icerik, T, type Dil } from '../icerik';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
+const sorular = icerik.faq || [];
+---
+<section class="giris">
+  <p class="ust-etiket">{m('s5e', 'Sık sorulan sorular')}</p>
+  <h1>{m('s5h', 'Dürüst cevaplar.')}
+    <span class="say">({sorular.length})</span></h1>
+</section>
+
+<div class="sorular">
+  {sorular.map((f: any) => (
+    <details>
+      <summary>{T(f.q, dil)}</summary>
+      <p>{T(f.a, dil)}</p>
+    </details>
+  ))}
+</div>
+
+{/* EN adası ana sayfa henüz yok — EN düğmesi kesmeye kadar kök /en'e
+    çıkar (bilinçli kaçak, envanterde kayıtlı — hizmetler dizininin aynısı). */}
+<p class="son">
+  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+</p>
+
+<style>
+  .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
+    font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  .sorular { display: flex; flex-direction: column; gap: 10px; }
+  .sorular details { border: 1px solid var(--line); border-radius: 14px;
+    padding: 0 18px; }
+  .sorular summary { cursor: pointer; padding: 16px 0; font-weight: 600;
+    font-size: .95rem; list-style: none; position: relative; padding-right: 26px; }
+  .sorular summary::-webkit-details-marker { display: none; }
+  .sorular summary::after { content: '+'; position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%); color: var(--tx3); font-weight: 400; }
+  .sorular details[open] summary::after { content: '−'; }
+  .sorular details > p { color: var(--tx2); font-size: .92rem;
+    margin: 0; padding: 0 0 16px; }
+  .son { margin-top: 34px; text-align: center; }
+</style>

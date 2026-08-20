@@ -127,6 +127,26 @@ export function bultenDizinSema(icerik, sayfa) {
   return g;
 }
 
+/* SSS ŞEMASI — eski /sss @graph'ının göçü: üçlü + FAQPage (kök schema()
+   11559-11567; bülten gibi salt üçlü DEĞİL, özel bloğu olan iki eski
+   sayfadan biri). Kimlik sayfanın kendi adresine bağlı (eski taraftaki
+   TR/EN kimlik çakışması düzeltmesi korunuyor); q/a strip'li — etiket
+   sıyrılır, boşluk tekilleşir, kaynaktaki davranışın aynısı. */
+export function sssSema(icerik, sayfa) {
+  const g = anaSema(icerik, sayfa);
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const strip = (v) => String(T(v)).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  g['@graph'].push({
+    '@type': 'FAQPage', '@id': sayfa.url + '#faq',
+    mainEntity: (icerik.faq || []).map((f) => ({
+      '@type': 'Question', name: strip(f.q),
+      acceptedAnswer: { '@type': 'Answer', text: strip(f.a) },
+    })),
+  });
+  return g;
+}
+
 export function dizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
   const KOK = 'https://qanatone.com';
