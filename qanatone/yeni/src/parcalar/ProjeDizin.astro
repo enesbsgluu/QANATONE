@@ -10,6 +10,11 @@
    (S-SZ dersi: atmosfer, konu değil — bayt eşiği). */
 import { getCollection } from 'astro:content';
 import { icerik, T, type Dil } from '../icerik';
+/* Kart kucuk gorseli (giydirme, 20 Agu): olculer kunyeden — uretec
+   `gorsel-uret.cjs` yazar, bilesen ELLE olcu yazmaz. Kunyede olmayan
+   proje gorselsiz basilir (panelden yeni proje senaryosu). */
+import prjGorsel from '../veri/proje-gorselleri.json';
+const gorselMap = new Map(prjGorsel.map((g: any) => [g.slug, g]));
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
@@ -28,23 +33,33 @@ const on = dil === 'en' ? '/en' : '';
 </section>
 
 <div class="isler">
-  {projeler.map((p: any) => (
+  {projeler.map((p: any) => { const g: any = gorselMap.get(p.slug); return (
     <article class="is">
-      <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
-      <h2>{p.name}</h2>
-      <p>{T(p.text, dil)}</p>
-      {p.res?.length > 0 && <ul class="rakamlar">
-        {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
-      </ul>}
-      <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
+      {g && <img class="pul" src={`/yeni/img/pt/${p.slug}.webp`}
+        width={g.thumb.w} height={g.thumb.h} loading="lazy" decoding="async" alt="" />}
+      <div class="icerik">
+        <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
+        <h2>{p.name}</h2>
+        <p>{T(p.text, dil)}</p>
+        {p.res?.length > 0 && <ul class="rakamlar">
+          {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
+        </ul>}
+        <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
+      </div>
     </article>
-  ))}
+  ); })}
 </div>
 
 <style>
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
   .isler { display: flex; flex-direction: column; gap: 14px; }
-  .is { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .is { display: flex; gap: 16px; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .is .icerik { min-width: 0; }
+  /* SABIT 104 CSS px kutu — uretecin 208w varyanti tam 2,0x (kural 109) */
+  .pul { flex: none; width: 104px; height: 78px; border-radius: 10px;
+    object-fit: cover; }
+  @media (max-width: 560px) { .pul { width: 88px; height: 66px; } }
   .is .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
   .is .yil { font-family: ui-monospace, monospace; color: var(--red-soft); }
   .is h2 { font-size: 1.05rem; margin: 0 0 6px; }

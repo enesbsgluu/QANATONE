@@ -59,8 +59,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
    dışındakiler lazy — eager kalan fetchpriority=high taşımalı. */
 {
   const kusur = [];
+  let gorselSayisi = 0;
   for (const p of sayfalar) {
     for (const m of oku(p).matchAll(/<img[^>]*>/g)) {
+      gorselSayisi++;
       const t = m[0];
       if (!/\bwidth=/.test(t) || !/\bheight=/.test(t)) kusur.push(rel(p) + ':olcusuz');
       else if (!/loading="lazy"/.test(t) && !/fetchpriority="high"/.test(t))
@@ -68,7 +70,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     }
   }
   ol('G1 · her <img> ölçülü + lazy/öncelik işaretli', kusur.length === 0,
-     kusur.slice(0, 3).join(' ') || 'görsel yok (Faz 1 sayfaları metin)');
+     kusur.slice(0, 3).join(' ') || `${gorselSayisi} görsel tarandı`);
 }
 
 /* V1 · veri derlemede pişer: sayfa içi çalışan betiklerde fetch/XHR yok.

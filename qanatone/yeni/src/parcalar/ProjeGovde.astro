@@ -3,9 +3,11 @@
    Eski sayfada bu içerik JS'le doğuyordu (pdHero/pdMeta/pdBlocks);
    burada tamamı derleme anında basılır. blocks panelden HTML geliyor
    (yalnız <p> ölçüldü) — suz süzgecinden geçer (Anayasa madde 6).
-   Taşınmayan: hero görseli (giydirme turu — eski tarafta da bot
-   görmüyordu, JS basıyordu). */
+   Hero gorseli GELDI (giydirme, 20 Agu): kunyeden olculu, LAZY —
+   giris+kunyenin ALTINDA durur ki LCP metin kalsin (olculdu, asagida
+   sayfa kapisi). Kunyede olmayan proje gorselsiz basilir. */
 import { icerik, T, suz, type Dil } from '../icerik';
+import prjGorsel from '../veri/proje-gorselleri.json';
 interface Props { p: any; dil: Dil }
 const { p, dil } = Astro.props;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
@@ -16,6 +18,7 @@ const bloklar: [string, string][] = (p.blocks && (p.blocks[dil] || p.blocks.tr))
 const sira = (icerik.projects || []).map((x: any) => x.slug);
 const i = sira.indexOf(p.slug);
 const sonraki = (icerik.projects || [])[(i + 1) % sira.length];
+const g: any = prjGorsel.find((x: any) => x.slug === p.slug);
 ---
 <p class="geri"><a href={`${B}${on}/projeler`}>{M('Tüm projeler', 'All projects')}</a></p>
 
@@ -30,6 +33,13 @@ const sonraki = (icerik.projects || [])[(i + 1) % sira.length];
   {p.meta?.dur && <div><dt>{M('Süre', 'Duration')}</dt><dd>{T(p.meta.dur, dil)}</dd></div>}
   {p.meta?.ch && <div><dt>{M('Kanallar', 'Channels')}</dt><dd>{T(p.meta.ch, dil)}</dd></div>}
 </dl>
+
+{g && <picture class="hero">
+  <source media="(max-width:760px)" srcset={`/yeni/img/pd/${p.slug}-m.webp`}
+    width={g.herom.w} height={g.herom.h} />
+  <img src={`/yeni/img/pd/${p.slug}.webp`} width={g.hero.w} height={g.hero.h}
+    loading="lazy" decoding="async" alt={p.name} />
+</picture>}
 
 {bloklar.map(([baslik, govde]) => (
   <section class="govde">
@@ -56,6 +66,8 @@ const sonraki = (icerik.projects || [])[(i + 1) % sira.length];
   .kunye div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; }
   .kunye dt { color: var(--tx3); font-size: .74rem; margin-bottom: 3px; }
   .kunye dd { color: var(--tx2); font-size: .9rem; margin: 0; }
+  .hero { display: block; margin: 20px 0 8px; }
+  .hero img { display: block; width: 100%; height: auto; border-radius: 14px; }
   .olcu { margin-top: 22px; }
   .sonraki { margin-top: 34px; display: flex; gap: 10px; align-items: baseline; }
   .sonraki span { color: var(--tx3); font-size: .82rem; }
