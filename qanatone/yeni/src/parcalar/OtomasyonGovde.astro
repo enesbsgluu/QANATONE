@@ -121,23 +121,29 @@ const szBoru = 'M500,108 L500,254';
   <p class="lede">{m('s8p', 'Her kanal tek bir merkeze bağlanır. Ajan gelen talebi karşılar, eler, yönlendirir — sonuç elinde hazır olarak durur.')}</p>
 </section>
 
-{/* ---- AKIŞ MANTIĞI (içerik statik; teller süs) ---- */}
+{/* ---- AKIŞ MANTIĞI (içerik statik; teller süs) ----
+     A3-D1 (sürücü düzeltmesi): kaynağın reveal(p) scrub'ı geri geldi —
+     eşikler kökün 10632-10639 formülleri BİREBİR: giriş .06+i·.07,
+     beyin .34, çıkış .50+i·.08, teller .12+i·.07 / .52+i·.08; sürücü
+     ST scrub yerine anonim view() (--fyt, SurecGovde deseni). */}
 <div class="akis3">
   <div class="akol">
     <p class="akbas">{m('flc1', 'Gelen')}</p>
-    {GELEN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
+    {GELEN.map(([ad, alt], i) => <p class="adugum" style={`--fe:${(0.06 + i * 0.07).toFixed(2)}`}><b>{ad}</b><span>{alt}</span></p>)}
   </div>
   <svg class="sus-tel sol" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
     {telSol.map(d => <path class="tel" d={d} />)}
+    {telSol.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
     {telSol.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
   <svg class="sus-tel-m sol" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
     {telSolM.map(d => <path class="tel" d={d} />)}
+    {telSolM.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
     {telSolM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
   <div class="akol beyin">
     <p class="akbas">{m('flc2', 'Ajan')}</p>
-    <div class="ajan-kart">
+    <div class="ajan-kart" style="--fe:.34">
       <p class="ajan-ad"><b>{m('flb', 'QANATONE Ajanı')}</b>
         <span>{m('flbs', 'Sınıflandır · Ele · Yönlendir')}</span></p>
       <ol>
@@ -147,15 +153,17 @@ const szBoru = 'M500,108 L500,254';
   </div>
   <svg class="sus-tel sag" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
     {telSag.map(d => <path class="tel" d={d} />)}
+    {telSag.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
     {telSag.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
   <svg class="sus-tel-m sag" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
     {telSagM.map(d => <path class="tel" d={d} />)}
+    {telSagM.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
     {telSagM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
   <div class="akol">
     <p class="akbas">{m('flc3', 'Çıkan')}</p>
-    {CIKAN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
+    {CIKAN.map(([ad, alt], i) => <p class="adugum" style={`--fe:${(0.5 + i * 0.08).toFixed(2)}`}><b>{ad}</b><span>{alt}</span></p>)}
   </div>
 </div>
 
@@ -319,6 +327,34 @@ const szBoru = 'M500,108 L500,254';
 
   .akis3 { display: grid; grid-template-columns: 1fr 44px 1.3fr 44px 1fr; gap: 6px;
     margin-top: 26px; }
+  /* AKIŞ SCRUB SÜRÜCÜSÜ (A3-D1) — kaynak: ST scrub .5, top 86%→bottom
+     90% (kök 12461) + reveal(p) eşikleri (10632-10639, markup'ta --fe
+     olarak BİREBİR basılı). Sürücü kaydırma (IO değil): anonim view()
+     tek animasyon --fyt'yi 0→1 sürer, hâller eşikten türer (SurecGovde
+     --yt deseninin eşi). Aralık cover 5%→60%: kaynağın "blok tam
+     görünürken tamamlanır" hedefinin (Enes ayarı, 12456-2460) view
+     eşleniği. TABAN = TAMAMLANMIŞ (--fyt initial 1): desteksiz
+     tarayıcı ve reduced-motion tam hâli görür — kaynak REDUCE'da
+     reveal(1) çağırıyordu, birebir. Pencere ×20 (~0.05p): kaynağın
+     sınıf+.45s transition yumuşamasının scrub eşleniği (bilinçli
+     eşleme, ani sınıf geçişi değil). */
+  @property --fyt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .akis3 { animation: fyt-surus linear both; animation-timeline: view();
+      animation-range: cover 5% cover 60%; }
+  }
+  @keyframes fyt-surus { from { --fyt: 0; } to { --fyt: 1; } }
+  .adugum, .ajan-kart, .tel-yak {
+    --fp: clamp(0, (var(--fyt, 1) - var(--fe, 0)) * 20, 1); }
+  /* düğüm: kaynak .fln kapalı .55 → açık 1 (701-710) */
+  .adugum { opacity: calc(.55 + .45 * var(--fp)); }
+  /* beyin: kaynak .fbrain kapalı opacity 0 + scale(.9) → açık 1/1 (1356-1359) */
+  .ajan-kart { opacity: var(--fp); transform: scale(calc(.9 + .1 * var(--fp))); }
+  /* tel yakma katmanı: kaynak .fwire gri .13 → .lit kızıl .55 (1331-1332);
+     gri taban .tel sabit durur, kızıl kopya eşikle açılır */
+  .sus-tel .tel-yak, .sus-tel-m .tel-yak { fill: none; stroke: rgba(239,35,60,.55);
+    stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: var(--fp); }
+  @media (prefers-reduced-motion: reduce) { .akis3 { animation: none; } }
   /* Teller SÜS (.sus- sözleşmesi): içerik üç kolonda eksiksiz; mobilde
      ve reduced-motion'da süs söner, kimse bilgi kaybetmez. */
   .sus-tel { width: 100%; margin-top: 34px; height: calc(100% - 34px); }

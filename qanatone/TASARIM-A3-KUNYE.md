@@ -48,7 +48,8 @@ süsler · amblem `amCCW/amCW` (infinite; kapısı pin sahnesinin `on`u).
 | Deste (S-P) | scroll scrub (elle) | `view-timeline --sp-deste` scrub | ✅ SADIK (0,003 ölçek farkı, ölçülü) |
 | S2 kayıp çizgisi | (Faz 2 anlatısı — kaynak eşi yok) | `view()` entry 15%→exit 85% scrub | ✅ scrub ilkesine uygun |
 | S3 mekanizma rayı | (Faz 2 anlatısı) | `view()` entry 25%→entry 85% scrub | ✅ |
-| S5 süreç çizgisi (ana) | K6 scrub | anonim `view()` + `--yt` scrub | ✅ SADIK |
+| /surec çizgisi (rota) | K6 scrub | anonim `view()` + `--yt` scrub, cover 5%→55% (2a2bfe1) | ✅ SADIK — **ilk yazımda "açık" sanılmıştı; kod doğrulaması düzeltti** |
+| Ana sayfa S5 süreç | K6 (kök anada #chan vardı) | kartlı anlatı, çizgi YOK (Faz 2 anlatısı) | ⚠️ karar kalemi: anaya çizgi dönsün mü — Enes'te |
 | S-K katman girişi | rv.in tetik | `view()` scrub | ✅ (tetikten scrub'a — yön doğru) |
 | S-SZ sözler girişi | rv.in tetik | `view()` scrub | ✅ |
 | ak* demolar (5 ana + 4 detay) | IO + infinite | IO + infinite (`--akps`) | ✅ SADIK — kaynak da otomatik |
@@ -57,7 +58,7 @@ süsler · amblem `amCCW/amCW` (infinite; kapısı pin sahnesinin `on`u).
 | Hero içerik paralaksı (K2) | **scrub .6** | YOK (aynı karar) | ⚠️ AÇIK (D5) |
 | /otomasyon akış (K4) | **scrub .5** | animasyon YOK — statik | ❌ AÇIK (D1) — Enes'in özel şikâyeti |
 | /otomasyon sızıntı (K5) | **PIN+scrub** kilitli sahne | statik son-hâl çubukları | ❌ AÇIK (D2) |
-| /surec çizgisi (rota) | **scrub .5** (K6) | statik TAM hâl (çizilme yok) | ❌ AÇIK (D3) |
+| ~~/surec çizgisi (rota)~~ | — | — | satır yukarı taşındı: SADIK çıktı (D3 düştü) |
 | Hizmet detay story sahneleri (K7) | **PIN+scrub** | tamamen YOK (statik metin) | ❌ EN BÜYÜK AÇIK (D4) |
 | ai-ajan motor sahnesi (K8) | **PIN+scrub** yedi perde | yalnız amblem (A2, sahnesiz) | ❌ AÇIK (D4 ailesi) |
 
@@ -72,10 +73,11 @@ tablo bunu doğruluyor: his farkının kaynağı eksik scrub'lar.
 |---|---|---|---|
 | D1 | /otomasyon akış scrub | S5 deseni: `@property` ilerleme değişkeni + anonim `view()`, adım/kanal durumları calc/step'le | kaynak aralığı korunur: top 86%→bottom 90% |
 | D2 | /otomasyon sızıntı kilitli sahnesi | sticky kap + uzun bölme + `scroll()` ilerleme (destenin pin-eşdeğeri deseni); tutmazsa GSAP ST pin+scrub adası | tanecik rAF'ı taşınmaz (rota kararı); çubuk/tıpa/çıkış scrub |
-| D3 | /surec çizgisi çizilmesi | ana sayfadaki S5 `--yt` düzeni AYNEN rotaya | en ucuz kalem |
+| ~~D3~~ | /surec çizgisi | **ZATEN KAPALI** (2a2bfe1, `--yt` view() scrub) — ilk yazım kodu doğrulamadan rota raporunun eski notuna dayanmıştı; ders: künye kıyası KODA bakar, rapora değil | — |
 | D4 | Hizmet detay story + motor sahneleri | sahne başına karar; ölçümlü kablolar/pinli yedi perde → **GSAP ST scrub kendi adasında** güçlü aday | kapsamı büyük — Enes'le sıra kararı |
 | D5 | Hero paralaks (eller + içerik) | `animation-timeline: scroll(root)` hero aralığında (K1/K2 değerleri birebir) | iskeletin "taşınmadı" kararı tasarım turunda düşer |
 
-Sıra önerisi: **D3 → D1 → D2 → D5 → D4** (ucuzdan pahalıya; D4 sahne
-sahne kendi commit'leriyle). Her biri kendi kapısı + ekran karesi +
-savurma hükmüyle.
+Sıra önerisi: **D1 → D2 → D5 → D4** (D3 zaten kapalı çıktı; ucuzdan
+pahalıya; D4 sahne sahne kendi commit'leriyle). Her biri kendi kapısı +
+ekran karesi + savurma hükmüyle. Ek karar kalemi: ana sayfa S5'e
+müşteri yolu çizgisi dönsün mü (kök anada vardı) — Enes'te.
