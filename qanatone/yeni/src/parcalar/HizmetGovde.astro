@@ -1,12 +1,41 @@
 ---
 /* Hizmet sayfası gövdesi — TR ve EN sayfaları aynı parçayı kullanır.
-   Bütün metin content.json'dan; sayı/liste derleme anında pişer (V1). */
-import { T, type Dil } from '../icerik';
+   Bütün metin content.json'dan; sayı/liste derleme anında pişer (V1).
+
+   DETAY DEMOSU (giydirme, 20 Ağu): şeritte kullanılmayan dört mini
+   sahne (site/tool/auto/trade) kendi hizmet sayfasının girişinde —
+   kaynağın 6898 yorumu kart görselini "hizmet sayfasındaki sahnenin
+   mini hâli" diye tanımlıyordu, sahnenin kendisi bu turla detaya
+   geldi. Değerler künyeden (demo-detay.css başındaki sapma listesi).
+   Diğer beş hizmetin sahnesi ana sayfa şerit kartında yaşıyor; stili
+   bu sayfada yok, o sayfalar demosuz basılır (plan kararı).
+   Proje detayının dersi aynen: demo girişin ALTINDA ki LCP metin
+   kalsın; aria-hidden — aynı bilgi sayfanın metninde. */
+import { T, type Dil, icerik } from '../icerik';
+import { ton } from '../ton';
+import AkisDemo from './AkisDemo.astro';
+import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
 const d = s.det;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* Anahtar kaynağın akKind kuralı (kök 6908) — burada yalnız dördü:
+   slug eşlemesi + panelden yeni hizmet gelirse aile yedeği (craft →
+   story.tools varsa tool yoksa site; trade ailesi trade — kaynakta
+   'trust' anahtarı da fiilen trade markup'ına düşüyordu). funnel/
+   flow/climb aileleri şerit demolarına eşlenir → burada demosuz. */
+const DEMO_MAP: Record<string, string> = { 'web-tasarim': 'site',
+  'web-sitesi-araclar': 'tool', 'otomasyon': 'auto', 'finans': 'trade' };
+const demoAnahtar = (h: any): string | null => {
+  if (DEMO_MAP[h.slug]) return DEMO_MAP[h.slug];
+  if (h.fam === 'craft') return h.det?.story?.tools ? 'tool' : 'site';
+  if (h.fam === 'trade') return 'trade';
+  return null;
+};
+const dk = demoAnahtar(s);
+/* Ton hizmet SIRASINDAN (kaynak kuralı) — kart ile detay aynı tonda. */
+const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug === s.slug));
 ---
 <section class="giris">
   <h1>{T(d.h, dil)}</h1>
@@ -14,6 +43,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
   {d.hits?.length > 0 && <ul class="hits">
     {d.hits.map((h: any) => <li>{T(h, dil)}</li>)}
   </ul>}
+  {dk && <div class="hd-demo" aria-hidden="true" style={ton(sira)}>
+    <AkisDemo k={dk} dil={dil} />
+  </div>}
 </section>
 
 {d.pains?.length > 0 && <section>
@@ -70,3 +102,23 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
   {/* Form adada (S-IL); EN ana sayfa adası kuruldu, kaçak adaya döndü. */}
   <a class="dugme" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
 </section>}
+
+<script>
+  /* ADA — Anayasa S-A reçetesinin detay eşi (SAAkis'teki kapı):
+     demo yalnız görünürken oynar; durdurma animation-play-state,
+     anahtar .hd-demo KÖKÜNDE (--akps), açılışta sınıf yazılmaz —
+     paused doğar, IO göründüğünde oynatır. Demosuz beş hizmet
+     sayfasında seçici boş döner, iş yapılmaz. */
+  const d = document.querySelector('.hd-demo');
+  if (d) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => {
+        for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
+      }, { threshold: 0.25 });
+      io.observe(d);
+    } else {
+      /* IO yoksa: sürekli oynasın — içerik statik, bu yalnız süs. */
+      d.classList.add('akoynar');
+    }
+  }
+</script>

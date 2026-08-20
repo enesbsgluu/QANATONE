@@ -22,6 +22,7 @@ import '../stil/akis.css';
 import Ikon from '../parcalar/Ikon.astro';
 import AkisDemo from '../parcalar/AkisDemo.astro';
 import { icerik, T, suz } from '../icerik';
+import { ton } from '../ton';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -43,12 +44,8 @@ const ilkCumle = (t: string): string => {
   const m = String(t || '').match(/^[\s\S]*?[.!?](?=\s+[A-ZÇĞİÖŞÜ])/);
   return m ? m[0] : String(t || '');
 };
-/* Kart tonu — kaynak `HUE` (6889) ve `__akisRender`in --tA/--tB'si. */
-const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
-const ton = (i: number) => {
-  const h = HUE[i % HUE.length][0];
-  return `--tA:hsl(${h} 72% 30%);--tB:hsl(${h} 85% 56%)`;
-};
+/* Kart tonu — kaynak `HUE` (6889): ortak modülden (ton.ts), hizmet
+   detay demosu aynı diziden okur (kart ↔ detay ton tutarlılığı). */
 const kartlar = (icerik.services || []).slice(0, AKIS_KART);
 /* Demo anahtari — kaynagin kurali (akKind 6908): slug eslemesi + panelden
    yeni hizmet gelirse aile yedegi. Ana sayfa seridinin besi. */

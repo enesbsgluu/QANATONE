@@ -11,7 +11,9 @@
    ---- 1. SAPMA KAPANDI (giydirme, 20 Agu): BES DEMO GELDI ----
    Ana sayfa seridinin besi tasindi (serp chat ads social agent, 13
    keyframe); site/tool/auto/trade seritte kullanilmiyor — olu bayt
-   tasinmadi, hizmet detay giydirmesinin adayi. Bayt karari Enes'in:
+   tasinmadi. O dordu HIZMET DETAYINA gitti (demo-detay.css +
+   AkisDemo; ayni turun ikinci adimi) — ortak sozluk demo-taban.css'e
+   cikti, bu dosya onu @import eder. Bayt karari Enes'in:
    H18 tavani asildi (+1 RTT bilinçli), tavan denetimde yeni degerde.
    Anayasa'nin uc sarti uygulandi: durdurma animation-play-state +
    anahtar kart kokunde --akps degiskeni (evrensel secici yok) +
@@ -63,6 +65,7 @@
    kaydırma masaüstünde eksik kalan tek yol — düğmeler istenirse
    giydirme turunda ölçülerek eklenir.
    ============================================================ */
+@import './demo-taban.css';
 
 .sa-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .sa-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
@@ -137,22 +140,10 @@
    masaustu kapisinda (H14: mobil baglamda box-shadow yasak; akSpon
    ve akPulse'un tek isi golge oldugundan mobilde hic dogmazlar).
    ============================================================ */
+/* Taban (.akd, .aksq, .akmini, akRise) demo-taban.css'te — dosya
+   başındaki @import; detay demolarıyla ortak sözlük. */
 .sa-kart{--akps:paused}
 .sa-kart.akoynar{--akps:running}
-.akd{position:absolute;inset:0;display:flex;flex-direction:column;
-  justify-content:center;gap:2.6cqw;padding:7cqw 6.5cqw;
-  font-size:clamp(9.2px,3.3cqw,11.4px);line-height:1.25;
-  font-family:var(--f-govde);letter-spacing:-.005em}
-.akd b,.akd i,.akd em,.akd u,.akd s{font-style:normal;font-weight:inherit;text-decoration:none}
-.akd em{font-family:var(--f-tek);font-variant-numeric:tabular-nums}
-
-/* -- arama kutusu (ads + serp ortak) -- */
-.aksq{display:flex;align-items:center;gap:2.2cqw;padding:2.6cqw 3cqw;border-radius:6cqw;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--tx2)}
-.aksq b{width:2.8cqw;height:2.8cqw;border-radius:50%;flex:none;
-  border:1.4px solid var(--tx3);position:relative}
-.aksq b::after{content:'';position:absolute;right:-1cqw;bottom:-.6cqw;width:1.4cqw;height:1.4px;
-  background:var(--tx3);transform:rotate(45deg)}
 .akres{display:flex;flex-direction:column;gap:1.6cqw}
 .akrw{display:flex;align-items:center;justify-content:space-between;gap:2cqw;
   padding:2.2cqw 2.8cqw;border-radius:2cqw;background:rgba(255,255,255,.035);
@@ -189,19 +180,6 @@
 .akd-ads .akrw.hot i u{display:inline-block;margin-right:1.6cqw;padding:.5cqw 1.4cqw;
   border-radius:1cqw;background:var(--red);color:var(--tx);font-size:.78em;font-weight:700;
   letter-spacing:.04em}
-@keyframes akRise{0%,26%{opacity:0;transform:translateY(1.6cqw)}
-  34%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(1.6cqw)}}
-.akmini{display:flex;gap:1.6cqw;margin-top:.6cqw}
-.akmini>span{flex:1;display:flex;flex-direction:column;gap:.7cqw;padding:2cqw 2.2cqw;
-  border-radius:2cqw;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
-  opacity:0;animation:akRise 5.6s var(--e) infinite;animation-delay:2.6s;
-  animation-play-state:var(--akps,paused)}
-.akmini>span:nth-child(2){animation-delay:2.8s}
-.akmini>span:nth-child(3){animation-delay:3s}
-.akmini i{color:var(--tx4);font-size:.84em}
-.akmini b{color:var(--tx);font-weight:700;font-size:1.16em;font-family:var(--f-tek)}
-.akmini>span.hot{border-color:rgba(239,35,60,.42);background:rgba(239,35,60,.1)}
-.akmini>span.hot b{color:var(--red-soft)}
 
 /* -- META: kitle cipleri, akan akis, sponsorlu gonderi -- */
 .akd-social{gap:2.4cqw}
@@ -320,11 +298,11 @@
 /* -- hareket azaltma: durduran secici hareketi verenin AYNISI (H11);
      son hal = icerik tam gorunur (kaynak 4292'nin uyarlamasi) -- */
 @media (prefers-reduced-motion: reduce){
-  .aktype,.akd-ads .aksq::after,.akd-ads .akrw,.akmini>span,.akaud i,.akrail,
+  .aktype,.akd-ads .aksq::after,.akd-ads .akrw,.akaud i,.akrail,
   .akpost.spon,.aknight b,.akwire .akpk,.akbh b,.akstp,.akrw,.akrw.hot,
   .akq,.aka,.aksrc{animation:none}
   .aktype{clip-path:none}
-  .akd-ads .akrw,.akmini>span,.akaud i,.akq,.aka,.aksrc{opacity:1;transform:none}
+  .akd-ads .akrw,.akaud i,.akq,.aka,.aksrc{opacity:1;transform:none}
   .akstp{opacity:1}
   .akd-ads .aksq::after,.akwire .akpk{opacity:0}
 }
