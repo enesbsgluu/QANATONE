@@ -38,7 +38,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 15; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en) */
+    + 16; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }

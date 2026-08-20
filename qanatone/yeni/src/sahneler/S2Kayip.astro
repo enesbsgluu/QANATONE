@@ -3,8 +3,20 @@
    bekleme → yanlış kişi → kayıp. Kaydırmaya bağlı tek çizgi dolumu
    (CSS scroll-driven, JS yok); desteklemeyen tarayıcıda çizgi dolu
    durur — içerik iki hâlde de eksiksiz. Mobil: aynı beş durak, daha
-   kısa dikey mesafe (yol sıkışık, adım atlanmaz). */
-const duraklar = [
+   kısa dikey mesafe (yol sıkışık, adım atlanmaz).
+   METİN KAYNAĞI: Faz 2 anlatısı (content.json'da karşılığı yok — bu
+   sahne yeniden yazımdı). EN, /en adası kurulurken TR'nin sadık
+   çevirisi olarak buraya eklendi; iki dil tek dosyada yaşar. */
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const duraklar = dil === 'en' ? [
+  { e: 'SEARCH', b: 'The customer is looking for you', p: 'They ask Google, ChatGPT, Instagram: "who does this?" The demand is born right here.' },
+  { e: 'CONTACT', b: 'Form, WhatsApp, DM', p: 'They write through one channel. The message lands in an inbox — nobody knows who is watching it.' },
+  { e: 'WAITING', b: 'The reply is late', p: 'Hours pass. Nobody answers while the lead is hot; the customer writes to a second company.' },
+  { e: 'ROUTING', b: 'It lands on the wrong person', p: 'Even when someone replies, the enquiry sits with the wrong person: no pricing, no calendar, more questions.' },
+  { e: 'OUTCOME', b: 'The enquiry is lost', p: 'The customer hires whoever answered fastest. This path ends the same way every day, in every industry.', son: true }
+] : [
   { e: 'ARAMA', b: 'Müşteri seni arıyor', p: 'Google\'a, ChatGPT\'ye, Instagram\'a soruyor: "kim yapar?" Talep bu anda doğdu.' },
   { e: 'TEMAS', b: 'Form, WhatsApp, DM', p: 'Bir kanaldan yazıyor. Mesaj bir gelen kutusuna düşüyor — kimin baktığı belirsiz.' },
   { e: 'BEKLEME', b: 'Yanıt gecikiyor', p: 'Saatler geçiyor. Talep sıcakken kimse dönmüyor; müşteri ikinci firmaya yazıyor.' },
@@ -14,9 +26,9 @@ const duraklar = [
 ---
 <section data-sahne="2">
   <div class="icgen">
-    <p class="kunye"><i>02</i>KAYIP</p>
-    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Bir talebin yolunu izle.</h2>
-    <p class="s1-alt" style="margin-bottom:44px">Soyut bir istatistik değil — tek bir talebin bugün başına gelenler.</p>
+    <p class="kunye"><i>02</i>{M('KAYIP', 'LOSS')}</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">{M('Bir talebin yolunu izle.', "Follow one enquiry's path.")}</h2>
+    <p class="s1-alt" style="margin-bottom:44px">{M('Soyut bir istatistik değil — tek bir talebin bugün başına gelenler.', 'Not an abstract statistic — what happens to a single enquiry today.')}</p>
     <div class="s2-yol">
       <i class="s2-cizgi" aria-hidden="true"></i>
       {duraklar.map(d => (

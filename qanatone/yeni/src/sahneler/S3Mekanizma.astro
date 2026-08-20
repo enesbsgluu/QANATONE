@@ -2,8 +2,19 @@
 /* S3 · Mekanizma — ajan devrede: niyet → uygunluk → eşleştirme → doğru
    kişiye → CRM/takvim. Adımların rayı kaydırmayla çizilir (CSS
    scroll-driven); metin HEP tam opak (H2). Mevcut "canlı iş akışı"
-   sahnesinin sadeleşmiş hâli — süs yok, mekanizmanın kendisi var. */
-const adimlar = [
+   sahnesinin sadeleşmiş hâli — süs yok, mekanizmanın kendisi var.
+   METİN KAYNAĞI: Faz 2 anlatısı; EN, /en adası kurulurken TR'nin sadık
+   çevirisi olarak eklendi (S2 ile aynı düzen). */
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const adimlar = dil === 'en' ? [
+  { n: '01', b: 'Intent read', p: 'Whichever channel it comes from, the agent reads the message: what they want, how urgent it is, what their budget says.' },
+  { n: '02', b: 'Fit', p: 'Does it match the work you do? If not, it is politely redirected — nobody\'s time gets stolen.' },
+  { n: '03', b: 'Matching', p: 'A qualified enquiry is tied to the right service, the right package, the right priority.' },
+  { n: '04', b: 'To the right person', p: 'The enquiry reaches the person who can actually answer — the one who knows the price and the calendar. Within minutes.' },
+  { n: '05', b: 'CRM + calendar', p: 'Every step is on record: who, when, which answer. No enquiry dies in an inbox.' }
+] : [
   { n: '01', b: 'Niyet okundu', p: 'Talep hangi kanaldan gelirse gelsin ajan mesajı okur: ne istiyor, ne kadar acil, bütçesi ne söylüyor.' },
   { n: '02', b: 'Uygunluk', p: 'İş tanımına uyuyor mu? Uymuyorsa nazikçe yönlendirilir — kimsenin vakti çalınmaz.' },
   { n: '03', b: 'Eşleştirme', p: 'Uygun talep doğru hizmete, doğru pakete, doğru önceliğe bağlanır.' },
@@ -13,9 +24,9 @@ const adimlar = [
 ---
 <section data-sahne="3">
   <div class="icgen">
-    <p class="kunye"><i>03</i>MEKANİZMA</p>
-    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Aynı talep, sistem varken.</h2>
-    <p class="s1-alt" style="margin-bottom:44px">Ajan devreye girer; talep beklemez, kaybolmaz, yanlış kişiye düşmez.</p>
+    <p class="kunye"><i>03</i>{M('MEKANİZMA', 'MECHANISM')}</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">{M('Aynı talep, sistem varken.', 'The same enquiry, with the system in place.')}</h2>
+    <p class="s1-alt" style="margin-bottom:44px">{M('Ajan devreye girer; talep beklemez, kaybolmaz, yanlış kişiye düşmez.', 'The agent steps in; the enquiry never waits, never gets lost, never lands on the wrong person.')}</p>
     <div class="s3-dizi">
       {adimlar.map(a => (
         <div class="s3-adim">
