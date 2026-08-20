@@ -271,11 +271,37 @@
   .sh-void{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 }
 
+/* ── HERO PARALAKSI (Tasarım turu A3-D5) — sapma 6 KAPANDI.
+   Kaynak künyesi birebir: eller ST scrub .9, hero `top top → bottom
+   top`, hand-h yPercent −15 / hand-r +17, ease:none (kök 12338-12343);
+   içerik ST scrub .6, y:110 + opacity→.2 (12527-12528). Sürücü GSAP
+   değil scroll-driven CSS: özne hero sahnesi (adlandırılmış timeline —
+   deste kanıtlı desen), aralık `exit 0%→100%` = kaynağın top-top→
+   bottom-top penceresinin birebiri (hero üstten çıkarken sürülür).
+   Paralaks .sus-el'de yaşar — eski GSAP'in sahibi olan katman; salınım
+   (.sus-suzul) ve giriş (img) kendi katmanlarında, transform çakışmaz.
+   Kaynak REDUCE'da paralaksı hiç kurmuyordu → mirror aynı seçicide. */
+@supports (animation-timeline: view()){
+  .ana .sh-sahne{view-timeline:--sh-hero block}
+  .sus-el-h{animation:sh-par-h linear both;animation-timeline:--sh-hero;
+    animation-range:exit 0% exit 100%}
+  .sus-el-r{animation:sh-par-r linear both;animation-timeline:--sh-hero;
+    animation-range:exit 0% exit 100%}
+  .sh-ic{animation:sh-par-ic linear both;animation-timeline:--sh-hero;
+    animation-range:exit 0% exit 100%}
+}
+@keyframes sh-par-h{from{transform:none}to{transform:translateY(-15%)}}
+@keyframes sh-par-r{from{transform:none}to{transform:translateY(17%)}}
+/* içerik keyframe'i opacity taşıyor → from açıkça opak (H5 şartı);
+   bu bir GİRİŞ değil ÇIKIŞ hareketi, taban her zaman opak doğar */
+@keyframes sh-par-ic{from{transform:none;opacity:1}to{transform:translateY(110px);opacity:.2}}
+
 @media(prefers-reduced-motion:reduce){
   /* Durdurma seciciSI, hareketi VEREN seciciyle ayni ozgullukte olmali:
      suzulme `.sus-el-h .sus-suzul` (0,2,0) uzerinde tanimli, sade
      `.sus-suzul` (0,1,0) onu YENEMEZ — kullanici hareket azaltma dese de
      eller salanmaya devam ediyordu. Denetim H11 yakaladi. */
+  .sus-el-h,.sus-el-r,.sh-ic{animation:none}
   .sus-el-h .sus-suzul,.sus-el-r .sus-suzul{animation:none}
   .sus-el img{animation:none;opacity:.94}
   .sus-suzul::before,.sus-suzul::after{animation:none;opacity:1}
