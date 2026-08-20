@@ -174,6 +174,53 @@ async function kurucu() {
               `  ${kb(fs.statSync(giris).size)} -> ${kb(fs.statSync(cikis).size)}`);
 }
 
+
+/* --- Projeler dizini + detay gorselleri (giydirme, 20 Agu) ------------
+   Kaynak ayni renkli asillar (img/pj-<slug>.webp). Uc varyant, ucu de
+   CSS kutusundan (kural 109, <=2x):
+
+     THUMB (dizin karti solunda, SABIT 104 CSS px, 4:3)
+       -> 208x156 cover (2,0x) — tek varyant, kutu her kirilimda sabit.
+     HERO masaustu (detay, main 800 CSS px, 16:9)
+       -> 1280x720 cover (1,6x) — 2x tavaninin altinda, bayt bilinçli.
+     HERO mobil (372 CSS px kutu) -> 744x419 cover (2,0x).
+
+   Kunye `src/veri/proje-gorselleri.json`: bilesen olcuyu ELLE yazmaz;
+   `image`si olmayan proje kunyeye girmez, bilesen gorselsiz basar
+   (panelden yeni proje senaryosu — deste <source> dersinin ayni). */
+const PRJ_HEDEF_T = path.join(HEDEF, 'pt');
+const PRJ_HEDEF_D = path.join(HEDEF, 'pd');
+const PRJ_KUNYE = path.join(__dirname, 'src', 'veri', 'proje-gorselleri.json');
+
+async function projeGorselleri() {
+  fs.mkdirSync(PRJ_HEDEF_T, { recursive: true });
+  fs.mkdirSync(PRJ_HEDEF_D, { recursive: true });
+  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const kunye = [];
+  let toplam = 0;
+  for (const pr of (icerik.projects || [])) {
+    if (!pr.image) continue;
+    const giris = path.join(__dirname, '..', pr.image);
+    if (!fs.existsSync(giris)) { console.log('  ! kaynak yok: ' + pr.image); continue; }
+    const t = path.join(PRJ_HEDEF_T, pr.slug + '.webp');
+    await sharp(giris).resize({ width: 208, height: 156, fit: 'cover', position: 'centre' })
+      .webp({ quality: 78, effort: 6 }).toFile(t);
+    const d = path.join(PRJ_HEDEF_D, pr.slug + '.webp');
+    await sharp(giris).resize({ width: 1280, height: 720, fit: 'cover', position: 'centre' })
+      .webp({ quality: 78, effort: 6 }).toFile(d);
+    const dm = path.join(PRJ_HEDEF_D, pr.slug + '-m.webp');
+    await sharp(giris).resize({ width: 744, height: 419, fit: 'cover', position: 'centre' })
+      .webp({ quality: 74, effort: 6 }).toFile(dm);
+    const boy = fs.statSync(t).size + fs.statSync(d).size + fs.statSync(dm).size;
+    toplam += boy;
+    kunye.push({ slug: pr.slug, thumb: { w: 208, h: 156 },
+      hero: { w: 1280, h: 720 }, herom: { w: 744, h: 419 } });
+    console.log('  + prj ' + pr.slug + '  ' + kb(boy) + ' (t+d+dm)');
+  }
+  fs.writeFileSync(PRJ_KUNYE, JSON.stringify(kunye, null, 2) + String.fromCharCode(10));
+  console.log('  = projeler: ' + kunye.length + ' is · toplam ' + kb(toplam));
+}
+
 (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama
@@ -198,4 +245,5 @@ async function kurucu() {
   await logolar();
   await kartlar();
   await kurucu();
+  await projeGorselleri();
 })();
