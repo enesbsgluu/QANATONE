@@ -31,7 +31,7 @@
 .sku-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .sku-bas{margin-bottom:clamp(18px,2.4vw,30px)}
 .sku-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.sku-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sku-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--aksan)}
 .sku-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
   letter-spacing:-.035em;margin-bottom:0}
 
@@ -82,7 +82,7 @@
   .sus-tog i,.sku-baglar a{transition:transform .3s var(--e),
     border-color .3s var(--e),color .3s var(--e)}
   .sku-bas-satir:hover .sus-tog{border-color:var(--tx3)}
-  .sku-baglar a:hover{border-color:var(--red);color:var(--tx)}
+  .sku-baglar a:hover{border-color:var(--aksan);color:var(--tx)}
 }
 
 @media (prefers-reduced-motion: reduce){

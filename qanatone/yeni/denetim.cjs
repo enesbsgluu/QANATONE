@@ -434,6 +434,32 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
+/* RG1 · RENK TEK KAYNAKTAN (giydirme turu, RENK-SISTEMI.md): kaynak
+   dosyalarda ham renk degeri (hex, rgb, hsl) BULUNMAZ — renk yalniz
+   var(--...) ya da tokenden turetme (color-mix) ile gelir. Istisna
+   token dosyasinin kendisi (renk.css). KAYNAK taranir, dist degil:
+   cikti CSS'inde token dosyasinin degerleri mesru olarak durur ve
+   istisna ayirt edilemez. Yorumlar AYIKLANIR (kural kaynagi tararken
+   yorum eslesmesi yanlis kirmizi verir — yasandi, hafiza dersi). */
+{
+  const kaynakKok = path.join(__dirname, 'src');
+  const desen = /#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/g;
+  const kusur = [];
+  const gez = (d) => {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f);
+      if (fs.statSync(p).isDirectory()) { gez(p); continue; }
+      if (!/\.(css|astro)$/.test(f) || f === 'renk.css') continue;
+      const govde = fs.readFileSync(p, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      const m = govde.match(desen);
+      if (m) kusur.push(path.relative(kaynakKok, p).replace(/\\/g, '/') + ':' + m[0]);
+    }
+  };
+  gez(kaynakKok);
+  ol('RG1 · kaynakta ham renk yok — renk yalnız token/color-mix (istisna renk.css)',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
 /* ---- FAZ 2 · ana sayfa kuralları (H ailesi) ------------------------- */
 {
   const ana = path.join(KOK, 'index.html');

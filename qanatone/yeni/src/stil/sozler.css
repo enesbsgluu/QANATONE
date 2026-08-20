@@ -37,10 +37,10 @@
 .ssz-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .ssz-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
 .ssz-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.ssz-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.ssz-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--aksan)}
 .ssz-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
   letter-spacing:-.035em;margin-bottom:0}
-.ssz-bas h2 em{font-style:normal;color:var(--red)}
+.ssz-bas h2 em{font-style:normal;color:var(--aksan)}
 .ssz-bas p{margin-top:clamp(11px,1.3vw,18px)}
 
 /* ---- TABAN = MOBİL: tek sütun, açıklama açık, artı yok ---- */
@@ -61,32 +61,37 @@
   font-size:clamp(.88rem,.95vw,.95rem);line-height:1.6}
 
 /* ---- üç yüz ---- */
-.ssz-desen{background:var(--card2,#141418)}
-/* ince çizgi ızgarası + tepeden kızıl ışık; ikisi de sözde elemanda,
+.ssz-desen{background:var(--card2,var(--yuzey))}
+/* ince çizgi ızgarası + tepeden ışık; ikisi de sözde elemanda,
    içerik katmanına dokunmuyor */
 .ssz-desen::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(to right,rgba(255,255,255,.055) 1px,transparent 1px),
-    linear-gradient(to bottom,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-image:linear-gradient(to right,color-mix(in srgb,var(--metin) 5.5%,transparent) 1px,transparent 1px),
+    linear-gradient(to bottom,color-mix(in srgb,var(--metin) 5.5%,transparent) 1px,transparent 1px);
   background-size:50px 56px;
-  -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%);
-  mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%)}
+  -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,black 60%,transparent 108%);
+  mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,black 60%,transparent 108%)}
 .ssz-desen::after{content:'';position:absolute;inset:0 0 auto;height:60%;
   pointer-events:none;opacity:.75;
-  background:radial-gradient(60% 70% at 50% 0%,var(--red-dim,rgba(239,35,60,.12)),transparent 72%)}
-.ssz-desen .ssz-ikon{background:var(--red-dim,rgba(239,35,60,.12));color:var(--red-soft);
-  border:1px solid rgba(239,35,60,.28)}
+  background:radial-gradient(60% 70% at 50% 0%,var(--aksan-sonuk),transparent 72%)}
+/* SAHNE NOTU (kural 5): kanal kartlarinin ikonlari NOTR — bolumun tek
+   cyan bolgesi one cikan (eski adi 'kizil') karttir; alti ikon birden
+   cyan tasisa kural 2 patlar. */
+.ssz-desen .ssz-ikon{background:color-mix(in srgb,var(--metin) 6%,transparent);color:var(--tx2);
+  border:1px solid var(--line2)}
 .ssz-desen p{color:var(--tx2)}
 
-.ssz-kizil{background:var(--red);border-color:rgba(0,0,0,.18)}
+/* One cikan kart: eski kizil zemin -> AKSAN zemin (imza kart); kural 3:
+   ustundeki her sey KOYU (zemin tonu), beyaz yok. */
+.ssz-kizil{background:var(--aksan);border-color:color-mix(in srgb,black 18%,transparent)}
 .ssz-kizil::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 42%)}
-.ssz-kizil h3{color:#0a0a0a}
-.ssz-kizil p{color:rgba(0,0,0,.72)}
-.ssz-kizil .ssz-ikon{background:#0a0a0a;color:#fff}
+  background:linear-gradient(180deg,color-mix(in srgb,white 16%,transparent),transparent 42%)}
+.ssz-kizil h3{color:var(--zemin)}
+.ssz-kizil p{color:color-mix(in srgb,var(--zemin) 82%,transparent)}
+.ssz-kizil .ssz-ikon{background:var(--zemin);color:var(--aksan)}
 
 .ssz-koyu{background:var(--card)}
 .ssz-koyu p{color:var(--tx2)}
-.ssz-koyu .ssz-ikon{background:var(--card2,#141418);border:1px solid var(--line2);
+.ssz-koyu .ssz-ikon{background:var(--card2,var(--yuzey));border:1px solid var(--line2);
   color:var(--tx2)}
 
 /* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule`) ---- */
@@ -128,9 +133,9 @@
   .ssz-arti svg{width:12px;height:12px}
   .ssz-kart:hover .ssz-arti,.ssz-kart:focus-visible .ssz-arti{
     transform:rotate(45deg);color:var(--tx);border-color:var(--tx3)}
-  .ssz-kizil .ssz-arti{border-color:rgba(0,0,0,.3);color:rgba(0,0,0,.6)}
+  .ssz-kizil .ssz-arti{border-color:color-mix(in srgb,var(--zemin) 45%,transparent);color:color-mix(in srgb,var(--zemin) 70%,transparent)}
   .ssz-kizil:hover .ssz-arti,.ssz-kizil:focus-visible .ssz-arti{
-    color:#0a0a0a;border-color:rgba(0,0,0,.55)}
+    color:var(--zemin);border-color:color-mix(in srgb,var(--zemin) 65%,transparent)}
   .ssz-desen:hover::after{opacity:1}
 }
 

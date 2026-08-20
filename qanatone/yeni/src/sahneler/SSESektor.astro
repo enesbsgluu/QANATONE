@@ -35,7 +35,6 @@ const KANAL: Record<string, string> = {
   tiktok: 'TikTok Ads', linkedin: 'LinkedIn', reddit: 'Reddit',
   site: en ? 'Website' : 'Web sitesi',
 };
-const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
 
 /* Her sektör için pano verisi derleme anında hazırlanır. */
 const panolar = sektorler.map((x: any, i: number) => {
@@ -49,7 +48,7 @@ const panolar = sektorler.map((x: any, i: number) => {
   const enBuyuk = sirali.length ? Number(sirali[0][1]) : 1;
   return {
     k: x.k, ad: T(x.n, dil2), ozet: T(x.d, dil2), ikon: x.icon,
-    ton: `--sA:hsl(${HUE[i % HUE.length][0]} 78% 46%)`,
+    ton: '', /* RENK GÖÇÜ: sektör hue'su söküldü; --sA fallback'i aksan */
     baslik: bas[0] || '', anlatim: bas[1] || '',
     kutular: [
       { s: '', b: h.talep.toLocaleString(en ? 'en-US' : 'tr-TR'),
