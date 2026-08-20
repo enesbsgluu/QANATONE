@@ -61,6 +61,13 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   </div>
 </section>}
 
+{/* TradeSelf amblemi (A2) — yalnız finans; künye demo-detay.css'te.
+    role="img" + engineLab kaynaktan (8232). Katman sırası kaynak
+    markup'ıyla aynı: dış → beyin → iç. */}
+{s.slug === 'finans' && <div class="tsa" role="img" aria-label="TradeSelf">
+  <i class="tsa-dis"></i><i class="tsa-beyin"></i><i class="tsa-ic"></i>
+</div>}
+
 {d.steps?.length > 0 && <section>
   <h2>{M('Nasıl çalışırız', 'How we work')}</h2>
   <ol class="adimlar">
@@ -108,17 +115,18 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
      demo yalnız görünürken oynar; durdurma animation-play-state,
      anahtar .hd-demo KÖKÜNDE (--akps), açılışta sınıf yazılmaz —
      paused doğar, IO göründüğünde oynatır. Demosuz beş hizmet
-     sayfasında seçici boş döner, iş yapılmaz. */
-  const d = document.querySelector('.hd-demo');
-  if (d) {
+     sayfasında seçici boş döner, iş yapılmaz. .tsa: TradeSelf
+     amblemi (A2) aynı kapıyı kullanır (kaynağın .mkact.on eşi). */
+  const dl = document.querySelectorAll('.hd-demo,.tsa');
+  if (dl.length) {
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => {
         for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
       }, { threshold: 0.25 });
-      io.observe(d);
+      dl.forEach((d) => io.observe(d));
     } else {
       /* IO yoksa: sürekli oynasın — içerik statik, bu yalnız süs. */
-      d.classList.add('akoynar');
+      dl.forEach((d) => d.classList.add('akoynar'));
     }
   }
 </script>
