@@ -51,6 +51,41 @@ bitmiş olmalı.**
 | rss.xml + sitemap üreteci | ✅ bu hazırlıkta geldi (R8 bekçili) |
 | EN ana bekçisi | ✅ H24 (üretilmiş + tek h1 + gzip ≤ 32 KB; tam H genişletmesi aşağıda) |
 | qanatone.com bağlı | ❌ **Adım 0 — hemen yapılabilir** |
+| **Global katman (nav/menü/footer/dil)** | ❌ **HİÇBİR turda ele alınmadı — envanter 20 Ağu, aşağıda 1b; kesme ÖNCESİ tur ister** |
+
+### 1b · Global katman açığı (20 Ağu envanteri)
+
+Yeni kabuğun 60 sayfasının tamamı Faz 1'in MİNİMAL kabuğunu taşıyor
+(`Temel.astro`: metin logo + etiket rozeti; footer: legal satırı +
+Hukuki + «ana site»). Eski global katmanın karşılıkları:
+
+| Eski öğe (kök index.html) | Envanter kararı | Bugünkü durum |
+|---|---|---|
+| `#nav`: görselli logo + Hizmetler/Projeler/Stüdyo dropdown + Bülten + TR/EN + «Konuşalım» CTA (gaspin/.shiny) + burger (4632) | gaspin: «Aynen, saf CSS» | **kurulmadı** |
+| `#mmenu` tam ekran mobil menü (mmrow kademeli giriş, 4660) | «Menü adasıyla» | **kurulmadı** |
+| `<footer>`: logo+tanıtım · «Sayfalar» 6 link · İletişim (waFoot/mailFoot/footSocial — JS) · © + legalLine + İst·Dubai bandı (5478) | envanterde satırı YOK | **kurulmadı** (minimal eş var) |
+| `#wmk` wordmark piksel canvas (5502) | «TAŞINMIYOR — SVG/CSS metin olur» | canvas doğru şekilde yok; **SVG karşılığı da yok** (footer kurulmadığı için) |
+| `#bit` «QANATONE ajanı» yüzen balonu (bitr, 4624) | «Masaüstü adası, idle+lazy; mobilde inmez» | **kurulmadı** |
+| TR/EN dil değiştirici (SPA butonları) | kayıtsız — mekanizma rota tabanına değişti | hreflang var (S1), **görünür geçiş yolu YOK** |
+| SPA rota geçişi (pgin) | «TAŞINMIYOR» (kayıtlı, Enes veto edebilir) | doğru şekilde yok |
+
+Sebep «unutma» değil ama «sahipsiz taahhüt»: ana sayfa turu SAHNE
+listesiyle, rota turu SAYFA listesiyle, giydirme ertelenen-animasyon
+listesiyle çalıştı — global katman hiçbirinin listesine girmedi;
+envanterin adaya bağladığı üç kalem (menü adası, nav CTA, #bit) askıda
+kaldı. Gezinme bugün sahne gövdelerinden akıyor (H16: 216 iç bağlantı)
+ama örneğin bülten yazısından hizmetlere header yolu yok; kesme bu
+hâlle yapılırsa köke NAV'SIZ ve dil geçişsiz bir site çıkar — eski
+siteye göre gezinme gerilemesi (parite diff'i sayfa gövdesini ölçtü,
+chrome'u hiç ölçmedi).
+
+**Gereken: GLOBAL KATMAN TURU (kesme ön şartı).** Kapsam: nav (dropdown
+içerikleri statik basılır — eskide JS'ten doluyordu, bot görmüyordu:
+süperküme fırsatı) · mobil menü adası · footer (wa/social alanları
+content.json'dan; `wa` verisi bozuk — bilinen 4 anahtar) · görünür dil
+değiştiricisi (rota eşine bağlantı) · #wmk'nin SVG/CSS metin karşılığı ·
+#bit kararı (Enes: taşınsın mı). BAYT UYARISI: TR ana 31.829/32.768 —
+nav+footer markup'ı H18 payına sığmayabilir, tur ölçümle açılır.
 
 ## 2 · Kesme günü adımları (tek commit + netlify yapılandırması)
 
