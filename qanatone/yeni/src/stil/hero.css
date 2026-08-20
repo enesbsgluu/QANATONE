@@ -269,7 +269,23 @@
       transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%)}
   .sus-el-h{left:-5vw;top:82px;width:57vw}
   .sus-el-r{right:-4vw;bottom:-3vw;width:64vw}
-  .sh-meta{margin-top:38px;gap:12px}
+  /* KAYNAK SIRA SÖZLEŞMESİ (kök 2582-2587) — sadakat, 21 Ağu:
+     başlık → paragraf → durum satırı → butonlar; DOM'da cta metadan
+     önce durduğu için kaynaktaki order deseni birebir. */
+  .sh-ic{display:flex;flex-direction:column;align-items:center}
+  .sh-h1{order:1}
+  .sh-lede{order:2}
+  .sh-meta{order:3;margin-top:22px;gap:12px}
+  .sh-cta{order:4;margin-top:20px}
+  /* KAYNAK DÜĞME STANDARDI (kök 2593-2595): tek boy, yazı ortada */
+  .sh-cta{width:100%;flex-direction:column;align-items:center;gap:11px}
+  .sh-cta .sh-void,.sh-cta .sh-btn{width:min(340px,100%);min-height:54px;
+    padding:0 24px;justify-content:center;text-align:center}
+}
+/* kaynak 640px kuralı (2599-2606): buton bölüm genişliğini alır */
+@media(max-width:640px){
+  .sh-cta .sh-void,.sh-cta .sh-btn{width:100%}
+  .sh-void{min-height:54px}
 }
 /* cam malzeme yalniz isaretleme cihazi olan masaustunde ve <=12px */
 @media(hover:hover) and (pointer:fine){
