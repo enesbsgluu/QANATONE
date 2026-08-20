@@ -1,0 +1,172 @@
+---
+/* K7 · SOHBET SAHNESİ (#aiStage) — GEO hizmetinin kaydırma sahnesi.
+   Kaynak: kök index.html · markup aiStage 8325-8334 · CSS 746-774 +
+   854-855 + 878-881 · sürücü draw 8774-8814, ST 9006-9007.
+   Hizmet: geo (fam:'climb' + det.ai).
+
+   SEGMENT HESABI kaynaktan BİREBİR (8775-8781), derlemede pişer:
+     chars = mesajın {b} yerine marka adı konmuş hâlinin uzunluğu
+     totA  = ajan mesajlarının toplam karakteri
+     w     = kullanıcı ? .05 : .78·(chars/totA)
+     cur   = .03 başlar; her mesaj sonrası cur += w + .014
+   Mesaj içi: kullanıcı t>0'da tam görünür (opacity .12+.88t,
+   translateY (1−t)·10px); ajan t<.12 üç nokta, sonrası
+   tt=(t−.12)/.88 ve yazım ilerlemesi 1−(1−tt)² (8809-8810).
+   Kaynak rozeti: p>.94 (8813).
+
+   SAPMA (adıyla): kaynak KARAKTER karakter yazıyordu (innerHTML her
+   karede yeniden kuruluyordu). Yenide yazım KELİME granülaritesinde
+   ve JS'siz: her kelime derlemede kendi eşiğini taşıyan bir span.
+   Neden: karakter maskesi çok satırlı metinde CSS ile kurulamaz
+   (satır kırılımı çalışma anında belli olur), JS ile kurmak ise her
+   karede innerHTML yazmak demekti — H12 ailesi. Kelime akışı aynı
+   hissi verir, imleç ve üç nokta kaynak değerleriyle korunur.
+
+   Marka adı ({b}) kaynaktaki gibi ayrı: yazımı tamamlanınca kızıla
+   döner (.gb.lit, 763-764). TABAN = TAMAMLANMIŞ. */
+import { T, type Dil } from '../icerik';
+interface Props { ai: any; dil: Dil }
+const { ai, dil } = Astro.props;
+const en = dil === 'en';
+const bn = T(ai?.b, dil) || '';
+const msgs = (ai?.msgs || []) as any[];
+
+/* kaynak SEG hesabı (8775-8781) */
+const M = msgs.map((m) => {
+  const parts = String(T(m.t, dil) || '').split('{b}');
+  return { r: m.r, parts, chars: parts.join(bn).length };
+});
+const totA = M.filter(m => m.r === 'a').reduce((s, m) => s + m.chars, 0) || 1;
+let cur = 0.03;
+const SEG = M.map(m => {
+  const w = m.r === 'u' ? 0.05 : 0.78 * (m.chars / totA);
+  const g = { s: cur, e: cur + w };
+  cur += w + 0.014;
+  return g;
+});
+/* Kelime dizisi: {b} parçası ayrı jeton. Vurgu (.gb) YALNIZ ajan
+   mesajında — kaynakta typed() sadece ajan dalında çağrılıyor (8811),
+   kullanıcı dalı marka adını düz metin olarak birleştiriyor (8801).
+   Kare kıyasında yakalandı. */
+type Jeton = { k: string; b?: boolean; br?: boolean };
+const jetonla = (m: { parts: string[]; r: string }): Jeton[] => {
+  const out: Jeton[] = [];
+  m.parts.forEach((p, i) => {
+    p.split(/(\n)/).forEach(par => {
+      if (par === '\n') { out.push({ k: '', br: true }); return; }
+      par.split(/\s+/).filter(Boolean).forEach(k => out.push({ k }));
+    });
+    if (i < m.parts.length - 1 && bn) out.push({ k: bn, b: m.r === 'a' });
+  });
+  return out;
+};
+const JET = M.map(jetonla);
+---
+{msgs.length > 0 && (
+<div class="sdsec">
+  <span class="mono">{en ? 'The conversation — types itself on scroll' : 'Sohbet — kaydırdıkça kendini yazar'}</span>
+  <div class="aistage">
+    {M.map((m, i) => (
+      <div class={`aim ${m.r === 'u' ? 'u' : 'a'}`}
+        style={`--s:${SEG[i].s.toFixed(4)};--e:${SEG[i].e.toFixed(4)};--n:${JET[i].length}`}>
+        {/* Ajan işareti kaynakta '✦' KARAKTERİYDİ (8328); F1c denetimi
+            yakaladı: U+2726 alt kümede yok (S-SE okunun aynı dersi).
+            Aynı dört uçlu yıldız SVG olarak basılıyor. */}
+        <span class={`aiav${m.r === 'a' ? ' ai' : ''}`}>{m.r === 'a'
+          ? <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+              ><path d="M12 2.6 13.9 10.1 21.4 12 13.9 13.9 12 21.4 10.1 13.9 2.6 12 10.1 10.1Z" /></svg>
+          : 'S'}</span>
+        <p class="aitxt">{JET[i].map((j, k) => j.br
+          ? <br />
+          : <span class={j.b ? 'ai-k gb' : 'ai-k'} style={`--k:${k}`}>{j.k}{' '}</span>)}
+          <i class="aicur" aria-hidden="true" /></p>
+      </div>
+    ))}
+    <div class="aisrc"><span>{en ? 'source' : 'kaynak'}</span><b>{ai.src}</b></div>
+  </div>
+  {ai.note && <div class="fnnote">{T(ai.note, dil)}</div>}
+</div>
+)}
+
+<style>
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec > .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+
+  /* --- kap ve balonlar: kaynak 746-774 birebir --- */
+  .aistage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    padding: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; gap: 16px; }
+  .aim { display: flex; gap: 12px; align-items: flex-start; }
+  .aiav { width: 32px; height: 32px; border-radius: 50%; flex: none; display: grid;
+    place-items: center; font-family: ui-monospace, monospace; font-size: 12px;
+    color: var(--tx2); background: rgba(255, 255, 255, .06); border: 1px solid var(--line2); }
+  .aiav.ai { color: var(--red-soft); border-color: rgba(239, 35, 60, .4);
+    background: rgba(239, 35, 60, .08); }
+  .aiav svg { width: 13px; height: 13px; }
+  .aim.u .aitxt { font-size: .93rem; color: var(--tx); background: rgba(255, 255, 255, .05);
+    border: 1px solid var(--line2); border-radius: 4px 16px 16px 16px; padding: 12px 16px;
+    line-height: 1.6; max-width: 58ch; }
+  .aim.a .aitxt { font-size: .95rem; color: var(--tx2); line-height: 1.75; min-height: 52px;
+    background: #0c0c0d; border: 1px solid var(--line); border-radius: 4px 16px 16px 16px;
+    padding: 13px 17px; max-width: 66ch; flex: 1; }
+  .gb { color: var(--tx); font-weight: 600; }
+  .aisrc { display: flex; align-items: center; gap: 8px; margin-left: 44px;
+    font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .12em; }
+  .aisrc span { color: var(--tx4); text-transform: uppercase; }
+  .aisrc b { color: var(--red-soft); border: 1px solid rgba(239, 35, 60, .35);
+    border-radius: 999px; padding: 3px 10px; background: rgba(239, 35, 60, .06); }
+
+  /* --- sürücü: kaynağın ST pinsiz dalı (huni/akış ile aynı yazım) --- */
+  @property --aip { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .aistage { animation: aip-surus linear both; animation-timeline: view();
+      animation-range: entry calc(100% + 2vh) entry calc(100% + 58vh); }
+  }
+  @keyframes aip-surus { from { --aip: 0; } to { --aip: 1; } }
+
+  /* mesaj ilerlemesi t = clamp(0,(p−s)/(e−s),1) — 8796 */
+  .aim { --t: clamp(0, (var(--aip, 1) - var(--s)) / (var(--e) - var(--s)), 1); }
+  /* kullanıcı: opacity .12+.88t · y (1−t)·10px — 8799-8800 */
+  .aim.u { opacity: calc(.12 + .88 * var(--t));
+    transform: translateY(calc((1 - var(--t)) * 10px)); }
+  /* ajan: t>0'da balon açılır (8805) */
+  .aim.a { opacity: calc(.12 + .88 * clamp(0, var(--t) * 1000, 1)); }
+  /* yazım: ajan tt=(t−.12)/.88 ve 1−(1−tt)²; kullanıcı anında (8801) */
+  .aim.a { --tt: clamp(0, (var(--t) - .12) / .88, 1);
+    --tu: calc(1 - var(--tt));
+    --yaz: calc(1 - var(--tu) * var(--tu)); }
+  .aim.u { --yaz: clamp(0, var(--t) * 1000, 1); }
+  /* kelime k görünür: yaz·n ≥ k+1 (kaynağın karakter sayacının kelime eşi) */
+  .ai-k { opacity: clamp(0, (var(--yaz) * var(--n) - var(--k)) * 2, 1); }
+  /* marka adı yazımı bitince kızıla döner — kaynak .gb.lit (764) */
+  .gb { color: color-mix(in srgb, var(--red-soft)
+    calc(clamp(0, (var(--yaz) * var(--n) - var(--k) - 1) * 4, 1) * 100%), var(--tx)); }
+  /* imleç: yazım sürerken görünür (8793: tt<1) — kaynakta ping2 1s
+     steps(2); o keyframe kaynakta TANIMSIZ (ölçüldü), gerçek davranış
+     sabit imleç, öyle basılıyor */
+  .aicur { display: inline-block; width: 2px; height: 1em; background: var(--red);
+    vertical-align: text-bottom; margin-left: 2px; font-style: normal;
+    opacity: calc(clamp(0, var(--t) * 1000, 1) * clamp(0, (1 - var(--yaz)) * 40, 1)); }
+  /* üç nokta yerine: ajan balonu t<.12'de boş+imleçli durur (kaynakta
+     .aidots üç nokta vardı — kelime yazımı başlamadan önceki pencere
+     aynı, gösterim imleçle sadeleşti; sapma adıyla) */
+  /* kaynak rozeti: p>.94 (8813) */
+  .aisrc { opacity: clamp(0, (var(--aip, 1) - .94) * 60, 1);
+    transform: translateY(calc((1 - clamp(0, (var(--aip, 1) - .94) * 60, 1)) * 6px)); }
+
+  /* gölge H14: .gb.lit metin gölgesi (764) yalnız masaüstü */
+  @media (min-width: 901px) {
+    .gb { text-shadow: 0 0 calc(clamp(0, (var(--yaz) * var(--n) - var(--k) - 1) * 4, 1) * 16px)
+      rgba(239, 35, 60, .4); }
+  }
+  /* kaynak mobil çizelgesi: 854-855 */
+  @media (max-width: 760px) {
+    .aistage { padding: 16px 14px; }
+    .aim.u .aitxt, .aim.a .aitxt { max-width: 100%; font-size: .86rem; padding: 11px 13px; }
+    .aisrc { margin-left: 36px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .aistage { animation: none; } }
+</style>
