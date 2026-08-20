@@ -15,6 +15,7 @@ import { T, type Dil, icerik } from '../icerik';
 import { ton } from '../ton';
 import AkisDemo from './AkisDemo.astro';
 import HuniSahne from './HuniSahne.astro';
+import AkisSahne from './AkisSahne.astro';
 import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
@@ -54,6 +55,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     içerikleri content.json'da duruyordu ama sayfada görünmüyordu.
     Sahne sahne geri geliyor; kaynaktaki yerleri hits'ten sonra. */}
 {d.fun && <HuniSahne fun={d.fun} dil={dil} />}
+{d.flow && <AkisSahne flow={d.flow} dil={dil} />}
 
 {d.pains?.length > 0 && <section>
   <h2>{M('Dert nerede', 'Where it hurts')}</h2>
