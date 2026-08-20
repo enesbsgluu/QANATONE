@@ -27,6 +27,7 @@
    varsayılan rakamlarla anlamlı durur. */
 import { icerik, T, suz, type Dil } from '../icerik';
 import { DEG, huni, fmt } from '../huni.mjs';
+import Ikon from './Ikon.astro';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
@@ -37,15 +38,19 @@ const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
 /* Akış içerik setleri — kaynaktan (flowKur IN/OUT/STEPS), 'genel'
    varsayılanı: giriş google/seo/meta/site, çıkış 'esnaf' seti. Kodda
    sabittiler, panel zaten ezemiyordu; davranış değişmedi. */
+/* Üçüncü eleman İKON anahtarı — kaynak IN/OUT haritalarından birebir
+   (10498-10516: google→target, seo→seo, meta→camera, site→site;
+   esnaf çıkışı calendar/clipboard/handoff/trend; trend kaynakta
+   chart'a düşer — 10524). */
 const GELEN = dil === 'en'
-  ? [['Google Ads', 'search'], ['Organic search', 'SEO'], ['Instagram DM', 'Meta'], ['Web form', 'site']]
-  : [['Google Ads', 'arama'], ['Organik arama', 'SEO'], ['Instagram DM', 'Meta'], ['Web formu', 'site']];
+  ? [['Google Ads', 'search', 'target'], ['Organic search', 'SEO', 'seo'], ['Instagram DM', 'Meta', 'camera'], ['Web form', 'site', 'site']]
+  : [['Google Ads', 'arama', 'target'], ['Organik arama', 'SEO', 'seo'], ['Instagram DM', 'Meta', 'camera'], ['Web formu', 'site', 'site']];
 const ADIMLAR = dil === 'en'
   ? [['Enquiry read', '0.3s'], ['Intent extracted', '0.6s'], ['Matched to pricing', '0.9s'], ['Reply sent', '1.2s'], ['CRM + reminder', '1.4s']]
   : [['Talep okundu', '0,3 sn'], ['Niyet çıkarıldı', '0,6 sn'], ['Fiyat/kapsam eşleşti', '0,9 sn'], ['Yanıt gönderildi', '1,2 sn'], ['CRM + hatırlatma', '1,4 sn']];
 const CIKAN = dil === 'en'
-  ? [['Booked', 'calendar'], ['Price range', 'instant'], ['Handover', 'special'], ['Filtered', 'out of area']]
-  : [['Randevu yazıldı', 'takvim'], ['Fiyat aralığı', 'anında'], ['Sana devir', 'özel iş'], ['Elendi', 'bölge dışı']];
+  ? [['Booked', 'calendar', 'calendar'], ['Price range', 'instant', 'clipboard'], ['Handover', 'special', 'handoff'], ['Filtered', 'out of area', 'chart']]
+  : [['Randevu yazıldı', 'takvim', 'calendar'], ['Fiyat aralığı', 'anında', 'clipboard'], ['Sana devir', 'özel iş', 'handoff'], ['Elendi', 'bölge dışı', 'chart']];
 
 /* Bir gün zaman çizelgesi: saatler markup sabitiydi (data-t YOK). */
 const GUN: [string, string, string][] = [
@@ -106,9 +111,16 @@ const TELI = [0, 1, 2, 3];
      beyin .34, çıkış .50+i·.08, teller .12+i·.07 / .52+i·.08; sürücü
      ST scrub yerine anonim view() (--fyt, SurecGovde deseni). */}
 <div class="akis3">
+  {/* Düğüm yapısı kaynak .fnode birebiri (build 10538-10539): ikon
+      kutusu .ni + metin .nt + durum noktası .nd. Kaynakta tik YOK —
+      önceki fark listesi .fln'i (başka bileşen, 701) akış sanmıştı;
+      gerçek düğüm .fnode 1336. --hi: hot dalgası fazı (tick 10622:
+      1.5 adım/sn; çıkış +2 faz). */}
   <div class="akol">
     <p class="akbas">{m('flc1', 'Gelen')}</p>
-    {GELEN.map(([ad, alt], i) => <p class="adugum" style={`--fe:${(0.06 + i * 0.07).toFixed(2)}`}><b>{ad}</b><span>{alt}</span></p>)}
+    {GELEN.map(([ad, alt, ikn], i) => <p class="adugum" style={`--fe:${(0.06 + i * 0.07).toFixed(2)};--hi:${i}`}>
+      <span class="ni"><Ikon ad={ikn} /></span>
+      <span class="nt"><b>{ad}</b><span>{alt}</span></span><span class="nd" /></p>)}
   </div>
   <svg class="sus-tel sol" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
     {TELI.map(() => <path class="tel" d="" />)}
@@ -120,13 +132,23 @@ const TELI = [0, 1, 2, 3];
     {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
     {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
   </svg>
+  {/* Beyin kaynak .fbrain birebiri: .bh (bi ikon kutusu + bt metin +
+      fbadge "Aktif" — rozet kaynakta YALNIZ MOBİL, 1384/1410; noktası
+      kaynakta ping2 TANIMSIZ keyframe'e bağlıydı → gerçek davranış
+      SABİT nokta, öyle basıldı). Adım satırları .fstep: tik dairesi +
+      ad + süre; tik ✓ font karakteri değil kaynağın kendi IC.check
+      SVG'si (F1c). --fi: adım dalga fazı (tick 10626: 2.2 adım/sn). */}
   <div class="akol beyin">
     <p class="akbas">{m('flc2', 'Ajan')}</p>
     <div class="ajan-kart" style="--fe:.34">
-      <p class="ajan-ad"><b>{m('flb', 'QANATONE Ajanı')}</b>
-        <span>{m('flbs', 'Sınıflandır · Ele · Yönlendir')}</span></p>
+      <p class="ajan-ad"><span class="bi"><Ikon ad="bot" /></span>
+        <span class="bt"><b>{m('flb', 'QANATONE Ajanı')}</b>
+        <span>{m('flbs', 'Sınıflandır · Ele · Yönlendir')}</span></span>
+        <span class="fbadge">{m('flon', 'Aktif')}<i /></span></p>
       <ol>
-        {ADIMLAR.map(([ad, sure]) => <li><span>{ad}</span><em>{sure}</em></li>)}
+        {ADIMLAR.map(([ad, sure], i) => <li style={`--fi:${i}`}>
+          <i class="fsi"><Ikon ad="check" /></i>
+          <span>{ad}</span><em>{sure}</em></li>)}
       </ol>
     </div>
   </div>
@@ -142,7 +164,9 @@ const TELI = [0, 1, 2, 3];
   </svg>
   <div class="akol">
     <p class="akbas">{m('flc3', 'Çıkan')}</p>
-    {CIKAN.map(([ad, alt], i) => <p class="adugum" style={`--fe:${(0.5 + i * 0.08).toFixed(2)}`}><b>{ad}</b><span>{alt}</span></p>)}
+    {CIKAN.map(([ad, alt, ikn], i) => <p class="adugum" style={`--fe:${(0.5 + i * 0.08).toFixed(2)};--hi:${i + 2}`}>
+      <span class="ni"><Ikon ad={ikn} /></span>
+      <span class="nt"><b>{ad}</b><span>{alt}</span></span><span class="nd" /></p>)}
   </div>
 </div>
 
@@ -399,8 +423,13 @@ const TELI = [0, 1, 2, 3];
   @keyframes fyt-surus { from { --fyt: 0; } to { --fyt: 1; } }
   .adugum, .ajan-kart, .tel-yak {
     --fp: clamp(0, (var(--fyt, 1) - var(--fe, 0)) * 20, 1); }
-  /* düğüm: kaynak .fln kapalı .55 → açık 1 (701-710) */
-  .adugum { opacity: calc(.55 + .45 * var(--fp)); }
+  /* düğüm: kaynak .fnode kapalı hâli (1336-1339): opacity 0 +
+     translateY(10px) scale(.96) → on'da 1/none. (D1'in ".fln .55→1"
+     künyesi YANLIŞ bileşendendi — .fln 701 başka sahnenin düğümü;
+     21 Ağu denetimi düzeltti.) */
+  .adugum { opacity: var(--fp);
+    transform: translateY(calc((1 - var(--fp)) * 10px))
+      scale(calc(.96 + .04 * var(--fp))); }
   /* beyin: kaynak .fbrain kapalı opacity 0 + scale(.9) → açık 1/1 (1356-1359) */
   .ajan-kart { opacity: var(--fp); transform: scale(calc(.9 + .1 * var(--fp))); }
   /* tel yakma katmanı: kaynak .fwire gri .13 → .lit kızıl .55 (1331-1332);
@@ -460,21 +489,123 @@ const TELI = [0, 1, 2, 3];
   @media (prefers-reduced-motion: reduce) {
     .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation: none; opacity: 0; }
   }
+  /* kaynak mobil çizelgesi (1403-1418, kırılım 900 birebir): düğüm ve
+     ikon büyür, beyin dolgusu daralır, "Aktif" rozeti görünür olur */
+  @media (max-width: 900px) {
+    .adugum { padding: 15px; border-radius: 16px; gap: 12px; }
+    .adugum .ni { width: 42px; height: 42px; border-radius: 12px; }
+    .adugum .ni :global(svg) { width: 18px; height: 18px; }
+    .nt b { font-size: .95rem; white-space: normal; }
+    .nt span { font-size: .72rem; }
+    .nd { width: 8px; height: 8px; }
+    .ajan-kart { padding: 18px 16px 16px; border-radius: 18px; }
+    /* .ajan-ad öneki: taban display:none dosyada SONRA geldiğinden
+       özgüllükle kazanılır (ölçümle yakalandı) */
+    .ajan-ad .fbadge { display: inline-flex; align-items: center; gap: 6px; margin-left: auto;
+      font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--red-soft);
+      border: 1px solid rgba(239, 35, 60, .4); border-radius: 999px;
+      padding: 4px 9px; background: rgba(239, 35, 60, .08); }
+    .fbadge i { width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+      font-style: normal; }
+    .ajan-kart li { padding: 11px 12px; font-size: .84rem; border-radius: 12px; gap: 11px; }
+    .fsi { width: 18px; height: 18px; }
+    .fsi :global(svg) { width: 10px; height: 10px; }
+    .ajan-kart li em { font-size: 10px; }
+  }
 
   .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
     letter-spacing: .08em; margin-bottom: 8px; }
-  .adugum { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
-    margin-bottom: 8px; display: flex; justify-content: space-between; gap: 8px; }
-  .adugum b { font-size: .9rem; }
-  .adugum span { color: var(--tx3); font-size: .8rem; }
-  .ajan-kart { border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
-  .ajan-ad b { display: block; font-size: .95rem; }
-  .ajan-ad span { color: var(--tx3); font-size: .8rem; }
-  .ajan-kart ol { list-style: none; margin: 10px 0 0; padding: 0; }
-  .ajan-kart li { display: flex; justify-content: space-between; gap: 8px;
-    padding: 5px 0; border-top: 1px solid var(--line); font-size: .85rem; }
-  .ajan-kart li em { color: var(--tx3); font-family: ui-monospace, monospace;
-    font-style: normal; font-size: .78rem; }
+  /* ---- DÜĞÜM KOMPOZİSYONU — kaynak .fnode 1336-1354 birebir.
+     HOT DALGASI: kaynakta rAF tick'i 1.5 adım/sn ile düğümleri sırayla
+     'hot' yapıyordu (10622-10625; çıkış +2 faz). Eşlenik: --hp custom
+     property dalgası (period 4/1.5=2.667s, pencere .667s), renkler
+     color-mix ile taban↔hot arası karışır (kaynak .6s transition'ının
+     rampası keyframe'de). Desteksiz tarayıcı --hp=0 taban hâli görür.
+     Gölgeli hot vurguları H14 gereği yalnız masaüstü bloğunda. */
+  @property --hp { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @keyframes hp-dalga { 0% { --hp: 0; } 2% { --hp: 1; } 20% { --hp: 1; }
+    27%, 100% { --hp: 0; } }
+  .adugum { display: flex; align-items: center; gap: 11px; padding: 12px 14px;
+    margin-bottom: 11px; border-radius: 14px;
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .5) calc(var(--hp, 0) * 100%), var(--line));
+    background: color-mix(in srgb, #161010 calc(var(--hp, 0) * 100%), #101010);
+    animation: hp-dalga 2.667s linear infinite;
+    animation-delay: calc(var(--hi, 0) * .667s); }
+  .adugum .ni { width: 32px; height: 32px; border-radius: 9px; display: grid;
+    place-items: center; flex-shrink: 0;
+    background: color-mix(in srgb, var(--red-dim, rgba(239, 35, 60, .15)) calc(var(--hp, 0) * 100%), rgba(255, 255, 255, .05));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .45) calc(var(--hp, 0) * 100%), var(--line));
+    color: color-mix(in srgb, var(--red-soft) calc(var(--hp, 0) * 100%), var(--tx3)); }
+  /* :global — Ikon.astro'nun svg'si bu bileşenin scope damgasını
+     taşımaz; düz seçici eşleşmez (gerçek Chrome ölçümüyle yakalandı) */
+  .adugum .ni :global(svg) { width: 15px; height: 15px; }
+  .nt { flex: 1; min-width: 0; }
+  .nt b { display: block; font-size: .83rem; font-weight: 600; letter-spacing: -.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt span { font-size: .68rem; color: var(--tx4); font-family: ui-monospace, monospace;
+    letter-spacing: .08em; }
+  .nd { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: color-mix(in srgb, var(--red) calc(var(--hp, 0) * 100%), var(--line2)); }
+
+  /* ---- BEYİN — kaynak .fbrain 1356-1381 birebir (Manrope→gövde,
+     JetBrains→ui-monospace: F1 sözleşmesi). */
+  .ajan-kart { border: 1px solid rgba(239, 35, 60, .34); border-radius: 20px;
+    background: linear-gradient(180deg, rgba(239, 35, 60, .1), rgba(255, 255, 255, .02));
+    padding: 20px; }
+  .ajan-ad { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+  .bi { width: 42px; height: 42px; border-radius: 12px; display: grid;
+    place-items: center; background: var(--red); color: #fff; flex-shrink: 0; }
+  .bi :global(svg) { width: 20px; height: 20px; }
+  .bt { min-width: 0; }
+  .bt b { display: block; font-size: 1rem; font-weight: 700; letter-spacing: -.03em; }
+  .bt span { font-family: ui-monospace, monospace; font-size: 9.5px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
+  /* rozet kaynakta YALNIZ MOBİL (1384: taban gizli, 1410: ≤900 açık);
+     noktası kaynakta ping2 TANIMSIZ keyframe'deydi → SABİT basılır;
+     glow'u H14 gereği yok (kaynakta vardı, belgeli sapma). */
+  .fbadge { display: none; }
+
+  /* ---- ADIM SATIRLARI — kaynak .fstep 1370-1381; tik ✓ karakteri
+     değil kaynağın IC.check SVG'si (F1c). DALGA: kaynak tick'i 2.2
+     adım/sn, döngü n+2=7 birim (10626-10627) → --fsp 0→7 (3.18s),
+     satır i eşiği (i+1); rampa ×1.5 ≈ kaynağın .4s transition'ı.
+     --fsp initial 7: desteksiz tarayıcı + reduced TAMAMLANMIŞ görür. */
+  @property --fsp { syntax: '<number>'; inherits: true; initial-value: 7; }
+  @keyframes fsp-dalga { 0% { --fsp: 0; } 100% { --fsp: 7; } }
+  .ajan-kart ol { list-style: none; margin: 0; padding: 0; display: flex;
+    flex-direction: column; gap: 7px;
+    animation: fsp-dalga 3.18s linear infinite; }
+  .ajan-kart li { --on: clamp(0, (var(--fsp, 7) - 1 - var(--fi, 0)) * 1.5, 1);
+    display: flex; align-items: center; gap: 10px; padding: 8px 11px;
+    border-radius: 10px; font-size: .76rem;
+    background: color-mix(in srgb, rgba(239, 35, 60, .08) calc(var(--on) * 100%), rgba(255, 255, 255, .03));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .3) calc(var(--on) * 100%), transparent);
+    color: color-mix(in srgb, var(--tx) calc(var(--on) * 100%), var(--tx3)); }
+  .fsi { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center; font-style: normal;
+    border: 1px solid color-mix(in srgb, var(--red) calc(var(--on) * 100%), var(--line2));
+    background: color-mix(in srgb, var(--red-dim, rgba(239, 35, 60, .15)) calc(var(--on) * 100%), transparent); }
+  .fsi :global(svg) { width: 9px; height: 9px; color: var(--red-soft);
+    opacity: var(--on); }
+  .ajan-kart li span { min-width: 0; }
+  .ajan-kart li em { margin-left: auto; font-style: normal;
+    font-family: ui-monospace, monospace; font-size: 9px;
+    color: color-mix(in srgb, var(--red-soft) calc(var(--on) * 100%), var(--tx4)); }
+
+  /* gölgeli vurgular yalnız masaüstü (H14): hot kutu/nokta glow'u,
+     beyin ikonunun brainPulse'u (1362-1365 birebir) */
+  @media (min-width: 901px) {
+    .adugum { box-shadow: 0 0 26px -8px color-mix(in srgb, var(--red-glow, rgba(239, 35, 60, .5)) calc(var(--hp, 0) * 100%), transparent); }
+    .nd { box-shadow: 0 0 9px color-mix(in srgb, var(--red-glow, rgba(239, 35, 60, .5)) calc(var(--hp, 0) * 100%), transparent); }
+    .bi { box-shadow: 0 0 24px -4px var(--red-glow, rgba(239, 35, 60, .5));
+      animation: brainPulse 2.6s ease-in-out infinite; }
+    @keyframes brainPulse { 0%, 100% { box-shadow: 0 0 24px -4px rgba(239, 35, 60, .5); }
+      50% { box-shadow: 0 0 40px 0 rgba(239, 35, 60, .8); } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .adugum, .ajan-kart ol, .bi { animation: none; }
+  }
 
   .uc-adim { list-style: none; display: grid; gap: 12px; margin: 18px 0 0; padding: 0;
     grid-template-columns: repeat(3, 1fr); }
