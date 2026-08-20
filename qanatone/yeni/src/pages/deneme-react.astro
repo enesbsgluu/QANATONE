@@ -1,0 +1,23 @@
+---
+/* DENEME SAYFASI — React + motion adasının BÜTÇE ÖLÇÜM zemini
+   (Enes talebi, 20 Ağu; tasarım turu B kalemleri hazırlığı).
+   GEÇİCİ: B kalemlerinden biri React'i hak edip kendi adasıyla
+   gelince bu sayfa ve DenemeAda silinir — denetimdeki sayfa formülü
+   (+17) ve J1 istisnası da onunla birlikte geri alınır.
+   Canonical hukuki deseni: canlı kökte karşılığı yok → kendine,
+   noindex zaten kabuk geneli; sitemap/R8 dışında (KOK'suz canonical). */
+import Temel from '../layouts/Temel.astro';
+import DenemeAda from '../parcalar/DenemeAda.tsx';
+const canon = 'https://qanatone.netlify.app/yeni/deneme-react';
+---
+<Temel dil="tr" baslik="React ada denemesi — QANATONE"
+  aciklama="React + motion adasının bütçe ölçümü için geçici deneme sayfası; ürün sayfası değildir."
+  canonical={canon}>
+  <section class="giris">
+    <h1>React ada denemesi</h1>
+    <p class="lede">Bu sayfa ürün değil, ölçüm zemini: aşağıdaki kart React +
+      motion adasıdır — sürükle, bırak, yarıda kes. Bütçe rakamları commit
+      raporunda; ada <code>client:visible</code> ile yalnız bu sayfada yaşar.</p>
+  </section>
+  <DenemeAda client:visible />
+</Temel>
