@@ -163,6 +163,12 @@
   .nv-logo i img{height:25px}
   .nv-logo b{font-size:.98rem}
 }
+/* kaynak 2610: nav CTA'sı ≤640'ta gizlenir — dar ekranda logo+dil+
+   burger üçlüsüyle sıkışıyordu; çağrı zaten menünün içinde (.nv-mcta).
+   Sadakat denetimi 21 Ağu: yenide taşınmamıştı. */
+@media(max-width:640px){
+  .nv-cta{display:none}
+}
 @media(max-width:520px){
   .nv-lang{display:none}
 }
