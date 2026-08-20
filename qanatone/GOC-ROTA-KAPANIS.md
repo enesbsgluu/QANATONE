@@ -134,19 +134,27 @@ BreadcrumbList (6×2) · FAQPage (/sss).
 
 Kapanış anı: **43 kural / 0 kırmızı · 59 sayfa.**
 
-## 8 · Bağlantı kaçakları (dist taraması, kapanış anı)
+## 8 · Bağlantı kaçakları (dist taraması)
 
-Kırık 0 · boş 0 · kök-sabit 3 sınıf: yapısal `/` ×119 (logo + «ana site»,
-kesmede kendiliğinden doğru), `/en#iletisim` ×13 ve `/en#lead` ×1 (EN ana
-sayfa adası yok; kurulunca `${B}`ye döner, yerleri yorumla işaretli).
-Rota-turu kaçağı yok; H16 bekçiliyor.
+**GÜNCELLENDİ — /en ana sayfa adası kuruldu (kapanışın hemen ardından):**
+kök-sabit kaçak tek sınıfa indi: yapısal `/` ×121 (logo + «ana site»,
+kesmede kendiliğinden doğru). `/en#iletisim` ×13 ve `/en#lead` ×1
+sınıfları SIFIRLANDI — altı CTA `${B}/en`e döndü. H16 bekçiliyor.
+
+`/yeni/en/` kapı ölçümü (dönüşümlü, 3 koşum ortancası): **yeni 98 ·
+FCP 1.213 · LCP 1.739 · TBT 42 · CLS 0 · 164 KB ↔ eski /en 62 ·
+3.822 · 6.665 · 186 · 987 KB.** TR ana bandıyla uyumlu. S2/S3/S5
+anlatılarının EN metni TR'nin sadık çevirisi (sahne dosyalarında iki dil
+yan yana) — **savurmada TR'yle birlikte Enes bakmalı.** EN ana gzip
+28.040 B: TR tavanının (28.672) altında ama **H ailesi bekçileri yalnız
+TR anayı ölçer** — EN'e genişletme ayrı iş.
 
 ## 9 · Kalan işler
 
-**Rota (sayfa değil, üreteç/kesme):** `/en` ana sayfa adası ·
-`bulten/rss.xml` · sitemap.xml (eskileri kök build.js üretiyor; kesmede
-yeni üreteç ister). **Faz 4 ek şartı:** hizmet detay redirect'leri (9×2,
-tekil→çoğul).
+**Rota (üreteç/kesme):** `bulten/rss.xml` · sitemap.xml (eskileri kök
+build.js üretiyor; kesmede yeni üreteç ister). **Faz 4 ek şartı:** hizmet
+detay redirect'leri (9×2, tekil→çoğul) + H bekçilerinin EN anaya
+genişletilmesi.
 
 **Enes'te bekleyenler:** rota sayfalarının savurma/telefon hükmü ·
 giydirme turunun başlangıcı (ertelenen animasyonlar bölüm 5'te) · Faz 3

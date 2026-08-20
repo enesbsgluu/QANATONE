@@ -32,10 +32,9 @@ const sorular = icerik.faq || [];
   ))}
 </div>
 
-{/* EN adası ana sayfa henüz yok — EN düğmesi kesmeye kadar kök /en'e
-    çıkar (bilinçli kaçak, envanterde kayıtlı — hizmetler dizininin aynısı). */}
+{/* EN ana sayfa adası kuruldu — eski '/en#iletisim' kaçağı adaya döndü. */}
 <p class="son">
-  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  <a class="dugme" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>

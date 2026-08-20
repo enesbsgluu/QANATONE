@@ -67,7 +67,6 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 {d.cta && <section class="cta">
   <h2>{T(d.cta.t, dil)}</h2>
   <p>{T(d.cta.s, dil)}</p>
-  {/* TR formu adada (S-IL); EN adası ana sayfa henüz yok — EN kesmeye
-      kadar kök /en'e çıkar (bilinçli kaçak, envanterde kayıtlı). */}
-  <a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  {/* Form adada (S-IL); EN ana sayfa adası kuruldu, kaçak adaya döndü. */}
+  <a class="dugme" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
 </section>}

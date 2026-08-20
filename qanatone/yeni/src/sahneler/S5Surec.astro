@@ -1,7 +1,17 @@
 ---
 /* S5 · Süreç — Enes'in kendi işleyişi (talimat metni, dört adım) +
-   marka kimliği 14 gün taahhüdü. Hareket yok (H1). */
-const adimlar = [
+   marka kimliği 14 gün taahhüdü. Hareket yok (H1).
+   METİN KAYNAĞI: Faz 2 anlatısı; EN, /en adası kurulurken TR'nin sadık
+   çevirisi olarak eklendi (S2 ile aynı düzen). */
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const adimlar = dil === 'en' ? [
+  { n: '01', b: 'Reviewing the request', p: 'Website, SEO, GEO or ad conversion state — we take the current picture.' },
+  { n: '02', b: 'Diagnosis', p: 'Architecture and existing mistakes, the company\'s workflows, target audience analysis.' },
+  { n: '03', b: 'Proposed solution', p: 'What gets built, in which order, and why — on a single page, with the reasoning.' },
+  { n: '04', b: 'Execution', p: 'Sometimes just ads, sometimes a website, sometimes automation; data analysis for larger companies.' }
+] : [
   { n: '01', b: 'Talebi inceleme', p: 'Website, SEO, GEO ya da reklam dönüşüm durumu — mevcut fotoğraf çekilir.' },
   { n: '02', b: 'Teşhis', p: 'Mimari ve yapılan hatalar, firmanın iş süreçleri, hedef kitle analizi.' },
   { n: '03', b: 'Çözüm önerisi', p: 'Neyin, hangi sırayla, neden kurulacağı — tek sayfada, gerekçesiyle.' },
@@ -10,9 +20,9 @@ const adimlar = [
 ---
 <section data-sahne="5">
   <div class="icgen">
-    <p class="kunye"><i>05</i>SÜREÇ</p>
-    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Nasıl çalışıyoruz.</h2>
-    <p class="s1-alt" style="margin-bottom:44px">Dört adım; her biri bir öncekinin çıktısıyla başlar.</p>
+    <p class="kunye"><i>05</i>{M('SÜREÇ', 'PROCESS')}</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">{M('Nasıl çalışıyoruz.', 'How we work.')}</h2>
+    <p class="s1-alt" style="margin-bottom:44px">{M('Dört adım; her biri bir öncekinin çıktısıyla başlar.', "Four steps; each one starts from the previous one's output.")}</p>
     <div class="s5-dizi">
       {adimlar.map(a => (
         <div class="s5-adim">
@@ -22,7 +32,7 @@ const adimlar = [
         </div>
       ))}
     </div>
-    <p class="s5-soz"><b>Marka kimliği teslimi: 14 gün.</b>
-      <span>Logo, renk, tipografi ve temel kullanım seti — söz verilen tarihte elinde.</span></p>
+    <p class="s5-soz"><b>{M('Marka kimliği teslimi: 14 gün.', 'Brand identity delivery: 14 days.')}</b>
+      <span>{M('Logo, renk, tipografi ve temel kullanım seti — söz verilen tarihte elinde.', 'Logo, color, typography and the core usage kit — in your hands on the promised date.')}</span></p>
   </div>
 </section>

@@ -16,13 +16,17 @@
 import '../stil/serit.css';
 import logolar from '../veri/serit-logolari.json';
 
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+
 /* Üç özdeş tur: biri gerçek içerik, ikisi görsel tekrar. Tekrarlar
    ekran okuyucudan ve erişilebilirlik ağacından gizlenir — aynı dokuz
    isim üç kez okunmasın (eski tarafta dört kopyanın dördü de alt metin
    taşıyordu). */
 const TURLAR = [0, 1, 2];
 ---
-<section class="st-sahne" data-sahne="t" aria-label="Birlikte çalıştığımız araçlar">
+<section class="st-sahne" data-sahne="t"
+  aria-label={dil === 'en' ? 'Tools we work with' : 'Birlikte çalıştığımız araçlar'}>
   <div class="st-pencere">
     <div class="st-ray"><div class="st-akis">
       {TURLAR.map((t) => (

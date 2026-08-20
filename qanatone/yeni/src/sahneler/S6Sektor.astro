@@ -4,8 +4,12 @@
    en yakın gerçek veri 'insaat' (İnşaat & müteahhitlik — Bab İç Mimarlık
    referansının kulvarı). Uydurma sektör kartı yazılmaz; Enes panelden
    sektör ekler/değiştirirse buradaki liste anahtarla güncellenir.
-   Hareket yok (H1). */
+   Hareket yok (H1). Kart metinleri dilli (content.json), başlıklar
+   S2 düzeniyle iki dilli. */
 import { icerik, T } from '../icerik';
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
 const one = ['insaat', 'saglik', 'finans'];
 const sektorler = one
   .map(k => (icerik.sectors || []).find((s: any) => s.k === k))
@@ -13,14 +17,14 @@ const sektorler = one
 ---
 <section data-sahne="6">
   <div class="icgen">
-    <p class="kunye"><i>06</i>SEKTÖR</p>
-    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">Nerede kuruyoruz.</h2>
-    <p class="s1-alt" style="margin-bottom:44px">Her sektörün kaybı başka yerden akar; sistem ona göre kurulur.</p>
+    <p class="kunye"><i>06</i>{M('SEKTÖR', 'INDUSTRY')}</p>
+    <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">{M('Nerede kuruyoruz.', 'Where we build.')}</h2>
+    <p class="s1-alt" style="margin-bottom:44px">{M('Her sektörün kaybı başka yerden akar; sistem ona göre kurulur.', 'Every industry leaks from a different place; the system is built accordingly.')}</p>
     <div class="s6-dizi">
       {sektorler.map((s: any) => (
         <div class="s6-kart">
-          <b>{T(s.n)}</b>
-          <p>{T(s.d)}</p>
+          <b>{T(s.n, dil)}</b>
+          <p>{T(s.d, dil)}</p>
         </div>
       ))}
     </div>
