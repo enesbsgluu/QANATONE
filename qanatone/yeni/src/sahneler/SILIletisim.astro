@@ -40,10 +40,10 @@ const wa = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
 const kvkkOzet = g('ld4').replace(/<[^>]*>/g, '').slice(0, 180);
 const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
 ---
-<section class="sil-sahne" data-sahne="il" id="iletisim">
+<section class="sil-sahne" data-sahne="il" id="iletisim" data-anlati>
   <div class="sil-ic">
     <div class="sil-cagri">
-      <p class="kunye"><i>08</i>{en ? 'CONTACT' : 'İLETİŞİM'}</p>
+      <p class="kunye"><i class="no"></i>{en ? 'CONTACT' : 'İLETİŞİM'}</p>
       <h2 class="s1-buyuk" set:html={suz(g('ctah'), ['em', 'b'])} />
       <p class="s1-alt">{g('ctap')}</p>
       <p class="sil-dugmeler">
