@@ -98,6 +98,35 @@ export function projeSema(icerik, sayfa, proje) {
   return g;
 }
 
+/* BÜLTEN DİZİNİ ŞEMASI — eski /bulten @graph'ı yalnız üçlüydü (özel
+   blok yalnız /sss ve /hizmetler'de vardı; kök schema() 11559-11574).
+   Hizmetler/projeler dizinleriyle tutarlılık için ItemList(N×Article)
+   eklendi — bilinçli süperküme. Item alan adları detay sayfasının
+   Article şemasıyla aynı (headline/description/datePublished/publisher).
+   Sıra tarihe göre yeni→eski: dizin sayfası da böyle basıyor (eski
+   postsSorted davranışı), şema sayfayla aynı sırayı anlatmalı. */
+export function bultenDizinSema(icerik, sayfa) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const yazilar = [...(icerik.posts || [])]
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  g['@graph'].push({
+    '@type': 'ItemList', '@id': sayfa.url + '#list',
+    itemListElement: yazilar.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'Article', headline: T(p.title), description: T(p.lede),
+        url: `${KOK}${dil === 'en' ? '/en' : ''}/bulten/${p.slug}`,
+        datePublished: p.date,
+        publisher: { '@id': KOK + '/#org' },
+      },
+    })),
+  });
+  return g;
+}
+
 export function dizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
   const KOK = 'https://qanatone.com';

@@ -1,0 +1,92 @@
+---
+/* Bülten dizini gövdesi — TR ve EN aynı parça (rota turu). Sıra TARİHE
+   göre yeni→eski (eski postsSorted davranışı) — content.json sırası
+   DEĞİL: bülten kronolojik bir akış, dizin sırası panele değil takvime
+   bağlı. Metinler eski sayfanın data-t düzeniyle aynı düşüşü izler:
+   strings[dil][anahtar] doluysa panelinki, boşsa buradaki varsayılan.
+   TR varsayılanları eski markup'ın kendisi — strings.tr'de bu anahtarlar
+   YOK, TR'nin kaynağı hep markup'tı (ölçüldü); EN karşılıkları
+   strings.en'de yaşıyor ve panel ezebilir.
+   Taşınmayanlar (bilinçli, rapora yazıldı):
+   – sektör filtre çipleri: etiket haritası (BKC) KODDAYDI, content.json'da
+     değil — panelden gelen yeni sektör anahtarında çip sessizce bayatlar.
+     Projeler dizinindeki kararın aynısı (R2 turu). Sektör bilgisi
+     kaybolmadı: her kartın künyesi etiketini (tag) taşıyor.
+   – abone formunun betiği: form STATİK HTML + native POST (Netlify
+     "bulletin" formunu derleme anındaki HTML'den tanır — S-IL dersi);
+     satır içi "kaydettik" mesajı JS istiyordu, ada JS'i 0 tutuldu.
+     JS'siz de çalışır; gönderen Netlify'ın teşekkür sayfasını görür. */
+import { getCollection } from 'astro:content';
+import { icerik, T, type Dil } from '../icerik';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
+const yazilar = (await getCollection('yazilar')).map(e => e.data)
+  .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
+const on = dil === 'en' ? '/en' : '';
+/* Tarih ELDEKİ listeyle basılır, toLocaleDateString ile değil: yerel
+   Node 24 ↔ Netlify Node 20 ICU farkı çıktıyı sessizce değiştirebilir;
+   YaziGovde da aynı sebepten kendi listesini taşıyor. Biçim eski
+   dizinin uzun ayı (tr-TR/en-GB: "4 Ağustos 2026" / "4 August 2026"). */
+const AY = dil === 'en'
+  ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+  : ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const tarihYaz = (d: string) => {
+  const t = new Date(d + 'T00:00:00');
+  return `${t.getDate()} ${AY[t.getMonth()]} ${t.getFullYear()}`;
+};
+---
+<section class="giris">
+  <h1>{m('bkh', 'Veriyle konuşuyoruz.')}
+    <span class="say">({yazilar.length})</span></h1>
+  <p class="lede">{m('bkp', 'Yapay zekâ, arama ve talep yönetimi tarafında işine dokunan gelişmeleri kaynağıyla birlikte yazıyoruz. Görüş değil rakam; her yazının sonunda "bu senin işin için ne demek" var.')}</p>
+</section>
+
+<div class="yazilar">
+  {yazilar.map((p: any) => (
+    <article class="yazi">
+      <p class="kunye">{T(p.tag, dil)} · <time datetime={p.date}>{tarihYaz(p.date)}</time>{p.read &&
+        <> · {p.read}{M(' dk okuma', ' min read')}</>}</p>
+      <h2>{T(p.title, dil)}</h2>
+      <p>{T(p.lede, dil)}</p>
+      <a class="git" href={`${B}${on}/bulten/${p.slug}`}>{M('Oku', 'Read')}</a>
+    </article>
+  ))}
+</div>
+
+<div class="abone">
+  <h3>{m('bks1', 'Yeni yazı çıkınca haberin olsun')}</h3>
+  <p>{m('bks2', 'Ayda birkaç yazı. Spam yok, satış maili yok, tek tıkla çıkabilirsin.')}</p>
+  <form name="bulletin" method="POST" data-netlify="true" netlify-honeypot="website">
+    <input type="hidden" name="form-name" value="bulletin" />
+    {/* Honeypot: gerçek kullanıcı görmez, bot doldurur (kaynaktakiyle
+        aynı alan adı — kayıtlar aynı "bulletin" formuna düşer). */}
+    <p class="sus-tuzak"><label>{m('hpSite', 'Web sitesi')}
+      <input name="website" tabindex="-1" autocomplete="off" /></label></p>
+    <input type="email" name="email" required maxlength="120" autocomplete="email"
+      placeholder={m('phMail', 'e-posta adresin')} aria-label={m('phMail', 'e-posta adresin')} />
+    <button class="dugme" type="submit">{m('bks3', 'Abone ol')}</button>
+  </form>
+</div>
+
+<style>
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  .yazilar { display: flex; flex-direction: column; gap: 14px; }
+  .yazi { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .yazi .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
+  .yazi h2 { font-size: 1.05rem; margin: 0 0 6px; }
+  .yazi > p:not(.kunye) { color: var(--tx2); font-size: .92rem; }
+  .git { display: inline-block; margin-top: 12px; font-size: .85rem; }
+  .abone { border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 34px; }
+  .abone h3 { font-size: 1rem; margin: 0 0 4px; }
+  .abone > p { color: var(--tx2); font-size: .9rem; margin: 0 0 12px; }
+  .abone form { display: flex; flex-wrap: wrap; gap: 10px; }
+  .abone input[type="email"] { flex: 1 1 220px; min-width: 0; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; background: transparent;
+    color: inherit; font: inherit; }
+  .sus-tuzak { position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; }
+</style>

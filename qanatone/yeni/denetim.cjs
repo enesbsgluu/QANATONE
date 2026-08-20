@@ -38,7 +38,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 7; /* +hukuki +404 +ana +hizmetler dizini (tr/en) +projeler dizini (tr/en) */
+    + 9; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -280,6 +280,39 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     }
   }
   ol('R3 · proje detayları: blok+rakam+künye alanları ham HTML\'de (7×2 sayfa)',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R4 · BULTEN DIZINI BUTUNLUGU: dizin (TR ve EN) HER yazinin basligini,
+   girisini (lede), tarihini (time[datetime] ham degeriyle) ve detay
+   baglantisini ham HTML'de tasimali; abone formu ("bulletin", honeypot
+   website dahil) STATIK HTML'de dogmali — Netlify Forms formu derleme
+   anindaki HTML'den tanir (S-IL dersi), JS'le eklenen form kayda girmez. */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/bulten' : 'bulten', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const ham = oku(p), duz = coz(ham);
+    for (const y of c.posts) {
+      if (!duz.includes(coz(D(y.title, dil)))) kusur.push(`${dil}:${y.slug}:ad`);
+      if (!duz.includes(coz(D(y.lede, dil)))) kusur.push(`${dil}:${y.slug}:lede`);
+      if (!ham.includes(`datetime="${y.date}"`)) kusur.push(`${dil}:${y.slug}:tarih`);
+      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
+        kusur.push(`${dil}:${y.slug}:bağlantı`);
+    }
+    if (!/<form[^>]*name="bulletin"[^>]*method="POST"/i.test(ham) ||
+        !ham.includes('name="form-name" value="bulletin"') ||
+        !ham.includes('name="website"'))
+      kusur.push(dil + ':abone formu statik değil');
+  }
+  ol('R4 · bülten dizini: her yazı ad+lede+tarih+bağlantı ham HTML\'de + statik abone formu',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
