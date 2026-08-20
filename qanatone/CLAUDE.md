@@ -49,6 +49,12 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   kaldırmayı önerme.
 - **Enflasyon testi:** yeni sahne/animasyon/özellik, sayfada zaten anlatılan
   bir şeyi tekrar ediyorsa eklenmez.
+- **Sadakat kuralı (21 Ağu):** sahne kıyası yan yana ekran karesi + yazılı
+  fark listesiyle yapılır; kaynakta olmayan görsel öğe eklenmez (kutu/
+  çerçeve/ikon/tik/düğüm/parlama/gölge — kaynak çıplaksa yeni de çıplak);
+  künyeler kompozisyon sütunu taşır (kap·ayraç·ikon·vurgu); iki öğeyi
+  birleştiren hiçbir şey göz kararı çizilmez — ya kaynaktan okunur ya
+  ölçülür. Ayrıntı `TASARIM-A3-KUNYE.md` bölüm 0.
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.

@@ -130,7 +130,8 @@
 #nvAc:checked ~ .nv-bar .nv-burger i::before{top:0;transform:rotate(45deg)}
 #nvAc:checked ~ .nv-bar .nv-burger i::after{top:0;transform:rotate(-45deg)}
 /* klavye: görünmez checkbox'ın odağı burger'de görünür */
-#nvAc:focus-visible ~ .nv-bar .nv-burger{outline:2px solid var(--red);outline-offset:2px}
+/* değerler kaynağın küresel odak halkası (kök 2632) — 21 Ağu denetimi */
+#nvAc:focus-visible ~ .nv-bar .nv-burger{outline:2px solid var(--red-soft);outline-offset:3px}
 
 /* -- masaüstü süsleri tek kapıda (H14): blur, hare, gölgeler, hover -- */
 @media(min-width:981px) and (hover:hover) and (pointer:fine){

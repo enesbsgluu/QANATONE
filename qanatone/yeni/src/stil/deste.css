@@ -65,6 +65,10 @@
    kalsın diye (H10'un konusu olan çakışma bu sahnede hiç doğmuyor). */
 .sp-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .sp-giris{margin-bottom:clamp(40px,5vw,66px)}
+/* künye kaynak biçimi (kök 366-367): 26px kızıl çizgi + mono metin —
+   sadakat denetimi 21 Ağu, anlatı sayacı ("04") kaynakta yoktu */
+.sp-kunye::before{content:'';display:inline-block;width:26px;height:1px;
+  background:var(--red);vertical-align:middle;margin-right:10px}
 .sp-sayi{font-family:var(--f-tek);font-size:.9rem;color:var(--tx4);
   vertical-align:super;margin-left:10px;letter-spacing:0}
 

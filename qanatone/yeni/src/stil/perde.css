@@ -16,10 +16,13 @@
    dersi: clip-path her karede tam ekran yeniden boyamaydı.
 
    BU ADADA ALINAN SAPMALAR (madde 6):
-   1) SVG ANAKART İZLERİ (tr/pd/sig, `bsig` sinyalleri) BU TURDA GELMEDİ.
-      Eskisi iz başına `getTotalLength` okutuyordu — Anayasa'nın adıyla
-      yasakladığı maliyet. Gelecekse giydirme turunda `pathLength="1"`
-      özniteliğiyle gelir: çizim animasyonu yerleşim okumasız kurulur.
+   1) SVG ANAKART İZLERİ GELDİ (giydirme, a8b1d6a) — dokuz yol kaynaktan
+      birebir kopya (kök 4418-4428), `getTotalLength` yerine
+      `pathLength="1"`. Sapma değil kaynağa dönüş; tek fark sinyal
+      gecikmeleri (aşağıda, adıyla) ve .sig parlamasının H14 gereği
+      yalnız masaüstünde olması (kaynakta koşulsuzdu). Bu maddenin eski
+      hâli "izler bu turda gelmedi" diyordu — 21 Ağu denetimi belge
+      hatasını düzeltti.
    2) İLERLEME ÇUBUĞU (`.bbar` + rAF tick döngüsü) TAŞINMADI. Çubuk
       zorunlu bekletmenin arayüzüydü ("yüzde uydurulmuyor, gerçek yükleme
       sinyali"); bekletme taşınmayınca gösterecek gerçek bir ilerleme
@@ -32,10 +35,12 @@
       tek seferlik transform animasyonunu tarayıcı kendisi katmanlar).
    5) Manrope taşınmadı (madde 4) — marka kilidi gövde ailesinin 800
       ağırlığıyla (Nunito Sans değişken, 300-800 aralığı yüklü).
-   6) Tarama çizgisinin `box-shadow` ışıması sadeleşti: iki katmanlı
-      gradient aynı hissi veriyor; tam ekran fixed katmanın çocuğunda
-      gölge taşımamak H14'ün ruhu (süs önekli olduğu için kural
-      taramıyor ama sebep duruyor).
+   6) Tarama çizgisinin `box-shadow` ışıması KALDIRILDI (gradient'in
+      kendisi kaynakla birebir, "sadeleşen" bir şey yok — 21 Ağu belge
+      düzeltmesi): tam ekran fixed katmanın çocuğunda gölge taşımamak
+      H14'ün ruhu (süs önekli olduğu için kural taramıyor ama sebep
+      duruyor). Kaynaktaki iki katmanlı glow (kök 108) EKSİK kalem
+      olarak künyede.
    ============================================================ */
 
 /* Varsayılan GİZLİ: görünürlük kararını kapı betiği ilk boyamadan önce

@@ -16,12 +16,13 @@
    Inter → --f-govde (F1), JetBrains → --f-tek, #fff → var(--tx);
    animasyonlu her kural `animation-play-state:var(--akps,paused)`
    taşır — kapıyı bağlam verir (şeritte .sa-kart, detayda .hd-demo),
-   IO .akoynar sınıfıyla açar. Taban dolgusu 7cqw 6.5cqw kaynağın
-   8cqw 7cqw'sinden bilinçli sapmaydı (16/10 şerit kartı, 20 Ağu);
-   dolgudan türeyen sabitler (akKnob 86cqw) kendi demosunda kaynağın
-   dolgusunu geri kurar. ============================================ */
+   IO .akoynar sınıfıyla açar. Taban dolgusu KAYNAK DEĞERİ 8cqw 7cqw
+   (kök 3912) — 20 Ağu'daki 7cqw 6.5cqw sapması 16/10 şerit kartına
+   dayanıyordu; sadakat denetimi (21 Ağu) şerit kartını kaynağın
+   1/1.02'sine döndürünce gerekçe düştü, dolgu kaynağa döndü.
+   akKnob 86cqw sabiti de bu dolgunun türevi. ===================== */
 .akd{position:absolute;inset:0;display:flex;flex-direction:column;
-  justify-content:center;gap:2.6cqw;padding:7cqw 6.5cqw;
+  justify-content:center;gap:2.6cqw;padding:8cqw 7cqw;
   font-size:clamp(9.2px,3.3cqw,11.4px);line-height:1.25;
   font-family:var(--f-govde);letter-spacing:-.005em}
 .akd b,.akd i,.akd em,.akd u,.akd s{font-style:normal;font-weight:inherit;text-decoration:none}
