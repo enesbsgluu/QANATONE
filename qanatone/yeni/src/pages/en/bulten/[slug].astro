@@ -1,24 +1,22 @@
 ---
-/* Yazı sayfaları (EN). */
+/* Yazı sayfaları (EN) — şema TR sayfayla aynı sebeple @graph (yaziSema). */
 import { getCollection } from 'astro:content';
 import Temel from '../../../layouts/Temel.astro';
 import YaziGovde from '../../../parcalar/YaziGovde.astro';
-import { T, KOK, kes, basAd } from '../../../icerik';
+import { icerik, T, KOK, kes, basAd } from '../../../icerik';
+import { yaziSema } from '../../../sema.mjs';
 
 export async function getStaticPaths() {
   return (await getCollection('yazilar')).map(e => ({ params: { slug: e.id }, props: { p: e.data } }));
 }
 const { p } = Astro.props;
 const canon = `${KOK}/en/bulten/${p.slug}`;
-const sema = {
-  '@context': 'https://schema.org', '@type': 'Article',
-  headline: T(p.title, 'en'), description: T(p.lede, 'en').slice(0, 300),
-  datePublished: p.date, inLanguage: 'en', url: canon,
-  publisher: { '@id': `${KOK}/#org` }
-};
+const baslik = basAd(p.title, 'en');
+const aciklama = kes(p.lede, 'en');
+const sema = yaziSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' }, p);
 ---
-<Temel dil="en" baslik={basAd(p.title, 'en')}
-  aciklama={kes(p.lede, 'en')} canonical={canon}
+<Temel dil="en" baslik={baslik}
+  aciklama={aciklama} canonical={canon}
   heleftr={`${KOK}/bulten/${p.slug}`} helefen={canon}
   sema={sema} etiket="NEWSLETTER">
   <YaziGovde p={p} dil="en" />

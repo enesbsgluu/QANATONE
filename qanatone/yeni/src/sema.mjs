@@ -147,6 +147,62 @@ export function sssSema(icerik, sayfa) {
   return g;
 }
 
+/* DETAY ŞEMALARI — rota turu kapanış raporunda yakalanan parite açığı:
+   Faz 1 hizmet/bülten detaylarına TEKİL düğüm yazmıştı; eski taraf her
+   sayfada üçlü @graph + tür basıyor, hizmette det.faq varsa FAQPage,
+   bültende BreadcrumbList de var (kök schema() 11575-11602). Alan alan
+   birebir; eski `serviceType:...||undefined` düşüşü aynen (JSON.stringify
+   undefined alanı düşürür — yarım alan basılmaz). */
+export function hizmetSema(icerik, sayfa, hizmet) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  const strip = (v) => String(T(v)).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const det = hizmet.det || {};
+  g['@graph'].push({
+    '@type': 'Service', '@id': sayfa.url + '#service',
+    name: strip(det.h), description: strip(det.lede),
+    provider: { '@id': KOK + '/#org' }, areaServed: ['TR', 'AE'],
+    serviceType: T(hizmet.tag) || undefined,
+  });
+  if (det.faq && det.faq.length)
+    g['@graph'].push({
+      '@type': 'FAQPage', '@id': sayfa.url + '#faq',
+      mainEntity: det.faq.map((f) => ({
+        '@type': 'Question', name: strip(f.q),
+        acceptedAnswer: { '@type': 'Answer', text: strip(f.a) },
+      })),
+    });
+  return g;
+}
+
+export function yaziSema(icerik, sayfa, yazi) {
+  const g = anaSema(icerik, sayfa);
+  const KOK = 'https://qanatone.com';
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  g['@graph'].push({
+    '@type': 'Article', '@id': sayfa.url + '#article',
+    headline: T(yazi.title), description: sayfa.aciklama,
+    datePublished: yazi.date, dateModified: yazi.date,
+    inLanguage: dil,
+    mainEntityOfPage: { '@id': sayfa.url + '#page' },
+    author: { '@id': KOK + '/#org' }, publisher: { '@id': KOK + '/#org' },
+    image: KOK + '/' + String(yazi.image || 'og.png').replace(/^\//, ''),
+  });
+  g['@graph'].push({
+    '@type': 'BreadcrumbList', '@id': sayfa.url + '#crumb',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'QANATONE', item: KOK + '/' },
+      { '@type': 'ListItem', position: 2, name: dil === 'en' ? 'Bulletin' : 'Bülten',
+        item: `${KOK}${dil === 'en' ? '/en' : ''}/bulten` },
+      { '@type': 'ListItem', position: 3, name: T(yazi.title) },
+    ],
+  });
+  return g;
+}
+
 export function dizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
   const KOK = 'https://qanatone.com';
