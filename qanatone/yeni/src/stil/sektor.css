@@ -39,7 +39,7 @@
 .sse-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .sse-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
 .sse-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.sse-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sse-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--aksan)}
 .sse-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
   letter-spacing:-.035em;margin-bottom:0}
 .sse-bas p{margin-top:clamp(11px,1.3vw,18px)}
@@ -56,7 +56,7 @@
   padding:clamp(14px,1.6vw,18px);border:1px solid var(--line);
   border-radius:16px;background:var(--card)}
 .sse-sec-ik{display:grid;place-items:center;width:34px;height:34px;
-  border-radius:10px;border:1px solid var(--line);color:var(--red-soft);
+  border-radius:10px;border:1px solid var(--line);color:var(--tx3);
   margin-bottom:6px}
 .sse-sec-ik svg{width:18px;height:18px}
 .sse-sec b{font-size:.98rem;letter-spacing:-.01em}
@@ -77,7 +77,8 @@
 #sse-esnaf:checked ~ .sse-secici label[for="sse-esnaf"],
 #sse-uretim:checked ~ .sse-secici label[for="sse-uretim"],
 #sse-finans:checked ~ .sse-secici label[for="sse-finans"]{
-  border-color:var(--sA,var(--red));background:rgba(255,255,255,.04)}
+  /* Seçili çip = aktif durum (kural 5) — aksan çerçeve. */
+  border-color:var(--sA,var(--aksan));background:color-mix(in srgb,var(--metin) 4%,transparent)}
 /* klavyeyle gezerken hangi düğmede olduğun görünsün */
 #sse-insaat:focus-visible ~ .sse-secici label[for="sse-insaat"],
 #sse-saglik:focus-visible ~ .sse-secici label[for="sse-saglik"],
@@ -85,7 +86,7 @@
 #sse-esnaf:focus-visible ~ .sse-secici label[for="sse-esnaf"],
 #sse-uretim:focus-visible ~ .sse-secici label[for="sse-uretim"],
 #sse-finans:focus-visible ~ .sse-secici label[for="sse-finans"]{
-  outline:2px solid var(--red);outline-offset:3px}
+  outline:2px solid var(--aksan);outline-offset:3px}
 
 /* ---- pano ---- */
 .sse-pano{border:1px solid var(--line);border-radius:20px;
@@ -93,7 +94,7 @@
 .sse-pano-bas{display:flex;gap:14px;align-items:flex-start;
   margin-bottom:clamp(16px,2vw,24px)}
 .sse-pano-ik{flex:none;display:grid;place-items:center;width:44px;height:44px;
-  border-radius:13px;border:1px solid var(--line);color:var(--sA,var(--red))}
+  border-radius:13px;border:1px solid var(--line);color:var(--sA,var(--aksan))}
 .sse-pano-ik svg{width:22px;height:22px}
 .sse-etiket{display:block;font-family:var(--f-tek);font-size:10px;
   letter-spacing:.18em;text-transform:uppercase;color:var(--tx4);margin-bottom:6px}
@@ -111,19 +112,20 @@
 .sse-kutular span{color:var(--tx3);font-size:.8rem;line-height:1.35}
 /* ok ikonu: U+2192 hiçbir kaynak yüzde yok (F1c), yerine tek SVG */
 .sse-ok{width:14px;height:14px;margin:0 6px;vertical-align:-1px;color:var(--tx4)}
-.sse-kutular .iyi b{color:var(--red-soft)}
+.sse-kutular .iyi b{color:var(--aksan)}
 .sse-kutular .uyari b{color:var(--tx)}
-.sse-kutular .uyari{border-color:rgba(239,35,60,.34)}
+.sse-kutular .uyari{border-color:color-mix(in srgb,var(--kayip) 34%,transparent)}
 
 .sse-kazanc{display:flex;gap:clamp(14px,2vw,26px);flex-wrap:wrap;
   align-items:center;justify-content:space-between;
-  border:1px solid rgba(239,35,60,.34);border-radius:16px;
+  /* Kazanç bloğu = panonun sonuç imzası (kural 5) — aksan çerçeve+degrade. */
+  border:1px solid color-mix(in srgb,var(--aksan) 34%,transparent);border-radius:16px;
   padding:clamp(14px,1.8vw,20px);margin-bottom:clamp(14px,1.8vw,22px);
-  background:linear-gradient(180deg,rgba(239,35,60,.08),transparent)}
+  background:linear-gradient(180deg,color-mix(in srgb,var(--aksan) 8%,transparent),transparent)}
 .sse-kazanc p{color:var(--tx2);font-size:.88rem;line-height:1.55;max-width:64ch}
 .sse-kazanc span{display:flex;flex-direction:column;gap:2px;flex:none}
 .sse-kazanc em{font-style:normal;color:var(--tx3);font-size:.78rem}
-.sse-kazanc b{font-size:clamp(1.2rem,2.2vw,1.7rem);color:var(--red-soft);
+.sse-kazanc b{font-size:clamp(1.2rem,2.2vw,1.7rem);color:var(--aksan);
   letter-spacing:-.02em}
 
 .sse-sutunlar{display:grid;gap:12px;
@@ -136,13 +138,14 @@
 .sse-kanal{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .sse-kanal-ad{flex:none;width:34%;font-size:.86rem;color:var(--tx2)}
 .sse-kanal-cubuk{flex:1;height:6px;border-radius:999px;
-  background:rgba(255,255,255,.06);overflow:clip}
+  background:color-mix(in srgb,var(--metin) 6%,transparent);overflow:clip}
 .sse-kanal-cubuk i{display:block;height:100%;border-radius:999px;
-  background:linear-gradient(90deg,var(--sA,var(--red)),var(--red-soft))}
+  /* Kanal çubukları = veri çizgisi (kural 5) — aksan. */
+  background:linear-gradient(90deg,var(--sA,var(--aksan)),var(--aksan))}
 .sse-kanal-pay{flex:none;font-family:var(--f-tek);font-size:.78rem;color:var(--tx3)}
 .sse-soru{color:var(--tx);font-size:.94rem;line-height:1.55}
 .sse-soru span{display:block;margin-top:8px;font-family:var(--f-tek);
-  font-size:10px;letter-spacing:.16em;color:var(--red-soft)}
+  font-size:10px;letter-spacing:.16em;color:var(--tx3)}
 .sse-isler{list-style:none;counter-reset:sse}
 .sse-isler li{counter-increment:sse;position:relative;padding-left:30px;
   margin-bottom:8px;color:var(--tx2);font-size:.88rem;line-height:1.5}
@@ -156,7 +159,7 @@
 /* ---- hover: yalnız gerçek imleçte ---- */
 @media (hover:hover) and (pointer:fine){
   .sse-sec{transition:border-color .3s var(--e),background-color .3s var(--e)}
-  .sse-sec:hover{border-color:var(--line2);background:rgba(255,255,255,.03)}
+  .sse-sec:hover{border-color:var(--line2);background:color-mix(in srgb,var(--metin) 3%,transparent)}
 }
 
 /* ---- hareket azaltma ---- */

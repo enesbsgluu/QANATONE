@@ -19,7 +19,7 @@ body:has(.ana) main{max-width:none;padding:0}
 
 /* etiket satırı — her sahnenin künyesi */
 .kunye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;
-  letter-spacing:.22em;color:var(--red-soft);margin-bottom:18px;text-transform:uppercase}
+  letter-spacing:.22em;color:var(--tx3);margin-bottom:18px;text-transform:uppercase}
 .kunye i{font-style:normal;color:var(--tx3);margin-right:10px}
 
 /* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
@@ -38,15 +38,16 @@ body:has(.ana) main{max-width:none;padding:0}
 .s2-yol::before{content:'';position:absolute;left:10px;top:6px;bottom:6px;width:2px;
   background:var(--line)}
 .s2-cizgi{position:absolute;left:10px;top:6px;bottom:6px;width:2px;
-  background:linear-gradient(180deg,var(--red),var(--red-soft));transform-origin:top}
+  background:linear-gradient(180deg,var(--kayip),color-mix(in srgb,var(--kayip) 55%,transparent));transform-origin:top}
 .s2-durak{position:relative}
 .s2-durak::before{content:'';position:absolute;left:-30px;top:6px;width:10px;height:10px;
   border-radius:50%;background:var(--bg);border:2px solid var(--tx3)}
-.s2-durak.kirmizi::before{border-color:var(--red);background:var(--red-dim,rgba(239,35,60,.15))}
+/* SAHNE NOTU (kural 5): S2 = KAYIP sahnesi — vurgular kayıp tonunda. */
+.s2-durak.kirmizi::before{border-color:var(--kayip);background:var(--kayip-sonuk)}
 .s2-durak b{display:block;font-size:1.05rem;margin-bottom:4px}
 .s2-durak p{color:var(--tx2);font-size:.94rem;max-width:52ch}
 .s2-durak .tek{font-size:.66rem;letter-spacing:.18em;color:var(--tx3);display:block;margin-bottom:6px}
-.s2-son b{color:var(--red-soft)}
+.s2-son b{color:var(--kayip)}
 /* kaydırma-güdümlü dolum: destekleyen tarayıcıda çizgi kaydırmayla dolar;
    desteklemeyende çizgi tam durur — içerik iki hâlde de eksiksiz (süs). */
 .s2-cizgi{transform:scaleY(1)}
@@ -63,10 +64,11 @@ body:has(.ana) main{max-width:none;padding:0}
   border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card);
   overflow:hidden}
 .s3-adim::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--red);transform-origin:top;transform:scaleY(1)}
+  /* SAHNE NOTU (kural 5): S3 = MEKANİZMA/sistem — ray aksan (sahnenin tek cyan bölgesi). */
+  background:var(--aksan);transform-origin:top;transform:scaleY(1)}
 .s3-adim b{display:block;margin-bottom:3px}
 .s3-adim p{color:var(--tx2);font-size:.92rem}
-.s3-adim .tek{color:var(--red-soft);font-size:.72rem;letter-spacing:.14em;padding-top:4px}
+.s3-adim .tek{color:var(--tx3);font-size:.72rem;letter-spacing:.14em;padding-top:4px}
 /* aydınlanma: ray kaydırmayla çizilir; metin HEP tam opak (H2) */
 @supports (animation-timeline: view()){
   .s3-adim::before{transform:scaleY(0);animation:s3ray linear both;
@@ -86,10 +88,11 @@ body:has(.ana) main{max-width:none;padding:0}
 /* ============ S5 · SÜREÇ (hareketsiz) ============ */
 .s5-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .s5-adim{border:1px solid var(--line);border-radius:14px;padding:18px}
-.s5-adim .tek{color:var(--red-soft);font-size:.8rem;display:block;margin-bottom:8px}
+.s5-adim .tek{color:var(--tx3);font-size:.8rem;display:block;margin-bottom:8px}
 .s5-adim b{display:block;margin-bottom:6px}
 .s5-adim p{color:var(--tx2);font-size:.9rem}
-.s5-soz{margin-top:22px;border:1px solid rgba(239,35,60,.4);border-radius:14px;
+/* 14 gün taahhüdü = güven/sistem imzası — aksan çerçeve (S5'in tek cyan'ı). */
+.s5-soz{margin-top:22px;border:1px solid color-mix(in srgb,var(--aksan) 40%,transparent);border-radius:14px;
   padding:16px 18px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
 .s5-soz b{color:var(--red-soft);white-space:nowrap}
 .s5-soz span{color:var(--tx2);font-size:.92rem}
@@ -113,7 +116,7 @@ body:has(.ana) main{max-width:none;padding:0}
 
 /* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
 .ana .dugme{transition:transform .15s ease,box-shadow .15s ease}
-.ana .dugme:hover{transform:translateY(-1px);box-shadow:0 8px 26px -12px var(--red)}
+.ana .dugme:hover{transform:translateY(-1px);box-shadow:0 8px 26px -12px var(--red-glow)}
 
 @media(max-width:640px){
   .ana section{padding:8vh 0}
