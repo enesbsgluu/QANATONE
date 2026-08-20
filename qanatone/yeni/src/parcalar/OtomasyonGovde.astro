@@ -213,40 +213,61 @@ const TELI = [0, 1, 2, 3];
      bilinçli: yeni bölüm dikey uzun, 100vh sticky penceresine sığmıyor;
      kilit ancak bölüm kompaktlaşmasıyla (tasarım kararı, Enes) gelir.
      Sürücü sınıfı yine de düzeldi: otomatik değil, kaydırma. */}
-<div class="blok sz-surus">
-  <p class="kicker">{m('sz0', 'Kanıt')}</p>
-  <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
-  <p class="rozet"><b>{m('sz2', 'Aynı bütçe')}</b> · <i>{m('sz3', 'değişmeyen giriş')}</i></p>
-  <p class="cipler">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
-  {/* SADAKAT KURALI (21 Ağu): buradaki boru+damla+giriş noktası+ok başı
-      şeması SÖKÜLDÜ — kaynakta böyle bir şema yok (kaynak görseli canvas
-      HUNİsiydi: daralan duvarlar + tanecikler + kesikli bağ çizgileri,
-      hepsi ölçülü — kök 10680-10783). Göz kararı çizilmiş hiçbir
-      birleştirici kalamaz. Huni görselinin kaynak kompozisyonuyla
-      kurulması AÇIK kalem (A3 raporunda D2b). */}
-  <ul class="sizinti">
-    {SIZINTI.map(([sorun, belirti, cozum], k) => (
-      <li style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
-        <b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
-    ))}
-  </ul>
-  {/* SADAKAT KURALI (21 Ağu): aşamalar arası ok SVG'leri SÖKÜLDÜ —
-      kaynak .szstages'te ok yok (2870-2885): aşama = mono başlık +
-      ALTINDA ilerleme çubuğu (.szsb, genişlik 92/58/30% — kök 10678).
-      Çubuk kaynak künyesiyle geri geldi; ayraç tipi kaynaktaki gibi
-      BOŞLUK. "kalan müşteri" kaynakta da ayrı öğeydi (.szout). */}
-  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama"
-      style={`--se:${(0.12 + i * 0.045).toFixed(3)};--w:${[92, 58, 30][i]}%`}>
-    <b>{a}</b><span class="szsb"><i /></span></span>)}
-    <span class="asama kalan" style="--se:.30">{m('szb', 'kalan müşteri')}</span></p>
-  <p class="vurgu">{m('szu', 'Bütçe aynı. Sorun burada.')}</p>
-  <div class="maliyet">
-    <p class="akbas">{m('szc', 'Müşteri başına maliyet')}</p>
-    <p class="cubuk"><i>{m('szd', 'Önce')}</i><span class="bar once" /></p>
-    <p class="cubuk"><i>{m('sze', 'Sonra')}</i><span class="bar sonra" /></p>
-    <p class="cubuk-alt">{m('szf', 'aynı bütçe, daha çok müşteri')}</p>
+{/* SIZINTI — KAYNAK KOMPOZİSYONUNA TAM DÖNÜŞ (21 Ağu, D2b):
+    kutu sahne .szstage (2804) → başlık şeridi .szhd + çipler + .szwrap
+    (HUNİ SVG'si ortada, kartlar YANLARDA absolute, aşamalar dikey
+    ortada, "kalan müşteri" altta, beat rozeti merkezde) + .szfoot
+    (çubuklar + aşağı ok + kapanış). Huni geometrisi kaynak canvas
+    formüllerinden (LY/LW 10681, bağ hedefleri .30/.70, phyllotaxis
+    10777-10779) — koordinatları ADA ölçüp basar (göz kararı yasak),
+    SSR'de boş: kaynakta da canvas'ı JS çiziyordu, JS'siz ziyaretçi
+    hunisiz görür; kartlar/çipler/çubuklar İÇERİK olarak SSR'de tam.
+    Tanecik rAF'ı TAŞINMADI (rota kararı — değişmedi).
+    PIN hâlâ YOK (D2c açık, Enes kararı): kaynak max-height'i
+    (100vh-44px) pin kilidi içindi, pin'siz alınsa içeriği keserdi —
+    bilinçli alınmadı. Sürücü view() scrub aynı. */}
+<div class="blok szstage sz-surus">
+  <div class="szhd">
+    <div>
+      <p class="szk"><i />{m('sz0', 'Kanıt')}</p>
+      <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
+    </div>
+    <div class="szbudget"><b>{m('sz2', 'Aynı bütçe')}</b><i>{m('sz3', 'değişmeyen giriş')}</i></div>
   </div>
-  <p class="kapanis" set:html={suz(m('szg', 'Yeni bütçe değil, <em>kaçan müşteri</em> geri geldi.'), ['em'])} />
+  <p class="szchans">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
+  <div class="szwrap" id="szWrap">
+    <svg class="sus-huni" aria-hidden="true"></svg>
+    <div class="szside left">
+      {[0, 2].map(k => { const [sorun, belirti, cozum] = SIZINTI[k]; return (
+        <span class="szleak" style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
+          <span class="szlt"><b>{sorun}</b><i>{belirti}</i></span>
+          <span class="szfix"><s /><span>{cozum}</span></span></span>); })}
+    </div>
+    <div class="szside right">
+      {[1, 3].map(k => { const [sorun, belirti, cozum] = SIZINTI[k]; return (
+        <span class="szleak" style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
+          <span class="szlt"><b>{sorun}</b><i>{belirti}</i></span>
+          <span class="szfix"><s /><span>{cozum}</span></span></span>); })}
+    </div>
+    <div class="szstages">
+      {ASAMALAR.map((a, i) => <span class="szst"
+        style={`--se:${(0.12 + i * 0.045).toFixed(3)};--w:${[92, 58, 30][i]}%`}>
+        <b>{a}</b><span class="szsb"><i /></span></span>)}
+    </div>
+    <span class="szout">{m('szb', 'kalan müşteri')}</span>
+    <span class="szbeat">{m('szu', 'Bütçe aynı. Sorun burada.')}</span>
+  </div>
+  <div class="szfoot">
+    <div class="szbars">
+      <span class="szcap">{m('szc', 'Müşteri başına maliyet')}</span>
+      <p class="cubuk"><i>{m('szd', 'Önce')}</i><span class="bar once" /></p>
+      <p class="cubuk"><i>{m('sze', 'Sonra')}</i><span class="bar sonra" /></p>
+      <span class="szarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+        ><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg>{m('szf', 'aynı bütçe, daha çok müşteri')}</span>
+    </div>
+    <p class="szend" set:html={suz(m('szg', 'Yeni bütçe değil, <em>kaçan müşteri</em> geri geldi.'), ['em'])} />
+  </div>
 </div>
 
 {/* ---- HUNİ (ada) ---- */}
@@ -351,6 +372,86 @@ const TELI = [0, 1, 2, 3];
         if (sol) { xler.forEach(x => dj(x, yKol, 2.6)); dj(kx, yKrt, 3.2); }
         else dj(kx, yKrt, 3.2);
       });
+    };
+    let rt: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
+    document.fonts?.ready?.then(ciz);
+    ciz();
+  }
+</script>
+
+<script>
+  /* HUNİ ADASI (D2b) — kaynak canvas sahnesinin SVG eşleniği.
+     Geometri kaynak formüllerinden BİREBİR (göz kararı yasak):
+       katlar LY=[.10,.34,.58,.80] · LW=[.60,.44,.28,.15]  (kök 10681)
+       duvar dolgusu k%2 ? .016 : .028 · kenar rgba(255,255,255,.13)
+         (10704-10711)
+       bağ çizgisi: kavşak t=(k+1)/4 → hedef x = W·.30 / W·.70,
+         kesikli [3,4] (10716-10730)
+       çıkan küme: phyllotaxis a=i·2.39996, r=√(i/n)·min(W,H)·.11,
+         x=W/2+cos·r·1.6, y=LY[3]·H+H·.11+sin·r·.6, i%3 kızıl
+         (10776-10782); adet 6+34 → 40 nokta, her biri kendi eşiğinde
+         (--ti) açılır: kaynağın "küme büyür" davranışının eşleniği.
+     ÖLÇÜM rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready. Kaynak
+     tanecikleri (rAF) TAŞINMADI — rota kararı; hareket scrub'dan.
+     SSR'de SVG boş: kaynakta da canvas'ı JS çiziyordu. */
+  const kap = document.getElementById('szWrap');
+  const hsvg = kap?.querySelector('.sus-huni') as SVGSVGElement | null;
+  if (kap && hsvg) {
+    const LY = [.10, .34, .58, .80], LW = [.60, .44, .28, .15];
+    const NS = 'http://www.w3.org/2000/svg';
+    const kat = (t: number) => Math.min(2, Math.floor(t * 3));
+    const genis = (t: number) => { const k = kat(t), u = t * 3 - k; return LW[k] + (LW[k + 1] - LW[k]) * u; };
+    const yKon = (t: number) => { const k = kat(t), u = t * 3 - k; return LY[k] + (LY[k + 1] - LY[k]) * u; };
+    const el = (ad: string, oz: Record<string, string>) => {
+      const e = document.createElementNS(NS, ad);
+      for (const k in oz) e.setAttribute(k, oz[k]);
+      return e;
+    };
+    const ciz = () => {
+      const r = kap.getBoundingClientRect();
+      const W = Math.round(r.width), H = Math.round(r.height);
+      if (!W || !H) return;
+      hsvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      const g = el('g', { class: 'hgov' });
+      /* huni duvarları (üç kat) */
+      for (let k = 0; k < 3; k++) {
+        const y1 = LY[k] * H, y2 = LY[k + 1] * H, w1 = LW[k] * W / 2, w2 = LW[k + 1] * W / 2;
+        g.appendChild(el('path', {
+          class: 'duvar', fill: k % 2 ? 'rgba(255,255,255,.016)' : 'rgba(255,255,255,.028)',
+          d: `M${W / 2 - w1},${y1} L${W / 2 + w1},${y1} L${W / 2 + w2},${y2} L${W / 2 - w2},${y2} Z`,
+        }));
+        g.appendChild(el('path', { class: 'duvar-kenar', d: `M${W / 2 - w1},${y1} L${W / 2 - w2},${y2}` }));
+        g.appendChild(el('path', { class: 'duvar-kenar', d: `M${W / 2 + w1},${y1} L${W / 2 + w2},${y2}` }));
+      }
+      /* kavşak bağları — kart k ile aynı --sm mührü */
+      for (let k = 0; k < 4; k++) {
+        const t = Math.min(.999, (k + 1) / 4);
+        const y = yKon(t) * H, w = genis(t) * W / 2;
+        const sol = k % 2 === 0, x = W / 2 + (sol ? -w : w);
+        const hedef = sol ? Math.max(10, W * .30) : Math.min(W - 10, W * .70);
+        const sm = (.52 + k * .055).toFixed(3);
+        g.appendChild(el('path', {
+          class: 'bag', d: `M${x},${y} L${hedef},${y}`,
+          style: `--sm:${sm};--bk:${k};transform-origin:${x}px ${y}px`,
+        }));
+        g.appendChild(el('circle', { class: 'knokta', cx: String(x), cy: String(y), r: '3.2' }));
+        g.appendChild(el('circle', { class: 'kglow', cx: String(x), cy: String(y), r: '5', style: `--sm:${sm}` }));
+      }
+      /* çıkan müşteri kümesi (phyllotaxis, kaynak 10776-10782) */
+      const kume = el('g', { class: 'kume' });
+      const ADET = 40, cy = LY[3] * H + H * .11;
+      for (let i = 0; i < ADET; i++) {
+        const a = i * 2.39996, rr = Math.sqrt(i / ADET) * Math.min(W, H) * .11;
+        kume.appendChild(el('circle', {
+          cx: (W / 2 + Math.cos(a) * rr * 1.6).toFixed(1),
+          cy: (cy + Math.sin(a) * rr * .6).toFixed(1), r: '2.2',
+          fill: i % 3 === 0 ? 'rgba(255,90,110,.92)' : 'rgba(255,255,255,.62)',
+          style: `--ti:${Math.max(0, (i - 6) / 34).toFixed(3)};--ta:${i % 3 === 0 ? .92 : .62}`,
+        }));
+      }
+      g.appendChild(kume);
+      hsvg.replaceChildren(g);
     };
     let rt: ReturnType<typeof setTimeout>;
     addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
@@ -626,31 +727,114 @@ const TELI = [0, 1, 2, 3];
   .gun b { font-size: .95rem; }
   .gun p { color: var(--tx2); font-size: .88rem; margin-top: 4px; }
 
-  .rozet { margin-top: 8px; font-size: .85rem; }
-  .rozet i { color: var(--tx3); }
-  .cipler { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .cip { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
-    font-size: .8rem; color: var(--tx2); }
-  .sizinti { list-style: none; display: grid; gap: 10px; margin: 16px 0 0; padding: 0;
-    grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 700px) { .sizinti { grid-template-columns: 1fr; } }
-  .sizinti li { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-  .sizinti b { display: block; font-size: .9rem; }
-  .sizinti i { color: var(--tx3); font-size: .82rem; }
-  .cozum { display: block; margin-top: 8px; color: var(--red-soft); font-size: .84rem; }
-  /* Aşama kompozisyonu kaynaktan (2873-2885): mono küçük başlık +
-     ALTINDA ilerleme çubuğu; ayraç BOŞLUK, ok yok. Yerleşim yatay
-     (kaynak huni üstünde dikey overlay'di — huni görseli açık kalem);
-     yazı yüzü site mono sözleşmesi (kaynak JetBrains Mono'ydu, F1c). */
-  .asamalar { margin-top: 16px; color: var(--tx2);
-    display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: flex-start; }
-  .asama { display: inline-flex; flex-direction: column;
-    align-items: center; gap: 5px; }
-  .asama b { font-family: ui-monospace, monospace;
-    font-size: clamp(9px, .8vw, 10.8px); letter-spacing: .14em;
-    text-transform: uppercase; color: var(--tx3); font-weight: 500; }
-  .szsb { width: min(70%, 150px); min-width: 56px; height: 4px;
-    border-radius: 3px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+  /* ==== SIZINTI — kaynak kompozisyonu (21 Ağu, D2b). Kutu .szstage
+     2804-2807 (max-height pin kilidi içindi — pin'siz ALINMADI, D2c;
+     gölge H14 masaüstü). Fontlar F1: Manrope→gövde 700, JetBrains→
+     ui-monospace. ==== */
+  .szstage { border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: linear-gradient(168deg, #131316, #0b0b0d); }
+  .szhd { padding: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 40px) clamp(12px, 1.6vw, 22px);
+    border-bottom: 1px solid var(--line); display: flex; align-items: flex-end;
+    justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .szhd h2 { margin: 0; font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(1.24rem, 2.5vw, 2.1rem); line-height: 1.1; color: #fff;
+    text-wrap: balance; }
+  /* :global — set:html içeriği scope damgası taşımaz (akış dersi) */
+  .szhd h2 :global(em) { font-style: normal; color: var(--red-soft); }
+  .szk { display: inline-flex; align-items: center; gap: 8px;
+    font-family: ui-monospace, monospace; font-size: clamp(9px, .76vw, 10.6px);
+    letter-spacing: .16em; text-transform: uppercase; color: var(--red-soft);
+    margin: 0 0 10px; }
+  .szk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  .szbudget { flex: none; display: flex; flex-direction: column; gap: 3px; text-align: right; }
+  .szbudget b { font-weight: 700; color: #fff; font-size: clamp(.98rem, 1.3vw, 1.24rem);
+    letter-spacing: -.02em; }
+  .szbudget i { font-style: normal; color: var(--tx4); font-family: ui-monospace, monospace;
+    font-size: clamp(8.6px, .74vw, 10.2px); letter-spacing: .12em; text-transform: uppercase; }
+  /* çipler — kaynak .szch 2827-2835; on renkleri (kızıl kenar + beyaz
+     metin) scrub'dan color-mix'le */
+  .szchans { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    padding: clamp(14px, 1.8vw, 24px) clamp(20px, 2.6vw, 40px) 0; margin: 0; }
+  .cip { padding: 7px 15px; border-radius: 999px; background: rgba(255, 255, 255, .04);
+    font-size: clamp(10.4px, .9vw, 12.2px); font-weight: 500;
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .34) calc(var(--sp, 1) * 100%), var(--line2));
+    color: color-mix(in srgb, #fff calc(var(--sp, 1) * 100%), var(--tx3)); }
+  /* huni sahnesi — kaynak .szwrap 2837-2838; SVG'yi ADA çizer (kaynak
+     canvas formülleri), SSR boş */
+  .szwrap { position: relative; flex: 0 0 auto;
+    height: clamp(250px, calc(100vh - 470px), 560px); }
+  .sus-huni { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .sus-huni :global(.hgov) { opacity: clamp(0, var(--szt, 1) * 10, 1); }
+  .sus-huni :global(.duvar-kenar) { fill: none; stroke: rgba(255, 255, 255, .13);
+    stroke-width: 1.2; }
+  .sus-huni :global(.bag), .sus-huni :global(.knokta), .sus-huni :global(.kglow) {
+    --kp: clamp(0, (var(--szt, 1) - var(--sm, 2)) * 18, 1); }
+  /* bağ: kesikli [3,4], beyaz .2 → tıpalanınca kızıl .55 (10722);
+     uzunluk scrub'ı kaynakta lineTo kısmıydı — burada scaleX (origin
+     kavşak, ada basar; bilinçli mekanizma eşlemesi, kesik deseni
+     .10p'lik pencerede esner) */
+  .sus-huni :global(.bag) { fill: none; stroke-width: 1; stroke-dasharray: 3 4;
+    stroke: color-mix(in srgb, rgba(239, 35, 60, .55) calc(var(--kp) * 100%), rgba(255, 255, 255, .2));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .22 - var(--bk, 0) * .05) * 10, 1)); }
+  .sus-huni :global(.knokta) { fill: rgba(255, 255, 255, .24); }
+  .sus-huni :global(.kglow) { fill: var(--red); opacity: var(--kp); }
+  /* çıkan küme: nokta i eşiği --ti=(i-6)/34; --ck iki pencereli çıkış
+     eğrisi (10746) .szstage'de */
+  .sus-huni :global(.kume circle) {
+    opacity: calc(var(--ta, .6) * clamp(0, (var(--ck, 1) - var(--ti, 0)) * 40, 1)); }
+  /* yan kartlar — kaynak .szside/.szleak/.szfix 2842-2867 birebir */
+  .szside { position: absolute; top: 0; bottom: 0; width: min(30%, 270px); display: flex;
+    flex-direction: column; justify-content: center; gap: clamp(26px, 4vw, 64px);
+    pointer-events: none; padding: 6% 0; }
+  .szside.left { left: clamp(12px, 1.8vw, 26px); align-items: flex-start; text-align: left; }
+  .szside.right { right: clamp(12px, 1.8vw, 26px); align-items: flex-end; text-align: right; }
+  .szleak { display: flex; flex-direction: column; gap: 7px; }
+  .szlt { display: flex; flex-direction: column; gap: 3px; }
+  .szlt b { font-weight: 700; letter-spacing: -.02em; font-size: clamp(12.6px, 1.26vw, 17px);
+    line-height: 1.2; color: color-mix(in srgb, var(--tx3) calc(var(--mp, 0) * 100%), #fff);
+    text-decoration: line-through; text-decoration-thickness: 2px;
+    text-decoration-color: rgba(239, 35, 60, calc(var(--mp, 0) * .7)); }
+  .szlt i { font-style: normal; color: var(--tx4); font-size: clamp(10.2px, .9vw, 12px);
+    line-height: 1.35; }
+  .szfix { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px;
+    border-radius: 999px; background: rgba(239, 35, 60, .12);
+    border: 1px solid rgba(239, 35, 60, .4); color: var(--red-soft);
+    font-family: ui-monospace, monospace; font-size: clamp(9.2px, .8vw, 10.8px);
+    letter-spacing: .04em; white-space: nowrap;
+    opacity: var(--mp, 0); transform: scale(calc(.9 + .1 * var(--mp, 0))); }
+  .szfix s { width: 12px; height: 12px; border-radius: 50%; background: var(--red);
+    flex: none; position: relative; text-decoration: none; }
+  .szfix s::after { content: ''; position: absolute; left: 3.4px; top: 5px; width: 3.6px;
+    height: 1.8px; border-left: 1.4px solid #fff; border-bottom: 1.4px solid #fff;
+    transform: rotate(-45deg); }
+  /* "kalan müşteri" + beat rozeti — kaynak 2887-2898; beat penceresi
+     p .435-.522 (10792), rampa ×22 ≈ kaynağın .4s geçişi */
+  .szout { position: absolute; left: 50%; bottom: clamp(8px, 1.2vw, 18px);
+    transform: translateX(-50%); font-family: ui-monospace, monospace;
+    font-size: clamp(9px, .8vw, 10.8px); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--tx3); opacity: clamp(0, (var(--szt, 1) - .30) * 20, 1); }
+  .szbeat { position: absolute; left: 50%; top: 50%;
+    --bp: calc(clamp(0, (var(--szt, 1) - .435) * 22, 1) * clamp(0, (.522 - var(--szt, 1)) * 22, 1));
+    transform: translate(-50%, -50%) scale(calc(.96 + .04 * var(--bp)));
+    padding: 12px 26px; border-radius: 999px; background: rgba(10, 10, 11, .9);
+    border: 1px solid rgba(239, 35, 60, .45); font-weight: 700; letter-spacing: -.02em;
+    font-size: clamp(1rem, 1.5vw, 1.34rem); color: #fff; white-space: nowrap; z-index: 3;
+    opacity: var(--bp); }
+  /* aşamalar — kaynak .szstages/.szst/.szsb 2870-2885 birebir:
+     huninin ÜSTÜNDE dikey overlay, mono başlık + altında oran çubuğu */
+  .szstages { position: absolute; left: 50%; top: 0; bottom: 0;
+    transform: translateX(-50%); width: min(38%, 300px); display: flex;
+    flex-direction: column; justify-content: flex-start; pointer-events: none;
+    padding-top: 6%; }
+  .szst { display: flex; flex-direction: column; align-items: center; gap: 5px;
+    height: 24%; justify-content: flex-start;
+    opacity: var(--sp, 1); transform: translateY(calc((1 - var(--sp, 1)) * 6px)); }
+  .szst b { font-family: ui-monospace, monospace; font-size: clamp(9px, .8vw, 10.8px);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--tx3);
+    font-weight: 500; }
+  .szsb { width: min(70%, 150px); height: 4px; border-radius: 3px;
+    background: rgba(255, 255, 255, .08); overflow: hidden; }
   .szsb i { display: block; position: relative; height: 100%; border-radius: 3px;
     background: linear-gradient(90deg, rgba(255, 255, 255, .42), rgba(255, 255, 255, .16));
     width: calc(var(--sp, 1) * var(--w, 60%)); }
@@ -658,19 +842,41 @@ const TELI = [0, 1, 2, 3];
   .szsb i::after { content: ''; position: absolute; inset: 0; border-radius: 3px;
     background: linear-gradient(90deg, var(--red), var(--red-soft));
     opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1); }
-  .kalan { color: var(--red-soft); align-self: center; font-size: .88rem; }
-  .vurgu { margin-top: 6px; color: var(--tx3); font-size: .85rem; }
-  .maliyet { margin-top: 18px; max-width: 420px; }
-  .cubuk { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-  .cubuk i { color: var(--tx3); font-size: .8rem; min-width: 44px; }
-  .bar { display: block; height: 10px; border-radius: 6px; background: var(--line);
-    position: relative; overflow: hidden; }
-  .bar::after { content: ''; position: absolute; inset: 0; border-radius: 6px;
+  /* alt şerit — kaynak .szfoot/.szbars/.szbar/.szarrow/.szend
+     2908-2931 birebir (çubuk dolumu width yerine scaleX: düzen
+     tetiklemez, oranlar aynı — bilinçli mekanizma eşlemesi) */
+  .szfoot { border-top: 1px solid var(--line);
+    padding: clamp(16px, 2vw, 28px) clamp(20px, 2.6vw, 40px);
+    display: grid; grid-template-columns: 1fr auto;
+    gap: clamp(16px, 2.4vw, 36px); align-items: center; }
+  .szbars { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+  .szcap { font-family: ui-monospace, monospace; font-size: clamp(8.4px, .72vw, 10px);
+    letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); }
+  .cubuk { display: grid; grid-template-columns: clamp(46px, 5vw, 64px) 1fr;
+    gap: 12px; align-items: center; margin: 0; }
+  .cubuk i { font-style: normal; color: var(--tx3); font-size: clamp(9.6px, .84vw, 11.4px); }
+  .bar { position: relative; height: 10px; border-radius: 5px;
+    background: rgba(255, 255, 255, .06); overflow: hidden; }
+  .bar::after { content: ''; position: absolute; inset: 0; border-radius: 5px;
     transform-origin: left; }
-  .bar.once { width: 100%; }
-  .bar.once::after { background: rgba(239, 35, 60, .45); }
-  .bar.sonra { width: 46%; }
-  .bar.sonra::after { background: rgba(239, 35, 60, .85); }
+  .bar.once::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, .12));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .28) / .15, 1)); }
+  /* Sonra çubuğu kaynakta %46'da durur (10795: ×46) — genişlik oranı
+     kabın .46'sı, dolum scaleX'i kendi içinde tam */
+  .bar.sonra::after { width: 46%;
+    background: linear-gradient(90deg, var(--red), var(--red-soft));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .66) / .24, 1)); }
+  .szarrow { display: flex; align-items: center; gap: 8px; color: var(--red-soft);
+    font-size: clamp(9.6px, .84vw, 11.4px);
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1); }
+  .szarrow svg { width: 15px; height: 15px; flex: none; }
+  .szend { flex: none; max-width: min(100%, 300px); font-weight: 700;
+    letter-spacing: -.025em; font-size: clamp(1.02rem, 1.6vw, 1.4rem); line-height: 1.22;
+    color: #fff; text-wrap: balance; margin: 0;
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1);
+    transform: translateY(calc((1 - clamp(0, (var(--szt, 1) - .84) * 18, 1)) * 8px)); }
+  .szend :global(em) { font-style: normal; color: var(--red-soft); }
 
   /* SIZINTI SCRUB SÜRÜCÜSÜ (A3-D2) — kaynak: ST PIN+scrub .5, +=2.2vh
      (kök 12467-12478) + szDraw DOM eşikleri (10785-10795, markup'ta
@@ -692,22 +898,40 @@ const TELI = [0, 1, 2, 3];
       animation-range: cover 5% cover 90%; }
   }
   @keyframes szt-surus { from { --szt: 0; } to { --szt: 1; } }
-  .cip, .sizinti li, .asama {
+  .cip, .szleak, .szst {
     --sp: clamp(0, (var(--szt, 1) - var(--se, 0)) * 20, 1); }
   .cip { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 7px)); }
-  .sizinti li { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 10px)); }
-  .asama { opacity: calc(.35 + .65 * var(--sp)); }
-  /* mühür penceresi (tıpa): kart k → .52+.055k */
-  .sizinti li { --mp: clamp(0, (var(--szt, 1) - var(--sm, 0)) * 18, 1); }
-  .sizinti b { text-decoration: line-through;
-    text-decoration-color: rgba(239, 35, 60, calc(var(--mp) * .7));
-    text-decoration-thickness: 2px; }
-  .cozum { opacity: var(--mp); transform: scale(calc(.9 + .1 * var(--mp)));
-    transform-origin: left; }
-  .bar.once::after { transform: scaleX(clamp(0, (var(--szt, 1) - .28) / .15, 1)); }
-  .bar.sonra::after { transform: scaleX(clamp(0, (var(--szt, 1) - .66) / .24, 1)); }
+  .szleak { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 10px)); }
+  /* mühür penceresi (tıpa): kart k → .52+.055k; SVG kavşak eşleniği
+     --sm ada tarafından aynı değerlerle basılır */
+  .szleak { --mp: clamp(0, (var(--szt, 1) - var(--sm, 0)) * 18, 1); }
+  /* çıkan küme eğrisi — kaynak 10746 birebir: iki pencereli toplam */
+  .szstage { --ck: calc(clamp(0, (var(--szt, 1) - .08) / .26, 1) * .38
+    + clamp(0, (var(--szt, 1) - .60) / .34, 1) * .62); }
   @media (prefers-reduced-motion: reduce) { .sz-surus { animation: none; } }
-  .cubuk-alt { color: var(--tx3); font-size: .8rem; margin-top: 8px; }
+  /* kaynak sızıntı mobil çizelgesi (2900-2907 + 2933-2937) */
+  @media (max-width: 900px) {
+    .szwrap { height: clamp(300px, calc(100vh - 430px), 480px); }
+    .szside { width: 40%; gap: 18px; padding: 4% 0; }
+    .szlt b { font-size: 12px; }
+    .szlt i { display: none; }
+    .szfix { font-size: 8.8px; padding: 4px 8px; }
+    .szstages { width: 34%; }
+    .szst b { font-size: 8.4px; letter-spacing: .08em; }
+  }
+  @media (max-width: 860px) {
+    .szhd { flex-direction: column; align-items: flex-start; }
+    .szbudget { text-align: left; }
+    .szfoot { grid-template-columns: 1fr; }
+    .szend { max-width: 100%; }
+  }
+  /* gölge H14: kaynak .szstage gölgesi (2807) yalnız masaüstünde */
+  @media (min-width: 901px) {
+    .szstage { box-shadow: 0 30px 80px -50px rgba(0, 0, 0, .9); }
+    .szbeat { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .bar.sonra::after { box-shadow: 0 0 22px -8px var(--red-glow, rgba(239, 35, 60, .5)); }
+    .szk i { box-shadow: 0 0 10px var(--red-glow, rgba(239, 35, 60, .5)); }
+  }
 
   .hgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px; }
   @media (max-width: 820px) { .hgrid { grid-template-columns: 1fr; } }
