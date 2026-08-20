@@ -48,6 +48,31 @@ html:not(.prd) .sus-perde{display:none}
   background:radial-gradient(120% 100% at 50% 45%,#160609 0%,#070708 55%,#040405 100%)}
 .sus-perde-kabuk{position:absolute;inset:0}
 
+/* ---- anakart izleri (giydirme): çizilme pathLength=1 ile, ölçüm yok.
+   Sinyal parlaması (drop-shadow) H14 gereği yalnız masaüstünde —
+   mobilde sinyal filtresiz akar, hareket kısılmaz. RM'de perde zaten
+   tümden display:none (aşağıda). */
+.sus-perde-iz{position:absolute;left:50%;top:50%;z-index:1;
+  width:min(680px,94vw);transform:translate(-50%,-50%);
+  opacity:.9;overflow:visible;pointer-events:none}
+.sus-perde-iz .tr{stroke:rgba(239,35,60,.28);stroke-width:1;fill:none;
+  stroke-dasharray:1;stroke-dashoffset:-1;
+  animation:prd-iz .85s var(--e2) forwards;
+  animation-delay:calc(.16s + var(--i) * .06s)}
+.sus-perde-iz .pd{fill:rgba(239,35,60,.5);opacity:0;
+  animation:prd-gorun .35s forwards;
+  animation-delay:calc(.06s + var(--i) * .05s)}
+.sus-perde-iz .sig{stroke:var(--red-soft);stroke-width:1.4;fill:none;
+  stroke-dasharray:.066 .934;opacity:0;
+  animation:prd-gorun .4s 1s forwards,prd-sig 2.8s linear 1s infinite}
+.sus-perde-iz .sig.s2{animation-delay:1.35s,1.35s}
+.sus-perde-iz .sig.s3{animation-delay:1.7s,1.7s}
+@keyframes prd-iz{to{stroke-dashoffset:0}}
+@keyframes prd-sig{to{stroke-dashoffset:-1}}
+@media(min-width:901px){
+  .sus-perde-iz .sig{filter:drop-shadow(0 0 4px rgba(239,35,60,.8))}
+}
+
 /* süpüren kenar çizgisi: perdenin alt kenarına yapışık, perdeyle yükselir */
 .sus-perde-cizgi{position:absolute;left:0;right:0;bottom:-1px;height:2px;
   background:linear-gradient(90deg,transparent,#ff4d63 18%,#ffb3bd 50%,#ff4d63 82%,transparent);
@@ -92,4 +117,7 @@ html:not(.prd) .sus-perde{display:none}
    hareket azaltma isteyen kullanıcı perde görmez */
 @media (prefers-reduced-motion: reduce){
   .sus-perde{display:none}
+  /* perde zaten hiç doğmuyor; H11 aynası yine de açık yazılır —
+     "durduran seçici hareketi verenin aynısı" sözleşmesi. */
+  .sus-perde-iz .tr,.sus-perde-iz .pd,.sus-perde-iz .sig{animation:none}
 }

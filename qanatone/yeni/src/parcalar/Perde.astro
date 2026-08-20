@@ -34,6 +34,25 @@ const HARFLER = 'QANATONE'.split('');
 ---
 <div class="sus-perde" id="perde" aria-hidden="true">
   <span class="sus-perde-kabuk"></span>
+  {/* ANAKART İZLERİ (giydirme, 20 Ağu) — kaynağın bcirc SVG'si (4418).
+      Çizilme pathLength="1" ile: getTotalLength YOK (H12), yerleşim
+      okuması sıfır — perde kararının kendi reçetesi. Teller kenar
+      pedlerinden merkeze çizilir (offset -1→0, eski yönün aynısı);
+      sinyaller izler oturunca akar (dash oranı kaynağın 24/364'ü).
+      Sinyal gecikmeleri sıkıştırıldı (1,05/1,65/2,25 → 1,0/1,35/1,7):
+      yeni perde ~2,2 sn'de süpürülüyor, eski üçüncü sinyal hiç
+      görünmeyecekti. */}
+  <svg class="sus-perde-iz" viewBox="0 0 680 380" aria-hidden="true">
+    <path class="tr" pathLength="1" style="--i:0" d="M182,148 H118 V94 H60" /><circle class="pd" style="--i:0" cx="60" cy="94" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:1" d="M180,190 H38" /><circle class="pd" style="--i:1" cx="38" cy="190" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:2" d="M184,238 H104 V296 H68" /><circle class="pd" style="--i:2" cx="68" cy="296" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:3" d="M498,146 H562 V90 H618" /><circle class="pd" style="--i:3" cx="618" cy="90" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:4" d="M500,190 H642" /><circle class="pd" style="--i:4" cx="642" cy="190" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:5" d="M496,244 H574 V302 H610" /><circle class="pd" style="--i:5" cx="610" cy="302" r="2.6" />
+    <path class="sig" pathLength="1" d="M180,190 H38" />
+    <path class="sig s2" pathLength="1" d="M498,146 H562 V90 H618" />
+    <path class="sig s3" pathLength="1" d="M184,238 H104 V296 H68" />
+  </svg>
   <span class="sus-perde-cizgi"></span>
   <span class="sus-perde-kose a"></span><span class="sus-perde-kose b"></span>
   <span class="sus-perde-kose c"></span><span class="sus-perde-kose d"></span>
