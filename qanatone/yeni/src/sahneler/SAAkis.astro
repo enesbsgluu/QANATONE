@@ -20,6 +20,7 @@
    gelmedi (aşağıda 4. sapma). */
 import '../stil/akis.css';
 import Ikon from '../parcalar/Ikon.astro';
+import AkisDemo from '../parcalar/AkisDemo.astro';
 import { icerik, T, suz } from '../icerik';
 
 interface Props { dil?: 'tr' | 'en' }
@@ -49,6 +50,17 @@ const ton = (i: number) => {
   return `--tA:hsl(${h} 72% 30%);--tB:hsl(${h} 85% 56%)`;
 };
 const kartlar = (icerik.services || []).slice(0, AKIS_KART);
+/* Demo anahtari — kaynagin kurali (akKind 6908): slug eslemesi + panelden
+   yeni hizmet gelirse aile yedegi. Ana sayfa seridinin besi. */
+const AKMAP: Record<string, string> = { 'google-ads': 'ads', 'meta-ads': 'social',
+  'ai-ajan': 'agent', 'seo': 'serp', 'geo': 'chat' };
+const demoK = (h: any): string => {
+  if (AKMAP[h.slug]) return AKMAP[h.slug];
+  if (h.fam === 'funnel') return 'ads';
+  if (h.fam === 'flow') return 'agent';
+  if (h.fam === 'climb') return h.det && h.det.ai ? 'chat' : 'serp';
+  return 'serp';
+};
 ---
 <section class="sa-sahne" data-sahne="a">
   <div class="sa-ic">
@@ -65,9 +77,12 @@ const kartlar = (icerik.services || []).slice(0, AKIS_KART);
     aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
     {kartlar.map((h: any, i: number) => (
       <a class="sa-kart" href={`${B}/hizmet/${h.slug}`} style={ton(i)}>
-        <span class="sa-gorsel" aria-hidden="true"><Ikon ad={h.icon} sinif="sa-ikon" /></span>
+        {/* Gorsel alan artik CALISAN mini demo (giydirme); ikon kucijlup
+            basligin yanina gecti — kaynagin kendi dili (6898). Demo
+            aria-hidden: ayni bilgi kartin yazisinda ve hizmet sayfasinda. */}
+        <span class="sa-gorsel" aria-hidden="true"><AkisDemo k={demoK(h)} dil={dil} /></span>
         <span class="sa-yazi">
-          <h3>{T(h.title, dil)}<Ikon ad="arrow" sinif="sa-ok" /></h3>
+          <h3><Ikon ad={h.icon} sinif="sa-ikon-k" />{T(h.title, dil)}<Ikon ad="arrow" sinif="sa-ok" /></h3>
           <p>{ilkCumle(T(h.text, dil))}</p>
         </span>
       </a>
@@ -85,3 +100,22 @@ const kartlar = (icerik.services || []).slice(0, AKIS_KART);
     </a>
   </div>
 </section>
+
+<script>
+  /* ADA (giydirme) — Anayasa S-A recetesi: demolar YALNIZ gorunurken
+     oynar; durdurma animation-play-state ile (animation-name degistirme
+     YOK), anahtar kart KOKUNDE (--akps degiskeni, .akd * evrenseli yok).
+     Acilista sinif YAZILMAZ (S-K dersi: acilis yazimi LCP itmisti) —
+     kartlar paused dogar, IO gorunenleri oynatir. content-visibility
+     kullanilmiyor (sart c). Ada butcesi <=0,7 KB. */
+  const kartlar = document.querySelectorAll('.sa-kart');
+  if (kartlar.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
+    }, { threshold: 0.25 });
+    kartlar.forEach((k) => io.observe(k));
+  } else {
+    /* IO yoksa: surekli oynasin — icerik zaten statik, bu yalniz sus. */
+    kartlar.forEach((k) => k.classList.add('akoynar'));
+  }
+</script>

@@ -499,7 +499,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
                       tek yer de burası. İkisi aynı sözlüğü kullanmalı.
        Sonraki sahneler geldikçe TEK yer değişir: bu iki dizi. */
     const SAHNE_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-)/;      /* içerik sahneleri */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-)/; /* + süs katmanı */
+    /* `ak` öneki: S-A mini demo ailesi (giydirme, 20 Agu) — kart içi
+       canlandırmaların tüm sınıfları kaynaktan `ak*` gelir (akd akrw
+       aksq akmini...). S-A'nın alt sözlüğü sayılır. */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|ak[a-z])/; /* + süs katmanı + ak demo ailesi */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -1001,13 +1004,20 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        Sebep dogrulandi: RTT 150 -> 75 ms yapilinca fark 130 -> 72 ms'e
        dustu, yani maliyet bant genisligi ya da CPU degil, TEK BIR
        gidis-donus. Sonraki esik cwnd katlandigi icin ~29 KB gz.
-       TAVAN 28 KB: bir sonraki ucurumdan ONCE kirmiziya doner, boylece
-       "hangi sahne butceyi patlatti" sorusu derlemede cevaplanir. Tavana
-       yaklasildiginda cozum sahne kismak degil, satir ici CSS kararini
-       (`inlineStylesheets:'always'`) olculu bir turda yeniden acmaktir. */
+       TAVAN GUNCELLENDI (giydirme, 20 Agu — ENES KARARI, sessizce degil):
+       S-A mini demolari +~2,7 KB gz getirdi ve ~29 KB ucurumu ASILDI;
+       secenekler rakamlariyla soruldu, "tavani as" secildi — LCP'ye bir
+       tam RTT (+~130-150 ms) goze alindi. SONRA OLCULDU (3 kosum): LCP
+       bandi DEGISMEDI (ortanca 1.826, eski bant 1.815-1.833) — LCP
+       elemani (hero lede) HTML'in ILK cwnd'inde geliyor; kuyruk baytlari
+       onu itmiyor. Esik dersi gecerli ama olcusu "toplam gzip" degil
+       "LCP elemaninin bayt konumu". Yeni tavan 32 KB: bir
+       SONRAKI ucurumdan (cwnd katlanmasi, ~44 KB) once kirmiziya doner.
+       Eski ders duruyor: tavana yaklasildiginda cozum sahne kismak
+       degil, satir ici CSS kararini olculu bir turda yeniden acmaktir. */
     {
       const zlib = require('zlib');
-      const TAVAN = 28 * 1024;
+      const TAVAN = 32 * 1024;
       const gz = zlib.gzipSync(fs.readFileSync(ana), { level: 9 }).length;
       ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B`, gz <= TAVAN,
          `${gz} B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)`);
