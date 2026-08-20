@@ -89,42 +89,57 @@
 /* klavyeyle odaklanınca görünür olsun (odak halkası bastırılmıyor) */
 .sa-ray:focus-visible{outline:2px solid var(--red);outline-offset:4px}
 
+/* SADAKAT DENETİMİ (21 Ağu): kartın kutusu SÖKÜLDÜ — kaynakta kart
+   ÇIPLAKTI (kök 2684-2686: border yok, zemin yok, gap:16px), kutu olan
+   tek öğe .akv görsel alanıydı. Çerçeve+zemin+overflow buradan görsel
+   alana indi; oran da kaynağın 1/1.02'sine döndü (16/10 içerik
+   taşırıyordu — ölçüm ajan raporunda). */
 .sa-kart{flex:0 0 clamp(260px,78vw,360px);scroll-snap-align:start;
-  display:flex;flex-direction:column;
-  border:1px solid var(--line);border-radius:18px;overflow:clip;
-  background:var(--card);color:var(--tx);text-decoration:none}
-/* gorsel alan: CALISAN mini demo (giydirme; 2. sapma kapandi).
-   container-type: demolarin cqw olculeri kart genisligine baglanir. */
-.sa-gorsel{position:relative;aspect-ratio:16/10;container-type:inline-size;
-  background:linear-gradient(140deg,var(--tA,#2a2a36),transparent 62%),
-             radial-gradient(80% 90% at 78% 8%,var(--tB,#444),transparent 70%),
-             var(--card)}
+  display:flex;flex-direction:column;gap:16px;
+  color:var(--tx);text-decoration:none}
+/* gorsel alan = kaynak .akv (2688-2695): kap, çerçeve, degrade üçlüsü
+   birebir; container-type demoların cqw ölçüleri için. Ton parlaması
+   (box-shadow) H14 gereği yalnız masaüstü bloğunda. */
+.sa-gorsel{position:relative;aspect-ratio:1/1.02;container-type:inline-size;
+  border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.09);
+  background:
+    radial-gradient(120% 85% at 50% 118%,color-mix(in srgb,var(--tA,#2a2a36) 78%,#000 10%),transparent 62%),
+    radial-gradient(90% 70% at 82% -8%,color-mix(in srgb,var(--tB,#444) 26%,transparent),transparent 60%),
+    linear-gradient(165deg,#17171a,#0b0b0d)}
 /* ikon basligin yaninda kucuk (kaynagin dili 6898) */
 .sa-ikon-k{flex:none;width:18px;height:18px;color:var(--red-soft);opacity:.9}
-.sa-yazi{display:flex;flex-direction:column;gap:8px;
-  padding:clamp(16px,1.8vw,22px) clamp(16px,1.8vw,22px) clamp(18px,2vw,24px)}
+/* yazı bloğu kutu DIŞINDA (kaynak .akt gibi) — dolgu yok, ayraç gap:16px */
+.sa-yazi{display:flex;flex-direction:column;gap:8px}
 .sa-yazi h3{display:flex;align-items:center;gap:10px;
   font-size:clamp(1.02rem,1.5vw,1.24rem);line-height:1.2;letter-spacing:-.02em}
 .sa-ok{flex:none;margin-left:auto;width:15px;height:15px;color:var(--tx4)}
 .sa-yazi p{color:var(--tx2);font-size:clamp(.86rem,.95vw,.95rem);line-height:1.55}
-/* son kart: görseli yok, yazı ortada dursun */
-.sa-tum .sa-yazi{justify-content:center;flex:1}
+/* son kart: kaynak .akall (2661-2663) — hafif zemin, içerik ortalı,
+   yazı dolgusu 26px; çerçevesi kaynakta da yoktu */
+.sa-tum{background:rgba(255,255,255,.02)}
+.sa-tum .sa-yazi{justify-content:center;flex:1;padding:26px;text-align:center}
+.sa-tum .sa-yazi h3{justify-content:center}
 
 @media(min-width:901px){
   .sa-kart{flex-basis:clamp(300px,26vw,360px)}
 }
 
-/* ---- hover: yalnız gerçek imleçte ---- */
+/* ---- hover: yalnız gerçek imleçte — kaynak davranışı (2686-2697):
+   kart kalkar, görsel çerçevesi aydınlanır; border-color hover'ı
+   kaynakta yoktu, söküldü (sadakat denetimi 21 Ağu) ---- */
 @media (hover:hover) and (pointer:fine){
-  .sa-kart{transition:border-color .3s var(--e)}
+  .sa-kart{transition:transform .45s var(--e)}
+  .sa-gorsel{transition:border-color .45s var(--e),box-shadow .45s var(--e)}
   .sa-ok{transition:color .3s var(--e),transform .3s var(--e)}
-  .sa-kart:hover{border-color:var(--line2)}
+  .sa-kart:hover{transform:translateY(-6px)}
+  .sa-kart:hover .sa-gorsel{border-color:rgba(255,255,255,.16)}
   .sa-kart:hover .sa-ok{color:var(--red-soft);transform:translate(3px,-3px)}
 }
 
 /* ---- hareket azaltma: durduran seçici hareketi verenin aynısı ---- */
 @media (prefers-reduced-motion: reduce){
   .sa-kart{transition:none}
+  .sa-kart:hover{transform:none}
   .sa-ok{transition:none}
   .sa-kart:hover .sa-ok{transform:none}
   .sa-ray{scroll-behavior:auto}
@@ -282,6 +297,10 @@
 /* -- golgeli susler YALNIZ masaustu (H14: mobil baglamda golge yasak);
      akSpon ve akPulse'un tek isi golge — mobilde hic dogmazlar -- */
 @media(min-width:901px){
+  /* görsel alanın ton parlaması — kaynak .akv (2694-2697); H14 gereği
+     yalnız masaüstünde (kaynakta koşulsuzdu, belgeli sapma) */
+  .sa-gorsel{box-shadow:0 0 44px -18px color-mix(in srgb,var(--tB,#444) 40%,transparent)}
+  .sa-kart:hover .sa-gorsel{box-shadow:0 0 66px -14px color-mix(in srgb,var(--tB,#444) 62%,transparent)}
   .akrw.hot{box-shadow:0 0 5cqw -1cqw var(--red-glow)}
   .akwire .akpk{box-shadow:0 0 3cqw var(--red-glow)}
   .akfout b{box-shadow:0 0 2.4cqw var(--red-glow)}

@@ -81,39 +81,18 @@ const KAYDIRICI = [
   { id: 4, ad: m('hs8', 'Randevuya gelmeyen'), deger: YUZDE[3] },
 ];
 
-/* TEL YELPAZESİ (giydirme turu) — eski flowKur telleri
-   getBoundingClientRect'le çiziyordu (yasaklı desen); yerlisi SABİT
-   viewBox'ta temsilî yelpaze: dört kaynak düğüm → tek merkez, ölçüm
-   YOK. Şerit gerilir (preserveAspectRatio none); çizgi kalınlığını
-   vector-effect korur. Paket hissi ayrı daire değil (gerilmede
-   eliptikleşir, ölçüldü mantık): aynı eğri üstünde pathLength=1 +
-   dasharray ile AKAN IŞIK PARÇASI — kaydır işaretinin dili. */
-const TELY = [50, 150, 250, 350];
-const telSol = TELY.map(y => `M0,${y} C55,${y} 45,200 100,200`);
-const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
-/* MOBIL TELLER (Enes, 20 Agu: "ustteki animasyon mobilde yok") — eski
-   flowKur'un dikey modu: uclar kart yigininin altindan yelpaze gibi
-   ayrilip ajan kartinin tepesinde birlesir; cikista tersi. Dikey ayri
-   viewBox (tek SVG iki viewBox tasiyamaz), ayni iz teknigi. */
-const TELXM = [60, 173, 287, 340];
-const telSolM = TELXM.map(x => `M${x},0 C${x},38 200,30 200,72`);
-const telSagM = TELXM.map(x => `M200,0 C200,42 ${x},34 ${x},72`);
-
-/* SIZINTI SEMASI — geometri Enes'in "cikis ve dagilim yerleri bozuk"
-   bulgusuyla yeniden kuruldu (20 Agu): damlalar borudan teget ayrilip
-   ASAGI kivrilir ve ucta damla noktasiyla BITER (havada asili iz yok);
-   dagilim sirali-simetrik (ic/dis ikiser); cikis ok basiyla "kalan
-   musteri" yonunu gosterir. Sema genis ekranda gerilmesin diye
-   max-width'li. Akan izler tellerle ayni teknik. */
-const GIRX = [100, 300, 500, 700, 900];
-const szGiris = GIRX.map(x => `M${x},16 C${x},70 500,54 500,108`);
-/* damla: [cikis y, yon, yatay uzaklik] — ic/dis sirali, simetrik */
-const SZD: [number, number, number][] = [
-  [138, -1, 120], [162, 1, 120], [186, -1, 175], [210, 1, 175]];
-const szDamla = SZD.map(([y, yon, u]) =>
-  `M500,${y} C${500 + yon * u * .55},${y + 2} ${500 + yon * u},${y + 14} ${500 + yon * u},${y + 44}`);
-const szDamlaUc = SZD.map(([y, yon, u]) => ({ x: 500 + yon * u, y: y + 44 }));
-const szBoru = 'M500,108 L500,254';
+/* TELLER (sadakat kuralı, 21 Ağu) — iki öğeyi birleştiren çizim GÖZ
+   KARARI ÇİZİLMEZ. Eski göz kararı yelpaze (TELY sabitleri) söküldü;
+   uçlar artık kaynağın wire() künyesiyle ÖLÇÜLÜR (kök 10553-10600):
+   masaüstü düğüm sağ-orta → kart sol kenarı .42h (giriş) / kart sağ
+   .58h → düğüm sol-orta (çıkış), kontrol x'i orta nokta; mobil uç
+   y'ler şerit kenarları, x dağılımı kaynak formülü sp=min(34,w·.08),
+   birleşme kart merkezi + fjoin düğüm daireleri (kaynak yalnız mobilde
+   basıyordu). Ölçüm rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready
+   (klasör telleri deseni). SSR'de d BOŞ: kaynakta teller JS ürünüydü,
+   JS'siz ziyaretçi kaynaktaki gibi telsiz görür. İz (pathLength=1 +
+   dasharray akan parça) kaynak paketlerinin eşleniği. */
+const TELI = [0, 1, 2, 3];
 ---
 <section class="giris">
   <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
@@ -132,14 +111,14 @@ const szBoru = 'M500,108 L500,254';
     {GELEN.map(([ad, alt], i) => <p class="adugum" style={`--fe:${(0.06 + i * 0.07).toFixed(2)}`}><b>{ad}</b><span>{alt}</span></p>)}
   </div>
   <svg class="sus-tel sol" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
-    {telSol.map(d => <path class="tel" d={d} />)}
-    {telSol.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
-    {telSol.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
   </svg>
   <svg class="sus-tel-m sol" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
-    {telSolM.map(d => <path class="tel" d={d} />)}
-    {telSolM.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
-    {telSolM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
   </svg>
   <div class="akol beyin">
     <p class="akbas">{m('flc2', 'Ajan')}</p>
@@ -152,14 +131,14 @@ const szBoru = 'M500,108 L500,254';
     </div>
   </div>
   <svg class="sus-tel sag" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
-    {telSag.map(d => <path class="tel" d={d} />)}
-    {telSag.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
-    {telSag.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
   </svg>
   <svg class="sus-tel-m sag" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
-    {telSagM.map(d => <path class="tel" d={d} />)}
-    {telSagM.map((d, i) => <path class="tel-yak" d={d} style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
-    {telSagM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
   </svg>
   <div class="akol">
     <p class="akbas">{m('flc3', 'Çıkan')}</p>
@@ -215,34 +194,27 @@ const szBoru = 'M500,108 L500,254';
   <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
   <p class="rozet"><b>{m('sz2', 'Aynı bütçe')}</b> · <i>{m('sz3', 'değişmeyen giriş')}</i></p>
   <p class="cipler">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
-  {/* Sızıntı şeması — süs (.sus-): içerik çipler+kartlarda eksiksiz;
-      şema kaybolursa bilgi kaybolmaz. Kayıp damlaları kızıl, akış izi
-      yumuşak kızıl; reduced-motion'da izler yok, şema statik durur. */}
-  <svg class="sus-szsema" viewBox="0 0 1000 276" aria-hidden="true">
-    {szGiris.map(d => <path class="tel" d={d} />)}
-    <path class="tel boru" d={szBoru} />
-    {szDamla.map(d => <path class="damla" d={d} />)}
-    {szGiris.map((d, i) => <path class={`tel-iz gz${i}`} d={d} pathLength="1" />)}
-    <path class="tel-iz boru-iz" d={szBoru} pathLength="1" />
-    {szDamla.map((d, i) => <path class={`damla-iz dz${i}`} d={d} pathLength="1" />)}
-    {GIRX.map(x => <circle class="giris-nokta" cx={x} cy="16" r="4" />)}
-    {/* damla uclari: kayip burada YERE duser — havada asili iz kalmaz */}
-    {szDamlaUc.map(u => <circle class="damla-ucu" cx={u.x} cy={u.y} r="3.5" />)}
-    {/* cikis: kalan musteri asagi akar — ok basi yonu soyler */}
-    <path class="cikis-ok" d="M492,254 L500,268 L508,254 Z" />
-  </svg>
+  {/* SADAKAT KURALI (21 Ağu): buradaki boru+damla+giriş noktası+ok başı
+      şeması SÖKÜLDÜ — kaynakta böyle bir şema yok (kaynak görseli canvas
+      HUNİsiydi: daralan duvarlar + tanecikler + kesikli bağ çizgileri,
+      hepsi ölçülü — kök 10680-10783). Göz kararı çizilmiş hiçbir
+      birleştirici kalamaz. Huni görselinin kaynak kompozisyonuyla
+      kurulması AÇIK kalem (A3 raporunda D2b). */}
   <ul class="sizinti">
     {SIZINTI.map(([sorun, belirti, cozum], k) => (
       <li style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
         <b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
     ))}
   </ul>
-  {/* Ok METİN DEĞİL SVG: U+2192 hiçbir font yüzünde yok (F1c, S-SE dersi). */}
-  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama" style={`--se:${(0.12 + i * 0.045).toFixed(3)}`}>{i > 0 &&
-      <svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{a}</span>)}
-    <span class="asama kalan" style="--se:.30"><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>{m('szb', 'kalan müşteri')}</span></p>
+  {/* SADAKAT KURALI (21 Ağu): aşamalar arası ok SVG'leri SÖKÜLDÜ —
+      kaynak .szstages'te ok yok (2870-2885): aşama = mono başlık +
+      ALTINDA ilerleme çubuğu (.szsb, genişlik 92/58/30% — kök 10678).
+      Çubuk kaynak künyesiyle geri geldi; ayraç tipi kaynaktaki gibi
+      BOŞLUK. "kalan müşteri" kaynakta da ayrı öğeydi (.szout). */}
+  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama"
+      style={`--se:${(0.12 + i * 0.045).toFixed(3)};--w:${[92, 58, 30][i]}%`}>
+    <b>{a}</b><span class="szsb"><i /></span></span>)}
+    <span class="asama kalan" style="--se:.30">{m('szb', 'kalan müşteri')}</span></p>
   <p class="vurgu">{m('szu', 'Bütçe aynı. Sorun burada.')}</p>
   <div class="maliyet">
     <p class="akbas">{m('szc', 'Müşteri başına maliyet')}</p>
@@ -290,6 +262,78 @@ const szBoru = 'M500,108 L500,254';
     </div>
   </div>
 </div>
+
+<script>
+  /* TEL HİZALAMA ADASI — sadakat kuralı (21 Ağu): iki öğeyi birleştiren
+     çizim göz kararı çizilmez. Uçlar kaynağın wire() künyesiyle ölçülür
+     (kök 10553-10600): masaüstü düğüm kenar-ortası ↔ kart .42h/.58h,
+     kontrol x orta nokta; mobil x dağılımı cx±(i-(n-1)/2)·sp,
+     sp=min(34px, genişlik·.08), uçlarda +3px pay, fjoin düğümleri
+     yalnız mobil (kaynak da öyleydi). Ölçüm rAF DIŞINDA: kurulum +
+     resize 180ms (kaynak rt eşleniği) + fonts.ready — klasör telleri
+     deseni. SSR'de d boş: kaynakta teller JS ürünüydü, JS'siz ziyaretçi
+     kaynaktaki gibi telsiz görür. */
+  const akis = document.querySelector('.akis3') as HTMLElement | null;
+  const kartEl = akis?.querySelector('.ajan-kart') as HTMLElement | null;
+  if (akis && kartEl) {
+    const kollar = akis.querySelectorAll('.akol:not(.beyin)');
+    const NS = 'http://www.w3.org/2000/svg';
+    const yaz = (svg: SVGSVGElement, dler: string[]) =>
+      svg.querySelectorAll('path').forEach((p, i) => p.setAttribute('d', dler[i % dler.length] || ''));
+    const ciz = () => {
+      const kr = kartEl.getBoundingClientRect();
+      if (!kr.width) return;
+      akis.querySelectorAll<SVGSVGElement>('svg.sus-tel').forEach(svg => {
+        const sr = svg.getBoundingClientRect();
+        if (!sr.width || !sr.height) return;
+        const sol = svg.classList.contains('sol');
+        const Y = (v: number) => ((v - sr.top) / sr.height * 400).toFixed(1);
+        const ky = Y(kr.top + kr.height * (sol ? .42 : .58));
+        yaz(svg, [...kollar[sol ? 0 : 1].querySelectorAll('.adugum')].map(n => {
+          const q = n.getBoundingClientRect();
+          const ny = Y(q.top + q.height / 2);
+          return sol ? `M0,${ny} C50,${ny} 50,${ky} 100,${ky}`
+            : `M0,${ky} C50,${ky} 50,${ny} 100,${ny}`;
+        }));
+      });
+      akis.querySelectorAll<SVGSVGElement>('svg.sus-tel-m').forEach(svg => {
+        const sr = svg.getBoundingClientRect();
+        if (!sr.width || !sr.height) return;
+        const sol = svg.classList.contains('sol');
+        const kol = kollar[sol ? 0 : 1] as HTMLElement;
+        const kolR = kol.getBoundingClientRect();
+        const dugum = kol.querySelectorAll('.adugum').length || 1;
+        const X = 400 / sr.width, Yv = 72 / sr.height;
+        const sp = Math.min(34, sr.width * .08) * X;
+        const kx = ((kr.left + kr.width / 2 - sr.left) * X).toFixed(1);
+        /* uç y'ler: kaynak +3/-3 px payı (10566-10575) */
+        const yKol = ((sol ? kolR.bottom + 3 : kolR.top - 3) - sr.top) * Yv;
+        const yKrt = ((sol ? kr.top - 3 : kr.bottom + 3) - sr.top) * Yv;
+        const m = ((yKol + yKrt) / 2).toFixed(1);
+        const xler = [...Array(dugum)].map((_, i) => (200 + (i - (dugum - 1) / 2) * sp).toFixed(1));
+        yaz(svg, xler.map(x => sol
+          ? `M${x},${yKol.toFixed(1)} C${x},${m} ${kx},${m} ${kx},${yKrt.toFixed(1)}`
+          : `M${kx},${yKrt.toFixed(1)} C${kx},${m} ${x},${m} ${x},${yKol.toFixed(1)}`));
+        svg.querySelectorAll('.fjoin').forEach(c => c.remove());
+        const dj = (cx: string, cy: number, r: number) => {
+          const c = document.createElementNS(NS, 'circle');
+          c.setAttribute('class', 'fjoin');
+          c.setAttribute('cx', cx); c.setAttribute('cy', cy.toFixed(1));
+          c.setAttribute('r', (r * X).toFixed(1));
+          svg.appendChild(c);
+        };
+        /* kaynak (10570-10581): giriş uçları r2.6 + birleşme r3.2;
+           çıkışta yalnız kart çıkış düğümü r3.2 */
+        if (sol) { xler.forEach(x => dj(x, yKol, 2.6)); dj(kx, yKrt, 3.2); }
+        else dj(kx, yKrt, 3.2);
+      });
+    };
+    let rt: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
+    document.fonts?.ready?.then(ciz);
+    ciz();
+  }
+</script>
 
 <script>
   /* ADA — yalnız huninin işi. Açılışta SIFIR yeniden yazım: iskelet ve
@@ -366,7 +410,10 @@ const szBoru = 'M500,108 L500,254';
   @media (prefers-reduced-motion: reduce) { .akis3 { animation: none; } }
   /* Teller SÜS (.sus- sözleşmesi): içerik üç kolonda eksiksiz; mobilde
      ve reduced-motion'da süs söner, kimse bilgi kaybetmez. */
-  .sus-tel { width: 100%; margin-top: 34px; height: calc(100% - 34px); }
+  /* overflow:visible kaynak fsvg künyesi (1330) — uç daireleri ve +3px
+     taşma payı şerit dışına çizilebilir. */
+  .sus-tel { width: 100%; margin-top: 34px; height: calc(100% - 34px);
+    overflow: visible; }
   .sus-tel .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
     vector-effect: non-scaling-stroke; }
   .sus-tel .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
@@ -390,7 +437,11 @@ const szBoru = 'M500,108 L500,254';
     .akis3 { grid-template-columns: 1fr; gap: 10px; }
     .sus-tel { display: none; }
     .sus-tel-m { display: block; width: min(100%, 340px);
-      margin: 0 auto; height: 56px; }
+      margin: 0 auto; height: 56px; overflow: visible; }
+    /* fjoin düğüm daireleri: kaynak YALNIZ mobil telde basıyordu
+       (10570-10581, r 2.6/3.2; fill/opacity 1383). Kaynaktaki
+       drop-shadow parlaması H14 gereği mobilde YOK (belgeli sapma). */
+    .sus-tel-m .fjoin { fill: var(--red); opacity: .9; }
     .sus-tel-m .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
       vector-effect: non-scaling-stroke; }
     .sus-tel-m .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
@@ -410,36 +461,6 @@ const szBoru = 'M500,108 L500,254';
     .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation: none; opacity: 0; }
   }
 
-  /* Genis ekranda gerilip dagilmasin: sema kompakt ortada durur. */
-  .sus-szsema { display: block; width: 100%; max-width: 680px;
-    height: auto; margin: 18px auto 4px; }
-  .sus-szsema .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
-    vector-effect: non-scaling-stroke; }
-  .sus-szsema .damla { fill: none; stroke: rgba(239, 35, 60, .3); stroke-width: 1.2;
-    vector-effect: non-scaling-stroke; }
-  .sus-szsema .giris-nokta { fill: rgba(255, 255, 255, .25); }
-  .sus-szsema .damla-ucu { fill: rgba(239, 35, 60, .55); }
-  .sus-szsema .cikis-ok { fill: var(--red-soft); }
-  .sus-szsema .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
-    vector-effect: non-scaling-stroke; opacity: .9;
-    stroke-dasharray: .1 .9; stroke-dashoffset: 1.1;
-    animation: ak-iz 2.8s linear infinite; }
-  /* Damla izleri KAYIP kızılı; kısa parça hızla dışarı akar ve söner. */
-  .sus-szsema .damla-iz { fill: none; stroke: var(--red); stroke-width: 1.8;
-    vector-effect: non-scaling-stroke; opacity: .95;
-    stroke-dasharray: .22 .78; stroke-dashoffset: 1.22;
-    animation: ak-iz-damla 2.8s linear infinite; }
-  .sus-szsema .gz1 { animation-delay: .55s; } .sus-szsema .gz2 { animation-delay: 1.1s; }
-  .sus-szsema .gz3 { animation-delay: 1.65s; } .sus-szsema .gz4 { animation-delay: 2.2s; }
-  .sus-szsema .boru-iz { animation-delay: .3s; }
-  .sus-szsema .dz0 { animation-delay: .7s; } .sus-szsema .dz1 { animation-delay: 1.4s; }
-  .sus-szsema .dz2 { animation-delay: 2.1s; } .sus-szsema .dz3 { animation-delay: 2.7s; }
-  @keyframes ak-iz-damla {
-    0% { stroke-dashoffset: 1.22; opacity: .95; }
-    70%, 100% { stroke-dashoffset: .22; opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .sus-szsema .tel-iz, .sus-szsema .damla-iz { animation: none; opacity: 0; }
-  }
   .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
     letter-spacing: .08em; margin-bottom: 8px; }
   .adugum { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
@@ -486,11 +507,27 @@ const szBoru = 'M500,108 L500,254';
   .sizinti b { display: block; font-size: .9rem; }
   .sizinti i { color: var(--tx3); font-size: .82rem; }
   .cozum { display: block; margin-top: 8px; color: var(--red-soft); font-size: .84rem; }
-  .asamalar { margin-top: 16px; color: var(--tx2); font-size: .88rem;
-    display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
-  .asama { display: inline-flex; align-items: center; gap: 10px; }
-  .ok { width: 14px; height: 14px; color: var(--tx3); flex: none; }
-  .kalan { color: var(--red-soft); }
+  /* Aşama kompozisyonu kaynaktan (2873-2885): mono küçük başlık +
+     ALTINDA ilerleme çubuğu; ayraç BOŞLUK, ok yok. Yerleşim yatay
+     (kaynak huni üstünde dikey overlay'di — huni görseli açık kalem);
+     yazı yüzü site mono sözleşmesi (kaynak JetBrains Mono'ydu, F1c). */
+  .asamalar { margin-top: 16px; color: var(--tx2);
+    display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: flex-start; }
+  .asama { display: inline-flex; flex-direction: column;
+    align-items: center; gap: 5px; }
+  .asama b { font-family: ui-monospace, monospace;
+    font-size: clamp(9px, .8vw, 10.8px); letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx3); font-weight: 500; }
+  .szsb { width: min(70%, 150px); min-width: 56px; height: 4px;
+    border-radius: 3px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+  .szsb i { display: block; position: relative; height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .42), rgba(255, 255, 255, .16));
+    width: calc(var(--sp, 1) * var(--w, 60%)); }
+  /* done kızıllaşması: kaynak .szstage.done .szsb i (2885), eşik p>.84 */
+  .szsb i::after { content: ''; position: absolute; inset: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--red), var(--red-soft));
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1); }
+  .kalan { color: var(--red-soft); align-self: center; font-size: .88rem; }
   .vurgu { margin-top: 6px; color: var(--tx3); font-size: .85rem; }
   .maliyet { margin-top: 18px; max-width: 420px; }
   .cubuk { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
@@ -538,10 +575,6 @@ const szBoru = 'M500,108 L500,254';
     transform-origin: left; }
   .bar.once::after { transform: scaleX(clamp(0, (var(--szt, 1) - .28) / .15, 1)); }
   .bar.sonra::after { transform: scaleX(clamp(0, (var(--szt, 1) - .66) / .24, 1)); }
-  /* damlalar mühürle söner: dz k ↔ kart k (tıpalanan kavşak damlamaz) */
-  .sus-szsema .dz0 { --sm: .52; } .sus-szsema .dz1 { --sm: .575; }
-  .sus-szsema .dz2 { --sm: .63; } .sus-szsema .dz3 { --sm: .685; }
-  .sus-szsema .damla-iz { opacity: calc(.9 * (1 - clamp(0, (var(--szt, 1) - var(--sm, 2)) * 18, 1))); }
   @media (prefers-reduced-motion: reduce) { .sz-surus { animation: none; } }
   .cubuk-alt { color: var(--tx3); font-size: .8rem; margin-top: 8px; }
 

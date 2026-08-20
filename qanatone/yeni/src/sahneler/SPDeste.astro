@@ -41,10 +41,15 @@ const ton = (i: number) => {
 const iki = (n: number) => String(n).padStart(2, '0');
 const en = dil === 'en';
 ---
-<section class="sp-sahne" data-sahne="p" data-anlati>
+{/* SADAKAT DENETİMİ (21 Ağu): bu sahnenin kaynak eşi VAR (kök #prjDeck)
+    ve kaynak künyesi sayı değil 26px KIZIL ÇİZGİ + mono metindi
+    (kök 366-367: .shead .mono::before). Anlatı sayacı ("04") kaynakta
+    olmayan ekleme sayıldı → data-anlati düştü (sayaç DOM'dan aktığı
+    için sonraki numaralar kendiliğinden oturur), çizgi künyeden geldi. */}
+<section class="sp-sahne" data-sahne="p">
   <div class="sp-ic">
     <div class="sp-giris">
-      <p class="kunye"><i class="no"></i>{en ? 'SELECTED WORK' : 'SEÇİLMİŞ İŞLER'}</p>
+      <p class="kunye sp-kunye">{en ? 'SELECTED WORK' : 'SEÇİLMİŞ İŞLER'}</p>
       <h2 class="s1-buyuk">{en ? 'Projects.' : 'Projeler.'}<span
         class="sp-sayi">({tum.length})</span></h2>
       <p class="s1-alt">{en

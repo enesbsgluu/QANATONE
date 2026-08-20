@@ -20,9 +20,10 @@
    · 2,7 sn zorunlu bekletme — perde artık yüklemeyi MASKELEMİYOR
      (arkada bekleyen bir şey yok, sayfa statik ve boyalı); marka selamı
      ~2 sn'de kendi kendine biter, etkileşimle daha da erken.
-   · iz başına `getTotalLength` — SVG anakart izleri bu turda hiç
-     gelmedi (aşağıda), gelecekse `pathLength="1"` özniteliğiyle gelir:
-     yerleşim okuması sıfır.
+   · iz başına `getTotalLength` — SVG anakart izleri GELDİ (giydirme,
+     a8b1d6a; dokuz yol kaynak 4418-4428'den birebir) ama ölçümsüz:
+     `pathLength="1"` özniteliğiyle, yerleşim okuması sıfır. (Bu satır
+     eskiden "izler hiç gelmedi" diyordu — 21 Ağu belge düzeltmesi.)
 
    KAPI BETİĞİ `is:inline` VE MARKUP'IN HEMEN ARDINDA — eski kaynağın
    ölçülmüş dersi (4438): perde varsayılan gizli doğar (`html:not(.prd)`),

@@ -140,7 +140,9 @@
 .sh-l{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
 .sh-l i{display:block;font-style:normal;animation:sh-rise 1.2s var(--e) backwards}
 .sh-l:nth-child(2) i{animation-delay:.12s}
-.sh-h1 em{font-style:italic;font-weight:500;color:rgba(255,255,255,.8)}
+/* em ağırlığı kaynak değeri 400 (kök: #hero h1 em italic 400) —
+   sadakat denetimi 21 Ağu, 500'e kaymıştı */
+.sh-h1 em{font-style:italic;font-weight:400;color:rgba(255,255,255,.8)}
 .sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic;
   text-shadow:0 0 10px rgba(255,47,77,.55),0 0 46px rgba(239,35,60,.8)}
 /* sapma 3: perde araligi %114 -> %30, metin ilk kareden boyali */
@@ -256,6 +258,10 @@
    kaydir isareti eskide de mobilde kapaliydi.                        */
 @media(max-width:900px){
   .sus-kaydir{display:none}
+  /* sadakat denetimi (21 Ağu): kaynak rozeti mobilde KALDIRIYORDU
+     (kök 2581: #hero .pill{display:none}) — buradaki eksik kural
+     mobile kaynakta olmayan bir çerçeveli kutu sokuyordu. */
+  .sh-rozet{display:none}
   .sus-eller{
     -webkit-mask-image:radial-gradient(ellipse 62% 42% at 50% 50%,
       transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%);
