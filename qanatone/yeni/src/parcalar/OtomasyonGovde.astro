@@ -80,6 +80,17 @@ const KAYDIRICI = [
   { id: 3, ad: m('hs7', 'Teklif sonrası sessizleşen'), deger: YUZDE[2] },
   { id: 4, ad: m('hs8', 'Randevuya gelmeyen'), deger: YUZDE[3] },
 ];
+
+/* TEL YELPAZESİ (giydirme turu) — eski flowKur telleri
+   getBoundingClientRect'le çiziyordu (yasaklı desen); yerlisi SABİT
+   viewBox'ta temsilî yelpaze: dört kaynak düğüm → tek merkez, ölçüm
+   YOK. Şerit gerilir (preserveAspectRatio none); çizgi kalınlığını
+   vector-effect korur. Paket hissi ayrı daire değil (gerilmede
+   eliptikleşir, ölçüldü mantık): aynı eğri üstünde pathLength=1 +
+   dasharray ile AKAN IŞIK PARÇASI — kaydır işaretinin dili. */
+const TELY = [50, 150, 250, 350];
+const telSol = TELY.map(y => `M0,${y} C55,${y} 45,200 100,200`);
+const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
 ---
 <section class="giris">
   <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
@@ -87,12 +98,16 @@ const KAYDIRICI = [
   <p class="lede">{m('s8p', 'Her kanal tek bir merkeze bağlanır. Ajan gelen talebi karşılar, eler, yönlendirir — sonuç elinde hazır olarak durur.')}</p>
 </section>
 
-{/* ---- AKIŞ MANTIĞI (statik) ---- */}
+{/* ---- AKIŞ MANTIĞI (içerik statik; teller süs) ---- */}
 <div class="akis3">
   <div class="akol">
     <p class="akbas">{m('flc1', 'Gelen')}</p>
     {GELEN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
   </div>
+  <svg class="sus-tel sol" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
+    {telSol.map(d => <path class="tel" d={d} />)}
+    {telSol.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+  </svg>
   <div class="akol beyin">
     <p class="akbas">{m('flc2', 'Ajan')}</p>
     <div class="ajan-kart">
@@ -103,6 +118,10 @@ const KAYDIRICI = [
       </ol>
     </div>
   </div>
+  <svg class="sus-tel sag" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
+    {telSag.map(d => <path class="tel" d={d} />)}
+    {telSag.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+  </svg>
   <div class="akol">
     <p class="akbas">{m('flc3', 'Çıkan')}</p>
     {CIKAN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
@@ -251,9 +270,34 @@ const KAYDIRICI = [
   .kapanis { margin-top: 18px; font-size: 1.02rem; }
   .orta { margin-top: 18px; text-align: center; }
 
-  .akis3 { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 14px;
+  .akis3 { display: grid; grid-template-columns: 1fr 44px 1.3fr 44px 1fr; gap: 6px;
     margin-top: 26px; }
-  @media (max-width: 700px) { .akis3 { grid-template-columns: 1fr; } }
+  /* Teller SÜS (.sus- sözleşmesi): içerik üç kolonda eksiksiz; mobilde
+     ve reduced-motion'da süs söner, kimse bilgi kaybetmez. */
+  .sus-tel { width: 100%; margin-top: 34px; height: calc(100% - 34px); }
+  .sus-tel .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
+    vector-effect: non-scaling-stroke; }
+  .sus-tel .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
+    vector-effect: non-scaling-stroke; opacity: .9;
+    stroke-dasharray: .07 .93; stroke-dashoffset: 1.07;
+    animation: ak-iz 3.4s linear infinite; }
+  /* Dört tel aynı anda atmasın — sıra hissi; sağ şerit yarım vuruş geç
+     (paket ajandan çıkıyormuş gibi). */
+  .sus-tel .iz1 { animation-delay: .85s; }
+  .sus-tel .iz2 { animation-delay: 1.7s; }
+  .sus-tel .iz3 { animation-delay: 2.55s; }
+  .sus-tel.sag .tel-iz { animation-delay: .42s; }
+  .sus-tel.sag .iz1 { animation-delay: 1.27s; }
+  .sus-tel.sag .iz2 { animation-delay: 2.12s; }
+  .sus-tel.sag .iz3 { animation-delay: 2.97s; }
+  @keyframes ak-iz { to { stroke-dashoffset: .07; } }
+  @media (max-width: 700px) {
+    .akis3 { grid-template-columns: 1fr; }
+    .sus-tel { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sus-tel .tel-iz { animation: none; opacity: 0; }
+  }
   .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
     letter-spacing: .08em; margin-bottom: 8px; }
   .adugum { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
