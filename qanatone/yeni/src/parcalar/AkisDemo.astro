@@ -1,0 +1,84 @@
+---
+/* S-A MİNİ DEMOLAR (giydirme turu) — kaynağın `akDemo` şablonları
+   (kök index.html 6917-7000) Astro'ya birebir; JS şablonu değil
+   DERLEMEDE basılır: bot demo metinlerini de görür (eskiden hiçbirini
+   görmüyordu — süperküme). Ana sayfa şeridinin BEŞ demosu taşındı
+   (serp · chat · ads · social · agent); site/tool/auto/trade şeritte
+   kullanılmıyor, ölü bayt taşınmadı (H18 diyeti; hizmet detay
+   giydirmesinin adayı, akis.css başındaki liste güncel).
+
+   Bayt kararı (Enes, 20 Ağu): demolar H18 tavanını aşıyor — "tavanı
+   aş" seçildi, +1 RTT bilinçli; tavan denetimde yeni değere çekildi.
+
+   Anahtar seçimi kaynağın kuralı: AKMAP slug eşlemesi + panelden yeni
+   hizmet gelirse `fam` yedeği (kök `akKind` 6908). */
+interface Props { k: string; dil?: 'tr' | 'en' }
+const { k, dil = 'tr' } = Astro.props;
+const en = dil === 'en';
+const E = (a: string, b: string) => en ? b : a;
+const DOM = E('seninfirman.com', 'yourfirm.com');
+const SEHIR = E('istanbul', 'dubai');
+const AGENT_ST: [string, string][] = [
+  [E('Talep okundu', 'Enquiry read'), E('0,3 sn', '0.3s')],
+  [E('Niyet çıkarıldı', 'Intent found'), E('0,6 sn', '0.6s')],
+  [E('Fiyat aralığı verildi', 'Price given'), E('0,9 sn', '0.9s')],
+  [E('Randevu önerildi', 'Slot offered'), E('1,2 sn', '1.2s')],
+];
+---
+{k === 'ads' && <span class="akd akd-ads">
+  <span class="aksq"><b></b><i class="aktype">{SEHIR + ' '}{E('tadilat firması', 'fit-out company')}</i></span>
+  <span class="akres">
+    <span class="akrw hot"><i><u>{E('Reklam', 'Ad')}</u>{DOM}</i><em>{E('anında', 'instant')}</em></span>
+    <span class="akrw"><i>{E('Rakip Firma 1', 'Competitor 1')}</i></span>
+    <span class="akrw"><i>{E('Rakip Firma 2', 'Competitor 2')}</i></span>
+  </span>
+  <span class="akmini">
+    <span><i>{E('Tıklama', 'Clicks')}</i><b>840</b></span>
+    <span><i>{E('Form', 'Forms')}</i><b>96</b></span>
+    <span class="hot"><i>{E('Müşteri', 'Customers')}</i><b>21</b></span>
+  </span>
+</span>}
+
+{k === 'social' && <span class="akd akd-social">
+  <span class="akaud"><i>{E('İstanbul', 'Dubai')}</i><i>25-45</i><i>{E('ev sahibi', 'homeowner')}</i></span>
+  <span class="akfeed"><span class="akrail">
+    <span class="akpost"><b></b><u></u></span>
+    <span class="akpost spon"><em>{E('Sponsorlu', 'Sponsored')}</em><b></b>
+      <i>{E('Mutfağını yeniletmeyi düşündün mü?', 'Thinking about a new kitchen?')}</i>
+      <s>{E('Teklif al', 'Get a quote')}</s></span>
+    <span class="akpost"><b></b><u></u></span>
+  </span></span>
+  <span class="akmini">
+    <span><i>{E('Erişim', 'Reach')}</i><b>{E('84.000', '84,000')}</b></span>
+    <span class="hot"><i>{E('Gelen mesaj', 'Messages')}</i><b>37</b></span>
+  </span>
+</span>}
+
+{k === 'agent' && <span class="akd akd-agent">
+  <span class="aknight"><b></b>02:41 · {E('sen uyurken', 'while you sleep')}</span>
+  <span class="akfin"><b></b><i>WhatsApp</i><em>{E('yeni talep', 'new enquiry')}</em></span>
+  <span class="akwire"><b class="akpk"></b></span>
+  <span class="akbrain">
+    <span class="akbh"><b></b>{E('QANATONE Ajanı', 'QANATONE Agent')}<em>{E('aktif', 'live')}</em></span>
+    {AGENT_ST.map((st, i) => (
+      <span class="akstp" style={`--i:${i}`}><b></b><i>{st[0]}</i><em>{st[1]}</em></span>
+    ))}
+  </span>
+  <span class="akfout"><b></b><i>{E('Randevu yazıldı', 'Booked')}</i><em>{E('11 sn', '11s')}</em></span>
+</span>}
+
+{k === 'serp' && <span class="akd akd-serp">
+  <span class="aksq"><b></b><i>{SEHIR + ' '}{E('tadilat firması', 'fit-out company')}</i></span>
+  <span class="akres">
+    {[1, 2, 3].map(n => <span class="akrw"><i>{E('Rakip Firma ', 'Competitor ') + n}</i><em></em></span>)}
+    <span class="akrw hot"><i>{DOM}</i><em>#1</em></span>
+  </span>
+</span>}
+
+{k === 'chat' && <span class="akd akd-chat">
+  <span class="akq">{E(SEHIR + "'da güvenilir tadilat firması?", 'trusted fit-out company in ' + SEHIR + '?')}</span>
+  <span class="aka"><b>{E('Yanıt', 'Answer')}</b>
+    <i>{E('Bölgede en çok önerilen: ', 'Most recommended: ')}<u>{DOM}</u></i>
+    <em>{E('hızlı · belgeli · yerel', 'fast · certified · local')}</em></span>
+  <span class="aksrc">{E('kaynak', 'source')} · {DOM}</span>
+</span>}

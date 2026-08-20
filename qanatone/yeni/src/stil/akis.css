@@ -8,7 +8,15 @@
    BU TURDA NE TAŞINDI: iskelet — şerit, kart, içerik, bağlantı, tonlar.
    Ada JS'i 0.
 
-   ---- 1. SAPMA: SEKİZ MİNİ DEMO SAHNESİ BU TURDA TAŞINMADI ----
+   ---- 1. SAPMA KAPANDI (giydirme, 20 Agu): BES DEMO GELDI ----
+   Ana sayfa seridinin besi tasindi (serp chat ads social agent, 13
+   keyframe); site/tool/auto/trade seritte kullanilmiyor — olu bayt
+   tasinmadi, hizmet detay giydirmesinin adayi. Bayt karari Enes'in:
+   H18 tavani asildi (+1 RTT bilinçli), tavan denetimde yeni degerde.
+   Anayasa'nin uc sarti uygulandi: durdurma animation-play-state +
+   anahtar kart kokunde --akps degiskeni (evrensel secici yok) +
+   content-visibility yok. IO kapisi SAAkis'te (<=0,7 KB).
+   ---- (eski not, tarihce) ----
    Kaynakta her kartın içinde kendi küçük canlandırması var:
      akd-ads   (sorgu yazılır, ilan rakiplerin üstünde belirir)
      akd-meta  (akışta reklam, ilgi → tıklama)
@@ -82,12 +90,14 @@
   display:flex;flex-direction:column;
   border:1px solid var(--line);border-radius:18px;overflow:clip;
   background:var(--card);color:var(--tx);text-decoration:none}
-/* ton bandı — kartın kimliği (2. sapma) */
-.sa-gorsel{display:grid;place-items:center;aspect-ratio:16/9;
+/* gorsel alan: CALISAN mini demo (giydirme; 2. sapma kapandi).
+   container-type: demolarin cqw olculeri kart genisligine baglanir. */
+.sa-gorsel{position:relative;aspect-ratio:16/10;container-type:inline-size;
   background:linear-gradient(140deg,var(--tA,#2a2a36),transparent 62%),
              radial-gradient(80% 90% at 78% 8%,var(--tB,#444),transparent 70%),
              var(--card)}
-.sa-ikon{width:34px;height:34px;color:#fff;opacity:.9}
+/* ikon basligin yaninda kucuk (kaynagin dili 6898) */
+.sa-ikon-k{flex:none;width:18px;height:18px;color:var(--red-soft);opacity:.9}
 .sa-yazi{display:flex;flex-direction:column;gap:8px;
   padding:clamp(16px,1.8vw,22px) clamp(16px,1.8vw,22px) clamp(18px,2vw,24px)}
 .sa-yazi h3{display:flex;align-items:center;gap:10px;
@@ -115,4 +125,206 @@
   .sa-ok{transition:none}
   .sa-kart:hover .sa-ok{transform:none}
   .sa-ray{scroll-behavior:auto}
+}
+
+/* ============================================================
+   MINI DEMOLAR (giydirme, 20 Agu) — kaynak CSS 3911-4112'nin
+   kullanilan alt kumesi (5 sahne, 13 keyframe). Uyarlamalar:
+   Inter -> --f-govde (F1: Inter yok), JetBrains -> --f-tek,
+   #fff -> var(--tx); HER animasyonlu kural
+   `animation-play-state:var(--akps,paused)` tasir — anahtar kart
+   KOKUNDE (Anayasa sart a+b), IO .akoynar verir. GOLGELER yalniz
+   masaustu kapisinda (H14: mobil baglamda box-shadow yasak; akSpon
+   ve akPulse'un tek isi golge oldugundan mobilde hic dogmazlar).
+   ============================================================ */
+.sa-kart{--akps:paused}
+.sa-kart.akoynar{--akps:running}
+.akd{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;gap:2.6cqw;padding:7cqw 6.5cqw;
+  font-size:clamp(9.2px,3.3cqw,11.4px);line-height:1.25;
+  font-family:var(--f-govde);letter-spacing:-.005em}
+.akd b,.akd i,.akd em,.akd u,.akd s{font-style:normal;font-weight:inherit;text-decoration:none}
+.akd em{font-family:var(--f-tek);font-variant-numeric:tabular-nums}
+
+/* -- arama kutusu (ads + serp ortak) -- */
+.aksq{display:flex;align-items:center;gap:2.2cqw;padding:2.6cqw 3cqw;border-radius:6cqw;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--tx2)}
+.aksq b{width:2.8cqw;height:2.8cqw;border-radius:50%;flex:none;
+  border:1.4px solid var(--tx3);position:relative}
+.aksq b::after{content:'';position:absolute;right:-1cqw;bottom:-.6cqw;width:1.4cqw;height:1.4px;
+  background:var(--tx3);transform:rotate(45deg)}
+.akres{display:flex;flex-direction:column;gap:1.6cqw}
+.akrw{display:flex;align-items:center;justify-content:space-between;gap:2cqw;
+  padding:2.2cqw 2.8cqw;border-radius:2cqw;background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);color:var(--tx3);
+  animation:akDown 5.4s var(--e) infinite;animation-play-state:var(--akps,paused)}
+.akrw i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.akrw em{color:var(--tx4);font-size:.86em}
+.akrw.hot{background:linear-gradient(100deg,rgba(239,35,60,.2),rgba(239,35,60,.05));
+  border-color:rgba(239,35,60,.45);color:var(--tx);font-weight:600;
+  animation:akUp 5.4s var(--e) infinite;animation-play-state:var(--akps,paused)}
+.akrw.hot em{color:var(--red-soft);font-weight:700}
+@keyframes akUp{0%,8%{transform:translateY(0)}44%,86%{transform:translateY(calc(-3*(100% + 1.6cqw)))}
+  97%,100%{transform:translateY(0)}}
+@keyframes akDown{0%,8%{transform:translateY(0)}44%,86%{transform:translateY(calc(100% + 1.6cqw))}
+  97%,100%{transform:translateY(0)}}
+
+/* -- GOOGLE ADS: sorgu yazilir, ilan ustte belirir -- */
+.akd-ads{gap:2.6cqw}
+.aktype{white-space:nowrap;display:inline-block;
+  clip-path:inset(0 100% 0 0);animation:akType 5.6s steps(22,end) infinite;
+  animation-play-state:var(--akps,paused)}
+@keyframes akType{0%,4%{clip-path:inset(0 100% 0 0)}
+  30%,88%{clip-path:inset(0 0 0 0)}96%,100%{clip-path:inset(0 100% 0 0)}}
+.akd-ads .aksq{position:relative}
+.akd-ads .aksq::after{content:'';position:absolute;right:3cqw;top:28%;width:1.5px;height:44%;
+  background:var(--red-soft);animation:akCaret 1s step-end infinite;
+  animation-play-state:var(--akps,paused)}
+@keyframes akCaret{0%,50%{opacity:1}51%,100%{opacity:0}}
+.akd-ads .akrw{opacity:0;transform:translateY(1.6cqw);
+  animation:akRise 5.6s var(--e) infinite;animation-play-state:var(--akps,paused)}
+.akd-ads .akrw:nth-child(1){animation-delay:1.7s}
+.akd-ads .akrw:nth-child(2){animation-delay:1.95s}
+.akd-ads .akrw:nth-child(3){animation-delay:2.15s}
+.akd-ads .akrw.hot i u{display:inline-block;margin-right:1.6cqw;padding:.5cqw 1.4cqw;
+  border-radius:1cqw;background:var(--red);color:var(--tx);font-size:.78em;font-weight:700;
+  letter-spacing:.04em}
+@keyframes akRise{0%,26%{opacity:0;transform:translateY(1.6cqw)}
+  34%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(1.6cqw)}}
+.akmini{display:flex;gap:1.6cqw;margin-top:.6cqw}
+.akmini>span{flex:1;display:flex;flex-direction:column;gap:.7cqw;padding:2cqw 2.2cqw;
+  border-radius:2cqw;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
+  opacity:0;animation:akRise 5.6s var(--e) infinite;animation-delay:2.6s;
+  animation-play-state:var(--akps,paused)}
+.akmini>span:nth-child(2){animation-delay:2.8s}
+.akmini>span:nth-child(3){animation-delay:3s}
+.akmini i{color:var(--tx4);font-size:.84em}
+.akmini b{color:var(--tx);font-weight:700;font-size:1.16em;font-family:var(--f-tek)}
+.akmini>span.hot{border-color:rgba(239,35,60,.42);background:rgba(239,35,60,.1)}
+.akmini>span.hot b{color:var(--red-soft)}
+
+/* -- META: kitle cipleri, akan akis, sponsorlu gonderi -- */
+.akd-social{gap:2.4cqw}
+.akaud{display:flex;gap:1.4cqw;flex-wrap:wrap}
+.akaud i{padding:1.4cqw 2.4cqw;border-radius:4cqw;font-size:.86em;color:var(--tx2);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  opacity:0;transform:scale(.9);animation:akChip 6s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+.akaud i:nth-child(2){animation-delay:.16s}.akaud i:nth-child(3){animation-delay:.32s}
+@keyframes akChip{0%,3%{opacity:0;transform:scale(.9)}
+  10%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:scale(.9)}}
+.akfeed{position:relative;flex:1;min-height:16cqw;overflow:hidden;border-radius:2.6cqw;
+  border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.28)}
+.akrail{position:absolute;inset:0 0 auto 0;display:flex;flex-direction:column;gap:2cqw;
+  padding:2.4cqw;animation:akFeed 6s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+@keyframes akFeed{0%,12%{transform:translateY(0)}34%,84%{transform:translateY(-15cqw)}
+  96%,100%{transform:translateY(0)}}
+.akpost{display:flex;flex-direction:column;gap:1.4cqw;padding:2.2cqw;border-radius:2cqw;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.05)}
+.akpost b{height:8cqw;border-radius:1.4cqw;background:rgba(255,255,255,.06)}
+.akpost u{height:1.6cqw;width:62%;border-radius:1cqw;background:rgba(255,255,255,.08)}
+.akpost.spon{border-color:rgba(239,35,60,.45);
+  background:linear-gradient(150deg,rgba(239,35,60,.16),rgba(255,255,255,.03))}
+.akpost.spon em{font-family:var(--f-tek);font-size:.76em;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--red-soft)}
+.akpost.spon b{background:radial-gradient(90% 90% at 70% 20%,color-mix(in srgb,var(--tB) 38%,transparent),transparent 70%),rgba(255,255,255,.05)}
+.akpost.spon i{color:var(--tx);font-weight:600;line-height:1.3}
+.akpost.spon s{align-self:flex-start;padding:1.4cqw 2.6cqw;border-radius:4cqw;
+  background:var(--red);color:var(--tx);font-weight:600;font-size:.9em}
+
+/* -- AI AJAN: gece talebi, sureli adimlar, randevu -- */
+.akd-agent{gap:0;justify-content:center}
+.akd-agent .aknight{margin-bottom:2.4cqw}
+.aknight{display:flex;align-items:center;gap:2cqw;align-self:flex-start;
+  padding:1.2cqw 2.4cqw;border-radius:4cqw;font-family:var(--f-tek);
+  font-size:.82em;letter-spacing:.06em;color:var(--tx3);
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+.aknight b{width:2cqw;height:2cqw;border-radius:50%;flex:none;background:var(--red);
+  animation:akBlink 2.2s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akBlink{0%,100%{opacity:1}50%{opacity:.25}}
+.akfin,.akfout{display:flex;align-items:center;gap:2.4cqw;padding:2.4cqw 3cqw;
+  border-radius:2.4cqw;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09)}
+.akfin b,.akfout b{width:2.4cqw;height:2.4cqw;border-radius:50%;flex:none;background:var(--tB,var(--red-soft))}
+.akfout b{background:var(--red)}
+.akfin i,.akfout i{color:var(--tx);font-weight:600;flex:1}
+.akfin em,.akfout em{color:var(--tx4);font-size:.88em}
+.akwire{position:relative;height:5cqw;margin:0 auto;width:2px;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06))}
+.akwire .akpk{position:absolute;left:50%;top:0;width:2.4cqw;height:2.4cqw;border-radius:50%;
+  background:var(--red);margin-left:-1.2cqw;
+  animation:akPk 3.6s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akPk{0%{transform:translateY(-1.2cqw);opacity:0}
+  12%{opacity:1}52%{transform:translateY(3.8cqw);opacity:1}
+  60%,100%{transform:translateY(3.8cqw);opacity:0}}
+.akbrain{border-radius:2.8cqw;padding:2.6cqw 3cqw;
+  background:linear-gradient(160deg,rgba(239,35,60,.1),rgba(255,255,255,.03));
+  border:1px solid rgba(239,35,60,.26)}
+.akbh{display:flex;align-items:center;gap:2cqw;color:var(--tx);font-weight:650;
+  padding-bottom:2.2cqw;margin-bottom:2.2cqw;border-bottom:1px solid rgba(255,255,255,.1)}
+.akbh b{width:3.4cqw;height:3.4cqw;border-radius:1.2cqw;flex:none;background:var(--red)}
+.akbh em{margin-left:auto;color:var(--red-soft);font-size:.82em}
+.akstp{display:flex;align-items:center;gap:2cqw;padding:.9cqw 0;opacity:.3;
+  animation:akStep 4.8s var(--e) infinite;animation-delay:calc(var(--i)*.42s);
+  animation-play-state:var(--akps,paused)}
+.akstp b{width:2.6cqw;height:2.6cqw;border-radius:50%;flex:none;position:relative;
+  border:1px solid rgba(255,255,255,.22)}
+.akstp b::after{content:'';position:absolute;left:.75cqw;top:1.1cqw;width:.9cqw;height:.45cqw;
+  border-left:1px solid var(--tx);border-bottom:1px solid var(--tx);transform:rotate(-45deg)}
+.akstp i{flex:1;color:var(--tx2)}
+.akstp em{color:var(--tx4);font-size:.86em}
+@keyframes akStep{0%,6%{opacity:.28}18%{opacity:1}
+  22%{opacity:1}86%{opacity:1}96%,100%{opacity:.28}}
+
+/* -- SOHBET: soru, yanit, kaynak rozeti -- */
+.akd-chat{gap:2.6cqw;justify-content:center}
+.akq{align-self:flex-start;max-width:88%;padding:2.6cqw 3.2cqw;border-radius:3cqw 3cqw 3cqw .8cqw;
+  background:rgba(255,255,255,.07);color:var(--tx2);
+  transform:translateY(1.6cqw);opacity:0;animation:akIn 5.6s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+.aka{align-self:flex-end;max-width:94%;padding:2.8cqw 3.2cqw;border-radius:3cqw 3cqw .8cqw 3cqw;
+  background:linear-gradient(150deg,rgba(239,35,60,.16),rgba(255,255,255,.04));
+  border:1px solid rgba(239,35,60,.3);display:flex;flex-direction:column;gap:1.4cqw;
+  transform:translateY(1.6cqw);opacity:0;animation:akIn 5.6s var(--e) infinite;animation-delay:.9s;
+  animation-play-state:var(--akps,paused)}
+.aka b{font-family:var(--f-tek);font-size:.78em;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--red-soft)}
+.aka i{color:var(--tx);line-height:1.4}
+.aka i u{color:var(--red-soft);font-weight:600}
+.aka em{color:var(--tx4);font-size:.86em}
+.aksrc{align-self:flex-end;font-family:var(--f-tek);font-size:.8em;
+  color:var(--tx4);letter-spacing:.06em;opacity:0;
+  animation:akIn 5.6s var(--e) infinite;animation-delay:1.7s;
+  animation-play-state:var(--akps,paused)}
+@keyframes akIn{0%,3%{transform:translateY(1.6cqw);opacity:0}
+  12%,86%{transform:translateY(0);opacity:1}96%,100%{transform:translateY(1.6cqw);opacity:0}}
+.akd-serp{gap:2.6cqw}
+
+/* -- golgeli susler YALNIZ masaustu (H14: mobil baglamda golge yasak);
+     akSpon ve akPulse'un tek isi golge — mobilde hic dogmazlar -- */
+@media(min-width:901px){
+  .akrw.hot{box-shadow:0 0 5cqw -1cqw var(--red-glow)}
+  .akwire .akpk{box-shadow:0 0 3cqw var(--red-glow)}
+  .akfout b{box-shadow:0 0 2.4cqw var(--red-glow)}
+  .akpost.spon{animation:akSpon 6s var(--e) infinite;
+    animation-play-state:var(--akps,paused)}
+  .akbh b{animation:akPulse 2.6s var(--e) infinite;
+    animation-play-state:var(--akps,paused)}
+  @keyframes akSpon{0%,30%{box-shadow:0 0 0 0 rgba(239,35,60,0)}
+    44%,80%{box-shadow:0 0 6cqw -1cqw var(--red-glow)}100%{box-shadow:0 0 0 0 rgba(239,35,60,0)}}
+  @keyframes akPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,35,60,.5)}
+    70%{box-shadow:0 0 0 2.4cqw rgba(239,35,60,0)}}
+}
+
+/* -- hareket azaltma: durduran secici hareketi verenin AYNISI (H11);
+     son hal = icerik tam gorunur (kaynak 4292'nin uyarlamasi) -- */
+@media (prefers-reduced-motion: reduce){
+  .aktype,.akd-ads .aksq::after,.akd-ads .akrw,.akmini>span,.akaud i,.akrail,
+  .akpost.spon,.aknight b,.akwire .akpk,.akbh b,.akstp,.akrw,.akrw.hot,
+  .akq,.aka,.aksrc{animation:none}
+  .aktype{clip-path:none}
+  .akd-ads .akrw,.akmini>span,.akaud i,.akq,.aka,.aksrc{opacity:1;transform:none}
+  .akstp{opacity:1}
+  .akd-ads .aksq::after,.akwire .akpk{opacity:0}
 }
