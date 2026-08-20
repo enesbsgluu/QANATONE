@@ -1,0 +1,21 @@
+---
+/* Bülten dizini (TR) — rota turu. Rota adı eskiyle BİREBİR (/bulten +
+   /bulten/<slug>; detaylar Faz 1'den beri bu adta). Baş sözleşmesi eski
+   /bulten ile eşdeğer (S1): title/desc kök ROUTER.PAGES.bulten'den
+   birebir. Şema eski üçlü @graph + ItemList (bilinçli süperküme,
+   bultenDizinSema). Bekçisi R4. */
+import Temel from '../../layouts/Temel.astro';
+import BultenDizin from '../../parcalar/BultenDizin.astro';
+import { icerik, KOK } from '../../icerik';
+import { bultenDizinSema } from '../../sema.mjs';
+
+const canon = `${KOK}/bulten`;
+const baslik = 'Bülten — QANATONE';
+const aciklama = 'Yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla.';
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/bulten`} sema={sema}
+  etiket="Bülten">
+  <BultenDizin dil="tr" />
+</Temel>
