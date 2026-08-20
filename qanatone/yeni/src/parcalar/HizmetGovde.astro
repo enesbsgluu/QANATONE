@@ -14,6 +14,7 @@
 import { T, type Dil, icerik } from '../icerik';
 import { ton } from '../ton';
 import AkisDemo from './AkisDemo.astro';
+import HuniSahne from './HuniSahne.astro';
 import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
@@ -47,6 +48,12 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     <AkisDemo k={dk} dil={dil} />
   </div>}
 </section>
+
+{/* K7 SAHNELERİ (D4) — kaynakta her hizmet ailesinin kendi kaydırma
+    sahnesi vardı (SDT haritası 8447-8468) ve göçte hiçbiri gelmemişti;
+    içerikleri content.json'da duruyordu ama sayfada görünmüyordu.
+    Sahne sahne geri geliyor; kaynaktaki yerleri hits'ten sonra. */}
+{d.fun && <HuniSahne fun={d.fun} dil={dil} />}
 
 {d.pains?.length > 0 && <section>
   <h2>{M('Dert nerede', 'Where it hurts')}</h2>
