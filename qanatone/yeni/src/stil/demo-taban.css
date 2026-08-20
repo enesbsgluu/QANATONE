@@ -1,0 +1,59 @@
+/* ============================================================
+   DEMO TABANI — `ak*` mini demolarının ortak sözlüğü.
+   Kaynak (künye): kök index.html 3911-3919 (.akd tabanı) ·
+   4072-4077 (.aksq) · 3943-3954 (akRise + .akmini).
+
+   akis.css'ten buraya ÇIKARILDI (hizmet detay giydirmesi, 20 Ağu):
+   aynı taban iki bağlama hizmet ediyor —
+     ana sayfa şeridi (akis.css, 5 demo: serp chat ads social agent)
+     hizmet detayı   (demo-detay.css, 4 demo: site tool auto trade)
+   İki dosya da bunu @import eder; aynı sayfada ikisi birden asla
+   bulunmadığından (şerit ana sayfada, detay hizmet sayfalarında)
+   kopya inmez. Taban @import'la HER ZAMAN demo kurallarından önce
+   gelir — .akd-* geçersiz kılmaları eşit özgüllükte, sıra şart.
+
+   Uyarlamalar (5-demo göçünün aynısı, akis.css 130-138 kararı):
+   Inter → --f-govde (F1), JetBrains → --f-tek, #fff → var(--tx);
+   animasyonlu her kural `animation-play-state:var(--akps,paused)`
+   taşır — kapıyı bağlam verir (şeritte .sa-kart, detayda .hd-demo),
+   IO .akoynar sınıfıyla açar. Taban dolgusu 7cqw 6.5cqw kaynağın
+   8cqw 7cqw'sinden bilinçli sapmaydı (16/10 şerit kartı, 20 Ağu);
+   dolgudan türeyen sabitler (akKnob 86cqw) kendi demosunda kaynağın
+   dolgusunu geri kurar. ============================================ */
+.akd{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;gap:2.6cqw;padding:7cqw 6.5cqw;
+  font-size:clamp(9.2px,3.3cqw,11.4px);line-height:1.25;
+  font-family:var(--f-govde);letter-spacing:-.005em}
+.akd b,.akd i,.akd em,.akd u,.akd s{font-style:normal;font-weight:inherit;text-decoration:none}
+.akd em{font-family:var(--f-tek);font-variant-numeric:tabular-nums}
+
+/* -- arama kutusu (ads + serp + trade ortak) -- */
+.aksq{display:flex;align-items:center;gap:2.2cqw;padding:2.6cqw 3cqw;border-radius:6cqw;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--tx2)}
+.aksq b{width:2.8cqw;height:2.8cqw;border-radius:50%;flex:none;
+  border:1.4px solid var(--tx3);position:relative}
+.aksq b::after{content:'';position:absolute;right:-1cqw;bottom:-.6cqw;width:1.4cqw;height:1.4px;
+  background:var(--tx3);transform:rotate(45deg)}
+
+/* -- belirme (ads ilanları, mini rozetler, auto özeti, trade satırları) -- */
+@keyframes akRise{0%,26%{opacity:0;transform:translateY(1.6cqw)}
+  34%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(1.6cqw)}}
+
+/* -- mini metrik rozetleri (ads + social + trade ortak) -- */
+.akmini{display:flex;gap:1.6cqw;margin-top:.6cqw}
+.akmini>span{flex:1;display:flex;flex-direction:column;gap:.7cqw;padding:2cqw 2.2cqw;
+  border-radius:2cqw;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
+  opacity:0;animation:akRise 5.6s var(--e) infinite;animation-delay:2.6s;
+  animation-play-state:var(--akps,paused)}
+.akmini>span:nth-child(2){animation-delay:2.8s}
+.akmini>span:nth-child(3){animation-delay:3s}
+.akmini i{color:var(--tx4);font-size:.84em}
+.akmini b{color:var(--tx);font-weight:700;font-size:1.16em;font-family:var(--f-tek)}
+.akmini>span.hot{border-color:rgba(239,35,60,.42);background:rgba(239,35,60,.1)}
+.akmini>span.hot b{color:var(--red-soft)}
+
+/* -- hareket azaltma: durduran seçici verenin AYNISI (H11);
+     son hâl = içerik tam görünür -- */
+@media (prefers-reduced-motion: reduce){
+  .akmini>span{animation:none;opacity:1;transform:none}
+}

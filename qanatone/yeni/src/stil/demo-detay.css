@@ -1,0 +1,260 @@
+/* ============================================================
+   HİZMET DETAY DEMOLARI (giydirme, 20 Ağu) — şeritte kullanılmayan
+   dört mini sahne kendi hizmet sayfasının girişine indi:
+     site  (web-tasarim)        kaynak markup 7007-7020 · CSS 4114-4195
+     tool  (web-sitesi-araclar) kaynak markup 7022-7029 · CSS 4197-4226
+     auto  (otomasyon)          kaynak markup 6973-6980 · CSS 3998-4027
+     trade (finans)             kaynak markup 7035-7047 · CSS 4229-4254
+   Ortak sözlük demo-taban.css'te (@import aşağıda) — .akd tabanı,
+   .aksq, .akmini, akRise oradan gelir.
+
+   DEĞERLER KÜNYEDEN BİREBİR (Enes talimatı, 20 Ağu: animasyon
+   referansı yaklaşıkla kurulmaz, eski künyeden okunur; sapma ancak
+   yazılı bilinçli karar olur). Bilinçli sapmalar:
+   1. Uyarlama seti 5-demo göçünün aynısı: JetBrains → --f-tek,
+      #fff → var(--tx); gölge/filter YALNIZ masaüstü (H14) — akCta ve
+      akSend çift işliydi (ölçek + gölge), tabanda yalnız ölçek koşar,
+      masaüstü bloğu keyframe'i gölgeli hâliyle YENİDEN tanımlar
+      (akSpon/akPulse deseni); her animasyonlu kural play-state kapısı
+      taşır, kapı .hd-demo kökünde, IO .akoynar verir.
+   2. .akd-tool yan dolgusu 7cqw: akKnob'daki 86cqw sabiti kaynağın
+      taban dolgusundan türer (100 − 2×7); taban 6.5cqw olduğundan
+      sabit bozulmasın diye kaynağın dolgusu burada geri kurulur.
+   3. Trade satırlarının (aktr2/akdm) reduced-motion son hâli kaynakta
+      YOK — içerik görünmez kalıyordu (kaynak kusuru); H11 gereği
+      opacity:1 son hâl eklendi.
+   4. Sarmal (.hd-demo) yeni konum: kaynakta demolar yalnız şerit
+      kartındaydı; kutu oranı ve zemini kaynağın kart görsel alanından
+      (.akv 2688: aspect-ratio 1/1.02 + üç katman degrade) birebir.
+   5. Bu CSS 18 hizmet sayfasının hepsine iner (statik modül grafiği
+      slug'a göre bölünemez); demosuz 10 sayfada ÖLÇÜLDÜ: +2.894 B
+      gzip (5.030→7.924, hizmet/seo) — sayfa 14,6 KB tek-RTT eşiğinin
+      altında kalıyor, rota bölme karmaşıklığına değmez, bilinçli.
+   ============================================================ */
+@import './demo-taban.css';
+
+/* -- sarmal: kaynağın kart görsel alanı (.akv), detay girişinde -- */
+.hd-demo{--akps:paused;position:relative;max-width:420px;margin-top:26px;
+  container-type:inline-size;aspect-ratio:1/1.02;border-radius:20px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  background:
+    radial-gradient(120% 85% at 50% 118%,color-mix(in srgb,var(--tA) 78%,#000 10%),transparent 62%),
+    radial-gradient(90% 70% at 82% -8%,color-mix(in srgb,var(--tB) 26%,transparent),transparent 60%),
+    linear-gradient(165deg,#17171a,#0b0b0d)}
+.hd-demo.akoynar{--akps:running}
+
+/* ── WEB TASARIM: mini tarayıcı, dört perdelik sayfa, imleç tıklar ──
+   Kaynağın hesabı (4120): .akbr 88x90cqw · çubuk 7cqw · pencere 83cqw
+   · sayfa 111.2cqw · kaydırma 28.2cqw · CTA y=34.4 · Gönder y=84.9 —
+   koordinatlar cqw, oran 1/1.02 korundukça her boyutta doğru. */
+.akd-site{padding:6cqw;justify-content:stretch}
+.akbr{position:relative;flex:1;border-radius:3cqw;overflow:hidden;
+  border:1px solid rgba(255,255,255,.13);background:#0d0d10;display:flex;flex-direction:column}
+.akbb{height:7cqw;background:rgba(255,255,255,.05);display:flex;align-items:center;gap:1.2cqw;
+  padding:0 2.4cqw;border-bottom:1px solid rgba(255,255,255,.08);flex:none}
+.akbb b{width:1.5cqw;height:1.5cqw;border-radius:50%;background:rgba(255,255,255,.22);flex:none}
+.akbb b:first-child{background:var(--red)}
+.akbb span{margin-left:1.6cqw;font-family:var(--f-tek);font-size:.78em;color:var(--tx4)}
+.akpg{display:flex;flex-direction:column;gap:2.4cqw;padding:3cqw;
+  animation:akScroll 8s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akScroll{0%,30%{transform:translateY(0)}
+  44%,100%{transform:translateY(-28.2cqw)}}
+.akhero{height:34cqw;display:flex;flex-direction:column;gap:2.2cqw;padding:3cqw;
+  border-radius:2.4cqw;
+  background:radial-gradient(130% 130% at 85% 0%,color-mix(in srgb,var(--tB) 26%,transparent),transparent 68%),
+             rgba(255,255,255,.04)}
+.akhero i{color:var(--tx);font-weight:650;font-size:1.16em;line-height:1.22}
+.akhero u{color:var(--tx3);font-size:.92em;line-height:1.3}
+.akcta{align-self:flex-start;margin-top:auto;padding:1.8cqw 3.4cqw;border-radius:4cqw;
+  background:var(--red);color:var(--tx);font-weight:600;font-size:.92em;font-family:inherit;
+  animation:akCta 8s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akCta{0%,26%{transform:scale(1)}30%{transform:scale(.93)}
+  38%,100%{transform:scale(1)}}
+.akstory{height:22cqw;display:flex;gap:2.4cqw;padding:2.4cqw;border-radius:2.4cqw;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}
+.akstory>b{width:34%;border-radius:1.8cqw;flex:none;
+  background:radial-gradient(90% 90% at 40% 30%,color-mix(in srgb,var(--tB) 30%,transparent),transparent 70%),
+             rgba(255,255,255,.07)}
+.akstory>span{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1.6cqw}
+.akstory>span i{height:1.5cqw;border-radius:1cqw;background:rgba(255,255,255,.1)}
+.akstory>span i:nth-child(2){width:88%}.akstory>span i:nth-child(3){width:62%}
+.akstat{height:14cqw;display:flex;gap:1.8cqw}
+.akstat>span{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.6cqw;border-radius:2cqw;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.07)}
+.akstat b{font-family:var(--f-tek);font-weight:700;font-size:1.24em;color:var(--tx)}
+.akstat>span:first-child b{color:var(--red-soft)}
+.akstat i{color:var(--tx4);font-size:.8em}
+.akform{height:28cqw;display:flex;flex-direction:column;gap:1.8cqw;padding:3cqw;
+  border-radius:2.4cqw;background:rgba(255,255,255,.045);border:1px solid rgba(239,35,60,.24)}
+.akform i{padding:2cqw 2.4cqw;border-radius:1.6cqw;background:rgba(0,0,0,.35);
+  color:var(--tx4);font-size:.92em}
+.aksend{align-self:flex-start;margin-top:auto;padding:1.8cqw 3.4cqw;border-radius:4cqw;
+  background:var(--red);color:var(--tx);font-weight:600;font-size:.92em;font-family:inherit;
+  animation:akSend 8s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akSend{0%,72%{transform:scale(1)}76%{transform:scale(.93)}
+  84%,100%{transform:scale(1)}}
+.akdone{position:absolute;left:50%;bottom:4cqw;transform:translateX(-50%) translateY(2cqw);
+  padding:1.6cqw 3cqw;border-radius:4cqw;background:rgba(239,35,60,.16);
+  border:1px solid rgba(239,35,60,.5);color:var(--tx);font-weight:600;font-size:.9em;
+  white-space:nowrap;opacity:0;z-index:4;animation:akDone 8s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+@keyframes akDone{0%,80%{opacity:0;transform:translateX(-50%) translateY(2cqw)}
+  86%,96%{opacity:1;transform:translateX(-50%) translateY(0)}
+  100%{opacity:0;transform:translateX(-50%) translateY(2cqw)}}
+/* İmleç: hedefler kaynağın hesaplanmış konumları —
+   CTA (15, 34.4) kaydırma 0'ken · Gönder (14, 84.9) kaydırma -28.2'deyken. */
+.akcur{position:absolute;left:0;top:0;width:3.6cqw;height:4.8cqw;z-index:5;pointer-events:none;
+  background:var(--tx);clip-path:polygon(0 0,0 74%,25% 57%,43% 97%,61% 89%,43% 51%,76% 47%);
+  opacity:0;animation:akCur 8s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akCur{
+  0%{transform:translate(66cqw,78cqw);opacity:0}
+  8%{opacity:1}
+  24%{transform:translate(15cqw,34.4cqw);opacity:1}
+  29%{transform:translate(15cqw,34.4cqw) scale(.82)}
+  34%{transform:translate(15cqw,34.4cqw) scale(1)}
+  50%{transform:translate(38cqw,62cqw)}
+  70%{transform:translate(14cqw,84.9cqw)}
+  75%{transform:translate(14cqw,84.9cqw) scale(.82)}
+  80%{transform:translate(14cqw,84.9cqw) scale(1);opacity:1}
+  92%{transform:translate(14cqw,84.9cqw);opacity:0}
+  100%{transform:translate(66cqw,78cqw);opacity:0}}
+
+/* ── ARAÇ: hesaplayıcı, m² gerçekten sayar ── */
+@property --akm{syntax:'<integer>';inherits:false;initial-value:0}
+.akd-tool{gap:2.6cqw;padding-inline:7cqw}
+.aktl{display:flex;align-items:center;justify-content:space-between;gap:2cqw;
+  padding:2.4cqw 3cqw;border-radius:2.2cqw;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.07)}
+.aktl i{color:var(--tx2)}
+.aktl.bg{background:linear-gradient(100deg,rgba(239,35,60,.14),rgba(255,255,255,.03));
+  border-color:rgba(239,35,60,.3)}
+.akm2{color:var(--tx);font-weight:600;font-size:1.1em;--akm:0;
+  counter-reset:akm var(--akm);animation:akCount 5s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+.akm2::after{content:counter(akm) ' m²'}
+@keyframes akCount{0%,6%{--akm:0}46%,86%{--akm:120}96%,100%{--akm:0}}
+.akpr{color:var(--red-soft);font-weight:700;font-size:1.22em;
+  opacity:0;transform:translateY(.8cqw);animation:akPrIn 5s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+@keyframes akPrIn{0%,34%{opacity:0;transform:translateY(.8cqw)}
+  50%,86%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(.8cqw)}}
+.aktr{position:relative;height:1.6cqw;border-radius:1cqw;background:rgba(255,255,255,.1)}
+.aktr b{position:absolute;inset:0 auto 0 0;width:100%;border-radius:1cqw;background:var(--red);
+  transform-origin:left;transform:scaleX(0);animation:akFill 5s var(--e) infinite;
+  animation-play-state:var(--akps,paused)}
+.aktr u{position:absolute;top:50%;left:0;width:4.2cqw;height:4.2cqw;border-radius:50%;
+  background:var(--tx);margin:-2.1cqw 0 0 -2.1cqw;
+  animation:akKnob 5s var(--e) infinite;animation-play-state:var(--akps,paused)}
+@keyframes akFill{0%,6%{transform:scaleX(0)}46%,86%{transform:scaleX(.78)}96%,100%{transform:scaleX(0)}}
+@keyframes akKnob{0%,6%{transform:translateX(0)}46%,86%{transform:translateX(calc(86cqw*.78))}
+  96%,100%{transform:translateX(0)}}
+.akok{display:flex;align-items:center;gap:2cqw;color:var(--tx3);font-size:.92em}
+.akok b{width:3cqw;height:3cqw;border-radius:50%;flex:none;background:var(--red);position:relative}
+.akok b::after{content:'';position:absolute;left:.9cqw;top:1.3cqw;width:1cqw;height:.5cqw;
+  border-left:1.2px solid var(--tx);border-bottom:1.2px solid var(--tx);transform:rotate(-45deg)}
+
+/* ── OTOMASYON: masadaki işler sırayla "otomatik"e geçer ── */
+.akd-auto{gap:1.8cqw}
+.akhd2{display:flex;justify-content:space-between;gap:2cqw;padding:0 2.6cqw 1.4cqw;
+  border-bottom:1px solid rgba(255,255,255,.1);font-family:var(--f-tek);
+  font-size:.78em;letter-spacing:.1em;text-transform:uppercase}
+.akhd2 i{color:var(--tx4)}.akhd2 em{color:var(--red-soft)}
+.akjob{position:relative;display:flex;align-items:center;justify-content:space-between;
+  gap:2cqw;padding:2.3cqw 2.8cqw;border-radius:2.2cqw;overflow:hidden;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
+  animation:akJob 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  animation-play-state:var(--akps,paused)}
+.akjob i{position:relative;color:var(--tx2);
+  animation:akJobT 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  animation-play-state:var(--akps,paused)}
+.akjob b{position:relative;width:3.2cqw;height:3.2cqw;border-radius:50%;flex:none;
+  border:1px solid rgba(255,255,255,.2);
+  animation:akTick 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  animation-play-state:var(--akps,paused)}
+.akjob b::after{content:'';position:absolute;left:1cqw;top:1.3cqw;width:1cqw;height:.5cqw;
+  border-left:1.3px solid var(--tx);border-bottom:1.3px solid var(--tx);
+  transform:rotate(-45deg) scale(0);transform-origin:center;
+  animation:akTickIn 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  animation-play-state:var(--akps,paused)}
+@keyframes akJob{0%,10%{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.07)}
+  24%,86%{background:rgba(239,35,60,.1);border-color:rgba(239,35,60,.34)}
+  96%,100%{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.07)}}
+@keyframes akJobT{0%,10%{transform:translateX(0);color:var(--tx4)}
+  24%,86%{transform:translateX(1.4cqw);color:var(--tx)}
+  96%,100%{transform:translateX(0);color:var(--tx4)}}
+@keyframes akTick{0%,10%{background:transparent;border-color:rgba(255,255,255,.2)}
+  20%,86%{background:var(--red);border-color:var(--red)}
+  96%,100%{background:transparent;border-color:rgba(255,255,255,.2)}}
+@keyframes akTickIn{0%,12%{transform:rotate(-45deg) scale(0)}
+  22%,86%{transform:rotate(-45deg) scale(1)}96%,100%{transform:rotate(-45deg) scale(0)}}
+.aksum{display:flex;align-items:center;gap:2cqw;margin-top:.8cqw;color:var(--red-soft);
+  font-weight:600;opacity:0;animation:akRise 5.6s var(--e) infinite;animation-delay:2.4s;
+  animation-play-state:var(--akps,paused)}
+.aksum b{width:3cqw;height:3cqw;border-radius:50%;flex:none;background:var(--red);position:relative}
+.aksum b::after{content:'';position:absolute;left:.9cqw;top:1.3cqw;width:1cqw;height:.5cqw;
+  border-left:1.2px solid var(--tx);border-bottom:1.2px solid var(--tx);transform:rotate(-45deg)}
+
+/* ── FİNANS / TRADESELF: isim isim alıcı + karar verici + ilk temas ── */
+.akd-trade{gap:2.2cqw}
+.aktb{display:flex;flex-direction:column;gap:1.4cqw}
+.aktr2{display:flex;align-items:center;gap:2cqw;padding:2cqw 2.6cqw;border-radius:2cqw;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  opacity:0;transform:translateY(1.4cqw);
+  animation:akRise 6s var(--e) infinite;animation-delay:calc(var(--i)*.18s + .3s);
+  animation-play-state:var(--akps,paused)}
+.aktr2 i{flex:1;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aktr2 u{color:var(--tx4);font-size:.84em;flex:none}
+.aktr2 em{color:var(--tx);font-weight:600;flex:none;font-size:.94em}
+.aktr2.hot{background:linear-gradient(100deg,rgba(239,35,60,.16),rgba(255,255,255,.03));
+  border-color:rgba(239,35,60,.42)}
+.aktr2.hot i{color:var(--tx);font-weight:600}
+.aktr2.hot em{color:var(--red-soft)}
+.akdm{display:flex;align-items:center;gap:2.2cqw;padding:2.2cqw 2.6cqw;border-radius:2.2cqw;
+  background:rgba(239,35,60,.08);border:1px solid rgba(239,35,60,.3);
+  opacity:0;transform:translateY(1.4cqw);
+  animation:akRise 6s var(--e) infinite;animation-delay:1.5s;
+  animation-play-state:var(--akps,paused)}
+.akdm>b{width:3.6cqw;height:3.6cqw;border-radius:1.2cqw;flex:none;
+  background:radial-gradient(120% 120% at 30% 20%,var(--red),#7d0d1c)}
+.akdm>span{flex:1;display:flex;flex-direction:column;gap:.5cqw;min-width:0}
+.akdm i{color:var(--tx4);font-size:.82em}
+.akdm u{color:var(--tx);font-weight:600;
+  font-family:var(--f-tek);font-size:.92em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.akdm em{flex:none;color:var(--red-soft);font-size:.8em;padding:.8cqw 1.8cqw;
+  border-radius:3cqw;background:rgba(239,35,60,.14);border:1px solid rgba(239,35,60,.34)}
+
+/* -- gölgeli süsler YALNIZ masaüstü (H14 deseni): akCta/akSend
+     keyframe'leri gölgeli hâlleriyle YENİDEN tanımlanır (kaynak
+     4143/4168), imleç gölgesi ve sürgü topuzu gölgesi de burada -- */
+@media(min-width:901px){
+  .aktr u{box-shadow:0 .6cqw 2cqw rgba(0,0,0,.55)}
+  .akcur{filter:drop-shadow(0 .6cqw 1.4cqw rgba(0,0,0,.75))}
+  @keyframes akCta{0%,26%{transform:scale(1);box-shadow:0 0 0 0 rgba(239,35,60,.5)}
+    30%{transform:scale(.93)}
+    38%{transform:scale(1);box-shadow:0 0 0 5cqw rgba(239,35,60,0)}100%{transform:scale(1)}}
+  @keyframes akSend{0%,72%{transform:scale(1);box-shadow:0 0 0 0 rgba(239,35,60,.5)}
+    76%{transform:scale(.93)}84%{transform:scale(1);box-shadow:0 0 0 5cqw rgba(239,35,60,0)}
+    100%{transform:scale(1)}}
+}
+
+/* -- hareket azaltma: durduran seçici verenin AYNISI (H11);
+     son hâller kaynak 4289-4305'ten birebir + trade düzeltmesi
+     (bilinçli sapma 3) -- */
+@media (prefers-reduced-motion: reduce){
+  .akpg,.akcta,.aksend,.akdone,.akcur,
+  .akm2,.akpr,.aktr b,.aktr u,
+  .akjob,.akjob i,.akjob b,.akjob b::after,.aksum,
+  .aktr2,.akdm{animation:none}
+  .aksum{opacity:1;transform:none}
+  .akjob i{transform:translateX(1.4cqw);color:var(--tx)}
+  .akjob b{background:var(--red);border-color:var(--red)}
+  .akjob b::after{transform:rotate(-45deg) scale(1)}
+  .aktr b{transform:scaleX(.78)}
+  .aktr u{transform:translateX(calc(86cqw*.78))}
+  .akm2{--akm:120}
+  .akpr{opacity:1;transform:none}
+  .akcur,.akdone{opacity:0}
+  .aktr2,.akdm{opacity:1;transform:none}
+}
