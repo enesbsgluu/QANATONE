@@ -486,8 +486,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
    bandinda — tavana yakin, sessiz bayatlama riski). TAM genisletme
    (H1-H23'un EN esleri) ayri is: icerik kurallari (H15/H17/H19/H21)
    EN deger sozlukleri ister. Burada en gercek uc risk kilitlenir:
-   sayfa uretilmis + tek h1 + gzip tavani (TR H18 ile AYNI 32 KB —
-   ayni cwnd ucurumu iki dil icin de gecerli). */
+   sayfa uretilmis + tek h1 + gzip tavani (TR H18 ile AYNI tavan —
+   ayni cwnd ucurumu iki dil icin de gecerli; 32 -> 40 KB tasarim
+   turu A1 nav karari, gerekce H18 yorumunda). */
 {
   const zlib = require('zlib');
   const p = path.join(KOK, 'en', 'index.html');
@@ -498,11 +499,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     const h = oku(p);
     const h1 = (h.match(/<h1[\s>]/g) || []).length;
     if (h1 !== 1) kusur.push('h1 sayisi:' + h1);
-    const TAVAN = 32 * 1024;
+    const TAVAN = 40 * 1024;
     gz = zlib.gzipSync(fs.readFileSync(p), { level: 9 }).length;
     if (gz > TAVAN) kusur.push(`gzip ${gz} > ${TAVAN}`);
   }
-  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 32768 B',
+  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 40960 B',
      kusur.length === 0, kusur.join(' | ') || `${gz} B`);
 }
 
@@ -574,7 +575,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     /* `ak` öneki: S-A mini demo ailesi (giydirme, 20 Agu) — kart içi
        canlandırmaların tüm sınıfları kaynaktan `ak*` gelir (akd akrw
        aksq akmini...). S-A'nın alt sözlüğü sayılır. */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|ak[a-z])/; /* + süs katmanı + ak demo ailesi */
+    /* `nv-`: global katman (nav + mobil menü, tasarım turu A1) — H1
+       sözlüğüne eklendi (Anayasa madde 3: önek GENİŞLETİLİR). SAHNE_ONEK'e
+       BİLEREK girmedi: H2 "içerik görünür doğar"ı mobil menü linklerine
+       uygulamak yanlış olur (kapalı katmanın içeriği görünmez doğar,
+       menü açılınca mmrow'la gelir — kaynağın kendi davranışı). */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|ak[a-z]|nv-)/; /* + süs katmanı + ak demo ailesi + global katman */
 
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
@@ -785,7 +791,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
            yasayan her animasyonun, hareketi VEREN seciciyle AYNI secici
            uzerinde bir `prefers-reduced-motion` karsiligi olmali.
            Gevsetme degil, H11'in kendi dersinin genellestirilmesi. */
-        if (!/\binfinite\b/.test(anim[1]) && !SAHNE_ONEK.test(sec)) continue;
+        /* nv- (global katman, A1): tek seferlik menü girişleri (mmrow) de
+           durdurma sözleşmesine tabi — SAHNE_ONEK'e girmedi (H2 sebebi,
+           sözlük yorumunda) ama H11 kapsamına açıkça alındı. */
+        if (!/\binfinite\b/.test(anim[1]) && !SAHNE_ONEK.test(sec)
+            && !/(^|[\s,.>(])nv-/.test(sec)) continue;
         for (const p of sec.split(','))
           if (!duran.has(norm(p))) kusur.push(norm(p).slice(0, 36));
       }
@@ -1086,10 +1096,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        "LCP elemaninin bayt konumu". Yeni tavan 32 KB: bir
        SONRAKI ucurumdan (cwnd katlanmasi, ~44 KB) once kirmiziya doner.
        Eski ders duruyor: tavana yaklasildiginda cozum sahne kismak
-       degil, satir ici CSS kararini olculu bir turda yeniden acmaktir. */
+       degil, satir ici CSS kararini olculu bir turda yeniden acmaktir.
+       TAVAN 32 -> 40 KB (tasarim turu A1, 20 Agu — ENES KARARI,
+       sessizce degil): NAV + mobil menu geldi (+3,3 KB gz; zorunlu
+       icerik — "menu bile yok" hukmu) ve bedeli DONUSUMLU olculdu:
+       LCP 1.818 -> 1.908 (+90 ms), puan 95-96, CLS 0 — kapilar
+       iceride. Secenekler rakamlariyla soruldu, "tavani 40'a cek"
+       secildi. 40 KB bir SONRAKI gercek ucurumdan (cwnd katlanmasi,
+       ~44 KB) once kirmiziya doner. */
     {
       const zlib = require('zlib');
-      const TAVAN = 32 * 1024;
+      const TAVAN = 40 * 1024;
       const gz = zlib.gzipSync(fs.readFileSync(ana), { level: 9 }).length;
       ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B`, gz <= TAVAN,
          `${gz} B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)`);

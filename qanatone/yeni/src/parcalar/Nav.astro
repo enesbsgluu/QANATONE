@@ -1,0 +1,165 @@
+---
+/* NAV + TOPFADE + MOBİL MENÜ (Tasarım turu A1) — kaynak markup kök
+   index.html 4632-4680, üreteç buildNavDD 9030-9048, NDTXT 9019-9029.
+   Stil: stil/nav.css (künye eşlemesi ve bilinçli sapmalar orada).
+
+   Kaynaktan FAZLASI (süperküme): açılır menü içerikleri (8 hizmet +
+   7 proje + Stüdyo) eskiden JS'le doluyordu — bot HİÇBİRİNİ
+   görmüyordu; artık derlemede basılıyor. `.here` işareti de JS değil
+   derleme (her sayfa kendi rotasını bilir). Dil düğmeleri rota
+   bağlantısı (SPA yok); tek istisna /hukuki (EN'i yok → /en).
+
+   Ada JS'i: YALNIZ stuck nöbetçisi (~0,2 KB, altta) — burger ve
+   açılır menüler CSS (nav.css sapma 4-5). */
+import '../stil/nav.css';
+import Ikon from './Ikon.astro';
+import { icerik, T, type Dil } from '../icerik';
+
+interface Props { dil?: Dil }
+const { dil = 'tr' } = Astro.props;
+const en = dil === 'en';
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const on = en ? '/en' : '';
+const s = (icerik.strings && icerik.strings[dil]) || {};
+/* data-t düşüşü (rota sayfaları deseni): panelinki doluysa o, yoksa
+   buradaki varsayılan. TR varsayılanları eski markup'ın kendisi. */
+const m = (k: string, tr: string, enV: string): string =>
+  T((s as any)[k], dil) || (en ? enV : tr);
+
+/* dil bağlantıları: bu sayfanın öbür dildeki eşi */
+const ham = Astro.url.pathname.replace(B, '').replace(/\/$/, '') || '/';
+const cip = en ? (ham.replace(/^\/en(?=\/|$)/, '') || '/') : ham;
+/* eşi olmayan rotalar (hukuki EN'siz, 404 dil-üstü) dil ANASINA gider —
+   H16 üretilmemiş rotaya bağlantıyı kırmızıya döndürür, doğru da yapar */
+const essiz = cip === '/hukuki' || cip === '/404';
+const trYol = essiz && cip === '/404' ? `${B}/` : `${B}${cip === '/' ? '/' : cip}`;
+const enYol = essiz ? `${B}/en` : `${B}/en${cip === '/' ? '' : cip}`;
+
+/* .here: kaynak kuralı (11718) — yalnız düz bağlantılar işaret alır */
+const anaMi = cip === '/';
+const bultenMi = cip.startsWith('/bulten');
+
+const hizmetler = (icerik.services || []).slice(0, 8);
+const projeler = icerik.projects || [];
+/* Stüdyo sözlüğü — kaynak NDTXT.st (9022-9028) birebir */
+const ST = [
+  { r: '/otomasyon', i: 'bot', t: ['Otomasyon', 'Automation'],
+    d: ['Yapay zekâ ajanı talebi karşılar, eler, yönlendirir.', 'The AI agent answers, filters and routes demand.'] },
+  { r: '/surec', i: 'refresh', t: ['Süreç', 'Process'],
+    d: ['Müşteri yolculuğu baştan sona — sürpriz yok.', 'The journey end to end — no surprises.'] },
+  { r: '/sss', i: 'chat', t: ['SSS', 'FAQ'],
+    d: ['Dürüst cevaplar, küçük yazısız.', 'Honest answers, no fine print.'] },
+];
+const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
+---
+{/* checkbox önce gelmeli: burger/menü durumları kardeş seçicisiyle */}
+<input type="checkbox" id="nvAc" class="vh" aria-label={en ? 'Menu' : 'Menü'} />
+<i id="nvS" aria-hidden="true" style="position:absolute;top:0;left:0;width:1px;height:40px;pointer-events:none"></i>
+<div class="nv-fade" aria-hidden="true"></div>
+
+<nav class="nv-bar" id="nv" aria-label={en ? 'Site' : 'Site'}>
+  <div class="nv-ic">
+    <a class="nv-logo" href={`${B}${on || '/'}`}>
+      <i><picture>
+        <source srcset={`${B}/img/qanatone.avif`} type="image/avif" />
+        {/* lazy: logo LCP yarışına girmez (G1); ölçü sabit, kayma yok */}
+        <img src={`${B}/img/qanatone.webp`} alt="" width="240" height="270" decoding="async" loading="lazy" />
+      </picture></i>
+      <b>QANAT<span>ONE</span></b>
+    </a>
+    <div class="nv-links">
+      <a href={`${B}${on || '/'}`} class:list={[anaMi && 'here']}>{m('nav0', 'Ana sayfa', 'Home')}</a>
+      <div class="nv-dd">
+        <button class="nv-dt" type="button">{m('nav2', 'Hizmetler', 'Services')}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="nv-dp nv-dpg">
+          {hizmetler.map((h: any) => (
+            <a class="nv-di" href={h.det && h.slug ? `${B}${on}/hizmet/${h.slug}` : `${B}${on}/hizmetler`}>
+              <span class="nv-din"><Ikon ad={h.icon} /></span>
+              <span><b>{T(h.title, dil)}</b><em>{T(h.tag, dil)}</em></span>
+            </a>
+          ))}
+          <a class="nv-df" href={`${B}${on}/hizmetler`}>{en ? 'All services' : 'Tüm hizmetler'} <Ikon ad="arrow" /></a>
+        </div>
+      </div>
+      <div class="nv-dd">
+        <button class="nv-dt" type="button">{m('nav1', 'Projeler', 'Projects')}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="nv-dp">
+          {projeler.map((p: any) => (
+            <a class="nv-di" href={`${B}${on}/projeler/${p.slug}`}>
+              <span><b>{p.name}</b><em>{(p.year || '') + ' — '}{T(p.tag, dil)}</em></span>
+            </a>
+          ))}
+          <a class="nv-df" href={`${B}${on}/projeler`}>{en ? 'All projects' : 'Tüm projeler'} <Ikon ad="arrow" /></a>
+        </div>
+      </div>
+      <a href={`${B}${on}/bulten`} class:list={[bultenMi && 'here']}>{m('nav6', 'Bülten', 'Newsletter')}</a>
+      <div class="nv-dd">
+        <button class="nv-dt" type="button">{m('nav7', 'Stüdyo', 'Studio')}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="nv-dp">
+          {ST.map((o) => (
+            <a class="nv-di" href={`${B}${on}${o.r}`}>
+              <span class="nv-din"><Ikon ad={o.i} /></span>
+              <span><b>{E(o.t)}</b><span class="nv-dis">{E(o.d)}</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="nv-right">
+      <div class="nv-lang">
+        <a href={trYol} class:list={[!en && 'on']} aria-current={!en ? 'true' : undefined}>TR</a>
+        <a href={enYol} class:list={[en && 'on']} aria-current={en ? 'true' : undefined}>EN</a>
+      </div>
+      <a class="nv-cta" href={`${B}${on}/#iletisim`}>{m('navcta', 'Konuşalım', "Let's talk")}</a>
+      <label class="nv-burger" for="nvAc" aria-hidden="true"><i></i></label>
+    </div>
+  </div>
+</nav>
+
+{/* mobil tam ekran menü — kaynak 4660-4680 birebir */}
+<div class="nv-m">
+  <div class="nv-mtop">
+    <a class="nv-logo" href={`${B}${on || '/'}`}>
+      <i><picture>
+        <source srcset={`${B}/img/qanatone.avif`} type="image/avif" />
+        <img src={`${B}/img/qanatone.webp`} alt="" width="240" height="270" decoding="async" loading="lazy" />
+      </picture></i>
+      <b>QANAT<span>ONE</span></b>
+    </a>
+    <label class="nv-mx" for="nvAc" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </label>
+  </div>
+  <div class="nv-mlinks">
+    {[
+      [`${B}${on || '/'}`, m('nav0', 'Ana sayfa', 'Home')],
+      [`${B}${on}/projeler`, m('nav1', 'Projeler', 'Projects')],
+      [`${B}${on}/hizmetler`, m('nav2', 'Hizmetler', 'Services')],
+      [`${B}${on}/bulten`, m('nav6', 'Bülten', 'Newsletter')],
+      [`${B}${on}/otomasyon`, m('nav3', 'Otomasyon', 'Automation')],
+      [`${B}${on}/surec`, m('nav4', 'Süreç', 'Process')],
+      [`${B}${on}/sss`, m('nav5', 'SSS', 'FAQ')],
+    ].map(([h, t], i) => (
+      <a href={h} style={`--i:${i}`}><span>{t}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    ))}
+    <div class="nv-mlg"><em style="font-style:normal">Dil / Language</em>
+      <span>
+        <a href={trYol} class:list={[!en && 'on']}>TR</a>
+        <a href={enYol} class:list={[en && 'on']}>EN</a>
+      </span></div>
+  </div>
+  <div class="nv-mcta">
+    <a class="nv-mp" href={`${B}${on}/#iletisim`}>{m('navcta', 'Konuşalım', "Let's talk")}</a>
+    <a class="nv-mw" href={`${B}${on}/#tespit`}>{m('cta1', 'Sitemi ücretsiz kontrol et', 'Check my site for free')}</a>
+  </div>
+</div>
+
+<script is:inline>(function(){var s=document.getElementById('nvS'),n=document.getElementById('nv');if(s&&n&&'IntersectionObserver'in window)new IntersectionObserver(function(e){n.classList.toggle('stuck',!e[0].isIntersecting)}).observe(s)})()</script>
