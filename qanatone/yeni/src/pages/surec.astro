@@ -1,0 +1,22 @@
+---
+/* Süreç (TR) — rota turu. Rota adı eskiyle BİREBİR (/surec). Baş
+   sözleşmesi eski ROUTER.PAGES.surec'ten; desc 41 karakterdi (S1 tabanı
+   50 altı, ölçüldü) — adım sayısından türetilen kuyrukla uzatıldı,
+   bilinçli süperküme (sss kararının aynısı; sayı veriden gelir). Şema
+   eski üçlü @graph birebir (anaSema — /surec'in özel bloğu YOKTU).
+   Bekçisi R6. */
+import Temel from '../layouts/Temel.astro';
+import SurecGovde from '../parcalar/SurecGovde.astro';
+import { icerik, KOK } from '../icerik';
+import { anaSema } from '../sema.mjs';
+
+const canon = `${KOK}/surec`;
+const baslik = 'Süreç — QANATONE';
+const aciklama = `Hangi aşamada ne yapıyoruz, ne ölçüyoruz. ${(icerik.steps || []).length} aşamanın her birinde ölçülen metrikler belli.`;
+const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={`${KOK}/en/surec`} sema={sema}
+  etiket="Süreç">
+  <SurecGovde dil="tr" />
+</Temel>
