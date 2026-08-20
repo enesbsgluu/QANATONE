@@ -38,7 +38,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 13; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss +surec (tr/en) */
+    + 15; /* +hukuki +404 +ana +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -169,7 +169,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss|surec)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss|surec|otomasyon)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -383,6 +383,54 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       if (!duz.includes(e)) kusur.push(`${dil}:yol(${e})`);
   }
   ol('R6 · süreç: her adım n+ad+anlatım+ölçüm kalemleri + 5 yolculuk etiketi ham HTML\'de',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R7 · OTOMASYON BUTUNLUGU: sayfanin bes blogu da ham HTML'de dogmali.
+   (a) Yapisal: akisin 5 ajan adimi + 4 giris + 4 cikis, gunun 6 zamani,
+   sizintinin 4 cozumu, huninin varsayilan para ciktisi (₺ ile dolu) —
+   eski tarafta akis TAMAMEN JS'le dogyordu, bot hicbirini gormuyordu.
+   (b) Panel canliligi: sayfanin data-t anahtarlari strings.en'de yasar;
+   EN sayfa strings.en'deki GUNCEL metni basmali — panel metni degistirir
+   de bilesen varsayilanda kalirsa bu SESSIZ bir bayatlamadir. TR'de ayni
+   kontrol yapilamaz (anahtarlar strings.tr'de yok, kaynak markup). */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  const YAPISAL = {
+    tr: ['Talep okundu', 'Niyet çıkarıldı', 'Fiyat/kapsam eşleşti', 'Yanıt gönderildi',
+      'CRM + hatırlatma', 'Google Ads', 'Organik arama', 'Instagram DM', 'Web formu',
+      'Randevu yazıldı', 'Fiyat aralığı', 'Sana devir', 'Elendi'],
+    en: ['Enquiry read', 'Intent extracted', 'Matched to pricing', 'Reply sent',
+      'CRM + reminder', 'Google Ads', 'Organic search', 'Instagram DM', 'Web form',
+      'Booked', 'Price range', 'Handover', 'Filtered'],
+  };
+  const SAAT = ['02:41', '07:00', '09:00', '13:30', '17:00'];
+  const ANAHTAR = ('s8e s8h s8p flc1 flc2 flc3 flb flbs mf0 mf1 mf2 mf3 mf4 mf5 mf6 mf7 mf8 '
+    + 'mf9 mfa mfb mfc mfd mfe mff mfg mfh mfi gn0 gn1 gn2 gn3 gn4 gn5 gn6 gn7 gn8 gn9 '
+    + 'gna gnb gnc gnd gne gnf sz0 sz1 sz2 sz3 sz4 sz5 sz6 sz7 sz8 sz9 sza szb szc szd '
+    + 'sze szf szg szh szi szj szk szl szm szn szo szp szq szr szs szt szu hs0 hs1 hs2 '
+    + 'hs3 hs4 hs5 hs6 hs7 hs8 hs9 hsa hsb hsc hsd hse hsf hsg hsh hsi').split(' ');
+  const kusur = [];
+  for (const dil of ['tr', 'en']) {
+    const p = path.join(KOK, dil === 'en' ? 'en/otomasyon' : 'otomasyon', 'index.html');
+    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
+    const ham = oku(p), duz = coz(ham);
+    for (const x of YAPISAL[dil])
+      if (!duz.includes(x)) kusur.push(`${dil}:akış(${x})`);
+    for (const x of SAAT)
+      if (!duz.includes(x)) kusur.push(`${dil}:saat(${x})`);
+    if (!/id="hnPara"[^>]*>₺[\d.,]+</.test(ham)) kusur.push(dil + ':huni para varsayılanı boş');
+    if (dil === 'en')
+      for (const k of ANAHTAR) {
+        const v = coz((c.strings.en || {})[k] || '');
+        if (v && !duz.includes(v)) kusur.push(`en:${k}`);
+      }
+  }
+  ol('R7 · otomasyon: akış+gün+sızıntı+huni ham HTML\'de, EN metinleri strings.en\'den güncel',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
@@ -1019,23 +1067,28 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          soydugu icin test geciyordu, Netlify'da
          ERR_UNKNOWN_FILE_EXTENSION veriyordu. Kural artik once bunu
          STATIK olarak olcer — hata Netlify'a kadar gitmez. */
-      const testYolu = path.join(__dirname, 'test', 'hesap.test.mjs');
+      /* Rota turunda test AILE oldu (hesap + huni) — kural klasördeki
+         her *.test.mjs'i tarar ve --test'i klasöre koşar. */
+      const testKlasoru = path.join(__dirname, 'test');
+      const testler = fs.readdirSync(testKlasoru).filter(f => /\.test\.mjs$/.test(f))
+        .map(f => path.join(testKlasoru, f));
       const tsIthal = [];
       const bakIthal = (dosya) => {
         if (!fs.existsSync(dosya)) return [];
         const kod = fs.readFileSync(dosya, 'utf8');
         return [...kod.matchAll(/from\s+['"](\.[^'"]+)['"]/g)].map(m => m[1]);
       };
-      for (const u of bakIthal(testYolu)) {
-        if (/\.ts$/.test(u)) tsIthal.push('test -> ' + u);
-        const cozulen = path.join(path.dirname(testYolu), u);
-        for (const v of bakIthal(cozulen))
-          if (/\.ts$/.test(v)) tsIthal.push(path.basename(u) + ' -> ' + v);
-      }
+      for (const testYolu of testler)
+        for (const u of bakIthal(testYolu)) {
+          if (/\.ts$/.test(u)) tsIthal.push(path.basename(testYolu) + ' -> ' + u);
+          const cozulen = path.join(path.dirname(testYolu), u);
+          for (const v of bakIthal(cozulen))
+            if (/\.ts$/.test(v)) tsIthal.push(path.basename(u) + ' -> ' + v);
+        }
       let ciktiMetni = '', gecti = false;
       try {
         ciktiMetni = execFileSync(process.execPath,
-          ['--test', path.join(__dirname, 'test', 'hesap.test.mjs')],
+          ['--test', ...testler],
           { encoding: 'utf8', cwd: __dirname });
         gecti = /# fail 0/.test(ciktiMetni) || /\bfail 0\b/.test(ciktiMetni);
       } catch (e) {
