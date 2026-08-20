@@ -21,6 +21,17 @@ body:has(.ana) main{max-width:none;padding:0}
 .kunye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.68rem;
   letter-spacing:.22em;color:var(--red-soft);margin-bottom:18px;text-transform:uppercase}
 .kunye i{font-style:normal;color:var(--tx3);margin-right:10px}
+/* KUNYE RITMI (giydirme, 20 Agu): anlati numaralari artik ELLE degil —
+   DOM sirasindan CSS sayaciyla dogar. Elle "04"/"07" devir sirasinda
+   iki kez elle kaydirildi (deste S4Kanit'i, tespit S7Arac'i alirken);
+   artik sahne eklenince/cikinca numara kendiliginden oturur, kayma
+   imkansiz. Sayac 1'den baslar: anlatinin 01'i hero'dur (rozet tasir,
+   numara basmaz — eski davranisin aynisi). Numarasiz kunyeler (goc
+   sahneleri: katman, akis, pano, sozler, kurucu) BILINCLI numarasiz —
+   anlati/goc ayrimi ritmin kendisi (S-K karari). */
+.ana{counter-reset:anlati 1}
+.ana [data-anlati]{counter-increment:anlati}
+.ana [data-anlati] .kunye i.no::before{content:counter(anlati,decimal-leading-zero)}
 
 /* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
    Faz 2'nin "iddia" sahnesi ile göçün S-H hero'su aynı sözü söylüyordu

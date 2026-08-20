@@ -15,9 +15,9 @@ const sektorler = one
   .map(k => (icerik.sectors || []).find((s: any) => s.k === k))
   .filter(Boolean);
 ---
-<section data-sahne="6">
+<section data-sahne="6" data-anlati>
   <div class="icgen">
-    <p class="kunye"><i>06</i>{M('SEKTÖR', 'INDUSTRY')}</p>
+    <p class="kunye"><i class="no"></i>{M('SEKTÖR', 'INDUSTRY')}</p>
     <h2 class="s1-buyuk" style="font-size:clamp(1.6rem,5vw,2.6rem)">{M('Nerede kuruyoruz.', 'Where we build.')}</h2>
     <p class="s1-alt" style="margin-bottom:44px">{M('Her sektörün kaybı başka yerden akar; sistem ona göre kurulur.', 'Every industry leaks from a different place; the system is built accordingly.')}</p>
     <div class="s6-dizi">
