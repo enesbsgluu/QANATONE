@@ -1,0 +1,339 @@
+---
+/* Otomasyon gövdesi — TR ve EN aynı parça (rota turunun son ve en ağır
+   sayfası). Beş blok: akış mantığı · doğru model · bir gün · sızıntı ·
+   huni. Metin düşüşü data-t düzeninin aynısı: strings[dil][k] doluysa
+   panelinki, boşsa varsayılan (93 anahtarın TÜMÜ strings.en'de var,
+   hiçbiri strings.tr'de yok — TR kaynağı markup, ölçüldü).
+
+   AKIŞ STATİK DOĞUYOR: eski #flow tamamen JS'le kuruluyordu (IN/OUT/
+   STEPS haritaları kodda; teller getBoundingClientRect'le çizilip rAF
+   paketleriyle canlandırılıyordu) — bot kanal/adım/aksiyon adlarının
+   HİÇBİRİNİ görmüyordu. Üç kolonun içeriği artık derlemede basılıyor;
+   tel+paket animasyonu giydirme turuna. "Canlı iş akışı" şeridi,
+   "N talep işlendi" sayacı ve "Kaydırdıkça akış çalışır" satırı
+   TAŞINMADI: statik sayfada sahte canlılık iddiası olur (perdenin
+   sahte-dolum kararıyla aynı ilke). Sektör bağlama da taşınmadı —
+   eski sayfa doğrudan açılınca zaten 'genel' basıyordu; statik hâl o
+   varsayılanın aynısı (giriş google/seo/meta/site, çıkış esnaf seti).
+
+   SIZINTI SAHNESİ: metnin tamamı (kanallar, 4 sızıntı kartı, aşamalar,
+   maliyet çubukları) statik; canvas partikülleri ve çubuk dolum
+   animasyonu giydirmeye. Çubuklar animasyonun SON hâliyle basılır
+   (Önce %100 · Sonra %46 — eski render()'ın vardığı değerler).
+
+   HUNİ = SAYFANIN ADASI (S-TE deseni): iskelet ve varsayılan rakamlar
+   DERLEMEDE basılır (src/huni.mjs — testli, T1), JS yalnız kaydırıcı
+   dinler ve değer yazar; açılışta sıfır iş. JS kapalıyken sayfa
+   varsayılan rakamlarla anlamlı durur. */
+import { icerik, T, suz, type Dil } from '../icerik';
+import { DEG, huni, fmt } from '../huni.mjs';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
+
+/* Akış içerik setleri — kaynaktan (flowKur IN/OUT/STEPS), 'genel'
+   varsayılanı: giriş google/seo/meta/site, çıkış 'esnaf' seti. Kodda
+   sabittiler, panel zaten ezemiyordu; davranış değişmedi. */
+const GELEN = dil === 'en'
+  ? [['Google Ads', 'search'], ['Organic search', 'SEO'], ['Instagram DM', 'Meta'], ['Web form', 'site']]
+  : [['Google Ads', 'arama'], ['Organik arama', 'SEO'], ['Instagram DM', 'Meta'], ['Web formu', 'site']];
+const ADIMLAR = dil === 'en'
+  ? [['Enquiry read', '0.3s'], ['Intent extracted', '0.6s'], ['Matched to pricing', '0.9s'], ['Reply sent', '1.2s'], ['CRM + reminder', '1.4s']]
+  : [['Talep okundu', '0,3 sn'], ['Niyet çıkarıldı', '0,6 sn'], ['Fiyat/kapsam eşleşti', '0,9 sn'], ['Yanıt gönderildi', '1,2 sn'], ['CRM + hatırlatma', '1,4 sn']];
+const CIKAN = dil === 'en'
+  ? [['Booked', 'calendar'], ['Price range', 'instant'], ['Handover', 'special'], ['Filtered', 'out of area']]
+  : [['Randevu yazıldı', 'takvim'], ['Fiyat aralığı', 'anında'], ['Sana devir', 'özel iş'], ['Elendi', 'bölge dışı']];
+
+/* Bir gün zaman çizelgesi: saatler markup sabitiydi (data-t YOK). */
+const GUN: [string, string, string][] = [
+  ['02:41', m('gn3', 'Sen uyurken talep geldi.'), m('gn4', "WhatsApp'tan yazdı. Ajan okudu, niyeti çıkardı, fiyat aralığını verdi ve takvimden uygun saati önerdi. On bir saniye sürdü.")],
+  ['07:00', m('gn5', 'Sabah özeti hazır.'), m('gn6', 'Gece ne oldu, bugün kim seni bekliyor, hangi iş kimde bekliyor. Tek ekran, üç dakika.')],
+  ['09:00', m('gn7', 'Sessizleşenlere takip gitti.'), m('gn8', 'Teklif gönderildi ama dönmedi diye kenarda duran altı kişiye, sen hiçbir şey yapmadan hatırlatma çıktı.')],
+  ['13:30', m('gn9', 'Randevuya gelmeyene mesaj düştü.'), m('gna', 'İptal değil, yeniden planlama. Boşa çıkan saat aynı gün başkasına açıldı.')],
+  ['17:00', m('gnb', 'Hangi kanal kaç iş getirdi, görünüyor.'), m('gnc', 'Tahmin değil, rakam. Bir sonraki ayın bütçesi buna bakarak dağıtılıyor.')],
+  [m('gnd', 'Sonrası'), m('gne', 'Geriye yalnız senin yapabileceğin iş kaldı.'), m('gnf', 'Görüşmeye girmek, işi kurgulamak, fiyatı savunmak. Ötekilerin hepsi zaten oldu.')],
+];
+
+/* Sızıntı kartları: sorun (b) + belirti (i) + çözüm (fix). */
+const SIZINTI = [
+  [m('sz7', 'Teklif sonrası kayboldu'), m('szm', 'gönderildi, sonra sessizlik'), m('szq', 'otomatik takip dizisi')],
+  [m('sz8', 'Randevuya gelmedi'), m('szn', 'gün geldi, kimse aramadı'), m('szr', 'kendiliğinden hatırlatma')],
+  [m('sz9', 'Takip edilmedi'), m('szo', 'sırada kaldı, kimse dönmedi'), m('szs', 'tek hatta toplandı')],
+  [m('sza', 'Cevapsız kaldı'), m('szp', 'gece yazdı, sabah unutuldu'), m('szt', 'ajan saniyede yanıtlar')],
+];
+const KANALLAR = [m('szh', 'Google Ads'), m('szi', 'Organik arama'), m('szj', 'Meta'),
+  m('szk', 'WhatsApp'), m('szl', 'Web formu')];
+const ASAMALAR = [m('sz4', 'Keşif'), m('sz5', 'Değerlendirme'), m('sz6', 'Karar')];
+
+/* Huni varsayılanları — kaynağın markup değerleri; rakamlar DERLEMEDE
+   aynı modülle hesaplanır, ada açılışta hiçbir şey yeniden yazmaz. */
+const V0 = 60, YUZDE = [18, 22, 30, 15], IDX5 = 13;
+const { kademe, kacan } = huni(V0, YUZDE);
+const hsEtiket = [m('hs9', 'gelen'), m('hs5', 'Cevapsız kalan'), m('hs6', 'Takip edilmeyen'),
+  m('hs7', 'Teklif sonrası sessizleşen'), m('hsa', 'konuşmaya kalan')];
+const KAYDIRICI = [
+  { id: 1, ad: m('hs5', 'Cevapsız kalan'), deger: YUZDE[0] },
+  { id: 2, ad: m('hs6', 'Takip edilmeyen'), deger: YUZDE[1] },
+  { id: 3, ad: m('hs7', 'Teklif sonrası sessizleşen'), deger: YUZDE[2] },
+  { id: 4, ad: m('hs8', 'Randevuya gelmeyen'), deger: YUZDE[3] },
+];
+---
+<section class="giris">
+  <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
+  <h1 set:html={suz(m('s8h', 'Hazır bot değil.<br><span class="thin">Senin işini öğrenen ajan.</span>'), ['br', 'span.thin'])} />
+  <p class="lede">{m('s8p', 'Her kanal tek bir merkeze bağlanır. Ajan gelen talebi karşılar, eler, yönlendirir — sonuç elinde hazır olarak durur.')}</p>
+</section>
+
+{/* ---- AKIŞ MANTIĞI (statik) ---- */}
+<div class="akis3">
+  <div class="akol">
+    <p class="akbas">{m('flc1', 'Gelen')}</p>
+    {GELEN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
+  </div>
+  <div class="akol beyin">
+    <p class="akbas">{m('flc2', 'Ajan')}</p>
+    <div class="ajan-kart">
+      <p class="ajan-ad"><b>{m('flb', 'QANATONE Ajanı')}</b>
+        <span>{m('flbs', 'Sınıflandır · Ele · Yönlendir')}</span></p>
+      <ol>
+        {ADIMLAR.map(([ad, sure]) => <li><span>{ad}</span><em>{sure}</em></li>)}
+      </ol>
+    </div>
+  </div>
+  <div class="akol">
+    <p class="akbas">{m('flc3', 'Çıkan')}</p>
+    {CIKAN.map(([ad, alt]) => <p class="adugum"><b>{ad}</b><span>{alt}</span></p>)}
+  </div>
+</div>
+
+{/* ---- DOĞRU MODEL ---- */}
+<div class="blok">
+  <p class="kicker">{m('mf0', 'Doğru model')}</p>
+  <h2 set:html={suz(m('mf1', 'Yapay zekâ satmıyoruz.<br><em>Geri kazandığın süreci satıyoruz.</em>'), ['br', 'em'])} />
+  <p class="aciklama">{m('mf2', 'Teknolojinin kendisi ham hâliyle para ödenecek bir şey değil. Kazanç, teklif sonrası kaybolan müşterinin yeniden takip edilmesinden, randevuya gelmeyenin hatırlatılmasından, dağınık satışın tek hatta toplanmasından ve tekrar eden işin sisteme dönmesinden çıkar. Biz önce şirketini inceler, sonra doğru yatırımı doğru alana yönlendiririz.')}</p>
+  <ol class="uc-adim">
+    <li><b>01 · {m('mf3', 'Niş')}</b><p>{m('mf4', 'İşini sektör rasyolarıyla ve elimizdeki veri setiyle inceleriz. Hangi kalem para kazandırıyor, hangisi sızdırıyor — önce bunu görürüz.')}</p></li>
+    <li><b>02 · {m('mf5', 'Satış')}</b><p>{m('mf6', 'Rakamlarını ölçer, tekrar tekrar yaşadığın ve para kaybettiren problemi buluruz. Sonra onu net bir teklife çeviririz.')}</p></li>
+    <li><b>03 · {m('mf7', 'Otomasyon')}</b><p>{m('mf8', 'En sona kalır, çünkü otomasyon bir ürün değil — çözümü teslim etme biçimimiz. Sıra bozulursa araç alırsın, sonuç almazsın.')}</p></li>
+  </ol>
+  <ul class="kazanc">
+    <li><b>{m('mf9', 'Teklif sonrası kaybolan müşteri')}</b><i>{m('mfa', 'yeniden takibe alınır')}</i></li>
+    <li><b>{m('mfb', 'Randevuya gelmeyen kişi')}</b><i>{m('mfc', 'kendiliğinden hatırlatılır')}</i></li>
+    <li><b>{m('mfd', 'Dağınık satış süreci')}</b><i>{m('mfe', 'tek hatta toplanır')}</i></li>
+    <li><b>{m('mff', 'Tekrar eden iş')}</b><i>{m('mfg', 'sisteme döner ve ölçeklenir')}</i></li>
+  </ul>
+  <p class="kapanis" set:html={suz(m('mfh', 'Ürettiğimiz aracı değil, <em>işletmende oluşan sonucu</em> satıyoruz.'), ['em'])} />
+  {/* EN adası ana sayfa henüz yok — kesmeye kadar kök /en'e (bilinçli kaçak, envanter deseni) */}
+  <p class="orta"><a class="dugme" href={dil === 'en' ? '/en#iletisim' : `${B}/#iletisim`}>{m('mfi', 'Şirketini birlikte inceleyelim')}</a></p>
+</div>
+
+{/* ---- BİR GÜN ---- */}
+<div class="blok">
+  <p class="kicker">{m('gn0', 'Kurulumdan otuz gün sonra')}</p>
+  <h2>{m('gn1', 'Bir gün böyle geçiyor.')}</h2>
+  <p class="aciklama">{m('gn2', 'Özellik saymayacağız. Sistem kurulduktan sonraki sıradan bir salı gününü anlatacağız — saat saat.')}</p>
+  <ol class="gun">
+    {GUN.map(([saat, bas, metin]) => (
+      <li><span class="saat">{saat}</span>
+        <div><b>{bas}</b><p>{metin}</p></div></li>
+    ))}
+  </ol>
+</div>
+
+{/* ---- SIZINTI ---- */}
+<div class="blok">
+  <p class="kicker">{m('sz0', 'Kanıt')}</p>
+  <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
+  <p class="rozet"><b>{m('sz2', 'Aynı bütçe')}</b> · <i>{m('sz3', 'değişmeyen giriş')}</i></p>
+  <p class="cipler">{KANALLAR.map((k) => <span class="cip">{k}</span>)}</p>
+  <ul class="sizinti">
+    {SIZINTI.map(([sorun, belirti, cozum]) => (
+      <li><b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
+    ))}
+  </ul>
+  {/* Ok METİN DEĞİL SVG: U+2192 hiçbir font yüzünde yok (F1c, S-SE dersi). */}
+  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama">{i > 0 &&
+      <svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{a}</span>)}
+    <span class="asama kalan"><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>{m('szb', 'kalan müşteri')}</span></p>
+  <p class="vurgu">{m('szu', 'Bütçe aynı. Sorun burada.')}</p>
+  <div class="maliyet">
+    <p class="akbas">{m('szc', 'Müşteri başına maliyet')}</p>
+    <p class="cubuk"><i>{m('szd', 'Önce')}</i><span class="bar once" /></p>
+    <p class="cubuk"><i>{m('sze', 'Sonra')}</i><span class="bar sonra" /></p>
+    <p class="cubuk-alt">{m('szf', 'aynı bütçe, daha çok müşteri')}</p>
+  </div>
+  <p class="kapanis" set:html={suz(m('szg', 'Yeni bütçe değil, <em>kaçan müşteri</em> geri geldi.'), ['em'])} />
+</div>
+
+{/* ---- HUNİ (ada) ---- */}
+<div class="blok" id="huni">
+  <p class="kicker">{m('hs0', 'Senin rakamınla')}</p>
+  <h2 set:html={suz(m('hs1', 'Peki <em>senin</em> huninden ne akıyor?'), ['em'])} />
+  <p class="aciklama">{m('hs2', 'Kaydırıcıları kendi işine göre çek. Aşağıdaki sayı bizim iddiamız değil — senin girdiğin rakamların aritmetiği.')}</p>
+  <div class="hgrid">
+    <div class="girdiler">
+      <label class="hrow"><span><b>{m('hs3', 'Ayda gelen talep')}</b><em id="hnV0">{fmt(V0, dil)}</em></span>
+        <input type="range" id="hnR0" min="5" max="400" step="5" value={V0}
+          aria-label={m('hs3', 'Ayda gelen talep')} /></label>
+      <p class="ara">{m('hs4', 'Bunların kaçı yolda kalıyor?')}</p>
+      {KAYDIRICI.map((k) => (
+        <label class="hrow"><span><b>{k.ad}</b><em id={`hnV${k.id}`}>{k.deger}</em></span>
+          <input type="range" id={`hnR${k.id}`} min="0" max="60" step="1" value={k.deger}
+            aria-label={k.ad} /></label>
+      ))}
+      <p class="ara">{m('hsf', 'Bir işin sana ortalama değeri')}</p>
+      <label class="hrow"><span><b>{m('hsg', 'Ortalama iş değeri')}</b><em id="hnV5">₺{fmt(DEG[IDX5], dil)}</em></span>
+        <input type="range" id="hnR5" min="0" max="28" step="1" value={IDX5}
+          aria-label={m('hsg', 'Ortalama iş değeri')} /></label>
+    </div>
+    <div class="cikti">
+      <ol class="hakis" id="hnAkis">
+        {kademe.map((v, i) => (
+          <li><i>{hsEtiket[i]}</i><b>{fmt(v, dil)}</b>
+            <span class="hbar"><u style={`width:${Math.max(2, v / V0 * 100)}%`} /></span></li>
+        ))}
+      </ol>
+      <p class="hoz"><span>{m('hsb', 'Ayda elinden kaçan')}</span><b id="hnKacan">{fmt(kacan, dil)}</b>
+        <span>{m('hsc', 'Yılda')}</span><b id="hnYil">{fmt(kacan * 12, dil)}</b></p>
+      <p class="hpara"><span>{m('hsh', 'Ciro olarak, ayda')}</span><b id="hnPara">₺{fmt(kacan * DEG[IDX5], dil)}</b>
+        <span>{m('hsi', 'yılda')}</span><b id="hnParaY">₺{fmt(kacan * DEG[IDX5] * 12, dil)}</b></p>
+      <p class="hnot">{m('hsd', 'Bu bizim vaadimiz değil, senin rakamın. Ne kadarının kapanabileceğine keşifte birlikte bakarız.')}</p>
+      <p class="orta"><a class="dugme" href={dil === 'en' ? '/en#lead' : `${B}/#lead`}>{m('hse', 'Rakamlarımı konuşalım')}</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ADA — yalnız huninin işi. Açılışta SIFIR yeniden yazım: iskelet ve
+     varsayılan rakamlar derlemede aynı modülle basıldı; burada yalnız
+     kaydırıcı dinlenir. JS koşmazsa sayfa varsayılanlarla anlamlı. */
+  import { DEG, huni, fmt } from '../huni.mjs';
+  const al = (id: string) => document.getElementById(id);
+  const R = [0, 1, 2, 3, 4, 5].map(i => al('hnR' + i) as HTMLInputElement | null);
+  if (R.every(Boolean)) {
+    const dil = document.documentElement.lang === 'en' ? 'en' : 'tr';
+    const akis = [...(al('hnAkis')?.children || [])] as HTMLElement[];
+    const yaz = () => {
+      const T = +R[0]!.value;
+      const p = [1, 2, 3, 4].map(i => +R[i]!.value);
+      const dg = DEG[+R[5]!.value] || 0;
+      al('hnV0')!.textContent = fmt(T, dil);
+      p.forEach((y, i) => al('hnV' + (i + 1))!.textContent = String(y));
+      al('hnV5')!.textContent = '₺' + fmt(dg, dil);
+      const { kademe, kacan } = huni(T, p);
+      akis.forEach((li, i) => {
+        const b = li.querySelector('b'), u = li.querySelector('u');
+        if (b) b.textContent = fmt(kademe[i], dil);
+        if (u) (u as HTMLElement).style.width = (T ? Math.max(2, kademe[i] / T * 100) : 0) + '%';
+      });
+      al('hnKacan')!.textContent = fmt(kacan, dil);
+      al('hnYil')!.textContent = fmt(kacan * 12, dil);
+      al('hnPara')!.textContent = '₺' + fmt(kacan * dg, dil);
+      al('hnParaY')!.textContent = '₺' + fmt(kacan * dg * 12, dil);
+    };
+    R.forEach(r => r!.addEventListener('input', yaz));
+  }
+</script>
+
+<style>
+  .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
+    font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .blok { margin-top: 46px; }
+  .kicker { color: var(--red-soft); font-family: ui-monospace, monospace;
+    font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .blok h2 { font-size: 1.35rem; margin: 0 0 10px; }
+  .aciklama { color: var(--tx2); font-size: .95rem; max-width: 60ch; }
+  .kapanis { margin-top: 18px; font-size: 1.02rem; }
+  .orta { margin-top: 18px; text-align: center; }
+
+  .akis3 { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 14px;
+    margin-top: 26px; }
+  @media (max-width: 700px) { .akis3 { grid-template-columns: 1fr; } }
+  .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
+    letter-spacing: .08em; margin-bottom: 8px; }
+  .adugum { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 8px; display: flex; justify-content: space-between; gap: 8px; }
+  .adugum b { font-size: .9rem; }
+  .adugum span { color: var(--tx3); font-size: .8rem; }
+  .ajan-kart { border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .ajan-ad b { display: block; font-size: .95rem; }
+  .ajan-ad span { color: var(--tx3); font-size: .8rem; }
+  .ajan-kart ol { list-style: none; margin: 10px 0 0; padding: 0; }
+  .ajan-kart li { display: flex; justify-content: space-between; gap: 8px;
+    padding: 5px 0; border-top: 1px solid var(--line); font-size: .85rem; }
+  .ajan-kart li em { color: var(--tx3); font-family: ui-monospace, monospace;
+    font-style: normal; font-size: .78rem; }
+
+  .uc-adim { list-style: none; display: grid; gap: 12px; margin: 18px 0 0; padding: 0;
+    grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 700px) { .uc-adim { grid-template-columns: 1fr; } }
+  .uc-adim li { border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .uc-adim b { font-size: .9rem; color: var(--red-soft); }
+  .uc-adim p { color: var(--tx2); font-size: .88rem; margin-top: 6px; }
+  .kazanc { list-style: none; display: grid; gap: 8px 18px; margin: 16px 0 0; padding: 0;
+    grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 700px) { .kazanc { grid-template-columns: 1fr; } }
+  .kazanc b { font-size: .9rem; }
+  .kazanc i { color: var(--tx3); font-size: .85rem; margin-left: 6px; }
+
+  .gun { list-style: none; margin: 18px 0 0; padding: 0; }
+  .gun li { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .saat { font-family: ui-monospace, monospace; color: var(--red-soft);
+    font-size: .85rem; min-width: 58px; }
+  .gun b { font-size: .95rem; }
+  .gun p { color: var(--tx2); font-size: .88rem; margin-top: 4px; }
+
+  .rozet { margin-top: 8px; font-size: .85rem; }
+  .rozet i { color: var(--tx3); }
+  .cipler { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .cip { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+    font-size: .8rem; color: var(--tx2); }
+  .sizinti { list-style: none; display: grid; gap: 10px; margin: 16px 0 0; padding: 0;
+    grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 700px) { .sizinti { grid-template-columns: 1fr; } }
+  .sizinti li { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .sizinti b { display: block; font-size: .9rem; }
+  .sizinti i { color: var(--tx3); font-size: .82rem; }
+  .cozum { display: block; margin-top: 8px; color: var(--red-soft); font-size: .84rem; }
+  .asamalar { margin-top: 16px; color: var(--tx2); font-size: .88rem;
+    display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+  .asama { display: inline-flex; align-items: center; gap: 10px; }
+  .ok { width: 14px; height: 14px; color: var(--tx3); flex: none; }
+  .kalan { color: var(--red-soft); }
+  .vurgu { margin-top: 6px; color: var(--tx3); font-size: .85rem; }
+  .maliyet { margin-top: 18px; max-width: 420px; }
+  .cubuk { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+  .cubuk i { color: var(--tx3); font-size: .8rem; min-width: 44px; }
+  .bar { display: block; height: 10px; border-radius: 6px; background: var(--line); }
+  .bar.once { width: 100%; background: rgba(239, 35, 60, .45); }
+  .bar.sonra { width: 46%; background: rgba(239, 35, 60, .85); }
+  .cubuk-alt { color: var(--tx3); font-size: .8rem; margin-top: 8px; }
+
+  .hgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px; }
+  @media (max-width: 820px) { .hgrid { grid-template-columns: 1fr; } }
+  .hrow { display: block; margin-top: 12px; }
+  .hrow > span { display: flex; justify-content: space-between; font-size: .88rem; }
+  .hrow em { font-style: normal; font-family: ui-monospace, monospace;
+    color: var(--red-soft); }
+  .hrow input { width: 100%; accent-color: var(--red-soft); }
+  .ara { color: var(--tx3); font-size: .8rem; margin-top: 16px; }
+  .hakis { list-style: none; margin: 0; padding: 0; }
+  .hakis li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
+    padding: 7px 0; border-top: 1px solid var(--line); font-size: .86rem; }
+  .hakis i { color: var(--tx2); }
+  .hakis b { font-family: ui-monospace, monospace; }
+  .hbar { grid-column: 1 / -1; display: block; height: 5px; border-radius: 4px;
+    background: var(--line); overflow: hidden; }
+  .hbar u { display: block; height: 100%; background: rgba(239, 35, 60, .7); }
+  .hoz, .hpara { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
+    margin-top: 14px; font-size: .88rem; }
+  .hoz span, .hpara span { color: var(--tx3); }
+  .hoz b, .hpara b { font-family: ui-monospace, monospace; }
+  .hpara b:first-of-type { font-size: 1.3rem; color: var(--red-soft); }
+  .hnot { color: var(--tx3); font-size: .82rem; margin-top: 12px; }
+</style>
