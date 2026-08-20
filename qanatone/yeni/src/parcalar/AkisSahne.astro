@@ -1,0 +1,165 @@
+---
+/* K7 · AKIŞ SAHNESİ (#flStage) — hizmet detayının kaydırma sahnesi.
+   Kaynak: kök index.html · markup flowStage 7630-7636 · CSS 697-714 +
+   715-718 (mobil) + 869-874 (tik) · sürücü draw 8730-8747, ST 9006-9007.
+   Hizmetler: ai-ajan, otomasyon (fam:'flow', det.flow).
+
+   DİKKAT — bu sahnenin düğümü `.fln`, ana sayfa/otomasyon akışının
+   düğümü `.fnode`. İki ayrı sahne: TİK yalnız BURADA var (kaynak
+   871-874), `.fnode`'da yok. 21 Ağu künye düzeltmesinin kaynağı bu
+   karışıklıktı.
+
+   SÜRÜCÜ: kaynağın ST pinsiz dalı (bottom 98% → bottom 42%), huni
+   sahnesindeki birebir CSS yazımıyla (entry calc(100% + Nvh)).
+   Eşik: düğüm i yanar → p ≥ (i+.35)/n  (8734, markup'ta --i/--n).
+
+   İŞARETÇİ (.flpk) — kaynakta gBCR ile ilk ve son düğümün merkezleri
+   ölçülüp aralarında sürülüyordu (8736-8744). Burada aynı konum
+   DÜZEN KURALLARINDAN türer (göz kararı sabit YOK): düğümler flex:1
+   eşit genişlikte, aralarında 14px gap; ilk merkez = dolgu + w/2,
+   son merkez = dolgu + iç − w/2, w = (iç − (n−1)·14px)/n. Yatayda
+   left, mobil dikey kolonda top sürülür (kaynak 716-718 ile aynı
+   kırılım), sabit sol konum 27px kaynağın kendi değeri (8739).
+   Görünürlük: p>.02 && p<.985 (8743).
+
+   TABAN = TAMAMLANMIŞ (kaynak REDUCE dalı draw(1), 8972). İçerik
+   JS'siz tam; ada JS'i sıfır. */
+import { T, type Dil } from '../icerik';
+import Ikon from './Ikon.astro';
+interface Props { flow: any; dil: Dil }
+const { flow, dil } = Astro.props;
+const rows = (flow?.rows || []) as any[];
+---
+{rows.length > 0 && (
+<div class="sdsec">
+  <span class="mono">{dil === 'en' ? 'The flow — comes alive on scroll' : 'Akış — kaydırdıkça canlanır'}</span>
+  <div class="flstage" style={`--n:${rows.length}`}>
+    {rows.map((r, i) => (
+      <div class="fln" style={`--i:${i}`}>
+        <span class="ni"><Ikon ad={r.i} /></span>
+        <b>{T(r.t, dil)}</b>
+        <span>{T(r.d, dil)}</span>
+      </div>
+    ))}
+    <i class="flpk" aria-hidden="true" />
+  </div>
+  {flow.note && <div class="fnnote">{T(flow.note, dil)}</div>}
+</div>
+)}
+
+<style>
+  /* --- kap ve düğümler: kaynak 697-714 birebir (Manrope→gövde F1) --- */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec > .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .flstage { position: relative; display: flex; gap: 14px; border: 1px solid var(--line);
+    border-radius: 18px; background: var(--card); padding: clamp(20px, 3vw, 32px);
+    --fp: clamp(20px, 3vw, 32px); }
+  .flstage::before { content: ''; position: absolute; left: 7%; right: 7%; top: 50%;
+    height: 1px; background: linear-gradient(90deg, transparent, rgba(239, 35, 60, .35), transparent); }
+  .fln { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column;
+    gap: 9px; padding: 16px 14px; border-radius: 14px; background: #0c0c0d;
+    --lit: clamp(0, (var(--flp, 1) - (var(--i, 0) + .35) / var(--n, 4)) * 24, 1);
+    opacity: calc(.55 + .45 * var(--lit));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .4) calc(var(--lit) * 100%), var(--line)); }
+  .fln .ni { width: 34px; height: 34px; border-radius: 10px; display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--red-dim, rgba(239, 35, 60, .15)) calc(var(--lit) * 100%), rgba(255, 255, 255, .05));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .45) calc(var(--lit) * 100%), var(--line));
+    color: color-mix(in srgb, var(--red-soft) calc(var(--lit) * 100%), var(--tx3)); }
+  .fln .ni :global(svg) { width: 16px; height: 16px; }
+  .fln b { font-size: .9rem; font-weight: 600; letter-spacing: -.01em; }
+  .fln > span:last-child { font-size: .74rem; color: var(--tx4); line-height: 1.5; }
+  /* tik — kaynak 871-874. Kaynakta content:'✓' (U+2713) idi; F1c dersi
+     gereği font yüzüne güvenilmez, kaynağın kendi IC.check yolu
+     (5595: "m5 13 4 4L19 7", stroke-width 2.6) beyaz SVG olarak
+     basılıyor. Ölçü ve renkler kaynak değerleri. */
+  .fln::after { content: ''; position: absolute; top: 10px; right: 10px; width: 17px;
+    height: 17px; border-radius: 50%;
+    background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4L19 7'/%3E%3C/svg%3E") center / 9px 9px no-repeat;
+    opacity: var(--lit); transform: scale(calc(.4 + .6 * var(--lit))); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+
+  /* --- sürücü: huni sahnesiyle aynı, kaynağın ST aralığı birebir --- */
+  @property --flp { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .flstage { animation: flp-surus linear both; animation-timeline: view();
+      animation-range: entry calc(100% + 2vh) entry calc(100% + 58vh); }
+  }
+  @keyframes flp-surus { from { --flp: 0; } to { --flp: 1; } }
+
+  /* --- işaretçi: konum düzen kurallarından ÖLÇÜLÜ türer --- */
+  .flpk { position: absolute; z-index: 2; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--red); transform: translate(-50%, -50%); font-style: normal;
+    pointer-events: none;
+    /* iç genişlik ve düğüm genişliği (flex:1 eşit, gap 14px) */
+    --ic: calc(100% - 2 * var(--fp));
+    --w: calc((var(--ic) - (var(--n, 4) - 1) * 14px) / var(--n, 4));
+    left: calc(var(--fp) + var(--w) / 2 + var(--flp, 1) * (var(--ic) - var(--w)));
+    top: 50%;
+    opacity: calc(clamp(0, (var(--flp, 1) - .02) * 200, 1)
+      * clamp(0, (.985 - var(--flp, 1)) * 200, 1)); }
+
+  /* gölge H14: kaynak .flpk glow'u (713) yalnız masaüstü */
+  @media (min-width: 901px) { .flpk { box-shadow: 0 0 14px var(--red-glow, rgba(239, 35, 60, .5)); } }
+
+  /* --- mobil: kaynak 715-718 + 847 birebir; işaretçi dikey sürülür --- */
+  @media (max-width: 760px) {
+    .flstage { flex-direction: column; padding: 16px 14px; --fp: 16px; }
+    .flstage::before { left: 27px; right: auto; top: 8%; bottom: 8%; width: 1px;
+      height: auto;
+      background: linear-gradient(180deg, transparent, rgba(239, 35, 60, .35), transparent); }
+    /* dikey kolonda düğüm yükseklikleri EŞİT DEĞİL (içerik uzunluğu
+       değişir) — kaynak da bu yüzden gBCR ölçüyordu. Yerlisi: ilk ve
+       son düğümün merkezleri arasında sürülen yüzde; kap yüksekliği
+       yerine düğüm kutularının kendi ölçüsünü kullanan tek yol
+       anchor değil, ada ölçümü — bu yüzden mobilde işaretçi kaynak
+       davranışını korumak için ADA tarafından hizalanır (aşağıdaki
+       betik; ölçüm rAF DIŞINDA). */
+    .flpk { left: 27px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .flstage { animation: none; } }
+</style>
+
+<script>
+  /* İŞARETÇİ DİKEY HİZASI — yalnız mobil kolonda gerekli: düğüm
+     yükseklikleri içerik uzunluğuna göre değişir (klasör telleri
+     dersi: "eşit aralıklı" varsayımı yanlış). Yatayda flex:1 eşit
+     genişlik garantisi olduğu için CSS yeter, ada iş yapmaz.
+     Ölçüm rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready. */
+  const sahne = document.querySelector('.flstage') as HTMLElement | null;
+  if (sahne) {
+    const pk = sahne.querySelector('.flpk') as HTMLElement | null;
+    const hizala = () => {
+      if (!pk) return;
+      const kolon = getComputedStyle(sahne).flexDirection === 'column';
+      if (!kolon) { pk.style.removeProperty('--y0'); pk.style.removeProperty('--y1'); return; }
+      const n = sahne.querySelectorAll('.fln');
+      if (!n.length) return;
+      const rs = sahne.getBoundingClientRect();
+      const r0 = n[0].getBoundingClientRect();
+      const rL = n[n.length - 1].getBoundingClientRect();
+      /* SAPMA (adıyla, ölçülmüş): kaynak y0'ı BORDER kutusundan
+         ölçüp `top`a yazıyordu; `top` ise PADDING kutusundan ölçülür,
+         yani nokta düğüm merkezinden 1px aşağı kayıyordu (gerçek eski
+         sitede ölçüldü: yatay +1,00 · dikey +0,99). Kusur taşınmadı —
+         kenarlık payı düşülüyor, nokta tam merkeze oturuyor. Yatay
+         daldaki CSS türevi de zaten doğru hizalıyor; iki dal tutarlı. */
+      const kb = parseFloat(getComputedStyle(sahne).borderTopWidth) || 0;
+      const ust = rs.top + kb;
+      pk.style.setProperty('--y0', (r0.top - ust + r0.height / 2).toFixed(1) + 'px');
+      pk.style.setProperty('--y1', (rL.top - ust + rL.height / 2).toFixed(1) + 'px');
+      pk.style.top = 'calc(var(--y0) + var(--flp, 1) * (var(--y1) - var(--y0)))';
+    };
+    let rt: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(hizala, 180); });
+    document.fonts?.ready?.then(hizala);
+    /* İlk ölçümden sonra düzen bir kez daha oturuyordu (ölçüldü: 0,96 px
+       sabit kayma). Sahnenin KENDİ yüksekliğini izlemek bunu kapatır;
+       ResizeObserver düzen sonrası çalışır, rAF döngüsü değil. */
+    if ('ResizeObserver' in window) new ResizeObserver(hizala).observe(sahne);
+    hizala();
+  }
+</script>
