@@ -1,0 +1,231 @@
+/* ============================================================
+   NAV + TOPFADE + MOBİL MENÜ (Tasarım turu A1 — künye birebir)
+   Kaynak: kök index.html CSS 255-336 (nav ailesi) · 339-348 (.btn
+   ölçüleri, CTA için) · 2522-2531 + 2579-2598 (mobil) · 2533-2576
+   (#mmenu + mmrow). Markup 4632-4680. Değerler KÜNYEDEN — yaklaşık
+   kurulmadı (TASARIM-TURU-GOREV A1/A3 kuralı).
+
+   Sınıf eşlemesi (göç adlandırması nv- ailesi; H1/H11 önek sözlüğüne
+   nv- eklendi):
+     nav→.nv-bar · .navin→.nv-ic · .topfade→.nv-fade · .logo→.nv-logo
+     .nlinks→.nv-links · .ndd→.nv-dd · .ndt→.nv-dt · .ndp→.nv-dp
+     .ndp-g→.nv-dpg · .ndi→.nv-di · .ni→.nv-din · .nds→.nv-dis
+     .ndf→.nv-df · .nright→.nv-right · .langs→.nv-lang
+     .burger→.nv-burger · #mmenu→.nv-m (alt: nv-mtop nv-mx nv-mlinks
+     nv-mlg nv-mcta) · nav CTA (.btn.btn-p.btn-sm)→.nv-cta
+
+   BİLİNÇLİ SAPMALAR (her biri gerekçeli, unutma değil):
+   1. stuck mekanizması: kaynak scroll dinleyicisiydi (kök 9296,
+      scrollY>40) — H12 kaydırma dinleyicisini yasaklıyor; eşik ve
+      görsel değerler AYNEN (40px · padding 20→12 · bg .86 · .4s
+      var(--e)), tetik IO nöbetçisiyle (Nav.astro'daki 40px nöbetçi).
+   2. backdrop-filter blur(20px), logo kızıl haresi (drop-shadow) ve
+      .nv-ic gölgeleri YALNIZ masaüstü kapısında (H14: mobil bağlamda
+      filter/backdrop/gölge yasak); mobilde .nv-ic zemini daha opak
+      (.6→.92) — görev belgesinin "opak koyu şerit" alternatifi.
+   3. Manrope EMEKLİ (envanter/fontlar) → var(--f-govde); ölçüler
+      (boyut/ağırlık/aralık) künyeden aynen.
+   4. Açılır menü tetiği: kaynak JS'ti (hover+click, aria-expanded) —
+      burada :hover (hover:hover kapılı) + :focus-within, JS 0;
+      görsel değerler (15px boşluk, translateY(8px) scale(.98), .3s,
+      hover köprüsü ::before) aynen.
+   5. Burger/menü açılışı: kaynak JS class'ıydı — burada checkbox
+      (#nvAc) kardeş seçicisi, JS 0; MPA'da linke basınca sayfa
+      değiştiği için "menüyü kapat" JS'ine gerek kalmaz.
+   6. Dil düğmeleri buton değil BAĞLANTI: dil artık rota (SPA yok).
+   ============================================================ */
+
+/* görünmez ama erişilebilir (kaynak .vh) — checkbox bunu taşır */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+
+/* -- üst perde (255-258 birebir) -- */
+.nv-fade{position:fixed;top:0;left:0;right:0;height:110px;z-index:44;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,5,5,.92),rgba(5,5,5,.4) 55%,transparent);
+  -webkit-mask-image:linear-gradient(180deg,#000 42%,transparent);
+  mask-image:linear-gradient(180deg,#000 42%,transparent)}
+
+/* -- çubuk (259-265 birebir) -- */
+.nv-bar{position:fixed;top:0;left:0;right:0;z-index:50;padding:20px var(--gut);
+  transition:padding .4s var(--e)}
+.nv-bar.stuck{padding:12px var(--gut)}
+.nv-ic{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:20px;padding:11px 12px 11px 20px;border-radius:999px;
+  background:rgba(10,10,10,.92);
+  border:1px solid var(--line);transition:.4s var(--e)}
+.nv-bar.stuck .nv-ic{background:rgba(8,8,8,.86);border-color:var(--line2)}
+
+/* -- logo (266-272; hare masaüstünde) -- */
+.nv-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;text-decoration:none}
+.nv-logo i{display:block;font-style:normal;flex:none;line-height:0}
+.nv-logo i img{height:29px;width:auto;display:block}
+.nv-logo b{font-family:var(--f-govde);font-size:1.06rem;font-weight:700;letter-spacing:-.04em;
+  color:var(--red-soft)}
+.nv-logo b span{color:var(--tx);font-weight:700}
+
+/* -- masaüstü bağlantıları (274-281) -- */
+.nv-links{display:flex;gap:30px;align-items:center}
+.nv-links>a{font-family:var(--f-govde);font-size:.92rem;font-weight:500;
+  letter-spacing:-.015em;color:var(--tx2);transition:color .26s;
+  position:relative;white-space:nowrap;text-decoration:none}
+.nv-links>a.here{color:var(--tx)}
+.nv-links>a.here::after{content:'';position:absolute;left:0;right:0;bottom:-7px;height:1.5px;
+  background:var(--red);border-radius:2px}
+
+/* -- açılır menü grupları: tetik + yüzen panel (283-321) -- */
+.nv-dd{position:relative}
+.nv-dt{display:flex;align-items:center;gap:5px;font-family:var(--f-govde);
+  font-size:.92rem;font-weight:500;letter-spacing:-.015em;color:var(--tx2);
+  transition:color .26s;white-space:nowrap;background:none;border:0;cursor:pointer}
+.nv-dt svg{width:13px;height:13px;opacity:.65;transition:transform .3s var(--e)}
+.nv-dp{position:absolute;top:calc(100% + 15px);left:50%;
+  transform:translateX(-50%) translateY(8px) scale(.98);
+  min-width:280px;padding:8px;border-radius:16px;border:1px solid var(--line2);
+  background:rgba(12,12,13,.97);
+  opacity:0;visibility:hidden;pointer-events:none;transition:.3s var(--e);z-index:60}
+.nv-dp::before{content:'';position:absolute;top:-17px;left:0;right:0;height:17px} /* hover köprüsü (296) */
+.nv-dd:focus-within .nv-dt{color:var(--tx)}
+.nv-dd:focus-within .nv-dt svg{transform:rotate(180deg)}
+.nv-dd:focus-within .nv-dp{opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0) scale(1)}
+.nv-dpg{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:530px}
+@media(max-width:1100px){.nv-dpg{width:330px;grid-template-columns:1fr}}
+.nv-di{display:flex;align-items:flex-start;gap:11px;padding:10px 11px;border-radius:11px;
+  transition:background .22s;text-decoration:none}
+.nv-din{width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--tx3);
+  transition:.24s var(--e)}
+.nv-din svg{width:14px;height:14px}
+.nv-di b{display:block;font-family:var(--f-govde);font-size:.82rem;
+  font-weight:600;letter-spacing:-.015em;color:var(--tx);line-height:1.32}
+.nv-dis{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:.7rem;color:var(--tx4);line-height:1.45;margin-top:2px}
+.nv-di em{font-style:normal;font-family:var(--f-tek);font-size:8.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--tx4);margin-top:3px;display:block}
+.nv-df{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:7px;
+  margin-top:4px;padding:9px;border-top:1px solid var(--line);
+  font-family:var(--f-tek);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--tx3);transition:color .22s;text-decoration:none}
+.nv-df svg{width:11px;height:11px}
+
+/* -- sağ küme: dil + CTA + burger (322-336) -- */
+.nv-right{display:flex;align-items:center;gap:10px}
+.nv-lang{display:flex;background:rgba(255,255,255,.05);border-radius:999px;padding:3px;gap:2px}
+.nv-lang a{padding:5px 10px;border-radius:999px;font-family:var(--f-tek);
+  font-size:9.5px;letter-spacing:.12em;color:var(--tx3);transition:.24s;text-decoration:none}
+.nv-lang a.on{background:rgba(255,255,255,.1);color:var(--tx)}
+/* CTA — kaynak .btn+.btn-p+.btn-sm ölçüleri (339-348) */
+.nv-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:10px 18px;border-radius:999px;font-size:.82rem;font-weight:600;
+  font-family:var(--f-govde);letter-spacing:-.01em;white-space:nowrap;
+  background:var(--red);color:#fff;text-decoration:none;transition:.3s var(--e)}
+.nv-burger{display:none;width:38px;height:34px;border-radius:9px;border:1px solid var(--line);
+  align-items:center;justify-content:center;cursor:pointer}
+.nv-burger i{position:relative;width:15px;height:1.5px;background:var(--tx);font-style:normal;
+  transition:.3s var(--e)}
+.nv-burger i::before,.nv-burger i::after{content:'';position:absolute;left:0;width:15px;height:1.5px;
+  background:var(--tx);transition:.3s var(--e)}
+.nv-burger i::before{top:-5px}.nv-burger i::after{top:5px}
+#nvAc:checked ~ .nv-bar .nv-burger i{background:transparent}
+#nvAc:checked ~ .nv-bar .nv-burger i::before{top:0;transform:rotate(45deg)}
+#nvAc:checked ~ .nv-bar .nv-burger i::after{top:0;transform:rotate(-45deg)}
+/* klavye: görünmez checkbox'ın odağı burger'de görünür */
+#nvAc:focus-visible ~ .nv-bar .nv-burger{outline:2px solid var(--red);outline-offset:2px}
+
+/* -- masaüstü süsleri tek kapıda (H14): blur, hare, gölgeler, hover -- */
+@media(min-width:981px) and (hover:hover) and (pointer:fine){
+  .nv-links>a:hover{color:var(--tx)}
+  .nv-dd:hover .nv-dt{color:var(--tx)}
+  .nv-dd:hover .nv-dt svg{transform:rotate(180deg)}
+  .nv-dd:hover .nv-dp{opacity:1;visibility:visible;pointer-events:auto;
+    transform:translateX(-50%) translateY(0) scale(1)}
+  .nv-di:hover{background:rgba(255,255,255,.05)}
+  .nv-di:hover .nv-din{background:var(--red-dim);border-color:rgba(239,35,60,.4);color:var(--red-soft)}
+  .nv-df:hover{color:var(--red-soft)}
+  .nv-cta:hover{background:#ff2f47;box-shadow:0 12px 40px -10px var(--red-glow);transform:translateY(-2px)}
+}
+@media(min-width:981px){
+  .nv-ic{background:rgba(10,10,10,.6);backdrop-filter:blur(20px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 12px 40px -18px rgba(0,0,0,.6)}
+  .nv-bar.stuck .nv-ic{background:rgba(8,8,8,.86)}
+  .nv-logo i{filter:drop-shadow(0 0 14px rgba(239,35,60,.4))}
+  .nv-dp{backdrop-filter:blur(18px);box-shadow:0 30px 70px -22px rgba(0,0,0,.75)}
+}
+
+/* -- mobil (2522-2531 + 2588-2591 birebir) -- */
+@media(max-width:980px){
+  .nv-links{display:none}
+  .nv-burger{display:flex;position:relative;z-index:71}
+}
+@media(max-width:900px){
+  .nv-ic{padding:8px 8px 8px 15px}
+  .nv-logo i img{height:25px}
+  .nv-logo b{font-size:.98rem}
+}
+@media(max-width:520px){
+  .nv-lang{display:none}
+}
+
+/* -- mobil tam ekran menü (2533-2576 birebir; open = checkbox) -- */
+.nv-m{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;
+  background:linear-gradient(180deg,#0b0b0c,#070708);
+  padding:calc(12px + env(safe-area-inset-top)) 20px calc(18px + env(safe-area-inset-bottom));
+  opacity:0;pointer-events:none;
+  clip-path:inset(0 0 100% 0);
+  transition:clip-path .55s var(--e),opacity .35s var(--e)}
+@media(max-width:980px){.nv-m{display:flex}}
+#nvAc:checked ~ .nv-m{opacity:1;pointer-events:auto;clip-path:inset(0 0 0% 0)}
+html:has(#nvAc:checked){overflow:hidden}
+.nv-mtop{display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px}
+.nv-mx{width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;color:var(--tx);cursor:pointer}
+.nv-mx svg{width:20px;height:20px}
+.nv-mlinks{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;
+  border-top:1px solid var(--line)}
+.nv-mlinks>a{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:17px 2px;border-bottom:1px solid var(--line);
+  font-family:var(--f-govde);font-size:1rem;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tx);text-decoration:none;
+  opacity:0;transform:translateY(16px)}
+.nv-mlinks>a svg{width:14px;height:14px;color:var(--tx4);flex:none}
+#nvAc:checked ~ .nv-m .nv-mlinks>a{animation:mmrow .5s var(--e) forwards;
+  animation-delay:calc(.14s + var(--i,0)*.05s)}
+.nv-mlg{display:flex;align-items:center;justify-content:space-between;
+  padding:17px 2px;border-bottom:1px solid var(--line);
+  font-family:var(--f-govde);font-size:1rem;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tx3);
+  opacity:0;transform:translateY(16px)}
+#nvAc:checked ~ .nv-m .nv-mlg{animation:mmrow .5s var(--e) forwards;animation-delay:.54s}
+.nv-mlg span{display:flex;gap:6px}
+.nv-mlg a{min-height:40px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;font-family:var(--f-tek);font-size:10px;
+  letter-spacing:.14em;color:var(--tx3);transition:.24s;text-decoration:none}
+.nv-mlg a.on{background:rgba(255,255,255,.1);color:var(--tx);border-color:var(--line2)}
+.nv-mcta{display:flex;flex-direction:column;gap:10px;padding-top:16px;
+  opacity:0;transform:translateY(16px)}
+#nvAc:checked ~ .nv-m .nv-mcta{animation:mmrow .5s var(--e) forwards;animation-delay:.6s}
+.nv-mcta a{width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;
+  gap:9px;text-align:center;border-radius:999px;font-family:var(--f-govde);
+  font-size:.96rem;font-weight:600;letter-spacing:-.01em;text-decoration:none;
+  transition:.3s var(--e)}
+.nv-mcta .nv-mp{background:var(--red);color:#fff}
+.nv-mcta .nv-mw{background:#fff;color:#0a0a0b}
+@keyframes mmrow{to{opacity:1;transform:none}}
+
+/* -- iç sayfa gövdesi sabit nav'ın altından başlar; ana sayfanın
+     sahneleri (.ana) kendi dolgusunu taşır (kaynakta da hero nav'ın
+     altından başlıyordu) -- */
+main{padding-top:118px}
+main:has(.ana){padding-top:0}
+
+/* -- hareket azaltma: durduran seçici verenin AYNISI (H11);
+     menü içeriği tam görünür, geçişler anlık -- */
+@media (prefers-reduced-motion: reduce){
+  .nv-bar,.nv-ic,.nv-dt svg,.nv-dp,.nv-di,.nv-din,.nv-df,.nv-cta,
+  .nv-burger i,.nv-burger i::before,.nv-burger i::after,
+  .nv-lang a,.nv-m,.nv-mlg a,.nv-mcta a{transition:none}
+  #nvAc:checked ~ .nv-m .nv-mlinks>a,
+  #nvAc:checked ~ .nv-m .nv-mlg,
+  #nvAc:checked ~ .nv-m .nv-mcta{animation:none}
+  .nv-mlinks>a,.nv-mlg,.nv-mcta{opacity:1;transform:none}
+}
