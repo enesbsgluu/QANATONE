@@ -154,3 +154,81 @@ rayı kutudan türer, /surec eğrisi kaynak sabitlerinden devralınmış).
 
 Kural 0.1 gereği bundan sonra HER sahne işi bu düzenekle kare + liste
 üretir; kompozisyon sütunu olmayan künye eksik künyedir (K7 D4'te).
+
+---
+
+## 6 · KAYNAĞA DÖNÜŞ TURU (21 Ağu — Enes'in sırası)
+
+Sıra Enes'ten: **hero mobil → akış düğümleri → sızıntı+huni**. Üçü de
+kendi commit'i, künyeden, yan yana kareyle.
+
+### 6.1 Hero mobil (`dc15419`) — KAPANDI
+
+| Kalem | Kaynak | Yapılan |
+|---|---|---|
+| Sıra sözleşmesi | 2582-2587: başlık → paragraf → durum satırı → butonlar | DOM'da cta metadan önce; kaynaktaki `order` deseni birebir (meta mt22 · cta mt20) |
+| Düğme standardı | 2593-2595: `width min(340px,100%)` · `min-height 54px` · yazı ortada | birebir; 640px kuralı (2602-2606) da geldi |
+
+**Fark listesi (kareden):** eski/yeni artık aynı sırayı ve aynı düğme
+boyunu gösteriyor. Kalan tek görünür fark: yenide nav'da "Konuşalım"
+düğmesi var, kaynakta ≤640'ta gizleniyordu (`2610 .nright .btn`) —
+nav kalemi, hero değil; **açık**.
+
+### 6.2 Akış düğümleri (`833977d`) — KAPANDI
+
+Düğüm yapısı kaynak `build()` birebiri (10538-10545): ikon kutusu
+`.ni` (32px) + metin `.nt` + durum noktası `.nd`. İkon anahtarları
+kaynak IN/OUT haritalarından (target/seo/camera/site ·
+calendar/clipboard/handoff/chart), yolları `IC`'den birebir (5575+).
+
+**KÜNYE DÜZELTMESİ:** D1'in "düğüm `.fln` kapalı .55 → açık 1" satırı
+YANLIŞ bileşendendi — `.fln` (701) başka sahnenin öğesi; akışın gerçek
+düğümü `.fnode` (1336), kapalı hâli `opacity 0 + translateY(10px) +
+scale(.96)`. Scrub ona çekildi. **Kaynakta düğümde tik YOK** — 21 Ağu
+fark listesindeki "✓ tiki eksik" maddesi de bu yüzden düştü; tik
+kaynakta ajan ADIM satırlarındaydı (`.fstep i`), oraya geldi.
+
+Beyin `.fbrain` birebiri: kızıl degrade + `.bi` bot ikonu (42px,
+`brainPulse` + glow yalnız masaüstü — H14) + adım satırları `.fstep`
+(tik dairesi kaynağın kendi `IC.check` SVG'siyle; F1c gereği font
+karakteri değil). "Aktif" rozeti kaynaktaki gibi **yalnız mobil**
+(1384 gizli / 1410 açık); noktası kaynakta **tanımsız** bir keyframe'e
+(`ping2` — kaynakta hiç tanımlı değil, ölçüldü) bağlıydı, gerçek
+davranış sabit nokta olduğu için sabit basıldı.
+
+**Canlılık rAF'sız:** kaynağın tick'i düğümleri 1,5 adım/sn (10622,
+çıkış +2 faz), adımları 2,2 adım/sn (10626, döngü n+2) sırayla
+yakıyordu; eşleniği `@property` dalgası + `color-mix` — desteksiz
+tarayıcı ve reduced-motion taban hâli görür.
+
+**İki hata gerçek Chrome ölçümüyle yakalandı** (kare yetmezdi):
+`Ikon.astro`'nun SVG'sine scoped seçici ulaşmıyor (`:global()` şart) ve
+mobil rozet kuralı sıra yüzünden taban `display:none`'a yeniliyordu.
+
+### 6.3 Sızıntı + huni (`00cfdf8`, D2b) — KAPANDI
+
+F1'de sökülen göz kararı şemasının yerine kaynağın gerçek sahnesi
+kuruldu. Kompozisyon: kutu sahne `.szstage` → başlık şeridi `.szhd`
+(künye noktası + h2 + "Aynı bütçe" sağ bloğu) → çip şeridi → `.szwrap`
+→ `.szfoot` (çubuklar + aşağı ok + kapanış). Kartlar **yanlara** döndü
+(sol 0/2 · sağ 1/3 — kaynak markup sırası), aşamalar huninin **üstünde
+dikey overlay**, "kalan müşteri" altta, beat rozeti merkezde.
+
+**Huni adası — ölçülü, göz kararı yok:** katlar `LY/LW` (10681) ·
+duvar dolgusu `k%2 ? .016 : .028` + kenar `.13` (10704-10711) · bağ
+çizgileri kavşaktan `W·.30`/`W·.70`'e, kesikli `[3,4]`, mühürlenince
+kızıl (10716-10730) · çıkan küme phyllotaxis `a=i·2.39996`,
+`r=√(i/n)·min(W,H)·.11`, `i%3` kızıl (10776-10782). Ölçüm rAF dışında;
+SSR'de SVG boş (kaynakta da canvas'ı JS çiziyordu), içerik SSR'de tam.
+
+**Fark listesi (karelerden):**
+- Eski taraf canvas'ı headless'ta **boş** — rAF ölü (bilinen ölçüm
+  tuzağı, hafızada kayıtlı). Kıyas bu sahnede DOM katmanında geçerli;
+  huni görselinin gerçek karşılaştırması Enes'in ekranında.
+- Tanecikler (rAF) bilinçli yok — rota kararı, değişmedi.
+- **D2c açık:** kaynağın pin kilidi ve ona bağlı `max-height:
+  calc(100vh - 44px)` alınmadı — pin'siz alınırsa içeriği keser.
+  Kilit ancak bölüm kompaktlaşmasıyla gelir (tasarım kararı, Enes).
+
+**Kapı:** denetim 45/0 · LH mobil 3 koşum ortanca **100** · LCP
+**1,355 s** · TBT 0 · CLS 0 · sayfa JS 8,8 KB.
