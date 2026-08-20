@@ -39,17 +39,17 @@
 .ste-form{display:flex;gap:10px;flex-wrap:wrap}
 .ste-giris{flex:1 1 260px;display:flex;align-items:center;gap:10px;
   border:1px solid var(--line2);border-radius:999px;
-  padding:0 18px;background:color-mix(in srgb,var(--metin) 3%,transparent)}
+  padding:0 18px;background:rgba(255,255,255,.03)}
 .ste-giris svg{flex:none;width:18px;height:18px;color:var(--tx4)}
 .ste-giris input{flex:1;background:none;border:0;color:var(--tx);
   font:inherit;font-size:.95rem;padding:14px 0;min-width:0}
 .ste-giris input::placeholder{color:var(--tx4)}
 .ste-giris input:focus{outline:none}
-.ste-giris:focus-within{border-color:var(--aksan)}
+.ste-giris:focus-within{border-color:var(--red)}
 .ste-form .dugme{flex:none}
 .ste-not{margin-top:12px;color:var(--tx3);font-size:.82rem;line-height:1.5}
 .ste-not b{color:var(--tx2)}
-.ste-durum{margin-top:12px;color:var(--kayip);font-size:.88rem;min-height:1.2em}
+.ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
 
 /* ---- sonuç ---- */
 .ste-sonuc{margin-top:clamp(16px,2vw,24px);border-top:1px solid var(--line);
@@ -58,9 +58,8 @@
 .ste-halka{position:relative;flex:none;width:104px;height:104px}
 .ste-halka svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ste-halka circle{fill:none;stroke-width:7;stroke-linecap:round}
-.ste-halka-zemin{stroke:color-mix(in srgb,var(--metin) 8%,transparent)}
-/* Skor yayı = veri çizgisi (kural 5) — aksanın asıl evlerinden. */
-.ste-halka-yay{stroke:var(--aksan)}
+.ste-halka-zemin{stroke:rgba(255,255,255,.08)}
+.ste-halka-yay{stroke:var(--red)}
 .ste-halka b{position:absolute;inset:0;display:grid;place-items:center;
   font-size:1.7rem;letter-spacing:-.03em}
 .ste-kunye{flex:1 1 240px;min-width:0}
@@ -72,9 +71,9 @@
 .ste-kunye p{color:var(--tx2);font-size:.92rem;line-height:1.55}
 .ste-meta{margin-top:8px;font-family:var(--f-tek);font-size:.76rem;
   color:var(--tx4)}
-.ste-uyari{margin-top:14px;border:1px solid color-mix(in srgb,var(--kayip) 34%,transparent);
+.ste-uyari{margin-top:14px;border:1px solid rgba(239,35,60,.34);
   border-radius:12px;padding:12px 14px;color:var(--tx2);font-size:.86rem;
-  line-height:1.5;background:color-mix(in srgb,var(--kayip) 6%,transparent)}
+  line-height:1.5;background:rgba(239,35,60,.06)}
 
 .ste-izgara{list-style:none;display:grid;gap:8px;margin-top:clamp(14px,2vw,22px);
   grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
@@ -84,11 +83,9 @@
 /* durum noktası: renk TEK yerde, üç sınıf */
 .ste-kalem::before{content:'';flex:none;width:8px;height:8px;border-radius:50%;
   background:var(--tx4)}
-/* Durum renkleri palete indi (göç): yeşil/amber serbest renkleri —
-   ok=aksan (sistem onayı), warn=kayıp (uyarı), fail=kayıp. */
-.ste-kalem.ok::before{background:var(--aksan)}
-.ste-kalem.warn::before{background:var(--kayip)}
-.ste-kalem.fail::before{background:var(--kayip)}
+.ste-kalem.ok::before{background:#22c55e}
+.ste-kalem.warn::before{background:#f59e0b}
+.ste-kalem.fail::before{background:var(--red)}
 .ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
   font-size:.74rem;color:var(--tx4)}
 

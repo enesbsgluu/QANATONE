@@ -88,12 +88,12 @@
   background:var(--card);transform-origin:top center;
   color:var(--tx);text-decoration:none}
 
-.sp-gorsel{position:relative;min-height:186px;overflow:hidden;background:color-mix(in srgb,var(--zemin) 55%,black)}
+.sp-gorsel{position:relative;min-height:186px;overflow:hidden;background:#0b0b0c}
 /* zemin ayrı katmanda: karta özel iki ton (--g1/--g2 kart üstünde) */
 .sp-gorsel::before{content:'';position:absolute;inset:0;z-index:0;
-  background:linear-gradient(150deg,var(--g1,var(--kayip-sonuk)),transparent 60%),
-             radial-gradient(96% 84% at 80% 98%,var(--g2,color-mix(in srgb,var(--metin) 4%,transparent)),transparent 68%),
-             linear-gradient(150deg,color-mix(in srgb,var(--kayip) 8%,transparent),color-mix(in srgb,var(--metin) 3%,transparent))}
+  background:linear-gradient(150deg,var(--g1,rgba(239,35,60,.16)),transparent 60%),
+             radial-gradient(96% 84% at 80% 98%,var(--g2,rgba(255,255,255,.04)),transparent 68%),
+             linear-gradient(150deg,rgba(239,35,60,.08),rgba(255,255,255,.03))}
 /* absolute + inset:0 (kaynaktaki ders): görsel intrinsik yükseklik
    hesabından tamamen çıkar, kart boyu görsele göre büyüyüp küçülmez. */
 .sp-gorsel img{position:absolute;inset:0;z-index:1;
@@ -115,20 +115,20 @@
    Enes'e açık soru olarak duruyor. */
 .sp-yil{position:absolute;z-index:2;top:12px;left:12px;font-family:var(--f-tek);
   font-size:10px;letter-spacing:.16em;padding:7px 13px;border-radius:999px;
-  background:color-mix(in srgb,var(--zemin) 86%,transparent);border:1px solid var(--line2);color:var(--tx2)}
+  background:rgba(5,5,5,.86);border:1px solid var(--line2);color:var(--tx2)}
 
 .sp-yazi{position:relative;padding:20px 20px 24px;
   display:flex;flex-direction:column;justify-content:flex-start}
 /* sol üst köşede karta özel renk */
 .sp-yazi::before{content:'';position:absolute;left:0;top:0;width:66%;height:60%;z-index:0;
   pointer-events:none;opacity:.92;
-  background:radial-gradient(92% 88% at 0% 0%,var(--g1,color-mix(in srgb,var(--kayip) 24%,transparent)),transparent 68%),
-             radial-gradient(66% 64% at 30% 8%,var(--g2,var(--kayip-sonuk)),transparent 72%)}
+  background:radial-gradient(92% 88% at 0% 0%,var(--g1,rgba(239,35,60,.24)),transparent 68%),
+             radial-gradient(66% 64% at 30% 8%,var(--g2,rgba(239,35,60,.12)),transparent 72%)}
 .sp-yazi>*{position:relative;z-index:1}
 .sp-no{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;color:var(--tx4);
   margin-bottom:12px;display:flex;align-items:center;gap:12px}
 .sp-no::after{content:'';flex:1;height:1px;background:var(--line)}
-.sp-etiket{font-size:.82rem;font-weight:500;color:var(--tx3);margin-bottom:12px}
+.sp-etiket{font-size:.82rem;font-weight:500;color:var(--red);margin-bottom:12px}
 .sp-yazi h3{font-size:1.42rem;margin-bottom:9px;letter-spacing:-.02em}
 .sp-yazi p{font-size:.9rem;color:var(--tx2);line-height:1.58;font-weight:300;
   margin-bottom:15px;max-width:50ch;
@@ -142,7 +142,7 @@
 /* Arsive giden dugme: kaynaktaki `.btn.btn-g` (hayalet) — sayfanin asil
    cagrisiyla (S8) yarismasin diye dolu kirmizi `.dugme` DEGIL. */
 .sp-tum{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;
-  border-radius:999px;background:color-mix(in srgb,var(--metin) 4.5%,transparent);border:1px solid var(--line2);
+  border-radius:999px;background:rgba(255,255,255,.045);border:1px solid var(--line2);
   color:var(--tx);text-decoration:none;font-weight:600;font-size:.92rem}
 .sp-tum svg{width:16px;height:16px}
 
@@ -159,13 +159,13 @@
    — ayrılırsa 1024 px'lik dokunmatik tablette renkli kaynak filtresiz
    basılır ve kart bir anda renge döner. */
 @media (min-width:901px){
-  .sp-govde{grid-template-columns:.92fr 1.08fr;box-shadow:0 46px 100px -50px black}
+  .sp-govde{grid-template-columns:.92fr 1.08fr;box-shadow:0 46px 100px -50px #000}
   .sp-gorsel{min-height:clamp(260px,32vw,440px)}
   /* gri + kontrast masaüstünde CSS'te: kaynak renkli, hover'da renge
      döner. Mobilde bu satır YOK — orada görsel gri PİŞMİŞ geliyor
      (madde 7: kalıcı katmanda mobil filtre yasak). */
   .sp-gorsel img{filter:grayscale(1) contrast(1.1)}
-  .sp-yil{top:20px;left:20px;background:color-mix(in srgb,var(--zemin) 66%,transparent)}
+  .sp-yil{top:20px;left:20px;background:rgba(5,5,5,.66)}
   .sp-yazi{padding:clamp(28px,3.6vw,52px);justify-content:center}
   .sp-yazi h3{font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:15px}
   .sp-yazi p{font-size:.98rem;line-height:1.72;margin-bottom:26px;
@@ -227,9 +227,9 @@
   .sp-gorsel:hover::before,.sp-gorsel:hover img{transform:scale(1.075)}
   .sp-govde:hover .sp-gorsel img{filter:grayscale(.4) contrast(1.08)}
   .sp-govde:hover .sp-yazi::before{opacity:1}
-  .sp-git:hover{color:var(--aksan);border-color:var(--aksan);gap:16px}
+  .sp-git:hover{color:var(--red);border-color:var(--red);gap:16px}
   .sp-tum{transition:background-color .3s var(--e),border-color .3s var(--e)}
-  .sp-tum:hover{background:color-mix(in srgb,var(--metin) 9%,transparent);border-color:color-mix(in srgb,var(--metin) 28%,transparent)}
+  .sp-tum:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
 }
 
 /* ============ HAREKET AZALTMA ============

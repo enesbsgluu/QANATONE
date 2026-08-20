@@ -1,10 +1,5 @@
 /* ============================================================
    S-H · HERO — Goc Anayasasi madde 3: DOKUNULMAZ, BIREBIR.
-   RENK GÖÇÜ İSTİSNASI (giydirme turu, 20 Ağu): birebir sözleşmesi
-   YERLEŞİM ve HAREKET içindir; renk kimliği RENK-SISTEMI.md'ye göçtü.
-   Kızıl atmosfer → kayıp/derinlik, halka+rozet noktası → aksan (hero'nun
-   iki cyan bölgesi, kural 2), "yok." → kayıp, kaydır işareti nötr.
-   Opaklıklar ve duraklar eskiyle bire bir korunmuştur.
    Kaynak: kok index.html · markup 4685-4723 · CSS 383-585 · saat 9276.
    Adlandirma sozlesmesi (denetim H ailesi bunlari olcer):
      .sh-*   icerik — gorunur dogar, opacity:0 YASAK (H2)
@@ -55,24 +50,19 @@
    duruyor. Goc eden her sahne dolgusunu `.ana` ile nitelemeli; bekcisi
    denetimdeki H10. */
 
-/* ---------- atmosfer (blursuz, sapma 1) ----------
-   SAHNE NOTU (renk göçü, kural 5): hero atmosferi BURGUNDY'nin evi —
-   sıcaklık/derinlik. Işıklı duraklar kayıp tonundan (burgundy'nin metin
-   türevi), koyu duraklar derinlikten türetilir; kızıl ham değerler
-   söküldü. Opaklıklar eskiyle bire bir — değişen yalnız renk kimliği. */
+/* ---------- kizil atmosfer (blursuz, sapma 1) ---------- */
 .sus-atmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .sus-atmo span{position:absolute;display:block;border-radius:50%}
 .sus-a1{left:50%;top:34%;transform:translate(-50%,-50%);
   width:min(1500px,150vw);height:min(1100px,120vw);
-  background:radial-gradient(closest-side,color-mix(in srgb,var(--kayip) 13%,transparent) 0 22%,
-    color-mix(in srgb,var(--kayip) 40%,transparent) 52%,
-    color-mix(in srgb,var(--derinlik) 55%,transparent) 72%,transparent 93%)}
+  background:radial-gradient(closest-side,rgba(190,22,44,.13) 0 22%,
+    rgba(203,26,52,.40) 52%,rgba(120,12,28,.17) 72%,transparent 93%)}
 .sus-a2{left:-10%;top:-14%;width:70vw;height:60vw;
-  background:radial-gradient(closest-side,color-mix(in srgb,var(--kayip) 30%,transparent),transparent 84%)}
+  background:radial-gradient(closest-side,rgba(239,35,60,.30),transparent 84%)}
 .sus-a3{right:-14%;bottom:-20%;width:66vw;height:58vw;
-  background:radial-gradient(closest-side,color-mix(in srgb,var(--derinlik) 70%,transparent),transparent 86%)}
+  background:radial-gradient(closest-side,rgba(160,16,36,.36),transparent 86%)}
 .sus-a4{inset:0;border-radius:0;
-  background:linear-gradient(180deg,transparent 34%,color-mix(in srgb,var(--zemin) 60%,transparent) 78%,var(--zemin) 100%)}
+  background:linear-gradient(180deg,transparent 34%,rgba(5,5,5,.6) 78%,#050505 100%)}
 
 /* ---------- eller ----------
    Uc katman, her katmanin TEK transform sahibi var:
@@ -85,9 +75,9 @@
 .sus-eller{position:absolute;left:0;right:0;top:0;height:100svh;z-index:2;
   pointer-events:none;overflow:hidden;
   -webkit-mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,
-    transparent 0 10%,color-mix(in srgb,black 60%,transparent) 42%,black 90%);
+    transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%);
   mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,
-    transparent 0 10%,color-mix(in srgb,black 60%,transparent) 42%,black 90%)}
+    transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%)}
 /* will-change TASINMADI (sapma 8): eskide .hand'i her karede GSAP
    suruyordu, katmani onden ayirmak dogruydu. Burada .sus-el'in HIC
    animasyonu yok (paralaks tasinmadi) ve .sus-suzul 13-17 sn'lik
@@ -102,11 +92,11 @@
    salinimi hem paralaksla oynadigi icin filtreli dev katman her karede
    yeniden rasterize oluyordu — giris kasmasinin olculmus kaynagi.     */
 .sus-suzul::before{content:'';position:absolute;inset:-14%;z-index:0;pointer-events:none;
-  background:radial-gradient(58% 58% at 50% 52%,color-mix(in srgb,var(--kayip) 20%,transparent),transparent 72%);
+  background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 .sus-suzul::after{content:'';position:absolute;left:6%;right:6%;top:16%;bottom:-6%;
   z-index:0;pointer-events:none;
-  background:radial-gradient(52% 46% at 50% 62%,var(--karart),transparent 74%);
+  background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 
 /* capraz yerlesim: insan eli ustte-solda, robot altta-sagda; parmak
@@ -133,44 +123,32 @@
    cevresinden gecer, boylece beyaz beyaz kirmizi kirmizi okunur */
 .sh-ic::before{content:'';position:absolute;left:50%;top:47%;z-index:-1;
   transform:translate(-50%,-50%);width:min(1220px,124%);height:120%;pointer-events:none;
-  background:radial-gradient(closest-side,color-mix(in srgb,black 56%,transparent),
-    color-mix(in srgb,black 30%,transparent) 54%,transparent 78%)}
+  background:radial-gradient(closest-side,rgba(3,3,4,.56),rgba(3,3,4,.3) 54%,transparent 78%)}
 
-/* SAHNE NOTU (kural 5): hero'nun İKİ cyan bölgesi rozet noktası (aktif
-   durum) ve CTA halkasıdır — kural 2 tavanı burada dolar; kaydır işareti
-   bu yüzden nötrleşti (aşağıda). */
 .sh-rozet{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;
-  background:color-mix(in srgb,var(--metin) 5%,transparent);
-  border:1px solid color-mix(in srgb,var(--metin) 14%,transparent);margin-bottom:34px}
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);margin-bottom:34px}
 .sh-nokta{position:relative;display:flex;width:7px;height:7px;border-radius:50%;
-  background:var(--aksan);opacity:.85}
+  background:var(--red);opacity:.85}
 .sh-rozet span:last-child{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;
-  text-transform:uppercase;color:color-mix(in srgb,var(--metin) 78%,transparent);line-height:1.4}
+  text-transform:uppercase;color:rgba(255,255,255,.78);line-height:1.4}
 
 /* referans tipografisi: serif, ince, isikli */
 .sh-h1{font-family:var(--f-baslik);font-weight:500;
   font-size:clamp(2.8rem,7.6vw,5.9rem);line-height:1.06;letter-spacing:-.028em;
-  color:var(--tx);margin-bottom:26px;
-  text-shadow:0 1px 22px color-mix(in srgb,black 50%,transparent),
-    0 0 34px color-mix(in srgb,var(--kayip) 28%,transparent)}
+  color:#fff;margin-bottom:26px;
+  text-shadow:0 1px 22px rgba(0,0,0,.5),0 0 34px rgba(255,198,204,.28)}
 .sh-l{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
 .sh-l i{display:block;font-style:normal;animation:sh-rise 1.2s var(--e) backwards}
 .sh-l:nth-child(2) i{animation-delay:.12s}
-.sh-h1 em{font-style:italic;font-weight:500;color:color-mix(in srgb,var(--metin) 80%,transparent)}
-/* "yakalayan YOK" — kayıp vurgusu (kural 5): eski parlak kızıl yerine
-   burgundy'nin metin türevi + kendi ışıltısı. */
-.sh-h1 b{font-weight:500;color:var(--kayip);font-style:italic;
-  text-shadow:0 0 10px color-mix(in srgb,var(--kayip) 55%,transparent),
-    0 0 46px color-mix(in srgb,var(--kayip) 80%,transparent)}
+.sh-h1 em{font-style:italic;font-weight:500;color:rgba(255,255,255,.8)}
+.sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic;
+  text-shadow:0 0 10px rgba(255,47,77,.55),0 0 46px rgba(239,35,60,.8)}
 /* sapma 3: perde araligi %114 -> %30, metin ilk kareden boyali */
 @keyframes sh-rise{from{transform:translateY(30%)}}
 
-/* Lede LCP ELEMANI ve değişken atmosfer üstünde — metin-2'ye koyulaşmaz,
-   eski %78 beyaz opaklığın token türeviyle birebir kalır. */
-.sh-lede{font-size:clamp(.98rem,1.5vw,1.12rem);
-  color:color-mix(in srgb,var(--metin) 78%,transparent);font-weight:300;
+.sh-lede{font-size:clamp(.98rem,1.5vw,1.12rem);color:rgba(255,255,255,.78);font-weight:300;
   line-height:1.75;max-width:600px;margin:0 auto 44px;
-  text-shadow:0 1px 16px var(--karart);
+  text-shadow:0 1px 16px rgba(0,0,0,.55);
   animation:sh-yukari 1s var(--e) .68s backwards}
 /* sapma 4: eski fadeup opaklikla geliyordu; artik yalniz transform */
 @keyframes sh-yukari{from{transform:translateY(18px)}}
@@ -180,16 +158,14 @@
 
 /* --- ince cerceveli ana dugme: ayirt edici olan yazi degil yuzey --- */
 .sh-void{position:relative;display:inline-flex;align-items:center;justify-content:center;
-  padding:14px 30px;border-radius:999px;
-  border:1px solid color-mix(in srgb,var(--metin) 26%,transparent);
-  background:color-mix(in srgb,var(--metin) 5%,transparent);text-decoration:none;
+  padding:14px 30px;border-radius:999px;border:1px solid rgba(255,255,255,.26);
+  background:rgba(255,255,255,.05);text-decoration:none;
   font-size:.92rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;
   color:var(--tx);
   transition-property:transform,background,color,border-color,box-shadow;
   transition-duration:.26s;transition-timing-function:var(--e)}
-/* Aktif durum ışığı = aksan (kural 5: sistem/çözüm anı). */
 .sh-void::before{content:'';position:absolute;inset:0;border-radius:999px;
-  background:radial-gradient(60% 100% at 50% 100%,color-mix(in srgb,var(--aksan) 55%,transparent),transparent 72%);
+  background:radial-gradient(60% 100% at 50% 100%,rgba(239,35,60,.55),transparent 72%);
   opacity:0;transition:opacity .45s var(--e)}
 /* HOVER KAPISI (19 Agu, S-P turunda GERCEK TARAYICIDA olculdu):
    dokunmatikte `:hover` dokununca TAKILIR ve bir daha birakmaz. Bu iki
@@ -199,7 +175,7 @@
    Anayasa madde 7'nin mobilde yasakladigi kalici bulanik katmanin ta
    kendisi. Masaustunde hicbir sey degismedi. Bekcisi H14. */
 @media(hover:hover) and (pointer:fine){
-  .sh-void:hover{border-color:color-mix(in srgb,var(--aksan) 70%,transparent);transform:translateY(-2px);
+  .sh-void:hover{border-color:rgba(239,35,60,.7);transform:translateY(-2px);
     box-shadow:0 14px 44px -14px var(--red-glow)}
   .sh-void:hover::before{opacity:1}
 }
@@ -213,21 +189,19 @@
 .sus-halka{--sh-halka-spd:3.6s;--sh-halka-kuyruk:56%;
   position:absolute;inset:-1px;border-radius:999px;padding:2px;
   pointer-events:none;z-index:0;
-  -webkit-mask:linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
-  mask:linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   mask-composite:exclude;
-  filter:drop-shadow(0 0 7px color-mix(in srgb,var(--aksan) 70%,transparent));transition:filter .34s var(--e)}
+  filter:drop-shadow(0 0 7px rgba(239,35,60,.7));transition:filter .34s var(--e)}
 .sus-halka::before{content:'';position:absolute;left:50%;top:50%;
   width:260%;aspect-ratio:1;transform:translate(-50%,-50%);
-  /* Halka = hero'nun imza cyan öğesi (kural 5); uçtaki parlama aksanın
-     beyaza karışımı — eski beyaz-pembe ucun karşılığı. */
   background:conic-gradient(from 0deg,
     transparent 0 calc(100% - var(--sh-halka-kuyruk)),
-    color-mix(in srgb,var(--aksan) 30%,transparent) calc(100% - var(--sh-halka-kuyruk)*.72),
-    color-mix(in srgb,var(--aksan) 88%,transparent) calc(100% - var(--sh-halka-kuyruk)*.34),
-    color-mix(in srgb,var(--aksan) 25%,white) calc(100% - var(--sh-halka-kuyruk)*.15),
-    color-mix(in srgb,var(--aksan) 85%,transparent) calc(100% - var(--sh-halka-kuyruk)*.04),
+    rgba(239,35,60,.30) calc(100% - var(--sh-halka-kuyruk)*.72),
+    rgba(255,77,99,.88) calc(100% - var(--sh-halka-kuyruk)*.34),
+    #ffe6ea calc(100% - var(--sh-halka-kuyruk)*.15),
+    rgba(255,77,99,.85) calc(100% - var(--sh-halka-kuyruk)*.04),
     transparent 100%);
   animation:sh-halka var(--sh-halka-spd) linear infinite}
 @keyframes sh-halka{
@@ -238,7 +212,7 @@
    filtre demek. Halkanin TABAN filtresi (7 px) hala kapisiz ve mobilde
    de kosuyor; o AYRI bir kalem, raporda acik duruyor (gorunum karari). */
 @media(hover:hover) and (pointer:fine){
-  .sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px color-mix(in srgb,var(--aksan) 95%,transparent))}
+  .sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px rgba(239,35,60,.95))}
 }
 /* maske farki desteklenmiyorsa halkayi hic gosterme — yoksa dugmeyi doldurur */
 @supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
@@ -247,20 +221,18 @@
 .sh-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
   padding:14px 26px;border-radius:999px;font-size:.92rem;font-weight:600;
   white-space:nowrap;letter-spacing:-.01em;text-decoration:none;
-  background:color-mix(in srgb,var(--metin) 4%,transparent);
-  border:1px solid color-mix(in srgb,var(--metin) 16%,transparent);color:var(--tx);
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.16);color:var(--tx);
   transition-property:transform,background,color,border-color,box-shadow;
   transition-duration:.26s;transition-timing-function:var(--e)}
-.sh-btn:hover{background:color-mix(in srgb,var(--metin) 9%,transparent);
-  border-color:color-mix(in srgb,var(--metin) 28%,transparent)}
+.sh-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
 .sh-btn:active{transform:scale(.965);transition-duration:.08s}
 
 .sh-meta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:52px;
   flex-wrap:wrap;font-family:var(--f-tek);font-size:10px;letter-spacing:.22em;
-  text-transform:uppercase;color:color-mix(in srgb,var(--metin) 34%,transparent);
+  text-transform:uppercase;color:rgba(255,255,255,.34);
   animation:sh-yukari 1s var(--e) 1s backwards}
-.sh-meta i{width:1px;height:11px;background:color-mix(in srgb,var(--metin) 20%,transparent);font-style:normal}
-.sh-meta b{color:color-mix(in srgb,var(--metin) 56%,transparent);font-weight:400}
+.sh-meta i{width:1px;height:11px;background:rgba(255,255,255,.2);font-style:normal}
+.sh-meta b{color:rgba(255,255,255,.56);font-weight:400}
 .sh-saat{font-variant-numeric:tabular-nums}
 
 /* ---------- kaydir isareti (sus: mobilde hic yok) ---------- */
@@ -269,15 +241,12 @@
   animation:sh-yukari-sus 1s var(--e) 1.35s forwards;pointer-events:none}
 @keyframes sh-yukari-sus{from{opacity:0;transform:translate(-50%,18px)}
   to{opacity:1;transform:translate(-50%,0)}}
-/* Kaydır işareti NÖTRLEŞTİ (kural 2): hero'nun iki cyan bölgesi rozet
-   noktası + halka ile doldu; akan ışık metin tonundan türetilir. */
 .sus-kaydir span{font-family:var(--f-tek);font-size:9px;letter-spacing:.26em;
-  text-transform:uppercase;color:color-mix(in srgb,var(--metin) 30%,transparent)}
+  text-transform:uppercase;color:rgba(255,255,255,.3)}
 .sus-kaydir i{position:relative;width:1px;height:44px;font-style:normal;overflow:hidden;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--metin) 22%,transparent),
-    color-mix(in srgb,var(--metin) 4%,transparent))}
+  background:linear-gradient(180deg,rgba(239,35,60,.22),rgba(239,35,60,.04))}
 .sus-kaydir i::after{content:'';position:absolute;left:0;right:0;height:16px;
-  background:linear-gradient(180deg,transparent,var(--tx),transparent);
+  background:linear-gradient(180deg,transparent,var(--red-soft),transparent);
   animation:sh-akis 2.1s var(--e2) infinite}
 @keyframes sh-akis{0%{transform:translateY(-18px);opacity:0}
   22%{opacity:1}78%{opacity:1}100%{transform:translateY(46px);opacity:0}}
@@ -289,9 +258,9 @@
   .sus-kaydir{display:none}
   .sus-eller{
     -webkit-mask-image:radial-gradient(ellipse 62% 42% at 50% 50%,
-      transparent 0 12%,color-mix(in srgb,black 55%,transparent) 44%,black 90%);
+      transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%);
     mask-image:radial-gradient(ellipse 62% 42% at 50% 50%,
-      transparent 0 12%,color-mix(in srgb,black 55%,transparent) 44%,black 90%)}
+      transparent 0 12%,rgba(0,0,0,.55) 44%,#000 90%)}
   .sus-el-h{left:-5vw;top:82px;width:57vw}
   .sus-el-r{right:-4vw;bottom:-3vw;width:64vw}
   .sh-meta{margin-top:38px;gap:12px}

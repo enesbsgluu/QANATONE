@@ -244,7 +244,7 @@ const KAYDIRICI = [
   .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok { margin-top: 46px; }
-  .kicker { color: var(--tx3); font-family: ui-monospace, monospace;
+  .kicker { color: var(--red-soft); font-family: ui-monospace, monospace;
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok h2 { font-size: 1.35rem; margin: 0 0 10px; }
   .aciklama { color: var(--tx2); font-size: .95rem; max-width: 60ch; }
@@ -273,7 +273,7 @@ const KAYDIRICI = [
     grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 700px) { .uc-adim { grid-template-columns: 1fr; } }
   .uc-adim li { border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-  .uc-adim b { font-size: .9rem; color: var(--tx); }
+  .uc-adim b { font-size: .9rem; color: var(--red-soft); }
   .uc-adim p { color: var(--tx2); font-size: .88rem; margin-top: 6px; }
   .kazanc { list-style: none; display: grid; gap: 8px 18px; margin: 16px 0 0; padding: 0;
     grid-template-columns: repeat(2, 1fr); }
@@ -283,7 +283,7 @@ const KAYDIRICI = [
 
   .gun { list-style: none; margin: 18px 0 0; padding: 0; }
   .gun li { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
-  .saat { font-family: ui-monospace, monospace; color: var(--tx3);
+  .saat { font-family: ui-monospace, monospace; color: var(--red-soft);
     font-size: .85rem; min-width: 58px; }
   .gun b { font-size: .95rem; }
   .gun p { color: var(--tx2); font-size: .88rem; margin-top: 4px; }
@@ -299,21 +299,19 @@ const KAYDIRICI = [
   .sizinti li { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
   .sizinti b { display: block; font-size: .9rem; }
   .sizinti i { color: var(--tx3); font-size: .82rem; }
-  /* çözüm satırı = sistem cevabı (kural 5) — aksan. */
-  .cozum { display: block; margin-top: 8px; color: var(--aksan); font-size: .84rem; }
+  .cozum { display: block; margin-top: 8px; color: var(--red-soft); font-size: .84rem; }
   .asamalar { margin-top: 16px; color: var(--tx2); font-size: .88rem;
     display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
   .asama { display: inline-flex; align-items: center; gap: 10px; }
   .ok { width: 14px; height: 14px; color: var(--tx3); flex: none; }
-  .kalan { color: var(--aksan); }
+  .kalan { color: var(--red-soft); }
   .vurgu { margin-top: 6px; color: var(--tx3); font-size: .85rem; }
   .maliyet { margin-top: 18px; max-width: 420px; }
   .cubuk { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .cubuk i { color: var(--tx3); font-size: .8rem; min-width: 44px; }
   .bar { display: block; height: 10px; border-radius: 6px; background: var(--line); }
-  /* Önce = kayıp hâli, Sonra = sistem hâli (kural 5). */
-  .bar.once { width: 100%; background: color-mix(in srgb, var(--kayip) 60%, transparent); }
-  .bar.sonra { width: 46%; background: var(--aksan); }
+  .bar.once { width: 100%; background: rgba(239, 35, 60, .45); }
+  .bar.sonra { width: 46%; background: rgba(239, 35, 60, .85); }
   .cubuk-alt { color: var(--tx3); font-size: .8rem; margin-top: 8px; }
 
   .hgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px; }
@@ -321,8 +319,8 @@ const KAYDIRICI = [
   .hrow { display: block; margin-top: 12px; }
   .hrow > span { display: flex; justify-content: space-between; font-size: .88rem; }
   .hrow em { font-style: normal; font-family: ui-monospace, monospace;
-    color: var(--tx); }
-  .hrow input { width: 100%; accent-color: var(--aksan); }
+    color: var(--red-soft); }
+  .hrow input { width: 100%; accent-color: var(--red-soft); }
   .ara { color: var(--tx3); font-size: .8rem; margin-top: 16px; }
   .hakis { list-style: none; margin: 0; padding: 0; }
   .hakis li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
@@ -331,12 +329,11 @@ const KAYDIRICI = [
   .hakis b { font-family: ui-monospace, monospace; }
   .hbar { grid-column: 1 / -1; display: block; height: 5px; border-radius: 4px;
     background: var(--line); overflow: hidden; }
-  /* huni çubukları = veri çizgisi (kural 5) — aksan. */
-  .hbar u { display: block; height: 100%; background: color-mix(in srgb, var(--aksan) 70%, transparent); }
+  .hbar u { display: block; height: 100%; background: rgba(239, 35, 60, .7); }
   .hoz, .hpara { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
     margin-top: 14px; font-size: .88rem; }
   .hoz span, .hpara span { color: var(--tx3); }
   .hoz b, .hpara b { font-family: ui-monospace, monospace; }
-  .hpara b:first-of-type { font-size: 1.3rem; color: var(--aksan); }
+  .hpara b:first-of-type { font-size: 1.3rem; color: var(--red-soft); }
   .hnot { color: var(--tx3); font-size: .82rem; margin-top: 12px; }
 </style>

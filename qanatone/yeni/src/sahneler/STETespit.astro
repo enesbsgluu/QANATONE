@@ -173,8 +173,7 @@ const iskeleAyikla = (m: string): string => {
           'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
         /* Halka ve sayı: renk eşikleri kaynaktan (70/45). */
         const cevre = Number(yay.getAttribute('stroke-dasharray'));
-        /* esik renkleri palete indi (renk gocu): iyi=aksan, orta/dusuk=kayip */
-        yay.style.stroke = j.score >= 70 ? 'var(--aksan)' : 'var(--kayip)';
+        yay.style.stroke = j.score >= 70 ? '#22c55e' : j.score >= 45 ? '#f59e0b' : 'var(--red)';
         yay.setAttribute('stroke-dashoffset', (cevre * (1 - j.score / 100)).toFixed(1));
         skor.textContent = String(j.score);
         /* Sıra kaynaktaki gibi: önce kırmızılar, sonra sarılar, sonra yeşiller. */
