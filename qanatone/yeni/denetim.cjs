@@ -38,7 +38,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 16; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en) */
+    + 17; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
+             +deneme-react (GEÇİCİ — React+motion bütçe ölçüm sayfası,
+             Enes talebi 20 Ağu; gerçek React adası gelince sayfa ve
+             bu +1 birlikte kalkar) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
