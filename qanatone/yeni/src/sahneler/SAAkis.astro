@@ -42,10 +42,12 @@ const ilkCumle = (t: string): string => {
   const m = String(t || '').match(/^[\s\S]*?[.!?](?=\s+[A-ZÇĞİÖŞÜ])/);
   return m ? m[0] : String(t || '');
 };
-/* RENK GÖÇÜ: kaynak HUE tablosu (kızıl ailesinin slug-hue çeşitlemesi)
-   SÖKÜLDÜ — renk artık paletten (RENK-SISTEMI.md), kart tonları
-   akis.css'teki token fallback'lerine düşer (--tA:yuzey, --tB:cizgi).
-   Çeşitleme istenirse paletten kademeli çiftlerle döner — Enes hükmü. */
+/* Kart tonu — kaynak `HUE` (6889) ve `__akisRender`in --tA/--tB'si. */
+const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+const ton = (i: number) => {
+  const h = HUE[i % HUE.length][0];
+  return `--tA:hsl(${h} 72% 30%);--tB:hsl(${h} 85% 56%)`;
+};
 const kartlar = (icerik.services || []).slice(0, AKIS_KART);
 ---
 <section class="sa-sahne" data-sahne="a">
@@ -62,7 +64,7 @@ const kartlar = (icerik.services || []).slice(0, AKIS_KART);
   <div class="sa-ray" tabindex="0" role="group"
     aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
     {kartlar.map((h: any, i: number) => (
-      <a class="sa-kart" href={`${B}/hizmet/${h.slug}`}>
+      <a class="sa-kart" href={`${B}/hizmet/${h.slug}`} style={ton(i)}>
         <span class="sa-gorsel" aria-hidden="true"><Ikon ad={h.icon} sinif="sa-ikon" /></span>
         <span class="sa-yazi">
           <h3>{T(h.title, dil)}<Ikon ad="arrow" sinif="sa-ok" /></h3>

@@ -3,9 +3,12 @@
    Kaynak belge: RENK-SISTEMI.md (19 Ağu 2026, Enes onaylı).
    Renk buradan çıkar; sahne CSS'inde ham hex yazılmaz.
 
-   DURUM: BAĞLI (20 Ağu 2026, giydirme turu) — Temel.astro ilk sırada
-   bunu içer; temel.css'in :root'u eski token adlarını (--tx2, --line,
-   --red…) buradaki tokenlara köprüler. Palet değişirse TEK dosya değişir.
+   DURUM: BU DOSYA HENÜZ HİÇBİR YERE BAĞLI DEĞİL (bilerek).
+   İskelet turunda sahneler mevcut renkleriyle kalır — sahne sahne renk
+   değiştirmek yarım bir dil üretir (belgenin "Sıra" bölümü). Giydirme
+   turu başlarken tek satırla devreye girer:
+       layouts/Temel.astro → import '../stil/renk.css';
+   O ana kadar burada durur, bayt maliyeti sıfırdır.
 
    ROLLER (belgedeki tablo)
      zemin      #1C1C28  Deep Navy — sayfanın tabanı
@@ -22,12 +25,6 @@
      yuzey      #2A2A36  navy + %6 beyaz — kart zemini
      cizgi      #3A3A47                  — sınır, ayraç
      aksan-sonuk cyan %14              — odak halkası, seçili durum zemini
-     kayip      #D07A83  burgundy'nin METİN türevi (giydirme turu, 20 Ağu):
-                kural 5 kayıp/sıcaklık anlarını burgundy'ye veriyor ama
-                burgundy zeminle 1,14 — metin olamaz. Bu ton onun okunur
-                hâli: zemin 5,45 · yüzey 4,58 · derinlik 6,21 (ölçüldü).
-                Eski kırmızının "kayıp" anlamındaki kullanımları buraya iner.
-     kayip-sonuk kayip %14             — kayıp vurgulu dolgu/çerçeve
 
    KULLANIM KURALLARI (belgeden, sahne notlarının bağlanacağı yer)
    1. Navy ve burgundy ASLA doğrudan yan yana konmaz (kontrast 1,14:1 —
@@ -79,10 +76,4 @@
   --yuzey:#2A2A36;
   --cizgi:#3A3A47;
   --aksan-sonuk:rgb(30 193 203 / .14);
-  --kayip:#D07A83;
-  --kayip-sonuk:rgb(208 122 131 / .14);
-  /* Nötr gölge (renk değil, karartma) — text-shadow/scrim tek yerden.
-     Daha hafif karartmalar color-mix(in srgb, black N%, transparent)
-     ile türetilir; ham rgb yazılmaz (RG1). */
-  --karart:rgb(0 0 0 / .55);
 }

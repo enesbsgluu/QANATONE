@@ -59,7 +59,7 @@
 .sa-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 .sa-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
 .sa-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.sa-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--aksan)}
+.sa-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
 .sa-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
   letter-spacing:-.035em;margin-bottom:0}
 .sa-bas h2 .thin{font-weight:300;color:var(--tx3)}
@@ -76,7 +76,7 @@
   scrollbar-width:none}
 .sa-ray::-webkit-scrollbar{display:none}
 /* klavyeyle odaklanınca görünür olsun (odak halkası bastırılmıyor) */
-.sa-ray:focus-visible{outline:2px solid var(--aksan);outline-offset:4px}
+.sa-ray:focus-visible{outline:2px solid var(--red);outline-offset:4px}
 
 .sa-kart{flex:0 0 clamp(260px,78vw,360px);scroll-snap-align:start;
   display:flex;flex-direction:column;
@@ -84,10 +84,10 @@
   background:var(--card);color:var(--tx);text-decoration:none}
 /* ton bandı — kartın kimliği (2. sapma) */
 .sa-gorsel{display:grid;place-items:center;aspect-ratio:16/9;
-  background:linear-gradient(140deg,var(--tA,var(--yuzey)),transparent 62%),
-             radial-gradient(80% 90% at 78% 8%,var(--tB,var(--cizgi)),transparent 70%),
+  background:linear-gradient(140deg,var(--tA,#2a2a36),transparent 62%),
+             radial-gradient(80% 90% at 78% 8%,var(--tB,#444),transparent 70%),
              var(--card)}
-.sa-ikon{width:34px;height:34px;color:var(--tx);opacity:.9}
+.sa-ikon{width:34px;height:34px;color:#fff;opacity:.9}
 .sa-yazi{display:flex;flex-direction:column;gap:8px;
   padding:clamp(16px,1.8vw,22px) clamp(16px,1.8vw,22px) clamp(18px,2vw,24px)}
 .sa-yazi h3{display:flex;align-items:center;gap:10px;
@@ -106,7 +106,7 @@
   .sa-kart{transition:border-color .3s var(--e)}
   .sa-ok{transition:color .3s var(--e),transform .3s var(--e)}
   .sa-kart:hover{border-color:var(--line2)}
-  .sa-kart:hover .sa-ok{color:var(--aksan);transform:translate(3px,-3px)}
+  .sa-kart:hover .sa-ok{color:var(--red-soft);transform:translate(3px,-3px)}
 }
 
 /* ---- hareket azaltma: durduran seçici hareketi verenin aynısı ---- */

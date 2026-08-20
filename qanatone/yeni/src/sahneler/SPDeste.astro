@@ -31,11 +31,13 @@ const kartlar = kunye
     ({ ...k, p: bul(k.slug) }))
   .filter((k: any) => k.p);
 
-/* Karta özel ton İNDEKSİ — eski kaynak `HUE` dizisi (index.html 6889) ve
+/* Karta özel iki ton — kaynak `HUE` dizisi (index.html 6889) ve
    `hueVars` (6890). Renkler kartın kimliği: aynı sırada aynı ton. */
-/* RENK GÖÇÜ: slug-hue glow çeşitlemesi SÖKÜLDÜ — kart parlamaları
-   deste.css'teki palet fallback'lerine düşer (kayıp türevleri). */
-const ton = (i: number) => `--i:${i}`;
+const HUE: number[][] = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+const ton = (i: number) => {
+  const h = HUE[i % HUE.length];
+  return `--i:${i};--g1:hsl(${h[0]} 88% 58% / .26);--g2:hsl(${h[1]} 84% 56% / .15)`;
+};
 const iki = (n: number) => String(n).padStart(2, '0');
 const en = dil === 'en';
 ---

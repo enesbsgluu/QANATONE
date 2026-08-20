@@ -1,28 +1,15 @@
-/* QANATONE yeni kabuk — temel stil.
+/* QANATONE yeni kabuk — Faz 1 temel stili.
    Tek dosya, bütün sayfalar paylaşır → Astro tek hash'li CSS basar,
-   sayfadan sayfaya önbellekten gelir.
-
-   RENK GÖÇÜ (giydirme turu): renk artık renk.css'ten gelir; buradaki
-   :root eski adları yeni tokenlara BAĞLAYAN geçiş katmanıdır — 300+
-   var() kullanımı tek yerde yön değiştirir, sahneler ad değiştirmeden
-   yeni dili giyer. Ham renk bu dosyada da YASAK (bekçisi RG1).
-   Eşleme kararları:
-   · --bg → zemin (navy), --card → yuzey. Eski saf-siyah taban emekli.
-   · Metin kademeleri İKİDEN TEKE indi: --tx2/--tx3/--tx4 üçü de
-     metin-2'ye iner (belge tek ikincil ton tanır; hiyerarşi zaten
-     boyut/ağırlıkla kurulu). Kontrast: metin-2/zemin 5,61 · /yuzey 4,72.
-   · --line/--line2 → cizgi (tek ayraç tonu — dil sadeleşir).
-   · --red/--red-soft BURADA EŞLENMEZ: kırmızı tek anlam taşımıyordu
-     (vurgu + kayıp + atmosfer). Kural 5 gereği her kullanım kendi
-     sahnesinde rol aldı: imza/aktif → aksan (CİMRİ, kural 2), kayıp
-     anları → kayip türevi, atmosfer → derinlik. --red artık kayip'e,
-     --red-soft aksana işaret eder; sahne dosyaları tek tek gezildi. */
-:root{--bg:var(--zemin);--tx:var(--metin);--tx2:var(--metin-2);--tx3:var(--metin-2);
-  --red:var(--kayip);--red-soft:var(--aksan);--line:var(--cizgi);--card:var(--yuzey);
-  /* glow eskiden %45 kızıldı; aksan-sonuk (%14) yoğunluğu taşımaz —
-     aynı yoğunlukta aksandan türetilir. */
-  --red-glow:color-mix(in srgb,var(--aksan) 45%,transparent);
-  --line2:var(--cizgi);--tx4:var(--metin-2);
+   sayfadan sayfaya önbellekten gelir. Marka koyu; şölen Faz 2'de. */
+:root{--bg:#050505;--tx:#f5f5f5;--tx2:rgba(255,255,255,.72);--tx3:rgba(255,255,255,.5);
+  --red:#ef233c;--red-soft:#ff4d63;--line:rgba(255,255,255,.1);--card:#101010;
+  /* S-H hero ile geldi: eski kaynagin :root'undaki yumusama egrileri ve
+     kizil parilti — sahne sahne kopyalanmasin diye kabukta duruyor. */
+  --red-glow:rgba(239,35,60,.45);
+  /* S-P destesi ile geldi: eski :root'un ikinci kademe cizgi ve yazi
+     tonlari (kaynak index.html 40 ve 62) — rozet cercevesi, sayac ve
+     kart kunyesi bunlari kullaniyor. */
+  --line2:rgba(255,255,255,.16);--tx4:rgba(255,255,255,.48);
   --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--tx);
@@ -30,47 +17,39 @@ body{background:var(--bg);color:var(--tx);
 .ust{display:flex;align-items:center;justify-content:space-between;
   max-width:840px;margin:0 auto;padding:22px 20px}
 .logo{color:var(--tx);text-decoration:none;font-weight:800;letter-spacing:.14em;font-size:.95rem}
-/* SAHNE NOTU (kural 5): rozet sayfanın imza öğesi — sayfa başına tek
-   cyan bölge; düğmeyle birlikte tavan ikiyi aşmaz (kural 2). */
-.tag{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.18em;color:var(--aksan);
-  border:1px solid var(--aksan-sonuk);border-radius:999px;padding:5px 12px}
+.tag{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.18em;color:var(--red-soft);
+  border:1px solid rgba(239,35,60,.45);border-radius:999px;padding:5px 12px}
 main{max-width:840px;margin:0 auto;padding:24px 20px 60px}
 section{margin-bottom:56px}
 h1{font-size:clamp(1.7rem,5.4vw,2.6rem);letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
 h2{font-size:clamp(1.15rem,3vw,1.45rem);letter-spacing:-.02em;margin-bottom:18px}
 h3{font-size:1rem;margin-bottom:6px}
-/* Bağlantı cyan DEĞİL (dizinde 9 bağlantı = kural 2 patlar): metin
-   tonunda kalır, imzayı alt çizginin cyan'ı taşır — cimri ve seçilebilir. */
-a{color:var(--tx);text-decoration-color:var(--aksan)}
+a{color:var(--red-soft)}
 .lede{color:var(--tx2);font-size:1.05rem;max-width:62ch}
 .hits{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:8px}
 .hits li{padding-left:18px;position:relative;color:var(--tx2)}
-.hits li::before{content:'';position:absolute;left:0;top:.55em;width:8px;height:2px;background:var(--tx3)}
+.hits li::before{content:'';position:absolute;left:0;top:.55em;width:8px;height:2px;background:var(--red)}
 .kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .kart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
 .kart p{color:var(--tx2);font-size:.92rem}
 .kart .not{margin-top:10px;color:var(--tx3);font-size:.84rem}
 .adimlar{list-style:none;display:flex;flex-direction:column;gap:14px}
 .adimlar li{display:flex;gap:14px;border:1px solid var(--line);border-radius:14px;padding:16px}
-.adimlar b{font-family:ui-monospace,monospace;color:var(--tx3)}
+.adimlar b{font-family:ui-monospace,monospace;color:var(--red-soft)}
 .adimlar p{color:var(--tx2);font-size:.92rem}
 .teslim{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
 .teslim li{border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--tx2);font-size:.92rem}
 .olcu{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .mk{border:1px solid var(--line);border-radius:14px;padding:16px}
-.mk b{display:block;color:var(--tx);margin-bottom:4px}
+.mk b{display:block;color:var(--red-soft);margin-bottom:4px}
 .mk span{color:var(--tx3);font-size:.85rem}
 details{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 summary{cursor:pointer;font-weight:600}
 details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
-/* SAHNE NOTU (kural 5): CTA kutusu "çözüm çağrısı" — aksan-sonuk degrade
-   sayfanın ikinci ve son cyan izidir. */
-.cta{border:1px solid var(--cizgi);border-radius:18px;padding:28px;text-align:center;
-  background:linear-gradient(180deg,var(--aksan-sonuk),transparent)}
+.cta{border:1px solid rgba(239,35,60,.4);border-radius:18px;padding:28px;text-align:center;
+  background:linear-gradient(180deg,rgba(239,35,60,.09),transparent)}
 .cta p{color:var(--tx2);max-width:56ch;margin:10px auto 20px}
-/* Düğme = aksanın asıl evi (belge: "düğme, aktif durum"). Kural 3:
-   cyan üstünde metin KOYU — beyaz/cyan 1,88, zemin/cyan 7,66 (ölçüldü). */
-.dugme{display:inline-block;background:var(--aksan);color:var(--zemin);text-decoration:none;
+.dugme{display:inline-block;background:var(--red);color:#fff;text-decoration:none;
   padding:12px 26px;border-radius:999px;font-weight:600}
 footer{max-width:840px;margin:0 auto;padding:20px;color:var(--tx3);font-size:.85rem;
   border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
