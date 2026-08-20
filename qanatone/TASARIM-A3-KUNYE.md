@@ -232,3 +232,58 @@ SSR'de SVG boş (kaynakta da canvas'ı JS çiziyordu), içerik SSR'de tam.
 
 **Kapı:** denetim 45/0 · LH mobil 3 koşum ortanca **100** · LCP
 **1,355 s** · TBT 0 · CLS 0 · sayfa JS 8,8 KB.
+
+---
+
+## 7 · D4 — HİZMET DETAY SAHNELERİ (21 Ağu, sahne sahne)
+
+Künye taraması D4'ün gerçek kapsamını ölçtü: **8 sahne**, kaynakta
+~1050 satır JS + ~620 CSS, göçte **%0** taşınmıştı. İçerikleri
+`content.json`'da duruyordu ama sayfada hiç basılmıyordu — yani D4
+aynı zamanda bir içerik kazanımı (bot da ziyaretçi de görmüyordu).
+
+**Kapsam düzeltmesi (künyeye işlendi):** "K8 = ai-ajan motor sahnesi"
+adlandırması YANLIŞTI — `#mkStage` TradeSelf pazar motorudur (finans);
+ai-ajan `fam:'flow'` ile `#flStage`'i kullanır. Ayrıca `clhit/aidot/
+stcta/qtCar` anahtarları tek bir sahnenin parçaları değil, dört ayrı
+sahnenin.
+
+| Sahne | Hizmet(ler) | Sürücü | Durum |
+|---|---|---|---|
+| `#fnStage` huni | google-ads · meta-ads | pinsiz scrub | ✅ `e9a34e5` |
+| `#flStage` akış | ai-ajan · otomasyon | pinsiz scrub | ✅ (kare + ölçüm) |
+| `#clStage` tırmanış | seo | **PIN .95** | ✅ (sticky kilit) |
+| `#aiStage` sohbet | geo | pinsiz scrub | ✅ (kelime yazımı) |
+| `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ⏳ açık — 4 perde + simüle fare (gBCR, 5 hedef seti) |
+| `#stStage.stlive` canlı | web-tasarim | draw YOK | ⏳ açık — iframe yerleştirme + `fit()` |
+| `#qtStage` teklif akışı | finans | **PIN 2.7** | ⏳ açık — 4 perde yatay şerit |
+| `#mkStage` motor | finans | **PIN 4.4** | ⏳ açık — 8 perde + kablolar + **dünya haritası canvas** (243 ülke) |
+
+### Ortak sürücü yazımı (dört sahnede kanıtlandı)
+
+Kaynağın ST pinsiz dalı `start:'bottom 98%' · end:'bottom 42%'`.
+CSS eşleniği **yaklaştırma değil birebir**: `view()` +
+`animation-range: entry calc(100% + 2vh) → entry calc(100% + 58vh)`.
+Gerekçe: `entry 100%` tam olarak elemanın alt kenarının viewport
+altına değdiği andır (= ST'nin `bottom 100%`i); 98% ve 42% eşikleri
+oradan 2vh ve 58vh sonrasıdır, ikisi de viewport yüzdesi. Gerçek
+Chrome'da doğrulandı: bitişte alt kenar %41,9 (hedef 42).
+
+Kilitli sahnede (tırmanış) desen destenin dersi: **çizelgenin öznesi
+sticky OLMAYAN kap**, animasyonu sticky sahne alır.
+
+### Bu turda yakalanan üç hata (kare tek başına yetmedi)
+
+1. **Astro scoped CSS bileşen SVG'sine ulaşmıyor** — `Ikon.astro`
+   çıktısı için `:global(svg)` şart. `getComputedStyle` ölçümü
+   yakaladı; kare "ikon var" diyordu, ölçüm "kural uygulanmıyor".
+2. **Kaynağın kendi kusuru:** akış işaretçisi `y0`'ı border
+   kutusundan ölçüp `top`a yazıyordu; `top` padding kutusundan
+   ölçülür → nokta düğüm merkezinden **+1 px** kayıktı (eski sitede
+   ölçüldü: yatay +1,00 · dikey +0,99). Kusur taşınmadı, sapma yazılı.
+3. **F1c ajan işaretini düşürdü** — kaynak `✦` (U+2726) alt kümede
+   yok; aynı yıldız SVG'ye çevrildi (S-SE okunun dersinin tekrarı).
+
+Ayrıca kare kıyası bir içerik hatası yakaladı: marka vurgusu kullanıcı
+mesajında da kızıl çıkıyordu; kaynak `typed()`i yalnız ajan dalında
+çağırıyor.
