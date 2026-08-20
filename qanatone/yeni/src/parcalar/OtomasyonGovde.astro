@@ -91,21 +91,29 @@ const KAYDIRICI = [
 const TELY = [50, 150, 250, 350];
 const telSol = TELY.map(y => `M0,${y} C55,${y} 45,200 100,200`);
 const telSag = TELY.map(y => `M0,200 C55,200 45,${y} 100,${y}`);
+/* MOBIL TELLER (Enes, 20 Agu: "ustteki animasyon mobilde yok") — eski
+   flowKur'un dikey modu: uclar kart yigininin altindan yelpaze gibi
+   ayrilip ajan kartinin tepesinde birlesir; cikista tersi. Dikey ayri
+   viewBox (tek SVG iki viewBox tasiyamaz), ayni iz teknigi. */
+const TELXM = [60, 173, 287, 340];
+const telSolM = TELXM.map(x => `M${x},0 C${x},38 200,30 200,72`);
+const telSagM = TELXM.map(x => `M200,0 C200,42 ${x},34 ${x},72`);
 
-/* SIZINTI ŞEMASI (giydirme turu) — eski szCv canvas partikülleri
-   yerine yerli doku: aynı sabit-viewBox/ölçümsüz desen. Beş kanal
-   girişten ana boruya kavis; boruda dört sızıntı noktasından yana
-   damlayan KAYIP çıkışları (sol-sağ dönüşümlü); altta tek kalan çıkış.
-   Akan izler tellerle aynı teknik (pathLength=1 + dash döngüsü). */
+/* SIZINTI SEMASI — geometri Enes'in "cikis ve dagilim yerleri bozuk"
+   bulgusuyla yeniden kuruldu (20 Agu): damlalar borudan teget ayrilip
+   ASAGI kivrilir ve ucta damla noktasiyla BITER (havada asili iz yok);
+   dagilim sirali-simetrik (ic/dis ikiser); cikis ok basiyla "kalan
+   musteri" yonunu gosterir. Sema genis ekranda gerilmesin diye
+   max-width'li. Akan izler tellerle ayni teknik. */
 const GIRX = [100, 300, 500, 700, 900];
-const szGiris = GIRX.map(x => `M${x},14 C${x},70 500,52 500,104`);
-const SZY = [128, 152, 176, 200];
-const szDamla = SZY.map((y, i) => {
-  const yon = i % 2 ? 1 : -1; /* sağ-sol dönüşümlü */
-  const x2 = 500 + yon * 150, x3 = 500 + yon * 190;
-  return `M500,${y} C${500 + yon * 70},${y} ${x2},${y + 4} ${x3},${y + 34}`;
-});
-const szBoru = 'M500,104 L500,236';
+const szGiris = GIRX.map(x => `M${x},16 C${x},70 500,54 500,108`);
+/* damla: [cikis y, yon, yatay uzaklik] — ic/dis sirali, simetrik */
+const SZD: [number, number, number][] = [
+  [138, -1, 120], [162, 1, 120], [186, -1, 175], [210, 1, 175]];
+const szDamla = SZD.map(([y, yon, u]) =>
+  `M500,${y} C${500 + yon * u * .55},${y + 2} ${500 + yon * u},${y + 14} ${500 + yon * u},${y + 44}`);
+const szDamlaUc = SZD.map(([y, yon, u]) => ({ x: 500 + yon * u, y: y + 44 }));
+const szBoru = 'M500,108 L500,254';
 ---
 <section class="giris">
   <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
@@ -123,6 +131,10 @@ const szBoru = 'M500,104 L500,236';
     {telSol.map(d => <path class="tel" d={d} />)}
     {telSol.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
+  <svg class="sus-tel-m sol" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
+    {telSolM.map(d => <path class="tel" d={d} />)}
+    {telSolM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+  </svg>
   <div class="akol beyin">
     <p class="akbas">{m('flc2', 'Ajan')}</p>
     <div class="ajan-kart">
@@ -136,6 +148,10 @@ const szBoru = 'M500,104 L500,236';
   <svg class="sus-tel sag" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
     {telSag.map(d => <path class="tel" d={d} />)}
     {telSag.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
+  </svg>
+  <svg class="sus-tel-m sag" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
+    {telSagM.map(d => <path class="tel" d={d} />)}
+    {telSagM.map((d, i) => <path class={`tel-iz iz${i}`} d={d} pathLength="1" />)}
   </svg>
   <div class="akol">
     <p class="akbas">{m('flc3', 'Çıkan')}</p>
@@ -186,15 +202,18 @@ const szBoru = 'M500,104 L500,236';
   {/* Sızıntı şeması — süs (.sus-): içerik çipler+kartlarda eksiksiz;
       şema kaybolursa bilgi kaybolmaz. Kayıp damlaları kızıl, akış izi
       yumuşak kızıl; reduced-motion'da izler yok, şema statik durur. */}
-  <svg class="sus-szsema" viewBox="0 0 1000 240" aria-hidden="true">
+  <svg class="sus-szsema" viewBox="0 0 1000 276" aria-hidden="true">
     {szGiris.map(d => <path class="tel" d={d} />)}
     <path class="tel boru" d={szBoru} />
     {szDamla.map(d => <path class="damla" d={d} />)}
     {szGiris.map((d, i) => <path class={`tel-iz gz${i}`} d={d} pathLength="1" />)}
     <path class="tel-iz boru-iz" d={szBoru} pathLength="1" />
     {szDamla.map((d, i) => <path class={`damla-iz dz${i}`} d={d} pathLength="1" />)}
-    {GIRX.map(x => <circle class="giris-nokta" cx={x} cy="14" r="4" />)}
-    <circle class="cikis-nokta" cx="500" cy="236" r="5" />
+    {GIRX.map(x => <circle class="giris-nokta" cx={x} cy="16" r="4" />)}
+    {/* damla uclari: kayip burada YERE duser — havada asili iz kalmaz */}
+    {szDamlaUc.map(u => <circle class="damla-ucu" cx={u.x} cy={u.y} r="3.5" />)}
+    {/* cikis: kalan musteri asagi akar — ok basi yonu soyler */}
+    <path class="cikis-ok" d="M492,254 L500,268 L508,254 Z" />
   </svg>
   <ul class="sizinti">
     {SIZINTI.map(([sorun, belirti, cozum]) => (
@@ -319,21 +338,43 @@ const szBoru = 'M500,104 L500,236';
   .sus-tel.sag .iz2 { animation-delay: 2.12s; }
   .sus-tel.sag .iz3 { animation-delay: 2.97s; }
   @keyframes ak-iz { to { stroke-dashoffset: .07; } }
+  /* Mobil teller: dikey yelpaze (eski flowKur'un dikey modunun yerlisi).
+     Masaustunde gizli; mobilde kolonlarin arasina girer. */
+  .sus-tel-m { display: none; }
   @media (max-width: 700px) {
-    .akis3 { grid-template-columns: 1fr; }
+    .akis3 { grid-template-columns: 1fr; gap: 10px; }
     .sus-tel { display: none; }
+    .sus-tel-m { display: block; width: min(100%, 340px);
+      margin: 0 auto; height: 56px; }
+    .sus-tel-m .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
+      vector-effect: non-scaling-stroke; }
+    .sus-tel-m .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
+      vector-effect: non-scaling-stroke; opacity: .9;
+      stroke-dasharray: .12 .88; stroke-dashoffset: 1.12;
+      animation: ak-iz-m 2.6s linear infinite; }
+    .sus-tel-m .iz1 { animation-delay: .65s; }
+    .sus-tel-m .iz2 { animation-delay: 1.3s; }
+    .sus-tel-m .iz3 { animation-delay: 1.95s; }
+    .sus-tel-m.sag .tel-iz { animation-delay: .32s; }
+    .sus-tel-m.sag .iz1 { animation-delay: .97s; }
+    .sus-tel-m.sag .iz2 { animation-delay: 1.62s; }
+    .sus-tel-m.sag .iz3 { animation-delay: 2.27s; }
   }
+  @keyframes ak-iz-m { to { stroke-dashoffset: .12; } }
   @media (prefers-reduced-motion: reduce) {
-    .sus-tel .tel-iz { animation: none; opacity: 0; }
+    .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation: none; opacity: 0; }
   }
 
-  .sus-szsema { display: block; width: 100%; height: auto; margin: 18px 0 4px; }
+  /* Genis ekranda gerilip dagilmasin: sema kompakt ortada durur. */
+  .sus-szsema { display: block; width: 100%; max-width: 680px;
+    height: auto; margin: 18px auto 4px; }
   .sus-szsema .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
     vector-effect: non-scaling-stroke; }
   .sus-szsema .damla { fill: none; stroke: rgba(239, 35, 60, .3); stroke-width: 1.2;
     vector-effect: non-scaling-stroke; }
   .sus-szsema .giris-nokta { fill: rgba(255, 255, 255, .25); }
-  .sus-szsema .cikis-nokta { fill: var(--red-soft); }
+  .sus-szsema .damla-ucu { fill: rgba(239, 35, 60, .55); }
+  .sus-szsema .cikis-ok { fill: var(--red-soft); }
   .sus-szsema .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
     vector-effect: non-scaling-stroke; opacity: .9;
     stroke-dasharray: .1 .9; stroke-dashoffset: 1.1;
