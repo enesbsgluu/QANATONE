@@ -17,7 +17,10 @@
      aksan      #1EC1CB  Cyan      — TEK vurgu rengi (düğme, aktif durum,
                                      veri çizgisi, imza öğe)
      metin      #EDEDF2            — başlık ve gövde
-     metin-2    #8A8A99            — alt metin, künye, etiket, ince çizgi
+     metin-2    #94949F            — alt metin, künye, etiket, ince çizgi
+                                     (20 Ağu Enes kararı: #8A8A99 kart
+                                     zemininde 4,16'ya düşüyordu, ton
+                                     4,72/5,61'e açıldı — aşağıda)
    Türevler (ayrı renk değil, hesaplanmış):
      yuzey      #2A2A36  navy + %6 beyaz — kart zemini
      cizgi      #3A3A47                  — sınır, ayraç
@@ -44,15 +47,14 @@
      aksan / zemin            7,66:1   (belge 7,7 — uyuyor)
      aksan / derinlik         8,72:1   (belge 8,7 — uyuyor)
      metin / zemin           14,44:1   (belge 15 — yuvarlama)
-     metin-2 / zemin          4,96:1   (belge 5,2 — taban 4,5'in üstünde)
+     metin-2 / zemin          5,61:1   (yeni tonla; eski #8A8A99 4,96'ydı)
      metin / yuzey           12,14:1
-     metin-2 / yuzey          4,16:1   ⚠ TABANIN ALTINDA (kural 6: ≥4,5)
+     metin-2 / yuzey          4,72:1   (yeni tonla — taban geçildi;
+                                        eski ton 4,16 ⚠ veriyordu)
      zemin / derinlik         1,14:1   (kural 1'in sebebi)
-   ⚠ AÇIK KALEM: ikincil metin KART ZEMİNİ üstünde 4,16:1 veriyor, yani
-   `--metin-2` + `--yuzey` birleşimi kural 6'yı KARŞILAMIYOR. Giydirme
-   turundan önce ikisinden biri karara bağlanmalı: ya `--metin-2` bir
-   tık açılır, ya ikincil metin kart üstünde kullanılmaz. Token değerleri
-   belgedeki hâliyle duruyor — palet kararı Enes'in, ben değiştirmedim.
+   AÇIK KALEM KAPANDI (20 Ağu, Enes: "tonu aç"): `--metin-2` #8A8A99 →
+   #94949F. Mevcut karaktere en yakın düzeltme; kural 6 artık her iki
+   zeminde de geçiyor. Kaynak belge aynı tarihte güncellendi.
    (Belgedeki "navy metin / cyan 9,5:1" satırı ölçümle tutmuyor: kontrast
    simetriktir, o çift `aksan / zemin` ile aynı orandır → 7,66:1. Sayı
    düşse de kural değişmiyor, 7,66 zaten tabanın çok üstünde.)
@@ -70,7 +72,7 @@
   --derinlik:#1A0A0F;
   --aksan:#1EC1CB;
   --metin:#EDEDF2;
-  --metin-2:#8A8A99;
+  --metin-2:#94949F; /* 20 Ağu: kart kontrastı için #8A8A99'dan açıldı */
   --yuzey:#2A2A36;
   --cizgi:#3A3A47;
   --aksan-sonuk:rgb(30 193 203 / .14);
