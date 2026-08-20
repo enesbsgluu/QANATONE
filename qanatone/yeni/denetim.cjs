@@ -436,6 +436,76 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
+/* R8 · SITEMAP + RSS BUTUNLUGU (kesme hazirligi, Faz 4).
+   (a) sitemap.xml'in loc seti, dist'teki sayfalarin KOK tabanli
+   canonical setiyle BIREBIR ayni olmali — iki yonlu: sitemap'te olup
+   sayfasi olmayan loc hayalet, canonical'i olup sitemap'e girmeyen
+   sayfa gorunmez. Bilincli disarida: /hukuki (canonical'i kendine —
+   netlify.app/yeni; kesmede KOK'a donunce kendiliginden listeye girer
+   ve bu kural onu OTOMATIK kapsar) + 404 (canonical'siz).
+   (b) rss.xml'in item seti = content.json posts seti (guid tabanli),
+   pubDate her item'da var. Uretecler kaynaktan ayni formulle kurar;
+   bu kural CIKTILARI kiyaslar — uretec formulu sessizce saparsa
+   kirmiziya doner. */
+{
+  const kusur = [];
+  const smYol = path.join(KOK, 'sitemap.xml');
+  if (!fs.existsSync(smYol)) kusur.push('sitemap.xml yok');
+  else {
+    const sm = oku(smYol);
+    /* iki taraf da sondaki cizgi atilarak normallesir (kok dahil):
+       kiyasin konusu adres kimligi, cizgi bicimi degil. */
+    const norm = (u) => u.replace(/\/$/, '');
+    const smN = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => norm(m[1])));
+    const canonN = new Set();
+    for (const p of sayfalar) {
+      const m = oku(p).match(/<link rel="canonical" href="([^"]+)"/);
+      if (m && m[1].startsWith('https://qanatone.com')) canonN.add(norm(m[1]));
+    }
+    for (const c of canonN) if (!smN.has(c)) kusur.push('sitemapte-yok:' + c);
+    for (const l of smN) if (!canonN.has(l)) kusur.push('sayfasi-yok:' + l);
+    if (smN.size < 10) kusur.push('sitemap süpheli kisa:' + smN.size);
+  }
+  const rssYol = path.join(KOK, 'bulten', 'rss.xml');
+  if (!fs.existsSync(rssYol)) kusur.push('rss.xml yok');
+  else {
+    const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    const rss = oku(rssYol);
+    const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
+    for (const p of (c.posts || []))
+      if (!guidler.includes(`https://qanatone.com/bulten/${p.slug}`)) kusur.push('rss-eksik:' + p.slug);
+    if (guidler.length !== (c.posts || []).length) kusur.push(`rss-sayi:${guidler.length}/${(c.posts || []).length}`);
+    if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
+  }
+  ol('R8 · sitemap loc seti = canonical seti + rss item seti = posts',
+     kusur.length === 0, kusur.slice(0, 3).join(' | '));
+}
+
+/* H24 · EN ANA BEKCI ESLERI (kesme hazirligi, Faz 4). Rota kapanisinin
+   kaydi: H ailesi yalniz TR anayi olcer, EN ana BEKCISIZDI (gzip 28 KB
+   bandinda — tavana yakin, sessiz bayatlama riski). TAM genisletme
+   (H1-H23'un EN esleri) ayri is: icerik kurallari (H15/H17/H19/H21)
+   EN deger sozlukleri ister. Burada en gercek uc risk kilitlenir:
+   sayfa uretilmis + tek h1 + gzip tavani (TR H18 ile AYNI 32 KB —
+   ayni cwnd ucurumu iki dil icin de gecerli). */
+{
+  const zlib = require('zlib');
+  const p = path.join(KOK, 'en', 'index.html');
+  const kusur = [];
+  let gz = 0;
+  if (!fs.existsSync(p)) kusur.push('en/index.html yok');
+  else {
+    const h = oku(p);
+    const h1 = (h.match(/<h1[\s>]/g) || []).length;
+    if (h1 !== 1) kusur.push('h1 sayisi:' + h1);
+    const TAVAN = 32 * 1024;
+    gz = zlib.gzipSync(fs.readFileSync(p), { level: 9 }).length;
+    if (gz > TAVAN) kusur.push(`gzip ${gz} > ${TAVAN}`);
+  }
+  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 32768 B',
+     kusur.length === 0, kusur.join(' | ') || `${gz} B`);
+}
+
 /* ---- FAZ 2 · ana sayfa kuralları (H ailesi) ------------------------- */
 {
   const ana = path.join(KOK, 'index.html');
