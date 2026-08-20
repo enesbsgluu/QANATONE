@@ -49,7 +49,7 @@ süsler · amblem `amCCW/amCW` (infinite; kapısı pin sahnesinin `on`u).
 | S2 kayıp çizgisi | (Faz 2 anlatısı — kaynak eşi yok) | `view()` entry 15%→exit 85% scrub | ✅ scrub ilkesine uygun |
 | S3 mekanizma rayı | (Faz 2 anlatısı) | `view()` entry 25%→entry 85% scrub | ✅ |
 | /surec çizgisi (rota) | K6 scrub | anonim `view()` + `--yt` scrub, cover 5%→55% (2a2bfe1) | ✅ SADIK — **ilk yazımda "açık" sanılmıştı; kod doğrulaması düzeltti** |
-| Ana sayfa S5 süreç | K6 (kök anada #chan vardı) | kartlı anlatı, çizgi YOK (Faz 2 anlatısı) | ⚠️ karar kalemi: anaya çizgi dönsün mü — Enes'te |
+| Ana sayfa S5 süreç | — (kökte #chan YALNIZ /surec'teydi — kaynağın kendi yorumu 10862; ilk yazımdaki "kök anada vardı" iddiası YANLIŞTI) | kartlı anlatı (Faz 2) | ✅ sapma yok — "anaya çizgi" karar kalemi DÜŞTÜ |
 | S-K katman girişi | rv.in tetik | `view()` scrub | ✅ (tetikten scrub'a — yön doğru) |
 | S-SZ sözler girişi | rv.in tetik | `view()` scrub | ✅ |
 | ak* demolar (5 ana + 4 detay) | IO + infinite | IO + infinite (`--akps`) | ✅ SADIK — kaynak da otomatik |
@@ -79,5 +79,5 @@ tablo bunu doğruluyor: his farkının kaynağı eksik scrub'lar.
 
 Sıra önerisi: **D1 → D2 → D5 → D4** (D3 zaten kapalı çıktı; ucuzdan
 pahalıya; D4 sahne sahne kendi commit'leriyle). Her biri kendi kapısı +
-ekran karesi + savurma hükmüyle. Ek karar kalemi: ana sayfa S5'e
-müşteri yolu çizgisi dönsün mü (kök anada vardı) — Enes'te.
+ekran karesi + savurma hükmüyle. ("Anaya çizgi dönsün mü" kalemi
+düştü: kökte #chan yalnız /surec'teydi — 10862.)
