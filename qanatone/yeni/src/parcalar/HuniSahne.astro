@@ -1,0 +1,110 @@
+---
+/* K7 · HUNİ SAHNESİ (#fnStage) — hizmet detayının kaydırma sahnesi.
+   Kaynak: kök index.html · markup funnelStage 7623-7628 · CSS 626-638 +
+   865-869 · sürücü draw 8721-8728, ST 9006-9007.
+   Hizmetler: google-ads, meta-ads (fam:'funnel', det.fun).
+
+   SÜRÜCÜ — kaynak ST pinsiz dalı birebir: trigger #fnStage,
+   start 'bottom 98%', end 'bottom 42%', scrub .5. CSS eşleniği:
+   view() zaman çizelgesi + `entry calc(100% + Nvh)` aralığı.
+   Neden bu yazım: `entry 100%` tam olarak "elemanın ALT kenarı
+   viewport altına değdi" anıdır — ST'nin `bottom 100%`i. Kaynağın
+   `bottom 98%`i oradan 2vh, `bottom 42%`i 58vh sonrasıdır; ikisi de
+   viewport yüzdesi olduğu için birebir yazılır (yaklaştırma YOK).
+
+   Eşikler kaynak draw'dan (8721-8728), markup'ta --i olarak basılı:
+     t = clamp(0,(p − i·.18)/.4,1) · e = 1−(1−t)³
+     opacity = .4 + .6·min(1,t·2.2) · y = (1−min(1,t·2))·7px
+     çubuk genişliği = v·e %   · yüzde metni = round(v·e)
+     ok (.fncn) açılır: p ≥ (i+1)·.18
+   Yüzde metni CSS sayacıyla sayar (kaynakta textContent yazımıydı) —
+   ada JS'i sıfır, düzen okuması sıfır.
+
+   TABAN = TAMAMLANMIŞ: --fnp initial 1; desteksiz tarayıcı ve
+   reduced-motion son kareyi görür (kaynak REDUCE dalı draw(1), 8972).
+   İçerik JS'siz tam: satır adları, oranlar ve not HTML'de. */
+import { T, type Dil } from '../icerik';
+interface Props { fun: any; dil: Dil }
+const { fun, dil } = Astro.props;
+const rows = (fun?.rows || []) as any[];
+---
+{rows.length > 0 && (
+<div class="sdsec">
+  <span class="mono">{dil === 'en' ? 'The funnel — fills as you scroll' : 'Huni — kaydırdıkça dolar'}</span>
+  <div class="fnstage">
+    {rows.map((r, i) => (
+      <>
+        {i > 0 && <div class="fncn" style={`--i:${i}`}><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></div>}
+        <div class="fnrow" style={`--i:${i};--v:${r.v}`}>
+          <b>{T(r.t, dil)}</b>
+          <span class="fnbar"><i /></span>
+          <em />
+        </div>
+      </>
+    ))}
+    {fun.note && <div class="fnnote">{T(fun.note, dil)}</div>}
+  </div>
+</div>
+)}
+
+<style>
+  /* --- kap ve satırlar: kaynak 626-638 birebir --- */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec > .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnstage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    padding: clamp(20px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
+  .fnrow { display: grid; grid-template-columns: minmax(120px, 180px) 1fr 62px;
+    gap: 14px; align-items: center; }
+  .fnrow b { font-size: .86rem; font-weight: 600; color: var(--tx2); }
+  .fnbar { height: 30px; border-radius: 8px; background: rgba(255, 255, 255, .045);
+    border: 1px solid var(--line); overflow: hidden; }
+  .fnbar i { display: block; height: 100%; font-style: normal; border-radius: 7px;
+    background: linear-gradient(90deg, rgba(239, 35, 60, .28), var(--red)); }
+  .fnrow em { font-style: normal; font-family: ui-monospace, monospace; font-size: 12px;
+    color: var(--red-soft); text-align: right; font-variant-numeric: tabular-nums; }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 6px; }
+  .fncn { display: flex; justify-content: center; margin: -4px 0; color: var(--tx4); }
+  .fncn svg { width: 14px; height: 14px; }
+
+  /* --- sürücü: kaynak ST aralığının birebir CSS yazımı --- */
+  @property --fnp { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .fnstage { animation: fnp-surus linear both; animation-timeline: view();
+      animation-range: entry calc(100% + 2vh) entry calc(100% + 58vh); }
+  }
+  @keyframes fnp-surus { from { --fnp: 0; } to { --fnp: 1; } }
+
+  /* satır eşikleri — kaynak draw 8721-8728 */
+  .fnrow { --t: clamp(0, (var(--fnp, 1) - var(--i, 0) * .18) / .4, 1);
+    /* e = 1−(1−t)³ */
+    --u: calc(1 - var(--t));
+    --e: calc(1 - var(--u) * var(--u) * var(--u));
+    opacity: calc(.4 + .6 * clamp(0, var(--t) * 2.2, 1));
+    transform: translateY(calc((1 - clamp(0, var(--t) * 2, 1)) * 7px)); }
+  .fnbar i { width: calc(var(--v, 100) * var(--e) * 1%); }
+  /* yüzde metni: kaynakta Math.round(v·e) textContent'ti — burada sayaç */
+  .fnrow em { counter-reset: fnyuzde calc(round(down, var(--v, 100) * var(--e) + .5, 1)); }
+  .fnrow em::after { content: counter(fnyuzde) '%'; }
+  /* ok: kaynak .fncn / .fncn.on (865-868) */
+  .fncn { opacity: calc(.25 + .75 * clamp(0, (var(--fnp, 1) - var(--i, 1) * .18) * 20, 1));
+    color: color-mix(in srgb, var(--red-soft)
+      calc(clamp(0, (var(--fnp, 1) - var(--i, 1) * .18) * 20, 1) * 100%), var(--tx4));
+    transform: translateY(calc(clamp(0, (var(--fnp, 1) - var(--i, 1) * .18) * 20, 1) * 2px)); }
+
+  /* gölge H14: kaynak .fnbar i glow'u (633) yalnız masaüstü */
+  @media (min-width: 901px) {
+    .fnbar i { box-shadow: 0 0 18px rgba(239, 35, 60, .35); }
+  }
+  /* kaynak mobil çizelgesi: 847 (padding) + 658-659 (satır ölçüleri) */
+  @media (max-width: 760px) {
+    .fnstage { padding: 16px 14px; }
+    .fnrow { grid-template-columns: 92px 1fr 48px; gap: 10px; }
+    .fnrow b { font-size: .74rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fnstage { animation: none; } }
+</style>
