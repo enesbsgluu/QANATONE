@@ -201,12 +201,20 @@ const szBoru = 'M500,108 L500,254';
   </ol>
 </div>
 
-{/* ---- SIZINTI ---- */}
-<div class="blok">
+{/* ---- SIZINTI ----
+     A3-D2 (sürücü düzeltmesi): kaynağın szDraw(p) scrub'ı geri geldi —
+     DOM eşikleri kökün 10785-10795 formülleri BİREBİR (0-tabanlı):
+     çip .02+.02i · aşama .12+.045i · kart .24+.05k · mühür .52+.055k ·
+     çubuklar (p−.28)/.15 ve (p−.66)/.24. Sürücü anonim view() --szt.
+     KAYNAĞIN PIN'İ (kilitli sahne, +=2.2vh) BU ADIMDA ALINMADI —
+     bilinçli: yeni bölüm dikey uzun, 100vh sticky penceresine sığmıyor;
+     kilit ancak bölüm kompaktlaşmasıyla (tasarım kararı, Enes) gelir.
+     Sürücü sınıfı yine de düzeldi: otomatik değil, kaydırma. */}
+<div class="blok sz-surus">
   <p class="kicker">{m('sz0', 'Kanıt')}</p>
   <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
   <p class="rozet"><b>{m('sz2', 'Aynı bütçe')}</b> · <i>{m('sz3', 'değişmeyen giriş')}</i></p>
-  <p class="cipler">{KANALLAR.map((k) => <span class="cip">{k}</span>)}</p>
+  <p class="cipler">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
   {/* Sızıntı şeması — süs (.sus-): içerik çipler+kartlarda eksiksiz;
       şema kaybolursa bilgi kaybolmaz. Kayıp damlaları kızıl, akış izi
       yumuşak kızıl; reduced-motion'da izler yok, şema statik durur. */}
@@ -224,15 +232,16 @@ const szBoru = 'M500,108 L500,254';
     <path class="cikis-ok" d="M492,254 L500,268 L508,254 Z" />
   </svg>
   <ul class="sizinti">
-    {SIZINTI.map(([sorun, belirti, cozum]) => (
-      <li><b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
+    {SIZINTI.map(([sorun, belirti, cozum], k) => (
+      <li style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
+        <b>{sorun}</b><i>{belirti}</i><span class="cozum">{cozum}</span></li>
     ))}
   </ul>
   {/* Ok METİN DEĞİL SVG: U+2192 hiçbir font yüzünde yok (F1c, S-SE dersi). */}
-  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama">{i > 0 &&
+  <p class="asamalar">{ASAMALAR.map((a, i) => <span class="asama" style={`--se:${(0.12 + i * 0.045).toFixed(3)}`}>{i > 0 &&
       <svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{a}</span>)}
-    <span class="asama kalan"><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    <span class="asama kalan" style="--se:.30"><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>{m('szb', 'kalan müşteri')}</span></p>
   <p class="vurgu">{m('szu', 'Bütçe aynı. Sorun burada.')}</p>
   <div class="maliyet">
@@ -486,9 +495,54 @@ const szBoru = 'M500,108 L500,254';
   .maliyet { margin-top: 18px; max-width: 420px; }
   .cubuk { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .cubuk i { color: var(--tx3); font-size: .8rem; min-width: 44px; }
-  .bar { display: block; height: 10px; border-radius: 6px; background: var(--line); }
-  .bar.once { width: 100%; background: rgba(239, 35, 60, .45); }
-  .bar.sonra { width: 46%; background: rgba(239, 35, 60, .85); }
+  .bar { display: block; height: 10px; border-radius: 6px; background: var(--line);
+    position: relative; overflow: hidden; }
+  .bar::after { content: ''; position: absolute; inset: 0; border-radius: 6px;
+    transform-origin: left; }
+  .bar.once { width: 100%; }
+  .bar.once::after { background: rgba(239, 35, 60, .45); }
+  .bar.sonra { width: 46%; }
+  .bar.sonra::after { background: rgba(239, 35, 60, .85); }
+
+  /* SIZINTI SCRUB SÜRÜCÜSÜ (A3-D2) — kaynak: ST PIN+scrub .5, +=2.2vh
+     (kök 12467-12478) + szDraw DOM eşikleri (10785-10795, markup'ta
+     --se/--sm olarak BİREBİR). Sürücü anonim view() --szt (akışla aynı
+     desen); PIN bu adımda bilinçli yok (markup yorumunda gerekçe) —
+     aralık cover 5%→90%: pin'in 2.2vh ilerleme payının akan eşleniği.
+     TABAN=TAMAMLANMIŞ (--szt initial 1): desteksiz + reduced tam hâli
+     görür (kaynak RDC'de P=1 render, 10806 — birebir; tamamlanmış
+     hâlde damlalar SÖNÜK çünkü mühürler kapalı, anlatı bu).
+     Kapalı/açık görseller kaynak değerleri: çip 0+7px→1 (szch 2829),
+     kart 0+10px→1 (szleak 2848), mühürde başlık üstü çizili kızıl
+     (sealed 2855; çizgi hep var, RENGİ saydam→kızıl — calc'lanabilir
+     tek yol) + çözüm rozeti 0+scale(.9)→1 (szfix 2860). Çubuk dolumu
+     kaynakta width yazımıydı (2917) — burada ::after scaleX (düzen
+     tetiklemez; bilinçli mekanizma eşlemesi, oranlar aynı). */
+  @property --szt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .sz-surus { animation: szt-surus linear both; animation-timeline: view();
+      animation-range: cover 5% cover 90%; }
+  }
+  @keyframes szt-surus { from { --szt: 0; } to { --szt: 1; } }
+  .cip, .sizinti li, .asama {
+    --sp: clamp(0, (var(--szt, 1) - var(--se, 0)) * 20, 1); }
+  .cip { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 7px)); }
+  .sizinti li { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 10px)); }
+  .asama { opacity: calc(.35 + .65 * var(--sp)); }
+  /* mühür penceresi (tıpa): kart k → .52+.055k */
+  .sizinti li { --mp: clamp(0, (var(--szt, 1) - var(--sm, 0)) * 18, 1); }
+  .sizinti b { text-decoration: line-through;
+    text-decoration-color: rgba(239, 35, 60, calc(var(--mp) * .7));
+    text-decoration-thickness: 2px; }
+  .cozum { opacity: var(--mp); transform: scale(calc(.9 + .1 * var(--mp)));
+    transform-origin: left; }
+  .bar.once::after { transform: scaleX(clamp(0, (var(--szt, 1) - .28) / .15, 1)); }
+  .bar.sonra::after { transform: scaleX(clamp(0, (var(--szt, 1) - .66) / .24, 1)); }
+  /* damlalar mühürle söner: dz k ↔ kart k (tıpalanan kavşak damlamaz) */
+  .sus-szsema .dz0 { --sm: .52; } .sus-szsema .dz1 { --sm: .575; }
+  .sus-szsema .dz2 { --sm: .63; } .sus-szsema .dz3 { --sm: .685; }
+  .sus-szsema .damla-iz { opacity: calc(.9 * (1 - clamp(0, (var(--szt, 1) - var(--sm, 2)) * 18, 1))); }
+  @media (prefers-reduced-motion: reduce) { .sz-surus { animation: none; } }
   .cubuk-alt { color: var(--tx3); font-size: .8rem; margin-top: 8px; }
 
   .hgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px; }
