@@ -38,18 +38,29 @@ const ETIKET = dil === 'en'
   <p class="lede">{m('s3p', 'Her aşamada ne yaptığımız, ne ölçtüğümüz ve ne beklendiği belli. Sürpriz yok.')}</p>
 </section>
 
+{/* ÇİZİLME ANİMASYONU (giydirme turu) — perde kararındaki reçete:
+    pathLength="1" (getTotalLength YOK, yerleşim okuması sıfır) +
+    scroll-driven CSS (adlandırılmış view-timeline .yolcu'da; S-P dersi:
+    sticky yok ✓, overflow:visible ✓). JS'siz. Desteklemeyen tarayıcıda
+    @supports kapısı hiç açılmaz: çizgi DOLU durur, içerik iki hâlde de
+    eksiksiz (S2 deseni). Eski chan() davranışının birebiri: çizgi
+    ilerledikçe düğüm i, t=i/4·0,95'te açılır; uçta nokta gezer ve
+    bitişte kaybolur (eski paint: t<.02 ve >.995 gizli). */}
 <div class="yolcu">
   <svg viewBox={`0 0 ${W} 140`} preserveAspectRatio="none" role="img"
     aria-label={M('Müşteri yolculuğu: ' + ETIKET.join(', '), 'Customer journey: ' + ETIKET.join(', '))}>
     <defs><linearGradient id="yg" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#8f0f21" /><stop offset="1" stop-color="#ef233c" /></linearGradient></defs>
-    <path class="y-cizgi" d={yol} />
+    <path class="y-cizgi" d={yol} pathLength="1" />
     {xs.map((x, i) => (
       <>
         <circle class="y-dugum" cx={x} cy={ys[i]} r="7" />
         <text class="y-yazi" x={x} y={ys[i] - 19} text-anchor="middle">{ETIKET[i]}</text>
       </>
     ))}
+    {/* Uçta gezen nokta: eğri derlemede offset-path olarak basılır —
+        çizgiyle aynı koordinat uzayı, aynı gerilme. */}
+    <circle class="y-nokta" r="5" style={`offset-path:path('${yol}')`} />
   </svg>
 </div>
 
@@ -75,12 +86,43 @@ const ETIKET = dil === 'en'
 <style>
   .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  /* ÇİZİLME SÜRÜCÜSÜ — tek anonim view() animasyonu @property'li --yt
+     sayısını 0→1 sürer; SVG değerleri değişkenden TÜRER (calc), SVG
+     çocuklarına ayrı animasyon bağlanmaz. Sebep ölçüldü (20 Ağu, bu
+     Chrome'da): adlandırılmış view-timeline CSS'ten hiç aktive olmadı
+     (getAnimations currentTime null), aynı subject JS ViewTimeline'ında
+     aktifti; sitede kanıtlı çalışan desen anonim view() (S2/S3/S-K).
+     TABAN = TAMAMLANMIŞ: --yt'nin initial'ı 1 — @supports dışı tarayıcı,
+     @property bilmeyen tarayıcı (var fallback 1) ve reduced-motion
+     (animation:none) üçü de dolu çizgiyi görür; nokta yt=1'de gizli. */
   .yolcu { position: relative; height: clamp(96px, 12vw, 150px);
     margin: clamp(18px, 3vw, 30px) 0 clamp(30px, 4vw, 54px); }
+  @property --yt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    /* Aralık: eski draw() eşiği (top %92→%34 vh) ≈ cover 5–55. */
+    .yolcu { animation: y-surus linear both;
+      animation-timeline: view(); animation-range: cover 5% cover 55%; }
+  }
+  @keyframes y-surus { from { --yt: 0; } to { --yt: 1; } }
+  @media (prefers-reduced-motion: reduce) { .yolcu { animation: none; } }
   .yolcu svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .y-cizgi { fill: none; stroke: url(#yg); stroke-width: 2.4; stroke-linecap: round; }
-  .y-dugum { fill: rgba(239, 35, 60, .16); stroke: var(--red-soft); stroke-width: 1.6; }
-  .y-yazi { font-size: 11px; font-weight: 500; fill: var(--tx2); }
+  .y-cizgi { fill: none; stroke: url(#yg); stroke-width: 2.4; stroke-linecap: round;
+    stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--yt, 1)); }
+  /* Düğüm/etiket basamakları: eski t_i=i/4·0,95 eşikleri clamp-step ile —
+     (yt - t_i)·60 eşik altında 0'a, üstünde 1'e kırpılır. */
+  .y-dugum { fill: rgba(239, 35, 60, .16); stroke: var(--red-soft); stroke-width: 1.6;
+    opacity: calc(.3 + .7 * clamp(0, (var(--yt, 1) - var(--te, 0)) * 60, 1)); }
+  .y-yazi { font-size: 11px; font-weight: 500; fill: var(--tx2);
+    opacity: calc(.5 + .5 * clamp(0, (var(--yt, 1) - var(--te, 0)) * 60, 1)); }
+  .y-dugum:nth-of-type(2), .y-yazi:nth-of-type(2) { --te: .2375; }
+  .y-dugum:nth-of-type(3), .y-yazi:nth-of-type(3) { --te: .475; }
+  .y-dugum:nth-of-type(4), .y-yazi:nth-of-type(4) { --te: .7125; }
+  .y-dugum:nth-of-type(5), .y-yazi:nth-of-type(5) { --te: .95; }
+  /* Uçta gezen nokta: eski paint dersi — t<.02 ve >.995 gizli; yt=1
+     (taban ve bitiş) noktayı söndürür. */
+  .y-nokta { fill: var(--red);
+    offset-distance: calc(var(--yt, 1) * 100%);
+    opacity: clamp(0, min(var(--yt, 1) * 50, (1 - var(--yt, 1)) * 200), 1); }
   @media (max-width: 700px) { .yolcu { height: 78px; } .y-yazi { font-size: 9px; } }
   .adimlar-s { list-style: none; display: flex; flex-direction: column; gap: 14px; }
   .adimlar-s li { display: flex; gap: 14px; border: 1px solid var(--line);
