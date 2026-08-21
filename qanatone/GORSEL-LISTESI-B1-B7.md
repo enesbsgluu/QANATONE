@@ -92,6 +92,15 @@ ilkesinin buradaki karşılığı: **görsel basılır, okunabilirlik CSS'te.**
   background:linear-gradient(0deg,rgba(5,5,5,.92) 6%,rgba(5,5,5,.55) 30%,transparent 62%)}
 ```
 
+**Bento düzeltmesi (Enes, 21 Ağustos).** Kart yüzü degrade perdeden bento
+diline çekildi: yarıçap 18 → 22 (masaüstü köşelerde 26), ızgara **dışta
+yuvarlak / içte keskin** (boşluk 14 → 8; geniş boşlukla keskin iç köşe
+"bozuk kart" gibi duruyor), görsel kartın çoğunu kaplıyor, içerik görselin
+üstüne binen tanımlı bir **şeritte** — mobilde opak, masaüstünde hafif
+bulanık cam. Üst kenardan içe parlama degradeyle kuruldu, `box-shadow`
+kullanılmadı: H14 mobil bağlamda gölgeyi de reddediyor. `backdrop-filter`
+yalnız masaüstü bloğunda, aynı kural gereği.
+
 **Ton dengesi kartta kurulur, bento CSS'inde değil.** ch2 ve ch5 öbür dörtten
 belirgin parlaktı, altısı yan yana gelince ikisi öne fırlıyordu; ikisine karta özel
 `brightness` payı verildi. Sebep: kart tek başına da görünüyor (tablet satırı,
@@ -185,33 +194,24 @@ kabul edilmez**.
 
 ---
 
-## Karar verildi — B7 `/projeler` dizinine girdi
+## B7 GERİ ALINDI — akordeon beğenilmedi (Enes, 21 Ağustos)
 
-Akordeon, dizindeki 7 kartın **yerine geçti** (1. aday). Ölçüler bu belgede
-verildiği gibi: kap 800, aktif ~305, pasif ~76, yükseklik 480.
+Akordeon kuruldu, canlıya çıktı, **beğenilmedi ve geri alındı**. `/projeler`
+eski kart listesi olarak kalıyor. Akordeondan alınan tek şey duotone geçişi:
 
-Üç şey bilinçli, `ProjeDizin.astro`nun başında da yazılı:
+- **Kart dinlenirken küçük görsel duotone, hover'da gerçek renge dönüyor.**
+  Aynı iki katman, aynı tek `--k` değişkeni — sadece 592×960 dikey panelde
+  değil, 104×78 pulda.
+- Kart hover'da kalkıyor (`translateY(-3px)`) ve kenarlığı açılıyor.
+- İkisi de yalnız `(hover:hover) and (pointer:fine)` içinde: dokunmatikte
+  "dinlenme" durumu yok, bütün pullar kızıl kalırdı. Ayakta duran
+  `mix-blend-mode` katmanı da boşuna harman bağlamı doğururdu (H14).
 
-1. **İçerik kaybolmadı.** Pasif öğenin yazısı `opacity` ile sönüyor, DOM'dan
-   çıkmıyor. `display:none` ve `visibility:hidden` kullanılmadı — ikisi de
-   metni ekran okuyucudan ve tarayıcıdan siler. Dizinin bütün metni
-   (yıl · etiket · ad · anlatım · rakamlar · bağlantı) her durumda kaynakta.
-2. **Ada JS'i yok.** Genişleme `flex-grow`, açılma `:hover`/`:focus-within`.
-   Varsayılan açık öğe ilk proje; kabın üzerine gelince o kapanıyor, imlecin
-   durduğu açılıyor — S-SZ bento'sunun kurduğu desen.
-3. **Duotone tek değişkende.** `--k` aynı anda kızıl katmanı, karartmayı ve
-   yazı opaklığını sürüyor. Katmanlar **yalnız masaüstünde** kuruluyor:
-   dokunmatikte pasif/aktif diye bir durum yok, `--k:0` olsa bile ayakta
-   duran `mix-blend-mode` katmanı harman bağlamı doğuruyor ve H14'ün mobil
-   pahalı katman disiplinine giriyor.
-
-Mobil: dikey liste, görsel üstte yatay bant (`-m.webp` 700×520), yazı altında,
-kızıl katman yok — yani mobilde kareler gerçek renginde.
-
-**Ana dosyalar depoda tutulmuyor.** `gorsel-kaynak/` yok sayılıyor (13 dosya
-≈ 11 MB) çünkü ikisi de üretilebilir: `node gorsel-kompoze.cjs` ve
-`node gorsel-kanal.cjs` kaynağı `img/`den okuyup aynısını basıyor. Yayına
-giren `.webp` varyantlar depoda.
+**Dikey görseller rafa kalktı.** `yeni/public/img/galeri/` ve künyesi
+depodan çıktı; **üreteç `gorsel-kompoze.cjs` duruyor** — kesim/kadraj
+tablosu ve gerekçeleri betiğin içinde, tekrar istenirse tek komutla basar.
+Üç zayıf kimlik (Kononenko / Schwab / Bab) o yüzden hâlâ açık bir kalem;
+kaynak fotoğraflar değişmeden o kareler düzelmiyor.
 
 ---
 
