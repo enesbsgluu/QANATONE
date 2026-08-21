@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-21 22:58 UTC
+> Üretim tarihi: 2026-08-21 23:10 UTC
 
 ## Yeni sohbete geçerken
 
@@ -1001,7 +1001,7 @@
 | `CLAUDE.md` |  | 8 KB | `2b76bab4` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DENETIM-GOC-KOVALARI.md` |  | 3 KB | `960b852f` |
-| `DEVIR.md` | bu dosya | 73 KB |  |
+| `DEVIR.md` | bu dosya | 74 KB |  |
 | `GOC-ENVANTER.md` |  | 4 KB | `83d8f590` |
 | `GOC-ROTA-KAPANIS.md` |  | 9 KB | `a533badc` |
 | `GOC-TUR-KAPANIS.md` |  | 10 KB | `06a17752` |
@@ -1323,7 +1323,7 @@
 | `yeni/src/stil/serit.css` |  | 4 KB | `409b1c40` |
 | `yeni/src/stil/sozband.css` |  | 5 KB | `743ed6c0` |
 | `yeni/src/stil/sozler.css` |  | 12 KB | `760d4831` |
-| `yeni/src/stil/temel.css` |  | 8 KB | `ad6396f3` |
+| `yeni/src/stil/temel.css` |  | 9 KB | `6129ba27` |
 | `yeni/src/stil/tespit.css` |  | 7 KB | `c8071d82` |
 | `yeni/src/ton.ts` |  | 1 KB | `b77eab8a` |
 | `yeni/src/veri/deste-gorselleri.json` |  | 1 KB | `ee5c49f2` |
@@ -1346,7 +1346,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 63 sn (basılan 0, önbellekten 58) |
+| son derleme | 64 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma
