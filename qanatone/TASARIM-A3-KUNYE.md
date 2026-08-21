@@ -254,7 +254,7 @@ sahnenin.
 | `#flStage` akış | ai-ajan · otomasyon | pinsiz scrub | ✅ (kare + ölçüm) |
 | `#clStage` tırmanış | seo | **PIN .95** | ✅ (sticky kilit) |
 | `#aiStage` sohbet | geo | pinsiz scrub | ✅ (kelime yazımı) |
-| `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ⏳ açık — 4 perde + simüle fare (gBCR, 5 hedef seti) |
+| `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ✅ (17 kare parmak izi · bölüm 8) |
 | `#stStage.stlive` canlı | web-tasarim | draw YOK | ⏳ açık — iframe yerleştirme + `fit()` |
 | `#qtStage` teklif akışı | finans | **PIN 2.7** | ⏳ açık — 4 perde yatay şerit |
 | `#mkStage` motor | finans | **PIN 4.4** | ⏳ açık — 8 perde + kablolar + **dünya haritası canvas** (243 ülke) |
@@ -287,3 +287,130 @@ sticky OLMAYAN kap**, animasyonu sticky sahne alır.
 Ayrıca kare kıyası bir içerik hatası yakaladı: marka vurgusu kullanıcı
 mesajında da kızıl çıkıyordu; kaynak `typed()`i yalnız ajan dalında
 çağırıyor.
+
+---
+
+## 8 · ARAÇLAR SAHNESİ — `#stStage.sttools` (21 Ağu, D4'ün beşinci sahnesi)
+
+Kaynak: markup `storyStage` 8371-8443 · CSS 882-886 + 921-936 +
+1006-1127 **+ 4375-4380** · sürücü `draw` 8817-8960 · ST 9002-9008.
+Dört perde (senin siten · anında teklif · rezervasyon · müşteri paneli),
+mini tarayıcı, kaydırma çubuğu ve **simüle fare**.
+
+### Sürücü — Enes'in uyarısı yerine oturdu
+
+"Simüle fare kaydırmayla sürülmezse yine video hissi verir" (21 Ağu).
+Kaynakta imleç zaten `draw(p)` içinde yaşıyordu (8866-8905) ve tıklama
+halkası anahtar-kare değil ilerlemeye bağlıydı. Yeni tarafta da tek
+sürücü var: `--stp`. Kaydırma geri alınınca imleç geri sarar, halka geri
+söner. Hiçbir yerde `IO → play` yok ([[qanatone-io-tetik-surucu]]).
+
+**Kilit ölçüldü:** kap `sarmal + 105vh`, sarmal sticky
+`top: (100vh − sarmal)/2`. Gerçek kaydırmada: sahne d=4 px'te 228'e
+yapışıyor, ilerleme 0→1 tam **945 px** = 1,05 × 900 vh, ve animasyon
+bittiği anda (d=945) yapışkanlık bırakıyor. İlk yazımda kap
+`sarmal/2 + 155vh` idi ve sahne bitişten sonra **228 px daha** yapışık
+kalıyordu — ölçüm yakaladı, kap boyu düzeltildi. **Aynı fazlalık
+tırmanış sahnesinde (`.cl-kap`, 195vh) duruyor — açık kalem.**
+
+### Ölçüm — göz kararı koordinat yok
+
+Fare 11 hedefin merkezine gidiyor; koordinatlar ada tarafında
+**ölçülüyor** (kaynak da `getBoundingClientRect` okuyordu), rAF dışında,
+`fonts.ready` + `ResizeObserver` + resize(180 ms) tazelemesiyle.
+İki ölçüm dersi:
+- **Dikey ölçü SAYFA uzayında alınır** (hedef ile `.stpage` aynı
+  ötelemeyi yer → fark ilerlemeden bağımsız). İlk yazım görüntü
+  kutusuna göre ölçüp öteleme geri ekliyordu; sürücü tüketiciye
+  dağıtılınca o varsayım çöktü ve fare **787 px** kaydı. Parmak izi
+  yakaladı.
+- Hedef **tamamlanmış kadrajında** okunur: fiyat kutusunun genişliği
+  içeriğe bağlı ("₺ 0" 39,6 px ↔ "₺ 284.400" 81,2 px) ve imleç oraya
+  ancak sayı tam boyuna ulaştıktan sonra varır.
+Sürgü hedefi ölçülmez, kaynağın kendi formülünden türer
+(`rngx + kq·rngw`) — kaynak da canlı okuyordu, çünkü hedef hareketli.
+
+### Kanıt — 17 kare, durum düzeyinde parmak izi
+
+Yan yana kare tek başına yetmiyor (kaynak tarafında sınıf geçişleri
+zaman tabanlı, kare yakalarken yarı yolda kalıyor). Bu yüzden 17 `p`
+değerinde **sayısal parmak izi** alındı: alan · fiyat · yüzde · perde
+ışığı · çip · 21 gün · 3 saat · onay · 4 adım · fare opaklığı · halka.
+**16/17 kare birebir**; tek fark `p=0,50`'de takvimin 7. günü — eşik
+tam o noktada, kaynak sınıfı yeni atmış (görsel olarak hâlâ saydam),
+rampa yarısına gelmiş. Sapma değil, geçiş→rampa çevriminin sınırı.
+
+Renk kıyası da ölçüldü (`color-mix` çevriminin doğrulaması): p=0/0,5/1
+üç durumda sekiz seçicinin hesaplanmış renkleri birebir — tek fark
+`--tx2` (aşağıda, bulgu).
+
+### Bu turda yakalanan bulgular
+
+1. **MOBİL İÇERİK İSTİSNASI ANA CSS BLOĞUNUN DIŞINDAYDI** (kaynak
+   4375-4380). `@media (pointer:coarse),(max-width:900px)` içinde
+   `.tlsay,.tldd,.tlsl,.tlok{opacity:1;transform:none}` ve
+   **`.tlptr{display:none}`** duruyor — yani fare 640'ta değil
+   **900**'de sönüyor ve mobilde içerik görünür doğuyor. İlk yazım
+   yalnız 1006-1127 aralığını okuduğu için kaçırdı; **gerçek Chrome'da
+   mobil yan yana kare yakaladı** (eski tarafta 21 günün hepsi görünür,
+   yenide 6). DERS: `tl*`/`st*` kuralları TEK blokta değil — sahne
+   işine girmeden `grep` ile sınıfın GEÇTİĞİ her satır taranmalı.
+2. **`--tx2` kabukta .72, kaynakta .62.** İkincil yazı tonu bütün
+   göçmüş sahnelerde biraz daha parlak. Kabuk düzeyinde karar, bu
+   turda dokunulmadı — Enes'in kalemi.
+3. **F1c kör noktası:** kural `@font-face` menzil BEYANINA bakıyor,
+   diske basılan alt kümeye değil. `U+00B2` (²) beyanda var, üretilen
+   dosyada yok (font-uret.py TREN listesinde yok) — "m²" gövde
+   fontundan değil sistem fontundan çiziliyor. EN ana sayfada da geçen
+   mevcut bir durum; araçlar sahnesi bunu çoğaltıyor.
+4. **Yorum içinde `*/` CSS'i kesiyor.** `--fx*/--fy*` yazan bir yorum
+   yorumu erken kapattı, esbuild `.tlptr` kuralının tamamını yuttu ve
+   fare hiç doğmadı. Derleme uyarısı vardı ama kırmızı değildi.
+5. **Sayfadaki 0,00002'lik CLS araçlar sahnesinden DEĞİL** — kaynağı
+   `EM.akm2` (giriş mini demosu), ölçüldü.
+
+### Bedel — ölçüldü, biri açık kaldı
+
+Sürücü önce ortak atada yaşıyordu ve `--stp`'nin her karesi **95**
+elemanın hesaplanmış stilini tazeliyordu. Animasyon aynı zaman
+çizelgesinden **tüketicilere dağıtıldı** ve ilerleme değişkenleri
+mirassız yapıldı (`@property ... inherits: false`): kare başına
+tazelenen eleman **95 → 43**, mobilde (içerik istisnası + fare yok)
+**18**.
+
+Gerçek kaydırmada kare süresi (fare tekerleği, 40 adım, ortanca/p95/
+düşen kare >32 ms):
+
+| Düzenek | Eski (JS draw) | Yeni (CSS scrub) |
+|---|---|---|
+| 412 px · 4× CPU kısıtı | 8,6 / 20,3 / **3** | 8,4 / 12,3 / **1** |
+| 1440 px · kısıtsız | 8,4 / 13,7 / **2** | 8,3 / 9,2 / **0** |
+| 1440 px · 4× CPU kısıtı | 11,3 / 17,6 / **0** | 8,5 / 31,8 / **7** |
+
+Yani gerçek cihaz profillerinde (telefon-kısıtlı, masaüstü-kısıtsız)
+yeni sahne kaynaktan **daha akıcı**; tek zayıf nokta **geniş ekran +
+zayıf CPU** birleşimi — orada kuyruk kaynaktan kötü. Sebebi ölçüldü:
+imlecin ~50 halkalı `calc` zinciri (fare kaldırılınca düşen kare 7→1).
+**AÇIK KALEM:** imleci `@keyframes` + `linear()` yazımına çevirmek
+(zincir yerine yerli ara değer). Bu turda yapılmadı, kararı Enes'in.
+
+### Bilinçli sapmalar
+
+- Yarıçap 18 px (kardeş K7 sahneleriyle aynı; kaynak `--r-lg` 26 px).
+- Mono yüz `ui-monospace` (kabuk sözleşmesi; kaynak JetBrains Mono).
+- Kap genişliği 798 px ↔ kaynak 1198 px (kabuk düzeni; oranlar korunur,
+  fare koordinatları ölçümden gelir).
+- Sınıf geçişleri → rampa; çevrim **m = 9/süre(s)** (D1'in ×20 = .45 s
+  eşleniğinden türetildi): .45 s→20 · .35 s→26 · .30 s→30 · .28 s→32 ·
+  .24 s→37,5.
+- Sayılar CSS sayacı; `₺` biçimi üç parçalı sayaç + boş sembollü geri
+  düşüş (11 değerde JS `toLocaleString` ile genişlik birebir ölçüldü).
+- Kilitlenen blok etiket + sahne + notun tamamı (kaynak `pWrap`
+  `.sdsec`); tırmanışta yalnız sahne kutusu kilitleniyordu.
+- Fare hedefleri tamamlanmış kadrajda ölçülür; kaynak canlı okuduğu
+  için saat (4 px) ve onay (5 px) giriş ötelemesini de görüyordu —
+  ≤5 px sapma, yazılı.
+
+**Kapı:** denetim **45/0** · LH mobil 3 koşum ortanca **100** · LCP
+**1,357 s** · TBT **0** · CLS 0,00002 (sahne dışı) · sayfa JS **7,1 KB**
+· sayfa HTML 99,6 KB ham / 20,8 KB gzip.
