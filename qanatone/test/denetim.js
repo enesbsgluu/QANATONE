@@ -980,6 +980,28 @@ async function calisma() {
 async function ciktiDenetimi() {
   if (!fs.existsSync(DIST)) { bolum('3 · yayın çıktısı (dist yok, atlandı)'); return; }
   bolum('3 · yayın çıktısı');
+
+  /* KURAL 128 · ORTAK VARLIKTAKI CSS'TE GÖRELİ url() YASAK.
+     Belirti: TradeSelf amblemi (motor sahnesi ve finans detayı) hiç
+     görünmüyordu — üç katmanın da isteği 404. Sebep: CSS satır içindeyken
+     `url(img/ts-dis.webp)` sayfa adresine göre çözülüyordu ve çalışıyordu;
+     ortak varlık turunda (2a) CSS `/varlik/app.<hash>.css`e çıkınca aynı
+     göreli yol `/varlik/img/...` oldu. Taşıma sessizce kırdı: derleme
+     geçti, denetim geçti, yalnız ekranda boşluk kaldı.
+     Yeni kabuğa motor sahnesi taşınırken yan yana kare yakaladı. */
+  {
+    const varlik = path.join(DIST, 'varlik');
+    const dosyalar = fs.existsSync(varlik)
+      ? fs.readdirSync(varlik).filter(f => f.endsWith('.css')) : [];
+    const kusur = [];
+    for (const f of dosyalar) {
+      const css = fs.readFileSync(path.join(varlik, f), 'utf8');
+      for (const m of css.matchAll(/url\(\s*['"]?(?!data:|https?:|\/|#)([^'")]+)['"]?\s*\)/g))
+        kusur.push(f + ':' + m[1]);
+    }
+    ol('128 · ortak varlık CSS dosyasında göreli url() yok',
+       kusur.length === 0, kusur.slice(0, 3).join(' ') || (dosyalar.length + ' dosya'));
+  }
   /* huni ₺ bloğu botun gördüğü HAM HTML'de olmalı (bot JS çalıştırmaz).
      İLK YAZIMDA İKİ HATA VARDI, ikisi de bu suite'in kendi kurallarının
      ihlaliydi: (1) ana sayfaya bakıyordum — huni /otomasyon'da;
