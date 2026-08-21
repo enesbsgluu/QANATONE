@@ -53,6 +53,55 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
 .cta p{color:var(--tx2);max-width:56ch;margin:10px auto 20px}
 .dugme{display:inline-block;background:var(--red);color:#fff;text-decoration:none;
   padding:12px 26px;border-radius:999px;font-weight:600}
+
+/* ============ B2 · DÖNEN IŞIK HUZMESİ KENARLIK (giydirme turu) ============
+   Görev belgesi B2: "@property --ga ile konik degradeyi döndürerek
+   kenarlıkta dönen ışık". Teknik taban kaynakta HAZIR duruyordu
+   (kök index.html 351-361, `.shiny` + `gaspin`) ama hiçbir markup onu
+   kullanmıyordu — tarandı, yalnız CSS'te var.
+
+   ÜÇ KARAR:
+   1) KIRMIZI DOLGU KALIYOR. Kaynak `.shiny` koyu zeminli bir düğmeydi;
+      bizim birincil çağrı dolu kızıl ve kimliğin parçası (palet kararı
+      20 Ağu, kalıcı). Huzme kenarlıkta döner: dolgu padding-box'ta kızıl,
+      kenarlık border-box'ta konik degrade. Kimlik değişmiyor, dil ekleniyor.
+   2) SINIF `sus-isik` — hüzme SÜStür, kimlik değil. H1 "hareket yalnız
+      sahne/süs öneki" diyor ve `.dugme` istisnası yalnız `transition`ı
+      kapsıyor; `animation` için önek gerekiyor. H4 de böylece cihaz
+      kısıtıyla söndürebiliyor.
+   3) @property YOKSA HUZME DURUR, DÜĞME ÇALIŞIR: `var(--ga, 0deg)` yedeği
+      sabit bir kenarlık verir (görev belgesinin şartı).                */
+/* HUZME BİLEŞİK KATMANDA — ÖLÇÜLMÜŞ KARAR.
+   İlk yazım kaynaktaki `.shiny` gibi kayıtlı bir AÇI değişkenini
+   (`@property --ga`) döndürüyordu; konik degrade her karede YENİDEN
+   BOYANIR ve ana iş parçacığında koşar. Ana sayfada ölçüldü:
+   LH mobil TBT 145-423 ms bandina çıktı, puan 88-97 arasında sallanıyordu.
+   Şimdi degrade SABİT, dönen şey bir sözde-elemanın `transform`ı —
+   derleyici katmanında koşar, boyama üretmez.
+   Yapı: ::before konik huzmeyi taşır ve döner (z-index -2),
+   ::after 2 px içeride kızıl dolguyu basar (z-index -1), metin ikisinin
+   de üstünde kalır (`isolation:isolate` negatif yığını düğmenin içinde
+   tutar). @property gerekmiyor: eski tarayıcıda da döner. */
+.dugme.sus-isik{position:relative;isolation:isolate;overflow:hidden;
+  background:transparent;
+  transition:transform .18s var(--e2),box-shadow .18s var(--e2)}
+.dugme.sus-isik::before{content:'';position:absolute;inset:-70%;z-index:-2;
+  background:conic-gradient(transparent 0deg 200deg,var(--red-soft) 250deg,
+    #fff 275deg,var(--red-soft) 300deg,transparent 345deg 360deg);
+  animation:sus-gaspin 3s linear infinite}
+.dugme.sus-isik::after{content:'';position:absolute;inset:2px;z-index:-1;
+  border-radius:999px;background:var(--red)}
+@keyframes sus-gaspin{to{transform:rotate(360deg)}}
+/* hover ölçeği 1,02 · dokunuş 0,98 · süre ≤200 ms (görev belgesi B2) */
+@media (hover:hover) and (pointer:fine){
+  .dugme.sus-isik:hover{transform:scale(1.02);
+    box-shadow:0 10px 30px -12px var(--red-glow)}
+}
+.dugme.sus-isik:active{transform:scale(.98);transition-duration:.08s}
+/* hareket azaltma: huzme durur, düğme yerinde kalır */
+@media (prefers-reduced-motion:reduce){
+  .dugme.sus-isik::before{animation:none}
+}
 footer{max-width:840px;margin:0 auto;padding:20px;color:var(--tx3);font-size:.85rem;
   border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{color:var(--tx3)}
