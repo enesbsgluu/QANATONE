@@ -257,7 +257,7 @@ sahnenin.
 | `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ✅ (17 kare parmak izi · bölüm 8) |
 | `#stStage.stlive` canlı | web-tasarim | draw YOK | ✅ (iki dal · bölüm 10) |
 | `#qtStage` platform akışı | finans | **PIN 2.7** | ✅ (19 kare parmak izi · bölüm 9) |
-| `#mkStage` motor | finans | **PIN 4.4** | ⏳ açık — 8 perde + kablolar + **dünya haritası canvas** (243 ülke) |
+| `#mkStage` motor | finans | **PIN 4.4** | ✅ (21 kare parmak izi · bölüm 11) |
 
 ### Ortak sürücü yazımı (dört sahnede kanıtlandı)
 
@@ -587,3 +587,111 @@ formülünün birebiri). Sonra içerik geri alındı; `git status` temiz.
 haritası canvas'ı) — Enes'in kararı: **en sona, tek tur**; harita
 katmanı ana sayfanın ızgarasını da paylaştığı için o tur iki yere
 birden dokunacak.
+
+---
+
+## 11 · PAZAR ZEKÂSI MOTORU — `#mkStage` (21 Ağu, D4'ün son sahnesi)
+
+Kaynak: markup `marketStage` 8137-8262 · CSS 3376-3730 (+ 4390-4392) ·
+sürücü `mdraw` 8611-8692 · kablolar `kabloKur` 8536-8604 · harita
+`mkMap` 7687-7900 · ST 8703-8712 (pin 4.4). **Sekiz perde**: ham veri →
+sinyal → harcama eğrisi → risk iştahı → davranışsal motor → karar &
+sıçrama → kampanya devri → dünya haritası.
+
+### Kanıt — 21 kare, 24 kalem, gerçek kaydırma
+
+Şerit konumu · perde ışığı · adım rayı · sayaçlar · akış satırları ·
+sektör barları · sinyal · kalemler · ok · ürünler · üç eğri (dashoffset
+dahil) · risk bileşenleri · **sıralama kayması** · girdiler · sekiz kablo ·
+çekirdek · hipotezler (eleme + kilit) · karar kalemleri · sıçrama ·
+kanallar · etki · devir · HUD. **20/21 kare birebir**; tek fark
+`p=0,52`'de bir girdi kartı ve onun kablosu — geçiş→rampa çevriminin
+bilinen sınırı.
+
+### Harita: canvas değil, derlemede pişmiş SVG + CSS
+
+Kaynak her karede canvas'a çiziyordu. O yolu taşımak **6,3 KB ızgara +
+5 KB ülke listesi + çizici JS** demekti; sayfa başına **10 KB'lik J1
+tavanını tek başına yerdi**. Statik olan derlemeye alındı:
+
+- **Kara ızgarası** (400×142, kaynağın `QG`'si — ana sayfa talep
+  haritasıyla **paylaşılan** veri) `src/veri/kara-izgara.txt`e kopyalandı
+  ve üreteç (`gorsel-uret.cjs`) nokta katmanını görüntüye basıyor:
+  `kara.webp` 19,9 KB · `kara-m.webp` 4,5 KB. Ana sayfa haritası
+  göçtüğünde **aynı dosyayı** kullanacak.
+- **243 ülke** ve **tohumlu 64 çiftlik küresel ağ** derlemede
+  hesaplanıyor — kaynağın LCG üreteci birebir (aynı tohum 20260808,
+  aynı havuz kurulumu, aynı çiftler).
+- Zincir (hammadde → üretim → üç pazar), düğümler ve HUD; paketler
+  `offset-path` ile sürekli akıyor (Enes'in isteği: "oklar SÜREKLİ
+  aksın"). Düğüm etiketleri artık **gerçek metin** (kaynakta canvas
+  yazısıydı), yazı boyu kaynağın W/64 ve W/86 formüllerinden `cqw` ile.
+
+**Sonuç: harita katmanı SIFIR sayfa JS'i tutuyor** — J1 hâlâ 10.051 B.
+
+### Ölçülmüş üç performans kararı
+
+| Karar | Ölçüm |
+|---|---|
+| `content-visibility: auto` perdelerde | kare ortancası **18,4 → 9,1 ms** (1440 + 4× kısıt) |
+| noktalar 16, yaylar 8 gruba toplandı | kare başına ~370 → ~24 eleman; mobil ortanca **20,8 → 8,9 ms** |
+| mobilde paketlerin üçte biri | `offset-path` bileşik katmanda koşmuyor; ağın canlı hissi durur, kare bütçesi durmaz |
+
+Gruplama neden işe yarıyor: `stroke-dashoffset` ve `stroke-opacity`
+SVG'de **miras alınan** özelliklerdir — grupta bir kez verilir, içindeki
+sekiz yay onu okur. Noktalarda ise iç opaklık çarpım olarak biniyor.
+
+**Kaydırma akıcılığı** (ortanca / p95 / düşen kare):
+
+| Düzenek | Eski (canvas + rAF) | Yeni (SVG + CSS) |
+|---|---|---|
+| 412 px · 4× CPU kısıtı | 17,3 / 41 / **24** | 8,9 / 57 / **32** |
+| 1440 px · kısıtsız | 9,5 / 29 / **14** | 8,5 / 33 / **14** |
+
+Ortanca iki profilde de kaynaktan iyi; kuyruk 1440 + 4× kısıtta hâlâ
+kaynağın üstünde — araçlar ve platform sahneleriyle **aynı açık kalem**.
+
+### Bu turda yakalanan bulgular
+
+1. **ESKİ SİTEDE TRADESELF AMBLEMİ HİÇ GÖRÜNMÜYORDU** (canlı hata,
+   `dc148ac` ile düzeltildi). Üç katmanın da isteği 404: CSS satır
+   içindeyken `url(img/ts-dis.webp)` sayfa adresine göre çözülüyordu;
+   ortak varlık turunda CSS `/varlik/app.<hash>.css`e çıkınca aynı yol
+   `/varlik/img/...` oldu. **Taşıma sessizce kırdı** — derleme geçti,
+   denetim geçti, ekranda boşluk kaldı. Yan yana kare yakaladı.
+   **Kural 128** (eski suite): ortak varlık CSS dosyasında göreli
+   `url()` yok — enjeksiyonla kanıtlı.
+2. **Ada tarafında doğan eleman Astro kapsamını taşımaz.** Kablolar
+   `innerHTML` ile doğuyor; `.mkwire .kbin` kapsamlı seçicisi hiç
+   eşleşmedi ve `--mon` kendi ilk değerinde (1) kaldı — kablolar
+   sahnenin başında çizilmiş görünüyordu. `:global()` şart; parmak izi
+   yakaladı (kaynak `00000/000`, yeni `11111/111`).
+3. **İçerikteki `→` karakteri hiçbir marka fontunda yok.** F1c yakaladı;
+   `fontTools` ile dört yüzün dördünde de ölçüldü (ne `latin` ne
+   `latin-ext`). Eski site onu sistem fontundan çiziyordu, yani satır
+   iki yazı tipiyle karışık diziliyordu. Panel metni değişmedi, basımı
+   SVG'ye çevrildi (✦ ve S-SE okunun üçüncü tekrarı).
+
+### Bilinçli sapmalar
+
+- Harita mekanizması canvas → SVG + CSS (yukarıda gerekçeli).
+- Yay eğriliği kutu uzayında hesaplanır; kaynak piksel uzayında
+  hesaplayıp geriyordu — kap gerildiğinde eğrilik de gerilir.
+- Kara noktaları önceden basıldığı için kutu oranı değişince ≤1,5:1
+  ovalleşir; ölçülen çap 0,84 px (alt piksel).
+- Balonlar kaynakta paket turu tamamlanınca **rastgele** doğuyordu;
+  CSS'te rastgelelik yok — altı yay ucuna sabitlenip sıralı çevrimle
+  doğuyorlar (en fazla üçü aynı anda, kaynağın sınırı).
+- Amblem ve kıvılcım kapısı: kaynak `.mkact.on` ile duraklatıyordu,
+  burada perde başına IntersectionObserver (doktrinin IO'ya izin
+  verdiği tek yer: görünmeyen dönmez).
+
+**Kapı:** denetim **45/0** (yeni) · **128/0** (eski) · LH mobil 3 koşum
+ortanca **99** · LCP **1,529 s** · TBT **48** · CLS **0** · sayfa JS
+**10.051 B** (tavan 10.240) · sayfa HTML 232 KB ham / **39,5 KB gzip**.
+
+---
+
+**D4 KAPANDI: 8 sahnenin 8'i taşındı.** Sırada tasarım turunun B
+kalemleri var (B3 harf kayması · B2 dönen ışık düğme · B1 bento ·
+B7 akordeon galeri · B5 form · B4 parçacık hero · B6 prolog geçişi).
