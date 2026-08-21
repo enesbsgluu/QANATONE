@@ -256,7 +256,7 @@ sahnenin.
 | `#aiStage` sohbet | geo | pinsiz scrub | ✅ (kelime yazımı) |
 | `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ✅ (17 kare parmak izi · bölüm 8) |
 | `#stStage.stlive` canlı | web-tasarim | draw YOK | ⏳ açık — iframe yerleştirme + `fit()` |
-| `#qtStage` teklif akışı | finans | **PIN 2.7** | ⏳ açık — 4 perde yatay şerit |
+| `#qtStage` platform akışı | finans | **PIN 2.7** | ✅ (19 kare parmak izi · bölüm 9) |
 | `#mkStage` motor | finans | **PIN 4.4** | ⏳ açık — 8 perde + kablolar + **dünya haritası canvas** (243 ülke) |
 
 ### Ortak sürücü yazımı (dört sahnede kanıtlandı)
@@ -414,3 +414,105 @@ imlecin ~50 halkalı `calc` zinciri (fare kaldırılınca düşen kare 7→1).
 **Kapı:** denetim **45/0** · LH mobil 3 koşum ortanca **100** · LCP
 **1,357 s** · TBT **0** · CLS 0,00002 (sahne dışı) · sayfa JS **7,1 KB**
 · sayfa HTML 99,6 KB ham / 20,8 KB gzip.
+
+---
+
+## 9 · PLATFORM AKIŞI — `#qtStage` (21 Ağu, D4'ün altıncı sahnesi)
+
+Kaynak: markup `tradeStage` 8264-8324 · CSS 3736-3899 **+ 4393-4395** ·
+sürücü `draw` 8475-8527 · ST 8716 (pin 2.7). Dört perde tek pencerede
+yatay kayar: arama → alıcılar → karar verici → ilk temas.
+
+### Kilit — Enes'in uyarısı ölçüldü, fazlalık YOK
+
+Araçlar sahnesinde kap boyu yanlış kurulduğu için sahne bitişten sonra
+228 px daha yapışık kalmıştı. Burada kap **sarmal + 270vh**: yapışık
+pencere (kapBoyu − sarmal) tam kilit boyuna eşit. Gerçek kaydırmayla
+ölçüldü (1440 × 900): sahne 178,5 px'te yapışıyor (= (900−543)/2),
+ilerleme 0 → 1 **2.430 px**'te tamamlanıyor (= 2,7 × 900) ve tam o
+noktada yapışkanlık bırakıyor (d=2.536'da sahne 72,2'ye çıkmış).
+
+Sticky üst hizası kaynağın **iki dalını da** tek ifadeyle karşılıyor:
+`max(0px, (100vh − sarmal)/2)` — blok ekrana sığıyorsa `center center`,
+sığmıyorsa `top top` (kaynağın 9003 koşulu). Aralık başlangıcı da
+ondan türüyor: `100vh − üstHiza`.
+
+### Şerit anahtar kareyle — birebir ve bileşik katmana uygun
+
+Kaynağın şerit formülü (`slide = min(N−1, idx + clamp((sub−.82)/.18))`)
+eşikleri SABİT: e = .205→.25, .455→.5, .705→.75; aralarda hareket
+doğrusal. Yani `@keyframes` yazımı yaklaştırma değil **birebir**.
+Değişken güdümlü `transform` bileşik katmanda sürülemiyordu; 3192 × 420
+px'lik şerit her karede yeniden rasterleniyordu.
+
+`will-change: transform` (kaynağın 3770 satırı) DENENDİ ve **ölçümle
+reddedildi**: 1440 + 4× kısıtta düşen kare 8 → **22-28**. Katman
+promosyonunun bedeli, kaçınılan rasterlemeden ağır. Anahtar kare
+yazımı onun yerine geçti.
+
+### Yazım — iki granülarite, ikisi de gerekçeli
+
+- **Sorgu** (18 harf, tek satır): KARAKTER granülaritesi. Gizli harf
+  `font-size: 0` → sıfır genişlik; böylece metin gerçekten büyür ve
+  imleç ucunda kalır (kaynakta `textContent` büyüyordu).
+- **E-posta gövdesi** (281 karakter): KELİME granülaritesi — sohbet
+  sahnesinin dersi; 281 ayrı eleman kare başına ağır olurdu.
+- **Sayaç** 1.284: üçlü sayaç (binler + ayraç + **sıfır dolgulu** kalan;
+  araçlar sahnesindeki ₺ biçiminin kardeşi, orada kalan hep 100'ün katı
+  olduğu için dolgu gerekmiyordu, burada gerekiyor).
+
+### Kanıt — 19 kare, GERÇEK KAYDIRMAYLA
+
+Bu turda parmak izi enjeksiyonla değil **sayfayı gerçekten kaydırarak**
+alındı (şerit artık anahtar kare; enjeksiyonla animasyonu durdurmak
+sahneyi taban kareye düşürüyordu — ölçüm düzeni tuzağı, yakalandı).
+19 `p` değerinde şerit konumu · perde ışığı · adım rayı · sorgu metni ·
+sayaç · çipler · satırlar · seçim · özet · kanallar · rozet · kelime
+sayısı · gönderildi · yanıt karşılaştırıldı.
+
+**İki eşik dışında birebir:** `p=0,32`'de dördüncü satır ve `p=0,68`'de
+doğrulama rozeti — ikisi de eşiğin tam üstünde; kaynakta sınıf yeni
+atılmış (görsel olarak hâlâ saydam), rampa yarısına gelmiş. Geçiş →
+rampa çevriminin bilinen sınırı, sapma değil.
+
+Şerit konumu oran düzeyinde birebir: kaynak −931,8/1198 = −0,7778 ↔
+yeni −619,2/798 = −0,7759 (fark gerçek kaydırmanın tam sayı piksele
+oturmasından).
+
+### Bu turda yakalanan bulgular
+
+1. **Seçili satırın gölgesi rampa DEĞİL basamak olmalı** — kaynağın
+   geçiş listesi `box-shadow`'u içermiyor (3820), yani anında gelir.
+   Rampa yazımı 30 px bulanık gölgeyi kilit boyunca her karede yeniden
+   boyatıyordu. Kural: **kaynağın `transition` listesinde OLMAYAN
+   özellik rampalanmaz.**
+2. **Miras seçimi ölçülmüş karardır.** İlerleme değişkeni miras alırsa
+   onu KULLANMAYAN bütün alt ağaç da kare başına tazelenir; `--qact`
+   ilkin mirastaydı ve her perdenin ~40 elemanlık gövdesini stil
+   hesabına sokuyordu. Miras artık yalnız alt ağacı bir-iki elemanlık
+   olanlarda açık (`--qsa/--qsd`, `--qyaz`, `--qsec`).
+3. **E-posta gövdesi dar kapta kırpılıyor — kaynağın kendi davranışı.**
+   Ölçüldü: kaynak 1198 px kapta sığdırıyor, **872 px kapta kırpıyor**
+   (`.qtbody{overflow:hidden}`). Yeni kabuğun sütunu 798 px olduğu için
+   kırpma masaüstünde de görünür (145 px metin, 123 px pencere → bir
+   satır gidiyor). Mobilde iki taraf da birebir aynı kırpıyor (160 ↔
+   87/86 px). **Kabuk sütun genişliği kararı — Enes'in kalemi.**
+4. **Kaynakta ölü kural:** `@media(max-width:760px) .qtstep span` —
+   `.qtstep`in içinde `span` yok (etiket düz metin). Olduğu gibi
+   bırakıldı; mobilde adım etiketleri iki tarafta da görünür.
+
+### Kaydırma akıcılığı (ortanca / p95 / düşen kare >32 ms)
+
+| Düzenek | Eski (JS draw) | Yeni (CSS scrub) |
+|---|---|---|
+| 412 px · 4× CPU kısıtı | 9,6 / 19,6 / **1** | 8,5 / 17,0 / **0** |
+| 1440 px · kısıtsız | 8,4 / 10,4 / **0** | 8,4 / 16,3 / **0** |
+| 1440 px · 4× CPU kısıtı | 14,3 / 20,3 / **0** | 8,8 / 33,0 / **13** |
+
+Gerçek cihaz profillerinde kaynakla aynı ya da daha iyi; **geniş ekran +
+zayıf CPU** birleşimi araçlar sahnesiyle aynı açık kalemde (ölçüm
+gürültüsü bu düzenekte ±5 kare).
+
+**Kapı:** denetim **45/0** · LH mobil 3 koşum ortanca **100** · LCP
+**1,508 s** · TBT **0** · CLS **0** · sayfa HTML 123,8 KB ham /
+24,2 KB gzip.
