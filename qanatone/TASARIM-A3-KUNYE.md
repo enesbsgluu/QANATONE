@@ -776,3 +776,66 @@ yerinde (ölçüldü) · JS kapalıyken başlık ve düğmeler tam (ölçüldü)
 **Sıradaki B kalemleri:** B1 bento + B7 akordeon galeri (ikisi de görsel
 listesi istiyor — Enes üretecek), sonra B5 form, B4 parçacık hero,
 B6 prolog geçişi.
+
+---
+
+## 13 · ANA SAYFA AĞIRLIK TURU (21 Ağu)
+
+Bölüm 12'nin bulgusu kapandı. **Belirti:** ana sayfa LH mobil TBT
+145-423 ms bandında, puan 88-97. **Sebep ölçüldü:** betik değerlendirme
+yalnız 70 ms; yük *Style & Layout* 1.770 ms + *Rendering* 945 ms — yani
+JS değil, sayfanın kendi ölçeği (1.603 eleman, 15 sahne, 14.432 px belge;
+ilk boyamada hepsi biçimleniyor).
+
+### İki kaldıraç, ikisi de ölçüldü
+
+**1) Kadraj dışı bölüm boyanmaz** — `.ana > section` üzerinde
+`content-visibility: auto` + `contain-intrinsic-size: auto 900px`.
+Üç bölüm dışarıda: **hero** (LCP orası), **şerit** (ilk ekrana giriyor),
+**deste** (içinde sticky kart var; `content-visibility` boyama kapsaması
+getirir ve taşan görseli kırpar — kapsamın yan etkisi ölçülmeden
+girilmez).
+
+| ölçüm | önce | sonra |
+|---|---|---|
+| LH mobil puan (3 koşum ortanca) | 91 | **99** |
+| TBT | 348 ms | **65 ms** |
+| kaydırma kare ortancası (412 px · 4× kısıt) | 16,0 ms | **8,9 ms** |
+| kaydırma p95 | 23,9 ms | **19 ms** |
+
+**2) Perde zemini iki katman** — tam ekran `radial-gradient` **ilk
+boyamayı** geciktiriyordu. Aynı düzenekte (412 px · 4× CPU · 1,6 Mbps ·
+150 ms RTT) bisekt:
+
+| durum | ilk boyama |
+|---|---|
+| perde olduğu gibi | 1.464 ms |
+| zemin **düz renk** | 1.088 ms **(−376)** |
+| perde görünmez | 1.028 ms |
+| animasyonlar kapalı | 1.060 ms |
+
+Gecikmenin neredeyse tamamı tek bildirimden geliyordu. Çözüm vinyeti
+atmak değil, **sırasını değiştirmek**: ilk boyama düz renkle çıkar
+(kompozitörün en ucuz işi), vinyet bir kare sonra opaklıkla biner
+(.34 s, .1 s gecikme). Ölçüldü: **FP 1.464 → 1.132 ms**, LCP 1.608 →
+1.484 ms. Perde zaten ~2 sn duruyor, göz farkı görmez.
+
+**`z-index: -1` şart:** vinyet perdenin **zeminidir**; 0'da bırakılınca
+QANATONE harflerini ve anakart izlerini örtüyordu — kare yakaladı.
+
+**Kapı:** denetim **45/0** · TR ana **99** / LCP 1,969 s / TBT 65 / CLS 0
+· EN ana **99** / LCP 1,825 s / TBT 89 / CLS 0.
+
+**Açık kalem:** LH'in LCP'si (1,97 s) kendi benzetim modelinden geliyor
+ve perde kazancını yansıtmıyor; gerçek ölçümde kazanç var. LCP'yi
+aşağı çekmek isteyen bir sonraki tur satır içi CSS'in kritik/ertelenen
+ayrımına bakmalı (astro.config'de ölçülmüş bir karar var, yeniden
+ölçülmeden değiştirilmemeli).
+
+### B1/B7 görsel listesi çıkarıldı
+
+`GORSEL-LISTESI-B1-B7.md`: altı kanal kartı ve yedi proje için ana
+dosya şartları, ölçülen kutular (masaüstü/dizüstü/tablet/mobil),
+üretecin basacağı varyantlar ve tek karar sorusu (galeri `/projeler`
+dizinine mi giriyor). Enes görselleri hazırlarken tur B1/B7'ye devam
+edebilir.
