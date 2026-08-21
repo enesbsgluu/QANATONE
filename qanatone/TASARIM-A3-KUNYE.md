@@ -695,3 +695,84 @@ ortanca **99** · LCP **1,529 s** · TBT **48** · CLS **0** · sayfa JS
 **D4 KAPANDI: 8 sahnenin 8'i taşındı.** Sırada tasarım turunun B
 kalemleri var (B3 harf kayması · B2 dönen ışık düğme · B1 bento ·
 B7 akordeon galeri · B5 form · B4 parçacık hero · B6 prolog geçişi).
+
+---
+
+## 12 · GİYDİRME B KALEMLERİ — B2 + B3 (21 Ağu)
+
+Görev belgesinin sırası: "B3 (harf kayması) + B2 (düğmeler) — sayfanın
+her yerine dokunan dil öğeleri".
+
+### B3 · harf harf dikey kayma (S-TE başlığı)
+
+Kaynakta zaten vardı (`#tespit h2 .lt i` + `ltdrop`, kök 4314-4324) ve
+iskelet turunda giydirmeye ertelenmişti — `tespit.css` sapma listesinin
+1. maddesi. **Harfler derlemede bölünüyor, içerikten değil:**
+`strings.tr.dgh` eski istemcinin kendi DOM'unu geri yazdığı için bozuk
+(2.825 bayt, iç içe iki iskele); bileşen onu zaten ayıklıyordu, artık
+temiz metinden kendi harflerini üretiyor. Panel metni düzelirse de çalışır.
+
+**Menzil vh cinsinden, yüzde değil — ölçümle bulundu.** `entry` fazının
+boyu elemanın kendi yüksekliği kadardır; yüzdeyle yazılan kaskad ~120
+pikselde bitiyordu (ölçüldü: üç örnekleme noktasında da harfler birlikte
+düşüyordu). Şimdi harf başına `--adim` vh, her harf 26vh boyunca süzülür:
+
+| başlık ekranın … hizasında | ilk harf | orta harf | son harf |
+|---|---|---|---|
+| %100 | −58,9 px | −58,9 | −58,9 |
+| %90 | −36,2 | −58,9 | −58,9 |
+| %80 | −13,6 | −39,8 | −58,9 |
+| %70 | 0 | −17,2 | −43,4 |
+| %50 | 0 | 0 | 0 |
+
+Üç sapma, üçü de adıyla: **opaklık yok** (madde 5 / H2 — giriş yalnız
+transform + kabın `overflow`u); **sürücü kaydırma** (kaynak IO + zaman;
+kabuğun sahne dili kaydırma güdümlü ve ada JS'i yok); **adım harf
+sayısına bölünür** (TR 29, EN 38 harfte aynı pencereye sığar; kaynakta
+sabit .028 sn'ydi ve uzun başlıkta taşıyordu).
+
+Erişilebilirlik (görev belgesinin şartı): `h2` tam metni `aria-label` ile
+taşır, parçalanmış gövde `aria-hidden`. Ölçüldü: *"Önce konuşmayalım.
+Önce bakalım."* — ilk yazımda boşluklar kayboluyordu (zincirlenmiş ikinci
+`replace` üretilmiş HTML'in üzerinde koşuyordu), ölçüm yakaladı.
+
+### B2 · dönen ışık huzmesi kenarlık
+
+Teknik taban kaynakta **hazırdı** (`.shiny` + `gaspin`, 351-361) ama
+hiçbir markup kullanmıyordu (tarandı). Üç karar:
+
+1. **Kızıl dolgu kalıyor.** Kaynağın `.shiny`si koyu zeminliydi; bizim
+   birincil çağrı dolu kızıl ve palet kararı kalıcı. Huzme kenarlıkta
+   döner: kimlik değişmez, dil eklenir.
+2. **Sınıf `sus-isik`** — huzme süstür. H1 "hareket yalnız sahne/süs
+   öneki" diyor ve `.dugme` istisnası yalnız `transition`ı kapsıyor;
+   `animation` için önek gerekiyor. H4 de böylece cihaz kısıtıyla
+   söndürebiliyor.
+3. Hover 1,02 · dokunuş 0,98 · süre ≤200 ms (görev belgesi).
+
+**Huzme bileşik katmanda — ölçülmüş karar.** İlk yazım kaynağın
+`@property --ga` açısını döndürüyordu; konik degrade her karede yeniden
+boyanır ve ana iş parçacığında koşar. Şimdi degrade sabit, dönen şey
+sözde-elemanın `transform`u. Yan kazanç: `@property` gerekmiyor, eski
+tarayıcıda da döner.
+
+### Bulgu: ANA SAYFANIN TBT'Sİ YÜKSEK — B kalemlerinden DEĞİL
+
+Ana sayfa LH mobil ölçümü: **puan 88-97 · LCP 1,97 s · TBT 145-423 ms**
+(koşumlar arası oynak). B2/B3 geçici olarak çıkarılıp yeniden ölçüldü:
+**puan 91 · TBT 348 ms** — yani yük B kalemlerinden gelmiyor, **zaten
+oradaydı**. Ana iş parçacığı dökümü sebebi de gösteriyor: betik
+değerlendirme yalnız **70 ms**, buna karşılık *Other* 3.417 ms, *Style &
+Layout* 1.770 ms, *Rendering* 945 ms. Yani sorun JS değil, ana sayfanın
+sahne yükü (11 sahne, kaydırma güdümlü animasyonlar, 130 KB satır içi
+CSS). **AÇIK KALEM — kendi turunu istiyor** (motor sahnesinde işe yarayan
+üç kaldıraç burada da denenebilir: `content-visibility`, miras daraltma,
+grup opaklığı).
+
+**Kapı:** denetim **45/0** · H18 ana sayfa gzip **36.000 B** (tavan
+40.960) · J1 **10.051 B** · hareket azaltmada huzme durur, harfler
+yerinde (ölçüldü) · JS kapalıyken başlık ve düğmeler tam (ölçüldü).
+
+**Sıradaki B kalemleri:** B1 bento + B7 akordeon galeri (ikisi de görsel
+listesi istiyor — Enes üretecek), sonra B5 form, B4 parçacık hero,
+B6 prolog geçişi.
