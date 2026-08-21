@@ -1,0 +1,931 @@
+---
+/* K7 · PAZAR ZEKÂSI MOTORU (#mkStage) — finans hizmetinin ikinci ve en
+   uzun sahnesi. Kaynak: kök index.html · markup marketStage 8137-8262 ·
+   CSS 3376-3730 (+ 4390-4392 mobil içerik istisnası) · sürücü mdraw
+   8611-8692 · kablolar kabloKur 8536-8604 · ST 8703-8712 (pin 4.4).
+
+   SEKİZ PERDE TEK PENCEREDE YATAY KAYAR: ham veri → sinyal → harcama
+   eğrisi → risk iştahı → davranışsal motor → karar & sıçrama →
+   kampanya devri → dünya haritası.
+
+   KİLİT ÖLÇÜLÜR (platform sahnesinin dersi): kap = sarmal + 440vh,
+   yani yapışık pencere tam kilit boyuna eşit; sticky üst hizası
+   max(0px,(100vh−sarmal)/2) kaynağın iki dalını da karşılar.
+
+   SÜRÜCÜ TEK: --mkp. Şerit anahtar kareyle (eşikler sabit, aradaki
+   hareket doğrusal → birebir; platform turunda ölçülen karar: değişken
+   güdümlü transform bileşik katmanda sürülemiyor).
+
+   Eşikler kaynak mdraw'dan (N=8):
+     a_i = clamp((e − i/8) / .125)
+     şerit = Σ_{i=0..6} clamp((8e − i − .84)/.16)
+     1 ham veri : sayaç a0>.02+i·.06 · satır a0>.04+i·.045 · sektör a0>.30+i·.06
+     2 sinyal   : kutu a1>.08 · kalem a1>.26+i·.06 · ok a1>.52 · ürün a1>.58+i·.06
+     3 eğri     : t=clamp((a2−.06−i·.13)/.34) · çizgi dashoffset 240(1−t) · alt satır t>.72
+     4 risk     : bileşen a3>.08+i·.08 · sıra a3>.42+i·.05 · SIRALAMA KAYAR a3>.58
+     5 motor    : girdi a4>.04+i·.055 · kablo a4>.10+i·.055 · çekirdek a4>.30 ·
+                  çıkış kablosu a4>.40+i·.07 · kıvılcım a4>.52 ·
+                  hipotez a4>.44+i·.07 · eleme a4>.76 · kilit a4>.80
+     6 karar    : kalem a5>.06+i·.07 · istenen a5>.40 · gelen a5>.56
+     7 kampanya : kanal a6>.06+i·.08 · etki a6>.44 · devir a6>.62
+     8 harita   : HUD satırı a7>.60+i·.07 (harita katmanı ayrı bölümde)
+
+   KABLOLAR ÖLÇÜLÜR (kaynak kabloKur): girdi kartlarının sağ kenarından
+   amblemin çemberine, çemberin sağındaki TEK noktadan hipotez
+   kartlarına S eğrileri. Ölçüm `offsetLeft/Top` zinciriyle — kartlar
+   açılmadan önce translateX taşıdığı için gBCR uçları kaydırırdı
+   (kaynağın kendi dersi, 8536-8546). viewBox piksel biriminde.
+
+   AMBLEM ve KIVILCIM zaman animasyonudur (kaynağın kendi otomatiği:
+   dış dişli 20 sn CCW, iç 12 sn CW — oran diş sayısından ölçülmüş).
+   Kaynak `.mkact.on` sınıfıyla duraklatıyordu; burada perde sınıfı yok,
+   o yüzden kapı IntersectionObserver: görünmeyen dönmez (doktrinin
+   IO'ya izin verdiği tek yer — [[qanatone-io-tetik-surucu]] madde 3). */
+import { T, type Dil } from '../icerik';
+import { ulkeler, agKur, yay, yuzde, nokta, VB } from '../harita.mjs';
+interface Props { market: any; dil: Dil }
+const { market, dil } = Astro.props;
+const m = market || {};
+const en = dil === 'en';
+const M = (tr: string, eng: string) => en ? eng : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const adimlar = (m.steps || []) as any[];
+const sayimlar = (m.counts || []) as any[];
+const akis = (m.feed || []) as any[];
+const sektorler = (m.sectors || []) as any[];
+const kalemler = (m.items || []) as any[];
+const uretilen = (m.made || []) as any[];
+const pazarlar = (m.markets || []) as any[];
+const riskler = (m.risk || []) as any[];
+const girdiler = (m.inputs || []) as any[];
+const hipotezler = (m.hyp || []) as any[];
+const kararlar = (m.decision || []) as any[];
+const kanallar = (m.channels || []) as any[];
+const hud = (m.hud || []) as any[];
+const sinyal = m.signal || {};
+/* İÇERİKTEKİ OK KARAKTERİ SVG'YE ÇEVRİLİR — F1c yakaladı: U+2192 ne
+   'latin' ne 'latin-ext' kaynağında var (ölçüldü, fontTools ile dört
+   yüzde de yok). Eski site onu sistem fontundan çiziyordu, yani satır
+   iki yazı tipiyle karışık diziliyordu. Aynı ders üçüncü kez: ✦ (sohbet)
+   ve S-SE oku. Panel metni DEĞİŞMİYOR; yalnız basımı değişiyor. */
+const okla = (v: any): any[] => String(T(v, dil) ?? '').split('→');
+/* ── 8. PERDE: DÜNYA HARİTASI · geometri DERLEMEDE pişer ──────────
+   Kaynak mkMap (7687-7900) her karede canvas'a çiziyordu: kara ızgarası,
+   243 ülke, tohumlu 64 çiftlik küresel ağ, zincir yayları, paketler,
+   balonlar. Statik olan her şey burada hesaplanır; hareket CSS'te sürer.
+   Kaynağın veri ve çizici JS'i tarayıcıya İNMEZ (J1 tavanı 10 KB). */
+const H = m.map || {};
+const kaynak = H.src || {}, merkez = H.hub || {}, hedefler = (H.dst || []) as any[];
+const secili = H.pick || 0;
+const balonlar = (m.bubbles || []) as any[];
+const ag = agKur().map((L: any) => {
+  const g = yay(ulkeler[L.a], ulkeler[L.b]);
+  return { ...L, ...g };
+}).filter((x: any) => !x.kenar);      /* kaynak: kenardan dolanan yayı çizme (7740) */
+const yKaynak = yuzde(kaynak.lon, kaynak.lat), yMerkez = yuzde(merkez.lon, merkez.lat);
+const zKaynak = yay(kaynak, merkez);
+const zHedef = hedefler.map((d: any) => ({ ...yay(merkez, d), ad: d.n, y: yuzde(d.lon, d.lat) }));
+/* balonlar: kaynak paket turu tamamlanınca RASTGELE doğuruyordu; CSS'te
+   rastgelelik yok — altı yay ucuna sabitlenip sıralı çevrimle doğuyorlar
+   (sapma adıyla; en fazla üçü aynı anda görünür, kaynağın sınırı) */
+const balonYeri = ag.filter((_: any, i: number) => i % 9 === 2).slice(0, 6);
+/* GRUPLAMA (ölçülmüş karar): 243 nokta ve 64 yay tek tek değişken
+   zinciri taşıyınca kare başına ~370 eleman tazeleniyordu. Noktalar 16,
+   yaylar 8 gruba toplandı: açılış eşiği grubun ORTA indisinden gelir,
+   grup içi noktalar kendi statik boyunu/opaklığını korur. İç opaklık çarpım
+   olarak biner; dash-offset ve stroke-opacity SVG'de miras alınır. */
+const NG = 16, AGG = 8;
+const dilim = (dizi: any[], n: number) => {
+  const boy = Math.ceil(dizi.length / n), c: any[][] = [];
+  for (let i = 0; i < dizi.length; i += boy) c.push(dizi.slice(i, i + boy));
+  return c;
+};
+const ulkeGrup = dilim(ulkeler as any[], NG).map((g, gi) => ({
+  g, i: gi * Math.ceil((ulkeler as any[]).length / NG) + Math.ceil((ulkeler as any[]).length / NG) / 2,
+}));
+const agGrup = dilim(ag, AGG).map((g, gi) => ({
+  g, k: gi * Math.ceil(ag.length / AGG) + Math.ceil(ag.length / AGG) / 2,
+}));
+/* eğri noktaları derlemede pişer (kaynak 8153-8156) */
+const egri = (c: any) => {
+  const idx: number[] = c.idx || [];
+  const n = Math.max(1, idx.length - 1);
+  const pts = idx.map((v: number, j: number) => `${((j / n) * 100).toFixed(1)},${(100 - v).toFixed(1)}`).join(' ');
+  return { pts, alan: `0,100 ${pts} 100,100` };
+};
+---
+{m.steps && (
+<div class="sdsec mk-kap">
+  <div class="mk-sabit">
+    <span class="mono">{M('Pazar zekâsı — kaydırdıkça çözülür', 'Market intelligence — solved as you scroll')}</span>
+    <div class="mkstage" id="mkStage">
+      <div class="mkbar2">
+        <span class="mklogo"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+          ><path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm0 5.8a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" /><path
+            d="M21.2 13.6a9.6 9.6 0 0 0 0-3.2l1.9-1.4-1.9-3.3-2.2.8a9.4 9.4 0 0 0-2.8-1.6L15.8 2h-3.8l-.4 2.9c-1 .3-2 .9-2.8 1.6l-2.2-.8-1.9 3.3 1.9 1.4a9.6 9.6 0 0 0 0 3.2l-1.9 1.4 1.9 3.3 2.2-.8c.8.7 1.8 1.3 2.8 1.6l.4 2.9h3.8l.4-2.9c1-.3 2-.9 2.8-1.6l2.2.8 1.9-3.3-1.9-1.4Z"
+            opacity=".92" /></svg></b>{M('TradeSelf · pazar motoru', 'TradeSelf · market engine')}</span>
+        <span class="mkrail">{adimlar.map((s, i) =>
+          <span class="mkstep" data-s={i} style={`--i:${i}`}><b />{T(s, dil)}</span>)}</span>
+      </div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <linearGradient id="mkgrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(239,35,60,.34)" />
+          <stop offset="100%" stop-color="rgba(239,35,60,0)" />
+        </linearGradient></defs></svg>
+      <div class="mkview"><div class="mktrack">
+
+        {/* 1 — ham veri */}
+        <section class="mkact" data-a="0" style="--i:0">
+          <div class="mkcount">{sayimlar.map((c, i) =>
+            <span style={`--i:${i}`}><em>{c.v}</em><i>{T(c.n, dil)}</i></span>)}</div>
+          <div class="mksplit">
+            <div class="mkfeed">{akis.map((r, i) =>
+              <span class="mkfr" data-i={i} style={`--i:${i}`}><i>{r.f}</i>
+                {/* kaynak '→' KARAKTERİ basıyordu; F1c yakaladı: U+2192 alt
+                    kümede yok (S-SE okunun ve ✦ yıldızının aynı dersi).
+                    Aynı ok satır içi SVG olarak basılıyor. */}
+                <s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                  ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></s><i>{r.t}</i>
+                <em>{r.hs}</em><u>{r.p}</u><b>{r.v}</b></span>)}</div>
+            <div class="mksects">{sektorler.map((s, i) =>
+              <span class={'mksec' + (s.hot ? ' hot' : '')} data-i={i} style={`--i:${i}`}>
+                <i>{T(s.n, dil)}</i>
+                <span class="mkbar"><b style={`--w:${s.w}%`} /></span><em>{s.v}</em></span>)}</div>
+          </div>
+        </section>
+
+        {/* 2 — sinyal */}
+        <section class="mkact" data-a="1" style="--i:1">
+          <div class="mksig"><span class="mkup" /><div><b>{T(sinyal.t, dil)}</b>
+            <i>{okla(sinyal.d).map((p, i) => <>{i > 0 && <svg class="mkok" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{p}</>)}</i>
+            </div><em>{sinyal.v || ''}</em></div>
+          <div class="mkitems">{kalemler.map((x, i) =>
+            <span class="mkit" style={`--i:${i}`}><i>{x.n}</i><em>{x.v}</em></span>)}</div>
+          <div class="mkarrow" />
+          <div class="mkmades"><span class="mkmlab">{T(m.madeLab, dil)}</span>
+            {uretilen.map((x, i) => <span class="mkmade" data-i={i} style={`--i:${i}`}>{T(x, dil)}</span>)}</div>
+        </section>
+
+        {/* 3 — harcama eğrisi */}
+        <section class="mkact" data-a="2" style="--i:2">
+          <span class="mklab">{T(m.curveLab, dil)}</span>
+          <div class="mkcurves">{pazarlar.map((c: any, i: number) => { const g = egri(c); return (
+            <span class="mkmc" data-i={i} style={`--i:${i}`}>
+              <span class="mkmh"><b>{c.n}</b><em class="mkdelta">{c.d}</em></span>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="mkcv" aria-hidden="true">
+                <line x1="0" y1="25" x2="100" y2="25" /><line x1="0" y1="50" x2="100" y2="50" />
+                <line x1="0" y1="75" x2="100" y2="75" />
+                <polygon points={g.alan} /><polyline points={g.pts} />
+              </svg>
+              <span class="mkax"><i>{T(c.a0, dil)}</i><i>{T(c.a1, dil)}</i></span>
+              <span class="mkline"><i>{T(c.top, dil)}</i><em>{c.tv}</em></span>
+            </span>
+          ); })}</div>
+        </section>
+
+        {/* 4 — risk iştahı */}
+        <section class="mkact" data-a="3" style="--i:3">
+          <div class="mksplit2">
+            <div class="mkcomps"><span class="mklab">{T(m.riskLab, dil)}</span>
+              {riskler.map((r, i) => <span class="mkcomp" data-i={i} style={`--i:${i}`}>
+                <i>{T(r.n, dil)}</i>
+                <span class="mkbar"><b style={`--w:${r.w}%`} /></span><em>{r.v}</em></span>)}</div>
+            <div class="mkranks"><span class="mklab">{T(m.rankLab, dil)}</span>
+              <div class="mkrkbox">{pazarlar.map((c: any, i: number) =>
+                <span class="mkrk" data-i={i} style={`--i:${i};--o:${c.rank ?? i}`}>
+                  <i>{c.n}</i><em>{c.score}</em></span>)}</div></div>
+          </div>
+        </section>
+
+        {/* 5 — davranışsal motor */}
+        <section class="mkact" data-a="4" style="--i:4">
+          <div class="mkeng"><svg class="mkwire" aria-hidden="true" />
+            <div class="mkins">{girdiler.map((x, i) =>
+              <span class="mkin" data-i={i} style={`--i:${i}`}>{T(x, dil)}</span>)}</div>
+            <div class="mkcore" role="img" aria-label={T(m.engineLab, dil)}>
+              <i class="amDis" /><i class="amBeyin" /><i class="amIc" /></div>
+            <div class="mkhyps">{hipotezler.map((x: any, i: number) =>
+              <span class={'mkhy' + (x.win ? ' win' : '')} data-i={i} style={`--i:${i}`}>
+                <i>{T(x.n, dil)}</i><em>{x.p}</em></span>)}</div>
+          </div>
+        </section>
+
+        {/* 6 — karar ve sıçrama */}
+        <section class="mkact" data-a="5" style="--i:5">
+          <div class="mkdecs">{kararlar.map((x, i) =>
+            <span class="mkdc" data-i={i} style={`--i:${i}`}><i>{T(x.k, dil)}</i><b>{T(x.v, dil)}</b></span>)}</div>
+          <div class="mkjump">
+            <div class="mkjc ask"><span class="mkjl">{T(m.askLab, dil)}</span><b>{T(m.ask, dil)}</b></div>
+            <div class="mkjc got"><span class="mkjl">{T(m.gotLab, dil)}</span>
+              <b>{T(m.got, dil)}</b><i>{T(m.gotWhy, dil)}</i></div>
+          </div>
+        </section>
+
+        {/* 7 — kampanya devri */}
+        <section class="mkact" data-a="6" style="--i:6">
+          <span class="mklab">{T(m.campLab, dil)}</span>
+          <div class="mkchs">{kanallar.map((x, i) =>
+            <span class="mkch" data-i={i} style={`--i:${i}`}><i>{T(x.n, dil)}</i><em>{x.s}</em></span>)}</div>
+          <div class="mkinf"><b /><span><i>{T(m.infLab, dil)}</i><em>{T(m.inf, dil)}</em></span></div>
+          <div class="mkhand">{T(m.hand, dil)}</div>
+        </section>
+
+        {/* 8 — dünya haritası (finale) */}
+        <section class="mkact mkmapact" data-a="7" style="--i:7">
+          <div class="mkmapwrap">
+            {/* kara katmanı: derlemede basılmış nokta ızgarası (üreteç
+                gorsel-uret.cjs · kaynağın QG ızgarası, ana sayfa
+                haritasıyla PAYLAŞILAN dosya) */}
+            <picture class="mkkara">
+              <source media="(max-width: 900px)" srcset={`${B}/img/kara-m.webp`} />
+              <img src={`${B}/img/kara.webp`} width="1600" height="568" alt=""
+                loading="lazy" decoding="async" />
+            </picture>
+            {/* 243 ülke — yuvarlak kalsınlar diye SVG'de değil, yüzde
+                konumlu noktalar (SVG kutusu gerilir, nokta gerilmez) */}
+            <div class="mkco">{ulkeGrup.map((gr: any) => (
+              <span class="mkcg" style={`--i:${gr.i}`}>{gr.g.map((c: any) => { const y = yuzde(c.lon, c.lat); return (
+                <i class={'mkc w' + c.w} style={`left:${y.x.toFixed(2)}%;top:${y.y.toFixed(2)}%`} />
+              ); })}</span>
+            ))}</div>
+            <svg class="mkag" viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
+              {/* küresel ağ: tohumlu 64 çift (kaynak AG üreteci birebir) */}
+              {agGrup.map((gr: any) => (
+                <g class="mkagg" style={`--k:${gr.k}`}>
+                  {gr.g.map((L: any) => <path class="mkagy" d={L.d} pathLength="1" />)}
+                  {gr.g.map((L: any) => <circle class="mkagp" r="1.7"
+                    style={`offset-path:path('${L.d}');animation-duration:${L.hiz.toFixed(2)}s;animation-delay:${(-L.faz * L.hiz).toFixed(2)}s`} />)}
+                </g>
+              ))}
+              {/* zincir: hammadde → üretim → pazarlar */}
+              <path class="mkzn zn-src" d={zKaynak.d} pathLength="1" />
+              <circle class="mkznp" r="2.6"
+                style={`offset-path:path('${zKaynak.d}');animation-duration:2.2s`} />
+              {zHedef.map((z: any, i: number) => <path class={'mkzn zn-dst' + (i === secili ? ' sec' : '')}
+                style={`--i:${i}`} d={z.d} pathLength="1" />)}
+              {zHedef.map((z: any, i: number) => <circle class={'mkznp zn-dp' + (i === secili ? ' sec' : '')}
+                r={i === secili ? 3 : 1.9}
+                style={`--i:${i};offset-path:path('${z.d}');animation-duration:${i === secili ? 1.7 : 2.9}s;animation-delay:${(-i * .3).toFixed(2)}s`} />)}
+            </svg>
+            {/* düğümler ve etiketler: canvas yazısı yerine gerçek metin */}
+            <div class="mkdg">
+              <span class="mkd mkd-src" style={`left:${yKaynak.x.toFixed(2)}%;top:${yKaynak.y.toFixed(2)}%`}><b />{kaynak.n}</span>
+              <span class="mkd mkd-hub" style={`left:${yMerkez.x.toFixed(2)}%;top:${yMerkez.y.toFixed(2)}%`}><b />{merkez.n}</span>
+              {zHedef.map((z: any, i: number) => <span class={'mkd mkd-dst' + (i === secili ? ' sec' : '')}
+                style={`left:${z.y.x.toFixed(2)}%;top:${z.y.y.toFixed(2)}%;--i:${i}`}><b />{z.ad}</span>)}
+            </div>
+            {/* konuşma balonları: iletim tamamlanınca müşteri cümlesi */}
+            <div class="mkbl">{balonYeri.map((L: any, i: number) => {
+              const yz = { x: (L.p2.x / VB.w) * 100, y: (L.p2.y / VB.h) * 100 };
+              return <span class="mkb" style={`left:${yz.x.toFixed(2)}%;top:${yz.y.toFixed(2)}%;--i:${i}`}
+                >{T(balonlar[i % Math.max(1, balonlar.length)], dil)}</span>;
+            })}</div>
+            <div class="mkhud"><span class="mkhl">{T(m.mapLab, dil)}</span>
+              {hud.map((x, i) => <span class="mkhr" data-i={i} style={`--i:${i}`}>
+                <i>{T(x.k, dil)}</i><b>{okla(x.v).map((p, j) => <>{j > 0 && <svg class="mkok"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                  ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{p}</>)}</b></span>)}</div>
+          </div>
+        </section>
+
+      </div></div>
+    </div>
+    {m.note && <div class="fnnote">{okla(m.note).map((p, i) => <>{i > 0 && <svg class="mkok"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+      stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>}{p}</>)}</div>}
+  </div>
+</div>
+)}
+
+<style>
+  /* ═══ KAP · kaynak 3379-3392 ═══ */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec > .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+  .mkstage { border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    position: relative; display: flex; flex-direction: column; max-height: calc(100vh - 60px);
+    background: linear-gradient(168deg, #141418, #0b0b0d); }
+  .mkbar2 { display: flex; align-items: center; gap: clamp(12px, 1.8vw, 24px); flex-wrap: wrap;
+    padding: clamp(11px, 1.3vw, 16px) clamp(14px, 1.7vw, 22px);
+    border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
+  .mklogo { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -.02em;
+    font-size: clamp(11.5px, 1vw, 13.5px); color: #fff; flex: none; }
+  .mklogo b { width: 15px; height: 15px; display: block; color: var(--red); }
+  .mklogo svg { width: 100%; height: 100%; display: block; }
+  .mkrail { display: flex; align-items: center; gap: clamp(6px, .9vw, 13px); flex-wrap: wrap;
+    margin-left: auto; font-family: ui-monospace, monospace;
+    font-size: clamp(8.4px, .72vw, 10px); letter-spacing: .09em; text-transform: uppercase; }
+  .mkstep { display: flex; align-items: center; gap: 5px; }
+  .mkstep b { width: 5px; height: 5px; border-radius: 50%; flex: none; }
+  .mkview { overflow: hidden; flex: 0 0 auto;
+    height: clamp(280px, min(37vw, calc(100vh - 210px)), 470px); }
+  .mktrack { display: flex; width: 800%; height: 100%; }
+  /* content-visibility: sekiz perde yan yana duruyor, biri görünüyor —
+     kadraj dışındakinin boyaması atlanır. ÖLÇÜLDÜ (1440 + 4x kısıt,
+     kaydırma): kare ortancası 18,4 → 9,1 ms, p95 138 → 92. Perdenin
+     boyu dışardan (şerit) belirlendiği için intrinsic-size gerekmiyor. */
+  .mkact { width: 12.5%; height: 100%; flex: none; padding: clamp(16px, 2vw, 26px);
+    overflow: hidden; display: flex; flex-direction: column; gap: clamp(10px, 1.3vw, 16px);
+    content-visibility: auto; }
+  .mklab { font-family: ui-monospace, monospace; font-size: clamp(8.6px, .74vw, 10.2px);
+    letter-spacing: .11em; text-transform: uppercase; color: var(--tx4); flex: none; }
+  .mkstage b, .mkstage i, .mkstage em, .mkstage u, .mkstage s {
+    font-style: normal; text-decoration: none; }
+
+  /* 1 — ham veri (kaynak 3414-3451) */
+  .mkcount { display: flex; gap: clamp(10px, 1.4vw, 20px); flex: none; }
+  .mkcount span { display: flex; flex-direction: column; gap: 2px; }
+  .mkcount em { font-family: ui-monospace, monospace; font-weight: 700; color: var(--red-soft);
+    font-size: clamp(16px, 1.9vw, 26px); letter-spacing: -.02em; }
+  .mkcount i { color: var(--tx4); font-size: clamp(9.5px, .8vw, 11px); }
+  .mksplit { display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(12px, 1.6vw, 22px);
+    flex: 1; min-height: 0; }
+  .mkfeed { display: flex; flex-direction: column; gap: 3px; overflow: hidden;
+    justify-content: center; font-family: ui-monospace, monospace;
+    font-size: clamp(8.6px, .76vw, 10.4px); }
+  .mkfr { display: grid; grid-template-columns: auto auto auto auto 1fr auto; gap: 6px;
+    align-items: center; padding: 4px 8px; border-radius: 6px;
+    background: rgba(255, 255, 255, .03); color: var(--tx3); }
+  .mkfr i { color: #fff; font-weight: 600; }
+  .mkfr s { color: var(--tx4); display: flex; }
+  .mkfr s svg { width: .9em; height: .9em; display: block; }
+  /* içerikten gelen ok (bkz. okla) — satır içinde, yazı boyuyla ölçekli */
+  .mkok { width: .85em; height: .85em; display: inline-block; vertical-align: -.12em; }
+  .mkfr em { color: var(--red-soft); } .mkfr u { color: var(--tx3); }
+  .mkfr b { color: var(--tx2); text-align: right; }
+  .mksects { display: flex; flex-direction: column; gap: 7px; justify-content: center; }
+  .mksec { display: grid; grid-template-columns: 1fr 2.2fr auto; gap: 8px; align-items: center;
+    font-size: clamp(9.6px, .82vw, 11.4px); color: var(--tx3); }
+  .mksec.hot { color: #fff; font-weight: 600; }
+  .mkbar { height: 6px; border-radius: 4px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+  .mkbar b { display: block; height: 100%; width: 0; border-radius: 4px;
+    background: rgba(255, 255, 255, .22); }
+  .mksec.hot .mkbar b { background: linear-gradient(90deg, var(--red), var(--red-soft)); }
+  .mksec em { font-family: ui-monospace, monospace; font-size: .92em; color: var(--tx4); }
+  .mksec.hot em { color: var(--red-soft); }
+
+  /* 2 — sinyal (3453-3477) */
+  .mksig { display: flex; align-items: center; gap: clamp(10px, 1.3vw, 16px);
+    padding: clamp(11px, 1.4vw, 18px); border-radius: 12px;
+    border: 1px solid rgba(239, 35, 60, .32);
+    background: linear-gradient(100deg, rgba(239, 35, 60, .12), rgba(255, 255, 255, .02)); }
+  .mkup { width: 0; height: 0; flex: none; border-left: 7px solid transparent;
+    border-right: 7px solid transparent; border-bottom: 12px solid var(--red); }
+  .mksig b { display: block; color: #fff; font-weight: 650; font-size: clamp(12px, 1.1vw, 15px); }
+  .mksig i { display: block; color: var(--tx3); font-size: clamp(10px, .86vw, 12px); margin-top: 2px; }
+  .mksig em { margin-left: auto; font-family: ui-monospace, monospace; font-weight: 700;
+    color: var(--red-soft); font-size: clamp(15px, 1.7vw, 23px); }
+  .mkitems { display: flex; gap: 7px; flex-wrap: wrap; }
+  .mkit { display: flex; flex-direction: column; gap: 2px; padding: 7px 12px; border-radius: 9px;
+    background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
+  .mkit i { color: var(--tx3); font-size: clamp(9.4px, .78vw, 10.8px); }
+  .mkit em { font-family: ui-monospace, monospace; color: #fff; font-size: clamp(10px, .86vw, 12px); }
+  .mkarrow { width: 2px; height: 16px; margin: 0 auto;
+    background: linear-gradient(180deg, var(--red), transparent); }
+  .mkmades { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+  .mkmlab { width: 100%; font-family: ui-monospace, monospace;
+    font-size: clamp(8.6px, .74vw, 10.2px); letter-spacing: .11em; text-transform: uppercase;
+    color: var(--tx4); }
+  .mkmade { padding: 8px 15px; border-radius: 999px; background: var(--red-dim);
+    border: 1px solid rgba(239, 35, 60, .4); color: #fff; font-weight: 600;
+    font-size: clamp(10.5px, .9vw, 12.6px); }
+
+  /* 3 — harcama eğrisi (3479-3503) */
+  .mkcurves { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.4vw, 18px);
+    flex: 1; min-height: 0; }
+  .mkmc { display: flex; flex-direction: column; gap: 7px; padding: clamp(10px, 1.3vw, 16px);
+    overflow: hidden; border-radius: 12px; background: rgba(255, 255, 255, .03);
+    border: 1px solid var(--line); }
+  .mkmh { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .mkmh b { color: #fff; font-weight: 650; font-size: clamp(11.5px, 1vw, 13.6px); }
+  .mkdelta { font-family: ui-monospace, monospace; color: var(--red-soft);
+    font-size: clamp(10px, .86vw, 12px); font-weight: 700; }
+  .mkcv { width: 100%; flex: 1; min-height: 60px; }
+  .mkcv polyline { fill: none; stroke: var(--red); stroke-width: 2.4;
+    vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 240; }
+  .mkcv polygon { fill: url(#mkgrad); }
+  .mkcv line { stroke: rgba(255, 255, 255, .07); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .mkax { display: flex; justify-content: space-between; font-family: ui-monospace, monospace;
+    font-size: 8.6px; letter-spacing: .06em; color: var(--tx4); margin-top: -2px; }
+  .mkline { display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    padding-top: 7px; border-top: 1px solid var(--line); }
+  .mkline i { color: var(--tx3); font-size: clamp(9.4px, .8vw, 11px); }
+  .mkline em { font-family: ui-monospace, monospace; color: #fff; font-size: clamp(10px, .86vw, 12px); }
+
+  /* 4 — risk iştahı (3505-3536) */
+  .mksplit2 { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(12px, 1.8vw, 26px);
+    flex: 1; min-height: 0; align-items: center; }
+  .mkcomps, .mkranks { display: flex; flex-direction: column; gap: 9px; }
+  .mkcomp { display: grid; grid-template-columns: 1.5fr 1.6fr auto; gap: 9px; align-items: center;
+    font-size: clamp(9.6px, .82vw, 11.4px); color: var(--tx2); }
+  .mkcomp em { font-family: ui-monospace, monospace; color: #fff; font-size: .94em; }
+  .mkrkbox { position: relative; flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px; }
+  .mkrk { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: clamp(9px, 1.1vw, 14px) clamp(11px, 1.3vw, 16px); border-radius: 11px;
+    background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
+  .mkrk i { color: #fff; font-weight: 600; font-size: clamp(11px, .95vw, 13px); }
+  .mkrk em { font-family: ui-monospace, monospace; color: var(--tx3);
+    font-size: clamp(11px, .95vw, 13px); }
+
+  /* 5 — davranışsal motor + amblem (3538-3586) */
+  .mkeng { display: grid; grid-template-columns: 1fr 1.15fr 1.35fr; gap: clamp(10px, 1.5vw, 20px);
+    align-items: center; flex: 1; min-height: 0; position: relative; }
+  .mkins { display: flex; flex-direction: column; gap: 7px; justify-content: center; }
+  .mkin { padding: 7px 12px; border-radius: 8px; background: rgba(255, 255, 255, .045);
+    border: 1px solid var(--line2); color: var(--tx2); font-size: clamp(9.4px, .8vw, 11.2px); }
+  .mkcore { position: relative; display: grid; place-items: center; aspect-ratio: 1;
+    max-height: 100%; max-width: min(100%, 320px); margin: 0 auto; width: 100%; }
+  .mkcore i { position: absolute; inset: 0; display: block;
+    background: center/contain no-repeat; animation-play-state: paused; }
+  .mkcore .amDis { background-image: url('/yeni/img/ts-dis.webp'); animation: amCCW 20s linear infinite; }
+  .mkcore .amBeyin { inset: 20%; background-image: url('/yeni/img/ts-beyin.webp'); }
+  .mkcore .amIc { inset: 29%; background-image: url('/yeni/img/ts-ic.webp'); animation: amCW 12s linear infinite; }
+  /* dönüş oranı kaynakta ÖLÇÜLMÜŞ: diş sayıları 20/12 → periyot oranı .6 */
+  @keyframes amCCW { to { transform: rotate(-360deg); } }
+  @keyframes amCW { to { transform: rotate(360deg); } }
+  /* görünen perdede döner — kapı IO (ada) */
+  .mkgor .mkcore i { animation-play-state: running; }
+
+  /* kablolar (3588-3624) */
+  .mkwire { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+    z-index: 0; overflow: visible; }
+  /* :global ŞART — kablolar ada tarafında (innerHTML) doğuyor, yani
+     Astro'nun kapsam niteliğini TAŞIMIYORLAR; kapsamlı seçici hiç
+     eşleşmiyordu ve --mon kendi ilk değerinde (1) kalıyordu: kablolar
+     daha sahnenin başında ÇİZİLMİŞ görünüyordu. Parmak izi yakaladı
+     (kaynak p=0'da 00000/000, yeni 11111/111). */
+  .mkwire :global(path) { fill: none; stroke: rgba(239, 35, 60, .42); stroke-width: 1.2;
+    stroke-linecap: round; stroke-dasharray: var(--L, 300); }
+  .mkwire :global(circle) { fill: var(--red); }
+  .mkwire :global(.kiv) { fill: #ff8a9b; opacity: 0; animation: kivGit 2.6s linear infinite;
+    animation-play-state: paused; }
+  .mkgor .mkwire :global(.kiv) { animation-play-state: running; }
+  @keyframes kivGit { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+  .mkins, .mkcore, .mkhyps { position: relative; z-index: 1; }
+  .mkhyps { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .mkhy { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 9px 13px; border-radius: 10px; background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--line2); }
+  .mkhy i { color: var(--tx2); font-size: clamp(9.6px, .82vw, 11.4px); line-height: 1.3; }
+  .mkhy em { font-family: ui-monospace, monospace; color: var(--tx4); font-size: .94em; flex: none; }
+
+  /* 6 — karar ve sıçrama (3640-3663) */
+  .mkdecs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex: none; }
+  .mkdc { display: flex; flex-direction: column; gap: 3px; padding: clamp(9px, 1.1vw, 14px);
+    border-radius: 11px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
+  .mkdc i { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--tx4); }
+  .mkdc b { color: #fff; font-weight: 650; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.25; }
+  .mkjump { display: grid; grid-template-columns: .85fr 1.3fr; gap: clamp(10px, 1.4vw, 18px);
+    flex: 1; min-height: 0; align-items: stretch; }
+  .mkjc { display: flex; flex-direction: column; gap: 6px; padding: clamp(12px, 1.5vw, 20px);
+    border-radius: 13px; overflow: hidden; }
+  .mkjc.ask { background: rgba(255, 255, 255, .035); border: 1px solid var(--line2); }
+  .mkjc.got { background: linear-gradient(150deg, rgba(239, 35, 60, .16), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(239, 35, 60, .45); }
+  .mkjl { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--tx4); }
+  .mkjc.got .mkjl { color: var(--red-soft); }
+  .mkjc b { color: #fff; font-weight: 650; font-size: clamp(12px, 1.15vw, 16px); line-height: 1.25; }
+  .mkjc i { color: var(--tx3); font-size: clamp(9.6px, .78vw, 11.2px); line-height: 1.45; margin-top: auto; }
+
+  /* 7 — kampanya devri (3665-3690) */
+  .mkchs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex: none; }
+  .mkch { display: flex; flex-direction: column; gap: 4px; padding: clamp(10px, 1.2vw, 15px);
+    border-radius: 11px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
+  .mkch i { color: var(--tx2); font-size: clamp(9.4px, .8vw, 11.2px); line-height: 1.25; }
+  .mkch em { font-family: ui-monospace, monospace; color: var(--red-soft); font-weight: 700;
+    font-size: clamp(12px, 1.1vw, 15px); }
+  .mkinf { display: flex; align-items: center; gap: 12px; padding: clamp(11px, 1.3vw, 17px);
+    border-radius: 12px; background: rgba(239, 35, 60, .08); border: 1px solid rgba(239, 35, 60, .3); }
+  .mkinf > b { width: 30px; height: 30px; border-radius: 9px; flex: none;
+    background: radial-gradient(120% 120% at 30% 20%, var(--red), #7d0d1c); }
+  .mkinf span { display: flex; flex-direction: column; gap: 2px; }
+  .mkinf i { color: var(--red-soft); font-family: ui-monospace, monospace; font-size: 9px;
+    letter-spacing: .11em; text-transform: uppercase; }
+  .mkinf em { color: #fff; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.35; }
+  .mkhand { margin-top: auto; padding-top: 11px; border-top: 1px solid var(--line);
+    color: var(--tx2); font-size: clamp(10.4px, .9vw, 12.8px); }
+
+  /* 8 — dünya haritası kabı ve HUD (3692-3707) */
+  .mkmapact { padding: 0; position: relative; }
+  .mkmapwrap { position: relative; flex: 1; min-height: 0; display: flex; }
+  .mkhud { position: absolute; left: clamp(14px, 1.8vw, 24px); bottom: clamp(14px, 1.8vw, 24px);
+    z-index: 2; display: flex; flex-direction: column; gap: 6px; padding: clamp(11px, 1.3vw, 17px);
+    border-radius: 13px; background: rgba(10, 10, 11, .82);
+    border: 1px solid rgba(239, 35, 60, .3); max-width: min(300px, 58%); }
+  .mkhl { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--red-soft); margin-bottom: 2px; }
+  .mkhr { display: flex; flex-direction: column; gap: 1px; }
+  .mkhr i { color: var(--tx4); font-size: clamp(8.8px, .74vw, 10.2px); }
+  .mkhr b { color: #fff; font-weight: 600; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.25; }
+
+  /* ═══ SÜRÜCÜ · kaynağın pin 4.4 + scrub'ının birebir CSS yazımı ═══ */
+  @property --mkp { syntax: '<number>'; inherits: false; initial-value: 1; }
+  /* miras seçimi ölçülmüş karar (platform turunun dersi): ilerleme
+     değişkeni miras alırsa onu kullanmayan alt ağaç da tazelenir */
+  @property --mact { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --mon { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --msa { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --msd { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --mt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @property --mkay { syntax: '<number>'; inherits: false; initial-value: 1; }
+  /* eleme ve kilit: --mele kendi elemanında, --mkil kazananın İÇİNDEKİ
+     yazıya da geçtiği için mirasla (alt ağaç iki eleman) */
+  @property --mele { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --mkil { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @keyframes mkp-surus { from { --mkp: 0; } to { --mkp: 1; } }
+
+  @supports (animation-timeline: view()) {
+    .mk-kap { view-timeline-name: --mk-kap; view-timeline-axis: block;
+      min-height: calc(var(--mkh, 620px) + 440vh); }
+    .mk-sabit { position: sticky; top: max(0px, calc((100vh - var(--mkh, 620px)) / 2)); }
+    .mktrack, .mkact, .mkstep, .mkcount span, .mkfr, .mksec, .mksig, .mkit, .mkarrow,
+    .mkmade, .mkmc, .mkcomp, .mkrk, .mkin, .mkcore, .mkhy, .mkdc, .mkjc, .mkch,
+    .mkinf, .mkhand, .mkhr, .mkwire, .mkkara, .mkco, .mkag, .mkdg, .mkbl {
+      animation: mkp-surus linear both; animation-timeline: --mk-kap;
+      animation-range: cover calc(100vh - max(0px, (100vh - var(--mkh, 620px)) / 2))
+                       cover calc(540vh - max(0px, (100vh - var(--mkh, 620px)) / 2)); }
+  }
+
+  /* ŞERİT — anahtar kare (eşikler sabit: (i+.84)/8 → (i+1)/8) */
+  @keyframes mk-serit {
+    0%, 10.5% { transform: translateX(0); }
+    12.5%, 23% { transform: translateX(-12.5%); }
+    25%, 35.5% { transform: translateX(-25%); }
+    37.5%, 48% { transform: translateX(-37.5%); }
+    50%, 60.5% { transform: translateX(-50%); }
+    62.5%, 73% { transform: translateX(-62.5%); }
+    75%, 85.5% { transform: translateX(-75%); }
+    87.5%, 100% { transform: translateX(-87.5%); }
+  }
+  @supports (animation-timeline: view()) { .mktrack { animation-name: mk-serit; } }
+
+  /* perde ilerlemeleri: a_i = clamp((e − i/8)/.125) */
+  .mkcount span, .mkfr, .mksec { --a: clamp(0, calc(var(--mkp) * 8), 1); }
+  .mksig, .mkit, .mkarrow, .mkmade { --a: clamp(0, calc((var(--mkp) - .125) * 8), 1); }
+  .mkmc { --a: clamp(0, calc((var(--mkp) - .25) * 8), 1); }
+  .mkcomp, .mkrk { --a: clamp(0, calc((var(--mkp) - .375) * 8), 1); }
+  .mkin, .mkcore, .mkhy, .mkwire { --a: clamp(0, calc((var(--mkp) - .5) * 8), 1); }
+  .mkdc, .mkjc { --a: clamp(0, calc((var(--mkp) - .625) * 8), 1); }
+  .mkch, .mkinf, .mkhand { --a: clamp(0, calc((var(--mkp) - .75) * 8), 1); }
+  .mkhr, .mkkara, .mkco, .mkag, .mkdg, .mkbl { --a: clamp(0, calc((var(--mkp) - .875) * 8), 1); }
+
+  /* perde ışığı: .3 → 1 (geçiş .45s → ×20); ilk perde girişte YANIK */
+  .mkact { --mact: calc(clamp(0, calc((var(--mkp) * 8 - var(--i)) * 20), 1)
+                      * (1 - clamp(0, calc((var(--mkp) * 8 - var(--i) - 1) * 20), 1)));
+    opacity: calc(.3 + .7 * var(--mact)); }
+  .mkact[data-a='0'] { --mact: calc(1 - clamp(0, calc((var(--mkp) * 8 - 1) * 20), 1)); }
+  .mkact[data-a='7'] { --mact: clamp(0, calc((var(--mkp) * 8 - 7) * 20), 1); }
+
+  /* adım rayı (geçiş .4s → ×22.5) */
+  .mkstep { --msa: calc(clamp(0, calc((var(--mkp) * 8 - var(--i)) * 22.5), 1)
+                      * (1 - clamp(0, calc((var(--mkp) * 8 - var(--i) - 1) * 22.5), 1)));
+    --msd: clamp(0, calc((var(--mkp) * 8 - var(--i) - 1) * 22.5), 1);
+    color: color-mix(in srgb, #fff calc(var(--msa) * 100%),
+      color-mix(in srgb, var(--tx3) calc(var(--msd) * 100%), var(--tx4))); }
+  .mkstep[data-s='0'] { --msa: calc(1 - clamp(0, calc((var(--mkp) * 8 - 1) * 22.5), 1)); }
+  .mkstep[data-s='7'] { --msa: clamp(0, calc((var(--mkp) * 8 - 7) * 22.5), 1); --msd: 0; }
+  .mkstep b { background: color-mix(in srgb, var(--red) calc(var(--msa) * 100%),
+      color-mix(in srgb, var(--red-soft) calc(var(--msd) * 100%), rgba(255, 255, 255, .18)));
+    box-shadow: 0 0 0 calc(var(--msa) * 4px) rgba(239, 35, 60, .18); }
+
+  /* ── 1 ham veri ── */
+  .mkcount span { --mon: clamp(0, calc((var(--a) - (.02 + var(--i) * .06)) * 20), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 6px)); }
+  .mkfr { --mon: clamp(0, calc((var(--a) - (.04 + var(--i) * .045)) * 30), 1);
+    opacity: var(--mon); transform: translateX(calc((1 - var(--mon)) * -10px)); }
+  .mksec { --mon: clamp(0, calc((var(--a) - (.30 + var(--i) * .06)) * 22.5), 1);
+    opacity: var(--mon); }
+  /* bar dolumu kaynakta .7s geçişle sınıfa bağlı (→ ×12,86) */
+  .mksec .mkbar b { width: calc(clamp(0, calc((var(--a) - (.30 + var(--i) * .06)) * 12.86), 1) * var(--w)); }
+
+  /* ── 2 sinyal ── */
+  .mksig { --mon: clamp(0, calc((var(--a) - .08) * 18), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 10px)); }
+  .mkit { --mon: clamp(0, calc((var(--a) - (.26 + var(--i) * .06)) * 25.7), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 6px)); }
+  .mkarrow { opacity: clamp(0, calc((var(--a) - .52) * 22.5), 1); }
+  .mkmade { --mon: clamp(0, calc((var(--a) - (.58 + var(--i) * .06)) * 23.7), 1);
+    opacity: var(--mon); transform: scale(calc(.92 + .08 * var(--mon))); }
+
+  /* ── 3 harcama eğrisi: t = clamp((a−.06−i·.13)/.34) ── */
+  .mkmc { --mt: clamp(0, calc((var(--a) - .06 - var(--i) * .13) / .34), 1);
+    --mon: clamp(0, calc(var(--mt) * 22.5), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 10px)); }
+  .mkcv polyline { stroke-dashoffset: calc(240 * (1 - var(--mt))); }
+  .mkcv polygon { opacity: clamp(0, calc(var(--mt) * 15), 1); }
+  .mkline { opacity: clamp(0, calc((var(--mt) - .72) * 22.5), 1); }
+
+  /* ── 4 risk iştahı ── */
+  .mkcomp { --mon: clamp(0, calc((var(--a) - (.08 + var(--i) * .08)) * 22.5), 1);
+    opacity: var(--mon); transform: translateX(calc((1 - var(--mon)) * -8px)); }
+  .mkcomp .mkbar b { width: calc(var(--mon) * var(--w));
+    background: linear-gradient(90deg, var(--red), var(--red-soft)); }
+  .mkrk { --mon: clamp(0, calc((var(--a) - (.42 + var(--i) * .05)) * 22.5), 1);
+    /* SIRALAMA KAYMASI: kaynak .ranked sınıfıyla `order:var(--o)` veriyordu;
+       order tam sayıdır, rampalanmaz — basamak (a3 > .58) */
+    --mkay: clamp(0, calc((var(--a) - .58) * 100000), 1);
+    opacity: var(--mon);
+    order: calc(var(--i) + var(--mkay) * (var(--o) - var(--i))); }
+  .mkrk[data-i='0'] { --vur: calc(var(--mkay) * 100%);
+    background: color-mix(in srgb, rgba(239, 35, 60, .16) var(--vur), rgba(255, 255, 255, .04));
+    border-color: color-mix(in srgb, rgba(239, 35, 60, .45) var(--vur), var(--line2)); }
+  .mkrk[data-i='0'] em { color: color-mix(in srgb, var(--red-soft) var(--vur), var(--tx3));
+    font-weight: calc(400 + var(--mkay) * 300); }
+
+  /* ── 5 davranışsal motor ── */
+  .mkin { --mon: clamp(0, calc((var(--a) - (.04 + var(--i) * .055)) * 22.5), 1);
+    opacity: var(--mon); transform: translateX(calc((1 - var(--mon)) * -10px)); }
+  .mkcore { opacity: clamp(0, calc((var(--a) - .30) * 18), 1); }
+  /* kablolar: her yolun kendi eşiği --i'den (kaynak 8662-8668) */
+  .mkwire :global(.kbin), .mkwire :global(.kbnin) {
+    --mon: clamp(0, calc((var(--a) - (.10 + var(--i) * .055)) * 10.6), 1); }
+  .mkwire :global(.kbout), .mkwire :global(.kbnout) {
+    --mon: clamp(0, calc((var(--a) - (.40 + var(--i) * .07)) * 10.6), 1); }
+  .mkwire :global(path) { stroke-dashoffset: calc(var(--L, 300) * (1 - var(--mon))); }
+  .mkwire :global(circle) { opacity: calc(var(--mon) * .85); }
+  .mkwire :global(.kiv) { opacity: calc(clamp(0, calc((var(--a) - .52) * 22.5), 1) * .95); }
+  .mkhy { --mon: clamp(0, calc((var(--a) - (.44 + var(--i) * .07)) * 22.5), 1);
+    --mele: clamp(0, calc((var(--a) - .76) * 22.5), 1);
+    --mkil: clamp(0, calc((var(--a) - .80) * 22.5), 1);
+    opacity: calc(var(--mon) * (1 - var(--mele) * .78));
+    transform: translateX(calc((1 - var(--mon)) * 10px));
+    filter: saturate(calc(1 - var(--mele) * .7)); }
+  .mkhy.win { --mele: 0;
+    background: color-mix(in srgb, rgba(239, 35, 60, .18) calc(var(--mkil) * 100%),
+      rgba(255, 255, 255, .04));
+    border-color: color-mix(in srgb, rgba(239, 35, 60, .5) calc(var(--mkil) * 100%), var(--line2)); }
+  .mkhy.win i { color: color-mix(in srgb, #fff calc(var(--mkil) * 100%), var(--tx2));
+    font-weight: calc(400 + var(--mkil) * 200); }
+  .mkhy.win em { color: color-mix(in srgb, var(--red-soft) calc(var(--mkil) * 100%), var(--tx4));
+    font-weight: calc(400 + var(--mkil) * 300); }
+
+  /* ── 6 karar ve sıçrama ── */
+  .mkdc { --mon: clamp(0, calc((var(--a) - (.06 + var(--i) * .07)) * 22.5), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 8px)); }
+  .mkjc.ask { --mon: clamp(0, calc((var(--a) - .40) * 18), 1); }
+  .mkjc.got { --mon: clamp(0, calc((var(--a) - .56) * 18), 1); }
+  .mkjc { opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 12px)); }
+
+  /* ── 7 kampanya devri ── */
+  .mkch { --mon: clamp(0, calc((var(--a) - (.06 + var(--i) * .08)) * 22.5), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 8px)); }
+  .mkinf { --mon: clamp(0, calc((var(--a) - .44) * 20), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 10px)); }
+  .mkhand { opacity: clamp(0, calc((var(--a) - .62) * 20), 1); }
+
+  /* ── 8 harita HUD ── */
+  .mkhr { --mon: clamp(0, calc((var(--a) - (.60 + var(--i) * .07)) * 22.5), 1);
+    opacity: var(--mon); transform: translateY(calc((1 - var(--mon)) * 5px)); }
+
+
+  /* ═══ 8. PERDE — DÜNYA HARİTASI (kaynak render 7792-7860) ═══
+     Aşamalar kaydırmaya bağlı, paketler ve balonlar kendi zaman
+     çevriminde (kaynağın rAF döngüsünün karşılığı; Enes'in isteği:
+     "oklar SÜREKLİ aksın"). Kapı IO: görünmeyen perde akmaz. */
+  .mkkara, .mkco, .mkag, .mkdg, .mkbl { position: absolute; inset: 0; pointer-events: none; }
+  .mkkara img { width: 100%; height: 100%; object-fit: fill; display: block; }
+  .mkag { width: 100%; height: 100%; }
+  /* kara: a = EA(clamp(p/.14)) — 7797 */
+  .mkkara { --lt: clamp(0, calc(var(--a) / .14), 1); --lu: calc(1 - var(--lt));
+    opacity: calc(1 - var(--lu) * var(--lu) * var(--lu)); }
+  /* ülke noktaları: tN = clamp((p−.06)/.20) · k = clamp((tN·243·1.25 − i)/6) */
+  /* grup: açılış eşiği (kaynak k = clamp((tN·243·1.25 − i)/6)) */
+  .mkcg { position: absolute; inset: 0; display: block;
+    --tn: clamp(0, calc((var(--a) - .06) / .20), 1);
+    opacity: clamp(0, calc((var(--tn) * 303.75 - var(--i)) / 6), 1); }
+  .mkc { position: absolute; border-radius: 50%; background: #fff;
+    transform: translate(-50%, -50%); }
+  .mkc.w3 { width: 4.4px; height: 4.4px; opacity: .72; }
+  .mkc.w2 { width: 3px; height: 3px; opacity: .5; }
+  .mkc.w1 { width: 2.1px; height: 2.1px; opacity: .34; }
+  /* küresel ağ: tW = clamp((p−.18)/.26) · t2 = clamp((tW·64·1.3 − k)/9)
+     zincir açılınca ağ SÖNMEZ, yalnız kısılır (agA .62) — 7810 */
+  .mkag { --tw: clamp(0, calc((var(--a) - .18) / .26), 1);
+    --aga: calc(1 - .38 * clamp(0, calc((var(--a) - .62) * 100000), 1));
+    --son: clamp(0, calc((var(--a) - .92) * 100000), 1); }
+  /* grup: dash-offset ve stroke-opacity SVG'de MİRAS ALINIR, paketlerin
+     opaklığı da grubun opaklığından gelir — kare başına 128 değil 8 eleman */
+  .mkagg { --t2: clamp(0, calc((var(--tw) * 83.2 - var(--k)) / 9), 1);
+    stroke-dashoffset: calc(1 - var(--t2));
+    opacity: clamp(0, calc((var(--t2) - .999) * 100000), 1); }
+  .mkagy { fill: none; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1; stroke-opacity: calc(.075 * var(--aga));
+    /* yay çizilirken de görünür olmalı: grup opaklığı paket için, yay
+       kendi opaklığını taşır (grup opaklığı 0 iken bile çizim sürüyor) */
+    opacity: 1; }
+  .mkagg { opacity: 1; }
+  .mkagp { fill: #fff; opacity: calc(var(--pg) * .6 * var(--aga));
+    animation-name: mk-akis; animation-timing-function: linear;
+    animation-iteration-count: infinite; animation-play-state: paused; }
+  .mkagg { --pg: clamp(0, calc((var(--t2) - .999) * 100000), 1); }
+  @keyframes mk-akis { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+  .mkgor .mkagp, .mkgor .mkznp, .mkgor .mkb { animation-play-state: running; }
+  /* zincir: hammadde → üretim (t1 = EA(clamp((p−.60)/.14))) */
+  .mkzn { fill: none; stroke: #fff; vector-effect: non-scaling-stroke;
+    stroke-linecap: round; stroke-dasharray: 1; }
+  .zn-src { --t1: clamp(0, calc((var(--a) - .60) / .14), 1);
+    --u1: calc(1 - var(--t1)); --e1: calc(1 - var(--u1) * var(--u1) * var(--u1));
+    stroke-width: 2; stroke-opacity: .85; stroke-dashoffset: calc(1 - var(--e1)); }
+  /* pazar yayları: t3 = EA(clamp((p−.76−i·.045)/.13)) · son = p>.92 */
+  .zn-dst { --t3: clamp(0, calc((var(--a) - .76 - var(--i) * .045) / .13), 1);
+    --u3: calc(1 - var(--t3)); --e3: calc(1 - var(--u3) * var(--u3) * var(--u3));
+    stroke-dashoffset: calc(1 - var(--e3)); stroke-width: 1.5;
+    stroke-opacity: calc(.5 - var(--son) * .28); }
+  .zn-dst.sec { stroke: color-mix(in srgb, var(--red) calc(var(--son) * 100%), #fff);
+    stroke-width: calc(1.5 + var(--son) * 1.1); stroke-opacity: calc(.5 + var(--son) * .45); }
+  .mkznp { fill: #fff; animation-name: mk-akis; animation-timing-function: linear;
+    animation-iteration-count: infinite; animation-play-state: paused;
+    opacity: clamp(0, calc((var(--a) - .74) * 100000), 1); }
+  .zn-dp { --t3: clamp(0, calc((var(--a) - .76 - var(--i) * .045) / .13), 1);
+    opacity: calc(clamp(0, calc((var(--t3) - .999) * 100000), 1) * (.7 - var(--son) * .2)); }
+  .zn-dp.sec { fill: color-mix(in srgb, #ff5a6e calc(var(--son) * 100%), #fff);
+    opacity: clamp(0, calc((var(--t3) - .999) * 100000), 1); }
+  /* düğümler: canvas yazısı yerine gerçek metin (aynı eşikler) */
+  /* kaynak yazı boyu KUTU genişliğine bağlıydı (W/64 ve W/86), görüntü
+     genişliğine değil — kap container yapılıp cqw ile birebir yazıldı */
+  .mkmapwrap { container-type: inline-size; }
+  .mkd { position: absolute; display: flex; align-items: center; gap: 7px;
+    transform: translate(-50%, -50%); font-size: clamp(9px, 1.5625cqw, 12.5px);
+    font-weight: 600; color: #fff; white-space: nowrap;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .9); }
+  .mkd b { width: 7.2px; height: 7.2px; border-radius: 50%; background: #fff; flex: none;
+    margin-left: -3.6px; }
+  .mkd-src { --t1: clamp(0, calc((var(--a) - .60) / .14), 1);
+    opacity: clamp(0, calc(var(--t1) * 100000), 1);
+    color: rgba(255, 255, 255, clamp(0, calc((var(--t1) - .45) * 100000), 1)); }
+  .mkd-hub { --t2h: clamp(0, calc((var(--a) - .70) / .08), 1);
+    opacity: clamp(0, calc(var(--t2h) * 100000), 1); }
+  .mkd-hub b { width: 9.6px; height: 9.6px; margin-left: -4.8px; background: var(--red);
+    box-shadow: 0 0 0 calc((1 - var(--t2h)) * .9 * 24px)
+      rgba(239, 35, 60, calc(.3 * (1 - (1 - var(--t2h)) * .9))); }
+  .mkdg { --son2: clamp(0, calc((var(--a) - .92) * 100000), 1); }
+  .mkd-dst { --t3: clamp(0, calc((var(--a) - .76 - var(--i) * .045) / .13), 1);
+    opacity: calc(clamp(0, calc((var(--t3) - .2) * 100000), 1) * (1 - var(--son2) * .38));
+    color: rgba(255, 255, 255, clamp(0, calc((var(--t3) - .5) * 100000), 1)); }
+  .mkd-dst b { width: 6.4px; height: 6.4px; margin-left: -3.2px;
+    background: rgba(255, 255, 255, .66); }
+  .mkd-dst.sec { opacity: clamp(0, calc((var(--t3) - .2) * 100000), 1); }
+  .mkd-dst.sec b { width: calc(6.4px + var(--son2) * 4.4px);
+    height: calc(6.4px + var(--son2) * 4.4px);
+    background: color-mix(in srgb, var(--red) calc(var(--son2) * 100%), rgba(255, 255, 255, .66)); }
+  .mkgor .mkd-dst.sec b { animation: mk-nabiz 1.43s linear infinite; }
+  @keyframes mk-nabiz {
+    from { box-shadow: 0 0 0 0 rgba(239, 35, 60, .85); }
+    to { box-shadow: 0 0 0 20px rgba(239, 35, 60, 0); } }
+  /* balonlar: kaynakta 2,8 sn yaşıyor; burada sıralı çevrim (18 sn) */
+  .mkb { position: absolute; transform: translate(-50%, calc(-100% - 13px));
+    padding: 5px 9px; border-radius: 999px;
+    font-size: clamp(8.5px, 1.1628cqw, 11.5px); font-weight: 600; color: #fff;
+    white-space: nowrap; background: rgba(239, 35, 60, .16);
+    border: 1px solid rgba(239, 35, 60, .55); opacity: 0;
+    animation: mk-balon 18s linear infinite; animation-play-state: paused;
+    animation-delay: calc(var(--i) * 3s); }
+  @keyframes mk-balon {
+    0%, 1.6% { opacity: 0; } 3.3%, 12.8% { opacity: 1; } 15.6%, 100% { opacity: 0; } }
+
+  /* gölgeler + cam H14: kaynakta masaüstü katmanı */
+  @media (min-width: 901px) {
+    .mkstage { box-shadow: 0 30px 80px -50px rgba(0, 0, 0, .9); }
+    .mklogo b { box-shadow: 0 0 14px -2px var(--red-glow); }
+    .mkjc.got { box-shadow: 0 0 44px -20px var(--red-glow); }
+    .mkhy.win { box-shadow: 0 0 30px -12px rgba(239, 35, 60, calc(var(--mkil) * .45)); }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .mkhud { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  }
+  /* MOBİL PAKET BÜTÇESİ (ölçülmüş): 64 paketin her biri offset-path
+     boyunca sürülüyor ve bileşik katmanda koşmuyor. Telefonda üçte biri
+     akar — ağın "canlı" hissi durur, kare bütçesi durmaz. */
+  @media (pointer: coarse), (max-width: 900px) {
+    .mkagg circle:nth-of-type(3n+1), .mkagg circle:nth-of-type(3n+2) { display: none; }
+  }
+  /* MOBİL İÇERİK İSTİSNASI — kaynak 4390-4392 (ana bloğun DIŞINDA) */
+  @media (pointer: coarse), (max-width: 900px) {
+    .mkact, .mkcount span, .mkfr, .mksec, .mksig, .mkit, .mkarrow, .mkmade, .mkmc,
+    .mkline, .mkcomp, .mkrk, .mkin, .mkcore, .mkhy, .mkdc, .mkjc, .mkch, .mkinf,
+    .mkhand, .mkhr { opacity: 1; transform: none; }
+    .mkcount span, .mkfr, .mksec, .mksig, .mkit, .mkarrow, .mkmade, .mkcomp, .mkrk,
+    .mkin, .mkhy, .mkdc, .mkjc, .mkch, .mkinf, .mkhand, .mkhr { animation: none; }
+    .mksec .mkbar b { width: var(--w); }
+    .mkcomp .mkbar b { width: var(--w); }
+    .mkcv polyline { stroke-dashoffset: 0; }
+  }
+  /* kaynak mobil çizelgesi: 3708-3730 */
+  @media (max-width: 860px) {
+    .mkrail { width: 100%; margin-left: 0; gap: 5px; }
+    .mkview { height: clamp(380px, min(150vw, calc(100vh - 210px)), 620px); }
+    .mksplit, .mksplit2, .mkeng, .mkjump { grid-template-columns: 1fr; }
+    .mkeng .mkcore { max-height: 150px; max-width: 150px; }
+    .mkcurves { grid-template-columns: 1fr; gap: 7px; }
+    .mkmc:nth-child(3) { display: none; }
+    .mkdecs, .mkchs { grid-template-columns: repeat(2, 1fr); }
+    .mkfeed .mkfr:nth-child(n+6) { display: none; }
+    .mkhud { max-width: 76%; left: 10px; bottom: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mk-kap { min-height: 0; }
+    .mk-sabit { position: static; }
+    .mktrack, .mkact, .mkstep, .mkcount span, .mkfr, .mksec, .mksig, .mkit, .mkarrow,
+    .mkmade, .mkmc, .mkcomp, .mkrk, .mkin, .mkcore, .mkhy, .mkdc, .mkjc, .mkch,
+    .mkinf, .mkhand, .mkhr, .mkwire, .mkkara, .mkco, .mkag, .mkdg, .mkbl { animation: none; }
+    .mkcore i { animation: none !important; }
+    .mkwire :global(.kiv) { animation: none; opacity: 0; }
+    .mkcv polyline { stroke-dashoffset: 0; }
+  }
+</style>
+
+<script>
+  /* MOTOR KABLOLARI — kaynak kabloKur'un yerlisi (8536-8604).
+     Girdi kartlarının sağ kenarından amblem çemberine, çemberin
+     sağındaki TEK noktadan hipotez kartlarına S eğrileri.
+     ÖLÇÜM offsetLeft/Top ZİNCİRİYLE: kartlar açılmadan önce translateX
+     taşıyor, gBCR uçları kaydırırdı (kaynağın kendi dersi). viewBox
+     piksel biriminde — tek birim, zoom hepsini birlikte ölçekler.
+     Kaydırmada ölçüm YOK: kurulum + resize + fonts.ready.
+
+     İKİNCİ İŞ: amblem ve kıvılcım zaman animasyonu; kaynak `.mkact.on`
+     ile duraklatıyordu. Perde sınıfı yok, o yüzden kapı IO — görünmeyen
+     dönmez (doktrinin IO'ya izin verdiği tek yer). */
+  const kap = document.querySelector('.mk-kap') as HTMLElement | null;
+  if (kap) {
+    const sabit = kap.querySelector('.mk-sabit') as HTMLElement;
+    const eng = kap.querySelector('.mkeng') as HTMLElement | null;
+    const svg = kap.querySelector('.mkwire') as SVGSVGElement | null;
+    const cekirdek = kap.querySelector('.mkcore') as HTMLElement | null;
+    const konum = (el: HTMLElement, kok: HTMLElement) => {
+      let x = 0, y = 0, n: any = el;
+      while (n && n !== kok) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    };
+    const kabloKur = () => {
+      if (!eng || !svg || !cekirdek) return;
+      const W = eng.offsetWidth, H = eng.offsetHeight;
+      if (W < 40 || H < 40) return;
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      const gir = [...kap.querySelectorAll<HTMLElement>('.mkins .mkin')];
+      const cik = [...kap.querySelectorAll<HTMLElement>('.mkhyps .mkhy')];
+      const ck = konum(cekirdek, eng);
+      const cx = ck.x + ck.w / 2, cy = ck.y + ck.h / 2, R = ck.w / 2 * 0.93;
+      const destek = CSS?.supports?.('offset-path', 'path("M0,0L1,1")');
+      const egriYol = (sx: number, sy: number, ex: number, ey: number) => {
+        const k = Math.abs(ex - sx) * 0.45;
+        return `M${sx.toFixed(1)},${sy.toFixed(1)} C${(sx + k).toFixed(1)},${sy.toFixed(1)} ` +
+          `${(ex - k).toFixed(1)},${ey.toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}`;
+      };
+      let ic = '';
+      const ekle = (d: string, i: number, dd: string, nx: number, ny: number) => {
+        ic += `<path class="kb${d}" data-i="${i}" style="--i:${i}" d="${dd}"/>` +
+          `<circle class="kbn${d}" data-i="${i}" style="--i:${i}" cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="2.2"/>`;
+        if (destek) ic += `<circle class="kiv kbk${d}" data-i="${i}" r="2.6" ` +
+          `style="offset-path:path('${dd}');animation-delay:${(0.06 * i + 0.2).toFixed(2)}s"/>`;
+      };
+      gir.forEach((el, i) => {
+        const k = konum(el, eng);
+        const sx = k.x + k.w, sy = k.y + k.h / 2;
+        const dx = sx - cx, dy = sy - cy, u = Math.hypot(dx, dy) || 1;
+        ekle('in', i, egriYol(sx, sy, cx + dx / u * R, cy + dy / u * R), sx, sy);
+      });
+      const qx = cx + R, qy = cy;
+      cik.forEach((el, i) => {
+        const k = konum(el, eng);
+        ekle('out', i, egriYol(qx, qy, k.x, k.y + k.h / 2), k.x, k.y + k.h / 2);
+      });
+      if (cik.length) ic += `<circle class="kbnout kbcik" data-i="0" style="--i:0" cx="${qx.toFixed(1)}" cy="${qy.toFixed(1)}" r="3"/>`;
+      svg.innerHTML = ic;
+      svg.querySelectorAll('path').forEach(pt => {
+        try { (pt as SVGPathElement).style.setProperty('--L', String(Math.ceil((pt as SVGPathElement).getTotalLength()) + 4)); } catch (e) { }
+      });
+    };
+    let zm: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(zm); zm = setTimeout(kabloKur, 180); });
+    document.fonts?.ready?.then(kabloKur);
+    if ('ResizeObserver' in window && eng) new ResizeObserver(kabloKur).observe(eng);
+    kabloKur();
+    kap.style.setProperty('--mkh', sabit.offsetHeight + 'px');
+    const olcSabit = () => kap.style.setProperty('--mkh', sabit.offsetHeight + 'px');
+    document.fonts?.ready?.then(olcSabit);
+    if ('ResizeObserver' in window) new ResizeObserver(olcSabit).observe(sabit);
+
+    /* IO kapısı — kaynağın `.mkact.on` duraklatmasının karşılığı: perde
+       kadrajdayken zaman animasyonları (amblem, kıvılcım, harita
+       paketleri, balonlar) akar, dışarıdayken durur. Kapı PERDE
+       BAŞINA: sekiz perde yan yana duruyor, yalnız biri görünüyor. */
+    const perdeler = [...kap.querySelectorAll<HTMLElement>('.mkact')];
+    if (perdeler.length && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(g => {
+        for (const x of g) x.target.classList.toggle('mkgor', x.isIntersecting);
+      }, { root: kap.querySelector('.mkview'), threshold: .25 });
+      perdeler.forEach(x => io.observe(x));
+    } else perdeler.forEach(x => x.classList.add('mkgor'));
+  }
+</script>

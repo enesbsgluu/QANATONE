@@ -221,6 +221,57 @@ async function projeGorselleri() {
   console.log('  = projeler: ' + kunye.length + ' is · toplam ' + kb(toplam));
 }
 
+
+/* ---------- KARA IZGARASI (motor sahnesi · dünya haritası) ----------
+   400x142 equirectangular, hücre başına 2 bit (0 deniz · 1 seyrek kara ·
+   2 yerleşik · 3 yoğun). Kaynak: kökteki QG._rle — Natural Earth 50m
+   kara poligonları + 170.536 yerleşim noktasından üretilmiş, RLE+base64
+   6,3 KB. `src/veri/kara-izgara.txt`e KOPYALANDI (derleme girdisi,
+   tarayıcıya İNMEZ).
+
+   PAYLAŞILAN KATMAN: kaynakta aynı ızgarayı hem ana sayfa talep haritası
+   hem TradeSelf pazar haritası kullanıyor. Burada ızgara BİR KEZ
+   görüntüye basılıyor; ana sayfa haritası göçtüğünde aynı dosyayı
+   kullanacak — ikinci kopya yok.
+
+   NEDEN GÖRÜNTÜ: kaynak ızgarayı canvas'a çiziyordu; o yol 6,3 KB veri +
+   çözücü + çizici JS demek ve sayfa başına 10 KB'lik J1 tavanını tek
+   başına yerdi. Nokta katmanı statiktir — derlemede bir kez basılır.
+   ÖLÇÜLDÜ: 1600x568 webp 19,9 KB · 800x284 webp 4,5 KB.            */
+const KARA_KAYNAK = path.join(__dirname, 'src', 'veri', 'kara-izgara.txt');
+async function karaIzgarasi() {
+  if (!fs.existsSync(KARA_KAYNAK)) { console.log('  ! kara-izgara.txt yok'); return; }
+  const X = 400, Y = 142;
+  const b = Buffer.from(fs.readFileSync(KARA_KAYNAK, 'utf8').trim(), 'base64');
+  const g = new Uint8Array(X * Y);
+  let p = 0;
+  for (let i = 0; i < b.length; i++) {
+    const t = b[i], v = t >> 6, n = (t & 63) + 1;
+    for (let k = 0; k < n && p < g.length; k++) g[p++] = v;
+  }
+  const ciz = (W) => {
+    const H = Math.round(W * Y / X), sx = W / X, sy = H / Y;
+    const r0 = Math.max(.5, Math.min(sx, sy) * .42);
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">`;
+    for (let y = 0; y < Y; y++) for (let x = 0; x < X; x++) {
+      const v = g[y * X + x]; if (!v) continue;
+      const a = v === 3 ? .2 : v === 2 ? .12 : .06;
+      const r = r0 * (v === 3 ? 1.2 : v === 2 ? 1 : .8);
+      svg += `<circle cx="${((x + .5) * sx).toFixed(1)}" cy="${((y + .5) * sy).toFixed(1)}" r="${r.toFixed(2)}" fill="#fff" fill-opacity="${a}"/>`;
+    }
+    return { svg: svg + '</svg>', H };
+  };
+  let toplam = 0;
+  for (const [ad, W] of [['kara.webp', 1600], ['kara-m.webp', 800]]) {
+    const { svg, H } = ciz(W);
+    const hedef = path.join(HEDEF, ad);
+    await sharp(Buffer.from(svg)).resize(W, H).webp({ quality: 82, effort: 6, alphaQuality: 90 }).toFile(hedef);
+    const boy = fs.statSync(hedef).size; toplam += boy;
+    console.log(`  + ${ad}  ${W}x${H}  ${kb(boy)}`);
+  }
+  console.log('  = kara ızgarası: ' + kb(toplam));
+}
+
 (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama
@@ -246,4 +297,5 @@ async function projeGorselleri() {
   await kartlar();
   await kurucu();
   await projeGorselleri();
+  await karaIzgarasi();
 })();
