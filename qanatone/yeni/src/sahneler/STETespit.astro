@@ -50,12 +50,55 @@ const iskeleAyikla = (m: string): string => {
     return etiket;
   });
 };
+/* ============ B3 · HARF HARF DİKEY KAYMA (giydirme turu) ============
+   Görev belgesi B3: "vertical text clip slide-down animation letter by
+   letter". Kaynakta zaten vardı (`#tespit h2 .lt i` + `ltdrop`, kök
+   4314-4324) ve iskelet turunda giydirmeye ertelenmişti — bu adanın
+   sapma listesinin 1. maddesi. Şimdi geliyor.
+
+   HARFLER DERLEMEDE BÖLÜNÜR, İÇERİKTEN DEĞİL: `strings.tr.dgh` eski
+   istemcinin kendi DOM'unu geri yazdığı için bozuk (2.825 bayt, iç içe
+   iki iskele). Bileşen o iskeleyi zaten ayıklıyordu; harfleri şimdi
+   TEMİZ metinden kendisi üretiyor. Panel metni düzeldiğinde de çalışır.
+
+   ERİŞİLEBİLİRLİK (görev belgesinin şartı): başlık tam metni
+   `aria-label` ile taşır, parçalanmış gövde `aria-hidden`.
+
+   H2/H5: harf OPAKLIĞA DOKUNMAZ. Kaynak `opacity:0`la başlıyordu; burada
+   yalnız `transform` ve kapın `overflow:hidden`i — taban her zaman opak,
+   destekleyemeyen tarayıcıda başlık yerinde ve tam. */
+const harfle = (m: string): { html: string; n: number; duz: string } => {
+  let k = 0, duz = '';
+  const html = String(m ?? '').replace(/(<[^>]+>)|([^<]+)/g, (_t, etiket, metin) => {
+    /* <br> düz metinde BOŞLUK sayılır; öteki etiketler geçer */
+    if (etiket) { if (/^<br\s*\/?>/i.test(etiket)) duz += ' '; return etiket; }
+    /* TEK GEÇİŞ: zincirlenmiş ikinci replace üretilmiş HTML'in üzerinde
+       koşuyor ve öznitelik boşluklarını düz metne karıştırıyordu
+       (aria-label "Öncekonuşmayalım." çıkıyordu — ölçüm yakaladı). */
+    return [...String(metin)].map((ch) => {
+      duz += ch;
+      return /\s/u.test(ch) ? ch
+        : `<span class="ste-lt"><i style="--k:${k++}">${ch}</i></span>`;
+    }).join('');
+  });
+  return { html, n: Math.max(1, k), duz: duz.replace(/\s+/g, ' ').trim() };
+};
+
 ---
 <section class="ste-sahne" data-sahne="te" id="tespit" data-anlati>
   <div class="ste-ic">
     <div class="ste-bas">
       <p class="kunye"><i class="no"></i>{g('dge')}</p>
-      <h2 class="s1-buyuk" set:html={suz(iskeleAyikla(g('dgh')), ['em', 'b', 'br', 'span.thin'])} />
+      {(() => {
+        const H = harfle(suz(iskeleAyikla(g('dgh')), ['em', 'b', 'br', 'span.thin']));
+        /* adım: kaskadın toplam boyu 24vh; harf başına pay harf sayısına
+           bölünür — TR 29, EN 38 harfte de aynı pencereye sığar (kaynakta
+           sabit .028 sn'ydi ve uzun başlıkta taşıyordu) */
+        return <h2 class="s1-buyuk ste-h2" aria-label={H.duz}
+          style={`--adim:${(24 / H.n).toFixed(3)}`}>
+          <span aria-hidden="true" set:html={H.html} />
+        </h2>;
+      })()}
       <p class="s1-alt">{g('dgp')}</p>
     </div>
 

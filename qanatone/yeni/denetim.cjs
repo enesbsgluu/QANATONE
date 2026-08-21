@@ -1263,9 +1263,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         ['sonuc-kabi', /id="steSonuc"/], ['halka', /id="steYay"/],
         ['skor', /id="steSkor"/], ['izgara', /id="steIzgara"/],
       ]) if (!desen.test(ham)) kusur.push(ad + '-yok');
-      /* iskele sizintisi: ne etiket olarak ne de kacmis metin olarak */
+      /* iskele sizintisi: ne etiket olarak ne de kacmis metin olarak.
+         GENISLETME (21 Agu, giydirme turu B3): basligin harfleri artik
+         DERLEMEDE uretiliyor (`<span class="ste-lt"><i style="--k:N">`)
+         ve mesru. Kural gevsemedi, AYIRT EDIYOR: once mesru harf kalibi
+         cikarilir, KALANDA `--k` gorunurse iskele sizmistir. Eski
+         iskelenin kendi sinifi (`lt`, `ste-lt` DEGIL) ve kacmis metin
+         hali oldugu gibi kirmizi. */
+      const mesruHarf = /<span class="ste-lt"[^>]*><i style="--k:\d+"[^>]*>[\s\S]*?<\/i><\/span>/g;
+      const kalan = ham.replace(mesruHarf, '');
       if (/class="lt"/.test(ham) || /&lt;span class=&#34;lt&#34;/.test(ham) ||
-          /--k:\s*\d/.test(ham)) kusur.push('harf-iskelesi-sizmis');
+          /--k:\s*\d/.test(kalan)) kusur.push('harf-iskelesi-sizmis');
       /* aria-live: sonuc ekran okuyucuya duyurulmali */
       if (!/aria-live="polite"/.test(ham)) kusur.push('aria-live-yok');
       ol("H21 · tespit araci: form + sonuc iskeleti statik, iskele sizintisi yok",
