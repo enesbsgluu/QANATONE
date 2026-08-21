@@ -63,6 +63,42 @@ gzip tavanı 40 KB HTML'i etkilemez, görseller ayrı ve tembel yüklenir).
 
 ---
 
+## B1 · DURUM — 21 Ağustos, üretildi
+
+**Belgenin "B1 için hiç görsel yok" satırı yanlıştı.** `img/ch1..ch6.webp`
+(1400×933) zaten depoda duruyor: altısı da koyu, marka kızılında ve **yazısız**.
+Üstelik konuları listedeki altı kanala birebir oturuyor. Yani B1'de üretilecek
+görsel yoktu, kadraj/ton/varyant işi vardı — `yeni/gorsel-kanal.cjs` onu yapıyor.
+
+| kaynak | konu | kart |
+|---|---|---|
+| ch1 | ışıklı arama sonuç satırları | `kanal-google` |
+| ch2 | akışta kayan kartlar | `kanal-meta` |
+| ch3 | dallanan düğüm | `kanal-web` |
+| ch4 | grafik çubukları, biri parlıyor | `kanal-rapor` |
+| ch5 | konuşma balonları | `kanal-whatsapp` |
+| ch6 | ışıyan ağ | `kanal-ai` |
+
+Ana dosyalar `gorsel-kaynak/kanal/<ad>.png` (1400×932), varyantlar
+`yeni/public/img/kanal/` altında: `<ad>.webp` 680×700 · `<ad>-g.webp` 1000×240 ·
+`<ad>-m.webp` 700×470. Üçünde de **büyütme yok**, hepsi küçültme.
+
+**Perde dosyaya basılmaz.** Kutu oranları üç varyantta farklı, basılı perde geniş
+şeritte yanlış yere düşer. Perde CSS'te — B7'deki "ton basılır, renk CSS'e kalır"
+ilkesinin buradaki karşılığı: **görsel basılır, okunabilirlik CSS'te.**
+
+```css
+.kn::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,rgba(5,5,5,.92) 6%,rgba(5,5,5,.55) 30%,transparent 62%)}
+```
+
+**Ton dengesi kartta kurulur, bento CSS'inde değil.** ch2 ve ch5 öbür dörtten
+belirgin parlaktı, altısı yan yana gelince ikisi öne fırlıyordu; ikisine karta özel
+`brightness` payı verildi. Sebep: kart tek başına da görünüyor (tablet satırı,
+mobil), aileye orada da ait olmalı.
+
+---
+
 ## B7 · Akordeon galeri — "Çalıştıklarımız" (7 proje)
 
 Yatay akordeon: **aktif öğe genişler, pasifler daralır**. Pasif öğe
@@ -104,16 +140,78 @@ kırpılır, ikinci dosya gerekmez.
 
 ---
 
-## Karar bekleyen tek şey
+## B7 · DURUM — 21 Ağustos, üretildi
 
-**B7 galerisi nereye giriyor?** İki aday var:
-1. `/projeler` dizini — bugün 7 kart var, akordeon onların yerine geçer.
-2. Ana sayfadaki deste (yapışkan kartlar) — orası zaten kendi diliyle
-   çalışıyor ve pin'li.
+Bu bölüm artık Enes'in hazırlayacağı görselleri tarif etmiyor; yedisi de
+`yeni/gorsel-kompoze.cjs` ile **üretildi**. Ana dosyalar
+`gorsel-kaynak/galeri/galeri-<slug>.png` (1400×2100), varyantlar
+`yeni/public/img/galeri/` altında (aktif 592×960, mobil 700×520).
+Toplam varyant yükü ≈ 140 KB / 14 dosya; en ağırı CMBlu (25 KB, detaylı cephe).
 
-Görev belgesi "kart yerine" diyor; ben **1. adayı** (projeler dizini)
-varsayıyorum ve ölçüleri ona göre verdim. İkinci adaysa kutular
-değişir, listeyi güncellerim.
+**Neden üretim gerekti:** mevcut yedi kaynağın **hepsi** okunur yazı taşıyordu —
+Mercedes'te basılı İngilizce başlık, Schwab/Kononenko/TeraWulf'ta kadrajı kaplayan
+kelime markası, SkyClinics/Bab'da site metni. Dikey kırpma bunu kurtarmıyor.
+
+**Dil (dördü de betiğin başında yazılı):** bulanık dikey zemin + keskin yatay odak
+bandı · **ton basılır, renk CSS'e kalır** · yazı görselden değil kaynaktan kesilir ·
+kadraj merkez %25 dilime göre kurulur, kareye göre değil.
+
+**Duotone artık dosyada değil, CSS'te** (Enes'in kararı, 21 Ağustos). Pasif şerit
+duotone, aktif kart gerçek renkte açılır; tek `--k` değişkeni iki katmanı sürer:
+
+```css
+.gl::before{background:var(--bg);opacity:calc(var(--k,1) * .42)}   /* koyuluk */
+.gl::after {background:var(--red);mix-blend-mode:color;opacity:var(--k,1)}
+.gl[data-acik]{--k:0}
+```
+
+Bunun iki sonucu var: (1) ana dosyalarda **patlamış beyaz bırakılmaz** — `color`
+harmanı luminansı korur, 240 üstü kanal kızıla dönmez ve kart yamalanır; betik her
+koşumda en parlak kanalı raporlar. (2) CSS gelmeden görsel gelirse kartlar tam
+renkli açılır, sonra kızıla oturur — FOUC kalemi bunun üstüne biniyor.
+
+**Ölçüm dersi:** kesimler ızgaralı önizlemeden **göz kararıyla okunamıyor**. Bab'ın
+başlığını 1295'te bitiyor diye okudum, kesip bakınca 1615 çıktı; Schwab'ın tabelasını
+y<350 sandım, 425-850 çıktı. Kesim koordinatı yazıldıktan sonra **kesilip bakılmadan
+kabul edilmez**.
+
+**Üç zayıf kimlik (kaynak değişirse sırası budur):**
+
+| proje | sorun | bugünkü çare |
+|---|---|---|
+| Kononenko | afiş kareyi yiyor, yazısız alan yalnız afişin boş alt yarısı | büyük beyaz düzlem + kafe; kare kimlik söylemiyor |
+| Charles Schwab | mavi tabela ve camdaki hayalet marka kadrajın ortasında | üst cephe (cam + yaprak); mavi yalnız bulanık zeminde leke |
+| Bab İç Mimarlık | yazısız **ve yeterince yüksek** alan yok | başlık bloğunun altındaki koltuk grubu, bant 3,8x büyütüyor |
+
+---
+
+## Karar verildi — B7 `/projeler` dizinine girdi
+
+Akordeon, dizindeki 7 kartın **yerine geçti** (1. aday). Ölçüler bu belgede
+verildiği gibi: kap 800, aktif ~305, pasif ~76, yükseklik 480.
+
+Üç şey bilinçli, `ProjeDizin.astro`nun başında da yazılı:
+
+1. **İçerik kaybolmadı.** Pasif öğenin yazısı `opacity` ile sönüyor, DOM'dan
+   çıkmıyor. `display:none` ve `visibility:hidden` kullanılmadı — ikisi de
+   metni ekran okuyucudan ve tarayıcıdan siler. Dizinin bütün metni
+   (yıl · etiket · ad · anlatım · rakamlar · bağlantı) her durumda kaynakta.
+2. **Ada JS'i yok.** Genişleme `flex-grow`, açılma `:hover`/`:focus-within`.
+   Varsayılan açık öğe ilk proje; kabın üzerine gelince o kapanıyor, imlecin
+   durduğu açılıyor — S-SZ bento'sunun kurduğu desen.
+3. **Duotone tek değişkende.** `--k` aynı anda kızıl katmanı, karartmayı ve
+   yazı opaklığını sürüyor. Katmanlar **yalnız masaüstünde** kuruluyor:
+   dokunmatikte pasif/aktif diye bir durum yok, `--k:0` olsa bile ayakta
+   duran `mix-blend-mode` katmanı harman bağlamı doğuruyor ve H14'ün mobil
+   pahalı katman disiplinine giriyor.
+
+Mobil: dikey liste, görsel üstte yatay bant (`-m.webp` 700×520), yazı altında,
+kızıl katman yok — yani mobilde kareler gerçek renginde.
+
+**Ana dosyalar depoda tutulmuyor.** `gorsel-kaynak/` yok sayılıyor (13 dosya
+≈ 11 MB) çünkü ikisi de üretilebilir: `node gorsel-kompoze.cjs` ve
+`node gorsel-kanal.cjs` kaynağı `img/`den okuyup aynısını basıyor. Yayına
+giren `.webp` varyantlar depoda.
 
 ---
 

@@ -18,7 +18,12 @@
       madde 5/H2 içeriğin görünür doğmasını, madde 7 + H14 mobilde
       `filter`i yasaklıyor (blur'lu giriş altı kartta altı filtre katmanı
       demek). Giriş yalnız transform; mesafe ve süre aynı.
-   2) KART GÖRSELLERİ (content.json `chimg`, altı webp) BU TURDA GELMEDİ.
+   2) KART GÖRSELLERİ 21 AĞUSTOS GİYDİRME TURUNDA GELDİ (aşağıdaki
+      "GÖRSELLİ YÜZ" bölümü). Aşağıdaki iskelet turu gerekçesi tarih
+      olarak duruyor; şartı ("mobil kaynak + kendi alanımız") karşılandı:
+      üç kırılım, 18 dosya / 158 KB, hepsi `yeni/public/img/kanal/` ve
+      tembel. Kaynağın 202 KB'lık tek boy seti kullanılmadı.
+   2-eski) KART GÖRSELLERİ (content.json `chimg`, altı webp) O TURDA GELMEDİ.
       Kaynağın kendi yorumu "görsel kartın ATMOSFERİ, konusu değil" diyor;
       altısı toplam 202 KB ve sahnenin işi (altı kanalı anlatmak) onlarsız
       tam çalışıyor. Bayt eşiği dersi (H18: ~14,6 KB'ta bir RTT) tazeyken
@@ -89,6 +94,36 @@
 .ssz-koyu .ssz-ikon{background:var(--card2,#141418);border:1px solid var(--line2);
   color:var(--tx2)}
 
+
+/* ---- GÖRSELLİ YÜZ (giydirme, 21 Ağustos) --------------------------------
+   Kart görseli gelince üç yüz (desen/kızıl/koyu) DEVRE DIŞI kalır: altı kart
+   tek dile döner, kimlik desenden değil fotoğraftan gelir. Kızıl kartın siyah
+   yazısı da bu yüzden açığa döner — koyu görselin üstünde siyah okunmaz.
+
+   Perde dosyaya BASILMAZ, burada durur: kutu oranı üç kırılımda çok farklı
+   (0,97 · 4,17 · 1,49), basılı perde geniş şeritte yanlış yere düşer.
+   B7'deki "ton basılır, renk CSS'e kalır" ilkesinin buradaki karşılığı:
+   görsel basılır, okunabilirlik CSS'te.
+
+   Bu blok üç yüzden SONRA gelmeli — aynı özgüllükte, sıra kazandırıyor. */
+.ssz-gorsel{position:absolute;inset:0;z-index:0;pointer-events:none}
+.ssz-gorsel img{width:100%;height:100%;object-fit:cover;display:block}
+/* mobil/tablet: açıklama HEP AÇIK, yazı bloğu yüksek — perde de güçlü */
+.ssz-gorselli::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;background:none;
+  /* Perde TEPEDE DE bitmiyor: kartların bir kısmında (koyu/kızıl yüzler)
+     içerik üste hizalı, alt degrade onlara değmiyordu — "Web Siteniz"
+     başlığı parlak düğümün üstünde kalıyordu. Alt ağır, üst yine de %42. */
+  background-image:linear-gradient(0deg,rgba(5,5,5,.94) 16%,rgba(5,5,5,.7) 48%,rgba(5,5,5,.42) 100%);
+  -webkit-mask-image:none;mask-image:none}
+.ssz-gorselli::after{display:none}
+.ssz-gorselli{background:var(--card);border-color:var(--line)}
+.ssz-gorselli h3{color:var(--tx)}
+.ssz-gorselli p{color:var(--tx2)}
+.ssz-gorselli .ssz-ikon{background:rgba(255,255,255,.09);border:1px solid var(--line2);
+  color:#fff}
+.ssz-gorselli .ssz-arti{color:var(--tx2)}
+
 /* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule`) ---- */
 .sus-cetvel{position:relative;height:1px;background:var(--line2);
   margin-top:clamp(30px,4vw,46px)}
@@ -113,6 +148,17 @@
   .ssz-kucuk:hover,.ssz-kucuk:focus-visible{flex-grow:10.5}
   .ssz-buyuk .ssz-ikon{margin-bottom:auto}
   .ssz-buyuk h3{margin-top:20px}
+  /* görselli kartta perde masaüstünde hafifler: açıklama kapalı başlıyor,
+     alt bantta yalnız başlık var. Hover'da açılınca perde geri güçlenir. */
+  /* Görselli kartta içerik HER YÜZDE alta iner: B1 sözleşmesi "büyük görsel
+     + üstünde okunur bir şerit" diyor, şerit de altta. Kaynakta yalnız
+     `.ssz-buyuk` bunu yapıyordu; görsel gelince altısı da aynı hizaya
+     geçmezse perde yarısına değmiyor. */
+  .ssz-gorselli .ssz-ikon{margin-bottom:auto}
+  .ssz-gorselli::before{
+    background-image:linear-gradient(0deg,rgba(5,5,5,.92) 10%,rgba(5,5,5,.55) 38%,rgba(5,5,5,.3) 100%)}
+  .ssz-gorselli:hover::before,.ssz-gorselli:focus-visible::before{
+    background-image:linear-gradient(0deg,rgba(5,5,5,.95) 22%,rgba(5,5,5,.72) 56%,rgba(5,5,5,.34) 100%)}
   /* açıklama kapalı başlar, açılırken süzülür */
   .ssz-acilir{grid-template-rows:0fr;transition:grid-template-rows .55s var(--e)}
   .ssz-acilir p{transform:translateY(8px);

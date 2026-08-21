@@ -13,6 +13,15 @@
 import '../stil/sozler.css';
 import Ikon from '../parcalar/Ikon.astro';
 import { icerik, T, suz } from '../icerik';
+/* Kart görselleri (giydirme, 21 Ağu): ölçüler künyeden — üreteç
+   `gorsel-kanal.cjs` yazar, bileşen ELLE ölçü yazmaz. Künyede olmayan
+   kart görselsiz, bugünkü üç yüzüyle (desen/kızıl/koyu) basılır.
+   Kaynağın `chimg` görselleri 202 KB'tı ve iskelet turunda ertelenmişti;
+   şartı "mobil kaynak + kendi alanımız" idi, bu set ikisini de karşılıyor
+   (18 dosya / 158 KB, üç kırılım, hepsi tembel). */
+import kanalGorsel from '../veri/kanal-gorselleri.json';
+const gorselMap = new Map(kanalGorsel.map((g: any) => [g.k, g]));
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -43,9 +52,20 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
     <div class="ssz-izgara">
       {sutunlar.map((sutun) => (
         <div class="ssz-sutun">
-          {sutun.map((c) => (
-            <article class={`ssz-kart ssz-${c.deri}${c.boy ? ' ssz-' + c.boy : ''}`}
+          {sutun.map((c) => { const gr: any = gorselMap.get(c.k); return (
+            <article class={`ssz-kart ssz-${c.deri}${c.boy ? ' ssz-' + c.boy : ''}${gr ? ' ssz-gorselli' : ''}`}
               style={`--i:${c.k - 1}`} tabindex="0">
+              {/* Üç kırılım üç ayrı dosya: masaüstü 337 kutu → 680,
+                  tablet tam genişlik satır → 1000x240, mobil → 700x470.
+                  Kırılımlar sozler.css'teki kutu değişimleriyle aynı. */}
+              {gr && (
+                <picture class="ssz-gorsel">
+                  <source media="(min-width:901px)" srcset={`${B}/img/kanal/${gr.kod}.webp`} />
+                  <source media="(min-width:561px)" srcset={`${B}/img/kanal/${gr.kod}-g.webp`} />
+                  <img src={`${B}/img/kanal/${gr.kod}-m.webp`} width={gr.mw} height={gr.mh}
+                    loading="lazy" decoding="async" alt="" />
+                </picture>
+              )}
               <span class="ssz-arti" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -56,7 +76,7 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
                   açılır; dokunmatikte ve dar ekranda HEP AÇIK (aşağıda). */}
               <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
             </article>
-          ))}
+          ); })}
         </div>
       ))}
     </div>
