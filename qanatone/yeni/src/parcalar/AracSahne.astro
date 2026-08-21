@@ -1,0 +1,655 @@
+---
+/* K7 · ARAÇLAR SAHNESİ (#stStage.sttools) — "araçlı site" hizmetinin
+   kaydırma sahnesi. Kaynak: kök index.html · markup storyStage 8371-8443 ·
+   CSS 921-936 (ststage ailesi) + 1006-1127 (tl* ailesi) + 882-886 (ray) ·
+   sürücü draw 8817-8960 · ST 9002-9008.
+   Hizmet: web-sitesi-araclar (fam:'craft' + det.story.tools).
+
+   KİLİTLİ SAHNE (pin 1.05) — kaynağın ikinci pin'li K7 sahnesi.
+   Blok kısa (ölçüldü: masaüstü 445,6 px), 100vh'ye sığıyor; kaynağın
+   `start:'center center'` dalı bu. Kilit boyu kaynağın kendi payı:
+   `end:'+=' + innerHeight*1.05` → 105vh.
+   Desen deste dersi + tırmanış sahnesi: çizelgenin ÖZNESİ sticky OLMAYAN
+   kap (.st-kap), animasyonu sticky sarmal (.st-sabit) alır.
+   TIRMANIŞTAN SAPMA (bilinçli): orada yalnız sahne kutusu sticky'di,
+   burada etiket + sahne + not BİRLİKTE sticky — kaynak pWrap'i
+   `.sdsec`tir (9002), yani üç parça birlikte kilitlenir.
+
+   SÜRÜCÜ — SİMÜLE FARE DAHİL HER ŞEY KAYDIRMAYLA SÜRÜLÜR.
+   Kaynakta imleç `draw(p)` içinde yaşıyordu (8866-8905): tıklama halkası
+   anahtar-kare DEĞİL, ilerlemeye bağlı — kaydırma geri alınınca imleç de
+   geri sarar. IO tetikli otomatik oynatmaya çevrilirse sahne "video"ya
+   döner (kalıcı kural). Burada da tek sürücü var: --stp.
+
+   Eşikler kaynak draw'dan (kilitli dalda e = p, 8912):
+     sub(i,e): n=3 · c=i/3 · s0=c−.62/3 · s1=min(1,c+.30/3)
+       → q(1) .126667→.433333 · b(2) .46→.766667 · g(3) .793333→1
+     perde ışığı: e ≥ (i+.22)/4          → .055 · .305 · .555 · .805
+     alan/fiyat: kq=1−(1−q)³ · 120·kq m² · ₺ round(120·kq·2370/100)·100
+     panel: gv=1−(1−g)³ · %78·gv · adım eşikleri .26/.50/.78 · şimdi .86
+     ray (araçlarda GERÇEK kaydırma çubuğu): translateY(284,6%·e)
+
+   SAYFA ÖTELEMESİ ÖLÇÜMSÜZ: kaynak `mx = page.scrollHeight −
+   view.clientHeight` okuyordu; burada yüzde çeviriyle CSS'te —
+   translateY(e·(görüntü yüksekliği − 100%)) — çünkü translate yüzdesi
+   elemanın KENDİ boyuna göre çözülür. JS kapalıyken de mini sayfa akar.
+
+   ÖLÇÜM (yalnız fare): imlecin gittiği 11 hedefin merkezi ada tarafında
+   ÖLÇÜLÜR (kaynak da gBCR okuyordu, 8891) ve CSS değişkenine yazılır;
+   scrub CSS'te sürer. Göz kararı koordinat YOK. Dikey ölçü SAYFA
+   uzayında alınır (hedef ile mini sayfa aynı ötelemeyi yer → fark
+   ilerlemeden bağımsız); hedef, TAMAMLANMIŞ kadrajında okunur — fiyat
+   kutusu gibi genişliği içeriğe bağlı hedefler ancak orada gerçek
+   boyundadır.
+
+   TABAN = TAMAMLANMIŞ (kaynak REDUCE dalı draw(1), 8972): desteksiz
+   tarayıcı ve reduced-motion son kadrajı görür. İçerik JS'siz tam;
+   sayılar CSS sayacı (huni/tırmanış dersi, ada JS'i yalnız fare için). */
+import { T, type Dil } from '../icerik';
+interface Props { story: any; dil: Dil }
+const { story, dil } = Astro.props;
+const en = dil === 'en';
+const M = (tr: string, eng: string) => en ? eng : tr;
+const dom = story?.dom || 'seninfirman.com';
+const marka = dom.replace(/\..*$/, '');
+/* takvim kaynağı (8378-8381): 21 gün · dolu 3,4,9,10,16 · hedef 11 */
+const GUN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+const DOLU = new Set([3, 4, 9, 10, 16]);
+const BAS = en ? ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] : ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pz'];
+const CIP = en ? ['Painting', 'Kitchen', 'Full refit'] : ['Boya', 'Mutfak', 'Komple tadilat'];
+const SAAT = ['10:00', '14:30', '16:00'];
+const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', 'Installation']
+                : ['Keşif yapıldı', 'Teklif onaylandı', 'Üretim başladı', 'Montaj'];
+---
+{story?.tools && (
+<div class="sdsec st-kap">
+  <div class="st-sabit">
+    <span class="mono">{M('Araçlar — kaydırdıkça çalışır', 'The tools — they run as you scroll')}</span>
+    <div class="ststage sttools" id="stStage">
+      <div class="stbar"><i /><i /><i /><span>{dom}</span></div>
+      <div class="stview">
+        <i class="strail"><b /></i>
+        <div class="stpage">
+
+          {/* perde 0 — sitenin kendisi */}
+          <div class="stsec tl-act tl-site" style="--i:0">
+            <span class="stlab">{M('SENİN SİTEN', 'YOUR SITE')}</span>
+            <div class="tlnav"><b>{marka}</b>
+              <span>{M('Hizmetler', 'Services')}</span>
+              <span>{M('İşler', 'Work')}</span>
+              <span>{M('İletişim', 'Contact')}</span></div>
+            <p class="tlh">{M('Fiyatı sitede öğrensin,', 'Let them see the price on the site,')}
+              <em>{M(' seni beklemeden.', ' without waiting for you.')}</em></p>
+            <span class="tlbtn">{M('Anında teklif al', 'Get an instant quote')}</span>
+            <p class="tlsay">{M('Broşür burada biter. Araç burada başlar.',
+              'A brochure ends here. A tool starts here.')}</p>
+          </div>
+
+          {/* perde 1 — teklif hesaplayıcı */}
+          <div class="stsec tl-act tl-quote" style="--i:1">
+            <span class="stlab">{M('ARAÇ 01 — ANINDA TEKLİF', 'TOOL 01 — INSTANT QUOTE')}</span>
+            <div class="tlrow"><span class="tlk">{M('İş türü', 'Job type')}</span>
+              <span class="tlchips">{CIP.map((c, i) =>
+                <i class={'tlch' + (i === 2 ? ' aim' : '')}>{c}</i>)}</span></div>
+            <div class="tlrow"><span class="tlk">{M('Alan', 'Area')}</span>
+              <b class="tlnum tlarea" /></div>
+            <div class="tlrng"><i class="tlfill" /><b class="tlknob" /></div>
+            <div class="tlout"><span>{M('Tahmini bütçe', 'Estimated budget')}</span>
+              <b class="tlprice" /></div>
+            <p class="tlsay">{M('Ziyaretçi rakamı dört saniyede görür — sen telefona hiç bakmazsın.',
+              'The visitor gets a number in four seconds — you never pick up the phone.')}</p>
+          </div>
+
+          {/* perde 2 — rezervasyon */}
+          <div class="stsec tl-act tl-book" style="--i:2">
+            <span class="stlab">{M('ARAÇ 02 — REZERVASYON', 'TOOL 02 — BOOKING')}</span>
+            <div class="tlcal">
+              <div class="tlhead">{BAS.map(x => <span class="tldh">{x}</span>)}</div>
+              <div class="tlgrid">{GUN.map((n, i) =>
+                <i class={'tldd' + (DOLU.has(n) ? ' full' : '') + (n === 11 ? ' aim' : '')}
+                   style={`--i:${i}`}>{n}</i>)}</div>
+            </div>
+            <div class="tlslots">{SAAT.map((h, i) =>
+              <i class={'tlsl' + (i === 1 ? ' aim' : '')} style={`--i:${i}`}>{h}</i>)}</div>
+            <div class="tlok"><i />{M('Randevu alındı · Perşembe 14:30', 'Booked · Thu 14:30')}</div>
+            <p class="tlsay">{M('Dolu günler kapalı gelir. Takvim senin yerine hayır der.',
+              'Full days are already closed. The calendar says no for you.')}</p>
+          </div>
+
+          {/* perde 3 — müşteri paneli */}
+          <div class="stsec tl-act tl-panel" style="--i:3">
+            <span class="stlab">{M('ARAÇ 03 — MÜŞTERİ PANELİ', 'TOOL 03 — CLIENT PANEL')}</span>
+            <div class="tlprj"><b>{M('İstanbul — ofis tadilatı', 'Dubai — office refit')}</b>
+              <em class="tlpct" /></div>
+            <div class="tlbar"><i class="tlbarf" /></div>
+            <div class="tlsteps">{ADIM.map((t, i) =>
+              <span class="tlst" data-k={i}><i class="tltick" />{t}</span>)}</div>
+            <p class="tlsay">{M('Kimse ne durumda diye aramaz. Panelden kendi bakar.',
+              'Nobody calls to ask where things stand. They open the panel.')}</p>
+          </div>
+
+        </div>
+        <span class="tlptr"><b class="tlrip" /></span>
+      </div>
+    </div>
+    {story.note && <div class="fnnote">{T(story.note, dil)}</div>}
+  </div>
+</div>
+)}
+
+<style>
+  /* ═══ KAP · kaynak 921-936 (yarıçap kardeş K7 sahneleriyle aynı 18px;
+         kaynak var(--r-lg)=26px — sapma yazılı) ═══ */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+  .ststage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    overflow: hidden; }
+  .stbar { display: flex; align-items: center; gap: 6px; padding: 11px 15px;
+    border-bottom: 1px solid var(--line); background: #0c0c0d; }
+  .stbar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .13);
+    font-style: normal; }
+  .stbar i:first-child { background: rgba(239, 35, 60, .75); }
+  .stbar span { margin-left: 10px; font-family: ui-monospace, monospace; font-size: 10px;
+    letter-spacing: .08em; color: var(--tx4); }
+  /* araçlarda görüntü kutusu kaynak 1012; yükseklik ayrıca öteleme
+     formülünde de geçtiği için tek yerden (--stvh) okunur */
+  .sttools { --stvh: clamp(268px, 28vw, 338px); }
+  .stview { height: var(--stvh); overflow: hidden; position: relative; }
+  .stsec { padding: clamp(22px, 3vw, 36px) clamp(20px, 3.4vw, 40px);
+    border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+  .stlab { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .22em;
+    color: var(--tx4); }
+  /* ray: kaynak 882-886 + 1013-1016 */
+  .strail { position: absolute; top: 10px; bottom: 10px; right: 7px; width: 3px;
+    border-radius: 2px; background: rgba(255, 255, 255, .05); z-index: 3; font-style: normal; }
+  .strail b { display: block; width: 100%; height: 26%; border-radius: 2px; background: var(--red); }
+
+  /* ═══ PERDELER · kaynak 1017-1111 ═══ */
+  .tl-act { min-height: clamp(216px, 25vw, 292px); gap: 9px;
+    padding: clamp(15px, 2.05vw, 25px) clamp(17px, 2.5vw, 31px); }
+  .tl-act.tl-site { min-height: clamp(172px, 20vw, 232px); }
+  .tl-act .stlab { margin-bottom: 1px; }
+  .tlsay { margin: 1px 0 0; font-size: clamp(10.8px, .96vw, 12.2px); line-height: 1.45;
+    color: var(--tx3); }
+
+  /* perde 0 */
+  .tlnav { display: flex; align-items: center; gap: 14px; padding-bottom: 9px;
+    border-bottom: 1px solid var(--line); font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); }
+  .tlnav b { color: var(--tx); font-weight: 650; letter-spacing: -.01em;
+    font-size: clamp(11.5px, 1.02vw, 13px); margin-right: auto; text-transform: capitalize; }
+  .tlh { margin: 0; font-size: clamp(15px, 1.62vw, 21px); line-height: 1.2; font-weight: 600;
+    letter-spacing: -.02em; color: var(--tx); text-wrap: balance; }
+  .tlh em { color: var(--red-soft); font-style: normal; }
+  .tlbtn { align-self: flex-start; padding: 8px 15px; border-radius: 999px; background: var(--red);
+    color: #fff; font-size: clamp(10.5px, .92vw, 11.8px); font-weight: 600; }
+
+  /* perde 1 */
+  .tlrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .tlk { font-size: clamp(10.5px, .92vw, 11.8px); color: var(--tx3); min-width: 56px; }
+  .tlchips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tlch { display: inline-block; width: auto; padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--line2); background: transparent;
+    font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); font-style: normal; white-space: nowrap; }
+  .tlnum { font-family: ui-monospace, monospace; font-size: clamp(13px, 1.32vw, 17px);
+    color: var(--tx); font-variant-numeric: tabular-nums; }
+  .tlrng { position: relative; height: 5px; border-radius: 3px;
+    background: rgba(255, 255, 255, .09); margin: 1px 0; }
+  .tlfill { display: block; position: absolute; inset: 0 auto 0 0; border-radius: 3px;
+    background: var(--red); }
+  .tlknob { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; transform: translate(-50%, -50%); box-shadow: 0 3px 9px rgba(0, 0, 0, .5); }
+  .tlout { display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding-top: 9px; border-top: 1px solid var(--line); }
+  .tlout span { font-size: clamp(10.5px, .92vw, 11.8px); color: var(--tx3); }
+  .tlprice { font-family: ui-monospace, monospace; font-size: clamp(15px, 1.75vw, 23px);
+    font-weight: 600; color: var(--red-soft); font-variant-numeric: tabular-nums;
+    letter-spacing: -.01em; }
+
+  /* perde 2 */
+  .tlcal { border: 1px solid var(--line); border-radius: 11px; padding: 9px 10px;
+    background: rgba(255, 255, 255, .02); }
+  .tlhead, .tlgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .tldh { text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px;
+    letter-spacing: .08em; color: var(--tx4); padding-bottom: 5px; }
+  .tldd { display: flex; width: auto; align-items: center; justify-content: center;
+    height: clamp(18px, 1.95vw, 24px); border-radius: 6px; font-size: clamp(9.4px, .84vw, 10.8px);
+    color: var(--tx2); font-style: normal; background: rgba(255, 255, 255, .04); }
+  .tldd.full { color: var(--tx4); background: transparent; text-decoration: line-through; }
+  .tlslots { display: flex; gap: 7px; flex-wrap: wrap; }
+  .tlsl { display: inline-block; width: auto; padding: 6px 11px; border-radius: 8px;
+    border: 1px solid var(--line2); background: transparent; font-style: normal;
+    font-family: ui-monospace, monospace; font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); }
+  .tlok { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+    border-radius: 9px; background: rgba(239, 35, 60, .1); border: 1px solid rgba(239, 35, 60, .3);
+    color: var(--red-soft); font-size: clamp(10.5px, .92vw, 11.8px); font-weight: 550;
+    align-self: flex-start; white-space: nowrap; }
+  .tlok i { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--red);
+    position: relative; flex: none; }
+  .tlok i::after { content: ''; position: absolute; left: 3.7px; top: 6px; width: 4px; height: 2px;
+    border-left: 1.6px solid #fff; border-bottom: 1.6px solid #fff; transform: rotate(-45deg); }
+
+  /* perde 3 */
+  .tlprj { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .tlprj b { font-size: clamp(11.6px, 1.06vw, 13.6px); font-weight: 600; color: var(--tx);
+    letter-spacing: -.01em; }
+  .tlpct { font-family: ui-monospace, monospace; font-size: clamp(12px, 1.2vw, 15px);
+    color: var(--red-soft); font-style: normal; font-variant-numeric: tabular-nums; }
+  .tlbar { height: 6px; border-radius: 4px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+  .tlbarf { display: block; height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--red), var(--red-soft)); }
+  .tlsteps { display: flex; flex-direction: column; gap: 6px; }
+  .tlst { display: flex; align-items: center; gap: 9px; font-size: clamp(10.4px, .92vw, 11.9px); }
+  .tltick { display: block; width: 15px; height: 15px; border-radius: 50%; flex: none;
+    position: relative; border: 1px solid var(--line2); background: transparent; }
+
+  /* simüle fare · kaynak 1112-1121 */
+  .tlptr { position: absolute; left: 0; top: 0; width: 14px; height: 19px; z-index: 4;
+    pointer-events: none; opacity: 0; margin: -1px 0 0 -1px; }
+  .tlptr::before { content: ''; position: absolute; inset: 0; background: #fff;
+    clip-path: polygon(0 0, 0 74%, 25% 57%, 43% 97%, 61% 89%, 43% 51%, 76% 47%); }
+  .tlrip { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px;
+    margin: -15px 0 0 -15px; border-radius: 50%; border: 2px solid var(--red);
+    opacity: 0; transform: scale(.3); }
+
+  /* ═══ SÜRÜCÜ · kaynağın pin+scrub'ının birebir CSS yazımı ═══ */
+  @property --stp { syntax: '<number>'; inherits: false; initial-value: 1; }
+  /* Zincirin her halkası KAYITLI: kaydedilmemiş değişken metin olarak
+     yerine geçer ve 40 halkalık zincir karede kilobaytlarca simgeye
+     şişer (ölçüldü: --fpx 5.274 B). Kayıtla her biri tek sayıya iner
+     ve getComputedStyle ile ÖLÇÜLEBİLİR olur (kanıt düzeninin şartı). */
+  @property --ab { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --abin { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --adone { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --ae { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --ag { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --agv { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --akq { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --alit { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --anow { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --aon { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --apick { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --aq { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --aseen { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --aug { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --auq { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --av { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fa0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fa1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fa1h { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fa2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fa3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fb1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fb2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fb3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fc1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fc2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fc3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fgor { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fk { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --fk0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fk1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fk2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fk3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fknx { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --flm0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --flm1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --flm2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --flm3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fln1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fln2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fln3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fm0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fm1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fm2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fm3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fn1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fn2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fn3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fp0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fp1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fp2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fp3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpx { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpx0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpx1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpx2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpx3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpy { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpy0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpy1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpy2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fpy3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --ft0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzm0 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzm1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzm2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzm3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzn1 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzn2 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @property --fzn3 { syntax: '<number>'; inherits: false; initial-value: 0; }
+  @keyframes stp-surus { from { --stp: 0; } to { --stp: 1; } }
+  @supports (animation-timeline: view()) {
+    /* KİLİT: kap sticky DEĞİL (çizelgenin öznesi), sarmal sticky.
+       Kilit kaynağın 'center center' hizasında başlar, 105vh sürer;
+       kabın boyu = sarmalın yarısı + 155vh (= üst boşluk + kilit). */
+    .st-kap { view-timeline-name: --st-kap; view-timeline-axis: block;
+      /* kabın boyu = sarmal + kilit: yapışık pencere (kapBoyu − sarmal)
+         tam kilit boyuna eşit olsun, sahne bitince BEKLEMESİN (ölçüldü:
+         kap sarmal/2+155vh iken sahne 228 px fazladan yapışık kalıyordu) */
+      min-height: calc(var(--sth, 440px) + 105vh); }
+    .st-sabit { position: sticky; top: max(0px, calc((100vh - var(--sth, 440px)) / 2)); }
+
+    /* SÜRÜCÜ TÜKETİCİDE, ORTAK ATADA DEĞİL — ÖLÇÜLMÜŞ KARAR.
+       İlerleme ortak atada yaşayıp aşağı miras kalınca, --stp'nin her
+       karesi 95 elemanın hesaplanmış stilini tazeliyordu; 1440'ta 4x CPU
+       kısıtıyla kaydırmada 7-16 kare düşüyordu (kaynağın JS sürücüsü 0).
+       Animasyon aynı zaman çizelgesinden tüketicilere dağıtıldı ve
+       ilerleme değişkenleri MİRASSIZ yapıldı: kare başına tazelenen
+       eleman 95 → 43. Ölçüm kaydirma-testi.cjs ile iki durumda da alındı. */
+    .stpage, .strail b, .tlsay, .tlch.aim, .tlarea, .tlprice, .tlfill, .tlknob,
+    .tldd, .tlsl, .tlok, .tlbarf, .tlpct, .tlst, .tlptr {
+      animation: stp-surus linear both; animation-timeline: --st-kap;
+      animation-range: cover calc(50vh + var(--sth, 440px) / 2)
+                       cover calc(155vh + var(--sth, 440px) / 2); }
+  }
+
+  /* perde ilerlemeleri — kaynak sub() (8862-8866); kilitli dalda e = p.
+     Her tüketici YALNIZ kendi ihtiyacını türetir (miras yok). */
+  .stpage, .strail b, .tlsay, .tlptr { --ae: var(--stp); }
+  .tlch.aim, .tlarea, .tlprice, .tlfill, .tlknob, .tlptr {
+    --aq: clamp(0, calc((var(--stp) - .126667) / .306667), 1); }
+  .tlarea, .tlprice, .tlfill, .tlknob, .tlptr {           /* EA(t) = 1−(1−t)³ */
+    --auq: calc(1 - var(--aq)); --akq: calc(1 - var(--auq) * var(--auq) * var(--auq)); }
+  .tldd, .tlsl, .tlok, .tlptr {
+    --ab: clamp(0, calc((var(--stp) - .46) / .306667), 1); }
+  .tlbarf, .tlpct, .tlst, .tlptr {
+    --ag: clamp(0, calc((var(--stp) - .793333) / .206667), 1); }
+  .tlbarf, .tlpct, .tlst {
+    --aug: calc(1 - var(--ag)); --agv: calc(1 - var(--aug) * var(--aug) * var(--aug)); }
+
+  /* mini sayfa: y = e·(sayfa boyu − görüntü boyu); yüzde elemanın KENDİ
+     boyuna göre çözülür, o yüzden ölçüm gerekmez (kaynak 8913-8916) */
+  .stpage { transform: translateY(calc(var(--ae) * (var(--stvh) - 100%))); }
+  /* ray araçlarda kaydırma çubuğu gibi ÖTELENİR (kaynak 8921) */
+  .strail b { transform: translateY(calc(var(--ae) * 284.6%)); }
+
+  /* perde ışığı: e ≥ (i+.22)/4 (8925) — sınıf yerine ramp; .tlsay'ın
+     .45s geçişinin eşleniği ×20 (D1 turunda ölçülen dönüşüm: m = 9/süre) */
+  .tlsay { --alit: clamp(0, calc((var(--ae) - (var(--i) + .22) / 4) * 20), 1);
+    opacity: var(--alit); transform: translateY(calc((1 - var(--alit)) * 4px)); }
+
+  /* ── perde 1: teklif hesaplayıcı (8927-8937) ── */
+  .tlch.aim { --aon: clamp(0, calc((var(--aq) - .12) * 32), 1);
+    background: color-mix(in srgb, var(--red) calc(var(--aon) * 100%), transparent);
+    border-color: color-mix(in srgb, var(--red) calc(var(--aon) * 100%), var(--line2));
+    color: color-mix(in srgb, #fff calc(var(--aon) * 100%), var(--tx3)); }
+  /* alan ve fiyat BİRLİKTE sayar (kaynağın yorumu) — sayaçla, ada JS'i yok */
+  .tlarea { counter-reset: alan calc(round(down, 120 * var(--akq) + .5, 1)); }
+  .tlarea::after { content: counter(alan) ' m²'; }
+  /* ₺ biçimi: v = round(120·kq·2370/100)·100 → tr-TR binlik ayracı.
+     Sayaç üçe bölünür (binler · ayraç · birler+"00"); sıfır olan parça
+     BOŞ sembolle basılmaz, yoksa "₺ 0" yerine "₺ 000" çıkar (ölçüldü:
+     11 değerde JS biçimlendirmesiyle genişlik birebir). */
+  @counter-style qa-bos { system: cyclic; symbols: ''; }
+  @counter-style qa-bin { system: numeric; symbols: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+    range: 1 infinite; fallback: qa-bos; }
+  @counter-style qa-nok { system: cyclic; symbols: '.'; range: 1 infinite; fallback: qa-bos; }
+  @counter-style qa-yuz { system: cyclic; symbols: '00'; range: 1 infinite; fallback: qa-bos; }
+  .tlprice { --av: round(down, 2844 * var(--akq) + .5, 1);
+    --abin: round(down, var(--av) / 10, 1);
+    counter-reset: qbin calc(var(--abin)) qnok clamp(0, var(--abin), 1)
+                   qkal calc(var(--av) - var(--abin) * 10) qyuz clamp(0, var(--av), 1); }
+  .tlprice::after { content: '₺ ' counter(qbin, qa-bin) counter(qnok, qa-nok)
+                            counter(qkal) counter(qyuz, qa-yuz); }
+  .tlfill { width: calc(var(--akq) * 100%); }
+  .tlknob { left: calc(var(--akq) * 100%); }
+
+  /* ── perde 2: rezervasyon (8939-8947) ── */
+  .tldd { --aseen: clamp(0, calc((var(--ab) - (.04 + var(--i) / 21 * .3)) * 30), 1);
+    opacity: var(--aseen); transform: translateY(calc((1 - var(--aseen)) * 3px)); }
+  .tldd.aim { --apick: clamp(0, calc((var(--ab) - .46) * 37.5), 1);
+    background: color-mix(in srgb, var(--red) calc(var(--apick) * 100%), rgba(255, 255, 255, .04));
+    color: color-mix(in srgb, #fff calc(var(--apick) * 100%), var(--tx2));
+    font-weight: calc(400 + var(--apick) * 250);
+    box-shadow: 0 0 0 calc(var(--apick) * 3px) rgba(239, 35, 60, .2); }
+  .tlsl { --aseen: clamp(0, calc((var(--ab) - (.56 + var(--i) * .05)) * 32), 1);
+    opacity: var(--aseen); transform: translateY(calc((1 - var(--aseen)) * 4px)); }
+  .tlsl.aim { --aon: clamp(0, calc((var(--ab) - .74) * 37.5), 1);
+    border-color: color-mix(in srgb, var(--red) calc(var(--aon) * 100%), var(--line2));
+    background: color-mix(in srgb, rgba(239, 35, 60, .14) calc(var(--aon) * 100%), transparent);
+    color: color-mix(in srgb, var(--red-soft) calc(var(--aon) * 100%), var(--tx3)); }
+  .tlok { --aon: clamp(0, calc((var(--ab) - .88) * 26), 1);
+    opacity: var(--aon); transform: translateY(calc((1 - var(--aon)) * 5px)); }
+
+  /* ── perde 3: müşteri paneli (8949-8959) — %78 kaynağın kendi payı ── */
+  .tlbarf { width: calc(var(--agv) * 78%); }
+  .tlpct { counter-reset: yuzde calc(round(down, var(--agv) * 78 + .5, 1)); }
+  .tlpct::after { content: '%' counter(yuzde); }
+  .tlst { --adone: 0; --anow: 0;
+    color: color-mix(in srgb, var(--tx2) calc((var(--adone) + var(--anow)) * 100%), var(--tx4)); }
+  .tlst[data-k='0'] { --adone: clamp(0, calc((var(--agv) - .26) * 30), 1); }
+  .tlst[data-k='1'] { --adone: clamp(0, calc((var(--agv) - .50) * 30), 1); }
+  .tlst[data-k='2'] { --adone: clamp(0, calc((var(--agv) - .78) * 30), 1); }
+  .tlst[data-k='3'] { --anow: clamp(0, calc((var(--agv) - .86) * 30), 1); }
+  .tlst .tltick {
+    background: color-mix(in srgb, var(--red) calc(var(--adone) * 100%), transparent);
+    border-color: color-mix(in srgb, var(--red) calc((var(--adone) + var(--anow)) * 100%), var(--line2));
+    box-shadow: 0 0 0 calc(var(--anow) * 3px) rgba(239, 35, 60, .16); }
+  /* tik ve nokta kaynakta geçişsiz doğar (1105-1111) → dik ramp */
+  .tlst .tltick::after { content: ''; position: absolute; left: 4px; top: 6.3px; width: 4px;
+    height: 2px; border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+    transform: rotate(-45deg); opacity: clamp(0, calc(var(--adone) * 100000), 1); }
+  .tlst[data-k='3'] .tltick::after { inset: 3px; width: auto; height: auto;
+    border: 0; border-radius: 50%; background: var(--red); transform: none;
+    opacity: clamp(0, calc(var(--anow) * 100000), 1); }
+
+  /* ── SİMÜLE FARE (kaynak 8866-8905) ────────────────────────────────
+     Hedef merkezleri ada ölçümünden gelir (--fx.. ve --fy.. değişkenleri,
+     görüntü kutusuna göre, sayfa uzayında); sürgü hedefi ölçülmez, kendi
+     formülünden türer.
+     Perde seçimi kaynağın kuralı: s>.02 && s<.99 olan İLK perde. */
+  .tlptr {
+    --ft0: clamp(0, calc(var(--ae) / .16), 1);
+    --fa0: calc(clamp(0, calc((var(--ft0) - .02) * 100000), 1)
+             * clamp(0, calc((.99 - var(--ft0)) * 100000), 1));
+    --fa1h: calc(clamp(0, calc((var(--aq) - .02) * 100000), 1)
+              * clamp(0, calc((.99 - var(--aq)) * 100000), 1));
+    --fa1: calc(var(--fa1h) * (1 - var(--fa0)));
+    --fa2: calc(clamp(0, calc((var(--ab) - .02) * 100000), 1)
+             * clamp(0, calc((.99 - var(--ab)) * 100000), 1));
+    --fa3: calc(clamp(0, calc((var(--ag) - .02) * 100000), 1)
+             * clamp(0, calc((.99 - var(--ag)) * 100000), 1));
+    --fgor: calc(var(--fa0) + var(--fa1) + var(--fa2) + var(--fa3));
+
+    /* segment ilerlemeleri: ilk hedefe varış (yerinde tık) + geçişler */
+    --fp0: clamp(0, calc(var(--ft0) / .28), 1);
+    --fm0: clamp(0, calc((var(--ft0) - .28) / .42), 1);
+    --fp1: clamp(0, calc(var(--aq) / .06), 1);
+    --fm1: clamp(0, calc((var(--aq) - .06) / .26), 1);
+    --fn1: clamp(0, calc((var(--aq) - .32) / .46), 1);
+    --fp2: clamp(0, calc(var(--ab) / .24), 1);
+    --fm2: clamp(0, calc((var(--ab) - .24) / .32), 1);
+    --fn2: clamp(0, calc((var(--ab) - .56) / .3), 1);
+    --fp3: clamp(0, calc(var(--ag) / .14), 1);
+    --fm3: clamp(0, calc((var(--ag) - .14) / .46), 1);
+    --fn3: clamp(0, calc((var(--ag) - .6) / .3), 1);
+
+    /* easeInOut — "gerçek el böyle gider" (8888): s<.5 ? 2s² : 1−(2−2s)²/2 */
+    --flm0: clamp(0, calc((.5 - var(--fm0)) * 100000), 1);
+    --fzm0: calc(var(--flm0) * 2 * var(--fm0) * var(--fm0) + (1 - var(--flm0))
+             * (1 - (2 - 2 * var(--fm0)) * (2 - 2 * var(--fm0)) / 2));
+    --flm1: clamp(0, calc((.5 - var(--fm1)) * 100000), 1);
+    --fzm1: calc(var(--flm1) * 2 * var(--fm1) * var(--fm1) + (1 - var(--flm1))
+             * (1 - (2 - 2 * var(--fm1)) * (2 - 2 * var(--fm1)) / 2));
+    --fln1: clamp(0, calc((.5 - var(--fn1)) * 100000), 1);
+    --fzn1: calc(var(--fln1) * 2 * var(--fn1) * var(--fn1) + (1 - var(--fln1))
+             * (1 - (2 - 2 * var(--fn1)) * (2 - 2 * var(--fn1)) / 2));
+    --flm2: clamp(0, calc((.5 - var(--fm2)) * 100000), 1);
+    --fzm2: calc(var(--flm2) * 2 * var(--fm2) * var(--fm2) + (1 - var(--flm2))
+             * (1 - (2 - 2 * var(--fm2)) * (2 - 2 * var(--fm2)) / 2));
+    --fln2: clamp(0, calc((.5 - var(--fn2)) * 100000), 1);
+    --fzn2: calc(var(--fln2) * 2 * var(--fn2) * var(--fn2) + (1 - var(--fln2))
+             * (1 - (2 - 2 * var(--fn2)) * (2 - 2 * var(--fn2)) / 2));
+    --flm3: clamp(0, calc((.5 - var(--fm3)) * 100000), 1);
+    --fzm3: calc(var(--flm3) * 2 * var(--fm3) * var(--fm3) + (1 - var(--flm3))
+             * (1 - (2 - 2 * var(--fm3)) * (2 - 2 * var(--fm3)) / 2));
+    --fln3: clamp(0, calc((.5 - var(--fn3)) * 100000), 1);
+    --fzn3: calc(var(--fln3) * 2 * var(--fn3) * var(--fn3) + (1 - var(--fln3))
+             * (1 - (2 - 2 * var(--fn3)) * (2 - 2 * var(--fn3)) / 2));
+
+    /* sürgü hedefi: kaynak canlı gBCR okuyordu — burada kendi formülü */
+    --fknx: calc(var(--frx, 0) + var(--akq) * var(--frw, 0));
+
+    --fpx0: calc(var(--fx0a, 0) + (var(--fx0b, 0) - var(--fx0a, 0)) * var(--fzm0));
+    --fpy0: calc(var(--fy0a, 0) + (var(--fy0b, 0) - var(--fy0a, 0)) * var(--fzm0));
+    --fpx1: calc(var(--fx1a, 0) + (var(--fknx) - var(--fx1a, 0)) * var(--fzm1)
+            + (var(--fx1c, 0) - var(--fknx)) * var(--fzn1));
+    --fpy1: calc(var(--fy1a, 0) + (var(--fy1b, 0) - var(--fy1a, 0)) * var(--fzm1)
+            + (var(--fy1c, 0) - var(--fy1b, 0)) * var(--fzn1));
+    --fpx2: calc(var(--fx2a, 0) + (var(--fx2b, 0) - var(--fx2a, 0)) * var(--fzm2)
+            + (var(--fx2c, 0) - var(--fx2b, 0)) * var(--fzn2));
+    --fpy2: calc(var(--fy2a, 0) + (var(--fy2b, 0) - var(--fy2a, 0)) * var(--fzm2)
+            + (var(--fy2c, 0) - var(--fy2b, 0)) * var(--fzn2));
+    --fpx3: calc(var(--fx3a, 0) + (var(--fx3b, 0) - var(--fx3a, 0)) * var(--fzm3)
+            + (var(--fx3c, 0) - var(--fx3b, 0)) * var(--fzn3));
+    --fpy3: calc(var(--fy3a, 0) + (var(--fy3b, 0) - var(--fy3a, 0)) * var(--fzm3)
+            + (var(--fy3c, 0) - var(--fy3b, 0)) * var(--fzn3));
+
+    --fpx: calc(var(--fa0) * var(--fpx0) + var(--fa1) * var(--fpx1)
+             + var(--fa2) * var(--fpx2) + var(--fa3) * var(--fpx3));
+    /* sayfa uzayından görüntü uzayına: y − mx·e (mx ölçülür) */
+    --fpy: calc(var(--fa0) * var(--fpy0) + var(--fa1) * var(--fpy1)
+             + var(--fa2) * var(--fpy2) + var(--fa3) * var(--fpy3)
+             - var(--fgor) * var(--fmx, 0) * var(--ae));
+    transform: translate(calc(var(--fpx) * 1px), calc(var(--fpy) * 1px));
+    /* k = clamp((seg−.8)/.2); GEÇERLİ segment = başlamış olanların sonuncusu */
+    --fk0: calc((1 - clamp(0, calc(var(--fm0) * 100000), 1)) * clamp(0, calc((var(--fp0) - .8) * 5), 1)
+    + clamp(0, calc(var(--fm0) * 100000), 1) * clamp(0, calc((var(--fm0) - .8) * 5), 1));
+    --fb1: clamp(0, calc(var(--fm1) * 100000), 1); --fc1: clamp(0, calc(var(--fn1) * 100000), 1);
+    --fk1: calc((1 - var(--fb1)) * clamp(0, calc((var(--fp1) - .8) * 5), 1)
+    + var(--fb1) * (1 - var(--fc1)) * clamp(0, calc((var(--fm1) - .8) * 5), 1)
+    + var(--fc1) * clamp(0, calc((var(--fn1) - .8) * 5), 1));
+    --fb2: clamp(0, calc(var(--fm2) * 100000), 1); --fc2: clamp(0, calc(var(--fn2) * 100000), 1);
+    --fk2: calc((1 - var(--fb2)) * clamp(0, calc((var(--fp2) - .8) * 5), 1)
+    + var(--fb2) * (1 - var(--fc2)) * clamp(0, calc((var(--fm2) - .8) * 5), 1)
+    + var(--fc2) * clamp(0, calc((var(--fn2) - .8) * 5), 1));
+    --fb3: clamp(0, calc(var(--fm3) * 100000), 1); --fc3: clamp(0, calc(var(--fn3) * 100000), 1);
+    --fk3: calc((1 - var(--fb3)) * clamp(0, calc((var(--fp3) - .8) * 5), 1)
+    + var(--fb3) * (1 - var(--fc3)) * clamp(0, calc((var(--fm3) - .8) * 5), 1)
+    + var(--fc3) * clamp(0, calc((var(--fn3) - .8) * 5), 1));
+    --fk: calc(var(--fa0) * var(--fk0) + var(--fa1) * var(--fk1)
+    + var(--fa2) * var(--fk2) + var(--fa3) * var(--fk3));
+
+    /* kadraj dışına çıkınca söner (8897) · ölçüm yoksa hiç doğmaz */
+    opacity: calc(var(--folc, 0) * var(--fgor)
+             * clamp(0, calc((var(--fpy) + 14) * 100000), 1)
+             * clamp(0, calc((var(--fvh, 0) + 14 - var(--fpy)) * 100000), 1)); }
+
+  /* tıklama halkası: varışta çan eğrisi (8901-8904). Anahtar-kare DEĞİL —
+     ilerlemeye bağlı, kaydırma geri alınınca geri sarar. Zincir imlecin
+     ÜZERİNDE hesaplanır, halkaya yalnız tek sayı (--fk) miras kalır —
+     kalıtan değişken sayısı ölçülebilir maliyet (Style&Layout). */
+  .tlrip { opacity: calc(var(--fk) * (1 - var(--fk)) * 3.6);
+    transform: scale(calc(.3 + var(--fk))); }
+
+  /* gölgeler H14: kaynakta masaüstü katmanı (1016, 1035, 1122) */
+  @media (min-width: 901px) {
+    .strail b { box-shadow: 0 0 8px rgba(239, 35, 60, .35); }
+    .tlbtn { box-shadow: 0 9px 22px -14px var(--red); }
+    .tlptr::before { filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .65)); }
+  }
+  /* MOBİL İÇERİK İSTİSNASI — kaynak 4375-4380, ana CSS bloğunun DIŞINDA
+     duruyor ve ilk okumada gözden kaçtı; gerçek Chrome'da mobil kare
+     kıyası yakaladı (eski tarafta 21 günün hepsi görünür, yenide 6).
+     Kaynağın Madde 1'i: dokunmatikte ve ≤900'de içerik GÖRÜNÜR DOĞAR,
+     giriş hareketi yok. Fare de burada söner — 640 değil 900 eşiği.
+     Ek kazanç: mobilde kare başına sürülen eleman 43 → 18. */
+  @media (pointer: coarse), (max-width: 900px) {
+    .tlsay, .tldd, .tlsl, .tlok { opacity: 1; transform: none; animation: none; }
+    .tlptr { display: none; }
+  }
+
+  /* kaynak mobil çizelgesi: 1122-1128 */
+  @media (max-width: 640px) {
+    .sttools { --stvh: 250px; }
+    .tl-act { min-height: 206px; gap: 8px; }
+    .tl-act.tl-site { min-height: 168px; }
+    .tlnav span:nth-child(3), .tlnav span:nth-child(4) { display: none; }
+    .tlptr { display: none; }
+  }
+  /* kaynak 1129-1132: fare yok, perdeler tamamlanmış doğar */
+  @media (prefers-reduced-motion: reduce) {
+    .st-kap { min-height: 0; }
+    .st-sabit { position: static; animation: none; }
+    .tlptr { display: none; }
+  }
+</style>
+
+<script>
+  /* FARE HEDEFLERİNİN ÖLÇÜMÜ — kaynağın canlı gBCR okumasının yerlisi
+     (8891-8893). rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready +
+     ResizeObserver. Ölçüm TAMAMLANMIŞ kadrajda yapılır: animasyon bir
+     an kapatılır (taban = 1), çünkü fiyat kutusu gibi hedeflerin
+     genişliği içeriğe bağlıdır ve imleç oraya ancak sayı tam boyuna
+     ulaştıktan sonra varır. Kapatma boyama arası değil, ölçüm sırasında
+     senkron okunur ve hemen geri alınır. */
+  const kap = document.querySelector('.st-kap') as HTMLElement | null;
+  if (kap) {
+    const sabit = kap.querySelector('.st-sabit') as HTMLElement;
+    const view = kap.querySelector('.stview') as HTMLElement;
+    const sayfa = kap.querySelector('.stpage') as HTMLElement;
+    /* [seçici, x adı, y adı] — kaynak PTR tablosunun hedefleri (8874-8878) */
+    const HEDEF: [string, string | null, string][] = [
+      ['.tlnav b', 'fx0a', 'fy0a'], ['.tlbtn', 'fx0b', 'fy0b'],
+      ['.tlch.aim', 'fx1a', 'fy1a'], ['.tlknob', null, 'fy1b'], ['.tlprice', 'fx1c', 'fy1c'],
+      ['.tldd.aim', 'fx2a', 'fy2a'], ['.tlsl.aim', 'fx2b', 'fy2b'], ['.tlok', 'fx2c', 'fy2c'],
+      ['.tlbar', 'fx3a', 'fy3a'], ['.tlst[data-k="2"]', 'fx3b', 'fy3b'],
+      ['.tlst[data-k="3"]', 'fx3c', 'fy3c'],
+    ];
+    const olc = () => {
+      if (!sabit || !view || !sayfa) return;
+      const rv = view.getBoundingClientRect();
+      if (rv.width < 40) return;
+      /* y SAYFA UZAYINDA ölçülür: hedef ile .stpage aynı ötelemeyi yediği
+         için fark ilerlemeden BAĞIMSIZDIR (eski sürüm görüntü kutusuna
+         göre ölçüp öteleme geri ekliyordu; sürücü tüketiciye dağıtılınca
+         o varsayım çöktü ve fare 787 px kaydı — ölçüm yakaladı). */
+      const rp = sayfa.getBoundingClientRect();
+      for (const [sec, ax, ay] of HEDEF) {
+        const el = kap.querySelector(sec) as HTMLElement | null;
+        if (!el) continue;
+        /* hedefi TAMAMLANMIŞ kadrajında oku: fiyat kutusunun genişliği ve
+           giriş ötelemeleri (gün 3px, saat 4px, onay 5px) ilerlemeye bağlı;
+           imleç oraya zaten yerleşmiş hâlinde varır */
+        const onceki = el.style.cssText;
+        el.style.animation = 'none';
+        el.style.setProperty('--stp', '1');
+        const r = el.getBoundingClientRect();
+        if (r.width || r.height) {
+          if (ax) kap.style.setProperty('--' + ax, (r.left - rv.left + r.width * .5).toFixed(2));
+          kap.style.setProperty('--' + ay, (r.top - rp.top + r.height * .5).toFixed(2));
+        }
+        el.style.cssText = onceki;
+      }
+      const rng = kap.querySelector('.tlrng') as HTMLElement | null;
+      if (rng) {
+        const rr = rng.getBoundingClientRect();
+        kap.style.setProperty('--frx', (rr.left - rv.left).toFixed(2));
+        kap.style.setProperty('--frw', rr.width.toFixed(2));
+      }
+      kap.style.setProperty('--fmx', String(sayfa.scrollHeight - view.clientHeight));
+      kap.style.setProperty('--fvh', String(view.clientHeight));
+      kap.style.setProperty('--sth', sabit.offsetHeight + 'px');
+      kap.style.setProperty('--folc', '1');
+    };
+    let zm: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(zm); zm = setTimeout(olc, 180); });
+    document.fonts?.ready?.then(olc);
+    if ('ResizeObserver' in window) new ResizeObserver(olc).observe(sabit);
+    olc();
+  }
+</script>
