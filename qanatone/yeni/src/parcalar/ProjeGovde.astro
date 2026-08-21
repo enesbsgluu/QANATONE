@@ -3,9 +3,41 @@
    Eski sayfada bu içerik JS'le doğuyordu (pdHero/pdMeta/pdBlocks);
    burada tamamı derleme anında basılır. blocks panelden HTML geliyor
    (yalnız <p> ölçüldü) — suz süzgecinden geçer (Anayasa madde 6).
-   Hero gorseli GELDI (giydirme, 20 Agu): kunyeden olculu, LAZY —
-   giris+kunyenin ALTINDA durur ki LCP metin kalsin (olculdu, asagida
-   sayfa kapisi). Kunyede olmayan proje gorselsiz basilir. */
+
+   SADAKAT TURU (22 Ağustos). /projeler turunda bulunan kusur sınıfının
+   aynısı bu sayfada da vardı; kaynak künyesi okundu (markup 4991-4999,
+   render 11773-11797, CSS 365-373 · 2260-2263 · `.steps`/`.step`).
+
+   | kalem        | kaynaktaki değer                              | satır     |
+   |--------------|-----------------------------------------------|-----------|
+   | sıra         | geri · künye(mono+h1+lede) · HERO · meta · blok | 4991-4998 |
+   | künye şeridi | `.shead .mono` = T(p.tag), 26 px kızıl çizgi  | 366-367   |
+   | h1           | clamp(2.3rem,5.6vw,4.15rem)                   | 368       |
+   | hero         | `.pdhero` 16/7 · r-xl 34 · 1px line · degrade | 2260-2262 |
+   | hero görsel  | cover + `grayscale(.3) contrast(1.06)`        | 2263      |
+   | hero odağı   | genel liste + `#pdHero` iki override          | 1223-1233 |
+   | meta         | `.steps`>`.step`: nokta · DEĞER · etiket      | 11784-11786 |
+   | blok başlığı | `.shead .mono` (kicker), gövde 1rem/1.78/300  | 11789-11790 |
+   | rakamlar     | `.steps`>`.step`>`b` 1.9rem 700 kızıl         | 11792     |
+   | sonraki      | üstten 52 px, çizgi, mono + `.dkgo` 1.2rem    | 11795-11796 |
+
+   SAPMALAR (bilinçli):
+   1) HERO SIRASI KAYNAĞA DÖNDÜ (lede'nin hemen altı). Göç turunda hero
+      künyenin ALTINA alınmıştı ki LCP metin kalsın; o karar ÖLÇÜMLE
+      alınmıştı, bu yüzden geri dönüş de ölçümle doğrulandı ve hero
+      `eager` + `fetchpriority=high` ile LCP adayı yapıldı (rakamlar
+      commit'te).
+   2) BLOK BAŞLIKLARI `<h2>` KALDI. Kaynak onları `<span class="mono">`
+      yazıyor; görünüm aynı ama başlık ağacı yok. Statik HTML'in tek
+      sebebi botun yapıyı görmesi (Anayasa) — görünümü kaynaktan, semantiği
+      yeni kabuktan aldık.
+   3) META `<dl>` KALDI (kaynak `div`+`h4`). "2026" bir başlık değildir;
+      değer/etiket sırası CSS `order` ile kaynağınkine çevrildi.
+   4) GRİ/KONTRAST DOSYAYA PİŞTİ, CSS'te `filter` YOK — H14 mobil bağlamda
+      filtreyi reddediyor ve hero her cihazda aynı görünmeli. Destede
+      kullanılan yolun aynısı (`gorsel-uret.cjs`).
+   5) Hero kendi varyantını (`ph`) kullanır; `pd` DEĞİŞMEDİ çünkü onun
+      `-m` türevini S-CANLI sahnesi de okuyor. */
 import { icerik, T, suz, type Dil } from '../icerik';
 import prjGorsel from '../veri/proje-gorselleri.json';
 interface Props { p: any; dil: Dil }
@@ -20,55 +52,128 @@ const i = sira.indexOf(p.slug);
 const sonraki = (icerik.projects || [])[(i + 1) % sira.length];
 const g: any = prjGorsel.find((x: any) => x.slug === p.slug);
 ---
-<p class="geri"><a href={`${B}${on}/projeler`}>{M('Tüm projeler', 'All projects')}</a></p>
+<a class="pgback" href={`${B}${on}/projeler`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('Tüm projeler', 'All projects')}</span>
+</a>
 
 <section class="giris">
+  <span class="mono">{T(p.tag, dil)}</span>
   <h1>{p.name}</h1>
   <p class="lede">{T(p.text, dil)}</p>
 </section>
 
-<dl class="kunye">
-  <div><dt>{M('Yıl', 'Year')}</dt><dd>{p.year}</dd></div>
-  {p.meta?.role && <div><dt>{M('Kapsam', 'Scope')}</dt><dd>{T(p.meta.role, dil)}</dd></div>}
-  {p.meta?.dur && <div><dt>{M('Süre', 'Duration')}</dt><dd>{T(p.meta.dur, dil)}</dd></div>}
-  {p.meta?.ch && <div><dt>{M('Kanallar', 'Channels')}</dt><dd>{T(p.meta.ch, dil)}</dd></div>}
-</dl>
-
-{g && <picture class="hero">
-  <source media="(max-width:760px)" srcset={`/yeni/img/pd/${p.slug}-m.webp`}
-    width={g.herom.w} height={g.herom.h} />
-  <img src={`/yeni/img/pd/${p.slug}.webp`} width={g.hero.w} height={g.hero.h}
-    loading="lazy" decoding="async" alt={p.name} />
+{g && <picture class="pdhero">
+  <source media="(max-width:760px)" srcset={`${B}/img/ph/${p.slug}-m.webp`}
+    width={g.pdhm.w} height={g.pdhm.h} />
+  <img src={`${B}/img/ph/${p.slug}.webp`} width={g.pdh.w} height={g.pdh.h}
+    fetchpriority="high" decoding="async" alt={p.name} />
 </picture>}
+
+<dl class="steps kunye">
+  <div class="step"><span class="sn" aria-hidden="true">·</span>
+    <dd>{p.year}</dd><dt>{M('Yıl', 'Year')}</dt></div>
+  {p.meta?.role && <div class="step"><span class="sn" aria-hidden="true">·</span>
+    <dd>{T(p.meta.role, dil)}</dd><dt>{M('Kapsam', 'Scope')}</dt></div>}
+  {p.meta?.dur && <div class="step"><span class="sn" aria-hidden="true">·</span>
+    <dd>{T(p.meta.dur, dil)}</dd><dt>{M('Süre', 'Duration')}</dt></div>}
+  {p.meta?.ch && <div class="step"><span class="sn" aria-hidden="true">·</span>
+    <dd>{T(p.meta.ch, dil)}</dd><dt>{M('Kanallar', 'Channels')}</dt></div>}
+</dl>
 
 {bloklar.map(([baslik, govde]) => (
   <section class="govde">
-    <h2>{baslik}</h2>
+    <h2 class="mono">{baslik}</h2>
     <Fragment set:html={suz(govde, ['p', 'em', 'b', 'br'])} />
   </section>
 ))}
 
-{p.res?.length > 0 && <section class="olcu">
+{p.res?.length > 0 && <div class="steps olcu">
   {p.res.map((r: any) => (
-    <div class="mk"><b>{T(r.v, dil)}</b><span>{T(r.l, dil)}</span></div>
+    <div class="step"><b>{T(r.v, dil)}</b><p>{T(r.l, dil)}</p></div>
   ))}
-</section>}
+</div>}
 
-{sonraki && <p class="sonraki">
-  <span>{M('Sonraki proje', 'Next project')}</span>
-  <a href={`${B}${on}/projeler/${sonraki.slug}`}>{sonraki.name}</a>
-</p>}
+{sonraki && <div class="sonraki">
+  <span class="mono">{M('Sonraki proje', 'Next project')}</span>
+  <a class="dkgo" href={`${B}${on}/projeler/${sonraki.slug}`}>{sonraki.name}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+  </a>
+</div>}
 
 <style>
-  .geri { margin-bottom: 18px; font-size: .85rem; }
-  .kunye { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px; margin: 22px 0 6px; }
-  .kunye div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; }
-  .kunye dt { color: var(--tx3); font-size: .74rem; margin-bottom: 3px; }
-  .kunye dd { color: var(--tx2); font-size: .9rem; margin: 0; }
-  .hero { display: block; margin: 20px 0 8px; }
-  .hero img { display: block; width: 100%; height: auto; border-radius: 14px; }
-  .olcu { margin-top: 22px; }
-  .sonraki { margin-top: 34px; display: flex; gap: 10px; align-items: baseline; }
-  .sonraki span { color: var(--tx3); font-size: .82rem; }
+  /* ---- BAŞ: kaynağın `.pgback` + `.shead` ailesi (365-373, 2516-2519) ---- */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .mono { font-family: var(--f-tek); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--tx3); }
+  .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .giris .mono::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .giris h1 { font-size: clamp(2.3rem, 5.6vw, 4.15rem); margin-bottom: 18px; }
+  .giris .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--tx2);
+    font-weight: 400; line-height: 1.7; max-width: 62ch; }
+
+  /* ---- HERO: kaynağın `.pdhero`sı birebir (2260-2263) ----
+     Tek fark filtrenin yeri: `grayscale(.3) contrast(1.06)` CSS'te değil
+     DOSYADA (H14; üreteç `griKontrast`). Görünüm aynı, mobilde katman yok. */
+  .pdhero { position: relative; display: block; aspect-ratio: 16 / 7;
+    margin-bottom: 38px; border-radius: 34px; overflow: hidden;
+    border: 1px solid var(--line);
+    background: linear-gradient(150deg, rgba(239,35,60,.14), rgba(255,255,255,.03)); }
+  .pdhero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ---- META + RAKAMLAR: kaynağın `.steps`/`.step`i (aynı bileşen) ---- */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px; }
+  .kunye { margin: 0 0 38px; }
+  .step { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    padding: 22px 22px 24px; display: flex; flex-direction: column; }
+  .step .sn { order: 0; width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--line2); display: grid; place-items: center;
+    font-family: var(--f-tek); font-size: 11px; color: var(--tx3); margin-bottom: 16px; }
+  /* değer üstte, etiket altta — kaynağın sırası. `<dl>` semantiği dt→dd
+     ister, görünüm sırası `order` ile çevrildi (sapma 3). */
+  .step dd { order: 1; margin: 0; font-size: 1.02rem; letter-spacing: -.03em;
+    margin-bottom: 8px; color: var(--tx); }
+  .step dt { order: 2; font-size: .84rem; color: var(--tx3); line-height: 1.62;
+    font-weight: 300; }
+  .step b { display: block; font-family: var(--f-baslik); font-size: 1.9rem;
+    font-weight: 700; letter-spacing: -.04em; color: var(--red); margin-bottom: 6px; }
+  .step p { font-size: .84rem; color: var(--tx3); line-height: 1.62; font-weight: 300; }
+  .olcu { margin-top: 8px; }
+
+  /* ---- BLOKLAR: başlık kicker, gövde 1rem/1.78/300 (11789-11790) ---- */
+  .govde { margin-bottom: 34px; max-width: 74ch; }
+  .govde h2 { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 11px; font-weight: 400; }
+  .govde h2::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .govde :global(p) { font-size: 1rem; color: var(--tx2); line-height: 1.78;
+    font-weight: 300; margin-bottom: 12px; }
+
+  /* ---- SONRAKİ PROJE (11795-11796) ---- */
+  .sonraki { margin-top: 52px; padding-top: 26px; border-top: 1px solid var(--line); }
+  .sonraki .mono { display: block; }
+  .dkgo { display: inline-flex; align-items: center; gap: 10px; margin-top: 12px;
+    font-size: 1.2rem; font-weight: 600; color: var(--tx); text-decoration: none;
+    padding-bottom: 5px; border-bottom: 1px solid var(--line2); }
+  .dkgo svg { width: 16px; height: 16px; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .step { transition: border-color .36s var(--e), background .36s var(--e); }
+    .step:hover { border-color: rgba(239,35,60,.36); background: var(--card2); }
+    .step .sn { transition: .36s var(--e); }
+    .step:hover .sn { border-color: var(--red); color: var(--red);
+      background: var(--red-dim); }
+    .pgback { transition: color .26s var(--e); }
+    .pgback:hover { color: var(--red); }
+    .dkgo { transition: color .32s var(--e), border-color .32s var(--e), gap .32s var(--e); }
+    .dkgo:hover { color: var(--red); border-color: var(--red); gap: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step, .step .sn, .pgback, .dkgo { transition: none; }
+  }
 </style>
