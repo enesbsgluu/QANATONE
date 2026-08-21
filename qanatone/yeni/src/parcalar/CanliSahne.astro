@@ -1,0 +1,211 @@
+---
+/* K7 · CANLI HİKÂYELER (#stStage.stlive) — web-tasarim hizmetinin
+   sahnesi. Kaynak: kök index.html · markup storyStage 8336-8365 ·
+   CSS 793-841 (+ 4402 mobil blur yasağı) · sürücü 8818-8845 (fit).
+   Hizmet: web-tasarim (fam:'craft' + det.story.sites).
+
+   BU SAHNE SCRUB DEĞİL — kaynakta da draw yok. Tek "hareketi" mini
+   tarayıcı kutusuna yerleştirilen canlı sitenin ÖLÇEKLENMESİ: iframe
+   1280 px masaüstünde çalışır, kutuya oranla küçültülür (fit).
+   Kaydırma sürücüsü aramak yanlış olurdu; kaynakta olmayan hareket
+   eklenmez (enflasyon testi).
+
+   İKİ DAL, KAYNAĞIN KENDİ KURALI (8338-8340):
+     FR = frame'i false OLMAYAN siteler · P = FR[0]
+     P varsa   → iframe yerleştirilir, kartlar gizli (.stopts display:none)
+     P yoksa   → sahne `.nofr` sınıfını alır, iki kart ızgarası basılır
+   BUGÜNKÜ İÇERİK: iki sitenin de `frame: false`'u var (content.json),
+   yani yayında çalışan dal `.nofr`. iframe dalı yine de taşındı —
+   panelden bayrak açılırsa sahne çalışmalı; DOĞRULANDI: content.json
+   geçici olarak açılıp derlendi, ölçek 798/1280 = 0,623 ölçüldü ve
+   içerik geri alındı.
+
+   GÖRSEL MEKANİZMASI (adıyla sapma): kaynak kartın arkasına
+   `background-image` koyuyordu. Burada `<img loading="lazy">` +
+   `object-fit: cover` — aynı görüntü, ama ölçü künyeden gelir (CLS
+   yok) ve görsel tembel yüklenir. Varyant `pd/<slug>-m.webp`
+   (744×419): kart masaüstünde 379, mobilde 348 CSS px → ikisi de
+   2× tavanının altında (kural 109). Künyede olmayan proje görselsiz
+   basılır (ProjeDizin'in kuralı).
+
+   Buzlu cam kabuk sözleşmesine uyar: `backdrop-filter` yalnız
+   `hover:hover and pointer:fine` — kaynağın mobil bloğu da (4402)
+   evrensel `!important` ile söndürüyordu. */
+import { T, icerik, type Dil } from '../icerik';
+import prjGorsel from '../veri/proje-gorselleri.json';
+interface Props { story: any; dil: Dil }
+const { story, dil } = Astro.props;
+const en = dil === 'en';
+const M = (tr: string, eng: string) => en ? eng : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const gorsel = new Map((prjGorsel as any[]).map(g => [g.slug, g]));
+/* kaynak 8337-8341 birebir */
+const S: any[] = (story?.sites?.length ? story.sites : (story?.live ? [{ u: story.live, ps: story.ps || '' }] : []));
+const FR = S.filter(o => o.frame !== false);
+const P = FR[0] || null;
+const cip = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const dom = P ? cip(P.u) : M('canlı işlerimiz', 'our live builds');
+const digerleri = P ? S.filter(x => x !== P) : [];
+const daha = P && digerleri[0] ? digerleri[0] : null;
+---
+{S.length > 0 && (
+<div class="sdsec">
+  <span class="mono">{M('Canlı hikâyeler — içlerinde gez', 'Live stories — experience them')}</span>
+  <div class={'ststage stlive' + (P ? '' : ' nofr')} id="stStage">
+    <div class="stbar"><i /><i /><i /><span>{dom}</span>
+      {P && <a class="stopen" href={P.u} target="_blank" rel="noopener">{M('yeni sekmede aç', 'open')}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+          ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a>}
+    </div>
+    <div class="stlv">
+      {P && <div class="stlvw"><iframe src={P.u} loading="lazy" title={dom}
+        referrerpolicy="no-referrer" /></div>}
+      <div class="stopts">
+        {S.map((o: any) => { const g: any = gorsel.get(o.ps); return (
+          <a class="stpost" href={o.u} target="_blank" rel="noopener">
+            {g && <img src={`${B}/img/pd/${o.ps}-m.webp`} width={g.herom.w} height={g.herom.h}
+              loading="lazy" decoding="async" alt="" />}
+            <span>{(o.t ? T(o.t, dil) : cip(o.u)) + ' — ' + M('ziyaret et', 'visit')}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></span>
+          </a>
+        ); })}
+      </div>
+    </div>
+  </div>
+  <div class="fnnote">{P
+    ? M('Canlı yerleştirme — mobilde karta dokunuş siteye götürür.', 'Live embed — tap a card on mobile to visit.')
+    : M('Hikâye anlatılı işlerimizden ikisi — tıkla, canlı deneyimle.', 'Two of our story-driven builds — click to experience them live.')}
+    {daha && <> · <a class="stmore" href={daha.u} target="_blank" rel="noopener"
+      >{M('Bir örnek daha: ', 'One more build: ') + (daha.t ? T(daha.t, dil) : cip(daha.u))}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+        ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a></>}
+  </div>
+</div>
+)}
+
+<style>
+  /* ═══ KAP · kaynak 921-928 (kardeş K7 sahneleriyle aynı yarıçap) ═══ */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec > .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+  .ststage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    overflow: hidden; }
+  .stbar { display: flex; align-items: center; gap: 6px; padding: 11px 15px;
+    border-bottom: 1px solid var(--line); background: #0c0c0d; }
+  .stbar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .13);
+    font-style: normal; }
+  .stbar i:first-child { background: rgba(239, 35, 60, .75); }
+  .stbar span { margin-left: 10px; font-family: ui-monospace, monospace; font-size: 10px;
+    letter-spacing: .08em; color: var(--tx4); }
+
+  /* ═══ CANLI YERLEŞTİRME · kaynak 793-824 ═══ */
+  /* kaynağın küresel kuralı `a{color:inherit;text-decoration:none}` (203);
+     yeni kabukta bağlantılar altı çizili doğuyor — sahne bağlantıları
+     kaynağın davranışına döndürülür (mobil karede yakalandı) */
+  .stpost, .stopen, .stmore { text-decoration: none; }
+  .stopen { margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+    font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx3); transition: color .25s; }
+  .stopen:hover { color: var(--red-soft); }
+  .stopen svg { width: 11px; height: 11px; }
+  .stlive .stlv { position: relative; height: clamp(340px, 42vw, 480px); overflow: hidden;
+    background: #0a0a0b; }
+  /* ölçek bir kez kurulur ve sabit kalır — kaynak will-change'i 2026-08'de
+     bilerek kaldırmıştı (802), o karar taşındı */
+  .stlvw { width: 1280px; transform-origin: 0 0; }
+  .stlvw iframe { width: 1280px; height: 100%; border: 0; display: block; background: #0a0a0b; }
+  .stopts { display: none; }
+  .stlive.nofr .stlv { height: auto; }
+  .stlive.nofr .stopts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
+  .stlive.nofr .stpost { position: relative; display: flex; align-items: flex-end; height: 236px;
+    border-radius: 14px; overflow: hidden; border: 1px solid var(--line2);
+    background-color: #0c0c0d;
+    transition: transform .4s var(--e), border-color .4s var(--e); }
+  .stlive.nofr .stpost::before { content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(5, 5, 6, 0) 30%, rgba(5, 5, 6, .86)); }
+  /* görsel: kaynakta background-image idi (807-809) — burada ölçülü <img>,
+     aynı kadraj (cover · center top) */
+  /* z-index ŞART: kaynakta görsel elemanın ZEMİNİYDİ, yani ::before
+     karartması onun üstünde kalıyordu. <img> çocuk elemandır ve DOM
+     sırasına göre ::before'un ÜSTÜNE boyanır — mobil yan yana kare
+     yakaladı (yenide karartma yok gibi görünüyordu). */
+  .stpost img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center top; }
+  .stlive.nofr .stpost span { position: relative; z-index: 2; display: inline-flex;
+    align-items: center; gap: 8px; margin: 0 auto 16px; font-family: ui-monospace, monospace;
+    font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: #fff;
+    border: 1px solid rgba(239, 35, 60, .5); border-radius: 999px; padding: 9px 16px;
+    background: rgba(239, 35, 60, .16); }
+  .stlive.nofr .stpost svg { width: 12px; height: 12px; }
+  .stmore { color: var(--red-soft); display: inline-flex; align-items: center; gap: 5px; }
+  .stmore svg { width: 10px; height: 10px; }
+  .stmore:hover { color: var(--red); }
+
+  /* hover yalnız işaretleme cihazında (H14 + kabuk sözleşmesi) */
+  @media (hover: hover) and (pointer: fine) {
+    .stlive.nofr .stpost:hover { transform: translateY(-4px); border-color: rgba(239, 35, 60, .45); }
+    /* buzlu cam: kaynak mobilde evrensel !important ile söndürüyordu (4402) */
+    .stlive.nofr .stpost span { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .stpost span { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  }
+  /* kaynak kırılımları: 820-821 ve 825-841 */
+  @media (max-width: 700px) {
+    .stlive.nofr .stopts { grid-template-columns: 1fr; }
+    .stlive.nofr .stpost { height: 160px; }
+  }
+  @media (max-width: 760px) {
+    .stlvw { display: none; }
+    .stlive .stlv { height: auto; }
+    .stopts { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+    .stpost { position: relative; display: flex; align-items: flex-end; height: 150px;
+      border-radius: 14px; overflow: hidden; border: 1px solid var(--line2);
+      background-color: #0c0c0d; }
+    .stpost::before { content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(5, 5, 6, 0) 26%, rgba(5, 5, 6, .88)); }
+    .stpost span { position: relative; z-index: 2; display: inline-flex; align-items: center;
+      gap: 8px; margin: 0 auto 14px; font-family: ui-monospace, monospace; font-size: 10px;
+      letter-spacing: .14em; text-transform: uppercase; color: #fff;
+      border: 1px solid rgba(239, 35, 60, .5); border-radius: 999px; padding: 8px 15px;
+      background: rgba(239, 35, 60, .16); }
+    .stpost svg { width: 12px; height: 12px; }
+    .stmore { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stlive.nofr .stpost { transition: none; }
+  }
+</style>
+
+<script>
+  /* CANLI YERLEŞTİRME ÖLÇEĞİ (kaynak fit, 8822-8834) — yalnız iframe
+     dalında koşar. iframe 1280 px masaüstünde çalışır; kutuya oranla
+     küçültülür, yüksekliği ölçekle bölünerek kutuyu doldurur, ortalanır.
+     ResizeObserver'a bağlı: kutu gerçek boyutunu ne zaman alsa (font,
+     döndürme) yeniden ölçer, sıfır-genişlik anına takılmaz.
+     SAPMA (adıyla): kaynağın 420/1100 ms'lik iki ek denemesi TAŞINMADI —
+     onlar tek-sayfa uygulamasının rota geçişi içindi; burada düzen
+     kuruluşta oturuyor ve RO zaten her değişimi yakalıyor. */
+  const kutu = document.querySelector('.stlive .stlv') as HTMLElement | null;
+  const sar = document.querySelector('.stlive .stlvw') as HTMLElement | null;
+  if (kutu && sar) {
+    const fit = () => {
+      const bw = kutu.clientWidth;
+      if (bw < 40) return;
+      const sc = Math.min(1, bw / 1280);
+      sar.style.transform = 'scale(' + sc + ')';
+      sar.style.height = (kutu.clientHeight / sc) + 'px';
+      sar.style.marginLeft = Math.max(0, (bw - 1280 * sc) / 2) + 'px';
+    };
+    let zm: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(zm); zm = setTimeout(fit, 180); });
+    document.fonts?.ready?.then(fit);
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(kutu);
+    fit();
+  }
+</script>

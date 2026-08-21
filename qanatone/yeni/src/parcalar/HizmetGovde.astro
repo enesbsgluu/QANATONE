@@ -20,6 +20,7 @@ import SerpSahne from './SerpSahne.astro';
 import SohbetSahne from './SohbetSahne.astro';
 import AracSahne from './AracSahne.astro';
 import PlatformSahne from './PlatformSahne.astro';
+import CanliSahne from './CanliSahne.astro';
 import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
@@ -64,6 +65,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 {d.ai && <SohbetSahne ai={d.ai} dil={dil} />}
 {d.story?.tools && <AracSahne story={d.story} dil={dil} />}
 {d.trade && <PlatformSahne trade={d.trade} dil={dil} />}
+{(d.story?.sites || d.story?.live) && <CanliSahne story={d.story} dil={dil} />}
 
 {d.pains?.length > 0 && <section>
   <h2>{M('Dert nerede', 'Where it hurts')}</h2>
