@@ -25,6 +25,11 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
    **sıfır kalanla** bittiğini gör. Kırık zeminde iş yapılmaz.
 3. Oturum sonunda: suite temiz → commit → push. `DEVIR.md` her derlemede
    kendini günceller, elleme.
+4. **Her commit mesajının sonuna `[skip ci]` (Enes, 21 Ağu)** — Netlify
+   derlemesi commit'le değil Enes'in sözüyle tetiklenir. Yalnız Enes
+   **"yayınla"** dediğinde işaretsiz commit atılır; itilen yığının BAŞ
+   commit'i işaretsizse Netlify tüm yığını derler, ara commit'lerin
+   işareti yayını geciktirmez.
 
 ## Değişiklik disiplini — pazarlıksız
 
