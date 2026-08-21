@@ -255,7 +255,7 @@ sahnenin.
 | `#clStage` tırmanış | seo | **PIN .95** | ✅ (sticky kilit) |
 | `#aiStage` sohbet | geo | pinsiz scrub | ✅ (kelime yazımı) |
 | `#stStage.sttools` araçlar | web-sitesi-araclar | **PIN 1.05** | ✅ (17 kare parmak izi · bölüm 8) |
-| `#stStage.stlive` canlı | web-tasarim | draw YOK | ⏳ açık — iframe yerleştirme + `fit()` |
+| `#stStage.stlive` canlı | web-tasarim | draw YOK | ✅ (iki dal · bölüm 10) |
 | `#qtStage` platform akışı | finans | **PIN 2.7** | ✅ (19 kare parmak izi · bölüm 9) |
 | `#mkStage` motor | finans | **PIN 4.4** | ⏳ açık — 8 perde + kablolar + **dünya haritası canvas** (243 ülke) |
 
@@ -516,3 +516,74 @@ gürültüsü bu düzenekte ±5 kare).
 **Kapı:** denetim **45/0** · LH mobil 3 koşum ortanca **100** · LCP
 **1,508 s** · TBT **0** · CLS **0** · sayfa HTML 123,8 KB ham /
 24,2 KB gzip.
+
+---
+
+## 10 · CANLI HİKÂYELER — `#stStage.stlive` (21 Ağu, D4'ün yedinci sahnesi)
+
+Kaynak: markup `storyStage` 8336-8365 · CSS 793-841 (+ 4402) ·
+`fit` 8818-8845. **Bu sahne scrub DEĞİL** — kaynakta da `draw` yok.
+Tek mekanizma, canlı sitenin mini tarayıcı kutusuna ölçeklenmesi.
+Kaydırma sürücüsü aramak yanlış olurdu (enflasyon testi).
+
+### İki dal, ikisi de taşındı — biri ölçümle doğrulandı
+
+Kaynağın kuralı (8338-8340): `frame`i **false olmayan** ilk site varsa
+iframe yerleştirilir; yoksa sahne `.nofr` alır ve kart ızgarası basılır.
+Bugünkü içerikte iki sitenin de `frame: false`'u var → yayında çalışan
+dal `.nofr`.
+
+iframe dalı yine de taşındı ve **doğrulandı**: `content.json` geçici
+olarak açıldı, derlendi ve ölçüldü — ölçek `798/1280 = 0,6234`, sarmal
+yüksekliği `480/0,6234 = 769,9 px`, sol pay 0 (kaynağın `fit`
+formülünün birebiri). Sonra içerik geri alındı; `git status` temiz.
+
+### Kare kıyası iki hata yakaladı
+
+1. **`<img>` karartmanın üstüne boyanıyordu.** Kaynakta görsel elemanın
+   ZEMİNİYDİ (`background-image`), yani `::before` gradyanı onun
+   üstündeydi. Çocuk eleman olarak `<img>` DOM sırasına göre ::before'un
+   ÜSTÜNE gelir — `z-index: 0/1` ile düzeltildi. Mobil yan yana kare
+   gösterdi; ölçüm (`getComputedStyle(el,'::before')`) gradyanın iki
+   tarafta da **birebir aynı** olduğunu (30% / .86) doğruladı.
+2. **Yeni kabukta bağlantılar altı çizili doğuyor.** Kaynağın küresel
+   kuralı `a{color:inherit;text-decoration:none}` (203); kabukta
+   `a{color:var(--red-soft)}` var, altı çizgi tarayıcı varsayılanı.
+   Sahne bağlantıları kaynağın davranışına döndürüldü.
+
+### Ölçüm (yan yana)
+
+| | eski | yeni |
+|---|---|---|
+| kap genişliği (masaüstü) | 1200 | 800 |
+| kart (masaüstü) | 579 × 236 | 379 × 236 |
+| kart (mobil 390) | 320 × 160 | 320 × 160 |
+| `.stlv` yüksekliği | 264 / 360 | 264 / 360 |
+| not metni | birebir | birebir |
+
+### Bilinçli sapmalar
+
+- **Görsel mekanizması:** `background-image` → ölçülü
+  `<img loading="lazy">` + `object-fit: cover` (aynı kadraj kuralı:
+  cover · center top). Gerekçe: ölçü künyeden gelir (CLS yok), görsel
+  tembel yüklenir.
+- **Kadraj ~%14 daha dar:** paylaşılan varyant `pd/<slug>-m.webp`
+  kendisi 16:9'a **merkezden** kırpılmış (asıl 1860 × 898 = 2,07 →
+  744 × 419 = 1,776). Kaynak asıl görseli kullanıyordu. Ayrı bir varyant
+  ailesi üretmek %14 için pahalı görüldü; karar yazılı.
+- `fit`in 420/1100 ms'lik iki ek denemesi taşınmadı — onlar tek-sayfa
+  uygulamasının rota geçişi içindi; burada `ResizeObserver` yetiyor.
+- Buzlu cam yalnız `hover:hover and pointer:fine` (kabuk sözleşmesi;
+  kaynak da mobilde evrensel `!important` ile söndürüyordu, 4402).
+
+**Kapı:** denetim **45/0** · LH mobil 3 koşum ortanca **100** · LCP
+**1,432 s** · TBT **0** · CLS **0** · sayfa HTML 118,0 KB ham /
+22,9 KB gzip.
+
+---
+
+**D4 DURUMU:** 8 sahnenin **7'si kapandı**. Kalan tek kalem **motor
+`#mkStage`** (PIN 4.4 · 8 perde · ölçülü kablolar · 243 ülkelik dünya
+haritası canvas'ı) — Enes'in kararı: **en sona, tek tur**; harita
+katmanı ana sayfanın ızgarasını da paylaştığı için o tur iki yere
+birden dokunacak.
