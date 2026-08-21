@@ -430,10 +430,33 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
     .mi:hover .mgo svg { transform: translateX(4px); }
   }
 
+  /* ---- GİRİŞ: SIFIR JS, kaydırma güdümlü, YALNIZ transform ----
+     Enes (22 Ağu): "kartlar hafifçe yukarı kayarak girebilir, opaklık ve
+     bulanıklık olmadan. Aynı his, sıfır bedel."
+
+     Kaynak girişi (11101-11103) `opacity:0 + y+70 + blur(14px)`, süre 1,05 s
+     `power3.out`, kart başına .07 s gecikme. İkisi ELENDİ: opaklık madde 5/
+     H2'ye (içerik görünür doğar), bulanıklık madde 7/H14'e takılıyor —
+     yedi kartta yedi filtre katmanı demek. KALAN mesafe kaynağın kendi
+     sayısı: 70 px, aşağıdan yukarı.
+
+     Sürücü, kabuğun geri kalanıyla aynı: `view()` + `entry 0% → entry 100%`
+     (bento sözleşmesinin aynısı). Kaynağın .07 s'lik kademesi taşınmadı —
+     kaydırma güdümlü sürücüde kademe kartın SAYFADAKİ YERİNDEN doğuyor,
+     ayrıca yazılırsa iki kez kademelenir.
+
+     Taban bitmiş hâl: desteklemeyen tarayıcıda ve botta kart yerinde. */
+  @supports (animation-timeline: view()) {
+    .mi { animation: mi-gir linear both;
+      animation-timeline: view(); animation-range: entry 0% entry 100%; }
+  }
+  @keyframes mi-gir { from { transform: translateY(70px); } }
+
   /* hareket azaltma: durduran seçici hareketi verenin aynısı. Eğim
      BETİKTEN geliyor ve betik de aynı sorguyla kapılı — burada kalan iş
      dönüşümü sıfırlamak ve iki imleç katmanını susturmak. */
   @media (prefers-reduced-motion: reduce) {
+    .mi { animation: none; transform: none; }
     .mi-t, .mv img, .mgo, .mgo svg { transition: none; }
     .mi-t::before, .mi-t::after { transition: none; }
     .mi-t { transform: none; }
