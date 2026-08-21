@@ -52,7 +52,7 @@
 .ssz-izgara{display:grid;grid-template-columns:1fr;gap:12px}
 .ssz-sutun{display:flex;flex-direction:column;gap:12px;min-width:0}
 .ssz-kart{position:relative;display:flex;flex-direction:column;
-  border-radius:22px;border:1px solid var(--line);padding:22px 18px;
+  border-radius:18px;border:1px solid var(--line);padding:22px 18px;
   overflow:clip;min-width:0}
 .ssz-kart>*{position:relative;z-index:1}
 .ssz-arti{display:none}
@@ -100,43 +100,29 @@
    tek dile döner, kimlik desenden değil fotoğraftan gelir. Kızıl kartın siyah
    yazısı da bu yüzden açığa döner — koyu görselin üstünde siyah okunmaz.
 
-   BENTO DÜZELTMESİ (Enes, 21 Ağustos): görsel kartın çoğunu kaplar, içerik
-   görselin ÜSTÜNE biner. Perde artık degrade değil, tanımlı bir ŞERİT:
-   mobilde opak, masaüstünde hafif bulanık cam. Degrade perde bırakılmadı —
-   şerit zaten kendi zeminini taşıyor, ikisi üst üste binince görsel
-   gereksiz kararıyordu.
-
-   `::before` artık perde değil, ÜST KENARDAN İÇE PARLAMA. Gölge (box-shadow)
-   kullanılmadı: H14 mobil bağlamda pahalı katmanı (filter/backdrop/gölge)
-   reddediyor, parlama degradeyle kuruluyor. Bulanıklık yalnız masaüstü
-   bloğunda — mobilde `backdrop-filter` aynı kuralın kapsamında.
+   Perde dosyaya BASILMAZ, burada durur: kutu oranı üç kırılımda çok farklı
+   (0,97 · 4,17 · 1,49), basılı perde geniş şeritte yanlış yere düşer.
+   B7'deki "ton basılır, renk CSS'e kalır" ilkesinin buradaki karşılığı:
+   görsel basılır, okunabilirlik CSS'te.
 
    Bu blok üç yüzden SONRA gelmeli — aynı özgüllükte, sıra kazandırıyor. */
 .ssz-gorsel{position:absolute;inset:0;z-index:0;pointer-events:none}
 .ssz-gorsel img{width:100%;height:100%;object-fit:cover;display:block}
-
-.ssz-gorselli{background:var(--card);border-color:var(--line2);padding:0}
-/* üst kenardan içe parlama: beyaz ince hat + markanın kızılı, ikisi de degrade */
+/* mobil/tablet: açıklama HEP AÇIK, yazı bloğu yüksek — perde de güçlü */
 .ssz-gorselli::before{content:'';position:absolute;inset:0;z-index:0;
   pointer-events:none;background:none;
-  background-image:
-    linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 22%),
-    radial-gradient(74% 42% at 50% 0%,rgba(239,35,60,.26),transparent 72%);
+  /* Perde TEPEDE DE bitmiyor: kartların bir kısmında (koyu/kızıl yüzler)
+     içerik üste hizalı, alt degrade onlara değmiyordu — "Web Siteniz"
+     başlığı parlak düğümün üstünde kalıyordu. Alt ağır, üst yine de %42. */
+  background-image:linear-gradient(0deg,rgba(5,5,5,.94) 16%,rgba(5,5,5,.7) 48%,rgba(5,5,5,.42) 100%);
   -webkit-mask-image:none;mask-image:none}
 .ssz-gorselli::after{display:none}
-
-/* ikon görselin üstünde yüzer, şeride girmez */
-.ssz-gorselli .ssz-ikon{position:absolute;top:15px;left:15px;z-index:2;
-  background:rgba(255,255,255,.09);border:1px solid var(--line2);color:#fff}
-.ssz-gorselli .ssz-arti{color:var(--tx2)}
-
-/* ŞERİT — taban (mobil): opak. Üstündeki boşluk görselin kartın çoğunu
-   kaplamasını sağlıyor; kart yüksekliği içerikten değil bu paydan doğuyor. */
-.ssz-serit{margin-top:auto}
-.ssz-gorselli .ssz-serit{margin-top:152px;padding:15px 17px 17px;
-  background:var(--bg);border-top:1px solid rgba(255,255,255,.09)}
+.ssz-gorselli{background:var(--card);border-color:var(--line)}
 .ssz-gorselli h3{color:var(--tx)}
 .ssz-gorselli p{color:var(--tx2)}
+.ssz-gorselli .ssz-ikon{background:rgba(255,255,255,.09);border:1px solid var(--line2);
+  color:#fff}
+.ssz-gorselli .ssz-arti{color:var(--tx2)}
 
 /* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule`) ---- */
 .sus-cetvel{position:relative;height:1px;background:var(--line2);
@@ -165,32 +151,14 @@
   /* görselli kartta perde masaüstünde hafifler: açıklama kapalı başlıyor,
      alt bantta yalnız başlık var. Hover'da açılınca perde geri güçlenir. */
   /* Görselli kartta içerik HER YÜZDE alta iner: B1 sözleşmesi "büyük görsel
-     + üstünde okunur bir şerit" diyor, şerit de altta. */
-
-  /* IZGARA KÖŞELERİ: dışta yuvarlak, içte keskin — altı kart tek panelin
-     dilimleri gibi okunsun. Önce hepsi keskin, sonra dört köşe yuvarlanır.
-     Boşluk 14 → 8: geniş boşlukla keskin iç köşe "bozuk kart" gibi duruyor,
-     dilimlenmiş panel hissi dar boşlukla doğuyor. */
-  .ssz-izgara{gap:8px}
-  .ssz-sutun{gap:8px}
-  .ssz-izgara .ssz-kart{border-radius:0}
-  .ssz-sutun:first-child .ssz-kart:first-child{border-top-left-radius:26px}
-  .ssz-sutun:first-child .ssz-kart:last-child{border-bottom-left-radius:26px}
-  .ssz-sutun:last-child .ssz-kart:first-child{border-top-right-radius:26px}
-  .ssz-sutun:last-child .ssz-kart:last-child{border-bottom-right-radius:26px}
-
-  /* ŞERİT masaüstünde hafif bulanık cam, kartın altına oturur.
-     `.ssz-kart{padding:24px}` bu blokta yeniden yazıldığı için görselli
-     kartın dolgusunu BURADA da sıfırlamak gerekiyor — taban bloğundaki
-     `.ssz-gorselli{padding:0}` aynı özgüllükte ve DAHA ÖNCE geliyor.
-     `backdrop-filter` yalnız burada: blok (hover:hover)+(pointer:fine)
-     ile kapılı, mobil bağlama sızmıyor (H14). */
-  .ssz-gorselli{padding:0}
-  .ssz-gorselli .ssz-serit{margin-top:auto;padding:16px 18px 18px;
-    background:rgba(8,8,8,.5);
-    -webkit-backdrop-filter:blur(14px) saturate(1.08);
-    backdrop-filter:blur(14px) saturate(1.08);
-    border-top:1px solid rgba(255,255,255,.1)}
+     + üstünde okunur bir şerit" diyor, şerit de altta. Kaynakta yalnız
+     `.ssz-buyuk` bunu yapıyordu; görsel gelince altısı da aynı hizaya
+     geçmezse perde yarısına değmiyor. */
+  .ssz-gorselli .ssz-ikon{margin-bottom:auto}
+  .ssz-gorselli::before{
+    background-image:linear-gradient(0deg,rgba(5,5,5,.92) 10%,rgba(5,5,5,.55) 38%,rgba(5,5,5,.3) 100%)}
+  .ssz-gorselli:hover::before,.ssz-gorselli:focus-visible::before{
+    background-image:linear-gradient(0deg,rgba(5,5,5,.95) 22%,rgba(5,5,5,.72) 56%,rgba(5,5,5,.34) 100%)}
   /* açıklama kapalı başlar, açılırken süzülür */
   .ssz-acilir{grid-template-rows:0fr;transition:grid-template-rows .55s var(--e)}
   .ssz-acilir p{transform:translateY(8px);

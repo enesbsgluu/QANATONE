@@ -92,6 +92,14 @@ ilkesinin buradaki karşılığı: **görsel basılır, okunabilirlik CSS'te.**
   background:linear-gradient(0deg,rgba(5,5,5,.92) 6%,rgba(5,5,5,.55) 30%,transparent 62%)}
 ```
 
+**Bento düzeltmesi DENENDİ, GERİ ALINDI (21 Ağustos).** Beş değişiklik tek
+seferde uygulanmıştı (yarıçap 22/26 · boşluk 14→8 · şeridin karta yapışması ·
+üstten parlama · ince açık kenarlık) ve sonuç beğenilmedi; hangisinin bozduğu
+belli olmadığı için hepsi geri alındı. Beşi tek tek uygulanıp her adımda kare
+alındı (`adimlar.png`); kartlar `e5a3eed`in hâlinde bekliyor, hangi adımların
+gireceği Enes'in kararı. İlk okuma: en çok bozan adım 1 — iç köşeler
+keskinleşince kartlar "kart" olmaktan çıkıp parçaya dönüyor.
+
 **Bento düzeltmesi (Enes, 21 Ağustos).** Kart yüzü degrade perdeden bento
 diline çekildi: yarıçap 18 → 22 (masaüstü köşelerde 26), ızgara **dışta
 yuvarlak / içte keskin** (boşluk 14 → 8; geniş boşlukla keskin iç köşe
@@ -191,6 +199,37 @@ kabul edilmez**.
 | Kononenko | afiş kareyi yiyor, yazısız alan yalnız afişin boş alt yarısı | büyük beyaz düzlem + kafe; kare kimlik söylemiyor |
 | Charles Schwab | mavi tabela ve camdaki hayalet marka kadrajın ortasında | üst cephe (cam + yaprak); mavi yalnız bulanık zeminde leke |
 | Bab İç Mimarlık | yazısız **ve yeterince yüksek** alan yok | başlık bloğunun altındaki koltuk grubu, bant 3,8x büyütüyor |
+
+---
+
+## /projeler · KÜNYE KAYNAKTAN OKUNDU (21 Ağustos)
+
+Göç turunun tek sütunlu listesi (104 px pul) orijinal dizin DEĞİLDİ. Gerçek
+künye kök `index.html`in `#msn` / `.mi` bileşeninden okundu — ana sayfanın
+`#prjDeck`/`.dk` destesinden ayrı bir bileşen:
+
+| kalem | kaynaktaki değer | satır |
+|---|---|---|
+| yerleşim | masonry, mutlak konum, en kısa sütuna | 11055-11095 |
+| sütun | ≥1240:4 · ≥920:3 · ≥600:2 · altı:1 | 11073 |
+| boşluk | `innerWidth<700 ? 14 : 22` | 11059 |
+| görsel bandı | 220 px sabit, mobilde ×0,82 | 1730 · 1763 |
+| kart yüzü | radius 18 · 1px `var(--line)` · beyaz degrade | 1701-1706 |
+| dinlenme | görsel `grayscale(.22) contrast(1.05)` | 1735 |
+| hover | kenarlık kızıl + kızıl gölge + görsel `scale(1.05)` + ok 4 px | 1707 · 1737 |
+| tıklama | `.mi:active .mi-t{scale(.985)}` | 2627 |
+
+Kompozisyon: dört sütunlu masonry arşiv; üstte görsel bandı, altında
+künye/ad/anlatım/rakam kutuları; kimlik imleç güdümlü parıltı ve 3B eğimden.
+
+Kurulan hâlin sapmaları `ProjeDizin.astro`nun başında numaralı duruyor
+(masonry yerine ızgara, imleç güdümlü parıltı/eğim yok, dinlenme hâli
+`grayscale` yerine duotone, kart kalkması eklendi, filtre çipleri yok,
+ilk üç eager yerine yalnız ilk kart `fetchpriority="high"`).
+
+Kart bandı için üretece yeni varyant eklendi: `pk/<slug>.webp` 526×440 ve
+`pk/<slug>-m.webp` 700×360 — ölçü kaynaktan türedi (220 px bant × 263 px
+sütun × 2, kural 109).
 
 ---
 

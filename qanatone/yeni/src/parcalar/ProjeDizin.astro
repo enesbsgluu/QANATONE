@@ -1,22 +1,50 @@
 ---
 /* Projeler dizini gövdesi — TR ve EN aynı parçayı kullanır (rota turu).
-   Bütün metin ve sıra content.json'dan. Eski sayfanın iskeleti: başlık +
-   sayı + giriş + 7 kart (yıl/etiket/ad/anlatım/rakamlar/Projeyi gör).
-   Taşınmayanlar (bilinçli, rapora yazıldı): sektör filtre çipleri —
-   sektörler anahtarsız metinden türediği için saf CSS filtre panelden
-   gelen yeni sektörde SESSİZCE bayatlar; etkileşimsiz çip basmak da
-   tıklanmayan düğmedir. Giriş cümlesinin "sektöre göre filtrele"
-   parçası bu yüzden kırpıldı.
+   Bütün metin ve sıra content.json'dan.
 
-   B7 AKORDEON DENENDİ VE GERİ ALINDI (21 Ağustos, Enes). Dizin kart
-   listesi olarak kalıyor. Akordeondan alınan tek şey duotone geçişi:
-   KART DİNLENİRKEN KÜÇÜK GÖRSEL DUOTONE, HOVER'DA GERÇEK RENGE DÖNÜYOR.
-   Kart da hover'da kalkıyor. Dikey galeri görselleri rafa kalktı;
-   üreteci (`gorsel-kompoze.cjs`) duruyor, istenirse yeniden basar.
+   KÜNYE KAYNAKTAN OKUNDU (21 Ağustos, sadakat turu). Bu sayfa daha önce
+   göç turunun sadeleştirmesiydi (tek sütun liste + 104 px pul); orijinal
+   dizin o değil. Kaynak: kök `index.html` `#msn` / `.mi` (arşiv kartı,
+   ana sayfanın `#prjDeck`/`.dk` destesinden AYRI bileşen).
 
-   Kart kucuk gorseli (giydirme, 20 Agu): olculer kunyeden — uretec
-   `gorsel-uret.cjs` yazar, bilesen ELLE olcu yazmaz. Kunyede olmayan
-   proje gorselsiz basilir (panelden yeni proje senaryosu). */
+   | kalem        | kaynaktaki değer                                  | satır       |
+   |--------------|---------------------------------------------------|-------------|
+   | yerleşim     | masonry, mutlak konum, en kısa sütuna              | 11055-11095 |
+   | sütun        | >=1240:4 · >=920:3 · >=600:2 · altı:1              | 11073       |
+   | boşluk       | innerWidth<700 ? 14 : 22                           | 11059       |
+   | görsel bandı | 220 px SABİT, mobilde x0,82 (standart kart kararı) | 1730 · 1763 |
+   | kart yüzü    | radius 18 · 1px var(--line) · beyaz degrade        | 1701-1706   |
+   | dinlenme     | görsel `grayscale(.22) contrast(1.05)`             | 1735        |
+   | hover        | kenarlık kızıl + kızıl gölge + görsel scale(1.05)  | 1707 · 1737 |
+   | tıklama      | `.mi:active .mi-t{scale(.985)}`                    | 2627        |
+
+   SAPMALAR (madde 6 — hepsi bilinçli, hiçbiri göz kararı değil):
+   1) MASONRY YOK, CSS ızgara var. Masonry paketleme her kartın yüksekliğini
+      ÖLÇMEYİ gerektiriyor (kaynakta GSAP + layout()); dizin sayfasının ada
+      JS'i yok. 2026-08 "standart kart" kararı görsel bandını 220 px'e
+      sabitlediği için kalan yükseklik farkı yalnız metinden doğuyor —
+      paketlemenin kazancı o kararla zaten küçülmüştü. Sütun sayıları ve
+      boşluk kaynaktaki eşiklerin AYNISI.
+   2) İMLEÇ GÜDÜMLÜ PARILTI, KONİK KENAR IŞIĞI VE 3B EĞİM YOK (kaynak
+      1707-1723). Üçü de kart başına imleç koordinatı yazan JS istiyor.
+   3) DİNLENME HÂLİ `grayscale(.22)` DEĞİL, DUOTONE (Enes, 21 Ağustos):
+      kart dinlenirken görsel kızıla düşer, hover'da gerçek renge döner.
+      Kaynakta da dinlenme hâli zaten kısık doygunluktu; bu onun daha
+      keskin hâli. Filtre yerine iki katman kullanıldı ve blok yalnız
+      (hover:hover) içinde: H14 mobil bağlamda `filter` kabul etmiyor,
+      kaynağın `grayscale(.22)`si oraya olduğu gibi taşınamazdı.
+   4) Kart hover'da kalkıyor (Enes, 21 Ağustos) — kaynakta kenarlık ve
+      gölge var, kalkma yok.
+   6) Kaynak ilk ÜÇ kartı eager yüklüyordu (10998); gerekçesi "kartlar
+      sırayla geliyor" hissiydi ve o sıralı giriş bizde yok. Yalnız ilk
+      kart eager + `fetchpriority="high"` (LCP adayı), gerisi tembel —
+      G1 zaten eager kalan her görselden öncelik işareti istiyor.
+   5) Sektör filtre çipleri (`.mc`) taşınmadı — göç turunun kararı, gerekçe
+      aşağıda duruyordu: sektörler anahtarsız metinden türüyor, saf CSS
+      filtre panelden gelen yeni sektörde SESSİZCE bayatlar.
+
+   Ölçüler künyeden — üreteç `gorsel-uret.cjs` yazar, bileşen ELLE ölçü
+   yazmaz. Künyede olmayan proje görselsiz basılır. */
 import { getCollection } from 'astro:content';
 import { icerik, T, type Dil } from '../icerik';
 import prjGorsel from '../veri/proje-gorselleri.json';
@@ -38,70 +66,121 @@ const on = dil === 'en' ? '/en' : '';
     'Every system we built. Open one, see what it solved and what came out.')}</p>
 </section>
 
-<div class="isler">
-  {projeler.map((p: any) => { const g: any = gorselMap.get(p.slug); return (
-    <article class="is">
-      {/* Duotone iki katman tek değişkende (`--k`): ::before karartma,
-          ::after kızıl hue. Kızıl DOSYAYA BASILI DEĞİL — pul gerçek
-          renkte duruyor, kart dinlenirken CSS kızıla çeviriyor. */}
-      {g && <span class="pul-k">
-        <img class="pul" src={`${B}/img/pt/${p.slug}.webp`}
-          width={g.thumb.w} height={g.thumb.h} loading="lazy" decoding="async" alt="" />
-      </span>}
-      <div class="icerik">
-        <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
-        <h2>{p.name}</h2>
-        <p>{T(p.text, dil)}</p>
-        {p.res?.length > 0 && <ul class="rakamlar">
-          {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
-        </ul>}
-        <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
-      </div>
-    </article>
+<div class="msn">
+  {projeler.map((p: any, i: number) => { const g: any = gorselMap.get(p.slug); return (
+    <a class="mi" href={`${B}${on}/projeler/${p.slug}`}>
+      <span class="mi-t">
+        <span class="mv">
+          {g && <img src={`${B}/img/pk/${p.slug}.webp`}
+            srcset={`${B}/img/pk/${p.slug}-m.webp ${g.kartm.w}w, ${B}/img/pk/${p.slug}.webp ${g.kart.w}w`}
+            sizes="(min-width:1240px) 263px, (min-width:920px) 350px, (min-width:600px) 45vw, 90vw"
+            width={g.kart.w} height={g.kart.h}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : undefined}
+            decoding="async" alt="" />}
+          {!g && <span class="mk">{p.name.slice(0, 2).toUpperCase()}</span>}
+          <span class="yr">{p.year}</span>
+        </span>
+        <span class="mb">
+          <span class="mt">{T(p.tag, dil)}</span>
+          <h3>{p.name}</h3>
+          <p>{T(p.text, dil)}</p>
+          {p.res?.length > 0 && <span class="mr">
+            {p.res.slice(0, 3).map((r: any) => (
+              <span><b>{r.v}</b><em>{T(r.l, dil)}</em></span>
+            ))}
+          </span>}
+          <span class="mgo"><span>{M('Projeyi gör', 'View project')}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </span>
+      </span>
+    </a>
   ); })}
 </div>
 
 <style>
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
-  .isler { display: flex; flex-direction: column; gap: 14px; }
-  .is { display: flex; gap: 16px; align-items: flex-start;
-    border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-  .is .icerik { min-width: 0; }
-  /* SABIT 104 CSS px kutu — uretecin 208w varyanti tam 2,0x (kural 109) */
-  .pul-k { flex: none; width: 104px; height: 78px; border-radius: 10px;
-    overflow: clip; }
-  .pul { width: 100%; height: 100%; object-fit: cover; display: block; }
-  @media (max-width: 560px) { .pul-k { width: 88px; height: 66px; } }
-  .is .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
-  .is .yil { font-family: ui-monospace, monospace; color: var(--red-soft); }
-  .is h2 { font-size: 1.05rem; margin: 0 0 6px; }
-  .is .icerik > p:not(.kunye) { color: var(--tx2); font-size: .92rem; }
-  .rakamlar { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
-  .rakamlar li { color: var(--tx3); font-size: .84rem; }
-  .rakamlar b { color: var(--red-soft); font-family: ui-monospace, monospace; margin-right: 4px; }
-  .git { display: inline-block; margin-top: 12px; font-size: .85rem; }
 
-  /* ---- KART KALKMASI + DUOTONE ----
-     İkisi de YALNIZ imleçli cihazda kuruluyor. Dokunmatikte "dinlenme"
-     diye bir durum yok: kart hep dinlenir halde olur ve bütün pullar
-     kızıl kalırdı. Ayrıca `--k:0` olsa bile ayakta duran
-     `mix-blend-mode` katmanı boşuna harman bağlamı doğurur (H14). */
+  /* ---- IZGARA: kaynaktaki eşikler birebir (11059 · 11073) ---- */
+  .msn { display: grid; grid-template-columns: 1fr; gap: 14px;
+    align-items: start; }
+  @media (min-width: 600px)  { .msn { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 700px)  { .msn { gap: 22px; } }
+  @media (min-width: 920px)  { .msn { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1240px) { .msn { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  .mi { display: block; color: inherit; min-width: 0; text-decoration: none; }
+  /* kartın kendisi <a>: kabuğun genel bağlantı altı çizgisi bütün kart
+     metnine biniyordu (ad, anlatım, rakam kutuları dahil). */
+  .mi :where(h3, p, span, b, em) { text-decoration: none; }
+  .mi-t { position: relative; display: flex; flex-direction: column; height: 100%;
+    border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.006)); }
+
+  /* görsel alanı — fotoğraf yoksa üretilmiş bir yüzey, boş kutu değil */
+  .mv { position: relative; display: block; height: 220px; overflow: hidden;
+    background: radial-gradient(120% 100% at 28% 0%, rgba(239,35,60,.17), transparent 62%),
+      linear-gradient(158deg, #150609, #0a0a0b 64%); }
+  @media (max-width: 600px) { .mv { height: 180px; } }
+  .mv img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mv .mk { position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: var(--f-baslik); font-size: clamp(2.4rem, 4.6vw, 3.6rem);
+    letter-spacing: -.03em; color: rgba(255,255,255,.09); }
+  .mv .yr { position: absolute; left: 15px; top: 14px; z-index: 3;
+    font-family: var(--f-tek); font-size: 9px; letter-spacing: .2em; color: var(--tx4); }
+  .mv::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: linear-gradient(180deg, transparent 52%, rgba(5,5,5,.8)); }
+
+  .mb { padding: 16px 17px 18px; display: flex; flex-direction: column; gap: 9px; }
+  .mt { font-family: var(--f-tek); font-size: 9px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--red-soft); }
+  .mi h3 { font-family: var(--f-baslik); font-weight: 400; font-size: 1.16rem;
+    letter-spacing: -.01em; line-height: 1.22; margin: 0; }
+  .mi p { font-size: .83rem; line-height: 1.62; color: var(--tx3); font-weight: 300; }
+  .mr { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .mr > span { display: flex; flex-direction: column; gap: 1px; padding: 7px 10px;
+    border-radius: 9px; background: rgba(255,255,255,.03); border: 1px solid var(--line); }
+  .mr b { font-family: var(--f-tek); font-size: 13px; font-weight: 500; color: #fff;
+    font-variant-numeric: tabular-nums; }
+  .mr em { font-style: normal; font-size: 9px; letter-spacing: .04em; color: var(--tx4); }
+  .mgo { display: inline-flex; align-items: center; gap: 7px; margin-top: 5px;
+    font-family: var(--f-tek); font-size: 9.5px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--tx3); }
+  .mgo svg { width: 13px; height: 13px; }
+
+  /* ---- HOVER + DUOTONE — yalnız imleçli cihazda ----
+     Kaynağın dinlenme filtresi (`grayscale(.22)`) buraya olduğu gibi
+     taşınamazdı: H14 mobil bağlamda `filter` kabul etmiyor. Yerine iki
+     katman ve tek `--k` değişkeni; dokunmatikte hiç kurulmuyor, orada
+     kart zaten hep "dinlenir" durumda olur ve hepsi kızıl kalırdı. */
   @media (hover: hover) and (pointer: fine) {
-    .is { transition: transform .35s var(--e), border-color .35s var(--e); }
-    .is:hover, .is:focus-within { transform: translateY(-3px);
-      border-color: var(--line2); }
+    .mi-t { transition: transform .35s var(--e), border-color .35s var(--e),
+      box-shadow .35s var(--e); }
+    .mi:hover .mi-t { transform: translateY(-3px);
+      border-color: rgba(239,35,60,.45);
+      box-shadow: 0 26px 64px -32px var(--red-glow); }
+    .mi:active .mi-t { transform: scale(.985); transition: transform .1s ease-out; }
 
-    .pul-k { --k: 1; position: relative; isolation: isolate; }
-    .pul-k::before, .pul-k::after { content: ''; position: absolute; inset: 0;
-      pointer-events: none; transition: opacity .45s var(--e); }
-    .pul-k::before { background: var(--bg); opacity: calc(var(--k) * .42); }
-    .pul-k::after { background: var(--red); mix-blend-mode: color; opacity: var(--k); }
-    .is:hover .pul-k, .is:focus-within .pul-k { --k: 0; }
+    .mv { --k: 1; isolation: isolate; }
+    /* duotone alt degradenin ALTINDA: `color` harmanı yalnız fotoğrafı
+       görsün, kararma degradesini değil (z 1 < 2). */
+    .mv::before { content: ''; position: absolute; inset: 0; z-index: 1;
+      pointer-events: none; background: var(--red); mix-blend-mode: color;
+      opacity: var(--k); transition: opacity .45s var(--e); }
+    .mi:hover .mv { --k: 0; }
+    .mv img { transition: transform .7s var(--e); }
+    .mi:hover .mv img { transform: scale(1.05); }
+    .mgo { transition: color .3s var(--e); }
+    .mgo svg { transition: transform .3s var(--e); }
+    .mi:hover .mgo { color: var(--red-soft); }
+    .mi:hover .mgo svg { transform: translateX(4px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .is { transition: none; }
-    .is:hover, .is:focus-within { transform: none; }
-    .pul-k::before, .pul-k::after { transition: none; }
+    .mi-t, .mv img, .mv::before, .mgo, .mgo svg { transition: none; }
+    .mi:hover .mi-t { transform: none; }
+    .mi:hover .mv img { transform: none; }
   }
 </style>
