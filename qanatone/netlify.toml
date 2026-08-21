@@ -15,6 +15,25 @@
 [functions]
   included_files = ["admin.html"]
 
+# YEREL SUNUM (netlify dev, 21 Agu). Astro'nun kendi dev sunucusu DEGIL:
+# burada sunulan sey URETIM CIKTISININ ta kendisi (dist/), yani telefondan
+# bakilan hal yayina gidecek hal. Kok site ve /yeni/* ayni adreste, panel
+# ve fonksiyonlar da calisir (netlify/functions, _redirects dist icinde).
+# ONCE DERLE:  node build.js  &&  npm --prefix yeni run build
+# SONRA:       netlify dev
+# Astro tarafinda hizli donguye ihtiyac varsa o ayri bir sey:
+#   npm --prefix yeni run dev -- --host   (adres /yeni/ onekiyle acilir)
+# Statik sunum yerel-sun.cjs'e devredildi: netlify-cli 27.1.2'nin kendi
+# statik sunucusu bu makinede ALT DIZIN isteklerine 403 donuyor (kok
+# dosyalar 200; gerekce yerel-sun.cjs basinda). netlify dev VEKIL olarak
+# kaliyor — _redirects, _headers ve netlify/functions gercek gibi calisir.
+[dev]
+  command = "node yerel-sun.cjs"
+  targetPort = 8790
+  framework = "#custom"
+  publish = "dist"
+  port = 8888
+
 # Artimli derleme icin onbellek: .onbellek klasoru derlemeler arasinda
 # tasinir. Olmazsa her yayinda 58 sayfa bastan render edilir (~100 sn).
 [[plugins]]

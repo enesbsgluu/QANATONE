@@ -25,8 +25,13 @@
       sabitlediği için kalan yükseklik farkı yalnız metinden doğuyor —
       paketlemenin kazancı o kararla zaten küçülmüştü. Sütun sayıları ve
       boşluk kaynaktaki eşiklerin AYNISI.
-   2) İMLEÇ GÜDÜMLÜ PARILTI, KONİK KENAR IŞIĞI VE 3B EĞİM YOK (kaynak
-      1707-1723). Üçü de kart başına imleç koordinatı yazan JS istiyor.
+   2) İMLEÇ GÜDÜMLÜ PARILTI, KONİK KENAR IŞIĞI VE 3B EĞİM **KURULDU**
+      (Enes, 21 Ağustos — sapma KAPANDI). Kaynak CSS 1701-1723, sürücü
+      JS 10936-10974; sayılar (7° · %38 · sönüm .12/.20) kaynağınki.
+      Sayfanın ilk ada betiği bu: delegasyonlu, yalnız CSS değişkeni
+      yazan, kaydırmada düzen okumayan ve `(hover:hover)`+`(pointer:fine)`
+      + hareket azaltma kapısının ardında duran bir sürücü. Ayrıntı ve
+      iki bilinçli sapma aşağıdaki `<script>` başlığında.
    3) DİNLENME HÂLİ `grayscale(.22)` DEĞİL, DUOTONE (Enes, 21 Ağustos):
       kart dinlenirken görsel kızıla düşer, hover'da gerçek renge döner.
       Kaynakta da dinlenme hâli zaten kısık doygunluktu; bu onun daha
@@ -100,6 +105,84 @@ const on = dil === 'en' ? '/en' : '';
   ); })}
 </div>
 
+<script>
+  /* İMLEÇ GÜDÜMLÜ EĞİM + PARILTI — /projeler dizini.
+     Kaynak sürücü: kök index.html 10936-10974 (`bindGlare`). Sayının
+     hiçbiri göz kararı değil: TILT 7° · GLR 38% · sönüm .12 / .20 kaynağın
+     kendi değerleri.
+
+     SÖZLEŞME (Enes, 21 Ağustos):
+     · DELEGASYON — dinleyiciler kapta (`.msn`), kart başına SIFIR. Kartlar
+       dilde yeniden üretilse de dinleyici birikmez.
+     · YAZILAN TEK ŞEY CSS DEĞİŞKENİ (--rx --ry --gx --gy). Betik sınıf
+       yazmaz, düzen kurmaz, stil okumaz.
+     · KAYDIRMADA DÜZEN OKUMA YOK. Kart kutusu imleç yeni karta girdiğinde
+       BİR KEZ ölçülür; kaydırma/yeniden boyutlanma yalnız bir BAYRAK
+       çevirir (sıfır okuma), ölçüm sonraki `pointermove`da tazelenir.
+       CLAUDE.md tuzağı: rAF döngüsünün içinde düzen okunmaz — döngü
+       burada yalnız YAZAR.
+     · KAPI — `(hover:hover) and (pointer:fine)` + hareket azaltma. Kapı
+       tutmazsa betik hiç kurulmaz; CSS katmanları da aynı sorgunun içinde.
+
+     KAYNAKTAN İKİ SAPMA, ikisi de bilinçli:
+     1) Kaynağın döngüsü kart hover'dayken imleç DURSA DA dönüyordu
+        (`if(tl||…)`); burada hedefe oturunca duruyor — boşta kare üretmek
+        ölçülen maliyettir, görüntüde karşılığı yok.
+     2) İmleç kartlar arası boşluğa girince kaynak eğimi DONDURUYOR;
+        burada düz hâle yumuşakça dönüyor. */
+  const kap = document.querySelector('.msn');
+  if (kap
+      && matchMedia('(hover:hover) and (pointer:fine)').matches
+      && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const TILT = 7, GLR = 38, ESIK = .04;
+    let kart = null, kutu = null, bayat = true, tr = 0;
+    let rx = 0, ry = 0, gx = 50, gy = 50;
+    let hrx = 0, hry = 0, hgx = 50, hgy = 50;      /* hedefler */
+
+    const dongu = () => {
+      rx += (hrx - rx) * .12; ry += (hry - ry) * .12;
+      gx += (hgx - gx) * .2;  gy += (hgy - gy) * .2;
+      const fark = Math.abs(hrx - rx) + Math.abs(hry - ry)
+                 + Math.abs(hgx - gx) + Math.abs(hgy - gy);
+      if (fark < ESIK) { rx = hrx; ry = hry; gx = hgx; gy = hgy; }
+      if (kart) {
+        const st = kart.style;
+        st.setProperty('--rx', rx.toFixed(2) + 'deg');
+        st.setProperty('--ry', ry.toFixed(2) + 'deg');
+        st.setProperty('--gx', gx.toFixed(1) + '%');
+        st.setProperty('--gy', gy.toFixed(1) + '%');
+      }
+      tr = fark < ESIK ? 0 : requestAnimationFrame(dongu);
+    };
+    const sur = () => { if (!tr) tr = requestAnimationFrame(dongu); };
+    const duzle = () => { hrx = hry = 0; hgx = hgy = 50; sur(); };
+
+    kap.addEventListener('pointermove', (e) => {
+      const a = e.target instanceof Element ? e.target.closest('.mi') : null;
+      if (!a) { duzle(); return; }                 /* sapma 2 */
+      const t = a.querySelector('.mi-t');
+      if (t !== kart) {
+        if (kart) { kart.style.setProperty('--rx', '0deg');
+                    kart.style.setProperty('--ry', '0deg'); }
+        kart = t; rx = ry = 0; gx = gy = 50; bayat = true;
+      }
+      if (bayat) { kutu = a.getBoundingClientRect(); bayat = false; }
+      const nx = (e.clientX - kutu.left) / kutu.width * 2 - 1;   /* -1 .. 1 */
+      const ny = (e.clientY - kutu.top) / kutu.height * 2 - 1;
+      hrx = ny * -TILT; hry = nx * TILT;
+      hgx = 50 + nx * GLR; hgy = 50 + ny * GLR;
+      sur();
+    }, { passive: true });
+
+    kap.addEventListener('pointerleave', duzle, { passive: true });
+
+    /* kaydırma/boyut: SIFIR düzen okuma, yalnız bayrak */
+    const bayatla = () => { bayat = true; };
+    addEventListener('scroll', bayatla, { passive: true });
+    addEventListener('resize', bayatla, { passive: true });
+  }
+</script>
+
 <style>
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
 
@@ -156,12 +239,47 @@ const on = dil === 'en' ? '/en' : '';
      katman ve tek `--k` değişkeni; dokunmatikte hiç kurulmuyor, orada
      kart zaten hep "dinlenir" durumda olur ve hepsi kızıl kalırdı. */
   @media (hover: hover) and (pointer: fine) {
-    .mi-t { transition: transform .35s var(--e), border-color .35s var(--e),
-      box-shadow .35s var(--e); }
-    .mi:hover .mi-t { transform: translateY(-3px);
+    /* İMLEÇ GÜDÜMLÜ ÜÇ KATMAN — kaynak CSS 1701-1723, sürücü JS 10936-10974.
+       `transform` artık BETİĞİN: eğim her karede oradan yazılıyor, bu yüzden
+       geçiş listesinde YOK (geçiş + kare başına yazma aynı değeri iki kez
+       yumuşatır; kaynak da transform'u geçirmiyor). Kalkma ve tıklama
+       bağımsız dönüşüm özelliklerine taşındı — `translate`/`scale`
+       `transform`la çakışmadan üstüne biniyor, göç turunun eklediği
+       kalkma (sapma 4) böylece eğimi bozmadan yaşıyor. */
+    .mi { perspective: 900px; }
+    .mi-t { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: translate .35s var(--e), scale .35s var(--e),
+        border-color .35s var(--e), box-shadow .35s var(--e); }
+    .mi:hover .mi-t { translate: 0 -3px;
       border-color: rgba(239,35,60,.45);
       box-shadow: 0 26px 64px -32px var(--red-glow); }
-    .mi:active .mi-t { transform: scale(.985); transition: transform .1s ease-out; }
+    .mi:active .mi-t { scale: .985; transition: scale .1s ease-out; }
+
+    /* katman 1 — imleci izleyen kızıl parıltı (kaynak 1708-1713) */
+    .mi-t::before { content: ''; position: absolute; inset: 0; z-index: 3;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%),
+        rgba(239,35,60,.2), transparent 72%);
+      mix-blend-mode: screen; opacity: 0; transition: opacity .5s var(--e); }
+    .mi:hover .mi-t::before { opacity: 1; }
+
+    /* katman 2 — imlecin baktığı noktadan doğan konik kenar ışığı, 1px
+       halkaya maskeli (kaynak 1715-1723).
+       TEK SAPMA: kaynak `inset:-1px` + `border-radius:19px` yazıyor, ama
+       `.mi-t`de `overflow:hidden` var ve kırpma DOLGU kutusuna yapılır —
+       o halka tam kenarlığın üstüne düşüyor, yani kaynakta bütünüyle
+       kırpılıyordu. Halka dolgu kutusuna alındı (inset 0 · yarıçap 17 =
+       18 − 1px kenarlık); niyet aynı, kırpılmadan görünüyor. */
+    .mi-t::after { content: ''; position: absolute; inset: 0; z-index: 4;
+      pointer-events: none; border-radius: 17px; padding: 1px;
+      background: conic-gradient(from 0deg at var(--gx, 50%) var(--gy, 50%),
+        transparent, rgba(255,120,140,.8), transparent 32%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0; transition: opacity .5s var(--e); }
+    .mi:hover .mi-t::after { opacity: 1; }
 
     .mv { --k: 1; isolation: isolate; }
     /* duotone alt degradenin ALTINDA: `color` harmanı yalnız fotoğrafı
@@ -178,9 +296,14 @@ const on = dil === 'en' ? '/en' : '';
     .mi:hover .mgo svg { transform: translateX(4px); }
   }
 
+  /* hareket azaltma: durduran seçici hareketi verenin aynısı. Eğim
+     BETİKTEN geliyor ve betik de aynı sorguyla kapılı — burada kalan iş
+     dönüşümü sıfırlamak ve iki imleç katmanını susturmak. */
   @media (prefers-reduced-motion: reduce) {
     .mi-t, .mv img, .mv::before, .mgo, .mgo svg { transition: none; }
-    .mi:hover .mi-t { transform: none; }
+    .mi-t::before, .mi-t::after { transition: none; }
+    .mi-t { transform: none; }
+    .mi:hover .mi-t { translate: none; }
     .mi:hover .mv img { transform: none; }
   }
 </style>
