@@ -188,11 +188,18 @@ async function kurucu() {
    Kunye `src/veri/proje-gorselleri.json`: bilesen olcuyu ELLE yazmaz;
    `image`si olmayan proje kunyeye girmez, bilesen gorselsiz basar
    (panelden yeni proje senaryosu — deste <source> dersinin ayni). */
+/* pk = dizin izgarasinin kart bandi. Olcu kaynaktan turedi: orijinal
+   arsiv (#msn/.mi, kok index.html 1730) gorsel bandini 220 px SABIT
+   tutuyor; dort sutunlu izgarada (kap 1120, bosluk 22) sutun 263 px
+   eder -> 2x kutu 526x440 (kural 109: cozulmus bitmap <= 2x CSS kutusu).
+   `pt` (208x156) bu kutuya yetmiyordu. */
+const PRJ_HEDEF_K = path.join(HEDEF, 'pk');
 const PRJ_HEDEF_T = path.join(HEDEF, 'pt');
 const PRJ_HEDEF_D = path.join(HEDEF, 'pd');
 const PRJ_KUNYE = path.join(__dirname, 'src', 'veri', 'proje-gorselleri.json');
 
 async function projeGorselleri() {
+  fs.mkdirSync(PRJ_HEDEF_K, { recursive: true });
   fs.mkdirSync(PRJ_HEDEF_T, { recursive: true });
   fs.mkdirSync(PRJ_HEDEF_D, { recursive: true });
   const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
@@ -211,11 +218,19 @@ async function projeGorselleri() {
     const dm = path.join(PRJ_HEDEF_D, pr.slug + '-m.webp');
     await sharp(giris).resize({ width: 744, height: 419, fit: 'cover', position: 'centre' })
       .webp({ quality: 74, effort: 6 }).toFile(dm);
-    const boy = fs.statSync(t).size + fs.statSync(d).size + fs.statSync(dm).size;
+    const k = path.join(PRJ_HEDEF_K, pr.slug + '.webp');
+    await sharp(giris).resize({ width: 526, height: 440, fit: 'cover', position: 'centre' })
+      .webp({ quality: 76, effort: 6 }).toFile(k);
+    const km = path.join(PRJ_HEDEF_K, pr.slug + '-m.webp');
+    await sharp(giris).resize({ width: 700, height: 360, fit: 'cover', position: 'centre' })
+      .webp({ quality: 74, effort: 6 }).toFile(km);
+    const boy = fs.statSync(t).size + fs.statSync(d).size + fs.statSync(dm).size
+      + fs.statSync(k).size + fs.statSync(km).size;
     toplam += boy;
     kunye.push({ slug: pr.slug, thumb: { w: 208, h: 156 },
+      kart: { w: 526, h: 440 }, kartm: { w: 700, h: 360 },
       hero: { w: 1280, h: 720 }, herom: { w: 744, h: 419 } });
-    console.log('  + prj ' + pr.slug + '  ' + kb(boy) + ' (t+d+dm)');
+    console.log('  + prj ' + pr.slug + '  ' + kb(boy) + ' (t+k+km+d+dm)');
   }
   fs.writeFileSync(PRJ_KUNYE, JSON.stringify(kunye, null, 2) + String.fromCharCode(10));
   console.log('  = projeler: ' + kunye.length + ' is · toplam ' + kb(toplam));
