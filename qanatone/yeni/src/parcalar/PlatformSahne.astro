@@ -1,0 +1,469 @@
+---
+/* K7 · PLATFORM AKIŞI (#qtStage) — finans hizmetinin kaydırma sahnesi.
+   Kaynak: kök index.html · markup tradeStage 8264-8324 · CSS 3736-3899
+   (+ 4393-4395 mobil içerik istisnası) · sürücü draw 8475-8527 ·
+   ST 8716 (pin 2.7). Hizmet: finans (fam:'trade' + det.trade).
+
+   DÖRT PERDE TEK PENCEREDE YATAY KAYAR: arama → alıcılar → karar verici
+   → ilk temas. Yatay kaydırma perdeler arası GEÇİŞ, alt-ilerleme ise
+   perdenin İÇİNİ sürer (kaynağın 8481 yorumu).
+
+   KİLİT ÖLÇÜLDÜ (Enes'in uyarısı — araçlar sahnesinde 228 px fazla
+   yapışkanlık çıkmıştı): kap boyu = sarmal + 270vh, yani yapışık
+   pencere (kapBoyu − sarmal) tam kilit boyuna eşit. Sticky üst hizası
+   kaynağın iki dalını da karşılar: blok ekrana sığıyorsa 'center
+   center' (top=(100vh−sarmal)/2), sığmıyorsa 'top top' (top=0) —
+   max(0px, …) ikisini tek ifadede veriyor ve aralık başlangıcı da
+   ondan türüyor (100vh − top).
+
+   SÜRÜCÜ TEK: --qtp. Yatay şerit, perde ışıkları, adım rayı, yazan
+   sorgu, koşan sayaç, açılan satırlar, yazılan e-posta — hepsi
+   kaydırmaya bağlı. Kaynakta da öyleydi (draw(p) içinde); IO yok.
+
+   Eşikler kaynak draw'dan (8489-8526), N=4:
+     a_i = clamp((e − i/4) / .25)            (kaynağın idx/sub çifti)
+     şerit = Σ_{i=0..2} clamp((4e − i − .82)/.18)   → translateX(−%25·şerit)
+       (kaynak: slide=min(N−1, idx+clamp((sub−.82)/.18)); SON PERDEDE
+        DURUR — Enes iki sahnede de boş ekran görmüştü, 8492)
+     perde 1: sorgu a0/.30 · sayaç 1.284·EA((a0−.36)/.30) · çip a0>.32+i·.05
+     perde 2: satır a1>.05+i·.075 · seçim a1>.50 (pickIdx)
+     perde 3: özet a2>.10+i·.09 · kanal a2>.42+i·.09 · rozet a2>.72
+     perde 4: gövde a3/.52 · gönderildi a3>.60 · yanıt a3>.72
+     yazıyor imleci: idx=0 ve a0<.34  (⇔ e<.085)
+
+   SAPMA (adıyla, sohbet sahnesinin dersiyle aynı): kaynak metni KARAKTER
+   karakter yazıyordu (textContent her karede yeniden kuruluyordu).
+   Burada sorgu KARAKTER granülaritesinde (tek satır, 18 harf — imlecin
+   metnin ucunda durması için genişlik gerçekten büyümeli: gizli harf
+   font-size:0, yani sıfır genişlik), e-posta gövdesi ise KELİME
+   granülaritesinde (281 karakter × ayrı eleman kare başına ağır olurdu).
+
+   TABAN = TAMAMLANMIŞ (kaynak REDUCE dalı draw(1)); içerik JS'siz tam,
+   ada JS'i yalnız sarmal yüksekliğini ölçer. */
+import { T, type Dil } from '../icerik';
+interface Props { trade: any; dil: Dil }
+const { trade, dil } = Astro.props;
+const t = trade || {};
+const en = dil === 'en';
+const M = (tr: string, eng: string) => en ? eng : tr;
+const adimlar = (t.steps || []) as any[];
+const cipler = (t.filters || []) as any[];
+const alicilar = (t.buyers || []) as any[];
+const ozet = (t.sum || []) as any[];
+const dm = t.dm || {};
+const secim = t.pickIdx || 0;
+/* sayaç: kaynak FOUND'u rakam dışını atarak okuyor (8487) */
+const bulunan = parseInt(String(t.found || '0').replace(/\D/g, ''), 10) || 0;
+const binler = Math.floor(bulunan / 1000);
+/* sorgu: harf harf — eşik round(len·x) > k ⇔ x ≥ (k+.5)/len */
+const sorgu = String(T(t.q, dil) || '');
+const SH = [...sorgu];
+/* gövde: kelime kelime; \n ayrı jeton (kaynak white-space:pre-wrap) */
+const govde = String(T((t.mail || {}).body, dil) || '');
+type Jeton = { k: string; br?: boolean };
+const jetonlar: Jeton[] = [];
+govde.split(/(\n)/).forEach(par => {
+  if (par === '\n') { jetonlar.push({ k: '', br: true }); return; }
+  par.split(/\s+/).filter(Boolean).forEach(k => jetonlar.push({ k }));
+});
+const KN = jetonlar.filter(j => !j.br).length || 1;
+let ki = -1;
+---
+{t.q && (
+<div class="sdsec qt-kap">
+  <div class="qt-sabit">
+    <span class="mono">{M('Platform akışı — kaydırdıkça çalışır', 'The platform — runs as you scroll')}</span>
+    <div class="qtstage" id="qtStage">
+      <div class="qtbar">
+        <span class="qtlogo"><b />TradeSelf</span>
+        <span class="qtrail">{adimlar.map((s, i) =>
+          <span class="qtstep" data-s={i} style={`--i:${i}`}><b />{T(s, dil)}</span>)}</span>
+      </div>
+      <div class="qtview"><div class="qttrack">
+
+        {/* perde 1 — arama */}
+        <section class="qtact" data-a="0" style="--i:0">
+          <div class="qtsearch">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.4-3.4" /></svg>
+            <span class="qtq">{SH.map((c, k) =>
+              <i style={`--k:${((k + .5) / SH.length).toFixed(5)}`}>{c}</i>)}</span>
+            <b class="qtcar" />
+            <span class="qths">HS {t.hs || ''}</span>
+          </div>
+          <div class="qtchips">{cipler.map((f, i) =>
+            <span class="qtchip" style={`--i:${i}`}>{T(f, dil)}</span>)}</div>
+          <div class="qtfound"><em class="qtn" style={`--bulunan:${bulunan}`} /><i>{M('doğrulanmış alıcı bulundu', 'verified buyers found')}</i></div>
+        </section>
+
+        {/* perde 2 — alıcı listesi */}
+        <section class="qtact" data-a="1" style="--i:1">
+          <div class="qthead"><span>{M('Firma', 'Company')}</span><span>{M('Sevkiyat', 'Shipments')}</span>
+            <span>{M('Hacim', 'Volume')}</span><span>{M('Son alım', 'Last buy')}</span></div>
+          <div class="qtlist">{alicilar.map((b: any, i: number) =>
+            <div class={'qtrow' + (i === secim ? ' aim' : '')} data-b={i} style={`--i:${i}`}>
+              <span class="qtco"><b>{b.n}</b><i>{b.c}</i></span>
+              <span class="qtm"><em>{b.s}</em><i>{M('sevkiyat', 'shipments')}</i></span>
+              <span class="qtm"><em>{b.v}</em><i>{M('hacim', 'volume')}</i></span>
+              <span class="qtm last"><em>{b.d}</em><i>{M('son alım', 'last buy')}</i></span>
+            </div>)}</div>
+        </section>
+
+        {/* perde 3 — karar verici */}
+        <section class="qtact" data-a="2" style="--i:2">
+          <div class="qtcard">
+            <div class="qtch"><b class="qtav" />
+              <span><em>{t.pick || ''}</em><i>{t.pickc || ''}</i></span>
+              <span class="qtver">{M('doğrulandı', 'verified')}</span></div>
+            <ul class="qtsum">{ozet.map((s, i) =>
+              <li style={`--i:${i}`}>{T(s, dil)}</li>)}</ul>
+            <div class="qtdm"><span class="qtrole">{T(dm.role, dil)}</span>
+              <b class="qtname">{dm.name || ''}</b>
+              <span class="qtcon"><i data-c="0" style="--i:0">{dm.mail || ''}</i>
+                <i data-c="1" style="--i:1">{dm.tel || ''}</i>
+                <i data-c="2" style="--i:2">{dm.li || ''}</i></span></div>
+          </div>
+        </section>
+
+        {/* perde 4 — ilk temas */}
+        <section class="qtact" data-a="3" style="--i:3">
+          <div class="qtmail">
+            <div class="qtmh"><i>{M('Kime', 'To')}</i><b>{dm.mail || ''}</b></div>
+            <div class="qtmh"><i>{M('Konu', 'Subject')}</i><b>{T((t.mail || {}).sub, dil)}</b></div>
+            <p class="qtbody" style={`--n:${KN}`}>{jetonlar.map(j => j.br
+              ? <br />
+              : <span class="qtw" style={`--k:${++ki}`}>{j.k}{' '}</span>)}</p>
+            <div class="qtsend"><b>{M('AI yazdı · gönderildi', 'Written by AI · sent')}</b></div>
+          </div>
+          <div class="qtreply"><b />{T((t.mail || {}).reply, dil)}</div>
+        </section>
+
+      </div></div>
+    </div>
+    {t.note && <div class="fnnote">{T(t.note, dil)}</div>}
+  </div>
+</div>
+)}
+
+<style>
+  /* ═══ KAP · kaynak 3746-3775 birebir ═══ */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  .sdsec .mono { display: block; margin-bottom: 18px;
+    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--tx4); }
+  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+    color: var(--tx4); margin-top: 10px; }
+  .qtstage { border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    display: flex; flex-direction: column; max-height: calc(100vh - 60px);
+    background: linear-gradient(168deg, #141418, #0b0b0d); position: relative; }
+  .qtbar { display: flex; align-items: center; gap: clamp(14px, 2vw, 26px); flex-wrap: wrap;
+    padding: clamp(11px, 1.3vw, 16px) clamp(14px, 1.7vw, 22px);
+    border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
+  .qtlogo { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -.02em;
+    font-size: clamp(12.5px, 1.05vw, 14.5px); color: #fff; flex: none; }
+  .qtlogo b { width: 16px; height: 16px; border-radius: 5px; background: var(--red); }
+  .qtrail { display: flex; align-items: center; gap: clamp(8px, 1.1vw, 16px); flex-wrap: wrap;
+    margin-left: auto; font-family: ui-monospace, monospace;
+    font-size: clamp(9px, .78vw, 10.5px); letter-spacing: .1em; text-transform: uppercase; }
+  .qtstep { display: flex; align-items: center; gap: 6px; }
+  .qtstep b { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+  .qtview { overflow: hidden; flex: 0 0 auto;
+    height: clamp(260px, min(34vw, calc(100vh - 200px)), 420px); }
+  .qttrack { display: flex; width: 400%; height: 100%; }
+  .qtact { width: 25%; height: 100%; flex: none; padding: clamp(18px, 2.2vw, 30px);
+    display: flex; flex-direction: column; gap: clamp(12px, 1.5vw, 20px); }
+
+  /* perde 1 — arama (3777-3800) */
+  .qtsearch { display: flex; align-items: center; gap: 12px;
+    padding: clamp(12px, 1.4vw, 18px) clamp(14px, 1.6vw, 20px);
+    border-radius: 12px; background: rgba(255, 255, 255, .05); border: 1px solid var(--line2); }
+  .qtsearch svg { width: 18px; height: 18px; color: var(--tx3); flex: none; }
+  .qtq { color: #fff; font-size: clamp(13px, 1.15vw, 16px); white-space: nowrap; }
+  .qtq i { font-style: normal; }
+  .qtcar { width: 1.5px; height: 1.1em; background: var(--red-soft); opacity: 0; flex: none; }
+  .qths { margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px;
+    letter-spacing: .08em; color: var(--tx4); flex: none; }
+  .qtchips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .qtchip { padding: 7px 14px; border-radius: 999px; font-size: clamp(11px, .92vw, 12.5px);
+    background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
+  .qtfound { margin-top: auto; display: flex; align-items: baseline; gap: 12px; }
+  .qtfound em { font-family: ui-monospace, monospace; font-style: normal; font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 46px); color: var(--red-soft); letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums; }
+  .qtfound i { font-style: normal; color: var(--tx3); font-size: clamp(12px, 1vw, 14px); }
+
+  /* perde 2 — alıcı listesi (3802-3823) */
+  .qthead, .qtrow { display: grid; grid-template-columns: 1.9fr .8fr .9fr 1fr; gap: 10px;
+    align-items: center; }
+  .qthead { padding: 0 12px 10px; border-bottom: 1px solid var(--line);
+    font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--tx4); }
+  .qthead span:not(:first-child), .qtm { text-align: right; }
+  .qtlist { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; overflow: hidden; }
+  .qtrow { padding: clamp(9px, 1vw, 13px) 12px; border-radius: 10px;
+    background: rgba(255, 255, 255, .03); border: 1px solid transparent; }
+  .qtco { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .qtco b { color: #fff; font-weight: 600; font-size: clamp(12px, 1.02vw, 14px);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qtco i { font-style: normal; color: var(--tx4); font-size: clamp(10px, .82vw, 11.5px); }
+  .qtm { display: flex; flex-direction: column; gap: 2px; }
+  .qtm em { font-style: normal; font-family: ui-monospace, monospace; color: var(--tx2);
+    font-size: clamp(11.5px, .95vw, 13px); font-variant-numeric: tabular-nums; }
+  .qtm i { font-style: normal; color: var(--tx4); font-size: 9.5px; letter-spacing: .06em; }
+
+  /* perde 3 — karar verici (3825-3860) */
+  .qtcard { border: 1px solid rgba(239, 35, 60, .28); border-radius: 14px; overflow: hidden;
+    background: linear-gradient(160deg, rgba(239, 35, 60, .07), rgba(255, 255, 255, .02));
+    display: flex; flex-direction: column; height: 100%; }
+  .qtch { display: flex; align-items: center; gap: 12px; padding: clamp(12px, 1.4vw, 17px);
+    border-bottom: 1px solid var(--line); }
+  .qtav { width: 34px; height: 34px; border-radius: 10px; flex: none;
+    background: radial-gradient(120% 120% at 30% 20%, var(--red), #7d0d1c); }
+  .qtch > span:not(.qtver) { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .qtch em { font-style: normal; color: #fff; font-weight: 650; font-size: clamp(13px, 1.1vw, 15px); }
+  .qtch i { font-style: normal; color: var(--tx4); font-size: clamp(10.5px, .86vw, 12px); }
+  .qtver { margin-left: auto; flex: none; padding: 5px 11px; border-radius: 999px;
+    font-size: 10.5px; letter-spacing: .06em; color: var(--red-soft);
+    background: rgba(239, 35, 60, .12); border: 1px solid rgba(239, 35, 60, .34); }
+  .qtsum { list-style: none; margin: 0; padding: clamp(12px, 1.4vw, 17px); display: flex;
+    flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line); }
+  .qtsum li { position: relative; padding-left: 18px; color: var(--tx2);
+    font-size: clamp(11.5px, .95vw, 13px); line-height: 1.45; }
+  .qtsum li::before { content: ''; position: absolute; left: 0; top: .55em; width: 7px;
+    height: 7px; border-radius: 2px; background: var(--red); }
+  .qtdm { padding: clamp(12px, 1.4vw, 17px); margin-top: auto; }
+  .qtrole { font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--tx4); }
+  .qtname { display: block; margin: 4px 0 10px; color: #fff; font-weight: 650;
+    font-size: clamp(13px, 1.1vw, 15.5px); }
+  .qtcon { display: flex; gap: 8px; flex-wrap: wrap; }
+  .qtcon i { font-style: normal; padding: 7px 13px; border-radius: 9px;
+    font-family: ui-monospace, monospace; font-size: clamp(10.5px, .86vw, 12px);
+    color: var(--tx2); background: rgba(255, 255, 255, .05); border: 1px solid var(--line2); }
+
+  /* perde 4 — ilk temas (3862-3890) */
+  .qtmail { border: 1px solid var(--line2); border-radius: 14px; background: rgba(255, 255, 255, .03);
+    padding: clamp(14px, 1.6vw, 20px); display: flex; flex-direction: column; gap: 9px;
+    flex: 1; min-height: 0; }
+  .qtmh { display: flex; gap: 10px; align-items: baseline; padding-bottom: 8px;
+    border-bottom: 1px solid var(--line); }
+  .qtmh i { font-style: normal; font-family: ui-monospace, monospace; font-size: 9.5px;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); flex: none; min-width: 52px; }
+  .qtmh b { color: #fff; font-weight: 500; font-size: clamp(11.5px, .95vw, 13px);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qtbody { margin: 0; color: var(--tx2); font-size: clamp(11.5px, .95vw, 13.4px);
+    line-height: 1.55; flex: 1; min-height: 0; overflow: hidden; }
+  .qtsend { margin-top: auto; display: flex; align-items: center; gap: 9px; }
+  .qtsend b { padding: 7px 14px; border-radius: 999px; background: var(--red); color: #fff;
+    font-size: clamp(10.5px, .88vw, 12px); font-weight: 600; }
+  .qtreply { display: flex; align-items: center; gap: 10px;
+    padding: clamp(10px, 1.2vw, 15px) clamp(12px, 1.4vw, 18px);
+    border-radius: 12px; background: rgba(255, 255, 255, .05); border: 1px solid var(--line2);
+    color: var(--tx2); font-size: clamp(11.5px, .95vw, 13px); }
+  .qtreply b { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #3ddc84; }
+
+  /* ═══ SÜRÜCÜ · kaynağın pin 2.7 + scrub'ının birebir CSS yazımı ═══ */
+  @property --qtp { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --qe { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --a0 { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @property --a1 { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --a2 { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --a3 { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --serit { syntax: '<number>'; inherits: false; initial-value: 3; }
+  /* MİRAS SEÇİMİ ÖLÇÜLMÜŞ KARARDIR: miras alan bir ilerleme değişkeni,
+     onu KULLANMAYAN bütün alt ağacı da kare başına tazeler. --qact ilkin
+     miras alıyordu ve perdenin ~40 elemanlık gövdesini her karede stil
+     hesabına sokuyordu (1440 + 4x kısıtta ölçüldü). Miras yalnız alt
+     ağacı bir-iki elemanlık olanlarda açık. */
+  @property --qact { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --qon { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --qsa { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --qsd { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --qyaz { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @property --qsay { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --qbin { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --qsec { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @keyframes qtp-surus { from { --qtp: 0; } to { --qtp: 1; } }
+
+  @supports (animation-timeline: view()) {
+    /* KİLİT: kap sticky DEĞİL (çizelgenin öznesi), sarmal sticky.
+       Yapışık pencere = kapBoyu − sarmal = 270vh = kilit boyu; sahne
+       bitince BEKLEMEZ (araçlar sahnesinde 228 px fazlalık ölçülmüştü). */
+    .qt-kap { view-timeline-name: --qt-kap; view-timeline-axis: block;
+      min-height: calc(var(--qth, 545px) + 270vh); }
+    .qt-sabit { position: sticky;
+      top: max(0px, calc((100vh - var(--qth, 545px)) / 2)); }
+    /* sürücü ORTAK ATADA değil TÜKETİCİDE (araçlar turunun ölçülmüş
+       dersi: miras alan her eleman kare başına tazeleniyor) */
+    .qttrack, .qtact, .qtstep, .qtsearch, .qtn, .qtchip, .qtrow,
+    .qtsum li, .qtcon i, .qtver, .qtbody, .qtsend, .qtreply {
+      animation: qtp-surus linear both; animation-timeline: --qt-kap;
+      animation-range: cover calc(100vh - max(0px, (100vh - var(--qth, 545px)) / 2))
+                       cover calc(370vh - max(0px, (100vh - var(--qth, 545px)) / 2)); }
+  }
+
+  /* perde ilerlemeleri: a_i = clamp((e − i/4)/.25) — kaynağın idx/sub çifti */
+  /* arama kutusu ilerlemeyi taşır: sorgu ve imleç ondan miras alır —
+     imlecin KENDİ animasyonu zaman tabanlıdır (kaynağın yanıp sönmesi),
+     iki animasyonu tek elemanda karıştırmak animation-timeline'ı
+     sıfırlama riski taşır */
+  .qtsearch, .qtn, .qtchip { --a0: clamp(0, calc(var(--qtp) * 4), 1); }
+  .qtrow { --a1: clamp(0, calc((var(--qtp) - .25) * 4), 1); }
+  .qtsum li, .qtcon i, .qtver { --a2: clamp(0, calc((var(--qtp) - .5) * 4), 1); }
+  .qtbody, .qtsend, .qtreply { --a3: clamp(0, calc((var(--qtp) - .75) * 4), 1); }
+
+  /* ŞERİT — perde sınırının son %18'inde bir sonrakine kayar, SON PERDEDE
+     DURUR (kaynak 8493). Değişken güdümlü transform yerine ANAHTAR KARE:
+     eşikler zaten sabit (e = .205→.25, .455→.5, .705→.75) ve aradaki
+     hareket doğrusal, yani yazım BİREBİR. Kazancı ölçüldü: değişken
+     güdümlü transform bileşik katmanda sürülemiyor ve 3192 × 420 px'lik
+     şerit her karede yeniden rasterleniyordu (1440 + 4x kısıtta düşen
+     kare 8; will-change ile 22-28, yani katman promosyonu daha da pahalı;
+     anahtar kareyle 0). */
+  @keyframes qt-serit {
+    0%, 20.5% { transform: translateX(0); }
+    25%, 45.5% { transform: translateX(-25%); }
+    50%, 70.5% { transform: translateX(-50%); }
+    75%, 100% { transform: translateX(-75%); }
+  }
+  @supports (animation-timeline: view()) {
+    .qttrack { animation-name: qt-serit; }
+  }
+
+  /* perde ışığı: .34 → 1, geçiş .45s eşleniği ×20 (m = 9/süre) */
+  .qtact { --qact: calc(clamp(0, calc((var(--qtp) * 4 - var(--i)) * 20), 1)
+                      * (1 - clamp(0, calc((var(--qtp) * 4 - var(--i) - 1) * 20), 1)));
+    opacity: calc(.34 + .66 * var(--qact)); }
+  /* ilk perde kilit başında ZATEN yanık (kaynakta idx=0 → on): girişte
+     rampa yok, yalnız çıkış rampası. Son perdenin de çıkışı yok. */
+  .qtact[data-a='0'] { --qact: calc(1 - clamp(0, calc((var(--qtp) * 4 - 1) * 20), 1)); }
+  .qtact[data-a='3'] { --qact: clamp(0, calc((var(--qtp) * 4 - 3) * 20), 1); }
+
+  /* adım rayı: on = i'inci perdedeyken, done = geçtikten sonra (.4s → ×22.5) */
+  .qtstep { --qsa: calc(clamp(0, calc((var(--qtp) * 4 - var(--i)) * 22.5), 1)
+                      * (1 - clamp(0, calc((var(--qtp) * 4 - var(--i) - 1) * 22.5), 1)));
+    --qsd: clamp(0, calc((var(--qtp) * 4 - var(--i) - 1) * 22.5), 1);
+    color: color-mix(in srgb, #fff calc(var(--qsa) * 100%),
+      color-mix(in srgb, var(--tx3) calc(var(--qsd) * 100%), var(--tx4))); }
+  .qtstep[data-s='0'] { --qsa: calc(1 - clamp(0, calc((var(--qtp) * 4 - 1) * 22.5), 1)); }
+  .qtstep[data-s='3'] { --qsa: clamp(0, calc((var(--qtp) * 4 - 3) * 22.5), 1); --qsd: 0; }
+  .qtstep b { background: color-mix(in srgb, var(--red) calc(var(--qsa) * 100%),
+      color-mix(in srgb, var(--red-soft) calc(var(--qsd) * 100%), rgba(255, 255, 255, .18)));
+    box-shadow: 0 0 0 calc(var(--qsa) * 4px) rgba(239, 35, 60, .18); }
+
+  /* ── perde 1 ── */
+  /* sorgu: harf k, round(len·x) > k olunca basılır. Gizli harf font-size:0
+     → sıfır genişlik, imleç metnin ucunda kalır (kaynakta metin gerçekten
+     büyüyordu). Kaynakta geçiş yok: dik basamak. */
+  .qtq { --qyaz: clamp(0, calc(var(--a0) / .30), 1); }
+  .qtq i { font-size: calc(clamp(0, calc((var(--qyaz) - var(--k)) * 100000), 1) * 1em); }
+  /* imleç: idx=0 ve a0<.34 ⇔ e<.085 · yanıp sönmesi kaynağın kendi
+     zaman animasyonu (qtCar .95s step-end infinite, 3783) */
+  .qtcar { width: calc(clamp(0, calc((.34 - var(--a0)) * 100000), 1) * 1.5px);
+    animation: qtCar .95s step-end infinite; }
+  @keyframes qtCar { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  /* sayaç: 1.284 · EA((a0−.36)/.30) — binlik ayracı sayaç üçlemesiyle
+     (araçlar sahnesinin ₺ dersi; burada kalan üç haneye SIFIR DOLGULU) */
+  @counter-style qt-bos { system: cyclic; symbols: ''; }
+  @counter-style qt-bin { system: numeric; symbols: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+    range: 1 infinite; fallback: qt-bos; }
+  @counter-style qt-kal { system: numeric; symbols: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+    pad: 3 '0'; }
+  .qtn { --qnt: clamp(0, calc((var(--a0) - .36) / .30), 1);
+    --qnu: calc(1 - var(--qnt));
+    --qsay: round(down, var(--bulunan) * (1 - var(--qnu) * var(--qnu) * var(--qnu)) + .5, 1);
+    --qbin: round(down, var(--qsay) / 1000, 1);
+    counter-reset: qtbin calc(var(--qbin)) qtkal calc(var(--qsay) - var(--qbin) * 1000)
+                   qttam calc(var(--qsay)); }
+  /* binler > 0 iken "1.284", değilken düz sayı — yazı boyu sıfırlanarak
+     seçilir (koşullu içerik CSS'te başka türlü kurulamıyor) */
+  .qtn::before { content: counter(qtbin, qt-bin) '.' counter(qtkal, qt-kal);
+    font-size: calc(clamp(0, calc(var(--qbin) * 100000), 1) * 1em); }
+  .qtn::after { content: counter(qttam);
+    font-size: calc((1 - clamp(0, calc(var(--qbin) * 100000), 1)) * 1em); }
+  /* çip: a0 > .32 + i·.05 (.4s → ×22.5) */
+  .qtchip { --qon: clamp(0, calc((var(--a0) - (.32 + var(--i) * .05)) * 22.5), 1);
+    opacity: var(--qon); transform: translateY(calc((1 - var(--qon)) * 6px));
+    border-color: color-mix(in srgb, rgba(239, 35, 60, .4) calc(var(--qon) * 100%), var(--line2));
+    color: color-mix(in srgb, #fff calc(var(--qon) * 100%), var(--tx3)); }
+
+  /* ── perde 2: satır a1 > .05 + i·.075 (.42s → ×21.4) · seçim a1 > .50 ── */
+  .qtrow { --qon: clamp(0, calc((var(--a1) - (.05 + var(--i) * .075)) * 21.4), 1);
+    opacity: var(--qon); transform: translateY(calc((1 - var(--qon)) * 8px)); }
+  .qtrow.aim { --qsec: clamp(0, calc((var(--a1) - .5) * 30), 1);
+    background: color-mix(in srgb, rgba(239, 35, 60, .14) calc(var(--qsec) * 100%),
+      rgba(255, 255, 255, .03));
+    border-color: color-mix(in srgb, rgba(239, 35, 60, .45) calc(var(--qsec) * 100%), transparent); }
+  .qtrow.aim .qtm em { color: color-mix(in srgb, #fff calc(var(--qsec) * 100%), var(--tx2)); }
+
+  /* ── perde 3: özet a2 > .10+i·.09 (.4s) · kanal a2 > .42+i·.09 (.38s) · rozet a2 > .72 ── */
+  .qtsum li { --qon: clamp(0, calc((var(--a2) - (.10 + var(--i) * .09)) * 22.5), 1);
+    opacity: var(--qon); transform: translateX(calc((1 - var(--qon)) * -6px)); }
+  .qtcon i { --qon: clamp(0, calc((var(--a2) - (.42 + var(--i) * .09)) * 23.7), 1);
+    opacity: var(--qon); transform: translateY(calc((1 - var(--qon)) * 6px)); }
+  .qtver { --qon: clamp(0, calc((var(--a2) - .72) * 22.5), 1);
+    opacity: var(--qon); transform: scale(calc(.9 + .1 * var(--qon))); }
+
+  /* ── perde 4: gövde a3/.52 (kelime) · gönderildi a3 > .60 · yanıt a3 > .72 ── */
+  .qtbody { --qyaz: clamp(0, calc(var(--a3) / .52), 1); }
+  .qtw { opacity: clamp(0, calc((var(--qyaz) * var(--n) - var(--k)) * 100000), 1); }
+  .qtsend { --qon: clamp(0, calc((var(--a3) - .60) * 22.5), 1);
+    opacity: var(--qon); transform: translateY(calc((1 - var(--qon)) * 6px)); }
+  .qtreply { --qon: clamp(0, calc((var(--a3) - .72) * 20), 1);
+    opacity: var(--qon); transform: translateY(calc((1 - var(--qon)) * 10px)); }
+
+  /* gölgeler H14: kaynakta masaüstü katmanı (3748, 3757, 3767, 3821, 3891) */
+  @media (min-width: 901px) {
+    .qtstage { box-shadow: 0 30px 80px -50px rgba(0, 0, 0, .9); }
+    .qtlogo b { box-shadow: 0 0 14px -2px var(--red-glow); }
+    /* seçili satırın gölgesi BASAMAK, rampa değil: kaynağın geçiş listesi
+       box-shadow'u İÇERMİYOR (3820) — anında gelir. Ölçüm de aynı yeri
+       gösterdi: her karede rengi değişen 30 px bulanık gölge kilit boyunca
+       yeniden boyanıyordu (1440 + 4x kısıtta düşen kare 13 → 2). */
+    .qtrow.aim { box-shadow: 0 0 30px -14px
+      rgba(239, 35, 60, calc(clamp(0, calc((var(--qsec) - .5) * 100000), 1) * .45)); }
+    .qtreply b { box-shadow: 0 0 12px rgba(61, 220, 132, .5); }
+  }
+  /* MOBİL İÇERİK İSTİSNASI — kaynak 4393-4395 (ana bloğun DIŞINDA;
+     araçlar turunun dersi: sınıfın geçtiği HER satır taranır) */
+  @media (pointer: coarse), (max-width: 900px) {
+    .qtact, .qtchip, .qtrow, .qtsum li, .qtcon i, .qtver, .qtsend, .qtreply {
+      opacity: 1; transform: none; }
+    .qtchip, .qtrow, .qtsum li, .qtcon i, .qtver, .qtsend, .qtreply { animation: none; }
+    .qtcar { animation: qtCar .95s step-end infinite; }
+  }
+  /* kaynak mobil çizelgesi: 3893-3899 (.qtstep span kuralı kaynakta ÖLÜ —
+     .qtstep içinde span yok, etiket düz metin; olduğu gibi bırakıldı) */
+  @media (max-width: 760px) {
+    .qtrail { width: 100%; margin-left: 0; justify-content: space-between; gap: 6px; }
+    .qtview { height: clamp(320px, 74vw, 400px); }
+    .qthead, .qtrow { grid-template-columns: 1.5fr .8fr .9fr; }
+    .qthead span:last-child, .qtm.last { display: none; }
+    .qtcon i { flex: 1 1 100%; text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .qt-kap { min-height: 0; }
+    .qt-sabit { position: static; }
+    .qttrack, .qtact, .qtstep, .qtsearch, .qtn, .qtchip, .qtrow, .qtsum li,
+    .qtcon i, .qtver, .qtbody, .qtsend, .qtreply { animation: none; }
+    .qtcar { animation: none; width: 0; }
+  }
+</style>
+
+<script>
+  /* Tek ölçüm: sarmalın yüksekliği (kilidin üst hizası ve aralığı ondan
+     türer). rAF dışında; fonts.ready + ResizeObserver + resize(180ms). */
+  const kap = document.querySelector('.qt-kap') as HTMLElement | null;
+  if (kap) {
+    const sabit = kap.querySelector('.qt-sabit') as HTMLElement;
+    const olc = () => {
+      if (!sabit || !sabit.offsetHeight) return;
+      kap.style.setProperty('--qth', sabit.offsetHeight + 'px');
+    };
+    let zm: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(zm); zm = setTimeout(olc, 180); });
+    document.fonts?.ready?.then(olc);
+    if ('ResizeObserver' in window) new ResizeObserver(olc).observe(sabit);
+    olc();
+  }
+</script>
