@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-21 22:14 UTC
+> Üretim tarihi: 2026-08-21 22:58 UTC
 
 ## Yeni sohbete geçerken
 
@@ -1001,7 +1001,7 @@
 | `CLAUDE.md` |  | 8 KB | `2b76bab4` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DENETIM-GOC-KOVALARI.md` |  | 3 KB | `960b852f` |
-| `DEVIR.md` | bu dosya | 20 KB |  |
+| `DEVIR.md` | bu dosya | 73 KB |  |
 | `GOC-ENVANTER.md` |  | 4 KB | `83d8f590` |
 | `GOC-ROTA-KAPANIS.md` |  | 9 KB | `a533badc` |
 | `GOC-TUR-KAPANIS.md` |  | 10 KB | `06a17752` |
@@ -1113,7 +1113,7 @@
 | `yeni/font-uret.py` |  | 5 KB | `b4e91d6c` |
 | `yeni/gorsel-kanal.cjs` |  | 9 KB | `36b6483f` |
 | `yeni/gorsel-kompoze.cjs` |  | 11 KB | `16abd0f0` |
-| `yeni/gorsel-uret.cjs` |  | 19 KB | `fa2a0a71` |
+| `yeni/gorsel-uret.cjs` |  | 21 KB | `2b0e75af` |
 | `yeni/package-lock.json` |  | 240 KB | `b336378b` |
 | `yeni/package.json` |  | 0 KB | `ec75d21c` |
 | `yeni/public/font/jetbrains-mono-400-latin.woff2` |  | 17 KB | `407ba97a` |
@@ -1167,6 +1167,20 @@
 | `yeni/public/img/pd/skyclinics.webp` |  | 17 KB | `0a162474` |
 | `yeni/public/img/pd/terawulf-m.webp` |  | 17 KB | `b5705b1a` |
 | `yeni/public/img/pd/terawulf.webp` |  | 35 KB | `b2772c0e` |
+| `yeni/public/img/ph/bab-ic-mimarlik-m.webp` |  | 22 KB | `0ac88b20` |
+| `yeni/public/img/ph/bab-ic-mimarlik.webp` |  | 62 KB | `968561ec` |
+| `yeni/public/img/ph/charles-schwab-m.webp` |  | 11 KB | `85f6de4d` |
+| `yeni/public/img/ph/charles-schwab.webp` |  | 32 KB | `019365a3` |
+| `yeni/public/img/ph/cmblu-energy-m.webp` |  | 22 KB | `caa85987` |
+| `yeni/public/img/ph/cmblu-energy.webp` |  | 74 KB | `5c468df9` |
+| `yeni/public/img/ph/kononenko-group-m.webp` |  | 27 KB | `be21e6a7` |
+| `yeni/public/img/ph/kononenko-group.webp` |  | 82 KB | `31ff5c36` |
+| `yeni/public/img/ph/mercedes-benz-m.webp` |  | 14 KB | `b21e3133` |
+| `yeni/public/img/ph/mercedes-benz.webp` |  | 41 KB | `f91cc4c1` |
+| `yeni/public/img/ph/skyclinics-m.webp` |  | 6 KB | `2cabb573` |
+| `yeni/public/img/ph/skyclinics.webp` |  | 20 KB | `c5315cc3` |
+| `yeni/public/img/ph/terawulf-m.webp` |  | 13 KB | `6fa127c3` |
+| `yeni/public/img/ph/terawulf.webp` |  | 43 KB | `9d5d17ba` |
 | `yeni/public/img/pj/charles-schwab-m.webp` |  | 10 KB | `db2096ca` |
 | `yeni/public/img/pj/charles-schwab.webp` |  | 31 KB | `09fc8408` |
 | `yeni/public/img/pj/cmblu-energy-m.webp` |  | 22 KB | `4696a327` |
@@ -1240,7 +1254,7 @@
 | `yeni/src/pages/en/hizmetler.astro` |  | 1 KB | `555d31f0` |
 | `yeni/src/pages/en/index.astro` |  | 3 KB | `3e6abca2` |
 | `yeni/src/pages/en/otomasyon.astro` |  | 1 KB | `baf4a70d` |
-| `yeni/src/pages/en/projeler/[slug].astro` |  | 1 KB | `7648ebd7` |
+| `yeni/src/pages/en/projeler/[slug].astro` |  | 1 KB | `f565cfb7` |
 | `yeni/src/pages/en/projeler/index.astro` |  | 1 KB | `7fdc0aa2` |
 | `yeni/src/pages/en/sss.astro` |  | 1 KB | `1348318d` |
 | `yeni/src/pages/en/surec.astro` |  | 1 KB | `8c4fd9eb` |
@@ -1249,7 +1263,7 @@
 | `yeni/src/pages/hukuki.astro` |  | 1 KB | `f37f3220` |
 | `yeni/src/pages/index.astro` |  | 5 KB | `19957c63` |
 | `yeni/src/pages/otomasyon.astro` |  | 1 KB | `532e3100` |
-| `yeni/src/pages/projeler/[slug].astro` |  | 1 KB | `b51f07ae` |
+| `yeni/src/pages/projeler/[slug].astro` |  | 1 KB | `efd9ca9a` |
 | `yeni/src/pages/projeler/index.astro` |  | 1 KB | `2f7f3cbe` |
 | `yeni/src/pages/sitemap.xml.ts` |  | 3 KB | `64b89125` |
 | `yeni/src/pages/sss.astro` |  | 1 KB | `b6112ca2` |
@@ -1269,8 +1283,8 @@
 | `yeni/src/parcalar/OtomasyonGovde.astro` |  | 59 KB | `d6937758` |
 | `yeni/src/parcalar/Perde.astro` |  | 5 KB | `e4bc7f00` |
 | `yeni/src/parcalar/PlatformSahne.astro` |  | 28 KB | `425da17d` |
-| `yeni/src/parcalar/ProjeDizin.astro` |  | 25 KB | `508081d4` |
-| `yeni/src/parcalar/ProjeGovde.astro` |  | 3 KB | `4ac6146a` |
+| `yeni/src/parcalar/ProjeDizin.astro` |  | 26 KB | `78f1cf59` |
+| `yeni/src/parcalar/ProjeGovde.astro` |  | 10 KB | `0b8fdb53` |
 | `yeni/src/parcalar/SerpSahne.astro` |  | 10 KB | `aa53ce6a` |
 | `yeni/src/parcalar/SohbetSahne.astro` |  | 9 KB | `ffd5ae89` |
 | `yeni/src/parcalar/SssGovde.astro` |  | 3 KB | `50d2d2eb` |
@@ -1316,7 +1330,7 @@
 | `yeni/src/veri/kanal-gorselleri.json` |  | 1 KB | `6e44f8f9` |
 | `yeni/src/veri/kara-izgara.txt` |  | 6 KB | `3950853b` |
 | `yeni/src/veri/kurucu-gorsel.json` |  | 0 KB | `17def14d` |
-| `yeni/src/veri/proje-gorselleri.json` |  | 2 KB | `25a8471b` |
+| `yeni/src/veri/proje-gorselleri.json` |  | 3 KB | `b9c6db24` |
 | `yeni/src/veri/serit-logolari.json` |  | 1 KB | `12ea05d7` |
 | `yeni/src/veri/ulkeler.json` |  | 9 KB | `f32566a3` |
 | `yeni/test/hesap.test.mjs` |  | 4 KB | `38ead451` |
@@ -1332,7 +1346,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 61 sn (basılan 0, önbellekten 58) |
+| son derleme | 63 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma

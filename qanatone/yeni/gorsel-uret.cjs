@@ -216,14 +216,48 @@ const ODAK = { 'mercedes-benz': .04, 'skyclinics': .10, 'cmblu-energy': .12,
 
 /* object-fit:cover + object-position'un tarayicidaki davranisinin birebiri:
    once kutuyu ORTECEK kadar olcekle, sonra odak yuzdesiyle kaydirip kes. */
-async function odakliKirp(giris, W, H, fx) {
+async function odakliKirp(giris, W, H, fx, fy) {
+  if (fy == null) fy = .5;
   const m = await sharp(giris).metadata();
   const s = Math.max(W / m.width, H / m.height);
   const w = Math.round(m.width * s), h = Math.round(m.height * s);
   const sol = Math.max(0, Math.min(Math.round((w - W) * fx), w - W));
-  const ust = Math.max(0, Math.min(Math.round((h - H) * .5), h - H));
+  const ust = Math.max(0, Math.min(Math.round((h - H) * fy), h - H));
   return sharp(giris).resize(w, h).extract({ left: sol, top: ust, width: W, height: H });
 }
+
+/* HERO ODAGI: genel liste (ODAK) + detay hero'suna OZEL iki override
+   (kaynak 1232-1233). Kaynak `#pdHero[data-pj=...]` ile genel kurali
+   eziyor; burada da ayni oncelikle uygulaniyor. */
+const HERO_ODAK = { 'kononenko-group': [.5, .20], 'bab-ic-mimarlik': [.15, .60] };
+
+/* `filter: grayscale(.3) contrast(1.06)` DOSYAYA PISIYOR — kaynak (1734/
+   2263) bunu CSS'te yapiyor ama H14 mobil baglamda `filter`i reddediyor
+   ve hero her cihazda ayni gorunmeli. Destede ayni yol zaten kullanildi
+   ("CSS grayscale(1) contrast(1.1) karsiligi ... tuvalde bir kez").
+   grayscale(a) matrisi CSS Filter Effects'in kendi tanimi; contrast(c)
+   lineer: y = c*x - .5*(c-1)*255. */
+function griKontrast(pipe, gri, kon) {
+  const a = 1 - gri;                       /* CSS: amount 0 => kimlik */
+  const L = [.2126, .7152, .0722];
+  const M = [
+    [L[0] + a * (1 - L[0]), L[1] * (1 - a),       L[2] * (1 - a)],
+    [L[0] * (1 - a),        L[1] + a * (1 - L[1]), L[2] * (1 - a)],
+    [L[0] * (1 - a),        L[1] * (1 - a),       L[2] + a * (1 - L[2])],
+  ];
+  return pipe.recomb(M).linear(kon, -0.5 * (kon - 1) * 255);
+}
+
+/* ph = proje DETAY hero'su. Kaynak `.pdhero` (2260-2263): aspect-ratio
+   16/7, `object-fit:cover`, `grayscale(.3) contrast(1.06)`.
+   `pd` DEGISTIRILMEDI bilerek: onun `-m` turevini S-CANLI sahnesi de
+   okuyor (CanliSahne, `object-position:center top`) ve orani degistirmek
+   Enes'in onayladigi bir sahneyi bozardi. Hero kendi varyantini alir.
+   Olcu: govde sutunu 1200 (kaynagin `.wrap`i) -> kutu 1200x525; dosya
+   1600x700 = kutunun ~1,33 kati ve kaynagin kendi cozunurlugu dolayinda
+   (kural 109 tavani 2x). Mobil: 390'da kutu 350x153 -> 700x306 = tam 2x,
+   kirilim kaynagin `-m` esigiyle ayni (760px). */
+const HERO_HEDEF = path.join(HEDEF, 'ph');
 
 const PRJ_HEDEF_K = path.join(HEDEF, 'pk');
 const PRJ_HEDEF_T = path.join(HEDEF, 'pt');
@@ -234,6 +268,7 @@ async function projeGorselleri() {
   fs.mkdirSync(PRJ_HEDEF_K, { recursive: true });
   fs.mkdirSync(PRJ_HEDEF_T, { recursive: true });
   fs.mkdirSync(PRJ_HEDEF_D, { recursive: true });
+  fs.mkdirSync(HERO_HEDEF, { recursive: true });
   const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const kunye = [];
   let toplam = 0;
@@ -259,6 +294,15 @@ async function projeGorselleri() {
        tutarli olcekte"). Contain kirpmaz — o yuzden varyant da kirpilmaz,
        kutuya SIGDIRILIR ve kirpmayi/yerlesimi CSS yapar. */
     const logo = !!pr.imgc;
+    /* DETAY HERO'SU (ph): 16/7, odak + gri/kontrast dosyaya pismis */
+    const ho = HERO_ODAK[pr.slug] || [ODAK[pr.slug] != null ? ODAK[pr.slug] : .5, .5];
+    const hp = path.join(HERO_HEDEF, pr.slug + '.webp');
+    await griKontrast(await odakliKirp(giris, 1600, 700, ho[0], ho[1]), .3, 1.06)
+      .webp({ quality: 78, effort: 6 }).toFile(hp);
+    const hpm = path.join(HERO_HEDEF, pr.slug + '-m.webp');
+    await griKontrast(await odakliKirp(giris, 700, 306, ho[0], ho[1]), .3, 1.06)
+      .webp({ quality: 74, effort: 6 }).toFile(hpm);
+
     const k = path.join(PRJ_HEDEF_K, pr.slug + '.webp');
     const km = path.join(PRJ_HEDEF_K, pr.slug + '-m.webp');
     let kb2, kmb;
@@ -275,11 +319,13 @@ async function projeGorselleri() {
         .webp({ quality: 74, effort: 6 }).toFile(km);
     }
     const boy = fs.statSync(t).size + fs.statSync(d).size + fs.statSync(dm).size
-      + fs.statSync(k).size + fs.statSync(km).size;
+      + fs.statSync(k).size + fs.statSync(km).size
+      + fs.statSync(hp).size + fs.statSync(hpm).size;
     toplam += boy;
     kunye.push({ slug: pr.slug, thumb: { w: 208, h: 156 }, logo,
       kart: { w: kb2.width, h: kb2.height }, kartm: { w: kmb.width, h: kmb.height },
-      hero: { w: 1280, h: 720 }, herom: { w: 744, h: 419 } });
+      hero: { w: 1280, h: 720 }, herom: { w: 744, h: 419 },
+      pdh: { w: 1600, h: 700 }, pdhm: { w: 700, h: 306 } });
     console.log('  + prj ' + pr.slug + '  ' + kb(boy) + ' (t+k+km+d+dm)');
   }
   fs.writeFileSync(PRJ_KUNYE, JSON.stringify(kunye, null, 2) + String.fromCharCode(10));
