@@ -8,31 +8,19 @@
    tıklanmayan düğmedir. Giriş cümlesinin "sektöre göre filtrele"
    parçası bu yüzden kırpıldı.
 
-   B7 · AKORDEON GALERİ (giydirme, 21 Ağustos)
-   Dizin artık 104 px künye pulu olan dikey kart listesi değil; masaüstünde
-   yatay akordeon (aktif genişler, pasifler daralır), mobilde dikey liste.
-   Üç şey bilinçli:
+   B7 AKORDEON DENENDİ VE GERİ ALINDI (21 Ağustos, Enes). Dizin kart
+   listesi olarak kalıyor. Akordeondan alınan tek şey duotone geçişi:
+   KART DİNLENİRKEN KÜÇÜK GÖRSEL DUOTONE, HOVER'DA GERÇEK RENGE DÖNÜYOR.
+   Kart da hover'da kalkıyor. Dikey galeri görselleri rafa kalktı;
+   üreteci (`gorsel-kompoze.cjs`) duruyor, istenirse yeniden basar.
 
-   1) İÇERİK KAYBOLMUYOR. Pasif öğenin yazısı `opacity` ile sönüyor,
-      DOM'dan çıkmıyor — dizin sayfasının bütün metni (yıl, etiket, ad,
-      anlatım, rakamlar, bağlantı) her durumda kaynakta duruyor. `display`
-      veya `visibility` kullanılmadı; ikisi de metni tarayıcıdan ve ekran
-      okuyucudan siler.
-   2) ADA JS'i YOK. Genişleme `flex-grow`, açılma `:hover`/`:focus-within`.
-      Varsayılan açık öğe ilk proje; kaba üzerinde imleç varken o kapanıyor
-      ve imlecin durduğu açılıyor (S-SZ bento'sunun kurduğu desen).
-   3) DUOTONE TEK DEĞİŞKENDE. `--k` aynı anda kızıl katmanı, karartmayı ve
-      yazı opaklığını sürüyor: pasif şerit duotone, aktif panel gerçek
-      renkte. Kızıl dosyaya BASILI DEĞİL (bkz. gorsel-kompoze.cjs).
-
-   Kart küçük görseli (giydirme, 20 Agu) ve galeri görseli: ölçüler
-   künyeden — üreteçler `gorsel-uret.cjs` / `gorsel-kompoze.cjs` yazar,
-   bileşen ELLE ölçü yazmaz. Künyede olmayan proje görselsiz basılır
-   (panelden yeni proje senaryosu). */
+   Kart kucuk gorseli (giydirme, 20 Agu): olculer kunyeden — uretec
+   `gorsel-uret.cjs` yazar, bilesen ELLE olcu yazmaz. Kunyede olmayan
+   proje gorselsiz basilir (panelden yeni proje senaryosu). */
 import { getCollection } from 'astro:content';
 import { icerik, T, type Dil } from '../icerik';
-import galeriGorsel from '../veri/galeri-gorselleri.json';
-const galeriMap = new Map(galeriGorsel.map((g: any) => [g.slug, g]));
+import prjGorsel from '../veri/proje-gorselleri.json';
+const gorselMap = new Map(prjGorsel.map((g: any) => [g.slug, g]));
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
@@ -50,31 +38,24 @@ const on = dil === 'en' ? '/en' : '';
     'Every system we built. Open one, see what it solved and what came out.')}</p>
 </section>
 
-<div class="glr">
-  {projeler.map((p: any) => { const gg: any = galeriMap.get(p.slug); return (
-    <article class="glr-o" tabindex="0">
-      {gg && (
-        <picture class="glr-g">
-          {/* masaüstü: dikey panel 592x960 — pasif şeritte object-fit:cover
-              görselin tam orta %25'ini gösterir, kadraj ona göre kuruldu.
-              mobil: aynı karenin bandından 700x520. */}
-          <source media="(min-width:901px)" srcset={`${B}/img/galeri/${p.slug}.webp`} />
-          <img src={`${B}/img/galeri/${p.slug}-m.webp`} width={gg.mw} height={gg.mh}
-            loading="lazy" decoding="async" alt="" />
-        </picture>
-      )}
-      <div class="glr-yz">
-        <div class="glr-bas">
-          <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
-          <h2>{p.name}</h2>
-        </div>
-        <div class="glr-gov">
-          <p class="ac">{T(p.text, dil)}</p>
-          {p.res?.length > 0 && <ul class="rakamlar">
-            {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
-          </ul>}
-          <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
-        </div>
+<div class="isler">
+  {projeler.map((p: any) => { const g: any = gorselMap.get(p.slug); return (
+    <article class="is">
+      {/* Duotone iki katman tek değişkende (`--k`): ::before karartma,
+          ::after kızıl hue. Kızıl DOSYAYA BASILI DEĞİL — pul gerçek
+          renkte duruyor, kart dinlenirken CSS kızıla çeviriyor. */}
+      {g && <span class="pul-k">
+        <img class="pul" src={`${B}/img/pt/${p.slug}.webp`}
+          width={g.thumb.w} height={g.thumb.h} loading="lazy" decoding="async" alt="" />
+      </span>}
+      <div class="icerik">
+        <p class="kunye"><span class="yil">{p.year}</span> · {T(p.tag, dil)}</p>
+        <h2>{p.name}</h2>
+        <p>{T(p.text, dil)}</p>
+        {p.res?.length > 0 && <ul class="rakamlar">
+          {p.res.map((r: any) => <li><b>{r.v}</b> {T(r.l, dil)}</li>)}
+        </ul>}
+        <a class="git" href={`${B}${on}/projeler/${p.slug}`}>{M('Projeyi gör', 'View project')}</a>
       </div>
     </article>
   ); })}
@@ -82,72 +63,45 @@ const on = dil === 'en' ? '/en' : '';
 
 <style>
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
-
-  /* ---- TABAN = MOBİL: dikey liste, hepsi açık, duotone yok ----
-     Dokunmatikte pasif/aktif diye bir şey yok; `--k:0` yani kızıl katman
-     kapalı, yazı tam opak. Kart görseli üstte yatay bant (700x520). */
-  .glr { display: flex; flex-direction: column; gap: 14px; }
-  .glr-o { --k: 0; position: relative; isolation: isolate; min-width: 0;
-    border: 1px solid var(--line); border-radius: 14px; overflow: clip; }
-  .glr-o:focus-visible { outline: none; border-color: var(--red); }
-
-  .glr-g { display: block; }
-  .glr-g img { width: 100%; height: auto; aspect-ratio: 350 / 260;
-    object-fit: cover; display: block; }
-
-  /* Duotone katmanları MOBİLDE HİÇ KURULMUYOR — aşağıdaki masaüstü
-     bloğunda tanımlılar. `--k:0` ile opaklık sıfırlansa bile
-     `mix-blend-mode` katmanı ayakta kalır ve harman bağlamı doğurur;
-     dokunmatikte pasif/aktif diye bir durum olmadığı için o bedeli
-     hiç doğurmamak doğrusu (H14'ün mobil pahalı katman disiplini). */
-
-  .glr-yz { position: relative; z-index: 2; padding: 16px 18px 18px;
-    opacity: calc(1 - var(--k)); transition: opacity .4s var(--e); }
-  .glr .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
-  .glr .yil { font-family: ui-monospace, monospace; color: var(--red-soft); }
-  .glr h2 { font-size: 1.05rem; margin: 0 0 6px; }
-  .glr .ac { color: var(--tx2); font-size: .92rem; }
+  .isler { display: flex; flex-direction: column; gap: 14px; }
+  .is { display: flex; gap: 16px; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .is .icerik { min-width: 0; }
+  /* SABIT 104 CSS px kutu — uretecin 208w varyanti tam 2,0x (kural 109) */
+  .pul-k { flex: none; width: 104px; height: 78px; border-radius: 10px;
+    overflow: clip; }
+  .pul { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 560px) { .pul-k { width: 88px; height: 66px; } }
+  .is .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
+  .is .yil { font-family: ui-monospace, monospace; color: var(--red-soft); }
+  .is h2 { font-size: 1.05rem; margin: 0 0 6px; }
+  .is .icerik > p:not(.kunye) { color: var(--tx2); font-size: .92rem; }
   .rakamlar { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
   .rakamlar li { color: var(--tx3); font-size: .84rem; }
   .rakamlar b { color: var(--red-soft); font-family: ui-monospace, monospace; margin-right: 4px; }
   .git { display: inline-block; margin-top: 12px; font-size: .85rem; }
 
-  /* ---- MASAÜSTÜ: yatay akordeon ----
-     Kap 800, aktif ~305, pasif ~76 (flex 4 / 1, altı boşluk 6 px).
-     Pasif şeridin 76 px'i, 592 px'lik panelin tam orta %25'i. */
-  @media (min-width: 901px) and (hover: hover) and (pointer: fine) {
-    .glr { flex-direction: row; gap: 6px; height: 480px; max-width: 800px; }
-    .glr-o { --k: 1; flex: 1 1 0; transition: flex-grow .55s var(--e); }
-    .glr-g { position: absolute; inset: 0; }
-    .glr-g img { width: 100%; height: 100%; aspect-ratio: auto; }
+  /* ---- KART KALKMASI + DUOTONE ----
+     İkisi de YALNIZ imleçli cihazda kuruluyor. Dokunmatikte "dinlenme"
+     diye bir durum yok: kart hep dinlenir halde olur ve bütün pullar
+     kızıl kalırdı. Ayrıca `--k:0` olsa bile ayakta duran
+     `mix-blend-mode` katmanı boşuna harman bağlamı doğurur (H14). */
+  @media (hover: hover) and (pointer: fine) {
+    .is { transition: transform .35s var(--e), border-color .35s var(--e); }
+    .is:hover, .is:focus-within { transform: translateY(-3px);
+      border-color: var(--line2); }
 
-    /* iki katman, tek değişken: ::before karartma, ::after kızıl hue */
-    .glr-o::before, .glr-o::after { content: ''; position: absolute; inset: 0;
-      z-index: 1; pointer-events: none; transition: opacity .55s var(--e); }
-    .glr-o::before { background: var(--bg); opacity: calc(var(--k) * .42); }
-    .glr-o::after { background: var(--red); mix-blend-mode: color; opacity: var(--k); }
-
-    /* varsayılan: ilk proje açık */
-    .glr-o:first-child { --k: 0; flex-grow: 4.6; }
-    /* kaba imleç girdiğinde varsayılan kapanır... */
-    .glr:hover .glr-o:first-child { --k: 1; flex-grow: 1; }
-    /* ...ve imlecin/odağın durduğu açılır (sıra bu üçlüde kazandırıyor) */
-    .glr-o:hover, .glr-o:focus-within,
-    .glr:hover .glr-o:hover, .glr:hover .glr-o:focus-within { --k: 0; flex-grow: 4.6; }
-
-    /* künye ve ad ÜSTE çıkar: ana dosyanın üst %20'si bunun için sessiz
-       bırakıldı (GORSEL-LISTESI-B1-B7.md). Gövde altta, perdenin üstünde. */
-    .glr-yz { position: absolute; inset: 0; padding: 22px 20px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      background:
-        linear-gradient(180deg, rgba(5,5,5,.74) 0%, transparent 26%),
-        linear-gradient(0deg, rgba(5,5,5,.88) 0%, rgba(5,5,5,.44) 30%, transparent 58%); }
-    .glr h2 { font-size: 1.15rem; }
-    .glr .ac { font-size: .88rem; }
-    .glr-gov { min-width: 0; }
+    .pul-k { --k: 1; position: relative; isolation: isolate; }
+    .pul-k::before, .pul-k::after { content: ''; position: absolute; inset: 0;
+      pointer-events: none; transition: opacity .45s var(--e); }
+    .pul-k::before { background: var(--bg); opacity: calc(var(--k) * .42); }
+    .pul-k::after { background: var(--red); mix-blend-mode: color; opacity: var(--k); }
+    .is:hover .pul-k, .is:focus-within .pul-k { --k: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .glr-o, .glr-o::before, .glr-o::after, .glr-yz { transition: none; }
+    .is { transition: none; }
+    .is:hover, .is:focus-within { transform: none; }
+    .pul-k::before, .pul-k::after { transition: none; }
   }
 </style>

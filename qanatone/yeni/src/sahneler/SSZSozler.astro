@@ -71,10 +71,15 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
                   stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               </span>
               <span class="ssz-ikon"><Ikon ad={c.ikon} /></span>
-              <h3>{g('ch' + c.k + 't')}</h3>
-              {/* Açıklama masaüstünde 0fr ızgarayla kapalı başlar, hover/odakta
-                  açılır; dokunmatikte ve dar ekranda HEP AÇIK (aşağıda). */}
-              <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
+              {/* Şerit: görselli kartta içerik görselin ÜSTÜNE biner —
+                  mobilde opak, masaüstünde hafif bulanık cam. Görselsiz
+                  kartta şeridin hiçbir stili yok, akış eskisi gibi. */}
+              <div class="ssz-serit">
+                <h3>{g('ch' + c.k + 't')}</h3>
+                {/* Açıklama masaüstünde 0fr ızgarayla kapalı başlar, hover/odakta
+                    açılır; dokunmatikte ve dar ekranda HEP AÇIK (aşağıda). */}
+                <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
+              </div>
             </article>
           ); })}
         </div>
