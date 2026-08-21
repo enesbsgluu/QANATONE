@@ -130,3 +130,28 @@ body:has(.ana) main{max-width:none;padding:0}
   .ana section{padding:8vh 0}
   .s2-yol{gap:26px}
 }
+
+
+/* ============ ANA SAYFA AĞIRLIK TURU (21 Ağu) ============
+   BELİRTİ: ana sayfa LH mobil TBT 145-423 ms bandında sallanıyordu,
+   puan 88-97. Ölçüm sebebi gösterdi: betık değerlendirme yalnız 70 ms,
+   buna karşılık *Style & Layout* 1.770 ms, *Rendering* 945 ms.
+   Yani yük JS değil, sayfanın kendi ölçeği: 1.603 eleman, 15 sahne,
+   14.432 px belge — ilk boyamada hepsi biçimleniyor ve yerleşiyor.
+
+   KALDIRAÇ: kadraj dışındaki bölümün biçimlenmesi/yerleşimi/boyaması
+   ATLANIR (`content-visibility: auto`). Motor sahnesinde ölçülmüş
+   kaldıraçtı (kare ortancası 18,4 → 9,1 ms); burada hedef ilk boyama.
+   `contain-intrinsic-size: auto 900px` — `auto` son gerçek boyu hatırlar,
+   900 px yalnız ilk tahmindir; kaydırma çubuğu ve CLS ölçüldü.
+
+   ÜÇ BÖLÜM DIŞARIDA:
+   · `.sh-sahne` (hero) — LCP orası (ölçüldü: LCP öğesi `p.sh-lede`);
+     kadrajda zaten, atlamak kazanç vermez, risk verir.
+   · `.st-sahne` (şerit) — hemen altında, ilk ekrana giriyor.
+   · `.sp-sahne` (deste) — İÇİNDE STICKY KART VAR. `content-visibility`
+     boyama kapsaması (paint containment) getirir; yapışkan kartın
+     kutusundan taşan görselleri kırpar. Kapsamın yan etkisi ölçülmeden
+     girilmez (madde: ölçmediğin rakamı söyleme). */
+.ana > section:not(.sh-sahne):not(.st-sahne):not(.sp-sahne){
+  content-visibility:auto;contain-intrinsic-size:auto 900px}

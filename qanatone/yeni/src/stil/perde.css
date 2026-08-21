@@ -48,9 +48,25 @@
    ziyaretçi perdeyle hiç tanışmaz, içerik zaten önünde. */
 html:not(.prd) .sus-perde{display:none}
 
+/* ZEMİN İKİ KATMAN — ANA SAYFA AĞIRLIK TURUNUN ÖLÇÜMÜ (21 Ağu).
+   Perdenin tam ekran radial-gradient'i İLK BOYAMAYI geciktiriyordu.
+   Ölçüm (412 px · 4x CPU · 1,6 Mbps · 150 ms RTT, aynı düzenek):
+     perde olduğu gibi        FP 1.464 ms
+     zemin DÜZ RENK yapılınca  FP 1.088 ms   (−376 ms)
+     perde görünmez            FP 1.028 ms
+     animasyonlar kapalı       FP 1.060 ms
+   Yani gecikmenin neredeyse tamamı tek bir bildirimden geliyordu.
+   Çözüm vinyeti atmak DEĞİL, SİRASINI DEĞİŞTİRMEK: ilk boyama düz
+   renkle çıkar (kompozitörün en ucuz işi), vinyet bir kare sonra
+   opaklıkla biner. Göz farkı görmez — perde zaten 2 sn duruyor. */
 .sus-perde{position:fixed;inset:0;z-index:999;display:grid;place-items:center;
-  overflow:clip;pointer-events:none;
-  background:radial-gradient(120% 100% at 50% 45%,#160609 0%,#070708 55%,#040405 100%)}
+  overflow:clip;pointer-events:none;background:#070708}
+.sus-perde::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 45%,#160609 0%,#070708 55%,#040405 100%);
+  opacity:0;animation:prd-vinyet .34s var(--e) .1s forwards}
+/* z-index -1 ŞART: vinyet perdenin ZEMİNİdır, içeriğin üstü değil.
+   0'da bırakılınca harfleri ve izleri örtüyordu (kare yakaladı). */
+@keyframes prd-vinyet{to{opacity:1}}
 .sus-perde-kabuk{position:absolute;inset:0}
 
 /* ---- anakart izleri (giydirme): çizilme pathLength=1 ile, ölçüm yok.
