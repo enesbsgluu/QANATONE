@@ -50,7 +50,7 @@ const g: any = prjGorsel.find((x: any) => x.slug === p.slug);
 
 {p.res?.length > 0 && <section class="olcu">
   {p.res.map((r: any) => (
-    <div class="mk"><b>{r.v}</b><span>{T(r.l, dil)}</span></div>
+    <div class="mk"><b>{T(r.v, dil)}</b><span>{T(r.l, dil)}</span></div>
   ))}
 </section>}
 

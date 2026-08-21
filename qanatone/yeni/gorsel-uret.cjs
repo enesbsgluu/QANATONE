@@ -190,9 +190,41 @@ async function kurucu() {
    (panelden yeni proje senaryosu — deste <source> dersinin ayni). */
 /* pk = dizin izgarasinin kart bandi. Olcu kaynaktan turedi: orijinal
    arsiv (#msn/.mi, kok index.html 1730) gorsel bandini 220 px SABIT
-   tutuyor; dort sutunlu izgarada (kap 1120, bosluk 22) sutun 263 px
-   eder -> 2x kutu 526x440 (kural 109: cozulmus bitmap <= 2x CSS kutusu).
-   `pt` (208x156) bu kutuya yetmiyordu. */
+   tutuyor.
+   OLCU DUZELTILDI (22 Agu, sadakat turu): onceki 526x440 "kap 1120, DORT
+   sutun, sutun 263" varsayimindan turemisti ve o varsayim YANLISTI.
+   Kaynagin kabi `.wrap` = max 1280 - 2x40 oluk = en fazla 1200 px, sutun
+   sayisi da KAP genisliginden okunuyor (11056): 1200 px hicbir zaman 1240
+   esigini gecmez, yani sayfa en fazla UC sutun. Dogru sutun
+   (1200-44)/3 = 385,33 px -> 2x kutu 770x440 (kural 109: cozulmus bitmap
+   <= 2x CSS kutusu). Eski 526 hem yanlis kadraji (daha yakin kirpma) hem
+   eksik cozunurluk demekti.
+   KAYNAK GORSEL `imgc || image`: kaynak arsiv karti kart-ozel bir gorsel
+   alanini onceliyor (11002). Uretec bunu hic okumuyordu; Bab Ic Mimarlik
+   kartinda kaynak cizgi logoyu (pj-bab-logo) gosterirken yeni taraf ic
+   mekan fotografini basiyordu. */
+/* GORSEL ODAK NOKTALARI — kaynak index.html 1223-1227, slug bazli.
+   Kaynagin kendi yorumu: "cover kirpmasi logolu/metinli bolgeyi pencereden
+   atmasin diye slug bazli hizalar". Turetilemez, sanat yonetimi karari;
+   kaynaktan OKUNDU, goz karariyla konmadi. Listede olmayan proje %50.
+   Deger `object-position` yuzdesidir ve burada KIRPMAYA PISIRILIR:
+   varyant zaten kutunun oraninda uretildigi icin CSS'te ayrica
+   `object-position` yazmak gerekmiyor (ve yazilsaydi merkezden kirpilmis
+   bir goruntuyu kaydirmaya calisirdi — ise yaramazdi). */
+const ODAK = { 'mercedes-benz': .04, 'skyclinics': .10, 'cmblu-energy': .12,
+               'terawulf': .70 };
+
+/* object-fit:cover + object-position'un tarayicidaki davranisinin birebiri:
+   once kutuyu ORTECEK kadar olcekle, sonra odak yuzdesiyle kaydirip kes. */
+async function odakliKirp(giris, W, H, fx) {
+  const m = await sharp(giris).metadata();
+  const s = Math.max(W / m.width, H / m.height);
+  const w = Math.round(m.width * s), h = Math.round(m.height * s);
+  const sol = Math.max(0, Math.min(Math.round((w - W) * fx), w - W));
+  const ust = Math.max(0, Math.min(Math.round((h - H) * .5), h - H));
+  return sharp(giris).resize(w, h).extract({ left: sol, top: ust, width: W, height: H });
+}
+
 const PRJ_HEDEF_K = path.join(HEDEF, 'pk');
 const PRJ_HEDEF_T = path.join(HEDEF, 'pt');
 const PRJ_HEDEF_D = path.join(HEDEF, 'pd');
@@ -209,6 +241,9 @@ async function projeGorselleri() {
     if (!pr.image) continue;
     const giris = path.join(__dirname, '..', pr.image);
     if (!fs.existsSync(giris)) { console.log('  ! kaynak yok: ' + pr.image); continue; }
+    /* kart bandi kaynagi: `imgc` varsa O (kok index.html 11002) */
+    const girisK = pr.imgc && fs.existsSync(path.join(__dirname, '..', pr.imgc))
+      ? path.join(__dirname, '..', pr.imgc) : giris;
     const t = path.join(PRJ_HEDEF_T, pr.slug + '.webp');
     await sharp(giris).resize({ width: 208, height: 156, fit: 'cover', position: 'centre' })
       .webp({ quality: 78, effort: 6 }).toFile(t);
@@ -218,17 +253,32 @@ async function projeGorselleri() {
     const dm = path.join(PRJ_HEDEF_D, pr.slug + '-m.webp');
     await sharp(giris).resize({ width: 744, height: 419, fit: 'cover', position: 'centre' })
       .webp({ quality: 74, effort: 6 }).toFile(dm);
+    /* LOGO KARTI: `imgc` tasiyan projede kart gorseli bir LOGO'dur ve
+       kaynak ona `object-fit:contain + #000 zemin + %9 dolgu` uyguluyor
+       (1229-1231: "pencere orani ne olursa olsun logo tam, ortali ve
+       tutarli olcekte"). Contain kirpmaz — o yuzden varyant da kirpilmaz,
+       kutuya SIGDIRILIR ve kirpmayi/yerlesimi CSS yapar. */
+    const logo = !!pr.imgc;
     const k = path.join(PRJ_HEDEF_K, pr.slug + '.webp');
-    await sharp(giris).resize({ width: 526, height: 440, fit: 'cover', position: 'centre' })
-      .webp({ quality: 76, effort: 6 }).toFile(k);
     const km = path.join(PRJ_HEDEF_K, pr.slug + '-m.webp');
-    await sharp(giris).resize({ width: 700, height: 360, fit: 'cover', position: 'centre' })
-      .webp({ quality: 74, effort: 6 }).toFile(km);
+    let kb2, kmb;
+    if (logo) {
+      kb2 = await sharp(girisK).resize({ width: 770, height: 440, fit: 'inside' })
+        .webp({ quality: 82, effort: 6 }).toFile(k);
+      kmb = await sharp(girisK).resize({ width: 700, height: 360, fit: 'inside' })
+        .webp({ quality: 82, effort: 6 }).toFile(km);
+    } else {
+      const fx = ODAK[pr.slug] != null ? ODAK[pr.slug] : .5;
+      kb2 = await (await odakliKirp(girisK, 770, 440, fx))
+        .webp({ quality: 76, effort: 6 }).toFile(k);
+      kmb = await (await odakliKirp(girisK, 700, 360, fx))
+        .webp({ quality: 74, effort: 6 }).toFile(km);
+    }
     const boy = fs.statSync(t).size + fs.statSync(d).size + fs.statSync(dm).size
       + fs.statSync(k).size + fs.statSync(km).size;
     toplam += boy;
-    kunye.push({ slug: pr.slug, thumb: { w: 208, h: 156 },
-      kart: { w: 526, h: 440 }, kartm: { w: 700, h: 360 },
+    kunye.push({ slug: pr.slug, thumb: { w: 208, h: 156 }, logo,
+      kart: { w: kb2.width, h: kb2.height }, kartm: { w: kmb.width, h: kmb.height },
       hero: { w: 1280, h: 720 }, herom: { w: 744, h: 419 } });
     console.log('  + prj ' + pr.slug + '  ' + kb(boy) + ' (t+k+km+d+dm)');
   }
