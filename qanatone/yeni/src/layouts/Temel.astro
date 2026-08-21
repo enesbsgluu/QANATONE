@@ -19,9 +19,15 @@ interface Props {
   heleftr?: string; helefen?: string;  /* hreflang çifti (canlı kök) */
   sema?: object | null;
   etiket?: string;            /* başlıktaki rozet (ör. GEO) */
+  /* `genis`: gövde sütununu kaynağın `.wrap` ölçüsüne açar (max 1280 +
+     clamp(20,4vw,40) oluk = 1440'ta 1200 px içerik). Sadakat turu, 22 Ağu:
+     /projeler arşivinin sütun sayısı KABIN genişliğinden türüyor (kaynak
+     11056 `host.clientWidth`), 800 px'lik varsayılan gövdede o hesap
+     kaynaktakinin yarısına düşüyordu. Opt-in — başka sayfa etkilenmez. */
+  genis?: boolean;
 }
 const { dil = 'tr', baslik, aciklama, canonical,
-        heleftr, helefen, sema = null, etiket } = Astro.props;
+        heleftr, helefen, sema = null, etiket, genis = false } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <html lang={dil}>
@@ -44,7 +50,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       Etiket rozeti nav'a TAŞINMADI — kaynağın nav'ında yoktu, Faz 1
       kabuğunun uydurmasıydı; sayfa etiketi gövde künyelerinde yaşar. */}
   <Nav dil={dil} />
-  <main>
+  <main class={genis ? 'genis' : undefined}>
     <slot />
   </main>
   <footer>

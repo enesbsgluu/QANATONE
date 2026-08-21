@@ -22,6 +22,9 @@ body{background:var(--bg);color:var(--tx);
 .tag{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.18em;color:var(--red-soft);
   border:1px solid rgba(239,35,60,.45);border-radius:999px;padding:5px 12px}
 main{max-width:840px;margin:0 auto;padding:24px 20px 60px}
+/* genis gövde: kaynağın `.wrap` ölçüsü (index.html 207 + --max/--gut 64-65).
+   Yalnız `genis` bayrağını geçen sayfa alır. */
+main.genis{max-width:1280px;padding-left:clamp(20px,4vw,40px);padding-right:clamp(20px,4vw,40px)}
 section{margin-bottom:56px}
 h1{font-size:clamp(1.7rem,5.4vw,2.6rem);letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
 h2{font-size:clamp(1.15rem,3vw,1.45rem);letter-spacing:-.02em;margin-bottom:18px}

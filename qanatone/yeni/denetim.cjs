@@ -246,7 +246,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       if (!duz.includes(coz(pr.name))) kusur.push(`${dil}:${pr.slug}:ad`);
       if (!duz.includes(coz(D(pr.text, dil)))) kusur.push(`${dil}:${pr.slug}:metin`);
       for (const r of pr.res || [])
-        if (!duz.includes(coz(r.v))) kusur.push(`${dil}:${pr.slug}:rakam(${r.v})`);
+        /* `r.v` de yerellestirilmis olabilir ({tr,en}) — ham haliyle olcmek
+           YANLIS YESIL uretiyordu: sayfa `[object Object]` basiyordu, kural
+           da ayni dizeyi ariyor ve GECIYORDU (22 Agu, sadakat turunda
+           yakalandi). Olcum artik dil cozumunden sonra. */
+        if (!duz.includes(coz(D(r.v, dil))))
+          kusur.push(`${dil}:${pr.slug}:rakam(${D(r.v, dil)})`);
       if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/projeler/${pr.slug}`))
         kusur.push(`${dil}:${pr.slug}:bağlantı`);
     }
@@ -277,7 +282,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         if (!duz.includes(coz(gov))) kusur.push(`${dil}:${pr.slug}:blok-gövde(${bas})`);
       }
       for (const r of pr.res || [])
-        if (!duz.includes(coz(r.v))) kusur.push(`${dil}:${pr.slug}:rakam(${r.v})`);
+        /* `r.v` de yerellestirilmis olabilir ({tr,en}) — ham haliyle olcmek
+           YANLIS YESIL uretiyordu: sayfa `[object Object]` basiyordu, kural
+           da ayni dizeyi ariyor ve GECIYORDU (22 Agu, sadakat turunda
+           yakalandi). Olcum artik dil cozumunden sonra. */
+        if (!duz.includes(coz(D(r.v, dil))))
+          kusur.push(`${dil}:${pr.slug}:rakam(${D(r.v, dil)})`);
       for (const alan of ['role', 'dur', 'ch'])
         if (pr.meta && pr.meta[alan] && !duz.includes(coz(D(pr.meta[alan], dil))))
           kusur.push(`${dil}:${pr.slug}:künye(${alan})`);

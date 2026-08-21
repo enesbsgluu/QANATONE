@@ -19,12 +19,13 @@
    | tıklama      | `.mi:active .mi-t{scale(.985)}`                    | 2627        |
 
    SAPMALAR (madde 6 — hepsi bilinçli, hiçbiri göz kararı değil):
-   1) MASONRY YOK, CSS ızgara var. Masonry paketleme her kartın yüksekliğini
-      ÖLÇMEYİ gerektiriyor (kaynakta GSAP + layout()); dizin sayfasının ada
-      JS'i yok. 2026-08 "standart kart" kararı görsel bandını 220 px'e
-      sabitlediği için kalan yükseklik farkı yalnız metinden doğuyor —
-      paketlemenin kazancı o kararla zaten küçülmüştü. Sütun sayıları ve
-      boşluk kaynaktaki eşiklerin AYNISI.
+   1) MASONRY **KURULDU**, CSS sütunlarıyla ve ada JS'i olmadan (Enes,
+      22 Ağustos — sapma KAPANDI). Tek fark okuma sırası: `columns`
+      sütunları dengeler ve sıra sütun sütun iner, kaynak soldan sağa
+      dolduruyordu; Enes "dikey sıra sorun değil" dedi. Sütun eşikleri
+      artık KABIN genişliğinden okunuyor (kap sorgusu), kaynağın
+      `host.clientWidth`i gibi — ekran medya sorgusu 1440'ta 4 sütun
+      veriyordu, kaynak orada 3 sütun.
    2) İMLEÇ GÜDÜMLÜ PARILTI, KONİK KENAR IŞIĞI VE 3B EĞİM **KURULDU**
       (Enes, 21 Ağustos — sapma KAPANDI). Kaynak CSS 1701-1723, sürücü
       JS 10936-10974; sayılar (7° · %38 · sönüm .12/.20) kaynağınki.
@@ -32,21 +33,32 @@
       yazan, kaydırmada düzen okumayan ve `(hover:hover)`+`(pointer:fine)`
       + hareket azaltma kapısının ardında duran bir sürücü. Ayrıntı ve
       iki bilinçli sapma aşağıdaki `<script>` başlığında.
-   3) DİNLENME HÂLİ `grayscale(.22)` DEĞİL, DUOTONE (Enes, 21 Ağustos):
-      kart dinlenirken görsel kızıla düşer, hover'da gerçek renge döner.
-      Kaynakta da dinlenme hâli zaten kısık doygunluktu; bu onun daha
-      keskin hâli. Filtre yerine iki katman kullanıldı ve blok yalnız
-      (hover:hover) içinde: H14 mobil bağlamda `filter` kabul etmiyor,
-      kaynağın `grayscale(.22)`si oraya olduğu gibi taşınamazdı.
+   3) DİNLENME HÂLİ KAYNAĞIN GRİLEŞMESİ (Enes, 22 Ağustos — duotone GERİ
+      ALINDI). `filter:grayscale(.22) contrast(1.05)`, hover'da değişmez.
+      Duotone (kart kızıla düşsün, hover'da renge dönsün) benim kararımdı,
+      kaynakta yoktu ve altı kartı tek renge indiriyordu. Kalan tek sapma
+      filtrenin (hover:hover)+(pointer:fine) kapısında olması — H14 mobil
+      bağlamda `filter` kabul etmiyor.
    4) Kart hover'da kalkıyor (Enes, 21 Ağustos) — kaynakta kenarlık ve
       gölge var, kalkma yok.
    6) Kaynak ilk ÜÇ kartı eager yüklüyordu (10998); gerekçesi "kartlar
       sırayla geliyor" hissiydi ve o sıralı giriş bizde yok. Yalnız ilk
       kart eager + `fetchpriority="high"` (LCP adayı), gerisi tembel —
       G1 zaten eager kalan her görselden öncelik işareti istiyor.
-   5) Sektör filtre çipleri (`.mc`) taşınmadı — göç turunun kararı, gerekçe
-      aşağıda duruyordu: sektörler anahtarsız metinden türüyor, saf CSS
-      filtre panelden gelen yeni sektörde SESSİZCE bayatlar.
+   5) SEKTÖR FİLTRE ÇİPLERİ **KURULDU** (22 Ağustos — sapma KAPANDI).
+      Eski gerekçe "saf CSS filtre panelden gelen yeni sektörde sessizce
+      bayatlar" idi; çipler de süzme kuralları da artık AYNI derlemede
+      aynı veriden üretildiği için bayatlama yolu kapalı. Radyo + `:has()`,
+      sıfır JS. Lede cümlesindeki "Sektöre göre filtrele" de geri geldi.
+
+   7) GÖRSEL ODAĞI VE LOGO MUAMELESİ **KURULDU** (22 Ağustos — hiç
+      taşınmamıştı, yan yana karede yakalandı). Kaynak dört projeye slug
+      bazlı `object-position` veriyor (1223-1227: mercedes %4 · skyclinics
+      %10 · cmblu %12 · terawulf %70) ve Bab'ın kart LOGOSUNA `contain +
+      #000 + %9 dolgu` (1229-1231). Odak yüzdesi varyantın KIRPMASINA
+      pişiriliyor (varyant zaten kutunun oranında; CSS'te `object-position`
+      yazmak merkezden kırpılmış görüntüyü kaydırmaya çalışırdı), logo
+      muamelesi CSS'te ve `imgc` varlığından türüyor.
 
    Ölçüler künyeden — üreteç `gorsel-uret.cjs` yazar, bileşen ELLE ölçü
    yazmaz. Künyede olmayan proje görselsiz basılır. */
@@ -62,27 +74,88 @@ const sira = (icerik.projects || []).map((p: any) => p.slug);
 const projeler = (await getCollection('projeler')).map(e => e.data)
   .sort((a: any, b: any) => sira.indexOf(a.slug) - sira.indexOf(b.slug));
 const on = dil === 'en' ? '/en' : '';
+
+/* SEKTÖR = etiketin ilk parçası (kaynak 10978: `T(p.tag).split('·')[0]`).
+   Anahtarsız metinden türüyor — göç turunun çipleri bu yüzden atmıştı.
+   O itiraz burada KALKIYOR çünkü çipler de, süzme kuralları da AYNI
+   derlemede aynı veriden doğuyor: panelden yeni bir sektör gelirse çipi
+   ve kuralı bir sonraki derlemede kendiliğinden çıkar, sessiz bayatlama
+   yok. Ada JS'i de yok — süzme `:has()` + radyo ile saf CSS. */
+const kat = (p: any): string => String(T(p.tag, dil) || '').split('·')[0].trim();
+const sektorler: string[] = [...new Set(projeler.map(kat))].filter(Boolean) as string[];
+const sayim = (sk: string) => projeler.filter((p: any) => kat(p) === sk).length;
+
+/* Sütun tavanı kaynağın formülü (11074): her sütunda en az iki kart olsun
+   diye sütun sayısı hem genişliğe HEM kart sayısına bakar. Genişlik tarafı
+   kap sorgusuyla (--sut), sayı tarafı bu tavanla (--sut-kap) kuruluyor;
+   ikisinin küçüğü alınır. Süzme kart sayısını değiştirdiği için tavan da
+   çip başına yeniden yazılıyor — kaynak da her `layout()`ta yeniden
+   hesaplıyordu. */
+const tavan = (n: number) => (n < 2 ? 1 : Math.max(2, Math.ceil(n / 2)));
+/* Taban tavan da ÜRETİLMİŞ CSS'te, `style=""` niteliğinde DEĞİL: satır içi
+   stil her stylesheet kuralını yener, çip süzmesi tavanı hiç indiremezdi. */
+const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
+  + sektorler.map((sk, i) => {
+  const k = `#msf-${i + 1}:checked`;
+  return `.msf:has(${k})~.msn-kap .mi:not([data-k="${i + 1}"]){display:none}`
+       + `.msf:has(${k})~.msn-kap .msn{--sut-kap:${tavan(sayim(sk))}}`;
+}).join('');
 ---
+{/* Geri bağlantısı: kaynak 4746 `.pgback`, alt sayfalarda ana sayfaya. */}
+<a class="pgback" href={`${B}${on}/`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('Ana sayfa', 'Home')}</span>
+</a>
+
 <section class="giris">
-  <h1>{M('Tüm projeler.', 'All projects.')}
-    <span class="say">({projeler.length})</span></h1>
+  {/* Künye şeridi: kaynak 4748 `.shead .mono` — 26 px kızıl çizgi + ARŞİV.
+      `etiket` prop'u kabukta bilerek basılmıyor, sayfa etiketi gövdede yaşar. */}
+  <span class="mono">{M('Arşiv', 'Archive')}</span>
+  <h1>{M('Tüm projeler.', 'All projects.')}<span class="cnt">({projeler.length})</span></h1>
   <p class="lede">{M(
-    'Kurduğumuz her sistem burada. Birine gir; neyi çözdüğümüzü ve ne çıktığını gör.',
-    'Every system we built. Open one, see what it solved and what came out.')}</p>
+    'Kurduğumuz her sistem burada. Sektöre göre filtrele, birine gir; neyi çözdüğümüzü ve ne çıktığını gör.',
+    'Every system we built. Filter by sector, open one, see what it solved and what came out.')}</p>
 </section>
 
+{/* SEKTÖR ÇİPLERİ — kaynak 4752 `.msf`/`.mc`, ada JS'i SIFIR.
+    Radyo + `:has()`; kartlar `data-k` taşır, kurallar derlemede üretilir. */}
+<div class="msf">
+  <input type="radio" name="msf" id="msf-0" checked />
+  <label class="mc" for="msf-0">{M('Tümü', 'All')}<em>{projeler.length}</em></label>
+  {sektorler.map((sk: string, i: number) => (<>
+    <input type="radio" name="msf" id={`msf-${i + 1}`} />
+    <label class="mc" for={`msf-${i + 1}`}>{sk}<em>{sayim(sk)}</em></label>
+  </>))}
+</div>
+
+<div class="msn-kap">
 <div class="msn">
   {projeler.map((p: any, i: number) => { const g: any = gorselMap.get(p.slug); return (
-    <a class="mi" href={`${B}${on}/projeler/${p.slug}`}>
+    <a class="mi" data-k={String(sektorler.indexOf(kat(p)) + 1)}
+      href={`${B}${on}/projeler/${p.slug}`}>
       <span class="mi-t">
-        <span class="mv">
-          {g && <img src={`${B}/img/pk/${p.slug}.webp`}
-            srcset={`${B}/img/pk/${p.slug}-m.webp ${g.kartm.w}w, ${B}/img/pk/${p.slug}.webp ${g.kart.w}w`}
-            sizes="(min-width:1240px) 263px, (min-width:920px) 350px, (min-width:600px) 45vw, 90vw"
-            width={g.kart.w} height={g.kart.h}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            fetchpriority={i === 0 ? 'high' : undefined}
-            decoding="async" alt="" />}
+        <span class="mv" data-logo={g?.logo ? '' : undefined}>
+          {/* İKİ VARYANT AYNI `srcset`e KONMAZ — oranları farklı.
+              `w` tanımlayıcısı bütün adayların AYNI görselin farklı boyu
+              olduğunu varsayar; burada masaüstü kutusu 385x220 (1,75) ve
+              mobil kutusu 350x180 (1,94). Tek listeye konunca tarayıcı
+              1440 ekranda 385 px'lik kutu için 700w mobil dosyayı seçiyordu
+              ve `object-fit:cover` aradaki oran farkını KENARDAN kırparak
+              kapatıyordu — kart görselleri kaynaktakinden belirgin yakın
+              duruyordu (22 Ağu, yan yana karede yakalandı). `picture` +
+              `media` her kırılıma kendi oranını verir; bento da böyle. */}
+          {g && (
+            <picture>
+              <source media="(min-width:601px)" srcset={`${B}/img/pk/${p.slug}.webp`}
+                width={g.kart.w} height={g.kart.h} />
+              <img src={`${B}/img/pk/${p.slug}-m.webp`}
+                width={g.kartm.w} height={g.kartm.h}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={i === 0 ? 'high' : undefined}
+                decoding="async" alt="" />
+            </picture>
+          )}
           {!g && <span class="mk">{p.name.slice(0, 2).toUpperCase()}</span>}
           <span class="yr">{p.year}</span>
         </span>
@@ -92,7 +165,7 @@ const on = dil === 'en' ? '/en' : '';
           <p>{T(p.text, dil)}</p>
           {p.res?.length > 0 && <span class="mr">
             {p.res.slice(0, 3).map((r: any) => (
-              <span><b>{r.v}</b><em>{T(r.l, dil)}</em></span>
+              <span><b>{T(r.v, dil)}</b><em>{T(r.l, dil)}</em></span>
             ))}
           </span>}
           <span class="mgo"><span>{M('Projeyi gör', 'View project')}</span>
@@ -104,6 +177,11 @@ const on = dil === 'en' ? '/en' : '';
     </a>
   ); })}
 </div>
+</div>
+{/* Üretilmiş süzme kuralları: sektör sayısı veriden geldiği için sabit
+    yazılamaz. `is:inline` — kapsam niteliği almaz, ki kapsamlı CSS'in
+    yazdığı `.mi`/`.msn` seçicileri eşleşsin. */}
+<style is:inline set:html={suzKural}></style>
 
 <script>
   /* İMLEÇ GÜDÜMLÜ EĞİM + PARILTI — /projeler dizini.
@@ -184,21 +262,68 @@ const on = dil === 'en' ? '/en' : '';
 </script>
 
 <style>
-  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  /* ---- BAŞ: kaynağın `.shead` ailesi (365-373) birebir ---- */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    font-family: var(--f-tek); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--tx3); }
+  .giris .mono::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .giris h1 { font-size: clamp(2.3rem, 5.6vw, 4.15rem); margin-bottom: 18px; }
+  .cnt { font-family: var(--f-tek); font-size: .9rem; color: var(--tx4);
+    vertical-align: super; margin-left: 10px; letter-spacing: 0; }
+  .giris .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--tx2);
+    font-weight: 400; line-height: 1.7; max-width: 62ch; }
 
-  /* ---- IZGARA: kaynaktaki eşikler birebir (11059 · 11073) ---- */
-  .msn { display: grid; grid-template-columns: 1fr; gap: 14px;
-    align-items: start; }
-  @media (min-width: 600px)  { .msn { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 700px)  { .msn { gap: 22px; } }
-  @media (min-width: 920px)  { .msn { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @media (min-width: 1240px) { .msn { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  /* ---- SEKTÖR ÇİPLERİ: kaynak 1679-1687, radyo saklı ---- */
+  .msf { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: clamp(22px, 3vw, 36px); }
+  .msf input { position: absolute; width: 1px; height: 1px; opacity: 0;
+    pointer-events: none; }
+  .mc { display: inline-flex; align-items: center; gap: 9px; padding: 9px 16px;
+    border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.03);
+    color: var(--tx3); font-size: .82rem; cursor: pointer; white-space: nowrap; }
+  .msf input:checked + .mc { background: rgba(239,35,60,.12);
+    border-color: rgba(239,35,60,.42); color: #fff; }
+  .msf input:focus-visible + .mc { outline: 2px solid var(--red); outline-offset: 2px; }
+  .mc em { font-style: normal; font-family: var(--f-tek); font-size: 9.5px; color: var(--tx4); }
+  .msf input:checked + .mc em { color: var(--red-soft); }
 
-  .mi { display: block; color: inherit; min-width: 0; text-decoration: none; }
+  /* ---- MASONRY: CSS sütunları, ada JS'i SIFIR (Enes, 22 Ağu) ----
+     Kaynak yerleşimi JS'ti (11055-11095): her kartın yüksekliğini ölçüp en
+     kısa sütuna koyuyordu. Enes "CSS sütun özelliğiyle JS'siz yapılabilir,
+     dikey sıra sorun değil" dedi — tek fark bu: `columns` sütunları
+     DENGELER ve okuma sırası sütun sütun iner, kaynak ise soldan sağa
+     dolduruyordu. Paketlemenin görsel sonucu (kartlar komşusunun boşluğuna
+     otursun) aynı.
+
+     EŞİKLER KAPTAN OKUNUR, EKRANDAN DEĞİL. Kaynak `host.clientWidth`e
+     bakıyor (11056); göç turunda bunlar ekran medya sorgusuna çevrilmişti
+     ve 1440 ekranda 4 sütun çıkıyordu — kaynakta 3. (Kaynağın kabı
+     `.wrap` max 1280 − 2×40 oluk = en fazla 1200 px, yani 1240 eşiği bu
+     sayfada hiç ateşlenmiyor; 4 sütun dalı kaynakta ÖLÜ KOD.) Kap sorgusu
+     `host.clientWidth` ile aynı şeyi ölçüyor.
+
+     Oluk kaynağın kendi kuralı: ekran <700 ise 14, değilse 22 (11059) —
+     o taraf gerçekten EKRANA bakıyor, olduğu gibi bırakıldı. */
+  .msn-kap { container-type: inline-size; }
+  .msn { --sut: 1; columns: min(var(--sut), var(--sut-kap, 9));
+    column-gap: 14px; }
+  @container (min-width: 600px)  { .msn { --sut: 2; } }
+  @container (min-width: 920px)  { .msn { --sut: 3; } }
+  @container (min-width: 1240px) { .msn { --sut: 4; } }
+  @media (min-width: 700px) { .msn { column-gap: 22px; } }
+
+  .mi { display: block; color: inherit; min-width: 0; text-decoration: none;
+    break-inside: avoid; margin-bottom: 14px; }
+  @media (min-width: 700px) { .mi { margin-bottom: 22px; } }
   /* kartın kendisi <a>: kabuğun genel bağlantı altı çizgisi bütün kart
      metnine biniyordu (ad, anlatım, rakam kutuları dahil). */
   .mi :where(h3, p, span, b, em) { text-decoration: none; }
-  .mi-t { position: relative; display: flex; flex-direction: column; height: 100%;
+  /* `height:100%` kalktı: ızgara hücresini doldurmak içindi, sütun
+     masonry'sinde kart kendi içeriği kadar olur (kaynak da öyle). */
+  .mi-t { position: relative; display: flex; flex-direction: column;
     border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
     background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.006)); }
 
@@ -207,6 +332,14 @@ const on = dil === 'en' ? '/en' : '';
     background: radial-gradient(120% 100% at 28% 0%, rgba(239,35,60,.17), transparent 62%),
       linear-gradient(158deg, #150609, #0a0a0b 64%); }
   @media (max-width: 600px) { .mv { height: 180px; } }
+  .mv picture { display: block; height: 100%; }
+  /* LOGO KARTI — kaynak 1229-1231. `imgc` tasiyan projede kart gorseli
+     logodur: contain + saf siyah zemin + %9 dolgu, "pencere oranı ne
+     olursa olsun logo tam, ortalı ve tutarlı ölçekte". Kaynak bunu slug
+     yazarak yapiyor; burada `imgc` VARLIGINDAN turuyor — yeni bir logo
+     karti panelden gelirse kural kendiliginden uygulanir. */
+  .mv[data-logo] img { object-fit: contain; background: #000;
+    padding: 9%; box-sizing: border-box; }
   .mv img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .mv .mk { position: absolute; inset: 0; display: grid; place-items: center;
     font-family: var(--f-baslik); font-size: clamp(2.4rem, 4.6vw, 3.6rem);
@@ -233,11 +366,9 @@ const on = dil === 'en' ? '/en' : '';
     text-transform: uppercase; color: var(--tx3); }
   .mgo svg { width: 13px; height: 13px; }
 
-  /* ---- HOVER + DUOTONE — yalnız imleçli cihazda ----
-     Kaynağın dinlenme filtresi (`grayscale(.22)`) buraya olduğu gibi
-     taşınamazdı: H14 mobil bağlamda `filter` kabul etmiyor. Yerine iki
-     katman ve tek `--k` değişkeni; dokunmatikte hiç kurulmuyor, orada
-     kart zaten hep "dinlenir" durumda olur ve hepsi kızıl kalırdı. */
+  /* ---- İMLEÇLİ CİHAZ BLOĞU — hover, eğim, parıltı, dinlenme filtresi ----
+     Dokunmatikte hiçbiri kurulmaz: H14 mobil bağlamda `filter` ve pahalı
+     katman kabul etmiyor, hover'sız cihazda üçünün de karşılığı yok. */
   @media (hover: hover) and (pointer: fine) {
     /* İMLEÇ GÜDÜMLÜ ÜÇ KATMAN — kaynak CSS 1701-1723, sürücü JS 10936-10974.
        `transform` artık BETİĞİN: eğim her karede oradan yazılıyor, bu yüzden
@@ -281,14 +412,17 @@ const on = dil === 'en' ? '/en' : '';
       opacity: 0; transition: opacity .5s var(--e); }
     .mi:hover .mi-t::after { opacity: 1; }
 
-    .mv { --k: 1; isolation: isolate; }
-    /* duotone alt degradenin ALTINDA: `color` harmanı yalnız fotoğrafı
-       görsün, kararma degradesini değil (z 1 < 2). */
-    .mv::before { content: ''; position: absolute; inset: 0; z-index: 1;
-      pointer-events: none; background: var(--red); mix-blend-mode: color;
-      opacity: var(--k); transition: opacity .45s var(--e); }
-    .mi:hover .mv { --k: 0; }
-    .mv img { transition: transform .7s var(--e); }
+    /* DİNLENME HÂLİ — kaynağın grileşmesi geri geldi (Enes, 22 Ağu).
+       Duotone benim kararımdı ve kaynakta yoktu: kartların hepsi kızıla
+       düşüyor, fotoğraf kimliğini kaybediyordu. Kaynak (1734) tek satır:
+       `filter:grayscale(.22) contrast(1.05)` — ve hover'da DEĞİŞMİYOR,
+       yalnız ölçek büyüyor. Aynen öyle kuruldu.
+       TEK SAPMA: filtre bu bloğun içinde, yani `(hover:hover)`+
+       `(pointer:fine)` kapısının ardında. Kaynak onu dokunmatikte de
+       uyguluyordu; H14/kural 109 mobil bağlamda `filter`i reddediyor
+       (19 Ağu Enes kararı). Telefonda kart tam renkte durur. */
+    .mv img { filter: grayscale(.22) contrast(1.05);
+      transition: transform .7s var(--e); }
     .mi:hover .mv img { transform: scale(1.05); }
     .mgo { transition: color .3s var(--e); }
     .mgo svg { transition: transform .3s var(--e); }
@@ -300,7 +434,7 @@ const on = dil === 'en' ? '/en' : '';
      BETİKTEN geliyor ve betik de aynı sorguyla kapılı — burada kalan iş
      dönüşümü sıfırlamak ve iki imleç katmanını susturmak. */
   @media (prefers-reduced-motion: reduce) {
-    .mi-t, .mv img, .mv::before, .mgo, .mgo svg { transition: none; }
+    .mi-t, .mv img, .mgo, .mgo svg { transition: none; }
     .mi-t::before, .mi-t::after { transition: none; }
     .mi-t { transform: none; }
     .mi:hover .mi-t { translate: none; }
