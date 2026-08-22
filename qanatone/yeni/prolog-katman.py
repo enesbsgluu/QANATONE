@@ -60,8 +60,12 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 KOK   = os.path.dirname(os.path.abspath(__file__))
-HAM   = os.path.join(KOK, "..", "gorsel-kaynak", "prolog", "dag-ham.jpg")
-DER   = os.path.join(KOK, "..", "gorsel-kaynak", "prolog", "dag-derinlik.png")
+# AYNALANMIS KAYNAK (23 Agu). Logo ile fotograf geometrisi olcumle
+# cakismiyordu: nehir logoda SAGA akip kuyruga donusuyor, fotografta
+# SOLA akiyordu. Sahne aynalandi; orijinal iki dosya yerinde duruyor
+# (dag-ham.jpg / dag-derinlik.png) ki karar geri alinabilsin.
+HAM   = os.path.join(KOK, "..", "gorsel-kaynak", "prolog", "dag-ham-ayna.jpg")
+DER   = os.path.join(KOK, "..", "gorsel-kaynak", "prolog", "dag-derinlik-ayna.png")
 CIK   = os.path.join(KOK, "public", "img", "prolog")
 SAHNE = os.path.join(KOK, "src", "prolog", "sahne.json")
 KUNYE = os.path.join(KOK, "src", "prolog", "kunye.json")
