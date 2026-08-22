@@ -29,6 +29,7 @@
    iki yol AYNI yedi dosyayi kullanir, ikisi ayni anda inmez.
    ============================================================ */
 import VERI from './veri.json';
+import { yedek, acildi } from './tani';
 
 /* Cumle dokusu: tek satir, gercek sinirlardan olculmus tuval. */
 async function sozBitmap(metin: string): Promise<ImageBitmap | null> {
@@ -70,8 +71,11 @@ async function sozBitmap(metin: string): Promise<ImageBitmap | null> {
     c.fillStyle = '#fff';
     satir.forEach((x, i) => c.fillText(x, pd + sol, pd + ust + adim * i));
     return await createImageBitmap(t);
-  } catch {
-    return null;                       /* cumle 3B'de cikmaz, sahne kalir */
+  } catch (e) {
+    /* DUSUS DEGIL: sahne kalir, yalniz cumle tuvale cizilmez. Yine de
+       sessiz kalmiyor — "cumle kayboldu" ayri bir belirti. */
+    console.warn('[prolog] cumle dokusu cikmadi, sahne devam ediyor', e);
+    return null;
   }
 }
 
@@ -81,7 +85,13 @@ export async function baslat(bolum: HTMLElement) {
   const tuval = document.createElement('canvas');
   tuval.className = 'pr-tuval';
   const yapis = bolum.querySelector('.pr-yapis');
-  if (!yapis || !(tuval as any).transferControlToOffscreen || typeof Worker === 'undefined') {
+  /* UC AYRI KAPI, UC AYRI AD. Eskiden tek `if` idi ve hangisinin
+     kapandigi hicbir yere yazilmiyordu — Safari ile Chrome'u ayirt
+     etmeyi imkansiz kilan sey buydu. */
+  if (!yapis) { yedek('sahne-yapisi-yok'); geriDon(); return; }
+  if (typeof Worker === 'undefined') { yedek('worker-yok'); geriDon(); return; }
+  if (!(tuval as any).transferControlToOffscreen) {
+    yedek('offscreen-yok', `OffscreenCanvas=${typeof OffscreenCanvas}`);
     geriDon();
     return;
   }
@@ -92,7 +102,10 @@ export async function baslat(bolum: HTMLElement) {
   const varyant = matchMedia('(max-width: 760px)').matches ? 'mobil' : 'masaustu';
   const dpr = Math.min(window.devicePixelRatio || 1, (VERI as any).dpr_tavan);
   const r = tuval.getBoundingClientRect();
-  if (r.width < 1 || r.height < 1) { tuval.remove(); geriDon(); return; }
+  if (r.width < 1 || r.height < 1) {
+    yedek('tuval-olcusuz', `${r.width}x${r.height}`);
+    tuval.remove(); geriDon(); return;
+  }
 
   try { await (document as any).fonts?.ready; } catch { /* yoksa sistem fontu */ }
   const soz = await sozBitmap((bolum.querySelector('.pr-soz')!.textContent || '').trim());
@@ -149,8 +162,16 @@ export async function baslat(bolum: HTMLElement) {
   }
 
   isci.onmessage = (e) => {
-    if (e.data.tip === 'hazir') { kk.add('pr-gl-hazir'); baglan(); }
-    else if (e.data.tip === 'hata') { console.warn('[prolog] 3B kurulamadi', e.data.mesaj); dur(); }
+    if (e.data.tip === 'hazir') { kk.add('pr-gl-hazir'); acildi(); baglan(); }
+    else if (e.data.tip === 'hata') { yedek('isci-hatasi', e.data.mesaj); dur(); }
   };
-  isci.onerror = () => dur();
+  /* EN SESSIZ DALDI. Iscinin KENDISI yuklenemezse (404, yanlis MIME,
+     CSP `worker-src`, module worker desteklenmiyor) buraya duser ve
+     eskiden hicbir iz kalmazdi. `filename` ve `message` yaziliyor:
+     yol hatasi mi, ayrıştırma hatasi mi, tek bakista ayrilsin. */
+  isci.onerror = (e) => {
+    const h = e as ErrorEvent;
+    yedek('isci-yuklenmedi', `${h.message || 'onerror'} @ ${h.filename || isci.toString()}`);
+    dur();
+  };
 }
