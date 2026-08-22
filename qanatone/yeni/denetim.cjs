@@ -102,9 +102,19 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
    Tavan 10 KB (talimat: içerikte 0 hedef, kaçınılmazsa <10 KB; buradaki
    tek JS gezinme prefetch'i). Tavana yaklaşan her artış bilinçli olmalı. */
 {
+  /* ANA SAYFAYA AYRI TAVAN (22 Agu, prolog 1. durak; Anayasa madde 3'un
+     "J1 bilincli guncellenir, sessizce gevsetilmez" sarti):
+     ana sayfa 15 sahne + perde + prolog tasiyor, obur 60 sayfa en cok
+     birkac ada; 10 KB tavani ikisini ayni kefeye koyuyordu.
+     OLCULDU: ana sayfa prolog ONCESI 10.051 B · prolog adasi 326 B
+     (minify edilmis) · toplam 10.377 B. Ana sayfa tavani 11 KB —
+     kalan pay ~889 B, yani bir sonraki ada da bilincli karar olacak.
+     OBUR 60 SAYFANIN TAVANI DEGISMEDI. Anayasanin istedigi "ana
+     sayfada sahne bazli butce raporu" hala acik kalem. */
   const TAVAN = 10 * 1024;
+  const TAVAN_ANA = 11 * 1024;
   const kusur = [];
-  let enBuyuk = 0;
+  let enBuyuk = 0, anaToplam = 0;
   for (const p of sayfalar) {
     let toplam = 0;
     const h = oku(p);
@@ -115,11 +125,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     }
     for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
       if (!/application\/ld\+json/.test(m[1])) toplam += Buffer.byteLength(m[2]);
-    if (toplam > TAVAN) kusur.push(rel(p) + ':' + toplam + 'B');
-    enBuyuk = Math.max(enBuyuk, toplam);
+    const anaMi = /^(index|en[\\/]index)[.]html$/.test(rel(p));
+    if (anaMi) anaToplam = toplam;
+    if (toplam > (anaMi ? TAVAN_ANA : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
+    if (!anaMi) enBuyuk = Math.max(enBuyuk, toplam);
   }
-  ol(`J1 · sayfa başına JS ≤ ${TAVAN} B`, kusur.length === 0,
-     kusur.slice(0, 3).join(' ') || `en büyük ${enBuyuk} B`);
+  ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B · öbür sayfalar ≤ ${TAVAN} B`,
+     kusur.length === 0,
+     kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B`);
 }
 
 /* F1c · font kapsamı: sayfalarda GEÇEN her kod noktasının bir
@@ -593,8 +606,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        BİLEREK girmedi: H2 "içerik görünür doğar"ı mobil menü linklerine
        uygulamak yanlış olur (kapalı katmanın içeriği görünmez doğar,
        menü açılınca mmrow'la gelir — kaynağın kendi davranışı). */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|ak[a-z]|nv-)/; /* + süs katmanı + ak demo ailesi + global katman */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|pr-|ak[a-z]|nv-)/; /* + süs + ak demo ailesi + global katman + PROLOG (pr-) */
 
+    /* `pr-` ONEKI (22 Agu, prolog 1. durak): Anayasa madde 3'un ongordugu
+       genisletme — "H1 yeni sahne onekleriyle genisletilir", ayri ve acik
+       mesajli commit'le. Prolog KENDI sahne ailesi: alti katman + cumle +
+       "Gec" dugmesi. Kural GEVSEMIYOR, listeye bir sahne ekleniyor; onek
+       disindaki hicbir secici hala hareket alamaz. Hata enjekte edilerek
+       dogrulandi (bkz. tur raporu): sinif `.pr-kat` yerine `.prkat`
+       yazilinca kural KIRMIZI donuyor.
     /* H1 · hareket bütçesi: animation/transition yalnız sahne/süs
        öneklerinde ve etkileşim geri bildiriminde.
        BİLİNÇLİ İSTİSNA (kurala yazıldı): .dugme üzerindeki `transition`
@@ -1441,6 +1461,166 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
          yerel && dosyalar, `${yuzler.length} yüz`);
     }
   }
+}
+
+
+/* ============================================================
+   22 AGU · /hizmetler YAN YANA TURUNUN KURALLARI
+   Dordu de bu turda GERCEKTEN kirmizi donen kusurlardan dogdu;
+   hicbiri "olmasi guzel" degil, hepsi olculmus bir sapmanin bekcisi.
+   ============================================================ */
+
+/* R9 · TOKEN SADAKATI. Bu turda dort taban token ve govde tipografisi
+   kaynaktan sapmis bulundu (--tx #f5f5f5 yerine #ffffff, --tx2 .72
+   yerine .62, --line .1 yerine .08, --card #101010 yerine #0D0D0D,
+   govde 16px/1.65 yerine 16,5px/1.66) ve --card2 HIC tanimlanmamisti
+   (ProjeGovde `.step:hover`ta onu cagiriyor, kural sessizce oluydu).
+   Bunlar tek sayfanin degil BUTUN kabugun kusuruydu; kural kaynagi
+   TARAYIP kiyasliyor, sabit liste tutmuyor. */
+{
+  const kaynak = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  const kokBlok = (metin) => {
+    const i = metin.indexOf(':root{');
+    return i < 0 ? '' : metin.slice(i, metin.indexOf('}', i));
+  };
+  /* Kaynak :root'u yorumlu; deger okunurken yorumlar ayiklanir
+     (kural yazimi dersi: yorum icindeki metin deger sanilmasin). */
+  const temizle = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '');
+  const tokenler = (t) => {
+    const o = {};
+    for (const m of temizle(t).matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+)/g))
+      o[m[1]] = m[2].trim().toLowerCase().replace(/\s+/g, '');
+    return o;
+  };
+  const K = tokenler(kokBlok(kaynak));
+  const stil = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'temel.css'), 'utf8');
+  const Y = tokenler(kokBlok(stil));
+  /* AILE ADLARI BILINCLI FARKLI (Anayasa 1.4: Inter/Manrope EMEKLI) —
+     kiyas yalnizca RENK ve OLCU tokenlarinda. */
+  const BAKILAN = ['bg', 'ink', 'card', 'card2', 'line', 'line2', 'red', 'red-soft',
+                   'red-dim', 'red-glow', 'tx', 'tx2', 'tx3', 'tx4', 'gut', 'e', 'e2'];
+  const kusur = [];
+  for (const t of BAKILAN) {
+    if (K[t] === undefined) continue;              /* kaynakta yoksa konu degil */
+    if (Y[t] === undefined) { kusur.push('--' + t + ':TANIMSIZ'); continue; }
+    /* BICIM DEGIL DEGER: `.50` ile `.5`, `#ffffff` ile `#fff` ayni
+       renktir. Kural yazimi dersi — bicim farki kirmizi donerse kural
+       gurultu uretir ve bir sure sonra kimse bakmaz. */
+    const denk = (v) => v
+      .replace(/#([0-9a-f])\1([0-9a-f])\2([0-9a-f])\3\b/g, '#$1$2$3')
+      .replace(/(^|[^0-9])0?\.([0-9]*?)0+(?=[^0-9]|$)/g, '$1.$2')
+      .replace(/(^|[^0-9])\.([0-9]+)/g, '$10.$2');
+    const a = denk(K[t]), b = denk(Y[t]);
+    if (a !== b) kusur.push('--' + t + ': kaynak ' + K[t] + ' ≠ yeni ' + Y[t]);
+  }
+  /* govde tipografisi: kaynak 198-200 */
+  const gov = (stil.match(/body\{[^}]*\}/) || [''])[0].replace(/\s+/g, '');
+  if (!/font-size:16\.5px/.test(gov)) kusur.push('body font-size ≠ 16.5px');
+  if (!/line-height:1\.66/.test(gov)) kusur.push('body line-height ≠ 1.66');
+  const bas = (stil.match(/h1,h2,h3,h4,h5\{[^}]*\}/) || [''])[0].replace(/\s+/g, '');
+  if (!/letter-spacing:-\.045em/.test(bas)) kusur.push('baslik letter-spacing ≠ -.045em');
+  if (!/line-height:1\.04/.test(bas)) kusur.push('baslik line-height ≠ 1.04');
+  ol('R9 · token sadakati: kabuk :root kaynagin :root\'uyla ayni',
+     kusur.length === 0, kusur.slice(0, 4).join(' · ') || BAKILAN.length + ' token');
+}
+
+/* R10 · /hizmetler BENTO. Goc turu bu sayfayi tek sutun listeye
+   sadelestirmisti; kaynak dort sutunluk bir bento (1169-1181) ve her
+   kartta numara + ikon + baslik + metin + "Incele" var, tam BIR kart
+   vurgulu (panelin `hi` bayragi). Kural sayfayi HAM HTML'den olcer. */
+{
+  const kusur = [];
+  for (const rota of ['hizmetler/index.html', 'en/hizmetler/index.html']) {
+    const dosya = path.join(KOK, rota);
+    if (!fs.existsSync(dosya)) { kusur.push(rota + ':sayfa-yok'); continue; }
+    const h = oku(dosya);
+    if (!/class="[^"]*\bbento\b/.test(h)) kusur.push(rota + ':bento-yok');
+    const kart = (h.match(/class="[^"]*\bcard\b[^"]*"/g) || []).length;
+    if (kart !== 9) kusur.push(rota + ':kart=' + kart);
+    for (const [ad, re] of [['num', /class="num"/g], ['ic', /class="ic"/g],
+                            ['svgo', /class="svgo"/g]]) {
+      const n = (h.match(re) || []).length;
+      if (n !== 9) kusur.push(rota + ':' + ad + '=' + n);
+    }
+    const vurgu = (h.match(/<li class="[^"]*\bhi\b/g) || []).length;
+    if (vurgu !== 1) kusur.push(rota + ':vurgulu-kart=' + vurgu);
+    if (!/class="pgback"/.test(h)) kusur.push(rota + ':pgback-yok');
+    if (!/class="mono"/.test(h)) kusur.push(rota + ':kunye-seridi-yok');
+    if (!/class="cnt"/.test(h)) kusur.push(rota + ':sayac-yok');
+    if (!/<main class="genis"/.test(h)) kusur.push(rota + ':govde-sutunu-dar');
+  }
+  ol('R10 · /hizmetler: dokuz bento karti + kunye + tek vurgulu kart',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R11 · HIZMET DETAYI. Ayni turda olculen dort eksik: geri bagi,
+   kunye seridi (`#sdTag`), kaynagin ALTI genisleyen karti (`sdGrid`
+   7586-7606) ve IKI dugmeli cagri (`sdCta` 7608-7621). Uc vurusun
+   sahneden SONRA gelmesi de kaynagin sirasi (SDT haritasi). */
+{
+  const kusur = [];
+  const detaylar = sayfalar.filter(p => /(^|\/)(en\/)?hizmet\/[^/]+\/index\.html$/
+    .test(rel(p)));
+  if (detaylar.length !== 18) kusur.push('detay-sayfasi=' + detaylar.length);
+  for (const p of detaylar) {
+    const h = oku(p), r = rel(p);
+    if (!/class="pgback"/.test(h)) kusur.push(r + ':pgback-yok');
+    if (!/class="mono"/.test(h)) kusur.push(r + ':kunye-yok');
+    if (!/<main class="genis"/.test(h)) kusur.push(r + ':govde-sutunu-dar');
+    const xc = (h.match(/<details class="xc"/g) || []).length;
+    if (xc !== 6) kusur.push(r + ':genisleyen-kart=' + xc);
+    /* Sinif GOVDESINDE aranir, tam esitlikle degil: kap `sdsec sdhits`
+       tasiyor ve Astro kapsam nitelikleri de ekleniyor. */
+    if (!/class="[^"]*\bsdhits\b/.test(h)) kusur.push(r + ':uc-vurus-yok');
+    /* SIRA: sahne bloklari uc vurustan ONCE. Sahnesiz hizmet yok. */
+    const iV = h.search(/class="[^"]*\bsdhits\b/);
+    const iS = h.search(/class="(hn|ak|cl|ai|st|qt|mk)[a-z-]*sahne|class="[a-z]*stage/);
+    if (iV > 0 && iS > 0 && iS > iV) kusur.push(r + ':vurus-sahneden-once');
+    const dugme = (h.match(/class="[^"]*\bsdbtns\b[\s\S]{0,3000}?<\/section>/) || [''])[0];
+    if ((dugme.match(/<a\s/g) || []).length < 2) kusur.push(r + ':cagri-tek-dugme');
+  }
+  ol('R11 · hizmet detayi: geri bagi + kunye + alti genisleyen kart + iki dugme',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+/* R12 · PROLOG SOZLESMESI (CODE-TALIMATI-PROLOG-1 kapisi).
+   Sozlesme metinden degil CIKTIDAN olculuyor: alti katman ve hepsi
+   TEMBEL · cumle ham HTML'de · prologun icinde h1 YOK (bot govdeyi
+   gorur) · her katmanin mobil kaynagi var (vadi bilincli haric) ·
+   hareket sadece transform (opacity/filter/blur yok) · hareket azaltma
+   blogu hareketle ayni ozgullukte. */
+{
+  const kusur = [];
+  const h = oku(path.join(KOK, 'index.html'));
+  const sahne = (h.match(/<section class="pr"[\s\S]*?<\/section>/) || [''])[0];
+  if (!sahne) kusur.push('sahne-yok');
+  else {
+    const img = sahne.match(/<img [^>]*class="pr-kat[^>]*>/g) || [];
+    if (img.length !== 6) kusur.push('katman=' + img.length);
+    const tembelDegil = img.filter(t => !/loading="lazy"/.test(t)).length;
+    if (tembelDegil) kusur.push('tembel-olmayan-katman=' + tembelDegil);
+    const olcusuz = img.filter(t => !/width="\d+"/.test(t) || !/height="\d+"/.test(t)).length;
+    if (olcusuz) kusur.push('olcusuz-katman=' + olcusuz);   /* CLS 0 sarti */
+    const mobil = (sahne.match(/<source media="\(max-width: 760px\)"/g) || []).length;
+    if (mobil !== 5) kusur.push('mobil-kaynak=' + mobil);
+    if (!/class="pr-soz">[^<]{6,}/.test(sahne)) kusur.push('cumle-ham-html-de-yok');
+    if (/<h1/.test(sahne)) kusur.push('prologun-icinde-h1');
+    if (!/class="pr-gec"/.test(sahne)) kusur.push('gec-dugmesi-yok');
+  }
+  if (!/<h1/.test(h.replace(/<section class="pr"[\s\S]*?<\/section>/, '')))
+    kusur.push('govdede-h1-yok');
+  /* CSS tarafı: yalniz transform, ve durdurma kurali ayni ozgullukte */
+  const pcss = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'prolog.css'), 'utf8');
+  const kareler = pcss.match(/@keyframes pr-[a-z]+\s*\{[\s\S]*?\}\s*\}/g) || [];
+  for (const k of kareler)
+    if (/opacity|filter|blur|width|height|top|left/.test(k.replace(/@keyframes[^{]*/, '')))
+      kusur.push('keyframe-transform-disi:' + (k.match(/pr-[a-z]+/) || [''])[0]);
+  if (kareler.length !== 7) kusur.push('keyframe=' + kareler.length);
+  const azalt = (pcss.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\n\}/) || [''])[0];
+  if (!/\.pr-kat\s*\{[^}]*animation:\s*none/.test(azalt)) kusur.push('azaltma-katmani-durdurmuyor');
+  if (!/\.pr-soz\s*\{[^}]*animation:\s*none/.test(azalt)) kusur.push('azaltma-cumleyi-durdurmuyor');
+  ol('R12 · prolog sozlesmesi: 6 tembel katman · cumle HTML\'de · h1 govdede',
+     kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
