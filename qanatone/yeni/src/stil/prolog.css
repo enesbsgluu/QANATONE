@@ -1,0 +1,191 @@
+/* ============================================================
+   PROLOG · 1. DURAK — DAĞ  (CODE-TALİMATI-PROLOG-1, 21 Ağu)
+   Enes'in seçimi: B yaklaşımı (katmanlı derinlik) ile başla, sonra
+   A'ya (derinlik haritası + gerçek 3B) yükselt. İkisi AYNI katman
+   yapısını kullanır — bu dosya o yapının CSS tarafı.
+
+   KATMAN AYRIMI ELLE MASKELENMEDİ. `prolog-derinlik.py` Depth Anything
+   V2 ile bir derinlik haritası çıkardı (`gorsel-kaynak/prolog/
+   dag-derinlik.png`, 16-bit, saklandı — A yaklaşımında aynı harita
+   `displacementMap` olacak), `prolog-katman.py` eşiklerden kesti.
+
+   HIZLAR (talimat): gök .05 · zirve .15 · dağlar .30/.32 · vadi .55 ·
+   nehir .60. Kamera aşağı iner, yakın katman hızlı kayar.
+
+   SÜRÜCÜ: CSS kaydırma güdümlü (`view-timeline` + `animation-timeline`),
+   rAF DEĞİL. CSS animasyonu ana iş parçacığının dışında koşar; sayfa
+   yüklenirken kare düşürmez. Yarıda kesilme, ters yöne kaydırmada
+   mevcut değerden devam ve geri sarma sürücünün kendisinden gelir.
+
+   ATA DÜĞÜMDE İLERLEME DEĞİŞKENİ YOK. Tek bir `--p`yi sahne köküne
+   yazmak her karede bütün alt ağacın stilini tazeler (araçlar sahnesinde
+   ölçülmüştü: 95 eleman → 43'e indirilmişti). Her katman KENDİ
+   animasyonunu taşır; ortak olan yalnız zaman çizelgesi.
+
+   YALNIZ transform ve opacity. Düzene dokunan hiçbir özellik yok;
+   kaydırma sırasında düzen okuması da yok (JS'i yalnız "Geç" düğmesi).
+
+   TABAN = BİTMİŞ HÂL: `@supports` desteklemeyen tarayıcıda katmanlar
+   yerinde durur, sahne tek sabit kare olur, cümle okunur.
+   ============================================================ */
+
+.pr {
+  position: relative;
+  /* Kaydırma rayı: sahne yapışık dururken 300vh'lik yol tüketilir.
+     Ray yüksekliği HAREKETİN SÜRESİDİR (talimatın "yüksek bir kaydırma
+     rayı" şartı); mobilde kısalır (aşağıda). */
+  height: 300vh;
+  background: #050505;
+  /* Zaman çizelgesi RAYIN KENDİSİ. `scroll()` DEĞİL, çünkü `scroll()`
+     bütün belgeyi ölçer ve sahnenin yapışık kaldığı aralığı tanımaz;
+     `view-timeline` + `contain` aralığı TAM O ARALIK: ray üstü ekranın
+     üstüne değdiği andan rayın altı ekranın altına değdiği ana kadar,
+     yani yapışmanın başı ve sonu. Ad ATA düğümde duruyor ama bu bir
+     İLERLEME DEĞİŞKENİ DEĞİL — stil tazelemesi üretmez, katmanlar
+     çizelgeyi paylaşır, animasyonu paylaşmaz. */
+  view-timeline-name: --pr-ray;
+  view-timeline-axis: block;
+  /* Prolog gövdeyi BEKLETMEZ: arkada duran içerik normal akışta,
+     bu bölüm sadece onun önüne bir sahne koyar. */
+}
+.pr-yapis {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #050505;
+}
+
+/* ---- katmanlar ---- */
+.pr-kat {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Taban ölçek: katman kayarken kare kenarı açılmasın diye pay.
+     En hızlı katman (nehir) rayın sonunda %13,2 yol alır; 1.16 ölçek
+     her kenarda %8 pay bırakır. */
+  transform: scale(1.16);
+  will-change: transform;
+}
+
+/* Katman sırası — arkadan öne. `z-index` yerine DOM sırası yeterdi ama
+   metin ikisinin arasında duruyor, o yüzden açık yazılıyor. */
+.pr-gok    { z-index: 1; }
+.pr-zirve  { z-index: 2; }
+.pr-sol    { z-index: 3; }
+.pr-sag    { z-index: 3; }
+.pr-vadi   { z-index: 4; }
+.pr-nehir  { z-index: 5; }
+
+/* ---- CÜMLE ----
+   "Kaynak hep vardı." Orta bantta, zirvenin altında (fotoğrafın orta
+   %35'i boş). İLK KAREDEN GÖRÜNÜR doğar (madde 5 / H2): giriş yalnız
+   `translateY`, opaklık 1'de sabit. Kart yok, kutu yok, gölge yok.
+   Kızıl YOK — bu sahne monokrom; kızıl 2. durakta logoyla gelecek. */
+.pr-soz {
+  position: absolute;
+  z-index: 6;
+  left: 0; right: 0;
+  top: 52%;
+  margin: 0;
+  padding: 0 var(--gut);
+  text-align: center;
+  font-family: var(--f-govde);
+  font-size: clamp(48px, 9vw, 160px);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: #fff;
+}
+
+/* ---- "GEÇ" ---- */
+.pr-gec {
+  position: absolute;
+  z-index: 7;
+  top: calc(env(safe-area-inset-top, 0px) + 96px);
+  right: var(--gut);
+  font-family: var(--f-tek);
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--tx3);
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  /* dokunma hedefi ≥24px (denetim tasarım kuralı) */
+  padding: 9px 18px;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pr-gec { transition: color .26s var(--e), border-color .26s var(--e); }
+  .pr-gec:hover { color: #fff; border-color: rgba(239, 35, 60, .5); }
+}
+.pr-gec:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* Oturumda bir kez: betik `<html>`e `pr-atla` yazar, sahne rayı sıfırlanır
+   ve sahne hiç görünmez. Sınıf yoksa sahne normal çalışır — yani betik
+   hiç inmese bile prolog doğru davranır. */
+.pr-atla .pr { display: none; }
+
+/* ============ HAREKET ============
+   Her katmanın kendi keyframe'i. Mesafeler tek bir kaynaktan türüyor:
+   YOL = %22 · hız. Ölçek dolgusu da hızla artıyor (yakın katman biraz
+   daha yaklaşır) — kaynağın "kamera iniyor" hissi bu iki değişkende. */
+@supports (animation-timeline: view()) {
+  .pr-kat {
+    animation-timeline: --pr-ray;
+    animation-range: contain 0% contain 100%;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+  }
+  .pr-gok   { animation-name: pr-gok; }
+  .pr-zirve { animation-name: pr-zirve; }
+  .pr-sol   { animation-name: pr-sol; }
+  .pr-sag   { animation-name: pr-sag; }
+  .pr-vadi  { animation-name: pr-vadi; }
+  .pr-nehir { animation-name: pr-nehir; }
+
+  /* Cümle: girişi yalnız translateY, opaklık sabit 1. Kamera inerken
+     cümle de sahneyle birlikte hafifçe yükselir (zirve hızında). */
+  .pr-soz {
+    animation: pr-soz linear both;
+    animation-timeline: --pr-ray;
+    animation-range: contain 0% contain 100%;
+  }
+}
+
+@keyframes pr-gok   { to { transform: translate3d(0, -1.1%,  0) scale(1.165); } }
+@keyframes pr-zirve { to { transform: translate3d(0, -3.3%,  0) scale(1.175); } }
+@keyframes pr-sol   { to { transform: translate3d(0, -6.6%,  0) scale(1.190); } }
+@keyframes pr-sag   { to { transform: translate3d(0, -7.0%,  0) scale(1.192); } }
+@keyframes pr-vadi  { to { transform: translate3d(0, -12.1%, 0) scale(1.215); } }
+@keyframes pr-nehir { to { transform: translate3d(0, -13.2%, 0) scale(1.220); } }
+@keyframes pr-soz   { from { transform: translateY(26px); } to { transform: translateY(-38px); } }
+
+/* ============ MOBİL ============
+   Ayrı sürüm (talimat): ön plan katmanı düşer (6 → 5) ve DPR tavanı 2.
+   Düşen katman VADİ: kaplaması en geniş ikinci katman ve içeriği zaten
+   taban plakada duruyor (vadi tabanı karenin en karanlık bölgesi,
+   ortalama parlaklık 0,05) — nehir düşseydi 3. durağın yarılma hattı
+   giderdi, o yüzden nehir KALIYOR.
+   Ray da kısalıyor: mobilde 300vh'lik yol savurmada uzun geliyor. */
+@media (max-width: 760px), (pointer: coarse) {
+  .pr { height: 220vh; }
+  /* `display:none` + `loading="lazy"`: gizli tembel görsel hiçbir zaman
+     görünüm alanına girmediği için İNDİRİLMEZ. Mobil sürümün 6→5
+     düşüşü bu yolla oluyor; `<picture>`a sahte kaynak konmadı. */
+  .pr-vadi { display: none; }
+}
+
+/* ============ HAREKET AZALTMA ============
+   Talimat: tek sabit kare + cümle, kamera hareketi yok. Durdurma kuralı
+   hareketi verenle AYNI özgüllükte (H11): `.pr-kat` ve `.pr-soz`. */
+@media (prefers-reduced-motion: reduce) {
+  .pr { height: 100vh; }
+  .pr-kat { animation: none; transform: scale(1.16); will-change: auto; }
+  .pr-soz { animation: none; transform: none; }
+  .pr-gec { transition: none; }
+}

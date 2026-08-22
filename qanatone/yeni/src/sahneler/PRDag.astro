@@ -1,0 +1,87 @@
+---
+/* PROLOG · 1. DURAK — DAĞ.  Künye ve gerekçeler `src/stil/prolog.css`
+   başında; burada yalnız markup ve "Geç" adası.
+
+   MALZEME: `gorsel-kaynak/prolog/dag-ham.jpg` (4392×3095, siyah-beyaz
+   Everest). Fotoğrafçı adı künyeye konmayacak (talimat).
+   ÜRETEÇ: `prolog-derinlik.py` (harita) → `prolog-katman.py` (kesim).
+   Ölçüler bileşende ELLE yazılmıyor; üretecin bastığı iki genişlik
+   (1920 masaüstü · 960 mobil) aşağıdaki `<picture>`larda eşleniyor.
+   MOBİLDE DÜŞEN KATMAN (vadi) `<picture>`da sahte kaynakla değil, CSS
+   `display:none` + `loading="lazy"` çiftiyle düşüyor: gizli tembel
+   görsel hiçbir zaman görünüm alanına girmez, yani indirilmez.
+
+   BÜTÇE (ölçüldü, talimatın kapısı: masaüstü ≤1,2 MB · mobil ≤450 KB):
+     masaüstü 6 katman · 1920 px · 262,3 KB
+     mobil    5 katman ·  960 px ·  83,6 KB   (vadi düşer)
+   Hepsi TEMBEL: prolog varlığı ilk yükün içinde değil.
+
+   BOT PROLOGU DEĞİL GÖVDEYİ GÖRÜR: sahnede tek bir cümle var ve o
+   cümle `<p>`; sayfanın `h1`i gövdede (hero) kalır. Katman görselleri
+   `alt=""` + `aria-hidden` — anlam taşımıyorlar, sahne süs. */
+import '../stil/prolog.css';
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const soz = dil === 'en' ? 'The source was always there.' : 'Kaynak hep vardı.';
+const gec = dil === 'en' ? 'Skip' : 'Geç';
+/* Sıra ARKADAN ÖNE. `mobil:true` olan katmanın 960 px'lik mobil kaynağı
+   `<picture>`ın `media`sıyla seçilir; `mobil:false` olan tek katman
+   (vadi) mobilde CSS'te gizlenir ve tembel olduğu için hiç inmez. */
+const KATMANLAR = [
+  { ad: 'gok',     sinif: 'pr-gok',   mobil: true  },
+  { ad: 'zirve',   sinif: 'pr-zirve', mobil: true  },
+  { ad: 'dag-sol', sinif: 'pr-sol',   mobil: true  },
+  { ad: 'dag-sag', sinif: 'pr-sag',   mobil: true  },
+  { ad: 'vadi',    sinif: 'pr-vadi',  mobil: false },
+  { ad: 'nehir',   sinif: 'pr-nehir', mobil: true  },
+];
+---
+<section class="pr" aria-label={dil === 'en' ? 'Prologue' : 'Prolog'}>
+  <div class="pr-yapis">
+    {KATMANLAR.map((k) => (
+      <picture>
+        {k.mobil && <source media="(max-width: 760px)" type="image/webp"
+          srcset={`${B}/img/prolog/${k.ad}-960.webp`} />}
+        <img class={`pr-kat ${k.sinif}`} src={`${B}/img/prolog/${k.ad}-1920.webp`}
+          width="1920" height="1353" alt="" aria-hidden="true"
+          loading="lazy" decoding="async" fetchpriority="low" />
+      </picture>
+    ))}
+
+    <p class="pr-soz">{soz}</p>
+
+    {/* ATLANABİLİR: küçük "Geç" düğmesi sağ üstte, oturumda bir kez
+        (sessionStorage). Düğme JS'siz de anlamlı olsun diye <button>;
+        betik inmezse hiç basılmaz (aşağıdaki ada onu görünür yapıyor).
+        Kaydırma sırasında düzen OKUMASI yok — tek iş `scrollTo`. */}
+    <button class="pr-gec" type="button" hidden>{gec}</button>
+  </div>
+</section>
+
+<script>
+  /* ADA — prologun TEK betiği. İki iş, başka iş yok:
+     (1) OTURUMDA BİR KEZ: bayrak varsa `<html>`e `pr-atla` yazılır ve
+         sahne hiç kurulmaz (CSS `display:none`). Bayrağı "Geç" yazar.
+     (2) "GEÇ": bayrağı yazar ve gövdenin başına gider.
+     DÜZEN OKUMASI YOK (H12): hedef `offsetTop` ile hesaplanmıyor,
+     gövdenin kendisine `scrollIntoView` deniyor — konumu tarayıcı
+     kendi içinde biliyor, biz ondan bir ölçü İSTEMİYORUZ.
+     `sessionStorage` kap içinde: gizli sekmede/izin yoksa atmaz,
+     prolog o zaman her girişte oynar (içerik etkilenmez). */
+  let gorulmus = false;
+  try { gorulmus = sessionStorage.getItem('pr1') === '1'; } catch {}
+  if (gorulmus) {
+    document.documentElement.classList.add('pr-atla');
+  } else {
+    const gec = document.querySelector<HTMLElement>('.pr-gec');
+    const govde = document.querySelector<HTMLElement>('.ana');
+    if (gec && govde) {
+      gec.hidden = false;
+      gec.addEventListener('click', () => {
+        try { sessionStorage.setItem('pr1', '1'); } catch {}
+        govde.scrollIntoView({ block: 'start' });
+      });
+    }
+  }
+</script>

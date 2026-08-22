@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-21 23:10 UTC
+> Üretim tarihi: 2026-08-22 09:14 UTC
 
 ## Yeni sohbete geçerken
 
@@ -1035,6 +1035,7 @@
 | `gorsel-kaynak/kanal/rapor.png` |  | 398 KB | `35ccc6e1` |
 | `gorsel-kaynak/kanal/web.png` |  | 343 KB | `51d9bfe0` |
 | `gorsel-kaynak/kanal/whatsapp.png` |  | 539 KB | `86fe79f2` |
+| `gorsel-kaynak/prolog/dag-ham.jpg` |  | 1711 KB | `72d46a9a` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
 | `harness-hidrasyon.js` |  | 11 KB | `be5b65f9` |
@@ -1346,7 +1347,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 64 sn (basılan 0, önbellekten 58) |
+| son derleme | 67 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma
