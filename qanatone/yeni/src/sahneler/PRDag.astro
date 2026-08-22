@@ -1,80 +1,114 @@
 ---
-/* PROLOG · 1. DURAK — DAĞ.  Künye ve gerekçeler `src/stil/prolog.css`
-   başında; burada yalnız markup ve "Geç" adası.
+/* PROLOG · 1. DURAK — DAĞ.  A YAKLAŞIMI (gerçek 3B).
+   Künye ve gerekçeler `src/stil/prolog.css` başında ve `src/prolog/gl.ts`
+   başında; burada yalnız markup, "Geç" adası ve 3B'yi çağıran ada.
 
    MALZEME: `gorsel-kaynak/prolog/dag-ham.jpg` (4392×3095, siyah-beyaz
    Everest). Fotoğrafçı adı künyeye konmayacak (talimat).
-   ÜRETEÇ: `prolog-derinlik.py` (harita) → `prolog-katman.py` (kesim).
-   Ölçüler bileşende ELLE yazılmıyor; üretecin bastığı iki genişlik
-   (1920 masaüstü · 960 mobil) aşağıdaki `<picture>`larda eşleniyor.
-   MOBİLDE DÜŞEN KATMAN (vadi) `<picture>`da sahte kaynakla değil, CSS
-   `display:none` + `loading="lazy"` çiftiyle düşüyor: gizli tembel
-   görsel hiçbir zaman görünüm alanına girmez, yani indirilmez.
+   ÜRETEÇ: `prolog-derinlik.py` (harita) → `prolog-katman.py` (kesim +
+   genişlik hesabı + `kunye.json`). ÖLÇÜ HİÇBİR YERDE ELLE YAZILMIYOR:
+   dosya adları, kutular, oranlar, hızlar aşağıda künyeden okunuyor.
 
-   BÜTÇE (ölçüldü, talimatın kapısı: masaüstü ≤1,2 MB · mobil ≤450 KB):
-     masaüstü 6 katman · 1920 px · 262,3 KB
-     mobil    5 katman ·  960 px ·  83,6 KB   (vadi düşer)
-   Hepsi TEMBEL: prolog varlığı ilk yükün içinde değil.
+   İKİ YOL, TEK VARLIK KÜMESİ:
+     A (işçi + OffscreenCanvas + WebGL2, hareket açık) — buradaki
+       `<img>`ler HİÇ İNMEZ (`display:none` + lazy); aynı yedi dosyayı
+       işçi kendisi çeker, sahneyi tuvale çizer, kamera vadiye iner.
+     B (WebGL/işçi yok · hareket azaltma · JS yok) — `<img>`ler görünür,
+       CSS katmanlı paralaks çalışır. Yedek yol için FAZLADAN BAYT YOK.
+
+   İLK BOYA HER İKİ YOLDA DA CÜMLE: LCP elemanı tam ekran bir görsel
+   değil, metin olarak kalır (tuval zaten LCP adayı değildir). Cümle,
+   sahne hazır olduğunda görünmez-erişilebilir hâle geçer — ekran
+   okuyucu ve bot onu okumaya devam eder.
 
    BOT PROLOGU DEĞİL GÖVDEYİ GÖRÜR: sahnede tek bir cümle var ve o
    cümle `<p>`; sayfanın `h1`i gövdede (hero) kalır. Katman görselleri
    `alt=""` + `aria-hidden` — anlam taşımıyorlar, sahne süs. */
 import '../stil/prolog.css';
+import KUNYE from '../prolog/kunye.json';
+import SAHNE from '../prolog/sahne.json';
+
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const soz = dil === 'en' ? 'The source was always there.' : 'Kaynak hep vardı.';
 const gec = dil === 'en' ? 'Skip' : 'Geç';
-/* Sıra ARKADAN ÖNE. `mobil:true` olan katmanın 960 px'lik mobil kaynağı
-   `<picture>`ın `media`sıyla seçilir; `mobil:false` olan tek katman
-   (vadi) mobilde CSS'te gizlenir ve tembel olduğu için hiç inmez. */
-const KATMANLAR = [
-  { ad: 'gok',     sinif: 'pr-gok',   mobil: true  },
-  { ad: 'zirve',   sinif: 'pr-zirve', mobil: true  },
-  { ad: 'dag-sol', sinif: 'pr-sol',   mobil: true  },
-  { ad: 'dag-sag', sinif: 'pr-sag',   mobil: true  },
-  { ad: 'vadi',    sinif: 'pr-vadi',  mobil: false },
-  { ad: 'nehir',   sinif: 'pr-nehir', mobil: true  },
-];
+
+const MD = KUNYE.varyant.masaustu;
+const MB = KUNYE.varyant.mobil;
+const bul = (v: typeof MD, ad: string) => v.katman.find((k) => k.ad === ad)!;
+/* Sıra ARKADAN ÖNE; hız yalnız yedek yolun (CSS paralaks) girdisi. */
+const KATMANLAR = SAHNE.katman.map((k) => ({
+  ad: k.ad, hiz: k.hiz, d: bul(MD, k.ad), m: bul(MB, k.ad),
+}));
+const kutu = (k: { kutu: number[] }, o: string) =>
+  `--${o}x:${k.kutu[0]};--${o}y:${k.kutu[1]};` +
+  `--${o}w:${(k.kutu[2] - k.kutu[0]).toFixed(5)};--${o}h:${(k.kutu[3] - k.kutu[1]).toFixed(5)}`;
+/* Cümlenin dikey merkezi 3B'dekiyle AYNI noktadan gelir: sahne hazır
+   olduğunda DOM cümlesi sönüp yerini tuvaldekine bırakıyor, ikisi
+   farklı yerde dursa o an bir sıçrama olurdu. */
+const sozY = ((1 - SAHNE.soz.merkez[1]) / 2 * 100).toFixed(2);
 ---
-<section class="pr" aria-label={dil === 'en' ? 'Prologue' : 'Prolog'}>
+<section class="pr" aria-label={dil === 'en' ? 'Prologue' : 'Prolog'} data-kok={B}
+  style={`--pr-oran-d:${MD.oran};--pr-oran-m:${MB.oran};--pr-soz-y:${sozY}%;` +
+    `--pr-oncu-d:url(${B}/img/prolog/${MD.oncu.dosya});` +
+    `--pr-oncu-m:url(${B}/img/prolog/${MB.oncu.dosya})`}>
   <div class="pr-yapis">
-    {KATMANLAR.map((k) => (
-      <picture>
-        {k.mobil && <source media="(max-width: 760px)" type="image/webp"
-          srcset={`${B}/img/prolog/${k.ad}-960.webp`} />}
-        <img class={`pr-kat ${k.sinif}`} src={`${B}/img/prolog/${k.ad}-1920.webp`}
-          width="1920" height="1353" alt="" aria-hidden="true"
-          loading="lazy" decoding="async" fetchpriority="low" />
-      </picture>
-    ))}
+    <div class="pr-kare">
+      {KATMANLAR.map((k) => (
+        <div class={`pr-sar pr-${k.ad}`} style={`--hiz:${k.hiz}`}>
+          <picture>
+            <source media="(max-width: 760px)" type="image/webp"
+              srcset={`${B}/img/prolog/${k.m.dosya}`} />
+            <img class="pr-kat" data-kat={k.ad} src={`${B}/img/prolog/${k.d.dosya}`}
+              width={k.d.gen} height={k.d.yuk} alt="" aria-hidden="true"
+              loading="lazy" decoding="async" fetchpriority="low"
+              style={`${kutu(k.d, 'd')};${kutu(k.m, 'm')}`} />
+          </picture>
+        </div>
+      ))}
+    </div>
 
     <p class="pr-soz">{soz}</p>
 
     {/* ATLANABİLİR: küçük "Geç" düğmesi sağ üstte, oturumda bir kez
         (sessionStorage). Düğme JS'siz de anlamlı olsun diye <button>;
         betik inmezse hiç basılmaz (aşağıdaki ada onu görünür yapıyor).
-        Kaydırma sırasında düzen OKUMASI yok — tek iş `scrollTo`. */}
+        Kaydırma sırasında düzen OKUMASI yok — tek iş `scrollIntoView`. */}
     <button class="pr-gec" type="button" hidden>{gec}</button>
   </div>
 </section>
 
+{/* SATIR İÇİ VE ERKEN: `<img>`lerin ayrıştırılmasından ÖNCE koşmalı,
+    yoksa katmanlar bir kare boyanır ve LCP elemanı büyük bir görsel
+    olur. WebGL yoklaması burada YAPILMIYOR — bağlam açmak ilk boyanın
+    yoluna 2-10 ms koyuyor; WebGL çıkmazsa `gl.ts` sınıfı geri alır ve
+    sahne yedek yola düşer. J1 tavanına giren tek satır bu. */}
+<script is:inline>
+  try {
+    if (!matchMedia('(prefers-reduced-motion:reduce)').matches
+      && sessionStorage.getItem('pr1') !== '1')
+      document.documentElement.classList.add('pr-gl');
+  } catch (e) { /* gizli sekme: yedek yol çalışır */ }
+</script>
+
 <script>
-  /* ADA — prologun TEK betiği. İki iş, başka iş yok:
+  /* ADA — prologun sayfaya inen tek betiği. Üç iş:
      (1) OTURUMDA BİR KEZ: bayrak varsa `<html>`e `pr-atla` yazılır ve
          sahne hiç kurulmaz (CSS `display:none`). Bayrağı "Geç" yazar.
      (2) "GEÇ": bayrağı yazar ve gövdenin başına gider.
+     (3) 3B: `pr-gl` duruyorsa sahne modülünü ÇEKER. Modül J1/H3'ün
+         ölçtüğü `<script src>`/satır içi baytın dışında; kendi tavanı
+         denetimde R14.
      DÜZEN OKUMASI YOK (H12): hedef `offsetTop` ile hesaplanmıyor,
-     gövdenin kendisine `scrollIntoView` deniyor — konumu tarayıcı
-     kendi içinde biliyor, biz ondan bir ölçü İSTEMİYORUZ.
-     `sessionStorage` kap içinde: gizli sekmede/izin yoksa atmaz,
-     prolog o zaman her girişte oynar (içerik etkilenmez). */
+     gövdenin kendisine `scrollIntoView` deniyor. */
   let gorulmus = false;
   try { gorulmus = sessionStorage.getItem('pr1') === '1'; } catch {}
-  if (gorulmus) {
+  const bolum = document.querySelector<HTMLElement>('.pr');
+  if (gorulmus || !bolum) {
     document.documentElement.classList.add('pr-atla');
   } else {
-    const gec = document.querySelector<HTMLElement>('.pr-gec');
+    const gec = bolum.querySelector<HTMLElement>('.pr-gec');
     const govde = document.querySelector<HTMLElement>('.ana');
     if (gec && govde) {
       gec.hidden = false;
@@ -82,6 +116,18 @@ const KATMANLAR = [
         try { sessionStorage.setItem('pr1', '1'); } catch {}
         govde.scrollIntoView({ block: 'start' });
       });
+    }
+    /* 3B YUKLEME SONRASINA VE BOS BIR ANA ERTELENIR. Sahne ilk
+       ekranda ama SIRA ONUN DEGIL: parcasi da yedi katmani da
+       kritik yolun disinda kalmali (olculdu — varliklar yarisa
+       girdiginde LCP 540 ms itiliyordu). Cumle bu sure boyunca
+       zaten okunuyor, sahne uzerine yumusakca geliyor. */
+    if (document.documentElement.classList.contains('pr-gl')) {
+      const ac = () => import('../prolog/gl').then((m) => m.baslat(bolum))
+        .catch(() => document.documentElement.classList.remove('pr-gl'));
+      if (document.readyState === 'complete')
+        (window.requestIdleCallback || ((g: any) => setTimeout(g, 200)))(ac, { timeout: 2000 });
+      else addEventListener('load', ac, { once: true });
     }
   }
 </script>

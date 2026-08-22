@@ -1,0 +1,342 @@
+{
+ "kaynak": "dag-ham.jpg",
+ "uretec": "prolog-katman.py",
+ "varyant": {
+  "masaustu": {
+   "varyant": "masaustu",
+   "oran": 1.41906,
+   "kesim": {
+    "sol": 0.0,
+    "gen": 1.0
+   },
+   "dinlenme": 2880,
+   "taban_genislik": 2560,
+   "katman": [
+    {
+     "ad": "gok",
+     "dosya": "gok-d2560.webp",
+     "gen": 2560,
+     "yuk": 1803,
+     "bayt": 75652,
+     "kutu": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+     ],
+     "kare_gen": 2560,
+     "kaplama": 1.0,
+     "buyutme": 1.056,
+     "gerek": 3041,
+     "agirlik": 0.193,
+     "keskinlik": 0.842,
+     "kalite": 74
+    },
+    {
+     "ad": "bulut",
+     "dosya": "bulut-d2560.webp",
+     "gen": 2560,
+     "yuk": 680,
+     "bayt": 97692,
+     "kutu": [
+      0.0,
+      0.01294,
+      1.0,
+      0.38927
+     ],
+     "kare_gen": 2560,
+     "kaplama": 0.1122,
+     "buyutme": 1.032,
+     "gerek": 2972,
+     "agirlik": 0.35,
+     "keskinlik": 0.861,
+     "kalite": 78
+    },
+    {
+     "ad": "zirve",
+     "dosya": "zirve-d2980.webp",
+     "gen": 2980,
+     "yuk": 1088,
+     "bayt": 88444,
+     "kutu": [
+      0.0,
+      0.07674,
+      1.0,
+      0.59439
+     ],
+     "kare_gen": 2980,
+     "kaplama": 0.1094,
+     "buyutme": 1.179,
+     "gerek": 3396,
+     "agirlik": 0.409,
+     "keskinlik": 0.878,
+     "kalite": 80
+    },
+    {
+     "ad": "dag-sol",
+     "dosya": "dag-sol-d1708.webp",
+     "gen": 1708,
+     "yuk": 1626,
+     "bayt": 58070,
+     "kutu": [
+      0.0,
+      0.07415,
+      0.54648,
+      0.81308
+     ],
+     "kare_gen": 3124,
+     "kaplama": 0.1608,
+     "buyutme": 1.444,
+     "gerek": 4158,
+     "agirlik": 0.35,
+     "keskinlik": 0.751,
+     "kalite": 76
+    },
+    {
+     "ad": "dag-sag",
+     "dosya": "dag-sag-d1710.webp",
+     "gen": 1710,
+     "yuk": 1179,
+     "bayt": 32450,
+     "kutu": [
+      0.45408,
+      0.27291,
+      1.0,
+      0.80753
+     ],
+     "kare_gen": 3131,
+     "kaplama": 0.142,
+     "buyutme": 1.448,
+     "gerek": 4169,
+     "agirlik": 0.35,
+     "keskinlik": 0.751,
+     "kalite": 76
+    },
+    {
+     "ad": "vadi",
+     "dosya": "vadi-d3654.webp",
+     "gen": 3654,
+     "yuk": 1644,
+     "bayt": 74052,
+     "kutu": [
+      0.0,
+      0.36151,
+      1.0,
+      1.0
+     ],
+     "kare_gen": 3654,
+     "kaplama": 0.2859,
+     "buyutme": 1.689,
+     "gerek": 4865,
+     "agirlik": 0.35,
+     "keskinlik": 0.751,
+     "kalite": 76
+    },
+    {
+     "ad": "nehir",
+     "dosya": "nehir-d2960.webp",
+     "gen": 2960,
+     "yuk": 1574,
+     "bayt": 86388,
+     "kutu": [
+      0.35344,
+      0.51236,
+      1.0,
+      1.0
+     ],
+     "kare_gen": 4577,
+     "kaplama": 0.0083,
+     "buyutme": 1.588,
+     "gerek": 4575,
+     "agirlik": 1.0,
+     "keskinlik": 1.001,
+     "kalite": 84
+    }
+   ],
+   "derinlik": {
+    "dosya": "derinlik-d768.webp",
+    "gen": 768,
+    "yuk": 541,
+    "bayt": 22328
+   },
+   "oncu": {
+    "dosya": "oncu-d.webp",
+    "gen": 64,
+    "yuk": 45,
+    "bayt": 298
+   },
+   "toplam": 535374,
+   "butce": 1258291,
+   "doku_bayt": 100648424,
+   "doku_tavan": 100663296
+  },
+  "mobil": {
+   "varyant": "mobil",
+   "oran": 0.71987,
+   "kesim": {
+    "sol": 0.2163,
+    "gen": 0.50729
+   },
+   "dinlenme": 1284,
+   "taban_genislik": 1600,
+   "katman": [
+    {
+     "ad": "gok",
+     "dosya": "gok-m1600.webp",
+     "gen": 1600,
+     "yuk": 2222,
+     "bayt": 76100,
+     "kutu": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+     ],
+     "kare_gen": 1600,
+     "kaplama": 1.0,
+     "buyutme": 1.058,
+     "gerek": 1359,
+     "agirlik": 0.197,
+     "keskinlik": 1.177,
+     "kalite": 65
+    },
+    {
+     "ad": "bulut",
+     "dosya": "bulut-m1600.webp",
+     "gen": 1600,
+     "yuk": 849,
+     "bayt": 153422,
+     "kutu": [
+      0.0,
+      0.00633,
+      1.0,
+      0.38767
+     ],
+     "kare_gen": 1600,
+     "kaplama": 0.0566,
+     "buyutme": 1.032,
+     "gerek": 1325,
+     "agirlik": 0.35,
+     "keskinlik": 1.208,
+     "kalite": 69
+    },
+    {
+     "ad": "zirve",
+     "dosya": "zirve-m1600.webp",
+     "gen": 1600,
+     "yuk": 744,
+     "bayt": 63210,
+     "kutu": [
+      0.0,
+      0.25168,
+      1.0,
+      0.58632
+     ],
+     "kare_gen": 1600,
+     "kaplama": 0.1698,
+     "buyutme": 1.171,
+     "gerek": 1503,
+     "agirlik": 0.478,
+     "keskinlik": 1.064,
+     "kalite": 71
+    },
+    {
+     "ad": "dag-sol",
+     "dosya": "dag-sol-m876.webp",
+     "gen": 876,
+     "yuk": 1127,
+     "bayt": 20424,
+     "kutu": [
+      0.0,
+      0.29847,
+      0.54648,
+      0.80473
+     ],
+     "kare_gen": 1602,
+     "kaplama": 0.1509,
+     "buyutme": 1.442,
+     "gerek": 1851,
+     "agirlik": 0.35,
+     "keskinlik": 0.866,
+     "kalite": 67
+    },
+    {
+     "ad": "dag-sag",
+     "dosya": "dag-sag-m874.webp",
+     "gen": 874,
+     "yuk": 702,
+     "bayt": 19966,
+     "kutu": [
+      0.45408,
+      0.48631,
+      1.0,
+      0.80129
+     ],
+     "kare_gen": 1600,
+     "kaplama": 0.1102,
+     "buyutme": 1.446,
+     "gerek": 1857,
+     "agirlik": 0.371,
+     "keskinlik": 0.862,
+     "kalite": 67
+    },
+    {
+     "ad": "vadi",
+     "dosya": "vadi-m1600.webp",
+     "gen": 1600,
+     "yuk": 687,
+     "bayt": 20746,
+     "kutu": [
+      0.0,
+      0.69114,
+      1.0,
+      1.0
+     ],
+     "kare_gen": 1600,
+     "kaplama": 0.2276,
+     "buyutme": 1.715,
+     "gerek": 2203,
+     "agirlik": 0.35,
+     "keskinlik": 0.726,
+     "kalite": 67
+    },
+    {
+     "ad": "nehir",
+     "dosya": "nehir-m1376.webp",
+     "gen": 1376,
+     "yuk": 1082,
+     "bayt": 46314,
+     "kutu": [
+      0.02106,
+      0.51384,
+      0.87894,
+      1.0
+     ],
+     "kare_gen": 1602,
+     "kaplama": 0.014,
+     "buyutme": 1.662,
+     "gerek": 2134,
+     "agirlik": 1.0,
+     "keskinlik": 0.751,
+     "kalite": 75
+    }
+   ],
+   "derinlik": {
+    "dosya": "derinlik-m768.webp",
+    "gen": 768,
+    "yuk": 1067,
+    "bayt": 23890
+   },
+   "oncu": {
+    "dosya": "oncu-m.webp",
+    "gen": 64,
+    "yuk": 89,
+    "bayt": 434
+   },
+   "toplam": 424506,
+   "butce": 460800,
+   "doku_bayt": 41990784,
+   "doku_tavan": 58720256
+  }
+ }
+}
