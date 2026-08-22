@@ -1623,6 +1623,41 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
+
+/* R13 · KESME ADAYI ISARETLERI YERINDE. Talimat (21 Agu): "Kaldirilacak
+   dort bolum (katman, akis, sektor+panel, kanal izgarasi) ISARETLENSIN,
+   KALDIRILMASIN. Kesme prolog calisinca yapilacak."
+   Kural iki yonlu calisir:
+     (a) dort dosyanin dordunde de isaret DURUYOR — isaret sessizce
+         silinirse kirmizi doner ve kesme listesi kaybolmaz;
+     (b) dort sahne HALA ana sayfada BASILIYOR — biri erken kaldirilirsa
+         kirmizi doner. Kaldirma karari Enes'in, kural onun yerine karar
+         vermez ama sessiz olmasina izin vermez.
+   Kesme gunu bu kural, dort dosyayla BIRLIKTE ve acik mesajla kalkar. */
+{
+  /* Sahnenin KOKU aranir (`<section class="xx-sahne">`), gecici bir alt
+     sinif degil: bolum gercekten kalkarsa kok de kalkar, tek bir ic
+     dugumun adi degisirse kural gurultu uretmez. */
+  const ADAYLAR = [
+    ['SKKatman.astro',  'sk-sahne'],
+    ['SAAkis.astro',    'sa-sahne'],
+    ['SSESektor.astro', 'sse-sahne'],
+    ['SSZSozler.astro', 'ssz-sahne'],
+  ];
+  const kusur = [];
+  const ana = oku(path.join(KOK, 'index.html'));
+  for (const [dosya, onek] of ADAYLAR) {
+    const yol = path.join(__dirname, 'src', 'sahneler', dosya);
+    if (!fs.existsSync(yol)) { kusur.push(dosya + ':dosya-yok'); continue; }
+    if (!/KESME ADAYI/.test(fs.readFileSync(yol, 'utf8')))
+      kusur.push(dosya + ':isaret-yok');
+    if (!ana.includes('<section class="' + onek + '"'))
+      kusur.push(dosya + ':ana-sayfada-basilmiyor');
+  }
+  ol('R13 · kesme adayi dort bolum isaretli ve HALA yerinde',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || ADAYLAR.length + ' bolum');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');

@@ -154,6 +154,38 @@ veya elle) yoksa Search Console + sitemap yeterli mi.
 (2d'nin parçası). H18/H24 tavanları değişmez. Kesme sonrası canlıda
 Lighthouse (medyanlı düzen) + Search Console'a sitemap bildirimi.
 
+## 2c · KALDIRILACAK DÖRT BÖLÜM — İŞARETLENDİ, KALDIRILMADI (22 Ağu)
+
+Enes'in kararı (21 Ağu, `CODE-TALİMATI-PROLOG-1` → "Ayrıca"):
+**"Kaldırılacak dört bölüm işaretlensin, kaldırılmasın. Kesme prolog
+çalışınca yapılacak."**
+
+| bölüm | bileşen | ana sayfadaki kökü |
+|---|---|---|
+| katman | `src/sahneler/SKKatman.astro` | `<section class="sk-sahne">` |
+| akış | `src/sahneler/SAAkis.astro` | `<section class="sa-sahne">` |
+| sektör + pano | `src/sahneler/SSESektor.astro` | `<section class="sse-sahne">` |
+| kanal ızgarası | `src/sahneler/SSZSozler.astro` | `<section class="ssz-sahne">` |
+
+Dördünün de dosya başında `>>> KESME ADAYI · PROLOG ÇALIŞINCA
+KALDIRILACAK <<<` bloğu duruyor. **İşaret silinmez.**
+
+Bekçisi `yeni/denetim.cjs` **R13** ve iki yönlü çalışır: (a) dört işaret
+de yerinde mi, (b) dört sahne hâlâ ana sayfada basılıyor mu. Yani ne
+işaret sessizce kaybolabilir, ne de bölüm sessizce düşebilir — kaldırma
+Enes'in kararı, kural onun yerine karar vermez ama sessiz kalmasına izin
+vermez. Hata enjekte edilerek doğrulandı: işaret silinince ve bölüm
+kaldırılınca kural kırmızı dönüyor.
+
+**Kaldırma günü:** dört dosya + `src/pages/index.astro` (ve EN karşılığı)
++ R13 kuralı BİRLİKTE, tek ve açık mesajlı commit'le kalkar. Kaldırılan
+her sahnenin kendi CSS'i, görselleri ve `content.json` alanları da aynı
+commit'te temizlenir; H19/H17/H20 gibi o sahnelere bağlı denetim
+kuralları da (sessizce değil, adıyla) düşer.
+
+**Ön şart:** prolog çalışıyor olacak. 1. durak (dağ) 22 Ağu'da çıktı;
+kaldırma kapısı prologun Enes tarafından kabulüne bağlı.
+
 ## 3 · H bekçilerinin EN'e TAM genişletilmesi (ayrı iş, kesme şartı değil)
 
 H24 üç ucu kilitledi (üretilmiş/h1/gzip). H1-H23'ün EN eşleri içerik
