@@ -1,8 +1,19 @@
 /* QANATONE yeni kabuk — Faz 1 temel stili.
    Tek dosya, bütün sayfalar paylaşır → Astro tek hash'li CSS basar,
    sayfadan sayfaya önbellekten gelir. Marka koyu; şölen Faz 2'de. */
-:root{--bg:#050505;--tx:#f5f5f5;--tx2:rgba(255,255,255,.72);--tx3:rgba(255,255,255,.5);
-  --red:#ef233c;--red-soft:#ff4d63;--line:rgba(255,255,255,.1);--card:#101010;
+/* TOKEN SADAKATI (22 Agu, /hizmetler yan yana turu) — dort tabani
+   ORCULDU ve kaynaktan sapmis cikti; sapma tek sayfanin degil butun
+   kabugun kusuruydu, o yuzden burada kapaniyor. Solda kaynak
+   (kok index.html 34-63), sagda gocun yazdigi:
+     --tx    #ffffff              <- #f5f5f5      (govde yazisi)
+     --tx2   rgba(255,255,255,.62)<- .72          (lede ve kart metni)
+     --line  rgba(255,255,255,.08)<- .1           (her kenarlik)
+     --card  #0D0D0D              <- #101010      (her kart yuzu)
+   --card2 HIC TANIMLANMAMISTI: ProjeGovde `.step:hover`ta onu cagiriyor
+   ve kural sessizce olu duruyordu (hover'da zemin degismiyordu). */
+:root{--bg:#050505;--tx:#ffffff;--tx2:rgba(255,255,255,.62);--tx3:rgba(255,255,255,.5);
+  --red:#ef233c;--red-soft:#ff4d63;--line:rgba(255,255,255,.08);
+  --card:#0D0D0D;--card2:#131313;--ink:#000000;
   /* S-H hero ile geldi: eski kaynagin :root'undaki yumusama egrileri ve
      kizil parilti — sahne sahne kopyalanmasin diye kabukta duruyor. */
   --red-glow:rgba(239,35,60,.45);
@@ -14,8 +25,12 @@
   --red-dim:rgba(239,35,60,.12);--gut:clamp(20px,4vw,40px);
   --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}
+/* GOVDE TIPOGRAFI KUNYESI (kaynak 198-200): 16,5px / 1,66 / 400.
+   Goc 16px / 1,65 yazmisti — olculdu, her kartin yuksekligini ve her
+   satirin kirilmasini kaydiriyordu. Aile BILINCLI farkli (Anayasa 1.4:
+   Inter EMEKLI, govde Nunito Sans). */
 body{background:var(--bg);color:var(--tx);
-  font-family:var(--f-govde);line-height:1.65}
+  font-family:var(--f-govde);font-size:16.5px;line-height:1.66;font-weight:400}
 /* GLOBAL ZEMIN — kaynagin `#bg .fade`i (index.html 212). Kaynak zemini
    DORT katman: bu degrade + 900px bulanik orb (`filter:blur(130px)`) +
    nokta kafesi + yildiz/gren. Buraya YALNIZ ilki geldi; ucu de pahali
@@ -42,8 +57,14 @@ main{max-width:840px;margin:0 auto;padding:24px 20px 60px}
    Yalnız `genis` bayrağını geçen sayfa alır. */
 main.genis{max-width:1280px;padding-left:clamp(20px,4vw,40px);padding-right:clamp(20px,4vw,40px)}
 section{margin-bottom:56px}
-h1{font-size:clamp(1.7rem,5.4vw,2.6rem);letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
-h2{font-size:clamp(1.15rem,3vw,1.45rem);letter-spacing:-.02em;margin-bottom:18px}
+/* BASLIK KUNYESI (kaynak 205-206): agirlik 700 · harf araligi -.045em ·
+   satir araligi 1,04 — UCU DE bir tasarim karari, aile degil.
+   Goc -.03em / 1,15 yaziyordu; olcum: kart basligi 24,96 px yerine
+   28,8 px satir aliyordu, iki satirlik her baslik 4 px sisiyordu.
+   Aile burada da bilincli farkli (Manrope EMEKLI). */
+h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.045em;line-height:1.04}
+h1{font-size:clamp(1.7rem,5.4vw,2.6rem);margin-bottom:16px}
+h2{font-size:clamp(1.15rem,3vw,1.45rem);margin-bottom:18px}
 h3{font-size:1rem;margin-bottom:6px}
 a{color:var(--red-soft)}
 .lede{color:var(--tx2);font-size:1.05rem;max-width:62ch}
