@@ -294,6 +294,30 @@ type Kurulum = {
 
 let sok: (() => void) | null = null;
 
+/* ============ ILERLEMEYI ONGORME ============
+   Sahne kaydirmayi bir tik geriden takip ediyordu. Sebep FPS degil
+   GECIKME: ilerleme ana ipte uretilip `postMessage` ile geliyor,
+   isci onu KENDI karesinde kullaniyor - arada en az bir kuyruk ve bir
+   kare var. Olculdu (412x892, CPU 4x): degerin yasi ortalama 23-41 ms.
+
+   Cozum: son iki ornekten HIZ kestirilip cizim anina kadar ilerleme
+   ongoruluyor. Olculen sonuc, konum hatasi (cizilen kare ile o anin
+   gercek ilerlemesi arasindaki fark, piksel):
+       gonderim karede, ongoru YOK     6,4 px ort · p95 25,9
+       gonderim karede, ongoru VAR     2,4 px ort · p95 12,0
+   Durusta sicrama YOK: en buyuk hata da dusuyor (38,1 -> 26,5 px).
+
+   UC KORUMA:
+     - hiz EMA ile yumusatilir (tek ornegin gurultusu sahneyi
+       titretmesin),
+     - ongoru YAS_TAVANI ile sinirlidir,
+     - o tavanin otesinde kademeli SONER; ustelik ana ip kaydirma
+       bitince `dur` gonderir ve hiz sifirlanir. */
+const YAS_TAVAN = 50;      /* ms — bu kadar oteye ongoru yok */
+const SONUM = 50;          /* ms — tavandan sonra bu surede sifirlanir */
+let anaFark = 0;
+let pSon = 0, tSon = 0, pHiz = 0;
+
 async function kur(K0: Kurulum) {
   const V = (VERI as any).varyant[K0.varyant];
   const K = (VERI as any).kamera, D = (VERI as any).derinlik, H = (VERI as any).hareket;
@@ -632,6 +656,14 @@ async function kur(K0: Kurulum) {
   function dongu(zaman: number) {
     if (!calisiyor || sokuldu) return;
     if (!t0) t0 = zaman;
+    /* ONGORU: cizilen kare, ilerlemenin CIZIM ANINDAKI degerini
+       kullansin - geldigi andaki degerini degil. */
+    if (tSon && pHiz) {
+      const yas = performance.now() + anaFark - tSon;
+      const sinir = Math.min(Math.max(yas, 0), YAS_TAVAN);
+      const sonum = yas > YAS_TAVAN ? Math.max(0, 1 - (yas - YAS_TAVAN) / SONUM) : 1;
+      sahneRef?.p(Math.min(1, Math.max(0, pSon + pHiz * sinir * sonum)));
+    }
     ciz(zaman);
     cerceve = kareIste(dongu);
   }
@@ -687,18 +719,31 @@ async function kur(K0: Kurulum) {
 }
 
 let sahne: Awaited<ReturnType<typeof kur>> | null = null;
+let sahneRef: { p: (v: number) => void } | null = null;
 
 self.onmessage = async (e: MessageEvent) => {
   const m = e.data;
   if (m.tip === 'kur') {
     try {
+      if ((m as any).anaKok) anaFark = performance.timeOrigin - (m as any).anaKok;
       sahne = await kur(m as Kurulum);
+      sahneRef = sahne;
     } catch (hata) {
       (self as any).postMessage({ tip: 'hata', mesaj: String(hata) });
     }
   } else if (!sahne) {
     return;
   } else if (m.tip === 'p') {
+    /* Hiz: ilerleme birimi / ms. 120 ms'den uzun arali iki ornek
+       arasinda hiz kestirilmez - o bir kaydirma degil, yeni bir
+       baslangictir. */
+    if (m.t) {
+      const dt = m.t - tSon;
+      if (m.dur) pHiz = 0;
+      else if (tSon && dt > 0 && dt < 120) pHiz = pHiz * 0.6 + ((m.v - pSon) / dt) * 0.4;
+      else pHiz = 0;
+      pSon = m.v; tSon = m.t;
+    }
     sahne.p(m.v);
   } else if (m.tip === 'boyut') {
     sahne.boyut(m.g, m.y, m.d);
