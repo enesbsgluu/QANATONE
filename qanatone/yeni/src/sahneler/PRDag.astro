@@ -144,6 +144,13 @@ const sozY = ((1 - SAHNE.soz.merkez[1]) / 2 * 100).toFixed(2);
       /* `pr-gl` satir ici adada yazilir; yoksa sebep ikiden biridir. */
       yedek('hareket-azaltma');
     }
+    /* YEDEK YOLUN SURUCUSU. CSS `view-timeline` yoksa (Safari < 26)
+       paralaks JS'ten surulur - yoksa sahne sabit kare kalirdi.
+       Modul yalniz o tarayicilarda iniyor. Hareket azaltmada HIC
+       yuklenmiyor: orada sabit kare zaten talimatin kendisi. */
+    if (!CSS.supports('animation-timeline', 'view()')
+      && !matchMedia('(prefers-reduced-motion:reduce)').matches)
+      import('../prolog/paralaks').then((m) => m.kur(bolum)).catch(() => {});
     if (document.documentElement.classList.contains('pr-gl')) {
       const ac = () => import('../prolog/gl').then((m) => m.baslat(bolum))
         .catch((e) => {

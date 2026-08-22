@@ -34,10 +34,22 @@ export function yedek(sebep: string, ek?: unknown): void {
     document.documentElement.dataset.prolog = sebep;
     const donuk = !paralaksVar();
     console.warn(
-      `[prolog] yedek yol · ${sebep}${donuk ? ' · paralaks da YOK (sabit kare)' : ''}`,
+      `[prolog] yedek yol · ${sebep}`
+      + (donuk ? ' · CSS view-timeline yok, paralaksi JS suruyor' : ''),
       ek ?? '',
     );
-    if (donuk) document.documentElement.dataset.prologYedek = 'sabit';
+    /* 3B SONRADAN dustuyse yedek yol simdi devreye giriyor; surucusu
+       yoksa JS'ten kuruluyor. `data-prolog-yedek` artik "sabit" degil
+       "js" olur - hangi yolun surdugu DOM'dan okunabilsin. */
+    if (donuk) {
+      const b = document.querySelector<HTMLElement>('.pr');
+      document.documentElement.dataset.prologYedek = 'sabit';
+      if (b && !matchMedia('(prefers-reduced-motion:reduce)').matches)
+        import('./paralaks').then((m) => {
+          m.kur(b);
+          document.documentElement.dataset.prologYedek = 'js';
+        }).catch(() => {});
+    }
   } catch { /* konsolsuz ortam: sahne yine de calisir */ }
 }
 

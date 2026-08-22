@@ -214,6 +214,22 @@
   }
 }
 
+/* SURUCU YOKSA JS SURER (23 Agu). `animation-timeline` Safari/iOS'a
+   26.0 ile geldi; oncesinde ustteki blok HIC uygulanmiyor ve sahne
+   tek sabit kare kaliyordu. Ayni `@keyframes` burada `paused`
+   basliyor, noktayi `paralaks.ts` her ogenin KENDI negatif
+   `animation-delay`ine yaziyor. Kareler tek yerde kaliyor.
+   `.pr-js` sinifini yalniz o modul ekler: JS inmezse taban (sabit
+   kare) BOZULMADAN kalir. */
+@supports not (animation-timeline: view()) {
+  .pr-js .pr-sar {
+    animation: pr-kay 1s linear both paused;
+  }
+  .pr-js .pr-soz {
+    animation: pr-soz 1s linear both paused;
+  }
+}
+
 @keyframes pr-kay {
   from { transform: translate3d(0, 0, 0) scale(1.16); }
   to { transform: translate3d(0, calc(var(--hiz) * -22%), 0) scale(calc(1.16 + var(--hiz) * .1)); }

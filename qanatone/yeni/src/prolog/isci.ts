@@ -331,6 +331,15 @@ async function kur(K0: Kurulum) {
   const katmanSozu = (V.katman as KatmanV[]).map((k) => bit((k as any).dosya));
 
   /* ---------------- ag ---------------- */
+  /* AG COZUNURLUGU MOBILDE DUSURULMEDI - OLCUM REDDETTI (23 Agu).
+     Talimat "yuzey bozma cozunurlugunu mobilde dusur" diyordu; olcum
+     bunun kare kazandirmadigini gosterdi. DPR 1'de tam sahne, sis
+     kapali ve ARAZI KAPALI uc kosumun ucu de 8,63 ms verdi: mobilde
+     maliyetin tamami DOLUM (fragment) isi, vertex isi degil. 17.024
+     hucrelik ag bu GPU'da bedava; dusurmek yalniz siluet kalitesini
+     kaybettirirdi. Kazanc DPR'da ve sis perdesinde alindi.
+     (Mobil ag masaustunden BUYUK: 128x133 vs 176x93 - sebep mobil
+     kesimin dikey olmasi, oran 0,72. Bu da bilerek birakildi.) */
   const N = K0.varyant === 'mobil' ? 128 : 176;
   const M = Math.round(N / V.oran / 1.34);
   let vao: WebGLVertexArrayObject | null = null;
@@ -523,6 +532,10 @@ async function kur(K0: Kurulum) {
 
     function sisCiz(i: number) {
       const s = (VERI as any).sis[i];
+      /* Perde mobilde kapali olabilir (`sahne.json` -> sis[].mobil).
+         Olculdu: iki perde 412x892/DPR2'de kare basina 4,26 ms ve
+         p95'i 11,5 -> 30,7 ms'ye cikaran tek isti. */
+      if (s.mobil === false && K0.varyant === 'mobil') return;
       gl!.useProgram(pSis.p);
       ortak(pSis.u, [0, 0.10, 0.25, 0]);
       gl!.uniform4f(pSis.u.uKutu, s.kutu[0], s.kutu[1], s.kutu[2], s.kutu[3]);
