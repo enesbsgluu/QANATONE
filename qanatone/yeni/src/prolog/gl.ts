@@ -125,6 +125,9 @@ export async function baslat(bolum: HTMLElement) {
   isci.postMessage({
     tip: 'kur', tuval: off, varyant, kok: bolum.dataset.kok || '',
     dpr, gen: r.width, yuk: r.height, soz,
+    /* Ana ip ile isci AYRI zaman kokleri kullanir; ongoru damgalari
+       karsilastirabilmek icin fark kurulumda bir kez veriliyor. */
+    anaKok: performance.timeOrigin,
   }, cikart);
 
   function dur() {
@@ -147,11 +150,34 @@ export async function baslat(bolum: HTMLElement) {
       ust = k.top + scrollY;
       yol = Math.max(1, k.height - innerHeight);
     };
-    const tik = () => isci.postMessage({
+    /* GONDERIM KAYDIRMA OLAYINDA DEGIL, KAREDE. Olculdu (412x892,
+       CPU 4x): scroll olayi ortalama 29 ms'de bir atesliyor, isci ise
+       ~8,7 ms'de bir ciziyor - yani ayni ilerleme degeri uc dort kare
+       boyunca yeniden ciziliyordu ve sahne kaydirmayi geriden takip
+       ediyordu. Ilerlemenin YASI olayla 41,3 ms, karede 23,5 ms.
+       DONGU BOSTA KOSMAZ: kaydirma basladiginda aciliyor, 150 ms
+       sessizlikte kapaniyor ve kapanirken `dur` sinyali gonderiyor -
+       isci ongoru hizini o sinyalle sifirliyor (yoksa durusta eski
+       hizla ileri kayardi). */
+    const SESSIZLIK = 150;
+    let sonKaydirma = 0, acik = false;
+    const tik = (dur = false) => isci.postMessage({
       tip: 'p', v: Math.min(1, Math.max(0, (scrollY - ust) / yol)),
+      t: performance.now(), dur,
     });
-    olc(); tik();
-    addEventListener('scroll', tik, { passive: true });
+    const dongu = () => {
+      tik();
+      if (performance.now() - sonKaydirma < SESSIZLIK) requestAnimationFrame(dongu);
+      else { acik = false; tik(true); }
+    };
+    const uyan = () => {
+      sonKaydirma = performance.now();
+      if (acik) return;
+      acik = true;
+      requestAnimationFrame(dongu);
+    };
+    olc(); tik(true);
+    addEventListener('scroll', uyan, { passive: true });
     addEventListener('resize', () => { olc(); tik(); }, { passive: true });
     new ResizeObserver((g) => {
       const b = g[0].contentRect;

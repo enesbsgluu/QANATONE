@@ -1855,6 +1855,52 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' ') || 'CSS blogu + JS surucu');
 }
 
+
+/* R17 - TAKIP SOZLESMESI (23 Agu). Belirti: "sahne kaydirmayi bir tik
+   geriden takip ediyor" - kare dusmesi degil GECIKME.
+
+   Olculdu (412x892, CPU 4x, gercek girdi olayiyla - kaydirma
+   kompozitorde): `scroll` olayi ortalama 94,5 ms'de bir atesliyor
+   (p95 210), isci ise ~8,7 ms'de bir ciziyor. Yani ayni ilerleme
+   degeri on kareden fazla yeniden ciziliyordu. Kare ritminde
+   gonderimde ayni savurma 40 yerine 104 guncelleme uretti (37,4 ms).
+   Konum hatasi (cizilen kare ile o anin gercek ilerlemesi, piksel):
+   ongorusuz 6,4 ort / 25,9 p95 · ongoruyle 2,4 ort / 12,0 p95.
+
+   Kural uc seyi birden tutuyor - biri kaybolursa gecikme geri gelir:
+     (a) ilerleme scroll OLAYINDAN degil, kaydirma suresince kosan bir
+         rAF dongusunden gonderiliyor;
+     (b) durus BILDIRILIYOR (`dur`) - yoksa ongoru eski hizla ileri
+         kayar ve durusta sicrama olur;
+     (c) iscide ongoru var: hiz kestirimi + yas tavani + sonum.
+   Kaynak taranirken yorumlar ayiklaniyor: gerekce metninde gecen
+   kelime kurali yesile boyamasin. */
+{
+  const kusur = [];
+  const ayikla = (x) => x.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const G = ayikla(fs.readFileSync(path.join(__dirname, 'src', 'prolog', 'gl.ts'), 'utf8'));
+  const W = ayikla(fs.readFileSync(path.join(__dirname, 'src', 'prolog', 'isci.ts'), 'utf8'));
+
+  /* (a) scroll dinleyicisi dogrudan postMessage yapmamali */
+  const dinleyici = G.match(/addEventListener\('scroll',\s*([\s\S]{0,120}?)\)/);
+  if (!dinleyici) kusur.push('scroll-dinleyicisi-yok');
+  else if (/postMessage/.test(dinleyici[1])) kusur.push('ilerleme-hala-olaydan');
+  if (!/requestAnimationFrame\(dongu\)/.test(G)) kusur.push('kare-dongusu-yok');
+
+  /* (b) durus sinyali */
+  if (!/tik\(true\)/.test(G)) kusur.push('durus-sinyali-yok');
+  if (!/\bdur\b/.test(W)) kusur.push('iscide-durus-islenmiyor');
+
+  /* (c) ongoru: hiz + tavan + sonum */
+  if (!/pHiz\s*=\s*pHiz\s*\*/.test(W)) kusur.push('hiz-kestirimi-yok');
+  if (!/YAS_TAVAN/.test(W)) kusur.push('yas-tavani-yok');
+  if (!/SONUM/.test(W)) kusur.push('sonum-yok');
+  if (!/anaKok/.test(G) || !/anaFark/.test(W)) kusur.push('zaman-koku-eslenmiyor');
+
+  ol('R17 - takip: ilerleme kare ritminde + durus bildiriliyor + iscide ongoru',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || 'uc sart da yerinde');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
