@@ -264,3 +264,42 @@
   .pr-soz { animation: none; transform: none; }
   .pr-gec { transition: none; }
 }
+
+/* ============ DURAK 2 · AMBLEMIN DOGUSU ============
+   Amblem tuvalin USTUNDE ayri bir SVG katmani. Konum ve olcek
+   `halka.ts` icinde tek bir `transform` ile yaziliyor (kaydirmada
+   duzen okumasi yok, H12).
+
+   KIZIL ILK KEZ BURADA GORUNUYOR. Carpmasi icin sahne hafifce
+   soner: tuvalin parlakligi `--pr-sonuk` ile duser. `opacity`
+   DEGIL `filter: brightness` - opacity tuvali arkasindaki koyu
+   zeminle karistirip gri yapiyordu (denendi), brightness ise
+   sahneyi kendi renginde karartiyor.
+
+   Amblem SES CIKARMAZ: `aria-hidden` + `pointer-events:none`.
+   Prologun tek okunur ogesi cumle olarak kaliyor. */
+.pr-amblem {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1254px;
+  height: 1254px;
+  transform-origin: 0 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+  will-change: transform;
+}
+.pr-amblem .pr-halka { fill: var(--kz, #d81f26); }
+.pr-amblem .pr-dag { fill: var(--kz, #d81f26); }
+.pr-amblem .pr-nehir { fill: var(--bg, #0a0a0c); }
+.pr-amblem .pr-ic { opacity: 0; }
+
+/* Sahne sonmesi: tuval ve yedek yolun katmanlari birlikte. */
+.pr-tuval,
+.pr-kare { filter: brightness(var(--pr-sonuk, 1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Hareket azaltmada 3B yolu zaten acilmaz, amblem de dogmaz. */
+  .pr-amblem { display: none; }
+}

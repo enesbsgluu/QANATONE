@@ -9,14 +9,12 @@
     "  denetim.cjs       — butceyi ve taban genislikleri buradan dogrular.",
     "Bir sayiyi degistirmek isteyen BURAYI degistirir; ucu birden kayar."
   ],
-
   "bant": {
     "_": "Derinlik haritasinin KENDI yuzdeliklerinden (B yaklasimindan devir).",
-    "gok": 0.070,
-    "zirve": 0.240,
-    "dag": 0.500
+    "gok": 0.07,
+    "zirve": 0.24,
+    "dag": 0.5
   },
-
   "kesim": {
     "_": [
       "Mobil ayri bir KARE. 412x892 telefonda object-fit:cover 1,419 oranli",
@@ -24,10 +22,15 @@
       "buyutur — yani inen baytin ucte ikisi hic gorunmez. Dikey kesim iki",
       "duvarin ic kenarini, zirveyi ve nehri korur."
     ],
-    "masaustu": { "oran": null, "merkez": 0.5 },
-    "mobil": { "oran": 0.72, "merkez": 0.53 }
+    "masaustu": {
+      "oran": null,
+      "merkez": 0.5
+    },
+    "mobil": {
+      "oran": 0.72,
+      "merkez": 0.53
+    }
   },
-
   "derinlik": {
     "_": [
       "Depth Anything V2 TERS derinlik verir (1 = YAKIN). Uzaklik = k / d.",
@@ -40,7 +43,6 @@
     "d_taban": 0.055,
     "d_tavan": 0.995
   },
-
   "kamera": {
     "_": [
       "Referans kamera baslangic noktasidir: p=0'da sahne kaynak kareyle",
@@ -49,46 +51,266 @@
       "egim: inerken zirve kadrajdan kacmasin diye hafif yukari bakis."
     ],
     "fov_y": 45.9,
-    "yol": { "x": -0.25, "y": -1.35, "z": -4.2, "egim": 2.6 },
-    "egri": { "z": 1.0, "y": 1.35, "x": 1.0, "egim": 1.0 }
+    "yol": {
+      "x": -0.25,
+      "y": -1.35,
+      "z": -4.2,
+      "egim": 2.6
+    },
+    "egri": {
+      "z": 1.0,
+      "y": 1.35,
+      "x": 1.0,
+      "egim": 1.0
+    }
   },
-
   "katman": [
-    { "_": ["kip: parilti · gunes diski · sis payi · yon isigi. hiz: yedek yoldaki (CSS) paralaks hizi.", "genis: duz katmanin kare disina tasma payi. Kamera inip yukari egilince kadraj kaynak karenin USTUNU aciyor; tasma yetmeyince gogun ust satiri gerilip yatay bir bant dikisi birakiyordu (mobil p=1 karesinde goruldu). Duz katman iki ucgen, tasmanin bedeli yok."],
-      "ad": "gok",     "tur": "duz",      "d": 0.0631, "detay": 0.55, "genis": 0.38,
-      "hiz": 0.05, "kip": [0.0, 1.00, 0.10, 0.00] },
-    { "ad": "bulut",   "tur": "duz",      "d": 0.0600, "detay": 1.00, "genis": 0.12,
-      "hiz": 0.09, "kip": [0.0, 0.55, 0.16, 0.30] },
-    { "ad": "zirve",   "tur": "derinlik", "bant": [0.070, 0.240], "detay": 1.00,
-      "hiz": 0.15, "kip": [0.0, 0.20, 1.00, 0.85] },
-    { "ad": "dag-sol", "tur": "derinlik", "bant": [0.240, 0.500], "detay": 1.00,
-      "hiz": 0.30, "kip": [0.0, 0.10, 0.85, 0.75] },
-    { "ad": "dag-sag", "tur": "derinlik", "bant": [0.240, 0.500], "detay": 1.00,
-      "hiz": 0.32, "kip": [0.0, 0.10, 0.85, 0.75] },
-    { "ad": "vadi",    "tur": "derinlik", "bant": [0.500, 1.010], "detay": 1.00,
-      "hiz": 0.55, "kip": [0.0, 0.06, 0.55, 0.60] },
-    { "ad": "nehir",   "tur": "derinlik", "bant": [0.400, 1.010], "detay": 1.00,
-      "hiz": 0.60, "kip": [0.85, 0.05, 0.40, 0.25] }
+    {
+      "_": [
+        "kip: parilti · gunes diski · sis payi · yon isigi. hiz: yedek yoldaki (CSS) paralaks hizi.",
+        "genis: duz katmanin kare disina tasma payi. Kamera inip yukari egilince kadraj kaynak karenin USTUNU aciyor; tasma yetmeyince gogun ust satiri gerilip yatay bir bant dikisi birakiyordu (mobil p=1 karesinde goruldu). Duz katman iki ucgen, tasmanin bedeli yok."
+      ],
+      "ad": "gok",
+      "tur": "duz",
+      "d": 0.0631,
+      "detay": 0.55,
+      "genis": 0.38,
+      "hiz": 0.05,
+      "kip": [
+        0.0,
+        1.0,
+        0.1,
+        0.0
+      ]
+    },
+    {
+      "ad": "bulut",
+      "tur": "duz",
+      "d": 0.06,
+      "detay": 1.0,
+      "genis": 0.12,
+      "hiz": 0.09,
+      "kip": [
+        0.0,
+        0.55,
+        0.16,
+        0.3
+      ]
+    },
+    {
+      "ad": "zirve",
+      "tur": "derinlik",
+      "bant": [
+        0.07,
+        0.24
+      ],
+      "detay": 1.0,
+      "hiz": 0.15,
+      "kip": [
+        0.0,
+        0.2,
+        1.0,
+        0.85
+      ]
+    },
+    {
+      "ad": "dag-sol",
+      "tur": "derinlik",
+      "bant": [
+        0.24,
+        0.5
+      ],
+      "detay": 1.0,
+      "hiz": 0.3,
+      "kip": [
+        0.0,
+        0.1,
+        0.85,
+        0.75
+      ]
+    },
+    {
+      "ad": "dag-sag",
+      "tur": "derinlik",
+      "bant": [
+        0.24,
+        0.5
+      ],
+      "detay": 1.0,
+      "hiz": 0.32,
+      "kip": [
+        0.0,
+        0.1,
+        0.85,
+        0.75
+      ]
+    },
+    {
+      "ad": "vadi",
+      "tur": "derinlik",
+      "bant": [
+        0.5,
+        1.01
+      ],
+      "detay": 1.0,
+      "hiz": 0.55,
+      "kip": [
+        0.0,
+        0.06,
+        0.55,
+        0.6
+      ]
+    },
+    {
+      "ad": "nehir",
+      "tur": "derinlik",
+      "bant": [
+        0.4,
+        1.01
+      ],
+      "detay": 1.0,
+      "hiz": 0.6,
+      "kip": [
+        0.85,
+        0.05,
+        0.4,
+        0.25
+      ]
+    }
   ],
-
   "sis": [
-    { "_": "Iki perde. Uzaktaki vadi agzini dolduruyor ve cumlenin ARDINDA, yakindaki nehrin ONUNDE gecip kameraya en yakin hareket katmani oluyor.",
-      "d": 0.260, "kutu": [0.02, 0.40, 0.98, 0.90], "yogun": 0.85 },
-    { "_": "MOBILDE KAPALI (23 Agu, olculdu). Iki perde 412x892/DPR2'de kare basina 4,26 ms goturuyordu ve p95'i 11,5 -> 30,7 ms'ye cikaran tek is buydu. Bu YAKIN perde daha ucuz gorunse de en cok pikseli o kapliyor (kutu kare disina tasiyor). Uzaktaki perde (yogun 0.85) sahnenin dramatik isi; kalan o.",
-      "d": 0.560, "kutu": [-0.05, 0.52, 1.05, 1.06], "yogun": 0.38, "mobil": false }
+    {
+      "_": "Iki perde. Uzaktaki vadi agzini dolduruyor ve cumlenin ARDINDA, yakindaki nehrin ONUNDE gecip kameraya en yakin hareket katmani oluyor.",
+      "d": 0.26,
+      "kutu": [
+        0.02,
+        0.4,
+        0.98,
+        0.9
+      ],
+      "yogun": 0.85
+    },
+    {
+      "_": "MOBILDE KAPALI (23 Agu, olculdu). Iki perde 412x892/DPR2'de kare basina 4,26 ms goturuyordu ve p95'i 11,5 -> 30,7 ms'ye cikaran tek is buydu. Bu YAKIN perde daha ucuz gorunse de en cok pikseli o kapliyor (kutu kare disina tasiyor). Uzaktaki perde (yogun 0.85) sahnenin dramatik isi; kalan o.",
+      "d": 0.56,
+      "kutu": [
+        -0.05,
+        0.52,
+        1.05,
+        1.06
+      ],
+      "yogun": 0.38,
+      "mobil": false
+    }
   ],
-
   "soz": {
     "_": [
       "Cumle sahnenin ICINDE duruyor: vadi agziyla yan sirtlarin ARASINDA",
       "bir dunya noktasi. Kamera inerken yaklasir, buyur ve yan duvarlar",
       "onunun gecer — 'dagin onunde duran yazi' hissini kiran sey bu."
     ],
-    "d": 0.300,
-    "merkez": [0.0, 0.020],
+    "d": 0.3,
+    "merkez": [
+      0.0,
+      0.02
+    ],
     "genislik": 0.68
   },
-
+  "durak2": {
+    "_": [
+      "DURAK 2 - AMBLEMIN DOGUSU (23 Agu 2026).",
+      "Kamera daga yaklasirken Q halkasi dagin ETRAFINDA cizilerek",
+      "dogar, kuyrugu sahnenin nehrine devredilir, sonra kuculup",
+      "navdaki yerine oturur. Kizil bu sahnede ILK KEZ gorunuyor,",
+      "o yuzden cizim boyunca sahne hafifce soner.",
+      "YERLESIM OLCULDU, goz karari degil: halkanin ekrandaki",
+      "merkezi ve yaricapi, zirvenin ve dagin izdusumunden p nin",
+      "dogrusal fonksiyonu olarak cikarildi (sapma < 0,011).",
+      "MOBIL AYRI: dikey kesimde zirve ekranin DISINDA kaliyor",
+      "(x = -1,04) ve dag kadraji zaten dolduruyor - orada halka",
+      "daga degil KADRAJA oturur, merkezi ekranin ortasinda.",
+      "Hedef tam cakisma DEGIL tanınma (Enes, 23 Agu): logonun",
+      "stilize ucgen zirveleri ile gercek Everest siluetinin",
+      "ortalama 44 px farki bilerek kapatilmadi."
+    ],
+    "aralik": {
+      "_": "p araliklari. cizim bitince halka tam; sonra sahneyle buyur, sonra nava gider.",
+      "bekle": [
+        0.0,
+        0.06
+      ],
+      "cizim": [
+        0.06,
+        0.34
+      ],
+      "tam": [
+        0.34,
+        0.52
+      ],
+      "nav": [
+        0.52,
+        0.7
+      ]
+    },
+    "sonme": {
+      "_": "Sahnenin tuvali cizim boyunca bu deger carpanina soner.",
+      "deger": 0.55
+    },
+    "yerlesim": {
+      "masaustu": {
+        "_": "merkez olculdu (zirvenin izdusumu); yaricap tanınma olceginde secildi.",
+        "merkez_x": [
+          -0.2767,
+          -0.0103
+        ],
+        "merkez_y": [
+          0.2637,
+          -0.047
+        ],
+        "yaricap": [
+          0.3,
+          0.14
+        ],
+        "p_tam_ekran": 0.193
+      },
+      "mobil": {
+        "_": [
+          "Kadraja oturur (zirve ekran disinda kaliyor, x = -1,04).",
+          "YARICAP MASAUSTUNDEN KUCUK ve sebebi olculdu: mobilde sinir",
+          "ekranin GENISLIGI (412 px), yuksekligi degil. 0,36 denendi ->",
+          "dis cap 736 px, ekran genisliginin 1,8 kati, Q yatayda tasip",
+          "tanınmaz oldu (kare yakalandi). 0,15 -> 0,22 araliginda dis cap",
+          "355 -> 449 px: sona dogru ekran genisligini tam dolduruyor."
+        ],
+        "merkez_x": [
+          0.0,
+          0.0
+        ],
+        "merkez_y": [
+          0.14,
+          -0.04
+        ],
+        "yaricap": [
+          0.15,
+          0.07
+        ]
+      },
+      "_": [
+        "MERKEZ olculuyor (zirvenin izdusumu), YARICAP secilıyor.",
+        "Yaricap IC dairenin yaricapidir (1,0 = ekran yarisi/yukseklik).",
+        "Secim olcerek daraltildi, uc kare yakalandi:",
+        "  1,03 -> halkanin DIS capi 1431 px, ekran 900: dikeyde tasti,",
+        "          ekranda yalniz kizil kaldi, Q formu tanınmadi.",
+        "  0,70 -> hala tasiyor (dis cap 1431 px genisligi dolduruyor).",
+        "  0,44 -> dis cap 903 px = ekran yuksekligi, TAM oturuyor.",
+        "Q nun seridi kalin (dis r 441,7 / ic r 193,2 = 2,29 kat), yani",
+        "ic daireyi ekrana sigdirmak halkayi tasirir; sinir DIS cemberdir.",
+        "Cizim boyunca 0,30 -> 0,44: sona dogru dis cember ekran",
+        "yuksekligini tam dolduruyor. \"Ekrani kaplayacak kadar buyuyecek\"",
+        "sartinin tanınmayi bozmayan karsiligi bu."
+      ]
+    }
+  },
   "olcum": {
     "_": [
       "Genislik hesabinin referans ekranlari. DPR tavani 2: 3x telefonda",
@@ -110,13 +332,28 @@
       "yuk birakmiyor (ucu de 8,63 ms). 1,5 secildi cunku 1'e inmek",
       "kare kazandirmiyor ama keskinligi gorunur sekilde dusuruyor."
     ],
-    "dpr_cizim": { "masaustu": 2, "mobil": 1.5 },
-    "ekran": {
-      "masaustu": [1440, 900],
-      "mobil": [412, 892]
+    "dpr_cizim": {
+      "masaustu": 2,
+      "mobil": 1.5
     },
-    "taban_genislik": { "masaustu": 2560, "mobil": 1600 },
-    "butce_bayt": { "masaustu": 1258291, "mobil": 460800 },
+    "ekran": {
+      "masaustu": [
+        1440,
+        900
+      ],
+      "mobil": [
+        412,
+        892
+      ]
+    },
+    "taban_genislik": {
+      "masaustu": 2560,
+      "mobil": 1600
+    },
+    "butce_bayt": {
+      "masaustu": 1258291,
+      "mobil": 460800
+    },
     "doku_bayt": {
       "_": [
         "COZULMUS DOKU TAVANI — bayt tavaninin yanina ikinci kisit.",
@@ -136,13 +373,21 @@
       "mobil": 58720256
     }
   },
-
   "hareket": {
     "_": "Zamana bagli (kaydirmadan bagimsiz) hareketler; saniye cinsinden.",
     "bulut_hiz": 0.0042,
     "sis_nefes": 26.0,
-    "sis_suruklenme": 0.010,
+    "sis_suruklenme": 0.01,
     "nehir_parilti": 0.34,
-    "gunes": { "azimut": [0.62, 0.30], "yukseklik": [-0.070, 0.160] }
+    "gunes": {
+      "azimut": [
+        0.62,
+        0.3
+      ],
+      "yukseklik": [
+        -0.07,
+        0.16
+      ]
+    }
   }
 }

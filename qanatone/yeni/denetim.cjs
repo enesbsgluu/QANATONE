@@ -1901,6 +1901,55 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' ') || 'uc sart da yerinde');
 }
 
+
+/* R18 - DURAK 2 SOZLESMESI (23 Agu). Amblem sahnede DOGUYOR: halka
+   cizilerek geliyor, kuyrugu sahnenin nehrine devrediyor, sonra
+   navdaki yerine oturuyor. Kural dort seyi tutuyor:
+     (a) amblemin uc yolu ve CIZIM yolu kunyede duruyor - cizim yolu
+         olculen orta cizgidir, kaybolursa "kalem darbesi" gider;
+     (b) yerlesim IKI varyant icin de yazili (mobil ayri, cunku orada
+         sinir ekranin genisligi ve zirve kadraj disinda);
+     (c) amblem parcasi sayfaya <script src> olarak BAGLANMIYOR ve
+         kendi tavanini asmiyor - J1/H3 onu saymaz, tavani burasi;
+     (d) sonme degeri yerinde: kizil bu sahnede ilk kez goruluyor. */
+{
+  const kusur = [];
+  const pkok = path.join(__dirname, 'src', 'prolog');
+  const A = JSON.parse(fs.readFileSync(path.join(pkok, 'amblem.json'), 'utf8'));
+  const S = JSON.parse(fs.readFileSync(path.join(pkok, 'sahne.json'), 'utf8'));
+  for (const y of ['halka', 'dag', 'nehir'])
+    if (!(A.yol || {})[y] || A.yol[y].length < 500) kusur.push('yol-yok:' + y);
+  if (!A.cizim || !A.cizim.yol || A.cizim.yol.length < 500) kusur.push('cizim-yolu-yok');
+  if (!A.ic_daire || !A.ic_daire.r) kusur.push('ic-daire-yok');
+  if (!A.sinir || !A.sinir.yari_yukseklik) kusur.push('sinir-kutusu-yok');
+  const D2 = S.durak2 || {};
+  for (const v of ['masaustu', 'mobil']) {
+    const Y = (D2.yerlesim || {})[v];
+    if (!Y) { kusur.push('yerlesim-yok:' + v); continue; }
+    for (const a of ['merkez_x', 'merkez_y', 'yaricap'])
+      if (!Array.isArray(Y[a]) || Y[a].length !== 2) kusur.push(v + '.' + a);
+  }
+  if (!(D2.sonme || {}).deger) kusur.push('sonme-yok');
+  for (const a of ['bekle', 'cizim', 'tam', 'nav'])
+    if (!Array.isArray((D2.aralik || {})[a])) kusur.push('aralik:' + a);
+
+  const TAVAN = 24 * 1024;
+  const dizin = path.join(KOK, '_astro');
+  let boy = 0, adi = '';
+  if (fs.existsSync(dizin)) {
+    for (const f of fs.readdirSync(dizin))
+      if (f.indexOf('halka.') === 0) { boy = fs.statSync(path.join(dizin, f)).size; adi = f; }
+  }
+  if (!boy) kusur.push('amblem-parcasi-yok');
+  else if (boy > TAVAN) kusur.push('amblem-parcasi-buyuk:' + boy + '>' + TAVAN);
+  const ana = oku(path.join(KOK, 'index.html'));
+  if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
+
+  ol('R18 - durak 2: amblem kunyesi + iki varyant yerlesim + parca ayri',
+     kusur.length === 0,
+     kusur.slice(0, 4).join(' ') || 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
