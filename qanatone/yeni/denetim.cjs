@@ -110,9 +110,24 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      (minify edilmis) · toplam 10.377 B. Ana sayfa tavani 11 KB —
      kalan pay ~889 B, yani bir sonraki ada da bilincli karar olacak.
      OBUR 60 SAYFANIN TAVANI DEGISMEDI. Anayasanin istedigi "ana
-     sayfada sahne bazli butce raporu" hala acik kalem. */
+     sayfada sahne bazli butce raporu" hala acik kalem.
+
+     22 AGU · IKINCI GUNCELLEME, PROLOG A YAKLASIMI (11 -> 12 KB).
+     BILINCLI, RAKAMLARIYLA:
+       ada 326 B (satir ici)     -> 1.635 B (ayri parca)   +1.309 B
+       `pr-gl` satir ici acilis  ->   234 B                  +234 B
+       toplam ana sayfa 10.377 B -> 11.920 B
+     Ada neden buyudu: 3B sahnesi `import()` ile cekiliyor ve Vite her
+     dinamik import icin `__vitePreload` yardimcisini (~1,15 KB) parcaya
+     yaziyor. Yardimcidan KURTULMA DENENDI ve BIRAKILDI: `build.
+     modulePreload:false` yardimciyi kaldirmadi, 1.635 -> 1.779 B ile
+     BUYUTTU (olculdu); ustelik butun ciktida modulepreload bagi sayisi
+     zaten sifir. Karsiliginda alinan sey sayfada degil: 17 KB'lik 3B
+     parcasi J1'in disinda, kendi tavani R14'te ve yalnizca WebGL2 olan
+     + hareket azaltmasi kapali ziyaretcide iniyor.
+     Yeni tavan 12 KB, kalan pay ~368 B. */
   const TAVAN = 10 * 1024;
-  const TAVAN_ANA = 11 * 1024;
+  const TAVAN_ANA = 12 * 1024;
   const kusur = [];
   let enBuyuk = 0, anaToplam = 0;
   for (const p of sayfalar) {
@@ -1584,11 +1599,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 }
 
 /* R12 · PROLOG SOZLESMESI (CODE-TALIMATI-PROLOG-1 kapisi).
-   Sozlesme metinden degil CIKTIDAN olculuyor: alti katman ve hepsi
-   TEMBEL · cumle ham HTML'de · prologun icinde h1 YOK (bot govdeyi
-   gorur) · her katmanin mobil kaynagi var (vadi bilincli haric) ·
-   hareket sadece transform (opacity/filter/blur yok) · hareket azaltma
-   blogu hareketle ayni ozgullukte. */
+   Sozlesme metinden degil CIKTIDAN olculuyor: yedi katman ve hepsi
+   TEMBEL · her katmanin mobil kaynagi var · cumle ham HTML'de ·
+   prologun icinde h1 YOK (bot govdeyi gorur) · hareket sadece transform
+   (opacity/filter/blur yok) · hareket azaltma blogu hareketle ayni
+   ozgullukte.
+
+   22 AGU · A YAKLASIMIYLA BILINCLI DEGISEN UC SAYI (sessizce degil):
+     katman 6 -> 7   : bulut kendi katmanina cikti (surukleniyor, taban
+                       plakada duramazdi).
+     mobil kaynak 5 -> 7 : B'de vadi mobilde display:none ile
+                       dusuruluyordu (tam kare yedi katman butceyi
+                       zorluyordu); kutu kirpma + dikey kesimden sonra
+                       yedisi de 1600 px'te butcenin icinde.
+     keyframe 7 -> 2 : yedi ayri kare yerine --hiz tasiyan TEK kare
+                       (pr-kay) + cumle karesi. Hizlar sahne.json'dan
+                       bilesene, oradan katmanin kendi ozelligine gecer.
+   Hareketi veren dugum de degisti: .pr-kat -> .pr-sar (katmanlar artik
+   kendi sinir kutularina kirpik, yer degistirme KARENIN yuzdesi
+   olmali). Durdurma kurali onunla ayni dugumde. */
 {
   const kusur = [];
   const h = oku(path.join(KOK, 'index.html'));
@@ -1596,31 +1625,115 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (!sahne) kusur.push('sahne-yok');
   else {
     const img = sahne.match(/<img [^>]*class="pr-kat[^>]*>/g) || [];
-    if (img.length !== 6) kusur.push('katman=' + img.length);
+    if (img.length !== 7) kusur.push('katman=' + img.length);
     const tembelDegil = img.filter(t => !/loading="lazy"/.test(t)).length;
     if (tembelDegil) kusur.push('tembel-olmayan-katman=' + tembelDegil);
     const olcusuz = img.filter(t => !/width="\d+"/.test(t) || !/height="\d+"/.test(t)).length;
     if (olcusuz) kusur.push('olcusuz-katman=' + olcusuz);   /* CLS 0 sarti */
+    /* Kutu ELLE degil kunyeden gelmeli: dort degiskenin dordu de her
+       katmanda, iki varyant icin ayri ayri duruyor mu. */
+    const kutusuz = img.filter(t =>
+      !/--dx:/.test(t) || !/--dw:/.test(t) || !/--mx:/.test(t) || !/--mw:/.test(t)).length;
+    if (kutusuz) kusur.push('kutusuz-katman=' + kutusuz);
     const mobil = (sahne.match(/<source media="\(max-width: 760px\)"/g) || []).length;
-    if (mobil !== 5) kusur.push('mobil-kaynak=' + mobil);
+    if (mobil !== 7) kusur.push('mobil-kaynak=' + mobil);
     if (!/class="pr-soz">[^<]{6,}/.test(sahne)) kusur.push('cumle-ham-html-de-yok');
     if (/<h1/.test(sahne)) kusur.push('prologun-icinde-h1');
     if (!/class="pr-gec"/.test(sahne)) kusur.push('gec-dugmesi-yok');
   }
   if (!/<h1/.test(h.replace(/<section class="pr"[\s\S]*?<\/section>/, '')))
     kusur.push('govdede-h1-yok');
-  /* CSS tarafı: yalniz transform, ve durdurma kurali ayni ozgullukte */
+  /* CSS tarafi: yalniz transform, ve durdurma kurali ayni ozgullukte */
   const pcss = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'prolog.css'), 'utf8');
   const kareler = pcss.match(/@keyframes pr-[a-z]+\s*\{[\s\S]*?\}\s*\}/g) || [];
   for (const k of kareler)
     if (/opacity|filter|blur|width|height|top|left/.test(k.replace(/@keyframes[^{]*/, '')))
       kusur.push('keyframe-transform-disi:' + (k.match(/pr-[a-z]+/) || [''])[0]);
-  if (kareler.length !== 7) kusur.push('keyframe=' + kareler.length);
+  if (kareler.length !== 2) kusur.push('keyframe=' + kareler.length);
   const azalt = (pcss.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\n\}/) || [''])[0];
-  if (!/\.pr-kat\s*\{[^}]*animation:\s*none/.test(azalt)) kusur.push('azaltma-katmani-durdurmuyor');
+  if (!/\.pr-sar\s*\{[^}]*animation:\s*none/.test(azalt)) kusur.push('azaltma-katmani-durdurmuyor');
   if (!/\.pr-soz\s*\{[^}]*animation:\s*none/.test(azalt)) kusur.push('azaltma-cumleyi-durdurmuyor');
-  ol('R12 · prolog sozlesmesi: 6 tembel katman · cumle HTML\'de · h1 govdede',
+  ol('R12 · prolog sozlesmesi: 7 tembel katman · cumle HTML\'de · h1 govdede',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
+}
+
+
+/* R14 · PROLOG "A YAKLASIMI" SOZLESMESI (22 Agu).
+   Talimatin iki isi vardi ve ikisi de OLCULEBILIR:
+     (1) KALITE — mobil katmanlar >= 1600 px, masaustu >= 2560 px (KARE
+         olcusune cevrilmis genislik; dosya kendi sinir kutusuna kirpik
+         oldugu icin dosya genisligi bundan kucuk olabilir) ve butce
+         KULLANILMIS olmali (mobilde en az %75) — sart "kaliteyi butceye
+         sigdirmak" degil, "butceyi kullanmak".
+     (2) HAREKET — 3B parcasi var, sayfaya <script src> olarak
+         BAGLANMIYOR (J1/H3 tavanlari onu saymaz; tavani burasi) ve
+         acilis sinifi sayfada duruyor.
+   Ucuncu bir sart daha var, gorunmez ama pahali: COZULMUS DOKU tavani.
+   Dosya bayti kucukken bellek buyuyebilir; kural 109'un WebGL karsiligi.
+
+   Genislikler ve kutular ELLE yazilamaz: kunye ile diskteki dosyalar
+   birebir tutmali. Kunye bayatladigi anda kural kirmizi doner. */
+{
+  const kusur = [];
+  const pkok = path.join(__dirname, 'src', 'prolog');
+  const S = JSON.parse(fs.readFileSync(path.join(pkok, 'sahne.json'), 'utf8'));
+  const K = JSON.parse(fs.readFileSync(path.join(pkok, 'kunye.json'), 'utf8'));
+  const rapor = [];
+  for (const ad of Object.keys(K.varyant)) {
+    const V = K.varyant[ad];
+    const taban = S.olcum.taban_genislik[ad];
+    const butce = S.olcum.butce_bayt[ad];
+    const dokuTavan = S.olcum.doku_bayt[ad];
+    let bayt = V.derinlik.bayt, doku = V.derinlik.gen * V.derinlik.yuk;
+    for (const k of V.katman) {
+      const dosya = path.join(KOK, 'img', 'prolog', k.dosya);
+      if (!fs.existsSync(dosya)) { kusur.push(ad + ':dosya-yok:' + k.dosya); continue; }
+      const b = fs.statSync(dosya).size;
+      if (b !== k.bayt) kusur.push(ad + ':bayat-kunye:' + k.dosya);
+      if (k.kare_gen < taban) kusur.push(ad + ':dar:' + k.ad + '=' + k.kare_gen);
+      bayt += b; doku += k.gen * k.yuk * 4;
+    }
+    if (!fs.existsSync(path.join(KOK, 'img', 'prolog', V.derinlik.dosya)))
+      kusur.push(ad + ':derinlik-yok');
+    if (bayt > butce) kusur.push(ad + ':butce-asti:' + bayt);
+    if (ad === 'mobil' && bayt < butce * 0.75) kusur.push('mobil:butce-kullanilmadi:' + bayt);
+    if (doku > dokuTavan) kusur.push(ad + ':doku-tavani:' + doku);
+    rapor.push(ad + ' ' + Math.round(bayt / 1024) + '/' + Math.round(butce / 1024)
+      + ' KB · doku ' + Math.round(doku / 1048576) + ' MB');
+  }
+  /* Iki varyantin derinlik haritasi AYNI ADI TASIYAMAZ. Bir kez tasidi
+     (masaustu ve mobil ikisi de "m" onekiyle basliyordu) ve mobil kesim
+     masaustununkini ezdi. Hata p=0'da GORUNMUYORDU: o karede kamera
+     referans noktasinda durur, derinlik ne olursa olsun her nokta
+     kaynak kareye geri izdusur — yalniz paralaksta ortaya cikiyordu. */
+  if (K.varyant.mobil.derinlik.dosya === K.varyant.masaustu.derinlik.dosya)
+    kusur.push('derinlik-adi-cakisiyor');
+
+  /* Iki parca: ana ip kabugu (gl) ve sahnenin kendisi (isci). Ikisi de
+     sayfaya `<script src>` ile BAGLANMAZ — J1/H3 onlari saymaz, tavan
+     burasi. Isci ayri olcuyor cunku sahnenin butun agirligi orada ve
+     ana ip kabugunun ince kalmasi sozlesmenin kendisi. */
+  const TAVAN = { gl: 6 * 1024, isci: 22 * 1024 };
+  const astro = path.join(KOK, '_astro');
+  const hh = oku(path.join(KOK, 'index.html'));
+  const dosyalar = fs.existsSync(astro) ? fs.readdirSync(astro) : [];
+  for (const [ad, kalip] of [['gl', /^gl\..*\.js$/], ['isci', /^isci-.*\.js$/]]) {
+    const parca = dosyalar.filter(f => kalip.test(f));
+    if (parca.length !== 1) { kusur.push(ad + '-parcasi=' + parca.length); continue; }
+    const b = fs.statSync(path.join(astro, parca[0])).size;
+    if (b > TAVAN[ad]) kusur.push(ad + '-tavan:' + b);
+    if (hh.includes(parca[0])) kusur.push(ad + '-sayfaya-bagli');
+    rapor.push(ad + ' ' + (b / 1024).toFixed(1) + '/' + (TAVAN[ad] / 1024) + ' KB');
+  }
+  if (!/classList\.add\(.pr-gl.\)/.test(hh)) kusur.push('pr-gl-acilisi-yok');
+  /* 3B yolu ile yedek yol AYNI ANDA inmemeli: acilis sinifi varken
+     katmanlar `display:none` olmali (tembel gorsel goruse girmez ->
+     istek yok). Kural CSS'ten degil CIKTIDAN okunuyor. */
+  const pc = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'prolog.css'), 'utf8');
+  if (!/\.pr-gl\s+\.pr-kare\s*\{[^}]*display:\s*none/.test(pc))
+    kusur.push('3b-yolunda-katmanlar-de-iniyor');
+  ol('R14 · prolog A: taban genislik + butce + doku tavani + 3B parcasi ayri',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || rapor.join(' · '));
 }
 
 
