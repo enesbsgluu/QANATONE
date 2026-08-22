@@ -36,6 +36,7 @@ import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
 import Perde from '../parcalar/Perde.astro';
+import PRDag from '../sahneler/PRDag.astro';
 import { KOK, icerik } from '../icerik';
 import { anaSema } from '../sema.mjs';
 
@@ -77,6 +78,11 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
       bütçesini 33 sayfaya yayar; girişlerin ezici çoğunluğu ana sayfa.
       İç sayfaya doğrudan giren perde görmez — karar Enes'te. */}
   <Perde />
+  {/* PROLOG · 1. DURAK (21 Ağu talimatı, HAT 2). Gövdenin ÖNÜNE bir
+      sahne; gövde arkada normal akışta hazır durur ve h1 hero'da
+      kalır — bot prologu değil gövdeyi görür. 2. durak (logo
+      hizalanması) Enes'in hükmünden sonra. */}
+  <PRDag dil="tr" />
   <div class="ana">
     <SHHero />
     <STSerit />
