@@ -556,7 +556,8 @@ def veri_yaz(kunye):
     """
     K = {a: S["kamera"][a] for a in ("fov_y", "yol", "egri")}
     cikti = dict(
-        dpr_tavan=S["olcum"]["dpr_tavan"], kamera=K,
+        dpr_tavan=S["olcum"]["dpr_tavan"],
+        dpr_cizim=S["olcum"]["dpr_cizim"], kamera=K,
         derinlik={a: S["derinlik"][a] for a in ("k", "d_taban", "d_tavan")},
         hareket={a: v for a, v in S["hareket"].items() if a != "_"},
         soz={a: v for a, v in S["soz"].items() if a != "_"},

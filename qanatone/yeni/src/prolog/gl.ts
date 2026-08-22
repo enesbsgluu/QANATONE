@@ -100,7 +100,14 @@ export async function baslat(bolum: HTMLElement) {
   /* Varyant sorgusu `<picture>`in `media`siyla AYNI olmali: iki
      varyantin kesimi, kutulari ve dosyalari farkli. */
   const varyant = matchMedia('(max-width: 760px)').matches ? 'mobil' : 'masaustu';
-  const dpr = Math.min(window.devicePixelRatio || 1, (VERI as any).dpr_tavan);
+  /* CIZIM tavani URETIM tavanindan ayri ve VARYANTA BAGLI: mobilde
+     1,5, masaustunde 2. Olculdu (412x892, CPU 4x, GPU senkronlu):
+     DPR 2 -> 12,35 ms/kare (p95 28,6) · 1,5 -> 8,70 (p95 11,0).
+     Mobilde tek gercek kaldirac piksel sayisi. `dpr_tavan` (uretim
+     referansi) BILEREK dokunulmadi: onu dusurmek katman
+     genisliklerini kucultup butun gorselleri yeniden urettirirdi. */
+  const dprT = (VERI as any).dpr_cizim?.[varyant] ?? (VERI as any).dpr_tavan;
+  const dpr = Math.min(window.devicePixelRatio || 1, dprT);
   const r = tuval.getBoundingClientRect();
   if (r.width < 1 || r.height < 1) {
     yedek('tuval-olcusuz', `${r.width}x${r.height}`);

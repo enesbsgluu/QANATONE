@@ -74,7 +74,8 @@
   "sis": [
     { "_": "Iki perde. Uzaktaki vadi agzini dolduruyor ve cumlenin ARDINDA, yakindaki nehrin ONUNDE gecip kameraya en yakin hareket katmani oluyor.",
       "d": 0.260, "kutu": [0.02, 0.40, 0.98, 0.90], "yogun": 0.85 },
-    { "d": 0.560, "kutu": [-0.05, 0.52, 1.05, 1.06], "yogun": 0.38 }
+    { "_": "MOBILDE KAPALI (23 Agu, olculdu). Iki perde 412x892/DPR2'de kare basina 4,26 ms goturuyordu ve p95'i 11,5 -> 30,7 ms'ye cikaran tek is buydu. Bu YAKIN perde daha ucuz gorunse de en cok pikseli o kapliyor (kutu kare disina tasiyor). Uzaktaki perde (yogun 0.85) sahnenin dramatik isi; kalan o.",
+      "d": 0.560, "kutu": [-0.05, 0.52, 1.05, 1.06], "yogun": 0.38, "mobil": false }
   ],
 
   "soz": {
@@ -95,6 +96,21 @@
       "olcmek bayti 2,25 katina cikariyordu."
     ],
     "dpr_tavan": 2,
+    "_dpr_cizim": [
+      "CIZIM tavani URETIM tavanindan AYRI (23 Agu). Ustteki `dpr_tavan`",
+      "URETECIN bayt hesabinin referansi - onu dusurmek katman",
+      "genisliklerini kucultur ve butun gorselleri yeniden urettirir.",
+      "Asagidaki `dpr_cizim` yalniz CALISMA ANINDA kac piksel",
+      "boyandigini soyler; kaynak daha keskin kalir, ust ornekleme",
+      "payi mipmap'e yarar.",
+      "OLCULDU (412x892, CPU 4x, gercek Chrome + Intel UHD, GPU",
+      "senkronlu): DPR 2 -> 12,35 ms/kare (p95 28,6) · DPR 1,5 -> 8,70",
+      "(p95 11,0) · DPR 1 -> 8,65 (p95 8,55). Mobilde tek gercek",
+      "kaldirac PIKSEL SAYISI: DPR 1'de sis de arazi de OLCULEBILIR",
+      "yuk birakmiyor (ucu de 8,63 ms). 1,5 secildi cunku 1'e inmek",
+      "kare kazandirmiyor ama keskinligi gorunur sekilde dusuruyor."
+    ],
+    "dpr_cizim": { "masaustu": 2, "mobil": 1.5 },
     "ekran": {
       "masaustu": [1440, 900],
       "mobil": [412, 892]

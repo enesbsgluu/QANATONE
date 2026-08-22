@@ -1823,6 +1823,38 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0, kusur.slice(0, 4).join(' ') || SEBEP.length + ' dal');
 }
 
+
+/* R16 - YEDEK YOLUN KENDI SURUCUSU VAR (23 Agu).
+   B yolunun tek surucusu `@supports (animation-timeline: view())`
+   idi. `animation-timeline` Safari ve iOS Safari'ye 26.0 ile geldi;
+   18.7 ve oncesinde blok HIC uygulanmaz ve sahne 3B dusunce tek
+   SABIT kare kalirdi - dususten AYRI, ikinci bir sessiz kusur.
+   Kural uc seyi birden tutuyor:
+     (a) CSS'te destek YOKSA calisan bir blok var;
+     (b) o blok animasyonu `paused` baslatiyor - yani noktayi disaridan
+         biri yaziyor (JS surucusu), kareler tek yerde kaliyor;
+     (c) surucu modulu ciktida var ve `.pr-js` sinifini kuruyor.
+   Kareler (`@keyframes pr-kay`) TEK YERDE olmali: kural, ikinci bir
+   kopya dogarsa degil, SURUCU KAYBOLURSA kirmizi doner. */
+{
+  const kusur = [];
+  const pc = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'prolog.css'), 'utf8');
+  if (!/@supports\s+not\s*\(animation-timeline:\s*view\(\)\)/.test(pc))
+    kusur.push('destek-yoksa-blogu-yok');
+  const blok = pc.split('@supports not (animation-timeline: view())')[1] || '';
+  if (!/paused/.test(blok.slice(0, 400))) kusur.push('animasyon-paused-degil');
+  if (!/\.pr-js\s+\.pr-sar/.test(pc)) kusur.push('pr-js-kurali-yok');
+  const dizin = path.join(KOK, '_astro');
+  const js = !fs.existsSync(dizin) ? '' : fs.readdirSync(dizin)
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => fs.readFileSync(path.join(dizin, f), 'utf8'))
+    .join('\n');
+  if (!js.includes('pr-js')) kusur.push('surucu-ciktida-yok');
+  if (!/animationDelay/.test(js)) kusur.push('ilerleme-yazilmiyor');
+  ol('R16 - yedek yolun surucusu view-timeline\'a bagli degil',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || 'CSS blogu + JS surucu');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
