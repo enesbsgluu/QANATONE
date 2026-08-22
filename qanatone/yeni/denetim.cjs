@@ -125,9 +125,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      zaten sifir. Karsiliginda alinan sey sayfada degil: 17 KB'lik 3B
      parcasi J1'in disinda, kendi tavani R14'te ve yalnizca WebGL2 olan
      + hareket azaltmasi kapali ziyaretcide iniyor.
-     Yeni tavan 12 KB, kalan pay ~368 B. */
+     Yeni tavan 12 KB, kalan pay ~368 B.
+
+   IKINCI BILINCLI DEGISIM - 12 KB -> 12,5 KB (23 Agu), RAKAMIYLA:
+     ada 1.635 B -> 1.777 B   (+142 B: yedek yol dallarinin ADLARI +
+                               `<html data-prolog>` izi + tek konsol
+                               satiri; sadelestirilmis hali, tam modul
+                               327 B tutuyordu)
+     ana sayfa toplam 11.920 B -> 12.295 B  (tavan 12.288 idi: 7 B)
+   Neden tavan buyudu, neden dal kesilmedi: bu 142 B bir OZELLIK degil,
+   OLCUM ARACI. Sahne 22 Agu'da Chrome ve Safari'de sessizce yedek yola
+   dusuyordu ve elde sebebi ayirt edecek tek bir olcum yoktu - "yalniz
+   Brave'de calisiyor" gozlemi bir tur boyunca teshis edilemedi. 7 B
+   ugruna bir teshis dalini kesmek, ayni korlugu geri getirirdi. Dal
+   listesi R15'te kilitli.
+     Yeni tavan 12,5 KB, kalan pay ~505 B. */
   const TAVAN = 10 * 1024;
-  const TAVAN_ANA = 12 * 1024;
+  const TAVAN_ANA = 12.5 * 1024;
   const kusur = [];
   let enBuyuk = 0, anaToplam = 0;
   for (const p of sayfalar) {
@@ -1769,6 +1783,44 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   }
   ol('R13 · kesme adayi dort bolum isaretli ve HALA yerinde',
      kusur.length === 0, kusur.slice(0, 4).join(' ') || ADAYLAR.length + ' bolum');
+}
+
+
+/* R15 - YEDEK YOLA DUSUS SESSIZ OLAMAZ (23 Agu).
+   Belirti: "sahne yalniz Brave'de calisiyor, Chrome ve Safari yedek
+   yola dusuyor" - ve elde sebebi ayirt edecek TEK bir olcum yoktu,
+   cunku dusus dallarinin hepsi sessizdi (geriDon(), dur(), .catch()).
+   Kural, o korlugun geri gelmesini engeller.
+
+   CIKTIDAN okunuyor, kaynaktan degil: kaynakta duran ama derlemede
+   elenen (agac sallama, olu dal) bir log ise yaramaz. Aranan sey
+   ziyaretcinin konsolunda gercekten gorunecek DIZELERIN ta kendisi.
+
+   Uc sart:
+     (a) her dusus dalinin ADI ciktida var - dal eklenip adsiz
+         birakilirsa kirmizi doner;
+     (b) konsol satiri ve DOM izi (data-prolog) ikisi birden var -
+         konsol ucucu, oznitelik ekran goruntusunden bile okunur;
+     (c) yedek yolun KENDI surucusu yoklaniyor: animation-timeline
+         yoksa sahne sabit karedir, bu ayri bir hukumdur. */
+{
+  const SEBEP = [
+    'atla-oturum', 'hareket-azaltma', 'gl-modulu-inmedi',
+    'sahne-yapisi-yok', 'worker-yok', 'offscreen-yok', 'tuval-olcusuz',
+    'isci-yuklenmedi', 'isci-hatasi',
+  ];
+  const kusur = [];
+  const dizin = path.join(KOK, '_astro');
+  const js = !fs.existsSync(dizin) ? '' : fs.readdirSync(dizin)
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => fs.readFileSync(path.join(dizin, f), 'utf8'))
+    .join('\n');
+  for (const ad of SEBEP) if (!js.includes(ad)) kusur.push('sebep-yok:' + ad);
+  if (!js.includes('[prolog] yedek yol')) kusur.push('konsol-satiri-yok');
+  if (!/dataset[.]prolog\b/.test(js)) kusur.push('dom-izi-yok');
+  if (!js.includes('animation-timeline')) kusur.push('paralaks-yoklamasi-yok');
+  ol('R15 - yedek yola dusus sessiz degil: dokuz dal adlandirilmis + DOM izi',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || SEBEP.length + ' dal');
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
