@@ -1,50 +1,232 @@
 ---
-/* Hizmetler dizini gövdesi — TR ve EN aynı parçayı kullanır (rota turu).
-   Bütün metin content.json'dan; sıra da oradan: numaralar (01..09)
-   services dizisinin sırasından doğar, koleksiyon deposunun iç sırasına
-   güvenilmez. Eski sayfanın iskeleti: başlık + sayı + giriş + 9 kalem
-   (num/ad/metin/İncele). Eski #lead formu taşınmadı — ada tek formu
-   ana sayfada tutuyor (S-IL), dizin oraya bağlanır. */
+/* Hizmetler dizini gövdesi — TR ve EN aynı parçayı kullanır.
+
+   KÜNYE KAYNAKTAN OKUNDU (22 Ağustos, sadakat turu — /projeler'in aynı
+   turu). Bu sayfa daha önce göç turunun sadeleştirmesiydi (tek sütun
+   `<ol class="adimlar">`); orijinal dizin o değil. Kaynak: kök
+   `index.html` `#hizmet` bölümü, `renderServices()` (7184-7197) ve
+   `.bento`/`.card` ailesi (1150-1182).
+
+   | kalem         | kaynaktaki değer                                  | satır       |
+   |---------------|---------------------------------------------------|-------------|
+   | kap           | `.wrap` = max 1280 − 2×clamp(20,4vw,40)            | 207 · 64-66 |
+   | ızgara        | `grid-template-columns:repeat(4,1fr)` · gap 14     | 1169        |
+   | kart boyu     | `b2` = span 2 · `b2x2` = span 2 + row 2 · boş = 1  | 1170-1171   |
+   | eşikler       | EKRAN medya sorgusu: ≤1000 → 2 sütun · ≤620 → 1    | 1178-1181   |
+   | kart yüzü     | radius `--r-lg` 26 · 1px `--line` · beyaz degrade  | 1151-1153   |
+   | dolgu         | `clamp(24px,2.8vw,36px)`                           | 1153        |
+   | ikon kutusu   | 46×46 · radius 13 · `--line` · kızıl · alt 20 px   | 1158-1160   |
+   | numara        | sağ üst 24/26 · mono 10px · .16em · pul kenarlık   | 1165-1168   |
+   | başlık        | `clamp(1.14rem,1.9vw,1.5rem)` · −.035em            | 1163        |
+   | gövde         | .93rem · `--tx3` · 1.68 · 300                      | 1164        |
+   | "İncele"      | mono 12px · .18em · VERSAL · `--red-soft` + ok     | 619-623+4343|
+   | künye şeridi  | `.mono` 12px (11px yazar, 12 PİKSEL TABANI ezer)   | 208 + 4336  |
+   | vurgulu kart  | `.hi` → zemin `--red`, yazı #fff, p opaklık .82    | 1172-1177   |
+   | hover         | −3px kalkma + kenarlık açılır + kızıl ışık ::after | 1154-1157   |
+   | başlık künyesi| `.shead` ailesi (26 px kızıl çizgi + VERSAL etiket)| 365-373     |
+   | sayaç         | `.cnt` mono .9rem `--tx4` `vertical-align:super`   | 373-374     |
+   | geri bağı     | `.pgback` → ana sayfa                              | 2516-2520   |
+
+   SAPMALAR (Anayasa madde 6 — hepsi bilinçli):
+   1) KART GİRİŞİNDE SÜRE VE KADEME YAZILMADI. Enes'in künyesi 260 ms +
+      kart başına 40 ms kademe (tavan 6 kart) diyor, ama aynı künye
+      sürücüyü `animation-timeline: view()` (kaydırma güdümlü) olarak ve
+      "kaydırma geri alınınca geri sarmalı" diye kilitliyor. Kaydırma
+      güdümlü zaman çizelgesinde ms cinsinden süre ve gecikme YOKTUR —
+      ilerlemeyi kaydırma yazar. Geri sarma şartı IO'yu da eliyor. Bu
+      yüzden künyenin sürücü + mesafe + eğri + opaklık kararları aynen
+      kuruldu, süre/kademe düşürüldü: kademe zaten kartın sayfadaki
+      yerinden doğuyor (S-K katman sahnesinin dersi, katman.css 112-121).
+   2) KAYNAĞIN `.rv` GİRİŞİ TAŞINMADI (26 px + opaklık 0→1, .9 s, data-d
+      kademesi .07-.28 s). Opaklık madde 5/H2'ye takılıyor; mesafe ve süre
+      Enes'in yukarıdaki kararıyla değişti.
+   3) ALT BÖLÜMDEKİ DEMO FORMU TAŞINMADI. Enes hükmü (22 Ağu): iç sayfada
+      form kalmaz, dönüşüm ana sayfada ve iletişimde toplanır. Yerine
+      kaynağın `.shiny` düğmesi.
+   5) "12 PİKSEL TABANI" BULUNDU VE UYGULANDI (kaynak 4326-4366). Kaynak
+      `.mono`yu 11 px, `.svgo`yu 9,5 px tanımlıyor ama sayfanın SONUNDAKİ
+      bir blok ikisini de (ve 20 kardeşini) 12 px'e çekiyor — gerekçesi
+      dosyada yazılı: "ziyaretçinin OKUMASI gereken metinler bunlar".
+      Göç turları 208 ve 619 satırlarını okuyup 4336'yı görmemişti; bu
+      sayfada ölçümle yakalandı (mono 11 ↔ 12, İncele 9,5 ↔ 12). Aynı
+      kusur /projeler ve proje detayında da duruyordu, orada da kapandı.
+   4) Kaynak kartı `<div>`/`<a>` olarak basıyor ve ızgarayı çıplak `<div>`
+      yapıyor; burada ızgara `<ol>`, kart `<li><a>` — dokuz kalemlik
+      SIRALI bir liste ve sıra numarası görüntünün parçası (`.num`).
+      Görünüm aynı (`list-style:none`), ekran okuyucuda sayı kazanılıyor. */
 import { getCollection } from 'astro:content';
 import { icerik, T, type Dil } from '../icerik';
+import Ikon from './Ikon.astro';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sira = (icerik.services || []).map((s: any) => s.slug);
+/* Boy (`size`) ve vurgu (`hi`) panelin verisinde duruyor ama koleksiyon
+   şemasından geçmiyor olabilir — kaynağın kendi alanları, doğrudan
+   content.json'dan okunur ve slug'a eşlenir. */
+const bicim = new Map((icerik.services || []).map(
+  (s: any) => [s.slug, { size: s.size || '', hi: !!s.hi, icon: s.icon || 'zap' }]));
 const hizmetler = (await getCollection('hizmetler')).map(e => e.data)
   .sort((a: any, b: any) => sira.indexOf(a.slug) - sira.indexOf(b.slug));
 const on = dil === 'en' ? '/en' : '';
 ---
+{/* Geri bağlantısı: kaynak 5006 `.pgback`, ana sayfaya. */}
+<a class="pgback" href={`${B}${on}/`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('Ana sayfa', 'Home')}</span>
+</a>
+
 <section class="giris">
-  <h1>{M('Her hizmet bir sorunu çözer.', 'Every service solves one problem.')}
-    <span class="say">({hizmetler.length})</span></h1>
+  {/* Künye şeridi: kaynak 5008 `.shead .mono` — 26 px kızıl çizgi + etiket.
+      `etiket` prop'u kabukta bilerek basılmıyor, sayfa etiketi gövdede yaşar. */}
+  <span class="mono">{M('Ne yapıyoruz', 'What we do')}</span>
+  {/* Kaynak başlığı İKİ satır ve ikinci satır ince (`.thin`, 300/--tx3):
+      5009 `Her hizmet<br><span class="thin">bir sorunu çözer.</span>`.
+      `<br>` kaynağın KOMPOZİSYON kararı: 1200 px kapta cümle tek satıra
+      sığıyor, kaynak yine de kırıyor — iki satırlık blok başlığın kendisi.
+      Ölçüldü (yan yana kare, 1440): `<br>`siz hâlde başlık tek satır
+      kalıyor ve künye/lede/ızgara 66 px yukarı çıkıyordu. */}
+  <h1><span>{M('Her hizmet', 'Every service')}</span><br
+    /><span class="thin">{M('bir sorunu çözer.', 'solves one problem.')}</span
+    ><span class="cnt">({hizmetler.length})</span></h1>
   <p class="lede">{M(
     'Hepsini birden satmıyoruz. Önce nerede para kaybettiğine bakar, bu çeyrekte hangisinin en hızlı geri döneceğine birlikte karar veririz.',
     'We do not sell all of them at once. We look at where you are losing money first, then decide together which one pays back fastest this quarter.')}</p>
 </section>
 
-<ol class="adimlar">
-  {hizmetler.map((s: any, i: number) => (
-    <li>
-      <b>{String(i + 1).padStart(2, '0')}</b>
-      <div>
-        <h2>{T(s.title, dil)}</h2>
-        <p>{T(s.text, dil)}</p>
-        <a class="git" href={`${B}${on}/hizmet/${s.slug}`}>{M('İncele', 'Explore')}</a>
-      </div>
-    </li>
-  ))}
+<ol class="bento">
+  {hizmetler.map((s: any, i: number) => {
+    const b = bicim.get(s.slug) || { size: '', hi: false, icon: 'zap' };
+    return (
+      <li class={`${b.size} ${b.hi ? 'hi' : ''}`.trim()}>
+        <a class="card" href={`${B}${on}/hizmet/${s.slug}`}>
+          <span class="num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="ic"><Ikon ad={b.icon} /></span>
+          <h2>{T(s.title, dil)}</h2>
+          <p>{T(s.text, dil)}</p>
+          <span class="svgo">{M('İncele', 'Explore')}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+          </span>
+        </a>
+      </li>
+    );
+  })}
 </ol>
 
-{/* EN ana sayfa adası kuruldu — eski '/en#iletisim' kaçağı adaya döndü. */}
 <p class="son">
-  <a class="dugme sus-isik" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  <a class="dugme sus-isik" href={`${B}${on}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>
-  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
-  .adimlar h2 { font-size: 1.05rem; margin: 0 0 6px; }
-  .git { display: inline-block; margin-top: 10px; font-size: .85rem; }
-  .son { margin-top: 34px; text-align: center; }
+  /* ---- BAŞ: kaynağın `.pgback` + `.shead` ailesi (365-374, 2516-2519) ---- */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    font-family: var(--f-tek); font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--tx3); }
+  .giris .mono::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .giris h1 { font-size: clamp(2.3rem, 5.6vw, 4.15rem); margin-bottom: 18px; }
+  .giris h1 .thin { font-weight: 300; color: var(--tx3); }
+  .cnt { font-family: var(--f-tek); font-size: .9rem; color: var(--tx4);
+    vertical-align: super; margin-left: 10px; letter-spacing: 0; }
+  .giris .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--tx2);
+    font-weight: 400; line-height: 1.7; max-width: 62ch; }
+
+  /* ---- BENTO: kaynağın 1169-1181'i birebir ----
+     Eşikler EKRAN medya sorgusu — kaynak burada gerçekten `@media`
+     kullanıyor (1178, 1180); /projeler arşivinin `host.clientWidth`
+     hesabı bu sayfada YOK, o yüzden kap sorgusuna çevrilmedi. */
+  .bento { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; }
+  .bento > li { display: grid; }
+  .bento > li.b2 { grid-column: span 2; }
+  .bento > li.b2x2 { grid-column: span 2; grid-row: span 2; }
+  @media (max-width: 1000px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento > li.b2x2 { grid-row: span 1; }
+  }
+  @media (max-width: 620px) {
+    .bento { grid-template-columns: 1fr; }
+    .bento > li.b2, .bento > li.b2x2 { grid-column: span 1; }
+  }
+
+  /* ---- KART: kaynağın `.card`ı (1150-1168) ---- */
+  .card { position: relative; display: block; color: inherit; text-decoration: none;
+    border: 1px solid var(--line); border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.008));
+    padding: clamp(24px, 2.8vw, 36px); overflow: hidden; }
+  .card::after { content: ''; position: absolute; inset: 0; opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(70% 60% at 80% 0%, rgba(239,35,60,.14), transparent 70%); }
+  .card .ic { width: 46px; height: 46px; border-radius: 13px; display: grid;
+    place-items: center; background: rgba(255,255,255,.05);
+    border: 1px solid var(--line); color: var(--red); margin-bottom: 20px; }
+  .card .ic :global(svg) { width: 20px; height: 20px; }
+  /* satır aralığı KABUKTAN (1,04) — kaynağın h1-h5 künyesi. */
+  .card h2 { font-size: clamp(1.14rem, 1.9vw, 1.5rem); margin-bottom: 11px;
+    letter-spacing: -.035em; }
+  .card p { font-size: .93rem; color: var(--tx3); line-height: 1.68; font-weight: 300; }
+  .card .num { position: absolute; top: 24px; right: 26px; font-family: var(--f-tek);
+    font-size: 10px; letter-spacing: .16em; color: var(--tx4);
+    border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; }
+  .svgo { display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
+    font-family: var(--f-tek); font-size: 12px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--red-soft); }
+  .svgo svg { width: 12px; height: 12px; }
+
+  /* ---- VURGULU KART (1172-1177) — panelin `hi` bayrağı ---- */
+  .bento > li.hi .card { background: var(--red); border-color: var(--red); }
+  .bento > li.hi .card h2, .bento > li.hi .card p { color: #fff; }
+  .bento > li.hi .card p { opacity: .82; }
+  .bento > li.hi .card .ic { background: rgba(0,0,0,.16);
+    border-color: rgba(0,0,0,.2); color: #fff; }
+  .bento > li.hi .card::after { display: none; }
+  .bento > li.hi .card .num { color: rgba(255,255,255,.7);
+    border-color: rgba(255,255,255,.3); }
+  .bento > li.hi .svgo { color: #fff; }
+
+  .son { margin-top: clamp(30px, 4vw, 52px); text-align: center; }
+
+  /* ---- HOVER: yalnız gerçek imleçte (dokunmatikte :hover takılır) ---- */
+  @media (hover: hover) and (pointer: fine) {
+    .card { transition: border-color .42s var(--e), transform .42s var(--e); }
+    .card::after { transition: opacity .5s var(--e); }
+    .card .ic { transition: background .4s var(--e), border-color .4s var(--e); }
+    .svgo svg { transition: transform .3s var(--e); }
+    .card:hover { border-color: rgba(255,255,255,.2); transform: translateY(-3px); }
+    .card:hover::after { opacity: 1; }
+    .card:hover .ic { background: var(--red-dim); border-color: rgba(239,35,60,.34); }
+    .card:hover .svgo svg { transform: translateX(4px); }
+    .bento > li.hi .card:hover .ic { background: rgba(0,0,0,.24);
+      border-color: rgba(0,0,0,.3); }
+  }
+  .card:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+  /* ---- KART GİRİŞİ (Enes onayı, 22 Ağu) ----
+     Karar künyesi: `translateY(12px) → 0` · opaklık SABİT 1 (H2: içerik
+     görünür doğar, LCP elemanı gizli başlamaz) · eğri
+     `cubic-bezier(.23,1,.32,1)` · sürücü `animation-timeline: view()`,
+     IO DEĞİL · kaydırma geri alınınca geri sarar (kaydırma güdümlü
+     sürücü bunu kendiliğinden verir).
+     Süre (260 ms) ve kademe (40 ms/kart, tavan 6) YAZILMADI — sapma 1'e
+     bak: kaydırma güdümlü çizelgede ms yoktur, kademe kartın sayfadaki
+     yerinden doğar. Taban BİTMİŞ hâl: desteklemeyen tarayıcıda ve botta
+     kart yerinde. */
+  @supports (animation-timeline: view()) {
+    .card { animation: hz-gir cubic-bezier(.23, 1, .32, 1) both;
+      animation-timeline: view(); animation-range: entry 0% entry 100%; }
+  }
+  @keyframes hz-gir { from { transform: translateY(12px); } }
+
+  /* Durdurma kuralı hareketle AYNI özgüllükte (H11): `.card`. */
+  @media (prefers-reduced-motion: reduce) {
+    .card { animation: none; transform: none; transition: none; }
+    .card::after, .card .ic, .svgo svg { transition: none; }
+  }
 </style>
