@@ -139,6 +139,13 @@ export async function baslat(bolum: HTMLElement) {
     geriDon();
   }
 
+  /* DURAK 2 - AMBLEMIN DOGUSU. Ayri parca, ayri tavan: 3B yolu
+     zaten aciksa (yani kamera gercekten iniyorsa) cekiliyor. Yedek
+     yolda kamera hareketi YOK, orada amblem de dogmaz - sahne sade
+     kalir ve o yola fazladan bayt inmez. */
+  let amblem: ((p: number) => void) | null = null;
+  import('./halka').then((m) => { amblem = m.kur(bolum); }).catch(() => {});
+
   function baglan() {
     /* ILERLEME — KAYDIRMADA DUZEN OKUMASI YOK (H12). Rayin belge
        icindeki yeri BIR KEZ olculuyor; kaydirmada yalniz `scrollY`
@@ -161,10 +168,11 @@ export async function baslat(bolum: HTMLElement) {
        hizla ileri kayardi). */
     const SESSIZLIK = 150;
     let sonKaydirma = 0, acik = false;
-    const tik = (dur = false) => isci.postMessage({
-      tip: 'p', v: Math.min(1, Math.max(0, (scrollY - ust) / yol)),
-      t: performance.now(), dur,
-    });
+    const tik = (dur = false) => {
+      const v = Math.min(1, Math.max(0, (scrollY - ust) / yol));
+      amblem?.(v);
+      isci.postMessage({ tip: 'p', v, t: performance.now(), dur });
+    };
     const dongu = () => {
       tik();
       if (performance.now() - sonKaydirma < SESSIZLIK) requestAnimationFrame(dongu);
