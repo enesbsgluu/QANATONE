@@ -42,15 +42,35 @@ const demoAnahtar = (h: any): string | null => {
   return null;
 };
 const dk = demoAnahtar(s);
+const on = dil === 'en' ? '/en' : '';
+/* WhatsApp adresi kaynağın kendi kurulumundan (7457-7462): panel
+   `settings.whatsapp` + `settings.waMessage` yazıyor, numara rakama
+   indirgeniyor, mesaj URL-kodlanıyor. Numara yoksa düğme HİÇ basılmaz —
+   kaynak `905000000000` gibi sahte bir numaraya düşüyordu (kusur). */
+const waNum = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
+const waUrl = waNum
+  ? `https://wa.me/${waNum}?text=${encodeURIComponent(
+      String((icerik.settings || {}).waMessage || 'Merhaba'))}`
+  : '';
 /* Ton hizmet SIRASINDAN (kaynak kuralı) — kart ile detay aynı tonda. */
 const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug === s.slug));
 ---
+{/* Geri bağlantısı: kaynak 4985 `.pgback` → /hizmetler ("Tüm hizmetler").
+    Dizinin `.pgback`i ana sayfaya gider, detayınki LİSTEYE — kaynağın
+    kendi ayrımı, ikisi de taşındı. */}
+<a class="pgback" href={`${B}${on}/hizmetler`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('Tüm hizmetler', 'All services')}</span>
+</a>
+
 <section class="giris">
+  {/* Künye şeridi: kaynak 4986 `#sdTag` — hizmetin `tag` alanı, `.mono`.
+      `etiket` prop'u kabuğa gidiyordu ve kabuk onu BASMIYOR; sayfa
+      etiketi gövde künyesinde yaşar (dizin sayfasının kararıyla aynı). */}
+  {s.tag && <span class="mono">{T(s.tag, dil)}</span>}
   <h1>{T(d.h, dil)}</h1>
   <p class="lede">{T(d.lede, dil)}</p>
-  {d.hits?.length > 0 && <ul class="hits">
-    {d.hits.map((h: any) => <li>{T(h, dil)}</li>)}
-  </ul>}
   {dk && <div class="hd-demo" aria-hidden="true" style={ton(sira)}>
     <AkisDemo k={dk} dil={dil} />
   </div>}
@@ -69,18 +89,17 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 {(d.story?.sites || d.story?.live) && <CanliSahne story={d.story} dil={dil} />}
 {d.market && <MotorSahne market={d.market} dil={dil} />}
 
-{d.pains?.length > 0 && <section>
-  <h2>{M('Dert nerede', 'Where it hurts')}</h2>
-  <div class="kartlar">
-    {d.pains.map((p: any) => (
-      <article class="kart">
-        <h3>{T(p.t, dil)}</h3>
-        <p>{T(p.d, dil)}</p>
-        {p.x && <p class="not">{T(p.x, dil)}</p>}
-      </article>
-    ))}
-  </div>
-</section>}
+{/* ÜÇ VURUŞ — kaynağın `sdHits`i (7575-7579) ve SIRASI: SDT haritasının
+    hepsinde `stage + sdHits + ...`, yani vuruşlar sahneden SONRA gelir.
+    Göç turu onları girişe, sahnenin ÜSTÜNE koymuştu — yan yana karede
+    yakalandı. Görünüm de küçülmüştü: kaynak bunları mono sıra numarası +
+    1,12-1,55rem/600 büyük cümle olarak basıyor (891-896), göç madde
+    imli küçük liste yapmıştı. */}
+{d.hits?.length > 0 && <div class="sdsec sdhits">
+  {d.hits.map((h: any, i: number) => (
+    <div class="sdhit"><span>{'0' + (i + 1)}</span><p>{T(h, dil)}</p></div>
+  ))}
+</div>}
 
 {/* TradeSelf amblemi (A2) — yalnız finans; künye demo-detay.css'te.
     role="img" + engineLab kaynaktan (8232). Katman sırası kaynak
@@ -89,47 +108,247 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   <i class="tsa-dis"></i><i class="tsa-beyin"></i><i class="tsa-ic"></i>
 </div>}
 
-{d.steps?.length > 0 && <section>
-  <h2>{M('Nasıl çalışırız', 'How we work')}</h2>
-  <ol class="adimlar">
-    {d.steps.map((a: any) => (
-      <li>
-        <b>{a.n}</b>
-        <div><h3>{T(a.t, dil)}</h3><p>{T(a.d, dil)}</p></div>
-      </li>
+{/* ALTI GENİŞLEYEN KART — kaynağın `sdGrid`i (7586-7606) birebir SIRA:
+    üç dert + "Nasıl yürütürüz" + "Eline geçenler" + "Hedefler & SSS".
+    Kapalı yüz: başlık + tek cümlelik kısa metin (`.step` kartı).
+    Göç turu bunları DÖRT AYRI düz bölüme açmıştı ("Dert nerede",
+    "Nasıl çalışırız", "Eline ne geçer", ölçü şeridi, "Sık sorulanlar")
+    ve sayfa iki katına çıkıyordu; kaynağın kompozisyonu tek satırda
+    altı kart. Yan yana karede yakalandı.
+
+    SAPMA: kaynak açılışta FLIP'li bir tam ekran panel açıyor
+    (`#xcPanel` + `#xcOv`, `backdrop-filter: blur(10px)`, ~90 satır JS).
+    Buraya `<details>` geldi — içerik YERİNDE açılır: ada JS'i SIFIR,
+    mobilde bulanıklık yok (madde 7 / H14), klavye ve ekran okuyucu
+    davranışı tarayıcının kendisinden, içerik JS'siz de tam (V1). */}
+<div class="sdsec">
+  <div class="steps sdgrid">
+    {d.pains.map((p: any) => (
+      <details class="xc">
+        <summary class="xco step"><h3>{T(p.t, dil)}</h3><p>{T(p.d, dil)}</p></summary>
+        <div class="xcl">
+          <h4>{T(p.t, dil)}</h4>
+          <span class="xcs">{T(p.d, dil)}</span>
+          {String(T(p.x || p.d, dil)).split('\n').map((t: string) => t.trim())
+            .filter(Boolean).map((t: string) => <p>{t}</p>)}
+        </div>
+      </details>
     ))}
-  </ol>
-</section>}
 
-{(d.del?.[dil] || d.del?.tr)?.length > 0 && <section>
-  <h2>{M('Eline ne geçer', 'What you get')}</h2>
-  <ul class="teslim">
-    {(d.del[dil] || d.del.tr).map((t: string) => <li>{t}</li>)}
-  </ul>
-</section>}
-
-{d.met?.length > 0 && <section class="olcu">
-  {d.met.map((m: any) => (
-    <div class="mk"><b>{T(m.v, dil)}</b><span>{T(m.l, dil)}</span></div>
-  ))}
-</section>}
-
-{d.faq?.length > 0 && <section>
-  <h2>{M('Sık sorulanlar', 'Common questions')}</h2>
-  {d.faq.map((f: any) => (
-    <details>
-      <summary>{T(f.q, dil)}</summary>
-      <p>{T(f.a, dil)}</p>
+    <details class="xc">
+      <summary class="xco step">
+        <h3>{M('Nasıl yürütürüz', 'How we run it')}</h3>
+        <p>{M(`${d.steps.length} adımda kurulum — aç, oku.`,
+              `${d.steps.length} steps — open and read.`)}</p>
+      </summary>
+      <div class="xcl">
+        <h4>{M('Nasıl yürütürüz', 'How we run it')}</h4>
+        <span class="xcs">{M('Adım adım', 'Step by step')}</span>
+        {d.steps.map((a: any) => (
+          <div class="xstp"><b>{a.n}</b>
+            <div><h5>{T(a.t, dil)}</h5><p>{T(a.d, dil)}</p></div></div>
+        ))}
+      </div>
     </details>
-  ))}
-</section>}
 
-{d.cta && <section class="cta">
+    <details class="xc">
+      <summary class="xco step">
+        <h3>{M('Eline geçenler', 'What you get')}</h3>
+        <p>{M('Somut teslim listesi — aç, say.', 'The concrete list — open and count.')}</p>
+      </summary>
+      <div class="xcl">
+        <h4>{M('Eline geçenler', 'What you get')}</h4>
+        <span class="xcs">{M('Teslimatlar', 'Deliverables')}</span>
+        <div class="xdel">
+          {(d.del[dil] || d.del.tr).map((t: string) => (
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>{t}</span>
+          ))}
+        </div>
+      </div>
+    </details>
+
+    <details class="xc">
+      <summary class="xco step">
+        <h3>{M('Hedefler & SSS', 'Targets & FAQ')}</h3>
+        <p>{M('Rakamlar ve dürüst cevaplar.', 'Numbers and honest answers.')}</p>
+      </summary>
+      <div class="xcl">
+        <h4>{M('Peşine düştüğümüz hedefler', 'Targets we chase')}</h4>
+        <div class="xmet">
+          {d.met.map((m: any) => (
+            <div><b>{T(m.v, dil)}</b><p>{T(m.l, dil)}</p></div>
+          ))}
+        </div>
+        <h4 class="xc-ara">{M('SSS', 'FAQ')}</h4>
+        {d.faq.map((f: any) => (
+          <details class="xsss">
+            <summary>{T(f.q, dil)}</summary>
+            <p>{T(f.a, dil)}</p>
+          </details>
+        ))}
+      </div>
+    </details>
+  </div>
+</div>
+
+{/* ÇAĞRI — kaynağın `sdCta`sı (7608-7621): başlık + cümle + İKİ düğme.
+    Birincil kızıl dolu düğme forma gider, ikincil WhatsApp'a. Göç turu
+    yalnız tek "Konuşalım" düğmesi basıyordu; kaynağın kendi notu
+    (7612-7615) "CTA kaybı demek bu" diyerek ikinci düğmeyi kurmuştu,
+    o karar taşındı. WhatsApp düğmesi kaynağın `.shiny`si: KOYU zemin +
+    dönen kızıl kenar (bizde `sus-isik` mekanizmasının `koyu` değişkesi).
+    Numara panelde boşsa düğme HİÇ basılmaz — kaynak sahte numaraya
+    düşüyordu (7459), o kusur taşınmadı. */}
+{d.cta && <section class="sdcta">
   <h2>{T(d.cta.t, dil)}</h2>
   <p>{T(d.cta.s, dil)}</p>
-  {/* Form adada (S-IL); EN ana sayfa adası kuruldu, kaçak adaya döndü. */}
-  <a class="dugme sus-isik" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  <div class="sdbtns">
+    <a class="dugme" href={`${B}${on}/#iletisim`}>{M('Kısa formu doldur', 'Fill the short form')}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>
+    {waUrl && <a class="dugme sus-isik koyu" href={waUrl} target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.8-5.2A8.4 8.4 0 1 1 21 11.5Z"/>
+        <path d="M8.6 9.2c.3 2.6 2.6 4.9 5.2 5.2l1-1.4 2 .9-.4 1.7c-2.9.5-6.8-2.4-8.4-5.6l1.4-1 .9 1.8Z"/>
+      </svg>WhatsApp</a>}
+  </div>
 </section>}
+
+<style>
+  /* ============ BAŞ: kaynağın `.pgback` + `.shead` ailesi ============
+     (365-374 · 2516-2519). Dizin sayfasının künyesiyle aynı — iki sayfa
+     aynı bileşeni paylaşmıyor ama aynı KÜNYEYİ paylaşıyor. */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    font-family: var(--f-tek); font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--tx3); }
+  .giris .mono::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .giris h1 { font-size: clamp(2.3rem, 5.6vw, 4.15rem); margin-bottom: 18px; }
+  .giris .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--tx2);
+    font-weight: 400; line-height: 1.7; max-width: 62ch; }
+
+  /* ---- bölüm aralığı: kaynağın `.sdsec`i (624-625) ---- */
+  .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  @media (max-width: 760px) { .sdsec { margin-top: clamp(36px, 9vw, 52px); } }
+
+  /* ---- ÜÇ VURUŞ (891-896) ---- */
+  .sdhits { display: flex; flex-direction: column; gap: 14px; max-width: 66ch; }
+  .sdhit { display: flex; gap: 16px; align-items: baseline; }
+  .sdhit span { font-family: var(--f-tek); font-size: 12px; letter-spacing: .16em;
+    color: var(--red-soft); flex: none; }
+  .sdhit p { font-size: clamp(1.12rem, 2.1vw, 1.55rem); font-weight: 600;
+    letter-spacing: -.022em; line-height: 1.32; color: var(--tx); }
+
+  /* ---- ALTILI IZGARA: kaynağın `.steps`/`.step`i (1437-1449) ---- */
+  .sdgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px; }
+  /* Kapali halde alti kart ESIT boyda (kaynagin `.steps` izgarasi
+     stretch): `details` sutun kutusu olur, kapak kalan yeri doldurur.
+     KABUGUN GLOBAL `details` KUTUSU BURADA SIFIRLANIYOR — temel.css
+     her `details`e kenarlik + 14/16 dolgu + 12 radius + 10 alt bosluk
+     veriyor; olculdu (yan yana, 1440): kart kapagi 190 px yerine
+     156 px'e dusuyor ve kart kartin icinde gorunuyordu. */
+  .xc { display: flex; flex-direction: column; border: 0; border-radius: 0;
+    padding: 0; margin-bottom: 0; background: none; }
+  .xc .xco { flex: 1; }
+  /* `font-weight` kaynagin degeri (400); kabugun global `summary`
+     kurali 600 yaziyor ve kapak metnini kalinlastiriyordu. */
+  .xco { list-style: none; cursor: pointer; display: flex;
+    flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    font-weight: 400; }
+  .xco::-webkit-details-marker { display: none; }
+  .xco::marker { content: ''; }
+  .step { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+    padding: 22px 22px 24px; }
+  .step h3 { font-size: 1.02rem; margin-bottom: 8px; letter-spacing: -.03em; }
+  .step p { font-size: .84rem; color: var(--tx3); line-height: 1.62; font-weight: 300;
+    margin: 0; }
+  .xco:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+  /* ---- AÇILAN GÖVDE: kaynağın panel içi blokları (686-693, 899-914) ----
+     Kaynakta bu içerik tam ekran panelde duruyordu; burada kartın
+     ALTINDA açılıyor, o yüzden kartla aynı yüz (kenarlık + zemin)
+     verilip üstteki kapağa yapıştırıldı. */
+  .xcl { border: 1px solid var(--line); border-top: 0; background: var(--card);
+    border-radius: 0 0 18px 18px; padding: 4px 22px 22px; margin-top: -6px; }
+  .xc[open] .step { border-radius: 18px 18px 0 0; border-bottom-color: transparent;
+    padding-bottom: 14px; }
+  .xcl h4 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; }
+  .xcl .xcs { display: block; font-family: var(--f-tek); font-size: 12px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--red-soft);
+    margin-bottom: 18px; }
+  .xcl > p { font-size: .94rem; color: var(--tx2); line-height: 1.75; margin-bottom: 13px; }
+  .xc-ara { margin-top: 24px; }
+
+  .xstp { display: flex; gap: 14px; margin-bottom: 16px; }
+  .xstp b { font-family: var(--f-tek); font-size: 12px; color: var(--red-soft);
+    flex: none; padding-top: 3px; }
+  .xstp h5 { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; margin-bottom: 4px; }
+  .xstp p { font-size: .88rem; color: var(--tx2); line-height: 1.65; margin: 0; }
+
+  .xdel { display: flex; flex-direction: column; gap: 9px; }
+  .xdel span { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem;
+    color: var(--tx2); line-height: 1.55; }
+  .xdel svg { width: 14px; height: 14px; color: var(--red); flex: none; margin-top: 3px; }
+
+  .xmet { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px; margin-bottom: 6px; }
+  .xmet b { display: block; font-size: 1.6rem; font-weight: 700; letter-spacing: -.035em;
+    color: var(--red); margin-bottom: 4px; }
+  .xmet p { font-size: .78rem; color: var(--tx3); line-height: 1.5; margin: 0; }
+
+  .xsss { border: 1px solid var(--line); border-radius: 11px;
+    background: rgba(255,255,255,.02); padding: 12px 15px; margin-bottom: 9px; }
+  .xsss summary { cursor: pointer; font-weight: 600; font-size: .92rem; color: var(--tx); }
+  .xsss summary::-webkit-details-marker { display: none; }
+  .xsss p { margin-top: 10px; font-size: .88rem; color: var(--tx2); line-height: 1.7; }
+
+  /* ---- ÇAĞRI: kaynağın `.sdcta`sı (650-656) ---- */
+  /* `margin-bottom` kabugun `section{margin-bottom:56px}` kuralindan
+     geliyordu; kaynakta cagri sayfanin SON blogu ve alt bosluk yok. */
+  .sdcta { margin-bottom: 0; margin-top: clamp(48px, 6vw, 80px);
+    border: 1px solid rgba(239,35,60,.32);
+    border-radius: 26px; padding: clamp(26px, 4vw, 44px); text-align: center;
+    background: linear-gradient(180deg, rgba(239,35,60,.07), rgba(239,35,60,.02)); }
+  .sdcta h2 { font-size: clamp(1.5rem, 3.4vw, 2.3rem); letter-spacing: -.035em;
+    margin-bottom: 12px; }
+  .sdcta p { color: var(--tx2); max-width: 56ch; margin: 0 auto 24px; font-size: .98rem;
+    line-height: 1.7; }
+  .sdbtns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  /* Dolgu kaynagin `.btn`inden (339-340) ve `.shiny`sinden (352):
+     14/26 ve 15/32. Kabugun `.dugme`si 12/26 idi — olculdu, dugme
+     seridi 59,2 px yerine 51,4 px kaliyordu. */
+  .sdbtns .dugme { display: inline-flex; align-items: center; justify-content: center;
+    gap: 9px; padding: 14px 26px; font-size: .92rem; letter-spacing: -.01em; }
+  .sdbtns .dugme.koyu { padding: 15px 32px; font-size: .95rem; font-weight: 700; }
+  .sdbtns .dugme svg { width: 15px; height: 15px; }
+  /* `koyu`: kaynağın `.shiny`si — dolgu KOYU, dönen kızıl kenar aynı
+     mekanizmadan (temel.css `sus-isik`). Kızıl dolu birincil düğmenin
+     yanında ikincil çağrı ayırt edilsin diye. */
+  .dugme.sus-isik.koyu::after { background: #0a0a0a; }
+  .dugme.sus-isik.koyu { color: #fff; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pgback { transition: color .26s var(--e); }
+    .pgback:hover { color: var(--red); }
+    .step { transition: border-color .36s var(--e), background .36s var(--e),
+      transform .38s var(--e); }
+    .xc:not([open]) .xco:hover .step { border-color: rgba(239,35,60,.4);
+      transform: translateY(-4px); }
+    .sdbtns .dugme svg { transition: transform .3s var(--e); }
+    .sdbtns .dugme:hover svg { transform: translateX(3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pgback, .step, .sdbtns .dugme svg { transition: none; }
+  }
+</style>
 
 <script>
   /* ADA — Anayasa S-A reçetesinin detay eşi (SAAkis'teki kapı):
