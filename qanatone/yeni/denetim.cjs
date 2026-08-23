@@ -2221,6 +2221,56 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
           : 'kunye okunamadi'));
 }
 
+/* R20 - ZAMAN SURUCUSU (F1, 23 Agu).
+   Yol haritasi "zaman surucusu hic yok, kurulacak" diyordu; OLCUM
+   tersini gosterdi - sahne kaydirma olmadan zaten yasiyor: 412x892'de
+   3,6 saniyede piksellerin %2,68'i degisiyor (bulut suruklenmesi) ve
+   uc durma sarti da yerinde. Yani F1'de eklenecek kod yoktu; asil is
+   bunun SESSIZCE GERI ALINAMAMASI. Kural bes seyi tutuyor:
+     (a) isci dongusu KENDI KENDINE donuyor - ciz'den sonra kosulsuz
+         yeni kare isteniyor. Bu satir gidince sahne yalnizca kaydirma
+         geldiginde cizer ve "oda" olur biter;
+     (b) `uZaman` KARE DAMGASINDAN besleniyor (p'den degil);
+     (c) gorunurluk kapisi: `oynat(false)` gelince kare IPTAL ediliyor.
+         Olculdu - IntersectionObserver goruse girip cikarken tam uc
+         `oynat` mesaji gidiyor: true / false / true;
+     (d) sekme arkaya gecince duruyor: renderer is suresi 101 ms/sn'den
+         9,8 ms/sn'ye iniyor (isci rAF'i arka planda uyuyor). Bunun
+         SARTI `kareIste`nin rAF'i tercih etmesi - setTimeout yedegine
+         sabitlenirse arka planda donmeye devam eder;
+     (e) hareket azaltmada 3B yolu HIC acilmiyor (olculdu:
+         data-prolog="hareket-azaltma", tuval yok, amblem yok). */
+{
+  const kusur = [];
+  const pk = path.join(__dirname, 'src', 'prolog');
+  const yorumsuz = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const isci = yorumsuz(fs.readFileSync(path.join(pk, 'isci.ts'), 'utf8'));
+  const gl = yorumsuz(fs.readFileSync(path.join(pk, 'gl.ts'), 'utf8'));
+  const ada = yorumsuz(fs.readFileSync(
+    path.join(__dirname, 'src', 'sahneler', 'PRDag.astro'), 'utf8'));
+
+  /* (a) kendi kendine donen dongu */
+  if (!/ciz\(zaman\);\s*cerceve\s*=\s*kareIste\(dongu\)/.test(isci))
+    kusur.push('dongu-kendi-kendine-donmuyor');
+  /* (b) uZaman kare damgasindan */
+  if (!/const\s+t\s*=\s*\(zaman\s*-\s*t0\)/.test(isci)) kusur.push('zaman-kare-damgasindan-degil');
+  if (!/uniform1f\(u\.uZaman,\s*t\)/.test(isci)) kusur.push('uZaman-beslenmiyor');
+  /* (c) gorunurluk kapisi kareyi iptal ediyor */
+  if (!/oynat:[\s\S]{0,160}kareIptal\(cerceve\)/.test(isci)) kusur.push('gorunurluk-kapisi-iptal-etmiyor');
+  if (!/IntersectionObserver[\s\S]{0,200}tip:\s*'oynat'/.test(gl))
+    kusur.push('gorunurluk-nobetcisi-yok');
+  /* (d) arka planda uyumasi rAF'e bagli */
+  if (!/G\.requestAnimationFrame\s*\?\s*G\.requestAnimationFrame/.test(isci))
+    kusur.push('kare-istegi-raf-tercih-etmiyor');
+  /* (e) hareket azaltma kapisi */
+  if (!/prefers-reduced-motion/.test(ada)) kusur.push('hareket-azaltma-kapisi-yok');
+
+  ol('R20 - zaman surucusu: kendi donen dongu + gorunurluk/arka plan/azaltma kapilari',
+     kusur.length === 0,
+     kusur.slice(0, 4).join(' ')
+       || 'dinlenmede canli (%2,68 piksel/3,6 sn) · oynat true/false/true · arkada 101->9,8 ms/sn');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
