@@ -72,27 +72,23 @@ export function kur(bolum: HTMLElement): (p: number) => void {
      seridin kalinligi ikisinde ayni degil (olculdu: cemberde 248,5 px,
      kuyrukta medyan 154 - uca dogru 4 px'e kadar iniyor). */
   /* IC CIZIM - SAHNEDE YOK, NAV EVRESINDE BELIRIYOR.
-     Katman sirasi OLCULEREK bulundu (`isPointInFill`, 23 Agu):
-     `yol.halka` dagi ICERMIYOR - ic kubbe ve dag alani orada DELIK,
-     nehir de bir delik degil disariya acilan yarik. Yani sira soyle
-     olmak zorunda: beyaz zemin -> kizil dag -> beyaz nehir -> kizil
-     govde. Beyaz zemin ic daire, yaricapi 1,20 kat: nav rasterine
-     karsi puanlandi (piksel uyumu 79,8% -> 97,8%) ve 1,20'de DOYUYOR
-     (1,35 birebir ayni sonucu veriyor), yani delik tam ortuluyor ve
-     tasan kismi kizil govde gizliyor. */
+     BEYAZ ZEMIN YOK: yeni marka varliginda (QANAT_LOGO-seffaf-2.png)
+     ic alanlar beyaz DEGIL DELIK - opak beyaz piksel sayisi sifir.
+     Gorunen tek ic sey kizil DAG; gok ve nehir bosluk kaliyor ve
+     amblem sahnede buyukken oralardan sahnenin kendisi goruluyor.
+     Kompozisyon olcumle dogrulandi: `halka + dag` maskesi yeni
+     dosyanin alfa maskesiyle %99,50 uyusuyor (yalniz halka %97,84 -
+     dag eksik kalir; nehri `evenodd` ile delmeye calismak %96,18 -
+     nehrin dag disinda kalan kismi kizile boyanir).
+     NEHIR AYRI CIZILMIYOR, cunku `isPointInFill` ile olculdu: nehir
+     hem `halka`nin hem `dag`in ICINDE ZATEN DELIK. */
   const C = A.cizim2;
-  const IC = A.ic_daire;
   svg.innerHTML =
     `<path class="pr-ck" d="${C.kuyruk.yol}" fill="none"` +
     ` stroke-width="${C.kuyruk.kalinlik}" stroke-linecap="round"/>` +
     `<path class="pr-cc" d="${C.cember.yol}" fill="none"` +
     ` stroke-width="${C.cember.kalinlik}" stroke-linecap="round"/>` +
-    `<g class="pr-ic">` +
-    `<circle class="pr-ic-zemin" cx="${IC.merkez[0]}" cy="${IC.merkez[1]}"` +
-    ` r="${(IC.r * D2.ic_zemin_kat).toFixed(2)}"/>` +
-    `<path class="pr-ic-dag" d="${A.yol.dag}"/>` +
-    `<path class="pr-ic-nehir" d="${A.yol.nehir}"/>` +
-    `</g>` +
+    `<path class="pr-ic" d="${A.yol.dag}"/>` +
     `<path class="pr-dolgu" d="${A.yol.halka}"/>`;
   /* AMBLEM GOVDEYE EKLENIYOR, SAHNE YAPISINA DEGIL. `.pr-yapis`
      `position: sticky` ve YAPISIK ELEMAN KENDI YIGIN BAGLAMINI KURAR -
@@ -165,10 +161,11 @@ export function kur(bolum: HTMLElement): (p: number) => void {
        sabit (ucuz), son halde seridin kendi degisken kalinligi. */
     svg.style.setProperty('--cizgi', `${1 - dP}`);
     svg.style.setProperty('--dolgu', `${dP}`);
-    /* Ic cizim NAV EVRESININ ICINDE beliriyor: sahne evresinde amblem
-       bos halka kalir. Aralik `sahne.json`da, iki ucu da olculdu -
+    /* Ic dag NAV EVRESININ ICINDE beliriyor: sahne evresinde amblem
+       bos halka kalir - gok ve nehir orada bosluktur ve sahnenin
+       kendisi goruluyor. Aralik `sahne.json`da, iki ucu da olculdu:
        amblem nav pilinin uzerine gelmeden ONCE tamamlaniyor (ortusme
-       t=0,80 ile 0,90 arasinda basliyor), ve ic cizimin okunabilecegi
+       t=0,80 ile 0,90 arasinda basliyor), ve dagin okunabilecegi
        bir boydayken basliyor (t=0,42'de amblem ~180 px). */
     svg.style.setProperty('--ic', `${iP}`);
 
