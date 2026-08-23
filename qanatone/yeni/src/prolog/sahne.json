@@ -1,382 +1,395 @@
 {
+ "_": [
+  "PROLOG 1. DURAK — SAHNENIN TEK KAYNAGI (A yaklasimi, 22 Agu 2026).",
+  "Uc okuyucusu var ve UCU DE buradan okur, hicbiri kendi kopyasini tutmaz:",
+  "  prolog-katman.py  — bantlari, kesimi ve KAMERA YOLUNU okur; yoldan her",
+  "                      katmanin ulastigi en buyuk buyutmeyi hesaplayip",
+  "                      kaynak genisligini ona gore secer.",
+  "  src/prolog/gl.ts  — ayni yolu WebGL kamerasina uygular.",
+  "  denetim.cjs       — butceyi ve taban genislikleri buradan dogrular.",
+  "Bir sayiyi degistirmek isteyen BURAYI degistirir; ucu birden kayar."
+ ],
+ "bant": {
+  "_": "Derinlik haritasinin KENDI yuzdeliklerinden (B yaklasimindan devir).",
+  "gok": 0.07,
+  "zirve": 0.24,
+  "dag": 0.5
+ },
+ "kesim": {
   "_": [
-    "PROLOG 1. DURAK — SAHNENIN TEK KAYNAGI (A yaklasimi, 22 Agu 2026).",
-    "Uc okuyucusu var ve UCU DE buradan okur, hicbiri kendi kopyasini tutmaz:",
-    "  prolog-katman.py  — bantlari, kesimi ve KAMERA YOLUNU okur; yoldan her",
-    "                      katmanin ulastigi en buyuk buyutmeyi hesaplayip",
-    "                      kaynak genisligini ona gore secer.",
-    "  src/prolog/gl.ts  — ayni yolu WebGL kamerasina uygular.",
-    "  denetim.cjs       — butceyi ve taban genislikleri buradan dogrular.",
-    "Bir sayiyi degistirmek isteyen BURAYI degistirir; ucu birden kayar."
+   "Mobil ayri bir KARE. 412x892 telefonda object-fit:cover 1,419 oranli",
+   "kareyi yukseklige oturtur, genisligin %67'sini atar ve kalani ~4x",
+   "buyutur — yani inen baytin ucte ikisi hic gorunmez. Dikey kesim iki",
+   "duvarin ic kenarini, zirveyi ve nehri korur."
   ],
-  "bant": {
-    "_": "Derinlik haritasinin KENDI yuzdeliklerinden (B yaklasimindan devir).",
-    "gok": 0.07,
-    "zirve": 0.24,
-    "dag": 0.5
+  "masaustu": {
+   "oran": null,
+   "merkez": 0.5
   },
-  "kesim": {
-    "_": [
-      "Mobil ayri bir KARE. 412x892 telefonda object-fit:cover 1,419 oranli",
-      "kareyi yukseklige oturtur, genisligin %67'sini atar ve kalani ~4x",
-      "buyutur — yani inen baytin ucte ikisi hic gorunmez. Dikey kesim iki",
-      "duvarin ic kenarini, zirveyi ve nehri korur."
-    ],
-    "masaustu": {
-      "oran": null,
-      "merkez": 0.5
-    },
-    "mobil": {
-      "oran": 0.72,
-      "merkez": 0.53
-    }
-  },
-  "derinlik": {
-    "_": [
-      "Depth Anything V2 TERS derinlik verir (1 = YAKIN). Uzaklik = k / d.",
-      "k gokyuzu platosundan cozuldu: d=0,0631 -> 110 birim.",
-      "Cikan olcek: zirve ~58 · vadi agzi ~35 · yan sirtlar ~20-29 ·",
-      "on plan ~7 birim. Kamera 4,2 birim ilerliyor: on plan 2,4x buyuyor,",
-      "zirve 1,08x — PERSPEKTIF gercekten degisiyor, olcek degil."
-    ],
-    "k": 6.94,
-    "d_taban": 0.055,
-    "d_tavan": 0.995
-  },
-  "kamera": {
-    "_": [
-      "Referans kamera baslangic noktasidir: p=0'da sahne kaynak kareyle",
-      "PIKSEL PIKSEL ayni oturur (agin kendisi o kameradan geri izdusumle",
-      "kuruluyor). p buyurken kamera ILERI ve ASAGI gider — vadiye iner.",
-      "egim: inerken zirve kadrajdan kacmasin diye hafif yukari bakis."
-    ],
-    "fov_y": 45.9,
-    "yol": {
-      "x": -0.25,
-      "y": -1.35,
-      "z": -4.2,
-      "egim": 2.6
-    },
-    "egri": {
-      "z": 1.0,
-      "y": 1.35,
-      "x": 1.0,
-      "egim": 1.0
-    }
-  },
-  "katman": [
-    {
-      "_": [
-        "kip: parilti · gunes diski · sis payi · yon isigi. hiz: yedek yoldaki (CSS) paralaks hizi.",
-        "genis: duz katmanin kare disina tasma payi. Kamera inip yukari egilince kadraj kaynak karenin USTUNU aciyor; tasma yetmeyince gogun ust satiri gerilip yatay bir bant dikisi birakiyordu (mobil p=1 karesinde goruldu). Duz katman iki ucgen, tasmanin bedeli yok."
-      ],
-      "ad": "gok",
-      "tur": "duz",
-      "d": 0.0631,
-      "detay": 0.55,
-      "genis": 0.38,
-      "hiz": 0.05,
-      "kip": [
-        0.0,
-        1.0,
-        0.1,
-        0.0
-      ]
-    },
-    {
-      "ad": "bulut",
-      "tur": "duz",
-      "d": 0.06,
-      "detay": 1.0,
-      "genis": 0.12,
-      "hiz": 0.09,
-      "kip": [
-        0.0,
-        0.55,
-        0.16,
-        0.3
-      ]
-    },
-    {
-      "ad": "zirve",
-      "tur": "derinlik",
-      "bant": [
-        0.07,
-        0.24
-      ],
-      "detay": 1.0,
-      "hiz": 0.15,
-      "kip": [
-        0.0,
-        0.2,
-        1.0,
-        0.85
-      ]
-    },
-    {
-      "ad": "dag-sol",
-      "tur": "derinlik",
-      "bant": [
-        0.24,
-        0.5
-      ],
-      "detay": 1.0,
-      "hiz": 0.3,
-      "kip": [
-        0.0,
-        0.1,
-        0.85,
-        0.75
-      ]
-    },
-    {
-      "ad": "dag-sag",
-      "tur": "derinlik",
-      "bant": [
-        0.24,
-        0.5
-      ],
-      "detay": 1.0,
-      "hiz": 0.32,
-      "kip": [
-        0.0,
-        0.1,
-        0.85,
-        0.75
-      ]
-    },
-    {
-      "ad": "vadi",
-      "tur": "derinlik",
-      "bant": [
-        0.5,
-        1.01
-      ],
-      "detay": 1.0,
-      "hiz": 0.55,
-      "kip": [
-        0.0,
-        0.06,
-        0.55,
-        0.6
-      ]
-    },
-    {
-      "ad": "nehir",
-      "tur": "derinlik",
-      "bant": [
-        0.4,
-        1.01
-      ],
-      "detay": 1.0,
-      "hiz": 0.6,
-      "kip": [
-        0.85,
-        0.05,
-        0.4,
-        0.25
-      ]
-    }
-  ],
-  "sis": [
-    {
-      "_": "Iki perde. Uzaktaki vadi agzini dolduruyor ve cumlenin ARDINDA, yakindaki nehrin ONUNDE gecip kameraya en yakin hareket katmani oluyor.",
-      "d": 0.26,
-      "kutu": [
-        0.02,
-        0.4,
-        0.98,
-        0.9
-      ],
-      "yogun": 0.85
-    },
-    {
-      "_": "MOBILDE KAPALI (23 Agu, olculdu). Iki perde 412x892/DPR2'de kare basina 4,26 ms goturuyordu ve p95'i 11,5 -> 30,7 ms'ye cikaran tek is buydu. Bu YAKIN perde daha ucuz gorunse de en cok pikseli o kapliyor (kutu kare disina tasiyor). Uzaktaki perde (yogun 0.85) sahnenin dramatik isi; kalan o.",
-      "d": 0.56,
-      "kutu": [
-        -0.05,
-        0.52,
-        1.05,
-        1.06
-      ],
-      "yogun": 0.38,
-      "mobil": false
-    }
-  ],
-  "soz": {
-    "_": [
-      "Cumle sahnenin ICINDE duruyor: vadi agziyla yan sirtlarin ARASINDA",
-      "bir dunya noktasi. Kamera inerken yaklasir, buyur ve yan duvarlar",
-      "onunun gecer — 'dagin onunde duran yazi' hissini kiran sey bu."
-    ],
-    "d": 0.3,
-    "merkez": [
-      0.0,
-      0.02
-    ],
-    "genislik": 0.68
-  },
-  "durak2": {
-    "_": [
-      "DURAK 2 - AMBLEMIN DOGUSU (2. kurgu, 23 Agu).",
-      "Akis: nav basta BOS. Kamera nehri takip ederken sahnenin nehri",
-      "kivrilip Q nun kuyruguna donusur, halka onun etrafinda kapanir,",
-      "logo kuculup navdaki yerine oturur ve ORADA KALIR; sonra dagin",
-      "icine inis baslar.",
-      "DAG SILUETINE HIZALANMA BIRAKILDI - o yol olcumle kapandi",
-      "(kalan hata ~44 px ve p ye duyarsizdi). Cakisan sey artik NEHIR:",
-      "logonun kuyrugu zaten nehir hattidir. Kuyrugu sahnenin nehir",
-      "izine oturtmanin hatasi masaustunde 28 px, mobilde 25 px.",
-      "Yerlesim katsayilari o olcumden geliyor ve EKRANA GORE",
-      "normalize: olcek ve y ekran YUKSEKLIGIYLE, x GENISLIGIYLE",
-      "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
-    ],
-    "aralik": {
-      "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet.",
-      "bekle": [
-        0.0,
-        0.08
-      ],
-      "kuyruk": [
-        0.08,
-        0.28
-      ],
-      "cember": [
-        0.28,
-        0.46
-      ],
-      "dolgu": [
-        0.44,
-        0.54
-      ],
-      "nav": [
-        0.54,
-        0.66
-      ]
-    },
-    "sonme": {
-      "_": "Kizil bu sahnede ilk kez goruluyor; cizim boyunca tuvalin parlakligi bu carpana iner, nava giderken geri doner.",
-      "deger": 0.55
-    },
-    "yerlesim": {
-      "_": [
-        "Kuyrugu sahnenin nehir izine oturtan olculmus benzerlik donusumu,",
-        "p nin dogrusal fonksiyonu. PIKSEL uzayinda olculdu: normalize",
-        "izdusumde x ve y farkli piksel olceginde ve tek skaler benzerlik",
-        "orada sekli bozuyor (onceki kurguda ucuncu kez yakalanmisti).",
-        "Katsayilar ekrana gore normalize - olcek ve merkez_y ekran",
-        "YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir."
-      ],
-      "masaustu": {
-        "olcek": [
-          0.000744,
-          0.000613
-        ],
-        "merkez_x": [
-          0.095,
-          -0.3086
-        ],
-        "merkez_y": [
-          0.2896,
-          -0.4616
-        ],
-        "hata_ort_px": 16595.2
-      },
-      "mobil": {
-        "olcek": [
-          0.000697,
-          0.000526
-        ],
-        "merkez_x": [
-          -0.9206,
-          -0.9721
-        ],
-        "merkez_y": [
-          0.2769,
-          -0.3969
-        ],
-        "hata_ort_px": 14480.3
-      }
-    },
-    "acik": true
-  },
-  "olcum": {
-    "_": [
-      "Genislik hesabinin referans ekranlari. DPR tavani 2: 3x telefonda",
-      "1,25x altornekleme kaliyor, o yogunlukta gorunmuyor; 3x'e gore",
-      "olcmek bayti 2,25 katina cikariyordu."
-    ],
-    "dpr_tavan": 2,
-    "_dpr_cizim": [
-      "CIZIM tavani URETIM tavanindan AYRI (23 Agu). Ustteki `dpr_tavan`",
-      "URETECIN bayt hesabinin referansi - onu dusurmek katman",
-      "genisliklerini kucultur ve butun gorselleri yeniden urettirir.",
-      "Asagidaki `dpr_cizim` yalniz CALISMA ANINDA kac piksel",
-      "boyandigini soyler; kaynak daha keskin kalir, ust ornekleme",
-      "payi mipmap'e yarar.",
-      "OLCULDU (412x892, CPU 4x, gercek Chrome + Intel UHD, GPU",
-      "senkronlu): DPR 2 -> 12,35 ms/kare (p95 28,6) · DPR 1,5 -> 8,70",
-      "(p95 11,0) · DPR 1 -> 8,65 (p95 8,55). Mobilde tek gercek",
-      "kaldirac PIKSEL SAYISI: DPR 1'de sis de arazi de OLCULEBILIR",
-      "yuk birakmiyor (ucu de 8,63 ms). 1,5 secildi cunku 1'e inmek",
-      "kare kazandirmiyor ama keskinligi gorunur sekilde dusuruyor."
-    ],
-    "dpr_cizim": {
-      "masaustu": 2,
-      "mobil": 1.5
-    },
-    "ekran": {
-      "masaustu": [
-        1440,
-        900
-      ],
-      "mobil": [
-        412,
-        892
-      ]
-    },
-    "taban_genislik": {
-      "masaustu": 2560,
-      "mobil": 1600
-    },
-    "butce_bayt": {
-      "masaustu": 1258291,
-      "mobil": 460800
-    },
-    "doku_bayt": {
-      "_": [
-        "COZULMUS DOKU TAVANI — bayt tavaninin yanina ikinci kisit.",
-        "Bir sahnede 1600x2223 RGBA tek katman 14,2 MB bellek demek;",
-        "yedi katman kutu kirpma olmadan mobilde 100 MB'i asiyordu.",
-        "Kural 109'un (cozulmus bitmap) WebGL tarafindaki karsiligi.",
-        "Sahne raydan cikinca dokular birakiliyor, bellek geri veriliyor."
-      ],
-      "_2": [
-        "Masaustu tavani 128 -> 96 MB (22 Agu, olcumden sonra). Sebep:",
-        "`texImage2D` bu makinede ~17 ms/Mpx; 128 MB'lik doku kumesi",
-        "kurulumda katman basina 50-130 ms'lik gorevler uretiyordu.",
-        "96 MB'ta yedi katmanin yedisi de 2560 px tabaninin USTUNDE",
-        "kaliyor ve DPR 1 ekranda zaten 1,7x asiri ornekli."
-      ],
-      "masaustu": 100663296,
-      "mobil": 58720256
-    }
-  },
-  "hareket": {
-    "_": "Zamana bagli (kaydirmadan bagimsiz) hareketler; saniye cinsinden.",
-    "bulut_hiz": 0.0042,
-    "sis_nefes": 26.0,
-    "sis_suruklenme": 0.01,
-    "nehir_parilti": 0.34,
-    "gunes": {
-      "azimut": [
-        0.62,
-        0.3
-      ],
-      "yukseklik": [
-        -0.07,
-        0.16
-      ]
-    }
+  "mobil": {
+   "oran": 0.72,
+   "merkez": 0.53
   }
+ },
+ "derinlik": {
+  "_": [
+   "Depth Anything V2 TERS derinlik verir (1 = YAKIN). Uzaklik = k / d.",
+   "k gokyuzu platosundan cozuldu: d=0,0631 -> 110 birim.",
+   "Cikan olcek: zirve ~58 · vadi agzi ~35 · yan sirtlar ~20-29 ·",
+   "on plan ~7 birim. Kamera 4,2 birim ilerliyor: on plan 2,4x buyuyor,",
+   "zirve 1,08x — PERSPEKTIF gercekten degisiyor, olcek degil."
+  ],
+  "k": 6.94,
+  "d_taban": 0.055,
+  "d_tavan": 0.995
+ },
+ "kamera": {
+  "_": [
+   "Referans kamera baslangic noktasidir: p=0'da sahne kaynak kareyle",
+   "PIKSEL PIKSEL ayni oturur (agin kendisi o kameradan geri izdusumle",
+   "kuruluyor). p buyurken kamera ILERI ve ASAGI gider — vadiye iner.",
+   "egim: inerken zirve kadrajdan kacmasin diye hafif yukari bakis."
+  ],
+  "fov_y": 45.9,
+  "yol": {
+   "x": -0.25,
+   "y": -1.35,
+   "z": -4.2,
+   "egim": 2.6
+  },
+  "egri": {
+   "z": 1.0,
+   "y": 1.35,
+   "x": 1.0,
+   "egim": 1.0
+  }
+ },
+ "katman": [
+  {
+   "_": [
+    "kip: parilti · gunes diski · sis payi · yon isigi. hiz: yedek yoldaki (CSS) paralaks hizi.",
+    "genis: duz katmanin kare disina tasma payi. Kamera inip yukari egilince kadraj kaynak karenin USTUNU aciyor; tasma yetmeyince gogun ust satiri gerilip yatay bir bant dikisi birakiyordu (mobil p=1 karesinde goruldu). Duz katman iki ucgen, tasmanin bedeli yok."
+   ],
+   "ad": "gok",
+   "tur": "duz",
+   "d": 0.0631,
+   "detay": 0.55,
+   "genis": 0.38,
+   "hiz": 0.05,
+   "kip": [
+    0.0,
+    1.0,
+    0.1,
+    0.0
+   ]
+  },
+  {
+   "ad": "bulut",
+   "tur": "duz",
+   "d": 0.06,
+   "detay": 1.0,
+   "genis": 0.12,
+   "hiz": 0.09,
+   "kip": [
+    0.0,
+    0.55,
+    0.16,
+    0.3
+   ]
+  },
+  {
+   "ad": "zirve",
+   "tur": "derinlik",
+   "bant": [
+    0.07,
+    0.24
+   ],
+   "detay": 1.0,
+   "hiz": 0.15,
+   "kip": [
+    0.0,
+    0.2,
+    1.0,
+    0.85
+   ]
+  },
+  {
+   "ad": "dag-sol",
+   "tur": "derinlik",
+   "bant": [
+    0.24,
+    0.5
+   ],
+   "detay": 1.0,
+   "hiz": 0.3,
+   "kip": [
+    0.0,
+    0.1,
+    0.85,
+    0.75
+   ]
+  },
+  {
+   "ad": "dag-sag",
+   "tur": "derinlik",
+   "bant": [
+    0.24,
+    0.5
+   ],
+   "detay": 1.0,
+   "hiz": 0.32,
+   "kip": [
+    0.0,
+    0.1,
+    0.85,
+    0.75
+   ]
+  },
+  {
+   "ad": "vadi",
+   "tur": "derinlik",
+   "bant": [
+    0.5,
+    1.01
+   ],
+   "detay": 1.0,
+   "hiz": 0.55,
+   "kip": [
+    0.0,
+    0.06,
+    0.55,
+    0.6
+   ]
+  },
+  {
+   "ad": "nehir",
+   "tur": "derinlik",
+   "bant": [
+    0.4,
+    1.01
+   ],
+   "detay": 1.0,
+   "hiz": 0.6,
+   "kip": [
+    0.85,
+    0.05,
+    0.4,
+    0.25
+   ]
+  }
+ ],
+ "sis": [
+  {
+   "_": "Iki perde. Uzaktaki vadi agzini dolduruyor ve cumlenin ARDINDA, yakindaki nehrin ONUNDE gecip kameraya en yakin hareket katmani oluyor.",
+   "d": 0.26,
+   "kutu": [
+    0.02,
+    0.4,
+    0.98,
+    0.9
+   ],
+   "yogun": 0.85
+  },
+  {
+   "_": "MOBILDE KAPALI (23 Agu, olculdu). Iki perde 412x892/DPR2'de kare basina 4,26 ms goturuyordu ve p95'i 11,5 -> 30,7 ms'ye cikaran tek is buydu. Bu YAKIN perde daha ucuz gorunse de en cok pikseli o kapliyor (kutu kare disina tasiyor). Uzaktaki perde (yogun 0.85) sahnenin dramatik isi; kalan o.",
+   "d": 0.56,
+   "kutu": [
+    -0.05,
+    0.52,
+    1.05,
+    1.06
+   ],
+   "yogun": 0.38,
+   "mobil": false
+  }
+ ],
+ "soz": {
+  "_": [
+   "Cumle sahnenin ICINDE duruyor: vadi agziyla yan sirtlarin ARASINDA",
+   "bir dunya noktasi. Kamera inerken yaklasir, buyur ve yan duvarlar",
+   "onunun gecer — 'dagin onunde duran yazi' hissini kiran sey bu."
+  ],
+  "d": 0.3,
+  "merkez": [
+   0.0,
+   0.02
+  ],
+  "genislik": 0.68
+ },
+ "durak2": {
+  "_": [
+   "DURAK 2 - AMBLEMIN DOGUSU (2. kurgu, 23 Agu).",
+   "Akis: nav basta BOS. Kamera nehri takip ederken sahnenin nehri",
+   "kivrilip Q nun kuyruguna donusur, halka onun etrafinda kapanir,",
+   "nav evresinde amblemin ic cizimi belirir, logo kuculup navdaki",
+   "yerine oturur ve ORADA KALIR; sonra dagin icine inis baslar.",
+   "IC CIZIM SAHNEDE YOK: sahne boyunca amblem BOS HALKADIR - sahnenin",
+   "kendi dagi ve nehri zaten arkasinda duruyor. Ic cizim yalniz nav",
+   "evresinde (`aralik.ic`) beliriyor ki devir aninda amblem ile gercek",
+   "nav logosu ayni seyi gostersin.",
+   "`ic_zemin_kat`: beyaz zemin ic dairenin bu kati yaricapla ciziliyor.",
+   "Nav rasterine karsi puanlandi - piksel uyumu 79,8% -> 97,8% - ve",
+   "1,20'de DOYUYOR (1,35 birebir ayni), yani delik tam ortuluyor ve",
+   "tasan kismi kizil govde gizliyor.",
+   "DAG SILUETINE HIZALANMA BIRAKILDI - o yol olcumle kapandi",
+   "(kalan hata ~44 px ve p ye duyarsizdi). Cakisan sey artik NEHIR:",
+   "logonun kuyrugu zaten nehir hattidir. Kuyrugu sahnenin nehir",
+   "izine oturtmanin hatasi masaustunde 28 px, mobilde 25 px.",
+   "Yerlesim katsayilari o olcumden geliyor ve EKRANA GORE",
+   "normalize: olcek ve y ekran YUKSEKLIGIYLE, x GENISLIGIYLE",
+   "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
+  ],
+  "aralik": {
+   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA ve nav'in ICINDE: amblemin ic cizimi (beyaz zemin + kizil dag + beyaz nehir) sahne evresinde YOKTUR, yalniz nav evresinde belirir. Iki ucu da olculdu: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme t=0,80 ile 0,90 arasinda basliyor) ve ic cizimin okunabilecegi bir boyda baslar (t=0,42'de amblem ~180 px).",
+   "bekle": [
+    0.0,
+    0.08
+   ],
+   "kuyruk": [
+    0.08,
+    0.28
+   ],
+   "cember": [
+    0.28,
+    0.46
+   ],
+   "dolgu": [
+    0.44,
+    0.54
+   ],
+   "nav": [
+    0.54,
+    0.66
+   ],
+   "ic": [
+    0.59,
+    0.635
+   ]
+  },
+  "sonme": {
+   "_": "Kizil bu sahnede ilk kez goruluyor; cizim boyunca tuvalin parlakligi bu carpana iner, nava giderken geri doner.",
+   "deger": 0.55
+  },
+  "yerlesim": {
+   "_": [
+    "Kuyrugu sahnenin nehir izine oturtan olculmus benzerlik donusumu,",
+    "p nin dogrusal fonksiyonu. PIKSEL uzayinda olculdu: normalize",
+    "izdusumde x ve y farkli piksel olceginde ve tek skaler benzerlik",
+    "orada sekli bozuyor (onceki kurguda ucuncu kez yakalanmisti).",
+    "Katsayilar ekrana gore normalize - olcek ve merkez_y ekran",
+    "YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir."
+   ],
+   "masaustu": {
+    "olcek": [
+     0.000744,
+     0.000613
+    ],
+    "merkez_x": [
+     0.095,
+     -0.3086
+    ],
+    "merkez_y": [
+     0.2896,
+     -0.4616
+    ],
+    "hata_ort_px": 16595.2
+   },
+   "mobil": {
+    "olcek": [
+     0.000697,
+     0.000526
+    ],
+    "merkez_x": [
+     -0.9206,
+     -0.9721
+    ],
+    "merkez_y": [
+     0.2769,
+     -0.3969
+    ],
+    "hata_ort_px": 14480.3
+   }
+  },
+  "acik": true,
+  "ic_zemin_kat": 1.2
+ },
+ "olcum": {
+  "_": [
+   "Genislik hesabinin referans ekranlari. DPR tavani 2: 3x telefonda",
+   "1,25x altornekleme kaliyor, o yogunlukta gorunmuyor; 3x'e gore",
+   "olcmek bayti 2,25 katina cikariyordu."
+  ],
+  "dpr_tavan": 2,
+  "_dpr_cizim": [
+   "CIZIM tavani URETIM tavanindan AYRI (23 Agu). Ustteki `dpr_tavan`",
+   "URETECIN bayt hesabinin referansi - onu dusurmek katman",
+   "genisliklerini kucultur ve butun gorselleri yeniden urettirir.",
+   "Asagidaki `dpr_cizim` yalniz CALISMA ANINDA kac piksel",
+   "boyandigini soyler; kaynak daha keskin kalir, ust ornekleme",
+   "payi mipmap'e yarar.",
+   "OLCULDU (412x892, CPU 4x, gercek Chrome + Intel UHD, GPU",
+   "senkronlu): DPR 2 -> 12,35 ms/kare (p95 28,6) · DPR 1,5 -> 8,70",
+   "(p95 11,0) · DPR 1 -> 8,65 (p95 8,55). Mobilde tek gercek",
+   "kaldirac PIKSEL SAYISI: DPR 1'de sis de arazi de OLCULEBILIR",
+   "yuk birakmiyor (ucu de 8,63 ms). 1,5 secildi cunku 1'e inmek",
+   "kare kazandirmiyor ama keskinligi gorunur sekilde dusuruyor."
+  ],
+  "dpr_cizim": {
+   "masaustu": 2,
+   "mobil": 1.5
+  },
+  "ekran": {
+   "masaustu": [
+    1440,
+    900
+   ],
+   "mobil": [
+    412,
+    892
+   ]
+  },
+  "taban_genislik": {
+   "masaustu": 2560,
+   "mobil": 1600
+  },
+  "butce_bayt": {
+   "masaustu": 1258291,
+   "mobil": 460800
+  },
+  "doku_bayt": {
+   "_": [
+    "COZULMUS DOKU TAVANI — bayt tavaninin yanina ikinci kisit.",
+    "Bir sahnede 1600x2223 RGBA tek katman 14,2 MB bellek demek;",
+    "yedi katman kutu kirpma olmadan mobilde 100 MB'i asiyordu.",
+    "Kural 109'un (cozulmus bitmap) WebGL tarafindaki karsiligi.",
+    "Sahne raydan cikinca dokular birakiliyor, bellek geri veriliyor."
+   ],
+   "_2": [
+    "Masaustu tavani 128 -> 96 MB (22 Agu, olcumden sonra). Sebep:",
+    "`texImage2D` bu makinede ~17 ms/Mpx; 128 MB'lik doku kumesi",
+    "kurulumda katman basina 50-130 ms'lik gorevler uretiyordu.",
+    "96 MB'ta yedi katmanin yedisi de 2560 px tabaninin USTUNDE",
+    "kaliyor ve DPR 1 ekranda zaten 1,7x asiri ornekli."
+   ],
+   "masaustu": 100663296,
+   "mobil": 58720256
+  }
+ },
+ "hareket": {
+  "_": "Zamana bagli (kaydirmadan bagimsiz) hareketler; saniye cinsinden.",
+  "bulut_hiz": 0.0042,
+  "sis_nefes": 26.0,
+  "sis_suruklenme": 0.01,
+  "nehir_parilti": 0.34,
+  "gunes": {
+   "azimut": [
+    0.62,
+    0.3
+   ],
+   "yukseklik": [
+    -0.07,
+    0.16
+   ]
+  }
+ }
 }

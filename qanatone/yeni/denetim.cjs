@@ -1912,7 +1912,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      (b) yerlesim IKI varyant icin de yazili - katsayilar nehir
          izine oturtan olculmus donusumden gelir;
      (c) BES aralik sirali ve bitisik: bekle -> kuyruk -> cember ->
-         dolgu -> nav;
+         dolgu -> nav. Alti bir aralik daha var ve o SIRAYA GIRMEZ:
+         `ic`, nav'in ICINDE durur. Amblemin ic cizimi - beyaz zemin,
+         kizil dag, beyaz nehir - SAHNE EVRESINDE YOKTUR; sahne boyunca
+         amblem bos halkadir, cunku sahnenin kendi dagi ve nehri zaten
+         arkasinda duruyor. Ic cizim yalniz nav evresinde belirir ve
+         nav BITMEDEN tamamlanir, ki devir aninda amblem ile gercek nav
+         logosu ayni seyi gostersin. Olculdu: ic cizim yokken devirde
+         kutunun beyazi %0'dan %11,7'ye zipliyor, ortalama isiklilik
+         +16,4 birim degisiyordu. Katman sirasi da olculdu
+         (`isPointInFill`): `yol.halka` dagi ICERMEZ, ic kubbe ve dag
+         alani orada deliktir - bu yuzden dag ve nehir AYRI cizilir;
      (d) MASKE YOK. Ilk kurgu maskeyle cizyordu ve olculdu: dashoffset
          her degistiginde maskelenen dolgu bastan raster ediliyor,
          kare p95'ine 16,7 ms yaziyordu. Kural ciktida `<mask`
@@ -2010,6 +2020,21 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const dl = (D2.aralik || {}).dolgu, nv = (D2.aralik || {}).nav;
   if (Array.isArray(dl) && Array.isArray(nv) && dl[1] > nv[0])
     kusur.push('dolgu-nav-basladiktan-sonra-bitiyor');
+
+  /* (h) IC CIZIM: sahnede yok, nav evresinde beliriyor. */
+  const ic = (D2.aralik || {}).ic;
+  if (!Array.isArray(ic) || ic.length !== 2) kusur.push('ic-araligi-yok');
+  else if (!Array.isArray(nv)) { /* nav zaten yukarida yakalandi */ }
+  else if (ic[0] < nv[0]) kusur.push('ic-sahne-evresine-tasiyor');
+  else if (ic[1] > nv[1]) kusur.push('ic-nav-bitmeden-tamamlanmiyor');
+  if (!(D2.ic_zemin_kat > 1)) kusur.push('ic-zemin-kati-yok');
+  for (const y of ['dag', 'nehir'])
+    if (kaynak.indexOf('yol.' + y) < 0) kusur.push('ic-cizim-yolu-cizilmiyor:' + y);
+  if (!/--ic/.test(kaynak)) kusur.push('ic-surulmuyor');
+  /* Ic cizim halkanin ALTINDA olmali: `yol.halka` dagi icermiyor, dag
+     ve nehir once cizilip govde ustlerine basiliyor. */
+  if (kaynak.indexOf('pr-ic') > kaynak.indexOf('pr-dolgu'))
+    kusur.push('ic-cizim-govdenin-ustunde');
 
   ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
      kusur.length === 0,

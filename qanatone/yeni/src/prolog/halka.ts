@@ -17,9 +17,15 @@
        maskelenen dolgu bastan raster ediliyor, kare p95'ine 16,7 ms
        yaziyordu. Burada cizilen sey DOGRUDAN STROKE; maskelenen
        icerik yok, her karede yeniden cizilen sey yalnizca cizgi.
-     - AMBLEMIN DAGI VE IC CIZIMI SAHNEDE HIC KULLANILMIYOR. Sahnede
-       yalniz halka ve kuyruk var; amblemin kendi dagi ancak logo
-       nava oturduktan SONRA, gercek nav logosuyla birlikte goruluyor.
+     - AMBLEMIN DAGI VE NEHRI SAHNE EVRESINDE YOK, NAV EVRESINDE
+       BELIRIYOR (23 Agu, ikinci duzeltme). Sahne boyunca amblem bos
+       halkadir - sahnenin kendi dagi ve nehri zaten arkasinda duruyor,
+       ustune ikincisini koymak o okumayi bozardi. Nav evresine
+       girince ic cizim (beyaz zemin + kizil dag + beyaz nehir)
+       yerine geliyor ve devir aninda amblem ile gercek nav logosu
+       AYNI seyi gosteriyor. Sebep olculdu: ic cizim yokken devirde
+       kutunun beyazi %0'dan %11,7'ye ziplayip ortalama isikliligi
+       +16,4 birim degistiriyordu.
 
    NAVA "OTURUP KALMAK" NASIL: amblem nava tasinmiyor - kuculup
    navdaki logonun yerine geldiginde gercek nav logosu acilir, amblem
@@ -65,12 +71,28 @@ export function kur(bolum: HTMLElement): (p: number) => void {
   /* Kuyruk ve cember AYRI stroke: kurgu ikisini sirayla istiyor ve
      seridin kalinligi ikisinde ayni degil (olculdu: cemberde 248,5 px,
      kuyrukta medyan 154 - uca dogru 4 px'e kadar iniyor). */
+  /* IC CIZIM - SAHNEDE YOK, NAV EVRESINDE BELIRIYOR.
+     Katman sirasi OLCULEREK bulundu (`isPointInFill`, 23 Agu):
+     `yol.halka` dagi ICERMIYOR - ic kubbe ve dag alani orada DELIK,
+     nehir de bir delik degil disariya acilan yarik. Yani sira soyle
+     olmak zorunda: beyaz zemin -> kizil dag -> beyaz nehir -> kizil
+     govde. Beyaz zemin ic daire, yaricapi 1,20 kat: nav rasterine
+     karsi puanlandi (piksel uyumu 79,8% -> 97,8%) ve 1,20'de DOYUYOR
+     (1,35 birebir ayni sonucu veriyor), yani delik tam ortuluyor ve
+     tasan kismi kizil govde gizliyor. */
   const C = A.cizim2;
+  const IC = A.ic_daire;
   svg.innerHTML =
     `<path class="pr-ck" d="${C.kuyruk.yol}" fill="none"` +
     ` stroke-width="${C.kuyruk.kalinlik}" stroke-linecap="round"/>` +
     `<path class="pr-cc" d="${C.cember.yol}" fill="none"` +
     ` stroke-width="${C.cember.kalinlik}" stroke-linecap="round"/>` +
+    `<g class="pr-ic">` +
+    `<circle class="pr-ic-zemin" cx="${IC.merkez[0]}" cy="${IC.merkez[1]}"` +
+    ` r="${(IC.r * D2.ic_zemin_kat).toFixed(2)}"/>` +
+    `<path class="pr-ic-dag" d="${A.yol.dag}"/>` +
+    `<path class="pr-ic-nehir" d="${A.yol.nehir}"/>` +
+    `</g>` +
     `<path class="pr-dolgu" d="${A.yol.halka}"/>`;
   /* AMBLEM GOVDEYE EKLENIYOR, SAHNE YAPISINA DEGIL. `.pr-yapis`
      `position: sticky` ve YAPISIK ELEMAN KENDI YIGIN BAGLAMINI KURAR -
@@ -135,6 +157,7 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     const cP = ilerle(p, AR.cember as Aralik);
     const dP = yumusat(ilerle(p, AR.dolgu as Aralik));
     const nP = yumusat(ilerle(p, AR.nav as Aralik));
+    const iP = yumusat(ilerle(p, AR.ic as Aralik));
 
     kuyruk.style.strokeDashoffset = `${uzKuyruk * (1 - kP)}`;
     cember.style.strokeDashoffset = `${uzCember * (1 - cP)}`;
@@ -142,6 +165,12 @@ export function kur(bolum: HTMLElement): (p: number) => void {
        sabit (ucuz), son halde seridin kendi degisken kalinligi. */
     svg.style.setProperty('--cizgi', `${1 - dP}`);
     svg.style.setProperty('--dolgu', `${dP}`);
+    /* Ic cizim NAV EVRESININ ICINDE beliriyor: sahne evresinde amblem
+       bos halka kalir. Aralik `sahne.json`da, iki ucu da olculdu -
+       amblem nav pilinin uzerine gelmeden ONCE tamamlaniyor (ortusme
+       t=0,80 ile 0,90 arasinda basliyor), ve ic cizimin okunabilecegi
+       bir boydayken basliyor (t=0,42'de amblem ~180 px). */
+    svg.style.setProperty('--ic', `${iP}`);
 
     /* HEDEF NAV EVRESINE GIRERKEN BIR KEZ YENIDEN OLCULUYOR. H12
        korunuyor: kare basina degil, EVREYE GIRISTE tek okuma.
