@@ -282,41 +282,162 @@
   },
   "yerlesim": {
    "_": [
-    "AMBLEMIN YERI KAPLAMA (cover) UZAYINDA (F0, 23 Agu). Onceki hal olcegi",
-    "ekran YUKSEKLIGIYLE, x'i GENISLIGIYLE carpiyordu; sahne ise `cover`",
-    "yerlesiyor - kaynak kare ekranin ORANINA gore kirpiliyor, yani nehrin",
-    "ekrandaki yeri W ya da H ile dogrusal DEGIL. Olculdu: ayni varyantin iki",
-    "referans ekrani (768x1024 ile 1440x900) eski uzayda merkez_x icin 0,423",
-    "fark istiyordu; kaplama uzayinda ayni fark 0,0126'ya iniyor. Yani sorun",
-    "katsayilarda degil NORMALIZASYONDAYDI.",
+    "AMBLEMIN YERI KAPLAMA (cover) UZAYINDA ve p'YE BAGLI (24 Agu).",
     "  kw = max(W, H*oran) · kh = max(H, W/oran) · kutu ortalanir",
-    "  olcek  = r * kh",
-    "  merkez = ((W-kw)/2 + u*kw , (H-kh)/2 + v*kh)",
-    "`oran` sahnenin kendi orani; CSS'te `--pr-oran-d` / `--pr-oran-m` olarak",
-    "zaten basili, halka.ts oradan okuyor - ikinci bir kaynak dogmuyor.",
-    "OLCEK P'DEN BAGIMSIZ: `r` tek sayi, egimi yok. Enes'in karari (23 Agu) -",
-    "kaydirmaya bagli olcek egimi F5'te koreografi bastan yazilirken",
-    "belirlenecek; oda kurgusu zaten sabit olcek istiyor.",
-    "u/v de sabit: sahne evresinde amblem kaplama kutusuna KILITLI durur.",
-    "Hedef ACILIS KARESIDIR (p=0). Orada olculen sonuc:",
-    "  360  nehir hatasi 24,2 px · merkez %8,0 · gok deligi %100",
-    "  412  25,9 px · %7,8 · %100",
-    "  768  17,9 px · %8,0 · %100",
-    "  1440 15,5 px · %4,2 · %100",
-    "(Bugunku hal ayni olcumde 80,7 / 83,1 / 122,3 / 114,0 px idi.)"
+    "  olcek  = r * kh                       (r p'den BAGIMSIZ)",
+    "  merkez = ((W-kw)/2 + u(p)*kw , (H-kh)/2 + v(p)*kh)",
+    "  u(p) = u[0] + u[1]*p        v(p) = v[0] + v[1]*p",
+    "`oran` ikinci bir kaynak degil: `.pr` zaten `--pr-oran-d`/`--pr-oran-m`",
+    "basiyor, halka.ts oradan okuyor.",
+    "",
+    "OLCUT DEGISTI (Enes, 24 Agu). Eskiden logonun BUTUN nehir hattinin",
+    "sahnenin nehrine ortalama uzakligi olculuyordu. O sayi yaniltiyordu:",
+    "hattin cogu cemberin ICINDE ve orada sahnenin nehri zaten yok, yani",
+    "ortalama iyi cikarken BIRLESME NOKTASI 62-74 px kaciktu. Yeni olcut",
+    "kuyrugun UCU:",
+    "  d_uc   < 8 px      kuyrugun bitis noktasi sahnenin nehri uzerinde",
+    "  dtheta < 10 derece o noktada iki egrinin tegetleri ortusuyor",
+    "  d_kuyruk           o an CIZILMIS kuyrugun nehre ort. uzakligi",
+    "  ort                ESKI olcut, artik yalniz kunye",
+    "",
+    "U VE V ARTIK P'NIN FONKSIYONU, cunku olculdu: sahnenin nehri p ile",
+    "17-42 px kayiyor (kamerayi takip ediyor). Sabit tek yerlesim 8 px'lik",
+    "hedefi tutamiyor - p=0'da 3-4 px olan birlesme p=0,52'de 27-31 px'e",
+    "cikiyordu. Amblem artik ekrana degil NEHRE kilitli.",
+    "",
+    "OLCEK ARTIK SERBEST DEGIL. Kuyrugun EGRILIGI nehrin egriligine",
+    "oturmak zorunda oldugu icin boy belirleniyor: iki varyant da",
+    "BAGIMSIZ olarak r=0,000348'te en iyi sonucu verdi. Bunun bedeli",
+    "amblemin kucuLMESI - masaustunde 556 -> 310 px, mobilde 438 -> 244 px.",
+    "",
+    "GOK DELIGI ARTIK KISIT DEGIL - Enes'in siralamasi: birlesme ondan",
+    "onemli, catisirsa delik feda edilir.",
+    "",
+    "OLCULEN SONUC (gorunur aralik p=0,08..0,52, en kotu deger):",
+    "  ekran  amblem eni   d_uc   dtheta   d_kuyruk   merkez",
+    "  360    244 px (68%)  2,6     2,1       6,9      %20",
+    "  412    272 px (66%)  3,6     1,7       7,6      %20",
+    "  768    312 px (41%)  4,8     8,8       8,1      %10",
+    "  1440   310 px (21%)  4,8     9,0       8,3      %5",
+    "(Bugunku hal ayni olcumde d_uc 74-96 px, dtheta 12-63 derece idi.)"
    ],
    "mobil": {
-    "r": 0.000625,
-    "u": 0.4498,
-    "v": 0.7011
+    "r": 0.000348,
+    "u": [
+     0.3276,
+     0.1518
+    ],
+    "v": [
+     0.6861,
+     0.0884
+    ]
    },
    "masaustu": {
-    "r": 0.000625,
-    "u": 0.4577,
-    "v": 0.6208
+    "r": 0.000348,
+    "u": [
+     0.4027,
+     0.1608
+    ],
+    "v": [
+     0.651,
+     0.1548
+    ]
    }
   },
-  "acik": true
+  "acik": true,
+  "birlesme": {
+   "_": [
+    "BIRLESME KUNYESI (24 Agu) - yerlesim katsayilarinin NEDEN bu oldugu.",
+    "Denetim statik: sahnenin nehrini cikaramaz (kare gerekir). Tutabilecegi",
+    "sey su: kullanilan katsayilar OLCULEN katsayilarla ayni mi. Biri r/u/v'yi",
+    "elle oynatirsa `katsayi` ile `yerlesim` ayrisir ve kural kirmizi yanar -",
+    "yani sayi yeniden olculmeden degistirilemez.",
+    "OLCUM DUZENI: gercek Chrome (puppeteer, SwiftShader), dort genislik,",
+    "p = 0,08..0,52 arasi sekiz kare. Sahnenin nehri kareden cikariliyor",
+    "(satir medyaninin 3 katini asan, alttan yukari sureklilik takip eden",
+    "en yakin kume). Kuyrugun ucu TAHMIN DEGIL OLCUM: `.pr-ck` yolunun",
+    "serbest ucu `getPointAtLength(0)`, dolgunun gercek ucu `isPointInFill`",
+    "ile yurunerek (+2 birim), tegeti kisa yaydan (26,6 derece).",
+    "TEGET PENCERESI KUYRUGUN BOYUYLA OLCEKLENIR (+-0,30*L). Sabit 26 px'lik",
+    "pencereyle cozucu nehrin bir KIVRIMINA oturup d_uc 0,0 / dtheta 0,1",
+    "yaziyordu - ayni noktada genis pencerede fark 14-24 dereceydi. Sayi",
+    "yesil, goz kirik gorurdu."
+   ],
+   "hedef": {
+    "d_uc_px": 8.0,
+    "dtheta_derece": 10.0
+   },
+   "katsayi": {
+    "mobil": {
+     "r": 0.000348,
+     "u": [
+      0.3276,
+      0.1518
+     ],
+     "v": [
+      0.6861,
+      0.0884
+     ]
+    },
+    "masaustu": {
+     "r": 0.000348,
+     "u": [
+      0.4027,
+      0.1608
+     ],
+     "v": [
+      0.651,
+      0.1548
+     ]
+    }
+   },
+   "olculen": {
+    "_": "DOGRULANAN degerler: gercek Chrome, p basina TAZE sayfa, hukum sayfanin KENDI CSS donusumunden (modelden degil). Gorunur aralikta (p=0,08..0,52) en kotu deger. d_hiza = Enes'in lafzi (ayni SATIRDAKI nehir noktasi) ve kapi degil; asil kapi d_uc, yani noktadan egriye en kisa uzaklik.",
+    "360": {
+     "en_px": 244,
+     "d_uc": 3.4,
+     "dtheta": 2.7,
+     "d_kuyruk": 6.9,
+     "d_hiza": 9.3
+    },
+    "412": {
+     "en_px": 272,
+     "d_uc": 3.6,
+     "dtheta": 1.6,
+     "d_kuyruk": 7.6,
+     "d_hiza": 9.0
+    },
+    "768": {
+     "en_px": 312,
+     "d_uc": 4.8,
+     "dtheta": 8.8,
+     "d_kuyruk": 8.2,
+     "d_hiza": 10.0
+    },
+    "1440": {
+     "en_px": 310,
+     "d_uc": 4.7,
+     "dtheta": 9.0,
+     "d_kuyruk": 8.3,
+     "d_hiza": 10.1
+    }
+   },
+   "once": "ayni olcumde bugunku hal: d_uc 74-96 px, dtheta 12-63 derece",
+   "_3b": [
+    "UC BOYUTLU AMBLEM ICIN (F3 prototipi, 24 Agu) - urun kodunda YOK;",
+    "olcum orada yapildi, sonucu buraya yaziliyor ki kaybolmasin.",
+    "Kalinligi olan bir govdede hizalamanin REFERANSI ORTA DUZLEM DEGIL",
+    "ON YUZDUR: perspektifte on yuz buyuk projekte olur, orta duzlemi",
+    "hizalarsan siluetin ucu hedefi 4,0-4,8 px asar ve nehrin ilk",
+    "parcasini orter - ekranda 'nehir kuyrugun ARKASINDAN cikiyor' diye",
+    "okunur. On yuz hizalaninca kalan 1,6-2,7 px (bevel yuvarlamasi).",
+    "IKINCI SART: govde salinimi (bosta duran +-0,09/0,16 rad donme) ucu",
+    "6,2-7,4 px oynatiyor - 8 px'lik butcenin neredeyse tamami. Donme",
+    "merkezi kuyrugun UCUNA alininca o nokta sabit kaliyor ve salinimla",
+    "birlikte en kotu deger 1,8-2,7 px'e iniyor. Kurgu acisindan da",
+    "dogrusu bu: amblemi tutan sey nehirdir."
+   ]
+  }
  },
  "olcum": {
   "_": [

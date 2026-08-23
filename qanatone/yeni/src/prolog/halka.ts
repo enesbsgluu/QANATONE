@@ -192,14 +192,26 @@ export function kur(bolum: HTMLElement): (p: number) => void {
        ayni varyantin iki referans ekrani eski uzayda merkez_x icin
        0,423 fark istiyordu, kaplama uzayinda 0,0126. Sorun
        katsayilarda degil normalizasyondaydi.
-       Olcek p'den bagimsiz (tek `r`): oda kurgusu sabit olcek istiyor,
-       kaydirmaya bagli egim F5'te koreografiyle birlikte belirlenecek.
+
+       U VE V P'NIN FONKSIYONU - AMBLEM EKRANA DEGIL NEHRE KILITLI
+       (24 Agu). Olculdu: sahnenin nehri p boyunca 17-42 px kayiyor,
+       cunku kamera onu tasiyor. Sabit tek yerlesimle kuyrugun ucu
+       p=0'da nehrin 3-4 px yakininda, p=0,52'de 27-31 px uzaginda
+       kaliyordu - yani birlesme, amblem ekrandayken ACILIYORDU.
+       Dogrusal terim o kaymayi tasiyor; kalan hata gorunur aralikta
+       (p=0,08..0,52) en kotu 4,8 px.
+
+       OLCEK HALA P'DEN BAGIMSIZ (tek `r`): oda kurgusu sabit olcek
+       istiyor, kaydirmaya bagli egim F5'te koreografiyle belirlenecek.
+       Ama `r` ARTIK SERBEST SECILMIYOR - kuyrugun egriligi sahnenin
+       nehrinin egriligine oturmak zorunda oldugu icin boy olculerek
+       cikti; iki varyant da bagimsiz olarak 0,000348 verdi.
        Nav evresinde yine navdaki logonun yerine gidiyor. */
     const kw = Math.max(innerWidth, innerHeight * oran);
     const kh = Math.max(innerHeight, innerWidth / oran);
     let s = Y.r * kh;
-    let tx = (innerWidth - kw) / 2 + Y.u * kw - mX * s;
-    let ty = (innerHeight - kh) / 2 + Y.v * kh - mY * s;
+    let tx = (innerWidth - kw) / 2 + (Y.u[0] + Y.u[1] * p) * kw - mX * s;
+    let ty = (innerHeight - kh) / 2 + (Y.v[0] + Y.v[1] * p) * kh - mY * s;
     if (hedef && nP > 0 && s > 0) {
       /* OLCEK GEOMETRIK, MERKEZ DOGRUSAL. Dogrusal olcek olculdu ve
          kapatti: kuculme orani 33-44 kat, dogrusal ara deger evrenin

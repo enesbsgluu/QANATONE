@@ -1947,12 +1947,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   for (const v of ['masaustu', 'mobil']) {
     const Y = (D2.yerlesim || {})[v];
     if (!Y) { kusur.push('yerlesim-yok:' + v); continue; }
-    /* Yerlesim KAPLAMA UZAYINDA uc sayi: r (olcek / kaplama yuksekligi),
-       u ve v (kaplama kutusundaki oran). Eski uc CIFT (olcek/merkez_x/
-       merkez_y, her biri [sabit, egim]) geri gelmemeli - o normalizasyon
-       ekran orani degisince nehri kaciriyordu ve olcek egimi F5'e ait. */
-    for (const a of ['r', 'u', 'v'])
-      if (typeof Y[a] !== 'number') kusur.push(v + '.' + a + '-yok');
+    /* Yerlesim KAPLAMA UZAYINDA: r sayi (olcek / kaplama yuksekligi),
+       u ve v ise [sabit, p egimi] CIFTI. Eski adlar (olcek/merkez_x/
+       merkez_y) geri gelmemeli - o normalizasyon ekran orani degisince
+       nehri kaciriyordu.
+       U/V'NIN SAYI OLMASI DA KIRMIZI YAKAR (24 Agu): sahnenin nehri p
+       boyunca 17-42 px kayiyor, cunku kamera onu tasiyor. Sabit tek
+       yerlesimle kuyrugun ucu p=0'da nehrin 3-4 px yakininda ama
+       p=0,52'de 27-31 px uzagindaydi - yani birlesme amblem ekrandayken
+       aciliyordu. p egimi o kaymayi tasiyan sey; silinirse hedef
+       (d_uc < 8 px) sessizce kaybolur.
+       OLCEK EGIMI YOK: `r` tek sayi kalir, egimi F5'e ait. */
+    if (typeof Y.r !== 'number') kusur.push(v + '.r-yok');
+    for (const a of ['u', 'v']) {
+      if (typeof Y[a] === 'number') { kusur.push(v + '.' + a + '-p-egimi-silinmis'); continue; }
+      if (!Array.isArray(Y[a]) || Y[a].length !== 2
+          || Y[a].some((q) => typeof q !== 'number')) kusur.push(v + '.' + a + '-cift-degil');
+    }
     for (const a of ['olcek', 'merkez_x', 'merkez_y'])
       if (Y[a] !== undefined) kusur.push(v + '.' + a + '-geri-gelmis');
     if (!(Y.r > 0)) kusur.push(v + '.r-pozitif-degil');
@@ -2073,13 +2084,19 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      amblem sahnede buyukken oradan sahnenin kendisi goruluyor - bu
      kazanc yerlesim kaydiginda sessizce kaybolur. Delik HESAPLANABILIR:
      merkez = ty + ic_daire.merkez*s, yaricap = ic_daire.r*s, s ve t
-     katsayilarin saf fonksiyonu. Referans ekranlarda p=0,30-0,60
-     boyunca taraniyor.
-     F0'DAN SONRA (23 Agu): yerlesim KAPLAMA UZAYINDA ve olcek p'den
-     bagimsiz, o yuzden delik ekranda SABIT duruyor - p taramasina gerek
-     yok, tek kare yetiyor. Ayni dongude F0'in ikinci sarti da tutuluyor:
-     amblemin merkezi yatayda ekran ortasindan %8'den fazla sapmamali.
-     Olculen hal: dort ekranda da delik %100 icerde, sapma %4,2-8,0. */
+     katsayilarin saf fonksiyonu.
+     24 AGU - IKI DEGISIKLIK, IKISI DE ENES'IN SIRALAMASINDAN:
+       * Delik artik p BOYUNCA taraniyor. Yerlesim p'ye bagli oldugu icin
+         (amblem nehre kilitli) tek kare yetmiyor.
+       * MERKEZ SARTI KAPI OLMAKTAN CIKTI. F0'da %8'di; birlesme onu
+         tasiyamiyor - kuyrugun ucunu nehre oturtmak amblemi mobilde
+         ortadan %15-26 sola cekiyor. Enes'in siralamasi acik: "bu gok
+         deliginden onemli, catisirsa delik feda edilir" - merkez de o
+         siranin altinda. Sayi ARTIK OLCULUYOR ama %30'a kadar
+         kirmizi yakmiyor; kaybolmasin diye ozette yaziliyor.
+     Olculen hal (yeni yerlesim, p=0,08..0,52): delik dort ekranda da
+     TAM ICERDE (pay 35-255 px) - yani feda edilmesi GEREKMEDI.
+     Merkez sapmasi %1,4-25,6. */
   const ICD = A.ic_daire || {};
   const VB = (A.sinir || {}).vektor_kutu || [0, 0, 1, 1];
   const ORAN = { mobil: 0, masaustu: 0 };
@@ -2089,33 +2106,65 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   } catch { kusur.push('varyant-orani-okunamadi'); }
   const EK = [['360', 360, 800, 'mobil'], ['412', 412, 892, 'mobil'],
               ['768', 768, 1024, 'masaustu'], ['1440', 1440, 900, 'masaustu']];
+  let enSap = 0;
   for (const [ad, W, H, v] of EK) {
     const y = (D2.yerlesim || {})[v];
     if (!y || !ICD.r || !ORAN[v]) continue;
-    if (!(y.r > 0) || typeof y.u !== 'number' || typeof y.v !== 'number') {
+    if (!(y.r > 0) || !Array.isArray(y.u) || !Array.isArray(y.v)) {
       kusur.push('yerlesim-kaplama-uzayinda-degil:' + v); continue;
     }
-    /* Kaplama kutusu: `.pr-kare` ile AYNI hesap. Olcek p'den bagimsiz
-       oldugu icin delik ekranda sabit duruyor - p taramasina gerek yok. */
-    const kw = Math.max(W, H * ORAN[v]);
-    const kh = Math.max(H, W / ORAN[v]);
-    const s = y.r * kh;
-    const mx = (VB[0] + VB[2]) / 2, my = (VB[1] + VB[3]) / 2;
-    const tx = (W - kw) / 2 + y.u * kw - mx * s;
-    const ty = (H - kh) / 2 + y.v * kh - my * s;
-    const cx = tx + ICD.merkez[0] * s, cy = ty + ICD.merkez[1] * s, r = ICD.r * s;
-    const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
-    if (pay < 0) kusur.push('gok-deligi-ekran-disi:' + ad + ':' + pay.toFixed(0) + 'px');
-    /* Amblemin merkezi yatayda ekran ortasindan %8'den fazla sapmamali
-       (F0 sarti). */
-    const sap = Math.abs(tx + mx * s - W / 2) / W;
-    if (sap > 0.0805) kusur.push('amblem-ortada-degil:' + ad + ':%' + (100 * sap).toFixed(1));
+    /* Kaplama kutusu: `.pr-kare` ile AYNI hesap. Yerlesim p'ye bagli
+       oldugu icin amblemin GORUNDUGU aralik taraniyor. */
+    for (const p of [0.08, 0.20, 0.32, 0.44, 0.54]) {
+      const kw = Math.max(W, H * ORAN[v]);
+      const kh = Math.max(H, W / ORAN[v]);
+      const s = y.r * kh;
+      const mx = (VB[0] + VB[2]) / 2, my = (VB[1] + VB[3]) / 2;
+      const tx = (W - kw) / 2 + (y.u[0] + y.u[1] * p) * kw - mx * s;
+      const ty = (H - kh) / 2 + (y.v[0] + y.v[1] * p) * kh - my * s;
+      const cx = tx + ICD.merkez[0] * s, cy = ty + ICD.merkez[1] * s, r = ICD.r * s;
+      const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
+      if (pay < 0)
+        kusur.push('gok-deligi-ekran-disi:' + ad + '@' + p + ':' + pay.toFixed(0) + 'px');
+      /* Merkez sapmasi: kapi DEGIL, olculuyor ve ozete yaziliyor.
+         %30'u asmasi baska bir sey kirildi demektir. */
+      const sap = Math.abs(tx + mx * s - W / 2) / W;
+      if (sap > enSap) enSap = sap;
+      if (sap > 0.30) kusur.push('amblem-cok-kacik:' + ad + ':%' + (100 * sap).toFixed(1));
+    }
   }
 
-  ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
+  /* (k) BIRLESME KUNYESI KULLANIMDAKI KATSAYIYLA AYNI OLMALI (24 Agu).
+     Denetim statik: sahnenin nehrini kareden cikaramaz, yani d_uc'u
+     kendisi olcemez. Tutabilecegi sey su - `birlesme.katsayi` OLCUM
+     sirasinda gecerli olan sayilardir; `yerlesim` ondan ayrilirsa
+     sayilar yeniden olculmeden degistirilmis demektir. */
+  const B = D2.birlesme || {};
+  if (!B.katsayi || !B.olculen) kusur.push('birlesme-kunyesi-yok');
+  else {
+    for (const v of ['mobil', 'masaustu']) {
+      const a = B.katsayi[v] || {}, b = (D2.yerlesim || {})[v] || {};
+      const ayni = a.r === b.r
+        && JSON.stringify(a.u) === JSON.stringify(b.u)
+        && JSON.stringify(a.v) === JSON.stringify(b.v);
+      if (!ayni) kusur.push('birlesme-kunyesi-eskimis:' + v);
+    }
+    for (const [ad] of EK) {
+      const o = (B.olculen || {})[ad];
+      if (!o) { kusur.push('birlesme-olcumu-yok:' + ad); continue; }
+      if (!(o.d_uc <= (B.hedef || {}).d_uc_px))
+        kusur.push('birlesme-d_uc-hedefi-asiyor:' + ad + ':' + o.d_uc);
+      if (!(o.dtheta <= (B.hedef || {}).dtheta_derece))
+        kusur.push('birlesme-aci-hedefi-asiyor:' + ad + ':' + o.dtheta);
+    }
+  }
+
+  ol('R18 - durak 2: maskesiz cizim + bes aralik + nehre kilitli yerlesim',
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
-       || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz'
+       || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz · '
+                  + 'birlesme d_uc<=' + (D2.birlesme || {}).hedef.d_uc_px + 'px · '
+                  + 'merkez sapmasi %' + (100 * enSap).toFixed(1) + ' (kapi degil)'
                 : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
 }
 
