@@ -1955,6 +1955,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (/<mask|url\(#/.test(kaynak)) kusur.push('maske-geri-gelmis');
   if (!/strokeDashoffset/.test(kaynak)) kusur.push('cizim-yok');
   if (!/nv-logo-bekle/.test(kaynak)) kusur.push('nav-bosaltilmiyor');
+  /* Amblem GOVDEYE eklenmeli: `.pr-yapis` yapisik ve yapisik eleman
+     kendi yigin baglamini kurar - icerideyken z-index 55 nav'i gecemez. */
+  if (!/document\.body\.appendChild/.test(kaynak)) kusur.push('amblem-yapisik-kabin-icinde');
+  if (/pr-yapis'\s*\)\s*\|\|/.test(kaynak)) kusur.push('amblem-yine-yapisikta');
   /* (f) OTURMANIN UC SARTI - ucu de 23 Agu'da OLCULEREK kondu, ucu
      de sessizce geri alinabilecek turden:
        - amblemin kutusu CIZILEN yoldan okunmali (`getBBox`), JSON'un
@@ -1984,6 +1988,28 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   else if (!acik && boy) kusur.push('durak2-kapali-ama-parca-var:' + boy);
   const ana = oku(path.join(KOK, 'index.html'));
   if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
+
+  /* (g) KATMAN VE KIZIL - ikisi de 23 Agu'da ekranda OLCULEREK kondu.
+     Amblem viewport uzayinda ve nav cubugunun USTUNDE olmali: z-index
+     2 iken nav evresinin son ~%15'inde `.nv-ic`in arkasina giriyor ve
+     ekrandaki kizil (20,9,9)'a duserek deviri bir parlaklik sicramasi
+     yapiyordu. `absolute` ise yalniz `.pr-yapis` pinliyken dogru
+     sonuc veriyor - cakisma tesadufi, tanim degil.
+     Kizil PALETTEN gelmeli: `var(--kz, …)` yaziliydi ve `--kz` hicbir
+     yerde tanimli degil, yani amblem dorduncu bir kizil basiyordu.
+     Ve dolgu, nav evresi BASLAMADAN once tamamlanmali - yoksa amblem
+     tam kizil olmadan devrediyor. */
+  const kural = (ana.match(/\.pr-amblem\{([^}]*)\}/) || [])[1] || '';
+  if (!kural) kusur.push('amblem-kurali-yok');
+  else {
+    if (!/position:fixed/.test(kural)) kusur.push('amblem-viewport-uzayinda-degil');
+    const z = +((kural.match(/z-index:(\d+)/) || [])[1] || 0);
+    if (!(z > 50 && z < 70)) kusur.push('amblem-katmani:' + z + '(50<z<70 olmali)');
+  }
+  if (/var\(--kz/.test(ana)) kusur.push('amblem-kizili-tanimsiz-degiskenden');
+  const dl = (D2.aralik || {}).dolgu, nv = (D2.aralik || {}).nav;
+  if (Array.isArray(dl) && Array.isArray(nv) && dl[1] > nv[0])
+    kusur.push('dolgu-nav-basladiktan-sonra-bitiyor');
 
   ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
      kusur.length === 0,

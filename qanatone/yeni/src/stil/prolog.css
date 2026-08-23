@@ -282,8 +282,26 @@
 
    NAV BASTA BOS: `.nv-logo-bekle` sinifini yalniz bu modul koyar,
    yani prolog atlanirsa ya da modul inmezse nav normal acilir. */
+/* AMBLEM VIEWPORT UZAYINDA VE NAV'IN USTUNDE.
+
+   `position: fixed` — `absolute` DEGIL. `halka.ts`in yazdigi dönüşüm
+   zaten viewport koordinatında: hedef `getBoundingClientRect`ten
+   geliyor, sahne katsayıları `innerWidth/innerHeight` ile çarpılıyor.
+   Kapsayıcı `.pr-yapis` yapışıkken viewport'la ÇAKIŞIYOR, o yüzden
+   hata pinliyken görünmüyordu — ama çakışma bir tesadüf, tanım değil.
+   `fixed` ile uzay koşulsuz viewport oluyor. `.pr-yapis`in
+   `overflow:hidden`ı sabit konumlu çocuğu kırpmaz (yapışıklık
+   kapsayıcı blok üretmez), kırpan zaten viewport'un kendisi.
+
+   z-index 55: `.nv-bar` 50, `.nv-fade` 44, `.nv-m` (mobil menü) 70.
+   Amblem nav çubuğunun ÜSTÜNDE, mobil menünün ALTINDA kalıyor.
+   Ölçüldü (23 Ağu): z-index 2 iken amblem nav evresinin son ~%15'inde
+   `.nv-ic`in arkasına giriyordu — zemin mobilde rgba(10,10,10,.92),
+   masaüstünde .6 + `backdrop-filter: blur(20px)`. Ekrandaki kızıl
+   (20, 9, 9) okunuyordu; tam kızıl (239, 35, 60). Yani oturmanın son
+   altıda biri %8'lik bir hayaletti ve devir bir parlaklık sıçramasıydı. */
 .pr-amblem {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 1254px;
@@ -291,17 +309,21 @@
   transform-origin: 0 0;
   pointer-events: none;
   opacity: 0;
-  z-index: 2;
+  z-index: 55;
   will-change: transform;
 }
+/* KIZIL PALETTEN. `var(--kz, …)` yazıyordu ve `--kz` HİÇBİR YERDE
+   tanımlı değil: amblem sitenin kızılını değil, yedek olarak bırakılmış
+   dördüncü bir kızılı (#d81f26) basıyordu. Palet kararı 20 Ağu'da
+   kapandı ve tek kaynak `temel.css :root` — token `--red`. */
 .pr-amblem .pr-ck,
 .pr-amblem .pr-cc {
-  stroke: var(--kz, #d81f26);
+  stroke: var(--red, #ef233c);
   opacity: var(--cizgi, 1);
   fill: none;
 }
 .pr-amblem .pr-dolgu {
-  fill: var(--kz, #d81f26);
+  fill: var(--red, #ef233c);
   opacity: var(--dolgu, 0);
 }
 
