@@ -144,7 +144,9 @@ export async function baslat(bolum: HTMLElement) {
      yolda kamera hareketi YOK, orada amblem de dogmaz - sahne sade
      kalir ve o yola fazladan bayt inmez. */
   let amblem: ((p: number) => void) | null = null;
-  import('./halka').then((m) => { amblem = m.kur(bolum); }).catch(() => {});
+  const d2Acik = (VERI as any).durak2acik !== false
+    && !/(^|[?&])d2=0/.test(location.search);
+  if (d2Acik) import('./halka').then((m) => { amblem = m.kur(bolum); }).catch(() => {});
 
   function baglan() {
     /* ILERLEME — KAYDIRMADA DUZEN OKUMASI YOK (H12). Rayin belge

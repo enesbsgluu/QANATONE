@@ -1940,14 +1940,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     for (const f of fs.readdirSync(dizin))
       if (f.indexOf('halka.') === 0) { boy = fs.statSync(path.join(dizin, f)).size; adi = f; }
   }
-  if (!boy) kusur.push('amblem-parcasi-yok');
-  else if (boy > TAVAN) kusur.push('amblem-parcasi-buyuk:' + boy + '>' + TAVAN);
+  /* Durak 2 KAPALIYKEN parca hic uretilmez ve bu DOGRU davranistir:
+     `durak2acik` veri.json'dan sabit geliyor, Vite `if (false)`
+     dalini eliyor - kapali durak sifir bayt eder. Kural o yuzden
+     parcayi yalniz ACIKKEN ariyor; kapaliyken TERSINI dogruluyor:
+     parca gercekten YOK mu. */
+  const acik = (D2.acik !== false);
+  if (acik && !boy) kusur.push('amblem-parcasi-yok');
+  else if (acik && boy > TAVAN) kusur.push('amblem-parcasi-buyuk:' + boy + '>' + TAVAN);
+  else if (!acik && boy) kusur.push('durak2-kapali-ama-parca-var:' + boy);
   const ana = oku(path.join(KOK, 'index.html'));
   if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
 
   ol('R18 - durak 2: amblem kunyesi + iki varyant yerlesim + parca ayri',
      kusur.length === 0,
-     kusur.slice(0, 4).join(' ') || 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB');
+     kusur.slice(0, 4).join(' ')
+       || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB'
+                : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);

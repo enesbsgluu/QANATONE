@@ -560,6 +560,7 @@ def veri_yaz(kunye):
     """
     K = {a: S["kamera"][a] for a in ("fov_y", "yol", "egri")}
     cikti = dict(
+        durak2acik=S.get("durak2", {}).get("acik", True),
         dpr_tavan=S["olcum"]["dpr_tavan"],
         dpr_cizim=S["olcum"]["dpr_cizim"], kamera=K,
         derinlik={a: S["derinlik"][a] for a in ("k", "d_taban", "d_tavan")},
