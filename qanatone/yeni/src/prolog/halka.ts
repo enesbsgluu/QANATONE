@@ -72,7 +72,17 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     `<path class="pr-cc" d="${C.cember.yol}" fill="none"` +
     ` stroke-width="${C.cember.kalinlik}" stroke-linecap="round"/>` +
     `<path class="pr-dolgu" d="${A.yol.halka}"/>`;
-  (bolum.querySelector('.pr-yapis') || bolum).appendChild(svg);
+  /* AMBLEM GOVDEYE EKLENIYOR, SAHNE YAPISINA DEGIL. `.pr-yapis`
+     `position: sticky` ve YAPISIK ELEMAN KENDI YIGIN BAGLAMINI KURAR -
+     icindeki hicbir `z-index` disari cikamaz. Amblem orada dururken
+     CSS'e z-index 55 yazmak ise yaramiyordu: olculdu, nav evresinin
+     son ~%15'inde ekranda kizil piksel 658'den 6'ya duSuyordu, cunku
+     amblem hala `.nv-ic`in (zemin rgba(10,10,10,.92), masaustunde
+     ustune blur(20px)) ARKASINDAYDI. Govdenin cocugu olunca kok yigin
+     baglamina giriyor ve 55 > nav'in 50'si gercekten kazaniyor.
+     `position: fixed` oldugu icin sahne yapisindan ayrilmasi konumu
+     degistirmiyor - donusum zaten viewport koordinatinda yaziliyor. */
+  document.body.appendChild(svg);
 
   const kuyruk = svg.querySelector<SVGPathElement>('.pr-ck')!;
   const cember = svg.querySelector<SVGPathElement>('.pr-cc')!;
