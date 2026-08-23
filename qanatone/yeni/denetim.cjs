@@ -1955,6 +1955,21 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (/<mask|url\(#/.test(kaynak)) kusur.push('maske-geri-gelmis');
   if (!/strokeDashoffset/.test(kaynak)) kusur.push('cizim-yok');
   if (!/nv-logo-bekle/.test(kaynak)) kusur.push('nav-bosaltilmiyor');
+  /* (f) OTURMANIN UC SARTI - ucu de 23 Agu'da OLCULEREK kondu, ucu
+     de sessizce geri alinabilecek turden:
+       - amblemin kutusu CIZILEN yoldan okunmali (`getBBox`), JSON'un
+         raster kutusundan degil: ikisi ~%1 ayriliyor;
+       - hedef nav evresine girerken YENIDEN olculmeli: `.nv-bar`
+         tepede 20 px, `stuck` iken 12 px dolgu tasiyor, yalniz
+         kurulumda olcen hedef dort genislikte de 8 px asagi dusuyordu;
+       - devir tam `nP >= 1`'de olmali: 0,999 esigi amblemi hedefe
+         VARMADAN kapatiyor, kalan artik genislikte 0,43-0,69 px. */
+  if (!/getBBox\(\)/.test(kaynak)) kusur.push('kutu-jsondan-okunuyor');
+  if (!/sinir\.yari_yukseklik/.test(kaynak)) kusur.push('kutu-yedegi-yok');
+  if (!/navOlculdu/.test(kaynak)) kusur.push('hedef-tek-kez-olculuyor');
+  if (/nP\s*>=\s*0\.99\d/.test(kaynak)) kusur.push('devir-hedefe-varmadan');
+  if (!/nP\s*>=\s*1\b/.test(kaynak)) kusur.push('devir-esigi-yok');
+  if (!/Math\.pow\(hedef\.s/.test(kaynak)) kusur.push('olcek-dogrusal');
 
   const TAVAN = 24 * 1024;
   const dizin = path.join(KOK, '_astro');
