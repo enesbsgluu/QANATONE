@@ -50,7 +50,6 @@ type Aralik = [number, number];
 const ilerle = (p: number, [a, b]: Aralik) =>
   Math.min(1, Math.max(0, (p - a) / (b - a)));
 const yumusat = (t: number) => t * t * (3 - 2 * t);
-const kat = ([sabit, carpan]: [number, number], p: number) => sabit + carpan * p;
 
 let kuruldu = false;
 
@@ -60,6 +59,12 @@ export function kur(bolum: HTMLElement): (p: number) => void {
 
   const mobil = matchMedia('(max-width: 760px)').matches;
   const Y = D2.yerlesim[mobil ? 'mobil' : 'masaustu'];
+  /* Sahnenin kendi orani: kaplama kutusunu kurmak icin gerekli ve
+     IKINCI BIR KAYNAK DOGURMUYOR - `.pr` zaten `--pr-oran-d` /
+     `--pr-oran-m` degiskenlerini basiyor, `.pr-kare` de kaplama
+     kutusunu ayni sayidan kuruyor. */
+  const oran = parseFloat(
+    getComputedStyle(bolum).getPropertyValue(mobil ? '--pr-oran-m' : '--pr-oran-d')) || 1;
   const AR = D2.aralik;
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
@@ -180,11 +185,21 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     if (nP > 0) { if (!navOlculdu) { navOlculdu = true; olcNav(); } }
     else navOlculdu = false;
 
-    /* Yerlesim: kuyrugu sahnenin nehir izine oturtan OLCULMUS
-       donusum; nav evresinde navdaki logonun yerine gidiyor. */
-    let s = kat(Y.olcek, p) * innerHeight;
-    let tx = kat(Y.merkez_x, p) * innerWidth;
-    let ty = kat(Y.merkez_y, p) * innerHeight;
+    /* YERLESIM KAPLAMA (cover) UZAYINDA. Eskiden olcek ekran
+       YUKSEKLIGIYLE, x GENISLIGIYLE carpiliyordu; sahne ise `cover`
+       yerlesiyor - kaynak kare ekranin ORANINA gore kirpiliyor, yani
+       nehrin ekrandaki yeri W ya da H ile dogrusal DEGIL. Olculdu:
+       ayni varyantin iki referans ekrani eski uzayda merkez_x icin
+       0,423 fark istiyordu, kaplama uzayinda 0,0126. Sorun
+       katsayilarda degil normalizasyondaydi.
+       Olcek p'den bagimsiz (tek `r`): oda kurgusu sabit olcek istiyor,
+       kaydirmaya bagli egim F5'te koreografiyle birlikte belirlenecek.
+       Nav evresinde yine navdaki logonun yerine gidiyor. */
+    const kw = Math.max(innerWidth, innerHeight * oran);
+    const kh = Math.max(innerHeight, innerWidth / oran);
+    let s = Y.r * kh;
+    let tx = (innerWidth - kw) / 2 + Y.u * kw - mX * s;
+    let ty = (innerHeight - kh) / 2 + Y.v * kh - mY * s;
     if (hedef && nP > 0 && s > 0) {
       /* OLCEK GEOMETRIK, MERKEZ DOGRUSAL. Dogrusal olcek olculdu ve
          kapatti: kuculme orani 33-44 kat, dogrusal ara deger evrenin
