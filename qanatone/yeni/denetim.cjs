@@ -2021,26 +2021,136 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (Array.isArray(dl) && Array.isArray(nv) && dl[1] > nv[0])
     kusur.push('dolgu-nav-basladiktan-sonra-bitiyor');
 
-  /* (h) IC CIZIM: sahnede yok, nav evresinde beliriyor. */
+  /* (h) IC DAG: sahnede yok, nav evresinde beliriyor - VE BEYAZ ZEMIN
+     YOK. Yeni marka varliginda (QANAT_LOGO-seffaf-2.png) ic alanlar
+     beyaz degil DELIK: opak beyaz piksel sifir. Gok ve nehir bosluk
+     kalir, amblem sahnede buyukken oralardan sahne goruluyor.
+     Kompozisyon olculdu: `halka + dag` maskesi dosyanin alfa maskesiyle
+     %99,50 uyusuyor (yalniz halka %97,84 - dag eksik; nehri `evenodd`
+     ile delme denemesi %96,18 - nehrin dag disindaki kismi kizile
+     boyaniyor). Nehir AYRI cizilmez: `isPointInFill` ile olculdu, hem
+     halkanin hem dagin icinde ZATEN delik. */
   const ic = (D2.aralik || {}).ic;
   if (!Array.isArray(ic) || ic.length !== 2) kusur.push('ic-araligi-yok');
   else if (!Array.isArray(nv)) { /* nav zaten yukarida yakalandi */ }
   else if (ic[0] < nv[0]) kusur.push('ic-sahne-evresine-tasiyor');
   else if (ic[1] > nv[1]) kusur.push('ic-nav-bitmeden-tamamlanmiyor');
-  if (!(D2.ic_zemin_kat > 1)) kusur.push('ic-zemin-kati-yok');
-  for (const y of ['dag', 'nehir'])
-    if (kaynak.indexOf('yol.' + y) < 0) kusur.push('ic-cizim-yolu-cizilmiyor:' + y);
+  if (D2.ic_zemin_kat) kusur.push('beyaz-ic-zemin-geri-gelmis');
+  if (kaynak.indexOf('yol.dag') < 0) kusur.push('ic-dag-cizilmiyor');
+  if (/yol\.nehir/.test(kaynak)) kusur.push('nehir-ayrica-ciziliyor');
+  if (/#fff|#ffffff|white/i.test(kaynak)) kusur.push('amblemde-beyaz-var');
   if (!/--ic/.test(kaynak)) kusur.push('ic-surulmuyor');
-  /* Ic cizim halkanin ALTINDA olmali: `yol.halka` dagi icermiyor, dag
-     ve nehir once cizilip govde ustlerine basiliyor. */
+  /* Ic dag halkanin ALTINDA olmali: `yol.halka` dagi icermiyor. */
   if (kaynak.indexOf('pr-ic') > kaynak.indexOf('pr-dolgu'))
-    kusur.push('ic-cizim-govdenin-ustunde');
+    kusur.push('ic-dag-govdenin-ustunde');
 
   ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
        || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz'
                 : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
+}
+
+/* R19 - NAV LOGOSU URETILIYOR, ELDE TASINMIYOR (23 Agu).
+   Varlik `logo-uret.py` ile uretilir: girdi depodaki seffaf kaynak
+   (`gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png`), kizil ise
+   `temel.css`teki `--red`. Uretec `src/veri/logo-kunye.json`e girdi ve
+   ciktilarin SHA1'ini, olcusunu ve OLCULEN renk gerceklerini yaziyor;
+   kural o kunyeyi dosyalarin gercegiyle kiyasliyor. Boylece denetimin
+   webp cozmesi gerekmiyor - Netlify'da ne Python var ne de garanti bir
+   goruntu kutuphanesi.
+   Dort sey tutuluyor:
+     (a) girdi, uretec ve ciktilar yerinde; hash'ler tutuyor - varlik
+         elle degistirilmis ya da kaynaktan kopmus olamaz;
+     (b) uretec kizili OKUYOR, gomulu bir hex yazmiyor. Bu turun sebebi
+         tam buydu: nav'da uc ayri kizil yan yana duruyordu (amblem
+         `--red`, logo rasteri rgb(168,1,3), QANAT yazisi `--red-soft`)
+         ve amblem nava otururken devir -15,9 birimlik bir parlaklik
+         kirilmasiyla kapaniyordu;
+     (c) kunyedeki kizil `--red`in kendisi ve olculen medyan govde tonu
+         onun isikliligina esit; OPAK BEYAZ PIKSEL SIFIR - yeni varlikta
+         ic alanlar beyaz degil delik ve amblem de o varsayimla ciziliyor;
+     (d) sayfadaki `width`/`height` dosyanin gercek olcusuyle ayni,
+         yoksa logo yerlesirken kayar. */
+{
+  const kusur = [];
+  const sha1 = (p) => require('crypto').createHash('sha1')
+    .update(fs.readFileSync(p)).digest('hex');
+  const kyol = path.join(__dirname, '..', 'gorsel-kaynak', 'prolog', 'QANAT_LOGO-seffaf-2.png');
+  const uyol = path.join(__dirname, 'logo-uret.py');
+  const kunyeYol = path.join(__dirname, 'src', 'veri', 'logo-kunye.json');
+  let K = null, olcu = null;
+
+  if (!fs.existsSync(kunyeYol)) kusur.push('kunye-yok');
+  else { try { K = JSON.parse(fs.readFileSync(kunyeYol, 'utf8')); }
+         catch { kusur.push('kunye-bozuk'); } }
+
+  /* KAYNAK GORSEL DEPODA DEGIL: `gorsel-kaynak/` .gitignore'da (uretilebilir
+     ve agir). Yani temiz bir klonda - Netlify dahil - bu dosya YOKTUR ve
+     varligini sart kosmak derlemeyi durdururdu. Varsa hash'i tutulur,
+     yoksa o tek kontrol atlanir ve durum ciktiya yazilir; geri kalan
+     sartlar (kunye <-> cikti hash'i, palet, delik, olcu) her yerde kosar. */
+  const kaynakVar = fs.existsSync(kyol);
+  if (kaynakVar && K && sha1(kyol) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
+
+  if (!fs.existsSync(uyol)) kusur.push('uretec-yok');
+  else {
+    /* Yorumlari at: gerekce metninde gecen hex kurali yaniltmasin (H-kural). */
+    const u = fs.readFileSync(uyol, 'utf8').replace(/"""[\s\S]*?"""/g, '').replace(/^\s*#.*$/gm, '');
+    if (!/temel\.css/.test(u) || !/--red/.test(u)) kusur.push('uretec-kizili-okumuyor');
+    if (/#[0-9a-fA-F]{6}['"]/.test(u)) kusur.push('uretec-kizili-gomulu');
+  }
+
+  /* (a) ciktilar ve hash'leri */
+  for (const u of ['webp', 'avif']) {
+    const p = path.join(__dirname, 'public', 'img', 'qanatone.' + u);
+    if (!fs.existsSync(p)) { kusur.push('varlik-yok:' + u); continue; }
+    const bayt = fs.statSync(p).size;
+    if (bayt > 40 * 1024) kusur.push('varlik-buyuk:' + u + ':' + bayt);
+    if (K && K.cikti && K.cikti[u] && sha1(p) !== K.cikti[u].sha1)
+      kusur.push('varlik-kunyeye-uymuyor:' + u);
+  }
+  /* Eski SVG denemesi geri gelmesin. */
+  if (fs.existsSync(path.join(__dirname, 'public', 'img', 'qanatone.svg')))
+    kusur.push('svg-varyanti-geri-gelmis');
+
+  /* (b,c) kizil paletten ve ic alanlar delik */
+  if (K) {
+    const temel = oku(path.join(__dirname, 'src', 'stil', 'temel.css'));
+    const rm = temel.match(/--red\s*:\s*(#[0-9a-fA-F]{6})/);
+    if (!rm) kusur.push('temel-css-red-yok');
+    else if (rm[1].toLowerCase() !== String(K.kizil).toLowerCase())
+      kusur.push('kunye-kizili-palete-uymuyor:' + K.kizil + '!=' + rm[1]);
+    else {
+      const h = rm[1].slice(1);
+      const L = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16));
+      const hedef = 0.2126 * L[0] + 0.7152 * L[1] + 0.0722 * L[2];
+      if (Math.abs(K.medyan_L_sonra - hedef) > 1.5)
+        kusur.push('kizil-eslenmemis:' + K.medyan_L_sonra + '!=' + hedef.toFixed(1));
+    }
+    if (K.opak_beyaz_piksel !== 0)
+      kusur.push('ic-alanlar-delik-degil:' + K.opak_beyaz_piksel + ' beyaz piksel');
+    olcu = K.olcu;
+  }
+
+  /* (d) sayfadaki olcu dosyanin olcusu */
+  if (olcu) {
+    const ana = oku(path.join(KOK, 'index.html'));
+    const m = ana.match(/qanatone\.webp[^>]*?width="(\d+)"[^>]*?height="(\d+)"/);
+    if (!m) kusur.push('sayfada-olcu-yok');
+    else if (+m[1] !== olcu[0] || +m[2] !== olcu[1])
+      kusur.push('olcu-uyusmuyor:' + m[1] + 'x' + m[2] + '!=' + olcu.join('x'));
+  }
+
+  ol('R19 - nav logosu: uretilmis varlik + kizil paletten + ic alanlar delik',
+     kusur.length === 0,
+     kusur.slice(0, 4).join(' ')
+       || (K ? K.olcu.join('x') + ' · webp ' + (K.cikti.webp.bayt / 1024).toFixed(1)
+            + ' KB · avif ' + (K.cikti.avif.bayt / 1024).toFixed(1) + ' KB · '
+            + 'medyan L ' + K.medyan_L_once + '->' + K.medyan_L_sonra
+            + ' · opak beyaz 0 · kaynak '
+            + (kaynakVar ? 'hash tuttu' : 'depoda yok, atlandi')
+          : 'kunye okunamadi'));
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);

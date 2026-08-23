@@ -221,16 +221,16 @@
    "DURAK 2 - AMBLEMIN DOGUSU (2. kurgu, 23 Agu).",
    "Akis: nav basta BOS. Kamera nehri takip ederken sahnenin nehri",
    "kivrilip Q nun kuyruguna donusur, halka onun etrafinda kapanir,",
-   "nav evresinde amblemin ic cizimi belirir, logo kuculup navdaki",
+   "nav evresinde amblemin ic dagi belirir, logo kuculup navdaki",
    "yerine oturur ve ORADA KALIR; sonra dagin icine inis baslar.",
-   "IC CIZIM SAHNEDE YOK: sahne boyunca amblem BOS HALKADIR - sahnenin",
-   "kendi dagi ve nehri zaten arkasinda duruyor. Ic cizim yalniz nav",
-   "evresinde (`aralik.ic`) beliriyor ki devir aninda amblem ile gercek",
-   "nav logosu ayni seyi gostersin.",
-   "`ic_zemin_kat`: beyaz zemin ic dairenin bu kati yaricapla ciziliyor.",
-   "Nav rasterine karsi puanlandi - piksel uyumu 79,8% -> 97,8% - ve",
-   "1,20'de DOYUYOR (1,35 birebir ayni), yani delik tam ortuluyor ve",
-   "tasan kismi kizil govde gizliyor.",
+   "IC BEYAZ ZEMIN YOK: yeni marka varliginda ic alanlar beyaz degil",
+   "DELIK. Gok ve nehir bosluk kalir - amblem sahnede buyukken",
+   "oralardan sahnenin kendisi goruluyor. Ic dag yalniz nav evresinde",
+   "(`aralik.ic`) belirir ki devir aninda amblem ile gercek nav logosu",
+   "ayni seyi gostersin.",
+   "Kompozisyon olculdu: `halka + dag` maskesi yeni dosyanin alfa",
+   "maskesiyle %99,50 uyusuyor. Nehir AYRI cizilmez - hem halkanin",
+   "hem dagin icinde zaten deliktir (isPointInFill).",
    "DAG SILUETINE HIZALANMA BIRAKILDI - o yol olcumle kapandi",
    "(kalan hata ~44 px ve p ye duyarsizdi). Cakisan sey artik NEHIR:",
    "logonun kuyrugu zaten nehir hattidir. Kuyrugu sahnenin nehir",
@@ -240,7 +240,7 @@
    "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
   ],
   "aralik": {
-   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA ve nav'in ICINDE: amblemin ic cizimi (beyaz zemin + kizil dag + beyaz nehir) sahne evresinde YOKTUR, yalniz nav evresinde belirir. Iki ucu da olculdu: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme t=0,80 ile 0,90 arasinda basliyor) ve ic cizimin okunabilecegi bir boyda baslar (t=0,42'de amblem ~180 px).",
+   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA ve nav'in ICINDE: amblemin ic dagi sahne evresinde YOKTUR, yalniz nav evresinde belirir. Iki ucu da olculdu: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme t=0,80 ile 0,90 arasinda basliyor) ve dagin okunabilecegi bir boyda baslar (t=0,42'de amblem ~180 px).",
    "bekle": [
     0.0,
     0.08
@@ -310,8 +310,7 @@
     "hata_ort_px": 14480.3
    }
   },
-  "acik": true,
-  "ic_zemin_kat": 1.2
+  "acik": true
  },
  "olcum": {
   "_": [
