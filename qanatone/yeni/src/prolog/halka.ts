@@ -27,7 +27,11 @@
    maliyete iner (dagin icine inis boyunca hicbir sey cizilmiyor) ve
    navda duran sey sayfanin kendi logosudur.
 
-   DUZEN OKUMASI YOK (H12): navdaki logonun yeri bir kez olculur.
+   DUZEN OKUMASI KARE BASINA YOK (H12): navdaki logonun yeri
+   kurulumda ve NAV EVRESINE GIRISTE birer kez olculur - toplam iki
+   okuma, kaydirma boyunca sifir. Ikincisi sart: `.nv-bar` sayfa
+   tepesinde 20 px, kaydirinca `stuck` ile 12 px ic bosluk tasiyor,
+   yani yalniz kurulumda olcen bir hedef 8 px asagi dusuyordu.
    ============================================================ */
 import AMBLEM from './amblem.json';
 import SAHNE from './sahne.json';
@@ -84,22 +88,36 @@ export function kur(bolum: HTMLElement): (p: number) => void {
   const navLogo = document.querySelector<HTMLElement>('.nv-logo i');
   navLogo?.classList.add('nv-logo-bekle');
 
-  let hedef: { x: number; y: number; s: number } | null = null;
+  /* AMBLEMIN KUTUSU CIZILEN SEYDEN OKUNUYOR, JSON'DAN DEGIL.
+     `amblem.json`in `sinir` kutusu RASTERDEN olculmustu ve cizilen
+     vektore dar degil GENIS geliyor: JSON 890,1x1006,4 birim, yolun
+     kendi kutusu 876,6x996,8 (getBBox ile olculdu, 23 Agu). Aradaki
+     %1 dogrudan oturma hatasina donuyordu. `getBBox` SVG'nin KENDI
+     kullanici uzayinda calisir - belge duzeni okumasi degil - ve bir
+     kez, kurulumda cagriliyor. JSON'daki `sinir` artik kunye ve
+     yedek: yol cizilemezse eski sayiya donulur. */
+  const kb = svg.querySelector<SVGGraphicsElement>('.pr-dolgu')!.getBBox();
+  const kYuk = kb.height > 1 ? kb.height : A.sinir.yari_yukseklik * 2;
+  const mX = kb.height > 1 ? kb.x + kb.width / 2 : A.sinir.merkez[0];
+  const mY = kb.height > 1 ? kb.y + kb.height / 2 : A.sinir.merkez[1];
+
+  /* HEDEF MERKEZ+OLCEK OLARAK TUTULUYOR (kose+otelemesi degil): ara
+     degerde olcek ile merkez AYRI egrilerden geciyor, ikisini tek
+     `x/y` otelemesinde tasimak olcegin egrisini merkeze sizdirirdi. */
+  let hedef: { cx: number; cy: number; s: number } | null = null;
   const olcNav = () => {
     if (!navLogo) { hedef = null; return; }
     const k = navLogo.getBoundingClientRect();
     if (!k.height) { hedef = null; return; }
-    /* Amblemin gorunur sinir kutusu navdaki logonun boyuna oturmali. */
-    const s = k.height / (A.sinir.yari_yukseklik * 2);
-    hedef = {
-      x: k.left + k.width / 2 - A.sinir.merkez[0] * s,
-      y: k.top + k.height / 2 - A.sinir.merkez[1] * s,
-      s,
-    };
+    /* Amblemin gorunur sinir kutusu navdaki logonun BOYUNA oturur.
+       Genislik serbest kaliyor: raster logonun orani 0,8874, cizilen
+       vektorunki 0,8794 - yuksekligi tutturunca genislik 25 px'lik
+       hedefte 0,19 px dar kaliyor. Orani zorlamak amblemi ezerdi. */
+    hedef = { cx: k.left + k.width / 2, cy: k.top + k.height / 2, s: k.height / kYuk };
   };
   olcNav();
 
-  let sonP = -1, devredildi = false;
+  let sonP = -1, devredildi = false, navOlculdu = false;
   const yaz = (p: number) => {
     if (p === sonP) return;
     sonP = p;
@@ -115,15 +133,37 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     svg.style.setProperty('--cizgi', `${1 - dP}`);
     svg.style.setProperty('--dolgu', `${dP}`);
 
+    /* HEDEF NAV EVRESINE GIRERKEN BIR KEZ YENIDEN OLCULUYOR. H12
+       korunuyor: kare basina degil, EVREYE GIRISTE tek okuma.
+       Sebep olculdu (23 Agu, dort genislik): `.nv-bar` sayfa
+       tepesinde 20 px, kaydirinca `stuck` ile 12 px ic bosluk
+       tasiyor. Kurulumda - yani sayfa TEPESINDE - okunan hedef, nav'a
+       oturma aninda tam 8 px asagida kaliyordu: 360'ta 8,13 · 412'de
+       8,11 · 768'de 8,15 · 1440'ta 8,05 px. Yanlis olan bir sayi
+       degil, olcumun ANIYDI. */
+    if (nP > 0) { if (!navOlculdu) { navOlculdu = true; olcNav(); } }
+    else navOlculdu = false;
+
     /* Yerlesim: kuyrugu sahnenin nehir izine oturtan OLCULMUS
        donusum; nav evresinde navdaki logonun yerine gidiyor. */
     let s = kat(Y.olcek, p) * innerHeight;
     let tx = kat(Y.merkez_x, p) * innerWidth;
     let ty = kat(Y.merkez_y, p) * innerHeight;
-    if (hedef && nP > 0) {
-      s += (hedef.s - s) * nP;
-      tx += (hedef.x - tx) * nP;
-      ty += (hedef.y - ty) * nP;
+    if (hedef && nP > 0 && s > 0) {
+      /* OLCEK GEOMETRIK, MERKEZ DOGRUSAL. Dogrusal olcek olculdu ve
+         kapatti: kuculme orani 33-44 kat, dogrusal ara deger evrenin
+         TAM ORTASINDA amblemi hala hedefin 16,5-23,0 kati birakiyor,
+         t=0,90'da bile 1,9-2,3 kat - yani gorunen kuculmenin hemen
+         hepsi son cegrege sikisip ani bir cokme veriyordu (412'de
+         128 px'lik evrenin son ~13 px'i). Geometrik ara deger her
+         esit ilerleme diliminde AYNI orani uygular; nP=1'de sonuc
+         birebir `hedef.s`. Merkez dogrusal kaliyor - onun yolu
+         zaten dogruydu, degistirilen yalniz olcegin egrisi. */
+      const cx = tx + mX * s;
+      const cy = ty + mY * s;
+      s *= Math.pow(hedef.s / s, nP);
+      tx = cx + (hedef.cx - cx) * nP - mX * s;
+      ty = cy + (hedef.cy - cy) * nP - mY * s;
     }
     svg.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px)`
       + ` scale(${s.toFixed(6)})`;
@@ -136,7 +176,12 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     /* DEVIR: amblem navdaki yerine oturunca gercek nav logosu acilir
        ve amblem kapanir. Sahne katmani boylece sifir maliyete iner -
        dagin icine inis boyunca burada hicbir sey cizilmiyor. */
-    const bitti = nP >= 0.999;
+    /* DEVIR TAM nP=1'DE. Eski esik 0,999 idi ve amblem hedefe
+       VARMADAN kapaniyordu: `ilerle` 1'e kirpildigi ve `yumusat(1)`
+       tam 1 ettigi icin nP=1 karesi her zaman olusuyor, orada olcek
+       ve merkez birebir hedeftir. 0,999'da kalan artik olculmustu -
+       genislikte 0,43-0,69 px, yukseklikte 0,74-0,99 px. */
+    const bitti = nP >= 1;
     if (bitti !== devredildi) {
       devredildi = bitti;
       navLogo?.classList.toggle('nv-logo-bekle', !bitti);
@@ -144,6 +189,29 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     }
   };
 
-  addEventListener('resize', olcNav, { passive: true });
+  /* HEDEF DEGISINCE YENIDEN OKU VE O KAREYI YENIDEN YAZ. `yaz` ayni
+     `p` icin erken donuyor; taze olcumu ekrana tasimanin tek yolu
+     son ilerlemeyi yeniden gecirmek. */
+  const tazele = () => {
+    olcNav();
+    if (sonP >= 0) { const p = sonP; sonP = -1; yaz(p); }
+  };
+  addEventListener('resize', tazele, { passive: true });
+
+  /* NAV'IN GECISI BITINCE. `.nv-bar` `stuck` sinifini alinca ic
+     boslugu 20 -> 12 px'e 0,4 sn'de geciyor; sinif ANINDA degisiyor
+     ama hedef 0,4 sn boyunca HAREKET HALINDE. Olculdu: tam o pencerede
+     alinan tek okuma 412'de 2,83 px, digerlerinde 8,03-8,08 px yanlis
+     hedef veriyordu - yani "bir kez olc" hangi ana denk gelirse o
+     kadar hata. Gecis bitiminde okumak bu belirsizligi kapatiyor.
+     Yalniz `padding-top` dinleniyor: `.nv-bar` dort kenar icin dort
+     olay atiyor, `.nv-ic` ise kendi zemin/kenar gecisini yukari
+     kabarciklandiriyor. */
+  const bar = document.querySelector<HTMLElement>('.nv-bar');
+  bar?.addEventListener('transitionend', (e) => {
+    const t = e as TransitionEvent;
+    if (t.target === bar && t.propertyName === 'padding-top') tazele();
+  }, { passive: true });
+
   return yaz;
 }
