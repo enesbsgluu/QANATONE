@@ -206,10 +206,19 @@ uniform sampler2D uDoku;
 uniform float uHam;        /* 1 = dokuyu oldugu gibi kullan (metin) */
 uniform float uParHiz;
 uniform float uSoluk;      /* dokunun kendi alfasini olcekler (cumle sonmesi) */
+uniform vec3  uDalga;      /* x genlik · y frekans · z hiz — yavas yatay esneme */
+uniform float uSalinim;    /* yogunluk salinimi (yalniz bulut) */
+uniform float uNefesIsik;  /* butun sahneye cok yavas parlaklik nefesi */
+uniform vec2  uParEsik;    /* pariltinin gorundugu parlaklik penceresi */
+uniform float uNefesHiz;   /* isik nefesinin acisal hizi */
 in vec2 vTUV; in vec3 vN; in float vZ; in vec3 vYon;
 out vec4 renk;
 void main(){
-  vec4 t = texture(uDoku, vTUV);
+  /* Yavas yatay esneme: bulutlar duz kaymasin. Tek bir sinus; genlik 0
+     iken dal bedelsiz. */
+  vec2 uv = vTUV;
+  uv.x += uDalga.x * sin(uv.y * uDalga.y + uZaman * uDalga.z);
+  vec4 t = texture(uDoku, uv);
   if (t.a < 0.004) discard;
   vec3 c;
   if (uHam > 0.5) {
@@ -220,15 +229,20 @@ void main(){
     /* nehir: parlak seride akan bir parilti — kaynak zaten aydinlik
        bir serit, parilti onun uzerinde geziyor, yeni sekil uydurmuyor */
     if (uKip.x > 0.0) {
-      float par = smoothstep(0.40, 0.92, l);
+      float par = smoothstep(uParEsik.x, uParEsik.y, l);
       float n = katmanli(vTUV * vec2(7.0, 21.0) + vec2(0.0, -uZaman * uParHiz));
       c += uKip.x * par * (0.28 + 0.72 * n)
            * mix(vec3(0.42,0.52,0.74), vec3(1.00,0.80,0.52), uIsi);
     }
     c = gunesi(c, vYon);
   }
+  /* ISIK NEFESI: kaydirma dururken isik olu kalmasin diye butun
+     sahneye uygulanan +-%3'luk cok yavas salinim. */
+  c *= 1.0 + uNefesIsik * sin(uZaman * uNefesHiz);
   c = sisle(c, vZ);
-  renk = vec4(c, t.a * uSoluk);
+  /* Yogunluk salinimi yalniz bulutta acik; arazi katmanlarinda 0,
+     yoksa daglar titrerdi. */
+  renk = vec4(c, t.a * uSoluk * (1.0 + uSalinim * sin(uZaman * 0.19 + vTUV.x * 3.0)));
 }`;
 
 /* Sis perdesi: dokusuz. Alfa katmanli gurultuden geliyor, iki eksende
@@ -474,13 +488,20 @@ async function kur(K0: Kurulum) {
 
   /* ---------------- dokular ---------------- */
   const dokular: Record<string, WebGLTexture> = {};
-  function doku(kaynak: ImageBitmap) {
+  function doku(kaynak: ImageBitmap, tekrar = false) {
     const t = gl!.createTexture()!;
     gl!.bindTexture(gl!.TEXTURE_2D, t);
     gl!.pixelStorei(gl!.UNPACK_FLIP_Y_WEBGL, false);
     gl!.pixelStorei(gl!.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
     gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, kaynak);
-    gl!.texParameteri(gl!.TEXTURE_2D, gl!.TEXTURE_WRAP_S, gl!.CLAMP_TO_EDGE);
+    /* BULUTUN IZ BIRAKMASI BUYDU. Kayan katmanin UV'si 0'in altina
+       inince CLAMP_TO_EDGE kenar sutununu butun kareye yayiyor - ekranda
+       bulutun arkasindan cekilen bir iz gibi goruluyordu. Suru ancak
+       kayan katmani sarmalayarak durur; `MIRRORED_REPEAT` secildi cunku
+       doku dosyasi dizilebilir (tileable) DEGIL, duz REPEAT sert bir
+       dikis birakirdi. WebGL2 NPOT dokuda tekrar + mipmap destekliyor. */
+    gl!.texParameteri(gl!.TEXTURE_2D, gl!.TEXTURE_WRAP_S,
+      tekrar ? gl!.MIRRORED_REPEAT : gl!.CLAMP_TO_EDGE);
     gl!.texParameteri(gl!.TEXTURE_2D, gl!.TEXTURE_WRAP_T, gl!.CLAMP_TO_EDGE);
     gl!.texParameteri(gl!.TEXTURE_2D, gl!.TEXTURE_MAG_FILTER, gl!.LINEAR);
     /* Mipmap: DPR 1 ekranda katmanlar 2x kucultuluyor, mipmapsiz
@@ -557,6 +578,13 @@ async function kur(K0: Kurulum) {
          yoksa (sis programinda `uSoluk` tanimli degil) cagri sessizce
          yok sayilir - WebGL null konumu gormezden gelir. */
       gl!.uniform1f(u.uSoluk, 1);
+      /* Varsayilan: esneme yok, salinim yok. Nefes GLOBAL. */
+      gl!.uniform3f(u.uDalga, 0, 0, 0);
+      gl!.uniform1f(u.uSalinim, 0);
+      gl!.uniform1f(u.uNefesIsik, H.isik_nefes || 0);
+      const PE = H.nehir_esik || [0.40, 0.92];
+      gl!.uniform2f(u.uParEsik, PE[0], PE[1]);
+      gl!.uniform1f(u.uNefesHiz, H.isik_nefes_hiz || 0.13);
     };
 
     function sisCiz(i: number) {
@@ -651,7 +679,16 @@ async function kur(K0: Kurulum) {
         gl!.uniform1f(pQuad.u.uHam, 0);
         gl!.uniform1f(pQuad.u.uParHiz, 0);
         /* bulut suruklenmesi — kaydirmadan bagimsiz, zamanla */
-        gl!.uniform2f(pQuad.u.uKaydir, kt.ad === 'bulut' ? -t * H.bulut_hiz : 0, 0);
+        /* IKI GOK KATMANI FARKLI HIZDA: tek hizda kaydiklarinda
+           gokyuzu tek parca bir afis gibi duruyordu. */
+        const kayHiz = kt.ad === 'bulut' ? H.bulut_hiz
+          : kt.ad === 'gok' ? (H.gok_hiz || 0) : 0;
+        gl!.uniform2f(pQuad.u.uKaydir, -t * kayHiz, 0);
+        if (kt.ad === 'bulut') {
+          const D = H.bulut_dalga || [0, 0, 0];
+          gl!.uniform3f(pQuad.u.uDalga, D[0], D[1], D[2]);
+          gl!.uniform1f(pQuad.u.uSalinim, H.bulut_salinim || 0);
+        }
         gl!.activeTexture(gl!.TEXTURE0);
         gl!.bindTexture(gl!.TEXTURE_2D, dk);
         gl!.uniform1i(pQuad.u.uDoku, 0);
@@ -705,7 +742,7 @@ async function kur(K0: Kurulum) {
   let ilkKare = false;
   await Promise.all((V.katman as KatmanV[]).map((kt, i) => katmanSozu[i].then((bm) => {
     if (sokuldu) { bm.close(); return; }
-    dokular[kt.ad] = doku(bm);
+    dokular[kt.ad] = doku(bm, kt.ad === 'bulut');
     bm.close();
     if (kt.ad === 'gok') {
       ilkKare = true;
