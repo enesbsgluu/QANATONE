@@ -266,18 +266,22 @@
 }
 
 /* ============ DURAK 2 · AMBLEMIN DOGUSU ============
-   Amblem tuvalin USTUNDE ayri bir SVG katmani. Konum ve olcek
-   `halka.ts` icinde tek bir `transform` ile yaziliyor (kaydirmada
-   duzen okumasi yok, H12).
+   Amblem tuvalin USTUNDE ayri bir SVG katmani; konum ve olcek
+   `halka.ts` icinde tek bir `transform` ile yaziliyor.
 
-   KIZIL ILK KEZ BURADA GORUNUYOR. Carpmasi icin sahne hafifce
-   soner: tuvalin parlakligi `--pr-sonuk` ile duser. `opacity`
-   DEGIL `filter: brightness` - opacity tuvali arkasindaki koyu
-   zeminle karistirip gri yapiyordu (denendi), brightness ise
-   sahneyi kendi renginde karartiyor.
+   MASKE YOK. Ilk kurguda gercek dolgu bir maskeyle aciliyordu ve
+   olculdu: `stroke-dashoffset` her degistiginde maskelenen icerik
+   bastan raster ediliyor, kare p95'ine 16,7 ms yaziyordu. Burada
+   cizilen sey dogrudan STROKE; cizim bitince gercek dolgu
+   `--dolgu`/`--cizgi` ile devraliyor.
 
-   Amblem SES CIKARMAZ: `aria-hidden` + `pointer-events:none`.
-   Prologun tek okunur ogesi cumle olarak kaliyor. */
+   KIZIL ILK KEZ BURADA GORUNUYOR. Carpmasi icin sahne hafifce soner:
+   tuvalin parlakligi `--pr-sonuk` ile duser. `opacity` DEGIL
+   `filter: brightness` - opacity tuvali arkasindaki koyu zeminle
+   karistirip gri yapiyordu (denendi).
+
+   NAV BASTA BOS: `.nv-logo-bekle` sinifini yalniz bu modul koyar,
+   yani prolog atlanirsa ya da modul inmezse nav normal acilir. */
 .pr-amblem {
   position: absolute;
   left: 0;
@@ -290,10 +294,19 @@
   z-index: 2;
   will-change: transform;
 }
-.pr-amblem .pr-halka { fill: var(--kz, #d81f26); }
-.pr-amblem .pr-dag { fill: var(--kz, #d81f26); }
-.pr-amblem .pr-nehir { fill: var(--bg, #0a0a0c); }
-.pr-amblem .pr-ic { opacity: 0; }
+.pr-amblem .pr-ck,
+.pr-amblem .pr-cc {
+  stroke: var(--kz, #d81f26);
+  opacity: var(--cizgi, 1);
+  fill: none;
+}
+.pr-amblem .pr-dolgu {
+  fill: var(--kz, #d81f26);
+  opacity: var(--dolgu, 0);
+}
+
+/* Navdaki logo amblem oturana kadar bos durur. */
+.nv-logo-bekle { opacity: 0; }
 
 /* Sahne sonmesi: tuval ve yedek yolun katmanlari birlikte. */
 .pr-tuval,
@@ -302,4 +315,5 @@
 @media (prefers-reduced-motion: reduce) {
   /* Hareket azaltmada 3B yolu zaten acilmaz, amblem de dogmaz. */
   .pr-amblem { display: none; }
+  .nv-logo-bekle { opacity: 1; }
 }

@@ -218,111 +218,87 @@
   },
   "durak2": {
     "_": [
-      "DURAK 2 - AMBLEMIN DOGUSU (23 Agu 2026).",
-      "Kamera daga yaklasirken Q halkasi dagin ETRAFINDA cizilerek",
-      "dogar, kuyrugu sahnenin nehrine devredilir, sonra kuculup",
-      "navdaki yerine oturur. Kizil bu sahnede ILK KEZ gorunuyor,",
-      "o yuzden cizim boyunca sahne hafifce soner.",
-      "YERLESIM OLCULDU, goz karari degil: halkanin ekrandaki",
-      "merkezi ve yaricapi, zirvenin ve dagin izdusumunden p nin",
-      "dogrusal fonksiyonu olarak cikarildi (sapma < 0,011).",
-      "MOBIL AYRI: dikey kesimde zirve ekranin DISINDA kaliyor",
-      "(x = -1,04) ve dag kadraji zaten dolduruyor - orada halka",
-      "daga degil KADRAJA oturur, merkezi ekranin ortasinda.",
-      "Hedef tam cakisma DEGIL tanınma (Enes, 23 Agu): logonun",
-      "stilize ucgen zirveleri ile gercek Everest siluetinin",
-      "ortalama 44 px farki bilerek kapatilmadi.",
-      "SU AN KAPALI (23 Agu). Sebebi olculdu: durak 2 acikken durak 1",
-      "kasiyordu - kare p50 50,0 -> 58,4 ms (%17), p95 83,3 -> 108,3",
-      "(%30). Uc kosumun ortancasi, CPU 4x, 1440x900. Iki alt kaynak",
-      "ayri ayri olculdu:",
-      "  - MASKE her karede yeniden rasterize oluyordu (stroke-dashoffset",
-      "    degisince maskelenen icerik bastan ciziliyor): p95 91,6 ->",
-      "    108,3, yani kuyrugun tamami. dashoffset sabitlenince gecti.",
-      "  - SVG katmaninin kendisi (buyuk yol + her karede transform):",
-      "    p50 +8,4 ms; maske sabitken bile duruyor.",
-      "Kapali oldugunda durak 1 OLCULEREK eski haline donuyor: p50 50,0",
-      "ve p95 83,3, aynalama oncesi surumle (311cd30) birebir ayni.",
-      "Yeni kurgu bu iki maliyeti bastan gozetmeli."
+      "DURAK 2 - AMBLEMIN DOGUSU (2. kurgu, 23 Agu).",
+      "Akis: nav basta BOS. Kamera nehri takip ederken sahnenin nehri",
+      "kivrilip Q nun kuyruguna donusur, halka onun etrafinda kapanir,",
+      "logo kuculup navdaki yerine oturur ve ORADA KALIR; sonra dagin",
+      "icine inis baslar.",
+      "DAG SILUETINE HIZALANMA BIRAKILDI - o yol olcumle kapandi",
+      "(kalan hata ~44 px ve p ye duyarsizdi). Cakisan sey artik NEHIR:",
+      "logonun kuyrugu zaten nehir hattidir. Kuyrugu sahnenin nehir",
+      "izine oturtmanin hatasi masaustunde 28 px, mobilde 25 px.",
+      "Yerlesim katsayilari o olcumden geliyor ve EKRANA GORE",
+      "normalize: olcek ve y ekran YUKSEKLIGIYLE, x GENISLIGIYLE",
+      "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
     ],
     "aralik": {
-      "_": "p araliklari. cizim bitince halka tam; sonra sahneyle buyur, sonra nava gider.",
+      "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet.",
       "bekle": [
         0.0,
-        0.06
+        0.08
       ],
-      "cizim": [
-        0.06,
-        0.34
+      "kuyruk": [
+        0.08,
+        0.28
       ],
-      "tam": [
-        0.34,
-        0.52
+      "cember": [
+        0.28,
+        0.46
+      ],
+      "dolgu": [
+        0.44,
+        0.54
       ],
       "nav": [
-        0.52,
-        0.7
+        0.54,
+        0.66
       ]
     },
     "sonme": {
-      "_": "Sahnenin tuvali cizim boyunca bu deger carpanina soner.",
+      "_": "Kizil bu sahnede ilk kez goruluyor; cizim boyunca tuvalin parlakligi bu carpana iner, nava giderken geri doner.",
       "deger": 0.55
     },
     "yerlesim": {
+      "_": [
+        "Kuyrugu sahnenin nehir izine oturtan olculmus benzerlik donusumu,",
+        "p nin dogrusal fonksiyonu. PIKSEL uzayinda olculdu: normalize",
+        "izdusumde x ve y farkli piksel olceginde ve tek skaler benzerlik",
+        "orada sekli bozuyor (onceki kurguda ucuncu kez yakalanmisti).",
+        "Katsayilar ekrana gore normalize - olcek ve merkez_y ekran",
+        "YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir."
+      ],
       "masaustu": {
-        "_": "merkez olculdu (zirvenin izdusumu); yaricap tanınma olceginde secildi.",
+        "olcek": [
+          0.000744,
+          0.000613
+        ],
         "merkez_x": [
-          -0.2767,
-          -0.0103
+          0.095,
+          -0.3086
         ],
         "merkez_y": [
-          0.2637,
-          -0.047
+          0.2896,
+          -0.4616
         ],
-        "yaricap": [
-          0.3,
-          0.14
-        ],
-        "p_tam_ekran": 0.193
+        "hata_ort_px": 16595.2
       },
       "mobil": {
-        "_": [
-          "Kadraja oturur (zirve ekran disinda kaliyor, x = -1,04).",
-          "YARICAP MASAUSTUNDEN KUCUK ve sebebi olculdu: mobilde sinir",
-          "ekranin GENISLIGI (412 px), yuksekligi degil. 0,36 denendi ->",
-          "dis cap 736 px, ekran genisliginin 1,8 kati, Q yatayda tasip",
-          "tanınmaz oldu (kare yakalandi). 0,15 -> 0,22 araliginda dis cap",
-          "355 -> 449 px: sona dogru ekran genisligini tam dolduruyor."
+        "olcek": [
+          0.000697,
+          0.000526
         ],
         "merkez_x": [
-          0.0,
-          0.0
+          -0.9206,
+          -0.9721
         ],
         "merkez_y": [
-          0.14,
-          -0.04
+          0.2769,
+          -0.3969
         ],
-        "yaricap": [
-          0.15,
-          0.07
-        ]
-      },
-      "_": [
-        "MERKEZ olculuyor (zirvenin izdusumu), YARICAP secilıyor.",
-        "Yaricap IC dairenin yaricapidir (1,0 = ekran yarisi/yukseklik).",
-        "Secim olcerek daraltildi, uc kare yakalandi:",
-        "  1,03 -> halkanin DIS capi 1431 px, ekran 900: dikeyde tasti,",
-        "          ekranda yalniz kizil kaldi, Q formu tanınmadi.",
-        "  0,70 -> hala tasiyor (dis cap 1431 px genisligi dolduruyor).",
-        "  0,44 -> dis cap 903 px = ekran yuksekligi, TAM oturuyor.",
-        "Q nun seridi kalin (dis r 441,7 / ic r 193,2 = 2,29 kat), yani",
-        "ic daireyi ekrana sigdirmak halkayi tasirir; sinir DIS cemberdir.",
-        "Cizim boyunca 0,30 -> 0,44: sona dogru dis cember ekran",
-        "yuksekligini tam dolduruyor. \"Ekrani kaplayacak kadar buyuyecek\"",
-        "sartinin tanınmayi bozmayan karsiligi bu."
-      ]
+        "hata_ort_px": 14480.3
+      }
     },
-    "acik": false
+    "acik": true
   },
   "olcum": {
     "_": [

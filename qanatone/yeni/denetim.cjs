@@ -1902,16 +1902,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 }
 
 
-/* R18 - DURAK 2 SOZLESMESI (23 Agu). Amblem sahnede DOGUYOR: halka
-   cizilerek geliyor, kuyrugu sahnenin nehrine devrediyor, sonra
-   navdaki yerine oturuyor. Kural dort seyi tutuyor:
-     (a) amblemin uc yolu ve CIZIM yolu kunyede duruyor - cizim yolu
-         olculen orta cizgidir, kaybolursa "kalem darbesi" gider;
-     (b) yerlesim IKI varyant icin de yazili (mobil ayri, cunku orada
-         sinir ekranin genisligi ve zirve kadraj disinda);
-     (c) amblem parcasi sayfaya <script src> olarak BAGLANMIYOR ve
-         kendi tavanini asmiyor - J1/H3 onu saymaz, tavani burasi;
-     (d) sonme degeri yerinde: kizil bu sahnede ilk kez goruluyor. */
+/* R18 - DURAK 2 SOZLESMESI (23 Agu, 2. kurgu). Amblem sahnede
+   DOGUYOR: sahnenin nehri kivrilip kuyruga donusur, halka onun
+   etrafinda kapanir, logo navdaki yerine oturur ve KALIR.
+   Kural bes seyi tutuyor:
+     (a) kunye: amblemin dolgu yollari + 2. kurgunun IKI cizim yolu
+         (kuyruk ve cember ayri, cunku kurgu onlari sirayla istiyor
+         ve seridin kalinligi ikisinde ayni degil);
+     (b) yerlesim IKI varyant icin de yazili - katsayilar nehir
+         izine oturtan olculmus donusumden gelir;
+     (c) BES aralik sirali ve bitisik: bekle -> kuyruk -> cember ->
+         dolgu -> nav;
+     (d) MASKE YOK. Ilk kurgu maskeyle cizyordu ve olculdu: dashoffset
+         her degistiginde maskelenen dolgu bastan raster ediliyor,
+         kare p95'ine 16,7 ms yaziyordu. Kural ciktida `<mask`
+         aramiyor - orada baska bir maske de olabilir - AMBLEM
+         parcasinin kendi kaynaginda ariyor;
+     (e) parca sayfaya baglanmiyor ve tavanini asmiyor; durak 2
+         kapaliyken parca HIC uretilmemeli (Vite `if (false)` dalini
+         eler, kapali durak sifir bayt eder). */
 {
   const kusur = [];
   const pkok = path.join(__dirname, 'src', 'prolog');
@@ -1919,19 +1928,33 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const S = JSON.parse(fs.readFileSync(path.join(pkok, 'sahne.json'), 'utf8'));
   for (const y of ['halka', 'dag', 'nehir'])
     if (!(A.yol || {})[y] || A.yol[y].length < 500) kusur.push('yol-yok:' + y);
-  if (!A.cizim || !A.cizim.yol || A.cizim.yol.length < 500) kusur.push('cizim-yolu-yok');
-  if (!A.ic_daire || !A.ic_daire.r) kusur.push('ic-daire-yok');
+  const C2 = A.cizim2 || {};
+  for (const y of ['kuyruk', 'cember'])
+    if (!(C2[y] || {}).yol || C2[y].yol.length < 200) kusur.push('cizim2-yok:' + y);
   if (!A.sinir || !A.sinir.yari_yukseklik) kusur.push('sinir-kutusu-yok');
+
   const D2 = S.durak2 || {};
   for (const v of ['masaustu', 'mobil']) {
     const Y = (D2.yerlesim || {})[v];
     if (!Y) { kusur.push('yerlesim-yok:' + v); continue; }
-    for (const a of ['merkez_x', 'merkez_y', 'yaricap'])
+    for (const a of ['olcek', 'merkez_x', 'merkez_y'])
       if (!Array.isArray(Y[a]) || Y[a].length !== 2) kusur.push(v + '.' + a);
   }
   if (!(D2.sonme || {}).deger) kusur.push('sonme-yok');
-  for (const a of ['bekle', 'cizim', 'tam', 'nav'])
-    if (!Array.isArray((D2.aralik || {})[a])) kusur.push('aralik:' + a);
+  const SIRA = ['bekle', 'kuyruk', 'cember', 'dolgu', 'nav'];
+  let onceki = null;
+  for (const a of SIRA) {
+    const r = (D2.aralik || {})[a];
+    if (!Array.isArray(r) || r.length !== 2) { kusur.push('aralik:' + a); continue; }
+    if (onceki !== null && r[0] < onceki - 0.06) kusur.push('aralik-sirasiz:' + a);
+    onceki = r[1];
+  }
+
+  const kaynak = fs.readFileSync(path.join(pkok, 'halka.ts'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  if (/<mask|url\(#/.test(kaynak)) kusur.push('maske-geri-gelmis');
+  if (!/strokeDashoffset/.test(kaynak)) kusur.push('cizim-yok');
+  if (!/nv-logo-bekle/.test(kaynak)) kusur.push('nav-bosaltilmiyor');
 
   const TAVAN = 24 * 1024;
   const dizin = path.join(KOK, '_astro');
@@ -1940,11 +1963,6 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     for (const f of fs.readdirSync(dizin))
       if (f.indexOf('halka.') === 0) { boy = fs.statSync(path.join(dizin, f)).size; adi = f; }
   }
-  /* Durak 2 KAPALIYKEN parca hic uretilmez ve bu DOGRU davranistir:
-     `durak2acik` veri.json'dan sabit geliyor, Vite `if (false)`
-     dalini eliyor - kapali durak sifir bayt eder. Kural o yuzden
-     parcayi yalniz ACIKKEN ariyor; kapaliyken TERSINI dogruluyor:
-     parca gercekten YOK mu. */
   const acik = (D2.acik !== false);
   if (acik && !boy) kusur.push('amblem-parcasi-yok');
   else if (acik && boy > TAVAN) kusur.push('amblem-parcasi-buyuk:' + boy + '>' + TAVAN);
@@ -1952,10 +1970,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const ana = oku(path.join(KOK, 'index.html'));
   if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
 
-  ol('R18 - durak 2: amblem kunyesi + iki varyant yerlesim + parca ayri',
+  ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
-       || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB'
+       || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz'
                 : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
 }
 
