@@ -381,11 +381,35 @@
   }
  },
  "hareket": {
-  "_": "Zamana bagli (kaydirmadan bagimsiz) hareketler; saniye cinsinden.",
+  "_": [
+   "ZAMAN SURUCUSUNUN BESLEDIGI SAYILAR (F2, 23 Agu). Hepsi `uZaman`la",
+   "surulur, kaydirmadan bagimsizdir - sahne kimse kaydirmasa da yasar.",
+   "bulut_hiz / gok_hiz: iki gok katmani FARKLI hizda kayar. Tek hizda",
+   "  kaydiklarinda gokyuzu tek parca bir afis gibi duruyordu.",
+   "bulut_dalga [genlik, frekans, hiz]: cok yavas yatay deformasyon.",
+   "  Bulutlar duz kaymasin, hafifce esnesin diye.",
+   "bulut_salinim: bulut yogunlugunun yavas salinimi (alfa carpani).",
+   "isik_nefes: butun sahneye uygulanan cok yavas parlaklik salinimi",
+   "  (+-%3). Kaydirma dururken isik olu kalmasin diye.",
+   "nehir_esik: pariltinin gorundugu parlaklik penceresi. Ilk hali",
+   "  smoothstep(0,40 · 0,92) idi ve sahne karanlik oldugu icin nehrin",
+   "  buyuk kismi esigin ALTINDA kaliyordu - parilti hesaplaniyor ama",
+   "  ekrana hic dusmuyordu. Olculdu: nehrin bulundugu satirlarda",
+   "  degisen piksel orani ~%0 idi.",
+   "nehir_parilti: nehir seridi uzerinde akan pariltinin HIZI.",
+   "sis_nefes / sis_suruklenme: perdenin nefesi ve akisi.",
+   "isik_nefes_hiz: nefesin acisal hizi. 0,13 iken periyot 48 sn idi",
+   "  ve dort saniyelik olcum penceresinde hic gorunmuyordu.",
+   "SIS DENENDI VE OLCUM REDDETTI: suruklenme 0,01 -> 0,06 ve nefes",
+   "  26 -> 15 sn yapildiginda toplam hareket 1440'ta %9,64'ten",
+   "  %8,05'e, 412'de %2,93'ten %2,54'e DUSTU. Perde bir tul; hizlaninca",
+   "  bulutlarin kontrastini orterek onlarin hareketini soneltiyor.",
+   "  Eski degerlere donuldu."
+  ],
   "bulut_hiz": 0.0042,
   "sis_nefes": 26.0,
   "sis_suruklenme": 0.01,
-  "nehir_parilti": 0.34,
+  "nehir_parilti": 1.1,
   "gunes": {
    "azimut": [
     0.62,
@@ -395,6 +419,19 @@
     -0.07,
     0.16
    ]
-  }
+  },
+  "gok_hiz": 0.0012,
+  "bulut_dalga": [
+   0.022,
+   4.0,
+   0.28
+  ],
+  "bulut_salinim": 0.16,
+  "isik_nefes": 0.03,
+  "nehir_esik": [
+   0.22,
+   0.72
+  ],
+  "isik_nefes_hiz": 0.13
  }
 }
