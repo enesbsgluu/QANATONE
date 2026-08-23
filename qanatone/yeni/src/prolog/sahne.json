@@ -282,52 +282,38 @@
   },
   "yerlesim": {
    "_": [
-    "Amblemin ekrandaki yeri. Katsayilar ekrana gore normalize - olcek ve",
-    "merkez_y ekran YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir.",
-    "PIKSEL uzayinda olculdu: normalize izdusumde x ve y farkli piksel",
-    "olceginde ve tek skaler benzerlik orada sekli bozuyor.",
-    "NEHIR IZINE HIZALAMA ARTIK BIR IDDIA DEGIL (23 Agu, olculdu).",
-    "Katsayilar 'kuyrugu sahnenin nehir izine oturtan donusum' diye",
-    "yazilmisti; logonun nehir orta hatti ekrana tasinip sahnenin uzerine",
-    "cizildiginde hattin sahnenin gercek nehriyle ORTUSMEDIGI goruldu -",
-    "zaten `hata_ort_px` degerleri (14480 / 16595) bunu soyluyordu.",
-    "Bu yuzden mobil merkez_x artik TUTAN bir olcute bagli: GOK DELIGI",
-    "EKRANDA KALSIN. Sabit terim +0,62 kaydirildi; tarama 0,60-0,65",
-    "arasinda duzluk veriyor, 0,62 onun ortasi. Sonuc: 360 ve 412'de",
-    "p=0,30-0,60 boyunca delik %100 ekranda (onceki hal %21-39) ve delik",
-    "icindeki icerik std sapmasi 1,9-5,7'den 16-25'e cikti.",
-    "Nehir yarigi mobilde de calisiyor, ona dokunulmadi.",
-    "MASAUSTU DOKUNULMADI: orada delik zaten %87-100 ekranda."
+    "AMBLEMIN YERI KAPLAMA (cover) UZAYINDA (F0, 23 Agu). Onceki hal olcegi",
+    "ekran YUKSEKLIGIYLE, x'i GENISLIGIYLE carpiyordu; sahne ise `cover`",
+    "yerlesiyor - kaynak kare ekranin ORANINA gore kirpiliyor, yani nehrin",
+    "ekrandaki yeri W ya da H ile dogrusal DEGIL. Olculdu: ayni varyantin iki",
+    "referans ekrani (768x1024 ile 1440x900) eski uzayda merkez_x icin 0,423",
+    "fark istiyordu; kaplama uzayinda ayni fark 0,0126'ya iniyor. Yani sorun",
+    "katsayilarda degil NORMALIZASYONDAYDI.",
+    "  kw = max(W, H*oran) · kh = max(H, W/oran) · kutu ortalanir",
+    "  olcek  = r * kh",
+    "  merkez = ((W-kw)/2 + u*kw , (H-kh)/2 + v*kh)",
+    "`oran` sahnenin kendi orani; CSS'te `--pr-oran-d` / `--pr-oran-m` olarak",
+    "zaten basili, halka.ts oradan okuyor - ikinci bir kaynak dogmuyor.",
+    "OLCEK P'DEN BAGIMSIZ: `r` tek sayi, egimi yok. Enes'in karari (23 Agu) -",
+    "kaydirmaya bagli olcek egimi F5'te koreografi bastan yazilirken",
+    "belirlenecek; oda kurgusu zaten sabit olcek istiyor.",
+    "u/v de sabit: sahne evresinde amblem kaplama kutusuna KILITLI durur.",
+    "Hedef ACILIS KARESIDIR (p=0). Orada olculen sonuc:",
+    "  360  nehir hatasi 24,2 px · merkez %8,0 · gok deligi %100",
+    "  412  25,9 px · %7,8 · %100",
+    "  768  17,9 px · %8,0 · %100",
+    "  1440 15,5 px · %4,2 · %100",
+    "(Bugunku hal ayni olcumde 80,7 / 83,1 / 122,3 / 114,0 px idi.)"
    ],
-   "masaustu": {
-    "olcek": [
-     0.000744,
-     0.000613
-    ],
-    "merkez_x": [
-     0.095,
-     -0.3086
-    ],
-    "merkez_y": [
-     0.2896,
-     -0.4616
-    ],
-    "_": "Nehir izi hizalamasi burada da tutmuyor (olculdu); delik zaten %87-100 ekranda oldugu icin dokunulmadi."
-   },
    "mobil": {
-    "olcek": [
-     0.000697,
-     0.000526
-    ],
-    "merkez_x": [
-     -0.3006,
-     -0.9721
-    ],
-    "merkez_y": [
-     0.2769,
-     -0.3969
-    ],
-    "_": "merkez_x gok deligi olcutuyle kaydirildi (+0,62). Eski deger [-0.9206, -0.9721] idi ve amblemi ekran disina soluyordu."
+    "r": 0.000625,
+    "u": 0.4498,
+    "v": 0.7011
+   },
+   "masaustu": {
+    "r": 0.000625,
+    "u": 0.4577,
+    "v": 0.6208
    }
   },
   "acik": true

@@ -1947,8 +1947,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   for (const v of ['masaustu', 'mobil']) {
     const Y = (D2.yerlesim || {})[v];
     if (!Y) { kusur.push('yerlesim-yok:' + v); continue; }
+    /* Yerlesim KAPLAMA UZAYINDA uc sayi: r (olcek / kaplama yuksekligi),
+       u ve v (kaplama kutusundaki oran). Eski uc CIFT (olcek/merkez_x/
+       merkez_y, her biri [sabit, egim]) geri gelmemeli - o normalizasyon
+       ekran orani degisince nehri kaciriyordu ve olcek egimi F5'e ait. */
+    for (const a of ['r', 'u', 'v'])
+      if (typeof Y[a] !== 'number') kusur.push(v + '.' + a + '-yok');
     for (const a of ['olcek', 'merkez_x', 'merkez_y'])
-      if (!Array.isArray(Y[a]) || Y[a].length !== 2) kusur.push(v + '.' + a);
+      if (Y[a] !== undefined) kusur.push(v + '.' + a + '-geri-gelmis');
+    if (!(Y.r > 0)) kusur.push(v + '.r-pozitif-degil');
   }
   if (!(D2.sonme || {}).deger) kusur.push('sonme-yok');
 
@@ -2068,30 +2075,41 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      merkez = ty + ic_daire.merkez*s, yaricap = ic_daire.r*s, s ve t
      katsayilarin saf fonksiyonu. Referans ekranlarda p=0,30-0,60
      boyunca taraniyor.
-     Esikler OLCUMDEN: mobilde delik TAM icerde (bugun en dar pay
-     +16,1 px / 360, +22,6 px / 412 - onceki hal %21-39 ekrandaydi);
-     masaustunde yaricapin yarisindan fazlasi tasmamali (bugun en kotu
-     768'de -0,41 r, yani %87 ekranda; 1440'ta pay +188 px). */
+     F0'DAN SONRA (23 Agu): yerlesim KAPLAMA UZAYINDA ve olcek p'den
+     bagimsiz, o yuzden delik ekranda SABIT duruyor - p taramasina gerek
+     yok, tek kare yetiyor. Ayni dongude F0'in ikinci sarti da tutuluyor:
+     amblemin merkezi yatayda ekran ortasindan %8'den fazla sapmamali.
+     Olculen hal: dort ekranda da delik %100 icerde, sapma %4,2-8,0. */
   const ICD = A.ic_daire || {};
+  const VB = (A.sinir || {}).vektor_kutu || [0, 0, 1, 1];
+  const ORAN = { mobil: 0, masaustu: 0 };
+  try {
+    const V = JSON.parse(fs.readFileSync(path.join(pkok, 'veri.json'), 'utf8'));
+    ORAN.mobil = V.varyant.mobil.oran; ORAN.masaustu = V.varyant.masaustu.oran;
+  } catch { kusur.push('varyant-orani-okunamadi'); }
   const EK = [['360', 360, 800, 'mobil'], ['412', 412, 892, 'mobil'],
               ['768', 768, 1024, 'masaustu'], ['1440', 1440, 900, 'masaustu']];
   for (const [ad, W, H, v] of EK) {
     const y = (D2.yerlesim || {})[v];
-    if (!y || !ICD.r) continue;
-    let dar = Infinity, darP = 0;
-    for (let i = 0; i <= 30; i++) {
-      const p = 0.30 + 0.01 * i;
-      const s = (y.olcek[0] + y.olcek[1] * p) * H;
-      const cx = (y.merkez_x[0] + y.merkez_x[1] * p) * W + ICD.merkez[0] * s;
-      const cy = (y.merkez_y[0] + y.merkez_y[1] * p) * H + ICD.merkez[1] * s;
-      const r = ICD.r * s;
-      const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
-      if (pay < dar) { dar = pay; darP = p; }
+    if (!y || !ICD.r || !ORAN[v]) continue;
+    if (!(y.r > 0) || typeof y.u !== 'number' || typeof y.v !== 'number') {
+      kusur.push('yerlesim-kaplama-uzayinda-degil:' + v); continue;
     }
-    const r0 = ICD.r * (y.olcek[0] + y.olcek[1] * darP) * H;
-    const sinir = v === 'mobil' ? 0 : -0.5 * r0;
-    if (dar < sinir)
-      kusur.push('gok-deligi-ekran-disi:' + ad + ':' + dar.toFixed(0) + 'px');
+    /* Kaplama kutusu: `.pr-kare` ile AYNI hesap. Olcek p'den bagimsiz
+       oldugu icin delik ekranda sabit duruyor - p taramasina gerek yok. */
+    const kw = Math.max(W, H * ORAN[v]);
+    const kh = Math.max(H, W / ORAN[v]);
+    const s = y.r * kh;
+    const mx = (VB[0] + VB[2]) / 2, my = (VB[1] + VB[3]) / 2;
+    const tx = (W - kw) / 2 + y.u * kw - mx * s;
+    const ty = (H - kh) / 2 + y.v * kh - my * s;
+    const cx = tx + ICD.merkez[0] * s, cy = ty + ICD.merkez[1] * s, r = ICD.r * s;
+    const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
+    if (pay < 0) kusur.push('gok-deligi-ekran-disi:' + ad + ':' + pay.toFixed(0) + 'px');
+    /* Amblemin merkezi yatayda ekran ortasindan %8'den fazla sapmamali
+       (F0 sarti). */
+    const sap = Math.abs(tx + mx * s - W / 2) / W;
+    if (sap > 0.0805) kusur.push('amblem-ortada-degil:' + ad + ':%' + (100 * sap).toFixed(1));
   }
 
   ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
