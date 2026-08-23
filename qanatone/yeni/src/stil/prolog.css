@@ -327,6 +327,18 @@
   opacity: var(--dolgu, 0);
 }
 
+/* IC CIZIM: sahne evresinde YOK (--ic 0), nav evresinde beliriyor.
+   Saydamlik GRUBA veriliyor, parcalara degil: parca parca verilseydi
+   yari yolda beyaz zemin kizil dagin altindan sizip dagi pembelestirir,
+   ic cizim tek bir sey gibi gelmezdi. Grup saydamligi uc katmani tek
+   birim olarak besteleyip sahnenin uzerine oyle koyuyor.
+   Beyaz #fff: paletten degil, AMBLEMIN KENDI beyazi - nav rasterinin
+   ic diski olculdu, tam (255,255,255). */
+.pr-amblem .pr-ic { opacity: var(--ic, 0); }
+.pr-amblem .pr-ic-zemin,
+.pr-amblem .pr-ic-nehir { fill: #fff; }
+.pr-amblem .pr-ic-dag { fill: var(--red, #ef233c); }
+
 /* Navdaki logo amblem oturana kadar bos durur. */
 .nv-logo-bekle { opacity: 0; }
 
