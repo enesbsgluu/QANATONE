@@ -231,7 +231,19 @@
       "daga degil KADRAJA oturur, merkezi ekranin ortasinda.",
       "Hedef tam cakisma DEGIL tanınma (Enes, 23 Agu): logonun",
       "stilize ucgen zirveleri ile gercek Everest siluetinin",
-      "ortalama 44 px farki bilerek kapatilmadi."
+      "ortalama 44 px farki bilerek kapatilmadi.",
+      "SU AN KAPALI (23 Agu). Sebebi olculdu: durak 2 acikken durak 1",
+      "kasiyordu - kare p50 50,0 -> 58,4 ms (%17), p95 83,3 -> 108,3",
+      "(%30). Uc kosumun ortancasi, CPU 4x, 1440x900. Iki alt kaynak",
+      "ayri ayri olculdu:",
+      "  - MASKE her karede yeniden rasterize oluyordu (stroke-dashoffset",
+      "    degisince maskelenen icerik bastan ciziliyor): p95 91,6 ->",
+      "    108,3, yani kuyrugun tamami. dashoffset sabitlenince gecti.",
+      "  - SVG katmaninin kendisi (buyuk yol + her karede transform):",
+      "    p50 +8,4 ms; maske sabitken bile duruyor.",
+      "Kapali oldugunda durak 1 OLCULEREK eski haline donuyor: p50 50,0",
+      "ve p95 83,3, aynalama oncesi surumle (311cd30) birebir ayni.",
+      "Yeni kurgu bu iki maliyeti bastan gozetmeli."
     ],
     "aralik": {
       "_": "p araliklari. cizim bitince halka tam; sonra sahneyle buyur, sonra nava gider.",
@@ -309,7 +321,8 @@
         "yuksekligini tam dolduruyor. \"Ekrani kaplayacak kadar buyuyecek\"",
         "sartinin tanınmayi bozmayan karsiligi bu."
       ]
-    }
+    },
+    "acik": false
   },
   "olcum": {
     "_": [
