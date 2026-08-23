@@ -205,6 +205,7 @@ ${ORTAK_FS}
 uniform sampler2D uDoku;
 uniform float uHam;        /* 1 = dokuyu oldugu gibi kullan (metin) */
 uniform float uParHiz;
+uniform float uSoluk;      /* dokunun kendi alfasini olcekler (cumle sonmesi) */
 in vec2 vTUV; in vec3 vN; in float vZ; in vec3 vYon;
 out vec4 renk;
 void main(){
@@ -227,7 +228,7 @@ void main(){
     c = gunesi(c, vYon);
   }
   c = sisle(c, vZ);
-  renk = vec4(c, t.a);
+  renk = vec4(c, t.a * uSoluk);
 }`;
 
 /* Sis perdesi: dokusuz. Alfa katmanli gurultuden geliyor, iki eksende
@@ -552,6 +553,10 @@ async function kur(K0: Kurulum) {
       gl!.uniform1f(u.uSisK, 0.0090 + 0.0040 * p);
       gl!.uniform1f(u.uSisBas, 6.0);
       gl!.uniform1f(u.uNefes, H.sis_nefes);
+      /* Varsayilan TAM OPAK; yalniz cumle bunu asagi cekiyor. Konum
+         yoksa (sis programinda `uSoluk` tanimli degil) cagri sessizce
+         yok sayilir - WebGL null konumu gormezden gelir. */
+      gl!.uniform1f(u.uSoluk, 1);
     };
 
     function sisCiz(i: number) {
@@ -578,6 +583,21 @@ async function kur(K0: Kurulum) {
     function sozCiz() {
       if (!sozDoku) return;
       const SZ = (VERI as any).soz;
+      /* CUMLE AMBLEM GELIRKEN SONUYOR. Sebep olculdu (23 Agu, dort
+         genislik): amblemin cizilen sinir kutusu ekranda 599-998 px,
+         cumle ise ORTALANMIS ve 248-1064 px - amblem cumleyi %66 ile
+         %100 arasinda ortuyor ve bunu kacinacak bir yerlesim YOK
+         (yolu kaydirmak denendi, kutu her halukarda cumlenin uzerine
+         geliyor). O yuzden cozum yolda degil ZAMANDA: cumle, halka
+         kapanirken cekiliyor ve dolgu baslamadan gidiyor.
+         Aralik `sahne.json` -> soz.sonme. */
+      const sn = SZ.sonme as [number, number] | undefined;
+      let soluk = 1;
+      if (sn) {
+        const u = Math.min(1, Math.max(0, (p - sn[0]) / (sn[1] - sn[0])));
+        soluk = 1 - u * u * (3 - 2 * u);
+        if (soluk <= 0.002) return;   /* sonduyse hic cizilmiyor */
+      }
       const Z = uzaklik(SZ.d);
       /* Genislik EKRANIN gorunur genisligine baglaniyor (vw gibi), kare
          genisligine degil: mobilde kare yanlardan kirpiliyor, cumle o
@@ -593,6 +613,7 @@ async function kur(K0: Kurulum) {
       gl!.uniform1f(pQuad.u.uHam, 1);
       gl!.uniform1f(pQuad.u.uParHiz, 0);
       gl!.uniform2f(pQuad.u.uKaydir, 0, 0);
+      gl!.uniform1f(pQuad.u.uSoluk, soluk);
       gl!.activeTexture(gl!.TEXTURE0);
       gl!.bindTexture(gl!.TEXTURE_2D, sozDoku.doku);
       gl!.uniform1i(pQuad.u.uDoku, 0);
