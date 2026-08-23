@@ -1951,6 +1951,24 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       if (!Array.isArray(Y[a]) || Y[a].length !== 2) kusur.push(v + '.' + a);
   }
   if (!(D2.sonme || {}).deger) kusur.push('sonme-yok');
+
+  /* (j) CUMLE AMBLEM GELIRKEN SONMELI. Olculdu (dort genislik):
+     amblemin sinir kutusu ekranda 599-998 px, cumle ortalanmis ve
+     248-1064 px - ortme %66 ile %100 arasinda ve kacinacak bir
+     yerlesim yok. Cumle DOLGU baslamadan gitmis olmali, yoksa kati
+     kizil kutle yazinin ustune oturuyor. Sonme ISCIDE `uSoluk` ile
+     yapiliyor; sabit bir kesme degil. */
+  const SZ = S.soz || {};
+  const sn = SZ.sonme, dl0 = (D2.aralik || {}).dolgu;
+  if (!Array.isArray(sn) || sn.length !== 2) kusur.push('cumle-sonmesi-yok');
+  else if (!(sn[0] >= 0 && sn[1] > sn[0])) kusur.push('cumle-sonme-araligi-bozuk');
+  else if (Array.isArray(dl0) && sn[1] > dl0[0])
+    kusur.push('cumle-dolgudan-sonra-soniyor:' + sn[1] + '>' + dl0[0]);
+  const isci = fs.readFileSync(path.join(pkok, 'isci.ts'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  if (!/uSoluk/.test(isci)) kusur.push('iscide-soluk-yok');
+  if (!/t\.a\s*\*\s*uSoluk/.test(isci)) kusur.push('soluk-alfaya-uygulanmiyor');
+  if (!/SZ\.sonme|sonme/.test(isci)) kusur.push('iscide-sonme-okunmuyor');
   const SIRA = ['bekle', 'kuyruk', 'cember', 'dolgu', 'nav'];
   let onceki = null;
   for (const a of SIRA) {
@@ -2043,6 +2061,38 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   /* Ic dag halkanin ALTINDA olmali: `yol.halka` dagi icermiyor. */
   if (kaynak.indexOf('pr-ic') > kaynak.indexOf('pr-dolgu'))
     kusur.push('ic-dag-govdenin-ustunde');
+
+  /* (i) GOK DELIGI EKRANDA KALMALI. Yeni varlikta ic alanlar delik ve
+     amblem sahnede buyukken oradan sahnenin kendisi goruluyor - bu
+     kazanc yerlesim kaydiginda sessizce kaybolur. Delik HESAPLANABILIR:
+     merkez = ty + ic_daire.merkez*s, yaricap = ic_daire.r*s, s ve t
+     katsayilarin saf fonksiyonu. Referans ekranlarda p=0,30-0,60
+     boyunca taraniyor.
+     Esikler OLCUMDEN: mobilde delik TAM icerde (bugun en dar pay
+     +16,1 px / 360, +22,6 px / 412 - onceki hal %21-39 ekrandaydi);
+     masaustunde yaricapin yarisindan fazlasi tasmamali (bugun en kotu
+     768'de -0,41 r, yani %87 ekranda; 1440'ta pay +188 px). */
+  const ICD = A.ic_daire || {};
+  const EK = [['360', 360, 800, 'mobil'], ['412', 412, 892, 'mobil'],
+              ['768', 768, 1024, 'masaustu'], ['1440', 1440, 900, 'masaustu']];
+  for (const [ad, W, H, v] of EK) {
+    const y = (D2.yerlesim || {})[v];
+    if (!y || !ICD.r) continue;
+    let dar = Infinity, darP = 0;
+    for (let i = 0; i <= 30; i++) {
+      const p = 0.30 + 0.01 * i;
+      const s = (y.olcek[0] + y.olcek[1] * p) * H;
+      const cx = (y.merkez_x[0] + y.merkez_x[1] * p) * W + ICD.merkez[0] * s;
+      const cy = (y.merkez_y[0] + y.merkez_y[1] * p) * H + ICD.merkez[1] * s;
+      const r = ICD.r * s;
+      const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
+      if (pay < dar) { dar = pay; darP = p; }
+    }
+    const r0 = ICD.r * (y.olcek[0] + y.olcek[1] * darP) * H;
+    const sinir = v === 'mobil' ? 0 : -0.5 * r0;
+    if (dar < sinir)
+      kusur.push('gok-deligi-ekran-disi:' + ad + ':' + dar.toFixed(0) + 'px');
+  }
 
   ol('R18 - durak 2: maskesiz cizim + bes aralik + iki varyant yerlesim',
      kusur.length === 0,

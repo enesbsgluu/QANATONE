@@ -207,14 +207,24 @@
   "_": [
    "Cumle sahnenin ICINDE duruyor: vadi agziyla yan sirtlarin ARASINDA",
    "bir dunya noktasi. Kamera inerken yaklasir, buyur ve yan duvarlar",
-   "onunun gecer — 'dagin onunde duran yazi' hissini kiran sey bu."
+   "onunden gecer - 'dagin onunde duran yazi' hissini kiran sey bu.",
+   "sonme: amblem gelirken cumle CEKILIYOR. Sebep olculdu (23 Agu, dort",
+   "genislik): amblemin cizilen sinir kutusu ekranda 599-998 px, cumle",
+   "ise ORTALANMIS ve 248-1064 px; amblem cumleyi %66 ile %100 arasinda",
+   "ortuyor ve bunu kacinacak bir yerlesim YOK - kutu her halukarda",
+   "cumlenin uzerine geliyor. Cozum yolda degil ZAMANDA: cumle halka",
+   "kapanirken (cember evresi) soner ve DOLGU baslamadan gider."
   ],
   "d": 0.3,
   "merkez": [
    0.0,
    0.02
   ],
-  "genislik": 0.68
+  "genislik": 0.68,
+  "sonme": [
+   0.28,
+   0.44
+  ]
  },
  "durak2": {
   "_": [
@@ -272,12 +282,22 @@
   },
   "yerlesim": {
    "_": [
-    "Kuyrugu sahnenin nehir izine oturtan olculmus benzerlik donusumu,",
-    "p nin dogrusal fonksiyonu. PIKSEL uzayinda olculdu: normalize",
-    "izdusumde x ve y farkli piksel olceginde ve tek skaler benzerlik",
-    "orada sekli bozuyor (onceki kurguda ucuncu kez yakalanmisti).",
-    "Katsayilar ekrana gore normalize - olcek ve merkez_y ekran",
-    "YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir."
+    "Amblemin ekrandaki yeri. Katsayilar ekrana gore normalize - olcek ve",
+    "merkez_y ekran YUKSEKLIGIYLE, merkez_x GENISLIGIYLE carpilir.",
+    "PIKSEL uzayinda olculdu: normalize izdusumde x ve y farkli piksel",
+    "olceginde ve tek skaler benzerlik orada sekli bozuyor.",
+    "NEHIR IZINE HIZALAMA ARTIK BIR IDDIA DEGIL (23 Agu, olculdu).",
+    "Katsayilar 'kuyrugu sahnenin nehir izine oturtan donusum' diye",
+    "yazilmisti; logonun nehir orta hatti ekrana tasinip sahnenin uzerine",
+    "cizildiginde hattin sahnenin gercek nehriyle ORTUSMEDIGI goruldu -",
+    "zaten `hata_ort_px` degerleri (14480 / 16595) bunu soyluyordu.",
+    "Bu yuzden mobil merkez_x artik TUTAN bir olcute bagli: GOK DELIGI",
+    "EKRANDA KALSIN. Sabit terim +0,62 kaydirildi; tarama 0,60-0,65",
+    "arasinda duzluk veriyor, 0,62 onun ortasi. Sonuc: 360 ve 412'de",
+    "p=0,30-0,60 boyunca delik %100 ekranda (onceki hal %21-39) ve delik",
+    "icindeki icerik std sapmasi 1,9-5,7'den 16-25'e cikti.",
+    "Nehir yarigi mobilde de calisiyor, ona dokunulmadi.",
+    "MASAUSTU DOKUNULMADI: orada delik zaten %87-100 ekranda."
    ],
    "masaustu": {
     "olcek": [
@@ -292,7 +312,7 @@
      0.2896,
      -0.4616
     ],
-    "hata_ort_px": 16595.2
+    "_": "Nehir izi hizalamasi burada da tutmuyor (olculdu); delik zaten %87-100 ekranda oldugu icin dokunulmadi."
    },
    "mobil": {
     "olcek": [
@@ -300,14 +320,14 @@
      0.000526
     ],
     "merkez_x": [
-     -0.9206,
+     -0.3006,
      -0.9721
     ],
     "merkez_y": [
      0.2769,
      -0.3969
     ],
-    "hata_ort_px": 14480.3
+    "_": "merkez_x gok deligi olcutuyle kaydirildi (+0,62). Eski deger [-0.9206, -0.9721] idi ve amblemi ekran disina soluyordu."
    }
   },
   "acik": true
