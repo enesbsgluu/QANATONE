@@ -197,10 +197,25 @@ export async function baslat(bolum: HTMLElement) {
        BIRAKILMIYOR: yukari donunce sessizce CSS yedegine dusmek
        gorunur bir tutarsizlik olurdu. Bellek sayfa gizlenirken
        geri veriliyor. */
+    /* SON GIRDI, ILK DEGIL (24 Agu). `g[0]` dizinin EN ESKISI; gozlemci
+       birden cok degisimi tek cagride birlestirdiginde eski hukum
+       uygulaniyordu. Iscide `oynat(false)` zaten duran dongude sessizce
+       yutuluyor ve baska kesisim degisimi gelmezse sahne HIC baslamiyor:
+       tuval kurulum karesinde donup kaliyor, amblem ise ana ipte
+       ilerliyor - birlesme o ziyarette gorunur sekilde kiriliyor.
+       Olculdu: ~%2-3 ziyaret, 900 ms arayla uc kare BAYT BAYT ayni ve
+       nehir p=0 konumunda. */
     new IntersectionObserver(
-      (g) => isci.postMessage({ tip: 'oynat', a: g[0].isIntersecting }),
+      (g) => isci.postMessage({ tip: 'oynat', a: g[g.length - 1].isIntersecting }),
       { rootMargin: '10% 0px' },
     ).observe(bolum);
+    /* BASLANGIC GOZLEMCIYE BIRAKILMIYOR. Sahne acilista gorunurse dongu
+       kesisim cagrisini beklemeden baslar. Kutu `olc()` ile zaten
+       okundu - kurulumda, kaydirmada degil (H12 duruyor). */
+    isci.postMessage({
+      tip: 'oynat',
+      a: ust < scrollY + innerHeight * 1.1 && ust + yol + innerHeight > scrollY - innerHeight * 0.1,
+    });
     addEventListener('pagehide', () => isci.postMessage({ tip: 'sok' }), { once: true });
   }
 
