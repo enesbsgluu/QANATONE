@@ -1,0 +1,73 @@
+{
+ "_": "amblem-sdf.py tarafindan yazilir, ELLE DUZENLENMEZ. Cozunurluk sahne.json r + veri.json oran + dpr_tavan'dan turetilir; bant birim cinsinden. Denetim R21 hash'leri ve turetimi kiyaslar.",
+ "kaynak": "amblem.json",
+ "kaynak_sha1": "09bc2fb80976e0fe435285e0f5b5e3b9cfd8aaf1",
+ "kaynak_boy": 4096,
+ "bant_birim": 12.0,
+ "kutu": 1254,
+ "kurulum": "texel merkezinde nokta ornekleme (map_coordinates order=1), ortalama yok",
+ "doyum_esigi_texel": 768,
+ "doyum_notu": "kafes fazi uzerinde en kotu uc kaymasi 640-768 texel'de doyuyor (kuyruk ucu 4 birim = 768'de 2,45 texel); doku tavani zorlarsa inilebilecek yer 768, altinda uc geri cekilir (512: +2,2 px)",
+ "varyant": {
+  "masaustu": {
+   "dosya": "amblem-sdf-d1344.webp",
+   "N": 1344,
+   "turetim": {
+    "r": 0.0005,
+    "kh": 1024,
+    "kutu_css": 642.0,
+    "texel": 1284.1
+   },
+   "bant_texel": 12.86,
+   "bayt": 52302,
+   "sha1": "914d30a880ebb9ed6eb42602055b588ff7d1b272",
+   "gpu_bayt_R8": 1806336,
+   "gpu_bayt_RGBA": 7225344,
+   "uc_kaymasi_px": {
+    "449": {
+     "vektor_tabani": 1.69,
+     "azami": 1.69,
+     "ortalama": 0.81,
+     "tabanin_ustu": 0.0
+    },
+    "413": {
+     "vektor_tabani": 1.28,
+     "azami": 1.99,
+     "ortalama": 1.99,
+     "tabanin_ustu": 0.71
+    }
+   },
+   "yarik_min_birim": 12.52
+  },
+  "mobil": {
+   "dosya": "amblem-sdf-m832.webp",
+   "N": 832,
+   "turetim": {
+    "r": 0.000348,
+    "kh": 892,
+    "kutu_css": 389.3,
+    "texel": 778.5
+   },
+   "bant_texel": 7.96,
+   "bayt": 25726,
+   "sha1": "b198dba7ae85c582937a72ee3a5bff6ec62ad0ad",
+   "gpu_bayt_R8": 692224,
+   "gpu_bayt_RGBA": 2768896,
+   "uc_kaymasi_px": {
+    "272": {
+     "vektor_tabani": 1.15,
+     "azami": 1.15,
+     "ortalama": 1.15,
+     "tabanin_ustu": 0.0
+    },
+    "244": {
+     "vektor_tabani": 1.61,
+     "azami": 1.61,
+     "ortalama": 1.61,
+     "tabanin_ustu": 0.0
+    }
+   },
+   "yarik_min_birim": 13.48
+  }
+ }
+}
