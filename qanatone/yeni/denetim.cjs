@@ -2235,6 +2235,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         && JSON.stringify(a.v) === JSON.stringify(b.v);
       if (!ayni) kusur.push('birlesme-kunyesi-eskimis:' + v);
     }
+    /* OLCUM ALTINA IMZA ATIYOR. `katsayi` <-> `yerlesim` bagi vardi,
+       ama `olculen` serbestti: katsayi degisince olcum tablosu
+       sessizce ESKI kaliyor ve kural yesil yanmaya devam ediyordu.
+       24 Agu'da tam bu oldu - masaustu r'si degisti, tablo eski
+       yerlesimi anlatiyordu ve denetim gormedi. Damga, olcumun
+       hangi katsayilarla alindigini soyluyor. */
+    const damga = JSON.stringify(B.katsayi || {});
+    if ((B.olculen || {}).katsayi_damgasi !== damga)
+      kusur.push('birlesme-olcumu-katsayidan-eski');
     for (const [ad] of EK) {
       const o = (B.olculen || {})[ad];
       if (!o) { kusur.push('birlesme-olcumu-yok:' + ad); continue; }
