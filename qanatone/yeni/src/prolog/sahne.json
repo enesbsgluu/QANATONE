@@ -290,36 +290,24 @@
     "`oran` ikinci bir kaynak degil: `.pr` zaten `--pr-oran-d`/`--pr-oran-m`",
     "basiyor, halka.ts oradan okuyor.",
     "",
-    "OLCUT DEGISTI (Enes, 24 Agu). Eskiden logonun BUTUN nehir hattinin",
-    "sahnenin nehrine ortalama uzakligi olculuyordu. O sayi yaniltiyordu:",
-    "hattin cogu cemberin ICINDE ve orada sahnenin nehri zaten yok, yani",
-    "ortalama iyi cikarken BIRLESME NOKTASI 62-74 px kaciktu. Yeni olcut",
-    "kuyrugun UCU:",
-    "  d_uc   < 8 px      kuyrugun bitis noktasi sahnenin nehri uzerinde",
-    "  dtheta < 10 derece o noktada iki egrinin tegetleri ortusuyor",
-    "  d_kuyruk           o an CIZILMIS kuyrugun nehre ort. uzakligi",
-    "  ort                ESKI olcut, artik yalniz kunye",
+    "U VE V P'NIN FONKSIYONU, cunku olculdu: sahnenin nehri p ile 17-42 px",
+    "kayiyor (kamerayi takip ediyor). Sabit tek yerlesim 8 px'lik hedefi",
+    "tutamiyor - p=0'da 3-4 px olan birlesme p=0,52'de 27-31 px'e cikiyordu.",
+    "Amblem ekrana degil NEHRE kilitli.",
     "",
-    "U VE V ARTIK P'NIN FONKSIYONU, cunku olculdu: sahnenin nehri p ile",
-    "17-42 px kayiyor (kamerayi takip ediyor). Sabit tek yerlesim 8 px'lik",
-    "hedefi tutamiyor - p=0'da 3-4 px olan birlesme p=0,52'de 27-31 px'e",
-    "cikiyordu. Amblem artik ekrana degil NEHRE kilitli.",
-    "",
-    "OLCEK ARTIK SERBEST DEGIL. Kuyrugun EGRILIGI nehrin egriligine",
-    "oturmak zorunda oldugu icin boy belirleniyor: iki varyant da",
-    "BAGIMSIZ olarak r=0,000348'te en iyi sonucu verdi. Bunun bedeli",
-    "amblemin kucuLMESI - masaustunde 556 -> 310 px, mobilde 438 -> 244 px.",
-    "",
-    "GOK DELIGI ARTIK KISIT DEGIL - Enes'in siralamasi: birlesme ondan",
-    "onemli, catisirsa delik feda edilir.",
-    "",
-    "OLCULEN SONUC (gorunur aralik p=0,08..0,52, en kotu deger):",
-    "  ekran  amblem eni   d_uc   dtheta   d_kuyruk   merkez",
-    "  360    244 px (68%)  2,6     2,1       6,9      %20",
-    "  412    272 px (66%)  3,6     1,7       7,6      %20",
-    "  768    312 px (41%)  4,8     8,8       8,1      %10",
-    "  1440   310 px (21%)  4,8     9,0       8,3      %5",
-    "(Bugunku hal ayni olcumde d_uc 74-96 px, dtheta 12-63 derece idi.)"
+    "OLCEK 24 AGU'DA YENIDEN COZULDU (F3 siralamasi, kalem 3). Eskiden",
+    "olcegi asagi ceken sey `d_kuyruk` idi: kuyrugun BOYUNCA nehre ortalama",
+    "uzakligi. O terim amblem kuculdukce iyilesiyordu ve boyu 556 -> 310 px'e",
+    "indirmisti. Ama Enes'in sarti bu degildi - 'Q'nun yol ciktisi nehirle",
+    "ortussun' bir UC + TEGET sarti. Tolerans artik kuyruk boyunca",
+    "AGIRLIKLI: ucta 8 px, halkaya dogru seridin KENDI yari genisligi",
+    "kadar serbest (ayrintisi durak2.olcek_cozumu'nde).",
+    "MASAUSTU: r 0,000348 -> 0,000500. Amblem 310 -> 445 px (%44 buyudu),",
+    "kapi daha genis marjla geciyor, merkez sapmasi %16 -> %17 (degismedi),",
+    "amblem ekrandan hic tasmiyor.",
+    "MOBIL DOKUNULMADI. Merdiven olculdu: buyutmenin bedeli teget marjini",
+    "yemek (r=0,00038'de dtheta 9,7/10) ve amblemin daha fazlasini ekran",
+    "disina itmek. Bugunku katsayilar kapiyi daha genis marjla geciyor."
    ],
    "mobil": {
     "r": 0.000348,
@@ -333,14 +321,14 @@
     ]
    },
    "masaustu": {
-    "r": 0.000348,
+    "r": 0.0005,
     "u": [
-     0.4027,
-     0.1608
+     0.4046,
+     0.0503
     ],
     "v": [
-     0.651,
-     0.1548
+     0.6192,
+     0.06
     ]
    }
   },
@@ -374,7 +362,12 @@
     "gok_nokta": 144,
     "gok_delik": 113,
     "gok_dagda": 31,
-    "dag_kutu": [458.0, 504.0, 323.0, 186.1],
+    "dag_kutu": [
+     458.0,
+     504.0,
+     323.0,
+     186.1
+    ],
     "ic_daire_r": 193.2
    }
   },
@@ -393,7 +386,10 @@
     "sozlugu. Buraya kopyalanmiyor - urun kodu F3'te oradan alacak."
    ],
    "secilen": "metal",
-   "kapali": ["cam", "kristal"],
+   "kapali": [
+    "cam",
+    "kristal"
+   ],
    "kaynak": "gorsel-kaynak/prototip-3b/ana.js"
   },
   "perde": {
@@ -426,37 +422,120 @@
    "olculen": {
     "_": "Kuyrugun ucundan disari tasan kizil, px. p=0,30 cizim evresi (dokunulmadi), oburleri capraz gecis.",
     "once": {
-     "360": [20.8, 20.8, null, null, 14.8, 11.8],
-     "412": [23.5, 23.0, null, null, 16.3, 13.0],
-     "768": [27.3, 26.8, null, null, 26.5, 22.3],
-     "1440": [26.8, 26.8, null, null, 26.5, 21.3]
+     "360": [
+      20.8,
+      20.8,
+      null,
+      null,
+      14.8,
+      11.8
+     ],
+     "412": [
+      23.5,
+      23.0,
+      null,
+      null,
+      16.3,
+      13.0
+     ],
+     "768": [
+      27.3,
+      26.8,
+      null,
+      null,
+      26.5,
+      22.3
+     ],
+     "1440": [
+      26.8,
+      26.8,
+      null,
+      null,
+      26.5,
+      21.3
+     ]
     },
     "sonra": {
-     "360": [20.8, 12.0, 5.0, 2.3, 0.3, 0.0],
-     "412": [23.5, 14.0, 6.0, 2.8, 0.0, 0.0],
-     "768": [27.3, 15.8, 6.5, 3.8, 0.0, 0.0],
-     "1440": [26.8, 15.8, 6.8, 2.8, 0.3, 0.0]
+     "360": [
+      20.8,
+      12.0,
+      5.0,
+      2.3,
+      0.3,
+      0.0
+     ],
+     "412": [
+      23.5,
+      14.0,
+      6.0,
+      2.8,
+      0.0,
+      0.0
+     ],
+     "768": [
+      27.3,
+      15.8,
+      6.5,
+      3.8,
+      0.0,
+      0.0
+     ],
+     "1440": [
+      26.8,
+      15.8,
+      6.8,
+      2.8,
+      0.3,
+      0.0
+     ]
     },
-    "p": [0.30, 0.46, 0.4726, 0.48, 0.50, 0.52]
+    "p": [
+     0.3,
+     0.46,
+     0.4726,
+     0.48,
+     0.5,
+     0.52
+    ]
    }
   },
   "birlesme": {
    "_": [
-    "BIRLESME KUNYESI (24 Agu) - yerlesim katsayilarinin NEDEN bu oldugu.",
+    "BIRLESME KUNYESI - yerlesim katsayilarinin NEDEN bu oldugu.",
     "Denetim statik: sahnenin nehrini cikaramaz (kare gerekir). Tutabilecegi",
-    "sey su: kullanilan katsayilar OLCULEN katsayilarla ayni mi. Biri r/u/v'yi",
-    "elle oynatirsa `katsayi` ile `yerlesim` ayrisir ve kural kirmizi yanar -",
-    "yani sayi yeniden olculmeden degistirilemez.",
+    "sey su: kullanilan katsayilar OLCULEN katsayilarla ayni mi, ve olcum",
+    "o katsayilarla mi alinmis (`katsayi_damgasi`). Biri r/u/v'yi elle",
+    "oynatirsa kural kirmizi yanar - sayi yeniden olculmeden degistirilemez.",
     "OLCUM DUZENI: gercek Chrome (puppeteer, SwiftShader), dort genislik,",
-    "p = 0,08..0,52 arasi sekiz kare. Sahnenin nehri kareden cikariliyor",
-    "(satir medyaninin 3 katini asan, alttan yukari sureklilik takip eden",
-    "en yakin kume). Kuyrugun ucu TAHMIN DEGIL OLCUM: `.pr-ck` yolunun",
-    "serbest ucu `getPointAtLength(0)`, dolgunun gercek ucu `isPointInFill`",
-    "ile yurunerek (+2 birim), tegeti kisa yaydan (26,6 derece).",
+    "p = 0,00..0,52 arasi dokuz kare, HER p ICIN TAZE SAYFA. Hukum sayfanin",
+    "KENDI CSS donusumunden - cozucunun bulduklari kullanilmiyor.",
+    "Sahnenin nehri kareden cikariliyor (satir medyaninin 3 katini asan,",
+    "alttan yukari sureklilik takip eden en yakin kume). Kuyrugun ucu TAHMIN",
+    "DEGIL OLCUM: `.pr-ck` yolunun serbest ucu `getPointAtLength(0)`,",
+    "dolgunun gercek ucu `isPointInFill` ile yurunerek, tegeti kisa yaydan.",
     "TEGET PENCERESI KUYRUGUN BOYUYLA OLCEKLENIR (+-0,30*L). Sabit 26 px'lik",
     "pencereyle cozucu nehrin bir KIVRIMINA oturup d_uc 0,0 / dtheta 0,1",
     "yaziyordu - ayni noktada genis pencerede fark 14-24 dereceydi. Sayi",
-    "yesil, goz kirik gorurdu."
+    "yesil, goz kirik gorurdu.",
+    "",
+    "24 AGU - OLCUT KUYRUK BOYUNCA AGIRLIKLANDI (F3 siralamasi, kalem 3).",
+    "Ayrintisi ve olcek merdiveni durak2.olcek_cozumu'nde.",
+    "",
+    "`asim` kapi DEGIL: agirlikli toleransin asimi, olcuye giriyor.",
+    "`merkez`, `tasma`, `alan` da kapi degil - olculuyor ve yaziliyor.",
+    "",
+    "HUKUM UC SUPURGENIN MEDYANI, TEK KOSUM DEGIL - ve nedeni olculdu.",
+    "Tek kosumla iki kare kapiyi kirdi: 360-p020'de d_uc 12,5 ·",
+    "1440-p040'ta dtheta 28,4. Ikisi de komsulari 1-5 px olan TEK",
+    "noktalardi. Kanit aracin oynadigi yonde: 360'in katsayilari o turda",
+    "HIC degismedi ve donusum bayt bayt ayni cikti (s/tx/ty), yani o",
+    "12,5 px uygulamadan gelemez; uc bagimsiz tekrar kosumu ayni kareler",
+    "icin 1,5 / 1,5 / 1,5 verdi. Sebep: sahnenin nehri ORGULU ve",
+    "cikarici ara sira komsu bir kola atliyor.",
+    "`yayilim_*` alanlari o oynamayi tasiyor. Iki nokta disinda yayilim",
+    "0,0-0,3; o iki noktada d_uc 11,0 px ve dtheta 26,1 derece - yani",
+    "KAPININ KENDISINDEN buyuk. O iki (genislik, p) ciftinde tek kare",
+    "hukum vermez; medyan sarttir."
    ],
    "hedef": {
     "d_uc_px": 8.0,
@@ -475,14 +554,14 @@
      ]
     },
     "masaustu": {
-     "r": 0.000348,
+     "r": 0.0005,
      "u": [
-      0.4027,
-      0.1608
+      0.4046,
+      0.0503
      ],
      "v": [
-      0.651,
-      0.1548
+      0.6192,
+      0.06
      ]
     }
    },
@@ -492,30 +571,55 @@
      "en_px": 244,
      "d_uc": 3.4,
      "dtheta": 2.7,
+     "asim": 6.3,
      "d_kuyruk": 6.9,
-     "d_hiza": 9.3
+     "d_hiza": 9.3,
+     "merkez": 0.256,
+     "tasma": 34.0,
+     "alan": 0.859,
+     "yayilim_d_uc": 11.0,
+     "yayilim_dtheta": 1.4
     },
     "412": {
      "en_px": 272,
      "d_uc": 3.6,
      "dtheta": 1.6,
+     "asim": 7.1,
      "d_kuyruk": 7.6,
-     "d_hiza": 9.0
+     "d_hiza": 9.0,
+     "merkez": 0.25,
+     "tasma": 33.0,
+     "alan": 0.879,
+     "yayilim_d_uc": 0.0,
+     "yayilim_dtheta": 0.0
     },
     "768": {
-     "en_px": 312,
-     "d_uc": 4.8,
-     "dtheta": 8.8,
-     "d_kuyruk": 8.2,
-     "d_hiza": 10.0
+     "en_px": 449,
+     "d_uc": 5.6,
+     "dtheta": 2.8,
+     "asim": 7.1,
+     "d_kuyruk": 11.8,
+     "d_hiza": 12.1,
+     "merkez": 0.173,
+     "tasma": 0.0,
+     "alan": 1.0,
+     "yayilim_d_uc": 0.1,
+     "yayilim_dtheta": 0.3
     },
     "1440": {
-     "en_px": 310,
-     "d_uc": 4.7,
-     "dtheta": 9.0,
-     "d_kuyruk": 8.3,
-     "d_hiza": 10.1
-    }
+     "en_px": 445,
+     "d_uc": 5.7,
+     "dtheta": 3.0,
+     "asim": 7.6,
+     "d_kuyruk": 11.0,
+     "d_hiza": 12.2,
+     "merkez": 0.091,
+     "tasma": 0.0,
+     "alan": 1.0,
+     "yayilim_d_uc": 4.2,
+     "yayilim_dtheta": 26.1
+    },
+    "katsayi_damgasi": "{\"mobil\":{\"r\":0.000348,\"u\":[0.3276,0.1518],\"v\":[0.6861,0.0884]},\"masaustu\":{\"r\":0.0005,\"u\":[0.4046,0.0503],\"v\":[0.6192,0.06]}}"
    },
    "once": "ayni olcumde bugunku hal: d_uc 74-96 px, dtheta 12-63 derece",
    "_3b": [
@@ -532,6 +636,97 @@
     "birlikte en kotu deger 1,8-2,7 px'e iniyor. Kurgu acisindan da",
     "dogrusu bu: amblemi tutan sey nehirdir."
    ]
+  },
+  "olcek_cozumu": {
+   "_": [
+    "OLCEK COZUMU (24 Agu, F3 siralamasi kalem 3).",
+    "",
+    "NEDEN YENIDEN COZULDU. Olcegi asagi ceken sey bedeldeki `d_kuyruk`",
+    "idi: kuyrugun BOYUNCA nehre ORTALAMA uzakligi. O sayi amblem",
+    "kuculdukce iyilesir - butun hat mutlak pikselde nehre yaklasir -",
+    "ve amblemi masaustunde 556'dan 310 px'e indirmisti. Ama Enes'in",
+    "sarti bu degildi: 'Q'nun yol ciktisi nehirle ortussun, nehir akisi",
+    "o kisimdan ciksin.' Bu bir UC NOKTASI + TEGET sarti. Goz birlesme",
+    "noktasina bakar, kuyrugun halkaya girdigi yere degil.",
+    "",
+    "YENI TOLERANS - EGRI UYDURULMADI, SERIDIN KENDISINDEN TURETILDI.",
+    "Nehir, kuyrugun kendi genisligi kadar sapabilir; o bantta nehir",
+    "hala 'kuyrugun icinde'dir. amblem.json cizim2.kuyruk uc sayi",
+    "veriyor: kalinlik_bas 440, kalinlik_uc 4, medyan 154. Dogrusal",
+    "daralma medyani 222 verirdi - yani daralma dogrusal DEGIL. Us",
+    "yasasi w(t) = 4 + 436*t^k ile medyani tutturmak k'yi belirliyor:",
+    "4 + 436*0,5^k = 154  ->  k = 1,539.  (t = noktanin uca uzakligi /",
+    "kuyruk boyu; 0 ucta, 1 halkada.)",
+    "  tol(t) = max(8 px, yari_genislik(t) * olcek)",
+    "8 px tabani kuyrugun ucundan itibaren ilk %22'sini yonetiyor;",
+    "otesini seridin kendi eni. Bedele giren sey `asim` - toleransin",
+    "ASILAN kismi, sifirlanabilir bir sayi.",
+    "",
+    "COZUCU IKI KEZ OYNADI, IKISI DE KAPATILDI.",
+    "1) Tolerans olcekle birlikte buyudugu icin `asim` olcege duyarsiz",
+    "   kaldi ve cozucu amblemi ekrandan disari kaydirip yalniz kuyrugun",
+    "   ucunu nehre oturttu: mobil r=0,000625 satiri kapiyi GECIYORDU",
+    "   (d_uc 5,3 · dtheta 8,4) ama amblem 240 px ekran disinda ve",
+    "   merkezden %50 kacikti. Sayi yesil, goz kirik gorurdu.",
+    "2) Ilk duzeltme 'tasma sifir olsun' oldu ve mobilde HICBIR satir",
+    "   gecmedi - cunku BUGUNKU mobil yerlesimde amblem zaten 33-34 px",
+    "   disarda (ekranda kalan alan %86-88). Kisit bugunku halden bile",
+    "   sertti. Bar artik BUGUNKU HALE bagli: ekranda kalan alan",
+    "   bugunkunden dusuk olmasin (masaustu %100, mobil %86).",
+    "",
+    "MERDIVEN (model; kapi d_uc<8 px, dtheta<10 derece):",
+    "  MASAUSTU (alan %100 korunarak)   768/1440 px · d_uc · dtheta · merkez",
+    "    r=0,000348  312/310   4,1   1,7   %14   GECER   <- bugunku olcek",
+    "    r=0,000420  377/374   2,8   1,7   %16   GECER",
+    "    r=0,000460  413/409   3,2   2,4   %18   GECER",
+    "    r=0,000500  449/445   5,6   3,0   %17   GECER   <- SECILEN",
+    "    r=0,000560  503/498   7,7  11,2   %20   KALIR (teget + tasma)",
+    "  MOBIL (alan %86 korunarak)       360/412 px",
+    "    r=0,000348  244/272   4,2   3,9   %23   GECER   <- bugunku olcek",
+    "    r=0,000380  266/297   4,6   9,7   %23   GECER  (teget 9,7/10)",
+    "    r=0,000420  295/328   8,6  10,1   %25   KALIR",
+    "",
+    "KARAR.",
+    "  MASAUSTU r 0,000348 -> 0,000500. Amblem 310 -> 445 px (%44),",
+    "  kapi daha genis marjla, merkez sapmasi %16 -> %17 (degismedi),",
+    "  amblem ekrandan hic tasmiyor. Enes'in hedefi '310'un ustune",
+    "  cikmak'ti; cikildi.",
+    "  MOBIL DOKUNULMADI. Bir sonraki basamak (r=0,00038) %9 buyume",
+    "  icin teget marjini 3,9'dan 9,7'ye (kapi 10) yiyor ve amblemin",
+    "  daha fazlasini ekran disina itiyor. Bugunku katsayilar kapiyi",
+    "  daha genis marjla geciyor.",
+    "",
+    "MOBILDE MERKEZ %20'NIN ALTINA INMIYOR - OLCULDU, DENENDI.",
+    "Merkez tavani bedele konup merdiven yeniden cikarildi:",
+    "  mobil, tavan %20: ALTI SATIRIN ALTISI DA KALIR (en iyisi bugunku",
+    "    olcekte d_uc 7,8 · dtheta 10,2 - yani kapi kirilir).",
+    "  mobil, tavan %25: yine altisi da KALIR.",
+    "  masaustu, tavan %10: gecer ama bedeli teget marji -",
+    "    r=0,000420'de dtheta 1,7'den 9,8'e cikiyor (kapi 10).",
+    "Yani merkezi ortalamak birlesmeyi kiriyor. Proje sirasi zaten bunu",
+    "soyluyordu (23 Agu: 'catisirsa delik feda edilir, merkez de o",
+    "siranin altinda'); simdi sayisi da var. Hangisinin daha pahali",
+    "oldugu Enes'in karari - bu kunye o karar icin duruyor.",
+    "",
+    "BIR DUZELTME - OLCEGI KILITLEYEN SEY GOK DELIGI DEGILMIS.",
+    "Siralamanin gerekcesi 'gok deligi kapisi olcegi kisitliyor' diyordu",
+    "ve kapi bu turda gevsetildi. Ama olculdu: yeni olcekte (r=0,0005)",
+    "delik dort ekranda da TAM ICERDE - pay masaustunde 155 ve 254 px,",
+    "mobilde 35 ve 44 px. Yani eski kapi bu olcekte zaten kirmizi",
+    "yanmayacakti; boyu 310 px'e indiren sey tek basina bedeldeki",
+    "`d_kuyruk` terimiydi. Gevseme yine de duruyor - kalem 2 onu ayri",
+    "gerekceyle (kurgu degisti) istiyordu - ama bu turdaki 310 -> 445 px",
+    "kazancini SAGLAYAN o degil, toleransin agirliklandirilmasi."
+   ],
+   "tolerans": {
+    "taban_px": 8.0,
+    "kuvvet": 1.539,
+    "kaynak": "amblem.json cizim2.kuyruk (kalinlik_bas/kalinlik_uc/kalinlik)"
+   },
+   "alan_bari": {
+    "masaustu": 1.0,
+    "mobil": 0.86
+   }
   }
  },
  "olcum": {
