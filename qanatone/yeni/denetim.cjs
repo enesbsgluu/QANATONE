@@ -2069,6 +2069,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (acik && !boy) kusur.push('amblem-parcasi-yok');
   else if (acik && boy > TAVAN) kusur.push('amblem-parcasi-buyuk:' + boy + '>' + TAVAN);
   else if (!acik && boy) kusur.push('durak2-kapali-ama-parca-var:' + boy);
+  /* KUNYE KAYNAKTA VAR, CIKTIDA YOK (24 Agu). Prolog JSON'lari sayiyi
+     ve gerekcesini AYNI dosyada tasiyor - `_` alanlari. Bu bilerek
+     boyle: sayi ile nedeni birlikte degissin. Ama `_`yi calisma
+     zamaninda okuyan hicbir sey yok, parcadaki yeri yalnizca
+     ziyaretcinin indirdigi bayt. Olculdu: sahne.json'un %73'u proz;
+     kunyeye ucuncu blok eklenince halka parcasi 20,3 -> 29,0 KB'a
+     cikip 24 KB tavanini asti. Cozum kunyeyi budamak degil, derlemede
+     soymak (astro.config.mjs `kunyeyiSoy`) - parca 18,3 KB'a indi.
+     KURAL IKI TARAFI DA TUTUYOR. Yalniz cikti tarafina baksaydi,
+     birileri `_`leri kaynaktan silince de yesil yanardi: belge
+     kaybolur, denetim gormezdi. */
+  if (adi) {
+    const parca = oku(path.join(dizin, adi));
+    if (parca.indexOf('"_"') >= 0) kusur.push('kunye-tarayiciya-gidiyor');
+  }
+  for (const j of ['amblem.json', 'sahne.json'])
+    if (fs.readFileSync(path.join(pkok, j), 'utf8').indexOf('"_"') < 0)
+      kusur.push('kunye-kaynaktan-silinmis:' + j);
+
   const ana = oku(path.join(KOK, 'index.html'));
   if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
 
@@ -2103,11 +2122,32 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      ile delme denemesi %96,18 - nehrin dag disindaki kismi kizile
      boyaniyor). Nehir AYRI cizilmez: `isPointInFill` ile olculdu, hem
      halkanin hem dagin icinde ZATEN delik. */
+  /* 24 AGU - IC DAG SAHNE EVRESINE ALINDI (kalem 2). Eski kapi
+     `ic[0] < nav[0]` idi ve bir OLCUMU degil bir KURGUYU koruyordu:
+     Q'nun ici bos kalsin ki arkadaki gercek dag oradan gorunsun.
+     Enes o kurguyu kapatti. Kapi SILINMIYOR, BAYRAGA baglaniyor -
+     `durak2.ic_dag.sahne_evresinde` yoksa eski sart geri gelir, yani
+     gevseme sessiz degil YAZILI. Bayrak varsa iki sart kaliyor:
+     kunye olcumu tasimali (nehir yarigi acik mi) ve `ic` nav BITMEDEN
+     tamamlanmali - amblem eksik dagla devredemez. */
   const ic = (D2.aralik || {}).ic;
+  const ICD2 = D2.ic_dag || {};
   if (!Array.isArray(ic) || ic.length !== 2) kusur.push('ic-araligi-yok');
   else if (!Array.isArray(nv)) { /* nav zaten yukarida yakalandi */ }
-  else if (ic[0] < nv[0]) kusur.push('ic-sahne-evresine-tasiyor');
-  else if (ic[1] > nv[1]) kusur.push('ic-nav-bitmeden-tamamlanmiyor');
+  else {
+    if (ic[0] < nv[0] && ICD2.sahne_evresinde !== true)
+      kusur.push('ic-sahne-evresine-tasiyor');
+    if (ic[1] > nv[1]) kusur.push('ic-nav-bitmeden-tamamlanmiyor');
+  }
+  if (ICD2.sahne_evresinde === true) {
+    const O = ICD2.olculen || {};
+    if (!(O.nehir_nokta > 0)) kusur.push('ic-dag-yarik-olcumu-yok');
+    /* KAPI: dag dolarken nehir kapanmamali. Denetim kareyi ceremez;
+       tuttugu sey olcumun kunyede DURMASI ve yarigin gercekten acik
+       cikmis olmasi - hattin uclari disinda kapanan nokta olmamali. */
+    else if (O.nehir_nokta - O.nehir_disarida > 3)
+      kusur.push('nehir-yarigi-kapaniyor:' + (O.nehir_nokta - O.nehir_disarida));
+  }
   if (D2.ic_zemin_kat) kusur.push('beyaz-ic-zemin-geri-gelmis');
   if (kaynak.indexOf('yol.dag') < 0) kusur.push('ic-dag-cizilmiyor');
   if (/yol\.nehir/.test(kaynak)) kusur.push('nehir-ayrica-ciziliyor');
@@ -2143,7 +2183,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   } catch { kusur.push('varyant-orani-okunamadi'); }
   const EK = [['360', 360, 800, 'mobil'], ['412', 412, 892, 'mobil'],
               ['768', 768, 1024, 'masaustu'], ['1440', 1440, 900, 'masaustu']];
-  let enSap = 0;
+  let enSap = 0, enPay = Infinity;
   for (const [ad, W, H, v] of EK) {
     const y = (D2.yerlesim || {})[v];
     if (!y || !ICD.r || !ORAN[v]) continue;
@@ -2161,8 +2201,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       const ty = (H - kh) / 2 + (y.v[0] + y.v[1] * p) * kh - my * s;
       const cx = tx + ICD.merkez[0] * s, cy = ty + ICD.merkez[1] * s, r = ICD.r * s;
       const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
-      if (pay < 0)
-        kusur.push('gok-deligi-ekran-disi:' + ad + '@' + p + ':' + pay.toFixed(0) + 'px');
+      /* 24 AGU - KAPI OLMAKTAN CIKTI (kalem 2/3). Delik dort ekranda
+         %100 icerde olsun sarti olcegi kilitliyordu: masaustunde
+         amblem 556'dan 310 px'e, mobilde merkez sapmasi %8'den %20'ye
+         bunun icin inmisti. Kalem 3 olcegi yeniden cozecek ve bu sart
+         cozum uzayini kisitliyor. Merkez sapmasiyla ayni muameleyi
+         goruyor: OLCULUYOR ve ozete yaziliyor, kirmizi yakmiyor.
+         Tek backstop delik EKRANI TAMAMEN TERKETMESI - o zaman
+         kaybolan sey bir tercih degil, kirilmis bir sey demektir. */
+      if (pay < enPay) enPay = pay;
+      if (pay < -r)
+        kusur.push('gok-deligi-tamamen-ekran-disi:' + ad + '@' + p + ':' + pay.toFixed(0) + 'px');
       /* Merkez sapmasi: kapi DEGIL, olculuyor ve ozete yaziliyor.
          %30'u asmasi baska bir sey kirildi demektir. */
       const sap = Math.abs(tx + mx * s - W / 2) / W;
@@ -2201,7 +2250,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.slice(0, 4).join(' ')
        || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz · '
                   + 'birlesme d_uc<=' + (D2.birlesme || {}).hedef.d_uc_px + 'px · '
-                  + 'merkez sapmasi %' + (100 * enSap).toFixed(1) + ' (kapi degil)'
+                  + 'merkez sapmasi %' + (100 * enSap).toFixed(1) + ' · gok deligi payi ' + (enPay === Infinity ? '-' : enPay.toFixed(0) + 'px') + ' (ikisi de kapi degil)'
                 : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
 }
 

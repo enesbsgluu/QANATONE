@@ -2,6 +2,34 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 
+/* KUNYE TARAYICIYA GITMIYOR (24 Agu). Prolog JSON'lari hem VERI hem
+   KUNYE tasiyor: her blogun `_` alani o sayinin NEDEN o oldugunu
+   yaziyor ve bu bilerek boyle - sayi ile gerekcesi ayni dosyada durur,
+   ikisi birlikte degisir. Ama `_`yi calisma zamaninda okuyan HICBIR
+   sey yok; parcaya girdigi yer yalnizca ziyaretcinin indirdigi bayt.
+   OLCULDU: sahne.json minified 18.811 B, `_` soyulunca 5.152 B - yani
+   %73'u proz. amblem.json'da 22.522 -> 19.891 B. Kunyeye her yeni blok
+   eklendiginde halka parcasi buyuyordu ve 24 KB tavanini asti.
+   Cozum kunyeyi kisaltmak DEGIL - belgeyi bayt ugruna budamak bu
+   projede yanlis takas. Kunye kaynakta tam kaliyor, derlemede
+   soyuluyor. Denetim iki tarafi da tutuyor: kaynakta `_` bulunmali,
+   cikti parcasinda BULUNMAMALI. */
+const kunyeyiSoy = () => ({
+  name: 'qanatone-kunye-soy',
+  enforce: 'pre',
+  transform(kod, kimlik) {
+    if (!/[\\/]src[\\/]prolog[\\/][^\\/]+\.json$/.test(kimlik)) return null;
+    const soy = (o) => Array.isArray(o)
+      ? o.map(soy)
+      : (o && typeof o === 'object'
+          ? Object.fromEntries(Object.entries(o)
+              .filter(([k]) => k !== '_')
+              .map(([k, v]) => [k, soy(v)]))
+          : o);
+    return { code: JSON.stringify(soy(JSON.parse(kod))), map: null };
+  },
+});
+
 /* QANATONE yeni kabuk — Faz 0 (Astro kararı belgesi, 18 Ağu 2026).
    Mevcut site aynen yaşar; bu proje dist/yeni altına basar ve /yeni/*
    adresinden yayına çıkar. Kök adrese alma Faz 4'ün işi.
@@ -47,5 +75,7 @@ export default defineConfig({
      sayfa basina JS tavaninin icinde; olcusu yeni/denetim.js'te. */
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 
-  integrations: [react()]
+  integrations: [react()],
+
+  vite: { plugins: [kunyeyiSoy()] }
 });

@@ -76,17 +76,29 @@ export function kur(bolum: HTMLElement): (p: number) => void {
   /* Kuyruk ve cember AYRI stroke: kurgu ikisini sirayla istiyor ve
      seridin kalinligi ikisinde ayni degil (olculdu: cemberde 248,5 px,
      kuyrukta medyan 154 - uca dogru 4 px'e kadar iniyor). */
-  /* IC CIZIM - SAHNEDE YOK, NAV EVRESINDE BELIRIYOR.
+  /* IC CIZIM - 24 AGU'DAN BERI SAHNE EVRESINDE DE VAR (kalem 2).
+     Eskiden yalniz nav evresinde belirirdi: Q'nun ici BILEREK bostu,
+     arkadaki gercek dag oradan gorunsun isteniyordu. Enes o kisiti
+     dusurdu; odak yalniz nehir akisi. Is yeni cizim degil, `ic`
+     araliginin dolgunun ustune alinmasi - govde ve dag tek yuzey.
+     GEVSEME BILINCLI VE YAZILI: `sahne.json` durak2.ic_dag'da
+     `sahne_evresinde: true`; denetim eski kapiyi o bayraga bagladi.
      BEYAZ ZEMIN YOK: yeni marka varliginda (QANAT_LOGO-seffaf-2.png)
      ic alanlar beyaz DEGIL DELIK - opak beyaz piksel sayisi sifir.
-     Gorunen tek ic sey kizil DAG; gok ve nehir bosluk kaliyor ve
-     amblem sahnede buyukken oralardan sahnenin kendisi goruluyor.
+     Gorunen tek ic sey kizil DAG; gok ve nehir bosluk kaliyor.
+     OLCULDU (24 Agu): dag Q'nun icini DOLDURMUYOR - ic dairenin 144
+     ornek noktasindan 113'u (%78,5) dag cizildikten sonra da delik.
+     Yani sahne gogun oradan HALA goruluyor; kaybolan sey alt bant.
      Kompozisyon olcumle dogrulandi: `halka + dag` maskesi yeni
      dosyanin alfa maskesiyle %99,50 uyusuyor (yalniz halka %97,84 -
      dag eksik kalir; nehri `evenodd` ile delmeye calismak %96,18 -
      nehrin dag disinda kalan kismi kizile boyanir).
      NEHIR AYRI CIZILMIYOR, cunku `isPointInFill` ile olculdu: nehir
-     hem `halka`nin hem `dag`in ICINDE ZATEN DELIK. */
+     hem `halka`nin hem `dag`in ICINDE ZATEN DELIK. Kalem 2'nin kapisi
+     bu oldugu icin iddia DEVRALINMADI, yeniden olculdu: nehir hattinin
+     82 noktasindan 79'u iki yolun da disinda; iceride kalan uc nokta
+     hattin UCLARI (nehrin dagin altindan ciktigi ilk nokta, kuyruga
+     girdigi son iki nokta). Yarik acik. */
   const C = A.cizim2;
   const KUY_KAL = C.kuyruk.kalinlik as number;
   const KUY_UC = C.kuyruk.kalinlik_uc as number;
@@ -181,12 +193,11 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     if (kal !== sonKal) { sonKal = kal; kuyruk.style.strokeWidth = `${kal}`; }
     svg.style.setProperty('--cizgi', `${1 - dP}`);
     svg.style.setProperty('--dolgu', `${dP}`);
-    /* Ic dag NAV EVRESININ ICINDE beliriyor: sahne evresinde amblem
-       bos halka kalir - gok ve nehir orada bosluktur ve sahnenin
-       kendisi goruluyor. Aralik `sahne.json`da, iki ucu da olculdu:
-       amblem nav pilinin uzerine gelmeden ONCE tamamlaniyor (ortusme
-       t=0,80 ile 0,90 arasinda basliyor), ve dagin okunabilecegi
-       bir boydayken basliyor (t=0,42'de amblem ~180 px). */
+    /* Ic dag artik DOLGUYLA BIRLIKTE geliyor (kalem 2, 24 Agu):
+       govde ve dag tek yuzey. Eski araligin iki olculmus ucu de
+       KORUNUYOR, ikisi de bu araligin SONRASINA dusuyor - amblem nav
+       pilinin uzerine gelmeden cok once tamamlaniyor ve dag sahnede
+       114x66 px, yani eski ~180 px'lik amblemdekinden buyuk. */
     svg.style.setProperty('--ic', `${iP}`);
 
     /* HEDEF NAV EVRESINE GIRERKEN BIR KEZ YENIDEN OLCULUYOR. H12
