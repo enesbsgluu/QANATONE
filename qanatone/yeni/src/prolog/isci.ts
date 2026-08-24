@@ -98,6 +98,7 @@ uniform float uZaman;
 uniform vec3  uGunes;      /* dunya uzayinda gunes yonu */
 uniform vec4  uKip;        /* x parilti · y gunes diski · z sis payi · w yon isigi */
 uniform float uSisK, uSisBas, uNefes;
+uniform float uSonuk;      /* sahne sonmesi (amblem cizilirken) - 3B yolunda CSS degil burada */
 
 /* Karistirici SIN'SIZ. Ilk surumde fract(sin(dot(..))*43758) vardi
    ve sis perdeleri iki kez uc oktavli gurultu cagirdigi icin fragment
@@ -242,7 +243,7 @@ void main(){
   c = sisle(c, vZ);
   /* Yogunluk salinimi yalniz bulutta acik; arazi katmanlarinda 0,
      yoksa daglar titrerdi. */
-  renk = vec4(c, t.a * uSoluk * (1.0 + uSalinim * sin(uZaman * 0.19 + vTUV.x * 3.0)));
+  renk = vec4(c * uSonuk, t.a * uSoluk * (1.0 + uSalinim * sin(uZaman * 0.19 + vTUV.x * 3.0)));
 }`;
 
 /* Sis perdesi: dokusuz. Alfa katmanli gurultuden geliyor, iki eksende
@@ -262,7 +263,7 @@ void main(){
   if (a < 0.004) discard;
   vec3 c = mix(vec3(0.10,0.125,0.180), vec3(0.44,0.33,0.29), uIsi);
   c = gunesi(c, vYon);
-  renk = vec4(c, clamp(a, 0.0, 0.62));
+  renk = vec4(c * uSonuk, clamp(a, 0.0, 0.62));
 }`;
 
 function derle(gl: WebGL2RenderingContext, tur: number, kaynak: string) {
@@ -516,10 +517,21 @@ async function kur(K0: Kurulum) {
   const pQuad = program(gl, QUAD_VS, DOKU_FS);
   const pSis = program(gl, QUAD_VS, SIS_FS);
 
+  /* F3 METAL - DINAMIK ITHAL (24 Agu). Amblemin metali `metal.ts`te,
+     ayri parcada: isci parcasinin 22 KB tavani var, PBR + envmap oraya
+     sigmaz. Ithal amblem dogmadan once (`on`), yukleme ertelenmis -
+     R14'un yardimci doku kabuluyle ayni ilke. Sessiz cikis YOK: hata
+     da basari da ana ipe mesajla gidiyor (`data-prolog-metal`). */
+  let metal: Awaited<ReturnType<typeof import('./metal').kur>> | null = null;
+  let metalYol: 'yok' | 'yukleniyor' | 'var' | 'hata' = 'yok';
+  let amblemD: (import('./metal').Durum & { on?: boolean }) | null = null;
+
   /* ---------------- durum ---------------- */
-  let p = 0, gen = K0.gen, yuk = K0.yuk, dpr = K0.dpr;
+  let p = 0, gen = K0.gen, yuk = K0.yuk, dpr = K0.dpr, sonuk = 1;
   let tanVr = tanV, oran = 1;
   let calisiyor = false, sokuldu = false, t0 = 0, cerceve = 0;
+  const kareSure: number[] = [];
+  let sonKare = 0;
   let sozDoku: { doku: WebGLTexture; oran: number } | null = null;
 
   function boyutla() {
@@ -538,10 +550,13 @@ async function kur(K0: Kurulum) {
     ];
   }
 
-  function ciz(zaman: number) {
+  function ciz(zaman: number, hedef?: { fbo: WebGLFramebuffer; g: number; y: number }) {
     if (sokuldu) return;
     boyutla();
-    oran = K0.tuval.width / K0.tuval.height;
+    /* `hedef`: sahne bir FBO'ya ciziliyor (metalin envmap'i icin, BIR
+       KEZ). Ayni kod yolu, ayni kamera; yalniz viewport ve oran farkli. */
+    if (hedef) { gl!.bindFramebuffer(gl!.FRAMEBUFFER, hedef.fbo); gl!.viewport(0, 0, hedef.g, hedef.y); }
+    oran = hedef ? hedef.g / hedef.y : K0.tuval.width / K0.tuval.height;
     /* `cover`: goruntu penceresi kaynak karenin ICINDE kalmali. */
     tanVr = Math.min(tanV, tanH / oran);
     const t = (zaman - t0) / 1000;
@@ -574,6 +589,11 @@ async function kur(K0: Kurulum) {
       gl!.uniform1f(u.uSisK, 0.0090 + 0.0040 * p);
       gl!.uniform1f(u.uSisBas, 6.0);
       gl!.uniform1f(u.uNefes, H.sis_nefes);
+      /* SONME ISCIDE (24 Agu). Eskiden tuvale `filter: brightness(--pr-sonuk)`
+         uygulaniyordu; metal tuvalin ICINDE oldugu icin sahneyle birlikte
+         sonuyordu - olculdu: govde L 111 -> 42 (0,55 carpani). Katmanlar
+         burada soner, metal muaf. Yedek yolda CSS degiskeni oldugu gibi. */
+      gl!.uniform1f(u.uSonuk, sonuk);
       /* Varsayilan TAM OPAK; yalniz cumle bunu asagi cekiyor. Konum
          yoksa (sis programinda `uSoluk` tanimli degil) cagri sessizce
          yok sayilir - WebGL null konumu gormezden gelir. */
@@ -709,6 +729,15 @@ async function kur(K0: Kurulum) {
       if (kt.ad === 'dag-sag') sozCiz();
       if (kt.ad === 'nehir') sisCiz(1);
     }
+    if (hedef) {
+      gl!.bindFramebuffer(gl!.FRAMEBUFFER, null);
+      gl!.viewport(0, 0, K0.tuval.width, K0.tuval.height);
+      return;
+    }
+    /* F3: amblemin metali EN USTTE - ressam sirasinin sonu. Donusum
+       ana ipten geliyor (halka.ts hesapliyor, `p` mesajina ekleniyor);
+       formul iki yere kopyalanmadi. */
+    if (metal && amblemD) metal.ciz(amblemD, t, gen, yuk, dpr);
   }
 
   function dongu(zaman: number) {
@@ -722,8 +751,23 @@ async function kur(K0: Kurulum) {
       const sonum = yas > YAS_TAVAN ? Math.max(0, 1 - (yas - YAS_TAVAN) / SONUM) : 1;
       sahneRef?.p(Math.min(1, Math.max(0, pSon + pHiz * sinir * sonum)));
     }
+    /* KARE RITMI SONDASI (F3 kapisi: "mobilde kare suresi olculecek,
+       metalin tam kalitede gidecegi varsayilmayacak"). ILK SURUM YANLIS
+       OLCUYORDU: ciz() etrafinda performance.now() yalnizca CPU'nun komut
+       GONDERME suresini verir (0,2 ms), GPU baska is parcaciginda calisir.
+       Dogru olcu KARE ARALIGI: rAF damgalari arasi sure - GPU'ya bagli
+       kaldiginda uzar. 90 karede bir p50/p95 ana ipe gider
+       (`data-prolog-kare`). Yine de SwiftShader'da MUTLAK degil GORELI;
+       gercek cihaz Enes'in telefonunda. */
+    if (sonKare) kareSure.push(zaman - sonKare);
+    sonKare = zaman;
     ciz(zaman);
     cerceve = kareIste(dongu);
+    if (kareSure.length >= 90) {
+      const d = kareSure.slice().sort((a, b) => a - b);
+      (self as any).postMessage({ tip: 'kare', p50: +d[45].toFixed(2), p95: +d[85].toFixed(2), n: d.length, p });
+      kareSure.length = 0;
+    }
   }
 
   /* ---------------- kurulum: KADEMELI ----------------
@@ -760,6 +804,7 @@ async function kur(K0: Kurulum) {
     sokuldu = true; calisiyor = false;
     kareIptal(cerceve);
     /* Dokular birakiliyor (mobilde ~40 MB, masaustunde ~96 MB). */
+    metal?.sok(); metal = null;
     for (const k in dokular) gl!.deleteTexture(dokular[k]);
     if (sozDoku) gl!.deleteTexture(sozDoku.doku);
     gl!.getExtension('WEBGL_lose_context')?.loseContext();
@@ -767,6 +812,25 @@ async function kur(K0: Kurulum) {
 
   return {
     p: (v: number) => { p = v; },
+    amblem: (d: import('./metal').Durum & { on?: boolean }) => {
+      amblemD = d;
+      sonuk = (d as any).sonuk ?? 1;
+      if ((d.on || d.metal > 0) && metalYol === 'yok') {
+        metalYol = 'yukleniyor';
+        import('./metal')
+          .then((Mm) => Mm.kur(gl!, K0.kok, K0.varyant, qVao,
+            (fbo, g, y) => ciz(performance.now(), { fbo, g, y })))
+          .then((m) => {
+            if (sokuldu) { m.sok(); return; }
+            metal = m; metalYol = 'var';
+            (self as any).postMessage({ tip: 'metal', olcum: m.olcum });
+          })
+          .catch((h) => {
+            metalYol = 'hata';
+            (self as any).postMessage({ tip: 'metal', hata: String(h) });
+          });
+      }
+    },
     boyut: (g: number, y: number, d: number) => { gen = g; yuk = y; dpr = d; },
     oynat: (a: boolean) => {
       if (sokuldu || a === calisiyor) return;
@@ -803,6 +867,7 @@ self.onmessage = async (e: MessageEvent) => {
       pSon = m.v; tSon = m.t;
     }
     sahne.p(m.v);
+    if (m.a) sahne.amblem(m.a);
   } else if (m.tip === 'boyut') {
     sahne.boyut(m.g, m.y, m.d);
   } else if (m.tip === 'oynat') {

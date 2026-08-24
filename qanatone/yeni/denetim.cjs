@@ -1744,11 +1744,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      sayfaya `<script src>` ile BAGLANMAZ — J1/H3 onlari saymaz, tavan
      burasi. Isci ayri olcuyor cunku sahnenin butun agirligi orada ve
      ana ip kabugunun ince kalmasi sozlesmenin kendisi. */
-  const TAVAN = { gl: 6 * 1024, isci: 22 * 1024 };
+  /* METAL PARCASI (24 Agu): amblemin PBR + envmap kodu `metal.ts`,
+     isciden DINAMIK ithal - isci tavani (22 KB) korunsun diye. Kendi
+     tavani: olculen boy + bir kademe pay. Sayfaya bagli olmamali,
+     iscinin icinden ve amblem dogmadan once inmeli. */
+  const TAVAN = { gl: 6 * 1024, isci: 22 * 1024, metal: 10 * 1024 };
   const astro = path.join(KOK, '_astro');
   const hh = oku(path.join(KOK, 'index.html'));
   const dosyalar = fs.existsSync(astro) ? fs.readdirSync(astro) : [];
-  for (const [ad, kalip] of [['gl', /^gl\..*\.js$/], ['isci', /^isci-.*\.js$/]]) {
+  for (const [ad, kalip] of [['gl', /^gl\..*\.js$/], ['isci', /^isci-.*\.js$/], ['metal', /^metal-.*\.js$/]]) {
     const parca = dosyalar.filter(f => kalip.test(f));
     if (parca.length !== 1) { kusur.push(ad + '-parcasi=' + parca.length); continue; }
     const b = fs.statSync(path.join(astro, parca[0])).size;

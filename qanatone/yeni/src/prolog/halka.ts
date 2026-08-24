@@ -53,8 +53,10 @@ const yumusat = (t: number) => t * t * (3 - 2 * t);
 
 let kuruldu = false;
 
-export function kur(bolum: HTMLElement): (p: number) => void {
-  if (kuruldu) return () => {};
+export type Durum = { s: number; tx: number; ty: number; metal: number; on: boolean; sonuk: number };
+
+export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) => Durum; metalVar: (v: boolean) => void } {
+  if (kuruldu) return { yaz: () => ({ s: 0, tx: 0, ty: 0, metal: 0, on: false, sonuk: 1 }), metalVar: () => {} };
   kuruldu = true;
 
   const mobil = matchMedia('(max-width: 760px)').matches;
@@ -166,8 +168,14 @@ export function kur(bolum: HTMLElement): (p: number) => void {
   olcNav();
 
   let sonP = -1, devredildi = false, navOlculdu = false, sonKal = -1;
-  const yaz = (p: number) => {
-    if (p === sonP) return;
+  /* F3: metal isci tarafinda ciziliyor; buradan ona DONUSUM ve OPAKLIK
+     gidiyor (tek kaynak: formul burada). `metalVar` isci "metal hazir"
+     deyince true olur; o zamana kadar SVG dolgu bugunku gibi calisir -
+     metal yuklenemezse amblem yine tam kizil olur, sessiz bosluk yok. */
+  let metalVar = false;
+  const durum: Durum = { s: 0, tx: 0, ty: 0, metal: 0, on: false, sonuk: 1 };
+  const yaz = (p: number): Durum => {
+    if (p === sonP) return durum;
     sonP = p;
     const kP = ilerle(p, AR.kuyruk as Aralik);
     const cP = ilerle(p, AR.cember as Aralik);
@@ -192,13 +200,20 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     const kal = KUY_UC + (KUY_KAL - KUY_UC) * (1 - dP) ** KUY_KUV;
     if (kal !== sonKal) { sonKal = kal; kuyruk.style.strokeWidth = `${kal}`; }
     svg.style.setProperty('--cizgi', `${1 - dP}`);
-    svg.style.setProperty('--dolgu', `${dP}`);
+    /* F3 MALZEME DEVRI (Enes, 24 Agu): metal -> duz SVG, amblem nav
+       boyuna kuculurken (aralik.metal), sabit bir p'de degil. 29 px'te
+       PBR okunmuyor; metal 0,52-0,60 arasinda sonerse gecis gorunmez.
+       Metal yoksa mP=1: SVG dolgu eskisi gibi dP ile gelir. */
+    const mP = metalVar ? yumusat(ilerle(p, AR.metal as Aralik)) : 1;
+    svg.style.setProperty('--dolgu', `${dP * mP}`);
     /* Ic dag artik DOLGUYLA BIRLIKTE geliyor (kalem 2, 24 Agu):
        govde ve dag tek yuzey. Eski araligin iki olculmus ucu de
        KORUNUYOR, ikisi de bu araligin SONRASINA dusuyor - amblem nav
        pilinin uzerine gelmeden cok once tamamlaniyor ve dag sahnede
        114x66 px, yani eski ~180 px'lik amblemdekinden buyuk. */
-    svg.style.setProperty('--ic', `${iP}`);
+    /* Metal kendi dagini ciziyor; SVG ic dag da ayni pencereyle cekilir,
+       yoksa iki dag ust uste biner (probe: --ic 0,65 metalin ustunde). */
+    svg.style.setProperty('--ic', `${iP * mP}`);
 
     /* HEDEF NAV EVRESINE GIRERKEN BIR KEZ YENIDEN OLCULUYOR. H12
        korunuyor: kare basina degil, EVREYE GIRISTE tek okuma.
@@ -257,10 +272,17 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     svg.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px)`
       + ` scale(${s.toFixed(6)})`;
     svg.style.opacity = kP > 0 ? '1' : '0';
+    durum.s = s; durum.tx = tx; durum.ty = ty;
+    durum.metal = dP * (1 - mP);
+    durum.on = p >= (AR.dolgu as Aralik)[0] - 0.14;   /* SDF + envmap onceden insin */
 
-    /* Sahne soner ki kizil carpsin; nava giderken geri doner. */
-    bolum.style.setProperty('--pr-sonuk',
-      `${1 - (1 - D2.sonme.deger) * Math.max(kP, cP) * (1 - nP)}`);
+    /* Sahne soner ki kizil carpsin; nava giderken geri doner.
+       3B YOLUNDA SONME ISCIDE (24 Agu): metal tuvalin icinde, CSS filtresi
+       onu da sonduruyordu (olculdu: govde L 111 -> 42). Deger durumla
+       isciye gider, katmanlar orada soner, metal muaf. CSS degiskeni
+       yalniz yedek yol icin yaziliyor. */
+    durum.sonuk = 1 - (1 - D2.sonme.deger) * Math.max(kP, cP) * (1 - nP);
+    if (!ucBoyutlu) bolum.style.setProperty('--pr-sonuk', `${durum.sonuk}`);
 
     /* DEVIR: amblem navdaki yerine oturunca gercek nav logosu acilir
        ve amblem kapanir. Sahne katmani boylece sifir maliyete iner -
@@ -276,6 +298,7 @@ export function kur(bolum: HTMLElement): (p: number) => void {
       navLogo?.classList.toggle('nv-logo-bekle', !bitti);
       svg.style.display = bitti ? 'none' : '';
     }
+    return durum;
   };
 
   /* HEDEF DEGISINCE YENIDEN OKU VE O KAREYI YENIDEN YAZ. `yaz` ayni
@@ -302,5 +325,5 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     if (t.target === bar && t.propertyName === 'padding-top') tazele();
   }, { passive: true });
 
-  return yaz;
+  return { yaz, metalVar: (v: boolean) => { metalVar = v; tazele(); } };
 }

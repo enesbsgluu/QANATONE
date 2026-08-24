@@ -143,10 +143,18 @@ export async function baslat(bolum: HTMLElement) {
      zaten aciksa (yani kamera gercekten iniyorsa) cekiliyor. Yedek
      yolda kamera hareketi YOK, orada amblem de dogmaz - sahne sade
      kalir ve o yola fazladan bayt inmez. */
-  let amblem: ((p: number) => void) | null = null;
+  let amblem: ((p: number) => unknown) | null = null;
+  let amblemMetal: ((v: boolean) => void) | null = null;
+  /* SESSIZ CIKIS KAPANDI (24 Agu, probeyle bulundu): metal hazir olunca
+     durum degisiyor ama isciye ancak sonraki KAYDIRMA tik'inde gidiyordu;
+     tam o anda duran kullanici metali hic gormezdi. Hazir mesaji bir tik
+     tetikler. */
+  let tikYenile: (() => void) | null = null;
   const d2Acik = (VERI as any).durak2acik !== false
     && !/(^|[?&])d2=0/.test(location.search);
-  if (d2Acik) import('./halka').then((m) => { amblem = m.kur(bolum); }).catch(() => {});
+  if (d2Acik) import('./halka').then((m) => {
+    const h = m.kur(bolum, true); amblem = h.yaz; amblemMetal = h.metalVar;
+  }).catch(() => {});
 
   function baglan() {
     /* ILERLEME — KAYDIRMADA DUZEN OKUMASI YOK (H12). Rayin belge
@@ -172,8 +180,9 @@ export async function baslat(bolum: HTMLElement) {
     let sonKaydirma = 0, acik = false;
     const tik = (dur = false) => {
       const v = Math.min(1, Math.max(0, (scrollY - ust) / yol));
-      amblem?.(v);
-      isci.postMessage({ tip: 'p', v, t: performance.now(), dur });
+      /* F3: amblemin donusumu ayni mesajda isciye - metal orada ciziliyor. */
+      const a = amblem?.(v);
+      isci.postMessage({ tip: 'p', v, t: performance.now(), dur, a });
     };
     const dongu = () => {
       tik();
@@ -187,6 +196,7 @@ export async function baslat(bolum: HTMLElement) {
       requestAnimationFrame(dongu);
     };
     olc(); tik(true);
+    tikYenile = () => tik();
     addEventListener('scroll', uyan, { passive: true });
     addEventListener('resize', () => { olc(); tik(); }, { passive: true });
     new ResizeObserver((g) => {
@@ -221,6 +231,15 @@ export async function baslat(bolum: HTMLElement) {
 
   isci.onmessage = (e) => {
     if (e.data.tip === 'hazir') { kk.add('pr-gl-hazir'); acildi(); baglan(); }
+    else if (e.data.tip === 'kare') {
+      document.documentElement.dataset.prologKare = e.data.p50 + ',' + e.data.p95 + ',' + e.data.p.toFixed(3);
+    }
+    else if (e.data.tip === 'metal') {
+      /* Iz birakir: olcum de hata da `data-prolog-metal`e yazilir. */
+      if (e.data.olcum) { amblemMetal?.(true); tikYenile?.(); }
+      document.documentElement.dataset.prologMetal =
+        e.data.olcum ? JSON.stringify(e.data.olcum) : 'hata:' + e.data.hata;
+    }
     else if (e.data.tip === 'hata') { yedek('isci-hatasi', e.data.mesaj); dur(); }
   };
   /* EN SESSIZ DALDI. Iscinin KENDISI yuklenemezse (404, yanlis MIME,

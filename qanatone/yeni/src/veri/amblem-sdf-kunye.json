@@ -10,24 +10,24 @@
  "doyum_notu": "kafes fazi uzerinde en kotu uc kaymasi 640-768 texel'de doyuyor (kuyruk ucu 4 birim = 768'de 2,45 texel); doku tavani zorlarsa inilebilecek yer 768, altinda uc geri cekilir (512: +2,2 px)",
  "varyant": {
   "masaustu": {
-   "dosya": "amblem-sdf-d1344.webp",
-   "N": 1344,
+   "dosya": "amblem-sdf-d1216.webp",
+   "N": 1216,
    "turetim": {
-    "r": 0.0005,
+    "r": 0.00046,
     "kh": 1024,
-    "kutu_css": 642.0,
-    "texel": 1284.1
+    "kutu_css": 590.7,
+    "texel": 1181.4
    },
-   "bant_texel": 12.86,
-   "bayt": 52302,
-   "sha1": "914d30a880ebb9ed6eb42602055b588ff7d1b272",
-   "gpu_bayt_R8": 1806336,
-   "gpu_bayt_RGBA": 7225344,
+   "bant_texel": 11.64,
+   "bayt": 44588,
+   "sha1": "374343472489f5729454a49d6870189da47c99dd",
+   "gpu_bayt_R8": 1478656,
+   "gpu_bayt_RGBA": 5914624,
    "uc_kaymasi_px": {
     "449": {
      "vektor_tabani": 1.69,
      "azami": 1.69,
-     "ortalama": 0.81,
+     "ortalama": 0.9,
      "tabanin_ustu": 0.0,
      "uzama_azami": 1.34,
      "kisalma_azami": 0.0
@@ -41,7 +41,7 @@
      "kisalma_azami": -0.89
     }
    },
-   "yarik_min_birim": 12.52
+   "yarik_min_birim": 13.84
   },
   "mobil": {
    "dosya": "amblem-sdf-m832.webp",
@@ -78,39 +78,5 @@
    "yarik_min_birim": 13.48
   }
  },
- "aday": [
-  {
-   "r": 0.00046,
-   "dosya": "amblem-sdf-d1216.webp",
-   "N": 1216,
-   "turetim": {
-    "r": 0.00046,
-    "kh": 1024,
-    "kutu_css": 590.7,
-    "texel": 1181.4
-   },
-   "bayt": 44588,
-   "sha1": "374343472489f5729454a49d6870189da47c99dd",
-   "gpu_bayt_R8": 1478656,
-   "uc_kaymasi_px": {
-    "412": {
-     "vektor_tabani": 1.28,
-     "azami": 1.99,
-     "ortalama": 1.99,
-     "tabanin_ustu": 0.71,
-     "uzama_azami": 0.0,
-     "kisalma_azami": -0.89
-    },
-    "409": {
-     "vektor_tabani": 1.29,
-     "azami": 1.29,
-     "ortalama": 1.29,
-     "tabanin_ustu": 0.0,
-     "uzama_azami": 0.0,
-     "kisalma_azami": 0.0
-    }
-   },
-   "yarik_min_birim": 13.84
-  }
- ]
+ "aday": []
 }
