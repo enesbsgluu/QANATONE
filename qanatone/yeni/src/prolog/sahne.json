@@ -250,7 +250,7 @@
    "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
   ],
   "aralik": {
-   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA ve nav'in ICINDE: amblemin ic dagi sahne evresinde YOKTUR, yalniz nav evresinde belirir. Iki ucu da olculdu: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme t=0,80 ile 0,90 arasinda basliyor) ve dagin okunabilecegi bir boyda baslar (t=0,42'de amblem ~180 px).",
+   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA. 24 Agu'ya kadar nav'in ICINDEYDI ([0,59 0,635]) cunku Q'nun ici BILEREK bostu: arkadaki gercek dag oradan gorunsun isteniyordu. ENES O KISITI DUSURDU - odak artik yalniz nehir akisi - ve `ic` dolgunun tam ustune alindi ([0,44 0,54]): govde ve dag TEK YUZEY, birlikte geliyor. Eski olcumun iki ucu da korunuyor, ikisi de bu araliktan SONRA gelen sartlar: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme nav t=0,80-0,90) ve dag okunabilecek bir boyda baslar (sahnede amblem ~310 px, dag 114x66 px - eskisinden buyuk). Gerekce ve olcumler durak2.ic_dag'da.",
    "bekle": [
     0.0,
     0.08
@@ -272,8 +272,8 @@
     0.66
    ],
    "ic": [
-    0.59,
-    0.635
+    0.44,
+    0.54
    ]
   },
   "sonme": {
@@ -345,6 +345,39 @@
    }
   },
   "acik": true,
+  "ic_dag": {
+   "_": [
+    "IC DAG SAHNE EVRESINDE (24 Agu, kalem 2) - BILINCLI GEVSEME.",
+    "Eskiden denetim `ic[0] < nav[0]` gorunce kirmizi yanardi:",
+    "'ic-sahne-evresine-tasiyor'. O kural bir OLCUMUN degil bir",
+    "KURGUNUN bekcisiydi - Q'nun ici bos kalsin ki arkadaki gercek dag",
+    "oradan gorunsun. Enes o kurguyu kapatti. Kural SESSIZCE kirilmiyor:",
+    "burada `sahne_evresinde: true` yazili ve denetim artik bunu ariyor;",
+    "bayrak kalkarsa eski kapi geri gelir.",
+    "KAPI: nehir yarigi hala acik olmali - dag dolarken nehir kapanmamali.",
+    "IDDIA DEVRALINMADI, OLCULDU (gercek Chrome, `isPointInFill`,",
+    "amblemin kendi kullanici uzayi): nehir hattinin 82 noktasindan 79'u",
+    "iki yolun da DISINDA. Kalan uc nokta hattin UCLARI - biri nehrin",
+    "dagin altindan ciktigi ilk nokta (615/532), ikisi nehrin kuyruga",
+    "girdigi son noktalar (1005/1052, 1015/1056). Yarik acik.",
+    "IKINCI OLCUM, BEKLENMEYEN: dag Q'nun icini DOLDURMUYOR. Ic dairenin",
+    "144 ornek noktasindan 113'u (%78,5) dag cizildikten SONRA da delik",
+    "kaliyor; dag yalnizca alt %21,5'i kapliyor (dag kutusu 323x186,",
+    "ic daire r=193). Yani 'Q'nun ici bos' kurgusu zaten yalniz alt bant",
+    "icin gecerliydi; gok bolgesinden sahne HALA goruluyor."
+   ],
+   "sahne_evresinde": true,
+   "olculen": {
+    "nehir_nokta": 82,
+    "nehir_disarida": 79,
+    "nehir_uclarda_iceride": 3,
+    "gok_nokta": 144,
+    "gok_delik": 113,
+    "gok_dagda": 31,
+    "dag_kutu": [458.0, 504.0, 323.0, 186.1],
+    "ic_daire_r": 193.2
+   }
+  },
   "malzeme": {
    "_": [
     "MALZEME KILIDI (24 Agu) - KARAR ENES'IN VE KAPALI: METAL.",
