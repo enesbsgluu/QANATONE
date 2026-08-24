@@ -1897,6 +1897,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (!/SONUM/.test(W)) kusur.push('sonum-yok');
   if (!/anaKok/.test(G) || !/anaFark/.test(W)) kusur.push('zaman-koku-eslenmiyor');
 
+  /* (d) SAHNE DONMASI (24 Agu) - olcum sirasinda yakalandi, URUN
+     KUSURU cikti. Isci `calisiyor = false` ile basliyor ve kurulumda
+     TEK kare ciziyor; dongusunu yalnizca `oynat(true)` baslatiyor.
+     O mesajin tek kaynagi IntersectionObserver'di ve geri cagri
+     `g[0]` okuyordu - dizinin EN ESKISI. Gozlemci birden cok degisimi
+     tek cagride birlestirdiginde eski hukum uygulaniyor, `oynat(false)`
+     iscide sessizce yutuluyor (`a === calisiyor`) ve baska kesisim
+     degisimi gelmezse sahne HIC baslamiyor.
+     Belirti olculdu: ~%2-3 ziyarette 900 ms arayla uc kare BAYT BAYT
+     ayni ve nehir p=0 konumunda (846 px, p=0,52'nin dogrusu 893) -
+     yani amblem ilerlerken sahne duruyor ve birlesme gorunur sekilde
+     kiriliyor.
+     Kural iki seyi tutuyor: son girdi okunmali VE baslangic durumu
+     gozlemciye birakilmamali. */
+  if (/g\[0\]\.isIntersecting/.test(G)) kusur.push('gozlemci-eski-girdiyi-okuyor');
+  if (!/g\[g\.length - 1\]\.isIntersecting/.test(G)) kusur.push('gozlemci-son-girdiyi-okumuyor');
+  const oynatlar = (G.match(/tip: 'oynat'/g) || []).length;
+  if (oynatlar < 2) kusur.push('baslangic-gorunurlugu-gonderilmiyor');
+
   ol('R17 - takip: ilerleme kare ritminde + durus bildiriliyor + iscide ongoru',
      kusur.length === 0, kusur.slice(0, 4).join(' ') || 'uc sart da yerinde');
 }
