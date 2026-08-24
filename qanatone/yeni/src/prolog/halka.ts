@@ -88,6 +88,9 @@ export function kur(bolum: HTMLElement): (p: number) => void {
      NEHIR AYRI CIZILMIYOR, cunku `isPointInFill` ile olculdu: nehir
      hem `halka`nin hem `dag`in ICINDE ZATEN DELIK. */
   const C = A.cizim2;
+  const KUY_KAL = C.kuyruk.kalinlik as number;
+  const KUY_UC = C.kuyruk.kalinlik_uc as number;
+  const KUY_KUV = D2.perde.kuvvet as number;
   svg.innerHTML =
     `<path class="pr-ck" d="${C.kuyruk.yol}" fill="none"` +
     ` stroke-width="${C.kuyruk.kalinlik}" stroke-linecap="round"/>` +
@@ -150,7 +153,7 @@ export function kur(bolum: HTMLElement): (p: number) => void {
   };
   olcNav();
 
-  let sonP = -1, devredildi = false, navOlculdu = false;
+  let sonP = -1, devredildi = false, navOlculdu = false, sonKal = -1;
   const yaz = (p: number) => {
     if (p === sonP) return;
     sonP = p;
@@ -163,7 +166,19 @@ export function kur(bolum: HTMLElement): (p: number) => void {
     kuyruk.style.strokeDashoffset = `${uzKuyruk * (1 - kP)}`;
     cember.style.strokeDashoffset = `${uzCember * (1 - cP)}`;
     /* Cizgi sonerken gercek dolgu geliyor: cizim sirasinda kalinlik
-       sabit (ucuz), son halde seridin kendi degisken kalinligi. */
+       sabit (ucuz), son halde seridin kendi degisken kalinligi.
+
+       PERDE KAPANDI (24 Agu). Kalem SABIT 154 birim genisti, seridin
+       kendi ucu 4 - ustelik `stroke-linecap="round"`. Dolgu yukselirken
+       kalem tam genisken kaliyordu: ucta siluetin DISINA yuvarlak bir
+       kapak, serit boyunca da kizil bir hare - Enes'in gordugu perde.
+       Kalem artik dolgu yukselirken seridin KENDI ucuna iniyor.
+       SAYILAR VE GEREKCE `sahne.json` durak2.perde'de: olcum duzeni,
+       once/sonra tasmalar ve kuvvetin NEDEN 5 oldugu orada. Buraya
+       kopyalanmiyor - iki kaynak olurdu. Kuvvet de oradan okunuyor.
+       CIZIM EVRESINE DOKUNULMADI: p<0,44'te dP=0, kalinlik yine 154. */
+    const kal = KUY_UC + (KUY_KAL - KUY_UC) * (1 - dP) ** KUY_KUV;
+    if (kal !== sonKal) { sonKal = kal; kuyruk.style.strokeWidth = `${kal}`; }
     svg.style.setProperty('--cizgi', `${1 - dP}`);
     svg.style.setProperty('--dolgu', `${dP}`);
     /* Ic dag NAV EVRESININ ICINDE beliriyor: sahne evresinde amblem

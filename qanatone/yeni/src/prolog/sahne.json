@@ -345,6 +345,68 @@
    }
   },
   "acik": true,
+  "malzeme": {
+   "_": [
+    "MALZEME KILIDI (24 Agu) - KARAR ENES'IN VE KAPALI: METAL.",
+    "Cam ve kristal DENENDI ve KAPANDI. Sebep gecirgenlik: gece",
+    "manzarasinda arkadaki karanlik dag amblemin icinden geciyor ve",
+    "kizili yutuyor; ortam kazanci yukseltilince de beyaza patliyor.",
+    "Ikisini birden kurtarmanin yolu sahneye sicak bir vurgu isigi",
+    "eklemek - o AYRI bir tur ve bu turun butcesi yok.",
+    "Bu kalem bir daha ACILMAZ. Yeniden acilacaksa once yukaridaki",
+    "iki gozlem (kizilin yutulmasi, kazancta beyaza patlama) sayiyla",
+    "curutulmeli - 'daha guzel duruyor' gerekce degil.",
+    "SAYILAR PROTOTIPTE: gorsel-kaynak/prototip-3b/ana.js MALZEME",
+    "sozlugu. Buraya kopyalanmiyor - urun kodu F3'te oradan alacak."
+   ],
+   "secilen": "metal",
+   "kapali": ["cam", "kristal"],
+   "kaynak": "gorsel-kaynak/prototip-3b/ana.js"
+  },
+  "perde": {
+   "_": [
+    "PERDE KUNYESI (24 Agu) - Enes karede Q'nun cikintisinin ETRAFINDA",
+    "kizil bir perde gordu. Olcum ne oldugunu soyledi: kuyrugun kalemi",
+    "(`.pr-ck`) SABIT 154 birim genis ve `stroke-linecap=round`, oysa",
+    "seridin kendi ucu 4 birim. Dolgu yukselirken kalem tam genisken",
+    "kaliyordu: ucta siluetin DISINA yuvarlak bir kapak, serit boyunca",
+    "da kizil bir hare.",
+    "OLCUM DUZENI: gercek Chrome (puppeteer, SwiftShader), dort genislik,",
+    "p basina TAZE sayfa, kuyrugun ucundan (`cizim2.kuyruk` yolunun",
+    "BASI, 1022/1059) yol yonunde disari yurunerek en uzak kizil piksel.",
+    "ONCE: tasma 20,8-27,3 px ve HER karede kapagin yaricapina",
+    "(kalinlik/2 x olcek) esit cikti - yani kaynak sahnenin kizili ya da",
+    "varliktaki bir kirpma artefakti DEGIL, bu stroke.",
+    "KUVVET SECILMEDI, HESAPLANDI: dolgu okunur hale geldiginde (>=%25,",
+    "yani p=0,4726) tasma birlesme butcesinin (8 px) altinda kalmali.",
+    "En buyuk olcek 0,3564 (768) icin bu kalinlik<=44,9 birim demek,",
+    "yani (1-dP)^k <= 0,2727 ve k >= 4,52 -> 5.",
+    "CIZIM EVRESI (p<0,44) DOKUNULMADI: orada dP=0 ve kalinlik yine 154.",
+    "KALAN, BILEREK ACIK: capraz gecis iki katmani ust uste soldurdugu",
+    "icin amblem ortada %77'ye kadar saydamlasiyor. Kalem kalkinca bu",
+    "dip kuyrukta gorunur oluyor - p=0,50'de kuyrugun medyan kizili 160,",
+    "halkanin 188 (ONCE ikisi de ~188'di, farki kapatan sey perdenin",
+    "kendisiydi). Dipi kapatmak zamanlama karari, Enes'te."
+   ],
+   "kuvvet": 5,
+   "hedef_px": 8.0,
+   "olculen": {
+    "_": "Kuyrugun ucundan disari tasan kizil, px. p=0,30 cizim evresi (dokunulmadi), oburleri capraz gecis.",
+    "once": {
+     "360": [20.8, 20.8, null, null, 14.8, 11.8],
+     "412": [23.5, 23.0, null, null, 16.3, 13.0],
+     "768": [27.3, 26.8, null, null, 26.5, 22.3],
+     "1440": [26.8, 26.8, null, null, 26.5, 21.3]
+    },
+    "sonra": {
+     "360": [20.8, 12.0, 5.0, 2.3, 0.3, 0.0],
+     "412": [23.5, 14.0, 6.0, 2.8, 0.0, 0.0],
+     "768": [27.3, 15.8, 6.5, 3.8, 0.0, 0.0],
+     "1440": [26.8, 15.8, 6.8, 2.8, 0.3, 0.0]
+    },
+    "p": [0.30, 0.46, 0.4726, 0.48, 0.50, 0.52]
+   }
+  },
   "birlesme": {
    "_": [
     "BIRLESME KUNYESI (24 Agu) - yerlesim katsayilarinin NEDEN bu oldugu.",
