@@ -832,6 +832,19 @@
     "imza": "900 ms arayla kareler bayt bayt ayni + nehir p=0 konumunda",
     "duzeltme": "gl.ts: gozlemcinin SON girdisi + baslangic gorunurlugu ayrica gonderiliyor"
    }
+  },
+  "olcek_adaylari": {
+   "_": [
+    "ADAY OLCEKLER (Enes, 24 Agu). Olcek karari (413 <-> 449 px)",
+    "hareketli en kotu kare kapisi shader'la kosunca verilecek; ureteC",
+    "adaylarin SDF'ini de uretir (amblem-sdf.py), butceye GIRMEZ,",
+    "yalniz olcum icin durur. Karar verilince liste bosaltilir.",
+    "Onaylanmis 'oda' kavrami 449'a bakiyor; 449 kapiyi gecerse 449,",
+    "gecmezse 413 - gerekce kendi kapimiz olur."
+   ],
+   "masaustu": [
+    0.00046
+   ]
   }
  },
  "olcum": {
@@ -894,6 +907,42 @@
    ],
    "masaustu": 100663296,
    "mobil": 58720256
+  },
+  "yardimci_doku_bayt": {
+   "_": [
+    "YARDIMCI DOKU KALEMI (Enes, 24 Agu). Fotograf disi, tek kanalli",
+    "alanlar - bugun yalniz amblemin SDF'i. `doku_bayt` tavaninin",
+    "gerekcesi fotograf katmanlarinin COZULMUS agirligi ve o gerekce",
+    "hala dogru; SDF o tavana SESSIZCE eklenmedi, kendi kalemini aldi.",
+    "SAYIM R8 (1 bayt/px): masaustu 1344^2 = 1,81 MB, mobil 832^2 =",
+    "0,69 MB; aday 1216^2 = 1,48 MB. Tavan: turetilen cozunurlugun",
+    "R8 agirligi + bir kademe pay (masaustu 2 MiB, mobil 1 MiB).",
+    "YUKLEME MALIYETI OLCULDU (SwiftShader, texImage2D + gl.finish,",
+    "7 tekrar medyan / en kotu):",
+    "  kisitsiz  R8 1344^2 1,6 / 1,7 ms   R8 832^2 0,5 / 0,7 ms",
+    "  CPU 4x    R8 1344^2 3,3 / 4,9 ms   R8 832^2 0,6 / 2,6 ms",
+    "  kiyas     RGBA 2560x1803 (bir fotograf katmani) CPU 4x 20,4 / 34,1",
+    "KABUL: tek seferlik, ertelenmis yuklemede (sahne kurulumunda degil,",
+    "amblemin dogusundan once). NOT: bu olcum tip dizisinden; katman",
+    "notundaki '~17 ms/Mpx' createImageBitmap yolundan ve o yol daha",
+    "pahali. SDF isciye o yoldan girerse gercek maliyet entegrasyonda",
+    "yeniden olculur; kalem o sayiyla guncellenir."
+   ],
+   "masaustu": 2097152,
+   "mobil": 1048576
+  },
+  "sdf_dosya_bayt": {
+   "_": [
+    "SDF DOSYA TAVANI (Enes, 24 Agu) - 'sessizce gecmesin'. SDF prolog",
+    "gorsel butcesinde sayiliyor (R21) ama mobilde 442/450 KB ile 8 KB",
+    "pay kaldi; 832 bir kademe yukari ciksa (896^2 ~29 KB) kimse fark",
+    "etmezdi. Tavan BILINCLI olarak bir kademe altina cekildi: mobil",
+    "26 KB (832^2 = 25,1 KB icerde, 896^2 disarida), masaustu 56 KB",
+    "(1344^2 = 51,1 KB icerde, 1408^2 disarida). Asilirsa cozunurluk",
+    "degil bu tavan konusulur - gerekcesiyle."
+   ],
+   "masaustu": 57344,
+   "mobil": 26624
   }
  },
  "hareket": {

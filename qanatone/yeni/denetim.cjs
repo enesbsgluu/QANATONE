@@ -1712,8 +1712,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (bayt > butce) kusur.push(ad + ':butce-asti:' + bayt);
     if (ad === 'mobil' && bayt < butce * 0.75) kusur.push('mobil:butce-kullanilmadi:' + bayt);
     if (doku > dokuTavan) kusur.push(ad + ':doku-tavani:' + doku);
+    /* YARDIMCI DOKU KALEMI (Enes, 24 Agu). Fotograf disi, tek kanalli
+       alanlar - bugun yalniz amblemin SDF'i. `doku_bayt` tavani fotograf
+       katmanlarinin COZULMUS agirligi icin ve gerekcesi hala dogru; SDF
+       ona sessizce eklenmedi. Sayim R8 (1 bayt/px), kaynak SDF kunyesi.
+       Yukleme maliyeti olculdu ve `sahne.json olcum.yardimci_doku_bayt._`
+       altinda (CPU 4x: 1344^2 R8 3,3 ms medyan). SDF isciye henuz
+       yuklenmedi; yuklenince gercek yol yeniden olculur. */
+    const yTavan = (S.olcum.yardimci_doku_bayt || {})[ad];
+    let yardimci = 0;
+    try {
+      const SK = JSON.parse(fs.readFileSync(
+        path.join(__dirname, 'src', 'veri', 'amblem-sdf-kunye.json'), 'utf8'));
+      yardimci = ((SK.varyant || {})[ad] || {}).gpu_bayt_R8 || 0;
+    } catch { kusur.push(ad + ':sdf-kunyesi-okunamadi'); }
+    if (!(yTavan > 0)) kusur.push(ad + ':yardimci-doku-tavani-yok');
+    else if (yardimci > yTavan) kusur.push(ad + ':yardimci-doku-tavani:' + yardimci + '>' + yTavan);
     rapor.push(ad + ' ' + Math.round(bayt / 1024) + '/' + Math.round(butce / 1024)
-      + ' KB · doku ' + Math.round(doku / 1048576) + ' MB');
+      + ' KB · doku ' + Math.round(doku / 1048576) + ' MB · yardimci '
+      + (yardimci / 1048576).toFixed(2) + '/' + (yTavan / 1048576).toFixed(0) + ' MB');
   }
   /* Iki varyantin derinlik haritasi AYNI ADI TASIYAMAZ. Bir kez tasidi
      (masaustu ve mobil ikisi de "m" onekiyle basliyordu) ve mobil kesim
@@ -2351,6 +2368,21 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         if (uc[e].tabanin_ustu > 1.0) kusur.push('uc-geri-cekiliyor:' + v + '@' + e + ':' + uc[e].tabanin_ustu);
       }
       if (!(k.yarik_min_birim > 4)) kusur.push('nehir-yarigi-kapaniyor:' + v + ':' + k.yarik_min_birim);
+      /* IMZALI UZANIM (24 Agu): `uc_kaymasi` en yakin dolu piksele
+         uzakliktir ve UZAMAYI GOREMEZ - olculdu, 449'da 0,0 derken
+         imzali uzanim +1,34 px uzama gosterdi. Esik 1,5 px: iki
+         rasterin kafes farki (sqrt 2) + pay. Iki yon de tutulur. */
+      for (const e of Object.keys(uc)) {
+        if (uc[e].uzama_azami === undefined) { kusur.push('imzali-uzanim-yok:' + v); break; }
+        if (uc[e].uzama_azami > 1.5) kusur.push('uc-uzuyor:' + v + '@' + e + ':' + uc[e].uzama_azami);
+        if (uc[e].kisalma_azami < -1.5) kusur.push('uc-kisaliyor:' + v + '@' + e + ':' + uc[e].kisalma_azami);
+      }
+      /* SDF DOSYA TAVANI (Enes, 24 Agu) - sessizce gecmesin. Mobil prolog
+         butcesinde 8 KB pay kaldi; bir kademe yukari (896^2 ~29 KB)
+         fark edilmezdi. Tavan bilincli olarak bir kademe altinda. */
+      const dTavan = (S.olcum.sdf_dosya_bayt || {})[v];
+      if (!(dTavan > 0)) kusur.push('sdf-dosya-tavani-yok:' + v);
+      else if (k.bayt > dTavan) kusur.push('sdf-dosya-tavani:' + v + ':' + k.bayt + '>' + dTavan);
       /* (e) prolog gorsel butcesi: katmanlar + derinlik + SDF */
       const Vv = V.varyant[v];
       let katman = 0;
@@ -2367,6 +2399,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
         + enUc.toFixed(2) + ' px · yarik ' + k.yarik_min_birim + ' birim · butce '
         + Math.round((katman + k.bayt) / 1024) + '/' + Math.round(butce / 1024) + ' KB');
     }
+    /* ADAY OLCEKLER (Enes, 24 Agu): olcek karari hareketli kapi shader'la
+       kosunca verilecek; adayin SDF'i uretilir ama BUTCEYE GIRMEZ (urun
+       cekmiyor). Tutulan: hash + turetim; listeyle dosya bire bir. */
+    const adayR = ((S.durak2.olcek_adaylari || {}).masaustu || [])
+      .filter((r) => Math.abs(r - S.durak2.yerlesim.masaustu.r) > 1e-12);
+    const adaylar = K.aday || [];
+    if (adaylar.length !== adayR.length) kusur.push('aday-listesi-uyusmuyor:' + adaylar.length + '!=' + adayR.length);
+    for (const a of adaylar) {
+      const oran = V.varyant.masaustu.oran, dpr = S.olcum.dpr_tavan;
+      const kh = Math.max(...EKR.masaustu.map(([W, H]) => Math.max(H, W / oran)));
+      const N = Math.ceil(1254 * a.r * kh * dpr / 64) * 64;
+      if (a.N !== N) kusur.push('aday-cozunurlugu-sapmis:' + a.r);
+      const p = path.join(KOK, 'img', 'prolog', a.dosya);
+      if (!fs.existsSync(p)) kusur.push('aday-sdf-yok:' + a.dosya);
+      else if (sha1(p) !== a.sha1) kusur.push('aday-kunyeye-uymuyor:' + a.dosya);
+    }
+    if (adaylar.length) rapor.push('aday ' + adaylar.map((a) => a.N + 'x' + a.N).join(','));
   }
   ol('R21 - amblem SDF: derleme aninda + cozunurluk turetilmis + uc/yarik olculmus',
      kusur.length === 0, kusur.slice(0, 4).join(' ') || rapor.join(' · '));
