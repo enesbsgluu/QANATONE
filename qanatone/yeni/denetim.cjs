@@ -2021,6 +2021,43 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (!/nP\s*>=\s*1\b/.test(kaynak)) kusur.push('devir-esigi-yok');
   if (!/Math\.pow\(hedef\.s/.test(kaynak)) kusur.push('olcek-dogrusal');
 
+  /* (f2) PERDE - Enes'in karede gordugu, Q'nun cikintisinin ETRAFINDAKI
+     kizil. Kaynagi olcumle bulundu: kuyrugun kalemi SABIT 154 birim
+     ve `stroke-linecap="round"`, seridin kendi ucu ise 4. Dolgu
+     yukselirken kalem tam genisken kalinca ucta siluetin DISINA
+     yuvarlak bir kapak basiyordu - dort genislikte 20,8-27,3 px, yani
+     birlesme butcesinin (8 px) 2,6-3,4 kati. Sayilar ve kuvvetin nasil
+     hesaplandigi `sahne.json` durak2.perde'de; buraya KOPYALANMIYOR,
+     kural yalnizca kunyenin durdugunu ve kodun onu okudugunu tutuyor.
+     Kalinlik halka.ts'e elle yazilirsa amblem.json ikinci bir kaynak
+     dogurur - o yuzden ciplak sayi da yasak. */
+  /* (f3) MALZEME KILIDI - siralamanin 1. kalemi. Karar Enes'in ve
+     KAPALI: metal. Cam ve kristal denendi; gecirgenlik gece
+     manzarasinda arkadaki karanlik dagi gecirip kizili yutuyor,
+     ortam kazanci yukseltilince de beyaza patliyor. Kurtarmanin yolu
+     sahneye sicak vurgu eklemek - ayri bir tur, butcesi yok.
+     Kural gorunusu olcemez, KARARI tutar: secim degisirse ya da
+     kapali liste bosalirsa kirmizi yanar. Yani kalem sessizce
+     acilamaz; acmak icin once bu kurali silmek gerekir. */
+  const MZ = D2.malzeme || {};
+  if (MZ.secilen !== 'metal') kusur.push('malzeme-kilidi-acilmis');
+  for (const k of ['cam', 'kristal'])
+    if (!(MZ.kapali || []).includes(k)) kusur.push('malzeme-kapali-eksik:' + k);
+
+  const PR = D2.perde || {};
+  if (typeof PR.kuvvet !== 'number') kusur.push('perde-kunyesi-yok');
+  if (!PR.olculen || !PR.olculen.once || !PR.olculen.sonra) kusur.push('perde-olcumu-yok');
+  if (PR.hedef_px !== (D2.birlesme || {}).hedef.d_uc_px) kusur.push('perde-hedefi-birlesmeden-ayrilmis');
+  if (!/strokeWidth/.test(kaynak)) kusur.push('kalem-seride-inmiyor');
+  if (!/kalinlik_uc/.test(kaynak)) kusur.push('kalem-ucu-jsondan-degil');
+  if (!/perde\.kuvvet/.test(kaynak)) kusur.push('kuvvet-kunyeden-degil');
+  /* Sabiti TANIMLAMAK yetmiyor: ilk yazimda `KUY_KUV` tanimli kalip
+     kuvvet ussun yerine elle yazilinca kural YESIL yandi. Kullanim
+     yerine de bakiliyor - ciplak us yasak. */
+  if (/\*\*\s*\d/.test(kaynak)) kusur.push('kuvvet-elle-yazilmis');
+  if (/strokeWidth\s*=\s*[`'"]?\s*\d/.test(kaynak)) kusur.push('kalem-kalinligi-elle');
+  if (/\b154(\.0)?\b/.test(kaynak)) kusur.push('kalinlik-elle-yazilmis');
+
   const TAVAN = 24 * 1024;
   const dizin = path.join(KOK, '_astro');
   let boy = 0, adi = '';
