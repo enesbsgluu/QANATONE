@@ -18,12 +18,13 @@ const kunyeyiSoy = () => ({
   name: 'qanatone-kunye-soy',
   enforce: 'pre',
   transform(kod, kimlik) {
-    if (!/[\\/]src[\\/]prolog[\\/][^\\/]+\.json$/.test(kimlik)) return null;
+    /* 24 Agu: SDF kunyesi de metal parcasina giriyor; onun `_` prozu da soyulur. */
+    if (!/[\\/]src[\\/](prolog[\\/][^\\/]+|veri[\\/]amblem-sdf-kunye)\.json$/.test(kimlik)) return null;
     const soy = (o) => Array.isArray(o)
       ? o.map(soy)
       : (o && typeof o === 'object'
           ? Object.fromEntries(Object.entries(o)
-              .filter(([k]) => k !== '_')
+              .filter(([k]) => !k.startsWith('_'))   /* 24 Agu: `_` ile BASLAYAN her anahtar kunyedir */
               .map(([k, v]) => [k, soy(v)]))
           : o);
     return { code: JSON.stringify(soy(JSON.parse(kod))), map: null };
@@ -77,5 +78,9 @@ export default defineConfig({
 
   integrations: [react()],
 
-  vite: { plugins: [kunyeyiSoy()] }
+  /* ISCI PAKETI AYRI HATTA (24 Agu): metal.ts iscinin icinden DINAMIK
+     ithal edilir, bu ES bicimi ister (IIFE kod bolmeyi desteklemez).
+     Iscinin kendi eklenti hatti var - kunye soyucu orada da kosmali,
+     yoksa sahne.json'in prozu metal parcasina iner. */
+  vite: { plugins: [kunyeyiSoy()], worker: { format: 'es', plugins: () => [kunyeyiSoy()] } }
 });

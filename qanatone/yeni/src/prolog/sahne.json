@@ -250,7 +250,7 @@
    "carpiliyor. Olcum ekranlari 1440x900 ve 412x892."
   ],
   "aralik": {
-   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA. 24 Agu'ya kadar nav'in ICINDEYDI ([0,59 0,635]) cunku Q'nun ici BILEREK bostu: arkadaki gercek dag oradan gorunsun isteniyordu. ENES O KISITI DUSURDU - odak artik yalniz nehir akisi - ve `ic` dolgunun tam ustune alindi ([0,44 0,54]): govde ve dag TEK YUZEY, birlikte geliyor. Eski olcumun iki ucu da korunuyor, ikisi de bu araliktan SONRA gelen sartlar: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme nav t=0,80-0,90) ve dag okunabilecek bir boyda baslar (sahnede amblem ~310 px, dag 114x66 px - eskisinden buyuk). Gerekce ve olcumler durak2.ic_dag'da.",
+   "_": "p araliklari. Sirali: once kuyruk (nehirden), sonra cember (kapanis), sonra dolguya gecis, sonra nava oturma. Nav evresi bitince amblem KAPANIR ve gercek nav logosu acilir - kalan yol (dagin icine inis) sifir maliyet. `ic` BES SIRANIN DISINDA. 24 Agu'ya kadar nav'in ICINDEYDI ([0,59 0,635]) cunku Q'nun ici BILEREK bostu: arkadaki gercek dag oradan gorunsun isteniyordu. ENES O KISITI DUSURDU - odak artik yalniz nehir akisi - ve `ic` dolgunun tam ustune alindi ([0,44 0,54]): govde ve dag TEK YUZEY, birlikte geliyor. Eski olcumun iki ucu da korunuyor, ikisi de bu araliktan SONRA gelen sartlar: amblem nav pilinin uzerine gelmeden ONCE tamamlanir (ortusme nav t=0,80-0,90) ve dag okunabilecek bir boyda baslar (sahnede amblem ~310 px, dag 114x66 px - eskisinden buyuk). Gerekce ve olcumler durak2.ic_dag'da. `metal` (24 Agu): MALZEME DEVRI penceresi - metal (isci, SDF+PBR) sonerken duz SVG dolgu geliyor; amblem nav boyuna kuculurken, sabit bir p'de degil (Enes). 29 px'te PBR okunmaz; 0,52-0,60 arasinda sonerse gecis gorunmez. Metal yuklenmemisse pencere yok sayilir, SVG dolgu dolgu araligiyla gelir.",
    "bekle": [
     0.0,
     0.08
@@ -274,6 +274,10 @@
    "ic": [
     0.44,
     0.54
+   ],
+   "metal": [
+    0.52,
+    0.6
    ]
   },
   "sonme": {
@@ -321,14 +325,14 @@
     ]
    },
    "masaustu": {
-    "r": 0.0005,
+    "r": 0.00046,
     "u": [
-     0.4046,
-     0.0503
+     0.4015,
+     0.0312
     ],
     "v": [
-     0.6192,
-     0.06
+     0.6208,
+     0.065
     ]
    }
   },
@@ -546,7 +550,20 @@
     "nehrin egimi (17.178 ornek): medyan 1,15 · %99 8,17 · azami 16,75.",
     "Sinir dagilimin disinda, yani pratikte SINIR YOK. Bu turda",
     "ISIRMADI ve olculmeden degistirilmiyor; gizli zayiflik olarak",
-    "yaziya geciyor."
+    "yaziya geciyor.",
+    "",
+    "KAPI YUMUSADI, IS GERI ALINMIYOR (Enes, 24 Agu): 'nehirle cikinti birebir",
+    "olcusmek zorunda degil, bu kadar ortusme yeterli; fotograf sahne icin",
+    "uretilmedi.' Somut karsiligi: cozulmus hizalama korunur (3-6 px, bedava);",
+    "hareketli en kotu kare olcumu BIR KEZ kosar, kayda gecer, regresyon",
+    "bekcisi olur - karar vermez, sikma turu dogurmaz; d_uc kapisi 8 px'te",
+    "kalir, daha fazla daraltilmaz. 'Birebir ortusme' dili bu notla gecersiz.",
+    "Referans kare (referans/kompozisyon-hedef.png) su beslerini DOGRULUYOR,",
+    "degisiklik gerektirmez: ic dag dolu · nehir yarigi acik, ic nehir kuyruga",
+    "akiyor · govdede derinlik (metal yonu dogru) · tek kizil, gerisi siyah-",
+    "beyaz · zirve halkanin ustunde gorunur kalir. BAGLAYICI OLMAYANLAR:",
+    "piksel hassas esleme, logonun karedeki boyutu. Kareden katsayi",
+    "TURETILMEZ; katsayilar olcumden gelir."
    ],
    "hedef": {
     "d_uc_px": 8.0,
@@ -565,14 +582,14 @@
      ]
     },
     "masaustu": {
-     "r": 0.0005,
+     "r": 0.00046,
      "u": [
-      0.4046,
-      0.0503
+      0.4015,
+      0.0312
      ],
      "v": [
-      0.6192,
-      0.06
+      0.6208,
+      0.065
      ]
     }
    },
@@ -626,7 +643,7 @@
      "alan": 1.0,
      "oturma_kaymasi": 0.3
     },
-    "katsayi_damgasi": "{\"mobil\":{\"r\":0.000348,\"u\":[0.3276,0.1518],\"v\":[0.6861,0.0884]},\"masaustu\":{\"r\":0.0005,\"u\":[0.4046,0.0503],\"v\":[0.6192,0.06]}}"
+    "katsayi_damgasi": "{\"mobil\":{\"r\":0.000348,\"u\":[0.3276,0.1518],\"v\":[0.6861,0.0884]},\"masaustu\":{\"r\":0.00046,\"u\":[0.4015,0.0312],\"v\":[0.6208,0.065]}}"
    },
    "once": "ayni olcumde bugunku hal: d_uc 74-96 px, dtheta 12-63 derece",
    "_3b": [
@@ -820,7 +837,7 @@
     "birakmali; `data-prolog` mekanizmasi zaten var, yeni bir dal",
     "adi yeter."
    ],
-   "donma": {
+   "_donma": {
     "_": [
      "SAHNE DONMASI - OLCULEN TABAN, 'gercek oran' DEGIL.",
      "Duzenek headless, tek profil, tek makine, yazilim GL.",
@@ -840,11 +857,227 @@
     "adaylarin SDF'ini de uretir (amblem-sdf.py), butceye GIRMEZ,",
     "yalniz olcum icin durur. Karar verilince liste bosaltilir.",
     "Onaylanmis 'oda' kavrami 449'a bakiyor; 449 kapiyi gecerse 449,",
-    "gecmezse 413 - gerekce kendi kapimiz olur."
+    "gecmezse 413 - gerekce kendi kapimiz olur.",
+    "KARAR VERILDI (Enes, 24 Agu, Canva karesi referans/kompozisyon-hedef.png):",
+    "r=0,000460 (413 px). Enes'in karesindeki amblem orantisi iki adayin da",
+    "altinda; olculu adaylarin KUCUGU secildi. Bir basamak inilmek istenirse",
+    "merdivenin 0,000420 (377 px) ve 0,000348 (312 px) satirlari olculu ve gecer.",
+    "Aday listesi bosaltildi; SDF 1216 ana dosya oldu."
    ],
-   "masaustu": [
-    0.00046
-   ]
+   "masaustu": []
+  },
+  "metal": {
+   "_": [
+    "F3 METAL KUNYESI (24 Agu). Malzeme METAL, kilitli; cam/kristal kapali.",
+    "Sayilar prototipten (gorsel-kaynak/prototip-3b/ana.js MALZEME.metal):",
+    "metallik 1, puruz 0,15, kaplama 0,5 / kaplama puruzu 0,14, env kazanci",
+    "2,4. Pah 7 birim (ana.js bevelSize). Renk temel.css --red (#ef233c);",
+    "shader dogrusala cevirir.",
+    "TEK SAAT: periyot 12,08 s = isik nefesinin (2pi/0,13 = 48,33 s, sahnedeki",
+    "en yavas periyodik surucu) dortte biri. Huzme = env donusu (0,55*a, prototip)",
+    "+ gunes yonu (a); salinim = sin(a)*0,09 / sin(0,8a)*0,16 rad (prototip",
+    "genlikleri; pivot kuyrugun ucu, 2B'de uc TAM sabit). Bagimsiz periyot",
+    "ekranda ikinci saat calistirirdi.",
+    "ENVMAP: sahne 512x256 FBO'ya bir kez cizilir; ustune gunes lekesi",
+    "(gunes_uv, gunes_guc) + kucuk gok gradyani - KARANLIK ORTAM UYARISI:",
+    "gece manzarasindan turetilen yansima metali matlastirir, cam bunu bir",
+    "kez kanitladi. Sahnenin kendisi degismez. Mipmap = PMREM yaklasigi.",
+    "Kare basina ASLA yeniden uretilmez.",
+    "SDF: kunye src/veri/amblem-sdf-kunye.json (dosya, N); bant_birim oradaki",
+    "ile AYNI olmali (12) - shader d'yi bu bantla cozer.",
+    "TUMSEK (24 Agu, ilk sahne karesinden): duz on yuz envmap'in TEK satirini",
+    "yansitir; gece sahnesinde o satir dag, govde koyu ve mat cikti; huzme yalniz",
+    "3,6 px'lik pahtaydi. Enes'in sarti: 'on yuze cok hafif tumsek'. Normal govde",
+    "boyunca degisiyor (kenarda 0,22 rad), yansima egrilik boyunca yol aliyor.",
+    "KAYNAKTAN SAPMA, BILINCLI: prototipte tumsek yok; pah 7 KORUNDU, tumsek",
+    "EKLENDI. Gunes lekesi ekvatora yakina (v 0,30 -> 0,46) alindi: govdenin",
+    "yansittigi bant orasi, leke donerken govdeden GECIYOR. `merkez` govdenin",
+    "vektor kutusu merkezi (617/1254, 607/1254). `dip` dip ton: envmap karanlik",
+    "bolgede govde siyaha dusmesin (0,06 -> 0,10).",
+    "UFUK BANDI (24 Agu, ikinci sahne karesinden): tumsek de yetmedi - envmap'in",
+    "ekvator bandi dag, gunes lekesi donusun ~%10'unda goruste. Olculdu: probede",
+    "gri (0,35) env ile govde L 84, sahne env ile ~45. Yansima kaynagina",
+    "ekvatorda yumusak sicak ufuk bandi (band_guc) eklendi, leke genisletildi",
+    "(cevrimin ~yarisinda govde boyunca yol aliyor). Sahne degismedi."
+   ],
+   "periyot_s": 12.08,
+   "periyot_kaynak": "isik_nefes_hiz 0,13 -> 48,33 s / 4",
+   "env_donus": 0.55,
+   "salinim": [
+    0.09,
+    0.16
+   ],
+   "puruz": 0.15,
+   "kaplama": 0.5,
+   "kaplama_puruz": 0.14,
+   "env_kazanc": 2.4,
+   "pah_birim": 7.0,
+   "bant_birim": 12.0,
+   "gunes_uv": [
+    0.62,
+    0.46
+   ],
+   "gunes_guc": 3.0,
+   "renk": [
+    0.937,
+    0.137,
+    0.235
+   ],
+   "uc": [
+    1022.0,
+    1059.0
+   ],
+   "tumsek": 0.22,
+   "dip": 0.1,
+   "merkez": [
+    0.492,
+    0.484
+   ],
+   "band_guc": 0.8
+  },
+  "hareketli_kayit": {
+   "_": [
+    "HAREKETLI EN KOTU KARE - BIR KEZ KOSTU, KAYDA GECTI (24 Agu).",
+    "Enes'in hukmu: karar vermez, sikma turu dogurmaz, regresyon bekcisi",
+    "olur; d_uc kapisi 8 px'te kalir. Olcum: gercek Chrome (SwiftShader),",
+    "kilitli olcek (masaustu r=0,00046 / mobil 0,000348), SDF + metal + salinim",
+    "AYNI KAREDE, p=0,46/0,50/0,52, her p'de UC ZAMAN NOKTASI (T/3 = 4,03 s",
+    "arayla), dort genislik. d_uc = kizil siluetin kuyruk ucu -> sahnenin",
+    "nehri; sayilar uc zaman noktasinin EN KOTUSU. Elle toplama yok.",
+    "L med/p95: kizil piksellerin isikligi (duz --red 80,2). huzme_gezisi:",
+    "en parlak %2'nin agirlik merkezi uc zaman noktasinda kac px yer",
+    "degistiriyor - sifirsa huzme gezinmiyor demektir.",
+    "kare: iscinin kendi kare suresi p50,p95 ms (SwiftShader - MUTLAK degil,",
+    "GORELI; gercek cihaz Enes'in telefonunda). metal: coz/yukle/env ms."
+   ],
+   "_tarih": "2026-08-24",
+   "_GECICI": true,
+   "_gecici_sebep": [
+    "1) ESKI YERLESIM: kayit merkez kilidi (Enes, 24 Agu: logo her cihazda",
+    "   ekrani ortalar) ONCESINDE alindi; d_uc/dtheta sutunlari o yerlesime",
+    "   ait, merkez kilidinden sonra yeniden kosacak.",
+    "2) p=0,46 METAL KARESI DEGIL: cizgi kapagi orada hala genis (kal ~79",
+    "   birim), olculen 'uc' cizgi kapaginin ucu - dtheta 66-78 oradan.",
+    "   Gecerli metal kareleri p>=0,48.",
+    "3) kare SUTUNU GECERSIZ: ilk sonda ciz() etrafinda CPU komut gonderme",
+    "   suresini olctu (0,2 ms), GPU degil. Sonda rAF araligina cevrildi;",
+    "   bu kayittaki sayilar atilir.",
+    "GECERLI OLANLAR: L med 73-100 (duz kizil 80), p95 101-102, huzme gezisi",
+    "20-121 px (ucu zaman noktasinda yer degistiriyor - huzme geziniyor).",
+    "1440 p=0,46/0,52 OLCULEMEDI (oturmadi)."
+   ],
+   "_ekran": {
+    "360": {
+     "d_uc": 3.4,
+     "dtheta": 78.1,
+     "L_med": 80.4,
+     "L_p95": 101.0,
+     "huzme_gezisi_px": 30.2,
+     "kare": "0.2,0.6,0.520"
+    },
+    "412": {
+     "d_uc": 5.8,
+     "dtheta": 66.7,
+     "L_med": 80.7,
+     "L_p95": 102.0,
+     "huzme_gezisi_px": 35.8,
+     "kare": "0.3,0.5,0.520"
+    },
+    "768": {
+     "d_uc": 8.4,
+     "dtheta": 18.8,
+     "L_med": 79.5,
+     "L_p95": 101.7,
+     "huzme_gezisi_px": 121.1,
+     "kare": null
+    },
+    "1440": {
+     "d_uc": 1.7,
+     "dtheta": 11.5,
+     "L_med": 73.7,
+     "L_p95": 78.5,
+     "huzme_gezisi_px": 62.0,
+     "kare": null
+    }
+   },
+   "_izler": {
+    "1440": {
+     "metal": {
+      "coz_ms": 398.5,
+      "yukle_ms": 1.7,
+      "env_ms": 720.6,
+      "N": 1216,
+      "env_bant": [
+       63,
+       60,
+       70,
+       171,
+       218,
+       123,
+       59,
+       62
+      ]
+     },
+     "kare": null
+    },
+    "360": {
+     "metal": {
+      "coz_ms": 71.1,
+      "yukle_ms": 0.2,
+      "env_ms": 298.9,
+      "N": 832,
+      "env_bant": [
+       58,
+       38,
+       56,
+       172,
+       219,
+       124,
+       58,
+       60
+      ]
+     },
+     "kare": "0.2,1,0.500"
+    },
+    "412": {
+     "metal": {
+      "coz_ms": 69.3,
+      "yukle_ms": 0.3,
+      "env_ms": 300.1,
+      "N": 832,
+      "env_bant": [
+       58,
+       38,
+       56,
+       172,
+       219,
+       124,
+       58,
+       60
+      ]
+     },
+     "kare": "0.2,0.7,0.500"
+    },
+    "768": {
+     "metal": {
+      "coz_ms": 111.7,
+      "yukle_ms": 1.2,
+      "env_ms": 430.1,
+      "N": 1216,
+      "env_bant": [
+       63,
+       60,
+       70,
+       171,
+       218,
+       123,
+       59,
+       62
+      ]
+     },
+     "kare": "0.2,0.5,0.500"
+    }
+   }
   }
  },
  "olcum": {
