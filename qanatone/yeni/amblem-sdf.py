@@ -106,8 +106,11 @@ def kizil_oku():
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4)), m.group(1).lower()
 
 
-def cozunurluk(varyant, S, V):
-    r = S['durak2']['yerlesim'][varyant]['r']
+def cozunurluk(varyant, S, V, r=None):
+    """r verilmezse sahne.json'daki secili olcek; ADAY olcekler icin
+    (durak2.olcek_adaylari) ayni formul ayri r ile."""
+    if r is None:
+        r = S['durak2']['yerlesim'][varyant]['r']
     oran = V['varyant'][varyant]['oran']
     dpr = S['olcum']['dpr_tavan']
     kh = max(max(H, W / oran) for (W, H) in EKRAN[varyant])
@@ -175,22 +178,54 @@ def uc_kaymasi(sil, b, kutu):
     return float(np.min(np.hypot(xs - UC[0] * b / kutu, ys - UC[1] * b / kutu)))
 
 
-def faz_testi(alan, N, kutu, m, ekran_enleri):
-    """Uretilen SDF'in kendisinde, 16 kafes fazinda en kotu uc kaymasi.
-    Yaninda vektor tabani: ayni ekran olceginde vektorun kendi rasteri."""
+def kuyruk_yonu(A):
+    """Kuyruk ekseni: cizim2.kuyruk yolunun ilk iki noktasi (uc -> govde),
+    UCA DOGRU birim vektor."""
+    n = [float(v) for v in re.findall(r'-?\d+\.?\d*', A['cizim2']['kuyruk']['yol'])]
+    dx, dy = n[0] - n[2], n[1] - n[3]
+    h = math.hypot(dx, dy)
+    return dx / h, dy / h
+
+
+def uzanim(sil, b, kutu, yon, yaricap=14.0):
+    """KUYRUK EKSENI BOYUNCA IMZALI UZANIM. `uc_kaymasi` en yakin dolu
+    piksele uzakliktir ve UZAMAYI GOREMEZ, yana kaymayi eksik gosterir
+    (karsit dogrulama, 24 Agu). Bu sayi ucun yakinindaki dolu piksellerin
+    kuyruk yonune izdusumunun azamisi: vektor ucuna gore + uzama, -
+    kisalma. Ucun yakininda hic dolu piksel yoksa -yaricap (kirpilmis,
+    isaretli)."""
+    ux, uy = UC[0] * b / kutu, UC[1] * b / kutu
+    ys, xs = np.where(sil)
+    d = np.hypot(xs - ux, ys - uy)
+    m = d <= yaricap
+    if not m.any():
+        return -yaricap
+    return float(np.max((xs[m] - ux) * yon[0] + (ys[m] - uy) * yon[1]))
+
+
+def faz_testi(alan, N, kutu, m, ekran_enleri, A):
+    """Uretilen SDF'in kendisinde, 16 kafes fazinda: en kotu uc kaymasi
+    (yakinlik) VE imzali uzanim (iki yon). Yaninda vektor tabani: ayni
+    ekran olceginde vektorun kendi rasteri."""
+    yon = kuyruk_yonu(A)
     sonuc = {}
     for en in ekran_enleri:
         b = int(round(en / (876.6 / kutu)))
         vek = np.asarray(Image.fromarray(m.astype(np.uint8) * 255)
                          .resize((b, b), Image.LANCZOS)) > 127
         taban = uc_kaymasi(vek, b, kutu)
-        v = []
+        e0 = uzanim(vek, b, kutu, yon)
+        v, imz = [], []
         for fx in (0.0, 0.25, 0.5, 0.75):
             for fy in (0.0, 0.25, 0.5, 0.75):
-                v.append(uc_kaymasi(siluet_ekranda(sdf_ornekle(alan, N, kutu, fx, fy), N, b, fx, fy), b, kutu))
+                sil = siluet_ekranda(sdf_ornekle(alan, N, kutu, fx, fy), N, b, fx, fy)
+                v.append(uc_kaymasi(sil, b, kutu))
+                imz.append(uzanim(sil, b, kutu, yon) - e0)
         sonuc[str(int(en))] = dict(vektor_tabani=round(taban, 2), azami=round(max(v), 2),
                                    ortalama=round(float(np.mean(v)), 2),
-                                   tabanin_ustu=round(max(v) - taban, 2))
+                                   tabanin_ustu=round(max(v) - taban, 2),
+                                   uzama_azami=round(max(0.0, max(imz)), 2),
+                                   kisalma_azami=round(min(0.0, min(imz)), 2))
     return sonuc
 
 
@@ -264,7 +299,7 @@ def main():
         geri = np.asarray(Image.open(yol).convert('L'))
         if not np.array_equal(geri, q):
             raise SystemExit('webp kayipsiz degil: ' + ad)
-        faz = faz_testi(alan, N, kutu, m, ekranlar[varyant])
+        faz = faz_testi(alan, N, kutu, m, ekranlar[varyant], A)
         kunye['varyant'][varyant] = dict(
             dosya=ad, N=N, turetim=tur, bant_texel=round(BANT_BIRIM * N / kutu, 2),
             bayt=os.path.getsize(yol), sha1=sha1(yol),
@@ -273,6 +308,31 @@ def main():
         print('   %s  %.1f KB  faz: %s' % (ad, os.path.getsize(yol) / 1024.0, faz)); sys.stdout.flush()
         if varyant == 'masaustu':
             qd, Nd = q, N
+
+    # ADAY OLCEKLER (Enes, 24 Agu): olcek karari hareketli kapi shader'la
+    # kosunca verilecek; iki SDF'yi birden tasimanin maliyeti yok, derleme
+    # aninda uretiliyor. Aday URUNE INMEZ (kunye ayri, butceye girmez),
+    # yalniz olcum icin durur; karar verilince liste bosaltilir ve dosya
+    # bir sonraki uretimde silinir.
+    kunye['aday'] = []
+    r_secili = S['durak2']['yerlesim']['masaustu']['r']
+    oran_d = V['varyant']['masaustu']['oran']
+    for r in (S['durak2'].get('olcek_adaylari') or {}).get('masaustu', []):
+        if abs(r - r_secili) < 1e-12:
+            continue
+        N2, tur2 = cozunurluk('masaustu', S, V, r)
+        q2 = sdf_ornekle(alan, N2, kutu)
+        ad2 = 'amblem-sdf-d%d.webp' % N2
+        yol2 = os.path.join(CIKTI_DIZIN, ad2)
+        Image.fromarray(q2, 'L').save(yol2, 'WEBP', lossless=True, quality=100, method=6)
+        enler = tuple(876.6 * r * max(H, W / oran_d) for (W, H) in EKRAN['masaustu'])
+        faz2 = faz_testi(alan, N2, kutu, m, enler, A)
+        kunye['aday'].append(dict(r=r, dosya=ad2, N=N2, turetim=tur2,
+                                  bayt=os.path.getsize(yol2), sha1=sha1(yol2),
+                                  gpu_bayt_R8=N2 * N2, uc_kaymasi_px=faz2,
+                                  yarik_min_birim=yarik_min(q2, N2, kutu, A)))
+        print('   ADAY r=%g -> %s  %.1f KB  faz: %s' % (r, ad2, os.path.getsize(yol2) / 1024.0, faz2))
+        sys.stdout.flush()
 
     # NAV LOGOSU - masaustu alanindan
     im = nav_logo(qd, Nd, kutu, A, RED)
