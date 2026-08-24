@@ -2282,7 +2282,101 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
                 : 'durak 2 KAPALI · parca uretilmiyor (0 B)'));
 }
 
+/* R21 - AMBLEM SDF: DERLEME ANINDA URETILIR, COZUNURLUK TURETILIR (24 Agu).
+   Amblemin 3B metali icin ekstruzyon agi butceye sigmadi (en ucuz
+   kullanilir hal 344 KB ham, mobil bosluk 33 KB); yerine tek kanalli
+   isaretli uzaklik alani (SDF) secildi - normal uzakligin egiminden
+   cikiyor, egrilik surekli. Alan `amblem-sdf.py` ile DERLEME ANINDA
+   uretilir, tarayicida degil (ucgenleme icin konan kural aynen).
+   Tutulan seyler:
+     (a) kunye var, kaynak amblem.json hash'i tutuyor, SDF dosyalari
+         kunyedeki hash'le birebir;
+     (b) COZUNURLUK SABIT DEGIL: katman kuraliyla ayni, "1 kaynak piksel =
+         1 cihaz pikseli" - 1254 * r * kh_azami * dpr_tavan, 64'e yukari.
+         Burada yeniden turetilip kunyeyle kiyaslanir; biri r'yi
+         degistirip SDF'i yeniden uretmezse kirmizi yanar. Uretec de
+         cozunurlugu elle yazamaz;
+     (c) KURULUM nokta ornekleme (`map_coordinates`): olculdu, PIL ile
+         kucultmek alan ortalamasi alip kuyruk ucunu 512'de 2,24 px geri
+         cekiyordu, nokta ornekleme ayni cozunurlukte 0,28 (vektor tabani);
+     (d) OLCULEN GERCEKLER: uretilen dosyanin kendisinde 16 kafes fazinda
+         en kotu uc kaymasi vektor tabaninin en fazla 1 px ustunde; nehir
+         yarigi acik (>4 birim); bant pahi (7 birim) kirpmiyor (>=9);
+     (e) prolog gorsel butcesi SDF dahil asilmiyor.
+   DOKU TAVANI HENUZ SAYILMIYOR: SDF isciye yuklenmedi (kalem 5 devami).
+   Yuklenince R8 (1 bayt/px) sayilacak; masaustu tavaninda 7,7 KB bos var
+   (100.655.520 / 100.663.296) - 512'lik R8 bile sigmaz. Karar Enes'te. */
+{
+  const kusur = [], rapor = [];
+  const sha1 = (p) => require('crypto').createHash('sha1')
+    .update(fs.readFileSync(p)).digest('hex');
+  const pk = path.join(__dirname, 'src', 'prolog');
+  const kunyeYol = path.join(__dirname, 'src', 'veri', 'amblem-sdf-kunye.json');
+  const uretec = path.join(__dirname, 'amblem-sdf.py');
+  let K = null;
+  if (!fs.existsSync(kunyeYol)) kusur.push('kunye-yok');
+  else { try { K = JSON.parse(fs.readFileSync(kunyeYol, 'utf8')); }
+         catch { kusur.push('kunye-bozuk'); } }
+  if (!fs.existsSync(uretec)) kusur.push('uretec-yok');
+  else {
+    const u = fs.readFileSync(uretec, 'utf8')
+      .replace(/"""[\s\S]*?"""/g, '').replace(/^\s*#.*$/gm, '');
+    if (/\bN\s*=\s*\d{3,4}\b/.test(u)) kusur.push('cozunurluk-elle-yazilmis');
+    if (!/map_coordinates/.test(u)) kusur.push('nokta-ornekleme-yok');
+    if (!/dpr_tavan/.test(u)) kusur.push('cozunurluk-dpr-tavandan-degil');
+  }
+  if (fs.existsSync(path.join(__dirname, 'logo-uret.py'))) kusur.push('eski-uretec-duruyor');
+  if (K) {
+    const S = JSON.parse(fs.readFileSync(path.join(pk, 'sahne.json'), 'utf8'));
+    const V = JSON.parse(fs.readFileSync(path.join(pk, 'veri.json'), 'utf8'));
+    const EKR = { masaustu: [[768, 1024], [1440, 900]], mobil: [[360, 800], [412, 892]] };
+    if (sha1(path.join(pk, 'amblem.json')) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
+    if (!(K.bant_birim >= 9)) kusur.push('bant-pahi-kirpar:' + K.bant_birim);
+    for (const v of ['masaustu', 'mobil']) {
+      const k = (K.varyant || {})[v];
+      if (!k) { kusur.push('varyant-yok:' + v); continue; }
+      const r = S.durak2.yerlesim[v].r, oran = V.varyant[v].oran, dpr = S.olcum.dpr_tavan;
+      const kh = Math.max(...EKR[v].map(([W, H]) => Math.max(H, W / oran)));
+      const N = Math.ceil(1254 * r * kh * dpr / 64) * 64;
+      if (k.N !== N) kusur.push('cozunurluk-turetimden-sapmis:' + v + ':' + k.N + '!=' + N);
+      const dosya = path.join(KOK, 'img', 'prolog', k.dosya);
+      if (!fs.existsSync(dosya)) { kusur.push('sdf-yok:' + v); continue; }
+      if (sha1(dosya) !== k.sha1) kusur.push('sdf-kunyeye-uymuyor:' + v);
+      if (!k.dosya.endsWith('-' + (v === 'masaustu' ? 'd' : 'm') + N + '.webp'))
+        kusur.push('sdf-adi-cozunurlugu-tasimiyor:' + v);
+      const uc = k.uc_kaymasi_px || {};
+      let enUc = 0;
+      for (const e of Object.keys(uc)) {
+        enUc = Math.max(enUc, uc[e].tabanin_ustu);
+        if (uc[e].tabanin_ustu > 1.0) kusur.push('uc-geri-cekiliyor:' + v + '@' + e + ':' + uc[e].tabanin_ustu);
+      }
+      if (!(k.yarik_min_birim > 4)) kusur.push('nehir-yarigi-kapaniyor:' + v + ':' + k.yarik_min_birim);
+      /* (e) prolog gorsel butcesi: katmanlar + derinlik + SDF */
+      const Vv = V.varyant[v];
+      let katman = 0;
+      for (const kt of Vv.katman) {
+        const p = path.join(KOK, 'img', 'prolog', kt.dosya);
+        if (fs.existsSync(p)) katman += fs.statSync(p).size;
+      }
+      const dp = path.join(KOK, 'img', 'prolog', Vv.derinlik);
+      if (fs.existsSync(dp)) katman += fs.statSync(dp).size;
+      const butce = S.olcum.butce_bayt[v];
+      if (katman + k.bayt > butce)
+        kusur.push('prolog-butcesi-asildi:' + v + ':' + (katman + k.bayt) + '>' + butce);
+      rapor.push(v + ' ' + N + 'x' + N + ' ' + (k.bayt / 1024).toFixed(1) + ' KB · uc +'
+        + enUc.toFixed(2) + ' px · yarik ' + k.yarik_min_birim + ' birim · butce '
+        + Math.round((katman + k.bayt) / 1024) + '/' + Math.round(butce / 1024) + ' KB');
+    }
+  }
+  ol('R21 - amblem SDF: derleme aninda + cozunurluk turetilmis + uc/yarik olculmus',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || rapor.join(' · '));
+}
+
 /* R19 - NAV LOGOSU URETILIYOR, ELDE TASINMIYOR (23 Agu).
+   24 AGU: uretec `amblem-sdf.py` oldu, kaynak `src/prolog/amblem.json` -
+   nav logosu amblemle AYNI uzaklik alanindan cikiyor. Olculdu (29 px):
+   eski rasterle XOR %1,8, agirlik merkezi farki 0,06/0,08 px, medyan L
+   80,8 -> 80,2 (tam --red). Dort sart aynen duruyor.
    Varlik `logo-uret.py` ile uretilir: girdi depodaki seffaf kaynak
    (`gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png`), kizil ise
    `temel.css`teki `--red`. Uretec `src/veri/logo-kunye.json`e girdi ve
@@ -2307,8 +2401,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const kusur = [];
   const sha1 = (p) => require('crypto').createHash('sha1')
     .update(fs.readFileSync(p)).digest('hex');
-  const kyol = path.join(__dirname, '..', 'gorsel-kaynak', 'prolog', 'QANAT_LOGO-seffaf-2.png');
-  const uyol = path.join(__dirname, 'logo-uret.py');
+  const kyol = path.join(__dirname, 'src', 'prolog', 'amblem.json');
+  const uyol = path.join(__dirname, 'amblem-sdf.py');
   const kunyeYol = path.join(__dirname, 'src', 'veri', 'logo-kunye.json');
   let K = null, olcu = null;
 
@@ -2316,13 +2410,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   else { try { K = JSON.parse(fs.readFileSync(kunyeYol, 'utf8')); }
          catch { kusur.push('kunye-bozuk'); } }
 
-  /* KAYNAK GORSEL DEPODA DEGIL: `gorsel-kaynak/` .gitignore'da (uretilebilir
-     ve agir). Yani temiz bir klonda - Netlify dahil - bu dosya YOKTUR ve
-     varligini sart kosmak derlemeyi durdururdu. Varsa hash'i tutulur,
-     yoksa o tek kontrol atlanir ve durum ciktiya yazilir; geri kalan
-     sartlar (kunye <-> cikti hash'i, palet, delik, olcu) her yerde kosar. */
+  /* KAYNAK ARTIK DEPODA (24 Agu): nav logosu amblemle AYNI SDF alanindan
+     cikiyor ve alanin kaynagi `src/prolog/amblem.json` - Photoroom rasteri
+     (gorsel-kaynak/, .gitignore'da) devreden cikti. Kaynak temiz klonda da
+     var, yani varligi SART kosulabilir ve hash her yerde tutulur. */
   const kaynakVar = fs.existsSync(kyol);
-  if (kaynakVar && K && sha1(kyol) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
+  if (!kaynakVar) kusur.push('kaynak-yok');
+  else if (K && sha1(kyol) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
 
   if (!fs.existsSync(uyol)) kusur.push('uretec-yok');
   else {

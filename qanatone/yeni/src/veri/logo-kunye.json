@@ -1,29 +1,31 @@
 {
- "_": "logo-uret.py tarafindan yazilir, ELLE DUZENLENMEZ. Denetim R19 buradaki hash'leri dosyalarin gercegiyle, kizili de temel.css --red ile kiyaslar.",
- "kaynak": "QANAT_LOGO-seffaf-2.png",
- "kaynak_sha1": "018e9cbd2df6b2d46672bb64b5bce519a0e336f2",
+ "_": "amblem-sdf.py tarafindan yazilir, ELLE DUZENLENMEZ (eski uretec logo-uret.py kalkti, 24 Agu). Nav logosu amblemle AYNI SDF alanindan cikar; denetim R19 hash'leri dosyalarin gercegiyle, kizili temel.css --red ile kiyaslar.",
+ "kaynak": "amblem.json",
+ "kaynak_sha1": "09bc2fb80976e0fe435285e0f5b5e3b9cfd8aaf1",
+ "sdf": "amblem-sdf-d1344.webp",
+ "nav_golgeleme": "duz --red dolgu; malzeme geldiginde ayni golgelemeyle yeniden uretilecek",
  "opak_kutu": [
-  178,
-  109,
-  1063,
-  1105
+  178.75,
+  108.75,
+  1055.324,
+  1105.594
  ],
  "olcu": [
-  260,
+  258,
   293
  ],
  "kizil": "#ef233c",
- "medyan_L_once": 42.8,
- "medyan_L_sonra": 80.0,
+ "medyan_L_once": 80.2,
+ "medyan_L_sonra": 80.2,
  "opak_beyaz_piksel": 0,
  "cikti": {
   "webp": {
-   "bayt": 16950,
-   "sha1": "225e606477d8f89103aabbc994b4ef8fd71c366c"
+   "bayt": 3944,
+   "sha1": "a1b96a4accf818e4c837f7bca0ccba1cf6f740a2"
   },
   "avif": {
-   "bayt": 10846,
-   "sha1": "5e66da96ce4898f42c7d277ba15a2660fdd49192"
+   "bayt": 3754,
+   "sha1": "30aeb43537647b43bcf59a17397d982a5c5b1503"
   }
  }
 }
