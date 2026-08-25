@@ -2109,7 +2109,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 
   const PR = D2.perde || {};
   if (typeof PR.kuvvet !== 'number') kusur.push('perde-kunyesi-yok');
-  if (!PR.olculen || !PR.olculen.once || !PR.olculen.sonra) kusur.push('perde-olcumu-yok');
+  if (!PR._olculen || !PR._olculen.once || !PR._olculen.sonra) kusur.push('perde-olcumu-yok');
   if (PR.hedef_px !== (D2.birlesme || {}).hedef.d_uc_px) kusur.push('perde-hedefi-birlesmeden-ayrilmis');
   if (!/strokeWidth/.test(kaynak)) kusur.push('kalem-seride-inmiyor');
   if (!/kalinlik_uc/.test(kaynak)) kusur.push('kalem-ucu-jsondan-degil');
@@ -2203,7 +2203,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (ic[1] > nv[1]) kusur.push('ic-nav-bitmeden-tamamlanmiyor');
   }
   if (ICD2.sahne_evresinde === true) {
-    const O = ICD2.olculen || {};
+    const O = ICD2._olculen || {};
     if (!(O.nehir_nokta > 0)) kusur.push('ic-dag-yarik-olcumu-yok');
     /* KAPI: dag dolarken nehir kapanmamali. Denetim kareyi ceremez;
        tuttugu sey olcumun kunyede DURMASI ve yarigin gercekten acik
@@ -2294,10 +2294,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      sirasinda gecerli olan sayilardir; `yerlesim` ondan ayrilirsa
      sayilar yeniden olculmeden degistirilmis demektir. */
   const B = D2.birlesme || {};
-  if (!B.katsayi || !B.olculen) kusur.push('birlesme-kunyesi-yok');
+  if (!B._katsayi || !B._olculen) kusur.push('birlesme-kunyesi-yok');
   else {
     for (const v of ['mobil', 'masaustu']) {
-      const a = B.katsayi[v] || {}, b = (D2.yerlesim || {})[v] || {};
+      const a = B._katsayi[v] || {}, b = (D2.yerlesim || {})[v] || {};
       /* Iki sema: eski {r,u,v} ve ekran kilidi {kilit,r,v}.
          EKRAN KILIDINDE KESIM DE KATSAYIDIR (24 Agu): amblem nehri
          kovalamadigi icin birlesmeyi ARKA PLANIN PENCERESI kuruyor
@@ -2316,11 +2316,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        24 Agu'da tam bu oldu - masaustu r'si degisti, tablo eski
        yerlesimi anlatiyordu ve denetim gormedi. Damga, olcumun
        hangi katsayilarla alindigini soyluyor. */
-    const damga = JSON.stringify(B.katsayi || {});
-    if ((B.olculen || {}).katsayi_damgasi !== damga)
+    const damga = JSON.stringify(B._katsayi || {});
+    if ((B._olculen || {}).katsayi_damgasi !== damga)
       kusur.push('birlesme-olcumu-katsayidan-eski');
     for (const [ad] of EK) {
-      const o = (B.olculen || {})[ad];
+      const o = (B._olculen || {})[ad];
       if (!o) { kusur.push('birlesme-olcumu-yok:' + ad); continue; }
       const HD = B.hedef || {};
       if (!(o.d_uc <= HD.d_uc_px))
@@ -2454,7 +2454,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     /* ADAY OLCEKLER (Enes, 24 Agu): olcek karari hareketli kapi shader'la
        kosunca verilecek; adayin SDF'i uretilir ama BUTCEYE GIRMEZ (urun
        cekmiyor). Tutulan: hash + turetim; listeyle dosya bire bir. */
-    const adayR = ((S.durak2.olcek_adaylari || {}).masaustu || [])
+    const adayR = ((S.durak2._olcek_adaylari || {}).masaustu || [])
       .filter((r) => Math.abs(r - S.durak2.yerlesim.masaustu.r) > 1e-12);
     const adaylar = K.aday || [];
     if (adaylar.length !== adayR.length) kusur.push('aday-listesi-uyusmuyor:' + adaylar.length + '!=' + adayR.length);
@@ -2470,6 +2470,69 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (adaylar.length) rapor.push('aday ' + adaylar.map((a) => a.N + 'x' + a.N).join(','));
   }
   ol('R21 - amblem SDF: derleme aninda + cozunurluk turetilmis + uc/yarik olculmus',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || rapor.join(' · '));
+}
+
+/* R22 - OLCUM ARALIGI EVRELERI KAPSAR + KUNYE DAMGASI TAZE (Enes, 25 Agu).
+   IKI KURAL, BIR GOVDE. Ikisi de ayni gunun iki yarasindan dogdu:
+
+   (a) KAPSAMA. Dogus evresi p=0'da olur; birlesme kapisi p=0,08..0,52
+       araliginda kosuyordu. Yeni evre eklendi, olcum araliginin onu
+       KAPSADIGI hic dogrulanmadi - ve 768'in p=0'daki 8,6 px'i aylarca
+       olculmemis kaldi. Bundan sonra: `aralik`taki her evre siniri
+       (birlesmenin gecerli oldugu ust sinira, yani nav rampasinin
+       basina kadar) ve p=0 olculen p kumesinde BULUNMALI. Yeni bir evre
+       acan, olcumu yenilemeden yesil goremez.
+
+   (b) TAZELIK. `kunye-yaz.py` sinifi: yazilmis ama hic kosmamis betik.
+       Kayit bloklari sahne.json'a islenmeden tur bitmis sayiliyordu.
+       Bundan sonra kayit bloklari kendi girdilerinin damgasini tasir
+       (dogus bicimi + yerlesim + kesim); damga bugunku degerlerden
+       hesaplanandan farkliysa kayit ESKI demektir, kirmizi yanar.
+       Boylece yerlesim katsayisi degisince kayit turu zorunlu olur. */
+{
+  const pk22 = path.join(__dirname, 'src', 'prolog');
+  const S = JSON.parse(fs.readFileSync(path.join(pk22, 'sahne.json'), 'utf8'));
+  const D2 = S.durak2 || {};
+  const kusur = [], rapor = [];
+  const B = D2.birlesme || {}, OL = B._olculen || {};
+
+  /* (a) KAPSAMA -------------------------------------------------------- */
+  const AR = D2.aralik || {};
+  const ustSinir = (AR.nav || [1, 1])[0];        /* nav rampasi = amblem nehirden ayrilir */
+  const gerekli = new Set([0]);                  /* dogus: kaydirmadan once */
+  for (const [ad, r] of Object.entries(AR)) {
+    if (ad.startsWith('_') || !Array.isArray(r)) continue;
+    for (const p of r) if (p <= ustSinir + 1e-9) gerekli.add(+p.toFixed(4));
+  }
+  const ekranlar = ['360', '412', '768', '1440'];
+  for (const ad of ekranlar) {
+    const o = OL[ad];
+    if (!o || !o.p) { kusur.push('olcum-yok:' + ad); continue; }
+    const olculen = new Set(Object.keys(o.p).map((k) => +(Number(k) / 100).toFixed(4)));
+    for (const g of gerekli)
+      if (!olculen.has(g)) kusur.push('olcum-araligi-evreyi-kapsamiyor:' + ad + ':p=' + g);
+  }
+  if (!kusur.length) rapor.push('kapsam ' + [...gerekli].sort((a, b) => a - b).map((p) => p.toFixed(2)).join('/'));
+
+  /* (b) TAZELIK -------------------------------------------------------- */
+  /* Damga = dogus bicimi + birlesme katsayisi (o da yerlesim + kesimden
+     turetiliyor ve tazeligini R18 tutuyor). Zincir: yerlesim degisir ->
+     R18 katsayiyi eskitir -> katsayi tazelenince kayit damgasi degisir ->
+     R22 kayit turunu zorunlu kilar. Tek uretec, iki kapi. */
+  const damgaGirdisi = JSON.stringify({
+    bicim: (D2.dogus || {}).bicim,
+    katsayi: B._katsayi || null,
+  });
+  const bloklar = [['dogus._kayit', (D2.dogus || {})._kayit], ['_devir_kayit', D2._devir_kayit]];
+  for (const [ad, blok] of bloklar) {
+    if (!blok) { kusur.push('kunye-blogu-yok:' + ad); continue; }
+    if (!blok.damga) { kusur.push('kunye-damgasiz:' + ad); continue; }
+    if (blok.damga !== damgaGirdisi) kusur.push('kunye-damgasi-eski:' + ad);
+  }
+  if (!kusur.length) rapor.push('damga taze (' + bloklar.length + ' kayit blogu)');
+
+  ol('R22 - olcum araligi evreleri kapsar + kunye damgasi taze',
      kusur.length === 0, kusur.slice(0, 4).join(' ') || rapor.join(' · '));
 }
 

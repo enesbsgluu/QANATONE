@@ -51,7 +51,7 @@ const M = (SAHNE as any).durak2.metal as {
   tumsek: number; dip: number; merkez: [number, number]; band_guc: number;
 };
 const KUTU = 1254;
-const DG = (SAHNE as any).durak2.dogus as { bicim: 'olcek' | 'isik'; sure_s: number; bekle_s: number; olcek0: number };
+const DG = (SAHNE as any).durak2.dogus as { bicim: 'isik'; sure_s: number; bekle_s: number };
 const yumusat = (t: number) => t * t * (3 - 2 * t);
 
 export type Durum = { s: number; tx: number; ty: number; metal: number };
@@ -272,20 +272,13 @@ export async function kur(
     const ex = Math.sin(a) * M.salinim[0], ey = Math.sin(a * 0.8) * M.salinim[1];
     /* Affin: birim -> cihaz pikseli. Uc SABIT: govde ucun etrafinda
        cos(egim) ile siksiyor. */
-    let s = d.s * dpr, tx = d.tx * dpr, ty = d.ty * dpr;
-    let opak = d.metal, kazanc = M.env_kazanc, dip = M.dip;
-    if (DG.bicim === 'olcek') {
-      /* govde 0,95 -> 1,00 amblem kutusu merkezi etrafinda + opaklik */
-      const cx = tx + M.merkez[0] * KUTU * s, cy = ty + M.merkez[1] * KUTU * s;
-      const k = DG.olcek0 + (1 - DG.olcek0) * g;
-      tx = cx - (cx - tx) * k; ty = cy - (cy - ty) * k; s *= k;
-      opak *= g;
-    } else {
-      /* isik govdeyi karanliktan yontar: env kazanci + dip 0 -> 1; govde
-         ilk ucte birde belirir ki siyah kesik gibi durmasin */
-      kazanc *= g; dip *= g;
-      opak *= Math.min(1, g * 3);
-    }
+    const s = d.s * dpr, tx = d.tx * dpr, ty = d.ty * dpr;
+    /* DOGUS = ISIK (Enes hukmu, 25 Agu; olcek varyanti kapandi ve soküldu).
+       Isik govdeyi karanliktan yontar: env kazanci + dip 0 -> 1; govde ilk
+       ucte birde belirir ki siyah kesik gibi durmasin. Govde OLCEGI dogusla
+       oynamaz - yerlesim (s, tx, ty) tek kaynaktan, birlesme olcumu onun
+       uzerinden hukum verir. */
+    const opak = d.metal * Math.min(1, g * 3), kazanc = M.env_kazanc * g, dip = M.dip * g;
     const ux = tx + M.uc[0] * s, uy = ty + M.uc[1] * s;
     const sx = Math.cos(ey), sy = Math.cos(ex);
     const Mm = [s * sx, 0, 0, 0, s * sy, 0, ux + (tx - ux) * sx, uy + (ty - uy) * sy, 1];
