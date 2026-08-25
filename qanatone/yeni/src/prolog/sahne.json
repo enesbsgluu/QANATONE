@@ -392,7 +392,7 @@
    "mobil": {
     "kilit": "ekran",
     "r": 0.000348,
-    "v": 0.591,
+    "v": 0.5865,
     "_eski": {
      "u": [
       0.3276,
@@ -408,7 +408,7 @@
    "masaustu": {
     "kilit": "ekran",
     "r": 0.000454,
-    "v": 0.59,
+    "v": 0.546,
     "_eski": {
      "u": [
       0.4015,
@@ -420,7 +420,20 @@
      ],
      "_": "nehir kilidi u,v=f(p) - Enes'in hukmuyle kaldirildi (24 Agu); olculdu: p boyunca kayma 12 px, yumusak kapi icinde"
     }
-   }
+   },
+   "_v_duzeltmesi": [
+    "DIKEY V YENIDEN COZULDU (25 Agu, Enes'in onayiyla). Sebep: dogus p=0'da",
+    "olurken birlesme kapisi p=0,08..0,52'de kosuyordu; 768 p=0'da d_uc 8,6 px",
+    "veriyordu (kapi 8). Cozum TAM P EKSENINDEN alindi - p = 0 / 0,08 / 0,20 /",
+    "0,28 / 0,35 / 0,44 / 0,46 / 0,52 / 0,54 (ucu evre dikisi; 0,54 nav",
+    "rampasinin basi = amblemin nehirden ayrildigi yer), dort genislik, 36 kare.",
+    "YALNIZ v tarandi, `r` SABIT: amblem boyu degismesin (masaustu 445 px).",
+    "  masaustu v 0.5900 -> 0.5460 : en kotu d_uc 8,6 -> 2,2 px",
+    "  mobil    v 0.5910 -> 0.5865 : en kotu d_uc 4,0 -> 1,0 px",
+    "Bedeli: amblem masaustunde ~40 px yukari cikti, zirve payi 214 -> 174 px",
+    "(kapi 12 px, bol). Merkez sapmasi ekran kilidinde yapisal olarak 0.",
+    "Hukum KAREDEN dogrulanir (sayfanin kendi CSS donusumu), tahminden degil."
+   ]
   },
   "acik": true,
   "ic_dag": {
@@ -445,7 +458,7 @@
     "icin gecerliydi; gok bolgesinden sahne HALA goruluyor."
    ],
    "sahne_evresinde": true,
-   "olculen": {
+   "_olculen": {
     "nehir_nokta": 82,
     "nehir_disarida": 79,
     "nehir_uclarda_iceride": 3,
@@ -509,7 +522,7 @@
    ],
    "kuvvet": 5,
    "hedef_px": 8.0,
-   "olculen": {
+   "_olculen": {
     "_": "Kuyrugun ucundan disari tasan kizil, px. p=0,30 cizim evresi (dokunulmadi), oburleri capraz gecis.",
     "once": {
      "360": [
@@ -659,11 +672,11 @@
     "merkez_sapma_px": 0.5,
     "p_kaymasi_px": 12
    },
-   "katsayi": {
+   "_katsayi": {
     "mobil": {
      "kilit": "ekran",
      "r": 0.000348,
-     "v": 0.591,
+     "v": 0.5865,
      "kesim": {
       "oran": 0.8,
       "merkez": 0.3866,
@@ -674,7 +687,7 @@
     "masaustu": {
      "kilit": "ekran",
      "r": 0.000454,
-     "v": 0.59,
+     "v": 0.546,
      "kesim": {
       "oran": 1.4,
       "merkez": 0.4195,
@@ -683,349 +696,493 @@
      }
     }
    },
-   "olculen": {
+   "_olculen": {
     "_": "DOGRULANAN degerler (24 Agu, EKRAN KILIDI + YENI KESIM): gercek Chrome (SwiftShader), p basina TAZE sayfa, hukum sayfanin KENDI CSS donusumunden. Gorunur aralikta (p=0,08..0,52) en kotu deger. OLCUT v4: d_uc = kuyruk ucunun NEHIR GOVDESINE uzakligi (parlak bant maskesi, EDT); d_cizgi = eski tek-kol merkez cizgisi (bilgi); dtheta = bantin yerel ana ekseni (PCA); zirve_payi = halka ust kenari - orta zirve (kunye kesiminden cover eslemesi), kapi >= 12 px; merkez_sapma = amblem kutu merkezi - W/2 (kapi 0, olcum <= 0,5 px). Donma sinamasi: son iki kare < 5.000 piksel -> OLCULEMEDI.",
     "360": {
      "en_px": 244,
-     "d_uc": 2.0,
-     "d_cizgi": 8.6,
-     "dtheta": 24.3,
-     "zirve_payi": 135,
+     "d_uc": 1.0,
+     "d_cizgi": 10.2,
+     "dtheta": 16.8,
+     "zirve_payi": 131,
      "merkez_sapma": 0.02,
      "hukum": "gecti",
      "teget_notu": "kabul kapisi 26 derece icinde (ideal 10 asildi)",
      "olculemedi": [],
      "p": {
+      "000": {
+       "d_uc": 0.0,
+       "d_cizgi": 1.8,
+       "dtheta": 11.4,
+       "anizotropi": 20.3,
+       "teget": "olculdu",
+       "dtheta_2r": 19.2,
+       "anizotropi_2r": 17.7,
+       "zirve_payi": 131,
+       "merkez_sapma": 0.02,
+       "degisen": 43204
+      },
       "008": {
        "d_uc": 0.0,
-       "d_cizgi": 3.1,
-       "dtheta": 10.7,
-       "anizotropi": 16.1,
+       "d_cizgi": 0.5,
+       "dtheta": 12.4,
+       "anizotropi": 7.8,
        "teget": "olculdu",
-       "dtheta_2r": 20.0,
-       "anizotropi_2r": 17.5,
-       "zirve_payi": 135,
+       "dtheta_2r": 18.9,
+       "anizotropi_2r": 16.5,
+       "zirve_payi": 131,
        "merkez_sapma": 0.02,
-       "degisen": 8344
+       "degisen": 43868
       },
       "020": {
-       "d_uc": 0.0,
-       "d_cizgi": 0.3,
-       "dtheta": 14.2,
-       "anizotropi": 6.0,
+       "d_uc": 1.0,
+       "d_cizgi": 3.1,
+       "dtheta": 13.7,
+       "anizotropi": 4.7,
        "teget": "olculdu",
-       "dtheta_2r": 18.8,
-       "anizotropi_2r": 17.5,
-       "zirve_payi": 135,
+       "dtheta_2r": 16.8,
+       "anizotropi_2r": 15.3,
+       "zirve_payi": 131,
        "merkez_sapma": 0.02,
-       "degisen": 8509
+       "degisen": 43998
       },
       "028": {
        "d_uc": 0.0,
-       "d_cizgi": 0.0,
-       "dtheta": 15.8,
-       "anizotropi": 4.6,
+       "d_cizgi": 1.1,
+       "dtheta": 16.3,
+       "anizotropi": 3.6,
        "teget": "olculdu",
-       "dtheta_2r": 18.2,
-       "anizotropi_2r": 19.2,
-       "zirve_payi": 135,
+       "dtheta_2r": 17.2,
+       "anizotropi_2r": 18.0,
+       "zirve_payi": 131,
        "merkez_sapma": 0.02,
-       "degisen": 13727
+       "degisen": 40932
       },
-      "034": {
-       "d_uc": 0.0,
-       "d_cizgi": 0.8,
-       "dtheta": 17.6,
-       "anizotropi": 3.9,
+      "035": {
+       "d_uc": 1.0,
+       "d_cizgi": 0.1,
+       "dtheta": 16.8,
+       "anizotropi": 3.1,
        "teget": "olculdu",
-       "dtheta_2r": 17.8,
-       "anizotropi_2r": 19.7,
-       "zirve_payi": 135,
+       "dtheta_2r": 15.6,
+       "anizotropi_2r": 16.3,
+       "zirve_payi": 131,
        "merkez_sapma": 0.02,
-       "degisen": 8242
+       "degisen": 40834
+      },
+      "044": {
+       "d_uc": 0.0,
+       "d_cizgi": 4.8,
+       "dtheta": 20.2,
+       "anizotropi": 2.6,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 15.6,
+       "anizotropi_2r": 14.3,
+       "zirve_payi": 131,
+       "merkez_sapma": 0.02,
+       "degisen": 43238
       },
       "046": {
        "d_uc": 0.0,
-       "d_cizgi": 5.3,
-       "dtheta": 24.3,
-       "anizotropi": 3.9,
-       "teget": "olculdu",
-       "dtheta_2r": 16.3,
-       "anizotropi_2r": 20.2,
-       "zirve_payi": 135,
-       "merkez_sapma": 0.02,
-       "degisen": 9034
-      },
-      "052": {
-       "d_uc": 2.0,
-       "d_cizgi": 8.6,
-       "dtheta": 24.8,
+       "d_cizgi": 5.7,
+       "dtheta": 21.5,
        "anizotropi": 2.6,
        "teget": "OLCULEMEDI",
-       "dtheta_2r": 16.7,
+       "dtheta_2r": 15.8,
        "anizotropi_2r": 13.7,
-       "zirve_payi": 135,
+       "zirve_payi": 131,
        "merkez_sapma": 0.02,
-       "degisen": 10946
+       "degisen": 44041
+      },
+      "052": {
+       "d_uc": 0.0,
+       "d_cizgi": 8.9,
+       "dtheta": 27.0,
+       "anizotropi": 2.5,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 19.0,
+       "anizotropi_2r": 10.7,
+       "zirve_payi": 131,
+       "merkez_sapma": 0.02,
+       "degisen": 40950
+      },
+      "054": {
+       "d_uc": 0.0,
+       "d_cizgi": 10.2,
+       "dtheta": 29.0,
+       "anizotropi": 2.5,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 19.8,
+       "anizotropi_2r": 10.6,
+       "zirve_payi": 131,
+       "merkez_sapma": 0.02,
+       "degisen": 37229
       }
      }
     },
     "412": {
      "en_px": 272,
-     "d_uc": 2.0,
-     "d_cizgi": 8.9,
-     "dtheta": 24.8,
-     "zirve_payi": 150,
+     "d_uc": 1.0,
+     "d_cizgi": 10.4,
+     "dtheta": 15.5,
+     "zirve_payi": 146,
      "merkez_sapma": 0.04,
      "hukum": "gecti",
      "teget_notu": "kabul kapisi 26 derece icinde (ideal 10 asildi)",
      "olculemedi": [],
      "p": {
+      "000": {
+       "d_uc": 0.0,
+       "d_cizgi": 5.0,
+       "dtheta": 11.7,
+       "anizotropi": 20.2,
+       "teget": "olculdu",
+       "dtheta_2r": 19.3,
+       "anizotropi_2r": 17.8,
+       "zirve_payi": 146,
+       "merkez_sapma": 0.04,
+       "degisen": 52532
+      },
       "008": {
        "d_uc": 0.0,
-       "d_cizgi": 3.7,
-       "dtheta": 11.2,
-       "anizotropi": 15.8,
+       "d_cizgi": 0.4,
+       "dtheta": 12.4,
+       "anizotropi": 7.8,
        "teget": "olculdu",
-       "dtheta_2r": 20.0,
-       "anizotropi_2r": 17.7,
-       "zirve_payi": 150,
+       "dtheta_2r": 18.9,
+       "anizotropi_2r": 16.7,
+       "zirve_payi": 146,
        "merkez_sapma": 0.04,
-       "degisen": 15378
+       "degisen": 58877
       },
       "020": {
-       "d_uc": 0.0,
-       "d_cizgi": 0.2,
-       "dtheta": 13.8,
-       "anizotropi": 6.3,
+       "d_uc": 1.0,
+       "d_cizgi": 3.5,
+       "dtheta": 14.4,
+       "anizotropi": 4.5,
        "teget": "olculdu",
-       "dtheta_2r": 18.7,
-       "anizotropi_2r": 16.7,
-       "zirve_payi": 150,
+       "dtheta_2r": 17.6,
+       "anizotropi_2r": 15.9,
+       "zirve_payi": 146,
        "merkez_sapma": 0.04,
-       "degisen": 16960
+       "degisen": 51657
       },
       "028": {
        "d_uc": 0.0,
-       "d_cizgi": 0.1,
+       "d_cizgi": 1.4,
        "dtheta": 15.5,
-       "anizotropi": 4.7,
+       "anizotropi": 3.8,
        "teget": "olculdu",
-       "dtheta_2r": 18.2,
-       "anizotropi_2r": 18.9,
-       "zirve_payi": 150,
+       "dtheta_2r": 17.2,
+       "anizotropi_2r": 18.1,
+       "zirve_payi": 146,
        "merkez_sapma": 0.04,
-       "degisen": 20175
+       "degisen": 56112
       },
-      "034": {
+      "035": {
        "d_uc": 0.0,
-       "d_cizgi": 0.7,
-       "dtheta": 18.0,
-       "anizotropi": 3.9,
-       "teget": "olculdu",
-       "dtheta_2r": 17.7,
-       "anizotropi_2r": 19.6,
-       "zirve_payi": 150,
+       "d_cizgi": 2.3,
+       "dtheta": 17.1,
+       "anizotropi": 3.0,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 16.3,
+       "anizotropi_2r": 16.8,
+       "zirve_payi": 146,
        "merkez_sapma": 0.04,
-       "degisen": 16466
+       "degisen": 57108
+      },
+      "044": {
+       "d_uc": 0.0,
+       "d_cizgi": 4.3,
+       "dtheta": 19.9,
+       "anizotropi": 2.6,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 15.7,
+       "anizotropi_2r": 14.3,
+       "zirve_payi": 146,
+       "merkez_sapma": 0.04,
+       "degisen": 56942
       },
       "046": {
        "d_uc": 0.0,
-       "d_cizgi": 5.4,
-       "dtheta": 24.8,
-       "anizotropi": 3.9,
-       "teget": "olculdu",
-       "dtheta_2r": 16.2,
-       "anizotropi_2r": 19.7,
-       "zirve_payi": 150,
-       "merkez_sapma": 0.04,
-       "degisen": 22627
-      },
-      "052": {
-       "d_uc": 2.0,
-       "d_cizgi": 8.9,
-       "dtheta": 23.6,
+       "d_cizgi": 5.2,
+       "dtheta": 20.8,
        "anizotropi": 2.6,
        "teget": "OLCULEMEDI",
-       "dtheta_2r": 16.5,
-       "anizotropi_2r": 13.5,
-       "zirve_payi": 150,
+       "dtheta_2r": 15.8,
+       "anizotropi_2r": 14.1,
+       "zirve_payi": 146,
        "merkez_sapma": 0.04,
-       "degisen": 12289
+       "degisen": 56923
+      },
+      "052": {
+       "d_uc": 0.0,
+       "d_cizgi": 8.9,
+       "dtheta": 27.2,
+       "anizotropi": 2.6,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 19.0,
+       "anizotropi_2r": 11.1,
+       "zirve_payi": 146,
+       "merkez_sapma": 0.04,
+       "degisen": 53556
+      },
+      "054": {
+       "d_uc": 0.0,
+       "d_cizgi": 10.4,
+       "dtheta": 28.2,
+       "anizotropi": 2.5,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 19.1,
+       "anizotropi_2r": 11.1,
+       "zirve_payi": 146,
+       "merkez_sapma": 0.04,
+       "degisen": 50028
       }
      }
     },
     "768": {
      "en_px": 408,
-     "d_uc": 7.2,
-     "d_cizgi": 14.7,
-     "dtheta": 12.3,
-     "zirve_payi": 224,
+     "d_uc": 2.0,
+     "d_cizgi": 26.6,
+     "dtheta": 23.3,
+     "zirve_payi": 179,
      "merkez_sapma": 0.04,
      "hukum": "gecti",
      "teget_notu": "kabul kapisi 26 derece icinde (ideal 10 asildi)",
      "olculemedi": [],
      "p": {
-      "008": {
-       "d_uc": 7.1,
-       "d_cizgi": 13.4,
-       "dtheta": 12.3,
-       "anizotropi": 4.4,
+      "000": {
+       "d_uc": 0.0,
+       "d_cizgi": 21.6,
+       "dtheta": 11.3,
+       "anizotropi": 3.8,
        "teget": "olculdu",
-       "dtheta_2r": 11.4,
-       "anizotropi_2r": 14.6,
-       "zirve_payi": 224,
+       "dtheta_2r": 10.2,
+       "anizotropi_2r": 12.7,
+       "zirve_payi": 179,
        "merkez_sapma": 0.04,
-       "degisen": 27582
+       "degisen": 123883
+      },
+      "008": {
+       "d_uc": 0.0,
+       "d_cizgi": 26.6,
+       "dtheta": 9.7,
+       "anizotropi": 3.6,
+       "teget": "olculdu",
+       "dtheta_2r": 11.6,
+       "anizotropi_2r": 11.9,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 131699
       },
       "020": {
-       "d_uc": 3.0,
-       "d_cizgi": 12.1,
-       "dtheta": 8.7,
-       "anizotropi": 4.6,
-       "teget": "olculdu",
-       "dtheta_2r": 12.4,
-       "anizotropi_2r": 14.3,
-       "zirve_payi": 224,
-       "merkez_sapma": 0.04,
-       "degisen": 26136
-      },
-      "028": {
        "d_uc": 0.0,
-       "d_cizgi": 10.3,
-       "dtheta": 4.7,
-       "anizotropi": 4.4,
-       "teget": "olculdu",
-       "dtheta_2r": 13.4,
-       "anizotropi_2r": 14.3,
-       "zirve_payi": 224,
-       "merkez_sapma": 0.04,
-       "degisen": 27340
-      },
-      "034": {
-       "d_uc": 2.8,
-       "d_cizgi": 10.6,
-       "dtheta": 3.2,
-       "anizotropi": 4.3,
-       "teget": "olculdu",
-       "dtheta_2r": 13.1,
-       "anizotropi_2r": 12.5,
-       "zirve_payi": 224,
-       "merkez_sapma": 0.04,
-       "degisen": 27487
-      },
-      "046": {
-       "d_uc": 5.0,
-       "d_cizgi": 13.6,
-       "dtheta": 9.8,
+       "d_cizgi": 22.5,
+       "dtheta": 9.2,
        "anizotropi": 3.2,
        "teget": "olculdu",
-       "dtheta_2r": 13.3,
-       "anizotropi_2r": 8.8,
-       "zirve_payi": 224,
+       "dtheta_2r": 12.3,
+       "anizotropi_2r": 11.5,
+       "zirve_payi": 179,
        "merkez_sapma": 0.04,
-       "degisen": 25273
+       "degisen": 124670
+      },
+      "028": {
+       "d_uc": 1.0,
+       "d_cizgi": 11.4,
+       "dtheta": 9.8,
+       "anizotropi": 2.8,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 12.6,
+       "anizotropi_2r": 11.9,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 126064
+      },
+      "035": {
+       "d_uc": 2.0,
+       "d_cizgi": 9.3,
+       "dtheta": 15.8,
+       "anizotropi": 2.6,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 12.2,
+       "anizotropi_2r": 11.0,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 129419
+      },
+      "044": {
+       "d_uc": 1.4,
+       "d_cizgi": 11.6,
+       "dtheta": 20.2,
+       "anizotropi": 2.7,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 11.5,
+       "anizotropi_2r": 10.1,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 137184
+      },
+      "046": {
+       "d_uc": 2.0,
+       "d_cizgi": 9.8,
+       "dtheta": 21.9,
+       "anizotropi": 2.7,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 11.0,
+       "anizotropi_2r": 9.9,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 135406
       },
       "052": {
-       "d_uc": 7.2,
-       "d_cizgi": 14.7,
-       "dtheta": 10.7,
-       "anizotropi": 3.0,
-       "teget": "OLCULEMEDI",
-       "dtheta_2r": 12.7,
-       "anizotropi_2r": 8.6,
-       "zirve_payi": 224,
+       "d_uc": 0.0,
+       "d_cizgi": 4.3,
+       "dtheta": 23.3,
+       "anizotropi": 3.3,
+       "teget": "olculdu",
+       "dtheta_2r": 10.0,
+       "anizotropi_2r": 10.3,
+       "zirve_payi": 179,
        "merkez_sapma": 0.04,
-       "degisen": 23278
+       "degisen": 108651
+      },
+      "054": {
+       "d_uc": 0.0,
+       "d_cizgi": 2.0,
+       "dtheta": 24.9,
+       "anizotropi": 2.8,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 10.0,
+       "anizotropi_2r": 9.3,
+       "zirve_payi": 179,
+       "merkez_sapma": 0.04,
+       "degisen": 100241
       }
      }
     },
     "1440": {
      "en_px": 409,
-     "d_uc": 0.0,
-     "d_cizgi": 4.9,
-     "dtheta": 13.9,
-     "zirve_payi": 214,
+     "d_uc": 2.2,
+     "d_cizgi": 31.8,
+     "dtheta": 10.2,
+     "zirve_payi": 174,
      "merkez_sapma": 0.03,
      "hukum": "gecti",
      "teget_notu": "kabul kapisi 26 derece icinde (ideal 10 asildi)",
      "olculemedi": [],
      "p": {
-      "008": {
+      "000": {
        "d_uc": 0.0,
-       "d_cizgi": 4.9,
-       "dtheta": 11.5,
-       "anizotropi": 4.3,
+       "d_cizgi": 26.6,
+       "dtheta": 10.2,
+       "anizotropi": 3.8,
        "teget": "olculdu",
-       "dtheta_2r": 11.7,
-       "anizotropi_2r": 13.1,
-       "zirve_payi": 214,
+       "dtheta_2r": 11.2,
+       "anizotropi_2r": 13.6,
+       "zirve_payi": 174,
        "merkez_sapma": 0.03,
-       "degisen": 22695
+       "degisen": 105025
+      },
+      "008": {
+       "d_uc": 2.2,
+       "d_cizgi": 31.8,
+       "dtheta": 7.1,
+       "anizotropi": 3.4,
+       "teget": "olculdu",
+       "dtheta_2r": 12.1,
+       "anizotropi_2r": 13.3,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 114599
       },
       "020": {
        "d_uc": 0.0,
-       "d_cizgi": 0.1,
-       "dtheta": 9.9,
-       "anizotropi": 4.0,
-       "teget": "olculdu",
-       "dtheta_2r": 13.2,
-       "anizotropi_2r": 11.6,
-       "zirve_payi": 214,
+       "d_cizgi": 10.8,
+       "dtheta": 7.8,
+       "anizotropi": 3.0,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 12.9,
+       "anizotropi_2r": 13.2,
+       "zirve_payi": 174,
        "merkez_sapma": 0.03,
-       "degisen": 25911
+       "degisen": 130696
       },
       "028": {
        "d_uc": 0.0,
-       "d_cizgi": 0.6,
-       "dtheta": 8.6,
-       "anizotropi": 3.8,
-       "teget": "olculdu",
-       "dtheta_2r": 14.7,
-       "anizotropi_2r": 11.6,
-       "zirve_payi": 214,
-       "merkez_sapma": 0.03,
-       "degisen": 42904
-      },
-      "034": {
-       "d_uc": 0.0,
-       "d_cizgi": 1.4,
-       "dtheta": 8.6,
-       "anizotropi": 4.0,
-       "teget": "olculdu",
-       "dtheta_2r": 14.0,
-       "anizotropi_2r": 11.7,
-       "zirve_payi": 214,
-       "merkez_sapma": 0.03,
-       "degisen": 35908
-      },
-      "046": {
-       "d_uc": 0.0,
-       "d_cizgi": 4.1,
-       "dtheta": 13.9,
-       "anizotropi": 3.3,
-       "teget": "olculdu",
-       "dtheta_2r": 13.0,
-       "anizotropi_2r": 9.9,
-       "zirve_payi": 214,
-       "merkez_sapma": 0.03,
-       "degisen": 39038
-      },
-      "052": {
-       "d_uc": 0.0,
-       "d_cizgi": 4.5,
-       "dtheta": 17.3,
-       "anizotropi": 3.0,
+       "d_cizgi": 3.0,
+       "dtheta": 7.6,
+       "anizotropi": 2.4,
        "teget": "OLCULEMEDI",
        "dtheta_2r": 12.6,
-       "anizotropi_2r": 8.5,
-       "zirve_payi": 214,
+       "anizotropi_2r": 13.3,
+       "zirve_payi": 174,
        "merkez_sapma": 0.03,
-       "degisen": 49041
+       "degisen": 104689
+      },
+      "035": {
+       "d_uc": 0.0,
+       "d_cizgi": 0.8,
+       "dtheta": 13.1,
+       "anizotropi": 2.1,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 12.0,
+       "anizotropi_2r": 12.4,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 101956
+      },
+      "044": {
+       "d_uc": 1.0,
+       "d_cizgi": 3.0,
+       "dtheta": 24.4,
+       "anizotropi": 2.3,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 11.3,
+       "anizotropi_2r": 10.9,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 112726
+      },
+      "046": {
+       "d_uc": 1.0,
+       "d_cizgi": 3.4,
+       "dtheta": 22.5,
+       "anizotropi": 2.3,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 10.6,
+       "anizotropi_2r": 10.8,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 181464
+      },
+      "052": {
+       "d_uc": 1.0,
+       "d_cizgi": 4.3,
+       "dtheta": 25.5,
+       "anizotropi": 2.5,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 9.6,
+       "anizotropi_2r": 10.1,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 112902
+      },
+      "054": {
+       "d_uc": 1.0,
+       "d_cizgi": 4.6,
+       "dtheta": 25.8,
+       "anizotropi": 2.5,
+       "teget": "OLCULEMEDI",
+       "dtheta_2r": 10.8,
+       "anizotropi_2r": 6.0,
+       "zirve_payi": 174,
+       "merkez_sapma": 0.03,
+       "degisen": 109407
       }
      }
     },
-    "katsayi_damgasi": "{\"mobil\":{\"kilit\":\"ekran\",\"r\":0.000348,\"v\":0.591,\"kesim\":{\"oran\":0.8,\"merkez\":0.3866,\"merkez_y\":0.5409,\"yuk\":0.9}},\"masaustu\":{\"kilit\":\"ekran\",\"r\":0.000454,\"v\":0.59,\"kesim\":{\"oran\":1.4,\"merkez\":0.4195,\"merkez_y\":0.5998,\"yuk\":0.8}}}"
+    "katsayi_damgasi": "{\"mobil\":{\"kilit\":\"ekran\",\"r\":0.000348,\"v\":0.5865,\"kesim\":{\"oran\":0.8,\"merkez\":0.3866,\"merkez_y\":0.5409,\"yuk\":0.9}},\"masaustu\":{\"kilit\":\"ekran\",\"r\":0.000454,\"v\":0.546,\"kesim\":{\"oran\":1.4,\"merkez\":0.4195,\"merkez_y\":0.5998,\"yuk\":0.8}}}"
    },
    "once": "ayni olcumde bugunku hal: d_uc 74-96 px, dtheta 12-63 derece",
    "_3b": [
@@ -1095,7 +1252,7 @@
    },
    "_teget_asimi": "KABUL EDILEN ASIM (Enes hukmu, 24 Agu: 'nehirle cikinti birebir olcusmek zorunda degil, fotograf sahne icin uretilmedi' = yumusak ortusme). Olculen teget 11-25 derece (2R'de 12-20); 10 derece ideal kalir, kapi `dtheta_kabul_derece` = 26 (25 Agu olcumunun en kotusu + 1 pay) - regresyon bekcisi, sikma turu dogurmaz. Nihai onay Enes'in kayit izlemesinde; goze sirıtarsa yeniden acilir."
   },
-  "olcek_cozumu": {
+  "_olcek_cozumu": {
    "_": [
     "OLCEK COZUMU (24 Agu, F3 siralamasi kalem 3).",
     "",
@@ -1195,7 +1352,7 @@
     "mobil": 0.86
    }
   },
-  "duzenek": {
+  "_duzenek": {
    "_": [
     "OLCUM DUZENEGININ TUZAKLARI (24 Agu). Hepsi bu projede en az",
     "bir kez isirdi; sirali, cunku her biri bir oncekinin actigi",
@@ -1311,7 +1468,7 @@
     "duzeltme": "gl.ts: gozlemcinin SON girdisi + baslangic gorunurlugu ayrica gonderiliyor"
    }
   },
-  "olcek_adaylari": {
+  "_olcek_adaylari": {
    "_": [
     "ADAY OLCEKLER (Enes, 24 Agu). Olcek karari (413 <-> 449 px)",
     "hareketli en kotu kare kapisi shader'la kosunca verilecek; ureteC",
@@ -1396,7 +1553,7 @@
    ],
    "band_guc": 0.8
   },
-  "hareketli_kayit": {
+  "_hareketli_kayit": {
    "_": [
     "HAREKETLI EN KOTU KARE v4 - BIR KEZ KOSTU, KAYDA GECTI (25 Agu, ekran kilidi +",
     "yeni kesim + dogus sonrasi). Enes'in hukmu: karar vermez, sikma turu dogurmaz,",
@@ -1491,20 +1648,18 @@
    "_": [
     "DOGUS (Enes, 24 Agu). Kaydirmadan ONCE, kendi kendine, uZaman'dan.",
     "Metal hazir olunca (kur bitince) ilk ciz karesinde saat baslar;",
-    "bekle_s tuvalin acilis gecisiyle cakismamak icin. Iki bicim, Enes secer:",
-    "  olcek : govde 0,95 -> 1,00 (amblem kutusu merkezi etrafinda) + opaklik.",
-    "  isik  : isigin govdeyi karanliktan yontmasi - env kazanci ve dip ton",
-    "          0 -> 1, huzmenin ILK gecisi dogusla cakisir (faz ofseti: gunes",
-    "          lekesi surenin ortasinda govde merkezinden gecer); govde ilk",
-    "          ucte bir hizla belirir ki siyah kesik gibi durmasin.",
+    "bekle_s tuvalin acilis gecisiyle cakismamak icin.",
+    "BICIM = ISIK, ENES HUKMU (25 Agu): isigin govdeyi karanliktan yontmasi -",
+    "env kazanci ve dip ton 0 -> 1, huzmenin ILK gecisi dogusla cakisir (faz",
+    "ofseti: gunes lekesi surenin ortasinda govde merkezinden gecer); govde ilk",
+    "ucte bir hizla belirir ki siyah kesik gibi durmasin.",
     "scale(0)'dan dogus YOK, kenardan giris YOK, vektor cizimi YOK.",
     "Cumle (soz) dogusla birlikte soner: soluk = 1 - g (isci sozCiz)."
    ],
    "bicim": "isik",
    "sure_s": 1.5,
    "bekle_s": 0.4,
-   "olcek0": 0.95,
-   "kayit": {
+   "_kayit": {
     "_": [
      "KAYIT (25 Agu): sayfa yuklenisinden itibaren 9 s, kare kare (SwiftShader, 200 ms",
      "hedef aralik; gercek aralik kayit dosyasinda), dort genislik, iki bicim. Sure MUTLAK",
@@ -1515,230 +1670,127 @@
      "(s, tx, ty) + kunyedeki amblem ucu. `son_d_uc_piksel` kizil siluetin AL yonundeki en",
      "ileri pikseli - isik ve esik etkiler, BILGI, hukum vermez (fark olculdu: 0,6-0,8 px).",
      "`zirve_payi`: halka ust kenari - orta zirve (px, arti: zirve halkanin ustunde).",
-     "Iki bicim de kayitta; SECIM ENES'IN (serit-dogus-isik.png / serit-dogus-olcek.png)."
+     "BICIM = ISIK (Enes hukmu, 25 Agu); olcek varyanti kapandi ve urun kodundan sokuldu."
     ],
     "tarih": "2026-08-25",
+    "damga": "{\"bicim\":\"isik\",\"katsayi\":{\"mobil\":{\"kilit\":\"ekran\",\"r\":0.000348,\"v\":0.5865,\"kesim\":{\"oran\":0.8,\"merkez\":0.3866,\"merkez_y\":0.5409,\"yuk\":0.9}},\"masaustu\":{\"kilit\":\"ekran\",\"r\":0.000454,\"v\":0.546,\"kesim\":{\"oran\":1.4,\"merkez\":0.4195,\"merkez_y\":0.5998,\"yuk\":0.8}}}}",
     "_kayit_disiplini": [
      "Dort genislik AYNI derlemeden ve TEK BASINA kaydedildi (cekisme tuzagi 10):",
      "ilk turda 412 dogusu bos cikmisti (24 kare, metal hic gelmedi) - tek basina",
      "kosunca metal 2564 ms'de geldi, kayit cekisme kurbaniymis. 1440/768 kayitlari ise",
      "gl.ts'in ILK KARE IZI yamasindan ONCEKI derlemeye aitti; ucu de yeniden alindi.",
      "Onceki turun '1440 devir nav kiyasi KALDI' hukmu bu karisik olcumden gelen YANLIS",
-     "KIRMIZIYDI; taze derlemede dort genislikte de kiyas gecti."
+     "KIRMIZIYDI; taze derlemede dort genislikte de kiyas gecti.",
+     "SON TUR: kayitlar DIKEY V DUZELTMESINDEN SONRAKI derlemeden alindi (masaustu",
+     "v 0,5900 -> 0,5460; mobil 0,5910 -> 0,5865) - damga bunu tasiyor."
     ],
-    "isik": {
+    "ekran": {
      "1440": {
-      "kare": 2,
-      "metal_kare": 1,
-      "ilk_metal_ms": 6795,
-      "L_egrisi": [
-       104.3
-      ],
-      "kizil_px_egrisi": [
-       110407
-      ],
-      "zirve_payi": 216,
-      "son_d_uc": 1.0,
-      "son_d_uc_piksel": 1.0,
-      "merkez_sapma_px": 1.5,
-      "hukum": "gecti"
-     },
-     "768": {
       "kare": 4,
-      "metal_kare": 3,
-      "ilk_metal_ms": 3719,
-      "L_egrisi": [
-       90.9,
-       107.3,
-       109.9
-      ],
-      "kizil_px_egrisi": [
-       108965,
-       109534,
-       111220
-      ],
-      "zirve_payi": 226,
-      "son_d_uc": 8.6,
-      "son_d_uc_piksel": 9.2,
-      "merkez_sapma_px": 0.0,
-      "hukum": "KALDI"
-     },
-     "412": {
-      "kare": 6,
-      "metal_kare": 6,
-      "ilk_metal_ms": 4399,
-      "L_egrisi": [
-       94.7,
-       102.1,
-       106.6,
-       109.0,
-       109.8,
-       109.8
-      ],
-      "kizil_px_egrisi": [
-       48844,
-       48817,
-       48856,
-       49064,
-       49290,
-       49645
-      ],
-      "zirve_payi": 151,
-      "son_d_uc": 4.0,
-      "son_d_uc_piksel": 3.2,
-      "merkez_sapma_px": -0.5,
-      "hukum": "gecti"
-     },
-     "360": {
-      "kare": 4,
-      "metal_kare": 4,
-      "ilk_metal_ms": 3601,
-      "L_egrisi": [
-       60.0,
-       105.6,
-       109.9,
-       109.8
-      ],
-      "kizil_px_egrisi": [
-       27758,
-       39222,
-       39609,
-       39920
-      ],
-      "zirve_payi": 136,
-      "son_d_uc": 3.2,
-      "son_d_uc_piksel": 2.8,
-      "merkez_sapma_px": -0.5,
-      "hukum": "gecti"
-     }
-    },
-    "olcek": {
-     "1440": {
-      "kare": 3,
       "metal_kare": 2,
-      "ilk_metal_ms": 6053,
+      "ilk_metal_ms": 5301,
       "L_egrisi": [
-       103.7,
-       109.9
+       101.0,
+       109.8
       ],
       "kizil_px_egrisi": [
-       110266,
-       112002
+       110386,
+       112541
       ],
-      "zirve_payi": 216,
-      "son_d_uc": 1.0,
+      "zirve_payi": 176,
+      "son_d_uc": 0.0,
+      "son_d_uc_piksel": 1.0,
+      "merkez_sapma_px": -0.5,
+      "hukum": "gecti"
+     },
+     "768": {
+      "kare": 6,
+      "metal_kare": 3,
+      "ilk_metal_ms": 3074,
+      "L_egrisi": [
+       84.6,
+       107.6,
+       109.8
+      ],
+      "kizil_px_egrisi": [
+       108601,
+       109581,
+       111428
+      ],
+      "zirve_payi": 181,
+      "son_d_uc": 0.0,
       "son_d_uc_piksel": 1.0,
       "merkez_sapma_px": 0.0,
       "hukum": "gecti"
      },
-     "768": {
-      "kare": 8,
-      "metal_kare": 5,
-      "ilk_metal_ms": 3875,
-      "L_egrisi": [
-       100.2,
-       104.9,
-       109.8,
-       109.9,
-       109.8
-      ],
-      "kizil_px_egrisi": [
-       110238,
-       109299,
-       109857,
-       110925,
-       111645
-      ],
-      "zirve_payi": 226,
-      "son_d_uc": 8.6,
-      "son_d_uc_piksel": 9.2,
-      "merkez_sapma_px": 0.0,
-      "hukum": "KALDI"
-     },
      "412": {
-      "kare": 12,
-      "metal_kare": 9,
-      "ilk_metal_ms": 3228,
+      "kare": 9,
+      "metal_kare": 6,
+      "ilk_metal_ms": 3259,
       "L_egrisi": [
-       91.2,
-       100.7,
-       104.5,
+       95.4,
+       103.5,
        107.6,
-       109.5,
-       109.8,
        109.8,
        109.8,
        109.8
       ],
       "kizil_px_egrisi": [
-       48058,
-       48902,
-       48793,
-       48886,
-       49059,
-       49248,
-       49476,
-       49582,
-       49671
+       48900,
+       48785,
+       48906,
+       49193,
+       49624,
+       49661
       ],
-      "zirve_payi": 151,
-      "son_d_uc": 4.0,
-      "son_d_uc_piksel": 2.8,
+      "zirve_payi": 147,
+      "son_d_uc": 0.0,
+      "son_d_uc_piksel": 1.0,
       "merkez_sapma_px": -0.5,
       "hukum": "gecti"
      },
      "360": {
-      "kare": 12,
-      "metal_kare": 10,
-      "ilk_metal_ms": 3396,
+      "kare": 11,
+      "metal_kare": 8,
+      "ilk_metal_ms": 3530,
       "L_egrisi": [
-       92.4,
-       100.6,
-       103.9,
-       106.4,
-       108.6,
+       99.0,
+       103.1,
+       107.2,
+       109.3,
+       109.9,
        109.8,
        109.8,
-       109.8,
-       109.8,
-       109.9
+       109.8
       ],
       "kizil_px_egrisi": [
-       38730,
-       39301,
-       39217,
-       39242,
-       39336,
-       39517,
-       39679,
-       39813,
-       39903,
-       39897
+       39388,
+       39219,
+       39262,
+       39418,
+       39608,
+       39810,
+       39948,
+       39913
       ],
-      "zirve_payi": 136,
-      "son_d_uc": 3.2,
-      "son_d_uc_piksel": 2.8,
+      "zirve_payi": 132,
+      "son_d_uc": 0.0,
+      "son_d_uc_piksel": 1.0,
       "merkez_sapma_px": -0.5,
       "hukum": "gecti"
      }
     },
-    "ACIK_KALEM": {
-     "ne": "768: dogus son karesinde (p=0) d_uc kapiyi (8 px) asiyor",
-     "olculen": {
-      "768": 8.6
-     },
-     "_": [
-      "Yontem degil: piksel ucu 9,2 - analitik uc 8,6; iki AYRI kayitta tekrarlandi.",
-      "p ekseninde (0,08..0,52) ayni genisligin en kotusu 5,6 px'ti - sapma p KUCULDUKCE",
-      "buyuyor: amblem ekran kilidinde, nehir kesimle geliyor. Yani kapinin olculdugu",
-      "aralik dogusu (p=0) KAPSAMIYORDU; dogus kullanicinin gordugu ILK kare oldugu icin",
-      "olcut araliginin p=0'a inmesi gerekiyor. Duzeltme yerlesim katsayilarina (masaustu",
-      "u, v, r) dokunur ve 1440'i da oynatir (1440 p=0'da 1,0 px, payi var) - ENES'IN KARARI."
-     ]
-    }
-   }
+    "_secilmeyen_olcek": "Olcek varyantinin kaydi ARTIK TUTULMUYOR: varyant kapandi (Enes, 25 Agu), metal.ts'teki dal sokuldu ve eldeki olcek kaydi dikey v duzeltmesinden ONCEKI yerlesime aitti - yeni sayilarla yan yana konursa yanlis okunur. Kiyas kareleri serit-dogus-olcek.png'de duruyor."
+   },
+   "_olcek_varyanti": [
+    "KAPANDI VE SOKULDU (Enes, 25 Agu): 'govde 0,95 -> 1,00 amblem kutusu merkezi",
+    "etrafinda + opaklik' varyanti secilmedi; metal.ts'teki dal ve `olcek0` alani",
+    "kaldirildi. Iki bicim de dort genislikte kaydedilmisti (serit-dogus-isik.png /",
+    "serit-dogus-olcek.png) ve d_uc sayilari BIREBIR AYNIYDI - secim gorseldi.",
+    "Govde olcegi artik dogusla oynamiyor: yerlesim (s, tx, ty) tek kaynak."
+   ]
   },
-  "devir_kayit": {
+  "_devir_kayit": {
    "_": [
     "DEVIR KAYDI (25 Agu): p 0,50 -> 0,66 kesintisiz adimlar (nav[1] sinirinda piksel",
     "cifti), her adimda bes ozdes okuma, oturma, SON kare; ardindan ayni genislikte",
@@ -1750,6 +1802,7 @@
     "Nav [0,54,0,62]: kuculme hizli ama akici (rampa kodu aynen, sure kisaldi)."
    ],
    "tarih": "2026-08-25",
+   "damga": "{\"bicim\":\"isik\",\"katsayi\":{\"mobil\":{\"kilit\":\"ekran\",\"r\":0.000348,\"v\":0.5865,\"kesim\":{\"oran\":0.8,\"merkez\":0.3866,\"merkez_y\":0.5409,\"yuk\":0.9}},\"masaustu\":{\"kilit\":\"ekran\",\"r\":0.000454,\"v\":0.546,\"kesim\":{\"oran\":1.4,\"merkez\":0.4195,\"merkez_y\":0.5998,\"yuk\":0.8}}}}",
    "ekran": {
     "1440": {
      "sicrama": {
@@ -1772,7 +1825,7 @@
       ],
       "xor": 1,
       "fark8": 0,
-      "azami": 5,
+      "azami": 6,
       "zemin_azami": 10,
       "hukum": "gecti"
      },
@@ -1829,9 +1882,9 @@
      "sicrama": {
       "son_svg_p": 0.61847,
       "ilk_img_p": 0.62127,
-      "dx": -0.08,
-      "dy": -0.01,
-      "d": 0.08,
+      "dx": -0.05,
+      "dy": -0.0,
+      "d": 0.05,
       "hukum": "gecti"
      },
      "kiyas": {
@@ -1841,13 +1894,13 @@
       ],
       "ayni_konum": true,
       "logo_px": [
-       424,
+       425,
        422
       ],
-      "xor": 2,
+      "xor": 3,
       "fark8": 0,
-      "azami": 6,
-      "zemin_azami": 10,
+      "azami": 8,
+      "zemin_azami": 16,
       "hukum": "gecti"
      },
      "son": {
@@ -1900,7 +1953,14 @@
      }
     }
    }
-  }
+  },
+  "_kunye_sozlesmesi": [
+   "OLCUM CIKTISI '_' ILE BASLAR (25 Agu, olculdu). Derlemede `_`li anahtarlar",
+   "soyuluyor (astro.config.mjs kunyeyiSoy). Kayit bloklari onekSIZ yazilinca",
+   "sahne.json'un urun payi 3.049 -> 13.348 B'a cikti ve metal parcasi 10,3 ->",
+   "21,5 KB olup tavani asti (R14/R18 kirmizi). Kunye kaynakta TAM kalir, urun",
+   "baytina binmez; kapilar (`hedef`) onekSIZ kalir cunku sozlesmedir, olcum degil."
+  ]
  },
  "olcum": {
   "_": [
