@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-08-22 09:14 UTC
+> Üretim tarihi: 2026-08-23 13:41 UTC
 
 ## Yeni sohbete geçerken
 
@@ -321,7 +321,7 @@
 | `.netlify/db/base/1/828` |  | 8 KB | `8db75854` |
 | `.netlify/db/base/1/PG_VERSION` |  | 0 KB | `ad48103e` |
 | `.netlify/db/base/1/pg_filenode.map` |  | 1 KB | `bbceb133` |
-| `.netlify/db/base/1/pg_internal.init` |  | 126 KB | `b57c685f` |
+| `.netlify/db/base/1/pg_internal.init` |  | 126 KB | `c3ea4b11` |
 | `.netlify/db/base/4/112` |  | 8 KB | `a93f6e4f` |
 | `.netlify/db/base/4/113` |  | 8 KB | `4448ac0d` |
 | `.netlify/db/base/4/1247` |  | 120 KB | `e68e256a` |
@@ -978,16 +978,16 @@
 | `.netlify/db/global/6247` |  | 8 KB | `7f102156` |
 | `.netlify/db/global/6302` |  | 16 KB | `b3b1d48b` |
 | `.netlify/db/global/6303` |  | 16 KB | `22c7d4d9` |
-| `.netlify/db/global/pg_control` |  | 8 KB | `419a8823` |
+| `.netlify/db/global/pg_control` |  | 8 KB | `37220cd2` |
 | `.netlify/db/global/pg_filenode.map` |  | 1 KB | `3de878cf` |
-| `.netlify/db/global/pg_internal.init` |  | 22 KB | `8f93cf85` |
+| `.netlify/db/global/pg_internal.init` |  | 22 KB | `9fa5cb02` |
 | `.netlify/db/pg_hba.conf` |  | 6 KB | `feae4132` |
 | `.netlify/db/pg_ident.conf` |  | 3 KB | `99e7ff6b` |
 | `.netlify/db/pg_logical/replorigin_checkpoint` |  | 0 KB | `347fc8f2` |
 | `.netlify/db/pg_multixact/members/0000` |  | 8 KB | `06314572` |
 | `.netlify/db/pg_multixact/offsets/0000` |  | 8 KB | `06314572` |
 | `.netlify/db/pg_subtrans/0000` |  | 8 KB | `06314572` |
-| `.netlify/db/pg_wal/000000010000000000000005` |  | 1024 KB | `4204c8cd` |
+| `.netlify/db/pg_wal/000000010000000000000005` |  | 1024 KB | `b58ee6a1` |
 | `.netlify/db/pg_wal/000000010000000000000006` |  | 1024 KB | `23e3a972` |
 | `.netlify/db/pg_wal/000000010000000000000007` |  | 1024 KB | `22a7c0ef` |
 | `.netlify/db/pg_wal/000000010000000000000008` |  | 1024 KB | `f796763b` |
@@ -995,18 +995,18 @@
 | `.netlify/db/pg_xact/0000` |  | 8 KB | `1b694dc5` |
 | `.netlify/db/postgresql.auto.conf` |  | 0 KB | `c6b93d1c` |
 | `.netlify/db/postgresql.conf` |  | 30 KB | `495059aa` |
-| `.netlify/db/postmaster.pid` |  | 0 KB | `85a9bd5d` |
-| `.netlify/state.json` |  | 0 KB | `89181b32` |
+| `.netlify/db/postmaster.pid` |  | 0 KB | `e08244ff` |
+| `.netlify/state.json` |  | 0 KB | `cf2fdf98` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 8 KB | `2b76bab4` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DENETIM-GOC-KOVALARI.md` |  | 3 KB | `960b852f` |
-| `DEVIR.md` | bu dosya | 74 KB |  |
+| `DEVIR.md` | bu dosya | 78 KB |  |
 | `GOC-ENVANTER.md` |  | 4 KB | `83d8f590` |
 | `GOC-ROTA-KAPANIS.md` |  | 9 KB | `a533badc` |
 | `GOC-TUR-KAPANIS.md` |  | 10 KB | `06a17752` |
 | `GORSEL-LISTESI-B1-B7.md` |  | 14 KB | `79b2ee50` |
-| `KESME-PLANI.md` |  | 11 KB | `6685ce14` |
+| `KESME-PLANI.md` |  | 13 KB | `6765842d` |
 | `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
 | `OLCUM-FAZ0-KIYAS.md` |  | 4 KB | `d38b1f7e` |
 | `PERFORMANS-MIMARI-INCELEME-2026-08-16.md` |  | 17 KB | `12e3bdde` |
@@ -1035,7 +1035,40 @@
 | `gorsel-kaynak/kanal/rapor.png` |  | 398 KB | `35ccc6e1` |
 | `gorsel-kaynak/kanal/web.png` |  | 343 KB | `51d9bfe0` |
 | `gorsel-kaynak/kanal/whatsapp.png` |  | 539 KB | `86fe79f2` |
+| `gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png` |  | 862 KB | `018e9cbd` |
+| `gorsel-kaynak/prolog/QANAT_LOGO.png` |  | 1063 KB | `2660684a` |
+| `gorsel-kaynak/prolog/QANAT_LOGO_seffaf.png` |  | 1169 KB | `b21125f9` |
+| `gorsel-kaynak/prolog/dag-derinlik-8.png` |  | 347 KB | `5bc34103` |
+| `gorsel-kaynak/prolog/dag-derinlik-ayna.png` |  | 3933 KB | `eef7410f` |
+| `gorsel-kaynak/prolog/dag-derinlik.png` |  | 4357 KB | `11f58695` |
+| `gorsel-kaynak/prolog/dag-ham-ayna.jpg` |  | 2743 KB | `2d3cc610` |
 | `gorsel-kaynak/prolog/dag-ham.jpg` |  | 1711 KB | `72d46a9a` |
+| `gorsel-kaynak/prolog/katman/dag-sag-1920.webp` |  | 29 KB | `a86dd511` |
+| `gorsel-kaynak/prolog/katman/dag-sag-960.webp` |  | 13 KB | `baaa49e4` |
+| `gorsel-kaynak/prolog/katman/dag-sol-1920.webp` |  | 39 KB | `4f59475d` |
+| `gorsel-kaynak/prolog/katman/dag-sol-960.webp` |  | 16 KB | `2db355fb` |
+| `gorsel-kaynak/prolog/katman/gok-1920.webp` |  | 59 KB | `1e042a87` |
+| `gorsel-kaynak/prolog/katman/gok-960.webp` |  | 17 KB | `0652bbc2` |
+| `gorsel-kaynak/prolog/katman/nehir-1920.webp` |  | 37 KB | `38dec484` |
+| `gorsel-kaynak/prolog/katman/nehir-960.webp` |  | 13 KB | `c65d4505` |
+| `gorsel-kaynak/prolog/katman/vadi-1920.webp` |  | 36 KB | `d605f9d8` |
+| `gorsel-kaynak/prolog/katman/vadi-960.webp` |  | 14 KB | `0659c0c9` |
+| `gorsel-kaynak/prolog/katman/zirve-1920.webp` |  | 56 KB | `411b3095` |
+| `gorsel-kaynak/prolog/katman/zirve-960.webp` |  | 23 KB | `8ca3ed44` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-bulut.png` |  | 20 KB | `274cc357` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-dag-sag.png` |  | 4 KB | `18aaece4` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-dag-sol.png` |  | 6 KB | `ec7d40ff` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-nehir.png` |  | 5 KB | `f2b29413` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-taban.png` |  | 136 KB | `4ee1a67a` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-vadi.png` |  | 4 KB | `bcc540ce` |
+| `gorsel-kaynak/prolog/onizleme/masaustu-zirve.png` |  | 8 KB | `0bd02000` |
+| `gorsel-kaynak/prolog/onizleme/mobil-bulut.png` |  | 40 KB | `77ae29ca` |
+| `gorsel-kaynak/prolog/onizleme/mobil-dag-sag.png` |  | 3 KB | `94069761` |
+| `gorsel-kaynak/prolog/onizleme/mobil-dag-sol.png` |  | 6 KB | `b8548625` |
+| `gorsel-kaynak/prolog/onizleme/mobil-nehir.png` |  | 10 KB | `ecc0359d` |
+| `gorsel-kaynak/prolog/onizleme/mobil-taban.png` |  | 315 KB | `87ae28ca` |
+| `gorsel-kaynak/prolog/onizleme/mobil-vadi.png` |  | 3 KB | `692a5c90` |
+| `gorsel-kaynak/prolog/onizleme/mobil-zirve.png` |  | 9 KB | `c7b6ed21` |
 | `halka-lowfx.diff` |  | 3 KB | `9fb6d89b` |
 | `halka-surekli.diff` |  | 6 KB | `0095b5b2` |
 | `harness-hidrasyon.js` |  | 11 KB | `be5b65f9` |
@@ -1082,7 +1115,7 @@
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
-| `netlify.toml` |  | 2 KB | `24c1cdbc` |
+| `netlify.toml` |  | 2 KB | `bbec7e2b` |
 | `og.png` |  | 128 KB | `4bcf0d3e` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 50 KB | `baf52f2b` |
@@ -1101,8 +1134,8 @@
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
 | `test/yayinla.test.js` |  | 8 KB | `ed434e4e` |
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
-| `yeni/astro.config.mjs` |  | 2 KB | `22a91244` |
-| `yeni/denetim.cjs` |  | 77 KB | `20e241ea` |
+| `yeni/astro.config.mjs` |  | 2 KB | `dc24dddd` |
+| `yeni/denetim.cjs` |  | 119 KB | `f130983e` |
 | `yeni/font-kaynak/jetbrains-mono-400-latin-ext.woff2` |  | 7 KB | `b015819f` |
 | `yeni/font-kaynak/jetbrains-mono-400-latin.woff2` |  | 21 KB | `3ae62151` |
 | `yeni/font-kaynak/nunito-sans-200-1000-latin-ext.woff2` |  | 43 KB | `f879256c` |
@@ -1115,8 +1148,11 @@
 | `yeni/gorsel-kanal.cjs` |  | 9 KB | `36b6483f` |
 | `yeni/gorsel-kompoze.cjs` |  | 11 KB | `16abd0f0` |
 | `yeni/gorsel-uret.cjs` |  | 21 KB | `2b0e75af` |
+| `yeni/logo-uret.py` |  | 6 KB | `9d691df1` |
 | `yeni/package-lock.json` |  | 240 KB | `b336378b` |
 | `yeni/package.json` |  | 0 KB | `ec75d21c` |
+| `yeni/prolog-derinlik.py` |  | 1 KB | `1f5fe1b3` |
+| `yeni/prolog-katman.py` |  | 28 KB | `ac4f2235` |
 | `yeni/public/font/jetbrains-mono-400-latin.woff2` |  | 17 KB | `407ba97a` |
 | `yeni/public/font/jetbrains-mono-400-tr.woff2` |  | 1 KB | `123c3c28` |
 | `yeni/public/font/nunito-sans-latin.woff2` |  | 20 KB | `55f43397` |
@@ -1226,6 +1262,24 @@
 | `yeni/public/img/powered/python.webp` |  | 2 KB | `7ff96bc5` |
 | `yeni/public/img/powered/vercel-m.webp` |  | 3 KB | `06cace1d` |
 | `yeni/public/img/powered/vercel.webp` |  | 5 KB | `87a09152` |
+| `yeni/public/img/prolog/bulut-d2560.webp` |  | 97 KB | `3b0efb78` |
+| `yeni/public/img/prolog/bulut-m1600.webp` |  | 151 KB | `f5bcfe71` |
+| `yeni/public/img/prolog/dag-sag-d1706.webp` |  | 57 KB | `74164c38` |
+| `yeni/public/img/prolog/dag-sag-m874.webp` |  | 21 KB | `bab84936` |
+| `yeni/public/img/prolog/dag-sol-d1712.webp` |  | 31 KB | `9901f60b` |
+| `yeni/public/img/prolog/dag-sol-m876.webp` |  | 19 KB | `b0660110` |
+| `yeni/public/img/prolog/derinlik-d768.webp` |  | 22 KB | `d24847f6` |
+| `yeni/public/img/prolog/derinlik-m768.webp` |  | 23 KB | `2c46bd51` |
+| `yeni/public/img/prolog/gok-d2560.webp` |  | 74 KB | `0364a658` |
+| `yeni/public/img/prolog/gok-m1600.webp` |  | 74 KB | `8b41e4ab` |
+| `yeni/public/img/prolog/nehir-d2962.webp` |  | 82 KB | `e911aa21` |
+| `yeni/public/img/prolog/nehir-m1376.webp` |  | 45 KB | `672b9db5` |
+| `yeni/public/img/prolog/oncu-d.webp` |  | 0 KB | `3fc80cb6` |
+| `yeni/public/img/prolog/oncu-m.webp` |  | 0 KB | `7813b292` |
+| `yeni/public/img/prolog/vadi-d3654.webp` |  | 72 KB | `1fb27849` |
+| `yeni/public/img/prolog/vadi-m1600.webp` |  | 20 KB | `cadd3d42` |
+| `yeni/public/img/prolog/zirve-d2978.webp` |  | 87 KB | `fc614cc2` |
+| `yeni/public/img/prolog/zirve-m1600.webp` |  | 63 KB | `15795b09` |
 | `yeni/public/img/pt/bab-ic-mimarlik.webp` |  | 6 KB | `667195a3` |
 | `yeni/public/img/pt/charles-schwab.webp` |  | 4 KB | `81e6b95c` |
 | `yeni/public/img/pt/cmblu-energy.webp` |  | 6 KB | `dc4896dd` |
@@ -1233,8 +1287,8 @@
 | `yeni/public/img/pt/mercedes-benz.webp` |  | 4 KB | `6a8b14e6` |
 | `yeni/public/img/pt/skyclinics.webp` |  | 2 KB | `c1959a8b` |
 | `yeni/public/img/pt/terawulf.webp` |  | 4 KB | `a217418b` |
-| `yeni/public/img/qanatone.avif` |  | 13 KB | `b4c890fd` |
-| `yeni/public/img/qanatone.webp` |  | 17 KB | `27eb4f51` |
+| `yeni/public/img/qanatone.avif` |  | 11 KB | `5e66da96` |
+| `yeni/public/img/qanatone.webp` |  | 17 KB | `225e6064` |
 | `yeni/public/img/ts-beyin.webp` |  | 65 KB | `6d68c7b3` |
 | `yeni/public/img/ts-dis.webp` |  | 106 KB | `765fa0cc` |
 | `yeni/public/img/ts-ic.webp` |  | 22 KB | `2d2fa4d9` |
@@ -1251,18 +1305,18 @@
 | `yeni/src/pages/deneme-react.astro` |  | 1 KB | `6b1b8a2c` |
 | `yeni/src/pages/en/bulten/[slug].astro` |  | 1 KB | `20d630e3` |
 | `yeni/src/pages/en/bulten/index.astro` |  | 1 KB | `e9a658b7` |
-| `yeni/src/pages/en/hizmet/[slug].astro` |  | 1 KB | `ad75b708` |
-| `yeni/src/pages/en/hizmetler.astro` |  | 1 KB | `555d31f0` |
+| `yeni/src/pages/en/hizmet/[slug].astro` |  | 1 KB | `a964c1e4` |
+| `yeni/src/pages/en/hizmetler.astro` |  | 1 KB | `5e9630b4` |
 | `yeni/src/pages/en/index.astro` |  | 3 KB | `3e6abca2` |
 | `yeni/src/pages/en/otomasyon.astro` |  | 1 KB | `baf4a70d` |
 | `yeni/src/pages/en/projeler/[slug].astro` |  | 1 KB | `f565cfb7` |
 | `yeni/src/pages/en/projeler/index.astro` |  | 1 KB | `7fdc0aa2` |
 | `yeni/src/pages/en/sss.astro` |  | 1 KB | `1348318d` |
 | `yeni/src/pages/en/surec.astro` |  | 1 KB | `8c4fd9eb` |
-| `yeni/src/pages/hizmet/[slug].astro` |  | 1 KB | `655bc37e` |
-| `yeni/src/pages/hizmetler.astro` |  | 1 KB | `79372f92` |
+| `yeni/src/pages/hizmet/[slug].astro` |  | 1 KB | `7fef1de8` |
+| `yeni/src/pages/hizmetler.astro` |  | 1 KB | `b920089d` |
 | `yeni/src/pages/hukuki.astro` |  | 1 KB | `f37f3220` |
-| `yeni/src/pages/index.astro` |  | 5 KB | `19957c63` |
+| `yeni/src/pages/index.astro` |  | 5 KB | `9f607a77` |
 | `yeni/src/pages/otomasyon.astro` |  | 1 KB | `532e3100` |
 | `yeni/src/pages/projeler/[slug].astro` |  | 1 KB | `efd9ca9a` |
 | `yeni/src/pages/projeler/index.astro` |  | 1 KB | `2f7f3cbe` |
@@ -1275,35 +1329,45 @@
 | `yeni/src/parcalar/BultenDizin.astro` |  | 5 KB | `bcbb65bd` |
 | `yeni/src/parcalar/CanliSahne.astro` |  | 12 KB | `7ccc2145` |
 | `yeni/src/parcalar/DenemeAda.tsx` |  | 1 KB | `5175c65b` |
-| `yeni/src/parcalar/HizmetDizin.astro` |  | 2 KB | `f210f7f7` |
-| `yeni/src/parcalar/HizmetGovde.astro` |  | 6 KB | `8ee2a8af` |
+| `yeni/src/parcalar/HizmetDizin.astro` |  | 13 KB | `e57844f8` |
+| `yeni/src/parcalar/HizmetGovde.astro` |  | 19 KB | `34434411` |
 | `yeni/src/parcalar/HuniSahne.astro` |  | 6 KB | `620b1f8c` |
 | `yeni/src/parcalar/Ikon.astro` |  | 4 KB | `ab1c6954` |
 | `yeni/src/parcalar/MotorSahne.astro` |  | 58 KB | `daea9528` |
-| `yeni/src/parcalar/Nav.astro` |  | 8 KB | `dba14d57` |
+| `yeni/src/parcalar/Nav.astro` |  | 8 KB | `43af40a3` |
 | `yeni/src/parcalar/OtomasyonGovde.astro` |  | 59 KB | `d6937758` |
 | `yeni/src/parcalar/Perde.astro` |  | 5 KB | `e4bc7f00` |
 | `yeni/src/parcalar/PlatformSahne.astro` |  | 28 KB | `425da17d` |
-| `yeni/src/parcalar/ProjeDizin.astro` |  | 26 KB | `78f1cf59` |
-| `yeni/src/parcalar/ProjeGovde.astro` |  | 10 KB | `0b8fdb53` |
+| `yeni/src/parcalar/ProjeDizin.astro` |  | 27 KB | `c139a31a` |
+| `yeni/src/parcalar/ProjeGovde.astro` |  | 10 KB | `1aa1cc3f` |
 | `yeni/src/parcalar/SerpSahne.astro` |  | 10 KB | `aa53ce6a` |
 | `yeni/src/parcalar/SohbetSahne.astro` |  | 9 KB | `ffd5ae89` |
 | `yeni/src/parcalar/SssGovde.astro` |  | 3 KB | `50d2d2eb` |
 | `yeni/src/parcalar/SurecGovde.astro` |  | 7 KB | `23c512aa` |
 | `yeni/src/parcalar/YaziGovde.astro` |  | 1 KB | `96327de2` |
+| `yeni/src/prolog/amblem.json` |  | 24 KB | `09bc2fb8` |
+| `yeni/src/prolog/gl.ts` |  | 10 KB | `70441bb1` |
+| `yeni/src/prolog/halka.ts` |  | 12 KB | `29da4d1b` |
+| `yeni/src/prolog/isci.ts` |  | 33 KB | `55b3bf47` |
+| `yeni/src/prolog/kunye.json` |  | 6 KB | `b52be7ee` |
+| `yeni/src/prolog/paralaks.ts` |  | 2 KB | `3b9e371e` |
+| `yeni/src/prolog/sahne.json` |  | 12 KB | `523d2f4c` |
+| `yeni/src/prolog/tani.ts` |  | 3 KB | `b90a63dc` |
+| `yeni/src/prolog/veri.json` |  | 3 KB | `620288af` |
+| `yeni/src/sahneler/PRDag.astro` |  | 8 KB | `0b17e737` |
 | `yeni/src/sahneler/S2Kayip.astro` |  | 3 KB | `0c8bca39` |
 | `yeni/src/sahneler/S3Mekanizma.astro` |  | 3 KB | `2c52c5af` |
 | `yeni/src/sahneler/S5Surec.astro` |  | 2 KB | `d85e8dee` |
 | `yeni/src/sahneler/S6Sektor.astro` |  | 1 KB | `e67033d7` |
-| `yeni/src/sahneler/SAAkis.astro` |  | 6 KB | `f2e29e2b` |
+| `yeni/src/sahneler/SAAkis.astro` |  | 7 KB | `f40add75` |
 | `yeni/src/sahneler/SHHero.astro` |  | 4 KB | `ae25b9e7` |
 | `yeni/src/sahneler/SILIletisim.astro` |  | 9 KB | `78a74e17` |
-| `yeni/src/sahneler/SKKatman.astro` |  | 4 KB | `55ac82aa` |
+| `yeni/src/sahneler/SKKatman.astro` |  | 4 KB | `b8dc75bc` |
 | `yeni/src/sahneler/SKUKurucu.astro` |  | 3 KB | `c602edc5` |
 | `yeni/src/sahneler/SPDeste.astro` |  | 6 KB | `5c9ea694` |
 | `yeni/src/sahneler/SSBSozBandi.astro` |  | 3 KB | `04bfaa61` |
-| `yeni/src/sahneler/SSESektor.astro` |  | 8 KB | `4bcbd4e1` |
-| `yeni/src/sahneler/SSZSozler.astro` |  | 4 KB | `5d0f7343` |
+| `yeni/src/sahneler/SSESektor.astro` |  | 9 KB | `2cdc3402` |
+| `yeni/src/sahneler/SSZSozler.astro` |  | 5 KB | `427f9b85` |
 | `yeni/src/sahneler/STETespit.astro` |  | 12 KB | `77ec92a8` |
 | `yeni/src/sahneler/STSerit.astro` |  | 2 KB | `699145a0` |
 | `yeni/src/sema.mjs` |  | 10 KB | `e30e15db` |
@@ -1320,17 +1384,19 @@
 | `yeni/src/stil/kurucu.css` |  | 5 KB | `9fa221c5` |
 | `yeni/src/stil/nav.css` |  | 13 KB | `a2ee3bcf` |
 | `yeni/src/stil/perde.css` |  | 8 KB | `e7becfb2` |
+| `yeni/src/stil/prolog.css` |  | 14 KB | `2bbeaf83` |
 | `yeni/src/stil/sektor.css` |  | 9 KB | `81702e33` |
 | `yeni/src/stil/serit.css` |  | 4 KB | `409b1c40` |
 | `yeni/src/stil/sozband.css` |  | 5 KB | `743ed6c0` |
 | `yeni/src/stil/sozler.css` |  | 12 KB | `760d4831` |
-| `yeni/src/stil/temel.css` |  | 9 KB | `6129ba27` |
+| `yeni/src/stil/temel.css` |  | 10 KB | `09c34383` |
 | `yeni/src/stil/tespit.css` |  | 7 KB | `c8071d82` |
 | `yeni/src/ton.ts` |  | 1 KB | `b77eab8a` |
 | `yeni/src/veri/deste-gorselleri.json` |  | 1 KB | `ee5c49f2` |
 | `yeni/src/veri/kanal-gorselleri.json` |  | 1 KB | `6e44f8f9` |
 | `yeni/src/veri/kara-izgara.txt` |  | 6 KB | `3950853b` |
 | `yeni/src/veri/kurucu-gorsel.json` |  | 0 KB | `17def14d` |
+| `yeni/src/veri/logo-kunye.json` |  | 1 KB | `7ab30b26` |
 | `yeni/src/veri/proje-gorselleri.json` |  | 3 KB | `b9c6db24` |
 | `yeni/src/veri/serit-logolari.json` |  | 1 KB | `12ea05d7` |
 | `yeni/src/veri/ulkeler.json` |  | 9 KB | `f32566a3` |
@@ -1347,7 +1413,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 67 sn (basılan 0, önbellekten 58) |
+| son derleme | 73 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma

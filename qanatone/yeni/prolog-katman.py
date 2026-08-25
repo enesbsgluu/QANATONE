@@ -214,11 +214,18 @@ def disari_yay(rgb, alfa, tur=5):
 
 
 def kesim_kutusu(varyant, W0, H0):
+    """Pencere: oran + merkez (x) + merkez_y + yuk (H0'a oranli). Dikey kesim
+    24 Agu'da geldi: amblem ekran merkezine kilitlenince nehir/zirve uyumunu
+    pencere sagliyor (sahne.json kesim._ ve kesim-coz4.py). yuk/merkez_y
+    yoksa eski davranis (tam yukseklik)."""
     k = S["kesim"][varyant]
     if not k["oran"]:
         return 0, 0, W0, H0
-    cw = int(round(H0 * k["oran"]))
-    return max(0, min(W0 - cw, int(round(k["merkez"] * W0 - cw / 2)))), 0, cw, H0
+    ch = int(round(H0 * k.get("yuk", 1.0)))
+    cw = int(round(ch * k["oran"]))
+    sol = max(0, min(W0 - cw, int(round(k["merkez"] * W0 - cw / 2))))
+    ust = max(0, min(H0 - ch, int(round(k.get("merkez_y", 0.5) * H0 - ch / 2))))
+    return sol, ust, cw, ch
 
 
 def sinir_kutusu(alfa):
@@ -541,7 +548,8 @@ def uret(varyant, oniz):
 
     sol, ust, cw, ch, W0, H0 = M["kaynak"]
     return dict(varyant=varyant, oran=round(kare_oran, 5),
-                kesim=dict(sol=round(sol / W0, 5), gen=round(cw / W0, 5)),
+                kesim=dict(sol=round(sol / W0, 5), gen=round(cw / W0, 5),
+                           ust=round(ust / H0, 5), yuk=round(ch / H0, 5)),
                 dinlenme=int(round(dinlenme)), taban_genislik=taban,
                 katman=kayit,
                 derinlik=dict(dosya=ddosya, gen=dg, yuk=dy, bayt=dbayt),
@@ -591,7 +599,7 @@ if __name__ == "__main__":
     oniz = "--onizleme" in sys.argv
     if os.path.isdir(CIK):                       # ad genisligi tasiyor, eskiler kalmasin
         for f in os.listdir(CIK):
-            if f.endswith(".webp"):
+            if f.endswith(".webp") and not f.startswith("amblem-sdf-"):   # SDF'yi amblem-sdf.py uretir
                 os.remove(os.path.join(CIK, f))
     kunye = dict(kaynak="dag-ham.jpg", uretec="prolog-katman.py", varyant={})
     for varyant in ("masaustu", "mobil"):

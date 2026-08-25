@@ -641,7 +641,13 @@ async function kur(K0: Kurulum) {
          Aralik `sahne.json` -> soz.sonme. */
       const sn = SZ.sonme as [number, number] | undefined;
       let soluk = 1;
-      if (sn) {
+      /* CUMLE DOGUSLA SONER (Enes, 24 Agu): metal hazirsa dogus saati
+         cumleyi ceker - zaman tabanli, kaydirmaya bagli degil. Metal
+         yoksa (yukleniyor / yedek) eski p-tabanli sonme calisir. */
+      if (metal) {
+        soluk = 1 - metal.dogusG(t);
+        if (soluk <= 0.002) return;
+      } else if (sn) {
         const u = Math.min(1, Math.max(0, (p - sn[0]) / (sn[1] - sn[0])));
         soluk = 1 - u * u * (3 - 2 * u);
         if (soluk <= 0.002) return;   /* sonduyse hic cizilmiyor */

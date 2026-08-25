@@ -55,7 +55,7 @@ let kuruldu = false;
 
 export type Durum = { s: number; tx: number; ty: number; metal: number; on: boolean; sonuk: number };
 
-export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) => Durum; metalVar: (v: boolean) => void } {
+export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) => Durum; metalVar: (v: boolean | 'hata') => void } {
   if (kuruldu) return { yaz: () => ({ s: 0, tx: 0, ty: 0, metal: 0, on: false, sonuk: 1 }), metalVar: () => {} };
   kuruldu = true;
 
@@ -136,7 +136,9 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
   /* NAV BASTA BOS. Gizleyen sinifi bu modul koyuyor: prolog atlanirsa
      ya da modul hic inmezse nav normal acilir. */
   const navLogo = document.querySelector<HTMLElement>('.nv-logo i');
-  navLogo?.classList.add('nv-logo-bekle');
+  /* Iki kopya var (nav cubugu + mobil menu); ikisi de bekler. */
+  const navLogolar = Array.from(document.querySelectorAll<HTMLElement>('.nv-logo i'));
+  navLogolar.forEach((e) => e.classList.add('nv-logo-bekle'));
 
   /* AMBLEMIN KUTUSU CIZILEN SEYDEN OKUNUYOR, JSON'DAN DEGIL.
      `amblem.json`in `sinir` kutusu RASTERDEN olculmustu ve cizilen
@@ -172,16 +174,24 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
      gidiyor (tek kaynak: formul burada). `metalVar` isci "metal hazir"
      deyince true olur; o zamana kadar SVG dolgu bugunku gibi calisir -
      metal yuklenemezse amblem yine tam kizil olur, sessiz bosluk yok. */
-  let metalVar = false;
+  /* UC DURUM (24 Agu): 'yok' = metal daha inmedi -> cizim kapaliyken amblem
+     GORUNMEZ (dogus metalde), 'var' = devir penceresi, 'hata' = SVG dolgu
+     aninda 1 (yedek; iz gl.ts'te `data-prolog-metal`). */
+  let metalDurum: 'yok' | 'var' | 'hata' = 'yok';
+  const C0 = !!(D2.koreografi && D2.koreografi.cizim === false);
   const durum: Durum = { s: 0, tx: 0, ty: 0, metal: 0, on: false, sonuk: 1 };
   const yaz = (p: number): Durum => {
     if (p === sonP) return durum;
     sonP = p;
-    const kP = ilerle(p, AR.kuyruk as Aralik);
-    const cP = ilerle(p, AR.cember as Aralik);
-    const dP = yumusat(ilerle(p, AR.dolgu as Aralik));
+    /* KOREOGRAFI (Enes, 24 Agu): cizim evreleri kaldirildi - kod duruyor,
+       harita `sahne.json durak2.koreografi.cizim`. false iken kuyruk/
+       cember/dolgu/ic TAMAMLANMIS sayilir: amblem p=0'dan itibaren butun
+       govde, metal iscide dogar. true yapilirsa eski koreografi geri gelir. */
+    const kP = C0 ? 1 : ilerle(p, AR.kuyruk as Aralik);
+    const cP = C0 ? 1 : ilerle(p, AR.cember as Aralik);
+    const dP = C0 ? 1 : yumusat(ilerle(p, AR.dolgu as Aralik));
     const nP = yumusat(ilerle(p, AR.nav as Aralik));
-    const iP = yumusat(ilerle(p, AR.ic as Aralik));
+    const iP = C0 ? 1 : yumusat(ilerle(p, AR.ic as Aralik));
 
     kuyruk.style.strokeDashoffset = `${uzKuyruk * (1 - kP)}`;
     cember.style.strokeDashoffset = `${uzCember * (1 - cP)}`;
@@ -204,7 +214,8 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
        boyuna kuculurken (aralik.metal), sabit bir p'de degil. 29 px'te
        PBR okunmuyor; metal 0,52-0,60 arasinda sonerse gecis gorunmez.
        Metal yoksa mP=1: SVG dolgu eskisi gibi dP ile gelir. */
-    const mP = metalVar ? yumusat(ilerle(p, AR.metal as Aralik)) : 1;
+    const mP = metalDurum === 'var' ? yumusat(ilerle(p, AR.metal as Aralik))
+      : (metalDurum === 'hata' || !C0 ? 1 : 0);
     svg.style.setProperty('--dolgu', `${dP * mP}`);
     /* Ic dag artik DOLGUYLA BIRLIKTE geliyor (kalem 2, 24 Agu):
        govde ve dag tek yuzey. Eski araligin iki olculmus ucu de
@@ -251,8 +262,14 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
     const kw = Math.max(innerWidth, innerHeight * oran);
     const kh = Math.max(innerHeight, innerWidth / oran);
     let s = Y.r * kh;
-    let tx = (innerWidth - kw) / 2 + (Y.u[0] + Y.u[1] * p) * kw - mX * s;
-    let ty = (innerHeight - kh) / 2 + (Y.v[0] + Y.v[1] * p) * kh - mY * s;
+    /* EKRAN KILIDI (Enes, 24 Agu): logo her cihazda ekrani ortalar; dikey
+       v referans kareden. Uyumu arka planin KESIMI saglar. Eski nehir
+       kilidi (u,v = f(p)) `_eski`de kunye olarak duruyor. */
+    const EK = Y.kilit === 'ekran';
+    let tx = EK ? innerWidth / 2 - mX * s
+      : (innerWidth - kw) / 2 + (Y.u[0] + Y.u[1] * p) * kw - mX * s;
+    let ty = EK ? Y.v * innerHeight - mY * s
+      : (innerHeight - kh) / 2 + (Y.v[0] + Y.v[1] * p) * kh - mY * s;
     if (hedef && nP > 0 && s > 0) {
       /* OLCEK GEOMETRIK, MERKEZ DOGRUSAL. Dogrusal olcek olculdu ve
          kapatti: kuculme orani 33-44 kat, dogrusal ara deger evrenin
@@ -274,14 +291,15 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
     svg.style.opacity = kP > 0 ? '1' : '0';
     durum.s = s; durum.tx = tx; durum.ty = ty;
     durum.metal = dP * (1 - mP);
-    durum.on = p >= (AR.dolgu as Aralik)[0] - 0.14;   /* SDF + envmap onceden insin */
+    durum.on = C0 || p >= (AR.dolgu as Aralik)[0] - 0.14;   /* cizim yokken metal HEMEN insin (dogus) */
 
     /* Sahne soner ki kizil carpsin; nava giderken geri doner.
        3B YOLUNDA SONME ISCIDE (24 Agu): metal tuvalin icinde, CSS filtresi
        onu da sonduruyordu (olculdu: govde L 111 -> 42). Deger durumla
        isciye gider, katmanlar orada soner, metal muaf. CSS degiskeni
        yalniz yedek yol icin yaziliyor. */
-    durum.sonuk = 1 - (1 - D2.sonme.deger) * Math.max(kP, cP) * (1 - nP);
+    /* Sonme Enes'in hukmuyle kaldirildi (24 Agu): referans kare karartilmamis. */
+    durum.sonuk = C0 ? 1 : 1 - (1 - D2.sonme.deger) * Math.max(kP, cP) * (1 - nP);
     if (!ucBoyutlu) bolum.style.setProperty('--pr-sonuk', `${durum.sonuk}`);
 
     /* DEVIR: amblem navdaki yerine oturunca gercek nav logosu acilir
@@ -295,7 +313,7 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
     const bitti = nP >= 1;
     if (bitti !== devredildi) {
       devredildi = bitti;
-      navLogo?.classList.toggle('nv-logo-bekle', !bitti);
+      navLogolar.forEach((e) => e.classList.toggle('nv-logo-bekle', !bitti));
       svg.style.display = bitti ? 'none' : '';
     }
     return durum;
@@ -325,5 +343,5 @@ export function kur(bolum: HTMLElement, ucBoyutlu = false): { yaz: (p: number) =
     if (t.target === bar && t.propertyName === 'padding-top') tazele();
   }, { passive: true });
 
-  return { yaz, metalVar: (v: boolean) => { metalVar = v; tazele(); } };
+  return { yaz, metalVar: (v: boolean | 'hata') => { metalDurum = v === 'hata' ? 'hata' : (v ? 'var' : 'yok'); tazele(); } };
 }

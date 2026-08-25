@@ -17,15 +17,57 @@
  "kizil": "#ef233c",
  "medyan_L_once": 80.2,
  "medyan_L_sonra": 80.2,
- "opak_beyaz_piksel": 0,
+ "opak_beyaz_piksel": 12100,
  "cikti": {
   "webp": {
-   "bayt": 3944,
-   "sha1": "591986b845817065884ed0511861aa52f1654fa9"
+   "bayt": 11084,
+   "sha1": "7df9a493f2aaa2185e38681ddcf49292da67d80e"
   },
   "avif": {
-   "bayt": 3760,
-   "sha1": "03c77824c5be84f19f0b388b75ec81ca929e35ea"
+   "bayt": 6611,
+   "sha1": "6373c34082a69210f60a3689af1edba50cd08710"
   }
- }
+ },
+ "hal": {
+  "delik": {
+   "dosya": "qanatone-delik",
+   "olcu": [
+    258,
+    293
+   ],
+   "medyan_L_sonra": 80.2,
+   "opak_beyaz_piksel": 0,
+   "cikti": {
+    "webp": {
+     "bayt": 3944,
+     "sha1": "591986b845817065884ed0511861aa52f1654fa9"
+    },
+    "avif": {
+     "bayt": 3760,
+     "sha1": "03c77824c5be84f19f0b388b75ec81ca929e35ea"
+    }
+   }
+  },
+  "beyaz": {
+   "dosya": "qanatone",
+   "olcu": [
+    258,
+    293
+   ],
+   "medyan_L_sonra": 80.2,
+   "opak_beyaz_piksel": 12100,
+   "cikti": {
+    "webp": {
+     "bayt": 11084,
+     "sha1": "7df9a493f2aaa2185e38681ddcf49292da67d80e"
+    },
+    "avif": {
+     "bayt": 6611,
+     "sha1": "6373c34082a69210f60a3689af1edba50cd08710"
+    }
+   },
+   "beyaz_disari_piksel": 0
+  }
+ },
+ "_hal": "IKI HAL (Enes, 24 Agu): `beyaz` = qanatone.webp/avif, ic disk + nehir beyaz, marka logosu, STATIK nav (tum sayfalar; Temel.astro tek bilesen). `delik` = qanatone-delik, ic alanlar oyuk - prologda amblemin son karesiyle ayni geometri, OLCUM varligi (devir sicramasi kizil maskeyle). Ikisi de amblem.json'dan; eski raster yok."
 }

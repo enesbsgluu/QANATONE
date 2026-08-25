@@ -130,9 +130,24 @@ export async function baslat(bolum: HTMLElement) {
     anaKok: performance.timeOrigin,
   }, cikart);
 
+  /* ILK KARE IZI (kalem 8, 25 Agu) - SESSIZ CIKIS SINIFININ SON DELIGI.
+     Isci kuruldu, hata da vermedi ama makul surede ilk kare gelmediyse
+     (doku inmedi, WebGL baglami sessizce kayboldu, ip doygun) hicbir iz
+     kalmiyordu. Simdi `data-prolog="ilk-kare-yok"` yaziliyor; kare sonradan
+     gelirse `acildi()` onu '3b' yapar ve gecikme `data-prolog-gec`e (ms)
+     kalir. Yalniz IZ: yol degistirilmez, sahne beklemeye devam eder. Esik
+     SwiftShader'da olculen 1-2 s'lik ilk karenin 4-8 kati. */
+  const ILK_KARE_MS = 8000, tKur = performance.now();
+  const ilkKareSayaci = setTimeout(() => {
+    if (bitti || kk.contains('pr-gl-hazir')) return;
+    document.documentElement.dataset.prolog = 'ilk-kare-yok';
+    console.warn(`[prolog] ilk kare ${ILK_KARE_MS} ms icinde cizilmedi`);
+  }, ILK_KARE_MS);
+
   function dur() {
     if (bitti) return;
     bitti = true;
+    clearTimeout(ilkKareSayaci);
     isci.terminate();
     tuval.remove();
     kk.remove('pr-gl-hazir');
@@ -144,7 +159,7 @@ export async function baslat(bolum: HTMLElement) {
      yolda kamera hareketi YOK, orada amblem de dogmaz - sahne sade
      kalir ve o yola fazladan bayt inmez. */
   let amblem: ((p: number) => unknown) | null = null;
-  let amblemMetal: ((v: boolean) => void) | null = null;
+  let amblemMetal: ((v: boolean | 'hata') => void) | null = null;
   /* SESSIZ CIKIS KAPANDI (24 Agu, probeyle bulundu): metal hazir olunca
      durum degisiyor ama isciye ancak sonraki KAYDIRMA tik'inde gidiyordu;
      tam o anda duran kullanici metali hic gormezdi. Hazir mesaji bir tik
@@ -230,13 +245,19 @@ export async function baslat(bolum: HTMLElement) {
   }
 
   isci.onmessage = (e) => {
-    if (e.data.tip === 'hazir') { kk.add('pr-gl-hazir'); acildi(); baglan(); }
+    if (e.data.tip === 'hazir') {
+      clearTimeout(ilkKareSayaci);
+      if (document.documentElement.dataset.prolog === 'ilk-kare-yok')
+        document.documentElement.dataset.prologGec = String(Math.round(performance.now() - tKur));
+      kk.add('pr-gl-hazir'); acildi(); baglan();
+    }
     else if (e.data.tip === 'kare') {
       document.documentElement.dataset.prologKare = e.data.p50 + ',' + e.data.p95 + ',' + e.data.p.toFixed(3);
     }
     else if (e.data.tip === 'metal') {
       /* Iz birakir: olcum de hata da `data-prolog-metal`e yazilir. */
       if (e.data.olcum) { amblemMetal?.(true); tikYenile?.(); }
+      else { amblemMetal?.('hata'); tikYenile?.(); }   /* yedek: SVG dolgu aninda, iz asagida */
       document.documentElement.dataset.prologMetal =
         e.data.olcum ? JSON.stringify(e.data.olcum) : 'hata:' + e.data.hata;
     }
