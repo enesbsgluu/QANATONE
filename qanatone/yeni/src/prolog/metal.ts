@@ -51,6 +51,8 @@ const M = (SAHNE as any).durak2.metal as {
   tumsek: number; dip: number; merkez: [number, number]; band_guc: number;
 };
 const KUTU = 1254;
+const DG = (SAHNE as any).durak2.dogus as { bicim: 'olcek' | 'isik'; sure_s: number; bekle_s: number; olcek0: number };
+const yumusat = (t: number) => t * t * (3 - 2 * t);
 
 export type Durum = { s: number; tx: number; ty: number; metal: number };
 
@@ -250,13 +252,40 @@ export async function kur(
   const renk = M.renk.map(lin) as [number, number, number];
   const olcum = { coz_ms: +(t1 - t0).toFixed(1), yukle_ms: +(t2 - t1).toFixed(1), env_ms: +(t3 - t2).toFixed(1), N, env_bant: envBant };
 
+  /* DOGUS SAATI (Enes, 24 Agu): kaydirmadan once, kendi kendine. Ilk ciz
+     karesinde baslar (+bekle_s); g 0->1 yumusak. `dogusG` isciye de acik
+     (cumle ayni saatle soner). Faz ofseti: gunes lekesi surenin ortasinda
+     govde merkezinden gecsin diye uDonus'a bir kez eklenir - a'ya bagli
+     kalir, ikinci saat yok. */
+  let tH = -1, fazOfs = 0;
+  const dogusG = (zaman: number) => (tH < 0 ? 0 : yumusat(Math.min(1, Math.max(0, (zaman - tH) / DG.sure_s))));
   function ciz(d: Durum, zaman: number, gen: number, yuk: number, dpr: number) {
     if (d.metal <= 0) return;
+    if (tH < 0) {
+      tH = zaman + DG.bekle_s;
+      const donusOrta = ((tH + DG.sure_s / 2) * M.env_donus) / M.periyot_s;
+      fazOfs = 0.5 - (M.gunes_uv[0] + donusOrta);
+    }
+    const g = dogusG(zaman);
+    if (g <= 0) return;
     const a = (zaman * 2 * Math.PI) / M.periyot_s;
     const ex = Math.sin(a) * M.salinim[0], ey = Math.sin(a * 0.8) * M.salinim[1];
     /* Affin: birim -> cihaz pikseli. Uc SABIT: govde ucun etrafinda
        cos(egim) ile siksiyor. */
-    const s = d.s * dpr, tx = d.tx * dpr, ty = d.ty * dpr;
+    let s = d.s * dpr, tx = d.tx * dpr, ty = d.ty * dpr;
+    let opak = d.metal, kazanc = M.env_kazanc, dip = M.dip;
+    if (DG.bicim === 'olcek') {
+      /* govde 0,95 -> 1,00 amblem kutusu merkezi etrafinda + opaklik */
+      const cx = tx + M.merkez[0] * KUTU * s, cy = ty + M.merkez[1] * KUTU * s;
+      const k = DG.olcek0 + (1 - DG.olcek0) * g;
+      tx = cx - (cx - tx) * k; ty = cy - (cy - ty) * k; s *= k;
+      opak *= g;
+    } else {
+      /* isik govdeyi karanliktan yontar: env kazanci + dip 0 -> 1; govde
+         ilk ucte birde belirir ki siyah kesik gibi durmasin */
+      kazanc *= g; dip *= g;
+      opak *= Math.min(1, g * 3);
+    }
     const ux = tx + M.uc[0] * s, uy = ty + M.uc[1] * s;
     const sx = Math.cos(ey), sy = Math.cos(ex);
     const Mm = [s * sx, 0, 0, 0, s * sy, 0, ux + (tx - ux) * sx, uy + (ty - uy) * sy, 1];
@@ -270,17 +299,17 @@ export async function kur(
     gl.uniform2f(pm.u.uEkran, gen * dpr, yuk * dpr);
     gl.uniform1f(pm.u.uPpb, s);
     gl.uniform1f(pm.u.uTexel, 1 / N);
-    gl.uniform1f(pm.u.uOpak, d.metal);
-    gl.uniform1f(pm.u.uDonus, (a * M.env_donus) / (2 * Math.PI));
+    gl.uniform1f(pm.u.uOpak, opak);
+    gl.uniform1f(pm.u.uDonus, (a * M.env_donus) / (2 * Math.PI) + fazOfs);
     gl.uniform1f(pm.u.uPah, M.pah_birim);
     gl.uniform1f(pm.u.uBant, M.bant_birim);
     gl.uniform1f(pm.u.uPuruz, M.puruz);
     gl.uniform1f(pm.u.uKapla, M.kaplama);
     gl.uniform1f(pm.u.uKaplaPuruz, M.kaplama_puruz);
-    gl.uniform1f(pm.u.uKazanc, M.env_kazanc);
+    gl.uniform1f(pm.u.uKazanc, kazanc);
     gl.uniform1f(pm.u.uGunesGuc, M.gunes_guc);
     gl.uniform1f(pm.u.uTumsek, M.tumsek);
-    gl.uniform1f(pm.u.uDip, M.dip);
+    gl.uniform1f(pm.u.uDip, dip);
     gl.uniform2f(pm.u.uMerkez, M.merkez[0], M.merkez[1]);
     gl.uniform3f(pm.u.uRenk, renk[0], renk[1], renk[2]);
     const gl_ = Math.hypot(gy * 0.8, 0.55, gz * 0.8);
@@ -296,5 +325,5 @@ export async function kur(
   /* `env` ve `sdf` disari veriliyor: olcum duzenegi (metal-yalniz) envmap'i
      geri okuyup satir satir isikligini olcuyor - "yansima neden karanlik"
      sorusu tahminle degil dokunun kendisiyle cevaplanir. */
-  return { ciz, sok, olcum, env, sdf, EW, EH };
+  return { ciz, sok, olcum, env, sdf, EW, EH, dogusG };
 }

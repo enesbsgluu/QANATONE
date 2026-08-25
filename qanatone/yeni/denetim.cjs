@@ -1748,7 +1748,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      isciden DINAMIK ithal - isci tavani (22 KB) korunsun diye. Kendi
      tavani: olculen boy + bir kademe pay. Sayfaya bagli olmamali,
      iscinin icinden ve amblem dogmadan once inmeli. */
-  const TAVAN = { gl: 6 * 1024, isci: 22 * 1024, metal: 10 * 1024 };
+  /* metal 10 -> 12 KB (24 Agu): dogus (iki bicim) +~0,6 KB; olcup cekildi. */
+  const TAVAN = { gl: 6 * 1024, isci: 22 * 1024, metal: 12 * 1024 };
   const astro = path.join(KOK, '_astro');
   const hh = oku(path.join(KOK, 'index.html'));
   const dosyalar = fs.existsSync(astro) ? fs.readdirSync(astro) : [];
@@ -1829,6 +1830,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     'atla-oturum', 'hareket-azaltma', 'gl-modulu-inmedi',
     'sahne-yapisi-yok', 'worker-yok', 'offscreen-yok', 'tuval-olcusuz',
     'isci-yuklenmedi', 'isci-hatasi',
+    /* 25 Agu: IZ dali, dusus degil - isci kuruldu, hata yok, ilk kare
+       makul surede gelmedi (gl.ts ILK_KARE_MS). Yol degismez, iz kalir. */
+    'ilk-kare-yok',
   ];
   const kusur = [];
   const dizin = path.join(KOK, '_astro');
@@ -1840,7 +1844,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   if (!js.includes('[prolog] yedek yol')) kusur.push('konsol-satiri-yok');
   if (!/dataset[.]prolog\b/.test(js)) kusur.push('dom-izi-yok');
   if (!js.includes('animation-timeline')) kusur.push('paralaks-yoklamasi-yok');
-  ol('R15 - yedek yola dusus sessiz degil: dokuz dal adlandirilmis + DOM izi',
+  ol('R15 - yedek yola dusus sessiz degil: on dal adlandirilmis (9 dusus + ilk-kare izi) + DOM izi',
      kusur.length === 0, kusur.slice(0, 4).join(' ') || SEBEP.length + ' dal');
 }
 
@@ -1999,6 +2003,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
        (d_uc < 8 px) sessizce kaybolur.
        OLCEK EGIMI YOK: `r` tek sayi kalir, egimi F5'e ait. */
     if (typeof Y.r !== 'number') kusur.push(v + '.r-yok');
+    /* EKRAN KILIDI (Enes, 24 Agu): nehir kilidi (u,v=f(p)) kaldirildi -
+       yukaridaki "p egimi silinirse hedef sessizce kaybolur" gerekcesi
+       ekran kilidinde gecersiz: amblem nehri kovalamiyor, kesim ona
+       geliyor; p boyunca 12 px kayma olculdu ve yumusak kapi icinde.
+       `kilit: ekran` ise u yok, v tek sayi (H orani). */
+    if (Y.kilit === 'ekran') {
+      if (typeof Y.v !== 'number' || Y.u !== undefined) kusur.push(v + '.ekran-kilidi-semasi');
+      continue;
+    }
     for (const a of ['u', 'v']) {
       if (typeof Y[a] === 'number') { kusur.push(v + '.' + a + '-p-egimi-silinmis'); continue; }
       if (!Array.isArray(Y[a]) || Y[a].length !== 2
@@ -2039,6 +2052,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   const kaynak = fs.readFileSync(path.join(pkok, 'halka.ts'), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '');
   if (/<mask|url\(#/.test(kaynak)) kusur.push('maske-geri-gelmis');
+  /* KOREOGRAFI (Enes, 24 Agu): cizim evreleri kaldirildi ama kod duruyor.
+     Bayrak `koreografi.cizim=false`: halka.ts bayragi okumali, kaldirilan
+     araliklar `_kaldirildi` notuyla kunyede durmali, nav 0,60'i kapsamali. */
+  const KR = D2.koreografi || {};
+  if (KR.cizim === false) {
+    if (!/koreografi/.test(kaynak)) kusur.push('koreografi-bayragi-okunmuyor');
+    if (!(D2.aralik || {})._kaldirildi) kusur.push('kaldirilan-evreler-kunyesiz');
+    if (!((D2.aralik.nav || [])[1] >= (D2.aralik.metal || [1, 1])[1])) kusur.push('nav-devir-penceresini-kapsamiyor');
+    if (!(D2.dogus && D2.dogus.sure_s > 0 && D2.dogus.bicim)) kusur.push('dogus-kunyesi-yok');
+  }
   if (!/strokeDashoffset/.test(kaynak)) kusur.push('cizim-yok');
   if (!/nv-logo-bekle/.test(kaynak)) kusur.push('nav-bosaltilmiyor');
   /* Amblem GOVDEYE eklenmeli: `.pr-yapis` yapisik ve yapisik eleman
@@ -2227,7 +2250,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   for (const [ad, W, H, v] of EK) {
     const y = (D2.yerlesim || {})[v];
     if (!y || !ICD.r || !ORAN[v]) continue;
-    if (!(y.r > 0) || !Array.isArray(y.u) || !Array.isArray(y.v)) {
+    /* EKRAN KILIDI (Enes, 24 Agu): `kilit: ekran` ise u yok, v sayi;
+       eski kaplama-uzayi semasi kilit yokken korunur. */
+    const EKk = y.kilit === 'ekran';
+    if (EKk ? !(y.r > 0 && typeof y.v === 'number') : (!(y.r > 0) || !Array.isArray(y.u) || !Array.isArray(y.v))) {
       kusur.push('yerlesim-kaplama-uzayinda-degil:' + v); continue;
     }
     /* Kaplama kutusu: `.pr-kare` ile AYNI hesap. Yerlesim p'ye bagli
@@ -2237,8 +2263,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       const kh = Math.max(H, W / ORAN[v]);
       const s = y.r * kh;
       const mx = (VB[0] + VB[2]) / 2, my = (VB[1] + VB[3]) / 2;
-      const tx = (W - kw) / 2 + (y.u[0] + y.u[1] * p) * kw - mx * s;
-      const ty = (H - kh) / 2 + (y.v[0] + y.v[1] * p) * kh - my * s;
+      const tx = EKk ? W / 2 - mx * s : (W - kw) / 2 + (y.u[0] + y.u[1] * p) * kw - mx * s;
+      const ty = EKk ? y.v * H - my * s : (H - kh) / 2 + (y.v[0] + y.v[1] * p) * kh - my * s;
       const cx = tx + ICD.merkez[0] * s, cy = ty + ICD.merkez[1] * s, r = ICD.r * s;
       const pay = Math.min(cx - r, W - (cx + r), cy - r, H - (cy + r));
       /* 24 AGU - KAPI OLMAKTAN CIKTI (kalem 2/3). Delik dort ekranda
@@ -2257,6 +2283,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       const sap = Math.abs(tx + mx * s - W / 2) / W;
       if (sap > enSap) enSap = sap;
       if (sap > 0.30) kusur.push('amblem-cok-kacik:' + ad + ':%' + (100 * sap).toFixed(1));
+      /* Ekran kilidinde merkez sapmasi KAPI: 0 olmali (Enes: mobil %20 kabul degil). */
+      if (EKk && sap > 0.002) kusur.push('merkez-kacik:' + ad + ':%' + (100 * sap).toFixed(2));
     }
   }
 
@@ -2270,9 +2298,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
   else {
     for (const v of ['mobil', 'masaustu']) {
       const a = B.katsayi[v] || {}, b = (D2.yerlesim || {})[v] || {};
-      const ayni = a.r === b.r
-        && JSON.stringify(a.u) === JSON.stringify(b.u)
-        && JSON.stringify(a.v) === JSON.stringify(b.v);
+      /* Iki sema: eski {r,u,v} ve ekran kilidi {kilit,r,v}.
+         EKRAN KILIDINDE KESIM DE KATSAYIDIR (24 Agu): amblem nehri
+         kovalamadigi icin birlesmeyi ARKA PLANIN PENCERESI kuruyor
+         (sahne.json kesim: oran, merkez, merkez_y, yuk). Pencere
+         degisirse olcum eskir; damga onu da tasimali. */
+      const K = (S.kesim || {})[v] || {};
+      const kes = (o) => (o && o.kilit === 'ekran')
+        ? { oran: K.oran, merkez: K.merkez, merkez_y: K.merkez_y, yuk: K.yuk } : undefined;
+      const sec = (o, k) => ({ kilit: o.kilit, r: o.r, u: o.u, v: o.v, kesim: k });
+      const ayni = JSON.stringify(sec(a, a.kesim)) === JSON.stringify(sec(b, kes(b)));
       if (!ayni) kusur.push('birlesme-kunyesi-eskimis:' + v);
     }
     /* OLCUM ALTINA IMZA ATIYOR. `katsayi` <-> `yerlesim` bagi vardi,
@@ -2287,14 +2322,27 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     for (const [ad] of EK) {
       const o = (B.olculen || {})[ad];
       if (!o) { kusur.push('birlesme-olcumu-yok:' + ad); continue; }
-      if (!(o.d_uc <= (B.hedef || {}).d_uc_px))
+      const HD = B.hedef || {};
+      if (!(o.d_uc <= HD.d_uc_px))
         kusur.push('birlesme-d_uc-hedefi-asiyor:' + ad + ':' + o.d_uc);
-      if (!(o.dtheta <= (B.hedef || {}).dtheta_derece))
+      /* KAPI IKI SARTLI (Enes, 24 Agu): d_uc VE zirve halkanin ustunde
+         gorunur (zirve_payi >= 12 px) VE ekran kilidinde merkez sapmasi
+         0 (olcum <= 0,5 px). Hukum OLCULEMEDI ise yesil olamaz.
+         TEGET: 10 derece ideal, KABUL EDILEN ASIM `dtheta_kabul_derece`
+         (Enes hukmu: yumusak ortusme; not `_teget_asimi`) - regresyon
+         bekcisi, sikma turu dogurmaz. */
+      if (typeof HD.zirve_payi_px === 'number' && !(o.zirve_payi >= HD.zirve_payi_px))
+        kusur.push('zirve-halkanin-altinda:' + ad + ':' + o.zirve_payi);
+      if (typeof HD.merkez_sapma_px === 'number' && !(o.merkez_sapma <= HD.merkez_sapma_px))
+        kusur.push('merkez-sapmasi:' + ad + ':' + o.merkez_sapma);
+      if (o.hukum && /OLCULEMEDI/.test(o.hukum)) kusur.push('birlesme-olculemedi:' + ad);
+      const tavan = typeof HD.dtheta_kabul_derece === 'number' ? HD.dtheta_kabul_derece : HD.dtheta_derece;
+      if (!(o.dtheta <= tavan))
         kusur.push('birlesme-aci-hedefi-asiyor:' + ad + ':' + o.dtheta);
     }
   }
 
-  ol('R18 - durak 2: maskesiz cizim + bes aralik + nehre kilitli yerlesim',
+  ol('R18 - durak 2: maskesiz cizim + bes aralik + ekran kilidi (kesim damgali) + iki sartli birlesme',
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
        || (acik ? 'amblem ' + (boy / 1024).toFixed(1) + '/24 KB · maskesiz · '
@@ -2479,14 +2527,20 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
     if (/#[0-9a-fA-F]{6}['"]/.test(u)) kusur.push('uretec-kizili-gomulu');
   }
 
-  /* (a) ciktilar ve hash'leri */
-  for (const u of ['webp', 'avif']) {
-    const p = path.join(__dirname, 'public', 'img', 'qanatone.' + u);
-    if (!fs.existsSync(p)) { kusur.push('varlik-yok:' + u); continue; }
-    const bayt = fs.statSync(p).size;
-    if (bayt > 40 * 1024) kusur.push('varlik-buyuk:' + u + ':' + bayt);
-    if (K && K.cikti && K.cikti[u] && sha1(p) !== K.cikti[u].sha1)
-      kusur.push('varlik-kunyeye-uymuyor:' + u);
+  /* (a) ciktilar ve hash'leri - IKI HAL (Enes, 24 Agu): `beyaz` (qanatone,
+     ic disk + nehir beyaz, statik nav) ve `delik` (qanatone-delik, olcum
+     varligi). Ikisi de kunyeden, ikisi de hash'li. */
+  const HAL = (K && K.hal) || {};
+  if (!HAL.beyaz || !HAL.delik) kusur.push('iki-hal-kunyesi-yok');
+  for (const [hal, dosya] of [['beyaz', 'qanatone'], ['delik', 'qanatone-delik']]) {
+    for (const u of ['webp', 'avif']) {
+      const p = path.join(__dirname, 'public', 'img', dosya + '.' + u);
+      if (!fs.existsSync(p)) { kusur.push('varlik-yok:' + hal + ':' + u); continue; }
+      const bayt = fs.statSync(p).size;
+      if (bayt > 40 * 1024) kusur.push('varlik-buyuk:' + hal + ':' + u + ':' + bayt);
+      const hk = (HAL[hal] || {}).cikti || {};
+      if (hk[u] && sha1(p) !== hk[u].sha1) kusur.push('varlik-kunyeye-uymuyor:' + hal + ':' + u);
+    }
   }
   /* Eski SVG denemesi geri gelmesin. */
   if (fs.existsSync(path.join(__dirname, 'public', 'img', 'qanatone.svg')))
@@ -2506,8 +2560,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       if (Math.abs(K.medyan_L_sonra - hedef) > 1.5)
         kusur.push('kizil-eslenmemis:' + K.medyan_L_sonra + '!=' + hedef.toFixed(1));
     }
-    if (K.opak_beyaz_piksel !== 0)
-      kusur.push('ic-alanlar-delik-degil:' + K.opak_beyaz_piksel + ' beyaz piksel');
+    /* (c) IKI HAL: delik halde opak beyaz SIFIR; beyaz halde beyaz VAR ve
+       yalniz ic+nehir bolgesinde (uretecin maskeyle sayimi, disari 0). */
+    if (HAL.delik && HAL.delik.opak_beyaz_piksel !== 0)
+      kusur.push('delik-hal-beyaz-tasiyor:' + HAL.delik.opak_beyaz_piksel);
+    if (HAL.beyaz && !(HAL.beyaz.opak_beyaz_piksel > 0))
+      kusur.push('beyaz-hal-beyazsiz');
+    if (HAL.beyaz && HAL.beyaz.beyaz_disari_piksel !== 0)
+      kusur.push('beyaz-ic-disari-tasmis:' + HAL.beyaz.beyaz_disari_piksel);
     olcu = K.olcu;
   }
 
@@ -2520,7 +2580,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
       kusur.push('olcu-uyusmuyor:' + m[1] + 'x' + m[2] + '!=' + olcu.join('x'));
   }
 
-  ol('R19 - nav logosu: uretilmis varlik + kizil paletten + ic alanlar delik',
+  ol('R19 - nav logosu: uretilmis varlik + kizil paletten + iki hal (delik/beyaz ic)',
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
        || (K ? K.olcu.join('x') + ' · webp ' + (K.cikti.webp.bayt / 1024).toFixed(1)

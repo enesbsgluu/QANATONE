@@ -120,14 +120,15 @@ def cozunurluk(varyant, S, V, r=None):
     return N, dict(r=r, kh=round(kh, 1), kutu_css=round(kutu_css, 1), texel=round(texel, 1))
 
 
-def maske_uret(A):
+def maske_uret(A, yollar=('halka', 'dag')):
     """Amblemin alfa maskesi - Chrome'da, urunun cizdigi YOLLARDAN (ikinci
-    kaynak yok: amblem.json). Beyaz = dolu; nehir yollarin icinde zaten delik."""
+    kaynak yok: amblem.json). Beyaz = dolu; nehir yollarin icinde zaten delik.
+    `yollar`: govde icin (halka, dag); beyaz ic icin ayrica ('nehir',)."""
     kutu = A['kutu']
     svg = (u'<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" '
            u'viewBox="0 0 %d %d"><rect width="100%%" height="100%%" fill="#000"/>'
-           u'<path d="%s" fill="#fff"/><path d="%s" fill="#fff"/></svg>'
-           % (KAYNAK_BOY, KAYNAK_BOY, kutu, kutu, A['yol']['halka'], A['yol']['dag']))
+           % (KAYNAK_BOY, KAYNAK_BOY, kutu, kutu)
+           + u''.join(u'<path d="%s" fill="#fff"/>' % A['yol'][y] for y in yollar) + u'</svg>')
     svg_yol = os.path.join(KOK, 'amblem-maske.svg')
     png_yol = os.path.join(KOK, 'amblem-maske.png')
     io.open(svg_yol, 'w', encoding='utf-8').write(svg)
@@ -144,6 +145,19 @@ def maske_uret(A):
 
 def isaretli_uzaklik(m):
     return ndimage.distance_transform_edt(m) - ndimage.distance_transform_edt(~m)
+
+
+def beyaz_ic(m_govde, m_nehir):
+    """BEYAZ IC (Enes, 24 Agu): ic disk + nehir beyaz = marka logosunun
+    tamamlanmis hali. Ic disk = govde+nehir birlesiminde KENARA DEGMEYEN
+    arka plan bilesenleri (gok bolgesi) - dag zaten govdede, cikmaz;
+    nehir = `yol.nehir` dolgusu (yarik disari acildigi icin kapali
+    bilesen degil, ayri veriliyor). Eski rasterden DEGIL, amblem.json'dan."""
+    kapali = m_govde | m_nehir
+    etiket, n = ndimage.label(~kapali)
+    kenar = set(np.unique(np.concatenate([etiket[0, :], etiket[-1, :], etiket[:, 0], etiket[:, -1]])))
+    ic = np.isin(etiket, [i for i in range(1, n + 1) if i not in kenar])
+    return (ic | m_nehir) & ~m_govde
 
 
 def sdf_ornekle(alan, N, kutu, fx=0.0, fy=0.0):
@@ -238,9 +252,11 @@ def yarik_min(q, N, kutu, A):
     return round(float(min(2.0 * dis[int(y * N / kutu), int(x * N / kutu)] for (x, y) in nok)), 2)
 
 
-def nav_logo(q, N, kutu, A, RED):
+def nav_logo(q, N, kutu, A, RED, q_beyaz=None):
     """293 px boy, vektor kutusuna (876,6 x 996,8) kirpilmis, --red duz
-    dolgu, alfa SDF'ten: 0,5 birim'lik yumusatma."""
+    dolgu, alfa SDF'ten: 0,5 birim'lik yumusatma. `q_beyaz` verilirse
+    BEYAZ IC hali: ic disk + nehir beyaz, govde ustte (iki SDF, AA'li
+    kompozit)."""
     kx, ky, kw, kh = 178.75, 108.75, 876.574, 996.844
     boy = NAV_BOY
     en = int(round(boy * kw / kh))
@@ -250,9 +266,26 @@ def nav_logo(q, N, kutu, A, RED):
     yy, xx = np.meshgrid(r * N / kutu - 0.5, c * N / kutu - 0.5, indexing='ij')
     d = ndimage.map_coordinates(coz(q), [yy, xx], order=1, mode='nearest')
     alfa = np.clip(d / olc + 0.5, 0.0, 1.0)         # 1 piksellik kenar
+    if q_beyaz is None:
+        im = np.zeros((boy, en, 4), np.uint8)
+        im[..., 0], im[..., 1], im[..., 2] = RED
+        im[..., 3] = np.round(alfa * 255).astype(np.uint8)
+        return Image.fromarray(im, 'RGBA')
+    db = ndimage.map_coordinates(coz(q_beyaz), [yy, xx], order=1, mode='nearest')
+    ab = np.clip(db / olc + 0.5, 0.0, 1.0)
+    BEYAZ = (255, 255, 255)
+    # once beyaz, ustune kizil (govde her yerde beyazin ustunde)
+    rgb = np.zeros((boy, en, 3), np.float32)
+    a = np.zeros((boy, en), np.float32)
+    for renk, al in ((BEYAZ, ab), (RED, alfa)):
+        for k in range(3):
+            rgb[..., k] = rgb[..., k] * (1 - al) + renk[k] * al
+        a = a * (1 - al) + al
     im = np.zeros((boy, en, 4), np.uint8)
-    im[..., 0], im[..., 1], im[..., 2] = RED
-    im[..., 3] = np.round(alfa * 255).astype(np.uint8)
+    # duz alfa: renk ustuste bindirilmis, alfa birlesik
+    for k in range(3):
+        im[..., k] = np.round(np.where(a > 0, rgb[..., k] / np.maximum(a, 1e-6) * 0 + rgb[..., k], 0)).astype(np.uint8)
+    im[..., 3] = np.round(a * 255).astype(np.uint8)
     return Image.fromarray(im, 'RGBA')
 
 
@@ -334,13 +367,46 @@ def main():
         print('   ADAY r=%g -> %s  %.1f KB  faz: %s' % (r, ad2, os.path.getsize(yol2) / 1024.0, faz2))
         sys.stdout.flush()
 
-    # NAV LOGOSU - masaustu alanindan
-    im = nav_logo(qd, Nd, kutu, A, RED)
-    im.save(NAV_CIKTI + '.webp', 'WEBP', quality=90, method=6)
-    im.save(NAV_CIKTI + '.avif', 'AVIF', quality=72)
-    son = list(im.getdata())
-    Ls = sorted(isik(p) for p in son if p[3] > 250)
-    beyaz = sum(1 for p in son if p[3] > 250 and min(p[:3]) > 170)
+    # NAV LOGOSU - IKI HAL (Enes, 24 Agu), masaustu alanindan.
+    #   delik : ic disk/dag/nehir oyuk - prologda devir aninda amblemle ayni sey
+    #   beyaz : ic disk + nehir beyaz - marka logosu; STATIK nav (tum sayfalar)
+    print('beyaz ic maskesi (nehir yolu)...'); sys.stdout.flush()
+    m_nehir = maske_uret(A, ('nehir',))
+    m_beyaz = beyaz_ic(m, m_nehir)
+    alan_b = isaretli_uzaklik(m_beyaz)
+    qb = sdf_ornekle(alan_b, Nd, kutu)
+    haller = {}
+    for hal, q_b, ad_c in (('delik', None, NAV_CIKTI + '-delik'), ('beyaz', qb, NAV_CIKTI)):
+        im = nav_logo(qd, Nd, kutu, A, RED, q_b)
+        im.save(ad_c + '.webp', 'WEBP', quality=90, method=6)
+        im.save(ad_c + '.avif', 'AVIF', quality=72)
+        son = list(im.getdata())
+        Ls = sorted(isik(p) for p in son if p[3] > 250 and p[0] > 40 and p[0] - max(p[1], p[2]) > 25)
+        beyaz = sum(1 for p in son if p[3] > 250 and min(p[:3]) > 170)
+        haller[hal] = dict(
+            dosya=os.path.basename(ad_c), olcu=[im.width, im.height],
+            medyan_L_sonra=round(Ls[len(Ls) // 2], 1) if Ls else 0,
+            opak_beyaz_piksel=beyaz,
+            cikti={u: {'bayt': os.path.getsize(ad_c + '.' + u), 'sha1': sha1(ad_c + '.' + u)} for u in ('webp', 'avif')})
+        print('   %-5s %s.webp %dx%d  webp %.1f KB  avif %.1f KB  medyan L %.1f  opak beyaz %d'
+              % (hal, os.path.basename(ad_c), im.width, im.height,
+                 haller[hal]['cikti']['webp']['bayt'] / 1024.0, haller[hal]['cikti']['avif']['bayt'] / 1024.0,
+                 haller[hal]['medyan_L_sonra'], beyaz))
+    # beyaz halde beyaz YALNIZ ic+nehir bolgesinde olmali: maskeyle sayim
+    im_b = nav_logo(qd, Nd, kutu, A, RED, qb)
+    ab = np.asarray(im_b)
+    beyaz_px = (ab[..., 3] > 250) & (ab[..., :3].min(-1) > 170)
+    # beyaz maskesini ayni cozunurluge indir
+    kx_, ky_, kw_, kh_ = 178.75, 108.75, 876.574, 996.844
+    c = kx_ + (np.arange(im_b.width) + 0.5) * (kh_ / NAV_BOY)
+    r = ky_ + (np.arange(NAV_BOY) + 0.5) * (kh_ / NAV_BOY)
+    yy, xx = np.meshgrid(r * KAYNAK_BOY / kutu - 0.5, c * KAYNAK_BOY / kutu - 0.5, indexing='ij')
+    mb = ndimage.map_coordinates(m_beyaz.astype(np.float32), [yy, xx], order=1, mode='nearest') > 0.5
+    disari = int((beyaz_px & ~ndimage.binary_dilation(mb, iterations=2)).sum())
+    haller['beyaz']['beyaz_disari_piksel'] = disari
+    im = im_b
+    Ls = sorted(isik(p) for p in list(im.getdata()) if p[3] > 250 and p[0] > 40 and p[0] - max(p[1], p[2]) > 25)
+    beyaz = haller['beyaz']['opak_beyaz_piksel']
     logo = {
         '_': ('amblem-sdf.py tarafindan yazilir, ELLE DUZENLENMEZ (eski uretec logo-uret.py '
               'kalkti, 24 Agu). Nav logosu amblemle AYNI SDF alanindan cikar; denetim R19 '
@@ -353,8 +419,12 @@ def main():
         'medyan_L_once': round(isik(RED), 1),
         'medyan_L_sonra': round(Ls[len(Ls) // 2], 1) if Ls else 0,
         'opak_beyaz_piksel': beyaz,
-        'cikti': {u: {'bayt': os.path.getsize(NAV_CIKTI + '.' + u),
-                      'sha1': sha1(NAV_CIKTI + '.' + u)} for u in ('webp', 'avif')},
+        'cikti': haller['beyaz']['cikti'],
+        'hal': haller,
+        '_hal': ('IKI HAL (Enes, 24 Agu): `beyaz` = qanatone.webp/avif, ic disk + nehir beyaz, marka '
+                 'logosu, STATIK nav (tum sayfalar; Temel.astro tek bilesen). `delik` = qanatone-delik, '
+                 'ic alanlar oyuk - prologda amblemin son karesiyle ayni geometri, OLCUM varligi '
+                 '(devir sicramasi kizil maskeyle). Ikisi de amblem.json\'dan; eski raster yok.'),
     }
     with open(KUNYE_SDF, 'w', encoding='utf-8') as f:
         json.dump(kunye, f, ensure_ascii=False, indent=1)
