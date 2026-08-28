@@ -625,3 +625,47 @@ Düzenek: `yeni/film/olc-giris.cjs` (dist sunar, faz kareleri + HUD + nav durumu
 Headless Chrome, Intel UHD (donanım, ANGLE D3D11): masaüstü 1440×900 dpr 1 → A→B→C 6,8 sn (cizim_min 2,4 + kabar 1,4), **120 fps (min 105)**; mobil 412×892 dpr 2 → **120 fps (min 94)**; uçuş p=1'de quad kapandı, nav img opacity 1 (26×29 px). Kareler: `olcum/giris/kontak-1440.jpg`, `kontak-erken-mobil.jpg`. GTX/Brave/telefon ölçümü Enes'te (tarayıcı + hızlandırma kaydıyla).
 
 Bilinen sınırlar: arka plan tek kare (film değil); yerleşim sayıları künyeden yaklaşık (kutu 0,569×yükseklik, v 0,546); envmap posterden canvas'ta türetildi (FBO değil); halka çizgi kalınlığı dolgu kalınlığı, kuyruk çizgisi kalınlığın %35'i (göz kararı, Enes'te).
+
+
+---
+---
+
+# 7. TUR — sönümleme YAY + SÖNÜM (28 Ağu 2026, akşam)
+
+Üstel yaklaşma ve sabahki alt hız tabanı kalktı. `motor.ts`: iki durum (konum, hız),
+`a = -k(x-hedef) - c v`; **kritik sönüm** varsayılan (`c = 2√k`, `sonum=0` = otomatik).
+**Fizik sabit adımlı 4 ms**, artan süre biriktirilir, çizim iki fizik durumu arasında
+ara değer harmanlar. **Moment devri:** hedef durunca (kaydırma bırakıldı) hedefin son
+gerçek hızı yaya devredilir, aşma sınırıyla `|v| ≤ √k·|d|` (kritik sönümlü yayda tek yönlü
+varış şartı). Hız tavanı 1,5× yayın hızına uygulanır. Katsayılar: `?sert=` `?sonum=` /
+`data-sert` `data-sonum` / `__fl.sert` `__fl.sonum`.
+
+**Üç aday sertlik** (`sahneler.ts SERTLIK_ADAY`, oturma ≈ 5,8/√k): **60 yumuşak** · **120 orta (varsayılan)** · **250 sıkı**.
+
+## Bırakma ölçümü — `yeni/film/olc-birakma.cjs`
+Brave headless (rAF ≈ 120 Hz), dist, `?kodek=h264`; 1,2 s boyunca 1× kaydır → bırak; konum
+**motorun kendi karesinden** (`__fl.istek[].T`, örnekleme sırası/çift sorunu yok). Son 500 ms
+(oturmadan önceki pencere) hız serisi (delta/dt): işaret değişimi (salınım), sıfır→artış (basamak),
+komşunun 2,2× üstü (sıçrama), aşma karesi. 3 tekrar.
+
+| sertlik | oturma ms (3 tekrar) | işaret değişimi | basamak | sıçrama | aşma | hız eğrisi (örnek) | düz |
+|---|---|---|---|---|---|---|---|
+| 60 | 449 · 453 · 457 | 0 | 0 | 0 | 0 | 0,94 → 0,59 tekdüze | **3/3** |
+| **120** | 275 · 264 · 283 | 0 | 0 | 0 | 0 | 1,06 → 0,30 tekdüze | **3/3** |
+| 250 | 173 · 160 · 166 | 0 | 0 | 0 | 0 | 0,99 → 0,24 tekdüze | **3/3** |
+
+Bırakıştaki yay hızı ≈ 1,0 (elin hızı, moment devri çalışıyor); eğri tek yönlü sönüyor.
+**60 Hz ↔ 120 Hz:** aynı integratörün node benzetimi (`benzet()`), aynı senaryo — konum farkı
+p95 **0,000000**, max **0** film-sn (harmanlama sayesinde bire bir). Sonuçlar `olcum/birakma/sert-*.json`.
+Düzenek dersi: ilk sürüm konumu ayrı bir rAF'tan okuyordu; motorun rAF'ıyla sıra yarışı
+"çift/sıfır kare" yalancı basamaklar üretti (17,6 → 0,06 hız). Kaynak: kayıt motorun karesinden.
+
+## Karşılama sayfası 2. tur (aynı akşam) — `karsilama/`
+Geist + Geist Mono (Google Fonts'tan indirilen değişken woff2, latin + latin-ext; Playfair kalktı),
+fütüristik tema (mono etiketler, ince ızgara, köşe braketleri, üst şerit saat). ESKİ SİTEDEN
+OLDUĞU GİBİ: `#boot` açılış perdesi (markup + CSS + WAAPI zaman çizelgesi, gerçek yükleme olayları,
+masaüstü min 2,7 s / mobil 0,8 s, süpürme; yüzde satırı eklendi), `#tubes` bit huzmeleri
+(`js/tubes.min.js` eski hero paketi, aynı kurulum/kural: ≥900 px + ince işaretçi), `.atmo`,
+eller, `#bit` imleç, `.shiny` dönen konik kenarlık (Demo talebi + Gönder); İletişim'e süzülen
+huzme. Önceki turun uydurulmuş parçacık izi SİLİNDİ. Kareler `karsilama/_kare/kontak2.jpg`.
+Headless Brave: `tubesOn true`, Geist/Geist Mono yüklü, tek ekran (scrollHeight = innerHeight) masaüstü + mobil.

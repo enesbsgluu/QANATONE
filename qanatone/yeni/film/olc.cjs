@@ -133,7 +133,7 @@ async function kos(y) {
   await p.waitForFunction('window.__fl && __fl.ilkKareMs !== null', { timeout: 20000 }).catch(() => uyari.push('ILK KARE BOYANMADI'));
   const ilk = await p.evaluate(() => ({ ilkKareMs: __fl.ilkKareMs, mobil: __fl.mobil, toplam: __fl.toplam,
     acilisMs: __fl.acilisMs ?? null, acilisTakasMs: __fl.acilisTakasMs ?? null,
-    kodek: __fl.kodek ?? null, sonum: __fl.sonum ?? null, tavan: __fl.tavan ?? null, pxSn: __fl.pxSn ?? null }));
+    kodek: __fl.kodek ?? null, sonum: __fl.sonum ?? null, sert: __fl.sert ?? null, tavan: __fl.tavan ?? null, pxSn: __fl.pxSn ?? null }));
   /* tarayici + hizlandirma kaydi */
   const tarayici = await p.evaluate(() => {
     let gpu = 'yok';
@@ -147,7 +147,7 @@ async function kos(y) {
   await p.screenshot({ path: path.join(CIKTI, `${y.ad}-ilk.png`) });
 
   const sonuc = { ad: y.ad, ag: y.ag, mobil: !!y.mobil, cpu: y.cpu, ilk_kare_ms: ilk.ilkKareMs, hat: ilk.mobil ? 'mobil' : 'masaustu',
-    kodek: ilk.kodek, sonum: ilk.sonum, tavan: ilk.tavan, pxSn: ilk.pxSn,
+    kodek: ilk.kodek, sonum: ilk.sonum, sert: ilk.sert, tavan: ilk.tavan, pxSn: ilk.pxSn,
     tarayici: { ad: TARAYICI, headless: !!HEADLESS, ...tarayici },
     acilis_ms: ilk.acilisMs, acilis_takas_ms: ilk.acilisTakasMs, supur: [] };
   for (const s of y.supur) {
