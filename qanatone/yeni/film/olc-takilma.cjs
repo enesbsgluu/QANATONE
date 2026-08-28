@@ -22,7 +22,7 @@ const SURUCU = `
 window.SUPUR = (T0, T1, ms) => new Promise((res) => {
   const F = window.__fl; F.sifirla(); F.kayit = true; const t0 = performance.now();
   const ad = () => { const u = Math.min(1, (performance.now() - t0) / ms); scrollTo(0, Math.round(F.konum(T0 + (T1 - T0) * u)));
-    if (u < 1) requestAnimationFrame(ad); else setTimeout(() => { F.kayit = false; res({ istek: F.istek, sunum: F.sunum, sahne: F.sahne(), bas: F.__bas || null }); }, 400); };
+    if (u < 1) requestAnimationFrame(ad); else setTimeout(() => { F.kayit = false; res({ istek: F.istek, sunum: F.sunum, sahne: F.sahne(), mbit: F.mbit ?? null, onPencere: F.onPencere ?? null, pencere: F.pencere ?? null, onsar: F.onsar ?? null }); }, 400); };
   requestAnimationFrame(ad);
 });`;
 
@@ -90,7 +90,7 @@ async function kos(y) {
     await p.evaluate((T0) => { scrollTo(0, Math.round(__fl.konum(T0))); __fl.atla(); }, s.T0); await new Promise((r) => setTimeout(r, 700));
     const g = await p.evaluate((a, b_, ms) => SUPUR(a, b_, ms), s.T0, s.T1, s.ms);
     const a = analiz(g, baslar, fps);
-    sonuc.supur.push({ ad: s.ad, hiz: s.hiz, film_sn: Math.abs(s.T1 - s.T0), ...a });
+    sonuc.supur.push({ ad: s.ad, hiz: s.hiz, film_sn: Math.abs(s.T1 - s.T0), mbit: g.mbit, onPencere: g.onPencere, pencere: g.pencere, onsar: g.onsar, sahne_inme: g.sahne.slice(0, 8).map((x) => `${x.n}:${x.durum}/${x.inmeMs}ms`).join(' '), ...a });
   }
   await b.close(); return sonuc;
 }
@@ -105,7 +105,7 @@ const KUME = [{ ad: 'masaustu-wifi', ag: 'wifi', cpu: 1, supur: supurler(false) 
   fs.writeFileSync(path.join(CIKTI, (sec ? 'rapor-' + sec : 'rapor') + '.json'), JSON.stringify(hepsi, null, 1));
   console.log('\n| küme | süpürme | sunulan kare | fark p50/p95/max ms | >100 ms kare (%) | olay | sınırda (≤0,35 s) | dağınık | hüküm |');
   console.log('|---|---|---:|---|---:|---:|---:|---:|---|');
-  for (const r of hepsi) for (const s of r.supur) console.log(`| ${r.ad} | ${s.ad} | ${s.sunulan_kare} | ${s.fark_p50}/${s.fark_p95}/${s.fark_max} | ${s.sapma_kare} (${s.sapma_yuzde}%) | ${s.olay_adet} | ${s.olay_sinirda} | ${s.olay_daginik} | ${s.hukum} |`);
+  for (const r of hepsi) for (const s of r.supur) console.log(`| ${r.ad} | ${s.ad} (mbit ${s.mbit} · ön ${s.onPencere} · önsar ${s.onsar}) | ${s.sunulan_kare} | ${s.fark_p50}/${s.fark_p95}/${s.fark_max} | ${s.sapma_kare} (${s.sapma_yuzde}%) | ${s.olay_adet} | ${s.olay_sinirda} | ${s.olay_daginik} | ${s.hukum} |`);
   console.log('\n== OLAYLAR (>100 ms) ==');
   for (const r of hepsi) for (const s of r.supur) for (const o of s.olaylar) console.log(`${r.ad} · ${s.ad} · t=${o.bas_t} ms · sahne${o.n} · ${o.adet} kare · max ${o.max_ms} ms (${o.isaret < 0 ? 'sunulan GERİDE' : 'sunulan İLERİDE'})${o.bosluk_ms ? ' · sunumsuz boşluk ' + o.bosluk_ms + ' ms' : ''} · sunulan ${o.sunulan} s · en yakın sınır sahne${o.sinir_n} başı, uzaklık ${o.sinira_s > 0 ? '+' : ''}${o.sinira_s} s`);
   console.log(`\nGPU: ${hepsi[0] && hepsi[0].gpu} · tarayıcı ${TARAYICI} headless · → yeni/film/olcum/takilma/rapor.json`);

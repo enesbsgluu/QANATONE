@@ -61,6 +61,23 @@
    kontrol hep kullanicida, cakisma yok. Film sonunda durur. Ayar:
    ?akis=0.08 (URL) · data-akis · __fl.akis (0 = kapali).
 
+   SINIR ON-SARMA + CIFT VIDEO (28 Agu 2026 gece, Enes): olculdu (olc-takilma),
+   ileri okumadaki her sapma klip sinirinin SON karesindeydi (110-170 ms
+   sunumsuz bosluk): komsu `visibility:hidden` iken devralinca ilk boyama +
+   ilk rVFC bir-iki kare yiyordu. Simdi: gosterilen konum sinira ON_SAR_S
+   (0,5 s) kala, YONDEKI komsu klip sinir karesine (ileri: 0, geri: son)
+   on-sarilir ve `fl-onsar` sinifiyla BOYANIR — etkinin ALTINDA, gorunur.
+   Devir aninda yalniz katman sirasi degisir (etkin ustte); display/
+   visibility gecisi yok, ilk kare coktan kompozitorde. Sinirdan
+   uzaklasinca (ya da devirden sonra) sinif kalkar: ayni anda en cok IKI
+   video boyanir.
+
+   YAVAS HAT PENCERESI (ayni tur): olculdu, yavas 4G 1x okumada sahne3->4
+   sinirinda 2,57 s sunumsuz bosluk (klip inmemis). Etkin indirme hizi
+   (son inen klibin bayt/inmeMs) YAVAS_MBIT altindaysa on-yukleme
+   penceresi bir klip genisler (ON_PENCERE+1) ve tutma penceresi de
+   onunla; sira zaten yondeki komsu ile baslar.
+
    SAHNE GECISI (dikis) — DEVRALMA (27 Agu 2026, Enes karari):
    Eskiden komsu klip sinir karesine on-sarilir ve el degisimi ANINDA
    yapilirdi. Geri savurmada bu, gorunur bir sicrama uretiyordu: klip
@@ -85,11 +102,15 @@
 /* Bellek tavani: gecerli sahnenin +-PENCERE'si bellekte kalir. 3 -> en cok
    7 klip. Olculen klip basi ~1 MiB (CRF 28 native) ile tavan ~7 MiB. */
 const PENCERE = 3;
+/* sinira bu kadar kala yondeki komsu on-sarilir ve boyanir (s) */
+const ON_SAR_S = 0.5;
+/* etkin indirme hizi bunun altindaysa (Mbit/s) on-yukleme penceresi +1 */
+const YAVAS_MBIT = 6;
 /* On yukleme penceresi TUTMA penceresinden DAR: ikisi esit olursa sinirda
    inen klip, gecerli sahne bir adim kayinca hemen pencere disina dusup
    birakilir ve geri gelindiginde yeniden iner (indir-birak salinimi).
    Aradaki bir kliplik pay histerezis gorevi gorur. */
-const ON_PENCERE = PENCERE - 1;
+const ON_PENCERE_TABAN = PENCERE - 1;
 
 /* Savurma esigi: iki rAF arasi kat edilen film saniyesi bunun ustundeyse
    kaydirma "savurma" sayilir ve on yukleme sirasi sinir-oncelikli kurulur.
@@ -127,7 +148,7 @@ interface Iz {
   istek: { t: number; n: number; kare: number; T?: number; hedef?: number }[];
   sunum: { t: number; n: number; kare: number; g: boolean; mt: number }[];   /* mt: sunulan karenin gercek mediaTime'i (sn) */
   ilkKareMs: number | null;
-  yon: number; hiz: number; pencere: number;
+  yon: number; hiz: number; pencere: number; onPencere: number; mbit: number | null; onsar: number;
   ray: () => { pxSn: number; rayPx: number; ekranBoyu: number; snBasinaEkran: number; birEkranSn: number };
   bellekMib: () => number;
   birakilan: number;
@@ -224,7 +245,7 @@ export function baslat(bolum: HTMLElement): () => void {
   const IZ: Iz = {
     hazir: false, kayit: false, mobil, kodek: KODEK, toplam, pxSn, fps,
     istek: [], sunum: [], ilkKareMs: null,
-    yon: 1, hiz: 0, pencere: PENCERE, birakilan: 0,
+    yon: 1, hiz: 0, pencere: PENCERE, onPencere: ON_PENCERE_TABAN, mbit: null, onsar: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
     sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
@@ -353,9 +374,16 @@ export function baslat(bolum: HTMLElement): () => void {
       await sar(v, kareSn(S.indexOf(s) === i ? kareNo(s, sonT2) : (S.indexOf(s) < i ? s.kare - 1 : 0)));
       s.durum = 'hazir';
       s.inmeMs = Math.round(performance.now() - t0);
+      /* etkin indirme hizi -> yavas hatta pencere genisler (kucuk kliplerde gurultulu; 200 KB alti sayilmaz) */
+      if (s.bayt > 200000 && s.inmeMs > 0) {
+        IZ.mbit = +((s.bayt * 8) / (s.inmeMs / 1000) / 1e6).toFixed(2);
+        const yavas = IZ.mbit < YAVAS_MBIT;
+        IZ.onPencere = ON_PENCERE_TABAN + (yavas ? 1 : 0);
+        IZ.pencere = PENCERE + (yavas ? 1 : 0);
+      }
       /* inerken pencere kaymis olabilir: kendi kontrolunu simdi yapar
          (budaP inen klibe dokunmuyor, dokunursa kilitleniyor) */
-      if (Math.abs(S.indexOf(s) - i) > PENCERE) birak(s);
+      if (Math.abs(S.indexOf(s) - i) > IZ.pencere) birak(s);
     } catch (e) {
       s.durum = 'hata';
       console.warn('[film] sahne ' + s.n + ' inmedi', e);
@@ -383,7 +411,7 @@ export function baslat(bolum: HTMLElement): () => void {
   };
   const budaP = () => {
     for (let k = 0; k < S.length; k++) {
-      if (Math.abs(k - i) <= PENCERE) continue;
+      if (Math.abs(k - i) <= IZ.pencere) continue;
       birak(S[k]);
     }
   };
@@ -404,7 +432,7 @@ export function baslat(bolum: HTMLElement): () => void {
     const s0 = S[i];
     if (s0.aVideo && s0.aDurum === 'yok' && s0.durum !== 'hazir') { acilisYukle(s0); return; }
     for (const k of oncelik()) {
-      if (Math.abs(k - i) > ON_PENCERE) continue; /* on yukleme penceresi disina indirme yok */
+      if (Math.abs(k - i) > IZ.onPencere) continue; /* on yukleme penceresi disina indirme yok (yavas hatta +1) */
       const s = S[k];
       if (s && s.durum === 'yok') { yukle(s); return; }
     }
@@ -432,10 +460,25 @@ export function baslat(bolum: HTMLElement): () => void {
       const komsu = Math.abs(x.n - s.n) === 1;
       x.el.classList.toggle('fl-etkin', x === s);
       x.el.classList.toggle('fl-komsu', komsu);
+      if (x === s) x.el.classList.remove('fl-onsar');
     };
     if (eski) { dokun(eski); dokun(S[S.indexOf(eski) - 1]); dokun(S[S.indexOf(eski) + 1]); }
     const j = S.indexOf(s);
     dokun(s); dokun(S[j - 1]); dokun(S[j + 1]);
+  };
+
+  /* --- SINIR ON-SARMA: yondeki komsuyu sinir karesine sar ve boya (cift video) --- */
+  let onsarli: Sahne | null = null;
+  const onSar = (T: number) => {
+    const y = IZ.yon >= 0 ? 1 : -1;
+    const k = S[i + y];
+    const uzak = y > 0 ? (S[i + 1] ? S[i + 1].bas - T : Infinity) : T - S[i].bas;
+    const aday = k && k.durum === 'hazir' && uzak <= ON_SAR_S ? k : null;
+    if (onsarli && onsarli !== aday) { if (onsarli !== etkin) onsarli.el.classList.remove('fl-onsar'); onsarli = null; }
+    if (!aday) return;
+    const v = aday.video, hedef = kareSn(y > 0 ? 0 : aday.kare - 1);
+    if (!v.seeking && Math.abs(v.currentTime - hedef) > 0.5 / fps) v.currentTime = hedef;   /* sinir karesi */
+    if (onsarli !== aday) { aday.el.classList.add('fl-onsar'); onsarli = aday; IZ.onsar++; }
   };
 
   /* aday sahneyi YERLESIK yapar (kod cozucu ayakta) ama gostermez —
@@ -546,6 +589,7 @@ export function baslat(bolum: HTMLElement): () => void {
     sonT = T;
     sonT2 = T;
     if (s !== etkin) { yerlestir(s); budaP(); }
+    onSar(T);
     sira();
     if (s.durum === 'hazir') {
       const k = kareNo(s, T);

@@ -53,6 +53,10 @@ main:has(> .fl) { max-width: none; padding: 0; }
 .fl-js .fl-sahne { position: absolute; inset: 0; display: none; }
 .fl-js .fl-sahne.fl-etkin { display: block; }
 .fl-js .fl-sahne.fl-komsu { display: block; visibility: hidden; }
+/* CIFT VIDEO (28 Agu gece): sinira 0,5 s kala yondeki komsu `fl-onsar` ile BOYANIR,
+   etkinin altinda (z 0 < 1). Devir katman sirasi degisimi; visibility gecisi yok. */
+.fl-js .fl-sahne.fl-onsar { display: block; visibility: visible; z-index: 0; }
+.fl-js .fl-sahne.fl-etkin { z-index: 1; }
 .fl-js .fl-poster,
 .fl-js .fl-video {
   position: absolute; inset: 0;
