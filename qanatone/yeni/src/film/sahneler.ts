@@ -35,13 +35,18 @@ import URETIM from '../../film/uretim.json';
    0,22 sn = 5,3 kare. */
 export const PX_SN = 450;
 
-/* SONUMLEME KATSAYISI (27 Agu 2026, Enes) — kaydirmanin hedef konumu ile
-   filmin gosterilen konumu arasindaki ustel yaklasma orani. 1 = sonumleme
-   yok (ham scrollY dogrudan currentTime). Kucuk deger = daha yumusak, daha
-   gec oturur. 60 Hz'e gore tanimli; motor kare suresine gore duzeltir.
-   DENEME: ?sonum=0.25 (URL) ya da konsolda __fl.sonum = 0.25 — ikisi de
-   bu varsayilani ezer. Deger oturunca buraya yazilir. */
-export const SONUM = 0.18;
+/* YAY + SONUM (28 Agu 2026, Enes) — kaydirmanin hedef konumu ile filmin
+   gosterilen konumu arasinda kritik sonumlu yay (motor.ts basindaki not).
+   SERTLIK k (1/s^2): oturma suresi ~5,8/sqrt(k). Uc aday:
+     60  yumusak  ~0,75 s   (agir okuma, sinema hissi)
+     120 orta     ~0,53 s   (VARSAYILAN)
+     250 siki     ~0,37 s   (ele yapisik, hizli gezinme)
+   SONUM c (1/s): 0 = kritik (2*sqrt(k)) otomatik; elle vermek yalniz deneme
+   icin (c < 2*sqrt(k) salinir, c > asiri sonumlu surunur).
+   DENEME: ?sert=250 ?sonum=0 (URL) · konsolda __fl.sert = 60. */
+export const SERTLIK = 120;
+export const SONUM = 0;
+export const SERTLIK_ADAY = [60, 120, 250] as const;
 
 /* HIZ TAVANI (28 Agu 2026, Enes) — gosterilen konum saniyede en cok bu
    kadar film-sn ilerler; daha hizli kaydirma yutulur, sayfadaki "atla"

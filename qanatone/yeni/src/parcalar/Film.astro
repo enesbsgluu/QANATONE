@@ -28,14 +28,14 @@
    JS yolunda `display:none` sarmal icinde oldukları icin HIC INMEZ
    (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
 import '../stil/film.css';
-import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SONUM, TAVAN } from '../film/sahneler';
+import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN } from '../film/sahneler';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
-  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sonum={SONUM} data-tavan={TAVAN}
+  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN}
   style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">

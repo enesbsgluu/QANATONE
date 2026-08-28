@@ -9,138 +9,273 @@
 <meta property="og:description" content="Performans pazarlama · yapay zekâ otomasyonu · web tasarımı ve daha fazlası. Yakında sizlerle.">
 <meta name="theme-color" content="#050505">
 <link rel="icon" href="img/qanatone.webp" type="image/webp">
-<link rel="preload" href="font/playfair-display-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!--
-  KARSILAMA SAYFASI (28 Agu 2026) — tek dosya, kaynak ESKI site tasarimi
-  (index.html build 130: palet, eller, kizil bit, pill, dugme dili). Tek ekran,
-  kaydirma yok (mobilde de). Deploy yok.
-  SAPMALAR (Enes, bilincli): yazi tipi tek aile iki varyant — Playfair Display
-  500 + 500 italic (eski sitenin Manrope 700/800'u yok); giris animasyonu
-  YAY tabanli ve KESILEBILIR (asagida `yay()`: hedef her an degisir, durum
-  suruklenir — sert baslangic/ani durus yok). Kontrol araci YOK, yerine
-  "yakinda" alani. Form Netlify Forms (statik data-netlify, gizli form-name,
-  honeypot, KVKK onayi `name`li). KVKK/gizlilik: kvkk.html, gizlilik.html.
+  KARSILAMA SAYFASI — 2. tur (28 Agu 2026). Tek dosya, tek ekran, kaydirma yok.
+  KAYNAK: ESKI SITE index.html (build 130). Buradan OLDUGU GIBI alinanlar:
+    · #boot acilis perdesi (markup + CSS + WAAPI zaman cizelgesi: anakart izleri,
+      sinyaller, kose braketleri, QANATONE harfleri, gercek yukleme olaylarina
+      bagli cubuk, masaustu min 2,7 s / mobil 0,8 s, harf + perde supurmesi)
+    · #tubes bit huzmeleri: js/tubes.min.js (eski hero canvas'i) — ayni kurulum
+      (renkler, isik, dpr 1,25 kapagi, .on opaklik .5, mix-blend screen,
+      IntersectionObserver/visibility durdurma, cift tik renk). Eski kural:
+      masaustu (>=900 px) + ince isaretci; dokunmatikte acilmaz.
+    · .atmo kizil atmosfer · eller (.hands) · #bit imlec noktasi · .shiny
+      donen konik kenarlik (dugme isik huzmesi) · palet
+  ENES SAPMALARI: yazi tipi Geist (baslik/govde) + Geist Mono (teknik satir,
+  etiketler), yerel woff2 latin + latin-ext (TR); tema FUTURISTIK (mono
+  etiketler, ince izgara, kose braketleri, tarama cizgisi) — editoryal degil;
+  icerik girisi YAY tabanli, kesilebilir (yay(): hedef her an degisir, sicrama
+  yok); kontrol araci yok, "yakinda" alani; form Netlify Forms.
+  Ayarlar: ?tubes=0 (huzmeleri kapat) ?boot=0 (perdeyi atla)
 -->
 <style>
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F,U+0130,U+015E-015F}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(font/playfair-display-500i-tr.woff2) format('woff2');unicode-range:U+011E-011F,U+0130,U+015E-015F}
+/* ---- yazi tipleri: Geist (degisken) + Geist Mono (degisken), latin + latin-ext ---- */
+@font-face{font-family:Geist;font-style:normal;font-weight:100 900;font-display:swap;src:url(font/geist-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Geist;font-style:normal;font-weight:100 900;font-display:swap;src:url(font/geist-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;font-display:swap;src:url(font/geist-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;font-display:swap;src:url(font/geist-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 
-/* palet: eski site :root (build 130) */
+/* palet: eski site :root */
 :root{--bg:#050505;--red:#ef233c;--red-soft:#ff4d63;--red-dim:rgba(239,35,60,.12);--red-glow:rgba(239,35,60,.45);
-  --tx:#fff;--tx2:rgba(255,255,255,.62);--tx3:rgba(255,255,255,.5);--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.2);
-  --e:cubic-bezier(.2,.7,.2,1);--f:'Playfair Display',Georgia,'Times New Roman',serif}
+  --tx:#fff;--tx2:rgba(255,255,255,.62);--tx3:rgba(255,255,255,.5);--tx4:rgba(255,255,255,.48);--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.2);
+  --e:cubic-bezier(.2,.7,.2,1);--e2:cubic-bezier(.22,1,.36,1);--f:Geist,system-ui,sans-serif;--m:'Geist Mono',ui-monospace,monospace}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:500 16px/1.5 var(--f);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
-button,input,textarea{font:inherit;color:inherit}
-button{background:none;border:0;padding:0;cursor:pointer}
-a{color:inherit;text-decoration:none}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:400 16px/1.5 var(--f);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+button,input,textarea{font:inherit;color:inherit}button{background:none;border:0;padding:0;cursor:pointer}a{color:inherit;text-decoration:none}
+.mono{font-family:var(--m);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--tx3)}
 
-/* ---- sahne: tek ekran ---- */
-#ekran{position:fixed;inset:0;height:100vh;height:100svh;overflow:hidden;display:grid;grid-template-rows:1fr auto;isolation:isolate}
-#bitcv{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-/* eller: eski hero (.hands) — insan ustte solda, robot altta sagda, merkeze dogru sise karisir */
-.eller{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-  -webkit-mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%);
-  mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%)}
-.el{position:absolute;will-change:transform,opacity;opacity:0}
-.el img{display:block;width:100%;height:auto}
-.el::before{content:'';position:absolute;inset:-14%;z-index:-1;background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%)}
-.el-h{left:-2vw;top:-2vw;width:33vw}
-.el-r{right:-2vw;bottom:-2vw;width:33vw}
-.salin{display:block}
-.el-h .salin{transform-origin:0 6%;animation:salA 13s ease-in-out infinite}
-.el-r .salin{transform-origin:100% 94%;animation:salB 17.5s ease-in-out -4s infinite}
-@keyframes salA{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(3px,-8px,0) rotate(-1deg)}}
-@keyframes salB{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(-5px,12px,0) rotate(.8deg)}}
-@media (max-width:900px){.el-h{width:52vw;left:-8vw;top:-4vw}.el-r{width:56vw;right:-10vw;bottom:-2vw}
-  .eller{-webkit-mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%);mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%)}}
+/* ---- sahne ---- */
+#ekran{position:fixed;inset:0;height:100vh;height:100svh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;isolation:isolate}
+/* ince izgara (futuristik zemin) */
+#ekran::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 96px,linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/96px 100%;
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,#000 30%,transparent 90%);mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,#000 30%,transparent 90%)}
+/* kizil atmosfer: eski hero .atmo */
+.atmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.atmo .a1{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);width:min(1500px,150vw);height:min(1100px,120vw);border-radius:50%;background:radial-gradient(closest-side,rgba(190,22,44,.13) 0 26%,rgba(203,26,52,.44) 56%,rgba(120,12,28,.19) 73%,transparent 87%);filter:blur(70px)}
+.atmo .a2{position:absolute;left:-10%;top:-14%;width:70vw;height:60vw;border-radius:50%;background:radial-gradient(closest-side,rgba(239,35,60,.34),transparent 70%);filter:blur(90px)}
+.atmo .a3{position:absolute;right:-14%;bottom:-20%;width:66vw;height:58vw;border-radius:50%;background:radial-gradient(closest-side,rgba(160,16,36,.4),transparent 72%);filter:blur(100px)}
+.atmo .a4{position:absolute;inset:0;background:linear-gradient(180deg,transparent 34%,rgba(5,5,5,.6) 78%,#050505 100%)}
+/* bit huzmeleri: eski #tubes */
+#tubes{position:absolute;inset:0;z-index:1;width:100%;height:100%;opacity:0;transition:opacity 1.8s var(--e);mix-blend-mode:screen}
+#tubes.on{opacity:.5}
+/* eller: eski #hero .hands */
+.hands{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%);mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%)}
+.hand{position:absolute;will-change:transform,opacity;opacity:0}
+.hand img{display:block;width:100%;height:auto}
+.hfloat{position:relative;display:block;will-change:transform}
+.hfloat::before{content:'';position:absolute;inset:-14%;z-index:0;pointer-events:none;background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%)}
+.hfloat::after{content:'';position:absolute;left:6%;right:6%;top:16%;bottom:-6%;z-index:0;pointer-events:none;background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%)}
+.hand img{position:relative;z-index:1}
+.hand-h{left:-2vw;top:-2vw;width:33vw}.hand-r{right:-2vw;bottom:-2vw;width:33vw}
+.hand-h .hfloat{transform-origin:0 6%;animation:handFloatA 13s ease-in-out infinite}
+.hand-r .hfloat{transform-origin:100% 94%;animation:handFloatB 17.5s ease-in-out -4s infinite}
+@keyframes handFloatA{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(3px,-8px,0) rotate(-1deg)}}
+@keyframes handFloatB{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(-5px,12px,0) rotate(.8deg)}}
+@media (max-width:900px){.hand-h{width:52vw;left:-8vw;top:-4vw}.hand-r{width:56vw;right:-10vw;bottom:-2vw}
+  .hands{-webkit-mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%);mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%)}}
+/* kose braketleri (eski #boot .bc dili, sahnede de kalir) */
+.bc{position:absolute;width:26px;height:26px;border:1px solid rgba(239,35,60,.42);z-index:3;pointer-events:none;opacity:0}
+.bc.a{left:18px;top:18px;border-right:0;border-bottom:0}.bc.b{right:18px;top:18px;border-left:0;border-bottom:0}
+.bc.c{left:18px;bottom:18px;border-right:0;border-top:0}.bc.d{right:18px;bottom:18px;border-left:0;border-top:0}
+
+/* ---- ust serit (mono) ---- */
+.ust{position:relative;z-index:4;display:flex;justify-content:space-between;align-items:center;padding:max(22px,env(safe-area-inset-top)) max(26px,env(safe-area-inset-left)) 0 max(26px,env(safe-area-inset-right))}
+.ust .mono b{color:var(--red-soft);font-weight:500}
+.ust .saat{font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ust{font-size:10px}.ust .orta-gizle{display:none}}
 
 /* ---- merkez ---- */
-.orta{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:max(40px,6vh) 24px 20px;gap:0}
-.orta::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,130%);height:110%;z-index:-1;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(3,3,4,.6),rgba(3,3,4,.3) 54%,transparent 78%)}
+.orta{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 24px}
+.orta::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,130%);height:110%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(3,3,4,.62),rgba(3,3,4,.3) 54%,transparent 78%)}
 .g{opacity:0;will-change:transform,opacity}
-h1{margin:0;font-weight:500;font-size:clamp(2.1rem,6.2vw,5.2rem);line-height:1.04;letter-spacing:-.02em}
-h1 em{font-style:italic;color:var(--red-soft)}
-.amblem{margin:clamp(20px,3.6vh,36px) 0 clamp(20px,3.4vh,34px);line-height:0}
-.amblem img{height:clamp(54px,9vh,88px);width:auto;filter:drop-shadow(0 0 22px rgba(239,35,60,.35))}
-.dugmeler{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:999px;font-size:1rem;letter-spacing:-.005em;line-height:1;transition:box-shadow .34s var(--e),background .34s var(--e),border-color .34s var(--e);will-change:transform}
-.btn-p{background:var(--red);color:#fff}
-.btn-p:hover{background:#ff2f47;box-shadow:0 12px 40px -10px var(--red-glow)}
-.btn-g{background:rgba(255,255,255,.045);border:1px solid var(--line2);color:var(--tx)}
-.btn-g:hover{border-color:rgba(255,255,255,.4)}
-.btn svg{width:15px;height:15px}
-.satir{margin:clamp(18px,3.2vh,30px) 0 0;font-size:clamp(.92rem,1.3vw,1.08rem);color:var(--tx2);max-width:42ch;line-height:1.55}
-.satir i{font-style:italic;color:var(--tx)}
-.yakinda{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(14px,2.4vh,22px);padding:8px 16px 8px 12px;border:1px dashed var(--line2);border-radius:999px;font-size:.84rem;color:var(--tx3);letter-spacing:.02em}
-.yakinda .nokta{position:relative;width:8px;height:8px;border-radius:50%;background:var(--red)}
-.yakinda .nokta::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(239,35,60,.5);animation:halka 2.6s ease-in-out infinite}
+.etiket{display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;margin-bottom:clamp(16px,2.6vh,26px)}
+.etiket .dot{position:relative;width:7px;height:7px;border-radius:50%;background:var(--red)}
+.etiket .dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(239,35,60,.5);animation:halka 2.6s ease-in-out infinite}
 @keyframes halka{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:.1}}
-.yakinda i{font-style:italic;color:var(--tx2)}
+h1{margin:0;font-weight:300;font-size:clamp(2.2rem,6.4vw,5.4rem);line-height:1.02;letter-spacing:-.045em}
+h1 em{font-style:normal;font-weight:400;color:var(--red-soft)}
+.amblem{margin:clamp(18px,3.4vh,34px) 0 clamp(18px,3.2vh,30px);line-height:0}
+.amblem img{height:clamp(52px,8.6vh,84px);width:auto;filter:drop-shadow(0 0 22px rgba(239,35,60,.35))}
+.dugmeler{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
+/* dugme + isik huzmesi: eski .shiny (donen konik kenarlik) — Demo talebi */
+@property --ga{syntax:"<angle>";initial-value:0deg;inherits:false}
+.shiny{position:relative;isolation:isolate;border-radius:999px;padding:14px 30px;font-weight:500;font-size:.95rem;letter-spacing:-.01em;color:#fff;
+  background:linear-gradient(#0a0a0a,#0a0a0a) padding-box,conic-gradient(from var(--ga),transparent 0%,var(--red) 6%,var(--red) 18%,transparent 34%,transparent 100%) border-box;
+  border:2px solid transparent;animation:gaspin 3s linear infinite;display:inline-flex;align-items:center;gap:10px;will-change:transform}
+.shiny svg{width:16px;height:16px;transition:transform .3s var(--e)}.shiny:hover svg{transform:translateX(4px)}
+@keyframes gaspin{to{--ga:360deg}}
+/* ikinci dugme: cam zemin + suzulen huzme (hover'da soldan saga isik) */
+.btn-g{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-size:.95rem;font-weight:500;letter-spacing:-.01em;background:rgba(255,255,255,.045);border:1px solid var(--line2);color:var(--tx);transition:border-color .3s var(--e),background .3s var(--e);will-change:transform}
+.btn-g::after{content:'';position:absolute;top:-40%;bottom:-40%;left:-30%;width:26%;transform:skewX(-22deg) translateX(-160%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:transform .9s var(--e);pointer-events:none}
+.btn-g:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}.btn-g:hover::after{transform:skewX(-22deg) translateX(560%)}
+.satir{margin:clamp(16px,3vh,28px) 0 0;font-family:var(--m);font-size:clamp(10.5px,1.05vw,12.5px);letter-spacing:.14em;text-transform:uppercase;color:var(--tx2);line-height:1.8;max-width:52ch}
+.satir i{font-style:normal;color:var(--tx)}
+.yakinda{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(12px,2.2vh,20px);padding:8px 16px 8px 12px;border:1px dashed var(--line2);border-radius:6px;font-family:var(--m);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--tx3)}
+.yakinda .bar{width:64px;height:2px;background:rgba(255,255,255,.1);position:relative;overflow:hidden;border-radius:2px}
+.yakinda .bar::after{content:'';position:absolute;inset:0;width:34%;background:linear-gradient(90deg,#c31732,#ff4d63 60%,#ff8b98);box-shadow:0 0 10px rgba(239,35,60,.9);animation:ybar 2.4s var(--e) infinite}
+@keyframes ybar{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+.yakinda i{font-style:normal;color:var(--red-soft)}
 
 /* ---- alt ---- */
-.alt{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(24px,env(safe-area-inset-left)) max(18px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-right));font-size:.9rem;color:var(--tx2)}
+.alt{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(26px,env(safe-area-inset-left)) max(20px,env(safe-area-inset-bottom)) max(26px,env(safe-area-inset-right));font-family:var(--m);font-size:11px;letter-spacing:.1em;color:var(--tx2)}
 .alt a:hover{color:var(--tx)}
 .piksel{display:grid;grid-auto-flow:column;gap:4px;align-items:end;height:18px}
 .piksel i{display:block;width:3px;height:3px;border-radius:1px;background:var(--red);opacity:.25;animation:pk 2.8s ease-in-out infinite;animation-delay:calc(var(--k) * -.11s)}
 @keyframes pk{0%,100%{opacity:.18;transform:translateY(0)}50%{opacity:.95;transform:translateY(-8px)}}
-.alt .hukuk{display:flex;gap:14px;font-size:.8rem;color:var(--tx3)}
+.alt .hukuk{display:flex;gap:16px;color:var(--tx3);text-transform:uppercase;letter-spacing:.16em;font-size:10px}
 @media (max-width:640px){.alt{flex-wrap:wrap;justify-content:center;text-align:center;row-gap:8px}.alt .hukuk{width:100%;justify-content:center}.piksel{order:-1;width:100%;justify-content:center}}
+
+/* ---- imlec noktasi: eski #bit ---- */
+#bit{position:fixed;left:0;top:0;z-index:140;width:10px;height:10px;margin:-5px 0 0 -5px;pointer-events:none;opacity:0;transition:opacity .6s var(--e);will-change:transform}
+#bit.on{opacity:1}
+#bit .core{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 34% 30%,#ff8b98,var(--red) 62%,#8d0f20);box-shadow:0 0 10px 2px rgba(239,35,60,.55);transition:transform .3s var(--e)}
+#bit .ring{position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(239,35,60,.4);animation:bitr 2.6s ease-in-out infinite}
+@keyframes bitr{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.35);opacity:.15}}
+#bit.link .core{transform:scale(1.55)}
+@media (pointer:coarse),(max-width:900px){#bit{display:none}}
 
 /* ---- modal (form) ---- */
 #perde{position:fixed;inset:0;z-index:20;background:rgba(5,5,5,.72);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s var(--e)}
 #perde.acik{opacity:1;pointer-events:auto}
-#kutu{position:fixed;left:50%;top:50%;z-index:21;width:min(520px,calc(100% - 28px));max-height:calc(100vh - 28px);max-height:calc(100svh - 28px);overflow:auto;padding:30px 28px 26px;border-radius:22px;border:1px solid var(--line2);background:rgba(12,12,13,.97);box-shadow:0 40px 90px -30px rgba(0,0,0,.8);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.96);will-change:transform,opacity}
+#kutu{position:fixed;left:50%;top:50%;z-index:21;width:min(520px,calc(100% - 28px));max-height:calc(100vh - 28px);max-height:calc(100svh - 28px);overflow:auto;padding:30px 28px 26px;border-radius:18px;border:1px solid var(--line2);background:rgba(12,12,13,.97);box-shadow:0 40px 90px -30px rgba(0,0,0,.8);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.96);will-change:transform,opacity}
 #kutu.acik{pointer-events:auto}
-#kutu h2{margin:0 0 4px;font-weight:500;font-size:1.5rem;letter-spacing:-.01em}
-#kutu .ust{color:var(--tx2);font-size:.92rem;margin:0 0 18px}
+#kutu h2{margin:0 0 4px;font-weight:400;font-size:1.5rem;letter-spacing:-.03em}
+#kutu .ust-not{color:var(--tx2);font-size:.92rem;margin:0 0 18px}
 .fld{display:block;margin:0 0 12px}
-.fld span{display:block;font-size:.82rem;color:var(--tx3);margin:0 0 5px}
-.fld input,.fld textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line2);background:rgba(255,255,255,.04);outline:0;transition:border-color .25s}
+.fld span{display:block;font-family:var(--m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--tx3);margin:0 0 6px}
+.fld input,.fld textarea{width:100%;padding:11px 13px;border-radius:8px;border:1px solid var(--line2);background:rgba(255,255,255,.04);outline:0;transition:border-color .25s}
 .fld input:focus,.fld textarea:focus{border-color:var(--red-soft)}
 .fld textarea{resize:vertical;min-height:74px}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:.8rem;color:var(--tx2);margin:6px 0 16px;line-height:1.45}
-.chk input{margin:3px 0 0;accent-color:var(--red)}
-.chk a{color:var(--red-soft)}
+.chk input{margin:3px 0 0;accent-color:var(--red)}.chk a{color:var(--red-soft)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .kapat{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--tx2);transition:background .25s}
-.kapat:hover{background:rgba(255,255,255,.08);color:var(--tx)}
-.kapat svg{width:15px;height:15px}
-.msj{display:block;min-height:1.3em;margin-top:12px;font-size:.86rem;color:var(--tx2)}
-.msj.ok{color:#7be0a0}.msj.hata{color:var(--red-soft)}
-.satirlar{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-@media (max-width:480px){.satirlar{grid-template-columns:1fr}}
+.kapat:hover{background:rgba(255,255,255,.08);color:var(--tx)}.kapat svg{width:15px;height:15px}
+.msj{display:block;min-height:1.3em;margin-top:12px;font-size:.86rem;color:var(--tx2)}.msj.ok{color:#7be0a0}.msj.hata{color:var(--red-soft)}
+.satirlar{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}@media (max-width:480px){.satirlar{grid-template-columns:1fr}}
 
-@media (prefers-reduced-motion:reduce){.salin,.piksel i,.yakinda .nokta::after{animation:none}}
+/* ===== ACILIS PERDESI: ESKI SITE #boot (build 130), harf tipi Geist Mono ===== */
+html.booting,html.booting body{overflow:hidden}
+#boot{position:fixed;inset:0;z-index:999;display:grid;place-items:center;transition:opacity .7s cubic-bezier(.22,1,.36,1),visibility .7s}
+#boot.done{opacity:0;visibility:hidden;pointer-events:none}
+html:not(.boot-on) #boot{display:none}
+#boot.out{will-change:transform}
+#boot:not(.js).out{animation:bwipe .62s .14s var(--e2) forwards}
+@keyframes bwipe{to{transform:translateY(-102%)}}
+#boot .bskin{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 100% at 50% 45%,#160609 0%,#070708 55%,#040405 100%)}
+#boot .bscan{position:absolute;left:0;right:0;bottom:-1px;height:2px;z-index:5;background:linear-gradient(90deg,transparent,#ff4d63 18%,#ffb3bd 50%,#ff4d63 82%,transparent);box-shadow:0 0 14px rgba(239,35,60,.9),0 0 44px rgba(239,35,60,.5);opacity:0;pointer-events:none}
+#boot.out .bscan{animation:bscanf .62s .1s forwards}
+@keyframes bscanf{0%{opacity:0}22%{opacity:1}85%{opacity:1}100%{opacity:0}}
+#boot .bcirc{position:absolute;left:50%;top:50%;z-index:2;width:min(680px,94vw);transform:translate(-50%,-50%);pointer-events:none;opacity:.9}
+#boot .bcirc .tr{stroke:rgba(239,35,60,.28);stroke-width:1;fill:none;opacity:0}
+#boot:not(.js) .bcirc .tr{animation:bfade .6s .2s forwards}
+#boot .bcirc .pd{fill:rgba(239,35,60,.5);opacity:0}
+#boot:not(.js) .bcirc .pd{animation:bfade .3s .06s forwards}
+#boot .bcirc .sig{stroke:#ff4d63;stroke-width:1.4;fill:none;stroke-dasharray:24 340;stroke-dashoffset:0;opacity:0;filter:drop-shadow(0 0 4px rgba(239,35,60,.8));animation:bsig 2.8s linear infinite}
+#boot:not(.js) .bcirc .sig{animation:bfade .4s 1.05s forwards,bsig 2.8s linear 1.05s infinite}
+#boot:not(.js) .bcirc .sig.s2{animation-delay:1.65s}#boot:not(.js) .bcirc .sig.s3{animation-delay:2.25s}
+@keyframes bsig{to{stroke-dashoffset:-364}}
+#boot .bc{opacity:0;z-index:2}
+#boot:not(.js) .bc{animation:bfade .5s .1s var(--e) forwards}
+.bwrap{position:relative;z-index:3;display:grid;justify-items:center;width:100%}
+.bword{display:flex;justify-content:center;gap:.14em;font-family:var(--m);font-weight:500;font-size:clamp(1.25rem,4.2vw,1.9rem);letter-spacing:.06em;color:#fff}
+.bword span:nth-child(-n+5){color:var(--red-soft);text-shadow:0 0 16px rgba(239,35,60,.55)}
+.bword span{opacity:0;transform:translateY(-46px)}
+#boot:not(.js) .bword span{animation:bletter .58s var(--e2) both;animation-delay:calc(.34s + var(--i) * .07s)}
+#boot:not(.js).out .bword span{animation:bletterout .34s var(--e2) forwards;animation-delay:calc(var(--i) * .026s)}
+#boot.js .bmeta{animation:none;opacity:0}
+#boot.out .bmeta{opacity:0;transition:opacity .18s}
+.bmeta{margin-top:22px;display:grid;justify-items:center;gap:10px;animation:bfade .7s .7s var(--e) both}
+.bbar{width:min(168px,42vw);height:2px;border-radius:2px;background:rgba(255,255,255,.12);position:relative;overflow:hidden}
+.bbar::after{content:'';position:absolute;inset:0;transform-origin:left;transform:scaleX(var(--p,0));border-radius:2px;background:linear-gradient(90deg,#c31732,#ff4d63 60%,#ff8b98);box-shadow:0 0 10px rgba(239,35,60,.95)}
+.byuzde{font-family:var(--m);font-size:10px;letter-spacing:.24em;color:var(--tx3);font-variant-numeric:tabular-nums}
+@keyframes bfade{from{opacity:0}to{opacity:1}}
+@keyframes bletter{0%{opacity:0;transform:translateY(-46px)}62%{opacity:1;transform:translateY(5px)}100%{opacity:1;transform:none}}
+@keyframes bletterout{to{opacity:0;transform:translateY(-74px)}}
+@media(prefers-reduced-motion:reduce){#boot *{animation:none!important}.bword span,.bmeta{opacity:1;transform:none;filter:none}#boot .bcirc .tr{stroke-dashoffset:0}#boot .bcirc .pd,#boot .bc{opacity:1}
+  .hfloat,.piksel i,.etiket .dot::after,.shiny,.yakinda .bar::after,#bit .ring{animation:none}}
+@media(max-width:900px){
+  #boot:not(.js) .bc{animation-duration:.28s;animation-delay:.04s}
+  #boot:not(.js) .bcirc .pd{animation-duration:.2s;animation-delay:.03s}
+  #boot:not(.js) .bcirc .tr{animation-duration:.34s;animation-delay:.06s}
+  #boot:not(.js) .bcirc .sig{animation:bfade .26s .34s forwards,bsig 2.8s linear .34s infinite}
+  #boot:not(.js) .bcirc .sig.s2{animation-delay:.4s}#boot:not(.js) .bcirc .sig.s3{animation-delay:.46s}
+  #boot:not(.js) .bword span{animation-duration:.38s;animation-delay:calc(.06s + var(--i) * .04s)}}
 </style>
 </head>
 <body>
+<!-- ===== ACILIS PERDESI (eski #boot markup, birebir; yuzde satiri eklendi) ===== -->
+<div id="boot" aria-hidden="true">
+  <span class="bskin"></span>
+  <svg class="bcirc" viewBox="0 0 680 380" aria-hidden="true">
+    <path class="tr" d="M182,148 H118 V94 H60"/><circle class="pd" cx="60" cy="94" r="2.6"/>
+    <path class="tr" d="M180,190 H38"/><circle class="pd" cx="38" cy="190" r="2.6"/>
+    <path class="tr" d="M184,238 H104 V296 H68"/><circle class="pd" cx="68" cy="296" r="2.6"/>
+    <path class="tr" d="M498,146 H562 V90 H618"/><circle class="pd" cx="618" cy="90" r="2.6"/>
+    <path class="tr" d="M500,190 H642"/><circle class="pd" cx="642" cy="190" r="2.6"/>
+    <path class="tr" d="M496,244 H574 V302 H610"/><circle class="pd" cx="610" cy="302" r="2.6"/>
+    <path class="sig"    d="M180,190 H38"/>
+    <path class="sig s2" d="M498,146 H562 V90 H618"/>
+    <path class="sig s3" d="M184,238 H104 V296 H68"/>
+  </svg>
+  <span class="bscan"></span>
+  <span class="bc a"></span><span class="bc b"></span><span class="bc c"></span><span class="bc d"></span>
+  <div class="bwrap">
+    <div class="bword"><span style="--i:0">Q</span><span style="--i:1">A</span><span style="--i:2">N</span><span style="--i:3">A</span><span style="--i:4">T</span><span style="--i:5">O</span><span style="--i:6">N</span><span style="--i:7">E</span></div>
+    <div class="bmeta"><span class="bbar" id="bootBar"></span><span class="byuzde" id="bootYuzde">000</span></div>
+  </div>
+</div>
+<script>
+/* PERDE KAPISI — eski site: kutuphaneden once kosar; oturumda bir kez. ?boot=0 atlar. */
+(function(){
+  var el=document.getElementById('boot'), R=document.documentElement;
+  if(!el)return;
+  var off=/[?&]boot=0/.test(location.search), seen=false;
+  try{ seen=sessionStorage.getItem('qanat-splash-seen')==='1'; }catch(e){}
+  if(off||seen){ el.parentNode.removeChild(el); R.classList.add('boot-yok'); return; }
+  window.__bootMobil=matchMedia('(max-width:900px)').matches;
+  R.classList.add('boot-on'); R.classList.add('booting');
+  try{ sessionStorage.setItem('qanat-splash-seen','1'); }catch(e){}
+  if(!window.__bootMobil&&!matchMedia('(prefers-reduced-motion:reduce)').matches) el.classList.add('js');
+})();
+</script>
+
 <div id="ekran">
-  <div class="eller" aria-hidden="true">
-    <div class="el el-h" data-yay="el-h"><span class="salin"><picture>
+  <div class="atmo" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+  <canvas id="tubes" aria-hidden="true"></canvas>
+  <div class="hands" aria-hidden="true">
+    <div class="hand hand-h" data-yay="el-h"><span class="hfloat"><picture>
       <source srcset="img/hand-human.avif" type="image/avif">
       <img src="img/hand-human.webp" alt="" width="888" height="774" fetchpriority="high" decoding="async"></picture></span></div>
-    <div class="el el-r" data-yay="el-r"><span class="salin"><picture>
+    <div class="hand hand-r" data-yay="el-r"><span class="hfloat"><picture>
       <source srcset="img/hand-robot.avif" type="image/avif">
       <img src="img/hand-robot.webp" alt="" width="1244" height="855" fetchpriority="high" decoding="async"></picture></span></div>
   </div>
-  <canvas id="bitcv" aria-hidden="true"></canvas>
+  <span class="bc a g" data-yay="bc"></span><span class="bc b g" data-yay="bc"></span><span class="bc c g" data-yay="bc"></span><span class="bc d g" data-yay="bc"></span>
+
+  <header class="ust g" data-yay="ust">
+    <span class="mono"><b>QANAT</b>ONE</span>
+    <span class="mono orta-gizle">İstanbul · Dubai</span>
+    <span class="mono saat" id="saat">00:00:00</span>
+  </header>
 
   <main class="orta">
+    <div class="etiket g" data-yay="etiket"><span class="dot" aria-hidden="true"></span><span class="mono">Performans pazarlama · Yapay zekâ otomasyonu</span></div>
     <h1 class="g" data-yay="h1">Talep var, <em>yakalayan yok.</em></h1>
     <div class="amblem g" data-yay="amblem"><picture>
       <source srcset="img/qanatone.avif" type="image/avif">
       <img src="img/qanatone.webp" alt="QANATONE" width="260" height="293" decoding="async"></picture></div>
     <div class="dugmeler g" data-yay="dugme">
-      <a class="btn btn-g" href="mailto:info@qanatone.com" data-hover>İletişim</a>
-      <button class="btn btn-p" type="button" id="demoAc" data-hover>Demo talebi
+      <a class="btn-g" href="mailto:info@qanatone.com" data-hover>İletişim</a>
+      <button class="shiny" type="button" id="demoAc" data-hover>Demo talebi
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
     </div>
     <p class="satir g" data-yay="satir">Performans pazarlama · yapay zekâ otomasyonu · web tasarımı ve daha fazlası. <i>Yakında sizlerle.</i></p>
-    <div class="yakinda g" data-yay="yakinda" aria-label="Site kontrol aracı yakında"><span class="nokta" aria-hidden="true"></span>Site kontrol aracı · <i>yakında</i></div>
+    <div class="yakinda g" data-yay="yakinda" aria-label="Site kontrol aracı yakında"><span class="bar" aria-hidden="true"></span>Site kontrol aracı · <i>yakında</i></div>
   </main>
 
   <footer class="alt g" data-yay="alt">
@@ -149,15 +284,15 @@ h1 em{font-style:italic;color:var(--red-soft)}
     <nav class="hukuk" aria-label="Hukuki"><a href="kvkk.html">KVKK</a><a href="gizlilik.html">Gizlilik</a></nav>
   </footer>
 </div>
+<div id="bit" aria-hidden="true"><span class="ring"></span><span class="core"></span></div>
 
 <div id="perde"></div>
 <section id="kutu" role="dialog" aria-modal="true" aria-labelledby="kutuBaslik" aria-hidden="true">
   <button class="kapat" type="button" id="kapat" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   <h2 id="kutuBaslik">Demo talebi</h2>
-  <p class="ust">Kısa bir görüşme için bilgilerini bırak; en geç bir iş günü içinde dönüş yaparız.</p>
-  <!-- NETLIFY FORMS: statik HTML'de data-netlify, gizli form-name, honeypot (company),
-       KVKK onayi `name`li (isaretsizse alan gonderime hic girmez — eski sitenin kurali).
-       Zaman alani BILEREK YOK: guvenilir zaman Netlify'in created_at'i. -->
+  <p class="ust-not">Kısa bir görüşme için bilgilerini bırak; en geç bir iş günü içinde dönüş yaparız.</p>
+  <!-- NETLIFY FORMS: statik data-netlify, gizli form-name, honeypot (company), KVKK onayi `name`li
+       (isaretsizse alan gonderime girmez — eski sitenin kurali). Zaman alani BILEREK YOK. -->
   <form name="demo" method="POST" action="/" data-netlify="true" netlify-honeypot="company" id="demoForm" novalidate>
     <input type="hidden" name="form-name" value="demo">
     <p class="hp" aria-hidden="true"><label>Şirket <input name="company" tabindex="-1" autocomplete="off"></label></p>
@@ -169,87 +304,149 @@ h1 em{font-style:italic;color:var(--red-soft)}
     <label class="fld"><span>Ne yaptırmak istiyorsun? (kısaca)</span><textarea name="message" maxlength="600" rows="3" placeholder="Örn: sağlık turizmi için site + WhatsApp ajanı"></textarea></label>
     <label class="chk"><input type="checkbox" name="kvkk_onay" value="evet" required>
       <span>Bilgilerimin bu talebe dönüş yapılması için işlenmesini kabul ediyorum. <a href="kvkk.html" target="_blank" rel="noopener">Aydınlatma metni</a> · <a href="gizlilik.html" target="_blank" rel="noopener">Gizlilik</a></span></label>
-    <button class="btn btn-p" type="submit" data-hover>Gönder
+    <button class="shiny" type="submit" data-hover>Gönder
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
     <span class="msj" id="msj" role="status" aria-live="polite"></span>
   </form>
 </section>
 
 <script>
+/* ===== ACILIS DENETLEYICISI — eski site (WAAPI zaman cizelgesi, gercek yukleme olaylari) =====
+   Degisen: yuzde satiri (bootYuzde) ve bitiste sahne girisinin baslatilmasi (window.__sahneBasla). */
+(function(){
+  var el=document.getElementById('boot'), R=document.documentElement;
+  if(!el){ window.__bootBitti=true; return; }
+  var MOBIL=!!window.__bootMobil;
+  var WA=typeof el.animate==='function', RDC=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function bez(e){return e?'cubic-bezier('+e.join(',')+')':'ease'}
+  function kademe(adim,taban){return function(i){return (taban||0)+adim*i}}
+  function anim(hedef,kare,o){
+    var ler=(hedef&&hedef.length!==undefined)?hedef:[hedef];
+    for(var i=0;i<ler.length;i++){
+      var g=(typeof o.delay==='function')?o.delay(i):(o.delay||0);
+      try{ler[i].animate(kare,{duration:(o.duration||.3)*1000,delay:g*1000,easing:bez(o.ease),fill:'both'});}catch(e){}
+    }
+  }
+  var spans=[].slice.call(el.querySelectorAll('.bword span')), trs=[].slice.call(el.querySelectorAll('.bcirc .tr')),
+      pds=[].slice.call(el.querySelectorAll('.bcirc .pd')), sigs=[].slice.call(el.querySelectorAll('.bcirc .sig')),
+      bcs=[].slice.call(el.querySelectorAll('.bc')), meta=el.querySelector('.bmeta');
+  if(WA&&!RDC&&!MOBIL){
+    try{
+    el.classList.add('js');
+    var E1=[.22,1,.36,1], E2=[.4,0,.2,1];
+    anim(bcs,{opacity:[0,1]},{duration:.5,delay:.08,ease:E1});
+    anim(pds,{opacity:[0,1]},{duration:.35,delay:kademe(.06,.05)});
+    trs.forEach(function(p,i){
+      try{ var L=p.getTotalLength(); p.style.strokeDasharray=L+' '+L; p.style.strokeDashoffset=-L; p.style.opacity=1;
+        p.animate([{strokeDashoffset:-L},{strokeDashoffset:0}],{duration:850,delay:160+i*60,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
+      }catch(e){ p.style.opacity=1; }
+    });
+    anim(sigs,{opacity:[0,1]},{duration:.4,delay:kademe(.55,1.05)});
+    anim(spans,{transform:['translateY(-64px)','translateY(6px)','translateY(0px)'],opacity:[0,.9,1],offset:[0,.7,1]},{duration:.74,delay:kademe(.078,.26),ease:E1});
+    if(meta)anim(meta,{opacity:[0,1]},{duration:.6,delay:.95});
+    }catch(err){ WA=false; el.classList.remove('js'); }
+  }else{ el.classList.remove('js'); }
+
+  var bar=document.getElementById('bootBar'), yz=document.getElementById('bootYuzde');
+  var MIN=MOBIL?800:2700;
+  var target=.12, cur=0, done=false, t0=Date.now();
+  function bump(v){ target=Math.max(target,Math.min(v,1)); }
+  document.addEventListener('DOMContentLoaded',function(){bump(.42)});
+  addEventListener('load',function(){bump(1)});
+  try{ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){bump(.66)}); }catch(e){}
+  window.__bootBump=bump;   /* huzme paketi inince .85 (asagida) */
+  function kill(){
+    R.classList.remove('booting'); R.classList.remove('boot-on');
+    if(el.parentNode)el.parentNode.removeChild(el);
+  }
+  function finish(){
+    if(done)return; done=true; cur=1; render();
+    setTimeout(function(){
+      /* perde kalkarken sahne girisi baslasin (yay, asagida) */
+      window.__bootBitti=true; try{ if(window.__sahneBasla)window.__sahneBasla(); }catch(e){}
+      if(RDC||!WA||!el.classList.contains('js')){
+        el.classList.add(RDC?'done':'out'); R.classList.remove('booting'); setTimeout(kill,RDC?700:940); return;
+      }
+      el.classList.add('out'); R.classList.remove('booting');
+      try{
+        var E1=[.22,1,.36,1], E2=[.4,0,.2,1];
+        anim(spans,{transform:['translateY(0px)','translateY(-74px)'],opacity:[1,0]},{duration:.34,delay:kademe(.026),ease:E2});
+        if(meta)anim(meta,{opacity:[1,0]},{duration:.18});
+        setTimeout(function(){ try{ el.style.willChange='transform'; anim(el,{transform:['translateY(0%)','translateY(-102%)']},{duration:.62,ease:E1}); }catch(err){ el.classList.remove('js'); } },140);
+      }catch(err){ el.classList.remove('js'); }
+      setTimeout(kill,1000);
+    },160);
+  }
+  function render(){ var p=cur.toFixed(3); if(bar)bar.style.setProperty('--p',p); if(yz)yz.textContent=String(Math.round(cur*100)).padStart(3,'0'); }
+  (function tick(){
+    if(done)return;
+    var age=Date.now()-t0;
+    if(age>MIN)bump(1);
+    var eff=Math.min(target,age/MIN);
+    cur+=(eff-cur)*(eff>=1?.3:.14);
+    if(eff>=1&&cur>.985)cur=1;
+    render();
+    if(cur>=1)return finish();
+    requestAnimationFrame(tick);
+  })();
+  setTimeout(function(){ R.classList.remove('booting'); },6000);
+})();
+</script>
+
+<script>
 (() => {
   const AZALT = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const $ = (s) => document.querySelector(s);
+  const q = new URLSearchParams(location.search);
 
-  /* ================= YAY: sonumlu yay entegratoru =================
-     Her ogenin bir DURUMU (x, v) ve bir HEDEFI var. Hedef her an
-     degisebilir (kesilebilir): durum surukleniyorsa suruklenmeye devam
-     eder, sicramaz. Sert baslangic yok: ilk kare v=0'dan yay ivmesiyle
-     kalkar; ani durus yok: hedefe sonumle oturur (kritik-alti sonum). */
+  /* ================= YAY: sonumlu yay entegratoru (kesilebilir giris) ================= */
   const yaylar = [];
-  function yay(x, k = 90, c = 16) { /* k: sertlik, c: sonum (c^2<4k => hafif tasma) */
-    const y = { x, v: 0, h: x, k, c, dinle: null };
-    yaylar.push(y); return y;
-  }
+  function yay(x, k = 90, c = 16) { const y = { x, v: 0, h: x, k, c }; yaylar.push(y); return y; }
   function adimla(dt) {
     for (const y of yaylar) {
-      /* yari-ortuk Euler, 4 alt adim: 120 Hz'de de 30 Hz'de de kararli */
       const n = 4, h = dt / n;
       for (let i = 0; i < n; i++) { const a = -y.k * (y.x - y.h) - y.c * y.v; y.v += a * h; y.x += y.v * h; }
       if (Math.abs(y.x - y.h) < 1e-4 && Math.abs(y.v) < 1e-3) { y.x = y.h; y.v = 0; }
     }
   }
-
-  /* ---- giris koreografisi: her oge bir yay (0 -> 1), sahnede kaydirma+olcek+opaklik ---- */
   const ogeler = [...document.querySelectorAll('[data-yay]')];
-  const SIRA = { 'el-h': 0.00, 'el-r': 0.12, h1: 0.30, amblem: 0.48, dugme: 0.62, satir: 0.74, yakinda: 0.84, alt: 0.92 }; /* sn */
+  const SIRA = { 'el-h': 0.00, 'el-r': 0.12, bc: 0.05, ust: 0.18, etiket: 0.26, h1: 0.34, amblem: 0.5, dugme: 0.62, satir: 0.74, yakinda: 0.84, alt: 0.92 };
   const OG = new Map();
-  for (const el of ogeler) {
-    const ad = el.dataset.yay;
-    const y = yay(0, ad.startsWith('el') ? 40 : 110, ad.startsWith('el') ? 11 : 17);
-    OG.set(el, { ad, y });
-  }
+  for (const el of ogeler) { const ad = el.dataset.yay; OG.set(el, { ad, y: yay(0, ad.startsWith('el') ? 40 : 110, ad.startsWith('el') ? 11 : 17) }); }
   const yerlestir = () => {
     for (const [el, o] of OG) {
       const p = o.y.x, ad = o.ad;
-      if (ad.startsWith('el')) { /* eller: %105'ten oturur, opaklik .94 (eski handIn) */
-        el.style.opacity = (Math.min(1, p) * .94).toFixed(3);
-        el.style.transform = `scale(${(1.055 - .055 * p).toFixed(4)})`;
-      } else {
-        el.style.opacity = Math.max(0, Math.min(1, p)).toFixed(3);
-        el.style.transform = `translate3d(0,${((1 - p) * 18).toFixed(2)}px,0) scale(${(0.985 + .015 * p).toFixed(4)})`;
-      }
+      if (ad.startsWith('el')) { el.style.opacity = (Math.min(1, p) * .94).toFixed(3); el.style.transform = `scale(${(1.055 - .055 * p).toFixed(4)})`; }
+      else if (ad === 'bc') { el.style.opacity = Math.max(0, Math.min(1, p)).toFixed(3); }
+      else { el.style.opacity = Math.max(0, Math.min(1, p)).toFixed(3); el.style.transform = `translate3d(0,${((1 - p) * 18).toFixed(2)}px,0) scale(${(0.985 + .015 * p).toFixed(4)})`; }
     }
   };
-  let t0 = null, baslatildi = false;
+  let t0 = null;
   const hedefle = (zaman) => { for (const [, o] of OG) if (zaman >= SIRA[o.ad]) o.y.h = 1; };
-  /* KESILEBILIR: kullanici dokununca/tiklayinca/tus basinca butun hedefler simdi 1 olur;
-     yaylar bulunduklari yerden hedefe suruklenir (atlama yok). */
   const atla = () => { for (const [, o] of OG) o.y.h = 1; };
-  addEventListener('pointerdown', atla, { passive: true });
-  addEventListener('keydown', atla);
-  if (AZALT) { for (const [, o] of OG) { o.y.x = 1; o.y.h = 1; } }
+  addEventListener('pointerdown', atla, { passive: true }); addEventListener('keydown', atla);
+  if (AZALT) for (const [, o] of OG) { o.y.x = 1; o.y.h = 1; }
+  /* giris perde kalkinca baslar (perde yoksa hemen) */
+  window.__sahneBasla = () => { if (t0 === null) t0 = performance.now(); };
+  if (window.__bootBitti || !document.getElementById('boot')) window.__sahneBasla();
 
-  /* ---- dugme hover: ayni yay, olcek 1 -> 1.03 (kesilebilir) ---- */
   for (const b of document.querySelectorAll('[data-hover]')) {
     const y = yay(1, 220, 22); b.__y = y;
-    b.addEventListener('pointerenter', () => { y.h = 1.035; });
-    b.addEventListener('pointerleave', () => { y.h = 1; });
-    b.addEventListener('pointerdown', () => { y.h = .97; });
-    b.addEventListener('pointerup', () => { y.h = 1.035; });
+    b.addEventListener('pointerenter', () => { y.h = 1.035; }); b.addEventListener('pointerleave', () => { y.h = 1; });
+    b.addEventListener('pointerdown', () => { y.h = .97; }); b.addEventListener('pointerup', () => { y.h = 1.035; });
   }
 
-  /* ---- modal: perde CSS, kutu yay (olcek+opaklik), kesilebilir ---- */
+  /* ---- modal ---- */
   const perde = $('#perde'), kutu = $('#kutu'), yK = yay(0, 130, 18);
   const ac = () => { perde.classList.add('acik'); kutu.classList.add('acik'); kutu.setAttribute('aria-hidden', 'false'); yK.h = 1; setTimeout(() => kutu.querySelector('input[name=name]').focus(), 120); };
   const kapa = () => { perde.classList.remove('acik'); kutu.classList.remove('acik'); kutu.setAttribute('aria-hidden', 'true'); yK.h = 0; $('#demoAc').focus(); };
   $('#demoAc').addEventListener('click', ac); $('#kapat').addEventListener('click', kapa); perde.addEventListener('click', kapa);
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && yK.h === 1) kapa(); });
 
-  /* ---- form: Netlify Forms (yayinda). Lokalde POST hedefi yok -> durum mesaji. ---- */
+  /* ---- form ---- */
   const form = $('#demoForm'), msj = $('#msj');
   form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
+    e.preventDefault(); if (!form.reportValidity()) return;
     msj.className = 'msj'; msj.textContent = 'Gönderiliyor…';
     try {
       const r = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)) });
@@ -257,82 +454,65 @@ h1 em{font-style:italic;color:var(--red-soft)}
       msj.className = 'msj ok'; msj.textContent = 'Alındı. En geç bir iş günü içinde dönüş yapacağız.'; form.reset();
     } catch (err) {
       msj.className = 'msj hata';
-      msj.textContent = location.hostname.endsWith('netlify.app') || location.hostname.includes('qanatone') ? 'Gönderilemedi. info@qanatone.com adresine yazabilirsin.' : 'Lokal sunumda form gönderimi yok (Netlify Forms yayında çalışır).';
+      msj.textContent = /netlify\.app|qanatone/.test(location.hostname) ? 'Gönderilemedi. info@qanatone.com adresine yazabilirsin.' : 'Lokal sunumda form gönderimi yok (Netlify Forms yayında çalışır).';
     }
   });
 
-  /* ---- alt piksel dalgasi ---- */
+  /* ---- piksel dalgasi + saat ---- */
   const pk = $('#piksel'); const N = innerWidth < 640 ? 28 : 40;
   for (let i = 0; i < N; i++) { const s = document.createElement('i'); s.style.setProperty('--k', i); pk.appendChild(s); }
+  const saat = $('#saat'); const saatYaz = () => { saat.textContent = new Date().toLocaleTimeString('tr-TR', { timeZone: 'Europe/Istanbul', hour12: false }); };
+  saatYaz(); setInterval(saatYaz, 1000);
 
-  /* ================= BIT: imlec/dokunmayla cizilen iz =================
-     Eski sitenin kizil ajan noktasi (#bit) burada yol boyunca bit birakir:
-     her hareket noktasindan kucuk kare "bit"ler dogar, hafif sacilir, soner.
-     Isaretci yokken (dokunmatik bekleme) seyrek ortam bitleri suzulur. */
-  const cv = $('#bitcv'), cx = cv.getContext('2d', { alpha: true });
-  let W = 0, H = 0, DPR = 1;
-  const boyut = () => { DPR = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); };
-  boyut(); addEventListener('resize', boyut);
-  const bitler = []; const MAX = 420;
-  let sonX = null, sonY = null, imlec = { x: -1, y: -1, var: false };
-  const dogur = (x, y, vx, vy, n) => {
-    for (let i = 0; i < n; i++) {
-      if (bitler.length >= MAX) bitler.shift();
-      const a = Math.random() * Math.PI * 2, s = 6 + Math.random() * 26;
-      bitler.push({ x, y, vx: vx * .18 + Math.cos(a) * s, vy: vy * .18 + Math.sin(a) * s, om: 1.1 + Math.random() * .9, t: 0, b: 1.5 + Math.random() * 1.8, beyaz: Math.random() < .12 });
-    }
-  };
-  const hareket = (x, y) => {
-    imlec.x = x; imlec.y = y; imlec.var = true;
-    if (sonX !== null) {
-      const dx = x - sonX, dy = y - sonY, d = Math.hypot(dx, dy);
-      const adet = Math.min(14, Math.max(1, Math.round(d / 6)));
-      for (let i = 0; i < adet; i++) { const f = i / adet; dogur(sonX + dx * f, sonY + dy * f, dx, dy, 1); }
-    }
-    sonX = x; sonY = y;
-  };
-  if (!AZALT) {
-    addEventListener('pointermove', (e) => hareket(e.clientX, e.clientY), { passive: true });
-    addEventListener('pointerdown', (e) => { hareket(e.clientX, e.clientY); dogur(e.clientX, e.clientY, 0, 0, 18); }, { passive: true });
-    addEventListener('pointerleave', () => { imlec.var = false; sonX = null; });
-    addEventListener('pointerup', () => { if (matchMedia('(pointer:coarse)').matches) { sonX = null; } });
+  /* ---- imlec noktasi: eski #bit (yalniz ince isaretci) ---- */
+  const bit = $('#bit');
+  if (bit && !AZALT && !matchMedia('(pointer:coarse)').matches && innerWidth >= 901) {
+    let bx = 0, by = 0, raf = null;
+    addEventListener('pointermove', (e) => { bx = e.clientX; by = e.clientY; bit.classList.add('on'); bit.classList.toggle('link', !!(e.target && e.target.closest && e.target.closest('a,button,input,label,textarea')));
+      if (!raf) raf = requestAnimationFrame(() => { raf = null; bit.style.transform = `translate3d(${bx}px,${by}px,0)`; }); }, { passive: true });
+    addEventListener('pointerleave', () => bit.classList.remove('on'));
   }
-  let ortamT = 0;
-  const bitCiz = (dt, z) => {
-    cx.clearRect(0, 0, W, H);
-    if (AZALT) return;
-    /* ortam: saniyede ~3 bit, ekranin alt yarisindan yukari suzulur */
-    ortamT += dt; if (ortamT > .33) { ortamT = 0; if (bitler.length < MAX) bitler.push({ x: Math.random() * W, y: H * (.55 + Math.random() * .45), vx: (Math.random() - .5) * 6, vy: -8 - Math.random() * 10, om: 5 + Math.random() * 4, t: 0, b: 1.5 + Math.random(), beyaz: false }); }
-    cx.globalCompositeOperation = 'lighter';
-    for (let i = bitler.length - 1; i >= 0; i--) {
-      const b = bitler[i]; b.t += dt; if (b.t >= b.om) { bitler.splice(i, 1); continue; }
-      b.vx *= (1 - 1.6 * dt); b.vy *= (1 - 1.6 * dt); b.x += b.vx * dt; b.y += b.vy * dt;
-      const k = 1 - b.t / b.om, al = k * k * .9;
-      cx.fillStyle = b.beyaz ? `rgba(255,255,255,${al})` : `rgba(239,35,60,${al})`;
-      const s = b.b * (0.6 + .4 * k); cx.fillRect(b.x - s / 2, b.y - s / 2, s, s);
-      if (b.beyaz || k > .7) { cx.fillStyle = `rgba(239,35,60,${al * .25})`; cx.fillRect(b.x - s * 1.6, b.y - s * 1.6, s * 3.2, s * 3.2); }
-    }
-    /* imlec noktasi (eski #bit: core + nefes alan halka) — yalniz fare */
-    if (imlec.var && !matchMedia('(pointer:coarse)').matches) {
-      const r = 5, h = 1 + .35 * (.5 + .5 * Math.sin(z * 2.4));
-      cx.globalCompositeOperation = 'source-over';
-      const g = cx.createRadialGradient(imlec.x - 1.5, imlec.y - 1.5, 0, imlec.x, imlec.y, r); g.addColorStop(0, '#ff8b98'); g.addColorStop(.62, '#ef233c'); g.addColorStop(1, '#8d0f20');
-      cx.shadowColor = 'rgba(239,35,60,.55)'; cx.shadowBlur = 10; cx.fillStyle = g; cx.beginPath(); cx.arc(imlec.x, imlec.y, r, 0, Math.PI * 2); cx.fill(); cx.shadowBlur = 0;
-      cx.strokeStyle = `rgba(239,35,60,${.6 - .45 * (h - 1) / .35})`; cx.lineWidth = 1; cx.beginPath(); cx.arc(imlec.x, imlec.y, (r + 4) * h, 0, Math.PI * 2); cx.stroke();
-    }
-  };
+
+  /* ===== BIT HUZMELERI: ESKI SITE tubesKur (birebir; yol ./js/, hedef #ekran) ===== */
+  (function tubesKur(){
+    const cv = $('#tubes'); if (!cv || cv.__kur) return; cv.__kur = 1;
+    if (AZALT || innerWidth < 900 || matchMedia('(pointer:coarse)').matches || q.get('tubes') === '0') return;
+    let app = null, loading = false;
+    const rnd = (n) => [...Array(n)].map(() => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
+    window.__tubesInit = function () {
+      if (app || loading) return; loading = true;
+      import('./js/tubes.min.js').then((m) => {
+        const F = m.default; if (typeof F !== 'function') return;
+        const realDpr = window.devicePixelRatio || 1;
+        try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => Math.min(realDpr, 1.25) }); } catch (e) {}
+        try { app = F(cv, { tubes: { colors: ['#ef233c', '#8f0f21', '#ffffff'], lights: { intensity: 180, colors: ['#ef233c', '#ff4d63', '#ffffff', '#5a0d18'] } } }); }
+        catch (err) { console.warn('tubes:', err.message); }
+        try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => realDpr }); } catch (e) {}
+        if (!app) return;
+        cv.classList.add('on'); window.__tubes = app;
+        if (window.__bootBump) window.__bootBump(.85);
+        const act = (on) => { try {
+          if (app && typeof app.pause === 'function' && typeof app.resume === 'function') { on ? app.resume() : app.pause(); return; }
+          if (app && typeof app.setPaused === 'function') { app.setPaused(!on); return; } } catch (e) {}
+          cv.style.visibility = on ? '' : 'hidden'; };
+        document.addEventListener('visibilitychange', () => act(!document.hidden));
+        $('#ekran').addEventListener('dblclick', (e) => {
+          if (e.target.closest('a,button,input,label,textarea,select')) return;
+          if (!app || !app.tubes) return; app.tubes.setColors(rnd(3)); app.tubes.setLightsColors(rnd(4));
+        });
+      }).catch(() => { loading = false; });
+    };
+    window.__tubesInit();
+  })();
 
   /* ================= tek dongu ================= */
   let son = performance.now();
   const kare = (now) => {
     const dt = Math.min(.05, (now - son) / 1000); son = now;
-    if (t0 === null) t0 = now;
-    hedefle((now - t0) / 1000);
-    adimla(dt);
-    yerlestir();
+    if (t0 !== null) hedefle((now - t0) / 1000);
+    adimla(dt); yerlestir();
     for (const b of document.querySelectorAll('[data-hover]')) if (b.__y) b.style.transform = `scale(${b.__y.x.toFixed(4)})`;
     kutu.style.opacity = yK.x.toFixed(3); kutu.style.transform = `translate(-50%,-50%) scale(${(0.96 + .04 * yK.x).toFixed(4)})`;
-    bitCiz(dt, now / 1000);
     requestAnimationFrame(kare);
   };
   requestAnimationFrame(kare);

@@ -32,24 +32,25 @@
    DOM / `video.currentTime`. KAYDIRMADA DUZEN OKUMASI YOK: rayin yeri
    bir kez (ve resize'da) olculur, dongude yalniz `scrollY` okunur.
 
-   SONUMLEME (27 Agu 2026, Enes): kaydirmanin HEDEF konumu ile filmin
-   GOSTERILEN konumu ayri tutulur; her karede gosterilen hedefe oranla
-   yaklasir (ustel yaklasma). Ham `scrollY` dogrudan `currentTime`a
-   yazildiginda tekerlek centigi 8 karelik sicrama olarak gorunuyordu;
-   sonumleme bunu surekli harekete cevirir. Katsayi ayarlanabilir:
-     ?sonum=0.25  (URL) · data-sonum (DOM) · __fl.sonum = 0.25 (konsol)
-   1 = sonumleme yok (eski davranis). Katsayi 60 Hz'e gore tanimlidir ve
-   kare suresine gore duzeltilir — 120 Hz ekranda his ayni kalir.
-   SURUNME YOK (28 Agu, Enes): ustel yaklasmanin kuyrugu hedefe sonsuz
-   yavaslayarak varir; son kareler "surunur". Alt hiz tabani var
-   (SURUNME_SN): adim bunun altina dusemez, hedefe yarim kareden yakinken
-   oturur. Ustte hiz tavani: gosterilen konum saniyede TAVAN film-sn'den
-   hizli gidemez (varsayilan 1,5x; ?tavan= / data-tavan / __fl.tavan).
-   Daha hizli kaydirma YUTULUR: hedef ilerler, gosterilen tavanda gelir;
-   `__fl.atla()` gosterileni hedefe oturtur (sayfa dugmesi cagirir - motor
-   dugme kurmaz, sert degismez #6). Geride kalma esigi asilinca/inince
-   bolume `fl-geride` olayi gider (detail: {geride: film-sn}).
-
+   SONUMLEME = YAY + SONUM (28 Agu 2026, Enes; 27 Agu'daki ustel yaklasma
+   ve 28 Agu sabahki alt hiz tabani KALKTI). Iki durum tutulur: KONUM
+   (gosterilenT) ve HIZ (v). Her fizik adiminda
+       a = -k (x - hedef) - c v ;  v += a dt ;  x += v dt
+   k = sertlik, c = sonum. Varsayilan KRITIK SONUM c = 2*sqrt(k): hedefe
+   salinmadan ve teklemeden varir. Katsayilar ustten:
+       ?sert=120 ?sonum=21.9  (URL) · data-sert / data-sonum (DOM)
+       · __fl.sert = 120 ; __fl.sonum = 0 (0 = kritik, otomatik) (konsol)
+   Uc aday sertlik (sahneler.ts SERTLIK_ADAY): 60 yumusak (oturma ~0,75 s)
+   · 120 orta (~0,53 s) · 250 siki (~0,37 s). Oturma suresi ~5,8/sqrt(k).
+   FIZIK SABIT ADIMLI (FIZIK_DT = 4 ms): kare suresi ne olursa olsun ayni
+   adim sayisi/saniye; artan sure biriktirilir, cizim iki fizik durumu
+   arasinda ara deger harmanlar (alfa = birikim / dt). 60 Hz ve 120 Hz'de
+   egri AYNI (olcum: yeni/film/olc-birakma.cjs + node benzetimi).
+   MOMENT DEVRI: kaydirma birakildiginda (hedef durdu) hedefin son gercek
+   hizi yayin hizina devredilir — ama ASMAYACAK kadar: |v| <= sqrt(k)*|x-hedef|
+   (kritik sonumlu yayda asma sarti v0 > w*d; bu sinirin altinda tek yonlu
+   varis). Boylece kaydirma biraktiginda film aniden yavaslamaz, elin
+   hiziyla sonumlenir. Hiz tavani (TAVAN) yayin hizina uygulanir.
    SAHNE GECISI (dikis) — DEVRALMA (27 Agu 2026, Enes karari):
    Eskiden komsu klip sinir karesine on-sarilir ve el degisimi ANINDA
    yapilirdi. Geri savurmada bu, gorunur bir sicrama uretiyordu: klip
@@ -84,10 +85,11 @@ const ON_PENCERE = PENCERE - 1;
    kaydirma "savurma" sayilir ve on yukleme sirasi sinir-oncelikli kurulur.
    1x okuma temposunda kare basi ~1/fps sn ilerlenir; 3x bunun ustu. */
 const SAVURMA_SN = 0.12;
-/* Sonumlemenin alt hiz tabani (film-sn / gercek-sn): hedefe yaklasirken
-   adim bunun altina dusmez — surunme yok. 6 kare/sn: 24 fps'te bir
-   centik (8 kare) en cok 1,3 s'de oturur. */
-const SURUNME_SN = 0.25;
+/* Fizik adimi (s): sabit; kare suresinden bagimsiz. */
+const FIZIK_DT = 0.004;
+/* Bir karede en cok bu kadar birikim islenir (sekme arka plana dusup
+   donunce yuzlerce adim kosmasin; kalan atilir, konum korunur). */
+const FIZIK_TAVAN_S = 0.1;
 /* Hiz tavaninin varsayilani (film-sn / gercek-sn). 1x okuma ve 1,5x
    gezinme olculdu, ikisi de temiz (FILM-ISKELET-TURU 5. tur); ustu yutulur. */
 const TAVAN_VARSAYILAN = 1.5;
@@ -110,7 +112,7 @@ interface Sahne {
 interface Iz {
   hazir: boolean; kayit: boolean; mobil: boolean; kodek: string;
   toplam: number; pxSn: number; fps: number;
-  istek: { t: number; n: number; kare: number }[];
+  istek: { t: number; n: number; kare: number; T?: number; hedef?: number }[];
   sunum: { t: number; n: number; kare: number; g: boolean }[];
   ilkKareMs: number | null;
   yon: number; hiz: number; pencere: number;
@@ -118,10 +120,13 @@ interface Iz {
   bellekMib: () => number;
   birakilan: number;
   hedef: () => number;        /* scrub konumunun sahnesi (etkin = GOSTERILEN) */
-  sonum: number;              /* kaydirma sonumleme katsayisi (1 = kapali) */
+  sert: number;               /* yay sertligi k (1/s^2) */
+  sonum: number;              /* sonum c (1/s); 0 = kritik (2*sqrt(k)), otomatik */
   tavan: number;              /* gosterilen hiz tavani, film-sn / gercek-sn (0 = kapali) */
   hedefT: number;             /* kaydirmanin istedigi film saniyesi */
-  gosterilenT: number;        /* ekranda olan film saniyesi */
+  gosterilenT: number;        /* ekranda olan film saniyesi (harmanlanmis) */
+  hizT: number;               /* yayin hizi, film-sn / gercek-sn */
+  hedefHiz: number;           /* hedefin (kaydirmanin) son olculen hizi */
   atla: () => void;           /* gosterileni hedefe oturt (yutulan kaydirmayi atla) */
   geride: () => number;       /* hedef - gosterilen, film-sn */
   devir: number;              /* devralma sayisi */
@@ -168,14 +173,15 @@ export function baslat(bolum: HTMLElement): () => void {
   })();
   const kaynakYolu = (el: HTMLElement, h264: string, h265: string) =>
     KODEK === 'h265' && el.dataset[h265] ? el.dataset[h265]! : el.dataset[h264]!;
-  /* sonumleme katsayisi: URL > DOM > varsayilan. Denemek icin uc yol da
-     acik; kalici deger oturunca data-sonum'a yazilir. */
-  const SONUM = (() => {
-    const u = Number(new URLSearchParams(location.search).get('sonum'));
-    if (u > 0 && u <= 1) return u;
-    const d = Number(bolum.dataset.sonum);
-    return d > 0 && d <= 1 ? d : 0.18;
-  })();
+  /* yay katsayilari: URL > DOM > varsayilan (sahneler.ts). sonum 0 = kritik. */
+  const oku = (ad: string, ust: number, vars: number) => {
+    const u = new URLSearchParams(location.search).get(ad);
+    if (u !== null && Number(u) >= 0 && Number(u) <= ust) return Number(u);
+    const d = bolum.dataset[ad];
+    return d !== undefined && Number(d) >= 0 ? Number(d) : vars;
+  };
+  const SERT = oku('sert', 5000, 120);
+  const SONUM = oku('sonum', 1000, 0);
   /* hiz tavani: URL > DOM > varsayilan; 0 = kapali */
   const TAVAN = (() => {
     const u = new URLSearchParams(location.search).get('tavan');
@@ -205,7 +211,7 @@ export function baslat(bolum: HTMLElement): () => void {
     istek: [], sunum: [], ilkKareMs: null,
     yon: 1, hiz: 0, pencere: PENCERE, birakilan: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
-    sonum: SONUM, tavan: TAVAN, hedefT: 0, gosterilenT: 0,
+    sert: SERT, sonum: SONUM, tavan: TAVAN, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
     geride: () => IZ.hedefT - IZ.gosterilenT,
     ray: () => ({ pxSn, rayPx: Math.round(toplam * pxSn), ekranBoyu: +(toplam * pxSn / innerHeight).toFixed(1),
@@ -432,6 +438,9 @@ export function baslat(bolum: HTMLElement): () => void {
   let ilkKareGecti = false;
   let atlaIstek = false;
   let gerideydi = false;
+  /* yay durumu: x (konum), v (hiz); onceki fizik durumu (harman icin); birikim */
+  let yx = 0, yv = 0, yxOnce = 0, birikim = 0;
+  let hedefOnce = 0, hedefHiz = 0, hedefDurdu = 0;   /* hedef hizi ve kac fizik adimidir durdugu */
   const kare = () => {
     bekleyen = false;
     const simdi = performance.now();
@@ -445,19 +454,49 @@ export function baslat(bolum: HTMLElement): () => void {
     /* SONUMLEME: gosterilen konum hedefe ustel yaklasir. Katsayi 60 Hz'e
        gore tanimli; kare suresine gore duzeltilir ki his ekran tazeleme
        hizindan bagimsiz olsun. sonum = 1 -> aninda (kapali). */
-    const k = IZ.sonum >= 1 ? 1 : 1 - Math.pow(1 - IZ.sonum, dt / 16.7);
-    if (!ilkKareGecti || atlaIstek) { IZ.gosterilenT = hedefT; ilkKareGecti = true; atlaIstek = false; }   /* acilista atlama yok; atla = hedefe otur */
-    else {
-      const fark = hedefT - IZ.gosterilenT, yon = Math.sign(fark);
-      let adim = Math.abs(fark) * k;
-      /* SURUNME YOK: adim alt hiz tabaninin altina dusmez; hedefe yarim
-         kareden yakinken dogrudan oturur. */
-      const taban = SURUNME_SN * dt / 1000;
-      if (adim < taban) adim = taban;
-      /* HIZ TAVANI: saniyede en cok `tavan` film-sn; ustu yutulur. */
-      if (IZ.tavan > 0) adim = Math.min(adim, IZ.tavan * dt / 1000);
-      if (adim >= Math.abs(fark) || Math.abs(fark) <= 0.5 / fps) IZ.gosterilenT = hedefT;
-      else IZ.gosterilenT += yon * adim;
+    if (!ilkKareGecti || atlaIstek) {            /* acilista atlama yok; atla = hedefe otur */
+      yx = yxOnce = hedefT; yv = 0; birikim = 0; hedefOnce = hedefT; hedefHiz = 0;
+      IZ.gosterilenT = hedefT; ilkKareGecti = true; atlaIstek = false;
+    } else {
+      /* --- SABIT ADIMLI YAY: birikimi 4 ms'lik adimlarla tuket --- */
+      const k = IZ.sert > 0 ? IZ.sert : 120;
+      const c = IZ.sonum > 0 ? IZ.sonum : 2 * Math.sqrt(k);   /* 0 = kritik sonum */
+      const w = Math.sqrt(k);
+      birikim = Math.min(FIZIK_TAVAN_S, birikim + dt / 1000);
+      /* hedef hizi: bu karede hedefin kat ettigi yol / kare suresi */
+      const dtS = dt / 1000;
+      const hz = dtS > 0 ? (hedefT - hedefOnce) / dtS : 0;
+      const hedefHareketli = Math.abs(hedefT - hedefOnce) > 1e-6;
+      if (hedefHareketli) { hedefHiz = hz; hedefDurdu = 0; }
+      hedefOnce = hedefT;
+      while (birikim >= FIZIK_DT) {
+        birikim -= FIZIK_DT;
+        yxOnce = yx;
+        if (!hedefHareketli) {
+          hedefDurdu++;
+          /* MOMENT DEVRI: hedef yeni durdu (ilk adim) -> hedefin son hizini
+             devral, asmayacak sinirla: |v| <= w * |d| (kritik sonumlu yay). */
+          if (hedefDurdu === 1 && hedefHiz !== 0) {
+            const d = hedefT - yx, yon = Math.sign(d);
+            if (yon !== 0 && Math.sign(hedefHiz) === yon) {
+              const sinir = w * Math.abs(d);
+              const aday = Math.min(Math.abs(hedefHiz), sinir);
+              if (aday > Math.abs(yv)) yv = yon * aday;
+            }
+            hedefHiz = 0;
+          }
+        }
+        const a = -k * (yx - hedefT) - c * yv;
+        yv += a * FIZIK_DT;
+        if (IZ.tavan > 0 && Math.abs(yv) > IZ.tavan) yv = Math.sign(yv) * IZ.tavan;   /* hiz tavani: ustu yutulur */
+        yx += yv * FIZIK_DT;
+        /* oturma: yarim kareden yakin ve hiz kucuk -> tam hedef, hiz sifir (tekleme yok) */
+        if (Math.abs(yx - hedefT) < 0.5 / fps && Math.abs(yv) < 0.02) { yx = hedefT; yv = 0; }
+      }
+      /* CIZIM: iki fizik durumu arasinda ara deger (alfa = birikim / dt) */
+      const alfa = birikim / FIZIK_DT;
+      IZ.gosterilenT = yxOnce + (yx - yxOnce) * alfa;
+      IZ.hizT = yv; IZ.hedefHiz = hedefHiz;
     }
     const T = IZ.gosterilenT;
     /* hedefe oturmadiysa dongu kendi kendini surdurur — kaydirma olayi
@@ -483,7 +522,7 @@ export function baslat(bolum: HTMLElement): () => void {
       const k = kareNo(s, T);
       const hedef = kareSn(k);
       if (Math.abs(s.video.currentTime - hedef) > 0.5 / fps) s.video.currentTime = hedef;
-      if (IZ.kayit) IZ.istek.push({ t: performance.now(), n: s.n, kare: k });
+      if (IZ.kayit) IZ.istek.push({ t: performance.now(), n: s.n, kare: k, T, hedef: hedefT });   /* T/hedef: sonumleme olcumu (olc-birakma) motorun kendi karesinden okur */
       devral(s, T);                                  /* yazimdan SONRA: ayni karede otursun */
       if (s.aVideo && !s.takas && s === etkin) acilisTakas(s);
     } else if (s.aVideo && s.aDurum === 'hazir' && !s.takas) {
