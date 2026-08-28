@@ -37,6 +37,18 @@ main:has(> .fl) { max-width: none; padding: 0; }
   background: #050505;
 }
 
+/* ---- NEFES (28 Agu 2026, Enes): video duzlemine kaydirmadan bagimsiz hafif
+   hareket — %1 olcek + 2-3 px kayma, 7 s dongu, kompozitorde (transform).
+   Yalniz JS yolunda ve hareket azaltma kapaliyken. Olcek kaymayi orter
+   (1440 px'te %1 = 14 px pay, kayma 3 px). ---- */
+.fl-js .fl-yapis { animation: fl-nefes 7s ease-in-out infinite; will-change: transform; }
+@keyframes fl-nefes {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(2px, -3px, 0) scale(1.01); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .fl-js .fl-yapis { animation: none; } }
+
 /* ---- JS YOLU ---- */
 .fl-js .fl-sahne { position: absolute; inset: 0; display: none; }
 .fl-js .fl-sahne.fl-etkin { display: block; }

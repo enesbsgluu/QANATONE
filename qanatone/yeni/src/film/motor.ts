@@ -51,6 +51,16 @@
    (kritik sonumlu yayda asma sarti v0 > w*d; bu sinirin altinda tek yonlu
    varis). Boylece kaydirma biraktiginda film aniden yavaslamaz, elin
    hiziyla sonumlenir. Hiz tavani (TAVAN) yayin hizina uygulanir.
+   DURUSTA AKIS (28 Agu 2026, Enes): kaydirma birakilinca ve yay otururken
+   film cok yavas ilerlemeye DEVAM eder (varsayilan AKIS = 0,08 film-sn /
+   gercek-sn). Gerekce: film 24 fps; yayin son ~275 ms'si bir kareden kucuk
+   hareket uretiyor, goruntu yaydan once donuyordu. NASIL: tek gercek kaynak
+   scrollY kalir — motor sayfayi kendisi kaydirir (px birikimi, tam pikselde
+   scrollBy). Kullanici girdisi (wheel/touch/key/pointer) gorulunce akis
+   ANINDA durur ve girdi bittikten AKIS_BEKLE sonra yeniden baslar; boylece
+   kontrol hep kullanicida, cakisma yok. Film sonunda durur. Ayar:
+   ?akis=0.08 (URL) · data-akis · __fl.akis (0 = kapali).
+
    SAHNE GECISI (dikis) — DEVRALMA (27 Agu 2026, Enes karari):
    Eskiden komsu klip sinir karesine on-sarilir ve el degisimi ANINDA
    yapilirdi. Geri savurmada bu, gorunur bir sicrama uretiyordu: klip
@@ -85,6 +95,8 @@ const ON_PENCERE = PENCERE - 1;
    kaydirma "savurma" sayilir ve on yukleme sirasi sinir-oncelikli kurulur.
    1x okuma temposunda kare basi ~1/fps sn ilerlenir; 3x bunun ustu. */
 const SAVURMA_SN = 0.12;
+/* Durusta akis: kullanici girdisinden sonra bu kadar bekle (ms), sonra ak. */
+const AKIS_BEKLE_MS = 160;
 /* Fizik adimi (s): sabit; kare suresinden bagimsiz. */
 const FIZIK_DT = 0.004;
 /* Bir karede en cok bu kadar birikim islenir (sekme arka plana dusup
@@ -113,7 +125,7 @@ interface Iz {
   hazir: boolean; kayit: boolean; mobil: boolean; kodek: string;
   toplam: number; pxSn: number; fps: number;
   istek: { t: number; n: number; kare: number; T?: number; hedef?: number }[];
-  sunum: { t: number; n: number; kare: number; g: boolean }[];
+  sunum: { t: number; n: number; kare: number; g: boolean; mt: number }[];   /* mt: sunulan karenin gercek mediaTime'i (sn) */
   ilkKareMs: number | null;
   yon: number; hiz: number; pencere: number;
   ray: () => { pxSn: number; rayPx: number; ekranBoyu: number; snBasinaEkran: number; birEkranSn: number };
@@ -123,6 +135,8 @@ interface Iz {
   sert: number;               /* yay sertligi k (1/s^2) */
   sonum: number;              /* sonum c (1/s); 0 = kritik (2*sqrt(k)), otomatik */
   tavan: number;              /* gosterilen hiz tavani, film-sn / gercek-sn (0 = kapali) */
+  akis: number;               /* durusta akis temposu, film-sn / gercek-sn (0 = kapali) */
+  akiyor: boolean;            /* su an motor sayfayi kendisi kaydiriyor mu */
   hedefT: number;             /* kaydirmanin istedigi film saniyesi */
   gosterilenT: number;        /* ekranda olan film saniyesi (harmanlanmis) */
   hizT: number;               /* yayin hizi, film-sn / gercek-sn */
@@ -182,6 +196,7 @@ export function baslat(bolum: HTMLElement): () => void {
   };
   const SERT = oku('sert', 5000, 120);
   const SONUM = oku('sonum', 1000, 0);
+  const AKIS = oku('akis', 5, 0.08);
   /* hiz tavani: URL > DOM > varsayilan; 0 = kapali */
   const TAVAN = (() => {
     const u = new URLSearchParams(location.search).get('tavan');
@@ -211,7 +226,7 @@ export function baslat(bolum: HTMLElement): () => void {
     istek: [], sunum: [], ilkKareMs: null,
     yon: 1, hiz: 0, pencere: PENCERE, birakilan: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
-    sert: SERT, sonum: SONUM, tavan: TAVAN, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
+    sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
     geride: () => IZ.hedefT - IZ.gosterilenT,
     ray: () => ({ pxSn, rayPx: Math.round(toplam * pxSn), ekranBoyu: +(toplam * pxSn / innerHeight).toFixed(1),
@@ -240,7 +255,7 @@ export function baslat(bolum: HTMLElement): () => void {
       if (IZ.ilkKareMs === null && s === S[0]) IZ.ilkKareMs = Math.round(now - yeni);
       /* `g`: bu kare EKRANDA MIYDI. Yerlesik ama gorunmez komsu klipler de
          rVFC atesler; onlari sunulmus saymak "max bosluk"u kirletirdi. */
-      if (IZ.kayit) IZ.sunum.push({ t: now, n: s.n, kare: Math.round(md.mediaTime * fps), g: s === etkin });
+      if (IZ.kayit) IZ.sunum.push({ t: now, n: s.n, kare: Math.round(md.mediaTime * fps), g: s === etkin, mt: md.mediaTime });
       v.requestVideoFrameCallback!(f);
     };
     v.requestVideoFrameCallback(f);
@@ -440,6 +455,8 @@ export function baslat(bolum: HTMLElement): () => void {
   let gerideydi = false;
   /* yay durumu: x (konum), v (hiz); onceki fizik durumu (harman icin); birikim */
   let yx = 0, yv = 0, yxOnce = 0, birikim = 0;
+  /* durusta akis: son kullanici girdisi ani, kaydirma px birikimi, bizim scrollBy'imizin dogurdugu scroll olayini ayirt etme */
+  let sonGirdi = 0, akisPx = 0;
   let hedefOnce = 0, hedefHiz = 0, hedefDurdu = 0;   /* hedef hizi ve kac fizik adimidir durdugu */
   const kare = () => {
     bekleyen = false;
@@ -447,6 +464,18 @@ export function baslat(bolum: HTMLElement): () => void {
     const dt = sonKareMs ? Math.min(100, simdi - sonKareMs) : 16.7;
     sonKareMs = simdi;
 
+    /* --- DURUSTA AKIS: kullanici sessizse sayfayi kendimiz kaydiririz (tek kaynak scrollY) --- */
+    IZ.akiyor = false;
+    if (IZ.akis > 0 && ilkKareGecti && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
+      const sonPx = ust + yol;                                   /* rayin sonu */
+      if (scrollY < sonPx - 1) {
+        akisPx += IZ.akis * pxSn * (dt / 1000);                  /* film-sn/sn -> px/sn */
+        const tam = Math.floor(akisPx);
+        if (tam >= 1) { akisPx -= tam; scrollBy(0, Math.min(tam, sonPx - scrollY)); }
+        IZ.akiyor = true;
+        tik();                                                   /* akis surdukce dongu surer */
+      }
+    } else akisPx = 0;
     const p = Math.min(1, Math.max(0, (scrollY - ust) / yol));
     const hedefT = Math.min(toplam - 1e-3, p * toplam);
     IZ.hedefT = hedefT;
@@ -545,6 +574,9 @@ export function baslat(bolum: HTMLElement): () => void {
     if (v && v.src) v.play().then(() => v.pause()).catch(() => {});
   };
 
+  /* kullanici girdisi: akisi durdurur (scroll olayi sayilmaz — bizim scrollBy da scroll dogurur) */
+  const girdi = () => { sonGirdi = performance.now(); akisPx = 0; tik(); };
+  for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) addEventListener(ad, girdi, { passive: true });
   olc();
   etkinYap(S[0]);
   kare();
@@ -555,6 +587,7 @@ export function baslat(bolum: HTMLElement): () => void {
   /* --- sokum --- */
   return function sok() {
     removeEventListener('scroll', tik);
+    for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) removeEventListener(ad, girdi);
     removeEventListener('resize', boyut);
     removeEventListener('touchstart', kilitAc);
     for (const s of S) {
