@@ -1,0 +1,78 @@
+/* ============================================================
+   FILM · SCROLL-SCRUB ADASI — ISKELET STILI (27 Agu 2026)
+
+   RAY: `--fl-sn` (ffprobe toplami) x `--fl-pxsn` (sahneler.ts PX_SN)
+   piksel + bir ekran; sahne yapisik dururken ray tuketilir. Olcu ELLE
+   yazili degil, iki degisken bilesenden gelir.
+
+   IKI YOL:
+     `.fl-js` (motor indi)  -> yapisik tam ekran kare; sahneler ust uste;
+                               yalniz .fl-etkin boyanir, .fl-komsu yerlesik
+                               ama gorunmez (kod cozucu ayakta, el degisimi
+                               seek beklemez); digerleri display:none —
+                               gizli tembel <img> istek atmaz.
+     motor yok / azaltma    -> ray cokup duz sutun olur, 39 poster okunur,
+                               <video> hic yerlesmez (src'si de yok).
+
+   MOBIL BAGLAMDA PAHALI KATMAN YOK (H14): filter/backdrop/will-change/
+   golge yazilmadi. Video zaten kendi kompozit katmani.
+   ============================================================ */
+
+/* sayfa govdesi: film tam genislik; Temel'in 840 px sutunu burada kalkar */
+main:has(> .fl) { max-width: none; padding: 0; }
+
+.fl { position: relative; background: #050505; }
+
+.fl-ray {
+  position: relative;
+  height: calc(var(--fl-sn) * var(--fl-pxsn) * 1px + 100vh);
+  height: calc(var(--fl-sn) * var(--fl-pxsn) * 1px + 100svh);
+}
+.fl-yapis {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #050505;
+}
+
+/* ---- JS YOLU ---- */
+.fl-js .fl-sahne { position: absolute; inset: 0; display: none; }
+.fl-js .fl-sahne.fl-etkin { display: block; }
+.fl-js .fl-sahne.fl-komsu { display: block; visibility: hidden; }
+.fl-js .fl-poster,
+.fl-js .fl-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* video posterin USTUNDE: kendi posterini (motor yazar) ya da karesini
+   boyar; <img> yalniz motor gelene kadar ve JS'siz yolda gorunur. */
+.fl-js .fl-video { z-index: 1; }
+
+/* ACILIS KOPYASI: tam klip inip ayni kareye sarilana kadar en ustte durur.
+   Takas tek sinif degisimidir (motor `fl-acilis-bitti` yazar) — iki video da
+   ayni kareyi, ayni kalitede gosterdigi icin gecis GORUNMEZ. */
+.fl-js .fl-acilis { z-index: 2; }
+.fl-js .fl-sahne.fl-acilis-bitti .fl-acilis { display: none; }
+
+/* ---- ATLA dugmesi (28 Agu): hiz tavani gerisinde kalinca gorunur ---- */
+.fl-atla {
+  position: absolute; right: 16px; bottom: 16px; z-index: 5;
+  font: 600 14px/1 system-ui, sans-serif; letter-spacing: -.01em;
+  color: #fff; background: rgba(8, 8, 8, .78); border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px; padding: 10px 14px; cursor: pointer;
+}
+.fl-atla[hidden] { display: none; }
+.fl-atla:hover { border-color: #ef233c; }
+.fl-atla-sn { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+html:not(.fl-js) .fl-atla { display: none; }
+
+/* ---- MOTORSUZ YOL (hareket azaltma / JS yok): duz sutun ---- */
+html:not(.fl-js) .fl-ray { height: auto; }
+html:not(.fl-js) .fl-yapis { position: static; height: auto; overflow: visible; }
+html:not(.fl-js) .fl-sahne { position: relative; }
+html:not(.fl-js) .fl-poster { display: block; width: 100%; height: auto; }
+html:not(.fl-js) .fl-video { display: none; }

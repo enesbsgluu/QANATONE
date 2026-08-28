@@ -1,0 +1,104 @@
+---
+/* FILM · SCROLL-SCRUB ADASI — ISKELET (27 Agu 2026).
+   39 klip tek zaman cizelgesine dikilir; kaydirma filmi oynatir
+   (DEVIR-SPESIFIKASYONU §3, Secenek B: klipler ayri yuklenir, sinirda el
+   degisimi — HIGGSFIELD motorunun multi-leg kurgusu, §5 esleme).
+   Secenek A (tek mp4) BILEREK secilmedi: motor sozlesmesinin poster/klip
+   basina degismezleri ve seri on-yukleme yalniz B'de anlamli; montaj-
+   duzenek E7/E11 tek filmin yavas hatta sarmaya uygun olmadigini olctu.
+
+   BU TURDA YOK (bilerek): hikaye metni · giris Q sahnesi · final devri.
+   Motor nav/dugme/ipucu/baslik kurmaz (sert degismez #6) — sayfanin isi.
+
+   SAYILAR DOM'A KUNYEDEN INER: sure/kare/bas `sahneler.ts` -> ffprobe.
+   Tarayiciya kanon.json inmez; motor data-* okur.
+
+   IKI YOL, AYNI MARKUP:
+     JS + hareket acik  -> `<html class="fl-js">`, motor `import()` ile
+                          iner, sahneler ust uste yapisik kare, yalniz
+                          etkin + iki komsu yerlesik.
+     hareket azaltma / JS yok -> motor HIC inmez, hicbir video fetch
+                          edilmez (sert degismez: reduced-motion'da sifir
+                          video); 39 poster duz sutun olarak okunur.
+   `<video>` etiketlerinde src YOK: kaynak yalniz motor tarafindan Blob
+   olarak verilir. Bu, V1'in ("veri derlemede piser") ruhuyla uyumlu:
+   sayfa kendiliginden hicbir sey cekmez.
+
+   POSTER <img>: yalniz ilk sahne eager (ilk boya), obur 38'i lazy — ve
+   JS yolunda `display:none` sarmal icinde oldukları icin HIC INMEZ
+   (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
+import '../stil/film.css';
+import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SONUM, TAVAN } from '../film/sahneler';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
+  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sonum={SONUM} data-tavan={TAVAN}
+  style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
+  <div class="fl-ray">
+    <div class="fl-yapis">
+      {SAHNELER.map((s, j) => (
+        <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
+          data-n={s.n} data-sure={s.sure} data-kare={s.kare} data-bas={s.bas}
+          data-clip={s.clip} data-poster={s.poster}
+          data-mclip={s.mobileClip} data-mposter={s.mobilePoster}
+          data-clip265={s.clip265} data-mclip265={s.mobileClip265}>
+          <picture>
+            <source media="(max-width: 900px)" type="image/webp" srcset={`${B}/${s.mobilePoster}`}
+              width={s.mgen} height={s.myuk} />
+            <img class="fl-poster" src={`${B}/${s.poster}`} width={s.gen} height={s.yuk}
+              alt="" aria-hidden="true" decoding="async"
+              loading={j === 0 ? 'eager' : 'lazy'}
+              fetchpriority={j === 0 ? 'high' : undefined} />
+          </picture>
+          <video class="fl-video" muted playsinline disableremoteplayback preload="none"
+            width={s.gen} height={s.yuk} aria-hidden="true" tabindex="-1"></video>
+          {s.acilis && (
+            <video class="fl-video fl-acilis" muted playsinline disableremoteplayback preload="none"
+              width={s.gen} height={s.yuk} aria-hidden="true" tabindex="-1"
+              data-acilis={s.acilis.clip} data-macilis={s.acilis.mobileClip}
+              data-acilis265={s.acilis.clip265} data-macilis265={s.acilis.mobileClip265} data-asn={s.acilis.sn}></video>
+          )}
+        </div>
+      ))}
+    </div>
+    {/* ATLA (28 Agu): hiz tavani asilinca gosterilen konum hedefin
+        gerisinde kalir; motor `fl-geride` olayi atar, sayfa bu dugmeyi
+        acar. Dugme sayfanin — motor UI kurmaz (sert degismez #6). */}
+    <button class="fl-atla" type="button" hidden aria-label={dil === 'en' ? 'Skip ahead' : 'Atla'}>
+      {dil === 'en' ? 'Skip' : 'Atla'} <span class="fl-atla-sn"></span>
+    </button>
+  </div>
+</section>
+
+<script>
+  /* ADA — sayfaya inen tek betik. Motor (`src/film/motor.ts`) dinamik
+     ithal: J1 tavaninin disinda, kendi tavani denetimde FM ailesi.
+     Hareket azaltmada motor HIC inmez -> sifir video fetch. */
+  const bolum = document.querySelector<HTMLElement>('.fl');
+  const azalt = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (bolum && !azalt) {
+    document.documentElement.classList.add('fl-js');
+    /* atla dugmesi: motor esik gecislerinde `fl-geride` atar (kare basina
+       olay yok); dugme gorunur/kaybolur, tiklaninca __fl.atla(). */
+    const atla = bolum.querySelector<HTMLButtonElement>('.fl-atla');
+    if (atla) {
+      bolum.addEventListener('fl-geride', (e) => {
+        const g = (e as CustomEvent<{ geride: number }>).detail.geride;
+        atla.hidden = g === 0;
+        const sn = atla.querySelector('.fl-atla-sn');
+        if (sn) sn.textContent = g ? `${g > 0 ? '+' : '−'}${Math.abs(g).toFixed(0)} sn` : '';
+      });
+      atla.addEventListener('click', () => { (window as any).__fl?.atla(); atla.hidden = true; });
+    }
+    import('../film/motor').then((m) => m.baslat(bolum)).catch((e) => {
+      document.documentElement.classList.remove('fl-js');
+      document.documentElement.dataset.film = 'motor-inmedi';
+      console.warn('[film] motor inmedi', e);
+    });
+  } else if (bolum) {
+    document.documentElement.dataset.film = 'hareket-azaltma';
+  }
+</script>
