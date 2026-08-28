@@ -48,6 +48,10 @@ export const SERTLIK = 120;
 export const SONUM = 0;
 export const SERTLIK_ADAY = [60, 120, 250] as const;
 
+/* DURUSTA AKIS (28 Agu 2026, Enes) — kaydirma birakilinca film bu tempoyla
+   ilerlemeye devam eder (film-sn / gercek-sn). 0 = kapali. DENEME: ?akis=0.12 */
+export const AKIS = 0.08;
+
 /* HIZ TAVANI (28 Agu 2026, Enes) — gosterilen konum saniyede en cok bu
    kadar film-sn ilerler; daha hizli kaydirma yutulur, sayfadaki "atla"
    dugmesi (`__fl.atla()`) hedefe oturtur. 1x ve 1,5x olculdu, temiz

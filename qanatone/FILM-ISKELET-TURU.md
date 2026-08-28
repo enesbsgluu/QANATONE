@@ -669,3 +669,57 @@ masaüstü min 2,7 s / mobil 0,8 s, süpürme; yüzde satırı eklendi), `#tubes
 eller, `#bit` imleç, `.shiny` dönen konik kenarlık (Demo talebi + Gönder); İletişim'e süzülen
 huzme. Önceki turun uydurulmuş parçacık izi SİLİNDİ. Kareler `karsilama/_kare/kontak2.jpg`.
 Headless Brave: `tubesOn true`, Geist/Geist Mono yüklü, tek ekran (scrollHeight = innerHeight) masaüstü + mobil.
+
+
+---
+---
+
+# 8. TUR — duruşta akış · nefes · takılma ölçümü (28 Ağu 2026, gece)
+
+## (a) Duruşta akış — `AKIS = 0,08` film-sn/sn (`?akis=`, `data-akis`, `__fl.akis`; 0 kapalı)
+Kaydırma bırakılınca ve yay otururken film çok yavaş ilerlemeye devam eder. Uygulama: tek gerçek
+kaynak **scrollY** kalır — motor sayfayı kendisi kaydırır (px birikimi, tam pikselde `scrollBy`),
+yay bu hedefi izler; böylece yayın son 275 ms'sindeki kare-altı hareket donmaya dönüşmez.
+Kullanıcı girdisi (wheel/touch/key/pointer) görülünce akış **anında durur**, girdi bittikten
+160 ms sonra yeniden başlar; film sonunda durur. Ölçüldü (Brave headless): yerleşmiş hâlde 2 s'de
+scrollY +73 px = **36,4 px/sn = 0,081 film-sn/sn**; wheel sonrası 100 ms `akiyor:false`, 700 ms sonra tekrar `true`.
+
+## (b) Nefes — `film.css .fl-js .fl-yapis`
+Kaydırmadan bağımsız: `translate3d(2px,−3px) scale(1.01)`, **7 s** ease-in-out döngü, kompozitörde;
+`prefers-reduced-motion` kapatır. Ölçek 1440 px'te 14 px pay verir, 3 px kayma kenar açmaz.
+
+## (c) Takılma ölçümü — `yeni/film/olc-takilma.cjs` (tahmin yok, kayıt)
+Her **sunulan** karede (rVFC, gerçek `mediaTime`; motor `sunum` kaydına `mt` eklendi) o anda **istenen**
+film zamanı (motorun karesindeki `gosterilenT`, zamana göre ara değer) ile sunulan zaman (`bas + mediaTime`)
+farkı; ayrıca **sunumsuz boşluk** (istek ilerlerken >100 ms kare gelmemesi — poster tutma; rVFC ateşlemediği
+için tek başına sapma kaydı doğurmaz, ayrıca sayılır). |fark| > 100 ms olaylar, her biri en yakın klip sınırına
+uzaklıkla. Sınır kümesi ≤ 0,35 s. Brave headless, GTX 1650 Ti donanım, H.264, akış kapalı (`?akis=0`).
+Düzenek dersleri: (1) rVFC yokken sapma "0" görünür — boşluk sayımı şart; (2) süpürme öncesi `atla()`
+**sonra** `scrollTo(T0)` yay ters yolculuk yaptırdı, sahte "sunulan ileride" olayları — sıra: kaydır → atla → bekle.
+
+| küme | süpürme | sunulan kare | fark p50/p95/max ms | >100 ms | olay | sınırda | dağınık | hüküm |
+|---|---|---:|---|---:|---:|---:|---:|---|
+| masaüstü wifi | okuma 1× | 948 | 15/26/164 | 2 (0,2 %) | 2 | 2 | 0 | sınırda → devralma |
+| masaüstü wifi | gezinme 1,5× | 1501 | 20/34/171 | 2 (0,1 %) | 2 | 1 | 1 | karışık |
+| masaüstü wifi | savurma 3,3× | 1065 | 19/34/47 | 0 | 0 | 0 | 0 | sapma yok |
+| masaüstü wifi | savurma 3,3× geri | 914 | 22/30/133 | 2 (0,2 %) | 2 | 1 | 1 | karışık |
+| mobil 4G (CPU 4×) | okuma 1× | 598 | 11/21/121 | 2 (0,3 %) | 2 | 2 | 0 | sınırda → devralma |
+| mobil 4G | gezinme 1,5× | 591 | 15/23/43 | 0 | 0 | 0 | 0 | sapma yok |
+| mobil 4G | savurma 3,3× | 282 | 15/24/34 | 0 | 0 | 0 | 0 | sapma yok |
+| mobil 4G | savurma 3,3× geri | 227 | 26/44/153 | 6 (2,6 %) | 5 | 1 | 4 | **dağınık → çözücü** |
+| mobil yavaş 4G | okuma 1× | 538 | 10/18/**2574** | 1 | 1 | 1 | 0 | **sınırda → devralma** |
+| mobil yavaş 4G | gezinme 1,5× | 591 | 15/24/42 | 0 | 0 | 0 | 0 | sapma yok |
+| mobil yavaş 4G | savurma 3,3× | 281 | 15/23/34 | 0 | 0 | 0 | 0 | sapma yok |
+
+Olaylar (tamamı `olcum/takilma/rapor.json`):
+- **İleri okumada sapmaların hepsi klip sınırının hemen ÖNCESİNDE** (sunulan = sahne2 13,042 s, sahne3 21,084 s,
+  sahne4 29,126 s — sınıra −0,042 s = son kare), 110–170 ms, sunumsuz boşluk 100–125 ms: bir sonraki klip devralana
+  kadar önceki klibin son karesi ekranda kalıyor (devralma kuralı: doğru kareye oturmadan devralmaz) → **devralma gecikmesi ~1 kare + seek**.
+- **Yavaş 4G 1×: sahne3→4 sınırında 2574 ms sunumsuz boşluk** — sahne4 klibi zamanında inmemiş; poster/son kare tutuldu. Tek büyük olay, sınırda.
+- **Geri savurma (mobil 3,3×): 5 olay sahne3'ün İÇİNE dağılmış** (+0,17 … +1,5 s), 120–153 ms, sunulan hep ileride: geri yönde her seek GOP başından decode → **çözücü** (5. turdaki yapısal bulguyla aynı).
+- Masaüstü 1,5×'te sahne1 0,208 s'de tek olay (sınırdan −7,8 s): süpürme başlangıcı, çözücü ısınması.
+- Seek gecikmesi tabanı: p50 10–26 ms, p95 18–44 ms her kümede.
+
+**Karar Enes'te (düzeltme ölçümden sonra konuşulacak):** sınır olayları için devralma öncesi
+ön-sarma/çift-video ping-pong; yavaş 4G için sınır klibinin daha erken indirilmesi (ön pencere);
+geri yön için GOP/çözücü kararı.
