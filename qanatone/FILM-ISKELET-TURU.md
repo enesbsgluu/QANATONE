@@ -723,3 +723,33 @@ Olaylar (tamamı `olcum/takilma/rapor.json`):
 **Karar Enes'te (düzeltme ölçümden sonra konuşulacak):** sınır olayları için devralma öncesi
 ön-sarma/çift-video ping-pong; yavaş 4G için sınır klibinin daha erken indirilmesi (ön pencere);
 geri yön için GOP/çözücü kararı.
+
+
+## 8b — sınır olayları: ön-sarma + çift video · yavaş hat penceresi (aynı gece)
+Enes kararı: sınıra 0,5 s kala sonraki klibi hedef kareye ön-sar, çift video ile devret; yavaş hatta sınır
+klibinin indirme penceresini genişlet; geri yön yapısal, dokunma.
+**Yapılan (`motor.ts`):** `ON_SAR_S = 0,5` — gösterilen konum sınıra 0,5 s kala yöndeki komşu sınır karesine
+(ileri 0 / geri son) sarılır ve `fl-onsar` ile **boyanır** (etkinin altında, z 0/1); devir yalnız katman sırası,
+visibility geçişi yok; en çok iki video boyanır. Yavaş hat: son inen klipten ölçülen etkin hız (`__fl.mbit`)
+< 6 Mbit ise ön pencere 2→3, tutma 3→4.
+
+**Aynı ölçüm tekrarı** (Brave headless, GTX donanım, H.264, akış kapalı):
+
+| küme | süpürme | önce → sonra (>100 ms olay) | kalan olay |
+|---|---|---|---|
+| masaüstü | okuma 1× | 2 → **1** | sahne3 başından +0,125 s, 225 ms (devir sonrası ilk seek 0→3. kare) |
+| masaüstü | gezinme 1,5× | 2 → **1** | sahne2 içinde −2,0 s (dağınık, çözücü) |
+| masaüstü | savurma 3,3× / geri | 0 / 2 → **0 / 0** | — |
+| mobil 4G | okuma 1× | 2 → **1** | sahne1→2 son karesi, 186 ms (sahne1 açılış kopyası takası + devir) |
+| mobil 4G | gezinme 1,5× / savurma | 0 → 0 | — |
+| mobil 4G | savurma geri | 5 → 4 | sahne3 içi dağınık 137–157 ms (yapısal, dokunulmadı) |
+| mobil yavaş 4G | okuma 1× | 1 → **1** | sahne3→4 sınırı **2667 ms** (önce 2574) |
+
+**Yavaş 4G teşhisi (iniş süreleri kaydedildi):** sahne1-4: 4842 / 5602 / 7872 / 11195 ms, etkin hız 3,83 Mbit,
+ön pencere 3 (genişleme çalıştı). Mobil klip ≈ 3,5 MB / 8 s ⇒ 1× okuma **≈ 3,5 Mbit** ister, hat 3,8 Mbit:
+okuma temposu hattın kendisini aşıyor; tek indirme kuyruğunda pencereyi genişletmek sırayı değil bandı
+değiştirmediği için sınırda bekleme kalıyor. **Bu kalem pencere ile kapanmaz; karar Enes'te:** yavaş hat için
+mobil bitrate/çözünürlük düşürme (CRF/540p, 2-3. turlardaki 74 MiB hattı), ya da yavaş hatta ilk kare yerine
+"hazır olana kadar bekle" kabulü.
+Seek tabanı değişmedi (p95 20–41 ms). Rapor: `olcum/takilma/rapor.json` (önce/sonra aynı dosya adı; önceki
+tur değerleri bu tabloda).
