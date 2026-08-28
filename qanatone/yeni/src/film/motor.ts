@@ -157,15 +157,14 @@ export function baslat(bolum: HTMLElement): () => void {
   /* Hat secimi: H13/H6 ile ayni esik (900 px). Kaynak farki yalniz CRF/GOP
      (mobil betik 720p tavanini zaten 716 satirla asmiyor). */
   const mobil = matchMedia('(max-width: 900px)').matches;
-  /* KODEK SECIMI: H.265 ana, H.264 yedek. canPlayType 'probably' sarti —
-     'maybe' yedek yola duser (Firefox HEVC'yi hic, bazi Android'ler
-     yalniz donanimla oynatir; 'maybe' orada yanlis yesil olurdu).
-     ?kodek=h264 URL'i olcum icin yedegi zorlar. */
+  /* KODEK: TEK HAT H.264 (Enes, 28 Agu). H.265 KAPANDI: Chromium'un HEVC
+     yolu (Chrome + Brave, olculdu 5. ve 6. tur) hedef kare anahtar kareden
+     uzaksa sonraki anahtar kareye yapisiyor; GOP 8'de %25, GOP 4'te %75
+     atlama. canPlayType 'probably' bunu gormuyordu (yanlis yesil). Secim
+     sabit; ?kodek=h265 yalniz OLCUM icin zorlar, urun yolunda kullanilmaz. */
   const KODEK = (() => {
     const z = new URLSearchParams(location.search).get('kodek');
-    if (z === 'h264' || z === 'h265') return z;
-    const v = document.createElement('video');
-    return v.canPlayType('video/mp4; codecs="hvc1.1.6.L120.90"') === 'probably' ? 'h265' : 'h264';
+    return z === 'h265' ? 'h265' : 'h264';
   })();
   const kaynakYolu = (el: HTMLElement, h264: string, h265: string) =>
     KODEK === 'h265' && el.dataset[h265] ? el.dataset[h265]! : el.dataset[h264]!;

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>QANATONE — Talep var, yakalayan yok.</title>
+<meta name="description" content="Performans pazarlama · yapay zekâ otomasyonu · web tasarımı ve daha fazlası. Yakında sizlerle.">
+<meta property="og:title" content="QANATONE — Talep var, yakalayan yok.">
+<meta property="og:description" content="Performans pazarlama · yapay zekâ otomasyonu · web tasarımı ve daha fazlası. Yakında sizlerle.">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="img/qanatone.webp" type="image/webp">
+<link rel="preload" href="font/playfair-display-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!--
+  KARSILAMA SAYFASI (28 Agu 2026) — tek dosya, kaynak ESKI site tasarimi
+  (index.html build 130: palet, eller, kizil bit, pill, dugme dili). Tek ekran,
+  kaydirma yok (mobilde de). Deploy yok.
+  SAPMALAR (Enes, bilincli): yazi tipi tek aile iki varyant — Playfair Display
+  500 + 500 italic (eski sitenin Manrope 700/800'u yok); giris animasyonu
+  YAY tabanli ve KESILEBILIR (asagida `yay()`: hedef her an degisir, durum
+  suruklenir — sert baslangic/ani durus yok). Kontrol araci YOK, yerine
+  "yakinda" alani. Form Netlify Forms (statik data-netlify, gizli form-name,
+  honeypot, KVKK onayi `name`li). KVKK/gizlilik: kvkk.html, gizlilik.html.
+-->
+<style>
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F,U+0130,U+015E-015F}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(font/playfair-display-500i-tr.woff2) format('woff2');unicode-range:U+011E-011F,U+0130,U+015E-015F}
+
+/* palet: eski site :root (build 130) */
+:root{--bg:#050505;--red:#ef233c;--red-soft:#ff4d63;--red-dim:rgba(239,35,60,.12);--red-glow:rgba(239,35,60,.45);
+  --tx:#fff;--tx2:rgba(255,255,255,.62);--tx3:rgba(255,255,255,.5);--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.2);
+  --e:cubic-bezier(.2,.7,.2,1);--f:'Playfair Display',Georgia,'Times New Roman',serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:500 16px/1.5 var(--f);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+button,input,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+/* ---- sahne: tek ekran ---- */
+#ekran{position:fixed;inset:0;height:100vh;height:100svh;overflow:hidden;display:grid;grid-template-rows:1fr auto;isolation:isolate}
+#bitcv{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+/* eller: eski hero (.hands) — insan ustte solda, robot altta sagda, merkeze dogru sise karisir */
+.eller{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%);
+  mask-image:radial-gradient(ellipse 48% 46% at 50% 50%,transparent 0 10%,rgba(0,0,0,.6) 42%,#000 90%)}
+.el{position:absolute;will-change:transform,opacity;opacity:0}
+.el img{display:block;width:100%;height:auto}
+.el::before{content:'';position:absolute;inset:-14%;z-index:-1;background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%)}
+.el-h{left:-2vw;top:-2vw;width:33vw}
+.el-r{right:-2vw;bottom:-2vw;width:33vw}
+.salin{display:block}
+.el-h .salin{transform-origin:0 6%;animation:salA 13s ease-in-out infinite}
+.el-r .salin{transform-origin:100% 94%;animation:salB 17.5s ease-in-out -4s infinite}
+@keyframes salA{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(3px,-8px,0) rotate(-1deg)}}
+@keyframes salB{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(-5px,12px,0) rotate(.8deg)}}
+@media (max-width:900px){.el-h{width:52vw;left:-8vw;top:-4vw}.el-r{width:56vw;right:-10vw;bottom:-2vw}
+  .eller{-webkit-mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%);mask-image:radial-gradient(ellipse 60% 40% at 50% 48%,transparent 0 12%,rgba(0,0,0,.55) 48%,#000 92%)}}
+
+/* ---- merkez ---- */
+.orta{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:max(40px,6vh) 24px 20px;gap:0}
+.orta::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,130%);height:110%;z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(3,3,4,.6),rgba(3,3,4,.3) 54%,transparent 78%)}
+.g{opacity:0;will-change:transform,opacity}
+h1{margin:0;font-weight:500;font-size:clamp(2.1rem,6.2vw,5.2rem);line-height:1.04;letter-spacing:-.02em}
+h1 em{font-style:italic;color:var(--red-soft)}
+.amblem{margin:clamp(20px,3.6vh,36px) 0 clamp(20px,3.4vh,34px);line-height:0}
+.amblem img{height:clamp(54px,9vh,88px);width:auto;filter:drop-shadow(0 0 22px rgba(239,35,60,.35))}
+.dugmeler{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:999px;font-size:1rem;letter-spacing:-.005em;line-height:1;transition:box-shadow .34s var(--e),background .34s var(--e),border-color .34s var(--e);will-change:transform}
+.btn-p{background:var(--red);color:#fff}
+.btn-p:hover{background:#ff2f47;box-shadow:0 12px 40px -10px var(--red-glow)}
+.btn-g{background:rgba(255,255,255,.045);border:1px solid var(--line2);color:var(--tx)}
+.btn-g:hover{border-color:rgba(255,255,255,.4)}
+.btn svg{width:15px;height:15px}
+.satir{margin:clamp(18px,3.2vh,30px) 0 0;font-size:clamp(.92rem,1.3vw,1.08rem);color:var(--tx2);max-width:42ch;line-height:1.55}
+.satir i{font-style:italic;color:var(--tx)}
+.yakinda{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(14px,2.4vh,22px);padding:8px 16px 8px 12px;border:1px dashed var(--line2);border-radius:999px;font-size:.84rem;color:var(--tx3);letter-spacing:.02em}
+.yakinda .nokta{position:relative;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.yakinda .nokta::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(239,35,60,.5);animation:halka 2.6s ease-in-out infinite}
+@keyframes halka{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:.1}}
+.yakinda i{font-style:italic;color:var(--tx2)}
+
+/* ---- alt ---- */
+.alt{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(24px,env(safe-area-inset-left)) max(18px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-right));font-size:.9rem;color:var(--tx2)}
+.alt a:hover{color:var(--tx)}
+.piksel{display:grid;grid-auto-flow:column;gap:4px;align-items:end;height:18px}
+.piksel i{display:block;width:3px;height:3px;border-radius:1px;background:var(--red);opacity:.25;animation:pk 2.8s ease-in-out infinite;animation-delay:calc(var(--k) * -.11s)}
+@keyframes pk{0%,100%{opacity:.18;transform:translateY(0)}50%{opacity:.95;transform:translateY(-8px)}}
+.alt .hukuk{display:flex;gap:14px;font-size:.8rem;color:var(--tx3)}
+@media (max-width:640px){.alt{flex-wrap:wrap;justify-content:center;text-align:center;row-gap:8px}.alt .hukuk{width:100%;justify-content:center}.piksel{order:-1;width:100%;justify-content:center}}
+
+/* ---- modal (form) ---- */
+#perde{position:fixed;inset:0;z-index:20;background:rgba(5,5,5,.72);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s var(--e)}
+#perde.acik{opacity:1;pointer-events:auto}
+#kutu{position:fixed;left:50%;top:50%;z-index:21;width:min(520px,calc(100% - 28px));max-height:calc(100vh - 28px);max-height:calc(100svh - 28px);overflow:auto;padding:30px 28px 26px;border-radius:22px;border:1px solid var(--line2);background:rgba(12,12,13,.97);box-shadow:0 40px 90px -30px rgba(0,0,0,.8);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.96);will-change:transform,opacity}
+#kutu.acik{pointer-events:auto}
+#kutu h2{margin:0 0 4px;font-weight:500;font-size:1.5rem;letter-spacing:-.01em}
+#kutu .ust{color:var(--tx2);font-size:.92rem;margin:0 0 18px}
+.fld{display:block;margin:0 0 12px}
+.fld span{display:block;font-size:.82rem;color:var(--tx3);margin:0 0 5px}
+.fld input,.fld textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line2);background:rgba(255,255,255,.04);outline:0;transition:border-color .25s}
+.fld input:focus,.fld textarea:focus{border-color:var(--red-soft)}
+.fld textarea{resize:vertical;min-height:74px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.8rem;color:var(--tx2);margin:6px 0 16px;line-height:1.45}
+.chk input{margin:3px 0 0;accent-color:var(--red)}
+.chk a{color:var(--red-soft)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.kapat{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--tx2);transition:background .25s}
+.kapat:hover{background:rgba(255,255,255,.08);color:var(--tx)}
+.kapat svg{width:15px;height:15px}
+.msj{display:block;min-height:1.3em;margin-top:12px;font-size:.86rem;color:var(--tx2)}
+.msj.ok{color:#7be0a0}.msj.hata{color:var(--red-soft)}
+.satirlar{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:480px){.satirlar{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion:reduce){.salin,.piksel i,.yakinda .nokta::after{animation:none}}
+</style>
+</head>
+<body>
+<div id="ekran">
+  <div class="eller" aria-hidden="true">
+    <div class="el el-h" data-yay="el-h"><span class="salin"><picture>
+      <source srcset="img/hand-human.avif" type="image/avif">
+      <img src="img/hand-human.webp" alt="" width="888" height="774" fetchpriority="high" decoding="async"></picture></span></div>
+    <div class="el el-r" data-yay="el-r"><span class="salin"><picture>
+      <source srcset="img/hand-robot.avif" type="image/avif">
+      <img src="img/hand-robot.webp" alt="" width="1244" height="855" fetchpriority="high" decoding="async"></picture></span></div>
+  </div>
+  <canvas id="bitcv" aria-hidden="true"></canvas>
+
+  <main class="orta">
+    <h1 class="g" data-yay="h1">Talep var, <em>yakalayan yok.</em></h1>
+    <div class="amblem g" data-yay="amblem"><picture>
+      <source srcset="img/qanatone.avif" type="image/avif">
+      <img src="img/qanatone.webp" alt="QANATONE" width="260" height="293" decoding="async"></picture></div>
+    <div class="dugmeler g" data-yay="dugme">
+      <a class="btn btn-g" href="mailto:info@qanatone.com" data-hover>İletişim</a>
+      <button class="btn btn-p" type="button" id="demoAc" data-hover>Demo talebi
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+    </div>
+    <p class="satir g" data-yay="satir">Performans pazarlama · yapay zekâ otomasyonu · web tasarımı ve daha fazlası. <i>Yakında sizlerle.</i></p>
+    <div class="yakinda g" data-yay="yakinda" aria-label="Site kontrol aracı yakında"><span class="nokta" aria-hidden="true"></span>Site kontrol aracı · <i>yakında</i></div>
+  </main>
+
+  <footer class="alt g" data-yay="alt">
+    <a href="mailto:info@qanatone.com">info@qanatone.com</a>
+    <div class="piksel" id="piksel" aria-hidden="true"></div>
+    <nav class="hukuk" aria-label="Hukuki"><a href="kvkk.html">KVKK</a><a href="gizlilik.html">Gizlilik</a></nav>
+  </footer>
+</div>
+
+<div id="perde"></div>
+<section id="kutu" role="dialog" aria-modal="true" aria-labelledby="kutuBaslik" aria-hidden="true">
+  <button class="kapat" type="button" id="kapat" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <h2 id="kutuBaslik">Demo talebi</h2>
+  <p class="ust">Kısa bir görüşme için bilgilerini bırak; en geç bir iş günü içinde dönüş yaparız.</p>
+  <!-- NETLIFY FORMS: statik HTML'de data-netlify, gizli form-name, honeypot (company),
+       KVKK onayi `name`li (isaretsizse alan gonderime hic girmez — eski sitenin kurali).
+       Zaman alani BILEREK YOK: guvenilir zaman Netlify'in created_at'i. -->
+  <form name="demo" method="POST" action="/" data-netlify="true" netlify-honeypot="company" id="demoForm" novalidate>
+    <input type="hidden" name="form-name" value="demo">
+    <p class="hp" aria-hidden="true"><label>Şirket <input name="company" tabindex="-1" autocomplete="off"></label></p>
+    <div class="satirlar">
+      <label class="fld"><span>Ad soyad</span><input type="text" name="name" required maxlength="80" autocomplete="name"></label>
+      <label class="fld"><span>E-posta</span><input type="email" name="email" required maxlength="120" autocomplete="email"></label>
+    </div>
+    <label class="fld"><span>Telefon</span><input type="tel" name="phone" required maxlength="24" autocomplete="tel" placeholder="+90 5xx xxx xx xx"></label>
+    <label class="fld"><span>Ne yaptırmak istiyorsun? (kısaca)</span><textarea name="message" maxlength="600" rows="3" placeholder="Örn: sağlık turizmi için site + WhatsApp ajanı"></textarea></label>
+    <label class="chk"><input type="checkbox" name="kvkk_onay" value="evet" required>
+      <span>Bilgilerimin bu talebe dönüş yapılması için işlenmesini kabul ediyorum. <a href="kvkk.html" target="_blank" rel="noopener">Aydınlatma metni</a> · <a href="gizlilik.html" target="_blank" rel="noopener">Gizlilik</a></span></label>
+    <button class="btn btn-p" type="submit" data-hover>Gönder
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></button>
+    <span class="msj" id="msj" role="status" aria-live="polite"></span>
+  </form>
+</section>
+
+<script>
+(() => {
+  const AZALT = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const $ = (s) => document.querySelector(s);
+
+  /* ================= YAY: sonumlu yay entegratoru =================
+     Her ogenin bir DURUMU (x, v) ve bir HEDEFI var. Hedef her an
+     degisebilir (kesilebilir): durum surukleniyorsa suruklenmeye devam
+     eder, sicramaz. Sert baslangic yok: ilk kare v=0'dan yay ivmesiyle
+     kalkar; ani durus yok: hedefe sonumle oturur (kritik-alti sonum). */
+  const yaylar = [];
+  function yay(x, k = 90, c = 16) { /* k: sertlik, c: sonum (c^2<4k => hafif tasma) */
+    const y = { x, v: 0, h: x, k, c, dinle: null };
+    yaylar.push(y); return y;
+  }
+  function adimla(dt) {
+    for (const y of yaylar) {
+      /* yari-ortuk Euler, 4 alt adim: 120 Hz'de de 30 Hz'de de kararli */
+      const n = 4, h = dt / n;
+      for (let i = 0; i < n; i++) { const a = -y.k * (y.x - y.h) - y.c * y.v; y.v += a * h; y.x += y.v * h; }
+      if (Math.abs(y.x - y.h) < 1e-4 && Math.abs(y.v) < 1e-3) { y.x = y.h; y.v = 0; }
+    }
+  }
+
+  /* ---- giris koreografisi: her oge bir yay (0 -> 1), sahnede kaydirma+olcek+opaklik ---- */
+  const ogeler = [...document.querySelectorAll('[data-yay]')];
+  const SIRA = { 'el-h': 0.00, 'el-r': 0.12, h1: 0.30, amblem: 0.48, dugme: 0.62, satir: 0.74, yakinda: 0.84, alt: 0.92 }; /* sn */
+  const OG = new Map();
+  for (const el of ogeler) {
+    const ad = el.dataset.yay;
+    const y = yay(0, ad.startsWith('el') ? 40 : 110, ad.startsWith('el') ? 11 : 17);
+    OG.set(el, { ad, y });
+  }
+  const yerlestir = () => {
+    for (const [el, o] of OG) {
+      const p = o.y.x, ad = o.ad;
+      if (ad.startsWith('el')) { /* eller: %105'ten oturur, opaklik .94 (eski handIn) */
+        el.style.opacity = (Math.min(1, p) * .94).toFixed(3);
+        el.style.transform = `scale(${(1.055 - .055 * p).toFixed(4)})`;
+      } else {
+        el.style.opacity = Math.max(0, Math.min(1, p)).toFixed(3);
+        el.style.transform = `translate3d(0,${((1 - p) * 18).toFixed(2)}px,0) scale(${(0.985 + .015 * p).toFixed(4)})`;
+      }
+    }
+  };
+  let t0 = null, baslatildi = false;
+  const hedefle = (zaman) => { for (const [, o] of OG) if (zaman >= SIRA[o.ad]) o.y.h = 1; };
+  /* KESILEBILIR: kullanici dokununca/tiklayinca/tus basinca butun hedefler simdi 1 olur;
+     yaylar bulunduklari yerden hedefe suruklenir (atlama yok). */
+  const atla = () => { for (const [, o] of OG) o.y.h = 1; };
+  addEventListener('pointerdown', atla, { passive: true });
+  addEventListener('keydown', atla);
+  if (AZALT) { for (const [, o] of OG) { o.y.x = 1; o.y.h = 1; } }
+
+  /* ---- dugme hover: ayni yay, olcek 1 -> 1.03 (kesilebilir) ---- */
+  for (const b of document.querySelectorAll('[data-hover]')) {
+    const y = yay(1, 220, 22); b.__y = y;
+    b.addEventListener('pointerenter', () => { y.h = 1.035; });
+    b.addEventListener('pointerleave', () => { y.h = 1; });
+    b.addEventListener('pointerdown', () => { y.h = .97; });
+    b.addEventListener('pointerup', () => { y.h = 1.035; });
+  }
+
+  /* ---- modal: perde CSS, kutu yay (olcek+opaklik), kesilebilir ---- */
+  const perde = $('#perde'), kutu = $('#kutu'), yK = yay(0, 130, 18);
+  const ac = () => { perde.classList.add('acik'); kutu.classList.add('acik'); kutu.setAttribute('aria-hidden', 'false'); yK.h = 1; setTimeout(() => kutu.querySelector('input[name=name]').focus(), 120); };
+  const kapa = () => { perde.classList.remove('acik'); kutu.classList.remove('acik'); kutu.setAttribute('aria-hidden', 'true'); yK.h = 0; $('#demoAc').focus(); };
+  $('#demoAc').addEventListener('click', ac); $('#kapat').addEventListener('click', kapa); perde.addEventListener('click', kapa);
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && yK.h === 1) kapa(); });
+
+  /* ---- form: Netlify Forms (yayinda). Lokalde POST hedefi yok -> durum mesaji. ---- */
+  const form = $('#demoForm'), msj = $('#msj');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    msj.className = 'msj'; msj.textContent = 'Gönderiliyor…';
+    try {
+      const r = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      msj.className = 'msj ok'; msj.textContent = 'Alındı. En geç bir iş günü içinde dönüş yapacağız.'; form.reset();
+    } catch (err) {
+      msj.className = 'msj hata';
+      msj.textContent = location.hostname.endsWith('netlify.app') || location.hostname.includes('qanatone') ? 'Gönderilemedi. info@qanatone.com adresine yazabilirsin.' : 'Lokal sunumda form gönderimi yok (Netlify Forms yayında çalışır).';
+    }
+  });
+
+  /* ---- alt piksel dalgasi ---- */
+  const pk = $('#piksel'); const N = innerWidth < 640 ? 28 : 40;
+  for (let i = 0; i < N; i++) { const s = document.createElement('i'); s.style.setProperty('--k', i); pk.appendChild(s); }
+
+  /* ================= BIT: imlec/dokunmayla cizilen iz =================
+     Eski sitenin kizil ajan noktasi (#bit) burada yol boyunca bit birakir:
+     her hareket noktasindan kucuk kare "bit"ler dogar, hafif sacilir, soner.
+     Isaretci yokken (dokunmatik bekleme) seyrek ortam bitleri suzulur. */
+  const cv = $('#bitcv'), cx = cv.getContext('2d', { alpha: true });
+  let W = 0, H = 0, DPR = 1;
+  const boyut = () => { DPR = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+  boyut(); addEventListener('resize', boyut);
+  const bitler = []; const MAX = 420;
+  let sonX = null, sonY = null, imlec = { x: -1, y: -1, var: false };
+  const dogur = (x, y, vx, vy, n) => {
+    for (let i = 0; i < n; i++) {
+      if (bitler.length >= MAX) bitler.shift();
+      const a = Math.random() * Math.PI * 2, s = 6 + Math.random() * 26;
+      bitler.push({ x, y, vx: vx * .18 + Math.cos(a) * s, vy: vy * .18 + Math.sin(a) * s, om: 1.1 + Math.random() * .9, t: 0, b: 1.5 + Math.random() * 1.8, beyaz: Math.random() < .12 });
+    }
+  };
+  const hareket = (x, y) => {
+    imlec.x = x; imlec.y = y; imlec.var = true;
+    if (sonX !== null) {
+      const dx = x - sonX, dy = y - sonY, d = Math.hypot(dx, dy);
+      const adet = Math.min(14, Math.max(1, Math.round(d / 6)));
+      for (let i = 0; i < adet; i++) { const f = i / adet; dogur(sonX + dx * f, sonY + dy * f, dx, dy, 1); }
+    }
+    sonX = x; sonY = y;
+  };
+  if (!AZALT) {
+    addEventListener('pointermove', (e) => hareket(e.clientX, e.clientY), { passive: true });
+    addEventListener('pointerdown', (e) => { hareket(e.clientX, e.clientY); dogur(e.clientX, e.clientY, 0, 0, 18); }, { passive: true });
+    addEventListener('pointerleave', () => { imlec.var = false; sonX = null; });
+    addEventListener('pointerup', () => { if (matchMedia('(pointer:coarse)').matches) { sonX = null; } });
+  }
+  let ortamT = 0;
+  const bitCiz = (dt, z) => {
+    cx.clearRect(0, 0, W, H);
+    if (AZALT) return;
+    /* ortam: saniyede ~3 bit, ekranin alt yarisindan yukari suzulur */
+    ortamT += dt; if (ortamT > .33) { ortamT = 0; if (bitler.length < MAX) bitler.push({ x: Math.random() * W, y: H * (.55 + Math.random() * .45), vx: (Math.random() - .5) * 6, vy: -8 - Math.random() * 10, om: 5 + Math.random() * 4, t: 0, b: 1.5 + Math.random(), beyaz: false }); }
+    cx.globalCompositeOperation = 'lighter';
+    for (let i = bitler.length - 1; i >= 0; i--) {
+      const b = bitler[i]; b.t += dt; if (b.t >= b.om) { bitler.splice(i, 1); continue; }
+      b.vx *= (1 - 1.6 * dt); b.vy *= (1 - 1.6 * dt); b.x += b.vx * dt; b.y += b.vy * dt;
+      const k = 1 - b.t / b.om, al = k * k * .9;
+      cx.fillStyle = b.beyaz ? `rgba(255,255,255,${al})` : `rgba(239,35,60,${al})`;
+      const s = b.b * (0.6 + .4 * k); cx.fillRect(b.x - s / 2, b.y - s / 2, s, s);
+      if (b.beyaz || k > .7) { cx.fillStyle = `rgba(239,35,60,${al * .25})`; cx.fillRect(b.x - s * 1.6, b.y - s * 1.6, s * 3.2, s * 3.2); }
+    }
+    /* imlec noktasi (eski #bit: core + nefes alan halka) — yalniz fare */
+    if (imlec.var && !matchMedia('(pointer:coarse)').matches) {
+      const r = 5, h = 1 + .35 * (.5 + .5 * Math.sin(z * 2.4));
+      cx.globalCompositeOperation = 'source-over';
+      const g = cx.createRadialGradient(imlec.x - 1.5, imlec.y - 1.5, 0, imlec.x, imlec.y, r); g.addColorStop(0, '#ff8b98'); g.addColorStop(.62, '#ef233c'); g.addColorStop(1, '#8d0f20');
+      cx.shadowColor = 'rgba(239,35,60,.55)'; cx.shadowBlur = 10; cx.fillStyle = g; cx.beginPath(); cx.arc(imlec.x, imlec.y, r, 0, Math.PI * 2); cx.fill(); cx.shadowBlur = 0;
+      cx.strokeStyle = `rgba(239,35,60,${.6 - .45 * (h - 1) / .35})`; cx.lineWidth = 1; cx.beginPath(); cx.arc(imlec.x, imlec.y, (r + 4) * h, 0, Math.PI * 2); cx.stroke();
+    }
+  };
+
+  /* ================= tek dongu ================= */
+  let son = performance.now();
+  const kare = (now) => {
+    const dt = Math.min(.05, (now - son) / 1000); son = now;
+    if (t0 === null) t0 = now;
+    hedefle((now - t0) / 1000);
+    adimla(dt);
+    yerlestir();
+    for (const b of document.querySelectorAll('[data-hover]')) if (b.__y) b.style.transform = `scale(${b.__y.x.toFixed(4)})`;
+    kutu.style.opacity = yK.x.toFixed(3); kutu.style.transform = `translate(-50%,-50%) scale(${(0.96 + .04 * yK.x).toFixed(4)})`;
+    bitCiz(dt, now / 1000);
+    requestAnimationFrame(kare);
+  };
+  requestAnimationFrame(kare);
+})();
+</script>
+</body>
+</html>
