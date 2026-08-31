@@ -74,31 +74,26 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
   style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">
-      {/* KUMANDA (31 Agu 2026) — IKI AYRI DUGME, KARISTIRILMASIN:
-          · `.fl-gec`  PROLOGU GEC: filmi tumden atlar, motoru SOKER,
-            oturum boyu atlanmis kalir. Her zaman gorunur/odaklanilabilir.
-          · `.fl-atla` YETISME: hiz tavani yuzunden gosterilen konum
-            hedefin gerisinde kalinca acilir, gosterileni hedefe oturtur.
-            Filmi ATLAMAZ. Yalniz `fl-geride` olayinda gorunur.
-          KONUM DUZELTMESI (31 Agu): ikisi de eskiden `.fl-ray` icindeydi
-          ve `position:absolute; bottom:16px` ile 115.487 px'lik RAYIN
-          DIBINE oturuyordu — yani savurma sirasinda ekranda hic yoktu.
-          Simdi sticky `.fl-yapis` icinde: kutu ekranin kendisi.
-          Motor UI kurmaz (sert degismez #6) — ikisi de sayfanin. */}
-      {/* "KAYDIRMAYA DEVAM" (31 Agu 2026, v2 6. adim): filmin sonunda,
-          ekran oturunca belirir; ILK kaydirmada soner; oturumda BIR KEZ.
-          Perde ve prologu-gec ile ayni ev deseni (sessionStorage). */}
-      {/* IBARE (Enes, 31 Agu gece): metin "Kaydirdikca ilerler", punto
-          gec dugmesiyle ESIT (14px, ondan buyuk degil), ok metinle
-          orantili (.42em — metinden alcak). */}
-      <p class="fl-ipucu" hidden aria-live="polite"><span>{dil === 'en' ? 'Scroll to advance' : 'Kaydırdıkça ilerler'}</span><svg viewBox="0 0 12 7" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+      {/* KUMANDA: tek dugme `.fl-gec` (PROLOGU GEC — filmi tumden atlar,
+          motoru soker, oturum boyu atlanmis kalir; her zaman gorunur).
+          `.fl-atla` YETIS DUGMESI KALKTI (Enes, 1 Eyl): hiz tavani
+          gerisinde kalinca cikan "+N sn" rozeti gereksiz duruyordu.
+          Motorun `atla()` API'si ve `fl-geride` olayi motor yuzeyinde
+          DURUYOR (olcum duzenekleri kullanir) — kalkan yalniz UI.
+          Motor UI kurmaz (sert degismez #6) — dugme sayfanin. */}
+      {/* IBARE (Enes, 1 Eyl — davranis degisti): film BOYUNCA sayfanin
+          alt ortasinda DURUR, bastan vardir (finalde-belirme + oturumda
+          bir kez + ilk-girdide sonme mekanizmasi KALKTI — o kurgu ibareyi
+          canlida hic gosterememisti). Yalniz devir baslayinca sonumlenerek
+          kaybolur (CSS: html.fl-devir .fl-ipucu). Metin 14px (gec ile
+          esit); ok .42em, DONGUSEL AKAR (CSS animasyonu, JS yok):
+          belirir, kayar, soner, yeniden dogar. Ok yonu ASAGI (kaydirma
+          yonu; Enes'in yon teyidi acik — tersi tek satir). */}
+      <p class="fl-ipucu"><span>{dil === 'en' ? 'Scroll to advance' : 'Kaydırdıkça ilerler'}</span><svg viewBox="0 0 12 7" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
       <div class="fl-kumanda">
         {/* DONEN CIZGI (Enes, 31 Agu gece): kaynak eski site .void .ring —
             fl-halka ayni dil, degerler bekcide (film-halka.test.mjs) */}
         <a class="fl-gec" href="#fl-son"><i class="fl-halka" aria-hidden="true"></i><span>{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</span></a>
-        <button class="fl-atla" type="button" hidden aria-label={dil === 'en' ? 'Skip ahead' : 'Yetiş'}>
-          {dil === 'en' ? 'Catch up' : 'Yetiş'} <span class="fl-atla-sn"></span>
-        </button>
       </div>
       {SAHNELER.map((s, j) => (
         <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
@@ -169,19 +164,8 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     KOKE.dataset.film = 'atlandi';
   } else if (bolum && !azalt) {
     KOKE.classList.add('fl-js');
-    /* yetisme dugmesi: motor esik gecislerinde `fl-geride` atar (kare
-       basina olay yok); dugme gorunur/kaybolur, tiklaninca __fl.atla().
-       Filmi ATLAMAZ — gosterileni hedefe oturtur. */
-    const atla = bolum.querySelector<HTMLButtonElement>('.fl-atla');
-    if (atla) {
-      bolum.addEventListener('fl-geride', (e) => {
-        const g = (e as CustomEvent<{ geride: number }>).detail.geride;
-        atla.hidden = g === 0;
-        const sn = atla.querySelector('.fl-atla-sn');
-        if (sn) sn.textContent = g ? `${g > 0 ? '+' : '−'}${Math.abs(g).toFixed(0)} sn` : '';
-      });
-      atla.addEventListener('click', () => { (window as any).__fl?.atla(); atla.hidden = true; });
-    }
+    /* YETIS DUGMESI KALKTI (1 Eyl, Enes) — `fl-geride` olayini dinleyen
+       kalmadi; olay motor yuzeyinde duruyor (olcum kullanir). */
     import('../film/motor').then((m) => {
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
@@ -223,9 +207,12 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     const ipucu = bolum.querySelector<HTMLElement>('.fl-ipucu');
     const govde = document.getElementById('fl-govde');
     const yapis = bolum.querySelector<HTMLElement>('.fl-yapis')!;
-    const IPUCU_ANAHTAR = 'qanat-prolog-ipucu';
-    let ipucuGorulmus = false;
-    try { ipucuGorulmus = sessionStorage.getItem(IPUCU_ANAHTAR) === '1'; } catch {}
+    /* IBARE SONMESI OLCUMU (kapi: devirde sonme ani ms cinsinden):
+       fl-devir sinifi ibareyi CSS gecisiyle sondurur; gecisin bitisi
+       gercek olaydan okunur, sure varsayilmaz. */
+    ipucu?.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'opacity' && KAYIT.ibareSonduMs === null && KOKE.classList.contains('fl-devir')) KAYIT.ibareSonduMs = AN();
+    });
 
     /* kunye: sol,ust,gen,yuk (oran) + son kare buyume hizi (1/s, 1x) —
        Film.astro frontmatter'i ekran-kose.json k119/k120'den turetir. */
@@ -290,8 +277,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       kapanisYolu: string | null;
       /* EFEKT B (prologu gec): yol 'isinlanma' | 'sade', nokta bilgi icin */
       gec: null | { basMs: number; tepeMs: number | null; sonMs: number | null; yol: string; kareler: number[] };
+      ibareSonduMs: number | null;   /* devirde ibarenin sonme ani (transitionend) */
     } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [],
-      tv: { basMs: null, parlaMs: null, acMs: null, sonMs: null }, kapanisYolu: null, gec: null };
+      tv: { basMs: null, parlaMs: null, acMs: null, sonMs: null }, kapanisYolu: null, gec: null, ibareSonduMs: null };
 
     /* NAV: film basladiysa kalkar ve DEVIRDE DE KALKIK KALIR (v2'de devirde
        geri iniyordu; govde artik eski sitenin TAM sayfasi — kendi navi var,
@@ -388,7 +376,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         /* onceki devrin (geri sarilmis) efekt kayitlari kalmasin — olculdu:
            isinmali kosumda tv.sonMs eski devirden kalinca sure negatif cikti */
         KAYIT.tv.basMs = KAYIT.tv.parlaMs = KAYIT.tv.acMs = KAYIT.tv.sonMs = null;
-        KAYIT.kapanisYolu = null;
+        KAYIT.kapanisYolu = null; KAYIT.ibareSonduMs = null;
         KAYIT.v0 = { video_1x: DK.hiz, tempo: +tempo.toFixed(4), video: +(DK.hiz * tempo).toFixed(7), bizim: +sv.toFixed(7), fark: 0 };
         KOKE.classList.add('fl-devir');
       }
@@ -497,7 +485,6 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       }
       navBak();
       tutunBak();
-      ipucuBak();
       /* dongu surme karari: devir oturup TAMAMLANDIYSA durur (pil);
          geri sarma scroll olayindan yeniden kurulur. Sona yakinken
          donmeye devam eder — tetik kaydirmasiz da gelebilir (yay/akis).
@@ -508,55 +495,17 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     };
     const devirTik = () => { if (!devirRaf) devirRaf = requestAnimationFrame(devirKare); };
 
-    /* IPUCU: film sonuna varinca belirir, ILK kaydirmada soner,
-       oturumda bir kez. */
-    const ipucuBak = () => {
-      if (ipucu && !ipucuGorulmus && ipucu.hidden) {
-        /* GORUNME SARTI YALNIZ FILMIN BITMESI; SONME SARTI ILK GIRDI.
-           Iki yanlis surumun notu duruyor, ikisi de OLCUMLE cikti
-           ("belirdi: null"):
-             (1) `d <= 0` — film sonuna oturana kadar kaydirma zaten
-                 devir araligina bir tik girmis oluyor, sart hic tutmadi.
-             (2) `d < 0,04` — pencere 900 px'lik devir araliginin %4'u,
-                 yani 36 PIKSEL. Kaydirma o pencerenin uzerinden atliyor.
-           Geometriye bagli her esik bu kirilganligi tasiyor. Sartname
-           zaten davranisi soyluyor: "belirir, ILK KAYDIRMADA soner".
-           Sonme artik gercek GIRDI olayina bagli, piksele degil. */
-        const f = (window as any).__fl;
-        if (f && f.gosterilenT >= f.toplam - 0.4) {
-          ipucu.hidden = false;
-          const son = () => {
-            ipucu.hidden = true; ipucuGorulmus = true;
-            if (yoklama) { clearInterval(yoklama); yoklama = 0; }
-            try { sessionStorage.setItem(IPUCU_ANAHTAR, '1'); } catch {}
-            for (const ad of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const) removeEventListener(ad, son);
-          };
-          for (const ad of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const)
-            addEventListener(ad, son, { passive: true });
-        }
-      }
-    };
-    /* IBARE ICIN DAR KAPSAMLI YOKLAMA — OLCUMLE BULUNDU (v2): ibarenin
-       sarti kaydirma DURDUKTAN sonra, yay otururken gerceklesiyor; o anda
-       scroll olayi gelmiyor. Yoklama 250 ms'de bir, yalniz ibare henuz
-       gosterilmemisken ve filmin son %10'unda; devir izleyicisini de
-       ayni sebepten durter (tetik kaydirmasiz gelebilir: yay/akis). */
-    let yoklama = 0;
-    const yoklamaBak = () => {
-      const f = (window as any).__fl;
-      if (!f || ipucuGorulmus) { clearInterval(yoklama); yoklama = 0; return; }
-      if (f.gosterilenT >= f.toplam * 0.9) { ipucuBak(); devirTik(); }
-    };
-    const yoklamaKur = () => {
-      if (yoklama || ipucuGorulmus) return;
-      yoklama = setInterval(yoklamaBak, 250) as unknown as number;
-    };
-
+    /* IBARE ARTIK HEP EKRANDA (1 Eyl, Enes): finalde-belirme + oturumda
+       bir kez + ilk-girdide sonme + 250 ms yoklama mekanizmasi TUMDEN
+       KALKTI — o kurgu ibareyi canlida hic gosterememisti ("ibare
+       yazisini goremiyorum"). Ibare bastan gorunur, yalniz devirde
+       soner (CSS). DEVIR IZLEYICISININ yoklamasi da gereksizlesti:
+       tetik kaydirmasiz gelebilir (yay/akis) ama akis scrollBy yapar,
+       scroll olayi devirTik'i zaten durtuyor; yayla varis ise scroll
+       durduktan sonra en cok ~1 sn surer ve son scroll olayinda kurulan
+       rAF dongusu (sona-yakin kosulu) o pencereyi zaten tasiyor. */
     olcDevir();
-    /* YOKLAMA KURULUMDA BASLAR, ILK KAYDIRMADA DEGIL (v2 dersi: dal
-       scroll'a bagliyken ibare hic gorunmedi). */
-    yoklamaKur();
-    addEventListener('scroll', () => { navBak(); tutunBak(); devirTik(); yoklamaKur(); }, { passive: true });
+    addEventListener('scroll', () => { navBak(); tutunBak(); devirTik(); }, { passive: true });
     addEventListener('resize', () => { olcDevir(); tutunBak(); devirTik(); }, { passive: true });
     navBak(); tutunBak(); devirTik();
     /* OLCUM YUZEYI (olc-devir.cjs okur): kunye + geometri + yay durumu +
