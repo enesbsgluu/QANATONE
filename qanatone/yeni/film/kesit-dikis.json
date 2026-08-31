@@ -1,0 +1,107 @@
+{
+ "_": "yeni/film/kesit-dikis.cjs — kesitin 7 dikisi, olcut min(A sonu, B basi). YENI = kesitin dogurdugu dikis (orijinal zincirde komsu degillerdi).",
+ "olcum": "2026-08-31T13:39:00.410Z",
+ "olcut": "delta = dikis_psnr - min(A son 4 kare medyani, B ilk 4 kare medyani)",
+ "esik": {
+  "surekli": "delta >= -1 dB",
+  "hafif": "-1 > delta >= -4 dB",
+  "sicrama": "delta < -4 dB"
+ },
+ "ozet": {
+  "surekli": 5,
+  "hafif_sapma": 0,
+  "gercek_sicrama": 2,
+  "esigi_asanlar": [
+   "6|7 (-13.06 dB)",
+   "7|8 (-6.77 dB)"
+  ],
+  "en_kotu": {
+   "dikis": "6|7",
+   "delta": -13.06,
+   "yeni": true
+  },
+  "yeni_dikisler": [
+   "6|7 -13.06 dB GERCEK-SICRAMA",
+   "7|8 -6.77 dB GERCEK-SICRAMA"
+  ]
+ },
+ "dikis": [
+  {
+   "dikis": "1|2",
+   "kaynak": "sahne1@kare192 → sahne2@kare0",
+   "yeni": false,
+   "psnr": 25.71,
+   "a_taban": 27.97,
+   "b_taban": 24.63,
+   "taban": 24.63,
+   "delta": 1.08,
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "2|3",
+   "kaynak": "sahne2@kare120 → sahne3@kare0",
+   "yeni": false,
+   "psnr": 17.96,
+   "a_taban": 18.17,
+   "b_taban": 26.77,
+   "taban": 18.17,
+   "delta": -0.21,
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "3|4",
+   "kaynak": "sahne3@kare192 → sahne4@kare0",
+   "yeni": false,
+   "psnr": 23.77,
+   "a_taban": 24.58,
+   "b_taban": 50.04,
+   "taban": 24.58,
+   "delta": -0.81,
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "4|5",
+   "kaynak": "sahne4@kare192 → sahne5@kare0",
+   "yeni": false,
+   "psnr": 26.02,
+   "a_taban": 49.21,
+   "b_taban": 22.09,
+   "taban": 22.09,
+   "delta": 3.93,
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "5|6",
+   "kaynak": "sahne5@kare192 → sahne6@kare0",
+   "yeni": false,
+   "psnr": 27.29,
+   "a_taban": 27.06,
+   "b_taban": 22.73,
+   "taban": 22.73,
+   "delta": 4.56,
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "6|7",
+   "kaynak": "sahne6@kare143 → sahne32@kare0",
+   "yeni": true,
+   "psnr": 11.25,
+   "a_taban": 24.31,
+   "b_taban": 24.35,
+   "taban": 24.31,
+   "delta": -13.06,
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "7|8",
+   "kaynak": "sahne32@kare143 → sahne39@kare0",
+   "yeni": true,
+   "psnr": 12.32,
+   "a_taban": 19.09,
+   "b_taban": 25.88,
+   "taban": 19.09,
+   "delta": -6.77,
+   "hukum": "GERCEK-SICRAMA"
+  }
+ ]
+}

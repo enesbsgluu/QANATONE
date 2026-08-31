@@ -1,0 +1,202 @@
+{
+ "_": "KESIT — sekiz durak (PROLOG-KESIT-VE-KAPANIS.md). Kaynak klipler kontak sayfasindan GORULEREK secildi (film/kontak/kontak39-A..D.png), ada gore degil: DEVIR anlati sirasi 33 kalem ama klip 39, yani 'N. kalem = sahneN' TUTMUYOR.",
+ "hedef_toplam_sn": 55,
+ "kirpma_kurali": "Bir dikisi ORIJINAL tutmanin sarti: onceki durak klibin SONUNA kadar gitmeli VE sonraki durak 0'dan baslamali. Kirpmak bu yuzden bedava DEGIL — her kirpma bir dikis maliyeti. Bu kesitte yalnizca komsusu kesitte OLMAYAN uclar kirpildi: sahne6'nin sonu (sonraki durak sahne32) ve sahne32'nin sonu (sonraki durak sahne39). Boylece hedef ~55 sn'e inilirken hicbir orijinal dikis harcanmadi.",
+ "durak": [
+  {
+   "n": 1,
+   "ad": "dağ → vadi tabanı",
+   "hedef_sn": 8,
+   "kaynak": "sahne1",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Everest benzeri dağ, vadi tabanında nehir; son karede tünel ağzına varış."
+  },
+  {
+   "n": 2,
+   "ad": "kanal ağzına giriş",
+   "hedef_sn": 5,
+   "kaynak": "sahne2",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Tünel ağzından içeri; içeride ışıklı ağız görünür."
+  },
+  {
+   "n": 3,
+   "ad": "tünelde ilerleyiş, kızıl çizginin doğuşu",
+   "hedef_sn": 8,
+   "kaynak": "sahne3",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Tünel içi ilerleyiş; son karede zeminde kızıl çatal doğar."
+  },
+  {
+   "n": 4,
+   "ad": "zemin: kızıl damar ağının büyümesi",
+   "hedef_sn": 8,
+   "kaynak": "sahne4",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Zemin makro: kizil damar agi buyur. sahne3 ile BITISIK — 3|4 orijinal dikis."
+  },
+  {
+   "n": 5,
+   "ad": "yonga ortaya çıkar → dikey geçidin ağzı",
+   "hedef_sn": 6,
+   "kaynak": "sahne5",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Damar agi -> YONGA ortaya cikar -> dikey gecidin agzi. sahne4 ile bitisik."
+  },
+  {
+   "n": 6,
+   "ad": "dikey geçitten iniş → çekirdek",
+   "hedef_sn": 6,
+   "kaynak": "sahne6",
+   "aralik": [
+    0,
+    6.0
+   ],
+   "not": "Kizil kare gecitten inis; cekirdek klibin SONUNDA beliriyor — 6 sn kirpma cekirdegi kesebilir, olculecek. Sonu kirpmak bedava (sonraki durak sahne32, komsu degil)."
+  },
+  {
+   "n": 7,
+   "ad": "uzaydan dünya",
+   "hedef_sn": 6,
+   "kaynak": "sahne32",
+   "aralik": [
+    0,
+    6.0
+   ],
+   "not": "Uzaydan dünya, gece ışıkları ve kızıl ağ. Iki ucu da kirpilabilir (iki komsusu da kesit disi)."
+  },
+  {
+   "n": 8,
+   "ad": "terminal ekranı",
+   "hedef_sn": 8,
+   "kaynak": "sahne39",
+   "aralik": [
+    0,
+    null
+   ],
+   "not": "Terminalden merkez ekrana uçuş; SON KARE ekranı doldurur ve gerçek hero sayfasını gösterir — devir bu kareye oturur. UYARI: gorevdeki baslik 'gece İstanbul → terminal ekranı'; tek klipte ikisini birden yapan kaynak YOK (gece İstanbul sahne34-36'da, terminal sahne38-39'da). Devir sarti sahne39'u zorunlu kildigi icin 'gece İstanbul' bu kesitte TEMSIL EDILMIYOR — karar Enes'te."
+  }
+ ],
+ "yeni_dikisler": [
+  "6|7",
+  "7|8"
+ ],
+ "orijinal_dikisler": [
+  "1|2",
+  "2|3",
+  "3|4",
+  "4|5",
+  "5|6"
+ ],
+ "secim": {
+  "secilen": "B",
+  "gerekce": "A ve B iki kesit haritasi kuruldu, ikisinin de sinir kareleri yan yana basildi (film/kontak/kesit-dikisler.png ve -b.png). A sahne5'i durak 4 yapip sahne4'u atliyordu; 3|4 dikisi orada AYNI OZNENIN IKI FARKLI EVRESI oluyordu (ince kizil catal -> tam damar agi) — goruntude acik bir sureklilik kopusu. B sahne4'u tutup sahne7'yi birakiyor: durak 1-6 tamamen bitisik kaliyor, yeni dikis 3'ten 2'ye iniyor ve kalan iki yeni dikis (mikro->uzay, uzay->terminal) zaten anlati sicramasi.",
+  "bedeli": "Durak ADLARI gorevdeki tabloya gore bir klip kayiyor: gorevde durak 4 'zeminden yonganin ortaya cikisi', durak 5 'dikey gecitten cekirdege inis', durak 6 'cekirdek'. Malzemede zemin sahne4'te, yonga sahne5'te, gecit+cekirdek sahne6'da. Icerik ayni sirayla geciyor, yalnizca hangi klibin hangi adi tasidigi kayiyor. Adlandirma karari Enes'te.",
+  "olculen": "sahne6 6,0 sn'de kesiliyor (kare143) ve O KARE cekirdegin belirdigi kare — kirpma cekirdegi kesmiyor, tam uzerine oturuyor. Kontak sayfasindan dogrulandi.",
+  "elenen_A": [
+   {
+    "n": 1,
+    "ad": "dağ → vadi tabanı",
+    "hedef_sn": 8,
+    "kaynak": "sahne1",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Everest benzeri dağ, vadi tabanında nehir; son karede tünel ağzına varış."
+   },
+   {
+    "n": 2,
+    "ad": "kanal ağzına giriş",
+    "hedef_sn": 5,
+    "kaynak": "sahne2",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Tünel ağzından içeri; içeride ışıklı ağız görünür."
+   },
+   {
+    "n": 3,
+    "ad": "tünelde ilerleyiş, kızıl çizginin doğuşu",
+    "hedef_sn": 8,
+    "kaynak": "sahne3",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Tünel içi ilerleyiş; son karede zeminde kızıl çatal doğar."
+   },
+   {
+    "n": 4,
+    "ad": "zeminden yonganın ortaya çıkışı",
+    "hedef_sn": 8,
+    "kaynak": "sahne5",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Damar ağı → YONGA ortaya çıkar → dikey geçidin ağzı. sahne4 (saf zemin makrosu) kesit disi kaldi; 3|4 dikisi bu yuzden YENI."
+   },
+   {
+    "n": 5,
+    "ad": "dikey geçitten çekirdeğe iniş",
+    "hedef_sn": 6,
+    "kaynak": "sahne6",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Kızıl kare geçitten iniş; son karede çekirdek belirir. TAM birakildi (kirpma kurali)."
+   },
+   {
+    "n": 6,
+    "ad": "çekirdek",
+    "hedef_sn": 6,
+    "kaynak": "sahne7",
+    "aralik": [
+     0,
+     6.0
+    ],
+    "not": "Çekirdek (beyin) ve kızıl akış. Sonu kirpildi: sonraki durak sahne32, zaten komsu degil."
+   },
+   {
+    "n": 7,
+    "ad": "uzaydan dünya",
+    "hedef_sn": 6,
+    "kaynak": "sahne32",
+    "aralik": [
+     0,
+     6.0
+    ],
+    "not": "Uzaydan dünya, gece ışıkları ve kızıl ağ. Iki ucu da kirpilabilir (iki komsusu da kesit disi)."
+   },
+   {
+    "n": 8,
+    "ad": "terminal ekranı",
+    "hedef_sn": 8,
+    "kaynak": "sahne39",
+    "aralik": [
+     0,
+     null
+    ],
+    "not": "Terminalden merkez ekrana uçuş; SON KARE ekranı doldurur ve gerçek hero sayfasını gösterir — devir bu kareye oturur. UYARI: gorevdeki baslik 'gece İstanbul → terminal ekranı'; tek klipte ikisini birden yapan kaynak YOK (gece İstanbul sahne34-36'da, terminal sahne38-39'da). Devir sarti sahne39'u zorunlu kildigi icin 'gece İstanbul' bu kesitte TEMSIL EDILMIYOR — karar Enes'te."
+   }
+  ]
+ }
+}

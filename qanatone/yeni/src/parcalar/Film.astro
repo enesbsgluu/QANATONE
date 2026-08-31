@@ -29,6 +29,12 @@
    (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
 import '../stil/film.css';
 import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN, AKIS, MOMENT, HIZALA } from '../film/sahneler';
+/* DEVIR HEDEFI: son karedeki ekran dikdortgeni. ELLE YAZILMIYOR —
+   `film/ekran-dikdortgen.cjs` son kareden olcuyor (isiklilik degil GRADYAN
+   YOGUNLUGU ile; isiklilik ayirmiyor cunku cerceve 0,1 · arka plan 2,5 ·
+   ekranin koyu bolgeleri 4). Oran olarak tasiniyor: video `object-fit:
+   cover` ile olceklendigi icin tasinabilir olan sey piksel degil orandir. */
+import EKRAN from '../../film/ekran-dikdortgen.json';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -36,6 +42,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
+  data-ekran={`${EKRAN.oran.sol},${EKRAN.oran.ust},${EKRAN.oran.gen},${EKRAN.oran.yuk}`}
   style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">
@@ -50,6 +57,10 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
           DIBINE oturuyordu — yani savurma sirasinda ekranda hic yoktu.
           Simdi sticky `.fl-yapis` icinde: kutu ekranin kendisi.
           Motor UI kurmaz (sert degismez #6) — ikisi de sayfanin. */}
+      {/* "KAYDIRMAYA DEVAM" (31 Agu 2026, v2 6. adim): filmin sonunda,
+          ekran oturunca belirir; ILK kaydirmada soner; oturumda BIR KEZ.
+          Perde ve prologu-gec ile ayni ev deseni (sessionStorage). */}
+      <p class="fl-ipucu" hidden aria-live="polite">{dil === 'en' ? 'Keep scrolling' : 'Kaydırmaya devam'}</p>
       <div class="fl-kumanda">
         <a class="fl-gec" href="#fl-son">{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</a>
         <button class="fl-atla" type="button" hidden aria-label={dil === 'en' ? 'Skip ahead' : 'Yetiş'}>
@@ -60,8 +71,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
           data-n={s.n} data-sure={s.sure} data-kare={s.kare} data-bas={s.bas}
           data-clip={s.clip} data-poster={s.poster}
-          data-mclip={s.mobileClip} data-mposter={s.mobilePoster}
-          data-clip265={s.clip265} data-mclip265={s.mobileClip265}>
+          data-mclip={s.mobileClip} data-mposter={s.mobilePoster}>
           <picture>
             <source media="(max-width: 900px)" type="image/webp" srcset={`${B}/${s.mobilePoster}`}
               width={s.mgen} height={s.myuk} />
@@ -75,8 +85,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
           {s.acilis && (
             <video class="fl-video fl-acilis" muted playsinline disableremoteplayback preload="none"
               width={s.gen} height={s.yuk} aria-hidden="true" tabindex="-1"
-              data-acilis={s.acilis.clip} data-macilis={s.acilis.mobileClip}
-              data-acilis265={s.acilis.clip265} data-macilis265={s.acilis.mobileClip265} data-asn={s.acilis.sn}></video>
+              data-acilis={s.acilis.clip} data-macilis={s.acilis.mobileClip} data-asn={s.acilis.sn}></video>
           )}
         </div>
       ))}
@@ -135,6 +144,141 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
          once zinciri sokeriz, sonra tarayici bagi kendi isler. */
+    /* ---- NAV KOREOGRAFISI + DEVIR (31 Agu 2026, v2 4. ve 6. adim) ----
+       Sira: film baslayinca nav amblemle birlikte YUKARI CEKILIR (film
+       boyunca ekranda yer kaplamaz); finalde terminal ekrani gelince nav
+       GERI INER ve inis devir animasyonuyla AYNI KAREDE baslar.
+
+       AYNI KARE SARTI KODLA GARANTI: iki is de tek `surucu()` cagrisinda,
+       tek rAF tikinde yapiliyor. Ayri dinleyicilere bolunse "ayni kare"
+       tesadufe kalirdi.
+
+       DUZEN OKUMASI KARE BASINA DEGIL: ray/ekran olculeri bir kez (ve
+       resize'da) okunur; dongude yalniz scrollY okunur — motorun kendi
+       kurali. */
+    const ekranOran = (bolum.dataset.ekran || '0,0,1,1').split(',').map(Number);
+    const ipucu = bolum.querySelector<HTMLElement>('.fl-ipucu');
+    const govde = document.getElementById('fl-govde');
+    const IPUCU_ANAHTAR = 'qanat-prolog-ipucu';
+    let ipucuGorulmus = false;
+    try { ipucuGorulmus = sessionStorage.getItem(IPUCU_ANAHTAR) === '1'; } catch {}
+
+    let devirBas = 0, devirBoy = 1, vw = 0, vh = 0, vidO = 16 / 9;
+    const olcDevir = () => {
+      vw = innerWidth; vh = innerHeight;
+      const v = bolum.querySelector<HTMLElement>('.fl-sahne:last-of-type video');
+      const g = Number(v?.getAttribute('width')) || 1920;
+      const y = Number(v?.getAttribute('height')) || 1080;
+      vidO = g / y;
+      const f = (window as any).__fl;
+      devirBas = f ? f.konum(f.toplam) : 0;
+      devirBoy = vh;
+    };
+
+    /* Ekran dikdortgeninin EKRAN koordinati: video `object-fit: cover`
+       ile olcekleniyor, yani oran piksele burada cevrilir. */
+    const ekranKutu = () => {
+      /* `cover`: video ekrani DOLDURUR, tasan kenar kirpilir. Cizilen
+         kutu, ekrandan genis ya da yuksek olan taraftan tasar. */
+      const ciz = vw / vh > vidO ? { g: vw, h: vw / vidO } : { g: vh * vidO, h: vh };
+      const ox = (vw - ciz.g) / 2, oy = (vh - ciz.h) / 2;
+      return {
+        x: ox + ekranOran[0] * ciz.g, y: oy + ekranOran[1] * ciz.h,
+        g: ekranOran[2] * ciz.g, h: ekranOran[3] * ciz.h,
+      };
+    };
+
+    let navKalkti = false, devirdeydi = false, sonD = -1;
+    const surucu = () => {
+      const y = scrollY;
+      /* 1) NAV: film basladiysa yukari; devir basladiysa geri iner */
+      const d = devirBoy > 0 ? Math.min(1, Math.max(0, (y - devirBas) / devirBoy)) : 0;
+      const kalk = y > 4 && d <= 0;
+      if (kalk !== navKalkti) {
+        navKalkti = kalk;
+        document.documentElement.classList.toggle('fl-nav-kalk', kalk);
+      }
+      /* 2) DEVIR: govde ekran dikdortgeninden tam ekrana acilir */
+      if (govde && d !== sonD) {
+        sonD = d;
+        if (d <= 0) {
+          govde.style.opacity = '0';
+          govde.style.visibility = 'hidden';
+          document.documentElement.classList.remove('fl-devir');
+        } else {
+          const k = ekranKutu();
+          /* TEK OLCEK (bozulma yok): dikdortgen ile ekranin en-boyu
+             birebir ayni degil; yatay/dikey ayri olceklenirse hero
+             ezilirdi. Kalan pay olculur ve rapora yazilir. */
+          const o0 = Math.min(k.g / vw, k.h / vh);
+          const olc = o0 + (1 - o0) * d;
+          const hx0 = k.x + k.g / 2 - vw / 2, hy0 = k.y + k.h / 2 - vh / 2;
+          const hx = hx0 * (1 - d), hy = hy0 * (1 - d);
+          govde.style.visibility = 'visible';
+          govde.style.opacity = String(Math.min(1, d * 3));
+          govde.style.transform = `translate3d(${hx.toFixed(2)}px, ${hy.toFixed(2)}px, 0) scale(${olc.toFixed(5)})`;
+          document.documentElement.classList.add('fl-devir');
+        }
+        if (d >= 1 && !devirdeydi) { devirdeydi = true; document.documentElement.dataset.devir = 'tam'; }
+      }
+      /* 3) IPUCU: film sonuna varinca belirir, ILK kaydirmada soner,
+            oturumda bir kez. */
+      if (ipucu && !ipucuGorulmus && ipucu.hidden) {
+        /* GORUNME SARTI YALNIZ FILMIN BITMESI; SONME SARTI ILK GIRDI.
+           Iki yanlis surumun notu duruyor, ikisi de OLCUMLE cikti
+           ("belirdi: null"):
+             (1) `d <= 0` — film sonuna oturana kadar kaydirma zaten
+                 devir araligina bir tik girmis oluyor, sart hic tutmadi.
+             (2) `d < 0,04` — pencere 900 px'lik devir araliginin %4'u,
+                 yani 36 PIKSEL. Kaydirma o pencerenin uzerinden atliyor.
+           Geometriye bagli her esik bu kirilganligi tasiyor. Sartname
+           zaten davranisi soyluyor: "belirir, ILK KAYDIRMADA soner".
+           Sonme artik gercek GIRDI olayina bagli, piksele degil. */
+        const f = (window as any).__fl;
+        if (f && f.gosterilenT >= f.toplam - 0.4) {
+          ipucu.hidden = false;
+          const son = () => {
+            ipucu.hidden = true; ipucuGorulmus = true;
+            if (yoklama) { clearInterval(yoklama); yoklama = 0; }
+            try { sessionStorage.setItem(IPUCU_ANAHTAR, '1'); } catch {}
+            for (const ad of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const) removeEventListener(ad, son);
+          };
+          for (const ad of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const)
+            addEventListener(ad, son, { passive: true });
+        }
+      }
+    };
+    /* IBARE ICIN DAR KAPSAMLI YOKLAMA — OLCUMLE BULUNDU: surucu yalniz
+       `scroll` olayinda kosuyordu, ama ibarenin sarti (gosterilen konum
+       filmin sonuna OTURDU ve henuz devre girilmedi) kaydirma DURDUKTAN
+       sonra, yay otururken gerceklesiyor. O anda yeni scroll olayi
+       gelmedigi icin ibare hic belirmiyordu — olcumde "belirdi: null"
+       cikti. Yoklama 250 ms'de bir, YALNIZ ibare henuz gosterilmemisken
+       ve yalnız filmin son %10'unda; gosterilince kendini kapatir. */
+    let yoklama = 0;
+    const yoklamaBak = () => {
+      const f = (window as any).__fl;
+      if (!f || ipucuGorulmus) { clearInterval(yoklama); yoklama = 0; return; }
+      if (f.gosterilenT >= f.toplam * 0.9) surucu();
+    };
+    const yoklamaKur = () => {
+      if (yoklama || ipucuGorulmus) return;
+      yoklama = setInterval(yoklamaBak, 250) as unknown as number;
+    };
+
+    olcDevir();
+    /* YOKLAMA KURULUMDA BASLAR, ILK KAYDIRMADA DEGIL. Onceki surumde
+       `yoklamaKur()` yalniz scroll dinleyicisinin icinde cagriliyordu;
+       olcumde ibare hic gorunmedi (T sona vardi, sart tuttu, dal
+       calismadi). Kurulumda baslatmak bagimliligi kaldiriyor — yoklama
+       zaten ibare gosterilince kendini kapatiyor, yani surekli bir yuk
+       degil. */
+    yoklamaKur();
+    addEventListener('scroll', () => { surucu(); yoklamaKur(); }, { passive: true });
+    addEventListener('resize', () => { olcDevir(); surucu(); }, { passive: true });
+    surucu();
+    (window as any).__devir = { olc: olcDevir, kutu: ekranKutu, ilerleme: () => (devirBoy > 0 ? Math.min(1, Math.max(0, (scrollY - devirBas) / devirBoy)) : 0), bas: () => devirBas };
+
       const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
       gec?.addEventListener('click', () => {
         try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}

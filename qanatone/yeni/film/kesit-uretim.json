@@ -1,0 +1,397 @@
+{
+ "_": "yeni/film/kesit-uret.cjs ciktisi. TEK HAT H.264 · crf28 · GOP 8 · 1080p. Sure/kare/boyut ffprobe ile CIKTIDAN okundu, kesit.json hedefinden degil. Poster ENCODE EDILMIS klipten.",
+ "uretim": "2026-08-31T13:34:04.054Z",
+ "ayar": {
+  "kodek": "h264",
+  "crf_masaustu": 28,
+  "crf_mobil": 28,
+  "gop": 8,
+  "masaustu_satir": 1080,
+  "mobil_satir": 720
+ },
+ "kaynak": "C:\\Users\\Monster\\Desktop\\QANATONE SAHNELER 4K",
+ "toplam": {
+  "sure_sn": 54.252,
+  "kare": 1302,
+  "masaustu_bayt": 27057555,
+  "mobil_bayt": 15034216,
+  "poster_bayt": 1412970
+ },
+ "durak": [
+  {
+   "n": 1,
+   "ad": "dağ → vadi tabanı",
+   "kaynak": "sahne1",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 8,
+   "bas": 0,
+   "acilis": {
+    "sn": 1.2,
+    "crf_arti": 4,
+    "masaustu": {
+     "dosya": "durak1-acilis.mp4",
+     "bayt": 169720,
+     "sha1": "14455fb52f8a13bfd49f0f41cb88126b53c5fe34",
+     "gen": 1920,
+     "yuk": 1080,
+     "kodek": "h264",
+     "kare": 29,
+     "sure": 1.209
+    },
+    "mobil": {
+     "dosya": "durak1-acilis-mobile.mp4",
+     "bayt": 96009,
+     "sha1": "1a732224208f86a3462ab90917004d33cad39cea",
+     "gen": 1280,
+     "yuk": 720,
+     "kodek": "h264",
+     "kare": 29,
+     "sure": 1.209
+    }
+   },
+   "masaustu": {
+    "dosya": "durak1.mp4",
+    "bayt": 2263128,
+    "sha1": "5cd16bbdaf3fedd411bf0ce74b07d2b0e89d0bc4",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "mobil": {
+    "dosya": "durak1-mobile.mp4",
+    "bayt": 1293654,
+    "sha1": "dbb4fd77f17aba027edea5b03259570e1e8b0308",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "poster": {
+    "dosya": "durak1-poster.webp",
+    "bayt": 38816,
+    "sha1": "ba4e7d29809209b5aeb1a64f72cd57beb683ef0f",
+    "kaynak_sha1": "5cd16bbdaf3fedd411bf0ce74b07d2b0e89d0bc4"
+   },
+   "mobil_poster": {
+    "dosya": "durak1-mobile-poster.webp",
+    "bayt": 23728,
+    "sha1": "ec85bd3cc64b9ffec2dc5619f573bdcdfa9fe5df",
+    "kaynak_sha1": "dbb4fd77f17aba027edea5b03259570e1e8b0308"
+   }
+  },
+  {
+   "n": 2,
+   "ad": "kanal ağzına giriş",
+   "kaynak": "sahne2",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 5,
+   "bas": 8.042,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak2.mp4",
+    "bayt": 3109034,
+    "sha1": "749e9f54b40e5aaeb18eec67a1f8a2dc15053e52",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 121,
+    "sure": 5.042
+   },
+   "mobil": {
+    "dosya": "durak2-mobile.mp4",
+    "bayt": 1710100,
+    "sha1": "e04a665cc3ffa9cceaa47318de33548af7521f4d",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 121,
+    "sure": 5.042
+   },
+   "poster": {
+    "dosya": "durak2-poster.webp",
+    "bayt": 99376,
+    "sha1": "1ab5e9a6fcc51788bce7ceeb2a5efcf570679222",
+    "kaynak_sha1": "749e9f54b40e5aaeb18eec67a1f8a2dc15053e52"
+   },
+   "mobil_poster": {
+    "dosya": "durak2-mobile-poster.webp",
+    "bayt": 57870,
+    "sha1": "f05735dc1545f2e46154eb6259f9e85a01187739",
+    "kaynak_sha1": "e04a665cc3ffa9cceaa47318de33548af7521f4d"
+   }
+  },
+  {
+   "n": 3,
+   "ad": "tünelde ilerleyiş, kızıl çizginin doğuşu",
+   "kaynak": "sahne3",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 8,
+   "bas": 13.084,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak3.mp4",
+    "bayt": 3928699,
+    "sha1": "6f06ca3a784b1c09a30deffbe74fb12a49e04b78",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "mobil": {
+    "dosya": "durak3-mobile.mp4",
+    "bayt": 2264035,
+    "sha1": "530aa844b58d9e06907e30a618c60da882279488",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "poster": {
+    "dosya": "durak3-poster.webp",
+    "bayt": 181436,
+    "sha1": "f80a6f667818924e607302e0f78fee5bed75e1c3",
+    "kaynak_sha1": "6f06ca3a784b1c09a30deffbe74fb12a49e04b78"
+   },
+   "mobil_poster": {
+    "dosya": "durak3-mobile-poster.webp",
+    "bayt": 111168,
+    "sha1": "cff60651b6f5e493d27a4fa13dff1e49abbaac89",
+    "kaynak_sha1": "530aa844b58d9e06907e30a618c60da882279488"
+   }
+  },
+  {
+   "n": 4,
+   "ad": "zemin: kızıl damar ağının büyümesi",
+   "kaynak": "sahne4",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 8,
+   "bas": 21.126,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak4.mp4",
+    "bayt": 4807655,
+    "sha1": "ec358e1ff23cb82c531d219e0476fc13d8e3ae8e",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "mobil": {
+    "dosya": "durak4-mobile.mp4",
+    "bayt": 2644176,
+    "sha1": "78cb051f817ad8b1956a873c5f21a737ec1af71d",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "poster": {
+    "dosya": "durak4-poster.webp",
+    "bayt": 120246,
+    "sha1": "2ab5e25cf33e8d3be34f395a13ba311f06de8a5c",
+    "kaynak_sha1": "ec358e1ff23cb82c531d219e0476fc13d8e3ae8e"
+   },
+   "mobil_poster": {
+    "dosya": "durak4-mobile-poster.webp",
+    "bayt": 67854,
+    "sha1": "861ae93617d53cbd0f2d2cd5a24e0963058949a2",
+    "kaynak_sha1": "78cb051f817ad8b1956a873c5f21a737ec1af71d"
+   }
+  },
+  {
+   "n": 5,
+   "ad": "yonga ortaya çıkar → dikey geçidin ağzı",
+   "kaynak": "sahne5",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 6,
+   "bas": 29.168,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak5.mp4",
+    "bayt": 4230383,
+    "sha1": "18e05f6bb627ebdfcd2c9d04bf1e6d4f855f0edf",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "mobil": {
+    "dosya": "durak5-mobile.mp4",
+    "bayt": 2360413,
+    "sha1": "d34b5f3ab254ce1cfffcb839322e8d73d1a70a6f",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 193,
+    "sure": 8.042
+   },
+   "poster": {
+    "dosya": "durak5-poster.webp",
+    "bayt": 174528,
+    "sha1": "b19fab391ce831c117bb384dc937cfa95919bcf6",
+    "kaynak_sha1": "18e05f6bb627ebdfcd2c9d04bf1e6d4f855f0edf"
+   },
+   "mobil_poster": {
+    "dosya": "durak5-mobile-poster.webp",
+    "bayt": 99656,
+    "sha1": "6cfa9163668acb54319b9876f446e2c579346041",
+    "kaynak_sha1": "d34b5f3ab254ce1cfffcb839322e8d73d1a70a6f"
+   }
+  },
+  {
+   "n": 6,
+   "ad": "dikey geçitten iniş → çekirdek",
+   "kaynak": "sahne6",
+   "aralik": [
+    0,
+    6
+   ],
+   "hedef_sn": 6,
+   "bas": 37.21,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak6.mp4",
+    "bayt": 2060655,
+    "sha1": "d3e0ee1c5ef7c30f5552519dd59a9a06dba618a8",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 144,
+    "sure": 6
+   },
+   "mobil": {
+    "dosya": "durak6-mobile.mp4",
+    "bayt": 1161756,
+    "sha1": "e5308b781f23bcc5416f318b80b771966ee63a19",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 144,
+    "sure": 6
+   },
+   "poster": {
+    "dosya": "durak6-poster.webp",
+    "bayt": 100838,
+    "sha1": "eb87b17e72ef29f18442f8f6fce4b9cb7a053553",
+    "kaynak_sha1": "d3e0ee1c5ef7c30f5552519dd59a9a06dba618a8"
+   },
+   "mobil_poster": {
+    "dosya": "durak6-mobile-poster.webp",
+    "bayt": 58056,
+    "sha1": "1a952e61ed4e198066eca31206d8a6182d6ae826",
+    "kaynak_sha1": "e5308b781f23bcc5416f318b80b771966ee63a19"
+   }
+  },
+  {
+   "n": 7,
+   "ad": "uzaydan dünya",
+   "kaynak": "sahne32",
+   "aralik": [
+    0,
+    6
+   ],
+   "hedef_sn": 6,
+   "bas": 43.21,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak7.mp4",
+    "bayt": 4725362,
+    "sha1": "e1c75187bc064b1452a9ebe1f9a847e3ff2259fa",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 144,
+    "sure": 6
+   },
+   "mobil": {
+    "dosya": "durak7-mobile.mp4",
+    "bayt": 2465100,
+    "sha1": "2fdae3e36f3d19f7a326403a690f2239d0b824e7",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 144,
+    "sure": 6
+   },
+   "poster": {
+    "dosya": "durak7-poster.webp",
+    "bayt": 107728,
+    "sha1": "864698918bc2af8661fe3a2903df203305d4cde7",
+    "kaynak_sha1": "e1c75187bc064b1452a9ebe1f9a847e3ff2259fa"
+   },
+   "mobil_poster": {
+    "dosya": "durak7-mobile-poster.webp",
+    "bayt": 59646,
+    "sha1": "bfa6e54137f3e71dd249048cbee7553bc16b43b4",
+    "kaynak_sha1": "2fdae3e36f3d19f7a326403a690f2239d0b824e7"
+   }
+  },
+  {
+   "n": 8,
+   "ad": "terminal ekranı",
+   "kaynak": "sahne39",
+   "aralik": [
+    0,
+    null
+   ],
+   "hedef_sn": 8,
+   "bas": 49.21,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "durak8.mp4",
+    "bayt": 1932639,
+    "sha1": "27dbb075ee25c3e1ab4ce5717763d89d6fba24ca",
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "kare": 121,
+    "sure": 5.042
+   },
+   "mobil": {
+    "dosya": "durak8-mobile.mp4",
+    "bayt": 1134982,
+    "sha1": "05a55e9a2cd7783e0ef983150eaf3d7507393405",
+    "gen": 1280,
+    "yuk": 720,
+    "kodek": "h264",
+    "kare": 121,
+    "sure": 5.042
+   },
+   "poster": {
+    "dosya": "durak8-poster.webp",
+    "bayt": 69504,
+    "sha1": "b9547f6572e0254ff8579064df736d80e6fa7a28",
+    "kaynak_sha1": "27dbb075ee25c3e1ab4ce5717763d89d6fba24ca"
+   },
+   "mobil_poster": {
+    "dosya": "durak8-mobile-poster.webp",
+    "bayt": 42520,
+    "sha1": "e9bfebf31275e616a3add01b71fa763971e1f41d",
+    "kaynak_sha1": "05a55e9a2cd7783e0ef983150eaf3d7507393405"
+   }
+  }
+ ]
+}
