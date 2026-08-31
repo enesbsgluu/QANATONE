@@ -152,12 +152,12 @@ html.fl-nav-kalk .nv-bar { transform: translateY(-115%); }
      (c) devirde iframe visibility:hidden -> raster onbellegi atildi,
          fade karesinde 40 ms geri boyama.
    Simdi govde hazirliktan itibaren TAM OPAK ve BOYALI, ama filmin
-   ALTINDA (yapis z 5 > govde z 4; film tam ekran opak ortuyor). Capraz
+   ALTINDA (yapis z 5 > govde z 3; film tam ekran opak ortuyor). Capraz
    gecis FILM KATMANININ fade-out'u: gorsel sonuc ayni — "gercek sayfa
    videonun ustunde netlesir" hissi korunur — ama boyama sicramasi
    imkansiz, sayfa coktan boyali. */
 .fl-govde {
-  position: fixed; inset: 0; z-index: 4;
+  position: fixed; inset: 0; z-index: 3;   /* TV panelleri (4) ve film (5) ustunde kalsin */
   visibility: hidden;
   background: #050505;
   overflow: hidden;
@@ -193,18 +193,32 @@ html.fl-devir .fl-kumanda, html.fl-devir .fl-ipucu { opacity: 0; pointer-events:
 /* devir tamamlaninca film katmani kalkar: artik gercek sayfadayiz */
 html[data-devir="tam"] .fl-yapis { visibility: hidden; }
 
-/* ---- PATLAMA GECISI (?gecis=patlama, Enes 31 Agu) ----
-   Yakinlasmanin son kisminda kizil-beyaz flas; tepe aninda (~%38, JS
-   FLAS_TEPE_MS) film katmani kalkar, site "isinlanir". Varsayilan yol
-   capraz gecis — bu kol gorsel hukum icin. */
-.fl-parla {
-  position: fixed; inset: 0; z-index: 7;
-  pointer-events: none; opacity: 0; visibility: hidden;
-  background: radial-gradient(ellipse at 50% 50%, #fff 0%, #ffd7dc 22%, #ef233c 55%, rgba(239, 35, 60, 0) 100%);
+/* ---- EFEKT A · TV ACMA (Enes, 31 Agu aksam; ?gecis=patlama KALKTI) ----
+   Video son karesine oturunca goruntu dikeyde parlak KIZIL CIZGIYE coker
+   (cokus JS'te: yapis scale(sx, sy->0), tek yazici kurali), cizgi kisa
+   bir an parlar, paneller dikeyde acilip siteyi gosterir. 130+50+130 =
+   ~310 ms. Cizgi rengi filmin kizil paleti (#ef233c / #ff4d63).
+   KATMAN: paneller z 4 (coken filmin ALTINDA kalan alani orter, site
+   z 3'te altta), cizgi z 6 (coken goruntunun USTUNDE parlar), film z 5.
+   Hareket azaltmada bu katmanlar hic kullanilmaz (surucu sade yolda). */
+.fl-tv { display: none; position: fixed; inset: 0; z-index: 4; pointer-events: none; }
+html.fl-tv-goster .fl-tv { display: block; }
+.fl-tv-ust, .fl-tv-alt { position: absolute; left: 0; right: 0; height: calc(50% + 1px); background: #050505; transition: transform .13s cubic-bezier(.2, .7, .3, 1); }
+.fl-tv-ust { top: 0; }
+.fl-tv-alt { bottom: 0; }
+html.fl-tv-ac .fl-tv-ust { transform: translateY(-102%); }
+html.fl-tv-ac .fl-tv-alt { transform: translateY(102%); }
+/* cizgi HEP yerlesik (opacity 0 boyanmaz): display flip ile gelseydi
+   opacity gecisi atlanir, cizgi cokusle belirmek yerine ANIDEN yanardi */
+.fl-tv-cizgi {
+  position: fixed; left: 0; right: 0; top: 50%; height: 26px; margin-top: -13px;
+  z-index: 6; pointer-events: none; opacity: 0; transition: opacity .12s linear;
+  background: linear-gradient(to bottom, transparent, rgba(239, 35, 60, .35) 30%, #ff4d63 45%, #fff 50%, #ff4d63 55%, rgba(239, 35, 60, .35) 70%, transparent);
 }
-.fl-parla.aktif { visibility: visible; animation: fl-parla-pat .26s cubic-bezier(.2, .7, .3, 1) both; }
-@keyframes fl-parla-pat { 0% { opacity: 0; } 38% { opacity: 1; } 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .fl-parla.aktif { animation: none; } }
+html.fl-tv-goster .fl-tv-cizgi { opacity: 1; }
+html.fl-tv-parla .fl-tv-cizgi { animation: fl-tv-parla .1s ease-out both; }
+@keyframes fl-tv-parla { 0% { transform: scaleY(1); } 60% { transform: scaleY(1.9); } 100% { transform: scaleY(1.2); } }
+html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
 .fl-ipucu {
