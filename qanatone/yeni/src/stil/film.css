@@ -139,20 +139,72 @@ html.fl-nav-kalk .nv-bar { transform: translateY(-115%); }
   .nv-bar { transition: none; }
 }
 
-/* GOVDE: devir baslayana kadar hic gorunmez ve YER KAPLAMAZ (film rayinin
-   altinda akista dursaydi ray uzar, kaydirma haritasi kayardi). Devirde
-   ekran dikdortgenine oturur, sonra tam ekrana acilir. */
+/* GOVDE v3 (31 Agu 2026, Enes): SAYFA HIC OLCEKLENMEZ — kapi "devir
+   aninda sayfa olcegi tam 1,0". transform-origin/will-change KALKTI, JS
+   govdeye transform yazmiyor. Devir baslayana kadar govde gorunmez ve
+   YER KAPLAMAZ (akista dursaydi ray uzar, kaydirma haritasi kayardi).
+
+   KATMAN DUZENI (uc yanlis surum olculdu, olc-devir dusenler kaydi):
+     (a) govde USTTE opacity 0 -> fade karesinde 44-70 ms ilk boyama
+         (tarayici ~saydam katmani hic boyamiyor);
+     (b) govde USTTE opacity .0001 + canli iframe -> olcek animasyonuyla
+         cakisti: devirin hizli fazinda 15-20 dusen kare;
+     (c) devirde iframe visibility:hidden -> raster onbellegi atildi,
+         fade karesinde 40 ms geri boyama.
+   Simdi govde hazirliktan itibaren TAM OPAK ve BOYALI, ama filmin
+   ALTINDA (yapis z 5 > govde z 4; film tam ekran opak ortuyor). Capraz
+   gecis FILM KATMANININ fade-out'u: gorsel sonuc ayni — "gercek sayfa
+   videonun ustunde netlesir" hissi korunur — ama boyama sicramasi
+   imkansiz, sayfa coktan boyali. */
 .fl-govde {
-  position: fixed; inset: 0; z-index: 6;
-  transform-origin: 50% 50%;
-  visibility: hidden; opacity: 0;
-  will-change: transform;
+  position: fixed; inset: 0; z-index: 4;
+  visibility: hidden;
   background: #050505;
   overflow: hidden;
 }
-html:not(.fl-js) .fl-govde { position: static; visibility: visible; opacity: 1; transform: none; }
+html.fl-hazirla .fl-govde, html.fl-devir .fl-govde { visibility: visible; pointer-events: none; }
+html.fl-devir-net .fl-govde { pointer-events: auto; }
+html:not(.fl-js) .fl-govde { position: static; visibility: visible; pointer-events: auto; }
+/* govde icerigi eski sitenin girisi (ayni origin iframe, film.astro notu) */
+.fl-govde iframe { display: block; width: 100%; height: 100%; border: 0; background: #050505; }
+/* film katmani: devir netlesince fade-out (.14s, 120-160 araligi) */
+html.fl-js .fl-yapis { z-index: 5; transition: opacity .14s ease; }
+html.fl-devir-net .fl-yapis { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { html.fl-js .fl-yapis { transition: none; } }
+/* yapisa ILK transform yazilan karede katman rasterlesiyordu (48-96 ms,
+   olculdu) ve olcek animasyonu boyunca HER karede yeniden rasterlaniyordu
+   (devir basinda 17-18 dusen kare, taban 0 iken — yani maliyet animasyonun
+   kendisi). will-change: tarayici katmani BIR kez rasterlar, animasyonda
+   GPU'da esnetir (zoom sirasinda hafif yumusaklik kabul — video zaten
+   buyutuluyor). H14 yasagi KALICI katman zorlamasi icindi; bu gecici:
+   yalniz ray sonu yaklasiminda takilir, uzaklasinca kalkar. */
+html.fl-hazirla .fl-yapis { will-change: transform; }
+
+/* TUTUNMA: scrollY ray sonuna varinca yapis yapisiktan SABITE gecer —
+   yapisik kutu ray icindeki her scrollY'de zaten ekranin kendisi, gecis
+   ayni konuma duser (gorunmez). Iki isi var: (1) devirde yakinlasan
+   video ekranda kalir; (2) savurmada scrollY ray sonunu GECIP film hiz
+   tavaniyla geride kalirsa yapis yukari kayip kacmaz (v3'te govde artik
+   erken gorunmedigi icin bu kacis maskesiz kalirdi). fl-devir'den AYRI
+   sinif: tutunma scroll'a, devir filmin sonuna bagli. */
+html.fl-tutun .fl-yapis { position: fixed; top: 0; left: 0; right: 0; }
+/* kumanda + ipucu yakinlasan videoyla birlikte buyumesin: devirde soner */
+html.fl-devir .fl-kumanda, html.fl-devir .fl-ipucu { opacity: 0; pointer-events: none; transition: opacity .12s; }
 /* devir tamamlaninca film katmani kalkar: artik gercek sayfadayiz */
 html[data-devir="tam"] .fl-yapis { visibility: hidden; }
+
+/* ---- PATLAMA GECISI (?gecis=patlama, Enes 31 Agu) ----
+   Yakinlasmanin son kisminda kizil-beyaz flas; tepe aninda (~%38, JS
+   FLAS_TEPE_MS) film katmani kalkar, site "isinlanir". Varsayilan yol
+   capraz gecis — bu kol gorsel hukum icin. */
+.fl-parla {
+  position: fixed; inset: 0; z-index: 7;
+  pointer-events: none; opacity: 0; visibility: hidden;
+  background: radial-gradient(ellipse at 50% 50%, #fff 0%, #ffd7dc 22%, #ef233c 55%, rgba(239, 35, 60, 0) 100%);
+}
+.fl-parla.aktif { visibility: visible; animation: fl-parla-pat .26s cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes fl-parla-pat { 0% { opacity: 0; } 38% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .fl-parla.aktif { animation: none; } }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
 .fl-ipucu {
