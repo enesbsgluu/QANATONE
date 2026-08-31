@@ -1,0 +1,602 @@
+{
+ "_": "yeni/film/olc-pencere.cjs — pencere politikasi teshisi/olcumu",
+ "olcum": "2026-08-31T22:24:05.767Z",
+ "tarayici": "brave",
+ "senaryo": "tam",
+ "hiz": 2,
+ "onbellek": true,
+ "kosum": [
+  {
+   "senaryo": "tam",
+   "tavan": 2,
+   "hiz": 2,
+   "onbellek": true,
+   "ag": "4g",
+   "toplam_istek": 62,
+   "inen_mib": 228.6,
+   "agdan_mib": 228.6,
+   "birakilan": 57,
+   "pencere": 3,
+   "on_pencere": 2,
+   "mbit": 125.28,
+   "bellek_tepe_mib": 54.2,
+   "takilma": {
+    "adet": 10,
+    "toplam_ms": 140968,
+    "liste": [
+     {
+      "bacak": 0,
+      "sahne": 2,
+      "bas": 9688,
+      "ms": 84
+     },
+     {
+      "bacak": 0,
+      "sahne": 3,
+      "bas": 12219,
+      "ms": 3269
+     },
+     {
+      "bacak": 0,
+      "sahne": 4,
+      "bas": 16237,
+      "ms": 56582
+     },
+     {
+      "bacak": 0,
+      "sahne": 23,
+      "bas": 74636,
+      "ms": 705
+     },
+     {
+      "bacak": 0,
+      "sahne": 24,
+      "bas": 78659,
+      "ms": 584
+     },
+     {
+      "bacak": 0,
+      "sahne": 25,
+      "bas": 82674,
+      "ms": 1222
+     },
+     {
+      "bacak": 0,
+      "sahne": 26,
+      "bas": 85199,
+      "ms": 48599
+     },
+     {
+      "bacak": 1,
+      "sahne": 39,
+      "bas": 133855,
+      "ms": 10255
+     },
+     {
+      "bacak": 1,
+      "sahne": 34,
+      "bas": 148141,
+      "ms": 11367
+     },
+     {
+      "bacak": 1,
+      "sahne": 29,
+      "bas": 168242,
+      "ms": 8301
+     }
+    ]
+   },
+   "cok_inen": [
+    {
+     "klip": "sahne27.mp4",
+     "istek": 2,
+     "bayt_mib": 10.6
+    },
+    {
+     "klip": "sahne32.mp4",
+     "istek": 2,
+     "bayt_mib": 10.6
+    },
+    {
+     "klip": "sahne26.mp4",
+     "istek": 2,
+     "bayt_mib": 9.8
+    },
+    {
+     "klip": "sahne16.mp4",
+     "istek": 2,
+     "bayt_mib": 8.4
+    },
+    {
+     "klip": "sahne4.mp4",
+     "istek": 2,
+     "bayt_mib": 7.2
+    },
+    {
+     "klip": "sahne5.mp4",
+     "istek": 2,
+     "bayt_mib": 6.4
+    },
+    {
+     "klip": "sahne3.mp4",
+     "istek": 2,
+     "bayt_mib": 6
+    },
+    {
+     "klip": "sahne31.mp4",
+     "istek": 2,
+     "bayt_mib": 5.8
+    },
+    {
+     "klip": "sahne7.mp4",
+     "istek": 2,
+     "bayt_mib": 5.7
+    },
+    {
+     "klip": "sahne19.mp4",
+     "istek": 2,
+     "bayt_mib": 5.7
+    },
+    {
+     "klip": "sahne14.mp4",
+     "istek": 2,
+     "bayt_mib": 5.6
+    },
+    {
+     "klip": "sahne2.mp4",
+     "istek": 2,
+     "bayt_mib": 5
+    },
+    {
+     "klip": "sahne25.mp4",
+     "istek": 2,
+     "bayt_mib": 4.9
+    },
+    {
+     "klip": "sahne9.mp4",
+     "istek": 2,
+     "bayt_mib": 4.8
+    },
+    {
+     "klip": "sahne21.mp4",
+     "istek": 2,
+     "bayt_mib": 4.8
+    },
+    {
+     "klip": "sahne6.mp4",
+     "istek": 2,
+     "bayt_mib": 4.7
+    },
+    {
+     "klip": "sahne30.mp4",
+     "istek": 2,
+     "bayt_mib": 4.3
+    },
+    {
+     "klip": "sahne24.mp4",
+     "istek": 2,
+     "bayt_mib": 4.2
+    },
+    {
+     "klip": "sahne1.mp4",
+     "istek": 2,
+     "bayt_mib": 3.5
+    },
+    {
+     "klip": "sahne13.mp4",
+     "istek": 2,
+     "bayt_mib": 3.2
+    },
+    {
+     "klip": "sahne12.mp4",
+     "istek": 2,
+     "bayt_mib": 3
+    },
+    {
+     "klip": "sahne23.mp4",
+     "istek": 2,
+     "bayt_mib": 2.8
+    },
+    {
+     "klip": "sahne11.mp4",
+     "istek": 2,
+     "bayt_mib": 2.6
+    },
+    {
+     "klip": "sahne22.mp4",
+     "istek": 2,
+     "bayt_mib": 1.6
+    }
+   ],
+   "tablo": {
+    "sahne1-acilis.mp4": {
+     "n": 1,
+     "bayt": 266431,
+     "diskten": 0
+    },
+    "sahne1.mp4": {
+     "n": 2,
+     "bayt": 3664655,
+     "diskten": 1
+    },
+    "sahne2.mp4": {
+     "n": 2,
+     "bayt": 5293510,
+     "diskten": 1
+    },
+    "sahne3.mp4": {
+     "n": 2,
+     "bayt": 6299492,
+     "diskten": 1
+    },
+    "sahne4.mp4": {
+     "n": 2,
+     "bayt": 7571137,
+     "diskten": 1
+    },
+    "sahne5.mp4": {
+     "n": 2,
+     "bayt": 6693405,
+     "diskten": 1
+    },
+    "sahne6.mp4": {
+     "n": 2,
+     "bayt": 4910129,
+     "diskten": 1
+    },
+    "sahne7.mp4": {
+     "n": 2,
+     "bayt": 6019928,
+     "diskten": 1
+    },
+    "sahne9.mp4": {
+     "n": 2,
+     "bayt": 5031582,
+     "diskten": 1
+    },
+    "sahne11.mp4": {
+     "n": 2,
+     "bayt": 2773540,
+     "diskten": 1
+    },
+    "sahne12.mp4": {
+     "n": 2,
+     "bayt": 3137729,
+     "diskten": 1
+    },
+    "sahne13.mp4": {
+     "n": 2,
+     "bayt": 3308080,
+     "diskten": 1
+    },
+    "sahne14.mp4": {
+     "n": 2,
+     "bayt": 5822535,
+     "diskten": 1
+    },
+    "sahne16.mp4": {
+     "n": 2,
+     "bayt": 8847235,
+     "diskten": 1
+    },
+    "sahne19.mp4": {
+     "n": 2,
+     "bayt": 6018162,
+     "diskten": 1
+    },
+    "sahne21.mp4": {
+     "n": 2,
+     "bayt": 5046432,
+     "diskten": 1
+    },
+    "sahne22.mp4": {
+     "n": 2,
+     "bayt": 1694333,
+     "diskten": 1
+    },
+    "sahne23.mp4": {
+     "n": 2,
+     "bayt": 2915639,
+     "diskten": 1
+    },
+    "sahne24.mp4": {
+     "n": 2,
+     "bayt": 4356454,
+     "diskten": 1
+    },
+    "sahne25.mp4": {
+     "n": 2,
+     "bayt": 5188874,
+     "diskten": 1
+    },
+    "sahne26.mp4": {
+     "n": 2,
+     "bayt": 10254564,
+     "diskten": 1
+    },
+    "sahne27.mp4": {
+     "n": 2,
+     "bayt": 11105641,
+     "diskten": 1
+    },
+    "sahne30.mp4": {
+     "n": 2,
+     "bayt": 4479300,
+     "diskten": 1
+    },
+    "sahne31.mp4": {
+     "n": 2,
+     "bayt": 6100294,
+     "diskten": 1
+    },
+    "sahne32.mp4": {
+     "n": 2,
+     "bayt": 11081130,
+     "diskten": 1
+    },
+    "sahne35.mp4": {
+     "n": 1,
+     "bayt": 17237064,
+     "diskten": 0
+    },
+    "sahne38.mp4": {
+     "n": 1,
+     "bayt": 4699364,
+     "diskten": 0
+    },
+    "sahne37.mp4": {
+     "n": 1,
+     "bayt": 6359996,
+     "diskten": 0
+    },
+    "sahne34.mp4": {
+     "n": 1,
+     "bayt": 17905751,
+     "diskten": 0
+    },
+    "sahne33.mp4": {
+     "n": 1,
+     "bayt": 11660336,
+     "diskten": 0
+    },
+    "sahne29.mp4": {
+     "n": 1,
+     "bayt": 9736203,
+     "diskten": 0
+    },
+    "sahne28.mp4": {
+     "n": 1,
+     "bayt": 7687210,
+     "diskten": 0
+    },
+    "sahne20.mp4": {
+     "n": 1,
+     "bayt": 3549878,
+     "diskten": 0
+    },
+    "sahne18.mp4": {
+     "n": 1,
+     "bayt": 4259243,
+     "diskten": 0
+    },
+    "sahne17.mp4": {
+     "n": 1,
+     "bayt": 5110119,
+     "diskten": 0
+    },
+    "sahne15.mp4": {
+     "n": 1,
+     "bayt": 4940970,
+     "diskten": 0
+    },
+    "sahne10.mp4": {
+     "n": 1,
+     "bayt": 5150260,
+     "diskten": 0
+    },
+    "sahne8.mp4": {
+     "n": 1,
+     "bayt": 3566716,
+     "diskten": 0
+    }
+   },
+   "ortusme": [
+    {
+     "sahne": 2,
+     "bas": 9688,
+     "ms": 84,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne3.mp4",
+       "dt": 87,
+       "diskten": false
+      },
+      {
+       "klip": "sahne3.mp4",
+       "dt": 87,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 3,
+     "bas": 12219,
+     "ms": 3269,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne3.mp4",
+       "dt": -2444,
+       "diskten": false
+      },
+      {
+       "klip": "sahne3.mp4",
+       "dt": -2444,
+       "diskten": true
+      },
+      {
+       "klip": "sahne4.mp4",
+       "dt": 3272,
+       "diskten": false
+      },
+      {
+       "klip": "sahne4.mp4",
+       "dt": 3272,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 4,
+     "bas": 16237,
+     "ms": 56582,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne4.mp4",
+       "dt": -746,
+       "diskten": false
+      },
+      {
+       "klip": "sahne4.mp4",
+       "dt": -746,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 23,
+     "bas": 74636,
+     "ms": 705,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne22.mp4",
+       "dt": -3302,
+       "diskten": false
+      },
+      {
+       "klip": "sahne22.mp4",
+       "dt": -3302,
+       "diskten": true
+      },
+      {
+       "klip": "sahne23.mp4",
+       "dt": -1815,
+       "diskten": false
+      },
+      {
+       "klip": "sahne23.mp4",
+       "dt": -1815,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 24,
+     "bas": 78659,
+     "ms": 584,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne24.mp4",
+       "dt": -3316,
+       "diskten": false
+      },
+      {
+       "klip": "sahne24.mp4",
+       "dt": -3316,
+       "diskten": true
+      },
+      {
+       "klip": "sahne25.mp4",
+       "dt": 585,
+       "diskten": false
+      },
+      {
+       "klip": "sahne25.mp4",
+       "dt": 585,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 25,
+     "bas": 82674,
+     "ms": 1222,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne25.mp4",
+       "dt": -3430,
+       "diskten": false
+      },
+      {
+       "klip": "sahne25.mp4",
+       "dt": -3430,
+       "diskten": true
+      },
+      {
+       "klip": "sahne26.mp4",
+       "dt": 1225,
+       "diskten": false
+      },
+      {
+       "klip": "sahne26.mp4",
+       "dt": 1225,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 26,
+     "bas": 85199,
+     "ms": 48599,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne26.mp4",
+       "dt": -1300,
+       "diskten": false
+      },
+      {
+       "klip": "sahne26.mp4",
+       "dt": -1300,
+       "diskten": true
+      }
+     ]
+    },
+    {
+     "sahne": 39,
+     "bas": 133855,
+     "ms": 10255,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne38.mp4",
+       "dt": 3448,
+       "diskten": false
+      }
+     ]
+    },
+    {
+     "sahne": 34,
+     "bas": 148141,
+     "ms": 11367,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne34.mp4",
+       "dt": -2224,
+       "diskten": false
+      }
+     ]
+    },
+    {
+     "sahne": 29,
+     "bas": 168242,
+     "ms": 8301,
+     "yakin_indirmeler": [
+      {
+       "klip": "sahne29.mp4",
+       "dt": 594,
+       "diskten": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

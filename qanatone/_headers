@@ -39,6 +39,18 @@
 /yeni/_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
+# PENCERE POLITIKASI (1 Eyl 2026, olculdu): film klipleri /yeni/varlik/
+# altinda ve BU DOSYADA KAPSANMIYORDU (/varlik/* deseni /yeni/... yollarini
+# kapsamaz). Sonuc: prolog geri sarildiginda pencere disina atilan klip
+# TAM GOVDEYLE yeniden iniyordu — tam turda 39 klip/238 MiB yerine 75
+# istek/456 MiB (35 klip iki kez). Tarayicinin disk onbellegi bu isin
+# dogru araci. SURE 1 GUN, immutable DEGIL — bilerek: klip adlari
+# icerik-hash'li degil (sahne34.mp4), yeniden encode ayni ada yazar;
+# immutable bassak istemci bir yil bayat kalirdi. Adlar hash'lenirse
+# (uretim zinciri karari) bu deger immutable'a cekilebilir. */
+/yeni/varlik/*
+  Cache-Control: public, max-age=86400
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
