@@ -255,7 +255,7 @@ async function gecSur(p, nokta) {
   for (let i = 0; i < TEKRAR; i++) {
     const { b, p } = await ac('?akis=0');
     await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam - 0.3)); __fl.atla(); });
-    await p.waitForFunction('!document.querySelector(".fl-ipucu").hidden', { timeout: 10000 });
+    await p.waitForFunction('getComputedStyle(document.querySelector(".fl-ipucu")).opacity === "1"', { timeout: 10000 });
     /* ayni kosumda iki pencere: halkali ve halkasiz (taban) — fark
        halkanin GERCEK maliyeti; makine gurultusu ikisine esit girer */
     const r = await p.evaluate(() => new Promise((res) => {
@@ -302,7 +302,63 @@ async function gecSur(p, nokta) {
   };
   raporla('halka: birlikte dusen 0 + CSS animasyon 3.6s', S.halka);
 
-  S.hukum = kirmiziTamam && S.A.gecti && S.A_azalt.gecti && S.B.gecti && S.B_azalt.gecti && S.halka.gecti && S.halka_azalt.gecti ? 'GECTI' : 'KALDI';
+  /* ---- 7) IBARE (1 Eyl, Enes): surekli yasar + ok dongusel akar ----
+     Kapilar: uc ilerleme noktasinda da ekranda (bas/orta/son) · ok
+     animasyonu computed'da (animationName none degil) · devirde sonme
+     ani ms cinsinden (transitionend kaydi) · reduce'ta ok durur, metin
+     kalir. */
+  console.log('== IBARE ==');
+  {
+    const { b, p } = await ac('?akis=0');
+    const noktaOku = () => p.evaluate(() => {
+      const el = document.querySelector('.fl-ipucu');
+      const r = el.getBoundingClientRect();
+      const st = getComputedStyle(el);
+      const ok = getComputedStyle(el.querySelector('svg'));
+      /* merkez LAYOUT genisligine gore (clientWidth): gercek pencerede
+         scrollbar innerWidth'i sisirir, ibare ~7 px "kayik" gorunurdu */
+      const cw = document.documentElement.clientWidth;
+      return { ekranda: r.top > 0 && r.bottom < innerHeight && st.visibility === 'visible' && +st.opacity > 0.9,
+        altOrta: Math.abs((r.left + r.right) / 2 - cw / 2) < 3 && r.bottom > innerHeight * 0.8,
+        okAnim: ok.animationName, okSure: ok.animationDuration, metin: el.textContent.trim() };
+    });
+    const noktalar = {};
+    for (const [ad, konum] of [['bas', 0], ['orta', 0.5], ['son', 0.98]]) {
+      await p.evaluate((k) => { scrollTo(0, __fl.konum(__fl.toplam * k)); __fl.atla(); }, konum);
+      await new Promise((r) => setTimeout(r, 250));
+      noktalar[ad] = await noktaOku();
+      console.log(` ${ad}: ekranda ${noktalar[ad].ekranda} · altOrta ${noktalar[ad].altOrta} · ok ${noktalar[ad].okAnim} ${noktalar[ad].okSure}`);
+    }
+    /* devirde sonme ani: son klip hazir olsun, sona oturt (atla devri
+       ayni karede tetikler — tanida dogrulandi), transitionend kaydi */
+    await p.waitForFunction('(() => { const s = __fl.sahne(); return s[s.length - 1].durum === "hazir"; })()', { timeout: 120000 });
+    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam)); __fl.atla(); });
+    await p.waitForFunction('__devir.kayit.ibareSonduMs !== null', { timeout: 20000 });
+    const sonme = await p.evaluate(() => ({
+      sonme_ms: Math.round(__devir.kayit.ibareSonduMs - __devir.kayit.basMs),
+      opaklik: getComputedStyle(document.querySelector('.fl-ipucu')).opacity,
+    }));
+    console.log(` devirde sonme: +${sonme.sonme_ms} ms (devir basindan) · sonrasi opaklik ${sonme.opaklik}`);
+    await b.close();
+    S.ibare = { noktalar, sonme,
+      gecti: Object.values(noktalar).every((x) => x.ekranda && x.altOrta && x.okAnim === 'fl-ok-ak')
+        && sonme.sonme_ms !== null && sonme.opaklik === '0' };
+    raporla('ibare: uc noktada ekranda + ok akiyor + devirde sondu', { gecti: S.ibare.gecti, sonme_ms: sonme.sonme_ms });
+  }
+  {
+    const { b, p } = await ac('?akis=0', true);
+    const rz = await p.evaluate(() => {
+      const el = document.querySelector('.fl-ipucu');
+      const ok = getComputedStyle(el.querySelector('svg'));
+      const st = getComputedStyle(el);
+      return { okAnim: ok.animationName, gorunur: st.visibility === 'visible' && +st.opacity > 0.9, metin: el.textContent.trim() };
+    });
+    S.ibare_azalt = { ...rz, gecti: rz.okAnim === 'none' && rz.gorunur && rz.metin.length > 0 };
+    raporla('ibare azaltma: ok durdu, metin kaldi', S.ibare_azalt);
+    await b.close();
+  }
+
+  S.hukum = kirmiziTamam && S.A.gecti && S.A_azalt.gecti && S.B.gecti && S.B_azalt.gecti && S.halka.gecti && S.halka_azalt.gecti && S.ibare.gecti && S.ibare_azalt.gecti ? 'GECTI' : 'KALDI';
   srv.close();
   fs.writeFileSync(CIKTI, JSON.stringify(S, null, 1));
   console.log(`\n=> ${S.hukum}\n→ ${CIKTI}`);

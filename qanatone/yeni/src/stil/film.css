@@ -91,21 +91,19 @@ main:has(> .fl) { max-width: none; padding: 0; }
   position: absolute; right: 16px; bottom: 16px; z-index: 5;
   display: flex; gap: 8px; align-items: center;
 }
-.fl-gec, .fl-atla {
+.fl-gec {
   font: 600 14px/1 system-ui, sans-serif; letter-spacing: -.01em;
   color: #fff; background: rgba(8, 8, 8, .78); border: 1px solid rgba(255, 255, 255, .22);
   border-radius: 999px; padding: 10px 14px; cursor: pointer;
   text-decoration: none; white-space: nowrap;
 }
-.fl-atla[hidden] { display: none; }
-.fl-gec:hover, .fl-atla:hover { border-color: #ef233c; }
+.fl-gec:hover { border-color: #ef233c; }
 /* KLAVYE: ikisi de odaklanabilir (a[href] ve button); odak HALKASI
    gorunur olmali — kumanda koyu zeminde durdugu icin varsayilan halka
    yetersiz kaliyordu. */
-.fl-gec:focus-visible, .fl-atla:focus-visible {
+.fl-gec:focus-visible {
   outline: 2px solid #ef233c; outline-offset: 3px; border-color: #ef233c;
 }
-.fl-atla-sn { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
 
 /* ---- DONEN CIZGI: PROLOGU GEC (Enes, 31 Agu gece) ----
    KAYNAK: eski site `.void .ring` (index.html ~502-557) — "kenarda
@@ -152,9 +150,7 @@ main:has(> .fl) { max-width: none; padding: 0; }
 }
 /* hareket azaltma: cizgi DURUR (statik kivilcim gorunur), dugme gorunur kalir */
 @media (prefers-reduced-motion: reduce) { .fl-halka::before { animation: none; } }
-/* motorsuz yolda YETISME dugmesi anlamsiz (yetisilecek hedef yok);
-   PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider. */
-html:not(.fl-js) .fl-atla { display: none; }
+/* motorsuz yolda PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider */
 html:not(.fl-js) .fl-kumanda { position: sticky; top: 12px; bottom: auto; justify-content: flex-end; }
 
 /* ray sonu capasi: "prologu gec" baginin hedefi */
@@ -267,9 +263,11 @@ html.fl-tv-parla .fl-tv-cizgi { animation: fl-tv-parla .1s ease-out both; }
 html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
-/* IBARE BOYUTU (Enes, 31 Agu gece): punto GEC DUGMESIYLE ESIT (14px —
-   .fl-gec ile ayni), ondan buyuk degil; ok metinle orantili (.42em),
-   metinden yuksek degil. */
+/* IBARE (Enes, 1 Eyl — surekli yasar): film BOYUNCA alt ortada durur,
+   bastan vardir; belirme animasyonu ve [hidden] yolu KALKTI. Yalniz
+   devirde soner (html.fl-devir kurali yukarida, .12s gecis — sonme ani
+   surucude transitionend'den olculur). Punto GEC DUGMESIYLE ESIT (14px),
+   ok metinle orantili (.42em, metinden alcak). */
 .fl-ipucu {
   position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%);
   z-index: 5; margin: 0; padding: 8px 16px; border-radius: 999px;
@@ -277,9 +275,14 @@ html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
   font: 500 14px/1 system-ui, sans-serif; letter-spacing: .02em;
   color: #fff; background: rgba(8, 8, 8, .72);
   border: 1px solid rgba(255, 255, 255, .18);
-  animation: fl-ipucu-bel .5s var(--e, ease) both;
 }
-.fl-ipucu svg { width: .72em; height: .42em; display: block; opacity: .8; }
-.fl-ipucu[hidden] { display: none; }
-@keyframes fl-ipucu-bel { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
-@media (prefers-reduced-motion: reduce) { .fl-ipucu { animation: none; } }
+/* OK DONGUSEL AKAR (CSS, JS kare dongusu yok): belirir, asagi kayar,
+   soner, yeniden dogar. Yon ASAGI (kaydirma yonu; Enes'in teyidi acik).
+   Hareket azaltmada durur, metin kalir. */
+.fl-ipucu svg { width: .72em; height: .42em; display: block; animation: fl-ok-ak 1.8s ease-in-out infinite; }
+@keyframes fl-ok-ak {
+  0% { opacity: 0; transform: translateY(-.3em); }
+  35% { opacity: .85; transform: translateY(0); }
+  70%, 100% { opacity: 0; transform: translateY(.3em); }
+}
+@media (prefers-reduced-motion: reduce) { .fl-ipucu svg { animation: none; opacity: .8; } }
