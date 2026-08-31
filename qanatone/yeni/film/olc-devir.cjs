@@ -98,6 +98,15 @@ async function kos(g) {
   await p.evaluateOnNewDocument(SURUCU);
   await p.goto(`http://127.0.0.1:${PORT}/yeni/film/`, { waitUntil: 'load', timeout: 120000 });
   await p.waitForFunction('window.__fl && __fl.hazir', { timeout: 180000 });
+  /* AZALT=1 (efekt turu, 31 Agu aksam): kapanis SADE yolda kosulsun —
+     TV cokusu son-hal transformunu (scaleY ~ 0) birakiyor, oturmus-hal
+     matris dogrulamasi ancak sade yolda anlamli. Geometri kapilari
+     kapanis efektinden bagimsizdir; reduce SONRADAN emule edilir ki
+     motor yuklensin. */
+  if (process.env.AZALT === '1') {
+    const cdpA = await p.createCDPSession();
+    await cdpA.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  }
 
   const tarayici = await p.evaluate(() => {
     let gpu = 'yok';

@@ -1,0 +1,130 @@
+{
+ "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
+ "olcum": "2026-08-31T20:42:11.142Z",
+ "tarayici": "brave",
+ "headless": false,
+ "tekrar": 3,
+ "kirmizi_A": {
+  "sure_ms": 871,
+  "yakalandi": true
+ },
+ "kirmizi_B": {
+  "dusen": 1,
+  "yakalandi": true
+ },
+ "A": {
+  "tekrar": [
+   {
+    "yol": "tv",
+    "sure_ms": 334,
+    "fazlar": {
+     "cokus": 135,
+     "parlama": 58,
+     "acilis": 142
+    },
+    "dusen": 4,
+    "zoom_dusen": 12,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 357,
+    "fazlar": {
+     "cokus": 156,
+     "parlama": 52,
+     "acilis": 149
+    },
+    "dusen": 3,
+    "zoom_dusen": 13,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 350,
+    "fazlar": {
+     "cokus": 140,
+     "parlama": 58,
+     "acilis": 152
+    },
+    "dusen": 0,
+    "zoom_dusen": 2,
+    "devirDurum": "tam"
+   }
+  ],
+  "medyan_sure": 350,
+  "medyan_dusen": 3,
+  "gecti": false
+ },
+ "A_azalt": {
+  "yol": "sade",
+  "tvBos": true,
+  "tam": true,
+  "gecti": true
+ },
+ "B": {
+  "noktalar": {
+   "bas": {
+    "yol": "isinlanma",
+    "sure_ms": 450,
+    "tepe_ms": 259,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 8,
+    "buyuk_aralar": [
+     {
+      "d": 24.9,
+      "tBas": 142
+     }
+    ],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": ""
+    }
+   },
+   "orta": {
+    "yol": "isinlanma",
+    "sure_ms": 459,
+    "tepe_ms": 255,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": ""
+    }
+   },
+   "son": {
+    "yol": "isinlanma",
+    "sure_ms": 451,
+    "tepe_ms": 255,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": ""
+    }
+   }
+  },
+  "ayni_calisti": true,
+  "gecti": true
+ },
+ "B_azalt": {
+  "yol": "sade",
+  "sure_ms": 282,
+  "film": "atlandi",
+  "gecti": true
+ },
+ "hukum": "KALDI"
+}

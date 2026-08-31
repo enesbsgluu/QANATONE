@@ -122,11 +122,12 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         buraya inen kaydirma filmi bitirmis demektir. */}
     <div id="fl-son" class="fl-son" tabindex="-1"></div>
   </div>
-  {/* PATLAMA GECISI KATMANI (Enes, 31 Agu): ?gecis=patlama kolunda
-      yakinlasmanin son kisminda kizil-beyaz flas, tepe aninda site aninda
-      devralir ("isinlama"). Transformlu yapis'in DISINDA durur (fixed'in
-      atasi transformlu olamaz). Varsayilan yol 140 ms capraz gecis. */}
-  <div class="fl-parla" aria-hidden="true"></div>
+  {/* EFEKT A · TV ACMA katmanlari (Enes, 31 Agu aksam). Paneller (z 4)
+      coken filmin ALTINDA kalan alani orter, kizil cizgi (z 6) coken
+      goruntunun USTUNDE parlar. Transformlu yapis'in DISINDA dururlar
+      (fixed'in atasi transformlu olamaz). */}
+  <div class="fl-tv" aria-hidden="true"><i class="fl-tv-ust"></i><i class="fl-tv-alt"></i></div>
+  <div class="fl-tv-cizgi" aria-hidden="true"></div>
 </section>
 
 <script>
@@ -150,6 +151,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
      `durdu` kapisi eklendi (motor.ts), yoksa `kare` kendini yeniden
      kuruyordu. */
   const bolum = document.querySelector<HTMLElement>('.fl');
+  /* J1 kirpmasi: minifier property zincirini kisaltamaz; takma ad ~600 B kazandirdi (olculdu) */
+  const KOKE = document.documentElement;
+  const AN = () => performance.now();
   const azalt = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const ANAHTAR = 'qanat-prolog-atlandi';
   let atlandi = false;
@@ -157,9 +161,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   if (bolum && atlandi) {
     /* 2. madde: oturumda zaten atlanmis — hicbir sey kurulmaz. */
-    document.documentElement.dataset.film = 'atlandi';
+    KOKE.dataset.film = 'atlandi';
   } else if (bolum && !azalt) {
-    document.documentElement.classList.add('fl-js');
+    KOKE.classList.add('fl-js');
     /* yetisme dugmesi: motor esik gecislerinde `fl-geride` atar (kare
        basina olay yok); dugme gorunur/kaybolur, tiklaninca __fl.atla().
        Filmi ATLAMAZ — gosterileni hedefe oturtur. */
@@ -222,21 +226,29 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
        Film.astro frontmatter'i ekran-kose.json k119/k120'den turetir. */
     const dk = (bolum.dataset.devir || '0,0,1,1,0').split(',').map(Number);
     const DK = { sol: dk[0], ust: dk[1], gen: dk[2], yuk: dk[3], hiz: dk[4] };
-    /* Devir yayi sertligi. k=25 -> kritik sonumde tepe kenar hizi
-       ~0,42 olcek/s x 1562 px = ~660 px/s; filmin kendi dollysinin
-       OLCULEN tepesi 864 px/s (ekran-kose tablosu, ~36 px/kare) — ayni
-       mertebe, devir filmin dilinden kopmuyor. k=120 tepe ~2000 px/s
-       ustune cikiyordu. Adaylar: 25 (~1,2 s) · 60 (~0,75 s) · 120
-       (~0,53 s); gorsel hukum Enes'te, ?dsert= ile denenir. */
-    const DSERT = (() => { const u = new URLSearchParams(location.search).get('dsert'); return u !== null && Number(u) > 0 && Number(u) <= 1000 ? Number(u) : 25; })();
-    const FADE_MS = 140;                       /* capraz gecis: 120-160 araligi */
+    /* Devir yayi sertligi — 60 SECILDI (Enes, 31 Agu aksam, gozle;
+       adaylar 25/60/120 denendi). k=60 kritik sonumde oturma ~0,75 s,
+       tepe kenar hizi filmin kendi dolly zarfinin icinde. ?dsert= kolu
+       deneme icin durur. */
+    const DSERT = (() => { const u = new URLSearchParams(location.search).get('dsert'); return u !== null && Number(u) > 0 && Number(u) <= 1000 ? Number(u) : 60; })();
+    const FADE_MS = 140;                       /* SADE yol (hareket azaltma): duz capraz gecis */
     const KAPANMA_PX = 2;                      /* kapi esigi: kapanan eksende fark < 2 px */
-    /* GECIS KOLU (Enes, 31 Agu): 'fade' (varsayilan, 140 ms capraz) |
-       'patlama' (yakinlasmanin sonunda kizil-beyaz flas, tepe aninda
-       isinlama). Gorsel hukum Enes'te: ?gecis=patlama ile denenir. */
-    const GECIS = new URLSearchParams(location.search).get('gecis') === 'patlama' ? 'patlama' : 'fade';
-    const FLAS_TEPE_MS = 100;                  /* fl-parla-pat %38 tepesi (.26s) */
-    const parla = bolum.querySelector<HTMLElement>('.fl-parla');
+    /* EFEKT A — TV ACMA (Enes, 31 Agu aksam; ?gecis=patlama KALKTI, flas
+       patlama gibi okunmuyordu): video son karesine oturup dortgen
+       goruntu alanini ortunce goruntu dikeyde parlak KIZIL CIZGIYE coker
+       (cizgi filmin kizil cizgisi: #ef233c/#ff4d63 paleti), cizgi kisa
+       bir an parlar, sonra dikeyde acilarak site belirir. Hedef 250-350:
+       130 cokus + 50 parlama + 130 acilis = 310 ms. Hareket azaltmada
+       sade sonumleme (FADE_MS capraz gecis, flas yok). */
+    const TV_PARLA_MS = 50, TV_AC_MS = 130;
+    /* BOZ=1 — OLCUM DUZENEGININ KIRMIZI KONTROLU (kapi: "kontrol once
+       kasten kirmiziya dondurulur"). Cokusu 4 katina uzatir (sure kapisi
+       kirmizi) ve gec tepesinde 60 ms ana is parcacigini kilitler (dusen
+       kare kapisi kirmizi). Urun yolunda hicbir etkisi yok. */
+    const BOZ = new URLSearchParams(location.search).get('boz') === '1';
+    const TV_COK_MS = BOZ ? 520 : 130;
+    const tvEl = bolum.querySelector<HTMLElement>('.fl-tv');
+    const azaltMi = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     let vw = 0, vh = 0, vidO = 16 / 9, devirBas = 0;
     interface DevirGeo { qg: number; qh: number; cx: number; cy: number; S: number; kapanan: 'yatay' | 'dikey'; txSon: number; tySon: number }
@@ -261,13 +273,20 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     /* ---- devir yayi: motorla ayni disiplin (sabit 4 ms adim + harman) ---- */
     let s = 1, sv = 0, sOnce = 1, birikimD = 0, sonMs = 0;
     let aktif = false, fadeAcik = false, devirRaf = 0, navKalkti = false;
+    let tvFaz = 0, tvT0 = 0;   /* EFEKT A fazi: 0 yok · 1 cokus · 2 parlama · 3 acilis */
     /* olcum yuzeyi kaydi — yalniz devir penceresinde dolar */
     const KAYIT: {
       v0: null | { video_1x: number; tempo: number; video: number; bizim: number; fark: number };
       basMs: number | null; fadeBasMs: number | null; tamMs: number | null;
       eskiYuklendiMs: number | null;
       fadeGeo: null | Record<string, unknown>; kareler: number[]; iz: [number, number, number][];
-    } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [] };
+      /* EFEKT A fazlari (tv acma) + kapanis yolu ('tv' | 'sade') */
+      tv: { basMs: number | null; parlaMs: number | null; acMs: number | null; sonMs: number | null };
+      kapanisYolu: string | null;
+      /* EFEKT B (prologu gec): yol 'isinlanma' | 'sade', nokta bilgi icin */
+      gec: null | { basMs: number; tepeMs: number | null; sonMs: number | null; yol: string; kareler: number[] };
+    } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [],
+      tv: { basMs: null, parlaMs: null, acMs: null, sonMs: null }, kapanisYolu: null, gec: null };
 
     /* NAV: film basladiysa kalkar ve DEVIRDE DE KALKIK KALIR (v2'de devirde
        geri iniyordu; govde artik eski sitenin TAM sayfasi — kendi navi var,
@@ -275,7 +294,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
        iframe'den gelir. Gorsel hukum Enes'te. */
     const navBak = () => {
       const kalk = scrollY > 4;
-      if (kalk !== navKalkti) { navKalkti = kalk; document.documentElement.classList.toggle('fl-nav-kalk', kalk); }
+      if (kalk !== navKalkti) { navKalkti = kalk; KOKE.classList.toggle('fl-nav-kalk', kalk); }
     };
     /* TUTUNMA (CSS fl-tutun): scrollY ray sonundaysa yapis sabitlenir —
        savurmada scrollY sonu gecip film geride kalinca yapis kacmasin.
@@ -284,14 +303,14 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     let tutundu = false, hazirlandi = false;
     const tutunBak = () => {
       const tut = devirBas > 0 && scrollY >= devirBas - 1;
-      if (tut !== tutundu) { tutundu = tut; document.documentElement.classList.toggle('fl-tutun', tut); }
+      if (tut !== tutundu) { tutundu = tut; KOKE.classList.toggle('fl-tutun', tut); }
       /* ON HAZIRLIK: govdenin ilk boyamasi devir karesine binmesin
          (olculdu: 44-70 ms sistematik takilma). Ray sonuna 1,5 ekran
          kala hazirlanir, 3 ekran uzaklasinca birakilir (histerezis). */
       const haz = devirBas > 0 && scrollY >= devirBas - 1.5 * vh;
       if (haz !== hazirlandi && (haz || scrollY < devirBas - 3 * vh)) {
         hazirlandi = haz;
-        document.documentElement.classList.toggle('fl-hazirla', haz);
+        KOKE.classList.toggle('fl-hazirla', haz);
         /* ESKI GIRIS GEC YUKLEME (Enes, 31 Agu): govde eski sitenin
            girisi; 845 KB'lik sayfa film boyunca inmesin, ilk hazirlikta
            insin. Perde bayragi ONCE yazilir — acilis torenini prolog
@@ -301,7 +320,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         if (haz && eski && !eski.src) {
           try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch {}
           eski.addEventListener('load', () => {
-            KAYIT.eskiYuklendiMs = performance.now();
+            KAYIT.eskiYuklendiMs = AN();
             /* ESKI SAYFANIN KENDI YUMUSAK-HAREKET ANAHTARI: t-mo-soft
                (noise+stars+tubes kapali — sitenin motion panel kipi).
                Olculdu: huzme canvas'i acikken devirin hizli fazinda
@@ -322,20 +341,23 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       const mx = g.cx + g.txSon * u, my = g.cy + g.tySon * u;
       return { sol: mx - g.qg * ss / 2, sag: mx + g.qg * ss / 2, ust: my - g.qh * ss / 2, alt: my + g.qh * ss / 2, u };
     };
-    const tamYap = () => {
-      if (!fadeAcik || document.documentElement.dataset.devir === 'tam') return;
-      document.documentElement.dataset.devir = 'tam';
-      if (KAYIT.tamMs === null) KAYIT.tamMs = performance.now();
-      /* devirden sonra eski giris etkilesilebilir (zemin govdesi iframe);
-         yumusak-hareket anahtari kalkar, huzmeler kendi gecisiyle dogar */
+    /* eski girisi canlandirma: etkilesim + huzmelerin dogusu. TV yolunda
+       efektin SONUNA ertelenir — olculdu: __tubesInit parlama karesine
+       binince efekt penceresinde 1-2 dusen kare uretiyordu. */
+    const eskiCanlandir = () => {
       const eski = document.getElementById('fl-eski') as HTMLIFrameElement | null;
-      if (eski) {
-        eski.removeAttribute('aria-hidden'); eski.removeAttribute('tabindex');
-        try {
-          eski.contentDocument?.documentElement.classList.remove('t-mo-soft');
-          (eski.contentWindow as any)?.__tubesInit?.();
-        } catch {}
-      }
+      if (!eski) return;
+      eski.removeAttribute('aria-hidden'); eski.removeAttribute('tabindex');
+      try {
+        eski.contentDocument?.documentElement.classList.remove('t-mo-soft');
+        (eski.contentWindow as any)?.__tubesInit?.();
+      } catch {}
+    };
+    const tamYap = () => {
+      if (!fadeAcik || KOKE.dataset.devir === 'tam') return;
+      KOKE.dataset.devir = 'tam';
+      if (KAYIT.tamMs === null) KAYIT.tamMs = AN();
+      if (!tvFaz) eskiCanlandir();            /* sade yol; tv yolu faz3 sonunda */
     };
     /* capraz gecis FILM katmaninin fade-out'u (film.css katman duzeni) —
        bitis o katmanin transitionend'inden dinlenir */
@@ -345,7 +367,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       devirRaf = 0;
       const f = (window as any).__fl;
       if (!f || !G) return;
-      const simdi = performance.now();
+      const simdi = AN();
       const dt = sonMs ? Math.min(100, simdi - sonMs) : 16.7;
       sonMs = simdi;
       /* video SON karesini gosteriyor mu (kareNo tavani: toplam - 1/fps) */
@@ -358,19 +380,25 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         const tempo = Math.max(0, Math.min(3, f.hizT || 0));
         sv = DK.hiz * tempo;
         KAYIT.basMs = simdi; KAYIT.kareler.length = 0; KAYIT.iz.length = 0;
+        /* onceki devrin (geri sarilmis) efekt kayitlari kalmasin — olculdu:
+           isinmali kosumda tv.sonMs eski devirden kalinca sure negatif cikti */
+        KAYIT.tv.basMs = KAYIT.tv.parlaMs = KAYIT.tv.acMs = KAYIT.tv.sonMs = null;
+        KAYIT.kapanisYolu = null;
         KAYIT.v0 = { video_1x: DK.hiz, tempo: +tempo.toFixed(4), video: +(DK.hiz * tempo).toFixed(7), bizim: +sv.toFixed(7), fark: 0 };
-        document.documentElement.classList.add('fl-devir');
+        KOKE.classList.add('fl-devir');
       }
       if (aktif) {
-        if (uzak && fadeAcik) {
-          /* GERI: kullanici filmi geri sardi — sayfa cozulur, film gorunur */
+        if (uzak && fadeAcik && !tvFaz) {
+          /* GERI: kullanici filmi geri sardi — sayfa cozulur, film gorunur.
+             TV efekti SURERKEN girilmez (310 ms'lik koreografi bolunmez;
+             bitince ayni dal calisir). */
           fadeAcik = false;
-          document.documentElement.classList.remove('fl-devir-net');
-          delete document.documentElement.dataset.devir;
+          KOKE.classList.remove('fl-devir-net', 'fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+          delete KOKE.dataset.devir;
           KAYIT.fadeBasMs = null; KAYIT.tamMs = null;
         }
-        if (uzak && yapis.style.opacity !== '') yapis.style.opacity = '';   /* ortme kiricinin kalintisi */
-        const hedefS = uzak ? 1 : G.S;
+        if (uzak && !tvFaz && yapis.style.opacity !== '') yapis.style.opacity = '';   /* ortme kiricinin kalintisi */
+        const hedefS = uzak && !tvFaz ? 1 : G.S;
         const k = DSERT, c = 2 * Math.sqrt(k);
         birikimD = Math.min(0.1, birikimD + dt / 1000);
         while (birikimD >= 0.004) {
@@ -381,8 +409,36 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         }
         const cizS = Math.max(1, sOnce + (s - sOnce) * (birikimD / 0.004));
         const kn = kenarlar(cizS);
-        yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)})`;
-        if (KAYIT.tamMs === null && KAYIT.kareler.length < 900) { KAYIT.kareler.push(simdi); KAYIT.iz.push([+simdi.toFixed(1), +cizS.toFixed(6), +(performance.now() - simdi).toFixed(1)]); }
+        /* ---- EFEKT A · TV ACMA koreografisi (tek yazici: transform hep
+           buradan cikar; cokus normal yazimin YERINE gecer) ---- */
+        if (tvFaz === 1) {
+          const kk = Math.min(1, (simdi - tvT0) / TV_COK_MS);
+          const sy = Math.max(0.004, cizS * (1 - kk * kk));      /* ease-in cokus */
+          yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)}, ${sy.toFixed(5)})`;
+          if (kk >= 1) {
+            tvFaz = 2; tvT0 = simdi; KAYIT.tv.parlaMs = simdi;
+            KOKE.classList.add('fl-tv-parla');
+            KOKE.classList.add('fl-devir-net');
+            tamYap();                                            /* film gizli; cizgi sahnede */
+          }
+        } else if (tvFaz === 2) {
+          if (simdi - tvT0 >= TV_PARLA_MS) {
+            tvFaz = 3; tvT0 = simdi; KAYIT.tv.acMs = simdi;
+            KOKE.classList.add('fl-tv-ac');  /* paneller acilir, site belirir */
+          }
+        } else if (tvFaz === 3) {
+          if (simdi - tvT0 >= TV_AC_MS + 10) {   /* +10: transition bitisi; +40 tamponu sureyi 350 sinirina dayiyordu (olculdu) */
+            tvFaz = 0; KAYIT.tv.sonMs = simdi;
+            KOKE.classList.remove('fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+            setTimeout(eskiCanlandir, 40);     /* huzme kurulumu efekt penceresinin disinda */
+          }
+        } else {
+          yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)})`;
+        }
+        /* kayit penceresi: devir basindan EFEKT sonuna kadar (tv yolunda
+           tamMs efektin ortasinda duser; pencere efektle biter) */
+        const kayitBitti = KAYIT.tamMs !== null && (KAYIT.tv.basMs === null || KAYIT.tv.sonMs !== null);
+        if (!kayitBitti && KAYIT.kareler.length < 900) { KAYIT.kareler.push(simdi); KAYIT.iz.push([+simdi.toFixed(1), +cizS.toFixed(6), +(AN() - simdi).toFixed(1)]); }
         /* CAPRAZ GECIS: dortgen goruntu alanini ortunce (en buyuk bosluk
            < KAPANMA_PX) gercek sayfa ustte netlesir. Kapanan eksen mikro
            ortalamayla iki kenardan birden kapanir; oteki eksen coktan
@@ -408,15 +464,16 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
              fade aninin sayfa olcegi bir sonraki gorev diliminde okunur. */
           const fg = KAYIT.fadeGeo;
           setTimeout(() => { fg.sayfa_transform = govde ? getComputedStyle(govde).transform : 'yok'; }, 0);
-          if (GECIS === 'patlama' && parla) {
-            /* PATLAMA: flas yukselirken film hala ekranda; tepe aninda
-               site devralir (tamYap film katmanini ANINDA gizler), flas
-               sonerken artik sayfa gorunuyor — "isinlama". */
-            parla.classList.add('aktif');
-            parla.addEventListener('animationend', () => parla.classList.remove('aktif'), { once: true });
-            setTimeout(() => { document.documentElement.classList.add('fl-devir-net'); tamYap(); }, FLAS_TEPE_MS);
+          if (!azaltMi() && tvEl) {
+            /* EFEKT A: cokus baslar; paneller aninda sahnede (film hala
+               her seyi ortuyor — gorunmez degisim), cizgi cokusle belirir */
+            KAYIT.kapanisYolu = 'tv';
+            tvFaz = 1; tvT0 = simdi; KAYIT.tv.basMs = simdi;
+            KOKE.classList.add('fl-tv-goster');
           } else {
-            document.documentElement.classList.add('fl-devir-net');
+            /* SADE yol (hareket azaltma): flassiz duz sonumleme */
+            KAYIT.kapanisYolu = 'sade';
+            KOKE.classList.add('fl-devir-net');
             setTimeout(tamYap, FADE_MS + 80);          /* transitionend yedegi */
           }
         }
@@ -427,8 +484,8 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
             /* cozulme: transform kalkar, katmanlar normale doner */
             aktif = false; fadeAcik = false;
             yapis.style.transform = ''; yapis.style.opacity = '';
-            document.documentElement.classList.remove('fl-devir', 'fl-devir-net');
-            delete document.documentElement.dataset.devir;
+            KOKE.classList.remove('fl-devir', 'fl-devir-net');
+            delete KOKE.dataset.devir;
             birikimD = 0;
           }
         }
@@ -438,8 +495,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       ipucuBak();
       /* dongu surme karari: devir oturup TAMAMLANDIYSA durur (pil);
          geri sarma scroll olayindan yeniden kurulur. Sona yakinken
-         donmeye devam eder — tetik kaydirmasiz da gelebilir (yay/akis). */
-      const oturduTam = aktif && s === G.S && sv === 0 && KAYIT.tamMs !== null;
+         donmeye devam eder — tetik kaydirmasiz da gelebilir (yay/akis).
+         TV efekti surerken durmaz (koreografi bu donguden surulur). */
+      const oturduTam = aktif && s === G.S && sv === 0 && KAYIT.tamMs !== null && tvFaz === 0;
       if (!oturduTam && (aktif || (devirBas > 0 && scrollY > devirBas - 2 * vh))) devirTik();
       else sonMs = 0;
     };
@@ -504,23 +562,68 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       kayit: KAYIT, bas: () => devirBas, olc: olcDevir,
     };
 
-      const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
-      gec?.addEventListener('click', () => {
+      /* ---- EFEKT B · ISINLANMA (prologu gec; Enes, 31 Agu aksam) ----
+         Efekt katmani videonun konumundan BAGIMSIZ: filmin basinda,
+         ortasinda, sonunda ayni calisir — cunku ortu sayfanin ustune
+         cizilir, sayfa dokuya cizilmez. Asil gecis isi (gecYap) efektin
+         TEPESINDE kosulur: ekran tamamen ortuluyken takas gorunmez.
+         Cizim ayri parcada (src/film/gecis.ts, motor emsali: J1 disi,
+         bosta isitilir); modul inmemisse ya da hareket azaltma acikken
+         SADE yol: flassiz duz sonumleme (ayni ortu, yalniz opaklik). */
+      let gecisModul: { isinla: (o: { tepe: () => void; bitti: () => void; kareler?: number[] }) => void } | null = null;
+      const bosta = (window as any).requestIdleCallback || ((f: () => void) => setTimeout(f, 300));
+      bosta(() => { import('../film/gecis').then((m) => { gecisModul = m; (m as any).hazirla?.(); }).catch(() => {}); });
+      const gecYap = () => {
         try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
-        sok();
-        document.documentElement.classList.remove('fl-js');
-        /* devir ortasinda basilirsa devir kalintilari da sokulur — yoksa
-           gorunur govde/tutunma sinifi sayfayi kilitli birakirdi */
-        document.documentElement.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk');
-        delete document.documentElement.dataset.devir;
-        document.documentElement.dataset.film = 'atlandi';
+        /* MOTOR SOKUMU SONRAKI DILIMDE (olculdu: sok'un 39 blob/revoke'u
+           + yeniden duzen tek karede 25 ms'i asiyordu). Gorsel takas bu
+           karede; sokum ortu HALA tam kapaliyken (~50 ms sonra, sonus
+           150 ms'te basliyor) kosulur — izleyici iki isi de gormez. */
+        setTimeout(sok, 50);
+        KOKE.classList.remove('fl-js');
+        /* devir ortasinda basilirsa devir/efekt kalintilari da sokulur */
+        KOKE.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk',
+          'fl-hazirla', 'fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+        delete KOKE.dataset.devir;
+        KOKE.dataset.film = 'atlandi';
+        scrollTo(0, 0);                          /* isinlanma sitenin basina */
+      };
+      const sadeGec = (tepe: () => void, bitti: () => void) => {
+        const ortu = document.createElement('div');
+        ortu.style.cssText = 'position:fixed;inset:0;z-index:70;background:#050505;opacity:0;transition:opacity .12s ease';
+        document.body.appendChild(ortu);
+        requestAnimationFrame(() => { ortu.style.opacity = '1'; });
+        setTimeout(() => {
+          tepe();
+          ortu.style.opacity = '0';
+          setTimeout(() => { ortu.remove(); bitti(); }, 140);
+        }, 140);
+      };
+      let gecKostu = false;
+      const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
+      gec?.addEventListener('click', (e) => {
+        e.preventDefault();                      /* capa isini efekt ustlenir (JS'siz yol capayla kalir) */
+        if (gecKostu) return;
+        gecKostu = true;
+        const kayitG = { basMs: AN(), tepeMs: null as number | null, sonMs: null as number | null, yol: '', kareler: [] as number[], execler: [] as number[] };
+        KAYIT.gec = kayitG;
+        const tepe = () => {
+          kayitG.tepeMs = AN();
+          /* BOZ: kirmizi kontrol — tepe karesinde ana is parcacigi 60 ms
+             kilitlenir, dusen kare kapisi kirmiziya donmek ZORUNDA */
+          if (BOZ) { const t0 = AN(); while (AN() - t0 < 60) { /* kasti */ } }
+          gecYap();
+        };
+        const bitti = () => { kayitG.sonMs = AN(); };
+        if (!azaltMi() && gecisModul) { kayitG.yol = 'isinlanma'; gecisModul.isinla({ tepe, bitti, kareler: kayitG.kareler, execler: kayitG.execler } as any); }
+        else { kayitG.yol = 'sade'; sadeGec(tepe, bitti); }
       });
     }).catch((e) => {
-      document.documentElement.classList.remove('fl-js');
-      document.documentElement.dataset.film = 'motor-inmedi';
+      KOKE.classList.remove('fl-js');
+      KOKE.dataset.film = 'motor-inmedi';
       console.warn('[film] motor inmedi', e);
     });
   } else if (bolum) {
-    document.documentElement.dataset.film = 'hareket-azaltma';
+    KOKE.dataset.film = 'hareket-azaltma';
   }
 </script>
