@@ -352,7 +352,7 @@ async function gecSur(p, nokta) {
     S.ibare = { noktalar, sonme, hiza_px: noktalar.bas.hiza_px, yazi: y,
       /* hiza kapisi: dugmenin BIR TIK ALTINDA (pozitif fark, 2-14 px
          bandi) — sayi ayrica raporlanir; yazi ailesi + punto esit */
-      gecti: Object.values(noktalar).every((x) => x.ekranda && x.altOrta && x.okAnim === 'fl-nabiz' && x.okSure === '3.6s')
+      gecti: Object.values(noktalar).every((x) => x.ekranda && x.altOrta && x.okAnim === 'fl-ok-kay' && x.okSure === '3.6s')
         && noktalar.bas.hiza_px > 2 && noktalar.bas.hiza_px < 14
         && y.ibare.aile === y.gec.aile && y.ibare.punto === y.gec.punto
         && sonme.sonme_ms !== null && sonme.opaklik === '0' };

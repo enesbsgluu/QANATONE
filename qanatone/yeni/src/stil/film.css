@@ -286,10 +286,18 @@ html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
    opacity'si devir sonmesinin gecisi — animasyon onu ezerdi. Iki ic oge
    ayni parse'ta yaratilir, animasyonlar ayni kareden baslar: senkron.
    CSS'te, JS kare dongusu yok; azaltmada durur, ikisi de gorunur kalir. */
-.fl-ipucu span, .fl-ipucu svg { animation: fl-nabiz 3.6s ease-in-out infinite; }
-.fl-ipucu svg { width: .72em; height: .42em; display: block; color: #ef233c; }
+.fl-ipucu span { animation: fl-nabiz 3.6s ease-in-out infinite; }
+/* OK (Enes, 4. duzeltme): nabza ek YUKARIDAN ASAGI akis — ayni 3,6 s
+   ritim, tepe metnin tepesiyle ayni anda (%45-50); uclarda opacity 0,
+   sarma zipla(ma)si gorunmez. */
+.fl-ipucu svg { width: .72em; height: .42em; display: block; color: #ef233c; animation: fl-ok-kay 3.6s ease-in-out infinite; }
 @keyframes fl-nabiz {
   0%, 100% { opacity: .25; }
   50% { opacity: 1; }
+}
+@keyframes fl-ok-kay {
+  0% { opacity: 0; transform: translateY(-.35em); }
+  45% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(.4em); }
 }
 @media (prefers-reduced-motion: reduce) { .fl-ipucu span, .fl-ipucu svg { animation: none; opacity: .85; } }
