@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-zincir.cjs — 39 klip zincir turu, GERCEK girdi (Input.synthesizeScrollGesture). Sayfa ici scrollTo YOK.",
- "olcum": "2026-08-31T12:13:25.906Z",
+ "olcum": "2026-08-31T12:47:49.457Z",
  "tarayici": "brave Chrome/152.0.7977.64",
  "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
  "ray": {
@@ -15,6 +15,56 @@
   "fps": 24
  },
  "tur_alt_siniri_sn": 171.1,
+ "tur_ileri": {
+  "sure_sn": 172.2,
+  "jest_hizi_px_sn": 776,
+  "gorulen_sahne_sayisi": 39,
+  "eksik_sahneler": [],
+  "sahne_sirasi_bozulmasi": [],
+  "sirali_mi": true,
+  "kare_p50": 8.3,
+  "kare_p95": 14.7,
+  "kare_sayisi": 19298,
+  "ort_fps": 112.2,
+  "en_yuksek_gosterilen_hiz": 1.5,
+  "son_T": 256.637,
+  "agdan_inen": {
+   "klip": 40,
+   "bayt": 250140611,
+   "mib": 238.6
+  }
+ },
+ "geri": {
+  "T_once": 256.637,
+  "T_sonra": 242.119,
+  "T_farki": -14.518,
+  "sahne_once": 39,
+  "sahne_sonra": 37,
+  "sahne_sirasi": [
+   39,
+   38,
+   37
+  ],
+  "geriye_sardi_mi": true,
+  "kare_p50": 8.3,
+  "kare_p95": 13.7
+ },
+ "tavan": {
+  "tavan_ayari": 1.5,
+  "olculen_en_yuksek_gosterilen_hiz": 1.5,
+  "tavani_asti_mi": false,
+  "hedef_firladi_mi": false,
+  "en_buyuk_borc_sn": 14.29,
+  "savurma_aninda": {
+   "T": 243.64,
+   "hedef": 243.65,
+   "geride_sn": 0.01,
+   "atla_dugmesi_gorunur": false
+  },
+  "geride_olayi_sayisi": 2,
+  "kare_p50": 8.3,
+  "kare_p95": 9
+ },
  "prologu_gec": {
   "ekranda": {
    "gec": {
@@ -29,13 +79,13 @@
    }
   },
   "klavye": {
-   "tab_adimi": 20,
+   "tab_adimi": 11,
    "klavyeyle_tetiklendi": true,
    "erisilebilir": true
   },
   "zincir_durdu": {
    "raf_cagri_sn_once": 241,
-   "raf_cagri_sn_sonra": 120,
+   "raf_cagri_sn_sonra": 120.3,
    "kayitci_tabani_sn": "~ekran tazeleme hizi (kendi kayitcimiz kare basina 1)",
    "dustu_mu": true,
    "fl_yuzeyi": "undefined",
