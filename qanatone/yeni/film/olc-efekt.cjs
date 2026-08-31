@@ -314,20 +314,27 @@ async function gecSur(p, nokta) {
       const el = document.querySelector('.fl-ipucu');
       const r = el.getBoundingClientRect();
       const st = getComputedStyle(el);
-      const ok = getComputedStyle(el.querySelector('svg'));
+      const nb = getComputedStyle(el.querySelector('.fl-nabiz'));
+      const gec = document.querySelector('.fl-gec');
+      const gr = gec.getBoundingClientRect();
+      const gst = getComputedStyle(gec);
       /* merkez LAYOUT genisligine gore (clientWidth): gercek pencerede
          scrollbar innerWidth'i sisirir, ibare ~7 px "kayik" gorunurdu */
       const cw = document.documentElement.clientWidth;
       return { ekranda: r.top > 0 && r.bottom < innerHeight && st.visibility === 'visible' && +st.opacity > 0.9,
         altOrta: Math.abs((r.left + r.right) / 2 - cw / 2) < 3 && r.bottom > innerHeight * 0.8,
-        okAnim: ok.animationName, okSure: ok.animationDuration, metin: el.textContent.trim() };
+        okAnim: nb.animationName, okSure: nb.animationDuration, metin: el.textContent.trim(),
+        /* hiza: dikey merkez farki (pozitif = ibare dugmenin ALTINDA) + yazi kimligi */
+        hiza_px: +(((r.top + r.bottom) / 2) - ((gr.top + gr.bottom) / 2)).toFixed(1),
+        yazi: { ibare: { aile: st.fontFamily, punto: st.fontSize }, gec: { aile: gst.fontFamily, punto: gst.fontSize } } };
     });
     const noktalar = {};
     for (const [ad, konum] of [['bas', 0], ['orta', 0.5], ['son', 0.98]]) {
       await p.evaluate((k) => { scrollTo(0, __fl.konum(__fl.toplam * k)); __fl.atla(); }, konum);
       await new Promise((r) => setTimeout(r, 250));
       noktalar[ad] = await noktaOku();
-      console.log(` ${ad}: ekranda ${noktalar[ad].ekranda} · altOrta ${noktalar[ad].altOrta} · ok ${noktalar[ad].okAnim} ${noktalar[ad].okSure}`);
+      const N = noktalar[ad];
+      console.log(` ${ad}: ekranda ${N.ekranda} · altOrta ${N.altOrta} · nabiz ${N.okAnim} ${N.okSure} · hiza +${N.hiza_px} px altta`);
     }
     /* devirde sonme ani: son klip hazir olsun, sona oturt (atla devri
        ayni karede tetikler — tanida dogrulandi), transitionend kaydi */
@@ -340,16 +347,22 @@ async function gecSur(p, nokta) {
     }));
     console.log(` devirde sonme: +${sonme.sonme_ms} ms (devir basindan) · sonrasi opaklik ${sonme.opaklik}`);
     await b.close();
-    S.ibare = { noktalar, sonme,
-      gecti: Object.values(noktalar).every((x) => x.ekranda && x.altOrta && x.okAnim === 'fl-ok-ak')
+    const y = noktalar.bas.yazi;
+    console.log(` yazi yan yana — ibare: ${y.ibare.aile} ${y.ibare.punto} · gec: ${y.gec.aile} ${y.gec.punto}`);
+    S.ibare = { noktalar, sonme, hiza_px: noktalar.bas.hiza_px, yazi: y,
+      /* hiza kapisi: dugmenin BIR TIK ALTINDA (pozitif fark, 2-14 px
+         bandi) — sayi ayrica raporlanir; yazi ailesi + punto esit */
+      gecti: Object.values(noktalar).every((x) => x.ekranda && x.altOrta && x.okAnim === 'fl-nabiz' && x.okSure === '3.6s')
+        && noktalar.bas.hiza_px > 2 && noktalar.bas.hiza_px < 14
+        && y.ibare.aile === y.gec.aile && y.ibare.punto === y.gec.punto
         && sonme.sonme_ms !== null && sonme.opaklik === '0' };
-    raporla('ibare: uc noktada ekranda + ok akiyor + devirde sondu', { gecti: S.ibare.gecti, sonme_ms: sonme.sonme_ms });
+    raporla('ibare: ekranda + nabiz 3.6s + hiza bir tik altta + yazi esit + devirde sondu', { gecti: S.ibare.gecti, hiza_px: noktalar.bas.hiza_px, sonme_ms: sonme.sonme_ms });
   }
   {
     const { b, p } = await ac('?akis=0', true);
     const rz = await p.evaluate(() => {
       const el = document.querySelector('.fl-ipucu');
-      const ok = getComputedStyle(el.querySelector('svg'));
+      const ok = getComputedStyle(el.querySelector('.fl-nabiz'));
       const st = getComputedStyle(el);
       return { okAnim: ok.animationName, gorunur: st.visibility === 'visible' && +st.opacity > 0.9, metin: el.textContent.trim() };
     });
