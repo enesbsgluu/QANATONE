@@ -42,7 +42,8 @@ const TAVAN = process.env.TAVAN || '2';
 const HIZ = Number(process.env.HIZ || 2);          /* kaydirma hizi (film-sn / gercek-sn) */
 const ONBELLEK = process.env.ONBELLEK === '1';
 const TEKRAR = Number(process.env.TEKRAR || 1);
-const AG = process.env.AG || '';               /* '4g' -> 12 Mbit / 60 ms emulasyonu */
+const AG = process.env.AG || '';
+const MOBIL = process.env.MOBIL === '1';   /* 720p hatti: viewport 412x892 */               /* '4g' -> 12 Mbit / 60 ms emulasyonu */
 const MIME = { '.mp4': 'video/mp4', '.html': 'text/html; charset=utf-8', '.webp': 'image/webp', '.png': 'image/png', '.js': 'text/javascript', '.css': 'text/css', '.woff2': 'font/woff2', '.json': 'application/json' };
 
 function sunucu() {
@@ -100,7 +101,7 @@ const medyan = (a) => { if (!a.length) return null; const b = [...a].sort((x, y)
 async function kos() {
   const b = await pt.launch({ executablePath: CHROME, headless: HEADLESS, args: ['--no-sandbox', '--autoplay-policy=no-user-gesture-required', '--ignore-gpu-blocklist', ...(HEADLESS ? [] : ['--window-size=1460,1000'])] });
   const p = await b.newPage();
-  await p.setViewport({ width: 1440, height: 900 });
+  await p.setViewport(MOBIL ? { width: 412, height: 892, deviceScaleFactor: 2, isMobile: true, hasTouch: true } : { width: 1440, height: 900 });
   const cdp = await p.createCDPSession();
   await cdp.send('Network.enable');
   if (AG === '4g') await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 60, downloadThroughput: 12e6 / 8, uploadThroughput: 3e6 / 8 });
@@ -152,7 +153,7 @@ async function kos() {
   });
   const bellekTepe = Math.max(0, ...bacaklar.flatMap((x) => x.bellek.map(([, m]) => m)));
   return {
-    senaryo: SENARYO, tavan: oz.tavan, hiz: HIZ, onbellek: ONBELLEK, ag: AG || 'yerel',
+    senaryo: SENARYO, tavan: oz.tavan, hiz: HIZ, onbellek: ONBELLEK, ag: AG || 'yerel', hat: MOBIL ? 'mobil-720p' : 'masaustu-1080p',
     toplam_istek: [...istekler.values()].length,
     inen_mib: +(toplamB / 1048576).toFixed(1), agdan_mib: +(agdanB / 1048576).toFixed(1),
     birakilan: oz.birakilan, pencere: oz.pencere, on_pencere: oz.onPencere, mbit: oz.mbit,
