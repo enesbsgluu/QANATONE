@@ -1,0 +1,37 @@
+---
+/* FILM ISKELETI — /yeni/film (27 Agu 2026).
+   39 kliplik scroll-scrub adasinin OLCUM ZEMINI; urun sayfasi degil.
+   DEVIR-SPESIFIKASYONU'nun tam kurgusu (giris Q sahnesi + film + final
+   devri) ana sayfaya oturacak; bu sayfa yalniz motor/dikis/butce/savurma
+   olcumleri icin var. Hikaye metni yok, giris yok, devir yok — bilerek.
+   Canonical deneme-react deseni: canli kokte karsiligi yok -> kendine;
+   noindex kabuk geneli; sitemap/R8 disinda (KOK'suz canonical). */
+import Temel from '../layouts/Temel.astro';
+import Film from '../parcalar/Film.astro';
+import SHHero from '../sahneler/SHHero.astro';
+const canon = 'https://qanatone.netlify.app/yeni/film';
+---
+{/* GOVDE BURADA (31 Agu 2026, PROLOG-KAPANIS-v2 6. adim): devir "gercek
+    sayfanin dikdortgenine" oturmak zorunda, yani filmin altinda GERCEK bir
+    govde olmali. Hero bileseni oldugu gibi cagriliyor — devir bir kopyaya
+    degil sayfanin kendisine devrediyor.
+    YERLESIM KARARI ENES'TE: DEVIR-SPESIFIKASYONU tam kurgunun (giris Q
+    sahnesi + film + devir) ANA SAYFAYA oturacagini soyluyor. Film su an
+    ayri sayfada; ana sayfada PRDag (amblem prologu) var, film yok.
+    Ikisini ana sayfada birlestirmek olculmus butceleri (H18 gzip HTML
+    <= 40960 B, su an 38249) zorlar — o tasima ayri bir karar. Burasi
+    devrin kurulabildigi ve OLCULEBILDIGI zemin. */}
+<Temel dil="tr" baslik="Film iskeleti — QANATONE"
+  aciklama="Prolog filminin 39 kliplik scroll-scrub iskeleti; motor, dikiş, bütçe ve savurma ölçüm zemini. Ürün sayfası değildir."
+  canonical={canon}>
+  <h1 class="fl-gizli">Film iskeleti</h1>
+  <Film dil="tr" />
+  <div class="fl-govde" id="fl-govde">
+    <SHHero dil="tr" />
+  </div>
+</Temel>
+
+<style>
+  /* baslik belge agaci icin var, gorunmez (metin yok karari) */
+  .fl-gizli { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: -1px; }
+</style>

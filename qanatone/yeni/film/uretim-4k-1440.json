@@ -1,0 +1,1828 @@
+{
+ "_": "yeni/film/uret.cjs ciktisi. Posterler ENCODE EDILMIS klipten (kaynak_sha1 = o klibin sha1'i). Yeniden uretmek: node yeni/film/uret.cjs",
+ "uretim": "2026-08-27T14:28:50.065Z",
+ "betik_sha1": "4d71ffe1ed27177897a0d4afcf4b084dfaea025f",
+ "toplam": {
+  "masaustu_bayt": 359461758,
+  "mobil_bayt": 241986618,
+  "poster_bayt": 242841743,
+  "poster_web_bayt": 14025044
+ },
+ "butce": {
+  "masaustu_bayt": 33554432,
+  "mobil_bayt": 16777216
+ },
+ "klip": [
+  {
+   "n": 1,
+   "kadraj": null,
+   "acilis": {
+    "sn": 1.2,
+    "crf_arti": 4,
+    "masaustu": {
+     "dosya": "sahne1-acilis.mp4",
+     "bayt": 389454,
+     "sha1": "b740f493abf67e50438cb7693e5a48b824cf5cfc",
+     "gen": 2560,
+     "yuk": 1440
+    },
+    "mobil": {
+     "dosya": "sahne1-acilis-mobile.mp4",
+     "bayt": 310764,
+     "sha1": "a7eb731b8ab1bdd1f044543fc6f2204b22f1e5ed",
+     "gen": 1920,
+     "yuk": 1080
+    }
+   },
+   "masaustu": {
+    "dosya": "sahne1.mp4",
+    "bayt": 5341096,
+    "sha1": "2b3d20e44b35e81b9c41146dbe11c4d38c435894",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne1-mobile.mp4",
+    "bayt": 3787468,
+    "sha1": "01ac180501f7e4c9330d51348a4f6a4df3fa74b4",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne1-poster.png",
+    "bayt": 1527579,
+    "sha1": "9719ee150a1234e553c4db4e150f24736b6c192b",
+    "kaynak_sha1": "2b3d20e44b35e81b9c41146dbe11c4d38c435894",
+    "web": {
+     "dosya": "sahne1-poster.webp",
+     "bayt": 82634,
+     "sha1": "24144911578f81d2df4aedcf2c0fa5482d536f83",
+     "kaynak_sha1": "9719ee150a1234e553c4db4e150f24736b6c192b",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne1-mobile-poster.png",
+    "bayt": 896067,
+    "sha1": "2520c4bf13167523f1ec011b4f2532d01b9c24f3",
+    "kaynak_sha1": "01ac180501f7e4c9330d51348a4f6a4df3fa74b4",
+    "web": {
+     "dosya": "sahne1-mobile-poster.webp",
+     "bayt": 45518,
+     "sha1": "50623901a7b658d717d84abb6791825310ad3edd",
+     "kaynak_sha1": "2520c4bf13167523f1ec011b4f2532d01b9c24f3",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 73192
+  },
+  {
+   "n": 2,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne2.mp4",
+    "bayt": 7698475,
+    "sha1": "e7f35b5197bb8abd08c9a25e9406f8fef386d300",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne2-mobile.mp4",
+    "bayt": 4512640,
+    "sha1": "98fc758c7e6966d13fb353b446c7569ec4371da8",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne2-poster.png",
+    "bayt": 2681687,
+    "sha1": "8ef4d8083a37d7ab6f924f3e57deef70b68407e8",
+    "kaynak_sha1": "e7f35b5197bb8abd08c9a25e9406f8fef386d300",
+    "web": {
+     "dosya": "sahne2-poster.webp",
+     "bayt": 214652,
+     "sha1": "f3dd281325306f90fe72296f1552f9dca45d5b78",
+     "kaynak_sha1": "8ef4d8083a37d7ab6f924f3e57deef70b68407e8",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne2-mobile-poster.png",
+    "bayt": 1450619,
+    "sha1": "28ff37a093d913653351eac9e67c3cd3bd758de8",
+    "kaynak_sha1": "98fc758c7e6966d13fb353b446c7569ec4371da8",
+    "web": {
+     "dosya": "sahne2-mobile-poster.webp",
+     "bayt": 115924,
+     "sha1": "3d20234c872d064bba1932229e0a7feae473c6ed",
+     "kaynak_sha1": "28ff37a093d913653351eac9e67c3cd3bd758de8",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 55722
+  },
+  {
+   "n": 3,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne3.mp4",
+    "bayt": 9083645,
+    "sha1": "d6de036d10de4cedc5de8cbcdcbbe5ea91e060b8",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne3-mobile.mp4",
+    "bayt": 6087618,
+    "sha1": "e8999e0c2b8219b478abe967e0ab7e84d14a80c2",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne3-poster.png",
+    "bayt": 4782740,
+    "sha1": "db078419ea5bb6ff3546895b7c881c004f5eb9dc",
+    "kaynak_sha1": "d6de036d10de4cedc5de8cbcdcbbe5ea91e060b8",
+    "web": {
+     "dosya": "sahne3-poster.webp",
+     "bayt": 344746,
+     "sha1": "4710cf0509576b5f3aeb0666e5b602c5b4c66f62",
+     "kaynak_sha1": "db078419ea5bb6ff3546895b7c881c004f5eb9dc",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne3-mobile-poster.png",
+    "bayt": 2943228,
+    "sha1": "3993c9ee97b876c774f383201938a2cdea203f7d",
+    "kaynak_sha1": "e8999e0c2b8219b478abe967e0ab7e84d14a80c2",
+    "web": {
+     "dosya": "sahne3-mobile-poster.webp",
+     "bayt": 198124,
+     "sha1": "754542a381f22a9c325e87b65f8a29ea723e23bb",
+     "kaynak_sha1": "3993c9ee97b876c774f383201938a2cdea203f7d",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 64652
+  },
+  {
+   "n": 4,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne4.mp4",
+    "bayt": 10864536,
+    "sha1": "fdeb1f8d3b144202e9f0142476ee968c18168fad",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne4-mobile.mp4",
+    "bayt": 9033465,
+    "sha1": "7707c06bfb808e1641a43222fd72f224f14b8b55",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne4-poster.png",
+    "bayt": 3262553,
+    "sha1": "20d543dcebcc54470d6ea67094f24e405450fe46",
+    "kaynak_sha1": "fdeb1f8d3b144202e9f0142476ee968c18168fad",
+    "web": {
+     "dosya": "sahne4-poster.webp",
+     "bayt": 244184,
+     "sha1": "3edc3071eb62f86ec137fd326c528bbb635371f4",
+     "kaynak_sha1": "20d543dcebcc54470d6ea67094f24e405450fe46",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne4-mobile-poster.png",
+    "bayt": 1950288,
+    "sha1": "1f35c90343ce4d764f116ef985a98230598ad6f5",
+    "kaynak_sha1": "7707c06bfb808e1641a43222fd72f224f14b8b55",
+    "web": {
+     "dosya": "sahne4-mobile-poster.webp",
+     "bayt": 133216,
+     "sha1": "bf473fad905c7bfccde104b3c577be86d96decdf",
+     "kaynak_sha1": "1f35c90343ce4d764f116ef985a98230598ad6f5",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 65092
+  },
+  {
+   "n": 5,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne5.mp4",
+    "bayt": 9620686,
+    "sha1": "14135e99bcc4e1e243e89621336e808893e6459e",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne5-mobile.mp4",
+    "bayt": 7087367,
+    "sha1": "aeae4a6e47f1b23b3e0c8b7e679b607e8b883b96",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne5-poster.png",
+    "bayt": 4561450,
+    "sha1": "f9254cd856fc69d56d9aca75e3d0b6e2e2d63a9e",
+    "kaynak_sha1": "14135e99bcc4e1e243e89621336e808893e6459e",
+    "web": {
+     "dosya": "sahne5-poster.webp",
+     "bayt": 325470,
+     "sha1": "93ef0c7ea5fd859c0cb4e47e019bc426973265ec",
+     "kaynak_sha1": "f9254cd856fc69d56d9aca75e3d0b6e2e2d63a9e",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne5-mobile-poster.png",
+    "bayt": 2762213,
+    "sha1": "a7154cd0db43706cf97293171a4c5fa56dca0be3",
+    "kaynak_sha1": "aeae4a6e47f1b23b3e0c8b7e679b607e8b883b96",
+    "web": {
+     "dosya": "sahne5-mobile-poster.webp",
+     "bayt": 189198,
+     "sha1": "5bb0460515f100afe454f1e6b5639faa6dd061e7",
+     "kaynak_sha1": "a7154cd0db43706cf97293171a4c5fa56dca0be3",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 73782
+  },
+  {
+   "n": 6,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne6.mp4",
+    "bayt": 7166933,
+    "sha1": "179580b786d9fbe1bb52b304232e5a8eec64b464",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne6-mobile.mp4",
+    "bayt": 4893905,
+    "sha1": "61b004b97144cb3f46bead966e88d622601de11a",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne6-poster.png",
+    "bayt": 4154352,
+    "sha1": "e051d3845cf50810e4b656a7e5b577a8b29deeae",
+    "kaynak_sha1": "179580b786d9fbe1bb52b304232e5a8eec64b464",
+    "web": {
+     "dosya": "sahne6-poster.webp",
+     "bayt": 205696,
+     "sha1": "3a581cbe361b115b60200fb2bd0eff7a1f893d38",
+     "kaynak_sha1": "e051d3845cf50810e4b656a7e5b577a8b29deeae",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne6-mobile-poster.png",
+    "bayt": 2513558,
+    "sha1": "ff7ae13ed145a5da99229044a44002de54cfe7d5",
+    "kaynak_sha1": "61b004b97144cb3f46bead966e88d622601de11a",
+    "web": {
+     "dosya": "sahne6-mobile-poster.webp",
+     "bayt": 115304,
+     "sha1": "adbc42f6a42703c125af183c3be1a858f226496a",
+     "kaynak_sha1": "ff7ae13ed145a5da99229044a44002de54cfe7d5",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 65421
+  },
+  {
+   "n": 7,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne7.mp4",
+    "bayt": 8651768,
+    "sha1": "329465058fada3e7ca128322f2e3e987fe47e9ba",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne7-mobile.mp4",
+    "bayt": 6150843,
+    "sha1": "8b21efdcb7b7a4dc1f6ff0e64cec7b07abf81e3c",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne7-poster.png",
+    "bayt": 4226620,
+    "sha1": "ab3cd45d0631b686459827280bd6bcb9f74727b7",
+    "kaynak_sha1": "329465058fada3e7ca128322f2e3e987fe47e9ba",
+    "web": {
+     "dosya": "sahne7-poster.webp",
+     "bayt": 215380,
+     "sha1": "2e9038fe95f6278288dbc8e26f102f0af7df13a9",
+     "kaynak_sha1": "ab3cd45d0631b686459827280bd6bcb9f74727b7",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne7-mobile-poster.png",
+    "bayt": 2583181,
+    "sha1": "81e35fb96325d68b9721305ec8d68a569775dcf5",
+    "kaynak_sha1": "8b21efdcb7b7a4dc1f6ff0e64cec7b07abf81e3c",
+    "web": {
+     "dosya": "sahne7-mobile-poster.webp",
+     "bayt": 124180,
+     "sha1": "27623b3ae786770f8389a6bc6711b034973e516e",
+     "kaynak_sha1": "81e35fb96325d68b9721305ec8d68a569775dcf5",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 65383
+  },
+  {
+   "n": 8,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne8.mp4",
+    "bayt": 4982029,
+    "sha1": "7ae38729f0e59f45445a808766a36b08606f8666",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne8-mobile.mp4",
+    "bayt": 4065992,
+    "sha1": "0f6b2b8d6c9ed00821fb97b2ae4f3bc1c748d1ef",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne8-poster.png",
+    "bayt": 4543383,
+    "sha1": "59f7a15e0e2da4deb58094eedc0603b6e9d59c7a",
+    "kaynak_sha1": "7ae38729f0e59f45445a808766a36b08606f8666",
+    "web": {
+     "dosya": "sahne8-poster.webp",
+     "bayt": 200756,
+     "sha1": "cf4f38fc7d65ac3b5ed411346fd63f7da68000f3",
+     "kaynak_sha1": "59f7a15e0e2da4deb58094eedc0603b6e9d59c7a",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne8-mobile-poster.png",
+    "bayt": 2792848,
+    "sha1": "578342df1490c4974d8a022404fc065a4c711098",
+    "kaynak_sha1": "0f6b2b8d6c9ed00821fb97b2ae4f3bc1c748d1ef",
+    "web": {
+     "dosya": "sahne8-mobile-poster.webp",
+     "bayt": 118562,
+     "sha1": "805948807fdca35eeb71f11336c463d2e1116ee9",
+     "kaynak_sha1": "578342df1490c4974d8a022404fc065a4c711098",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 49720
+  },
+  {
+   "n": 9,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne9.mp4",
+    "bayt": 7291047,
+    "sha1": "48fb88dbec79e903c5921555c3731e46164b8f25",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne9-mobile.mp4",
+    "bayt": 4472484,
+    "sha1": "93bbccfaef4abc2fac9a3734ad3ef2b954b8d07d",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne9-poster.png",
+    "bayt": 4146972,
+    "sha1": "d42154ea720a0101821ce3f576ae25d3d099165d",
+    "kaynak_sha1": "48fb88dbec79e903c5921555c3731e46164b8f25",
+    "web": {
+     "dosya": "sahne9-poster.webp",
+     "bayt": 180098,
+     "sha1": "e1e82ee931cfb9af48386a6bc3b1c9498dbf46c8",
+     "kaynak_sha1": "d42154ea720a0101821ce3f576ae25d3d099165d",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne9-mobile-poster.png",
+    "bayt": 2621267,
+    "sha1": "7178d52ef29a07336e069654797a70eb6dae017b",
+    "kaynak_sha1": "93bbccfaef4abc2fac9a3734ad3ef2b954b8d07d",
+    "web": {
+     "dosya": "sahne9-mobile-poster.webp",
+     "bayt": 109760,
+     "sha1": "dff2ee3da4beccdd27059a876ea76c6ebdbbf501",
+     "kaynak_sha1": "7178d52ef29a07336e069654797a70eb6dae017b",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 63370
+  },
+  {
+   "n": 10,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne10.mp4",
+    "bayt": 7420973,
+    "sha1": "61de73752cb002ca7fb26ad383855102b718f3b3",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne10-mobile.mp4",
+    "bayt": 4570895,
+    "sha1": "69206d170180e4eef0d82a9a12e9864e1d3d18b9",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne10-poster.png",
+    "bayt": 4039597,
+    "sha1": "a166d6b01487f1e19b7332cdf2823c6a9ebde2c6",
+    "kaynak_sha1": "61de73752cb002ca7fb26ad383855102b718f3b3",
+    "web": {
+     "dosya": "sahne10-poster.webp",
+     "bayt": 165690,
+     "sha1": "3a2def185ba4ac9fe985fd84d41998dc076fbf17",
+     "kaynak_sha1": "a166d6b01487f1e19b7332cdf2823c6a9ebde2c6",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne10-mobile-poster.png",
+    "bayt": 2559505,
+    "sha1": "45ee36eefdd086ddc2ba245d12d0e2eca3bd626e",
+    "kaynak_sha1": "69206d170180e4eef0d82a9a12e9864e1d3d18b9",
+    "web": {
+     "dosya": "sahne10-mobile-poster.webp",
+     "bayt": 100948,
+     "sha1": "2c5a4b34335edea386383796c82c6331c2b3af69",
+     "kaynak_sha1": "45ee36eefdd086ddc2ba245d12d0e2eca3bd626e",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 61464
+  },
+  {
+   "n": 11,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne11.mp4",
+    "bayt": 3953430,
+    "sha1": "fc71c7bac73823749ff38975c175c9bcd27ad2d4",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne11-mobile.mp4",
+    "bayt": 2897856,
+    "sha1": "2652a115afa9b9ee36a4ea7aaff2192e09e614cb",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne11-poster.png",
+    "bayt": 3504427,
+    "sha1": "4267793d95f15d4e19a4ddeefa1cbae7a931f80e",
+    "kaynak_sha1": "fc71c7bac73823749ff38975c175c9bcd27ad2d4",
+    "web": {
+     "dosya": "sahne11-poster.webp",
+     "bayt": 190894,
+     "sha1": "b15ed9ab8f908921bbdd41fdff23147c0d853bd0",
+     "kaynak_sha1": "4267793d95f15d4e19a4ddeefa1cbae7a931f80e",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne11-mobile-poster.png",
+    "bayt": 2095534,
+    "sha1": "6974d809901afcf6b01e43850d31fedd0845ad19",
+    "kaynak_sha1": "2652a115afa9b9ee36a4ea7aaff2192e09e614cb",
+    "web": {
+     "dosya": "sahne11-mobile-poster.webp",
+     "bayt": 113296,
+     "sha1": "ee3d502d5ebf5e2f0f70e6475a379b6bca1173c8",
+     "kaynak_sha1": "6974d809901afcf6b01e43850d31fedd0845ad19",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 41732
+  },
+  {
+   "n": 12,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne12.mp4",
+    "bayt": 4516617,
+    "sha1": "23f75fe9c53fb347e712703b20bebf7256b74bb8",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne12-mobile.mp4",
+    "bayt": 3060924,
+    "sha1": "c849db53305245be2181706cc14a95e617302842",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne12-poster.png",
+    "bayt": 2067174,
+    "sha1": "0cd35bd62a3442eb549478c557bf830bb5278ef4",
+    "kaynak_sha1": "23f75fe9c53fb347e712703b20bebf7256b74bb8",
+    "web": {
+     "dosya": "sahne12-poster.webp",
+     "bayt": 167076,
+     "sha1": "ceb457acb36b48347da439d4f021055c87a38829",
+     "kaynak_sha1": "0cd35bd62a3442eb549478c557bf830bb5278ef4",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne12-mobile-poster.png",
+    "bayt": 1298070,
+    "sha1": "ae3434e02e5150cd6ebbb19f6d20d208540edccc",
+    "kaynak_sha1": "c849db53305245be2181706cc14a95e617302842",
+    "web": {
+     "dosya": "sahne12-mobile-poster.webp",
+     "bayt": 99916,
+     "sha1": "5275cc70bd837d23119ce8049d7bb7417555b11d",
+     "kaynak_sha1": "ae3434e02e5150cd6ebbb19f6d20d208540edccc",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 39739
+  },
+  {
+   "n": 13,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne13.mp4",
+    "bayt": 4827990,
+    "sha1": "678f8d6ca69a3edc140378b18c03de748fdfa357",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne13-mobile.mp4",
+    "bayt": 3127239,
+    "sha1": "e704c09e96bb0d8ababd526fc2f54c95bf826ce4",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne13-poster.png",
+    "bayt": 1875575,
+    "sha1": "d5ba30950da9aa468d27c26416b6f5cdb0e04b74",
+    "kaynak_sha1": "678f8d6ca69a3edc140378b18c03de748fdfa357",
+    "web": {
+     "dosya": "sahne13-poster.webp",
+     "bayt": 86900,
+     "sha1": "f5d82763f89cf3a093313039fb1d6c7fff72f485",
+     "kaynak_sha1": "d5ba30950da9aa468d27c26416b6f5cdb0e04b74",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne13-mobile-poster.png",
+    "bayt": 1194762,
+    "sha1": "55f3e2536cb646cc41b419ee39d56a793ac5e9d0",
+    "kaynak_sha1": "e704c09e96bb0d8ababd526fc2f54c95bf826ce4",
+    "web": {
+     "dosya": "sahne13-mobile-poster.webp",
+     "bayt": 50792,
+     "sha1": "7712b4867ec9005753219b44709813d17c7999a9",
+     "kaynak_sha1": "55f3e2536cb646cc41b419ee39d56a793ac5e9d0",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 51051
+  },
+  {
+   "n": 14,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne14.mp4",
+    "bayt": 8331034,
+    "sha1": "75121906b71fb3ecd1c939b559718c2e9f9e1e28",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne14-mobile.mp4",
+    "bayt": 5329512,
+    "sha1": "502e42f7c477106c2afdf14ca28965ac0022ea46",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne14-poster.png",
+    "bayt": 4060574,
+    "sha1": "90f289a01e780c2bc33afeccfd025b230bad8ff0",
+    "kaynak_sha1": "75121906b71fb3ecd1c939b559718c2e9f9e1e28",
+    "web": {
+     "dosya": "sahne14-poster.webp",
+     "bayt": 167550,
+     "sha1": "09cff78ad8deea5079a120877961e33793337f5a",
+     "kaynak_sha1": "90f289a01e780c2bc33afeccfd025b230bad8ff0",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne14-mobile-poster.png",
+    "bayt": 2562783,
+    "sha1": "0e18936ed5e4cdc6084914c92d3afe95eea106c0",
+    "kaynak_sha1": "502e42f7c477106c2afdf14ca28965ac0022ea46",
+    "web": {
+     "dosya": "sahne14-mobile-poster.webp",
+     "bayt": 102598,
+     "sha1": "9dc2c94871aeff13d436a071d5199293550729ba",
+     "kaynak_sha1": "0e18936ed5e4cdc6084914c92d3afe95eea106c0",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 56153
+  },
+  {
+   "n": 15,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne15.mp4",
+    "bayt": 6912991,
+    "sha1": "7f478fdf7926c8b823b006ba0052588234443afb",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne15-mobile.mp4",
+    "bayt": 4800406,
+    "sha1": "c3411f47559b02692b4c1d94c77d4467cf588fac",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne15-poster.png",
+    "bayt": 3617458,
+    "sha1": "c1965c000c0a10b55c7900d4cc351f8ff0cef3d2",
+    "kaynak_sha1": "7f478fdf7926c8b823b006ba0052588234443afb",
+    "web": {
+     "dosya": "sahne15-poster.webp",
+     "bayt": 223568,
+     "sha1": "be47855b1742a0167e1532d20a5bbc5c529d47f9",
+     "kaynak_sha1": "c1965c000c0a10b55c7900d4cc351f8ff0cef3d2",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne15-mobile-poster.png",
+    "bayt": 2213542,
+    "sha1": "1c61d1c8388391dd2ed95f0cfd857eac44b80b81",
+    "kaynak_sha1": "c3411f47559b02692b4c1d94c77d4467cf588fac",
+    "web": {
+     "dosya": "sahne15-mobile-poster.webp",
+     "bayt": 133070,
+     "sha1": "7f2690d55559096198afbed7213c1dfe278caa9b",
+     "kaynak_sha1": "1c61d1c8388391dd2ed95f0cfd857eac44b80b81",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 55719
+  },
+  {
+   "n": 16,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne16.mp4",
+    "bayt": 12601730,
+    "sha1": "45be5b35bc214b2951a0a56d0c8168cd8b1df342",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne16-mobile.mp4",
+    "bayt": 8861508,
+    "sha1": "9462239ffdd66da4fe7816041bfe1afc15164370",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne16-poster.png",
+    "bayt": 3373875,
+    "sha1": "2b3911e6c907d0d24585dc91a33a5a2aedc3dd19",
+    "kaynak_sha1": "45be5b35bc214b2951a0a56d0c8168cd8b1df342",
+    "web": {
+     "dosya": "sahne16-poster.webp",
+     "bayt": 192672,
+     "sha1": "19daa26ed4fe0196d5ff9ba2b82e7de0236143c5",
+     "kaynak_sha1": "2b3911e6c907d0d24585dc91a33a5a2aedc3dd19",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne16-mobile-poster.png",
+    "bayt": 2118737,
+    "sha1": "62e9013fb59a910a5b81a7a96c4fbb62d6bb1c69",
+    "kaynak_sha1": "9462239ffdd66da4fe7816041bfe1afc15164370",
+    "web": {
+     "dosya": "sahne16-mobile-poster.webp",
+     "bayt": 116242,
+     "sha1": "5a5c34643848e380d98461326f94185472073a21",
+     "kaynak_sha1": "62e9013fb59a910a5b81a7a96c4fbb62d6bb1c69",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 74947
+  },
+  {
+   "n": 17,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne17.mp4",
+    "bayt": 7491896,
+    "sha1": "ef842fc5e6f0fc4072d0cd77d16e0cb8775843ee",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne17-mobile.mp4",
+    "bayt": 5186445,
+    "sha1": "c650e0f4b471b9de35edbde984e1a4909eafc125",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne17-poster.png",
+    "bayt": 4796614,
+    "sha1": "b0067ce9298b02ea84eabb0faa071e6dc1ae4a65",
+    "kaynak_sha1": "ef842fc5e6f0fc4072d0cd77d16e0cb8775843ee",
+    "web": {
+     "dosya": "sahne17-poster.webp",
+     "bayt": 266908,
+     "sha1": "78f0d6e6020f56aee6d16af45a85e29f87ce8bbd",
+     "kaynak_sha1": "b0067ce9298b02ea84eabb0faa071e6dc1ae4a65",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne17-mobile-poster.png",
+    "bayt": 2974389,
+    "sha1": "9910513ee9019a87e0361a59e60ba7e61d4ed9a0",
+    "kaynak_sha1": "c650e0f4b471b9de35edbde984e1a4909eafc125",
+    "web": {
+     "dosya": "sahne17-mobile-poster.webp",
+     "bayt": 157272,
+     "sha1": "ec23308fa7619335ebdc70ec9c2ac348c6a4e130",
+     "kaynak_sha1": "9910513ee9019a87e0361a59e60ba7e61d4ed9a0",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 44592
+  },
+  {
+   "n": 18,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne18.mp4",
+    "bayt": 6134633,
+    "sha1": "4b569508ed5a8c5400af7e1042d84f5274ea8ce7",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne18-mobile.mp4",
+    "bayt": 4134348,
+    "sha1": "a31e05aecbc5cecc4e15be7b6f270462b0ce6af5",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne18-poster.png",
+    "bayt": 4405494,
+    "sha1": "702c66b385b3823b8524957825f51a6d36d54984",
+    "kaynak_sha1": "4b569508ed5a8c5400af7e1042d84f5274ea8ce7",
+    "web": {
+     "dosya": "sahne18-poster.webp",
+     "bayt": 202260,
+     "sha1": "c432ccf5201c73097ab98b00c4675d202582df02",
+     "kaynak_sha1": "702c66b385b3823b8524957825f51a6d36d54984",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne18-mobile-poster.png",
+    "bayt": 2724963,
+    "sha1": "9cfe5c95c5338d625c1ddee69b506c953dbc77ff",
+    "kaynak_sha1": "a31e05aecbc5cecc4e15be7b6f270462b0ce6af5",
+    "web": {
+     "dosya": "sahne18-mobile-poster.webp",
+     "bayt": 122256,
+     "sha1": "f4808455e57a30b88087247d461bc4453e623a8f",
+     "kaynak_sha1": "9cfe5c95c5338d625c1ddee69b506c953dbc77ff",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 55986
+  },
+  {
+   "n": 19,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne19.mp4",
+    "bayt": 8477216,
+    "sha1": "78dd0c51c22e525cbb15f6c9d1d5802e604826e6",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne19-mobile.mp4",
+    "bayt": 5361786,
+    "sha1": "255b1cb772e0b9b0de78ac0b09c9b36dce675283",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne19-poster.png",
+    "bayt": 4069109,
+    "sha1": "ce4c666b262dec95800182e99914d013211a6d00",
+    "kaynak_sha1": "78dd0c51c22e525cbb15f6c9d1d5802e604826e6",
+    "web": {
+     "dosya": "sahne19-poster.webp",
+     "bayt": 165542,
+     "sha1": "16acaea201cb3176aa20c1952c637dd3b07006e7",
+     "kaynak_sha1": "ce4c666b262dec95800182e99914d013211a6d00",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne19-mobile-poster.png",
+    "bayt": 2573822,
+    "sha1": "5737ad49ac4b49e3732aa3eb3e1f8cb0f29c4c73",
+    "kaynak_sha1": "255b1cb772e0b9b0de78ac0b09c9b36dce675283",
+    "web": {
+     "dosya": "sahne19-mobile-poster.webp",
+     "bayt": 101654,
+     "sha1": "6b95c112a17c15cb438f75207638d4c7355f3d19",
+     "kaynak_sha1": "5737ad49ac4b49e3732aa3eb3e1f8cb0f29c4c73",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 56240
+  },
+  {
+   "n": 20,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne20.mp4",
+    "bayt": 5146048,
+    "sha1": "3cd8144fc55f56ebad06fcd59571d6c5453c1abe",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne20-mobile.mp4",
+    "bayt": 3357431,
+    "sha1": "08fae8f6a03165ee86894b159911f59fde164e6f",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne20-poster.png",
+    "bayt": 4388510,
+    "sha1": "aceb8fd781ab607501567b23031abc76a98b1dec",
+    "kaynak_sha1": "3cd8144fc55f56ebad06fcd59571d6c5453c1abe",
+    "web": {
+     "dosya": "sahne20-poster.webp",
+     "bayt": 243638,
+     "sha1": "16c582ecbebfc5b99a13f5244499d8b4db77b755",
+     "kaynak_sha1": "aceb8fd781ab607501567b23031abc76a98b1dec",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne20-mobile-poster.png",
+    "bayt": 2674018,
+    "sha1": "a1b17427545fccddd9c8e8679f0388112864ae13",
+    "kaynak_sha1": "08fae8f6a03165ee86894b159911f59fde164e6f",
+    "web": {
+     "dosya": "sahne20-mobile-poster.webp",
+     "bayt": 148770,
+     "sha1": "bb24948a876d0ce1fc44587843d741b24e699175",
+     "kaynak_sha1": "a1b17427545fccddd9c8e8679f0388112864ae13",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 47271
+  },
+  {
+   "n": 21,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne21.mp4",
+    "bayt": 7261957,
+    "sha1": "94c4f3d58ec846471ec99046200c0f891e3d36bc",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne21-mobile.mp4",
+    "bayt": 4548784,
+    "sha1": "ade7172355078d68a53959066a67ed8d98b53539",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne21-poster.png",
+    "bayt": 2896992,
+    "sha1": "c79e666cc410135d635644529e9d93e48bfd6603",
+    "kaynak_sha1": "94c4f3d58ec846471ec99046200c0f891e3d36bc",
+    "web": {
+     "dosya": "sahne21-poster.webp",
+     "bayt": 162848,
+     "sha1": "5468575128d7b6468abc1b9b536dbef0daa3b22a",
+     "kaynak_sha1": "c79e666cc410135d635644529e9d93e48bfd6603",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne21-mobile-poster.png",
+    "bayt": 1777304,
+    "sha1": "a30c2739b445b7a5a736330667b53331c927e290",
+    "kaynak_sha1": "ade7172355078d68a53959066a67ed8d98b53539",
+    "web": {
+     "dosya": "sahne21-mobile-poster.webp",
+     "bayt": 94988,
+     "sha1": "c76fd9b4e119fcdbd0759491fd54f105f4649098",
+     "kaynak_sha1": "a30c2739b445b7a5a736330667b53331c927e290",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 64775
+  },
+  {
+   "n": 22,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne22.mp4",
+    "bayt": 2526781,
+    "sha1": "ccc3b1ddc00629af52fafb04cf6a8982e67c4d27",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne22-mobile.mp4",
+    "bayt": 1657735,
+    "sha1": "1c050a88143fc4a5b9fc9f98311e276a0750faa6",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne22-poster.png",
+    "bayt": 875366,
+    "sha1": "014d686ebf36fcc14d4cfdb3fdc89a9516c88cbc",
+    "kaynak_sha1": "ccc3b1ddc00629af52fafb04cf6a8982e67c4d27",
+    "web": {
+     "dosya": "sahne22-poster.webp",
+     "bayt": 54536,
+     "sha1": "7b67679292db2e51e5068debfdae3da5a9c25adb",
+     "kaynak_sha1": "014d686ebf36fcc14d4cfdb3fdc89a9516c88cbc",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne22-mobile-poster.png",
+    "bayt": 558897,
+    "sha1": "67e56c1055116315a7fe8550a68148e6022a7c15",
+    "kaynak_sha1": "1c050a88143fc4a5b9fc9f98311e276a0750faa6",
+    "web": {
+     "dosya": "sahne22-mobile-poster.webp",
+     "bayt": 32746,
+     "sha1": "0f2bf8c0dbc3418fd62e83e050162c9542b94fa8",
+     "kaynak_sha1": "67e56c1055116315a7fe8550a68148e6022a7c15",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 52053
+  },
+  {
+   "n": 23,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne23.mp4",
+    "bayt": 4366724,
+    "sha1": "d9113645053d1290c6524d1ada6bc036bd6e489c",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne23-mobile.mp4",
+    "bayt": 2792697,
+    "sha1": "fa40981494f6ee9d5b27b6598fdd157a240a5707",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne23-poster.png",
+    "bayt": 987101,
+    "sha1": "65bfab390f35d3f23760beac10153dd0e328dca9",
+    "kaynak_sha1": "d9113645053d1290c6524d1ada6bc036bd6e489c",
+    "web": {
+     "dosya": "sahne23-poster.webp",
+     "bayt": 58326,
+     "sha1": "428b40c3f983a9ea2994cf102d2d96a3c3407802",
+     "kaynak_sha1": "65bfab390f35d3f23760beac10153dd0e328dca9",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne23-mobile-poster.png",
+    "bayt": 582041,
+    "sha1": "af7bb8b0788af5c21e713cb513c7c8465c1e62c6",
+    "kaynak_sha1": "fa40981494f6ee9d5b27b6598fdd157a240a5707",
+    "web": {
+     "dosya": "sahne23-mobile-poster.webp",
+     "bayt": 35202,
+     "sha1": "a61ea957d711d526b5e44478812dacd11ad41d6d",
+     "kaynak_sha1": "af7bb8b0788af5c21e713cb513c7c8465c1e62c6",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 67780
+  },
+  {
+   "n": 24,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne24.mp4",
+    "bayt": 6475072,
+    "sha1": "28fb402049daea36dc8b1ea4fa9ddf19e2160f3d",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne24-mobile.mp4",
+    "bayt": 4336677,
+    "sha1": "18c11a587e1919a845e8a76a65227eff07643c0e",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne24-poster.png",
+    "bayt": 1764005,
+    "sha1": "4c9bea8925811239edc3b45d7279760b401fdb08",
+    "kaynak_sha1": "28fb402049daea36dc8b1ea4fa9ddf19e2160f3d",
+    "web": {
+     "dosya": "sahne24-poster.webp",
+     "bayt": 78588,
+     "sha1": "f80b0e40ce25c9fea79f54a131903ed6ebeb889c",
+     "kaynak_sha1": "4c9bea8925811239edc3b45d7279760b401fdb08",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne24-mobile-poster.png",
+    "bayt": 1109387,
+    "sha1": "c558b9a9d9af150fb9b6bd61c46c2e95ed2d1f8a",
+    "kaynak_sha1": "18c11a587e1919a845e8a76a65227eff07643c0e",
+    "web": {
+     "dosya": "sahne24-mobile-poster.webp",
+     "bayt": 47196,
+     "sha1": "b5dad1c36684e89b9dfc0095b68df88d4f593b23",
+     "kaynak_sha1": "c558b9a9d9af150fb9b6bd61c46c2e95ed2d1f8a",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 74046
+  },
+  {
+   "n": 25,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne25.mp4",
+    "bayt": 7580956,
+    "sha1": "660d5d9ed078d884ee3877c55fe796440157f4a9",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne25-mobile.mp4",
+    "bayt": 4847757,
+    "sha1": "cdd263b3087153a697c13a49f070686e7fb95629",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne25-poster.png",
+    "bayt": 4721792,
+    "sha1": "47d1b2a4133462c4ade98f3b7067c64bfebda3fa",
+    "kaynak_sha1": "660d5d9ed078d884ee3877c55fe796440157f4a9",
+    "web": {
+     "dosya": "sahne25-poster.webp",
+     "bayt": 257184,
+     "sha1": "7c193bb56c8ad4662d0422e6cacd2c17652d5427",
+     "kaynak_sha1": "47d1b2a4133462c4ade98f3b7067c64bfebda3fa",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne25-mobile-poster.png",
+    "bayt": 2767513,
+    "sha1": "8bcb05068b415f6f5f5616079ea3ca37bbe65ab8",
+    "kaynak_sha1": "cdd263b3087153a697c13a49f070686e7fb95629",
+    "web": {
+     "dosya": "sahne25-mobile-poster.webp",
+     "bayt": 132204,
+     "sha1": "b97a32a8c9634eb5453e2e2e241680da20783591",
+     "kaynak_sha1": "8bcb05068b415f6f5f5616079ea3ca37bbe65ab8",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 59759
+  },
+  {
+   "n": 26,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne26.mp4",
+    "bayt": 14624178,
+    "sha1": "30cffb6d5dddf867ea857111f319c40360e0e31e",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne26-mobile.mp4",
+    "bayt": 10550606,
+    "sha1": "e6fee523c69a9aa2d952462675da62bf293a4ace",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne26-poster.png",
+    "bayt": 7839856,
+    "sha1": "c7e6f1cfea243ddbb44fbe0e0e44cdc1db4d09e8",
+    "kaynak_sha1": "30cffb6d5dddf867ea857111f319c40360e0e31e",
+    "web": {
+     "dosya": "sahne26-poster.webp",
+     "bayt": 547708,
+     "sha1": "b92fc9374512646742d04e0c38b2e6947c143173",
+     "kaynak_sha1": "c7e6f1cfea243ddbb44fbe0e0e44cdc1db4d09e8",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne26-mobile-poster.png",
+    "bayt": 4604063,
+    "sha1": "9d9ef09a1936d5c00d11b44a59bab45ca0aa655c",
+    "kaynak_sha1": "e6fee523c69a9aa2d952462675da62bf293a4ace",
+    "web": {
+     "dosya": "sahne26-mobile-poster.webp",
+     "bayt": 297698,
+     "sha1": "05f489b51e99b9ae9c553b8f188ed3ed665655c9",
+     "kaynak_sha1": "9d9ef09a1936d5c00d11b44a59bab45ca0aa655c",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 116063
+  },
+  {
+   "n": 27,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne27.mp4",
+    "bayt": 15898913,
+    "sha1": "574057a73979127baa62f4f517102f97ac0dc8b3",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne27-mobile.mp4",
+    "bayt": 10736222,
+    "sha1": "840cf195401e35561f114603ceddb54f044f561e",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne27-poster.png",
+    "bayt": 5620448,
+    "sha1": "bf429484eaba5cdce9f62f5665c0471feaa893bf",
+    "kaynak_sha1": "574057a73979127baa62f4f517102f97ac0dc8b3",
+    "web": {
+     "dosya": "sahne27-poster.webp",
+     "bayt": 265068,
+     "sha1": "7ae77725526416a35c8aa7579f419857702dfbb1",
+     "kaynak_sha1": "bf429484eaba5cdce9f62f5665c0471feaa893bf",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne27-mobile-poster.png",
+    "bayt": 3448838,
+    "sha1": "80a59fcc3c27ec03b0df03a048f38c4c59411677",
+    "kaynak_sha1": "840cf195401e35561f114603ceddb54f044f561e",
+    "web": {
+     "dosya": "sahne27-mobile-poster.webp",
+     "bayt": 161372,
+     "sha1": "170610c9655bf1540b84171638db1e0ccd9c930f",
+     "kaynak_sha1": "80a59fcc3c27ec03b0df03a048f38c4c59411677",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 110695
+  },
+  {
+   "n": 28,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne28.mp4",
+    "bayt": 10847746,
+    "sha1": "1a4f3df1864cc31eaf482a03fed1008a34358fe9",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne28-mobile.mp4",
+    "bayt": 7843316,
+    "sha1": "02a924eae3220646887b2449f530bf4d6cac27d8",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne28-poster.png",
+    "bayt": 6118117,
+    "sha1": "0b26c9b77745caa342b3bcd9f03c88e290beffe3",
+    "kaynak_sha1": "1a4f3df1864cc31eaf482a03fed1008a34358fe9",
+    "web": {
+     "dosya": "sahne28-poster.webp",
+     "bayt": 417678,
+     "sha1": "90f61de4ea2a2ad85c0def4210144a3dc579b1af",
+     "kaynak_sha1": "0b26c9b77745caa342b3bcd9f03c88e290beffe3",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne28-mobile-poster.png",
+    "bayt": 3733816,
+    "sha1": "11af66d8319d3bbc7dae51977cc6d129b6ca9b33",
+    "kaynak_sha1": "02a924eae3220646887b2449f530bf4d6cac27d8",
+    "web": {
+     "dosya": "sahne28-mobile-poster.webp",
+     "bayt": 248882,
+     "sha1": "164704c984c89b236c0b9efa3afe926bf4e5f33f",
+     "kaynak_sha1": "11af66d8319d3bbc7dae51977cc6d129b6ca9b33",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 74891
+  },
+  {
+   "n": 29,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne29.mp4",
+    "bayt": 13572793,
+    "sha1": "438f4814f6a38feefa0c1f779484053d7cc08d84",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne29-mobile.mp4",
+    "bayt": 9077703,
+    "sha1": "11b1c91283e1b40c1bdc6a956e99cde65a7ef6ce",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne29-poster.png",
+    "bayt": 6267453,
+    "sha1": "b644be183d5590f05a4cf82b9c5783bce48acf63",
+    "kaynak_sha1": "438f4814f6a38feefa0c1f779484053d7cc08d84",
+    "web": {
+     "dosya": "sahne29-poster.webp",
+     "bayt": 377228,
+     "sha1": "d2b3d2edee350c04de8c6ac4c2bfeaa3f27d58aa",
+     "kaynak_sha1": "b644be183d5590f05a4cf82b9c5783bce48acf63",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne29-mobile-poster.png",
+    "bayt": 3853496,
+    "sha1": "4ede4d27c3d04156b7b86f3b6e96b111aa164766",
+    "kaynak_sha1": "11b1c91283e1b40c1bdc6a956e99cde65a7ef6ce",
+    "web": {
+     "dosya": "sahne29-mobile-poster.webp",
+     "bayt": 228398,
+     "sha1": "08c4264be3e8320d068f66ef6f1f1aa93110bbd5",
+     "kaynak_sha1": "4ede4d27c3d04156b7b86f3b6e96b111aa164766",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 114095
+  },
+  {
+   "n": 30,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne30.mp4",
+    "bayt": 6569171,
+    "sha1": "1536ef4131fe601ba5e7a7908fb3d9b0f73263f2",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne30-mobile.mp4",
+    "bayt": 4876162,
+    "sha1": "5411c46ce1b8599ae5fdb29d0408d4e01bd84bce",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne30-poster.png",
+    "bayt": 3013694,
+    "sha1": "44e401ee2cb8cab607454e9594812db62e7da15f",
+    "kaynak_sha1": "1536ef4131fe601ba5e7a7908fb3d9b0f73263f2",
+    "web": {
+     "dosya": "sahne30-poster.webp",
+     "bayt": 152710,
+     "sha1": "4a527e81b847f861d868ce1334641fe4f423245c",
+     "kaynak_sha1": "44e401ee2cb8cab607454e9594812db62e7da15f",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne30-mobile-poster.png",
+    "bayt": 1940413,
+    "sha1": "25593baf1fa13784cc15bd38bf703aa9a22df105",
+    "kaynak_sha1": "5411c46ce1b8599ae5fdb29d0408d4e01bd84bce",
+    "web": {
+     "dosya": "sahne30-mobile-poster.webp",
+     "bayt": 88588,
+     "sha1": "b57c88b321d3729f30c1fd0b0968b1159d5ddb3d",
+     "kaynak_sha1": "25593baf1fa13784cc15bd38bf703aa9a22df105",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 112063
+  },
+  {
+   "n": 31,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne31.mp4",
+    "bayt": 8990724,
+    "sha1": "ed477697c747a167880d7c76ef47d2c842f13260",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne31-mobile.mp4",
+    "bayt": 6047261,
+    "sha1": "cd88655b30fbcf8829ad0825dfa4612f69febe91",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne31-poster.png",
+    "bayt": 2457771,
+    "sha1": "779896700377157260d6b3b913d084a6218f6bcb",
+    "kaynak_sha1": "ed477697c747a167880d7c76ef47d2c842f13260",
+    "web": {
+     "dosya": "sahne31-poster.webp",
+     "bayt": 120374,
+     "sha1": "8165addbffd5a659b122f3479a896fa4c0af1206",
+     "kaynak_sha1": "779896700377157260d6b3b913d084a6218f6bcb",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne31-mobile-poster.png",
+    "bayt": 1537001,
+    "sha1": "ed13fa25baac410b83e10ede2b9133723e5b2fc1",
+    "kaynak_sha1": "cd88655b30fbcf8829ad0825dfa4612f69febe91",
+    "web": {
+     "dosya": "sahne31-mobile-poster.webp",
+     "bayt": 68802,
+     "sha1": "e42dac10b2060230f993e93fc3b66aa64a9ef4d5",
+     "kaynak_sha1": "ed13fa25baac410b83e10ede2b9133723e5b2fc1",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 105454
+  },
+  {
+   "n": 32,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne32.mp4",
+    "bayt": 15956587,
+    "sha1": "1e79321fcb7770781ee4c63abffd7b3930d6ad95",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne32-mobile.mp4",
+    "bayt": 10290616,
+    "sha1": "934be00fbea11d6890d157b97dc53ca328d7cf78",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne32-poster.png",
+    "bayt": 3659410,
+    "sha1": "1800dda2b060bcfe693faa951727caba2367d68e",
+    "kaynak_sha1": "1e79321fcb7770781ee4c63abffd7b3930d6ad95",
+    "web": {
+     "dosya": "sahne32-poster.webp",
+     "bayt": 214796,
+     "sha1": "e219992f49e8b414f081e7382abd220dfc37f7f6",
+     "kaynak_sha1": "1800dda2b060bcfe693faa951727caba2367d68e",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne32-mobile-poster.png",
+    "bayt": 2195946,
+    "sha1": "589a04a5728ab1276da6d5c992d80dd34540b9d8",
+    "kaynak_sha1": "934be00fbea11d6890d157b97dc53ca328d7cf78",
+    "web": {
+     "dosya": "sahne32-mobile-poster.webp",
+     "bayt": 119126,
+     "sha1": "79757171fea87fc91b8cc2548be350127bfcb557",
+     "kaynak_sha1": "589a04a5728ab1276da6d5c992d80dd34540b9d8",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 100996
+  },
+  {
+   "n": 33,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne33.mp4",
+    "bayt": 16836111,
+    "sha1": "d2a60526eaad634685c7b55046bfafc9ec85cf1d",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne33-mobile.mp4",
+    "bayt": 12623995,
+    "sha1": "28254b5bfdb03a80084a3779b2e7257ca8256780",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne33-poster.png",
+    "bayt": 4738280,
+    "sha1": "c519f37d2fa69499ab8cf61d63fdef33ded3190e",
+    "kaynak_sha1": "d2a60526eaad634685c7b55046bfafc9ec85cf1d",
+    "web": {
+     "dosya": "sahne33-poster.webp",
+     "bayt": 393976,
+     "sha1": "f2600a8031f4038d3b4ce4a7e5a1e0fa1aad8e86",
+     "kaynak_sha1": "c519f37d2fa69499ab8cf61d63fdef33ded3190e",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne33-mobile-poster.png",
+    "bayt": 2858842,
+    "sha1": "0e46ffef7d03694d13955baa851f3ddfc60db5ab",
+    "kaynak_sha1": "28254b5bfdb03a80084a3779b2e7257ca8256780",
+    "web": {
+     "dosya": "sahne33-mobile-poster.webp",
+     "bayt": 219110,
+     "sha1": "fa0b77abc5f3893464caeb44cd42025725a34a62",
+     "kaynak_sha1": "0e46ffef7d03694d13955baa851f3ddfc60db5ab",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 119009
+  },
+  {
+   "n": 34,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne34.mp4",
+    "bayt": 25977265,
+    "sha1": "2cfa27ff1a7e0f60c8b6e42dce6ce9dca79fbd02",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne34-mobile.mp4",
+    "bayt": 15922369,
+    "sha1": "5415739f91fbd7a842215b088baafeb58fb30b65",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne34-poster.png",
+    "bayt": 6410858,
+    "sha1": "8c29cacd3be4996a4b380f581131bafadcc80e65",
+    "kaynak_sha1": "2cfa27ff1a7e0f60c8b6e42dce6ce9dca79fbd02",
+    "web": {
+     "dosya": "sahne34-poster.webp",
+     "bayt": 471012,
+     "sha1": "0196d516efb13a1f63c44cf96b2b532dcb3a6f59",
+     "kaynak_sha1": "8c29cacd3be4996a4b380f581131bafadcc80e65",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne34-mobile-poster.png",
+    "bayt": 3858966,
+    "sha1": "9fd2c051a72242bb38df48f036dc14e579a7d6e5",
+    "kaynak_sha1": "5415739f91fbd7a842215b088baafeb58fb30b65",
+    "web": {
+     "dosya": "sahne34-mobile-poster.webp",
+     "bayt": 275424,
+     "sha1": "57952aaef09cd9c191cf60d977ae18470fd97eb0",
+     "kaynak_sha1": "9fd2c051a72242bb38df48f036dc14e579a7d6e5",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 154031
+  },
+  {
+   "n": 35,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne35.mp4",
+    "bayt": 24625402,
+    "sha1": "8fc00002c4fe55123a638254e3abe23534a9941d",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne35-mobile.mp4",
+    "bayt": 15246364,
+    "sha1": "2782a83d4b80abc62ab7de88a708613a110e5b16",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne35-poster.png",
+    "bayt": 3771628,
+    "sha1": "d2b126b5b331c90b1a4268f125d449617213c703",
+    "kaynak_sha1": "8fc00002c4fe55123a638254e3abe23534a9941d",
+    "web": {
+     "dosya": "sahne35-poster.webp",
+     "bayt": 336270,
+     "sha1": "4dd5e64c4e65719410ea9105e1e058f0d13502a0",
+     "kaynak_sha1": "d2b126b5b331c90b1a4268f125d449617213c703",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne35-mobile-poster.png",
+    "bayt": 2240189,
+    "sha1": "9c4033a749e5635dcb7bad6390c5e7c31acb4f6b",
+    "kaynak_sha1": "2782a83d4b80abc62ab7de88a708613a110e5b16",
+    "web": {
+     "dosya": "sahne35-mobile-poster.webp",
+     "bayt": 198206,
+     "sha1": "9a049e2109f48746c8237756e13d345682a58f29",
+     "kaynak_sha1": "9c4033a749e5635dcb7bad6390c5e7c31acb4f6b",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 144086
+  },
+  {
+   "n": 36,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne36.mp4",
+    "bayt": 10622100,
+    "sha1": "093c8b68fae15f07afc05ab187c0f4d9fe15d04c",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne36-mobile.mp4",
+    "bayt": 6955861,
+    "sha1": "1206b56017e94850657def9159c66d32be84066c",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne36-poster.png",
+    "bayt": 5277567,
+    "sha1": "c5d1ed572f3417ed76892043542de618d1a45a8e",
+    "kaynak_sha1": "093c8b68fae15f07afc05ab187c0f4d9fe15d04c",
+    "web": {
+     "dosya": "sahne36-poster.webp",
+     "bayt": 404268,
+     "sha1": "a75f89c45f4924ae439727cde099026635f4b1f8",
+     "kaynak_sha1": "c5d1ed572f3417ed76892043542de618d1a45a8e",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne36-mobile-poster.png",
+    "bayt": 3180953,
+    "sha1": "056b77938ca10434ee05d788246cb118e60a993c",
+    "kaynak_sha1": "1206b56017e94850657def9159c66d32be84066c",
+    "web": {
+     "dosya": "sahne36-mobile-poster.webp",
+     "bayt": 240298,
+     "sha1": "ceaf69c164c727caee7c411b3dee85816f7ed81d",
+     "kaynak_sha1": "056b77938ca10434ee05d788246cb118e60a993c",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 98816
+  },
+  {
+   "n": 37,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne37.mp4",
+    "bayt": 9190822,
+    "sha1": "407492fccad1036271736c915e12a378a48b7a00",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne37-mobile.mp4",
+    "bayt": 5780673,
+    "sha1": "6b564112b9b31d9cc4f6ceff7ecac8c603ace50e",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne37-poster.png",
+    "bayt": 3637026,
+    "sha1": "2231867e226ef3a3024e139dbfd59cc68a9637fe",
+    "kaynak_sha1": "407492fccad1036271736c915e12a378a48b7a00",
+    "web": {
+     "dosya": "sahne37-poster.webp",
+     "bayt": 177874,
+     "sha1": "d1e964da86362a60f08e7ec977a6c8a14edfbf09",
+     "kaynak_sha1": "2231867e226ef3a3024e139dbfd59cc68a9637fe",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne37-mobile-poster.png",
+    "bayt": 2238858,
+    "sha1": "1485943f8781d03909c80a10ceca1bd8e5398886",
+    "kaynak_sha1": "6b564112b9b31d9cc4f6ceff7ecac8c603ace50e",
+    "web": {
+     "dosya": "sahne37-mobile-poster.webp",
+     "bayt": 101784,
+     "sha1": "98e391c864eb7ed2b755f18bd0d836cac64ccc4a",
+     "kaynak_sha1": "1485943f8781d03909c80a10ceca1bd8e5398886",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 86754
+  },
+  {
+   "n": 38,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne38.mp4",
+    "bayt": 6744441,
+    "sha1": "15da51cdf41346a992a528227e383298e1054e7e",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne38-mobile.mp4",
+    "bayt": 4268246,
+    "sha1": "5133dd120a2d15650c56872a1825483cdbb9a475",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne38-poster.png",
+    "bayt": 4056488,
+    "sha1": "d632d94ff0d8fa9f4b1178d406541b654fa51658",
+    "kaynak_sha1": "15da51cdf41346a992a528227e383298e1054e7e",
+    "web": {
+     "dosya": "sahne38-poster.webp",
+     "bayt": 159644,
+     "sha1": "0a28983ce4558605cb4b7e61eb01482d19d7932f",
+     "kaynak_sha1": "d632d94ff0d8fa9f4b1178d406541b654fa51658",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne38-mobile-poster.png",
+    "bayt": 2562772,
+    "sha1": "c838032660eb5eb5b8508a50899a2f02f48468e9",
+    "kaynak_sha1": "5133dd120a2d15650c56872a1825483cdbb9a475",
+    "web": {
+     "dosya": "sahne38-mobile-poster.webp",
+     "bayt": 97838,
+     "sha1": "b46f4a366c516144827a983a1eaf69329b152008",
+     "kaynak_sha1": "c838032660eb5eb5b8508a50899a2f02f48468e9",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 60674
+  },
+  {
+   "n": 39,
+   "kadraj": null,
+   "acilis": null,
+   "masaustu": {
+    "dosya": "sahne39.mp4",
+    "bayt": 4279242,
+    "sha1": "4c9b6305a8953d511c37f4be3be565ec8d213930",
+    "gen": 2560,
+    "yuk": 1440
+   },
+   "mobil": {
+    "dosya": "sahne39-mobile.mp4",
+    "bayt": 2803442,
+    "sha1": "7dc414ac484d1dac890dd20558f3e80fc9bbbc31",
+    "gen": 1920,
+    "yuk": 1080
+   },
+   "poster": {
+    "dosya": "sahne39-poster.png",
+    "bayt": 2551170,
+    "sha1": "d73d94b1854159f0e60a8bd7957e033c4ddbbcde",
+    "kaynak_sha1": "4c9b6305a8953d511c37f4be3be565ec8d213930",
+    "web": {
+     "dosya": "sahne39-poster.webp",
+     "bayt": 127622,
+     "sha1": "f731e2b5535c49fb387122b295407ad5de5016c2",
+     "kaynak_sha1": "d73d94b1854159f0e60a8bd7957e033c4ddbbcde",
+     "kalite": 82
+    }
+   },
+   "mobil_poster": {
+    "dosya": "sahne39-mobile-poster.png",
+    "bayt": 1538289,
+    "sha1": "1e483b11bc1266c607d8cdd2c78f9646c3c55c4a",
+    "kaynak_sha1": "7dc414ac484d1dac890dd20558f3e80fc9bbbc31",
+    "web": {
+     "dosya": "sahne39-mobile-poster.webp",
+     "bayt": 76558,
+     "sha1": "5dbb8b51e5aedfbe34d9038c4863a735b9a2a2c1",
+     "kaynak_sha1": "1e483b11bc1266c607d8cdd2c78f9646c3c55c4a",
+     "kalite": 78
+    }
+   },
+   "sure_ms": 28907
+  }
+ ]
+}

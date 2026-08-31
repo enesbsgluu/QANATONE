@@ -234,17 +234,16 @@ export function baslat(bolum: HTMLElement): () => void {
   /* Hat secimi: H13/H6 ile ayni esik (900 px). Kaynak farki yalniz CRF/GOP
      (mobil betik 720p tavanini zaten 716 satirla asmiyor). */
   const mobil = matchMedia('(max-width: 900px)').matches;
-  /* KODEK: TEK HAT H.264 (Enes, 28 Agu). H.265 KAPANDI: Chromium'un HEVC
-     yolu (Chrome + Brave, olculdu 5. ve 6. tur) hedef kare anahtar kareden
-     uzaksa sonraki anahtar kareye yapisiyor; GOP 8'de %25, GOP 4'te %75
-     atlama. canPlayType 'probably' bunu gormuyordu (yanlis yesil). Secim
-     sabit; ?kodek=h265 yalniz OLCUM icin zorlar, urun yolunda kullanilmaz. */
-  const KODEK = (() => {
-    const z = new URLSearchParams(location.search).get('kodek');
-    return z === 'h265' ? 'h265' : 'h264';
-  })();
-  const kaynakYolu = (el: HTMLElement, h264: string, h265: string) =>
-    KODEK === 'h265' && el.dataset[h265] ? el.dataset[h265]! : el.dataset[h264]!;
+  /* KODEK: TEK HAT H.264 — OLCUM DALI DA SOKULDU (31 Agu 2026, KESIT 2. adim).
+     HEVC 28 Agu'da urun yolundan cikmisti ama URL ile zorlanabilen bir
+     olcum dali ve DOM'daki ikinci kaynak nitelikleri kodda duruyordu.
+     Artik ikisi de yok. Gerekce olculdu: Chromium'un HEVC yolu hedef kare
+     anahtar kareden uzaksa SONRAKI anahtar kareye yapisiyor
+     (film/seek-3klip.json: H.264 36/36 kare dogru, HEVC 27/36 ve dokuz
+     karede yapisma). `canPlayType` 'probably' bunu gormuyordu — yanlis
+     yesilin ders kaydi orada. Tasiyacak ikinci hat kalmadigi icin kaynak
+     yolu artik duz `dataset` okumasi. */
+  const KODEK = 'h264';
   /* yay katsayilari: URL > DOM > ayar.mjs yedegi. sonum 0 = kritik. */
   const SERT = oku('sert', 5000, AYAR.sert);
   const SONUM = oku('sonum', 1000, AYAR.sonum);
@@ -267,11 +266,11 @@ export function baslat(bolum: HTMLElement): () => void {
   const S: Sahne[] = [...bolum.querySelectorAll<HTMLElement>('.fl-sahne')].map((el) => ({
     n: Number(el.dataset.n), el, video: el.querySelector('video')!,
     sure: Number(el.dataset.sure), kare: Number(el.dataset.kare), bas: Number(el.dataset.bas),
-    url: kok + '/' + (mobil ? kaynakYolu(el, 'mclip', 'mclip265') : kaynakYolu(el, 'clip', 'clip265')),
+    url: kok + '/' + (mobil ? el.dataset.mclip! : el.dataset.clip!),
     poster: kok + '/' + (mobil ? el.dataset.mposter : el.dataset.poster),
     durum: 'yok', blob: null, bayt: 0, inmeMs: 0,
     aVideo: el.querySelector<HTMLVideoElement>('.fl-acilis'),
-    aUrl: (() => { const a = el.querySelector<HTMLElement>('.fl-acilis'); return a ? kok + '/' + (mobil ? kaynakYolu(a, 'macilis', 'macilis265') : kaynakYolu(a, 'acilis', 'acilis265')) : null; })(),
+    aUrl: (() => { const a = el.querySelector<HTMLElement>('.fl-acilis'); return a ? kok + '/' + (mobil ? a.dataset.macilis! : a.dataset.acilis!) : null; })(),
     aSn: Number(el.querySelector<HTMLElement>('.fl-acilis')?.dataset.asn || 0),
     aBlob: null, aDurum: 'yok', takas: false,
   }));

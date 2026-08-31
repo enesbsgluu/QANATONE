@@ -1,6 +1,6 @@
 {
- "_": "yeni/film/olc-zincir.cjs — 39 klip zincir turu, GERCEK girdi (Input.synthesizeScrollGesture). Sayfa ici scrollTo YOK.",
- "olcum": "2026-08-31T12:47:49.457Z",
+ "_": "yeni/film/olc-zincir.cjs — kesit zincir turu (durak sayisi kunyeden), GERCEK girdi (Input.synthesizeScrollGesture). Sayfa ici scrollTo YOK.",
+ "olcum": "2026-08-31T14:58:20.793Z",
  "tarayici": "brave Chrome/152.0.7977.64",
  "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
  "ray": {
@@ -16,28 +16,29 @@
  },
  "tur_alt_siniri_sn": 171.1,
  "tur_ileri": {
-  "sure_sn": 172.2,
+  "sure_sn": 172.6,
   "jest_hizi_px_sn": 776,
   "gorulen_sahne_sayisi": 39,
   "eksik_sahneler": [],
   "sahne_sirasi_bozulmasi": [],
   "sirali_mi": true,
   "kare_p50": 8.3,
-  "kare_p95": 14.7,
-  "kare_sayisi": 19298,
-  "ort_fps": 112.2,
+  "kare_p95": 11.2,
+  "kare_sayisi": 20129,
+  "ort_fps": 116.8,
   "en_yuksek_gosterilen_hiz": 1.5,
   "son_T": 256.637,
   "agdan_inen": {
    "klip": 40,
    "bayt": 250140611,
    "mib": 238.6
-  }
+  },
+  "bellek_tepe_mib": 68.4
  },
  "geri": {
   "T_once": 256.637,
-  "T_sonra": 242.119,
-  "T_farki": -14.518,
+  "T_sonra": 242.153,
+  "T_farki": -14.484,
   "sahne_once": 39,
   "sahne_sonra": 37,
   "sahne_sirasi": [
@@ -47,23 +48,72 @@
   ],
   "geriye_sardi_mi": true,
   "kare_p50": 8.3,
-  "kare_p95": 13.7
+  "kare_p95": 10.9
  },
  "tavan": {
   "tavan_ayari": 1.5,
   "olculen_en_yuksek_gosterilen_hiz": 1.5,
   "tavani_asti_mi": false,
   "hedef_firladi_mi": false,
-  "en_buyuk_borc_sn": 14.29,
+  "en_buyuk_borc_sn": 14.24,
   "savurma_aninda": {
-   "T": 243.64,
-   "hedef": 243.65,
+   "T": 243.71,
+   "hedef": 243.72,
    "geride_sn": 0.01,
    "atla_dugmesi_gorunur": false
   },
   "geride_olayi_sayisi": 2,
   "kare_p50": 8.3,
-  "kare_p95": 9
+  "kare_p95": 12.4
+ },
+ "devir": {
+  "hedef_dikdortgen": {
+   "x": 66.672,
+   "y": 69.165,
+   "g": 1307.504,
+   "h": 769.167
+  },
+  "oturma": {
+   "d": 0.0001,
+   "x": 104,
+   "y": 69.2,
+   "gen": 1217.7,
+   "yuk": 769.2
+  },
+  "fark_px": {
+   "dx": 37.3,
+   "dy": 0,
+   "dgen": -89.8,
+   "dyuk": 0,
+   "merkez_dx": -7.6,
+   "merkez_dy": 0.1
+  },
+  "supurme": {
+   "ornek_sayisi": 1787,
+   "medyan_aralik_ms": 8.3,
+   "dusen_kare": 31
+  },
+  "ibare": {
+   "belirdi_ms": null,
+   "belirdi_d": null,
+   "sondu_ms": null,
+   "sondu_d": null,
+   "gorunur_kaldi_ms": null,
+   "tani": {
+    "en_buyuk_T": 256.64,
+    "toplam": 256.638,
+    "sart_tuttu": true,
+    "hic_gorundu": false
+   }
+  },
+  "nav_inisi": {
+   "devir_ornegi": 53,
+   "nav_ornegi": 53,
+   "ayni_kare": true,
+   "nav_alt_px_once": -13.4,
+   "nav_alt_px_sonra": -13.4
+  },
+  "nav_film_boyunca_ekranda": 0
  },
  "prologu_gec": {
   "ekranda": {
@@ -78,14 +128,53 @@
     "ekranda": false
    }
   },
+  "uc_nokta": [
+   {
+    "nokta": "bas",
+    "oran": 0.02,
+    "scrollY": 106238.3984375,
+    "T": 236.09,
+    "gec": {
+     "gizli": false,
+     "ekranda": true,
+     "ust": 848,
+     "sol": 1304
+    }
+   },
+   {
+    "nokta": "orta",
+    "oran": 0.5,
+    "scrollY": 102162.3984375,
+    "T": 227.03,
+    "gec": {
+     "gizli": false,
+     "ekranda": true,
+     "ust": 848,
+     "sol": 1304
+    }
+   },
+   {
+    "nokta": "son",
+    "oran": 0.95,
+    "scrollY": 102973.6015625,
+    "T": 228.82,
+    "gec": {
+     "gizli": false,
+     "ekranda": true,
+     "ust": 848,
+     "sol": 1304
+    }
+   }
+  ],
+  "her_noktada_ekranda": true,
   "klavye": {
    "tab_adimi": 11,
    "klavyeyle_tetiklendi": true,
    "erisilebilir": true
   },
   "zincir_durdu": {
-   "raf_cagri_sn_once": 241,
-   "raf_cagri_sn_sonra": 120.3,
+   "raf_cagri_sn_once": 360,
+   "raf_cagri_sn_sonra": 240.7,
    "kayitci_tabani_sn": "~ekran tazeleme hizi (kendi kayitcimiz kare basina 1)",
    "dustu_mu": true,
    "fl_yuzeyi": "undefined",

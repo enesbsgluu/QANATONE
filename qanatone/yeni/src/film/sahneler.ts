@@ -11,8 +11,20 @@
    Bu dosya YALNIZ derleme aninda okunur (Film.astro on-madde); tarayiciya
    inen sey DOM'daki data-* alanlaridir — kanon.json'un prozu pakete girmez.
 
-   METIN YOK (bu tur iskelet): `metin` alani bilerek null. Klip <-> durak
-   <-> metin eslemesi DEVIR §6 acik kalemi, Enes'le yerlesecek. */
+   METIN YOK (bu tur): `metin` alani bilerek null. Klip <-> durak <-> metin
+   eslemesi DEVIR §6 acik kalemi, Enes'le yerlesecek.
+
+   TEK HAT H.264 (31 Agu 2026): `clip265`/`mobileClip265` alanlari ve
+   `?kodek=h265` dali SOKULDU (motor.ts, Film.astro, burasi). Gerekce
+   olculdu — Chromium HEVC'de ara kareye sarmiyor, sonraki anahtar kareye
+   yapisiyor (film/seek-3klip.json: H.264 36/36, HEVC 27/36). Uretim
+   kunyesindeki `h265` alanlari DURUYOR (arsiv/geriye donus), sayfaya
+   inmiyor.
+
+   KESIT KARARI GERI ALINDI (31 Agu, PROLOG-KAPANIS-v2): 39 klip bütün
+   kaliyor, hicbir dikise dokunulmuyor. Kisaltma sureden degil HIZDAN
+   geliyor (tavan + pxsn). Elenen kesit hattinin olcumleri ve varliklari
+   `yeni/film/kesit-elenen/` ve `film/kesit*.json` icinde kayitli. */
 import KANON from './kanon.json';
 /* Boyutlar HAM kanondan DEGIL, uretim kunyesinden okunur: sahne1 kadraji
    duzeltildi (1144x804 -> 1284x716) ve mobil hat 540 satira indi; ikisi de
@@ -51,9 +63,7 @@ export interface Sahne {
   /* ACILIS KOPYASI (yalniz sahne1): tam klibin ilk saniyeleri, BIREBIR ayni
      encode zinciriyle. Motor once bunu indirir -> ilk kare erken boyanir;
      tam kopya arkada inip ayni kareye sarilinca takas edilir. */
-  acilis: { sn: number; clip: string; mobileClip: string; clip265: string; mobileClip265: string } | null;
-  /* H.265 hatti (ana); tarayici canPlayType ile secer, yoksa H.264 (yedek) */
-  clip265: string; mobileClip265: string;
+  acilis: { sn: number; clip: string; mobileClip: string } | null;
   metin: null;
 }
 
@@ -61,7 +71,7 @@ let bas = 0;
 const KUNYE = new Map((URETIM.klip as any[]).map((k) => [k.n, k]));
 export const SAHNELER: readonly Sahne[] = KANON.klip.map((k) => {
   const u = KUNYE.get(k.n);
-  if (!u || !u.masaustu?.gen || !u.mobil?.gen || !u.h265?.masaustu) throw new Error(`film: sahne${k.n} uretim kunyesinde eksik (h264/h265) — once \`node yeni/film/uret.cjs\``);
+  if (!u || !u.masaustu?.gen || !u.mobil?.gen) throw new Error(`film: sahne${k.n} uretim kunyesinde eksik — once \`node yeni/film/uret.cjs\``);
   const s: Sahne = {
     n: k.n, sure: k.sure, kare: k.kare, bas: +bas.toFixed(3),
     gen: u.masaustu.gen, yuk: u.masaustu.yuk, mgen: u.mobil.gen, myuk: u.mobil.yuk,
@@ -69,11 +79,9 @@ export const SAHNELER: readonly Sahne[] = KANON.klip.map((k) => {
     poster: `varlik/film/sahne${k.n}-poster.webp`,
     mobileClip: `varlik/film/sahne${k.n}-mobile.mp4`,
     mobilePoster: `varlik/film/sahne${k.n}-mobile-poster.webp`,
-    clip265: `varlik/film/${u.h265.masaustu.dosya}`,
-    mobileClip265: `varlik/film/${u.h265.mobil.dosya}`,
     acilis: u.acilis ? { sn: u.acilis.sn,
-      clip: `varlik/film/${u.acilis.h264.masaustu.dosya}`, mobileClip: `varlik/film/${u.acilis.h264.mobil.dosya}`,
-      clip265: `varlik/film/${u.acilis.h265.masaustu.dosya}`, mobileClip265: `varlik/film/${u.acilis.h265.mobil.dosya}` } : null,
+      clip: `varlik/film/${u.acilis.h264.masaustu.dosya}`,
+      mobileClip: `varlik/film/${u.acilis.h264.mobil.dosya}` } : null,
     metin: null,
   };
   bas += k.sure;

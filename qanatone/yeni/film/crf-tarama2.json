@@ -1,0 +1,86 @@
+{
+ "_": "yeni/film/crf-tarama2.cjs — tahmini_hat_mib 5 klip orneklemiyle OLCEKLI TAHMIN (%16,4 temsil), olculen_5klip_mib gercek. Kalite referansi = yayindaki masaustu hat (CRF20/GOP8/native).",
+ "olcum": "2026-08-27T10:20:44.415Z",
+ "ornek_klipler": [
+  34,
+  27,
+  16,
+  13,
+  22
+ ],
+ "not_720p_tavani": "Higgsfield betiginin `scale=-2:'min(720,ih)'` mobil tavani bu malzemede ETKISIZ: klipler 716 satir. Mobil hat bu yuzden masaustu cozunurlugunde kaldi; mobil butcenin x10,24 asmasinin sebeplerinden biri bu.",
+ "aday": [
+  {
+   "ad": "crf28-native",
+   "crf": 28,
+   "gop": 8,
+   "cozunurluk": "1284x716 (native)",
+   "olculen_5klip_mib": 12,
+   "tahmini_hat_mib": 73.1,
+   "masaustu_kapisi_x": 2.29,
+   "mobil_kapisi_x": 4.57,
+   "psnr_vs_yayin": 39.33,
+   "ssim_vs_yayin": 0.97
+  },
+  {
+   "ad": "crf32-native-gop12",
+   "crf": 32,
+   "gop": 12,
+   "cozunurluk": "1284x716 (native)",
+   "olculen_5klip_mib": 6.7,
+   "tahmini_hat_mib": 41,
+   "masaustu_kapisi_x": 1.28,
+   "mobil_kapisi_x": 2.56,
+   "psnr_vs_yayin": 36.83,
+   "ssim_vs_yayin": 0.96
+  },
+  {
+   "ad": "crf26-540",
+   "crf": 26,
+   "gop": 8,
+   "cozunurluk": "1284x716 -> ~968x540",
+   "olculen_5klip_mib": 10,
+   "tahmini_hat_mib": 60.9,
+   "masaustu_kapisi_x": 1.9,
+   "mobil_kapisi_x": 3.81,
+   "psnr_vs_yayin": 37.74,
+   "ssim_vs_yayin": 0.97
+  },
+  {
+   "ad": "crf28-540",
+   "crf": 28,
+   "gop": 8,
+   "cozunurluk": "1284x716 -> ~968x540",
+   "olculen_5klip_mib": 7.9,
+   "tahmini_hat_mib": 48.4,
+   "masaustu_kapisi_x": 1.51,
+   "mobil_kapisi_x": 3.03,
+   "psnr_vs_yayin": 36.9,
+   "ssim_vs_yayin": 0.96
+  },
+  {
+   "ad": "crf28-432-gop12",
+   "crf": 28,
+   "gop": 12,
+   "cozunurluk": "1284x716 -> ~775x432",
+   "olculen_5klip_mib": 5.1,
+   "tahmini_hat_mib": 31.3,
+   "masaustu_kapisi_x": 0.98,
+   "mobil_kapisi_x": 1.96,
+   "psnr_vs_yayin": 34.99,
+   "ssim_vs_yayin": 0.95
+  },
+  {
+   "ad": "crf30-360-gop12",
+   "crf": 30,
+   "gop": 12,
+   "cozunurluk": "1284x716 -> ~646x360",
+   "olculen_5klip_mib": 3.2,
+   "tahmini_hat_mib": 19.7,
+   "masaustu_kapisi_x": 0.61,
+   "mobil_kapisi_x": 1.23,
+   "psnr_vs_yayin": 32.9,
+   "ssim_vs_yayin": 0.93
+  }
+ ]
+}

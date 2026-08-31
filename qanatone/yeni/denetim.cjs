@@ -2764,8 +2764,19 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   if (!fs.existsSync(sayfa)) kusur.push('film/index.html yok');
   else {
     const h = oku(sayfa);
-    const K = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'film', 'kanon.json'), 'utf8'));
-    const U = JSON.parse(fs.readFileSync(path.join(__dirname, 'film', 'uretim.json'), 'utf8'));
+    /* GIRDI KAPISI (31 Agu 2026) — OLCULDU: bu iki dosya yokken kural
+       "sessizce gecmiyordu", DAHA KOTUSUNU yapiyordu: yakalanmamis ENOENT
+       ile BUTUN suite cokuyordu (node yigin izi basip cikiyor). Yani temiz
+       bir klonda denetim hic hukum vermiyordu. Artik eksik girdi TEMIZ
+       KIRMIZI: kural kalir, sebebi adiyla yazilir.
+       Kalici cozum ayrica: `yeni/film/` olcum dizini commit'lendi. */
+    const kanonY = path.join(__dirname, 'src', 'film', 'kanon.json');
+    const uretimY = path.join(__dirname, 'film', 'uretim.json');
+    if (!fs.existsSync(kanonY)) kusur.push('kanon.json-yok');
+    if (!fs.existsSync(uretimY)) kusur.push('uretim.json-yok (film olcum dizini eksik)');
+    if (kusur.length) { ol('FM1 · film iskeleti: girdi eksik', false, kusur.join(' ')); return; }
+    const K = JSON.parse(fs.readFileSync(kanonY, 'utf8'));
+    const U = JSON.parse(fs.readFileSync(uretimY, 'utf8'));
     const sahneler = [...h.matchAll(/<div class="fl-sahne[^"]*"([^>]*)>/g)].map((m) => m[1]);
     if (sahneler.length !== K.klip.length) kusur.push('sahne=' + sahneler.length);
     /* sira + sure toplami kanonla ayni */

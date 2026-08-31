@@ -32,3 +32,17 @@ yeni/film/crf-tarama/
 yeni/film/butce-gecici/
 yeni/film/.dikis-yerel/
 yeni/film/.dogrula/
+
+# PROLOG-KAPANIS-v2 (31 Agu 2026): olcum dizini commit'lenir ama ARTIKLARI
+# degil. Kural sudur: .cjs/.json/.md takipte (temiz klonda FM1 girdi bulur),
+# uretilen kare/encode yiginlari takipte DEGIL — 1,4 GB'lik PNG ve mp4
+# yeniden uretilebilir, depoya girmez.
+yeni/film/kesit-dikis/
+yeni/film/kesit-poster-ham/
+yeni/film/kesit-elenen/
+yeni/film/deneme-fps/
+yeni/film/kontak/
+yeni/film/.kontak39/
+yeni/film/.kesit-dikis-kare/
+yeni/public/varlik/kesit/
+yeni/film/.kodek/
