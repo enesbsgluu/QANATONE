@@ -10,3 +10,25 @@ gorsel-kaynak/
 
 # Local Netlify folder
 .netlify
+
+# film uretim hattinin OLCUM artiklari (yeni/film/uret.cjs `bounds` + dikis.cjs
+# kiyas kareleri, ~150 MB PNG): yeniden uretilir, hukmu dikis.json tasir.
+yeni/film/dikis/
+yeni/film/dikis-ham/
+yeni/film/olcum/
+# PNG posterler ARA URUN: sayfa WebP okur. public/ disinda tutulur ki
+# dist'e kopyalanip yayina cikmasin (olculdu: 87,9 MiB bos yuk).
+yeni/film/poster-ham/
+yeni/film/taban-cikti.txt
+yeni/film/taban-log.txt
+yeni/film/.404.cjs
+# kontak sayfasi + CRF tarama ornek kareleri: Enes'in goz karari icin
+# uretilir, hukmu taban.json / crf-tarama.json tasir.
+yeni/film/kontak/
+yeni/film/crf-tarama/
+
+# PROLOG-ISKELET (31 Agu 2026) olcum artiklari — kare PNG'leri ve deneme
+# encode'lari. Sonuc JSON'lari takipte, uretim artiklari degil.
+yeni/film/butce-gecici/
+yeni/film/.dikis-yerel/
+yeni/film/.dogrula/

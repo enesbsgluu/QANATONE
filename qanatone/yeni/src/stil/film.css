@@ -37,17 +37,23 @@ main:has(> .fl) { max-width: none; padding: 0; }
   background: #050505;
 }
 
-/* ---- NEFES (28 Agu 2026, Enes): video duzlemine kaydirmadan bagimsiz hafif
-   hareket — %1 olcek + 2-3 px kayma, 7 s dongu, kompozitorde (transform).
-   Yalniz JS yolunda ve hareket azaltma kapaliyken. Olcek kaymayi orter
-   (1440 px'te %1 = 14 px pay, kayma 3 px). ---- */
-.fl-js .fl-yapis { animation: fl-nefes 7s ease-in-out infinite; will-change: transform; }
-@keyframes fl-nefes {
-  0%   { transform: translate3d(0, 0, 0) scale(1); }
-  50%  { transform: translate3d(2px, -3px, 0) scale(1.01); }
-  100% { transform: translate3d(0, 0, 0) scale(1); }
-}
-@media (prefers-reduced-motion: reduce) { .fl-js .fl-yapis { animation: none; } }
+/* ---- NEFES KALDIRILDI (30 Agu 2026, Enes karari) ----
+   28 Agu'da eklenmisti: `.fl-js .fl-yapis`e 7 s'lik `fl-nefes` (%1 olcek +
+   2-3 px kayma) ve onu besleyen `will-change: transform`.
+   NEDEN KALKTI: gerekce mimari — bu bir video kare dizisi; duran karede
+   akiskanlik aranmaz, sahte canlilik yerine SABIT KARE tercih edildi.
+   Olculdu (TUR 9, yeni/film/olc-titreme4.cjs): motor tamamen dururken
+   (?akis=0 — scrollY sabit, gosterilenT sabit, sunulan video karesi 0)
+   ekran 20 yakalamanin 17-19'unda degisiyordu; nefes kapatilinca 1/20.
+   Yani ekranda gorulen surekli titremenin TEK kaynagi bu animasyondu;
+   video katmanini gizlemek titremeyi kaldirmiyordu.
+   `will-change: transform` de birlikte kalkti: tek isi bu animasyonun
+   katmanini onceden ayirmakti, animasyon gidince kalici bir katman
+   zorlamasindan baska bir sey yapmiyor — dosya basindaki H14 kurali
+   ("MOBIL BAGLAMDA PAHALI KATMAN YOK: filter/backdrop/will-change")
+   zaten bunu yasakliyor.
+   `prefers-reduced-motion` istisnasi da gereksizlesti: kapatilacak
+   animasyon kalmadi (JS'siz/hareket-azaltma yolu zaten motoru indirmiyor). */
 
 /* ---- JS YOLU ---- */
 .fl-js .fl-sahne { position: absolute; inset: 0; display: none; }
@@ -75,16 +81,42 @@ main:has(> .fl) { max-width: none; padding: 0; }
 .fl-js .fl-sahne.fl-acilis-bitti .fl-acilis { display: none; }
 
 /* ---- ATLA dugmesi (28 Agu): hiz tavani gerisinde kalinca gorunur ---- */
-.fl-atla {
+/* ---- KUMANDA (31 Agu 2026) ----
+   KONUM DUZELTMESI: iki dugme de eskiden `.fl-ray` icinde
+   `position:absolute; bottom:16px` idi. `.fl-ray` 115.487 px yuksek
+   oldugu icin bu "ekranin dibi" degil RAYIN DIBI demekti — dugme filmin
+   tamami boyunca ekran disindaydi ve ancak film bitince goruluyordu.
+   Kumanda artik sticky `.fl-yapis` icinde; o kutu ekranin kendisi. */
+.fl-kumanda {
   position: absolute; right: 16px; bottom: 16px; z-index: 5;
+  display: flex; gap: 8px; align-items: center;
+}
+.fl-gec, .fl-atla {
   font: 600 14px/1 system-ui, sans-serif; letter-spacing: -.01em;
   color: #fff; background: rgba(8, 8, 8, .78); border: 1px solid rgba(255, 255, 255, .22);
   border-radius: 999px; padding: 10px 14px; cursor: pointer;
+  text-decoration: none; white-space: nowrap;
 }
 .fl-atla[hidden] { display: none; }
-.fl-atla:hover { border-color: #ef233c; }
+.fl-gec:hover, .fl-atla:hover { border-color: #ef233c; }
+/* KLAVYE: ikisi de odaklanabilir (a[href] ve button); odak HALKASI
+   gorunur olmali — kumanda koyu zeminde durdugu icin varsayilan halka
+   yetersiz kaliyordu. */
+.fl-gec:focus-visible, .fl-atla:focus-visible {
+  outline: 2px solid #ef233c; outline-offset: 3px; border-color: #ef233c;
+}
 .fl-atla-sn { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+/* motorsuz yolda YETISME dugmesi anlamsiz (yetisilecek hedef yok);
+   PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider. */
 html:not(.fl-js) .fl-atla { display: none; }
+html:not(.fl-js) .fl-kumanda { position: sticky; top: 12px; bottom: auto; justify-content: flex-end; }
+
+/* ray sonu capasi: "prologu gec" baginin hedefi */
+.fl-son { position: absolute; bottom: 0; left: 0; width: 1px; height: 1px; }
+
+/* ATLANMIS (oturumda bir kez): film katmani hic kurulmaz — sifir video,
+   sifir poster, sifir kare. `<html data-film="atlandi">` betikten yazilir. */
+html[data-film="atlandi"] .fl { display: none; }
 
 /* ---- MOTORSUZ YOL (hareket azaltma / JS yok): duz sutun ---- */
 html:not(.fl-js) .fl-ray { height: auto; }

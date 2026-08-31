@@ -21,27 +21,45 @@ if (!fs.existsSync(KOK)) {
 }
 
 /* sayfaları topla */
-const sayfalar = [];
+const tumSayfalar = [];
 (function tara(d) {
   for (const f of fs.readdirSync(d)) {
     const p = path.join(d, f);
     if (fs.statSync(p).isDirectory()) tara(p);
-    else if (f.endsWith('.html')) sayfalar.push(p);
+    else if (f.endsWith('.html')) tumSayfalar.push(p);
   }
 })(KOK);
 const oku = p => fs.readFileSync(p, 'utf8');
 const rel = p => path.relative(KOK, p).replace(/\\/g, '/');
 
-console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
+/* ---- PROTOTIP AYRIMI (31 Agu 2026, PROLOG-ISKELET 6. adim) ----
+   `public/prototip/**` altindakiler URUN SAYFASI DEGIL, OLCUM DUZENEGI:
+   kendi kopya nav'i, kendi three.js surucusu, kendi varlik yolu var;
+   site navigasyonundan erisilmez ve DEVIR §2 hukmu Enes'te bekliyor.
+   Uretim sayfasi kurallari (sayfa sayimi, G1 gorsel, V1 veri, J1 JS
+   tavani, S1 bas sozlesmesi, G2 alan) bunlara uygulaninca 6 KIRMIZI
+   uretiyordu; bu duzenegin kusuru degil, kuralin YANLIS YERE
+   uygulanmasiydi — ve suite gunlerdir bu yuzden kirmiziydi.
+   MUAFIYET SESSIZ DEGIL: (1) asagida adiyla BASILIR, (2) P1 kurali
+   prototipleri ayrica denetler (noindex + siteden baglanti yok).
+   noindex kapsam DISI birakilmaz: N1 tum sayfalarda kosar. */
+const PROTOTIP = /(^|\/)prototip\//;
+const sayfalar = tumSayfalar.filter((p) => !PROTOTIP.test(rel(p)));
+const prototipler = tumSayfalar.filter((p) => PROTOTIP.test(rel(p)));
+
+console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
+  (prototipler.length ? ` (+ ${prototipler.length} prototip, ürün kuralları dışında: ${prototipler.map(rel).join(', ')})` : '') + `\n`);
 
 /* sayfa sayısı content.json'dan türetilir — rota sessiz düşmesin */
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 17; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
+    + 18; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
              +deneme-react (GEÇİCİ — React+motion bütçe ölçüm sayfası,
              Enes talebi 20 Ağu; gerçek React adası gelince sayfa ve
-             bu +1 birlikte kalkar) */
+             bu +1 birlikte kalkar)
+             +film (27 Ağu — 39 kliplik scroll-scrub iskeletinin ÖLÇÜM
+             zemini; film ana sayfaya oturunca sayfa ve bu +1 kalkar) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
@@ -234,9 +252,37 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
 /* N1 · göç bekçisi: kesmeye (Faz 4) kadar her sayfa noindex — canlı kök
    siteyle kopya içerik doğmaz. Faz 4'te bu kural TERSİNE çevrilir. */
 {
-  const kusur = sayfalar.filter(p => !/name="robots" content="noindex"/.test(oku(p)));
+  /* KAPSAM: prototipler DAHIL — noindex her uretilen sayfa icin gecerli.
+     BICIM: content="noindex,nofollow" de gecerli bir noindex'tir. Eski
+     kural content="noindex" diye TAM eslesme ariyordu ve prototipe
+     YANLIS KIRMIZI yakiyordu: sayfa zaten noindex'ti, kural bicimi
+     okuyordu. Artik robots listesinde noindex var mi diye bakilir. */
+  const kusur = tumSayfalar.filter(p => !/name="robots"[^>]*content="[^"]*noindex/.test(oku(p)));
   ol('N1 · göç bekçisi: her sayfa noindex (Faz 4\'te tersine döner)',
      kusur.length === 0, kusur.slice(0, 3).map(rel).join(' '));
+}
+
+/* P1 · PROTOTIP MUAFIYETININ BEDELI (31 Agu 2026, PROLOG-ISKELET 6. adim)
+   `prototip/**` uretim sayfasi kurallarindan muaf tutuldu (dosya basindaki
+   gerekce). Muafiyet BOS CEK OLMASIN diye bedeli burada:
+     1. Prototip URETILEN HICBIR SAYFADAN baglanmaz. Baglanirsa artik
+        "olcum duzenegi" degil sitenin bir parcasidir ve muafiyet duser.
+     2. Prototip sitemap'e girmez.
+   (noindex sarti ayri tutulmuyor: N1 prototipler DAHIL tum sayfalarda
+   kosuyor.) */
+{
+  const kusur = [];
+  for (const s of sayfalar) {
+    const h = oku(s);
+    for (const m of h.matchAll(/(?:href|src)="([^"]*prototip\/[^"]*)"/g)) {
+      kusur.push(`${rel(s)} -> ${m[1]}`);
+    }
+  }
+  const smY = path.join(KOK, 'sitemap.xml');
+  if (fs.existsSync(smY) && /prototip\//.test(oku(smY))) kusur.push('sitemap.xml:prototip-var');
+  ol('P1 · prototip muafiyetinin bedeli: üretilen sayfalardan bağlanmıyor + sitemap dışında',
+     kusur.length === 0,
+     kusur.slice(0, 3).join(' ') + (prototipler.length ? `  [${prototipler.length} prototip muaf]` : '  [prototip yok]'));
 }
 
 /* ---- ROTA TURU · R ailesi ------------------------------------------
@@ -2702,6 +2748,281 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa\n`);
      kusur.length === 0,
      kusur.slice(0, 4).join(' ')
        || 'dinlenmede canli (%2,68 piksel/3,6 sn) · oynat true/false/true · arkada 101->9,8 ms/sn');
+}
+
+/* ---- FILM · scroll-scrub iskeleti (FM ailesi, 27 Agu) ----------------
+   HIGGSFIELD-SCRUB-MOTORU.md §3 sert degismezleri + §7 butce kapisi + §8
+   teslim listesi CIKTIDAN olculur. Kaynak sayilar uretim.json (uret.cjs)
+   ve kanon.json (ffprobe); ikisi de "urettim" demekle degil sha1/bayt ile
+   dist'teki dosyaya baglanir. */
+{
+  const crypto = require('crypto');
+  const sha1 = (f) => crypto.createHash('sha1').update(fs.readFileSync(f)).digest('hex');
+  const sayfa = path.join(KOK, 'film', 'index.html');
+  const kusur = [];
+  let rapor = '';
+  if (!fs.existsSync(sayfa)) kusur.push('film/index.html yok');
+  else {
+    const h = oku(sayfa);
+    const K = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'film', 'kanon.json'), 'utf8'));
+    const U = JSON.parse(fs.readFileSync(path.join(__dirname, 'film', 'uretim.json'), 'utf8'));
+    const sahneler = [...h.matchAll(/<div class="fl-sahne[^"]*"([^>]*)>/g)].map((m) => m[1]);
+    if (sahneler.length !== K.klip.length) kusur.push('sahne=' + sahneler.length);
+    /* sira + sure toplami kanonla ayni */
+    let toplam = 0;
+    sahneler.forEach((a, j) => {
+      if ((a.match(/data-n="(\d+)"/) || [])[1] !== String(j + 1)) kusur.push('sira:' + j);
+      toplam += Number((a.match(/data-sure="([\d.]+)"/) || [, 0])[1]);
+    });
+    if (Math.abs(toplam - K.toplam_sn) > 0.01) kusur.push('sure-toplami:' + toplam.toFixed(3));
+    if (!/class="fl-sahne fl-etkin"/.test(h)) kusur.push('ilk-sahne-etkin-degil');
+    /* video: src YOK (JS'siz / azaltmada sifir fetch), preload none, muted, playsinline */
+    /* acilis kopyasi olan sahnede IKINCI bir <video class="fl-acilis"> var
+       (tam klip inene kadar ilk kareyi tasir); ana video sayisi = sahne
+       sayisi, acilis sayisi = uretim kunyesinde acilis'i olan klip sayisi. */
+    const tumVideo = h.match(/<video[^>]*>/g) || [];
+    const videolar = tumVideo.filter((v) => !/fl-acilis/.test(v));
+    const acilisVideo = tumVideo.length - videolar.length;
+    const acilisBekl = U.klip.filter((k) => k.acilis).length;
+    if (videolar.length !== K.klip.length) kusur.push('video=' + videolar.length);
+    if (acilisVideo !== acilisBekl) kusur.push('acilis-video=' + acilisVideo + '/' + acilisBekl);
+    for (const v of videolar) {
+      if (/\bsrc=/.test(v)) { kusur.push('video-src-statik'); break; }
+      if (!/preload="none"/.test(v) || !/\bmuted\b/.test(v) || !/\bplaysinline\b/.test(v)) { kusur.push('video-nitelik'); break; }
+    }
+    /* varliklar diskte + poster zinciri: dist webp sha1 == uretim.web.sha1,
+       web.kaynak_sha1 == png sha1, png kaynak_sha1 == ENCODE EDILMIS klip sha1
+       == dist mp4 sha1 (sert degismez #1: poster encode sonrasi kareden) */
+    let md = 0, mb = 0;
+    for (const k of U.klip) {
+      if (k.hata) { kusur.push('uretim-hata:' + k.n); continue; }
+      for (const [hat, poster] of [['masaustu', 'poster'], ['mobil', 'mobil_poster']]) {
+        const mp4 = path.join(KOK, 'varlik', 'film', k[hat].dosya);
+        const webp = path.join(KOK, 'varlik', 'film', (k[poster].web || {}).dosya || 'x');
+        if (!fs.existsSync(mp4)) { kusur.push('dosya-yok:' + k[hat].dosya); continue; }
+        if (!fs.existsSync(webp)) { kusur.push('poster-yok:' + k.n); continue; }
+        if (sha1(mp4) !== k[hat].sha1) kusur.push('mp4-bayat:' + k[hat].dosya);
+        if (k[poster].kaynak_sha1 !== k[hat].sha1 || k[poster].web.kaynak_sha1 !== k[poster].sha1
+            || sha1(webp) !== k[poster].web.sha1) kusur.push('poster-zinciri:' + k.n);
+        if (hat === 'masaustu') md += k[hat].bayt; else mb += k[hat].bayt;
+      }
+      if (!h.includes(`data-clip="varlik/film/${k.masaustu.dosya}"`)) kusur.push('sayfada-yok:' + k.n);
+    }
+    /* KAPI YENIDEN TANIMLANDI (27 Agu 2026, Enes karari). Higgsfield §7'nin
+       TOPLAM BAYT kapisi (32/16 MiB) kaldirildi: kapi sureyle olceklenmiyordu
+       (32 MiB / 256,6 sn = 1046 kbps) ve motor zaten segmentli yukluyor —
+       kullanici toplami hicbir zaman indirmiyor. Yerine UC OLCU:
+         1) 4G'de ilk kare < 1500 ms
+         2) savurmada sinir hazirligi 4/4 (her sahne sinirina hazir klip ile varilir)
+         3) bellek tavani: kayan pencere, gecerli +-PENCERE disi revoke
+       1 ve 2 gercek tarayici olcumunden (yeni/film/olcum/sonuc.json) okunur;
+       3 motorun kendisinde aranir. Toplamlar artik yalniz RAPOR. */
+    const oY = path.join(__dirname, 'film', 'olcum', 'sonuc.json');
+    if (!fs.existsSync(oY)) kusur.push('olcum-yok');
+    else {
+      const O = JSON.parse(fs.readFileSync(oY, 'utf8'));
+      if (!O.length) kusur.push('olcum-bos');
+      let ilkKapi = null, sinirKapi = null, tavan = 0;
+      for (const { ozet: o } of O) {
+        if (o.ag && o.ag !== 'wifi') {
+          const v = o.ilk_kare_ms && o.ilk_kare_ms.medyan;
+          if (v != null) ilkKapi = ilkKapi === null ? v : Math.max(ilkKapi, v);
+        }
+        for (const x of o.supur || []) {
+          if (x.ad && x.ad.indexOf('sert') === 0) {
+            const tam = x.varis_hazir >= x.varis;
+            sinirKapi = sinirKapi === null ? tam : (sinirKapi && tam);
+          }
+          if (x.bellek_mib != null) tavan = Math.max(tavan, x.bellek_mib);
+        }
+      }
+      if (ilkKapi === null) kusur.push('olcumde-4G-yok');
+      else if (ilkKapi >= 1500) kusur.push(`4G-ilk-kare:${ilkKapi}ms>=1500`);
+      if (sinirKapi === null) kusur.push('olcumde-savurma-yok');
+      else if (!sinirKapi) kusur.push('savurmada-sinir-hazirligi-eksik');
+      rapor += `4G ilk kare ${ilkKapi} ms · sınır hazırlığı ${sinirKapi ? 'tam' : 'EKSİK'} · bellek tepe ${tavan} MiB · `;
+      /* olcum uretimden taze olmali — bayat olcumle yesil verilmez */
+      const oDosya = fs.statSync(oY).mtime.toISOString();
+      if (oDosya < U.uretim) kusur.push('olcum-bayat');
+    }
+    /* motor parcasi: sayfaya <script src> ile BAGLI DEGIL (dinamik ithal),
+       kendi tavani. OLCULDU 27 Agu: motor.*.js ~3 KB; tavan 6 KB. */
+    const astro = path.join(KOK, '_astro');
+    const motor = (fs.existsSync(astro) ? fs.readdirSync(astro) : []).filter((f) => /^motor\..*\.js$/.test(f));
+    if (motor.length !== 1) kusur.push('motor-parcasi=' + motor.length);
+    else {
+      const b = fs.statSync(path.join(astro, motor[0])).size;
+      /* tavan 6 -> 7 KB (27 Agu): kayan pencere, yon/hiz duyarli on yukleme,
+         devralma ve kaydirma sonumlemesi eklendi; dordu de kare basina is
+         yapan, olculmus gerekcesi olan katmanlar. Tavan yine de dar tutulur.
+
+         TAVAN 7 -> 10 KB (31 Agu 2026, PROLOG-ISKELET 6. adim) — UCUNCU
+         YUKSELTME, HESABI ASAGIDA. 28-30 Agu turlarinda motora alti katman
+         daha girdi; hicbiri tavanla birlikte gozden gecirilmedigi icin
+         suite bu kural yuzunden GUNLERDIR KIRMIZIYDI (9608 B > 7168 B) ve
+         kirmizi kimseyi durdurmadi. Bu, tavanin kendisinin bakimsiz
+         kaldiginin isareti; sayiyi sessizce buyutmemek icin katmanlar
+         adiyla yaziliyor:
+           · yay + sonum (sabit 4 ms fizik adimi, iki durum harmani)
+           · moment devri (birakista hedef hizinin yaya devri)
+           · durusta akis (motor sayfayi kendisi kaydirir, girdiyle durur)
+           · birakista sayfa hizalama (borcu yol yerine hizalanarak kapatma)
+           · sinir on-sarma + cift video devri (0,5 s kala komsuyu boyar)
+           · acilis kopyasi takasi + kodek secimi (h264 tek hat, h265 olcum)
+         31 Agu'da eklenen `durdu`/`rafId` kapilari 71 B (9608 -> 9679).
+         10 KB bugunku olcunun ~%3 ustu: yeni katman tavani YINE zorlar.
+         ONERI (Enes'in karari): olcum-icin-var olan `?kodek=h265` dali
+         urun paketinden cikarilabilir; motor o zaman tek hat kalir. */
+      if (b > 10 * 1024) kusur.push('motor-tavan:' + b);
+      if (h.includes(motor[0])) kusur.push('motor-sayfaya-bagli');
+      rapor += `motor ${(b / 1024).toFixed(1)}/10 KB`;
+      const kod = fs.readFileSync(path.join(astro, motor[0]), 'utf8');
+      /* blob seek + rVFC olcum yuzeyi + sokum */
+      if (!/createObjectURL/.test(kod)) kusur.push('motor-blob-yok');
+      if (!/revokeObjectURL/.test(kod)) kusur.push('motor-sokum-yok');
+      if (!/requestVideoFrameCallback/.test(kod)) kusur.push('motor-rvfc-yok');
+      /* bellek tavani: kayan pencere gercekten kurulu mu (revoke + durum sifirlama) */
+      if (!/revokeObjectURL/.test(kod)) kusur.push('motor-pencere-revoke-yok');
+      if (!/removeAttribute\(["']src["']\)/.test(kod)) kusur.push('motor-pencere-src-birakmiyor');
+      /* SOKUM GERCEKTEN DURDURUYOR MU (31 Agu, PROLOG-ISKELET 5. adim):
+         `sok()` eskiden yalniz dinleyicileri cozuyordu; `kare` kendi
+         sonunda `tik()` cagirdigi icin yay/akis oturmamissa dongu
+         sokumden SONRA da doniyordu — gorunmeyen sahne icin kare basina
+         is, yani sessiz pil sizintisi. Kapi: bekleyen rAF iptal ediliyor
+         mu ve dongunun bir durma kapisi var mi. */
+      if (!/cancelAnimationFrame/.test(kod)) kusur.push('motor-raf-iptali-yok');
+    }
+    /* ada betigi: hareket azaltma kapisi + dinamik ithal */
+    const ada = [...h.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)].map((m) => {
+      const d = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      return fs.existsSync(d) ? fs.readFileSync(d, 'utf8') : '';
+    }).join('\n');
+    if (!/prefers-reduced-motion/.test(ada)) kusur.push('azaltma-kapisi-yok');
+    /* sahne dosyasinda yer tutucu yok (§8) */
+    if (/<[a-z-]+>/.test(fs.readFileSync(path.join(__dirname, 'src', 'film', 'sahneler.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')))
+      kusur.push('sahneler.ts-yer-tutucu');
+    /* CSP media-src blob: (sert degismez #5) */
+    if (!/media-src[^;]*blob:/.test(fs.readFileSync(path.join(__dirname, '..', '_headers'), 'utf8'))) kusur.push('csp-media-src-blob-yok');
+    /* dikis olcumu var ve uretimden taze, 38 dikis x 2 hat */
+    const dY = path.join(__dirname, 'film', 'dikis.json');
+    if (!fs.existsSync(dY)) kusur.push('dikis.json-yok');
+    else {
+      const D = JSON.parse(fs.readFileSync(dY, 'utf8'));
+      if (D.olcum < U.uretim) kusur.push('dikis-bayat');
+      const e = D.dikis.filter((x) => x.hat === 'encode' && !x.hata).length;
+      if (e !== K.klip.length - 1) kusur.push('dikis-sayisi:' + e);
+      rapor += ` · dikiş mutlak esit/yakin/sicrama ${D.ozet.encode.esit}/${D.ozet.encode.yakin}/${D.ozet.encode.sicrama.length}`;
+    }
+    /* DIKIS HUKMU MUTLAK PSNR'DAN GELMEZ (taban.cjs, 27 Agu): kamera surekli
+       hareket ettigi icin klip ICINDEKI ardisik kareler de farklidir. Mutlak
+       esik 35 dikisi "sicrama" sayiyordu; klip ici kare-basi degisim tabanina
+       gore olculunce 8'i gercek cikti. Kapi bu 8 uzerinden. */
+    const tY = path.join(__dirname, 'film', 'taban.json');
+    if (!fs.existsSync(tY)) kusur.push('taban.json-yok');
+    else {
+      const T = JSON.parse(fs.readFileSync(tY, 'utf8'));
+      if (T.olcum < U.uretim) kusur.push('taban-bayat');
+      if (T.dikis.length !== K.klip.length - 1) kusur.push('taban-dikis-sayisi:' + T.dikis.length);
+      rapor += ` · tabana göre sürekli/hafif/GERÇEK-SIÇRAMA ${T.ozet.surekli}/${T.ozet.hafif_sapma}/${T.ozet.gercek_sicrama}`;
+      if (T.ozet.gercek_sicrama) rapor += ` (${T.ozet.gercek_sicrama_dikisler.join(',')})`;
+    }
+    /* YEREL OLCUT (31 Agu 2026) — yukaridaki 8 rakami TEK BASINA
+       okunmasin diye. taban.cjs dikisin tabanini iki klibin ORTALAMASI
+       olarak kuruyor ve B'nin tabanini klibin SONUNDAN aliyor; dikis ise
+       B'nin BASINDA. Kamera dikiste yavasliyorsa (3->4: sahne3 sonu
+       ~24 dB/kare, sahne4 basi ~50 dB/kare) ortalama hicbir yani temsil
+       etmez ve dikis "sicrama" gorunur.
+       dikis-yerel.cjs ayni 38 dikisi uc olcutle olcer; C olcutu
+       (min(A sonu, B basi) — "adim HEMEN YANINDAKI en yavas adimdan
+       kotu mu") scrub surekliligi icin dogru sorudur ve hem encode hem
+       HAM 4K hatta 0 sicrama verir. Kapi hala A uzerinden kurulu
+       degil — bu satir yalniz RAPOR; hangi olcutun urun kapisi olacagi
+       Enes'in karari. */
+    const yY = path.join(__dirname, 'film', 'dikis-yerel.json');
+    if (fs.existsSync(yY)) {
+      const Y = JSON.parse(fs.readFileSync(yY, 'utf8'));
+      const c = Y.olcut_kiyasi && Y.olcut_kiyasi.C_min_taban;
+      if (c) rapor += ` · yerel ölçüt (min taban) encode/ham SIÇRAMA ${c.encode_sicrama}/${c.ham_sicrama}`;
+    } else rapor += ' · yerel ölçüt YOK (node yeni/film/dikis-yerel.cjs)';
+    rapor += ` · disk masaüstü ${(md / 1048576).toFixed(1)} MiB · mobil ${(mb / 1048576).toFixed(1)} MiB (kapı değil, rapor)`;
+  }
+  ol('FM1 · film iskeleti: 39 sahne kanonla + video src\'siz + poster zinciri encode\'dan + motor ayrı + CSP blob + dikiş ölçülü + KAPI (4G ilk kare<1,5sn · sınır 4/4 · bellek tavanı)',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') + (rapor ? '  [' + rapor + ']' : ''));
+}
+
+/* ---- FM2 · PROLOGU GEC SOZLESMESI (31 Agu 2026, PROLOG-ISKELET 5. adim)
+   Gorevin uc tamamlanma sarti kural haline getirildi, cunku ucu de "kodda
+   var" denip gecilebilecek, davranista sessizce bozulabilecek cinsten:
+     1. dugme KLAVYEYLE erisilebilir -> odaklanabilir bir ogedir (a[href]
+        ya da button; div+onclick kabul edilmez), hedefi gercekten var ve
+        gorunur bir odak halkasi tanimli.
+     2. atlandiginda ZINCIR DURUR    -> ada betigi baslat()'in dondurdugu
+        sokumu cagirir (motorun rAF iptali FM1'de ayrica olculur).
+     3. OTURUMDA BIR KEZ             -> sessionStorage bayragi hem YAZILIR
+        hem OKUNUR; okumadan yazmak davranisi kurmaz, yalniz iz birakir.
+   AYRICA KONUM: kumanda sticky kutunun (.fl-yapis) ICINDE olmali. Eskiden
+   `.fl-ray` icindeydi ve `bottom:16px` 115.487 px'lik RAYIN DIBI demekti —
+   dugme film boyunca ekran disindaydi, ancak film bitince goruluyordu.
+   Bu kural o hatanin geri gelmesini engeller. */
+{
+  const kusur = [];
+  const fY = path.join(KOK, 'film', 'index.html');
+  if (!fs.existsSync(fY)) kusur.push('film-sayfasi-yok');
+  else {
+    const h = oku(fY);
+    /* 1. klavye: .fl-gec odaklanabilir bir oge mi, hedefi var mi */
+    const gec = h.match(/<(a|button)\b[^>]*class="[^"]*\bfl-gec\b[^"]*"[^>]*>/);
+    if (!gec) kusur.push('fl-gec-odaklanabilir-degil');
+    else if (gec[1] === 'a') {
+      const hr = gec[0].match(/\bhref="#([^"]+)"/);
+      if (!hr) kusur.push('fl-gec-href-yok');
+      else if (!new RegExp('id="' + hr[1] + '"').test(h)) kusur.push('fl-gec-hedef-yok:' + hr[1]);
+    }
+    /* konum: kumanda sticky kutunun icinde (rayin dibinde degil).
+       SINIF ESLESMESI TAM OLMALI: ilk surum `indexOf('fl-kumanda')`
+       kullaniyordu ve `fl-kumandaX` da bu alt-dizeyi tasidigi icin kural
+       KASTEN BOZULMUS sayfada bile yesil yaniyordu (yanlis yesil). */
+    const sinifYeri = (ad) => {
+      const m = h.match(new RegExp('class="[^"]*\\b' + ad + '\\b[^"]*"'));
+      return m ? m.index : -1;
+    };
+    const yapis = sinifYeri('fl-yapis');
+    const kumanda = sinifYeri('fl-kumanda');
+    if (kumanda < 0) kusur.push('fl-kumanda-yok');
+    else if (yapis < 0 || kumanda < yapis) kusur.push('kumanda-yapisin-disinda');
+    /* odak halkasi + atlanmis hali: uretilen CSS'ten.
+       IKI KAYNAK: Astro bu sayfada stili SATIR ICI `<style>` blogunda
+       veriyor, `<link>` yok. Yalniz link'e bakan ilk surum BOZULMAMIS
+       koda da kirmizi yakti (yanlis kirmizi); kural once kasten
+       bozularak, sonra bozulmamis halde de sinandigi icin yakalandi.
+       TIRNAK: minify `[data-film="atlandi"]` -> `[data-film=atlandi]`
+       yaptigi icin tirnak istege bagli aranir. */
+    const css = [...h.matchAll(/<link[^>]+href="([^"]+\.css)"/g)]
+      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/yeni\//, '')); return fs.existsSync(d) ? oku(d) : ''; })
+      .concat([...h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]))
+      .join('\n');
+    if (!/fl-gec[^{]*:focus-visible/.test(css)) kusur.push('fl-gec-odak-halkasi-yok');
+    if (!/\[data-film=["']?atlandi["']?\][^{]*\.fl\s*\{[^}]*display:\s*none/.test(css))
+      kusur.push('atlandi-hali-gizlemiyor');
+    /* 2 + 3: ADA BETIGI — sokum cagrisi + oturum bayragi yaz VE oku.
+       KAPSAM DARALTMASI: ilk surum sayfadaki BUTUN betikleri tek metinde
+       birlestirip `getItem(` ariyordu. Sayfa kabugu (perde) zaten
+       sessionStorage kullandigi icin, film adasindaki okuma kasten
+       silinse bile kural yesil yaniyordu — yanlis yesil. Artik yalniz
+       PROLOG ANAHTARINI tasiyan betik(ler) taranir. */
+    const betikler = [...h.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)]
+      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/yeni\//, '')); return fs.existsSync(d) ? oku(d) : ''; })
+      .concat([...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]));
+    const ada = betikler.filter((b) => /qanat-prolog-atlandi/.test(b)).join('\n');
+    if (!ada) kusur.push('oturum-anahtari-tasiyan-betik-yok');
+    else {
+      if (!/setItem\(/.test(ada)) kusur.push('oturum-bayragi-yazilmiyor');
+      if (!/getItem\(/.test(ada)) kusur.push('oturum-bayragi-okunmuyor');
+      if (!/baslat\(/.test(ada)) kusur.push('baslat-cagrisi-yok');
+    }
+  }
+  ol('FM2 · prologu geç: klavyeyle erişilir + sticky kumandada + atlanınca zincir söküm + oturumda bir kez',
+     kusur.length === 0, kusur.join(' '));
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);

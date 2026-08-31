@@ -16,7 +16,9 @@ const PORT = +(process.env.YEREL_PORT || 8790);
 const TIP = { '.html':'text/html; charset=utf-8', '.js':'text/javascript', '.mjs':'text/javascript',
   '.css':'text/css', '.json':'application/json', '.xml':'application/xml', '.txt':'text/plain; charset=utf-8',
   '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg',
-  '.ico':'image/x-icon', '.woff2':'font/woff2', '.webmanifest':'application/manifest+json' };
+  '.ico':'image/x-icon', '.woff2':'font/woff2', '.webmanifest':'application/manifest+json',
+  /* video: MIME olmadan tarayici klibi oynatmaz (film adasi) */
+  '.mp4':'video/mp4', '.m4v':'video/mp4', '.webm':'video/webm', '.avif':'image/avif' };
 const GZIP = new Set(['.html','.js','.mjs','.css','.json','.xml','.txt','.svg','.webmanifest']);
 
 const coz = (u) => {
