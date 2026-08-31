@@ -275,7 +275,10 @@ async function jest(cdp, mesafe, hiz) {
         const r = g ? g.getBoundingClientRect() : null;
         __dv.ornek.push({
           t: +performance.now().toFixed(1),
-          d: window.__devir ? +window.__devir.ilerleme().toFixed(4) : 0,
+          /* v3 notu: yeni __devir yuzeyinde ilerleme() yok (devir artik
+             zaman-suruslu yay); s() olcek izi onun yerine gecer. */
+          d: window.__devir && window.__devir.ilerleme ? +window.__devir.ilerleme().toFixed(4)
+            : (window.__devir && window.__devir.s ? +window.__devir.s().toFixed(4) : 0),
           navKalk: R.classList.contains('fl-nav-kalk'),
           devir: R.classList.contains('fl-devir'),
           ipucu: (() => { const p = document.querySelector('.fl-ipucu'); return p ? !p.hidden : null; })(),
@@ -291,7 +294,8 @@ async function jest(cdp, mesafe, hiz) {
     requestAnimationFrame(dongu);
     window.__dvBasla = () => { __dv.ornek.length = 0; __dv.calisiyor = true; };
     window.__dvBitir = () => { __dv.calisiyor = false; return __dv.ornek; };
-    window.__dvHedef = () => (window.__devir ? window.__devir.kutu() : null);
+    window.__dvHedef = () => (window.__devir && window.__devir.kutu ? window.__devir.kutu()
+      : (window.__devir && window.__devir.geo ? window.__devir.geo() : null));
   })()`;
   await page.evaluate(devirKayitci);
 

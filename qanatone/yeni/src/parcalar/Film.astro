@@ -29,12 +29,40 @@
    (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
 import '../stil/film.css';
 import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN, AKIS, MOMENT, HIZALA } from '../film/sahneler';
-/* DEVIR HEDEFI: son karedeki ekran dikdortgeni. ELLE YAZILMIYOR —
-   `film/ekran-dikdortgen.cjs` son kareden olcuyor (isiklilik degil GRADYAN
-   YOGUNLUGU ile; isiklilik ayirmiyor cunku cerceve 0,1 · arka plan 2,5 ·
-   ekranin koyu bolgeleri 4). Oran olarak tasiniyor: video `object-fit:
-   cover` ile olceklendigi icin tasinabilir olan sey piksel degil orandir. */
-import EKRAN from '../../film/ekran-dikdortgen.json';
+/* DEVIR KUNYESI (31 Agu 2026, v3): son karedeki ekran dortgeni + son kare
+   BUYUME HIZI. ELLE YAZILMIYOR — `film/ekran-kose.cjs` iz modunun (f20db52)
+   k119/k120 KOSE olcumunden turetiliyor. Kutu olcumu (ekran-dikdortgen.json)
+   artik kullanilmiyor: oz-dogrulamasi kendisi "AYRISMADI" diyordu, kose
+   olcumu ise dortgenin dikdortgenligini de (ic acilar 90 +- 0,3) kanitladi.
+   Oran olarak tasinir: video `object-fit: cover` ile olceklendigi icin
+   tasinabilir olan sey piksel degil orandir. */
+import KOSE from '../../film/ekran-kose.json';
+
+/* k119 + k120 yoksa DERLEME KIRMIZI: kunye olcumsuz kalamaz. (ekran-kose.cjs
+   tek-kare modunda kosulursa dosyada `kare: 120` kalmaz — sessiz eskime
+   yerine derleme burada durur.) */
+const kareBul = (n: number) => (KOSE as any).kareler.find((k: any) => k.kare === n && k.kose);
+const K120 = kareBul(120), K119 = kareBul(119);
+if (!K120 || !K119) throw new Error('ekran-kose.json k119/k120 yok — devir künyesi ölçümsüz kalamaz (node yeni/film/ekran-kose.cjs iz modu, f20db52)');
+/* dort koseden eksen-hizali dortgen: olcum ic acilari 90 +- 0,3 verdi,
+   kose ciftlerinin ortalamasi dortgenin kendisidir (alt kenar +-4 px
+   gurultulu, ortalama onu da yumusatir). */
+const eksen = (k: any) => {
+  const K = k.kose;
+  return {
+    sol: (K.solUst[0] + K.solAlt[0]) / 2, sag: (K.sagUst[0] + K.sagAlt[0]) / 2,
+    ust: (K.solUst[1] + K.sagUst[1]) / 2, alt: (K.solAlt[1] + K.sagAlt[1]) / 2,
+  };
+};
+const e120 = eksen(K120), e119 = eksen(K119);
+const DEVIR = {
+  sol: e120.sol / K120.W, ust: e120.ust / K120.H,
+  gen: (e120.sag - e120.sol) / K120.W, yuk: (e120.alt - e120.ust) / K120.H,
+  /* SON KARE HIZI: dortgen son karede hala buyuyor (k119->k120 genislik
+     farki ~0,5 px/kare). 1x okumada olcek hizi (1/s) olarak tasinir;
+     surucu bunu varis temposuyla carpar (hiz surekliligi). */
+  hiz: ((e120.sag - e120.sol) - (e119.sag - e119.sol)) * FPS / (e120.sag - e120.sol),
+};
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -42,7 +70,7 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
-  data-ekran={`${EKRAN.oran.sol},${EKRAN.oran.ust},${EKRAN.oran.gen},${EKRAN.oran.yuk}`}
+  data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
   style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">
@@ -94,6 +122,11 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         buraya inen kaydirma filmi bitirmis demektir. */}
     <div id="fl-son" class="fl-son" tabindex="-1"></div>
   </div>
+  {/* PATLAMA GECISI KATMANI (Enes, 31 Agu): ?gecis=patlama kolunda
+      yakinlasmanin son kisminda kizil-beyaz flas, tepe aninda site aninda
+      devralir ("isinlama"). Transformlu yapis'in DISINDA durur (fixed'in
+      atasi transformlu olamaz). Varsayilan yol 140 ms capraz gecis. */}
+  <div class="fl-parla" aria-hidden="true"></div>
 </section>
 
 <script>
@@ -144,85 +177,277 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
          once zinciri sokeriz, sonra tarayici bagi kendi isler. */
-    /* ---- NAV KOREOGRAFISI + DEVIR (31 Agu 2026, v2 4. ve 6. adim) ----
-       Sira: film baslayinca nav amblemle birlikte YUKARI CEKILIR (film
-       boyunca ekranda yer kaplamaz); finalde terminal ekrani gelince nav
-       GERI INER ve inis devir animasyonuyla AYNI KAREDE baslar.
+    /* ---- NAV KOREOGRAFISI + DEVIR v3 (31 Agu 2026, Enes) ----
+       YAKLASIM DEGISTI: sayfa ekrana KUCULTULMUYOR, VIDEO ekrana
+       YAKINLASTIRILIYOR. `.fl-yapis` ekran dortgeninin merkezine
+       transform-origin verilerek olceklenir; dortgen goruntu alaninin
+       tami tamina kendisi oldugu anda gercek sayfa FADE_MS'lik capraz
+       gecisle videonun USTUNDE netlesir. SAYFA HIC OLCEKLENMEZ (kapi:
+       devir aninda sayfa olcegi tam 1,0) — govdeye transform yazan kod
+       ve CSS kalmadi.
 
-       AYNI KARE SARTI KODLA GARANTI: iki is de tek `surucu()` cagrisinda,
-       tek rAF tikinde yapiliyor. Ayri dinleyicilere bolunse "ayni kare"
-       tesadufe kalirdi.
+       OLCEK SABIT SAYI DEGIL: hedef olcek her acilista (ve resize'da)
+       goruntu alani oranindan hesaplanir — DAIMA COVER: dortgen dort
+       kenari da ortecek en kucuk olcekte durur; kapanan eksen tam
+       oturur, oteki tasar, bosluk kalmaz. Tasma olcum yuzeyine yazilir.
 
-       DUZEN OKUMASI KARE BASINA DEGIL: ray/ekran olculeri bir kez (ve
-       resize'da) okunur; dongude yalniz scrollY okunur — motorun kendi
-       kurali. */
-    const ekranOran = (bolum.dataset.ekran || '0,0,1,1').split(',').map(Number);
+       MIKRO ORTALAMA: dortgen merkezi kare merkezinden 0,5 / 5,9 px
+       kayik (f20db52). Saf olcek bu kaykligi kapanan eksende iki katina
+       tasiyip kapinin (fark < 2 px) ustune cikarirdi (1,6 oraninda dikey
+       ~10 px). Olcekle orantili kucuk kaydirma (ucta <= 6 px) dortgeni
+       devir aninda goruntu alanina TAM ortalar.
+
+       HIZ SUREKLILIGI: video SON karesinde hala buyuyor (kunye: k119->
+       k120 ~0,5 px/kare, data-devir 5. sayi = 1x'te olcek hizi 1/s).
+       Video son karesine oturdugu anda buyumeyi yay devralir: baslangic
+       hizi = kunye hizi x varis temposu (motor hizT; akisla ~0,08x,
+       okumayla ~1x). Kritik sonumlu yay hedef olcege varirken hiz sifira
+       iner — "sonra sonumlenerek sifira inecek". Iki hiz da olcum
+       yuzeyine yazilir (kapi: fark yazilir).
+
+       AYNI KARE SARTI: nav inisi devir tetigiyle ayni rAF tikinde
+       (devirKare icinde navBak) — ayri dinleyici yok.
+
+       DUZEN OKUMASI KARE BASINA DEGIL: geometri bir kez (ve resize'da)
+       olculur; dongude yalniz scrollY ve __fl okunur. getComputedStyle
+       yalniz fade basinda BIR kez (kayit icin). */
     const ipucu = bolum.querySelector<HTMLElement>('.fl-ipucu');
     const govde = document.getElementById('fl-govde');
+    const yapis = bolum.querySelector<HTMLElement>('.fl-yapis')!;
     const IPUCU_ANAHTAR = 'qanat-prolog-ipucu';
     let ipucuGorulmus = false;
     try { ipucuGorulmus = sessionStorage.getItem(IPUCU_ANAHTAR) === '1'; } catch {}
 
-    let devirBas = 0, devirBoy = 1, vw = 0, vh = 0, vidO = 16 / 9;
+    /* kunye: sol,ust,gen,yuk (oran) + son kare buyume hizi (1/s, 1x) —
+       Film.astro frontmatter'i ekran-kose.json k119/k120'den turetir. */
+    const dk = (bolum.dataset.devir || '0,0,1,1,0').split(',').map(Number);
+    const DK = { sol: dk[0], ust: dk[1], gen: dk[2], yuk: dk[3], hiz: dk[4] };
+    /* Devir yayi sertligi. k=25 -> kritik sonumde tepe kenar hizi
+       ~0,42 olcek/s x 1562 px = ~660 px/s; filmin kendi dollysinin
+       OLCULEN tepesi 864 px/s (ekran-kose tablosu, ~36 px/kare) — ayni
+       mertebe, devir filmin dilinden kopmuyor. k=120 tepe ~2000 px/s
+       ustune cikiyordu. Adaylar: 25 (~1,2 s) · 60 (~0,75 s) · 120
+       (~0,53 s); gorsel hukum Enes'te, ?dsert= ile denenir. */
+    const DSERT = (() => { const u = new URLSearchParams(location.search).get('dsert'); return u !== null && Number(u) > 0 && Number(u) <= 1000 ? Number(u) : 25; })();
+    const FADE_MS = 140;                       /* capraz gecis: 120-160 araligi */
+    const KAPANMA_PX = 2;                      /* kapi esigi: kapanan eksende fark < 2 px */
+    /* GECIS KOLU (Enes, 31 Agu): 'fade' (varsayilan, 140 ms capraz) |
+       'patlama' (yakinlasmanin sonunda kizil-beyaz flas, tepe aninda
+       isinlama). Gorsel hukum Enes'te: ?gecis=patlama ile denenir. */
+    const GECIS = new URLSearchParams(location.search).get('gecis') === 'patlama' ? 'patlama' : 'fade';
+    const FLAS_TEPE_MS = 100;                  /* fl-parla-pat %38 tepesi (.26s) */
+    const parla = bolum.querySelector<HTMLElement>('.fl-parla');
+
+    let vw = 0, vh = 0, vidO = 16 / 9, devirBas = 0;
+    interface DevirGeo { qg: number; qh: number; cx: number; cy: number; S: number; kapanan: 'yatay' | 'dikey'; txSon: number; tySon: number }
+    let G: DevirGeo | null = null;
     const olcDevir = () => {
       vw = innerWidth; vh = innerHeight;
       const v = bolum.querySelector<HTMLElement>('.fl-sahne:last-of-type video');
-      const g = Number(v?.getAttribute('width')) || 1920;
-      const y = Number(v?.getAttribute('height')) || 1080;
-      vidO = g / y;
+      vidO = (Number(v?.getAttribute('width')) || 1920) / (Number(v?.getAttribute('height')) || 1080);
       const f = (window as any).__fl;
       devirBas = f ? f.konum(f.toplam) : 0;
-      devirBoy = vh;
+      /* `cover` cizimi -> dortgenin ekran pikseli -> hedef olcek */
+      const cizG = vw / vh > vidO ? vw : vh * vidO;
+      const cizH = vw / vh > vidO ? vw / vidO : vh;
+      const ox = (vw - cizG) / 2, oy = (vh - cizH) / 2;
+      const qg = DK.gen * cizG, qh = DK.yuk * cizH;
+      const cx = ox + (DK.sol + DK.gen / 2) * cizG, cy = oy + (DK.ust + DK.yuk / 2) * cizH;
+      const Sx = vw / qg, Sy = vh / qh;
+      G = { qg, qh, cx, cy, S: Math.max(Sx, Sy), kapanan: Sx >= Sy ? 'yatay' : 'dikey', txSon: vw / 2 - cx, tySon: vh / 2 - cy };
+      yapis.style.transformOrigin = `${cx.toFixed(2)}px ${cy.toFixed(2)}px`;
     };
 
-    /* Ekran dikdortgeninin EKRAN koordinati: video `object-fit: cover`
-       ile olcekleniyor, yani oran piksele burada cevrilir. */
-    const ekranKutu = () => {
-      /* `cover`: video ekrani DOLDURUR, tasan kenar kirpilir. Cizilen
-         kutu, ekrandan genis ya da yuksek olan taraftan tasar. */
-      const ciz = vw / vh > vidO ? { g: vw, h: vw / vidO } : { g: vh * vidO, h: vh };
-      const ox = (vw - ciz.g) / 2, oy = (vh - ciz.h) / 2;
-      return {
-        x: ox + ekranOran[0] * ciz.g, y: oy + ekranOran[1] * ciz.h,
-        g: ekranOran[2] * ciz.g, h: ekranOran[3] * ciz.h,
-      };
-    };
+    /* ---- devir yayi: motorla ayni disiplin (sabit 4 ms adim + harman) ---- */
+    let s = 1, sv = 0, sOnce = 1, birikimD = 0, sonMs = 0;
+    let aktif = false, fadeAcik = false, devirRaf = 0, navKalkti = false;
+    /* olcum yuzeyi kaydi — yalniz devir penceresinde dolar */
+    const KAYIT: {
+      v0: null | { video_1x: number; tempo: number; video: number; bizim: number; fark: number };
+      basMs: number | null; fadeBasMs: number | null; tamMs: number | null;
+      eskiYuklendiMs: number | null;
+      fadeGeo: null | Record<string, unknown>; kareler: number[]; iz: [number, number, number][];
+    } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [] };
 
-    let navKalkti = false, devirdeydi = false, sonD = -1;
-    const surucu = () => {
-      const y = scrollY;
-      /* 1) NAV: film basladiysa yukari; devir basladiysa geri iner */
-      const d = devirBoy > 0 ? Math.min(1, Math.max(0, (y - devirBas) / devirBoy)) : 0;
-      const kalk = y > 4 && d <= 0;
-      if (kalk !== navKalkti) {
-        navKalkti = kalk;
-        document.documentElement.classList.toggle('fl-nav-kalk', kalk);
-      }
-      /* 2) DEVIR: govde ekran dikdortgeninden tam ekrana acilir */
-      if (govde && d !== sonD) {
-        sonD = d;
-        if (d <= 0) {
-          govde.style.opacity = '0';
-          govde.style.visibility = 'hidden';
-          document.documentElement.classList.remove('fl-devir');
-        } else {
-          const k = ekranKutu();
-          /* TEK OLCEK (bozulma yok): dikdortgen ile ekranin en-boyu
-             birebir ayni degil; yatay/dikey ayri olceklenirse hero
-             ezilirdi. Kalan pay olculur ve rapora yazilir. */
-          const o0 = Math.min(k.g / vw, k.h / vh);
-          const olc = o0 + (1 - o0) * d;
-          const hx0 = k.x + k.g / 2 - vw / 2, hy0 = k.y + k.h / 2 - vh / 2;
-          const hx = hx0 * (1 - d), hy = hy0 * (1 - d);
-          govde.style.visibility = 'visible';
-          govde.style.opacity = String(Math.min(1, d * 3));
-          govde.style.transform = `translate3d(${hx.toFixed(2)}px, ${hy.toFixed(2)}px, 0) scale(${olc.toFixed(5)})`;
-          document.documentElement.classList.add('fl-devir');
+    /* NAV: film basladiysa kalkar ve DEVIRDE DE KALKIK KALIR (v2'de devirde
+       geri iniyordu; govde artik eski sitenin TAM sayfasi — kendi navi var,
+       dis nav inerse CIFT nav gorunurdu). Sayfanin navi devirle birlikte
+       iframe'den gelir. Gorsel hukum Enes'te. */
+    const navBak = () => {
+      const kalk = scrollY > 4;
+      if (kalk !== navKalkti) { navKalkti = kalk; document.documentElement.classList.toggle('fl-nav-kalk', kalk); }
+    };
+    /* TUTUNMA (CSS fl-tutun): scrollY ray sonundaysa yapis sabitlenir —
+       savurmada scrollY sonu gecip film geride kalinca yapis kacmasin.
+       Scroll dinleyicisinde ESZAMANLI cagrilir (rAF bekleyen surumde
+       kacis bir kare gorunurdu). */
+    let tutundu = false, hazirlandi = false;
+    const tutunBak = () => {
+      const tut = devirBas > 0 && scrollY >= devirBas - 1;
+      if (tut !== tutundu) { tutundu = tut; document.documentElement.classList.toggle('fl-tutun', tut); }
+      /* ON HAZIRLIK: govdenin ilk boyamasi devir karesine binmesin
+         (olculdu: 44-70 ms sistematik takilma). Ray sonuna 1,5 ekran
+         kala hazirlanir, 3 ekran uzaklasinca birakilir (histerezis). */
+      const haz = devirBas > 0 && scrollY >= devirBas - 1.5 * vh;
+      if (haz !== hazirlandi && (haz || scrollY < devirBas - 3 * vh)) {
+        hazirlandi = haz;
+        document.documentElement.classList.toggle('fl-hazirla', haz);
+        /* ESKI GIRIS GEC YUKLEME (Enes, 31 Agu): govde eski sitenin
+           girisi; 845 KB'lik sayfa film boyunca inmesin, ilk hazirlikta
+           insin. Perde bayragi ONCE yazilir — acilis torenini prolog
+           filmi ustlendi, devirde eski #boot perdesi oynamaz (sitenin
+           kendi 'oturumda bir kez' mekanizmasi). */
+        const eski = document.getElementById('fl-eski') as HTMLIFrameElement | null;
+        if (haz && eski && !eski.src) {
+          try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch {}
+          eski.addEventListener('load', () => {
+            KAYIT.eskiYuklendiMs = performance.now();
+            /* ESKI SAYFANIN KENDI YUMUSAK-HAREKET ANAHTARI: t-mo-soft
+               (noise+stars+tubes kapali — sitenin motion panel kipi).
+               Olculdu: huzme canvas'i acikken devirin hizli fazinda
+               15-20 dusen kare. Devir boyunca takili durur; tamYap
+               kaldirir ve sayfa devralinca huzmeler kendi 1,8 s'lik
+               gecisiyle dogar (__tubesInit — panelin kullandigi ayni
+               kurulum cagrisi). Ayni origin; olmazsa sessiz gecilir. */
+            try { eski.contentDocument?.documentElement.classList.add('t-mo-soft'); } catch {}
+          }, { once: true });
+          eski.src = eski.dataset.src || '/';
         }
-        if (d >= 1 && !devirdeydi) { devirdeydi = true; document.documentElement.dataset.devir = 'tam'; }
       }
-      /* 3) IPUCU: film sonuna varinca belirir, ILK kaydirmada soner,
-            oturumda bir kez. */
+    };
+    /* dortgenin o olcekteki ekran kenarlari (mikro ortalama dahil) */
+    const kenarlar = (ss: number) => {
+      const g = G!;
+      const u = g.S > 1 ? Math.min(1, (ss - 1) / (g.S - 1)) : 1;
+      const mx = g.cx + g.txSon * u, my = g.cy + g.tySon * u;
+      return { sol: mx - g.qg * ss / 2, sag: mx + g.qg * ss / 2, ust: my - g.qh * ss / 2, alt: my + g.qh * ss / 2, u };
+    };
+    const tamYap = () => {
+      if (!fadeAcik || document.documentElement.dataset.devir === 'tam') return;
+      document.documentElement.dataset.devir = 'tam';
+      if (KAYIT.tamMs === null) KAYIT.tamMs = performance.now();
+      /* devirden sonra eski giris etkilesilebilir (zemin govdesi iframe);
+         yumusak-hareket anahtari kalkar, huzmeler kendi gecisiyle dogar */
+      const eski = document.getElementById('fl-eski') as HTMLIFrameElement | null;
+      if (eski) {
+        eski.removeAttribute('aria-hidden'); eski.removeAttribute('tabindex');
+        try {
+          eski.contentDocument?.documentElement.classList.remove('t-mo-soft');
+          (eski.contentWindow as any)?.__tubesInit?.();
+        } catch {}
+      }
+    };
+    /* capraz gecis FILM katmaninin fade-out'u (film.css katman duzeni) —
+       bitis o katmanin transitionend'inden dinlenir */
+    yapis.addEventListener('transitionend', (e) => { if (e.propertyName === 'opacity') tamYap(); });
+
+    const devirKare = () => {
+      devirRaf = 0;
+      const f = (window as any).__fl;
+      if (!f || !G) return;
+      const simdi = performance.now();
+      const dt = sonMs ? Math.min(100, simdi - sonMs) : 16.7;
+      sonMs = simdi;
+      /* video SON karesini gosteriyor mu (kareNo tavani: toplam - 1/fps) */
+      const sonda = f.toplam - f.gosterilenT < 1 / f.fps;
+      const uzak = f.toplam - f.gosterilenT > 2 / f.fps;      /* histerezis */
+      if (!aktif && sonda) {
+        /* DEVIR TETIGI: videonun icindeki buyume bu karede bitti; buyumeyi
+           yay devralir. Ayni tikte nav geri iner (navBak asagida). */
+        aktif = true;
+        const tempo = Math.max(0, Math.min(3, f.hizT || 0));
+        sv = DK.hiz * tempo;
+        KAYIT.basMs = simdi; KAYIT.kareler.length = 0; KAYIT.iz.length = 0;
+        KAYIT.v0 = { video_1x: DK.hiz, tempo: +tempo.toFixed(4), video: +(DK.hiz * tempo).toFixed(7), bizim: +sv.toFixed(7), fark: 0 };
+        document.documentElement.classList.add('fl-devir');
+      }
+      if (aktif) {
+        if (uzak && fadeAcik) {
+          /* GERI: kullanici filmi geri sardi — sayfa cozulur, film gorunur */
+          fadeAcik = false;
+          document.documentElement.classList.remove('fl-devir-net');
+          delete document.documentElement.dataset.devir;
+          KAYIT.fadeBasMs = null; KAYIT.tamMs = null;
+        }
+        if (uzak && yapis.style.opacity !== '') yapis.style.opacity = '';   /* ortme kiricinin kalintisi */
+        const hedefS = uzak ? 1 : G.S;
+        const k = DSERT, c = 2 * Math.sqrt(k);
+        birikimD = Math.min(0.1, birikimD + dt / 1000);
+        while (birikimD >= 0.004) {
+          birikimD -= 0.004; sOnce = s;
+          const a = -k * (s - hedefS) - c * sv;
+          sv += a * 0.004; s += sv * 0.004;
+          if (s < 1) { s = 1; if (sv < 0) sv = 0; }
+        }
+        const cizS = Math.max(1, sOnce + (s - sOnce) * (birikimD / 0.004));
+        const kn = kenarlar(cizS);
+        yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)})`;
+        if (KAYIT.tamMs === null && KAYIT.kareler.length < 900) { KAYIT.kareler.push(simdi); KAYIT.iz.push([+simdi.toFixed(1), +cizS.toFixed(6), +(performance.now() - simdi).toFixed(1)]); }
+        /* CAPRAZ GECIS: dortgen goruntu alanini ortunce (en buyuk bosluk
+           < KAPANMA_PX) gercek sayfa ustte netlesir. Kapanan eksen mikro
+           ortalamayla iki kenardan birden kapanir; oteki eksen coktan
+           tasmistir (S = max secimi), yani bosluk kalmamistir. */
+        const bosluk = Math.max(kn.sol, vw - kn.sag, kn.ust, vh - kn.alt);
+        /* ORTME KIRICI (olculdu: film tam opakken kompozitor alttaki
+           govdeyi HIC boyamiyor — occlusion; ilk boyama fade karesine
+           binip 40-78 ms yiyordu). Fade'e yaklasirken film opakligi
+           gorunmez bicimde 0,996'ya iner: ortme kalkar, govde erken
+           boyanir. Satir-ici deger fade aninda silinir ki sinifin 0'a
+           gecisi (transition) devralsin. */
+        if (!fadeAcik && hedefS === G.S && bosluk < KAPANMA_PX * 8 && yapis.style.opacity === '') yapis.style.opacity = '0.996';
+        if (!fadeAcik && hedefS === G.S && bosluk < KAPANMA_PX) {
+          fadeAcik = true;
+          yapis.style.opacity = '';
+          KAYIT.fadeBasMs = simdi;
+          KAYIT.fadeGeo = {
+            s: +cizS.toFixed(5), hedefS: +G.S.toFixed(5), kapanan: G.kapanan,
+            bosluk_px: { sol: +kn.sol.toFixed(2), sag: +(vw - kn.sag).toFixed(2), ust: +kn.ust.toFixed(2), alt: +(vh - kn.alt).toFixed(2) },
+            sayfa_transform: 'okunmadi',
+          };
+          /* getComputedStyle sicak kareden cikti (dusen kare olcumu):
+             fade aninin sayfa olcegi bir sonraki gorev diliminde okunur. */
+          const fg = KAYIT.fadeGeo;
+          setTimeout(() => { fg.sayfa_transform = govde ? getComputedStyle(govde).transform : 'yok'; }, 0);
+          if (GECIS === 'patlama' && parla) {
+            /* PATLAMA: flas yukselirken film hala ekranda; tepe aninda
+               site devralir (tamYap film katmanini ANINDA gizler), flas
+               sonerken artik sayfa gorunuyor — "isinlama". */
+            parla.classList.add('aktif');
+            parla.addEventListener('animationend', () => parla.classList.remove('aktif'), { once: true });
+            setTimeout(() => { document.documentElement.classList.add('fl-devir-net'); tamYap(); }, FLAS_TEPE_MS);
+          } else {
+            document.documentElement.classList.add('fl-devir-net');
+            setTimeout(tamYap, FADE_MS + 80);          /* transitionend yedegi */
+          }
+        }
+        /* oturma: hedefte ve durgun */
+        if (Math.abs(s - hedefS) < 0.0004 && Math.abs(sv) < 0.004) {
+          s = hedefS; sv = 0;
+          if (hedefS === 1) {
+            /* cozulme: transform kalkar, katmanlar normale doner */
+            aktif = false; fadeAcik = false;
+            yapis.style.transform = ''; yapis.style.opacity = '';
+            document.documentElement.classList.remove('fl-devir', 'fl-devir-net');
+            delete document.documentElement.dataset.devir;
+            birikimD = 0;
+          }
+        }
+      }
+      navBak();
+      tutunBak();
+      ipucuBak();
+      /* dongu surme karari: devir oturup TAMAMLANDIYSA durur (pil);
+         geri sarma scroll olayindan yeniden kurulur. Sona yakinken
+         donmeye devam eder — tetik kaydirmasiz da gelebilir (yay/akis). */
+      const oturduTam = aktif && s === G.S && sv === 0 && KAYIT.tamMs !== null;
+      if (!oturduTam && (aktif || (devirBas > 0 && scrollY > devirBas - 2 * vh))) devirTik();
+      else sonMs = 0;
+    };
+    const devirTik = () => { if (!devirRaf) devirRaf = requestAnimationFrame(devirKare); };
+
+    /* IPUCU: film sonuna varinca belirir, ILK kaydirmada soner,
+       oturumda bir kez. */
+    const ipucuBak = () => {
       if (ipucu && !ipucuGorulmus && ipucu.hidden) {
         /* GORUNME SARTI YALNIZ FILMIN BITMESI; SONME SARTI ILK GIRDI.
            Iki yanlis surumun notu duruyor, ikisi de OLCUMLE cikti
@@ -248,18 +473,16 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         }
       }
     };
-    /* IBARE ICIN DAR KAPSAMLI YOKLAMA — OLCUMLE BULUNDU: surucu yalniz
-       `scroll` olayinda kosuyordu, ama ibarenin sarti (gosterilen konum
-       filmin sonuna OTURDU ve henuz devre girilmedi) kaydirma DURDUKTAN
-       sonra, yay otururken gerceklesiyor. O anda yeni scroll olayi
-       gelmedigi icin ibare hic belirmiyordu — olcumde "belirdi: null"
-       cikti. Yoklama 250 ms'de bir, YALNIZ ibare henuz gosterilmemisken
-       ve yalnız filmin son %10'unda; gosterilince kendini kapatir. */
+    /* IBARE ICIN DAR KAPSAMLI YOKLAMA — OLCUMLE BULUNDU (v2): ibarenin
+       sarti kaydirma DURDUKTAN sonra, yay otururken gerceklesiyor; o anda
+       scroll olayi gelmiyor. Yoklama 250 ms'de bir, yalniz ibare henuz
+       gosterilmemisken ve filmin son %10'unda; devir izleyicisini de
+       ayni sebepten durter (tetik kaydirmasiz gelebilir: yay/akis). */
     let yoklama = 0;
     const yoklamaBak = () => {
       const f = (window as any).__fl;
       if (!f || ipucuGorulmus) { clearInterval(yoklama); yoklama = 0; return; }
-      if (f.gosterilenT >= f.toplam * 0.9) surucu();
+      if (f.gosterilenT >= f.toplam * 0.9) { ipucuBak(); devirTik(); }
     };
     const yoklamaKur = () => {
       if (yoklama || ipucuGorulmus) return;
@@ -267,23 +490,29 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     };
 
     olcDevir();
-    /* YOKLAMA KURULUMDA BASLAR, ILK KAYDIRMADA DEGIL. Onceki surumde
-       `yoklamaKur()` yalniz scroll dinleyicisinin icinde cagriliyordu;
-       olcumde ibare hic gorunmedi (T sona vardi, sart tuttu, dal
-       calismadi). Kurulumda baslatmak bagimliligi kaldiriyor — yoklama
-       zaten ibare gosterilince kendini kapatiyor, yani surekli bir yuk
-       degil. */
+    /* YOKLAMA KURULUMDA BASLAR, ILK KAYDIRMADA DEGIL (v2 dersi: dal
+       scroll'a bagliyken ibare hic gorunmedi). */
     yoklamaKur();
-    addEventListener('scroll', () => { surucu(); yoklamaKur(); }, { passive: true });
-    addEventListener('resize', () => { olcDevir(); surucu(); }, { passive: true });
-    surucu();
-    (window as any).__devir = { olc: olcDevir, kutu: ekranKutu, ilerleme: () => (devirBoy > 0 ? Math.min(1, Math.max(0, (scrollY - devirBas) / devirBoy)) : 0), bas: () => devirBas };
+    addEventListener('scroll', () => { navBak(); tutunBak(); devirTik(); yoklamaKur(); }, { passive: true });
+    addEventListener('resize', () => { olcDevir(); tutunBak(); devirTik(); }, { passive: true });
+    navBak(); tutunBak(); devirTik();
+    /* OLCUM YUZEYI (olc-devir.cjs okur): kunye + geometri + yay durumu +
+       devir penceresi kaydi (v0, fade/tam anlari, rAF zamanlari, olcek izi). */
+    (window as any).__devir = {
+      kunye: DK, sert: DSERT, fadeMs: FADE_MS, kapanmaPx: KAPANMA_PX,
+      geo: () => G, s: () => s, hiz: () => sv, aktif: () => aktif,
+      kayit: KAYIT, bas: () => devirBas, olc: olcDevir,
+    };
 
       const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
       gec?.addEventListener('click', () => {
         try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
         sok();
         document.documentElement.classList.remove('fl-js');
+        /* devir ortasinda basilirsa devir kalintilari da sokulur — yoksa
+           gorunur govde/tutunma sinifi sayfayi kilitli birakirdi */
+        document.documentElement.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk');
+        delete document.documentElement.dataset.devir;
         document.documentElement.dataset.film = 'atlandi';
       });
     }).catch((e) => {
