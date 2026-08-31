@@ -51,6 +51,10 @@
    (kritik sonumlu yayda asma sarti v0 > w*d; bu sinirin altinda tek yonlu
    varis). Boylece kaydirma biraktiginda film aniden yavaslamaz, elin
    hiziyla sonumlenir. Hiz tavani (TAVAN) yayin hizina uygulanir.
+   DEVIR KATSAYISI (30 Agu 2026, TUR 6): devredilen miktar artik
+   `min(|hedefHiz| * MOMENT, w*|d|)`. MOMENT = 1 varsayilan ve 28 Agu'dan
+   beri surdurulen davranisla BIREBIR ayni; 0 = hic devir yok.
+   Ayar: ?moment=0.3 (URL) · data-moment (DOM) · __fl.moment (konsol).
    DURUSTA AKIS (28 Agu 2026, Enes): kaydirma birakilinca ve yay otururken
    film cok yavas ilerlemeye DEVAM eder (varsayilan AKIS = 0,08 film-sn /
    gercek-sn). Gerekce: film 24 fps; yayin son ~275 ms'si bir kareden kucuk
@@ -99,6 +103,14 @@
    maliyeti sifir (dizilere itilmez).
    ============================================================ */
 
+/* AYAR SABITLERI (30 Agu 2026, sertlestirme turu): pxsn / sert / sonum /
+   tavan / akis degerleri TEK yerde — `ayar.mjs`. Bu dosya onlari yalniz
+   YEDEK olarak kullanir (urun yolunda deger DOM'daki data-*'tan gelir);
+   ayni dosyayi `sahneler.ts` de okudugu icin DOM ile yedek ayrisamaz.
+   sahneler.ts'in kendisi ithal EDILEMEZ: kanon.json/uretim.json'u pakete
+   sokardi (sert degismez: kanon.json tarayiciya inmez). */
+import { AYAR } from './ayar.mjs';
+
 /* Bellek tavani: gecerli sahnenin +-PENCERE'si bellekte kalir. 3 -> en cok
    7 klip. Olculen klip basi ~1 MiB (CRF 28 native) ile tavan ~7 MiB. */
 const PENCERE = 3;
@@ -118,14 +130,19 @@ const ON_PENCERE_TABAN = PENCERE - 1;
 const SAVURMA_SN = 0.12;
 /* Durusta akis: kullanici girdisinden sonra bu kadar bekle (ms), sonra ak. */
 const AKIS_BEKLE_MS = 160;
+/* Hizalama: girdi kesileli bu kadar gectiyse "kullanici birakti" sayilir.
+   AKIS_BEKLE_MS'ten KUCUK olmali — hizalama, akis yeniden baslamadan once
+   bitmeli, yoksa akisin kaydirmasi hizalamanin uzerine biner. */
+const HIZALA_BEKLE_MS = 120;
 /* Fizik adimi (s): sabit; kare suresinden bagimsiz. */
 const FIZIK_DT = 0.004;
 /* Bir karede en cok bu kadar birikim islenir (sekme arka plana dusup
    donunce yuzlerce adim kosmasin; kalan atilir, konum korunur). */
 const FIZIK_TAVAN_S = 0.1;
 /* Hiz tavaninin varsayilani (film-sn / gercek-sn). 1x okuma ve 1,5x
-   gezinme olculdu, ikisi de temiz (FILM-ISKELET-TURU 5. tur); ustu yutulur. */
-const TAVAN_VARSAYILAN = 1.5;
+   gezinme olculdu, ikisi de temiz (FILM-ISKELET-TURU 5. tur); ustu yutulur.
+   Sayi ayar.mjs'ten gelir — burada TEKRAR YAZILMAZ. */
+const TAVAN_VARSAYILAN = AYAR.tavan;
 /* "geride" olayi esigi: gosterilen hedefin bu kadar film-sn gerisindeyse
    sayfa atla dugmesini gosterebilir. */
 const GERIDE_SN = 1.0;
@@ -162,6 +179,9 @@ interface Iz {
   gosterilenT: number;        /* ekranda olan film saniyesi (harmanlanmis) */
   hizT: number;               /* yayin hizi, film-sn / gercek-sn */
   hedefHiz: number;           /* hedefin (kaydirmanin) son olculen hizi */
+  moment: number;             /* moment devri katsayisi: 1 = tamami, 0 = devir yok */
+  hizala: number;             /* birakista sayfa hizalama: 0 = kapali, >0 = savrulma payi carpani */
+  hizalama: number;           /* kac kez hizalandi (olcum yuzeyi) */
   atla: () => void;           /* gosterileni hedefe oturt (yutulan kaydirmayi atla) */
   geride: () => number;       /* hedef - gosterilen, film-sn */
   devir: number;              /* devralma sayisi */
@@ -180,20 +200,37 @@ export function baslat(bolum: HTMLElement): () => void {
   kuruldu = true;
 
   const kok = bolum.dataset.kok || '';
-  const fps = Number(bolum.dataset.fps);
-  /* KAYDIRMA UZUNLUGU (px / film saniyesi) — sonumleme gibi ustten
-     ayarlanabilir: ?pxsn=450 (URL) > data-pxsn (DOM) > sahneler.ts.
-     Ray yuksekligi CSS'ten geldigi icin URL ile ezilince ray da yeniden
-     yazilir (asagida --fl-pxsn). */
-  const pxSn = (() => {
-    const u = Number(new URLSearchParams(location.search).get('pxsn'));
-    const d = Number(bolum.dataset.pxsn);
-    if (u >= 50 && u <= 2000) {
-      bolum.style.setProperty('--fl-pxsn', String(u));   /* ray boyu da degissin */
-      return u;
-    }
-    return d;
-  })();
+  /* AYAR OKUMA — dort ayarin ORTAK yolu: URL > DOM > ayar.mjs yedegi.
+     `alt`..`ust` gecerlilik araligi: URL'den gelen sayi disaridaysa yok
+     sayilir; DOM'daki deger bozuksa VEYA EKSIKSE yedege duser
+     (Number(undefined) = NaN, hicbir karsilastirmayi gecemez). */
+  const oku = (ad: string, ust: number, vars: number, alt = 0) => {
+    const u = new URLSearchParams(location.search).get(ad);
+    if (u !== null && Number(u) >= alt && Number(u) <= ust) return Number(u);
+    const d = bolum.dataset[ad];
+    return d !== undefined && Number(d) >= alt ? Number(d) : vars;
+  };
+  /* KAYDIRMA UZUNLUGU (px / film saniyesi) — ?pxsn=450 (URL) >
+     data-pxsn (DOM) > ayar.mjs yedegi.
+     YEDEK NEDEN EKLENDI (30 Agu 2026, sertlestirme turu): eskiden DOM
+     degeri dogrudan Number()'a giriyordu, `data-pxsn` dusunce pxSn NaN
+     oluyordu ve motor PATLAMIYORDU — durusta akis birikimi (akisPx)
+     sessizce NaN'a donuyor, Math.floor(NaN) hicbir zaman 1'e ulasmiyor,
+     yani akis oluyor; ama IZ.akiyor true kaliyor, olcum yuzeyi "akiyor"
+     diyor. Sessiz yanlis yesil (kanit: jsdom + gercek markup, TUR 1).
+     Ray yuksekligi CSS'ten (--fl-pxsn) geldigi icin ETKIN deger her
+     halukarda stile de yazilir: URL ezse de yedege dusulse de ray ile
+     motorun haritasi ayni sayidan beslenir. */
+  const pxSn = oku('pxsn', 2000, AYAR.pxsn, 50);
+  bolum.style.setProperty('--fl-pxsn', String(pxSn));
+  /* FPS — ayni savunma (30 Agu, TUR 2 Adim 0). Kaynak kanon.json -> data-fps;
+     bu yalniz o duserse devreye giren yedek. fps NaN olsaydi kareNo/kareSn ve
+     butun 0,5/fps esikleri NaN olurdu (pxsn'den sert, yine sessiz). */
+  const fps = oku('fps', 240, AYAR.fpsYedek, 1);
+  /* OTURMA TOLERANSI (30 Agu 2026, TUR 3) — TEK buyukluk, iki yerde:
+     konumda YARIM KARE, hizda yarim kare / saniye (fps=24 -> 0,0208).
+     Solverdeki 0,02'lik sihirli sayi bundan turetildi, ayrica yazilmiyor. */
+  const OTUR = 0.5 / fps;
   /* Hat secimi: H13/H6 ile ayni esik (900 px). Kaynak farki yalniz CRF/GOP
      (mobil betik 720p tavanini zaten 716 satirla asmiyor). */
   const mobil = matchMedia('(max-width: 900px)').matches;
@@ -208,16 +245,15 @@ export function baslat(bolum: HTMLElement): () => void {
   })();
   const kaynakYolu = (el: HTMLElement, h264: string, h265: string) =>
     KODEK === 'h265' && el.dataset[h265] ? el.dataset[h265]! : el.dataset[h264]!;
-  /* yay katsayilari: URL > DOM > varsayilan (sahneler.ts). sonum 0 = kritik. */
-  const oku = (ad: string, ust: number, vars: number) => {
-    const u = new URLSearchParams(location.search).get(ad);
-    if (u !== null && Number(u) >= 0 && Number(u) <= ust) return Number(u);
-    const d = bolum.dataset[ad];
-    return d !== undefined && Number(d) >= 0 ? Number(d) : vars;
-  };
-  const SERT = oku('sert', 5000, 120);
-  const SONUM = oku('sonum', 1000, 0);
-  const AKIS = oku('akis', 5, 0.08);
+  /* yay katsayilari: URL > DOM > ayar.mjs yedegi. sonum 0 = kritik. */
+  const SERT = oku('sert', 5000, AYAR.sert);
+  const SONUM = oku('sonum', 1000, AYAR.sonum);
+  const AKIS = oku('akis', 5, AYAR.akis);
+  /* moment devri katsayisi (30 Agu 2026, TUR 6): 1 = tamami (varsayilan,
+     28 Agu'dan beri surdurulen davranis), 0 = devir yok. Ust sinir 2. */
+  const MOMENT = oku('moment', 2, AYAR.moment);
+  /* hizalama kolu (30 Agu 2026, TUR 7): 0 = kapali (varsayilan). */
+  const HIZALA = oku('hizala', 5, AYAR.hizala);
   /* hiz tavani: URL > DOM > varsayilan; 0 = kapali */
   const TAVAN = (() => {
     const u = new URLSearchParams(location.search).get('tavan');
@@ -247,7 +283,8 @@ export function baslat(bolum: HTMLElement): () => void {
     istek: [], sunum: [], ilkKareMs: null,
     yon: 1, hiz: 0, pencere: PENCERE, onPencere: ON_PENCERE_TABAN, mbit: null, onsar: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
-    sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
+    sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, moment: MOMENT, hizala: HIZALA, hizalama: 0,
+    akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
     geride: () => IZ.hedefT - IZ.gosterilenT,
     ray: () => ({ pxSn, rayPx: Math.round(toplam * pxSn), ekranBoyu: +(toplam * pxSn / innerHeight).toFixed(1),
@@ -491,6 +528,15 @@ export function baslat(bolum: HTMLElement): () => void {
 
   /* --- kaydirma dongusu: tek rAF, tek yazim --- */
   let bekleyen = false;
+  /* DURDURMA (31 Agu 2026, PROLOG-ISKELET 5. adim) — `sok()` cagrilinca
+     dongu KESIN durur. Eskiden sok() yalniz dinleyicileri cozuyordu; ama
+     `kare` kendi sonunda (yay oturmadiysa ya da akis suruyorsa) `tik()`
+     cagiriyor. Yani sokumden SONRA da rAF kendi kendini yeniden kuruyor:
+     gorunmeyen bir sahne icin kare basina is — gorevin adini koydugu
+     "sessiz pil sizintisi". Iki kapi: `tik` artik zamanlamaz, `kare`
+     bastan doner; bekleyen rAF de iptal edilir. */
+  let durdu = false;
+  let rafId = 0;
   let sonT: number | null = null;
   let sonKareMs = 0;
   let ilkKareGecti = false;
@@ -501,8 +547,12 @@ export function baslat(bolum: HTMLElement): () => void {
   /* durusta akis: son kullanici girdisi ani, kaydirma px birikimi, bizim scrollBy'imizin dogurdugu scroll olayini ayirt etme */
   let sonGirdi = 0, akisPx = 0;
   let hedefOnce = 0, hedefHiz = 0, hedefDurdu = 0;   /* hedef hizi ve kac fizik adimidir durdugu */
+  /* hizalama: birakis basina BIR kez. Yalniz gercek kullanici girdisinde
+     sifirlanir (girdi()), kendi scrollTo'muzda degil. */
+  let hizalandi = false;
   const kare = () => {
     bekleyen = false;
+    if (durdu) return;
     const simdi = performance.now();
     const dt = sonKareMs ? Math.min(100, simdi - sonKareMs) : 16.7;
     sonKareMs = simdi;
@@ -531,7 +581,7 @@ export function baslat(bolum: HTMLElement): () => void {
       IZ.gosterilenT = hedefT; ilkKareGecti = true; atlaIstek = false;
     } else {
       /* --- SABIT ADIMLI YAY: birikimi 4 ms'lik adimlarla tuket --- */
-      const k = IZ.sert > 0 ? IZ.sert : 120;
+      const k = IZ.sert > 0 ? IZ.sert : AYAR.sert;   /* sayi ayar.mjs'te */
       const c = IZ.sonum > 0 ? IZ.sonum : 2 * Math.sqrt(k);   /* 0 = kritik sonum */
       const w = Math.sqrt(k);
       birikim = Math.min(FIZIK_TAVAN_S, birikim + dt / 1000);
@@ -547,12 +597,17 @@ export function baslat(bolum: HTMLElement): () => void {
         if (!hedefHareketli) {
           hedefDurdu++;
           /* MOMENT DEVRI: hedef yeni durdu (ilk adim) -> hedefin son hizini
-             devral, asmayacak sinirla: |v| <= w * |d| (kritik sonumlu yay). */
+             devral, asmayacak sinirla: |v| <= w * |d| (kritik sonumlu yay).
+             KATSAYI (30 Agu 2026, TUR 6): `IZ.moment` hedefin hizinin ne
+             kadarinin devredilecegini soyler. 1 = tamami (varsayilan, eski
+             davranisla birebir ayni), 0 = hic. Katsayi yalnizca HEDEFIN
+             hizini olcekler; w*|d| siniri ve "ancak buyukse yaz" kurali
+             oldugu gibi kalir — yani kol hizi azaltabilir, artiramaz. */
           if (hedefDurdu === 1 && hedefHiz !== 0) {
             const d = hedefT - yx, yon = Math.sign(d);
             if (yon !== 0 && Math.sign(hedefHiz) === yon) {
               const sinir = w * Math.abs(d);
-              const aday = Math.min(Math.abs(hedefHiz), sinir);
+              const aday = Math.min(Math.abs(hedefHiz) * IZ.moment, sinir);
               if (aday > Math.abs(yv)) yv = yon * aday;
             }
             hedefHiz = 0;
@@ -562,18 +617,69 @@ export function baslat(bolum: HTMLElement): () => void {
         yv += a * FIZIK_DT;
         if (IZ.tavan > 0 && Math.abs(yv) > IZ.tavan) yv = Math.sign(yv) * IZ.tavan;   /* hiz tavani: ustu yutulur */
         yx += yv * FIZIK_DT;
-        /* oturma: yarim kareden yakin ve hiz kucuk -> tam hedef, hiz sifir (tekleme yok) */
-        if (Math.abs(yx - hedefT) < 0.5 / fps && Math.abs(yv) < 0.02) { yx = hedefT; yv = 0; }
+        /* oturma: yarim kareden yakin VE hizi yarim kare/sn'nin altinda ->
+           tam hedef, hiz sifir (tekleme yok). Esik OTUR; asagidaki dongu
+           durma sarti da ayni esigi kullanir, ikisi ayrisamaz. */
+        if (Math.abs(yx - hedefT) < OTUR && Math.abs(yv) < OTUR) { yx = hedefT; yv = 0; }
       }
       /* CIZIM: iki fizik durumu arasinda ara deger (alfa = birikim / dt) */
       const alfa = birikim / FIZIK_DT;
       IZ.gosterilenT = yxOnce + (yx - yxOnce) * alfa;
       IZ.hizT = yv; IZ.hedefHiz = hedefHiz;
     }
+
+    /* HIZALAMA (30 Agu 2026, TUR 7) — DENEYSEL, VARSAYILAN KAPALI (hizala=0).
+       SORUN: hiz tavani yetisme HIZINI kisiyor ama BORCUN kendisini degil.
+       3000 px'lik savurma 6,67 film-sn hedef uretiyor; kullanici elini
+       cektiginde tarayicinin kaydirmasi bitiyor ama filmin borcu duruyor ve
+       film onu YOL KAT EDEREK kapatiyor (olculdu TUR 4: 4,36 sn boyunca
+       tavana dayali akis).
+       ISTENEN (Enes): film o anki hizindan yumusak sifira insin, kalan borc
+       yol kat ederek degil HIZALANARAK kapansin. Araba benzetmesi: 100'den
+       0'a inerken 40 km daha gidilmez.
+       NASIL: harita degistirilmiyor, SAYFA hizalaniyor. Bilerek boyle:
+       `hedefT = f(scrollY)` degismezi (dosya basi, "tek gercek kaynak
+       scrollY") korunur, ray boyu filmin sonuyla ortusmeye devam eder ve
+       `konum()` tersi bozulmaz. Haritaya kayma terimi eklemek ayni etkiyi
+       verirdi ama kayma her savurmada birikir, rayin dibinde film o kadar
+       erken biterdi.
+       PAY: yay o anki hiziyla ASMADAN durabilsin diye hedef, filmin onunde
+       |v|/w kadar birakilir — moment devrindeki w*|d| sinirinin tersi.
+       `IZ.hizala` bu payin carpani.
+       NE ZAMAN: gercek girdi kesileli HIZALA_BEKLE_MS gecmis VE hedef durmus
+       olmali. `scroll` olayi girdi sayilmadigi icin kendi scrollTo'muz yeni
+       bir birakis uretmez; bayrak yalniz girdi()'de sifirlanir. */
+    if (IZ.hizala > 0 && ilkKareGecti && !hizalandi && hedefDurdu >= 1
+        && simdi - sonGirdi > HIZALA_BEKLE_MS) {
+      const dH = hedefT - yx;
+      const wH = Math.sqrt(IZ.sert > 0 ? IZ.sert : AYAR.sert);
+      const pay = (Math.abs(yv) / wH) * IZ.hizala;
+      if (Math.abs(dH) > pay) {
+        const hedefYeni = Math.min(toplam - 1e-3, Math.max(0, yx + Math.sign(dH) * pay));
+        const px = Math.round(IZ.konum(hedefYeni));
+        /* hedefOnce YUVARLANMIS pikselin karsiligi olmali: yoksa sonraki
+           karede 1 px'lik fark "hedef hareket etti" sayilir ve hem sahte bir
+           hedefHiz uretir hem de hizalamayi yeniden tetikleyebilir. */
+        hedefOnce = Math.min(toplam - 1e-3, Math.max(0, ((px - ust) / yol) * toplam));
+        hedefHiz = 0; akisPx = 0; hizalandi = true; IZ.hizalama++;
+        scrollTo(0, px);
+      }
+    }
+
     const T = IZ.gosterilenT;
     /* hedefe oturmadiysa dongu kendi kendini surdurur — kaydirma olayi
-       bitmis olsa da sonumleme tamamlanir. */
-    if (Math.abs(hedefT - T) > 0.5 / fps) tik();
+       bitmis olsa da sonumleme tamamlanir.
+       HIZ SARTI (30 Agu 2026, TUR 3 — DONMA KUSURU): eskiden burada yalniz
+       KONUM vardi. Snap ise konum VE hiz istiyordu; arada bir pencere
+       kaliyordu — yay hedefe yarim kareden yakin gelince dongu duruyor, ama
+       snap tetiklenmedigi icin hiz sifirlanmadan PARK EDIYORDU. Olculdu
+       (gercek Brave, CDP jesti, akis kapali): k=60/120/250 icin artik hiz
+       0,133 / 0,176 / 0,250 film-sn/sn; birakistan 2 sn sonra ayni sayi,
+       yani kalici. Bir sonraki savurma o artik hizla basliyordu —
+       "savurma sonrasi yag gibi kaymiyor" tarifinin muhtemel karsiligi.
+       Artik dongu, snap'in sarti saglanmadan durmuyor: ikisi ayni esikten
+       (OTUR) besleniyor. */
+    if (Math.abs(hedefT - T) > OTUR || Math.abs(yv) > OTUR) tik();
     /* geride kalma olayi: yalniz esik gecislerinde (kare basina olay yok) */
     const geride = Math.abs(hedefT - T) > GERIDE_SN;
     if (geride !== gerideydi) { gerideydi = geride; bolum.dispatchEvent(new CustomEvent('fl-geride', { detail: { geride: geride ? hedefT - T : 0 } })); }
@@ -607,9 +713,9 @@ export function baslat(bolum: HTMLElement): () => void {
     }
   };
   const tik = () => {
-    if (bekleyen) return;
+    if (durdu || bekleyen) return;
     bekleyen = true;
-    requestAnimationFrame(kare);
+    rafId = requestAnimationFrame(kare);
   };
   const boyut = () => { olc(); tik(); };
   const kilitAc = () => {
@@ -619,7 +725,7 @@ export function baslat(bolum: HTMLElement): () => void {
   };
 
   /* kullanici girdisi: akisi durdurur (scroll olayi sayilmaz — bizim scrollBy da scroll dogurur) */
-  const girdi = () => { sonGirdi = performance.now(); akisPx = 0; tik(); };
+  const girdi = () => { sonGirdi = performance.now(); akisPx = 0; hizalandi = false; tik(); };
   for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) addEventListener(ad, girdi, { passive: true });
   olc();
   etkinYap(S[0]);
@@ -630,6 +736,9 @@ export function baslat(bolum: HTMLElement): () => void {
 
   /* --- sokum --- */
   return function sok() {
+    durdu = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    bekleyen = false;
     removeEventListener('scroll', tik);
     for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) removeEventListener(ad, girdi);
     removeEventListener('resize', boyut);

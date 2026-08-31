@@ -1,0 +1,165 @@
+{
+ "_": "yeni/film/olc-butce.cjs — 32 MiB butcesi icin kaldirac olcumu. tahmini_hat_mib ORNEKTEN OLCEKLI TAHMIN (pay gercek bayttan), olculen_ornek_mib gercek. Taban aday DISKTEKI uretim ciktisi (yeniden encode yok).",
+ "olcum": "2026-08-31T12:00:43.827Z",
+ "kaynak": "C:\\Users\\Monster\\Desktop\\QANATONE SAHNELER 4K",
+ "ornek_klipler": [
+  13,
+  16,
+  22,
+  27,
+  34
+ ],
+ "ornek_payi_yuzde": 17.15,
+ "hat_gercek_bayt": 249874406,
+ "hat_gercek_mib": 238.3,
+ "butce_mib": 32,
+ "aday": [
+  {
+   "ad": "taban (yayindaki: 1080p crf24 gop8)",
+   "kaldirac": "—",
+   "yuk": 1080,
+   "crf": 24,
+   "gop": 8,
+   "olculen_ornek_bayt": 42859903,
+   "olculen_ornek_mib": 40.87,
+   "tahmini_hat_mib": 238.3,
+   "butceye_gore_x": 7.45,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 16,
+    "ort_aralik": 7.56
+   },
+   "psnr_vs_taban": null,
+   "ssim_vs_taban": null,
+   "sn": 2,
+   "tabana_gore_kazanc_yuzde": 0
+  },
+  {
+   "ad": "crf28 · 1080p gop8",
+   "kaldirac": "crf",
+   "yuk": 1080,
+   "crf": 28,
+   "gop": 8,
+   "olculen_ornek_bayt": 26796923,
+   "olculen_ornek_mib": 25.56,
+   "tahmini_hat_mib": 149,
+   "butceye_gore_x": 4.66,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 16,
+    "ort_aralik": 7.56
+   },
+   "psnr_vs_taban": 40.5,
+   "ssim_vs_taban": 0.975,
+   "sn": 19,
+   "tabana_gore_kazanc_yuzde": 37.5
+  },
+  {
+   "ad": "crf32 · 1080p gop8",
+   "kaldirac": "crf",
+   "yuk": 1080,
+   "crf": 32,
+   "gop": 8,
+   "olculen_ornek_bayt": 16814474,
+   "olculen_ornek_mib": 16.04,
+   "tahmini_hat_mib": 93.5,
+   "butceye_gore_x": 2.92,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 16,
+    "ort_aralik": 7.56
+   },
+   "psnr_vs_taban": 38.05,
+   "ssim_vs_taban": 0.9586,
+   "sn": 17,
+   "tabana_gore_kazanc_yuzde": 60.8
+  },
+  {
+   "ad": "crf24 · 720p gop8",
+   "kaldirac": "cozunurluk",
+   "yuk": 720,
+   "crf": 24,
+   "gop": 8,
+   "olculen_ornek_bayt": 24859320,
+   "olculen_ornek_mib": 23.71,
+   "tahmini_hat_mib": 138.2,
+   "butceye_gore_x": 4.32,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 16,
+    "ort_aralik": 7.56
+   },
+   "psnr_vs_taban": 37.75,
+   "ssim_vs_taban": 0.9642,
+   "sn": 19,
+   "tabana_gore_kazanc_yuzde": 42
+  },
+  {
+   "ad": "crf24 · 1080p gop24",
+   "kaldirac": "anahtar kare",
+   "yuk": 1080,
+   "crf": 24,
+   "gop": 24,
+   "olculen_ornek_bayt": 36702430,
+   "olculen_ornek_mib": 35,
+   "tahmini_hat_mib": 204.1,
+   "butceye_gore_x": 6.38,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 6,
+    "ort_aralik": 20.17
+   },
+   "psnr_vs_taban": 42.21,
+   "ssim_vs_taban": 0.9873,
+   "sn": 18,
+   "tabana_gore_kazanc_yuzde": 14.4
+  },
+  {
+   "ad": "crf24 · 1080p gop48",
+   "kaldirac": "anahtar kare",
+   "yuk": 1080,
+   "crf": 24,
+   "gop": 48,
+   "olculen_ornek_bayt": 34910353,
+   "olculen_ornek_mib": 33.29,
+   "tahmini_hat_mib": 194.1,
+   "butceye_gore_x": 6.07,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 3,
+    "ort_aralik": 40.33
+   },
+   "psnr_vs_taban": 41.95,
+   "ssim_vs_taban": 0.9872,
+   "sn": 19,
+   "tabana_gore_kazanc_yuzde": 18.5
+  },
+  {
+   "ad": "BIRLESIK crf30 · 720p gop12",
+   "kaldirac": "ucu birden",
+   "yuk": 720,
+   "crf": 30,
+   "gop": 12,
+   "olculen_ornek_bayt": 11082869,
+   "olculen_ornek_mib": 10.57,
+   "tahmini_hat_mib": 61.6,
+   "butceye_gore_x": 1.93,
+   "gecer_mi": false,
+   "anahtar_kare": {
+    "kare": 121,
+    "anahtar": 11,
+    "ort_aralik": 11
+   },
+   "psnr_vs_taban": 35.75,
+   "ssim_vs_taban": 0.9446,
+   "sn": 19,
+   "tabana_gore_kazanc_yuzde": 74.2
+  }
+ ]
+}

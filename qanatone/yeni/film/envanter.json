@@ -1,0 +1,923 @@
+{
+ "_": "yeni/film/envanter.cjs — 39 klip ffprobe envanteri. GOP kare kare key_frame sayimiyla OLCULDU (kanon.json GOP tasimaz). 32 MiB butcesi CIKTI hatti icindir; kaynak 4K ustalar butceye girmez.",
+ "olcum": "2026-08-31T12:35:01.472Z",
+ "kaynak": "C:\\Users\\Monster\\Desktop\\QANATONE SAHNELER 4K",
+ "toplam": {
+  "sure_sn": 256.638,
+  "kare": 6159,
+  "kaynak_bayt": 2151892068,
+  "cikti_bayt": 249874406,
+  "butce_bayt": 33554432,
+  "kalan_pay_bayt": -216319974,
+  "butceye_gore_x": 7.45
+ },
+ "cogunluk": {
+  "fps": 24,
+  "cozunurluk": "3840x2160"
+ },
+ "aykiri": {
+  "fps": [],
+  "kaynak_cozunurluk": [],
+  "cikti_cozunurluk": [],
+  "ciktisi_eksik": []
+ },
+ "klip": [
+  {
+   "n": 1,
+   "dosya": "sahne1.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 40757121
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 3664428
+   }
+  },
+  {
+   "n": 2,
+   "dosya": "sahne2.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 46069158
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5293283
+   }
+  },
+  {
+   "n": 3,
+   "dosya": "sahne3.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 64813307
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 6299265
+   }
+  },
+  {
+   "n": 4,
+   "dosya": "sahne4.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 30449813
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 7570910
+   }
+  },
+  {
+   "n": 5,
+   "dosya": "sahne5.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 53912625
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 6693178
+   }
+  },
+  {
+   "n": 6,
+   "dosya": "sahne6.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 78206122
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 4909902
+   }
+  },
+  {
+   "n": 7,
+   "dosya": "sahne7.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 65656366
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 6019701
+   }
+  },
+  {
+   "n": 8,
+   "dosya": "sahne8.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 25975111
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 3566489
+   }
+  },
+  {
+   "n": 9,
+   "dosya": "sahne9.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 60940661
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5031355
+   }
+  },
+  {
+   "n": 10,
+   "dosya": "sahne10.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 60708495
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5150033
+   }
+  },
+  {
+   "n": 11,
+   "dosya": "sahne11.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 29280924
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 2773313
+   }
+  },
+  {
+   "n": 12,
+   "dosya": "sahne12.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 38055119
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 3137502
+   }
+  },
+  {
+   "n": 13,
+   "dosya": "sahne13.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 53185358
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 3307853
+   }
+  },
+  {
+   "n": 14,
+   "dosya": "sahne14.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 47763796
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5822308
+   }
+  },
+  {
+   "n": 15,
+   "dosya": "sahne15.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 44909273
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 4940743
+   }
+  },
+  {
+   "n": 16,
+   "dosya": "sahne16.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 67056690
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 8847008
+   }
+  },
+  {
+   "n": 17,
+   "dosya": "sahne17.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 39013785
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5109892
+   }
+  },
+  {
+   "n": 18,
+   "dosya": "sahne18.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 49861257
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 4259016
+   }
+  },
+  {
+   "n": 19,
+   "dosya": "sahne19.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 56192365
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 6017935
+   }
+  },
+  {
+   "n": 20,
+   "dosya": "sahne20.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 39989573
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 3549651
+   }
+  },
+  {
+   "n": 21,
+   "dosya": "sahne21.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 64586130
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 5046205
+   }
+  },
+  {
+   "n": 22,
+   "dosya": "sahne22.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 44314623
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 1694106
+   }
+  },
+  {
+   "n": 23,
+   "dosya": "sahne23.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 75439983
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 2915412
+   }
+  },
+  {
+   "n": 24,
+   "dosya": "sahne24.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 70662254
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 4356227
+   }
+  },
+  {
+   "n": 25,
+   "dosya": "sahne25.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 55994061
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 5188647
+   }
+  },
+  {
+   "n": 26,
+   "dosya": "sahne26.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 54090598
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 10254336
+   }
+  },
+  {
+   "n": 27,
+   "dosya": "sahne27.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 81742819
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 11105413
+   }
+  },
+  {
+   "n": 28,
+   "dosya": "sahne28.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 33119532
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 7686983
+   }
+  },
+  {
+   "n": 29,
+   "dosya": "sahne29.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 62668384
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 9735976
+   }
+  },
+  {
+   "n": 30,
+   "dosya": "sahne30.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 53841218
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 4479073
+   }
+  },
+  {
+   "n": 31,
+   "dosya": "sahne31.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 59933889
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 6100067
+   }
+  },
+  {
+   "n": 32,
+   "dosya": "sahne32.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 64376850
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 11080902
+   }
+  },
+  {
+   "n": 33,
+   "dosya": "sahne33.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 55789124
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 11660108
+   }
+  },
+  {
+   "n": 34,
+   "dosya": "sahne34.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 84858131
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 17905523
+   }
+  },
+  {
+   "n": 35,
+   "dosya": "sahne35.mp4",
+   "kaynak": {
+    "sure": 8.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 27.57,
+    "kare": 193,
+    "bayt": 85665744
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.72,
+    "kare": 193,
+    "bayt": 17236836
+   }
+  },
+  {
+   "n": 36,
+   "dosya": "sahne36.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 55444373
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 7450823
+   }
+  },
+  {
+   "n": 37,
+   "dosya": "sahne37.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 56814763
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 6359769
+   }
+  },
+  {
+   "n": 38,
+   "dosya": "sahne38.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 57095545
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 4699137
+   }
+  },
+  {
+   "n": 39,
+   "dosya": "sahne39.mp4",
+   "kaynak": {
+    "sure": 5.042,
+    "fps": 24,
+    "gen": 3840,
+    "yuk": 2160,
+    "kodek": "hevc",
+    "gop": 24.2,
+    "kare": 121,
+    "bayt": 42657128
+   },
+   "cikti": {
+    "fps": 24,
+    "gen": 1920,
+    "yuk": 1080,
+    "kodek": "h264",
+    "gop": 7.56,
+    "kare": 121,
+    "bayt": 2955098
+   }
+  }
+ ]
+}

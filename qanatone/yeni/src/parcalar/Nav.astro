@@ -31,7 +31,7 @@ const ham = Astro.url.pathname.replace(B, '').replace(/\/$/, '') || '/';
 const cip = en ? (ham.replace(/^\/en(?=\/|$)/, '') || '/') : ham;
 /* eşi olmayan rotalar (hukuki EN'siz, 404 dil-üstü) dil ANASINA gider —
    H16 üretilmemiş rotaya bağlantıyı kırmızıya döndürür, doğru da yapar */
-const essiz = cip === '/hukuki' || cip === '/404' || cip === '/deneme-react';
+const essiz = cip === '/hukuki' || cip === '/404' || cip === '/deneme-react' || cip === '/film';
 const trYol = essiz && cip === '/404' ? `${B}/` : `${B}${cip === '/' ? '/' : cip}`;
 const enYol = essiz ? `${B}/en` : `${B}/en${cip === '/' ? '' : cip}`;
 

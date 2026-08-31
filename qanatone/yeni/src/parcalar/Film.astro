@@ -28,17 +28,34 @@
    JS yolunda `display:none` sarmal icinde oldukları icin HIC INMEZ
    (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
 import '../stil/film.css';
-import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN, AKIS } from '../film/sahneler';
+import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN, AKIS, MOMENT, HIZALA } from '../film/sahneler';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
-  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS}
+  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">
+      {/* KUMANDA (31 Agu 2026) — IKI AYRI DUGME, KARISTIRILMASIN:
+          · `.fl-gec`  PROLOGU GEC: filmi tumden atlar, motoru SOKER,
+            oturum boyu atlanmis kalir. Her zaman gorunur/odaklanilabilir.
+          · `.fl-atla` YETISME: hiz tavani yuzunden gosterilen konum
+            hedefin gerisinde kalinca acilir, gosterileni hedefe oturtur.
+            Filmi ATLAMAZ. Yalniz `fl-geride` olayinda gorunur.
+          KONUM DUZELTMESI (31 Agu): ikisi de eskiden `.fl-ray` icindeydi
+          ve `position:absolute; bottom:16px` ile 115.487 px'lik RAYIN
+          DIBINE oturuyordu — yani savurma sirasinda ekranda hic yoktu.
+          Simdi sticky `.fl-yapis` icinde: kutu ekranin kendisi.
+          Motor UI kurmaz (sert degismez #6) — ikisi de sayfanin. */}
+      <div class="fl-kumanda">
+        <a class="fl-gec" href="#fl-son">{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</a>
+        <button class="fl-atla" type="button" hidden aria-label={dil === 'en' ? 'Skip ahead' : 'Yetiş'}>
+          {dil === 'en' ? 'Catch up' : 'Yetiş'} <span class="fl-atla-sn"></span>
+        </button>
+      </div>
       {SAHNELER.map((s, j) => (
         <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
           data-n={s.n} data-sure={s.sure} data-kare={s.kare} data-bas={s.bas}
@@ -64,25 +81,46 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       ))}
     </div>
-    {/* ATLA (28 Agu): hiz tavani asilinca gosterilen konum hedefin
-        gerisinde kalir; motor `fl-geride` olayi atar, sayfa bu dugmeyi
-        acar. Dugme sayfanin — motor UI kurmaz (sert degismez #6). */}
-    <button class="fl-atla" type="button" hidden aria-label={dil === 'en' ? 'Skip ahead' : 'Atla'}>
-      {dil === 'en' ? 'Skip' : 'Atla'} <span class="fl-atla-sn"></span>
-    </button>
+    {/* RAY SONU: "prologu gec" baginin hedefi. Ray'in en dibinde durur;
+        buraya inen kaydirma filmi bitirmis demektir. */}
+    <div id="fl-son" class="fl-son" tabindex="-1"></div>
   </div>
 </section>
 
 <script>
   /* ADA — sayfaya inen tek betik. Motor (`src/film/motor.ts`) dinamik
      ithal: J1 tavaninin disinda, kendi tavani denetimde FM ailesi.
-     Hareket azaltmada motor HIC inmez -> sifir video fetch. */
+     Hareket azaltmada motor HIC inmez -> sifir video fetch.
+
+     PROLOGU GEC — OTURUMDA BIR KEZ (31 Agu 2026, PROLOG-ISKELET 5. adim).
+     Yazili davranis, uc madde:
+       1. Kullanici `.fl-gec` bagina basarsa: motorun `sok()`u cagrilir
+          (blob'lar revoke, dinleyiciler cozulur, DONGU DURUR), oturum
+          bayragi yazilir, `<html data-film="atlandi">` isaretlenir ve
+          bag kendi isini yapip ray sonuna (#fl-son) gider.
+       2. AYNI OTURUMDA sayfa yeniden acilirsa motor HIC INDIRILMEZ ve
+          film katmani hic kurulmaz: sifir video fetch, sifir poster,
+          sifir kare. Prolog bir kez atlandiysa oturum boyu atlanmistir.
+       3. Bayrak `sessionStorage` — sekme kapaninca dusen kapsam; kalici
+          tercih degil (perde `qanat-splash-seen` ile ayni ev deseni).
+     NEDEN SOKUM SART: `sok()` cagrilmazsa gorunmeyen film icin rAF
+     donmeye devam eder — sessiz pil sizintisi. Motor tarafinda da
+     `durdu` kapisi eklendi (motor.ts), yoksa `kare` kendini yeniden
+     kuruyordu. */
   const bolum = document.querySelector<HTMLElement>('.fl');
   const azalt = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (bolum && !azalt) {
+  const ANAHTAR = 'qanat-prolog-atlandi';
+  let atlandi = false;
+  try { atlandi = sessionStorage.getItem(ANAHTAR) === '1'; } catch {}
+
+  if (bolum && atlandi) {
+    /* 2. madde: oturumda zaten atlanmis — hicbir sey kurulmaz. */
+    document.documentElement.dataset.film = 'atlandi';
+  } else if (bolum && !azalt) {
     document.documentElement.classList.add('fl-js');
-    /* atla dugmesi: motor esik gecislerinde `fl-geride` atar (kare basina
-       olay yok); dugme gorunur/kaybolur, tiklaninca __fl.atla(). */
+    /* yetisme dugmesi: motor esik gecislerinde `fl-geride` atar (kare
+       basina olay yok); dugme gorunur/kaybolur, tiklaninca __fl.atla().
+       Filmi ATLAMAZ — gosterileni hedefe oturtur. */
     const atla = bolum.querySelector<HTMLButtonElement>('.fl-atla');
     if (atla) {
       bolum.addEventListener('fl-geride', (e) => {
@@ -93,7 +131,18 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       });
       atla.addEventListener('click', () => { (window as any).__fl?.atla(); atla.hidden = true; });
     }
-    import('../film/motor').then((m) => m.baslat(bolum)).catch((e) => {
+    import('../film/motor').then((m) => {
+      const sok = m.baslat(bolum);
+      /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
+         once zinciri sokeriz, sonra tarayici bagi kendi isler. */
+      const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
+      gec?.addEventListener('click', () => {
+        try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
+        sok();
+        document.documentElement.classList.remove('fl-js');
+        document.documentElement.dataset.film = 'atlandi';
+      });
+    }).catch((e) => {
       document.documentElement.classList.remove('fl-js');
       document.documentElement.dataset.film = 'motor-inmedi';
       console.warn('[film] motor inmedi', e);
