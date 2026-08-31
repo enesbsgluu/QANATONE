@@ -282,6 +282,7 @@ export function baslat(bolum: HTMLElement): () => void {
     istek: [], sunum: [], ilkKareMs: null,
     yon: 1, hiz: 0, pencere: PENCERE, onPencere: ON_PENCERE_TABAN, mbit: null, onsar: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
+    birakilan: 0,   /* PENCERE TURU (1 Eyl): sayac init edilmemisti — undefined++ = NaN, olcum yuzeyi bozuktu */
     sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, moment: MOMENT, hizala: HIZALA, hizalama: 0,
     akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
