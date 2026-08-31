@@ -1,25 +1,37 @@
 {
  "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
- "olcum": "2026-08-31T21:51:37.510Z",
+ "olcum": "2026-08-31T21:59:54.553Z",
  "tarayici": "brave",
  "headless": false,
  "tekrar": 3,
  "kirmizi_A": {
-  "sure_ms": 726,
+  "sure_ms": 733,
   "yakalandi": true
  },
  "kirmizi_B": {
-  "dusen": 2,
+  "dusen": 1,
   "yakalandi": true
  },
  "A": {
   "tekrar": [
    {
     "yol": "tv",
-    "sure_ms": 329,
+    "sure_ms": 420,
     "fazlar": {
-     "cokus": 133,
-     "parlama": 55,
+     "cokus": 188,
+     "parlama": 89,
+     "acilis": 143
+    },
+    "dusen": 7,
+    "zoom_dusen": 5,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 334,
+    "fazlar": {
+     "cokus": 134,
+     "parlama": 58,
      "acilis": 141
     },
     "dusen": 0,
@@ -28,32 +40,20 @@
    },
    {
     "yol": "tv",
-    "sure_ms": 397,
+    "sure_ms": 341,
     "fazlar": {
-     "cokus": 163,
-     "parlama": 60,
-     "acilis": 174
+     "cokus": 132,
+     "parlama": 57,
+     "acilis": 151
     },
-    "dusen": 5,
-    "zoom_dusen": 3,
-    "devirDurum": "tam"
-   },
-   {
-    "yol": "tv",
-    "sure_ms": 348,
-    "fazlar": {
-     "cokus": 138,
-     "parlama": 54,
-     "acilis": 156
-    },
-    "dusen": 0,
+    "dusen": 1,
     "zoom_dusen": 1,
     "devirDurum": "tam"
    }
   ],
-  "medyan_sure": 348,
-  "medyan_dusen": 0,
-  "gecti": true
+  "medyan_sure": 341,
+  "medyan_dusen": 1,
+  "gecti": false
  },
  "A_azalt": {
   "yol": "sade",
@@ -65,11 +65,11 @@
   "noktalar": {
    "bas": {
     "yol": "isinlanma",
-    "sure_ms": 452,
-    "tepe_ms": 260,
+    "sure_ms": 446,
+    "tepe_ms": 254,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 8,
+    "takas_gap_ms": 9,
     "buyuk_aralar": [],
     "iz": {
      "film": "atlandi",
@@ -81,15 +81,19 @@
    },
    "orta": {
     "yol": "isinlanma",
-    "sure_ms": 449,
-    "tepe_ms": 257,
+    "sure_ms": 451,
+    "tepe_ms": 256,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 17,
+    "takas_gap_ms": 25,
     "buyuk_aralar": [
      {
-      "d": 24.6,
-      "tBas": 441
+      "d": 25.1,
+      "tBas": 333
+     },
+     {
+      "d": 25,
+      "tBas": 417
      }
     ],
     "iz": {
@@ -102,7 +106,7 @@
    },
    "son": {
     "yol": "isinlanma",
-    "sure_ms": 450,
+    "sure_ms": 452,
     "tepe_ms": 259,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
@@ -122,7 +126,7 @@
  },
  "B_azalt": {
   "yol": "sade",
-  "sure_ms": 291,
+  "sure_ms": 282,
   "film": "atlandi",
   "gecti": true
  },
@@ -134,25 +138,25 @@
  "halka": {
   "tekrar": [
    {
-    "dusen": 3,
-    "taban": 14,
+    "dusen": 7,
+    "taban": 7,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    },
    {
-    "dusen": 0,
+    "dusen": 7,
+    "taban": 11,
+    "anim": "fl-halka-don",
+    "sure": "3.6s"
+   },
+   {
+    "dusen": 9,
     "taban": 9,
-    "anim": "fl-halka-don",
-    "sure": "3.6s"
-   },
-   {
-    "dusen": 1,
-    "taban": 2,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    }
   ],
-  "medyan_dusen": 1,
+  "medyan_dusen": 7,
   "medyan_taban": 9,
   "gecti": false
  },
@@ -161,9 +165,9 @@
    "bas": {
     "ekranda": true,
     "altOrta": true,
-    "okAnim": "fl-nabiz",
+    "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
-    "metin": "Kaydırdıkça ilerler",
+    "metin": "KAYDIR",
     "hiza_px": 10.8,
     "yazi": {
      "ibare": {
@@ -179,9 +183,9 @@
    "orta": {
     "ekranda": true,
     "altOrta": true,
-    "okAnim": "fl-nabiz",
+    "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
-    "metin": "Kaydırdıkça ilerler",
+    "metin": "KAYDIR",
     "hiza_px": 10.8,
     "yazi": {
      "ibare": {
@@ -197,9 +201,9 @@
    "son": {
     "ekranda": true,
     "altOrta": true,
-    "okAnim": "fl-nabiz",
+    "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
-    "metin": "Kaydırdıkça ilerler",
+    "metin": "KAYDIR",
     "hiza_px": 10.8,
     "yazi": {
      "ibare": {
@@ -214,7 +218,7 @@
    }
   },
   "sonme": {
-   "sonme_ms": 134,
+   "sonme_ms": 137,
    "opaklik": "0"
   },
   "hiza_px": 10.8,
@@ -233,7 +237,7 @@
  "ibare_azalt": {
   "okAnim": "none",
   "gorunur": true,
-  "metin": "Kaydırdıkça ilerler",
+  "metin": "KAYDIR",
   "gecti": true
  },
  "hukum": "KALDI"

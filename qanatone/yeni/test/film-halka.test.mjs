@@ -62,7 +62,8 @@ test('halka: sure, kalinlik, kuyruk ve renkler kaynakla ayni', () => {
   assert.ok(nS, 'fl-nabiz animasyonu okunamadi');
   console.log(`  nabiz ritmi  ${kS.trim().padEnd(22)} ${nS}`);
   assert.strictEqual(nS, kS.trim(), 'nabiz ritmi kaynak tur suresinden ayristi');
-  /* satir basindaki MUSTAKIL svg kurali (birlesik span,svg secicisi degil) */
   const okBlok = /^\.fl-ipucu svg \{([^}]*)\}/m.exec(film)?.[1] || '';
   assert.match(okBlok, /#ef233c/, 'ok rengi palet disi (kirmizi olmali)');
+  const oS = /animation:\s*fl-ok-kay\s+([\d.]+s)/.exec(okBlok)?.[1];
+  assert.strictEqual(oS, kS.trim(), 'ok akis ritmi kaynak tur suresinden ayristi');
 });
