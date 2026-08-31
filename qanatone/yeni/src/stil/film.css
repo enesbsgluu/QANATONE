@@ -278,14 +278,18 @@ html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
   font: 500 14px/1 system-ui, sans-serif; letter-spacing: .02em;
   color: #fff;
 }
-/* NABIZ ISIGI (Enes: ok TAMAMEN kalkti, yerine bu geciyor — ibaredeki
-   TEK hareket). Kaynaktan alinan yalniz RENK (.void .ring paleti:
-   #ef233c / #ff4d63) ve NABIZ RITMI (3,6 s tur — bekci film-halka.test
-   kaynak sureyle esitligi denetler). Halka bicimi, kuyruk, maske, conic
-   ALINMADI. CSS'te, JS kare dongusu yok; azaltmada durur, metin kalir. */
-.fl-nabiz { width: 6px; height: 6px; border-radius: 50%; background: #ef233c; animation: fl-nabiz 3.6s ease-in-out infinite; }
+/* OK + METIN BIRLIKTE NABIZ (Enes, 1 Eyl ucuncu duzeltme: nokta kalkti,
+   OK geri geldi — SADECE KIRMIZI; metin de okla BERABER yanip soner).
+   Ritim onceki karardan: halkanin tur suresi 3,6 s (bekci film-halka.test
+   kaynakla esitligi denetler); renk .void .ring paleti (#ef233c/#ff4d63).
+   Animasyon IC ogelerde (span + svg), kapsayicida DEGIL: .fl-ipucu'nun
+   opacity'si devir sonmesinin gecisi — animasyon onu ezerdi. Iki ic oge
+   ayni parse'ta yaratilir, animasyonlar ayni kareden baslar: senkron.
+   CSS'te, JS kare dongusu yok; azaltmada durur, ikisi de gorunur kalir. */
+.fl-ipucu span, .fl-ipucu svg { animation: fl-nabiz 3.6s ease-in-out infinite; }
+.fl-ipucu svg { width: .72em; height: .42em; display: block; color: #ef233c; }
 @keyframes fl-nabiz {
-  0%, 100% { opacity: .2; background: #ef233c; }
-  50% { opacity: 1; background: #ff4d63; }
+  0%, 100% { opacity: .25; }
+  50% { opacity: 1; }
 }
-@media (prefers-reduced-motion: reduce) { .fl-nabiz { animation: none; opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .fl-ipucu span, .fl-ipucu svg { animation: none; opacity: .85; } }

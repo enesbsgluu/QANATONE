@@ -314,7 +314,7 @@ async function gecSur(p, nokta) {
       const el = document.querySelector('.fl-ipucu');
       const r = el.getBoundingClientRect();
       const st = getComputedStyle(el);
-      const nb = getComputedStyle(el.querySelector('.fl-nabiz'));
+      const nb = getComputedStyle(el.querySelector('svg'));
       const gec = document.querySelector('.fl-gec');
       const gr = gec.getBoundingClientRect();
       const gst = getComputedStyle(gec);
@@ -362,7 +362,7 @@ async function gecSur(p, nokta) {
     const { b, p } = await ac('?akis=0', true);
     const rz = await p.evaluate(() => {
       const el = document.querySelector('.fl-ipucu');
-      const ok = getComputedStyle(el.querySelector('.fl-nabiz'));
+      const ok = getComputedStyle(el.querySelector('svg'));
       const st = getComputedStyle(el);
       return { okAnim: ok.animationName, gorunur: st.visibility === 'visible' && +st.opacity > 0.9, metin: el.textContent.trim() };
     });
