@@ -245,7 +245,64 @@ async function gecSur(p, nokta) {
     await b.close();
   }
 
-  S.hukum = kirmiziTamam && S.A.gecti && S.A_azalt.gecti && S.B.gecti && S.B_azalt.gecti ? 'GECTI' : 'KALDI';
+  /* ---- 6) HALKA + IBARE (31 Agu gece, Enes): dugme + donen cizgi +
+     ibare BIRLIKTE dusen kare 0. Senaryo: film sonuna 0,3 sn kala otur
+     (ipucu belirmis, kumanda + halka ekranda, devir tetiklenmemis),
+     ?akis=0 ile sahne tamamen statik — olculen maliyet yalniz bu ucun.
+     TEKRAR kosum, medyan. Reduce: cizgi durur, dugme gorunur. */
+  console.log('== HALKA + IBARE ==');
+  const hTekrar = [];
+  for (let i = 0; i < TEKRAR; i++) {
+    const { b, p } = await ac('?akis=0');
+    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam - 0.3)); __fl.atla(); });
+    await p.waitForFunction('!document.querySelector(".fl-ipucu").hidden', { timeout: 10000 });
+    /* ayni kosumda iki pencere: halkali ve halkasiz (taban) — fark
+       halkanin GERCEK maliyeti; makine gurultusu ikisine esit girer */
+    const r = await p.evaluate(() => new Promise((res) => {
+      const halka = document.querySelector('.fl-halka');
+      const st = getComputedStyle(halka, '::before');
+      const olc = (sure) => new Promise((r2) => {
+        const kayit = []; const t0 = performance.now();
+        const ad = (n) => { kayit.push(n); if (n - t0 < sure) requestAnimationFrame(ad); else r2(kayit); };
+        requestAnimationFrame(ad);
+      });
+      (async () => {
+        const halkali = await olc(1500);
+        halka.style.display = 'none';
+        const tabanK = await olc(1500);
+        halka.style.display = '';
+        res({ halkali, tabanK, anim: st.animationName, sure: st.animationDuration });
+      })();
+    }));
+    const say = (k) => k.slice(1).map((x, j) => x - k[j]).filter((d) => d > 25).length;
+    const dus = say(r.halkali), taban = say(r.tabanK);
+    hTekrar.push({ dusen: dus, taban, anim: r.anim, sure: r.sure });
+    console.log(` #${i + 1} dusen ${dus} (taban ${taban}) · animasyon ${r.anim} ${r.sure}`);
+    await b.close();
+  }
+  {
+    const { b, p } = await ac('?akis=0', true);
+    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam - 0.3)); __fl.atla(); });
+    await new Promise((r) => setTimeout(r, 300));
+    const rz = await p.evaluate(() => {
+      const halka = document.querySelector('.fl-halka');
+      const gec = document.querySelector('.fl-gec');
+      const st = getComputedStyle(halka, '::before');
+      const sg = getComputedStyle(gec);
+      return { anim: st.animationName, gecGorunur: sg.display !== 'none' && sg.visibility === 'visible' };
+    });
+    S.halka_azalt = { ...rz, gecti: rz.anim === 'none' && rz.gecGorunur };
+    raporla('halka azaltma: cizgi durdu, dugme gorunur', S.halka_azalt);
+    await b.close();
+  }
+  S.halka = {
+    tekrar: hTekrar, medyan_dusen: medyan(hTekrar.map((x) => x.dusen)),
+    medyan_taban: medyan(hTekrar.map((x) => x.taban)),
+    gecti: medyan(hTekrar.map((x) => x.dusen)) === 0 && hTekrar.every((x) => x.anim === 'fl-halka-don' && x.sure === '3.6s'),
+  };
+  raporla('halka: birlikte dusen 0 + CSS animasyon 3.6s', S.halka);
+
+  S.hukum = kirmiziTamam && S.A.gecti && S.A_azalt.gecti && S.B.gecti && S.B_azalt.gecti && S.halka.gecti && S.halka_azalt.gecti ? 'GECTI' : 'KALDI';
   srv.close();
   fs.writeFileSync(CIKTI, JSON.stringify(S, null, 1));
   console.log(`\n=> ${S.hukum}\n→ ${CIKTI}`);

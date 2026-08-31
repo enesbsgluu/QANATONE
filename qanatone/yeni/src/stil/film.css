@@ -106,6 +106,52 @@ main:has(> .fl) { max-width: none; padding: 0; }
   outline: 2px solid #ef233c; outline-offset: 3px; border-color: #ef233c;
 }
 .fl-atla-sn { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+
+/* ---- DONEN CIZGI: PROLOGU GEC (Enes, 31 Agu gece) ----
+   KAYNAK: eski site `.void .ring` (index.html ~502-557) — "kenarda
+   dolasan kirmizi isik": donen koni gradyani, maske farkiyla kenar
+   bandina kirpilir. BIREBIR AYNI DIL: kalinlik 2px (--t-ring-w yedegi) ·
+   tur 3.6s linear infinite (--t-ring-spd) · kuyruk 56% (--t-ring-tail) ·
+   conic duraklari ayni. BEKCI: yeni/test/film-halka.test.mjs iki kaynagi
+   YAN YANA okur, ayrisirsa kirmizi — sayilar burada elle durur ama
+   sessizce eskiyemez.
+   BILINCLI SAPMA (tek): drop-shadow parilti katmani ALINMADI — kaynagin
+   KENDI lowfx kipi de ayni gerekceyle filter'i kaldiriyor ("pahali olan
+   parilti, her karede yeniden boyama"); film sayfasi video scrub'li +
+   H14 filter yasagi + dusen kare 0 kapisi. Donen sey sozde-elemanin
+   TRANSFORM'u: kompozitor katmaninda kosar, JS kare dongusu ACMAZ. */
+.fl-gec { position: relative; }
+.fl-gec span { position: relative; z-index: 1; }
+.fl-halka {
+  position: absolute; inset: -1px; border-radius: 999px; padding: 2px;
+  pointer-events: none; z-index: 0;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.fl-halka::before {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 260%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg,
+    transparent 0 calc(100% - 56%),
+    rgba(239, 35, 60, .30) calc(100% - 56% * .72),
+    rgba(255, 77, 99, .88) calc(100% - 56% * .34),
+    #ffe6ea calc(100% - 56% * .15),
+    rgba(255, 77, 99, .85) calc(100% - 56% * .04),
+    transparent 100%);
+  animation: fl-halka-don 3.6s linear infinite;
+}
+@keyframes fl-halka-don {
+  from { transform: translate(-50%, -50%) rotate(0turn); }
+  to { transform: translate(-50%, -50%) rotate(1turn); }
+}
+/* maske farki desteklenmiyorsa halka hic gorunmez (kaynaktaki kural) */
+@supports not ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+  .fl-halka { display: none; }
+}
+/* hareket azaltma: cizgi DURUR (statik kivilcim gorunur), dugme gorunur kalir */
+@media (prefers-reduced-motion: reduce) { .fl-halka::before { animation: none; } }
 /* motorsuz yolda YETISME dugmesi anlamsiz (yetisilecek hedef yok);
    PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider. */
 html:not(.fl-js) .fl-atla { display: none; }
@@ -221,14 +267,19 @@ html.fl-tv-parla .fl-tv-cizgi { animation: fl-tv-parla .1s ease-out both; }
 html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
+/* IBARE BOYUTU (Enes, 31 Agu gece): punto GEC DUGMESIYLE ESIT (14px —
+   .fl-gec ile ayni), ondan buyuk degil; ok metinle orantili (.42em),
+   metinden yuksek degil. */
 .fl-ipucu {
   position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%);
   z-index: 5; margin: 0; padding: 8px 16px; border-radius: 999px;
-  font: 500 13px/1 system-ui, sans-serif; letter-spacing: .02em;
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 500 14px/1 system-ui, sans-serif; letter-spacing: .02em;
   color: #fff; background: rgba(8, 8, 8, .72);
   border: 1px solid rgba(255, 255, 255, .18);
   animation: fl-ipucu-bel .5s var(--e, ease) both;
 }
+.fl-ipucu svg { width: .72em; height: .42em; display: block; opacity: .8; }
 .fl-ipucu[hidden] { display: none; }
 @keyframes fl-ipucu-bel { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @media (prefers-reduced-motion: reduce) { .fl-ipucu { animation: none; } }
