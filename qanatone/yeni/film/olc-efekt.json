@@ -1,57 +1,57 @@
 {
  "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
- "olcum": "2026-08-31T21:41:01.391Z",
+ "olcum": "2026-08-31T21:51:37.510Z",
  "tarayici": "brave",
  "headless": false,
  "tekrar": 3,
  "kirmizi_A": {
-  "sure_ms": 752,
+  "sure_ms": 726,
   "yakalandi": true
  },
  "kirmizi_B": {
-  "dusen": 1,
+  "dusen": 2,
   "yakalandi": true
  },
  "A": {
   "tekrar": [
    {
     "yol": "tv",
-    "sure_ms": 343,
+    "sure_ms": 329,
     "fazlar": {
-     "cokus": 132,
-     "parlama": 60,
-     "acilis": 151
-    },
-    "dusen": 0,
-    "zoom_dusen": 6,
-    "devirDurum": "tam"
-   },
-   {
-    "yol": "tv",
-    "sure_ms": 340,
-    "fazlar": {
-     "cokus": 142,
-     "parlama": 59,
-     "acilis": 140
-    },
-    "dusen": 0,
-    "zoom_dusen": 1,
-    "devirDurum": "tam"
-   },
-   {
-    "yol": "tv",
-    "sure_ms": 366,
-    "fazlar": {
-     "cokus": 150,
-     "parlama": 63,
-     "acilis": 154
+     "cokus": 133,
+     "parlama": 55,
+     "acilis": 141
     },
     "dusen": 0,
     "zoom_dusen": 0,
     "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 397,
+    "fazlar": {
+     "cokus": 163,
+     "parlama": 60,
+     "acilis": 174
+    },
+    "dusen": 5,
+    "zoom_dusen": 3,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 348,
+    "fazlar": {
+     "cokus": 138,
+     "parlama": 54,
+     "acilis": 156
+    },
+    "dusen": 0,
+    "zoom_dusen": 1,
+    "devirDurum": "tam"
    }
   ],
-  "medyan_sure": 343,
+  "medyan_sure": 348,
   "medyan_dusen": 0,
   "gecti": true
  },
@@ -65,33 +65,12 @@
   "noktalar": {
    "bas": {
     "yol": "isinlanma",
-    "sure_ms": 450,
-    "tepe_ms": 254,
-    "toplanma_dusen": 1,
+    "sure_ms": 452,
+    "tepe_ms": 260,
+    "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 25,
-    "buyuk_aralar": [
-     {
-      "d": 41.1,
-      "tBas": 41
-     },
-     {
-      "d": 25,
-      "tBas": 133
-     },
-     {
-      "d": 25,
-      "tBas": 308
-     },
-     {
-      "d": 33.4,
-      "tBas": 383
-     },
-     {
-      "d": 41.7,
-      "tBas": 433
-     }
-    ],
+    "takas_gap_ms": 8,
+    "buyuk_aralar": [],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -102,15 +81,15 @@
    },
    "orta": {
     "yol": "isinlanma",
-    "sure_ms": 453,
-    "tepe_ms": 259,
+    "sure_ms": 449,
+    "tepe_ms": 257,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 18,
+    "takas_gap_ms": 17,
     "buyuk_aralar": [
      {
-      "d": 25.1,
-      "tBas": 258
+      "d": 24.6,
+      "tBas": 441
      }
     ],
     "iz": {
@@ -123,25 +102,12 @@
    },
    "son": {
     "yol": "isinlanma",
-    "sure_ms": 449,
-    "tepe_ms": 256,
+    "sure_ms": 450,
+    "tepe_ms": 259,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 25,
-    "buyuk_aralar": [
-     {
-      "d": 24.5,
-      "tBas": 42
-     },
-     {
-      "d": 24.7,
-      "tBas": 308
-     },
-     {
-      "d": 24.9,
-      "tBas": 433
-     }
-    ],
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -152,11 +118,11 @@
    }
   },
   "ayni_calisti": true,
-  "gecti": false
+  "gecti": true
  },
  "B_azalt": {
   "yol": "sade",
-  "sure_ms": 289,
+  "sure_ms": 291,
   "film": "atlandi",
   "gecti": true
  },
@@ -168,26 +134,26 @@
  "halka": {
   "tekrar": [
    {
-    "dusen": 9,
-    "taban": 10,
+    "dusen": 3,
+    "taban": 14,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    },
    {
-    "dusen": 10,
-    "taban": 12,
+    "dusen": 0,
+    "taban": 9,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    },
    {
-    "dusen": 10,
-    "taban": 11,
+    "dusen": 1,
+    "taban": 2,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    }
   ],
-  "medyan_dusen": 10,
-  "medyan_taban": 11,
+  "medyan_dusen": 1,
+  "medyan_taban": 9,
   "gecti": false
  },
  "ibare": {
@@ -248,7 +214,7 @@
    }
   },
   "sonme": {
-   "sonme_ms": 153,
+   "sonme_ms": 134,
    "opaklik": "0"
   },
   "hiza_px": 10.8,
