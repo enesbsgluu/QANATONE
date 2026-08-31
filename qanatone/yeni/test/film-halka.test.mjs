@@ -55,4 +55,13 @@ test('halka: sure, kalinlik, kuyruk ve renkler kaynakla ayni', () => {
   assert.match(eski, /\.void \.ring::before\{animation:none\}/, 'kaynak reduce kurali');
   assert.match(film, /reduce\)\s*\{\s*\.fl-halka::before\s*\{\s*animation:\s*none/, 'film reduce kurali (cizgi durur)');
   assert.match(film, /mask-composite:\s*exclude/, 'maske farki dili');
+
+  /* NABIZ ISIGI (1 Eyl, Enes): ibaredeki isik halkadan yalniz RENK ve
+     RITIM alir — ritim = kaynak tur suresi. Ayrismasin. */
+  const nS = /animation:\s*fl-nabiz\s+([\d.]+s)\s+ease-in-out\s+infinite/.exec(film)?.[1];
+  assert.ok(nS, 'fl-nabiz animasyonu okunamadi');
+  console.log(`  nabiz ritmi  ${kS.trim().padEnd(22)} ${nS}`);
+  assert.strictEqual(nS, kS.trim(), 'nabiz ritmi kaynak tur suresinden ayristi');
+  const nabizBlok = /\.fl-nabiz \{([^}]*)\}/.exec(film)?.[1] || '';
+  assert.match(nabizBlok, /#ef233c/, 'nabiz rengi palet disi');
 });

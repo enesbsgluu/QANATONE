@@ -263,26 +263,29 @@ html.fl-tv-parla .fl-tv-cizgi { animation: fl-tv-parla .1s ease-out both; }
 html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
-/* IBARE (Enes, 1 Eyl — surekli yasar): film BOYUNCA alt ortada durur,
-   bastan vardir; belirme animasyonu ve [hidden] yolu KALKTI. Yalniz
-   devirde soner (html.fl-devir kurali yukarida, .12s gecis — sonme ani
-   surucude transitionend'den olculur). Punto GEC DUGMESIYLE ESIT (14px),
-   ok metinle orantili (.42em, metinden alcak). */
+/* IBARE (Enes, 1 Eyl netlestirme): DUGME DEGIL — cerceve/zemin/kose yok,
+   duz metin. Film BOYUNCA alt ortada, bastan vardir; yalniz devirde
+   soner (html.fl-devir kurali yukarida, sonme ani transitionend'den).
+   HIZA: gec dugmesiyle AYNI SATIRDA DEGIL, bir tik ALTINDA — dikey
+   merkez farki olculup px olarak RAPORLANIR (olc-efekt IBARE bolumu).
+   Buton merkezi alttan ~34 px (16 + 36/2); ibare merkezi 16+7 = 23 px
+   -> hedef fark ~11 px altta. YAZI AILESI VE PUNTO gec ile AYNI
+   (system-ui, 14px) — computed'dan yan yana dogrulanir. */
 .fl-ipucu {
-  position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%);
-  z-index: 5; margin: 0; padding: 8px 16px; border-radius: 999px;
-  display: inline-flex; align-items: center; gap: 7px;
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+  z-index: 5; margin: 0; padding: 0;
+  display: inline-flex; align-items: center; gap: 8px;
   font: 500 14px/1 system-ui, sans-serif; letter-spacing: .02em;
-  color: #fff; background: rgba(8, 8, 8, .72);
-  border: 1px solid rgba(255, 255, 255, .18);
+  color: #fff;
 }
-/* OK DONGUSEL AKAR (CSS, JS kare dongusu yok): belirir, asagi kayar,
-   soner, yeniden dogar. Yon ASAGI (kaydirma yonu; Enes'in teyidi acik).
-   Hareket azaltmada durur, metin kalir. */
-.fl-ipucu svg { width: .72em; height: .42em; display: block; animation: fl-ok-ak 1.8s ease-in-out infinite; }
-@keyframes fl-ok-ak {
-  0% { opacity: 0; transform: translateY(-.3em); }
-  35% { opacity: .85; transform: translateY(0); }
-  70%, 100% { opacity: 0; transform: translateY(.3em); }
+/* NABIZ ISIGI (Enes: ok TAMAMEN kalkti, yerine bu geciyor — ibaredeki
+   TEK hareket). Kaynaktan alinan yalniz RENK (.void .ring paleti:
+   #ef233c / #ff4d63) ve NABIZ RITMI (3,6 s tur — bekci film-halka.test
+   kaynak sureyle esitligi denetler). Halka bicimi, kuyruk, maske, conic
+   ALINMADI. CSS'te, JS kare dongusu yok; azaltmada durur, metin kalir. */
+.fl-nabiz { width: 6px; height: 6px; border-radius: 50%; background: #ef233c; animation: fl-nabiz 3.6s ease-in-out infinite; }
+@keyframes fl-nabiz {
+  0%, 100% { opacity: .2; background: #ef233c; }
+  50% { opacity: 1; background: #ff4d63; }
 }
-@media (prefers-reduced-motion: reduce) { .fl-ipucu svg { animation: none; opacity: .8; } }
+@media (prefers-reduced-motion: reduce) { .fl-nabiz { animation: none; opacity: .7; } }
