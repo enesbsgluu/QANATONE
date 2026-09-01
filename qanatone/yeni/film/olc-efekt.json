@@ -1,11 +1,11 @@
 {
  "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
- "olcum": "2026-08-31T21:59:54.553Z",
+ "olcum": "2026-09-01T00:21:41.088Z",
  "tarayici": "brave",
  "headless": false,
  "tekrar": 3,
  "kirmizi_A": {
-  "sure_ms": 733,
+  "sure_ms": 721,
   "yakalandi": true
  },
  "kirmizi_B": {
@@ -16,23 +16,11 @@
   "tekrar": [
    {
     "yol": "tv",
-    "sure_ms": 420,
+    "sure_ms": 336,
     "fazlar": {
-     "cokus": 188,
-     "parlama": 89,
-     "acilis": 143
-    },
-    "dusen": 7,
-    "zoom_dusen": 5,
-    "devirDurum": "tam"
-   },
-   {
-    "yol": "tv",
-    "sure_ms": 334,
-    "fazlar": {
-     "cokus": 134,
-     "parlama": 58,
-     "acilis": 141
+     "cokus": 135,
+     "parlama": 52,
+     "acilis": 149
     },
     "dusen": 0,
     "zoom_dusen": 0,
@@ -40,20 +28,32 @@
    },
    {
     "yol": "tv",
-    "sure_ms": 341,
+    "sure_ms": 330,
     "fazlar": {
      "cokus": 132,
      "parlama": 57,
-     "acilis": 151
+     "acilis": 142
     },
-    "dusen": 1,
-    "zoom_dusen": 1,
+    "dusen": 0,
+    "zoom_dusen": 7,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 336,
+    "fazlar": {
+     "cokus": 134,
+     "parlama": 57,
+     "acilis": 145
+    },
+    "dusen": 0,
+    "zoom_dusen": 0,
     "devirDurum": "tam"
    }
   ],
-  "medyan_sure": 341,
-  "medyan_dusen": 1,
-  "gecti": false
+  "medyan_sure": 336,
+  "medyan_dusen": 0,
+  "gecti": true
  },
  "A_azalt": {
   "yol": "sade",
@@ -66,7 +66,7 @@
    "bas": {
     "yol": "isinlanma",
     "sure_ms": 446,
-    "tepe_ms": 254,
+    "tepe_ms": 252,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
     "takas_gap_ms": 9,
@@ -81,21 +81,12 @@
    },
    "orta": {
     "yol": "isinlanma",
-    "sure_ms": 451,
-    "tepe_ms": 256,
+    "sure_ms": 446,
+    "tepe_ms": 253,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 25,
-    "buyuk_aralar": [
-     {
-      "d": 25.1,
-      "tBas": 333
-     },
-     {
-      "d": 25,
-      "tBas": 417
-     }
-    ],
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -106,8 +97,8 @@
    },
    "son": {
     "yol": "isinlanma",
-    "sure_ms": 452,
-    "tepe_ms": 259,
+    "sure_ms": 448,
+    "tepe_ms": 254,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
     "takas_gap_ms": 17,
@@ -126,7 +117,7 @@
  },
  "B_azalt": {
   "yol": "sade",
-  "sure_ms": 282,
+  "sure_ms": 288,
   "film": "atlandi",
   "gecti": true
  },
@@ -135,30 +126,35 @@
   "gecGorunur": true,
   "gecti": true
  },
+ "halka_filmsonu_bilgi": {
+  "dusen": 12,
+  "taban": 2,
+  "not": "iframe (eski sayfa) yuklu — idle JS yuku; ana olcum ortada"
+ },
  "halka": {
   "tekrar": [
    {
-    "dusen": 7,
-    "taban": 7,
+    "dusen": 0,
+    "taban": 0,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    },
    {
-    "dusen": 7,
-    "taban": 11,
+    "dusen": 0,
+    "taban": 0,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    },
    {
-    "dusen": 9,
-    "taban": 9,
+    "dusen": 0,
+    "taban": 0,
     "anim": "fl-halka-don",
     "sure": "3.6s"
    }
   ],
-  "medyan_dusen": 7,
-  "medyan_taban": 9,
-  "gecti": false
+  "medyan_dusen": 0,
+  "medyan_taban": 0,
+  "gecti": true
  },
  "ibare": {
   "noktalar": {
@@ -218,7 +214,7 @@
    }
   },
   "sonme": {
-   "sonme_ms": 137,
+   "sonme_ms": 135,
    "opaklik": "0"
   },
   "hiza_px": 10.8,
@@ -240,5 +236,5 @@
   "metin": "KAYDIR",
   "gecti": true
  },
- "hukum": "KALDI"
+ "hukum": "GECTI"
 }
