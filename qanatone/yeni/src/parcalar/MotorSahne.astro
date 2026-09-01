@@ -106,6 +106,30 @@ const ulkeGrup = dilim(ulkeler as any[], NG).map((g, gi) => ({
 const agGrup = dilim(ag, AGG).map((g, gi) => ({
   g, k: gi * Math.ceil(ag.length / AGG) + Math.ceil(ag.length / AGG) / 2,
 }));
+/* GECE ZINCIRI TUR 2 (2 Eyl 2026) — AG YAYLARI KENDI ARALIK CIZELGESINDE.
+   Olculdu (finans, 3 kosum medyani): .mkag gizlenince p95 24,9 -> 16,8;
+   paketler/HUD/kivilcim/kablolar/kartlar tek basina etkisiz. Sebep: 64
+   yay --mkp zincirinden (her karede stil yeniden hesabi + tum SVG'nin
+   boyanmasi) suruluyordu. Simdi yaylar AYRI SVG'de, her grup --mk-kap
+   cizelgesinde kendi araligiyla cizilir ve BITINCE STATIK KALIR (kare
+   basina degisen sey yok); paketler ucuncu SVG'de (zaman animasyonu, kucuk
+   daireler). Zincir (kaynak -> uretim -> pazar) eski surucude (.mkag).
+   Esikler kaynakla ayni: tw=(a-.18)/.26 · t2=(tw*83.2-k)/9 · kisilma a>.62.
+   mkp = .875 + a/8 (8. perde); aralik ucu = taban + mkp*440vh. */
+const mkpA = (a: number) => .875 + a / 8;
+const KIS_MKP = mkpA(.62);
+const yayGrup = agGrup.map((gr: any) => {
+  const tw0 = gr.k / 83.2, tw1 = (gr.k + 9) / 83.2;
+  const m0 = mkpA(.18 + .26 * tw0), m1 = mkpA(.18 + .26 * tw1);
+  return { ...gr, m0, m1, p1: ((m1 - m0) / (KIS_MKP - m0) * 100).toFixed(2) };
+});
+const TABAN = 'calc(100vh - max(0px, (100vh - var(--mkh, 620px)) / 2))';
+const ar = (m: number) => `cover calc(${TABAN} + ${(m * 440).toFixed(3)}vh)`;
+const yayStil = yayGrup.map((gr: any, i: number) =>
+  `@keyframes mk-yay-${i}{0%{stroke-dashoffset:1;stroke-opacity:.075}${gr.p1}%{stroke-dashoffset:0;stroke-opacity:.075}99.9%{stroke-dashoffset:0;stroke-opacity:.075}100%{stroke-dashoffset:0;stroke-opacity:.0465}}`
+  + `@keyframes mk-pak-${i}{0%{opacity:0}.1%{opacity:.6}99.9%{opacity:.6}100%{opacity:.372}}`
+  + `.mkag-yay .yg${i}{animation-name:mk-yay-${i};animation-range:${ar(gr.m0)} ${ar(KIS_MKP)}}`
+  + `.mkag-pak .pg${i}{animation-name:mk-pak-${i};animation-range:${ar(gr.m1)} ${ar(KIS_MKP)}}`).join('');
 /* eğri noktaları derlemede pişer (kaynak 8153-8156) */
 const egri = (c: any) => {
   const idx: number[] = c.idx || [];
@@ -251,15 +275,28 @@ const egri = (c: any) => {
                 <i class={'mkc w' + c.w} style={`left:${y.x.toFixed(2)}%;top:${y.y.toFixed(2)}%`} />
               ); })}</span>
             ))}</div>
-            <svg class="mkag" viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
-              {/* küresel ağ: tohumlu 64 çift (kaynak AG üreteci birebir) */}
-              {agGrup.map((gr: any) => (
-                <g class="mkagg" style={`--k:${gr.k}`}>
+            {/* küresel ağ YAYLARI: tohumlu 64 çift (kaynak AG üreteci birebir),
+                8 grup, her grup kendi aralık çizelgesinde çizilir; bitince
+                statik (TUR 2 — bkz. frontmatter). */}
+            <style set:html={yayStil} />
+            <svg class="mkag-yay" viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
+              {yayGrup.map((gr: any, i: number) => (
+                <g class={`mkagg yg${i}`}>
                   {gr.g.map((L: any) => <path class="mkagy" d={L.d} pathLength="1" />)}
+                </g>
+              ))}
+            </svg>
+            {/* ağ PAKETLERİ: zaman animasyonu (kaynak "oklar sürekli aksın"),
+                grup opaklığı yayın çizimi bitince açılır (aralık çizelgesi) */}
+            <svg class="mkag-pak" viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
+              {yayGrup.map((gr: any, i: number) => (
+                <g class={`mkagg pg${i}`}>
                   {gr.g.map((L: any) => <circle class="mkagp" r="1.7"
                     style={`offset-path:path('${L.d}');animation-duration:${L.hiz.toFixed(2)}s;animation-delay:${(-L.faz * L.hiz).toFixed(2)}s`} />)}
                 </g>
               ))}
+            </svg>
+            <svg class="mkag" viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
               {/* zincir: hammadde → üretim → pazarlar */}
               <path class="mkzn zn-src" d={zKaynak.d} pathLength="1" />
               <circle class="mkznp" r="2.6"
@@ -692,9 +729,9 @@ const egri = (c: any) => {
      Aşamalar kaydırmaya bağlı, paketler ve balonlar kendi zaman
      çevriminde (kaynağın rAF döngüsünün karşılığı; Enes'in isteği:
      "oklar SÜREKLİ aksın"). Kapı IO: görünmeyen perde akmaz. */
-  .mkkara, .mkco, .mkag, .mkdg, .mkbl { position: absolute; inset: 0; pointer-events: none; }
+  .mkkara, .mkco, .mkag, .mkag-yay, .mkag-pak, .mkdg, .mkbl { position: absolute; inset: 0; pointer-events: none; }
   .mkkara img { width: 100%; height: 100%; object-fit: fill; display: block; }
-  .mkag { width: 100%; height: 100%; }
+  .mkag, .mkag-yay, .mkag-pak { width: 100%; height: 100%; }
   /* kara: a = EA(clamp(p/.14)) — 7797 */
   .mkkara { --lt: clamp(0, calc(var(--a) / .14), 1); --lu: calc(1 - var(--lt));
     opacity: calc(1 - var(--lu) * var(--lu) * var(--lu)); }
@@ -713,21 +750,22 @@ const egri = (c: any) => {
   .mkag { --tw: clamp(0, calc((var(--a) - .18) / .26), 1);
     --aga: calc(1 - .38 * clamp(0, calc((var(--a) - .62) * 100000), 1));
     --son: clamp(0, calc((var(--a) - .92) * 100000), 1); }
-  /* grup: dash-offset ve stroke-opacity SVG'de MİRAS ALINIR, paketlerin
-     opaklığı da grubun opaklığından gelir — kare başına 128 değil 8 eleman */
-  .mkagg { --t2: clamp(0, calc((var(--tw) * 83.2 - var(--k)) / 9), 1);
-    stroke-dashoffset: calc(1 - var(--t2));
-    opacity: clamp(0, calc((var(--t2) - .999) * 100000), 1); }
+  /* TUR 2: yay gruplari kendi aralik cizelgesinde (keyframe'ler
+     frontmatter'da, grup basina: cizim m0->m1, kisilma .62'de basamak);
+     dashoffset ve stroke-opacity SVG'de miras alinir. Desteksiz/azaltma:
+     cizili ve kisik son hal. */
+  .mkag-yay .mkagg { stroke-dashoffset: 0; stroke-opacity: .0465; }
+  .mkag-pak .mkagg { opacity: .372; }
+  @supports (animation-timeline: view()) {
+    .mkag-yay .mkagg, .mkag-pak .mkagg { animation-timeline: --mk-kap; animation-fill-mode: both;
+      animation-timing-function: linear; }
+    .mkag-pak .mkagg { animation-timing-function: step-end; }
+  }
   .mkagy { fill: none; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke;
-    stroke-dasharray: 1; stroke-opacity: calc(.075 * var(--aga));
-    /* yay çizilirken de görünür olmalı: grup opaklığı paket için, yay
-       kendi opaklığını taşır (grup opaklığı 0 iken bile çizim sürüyor) */
-    opacity: 1; }
-  .mkagg { opacity: 1; }
-  .mkagp { fill: #fff; opacity: calc(var(--pg) * .6 * var(--aga));
+    stroke-dasharray: 1; }
+  .mkagp { fill: #fff;
     animation-name: mk-akis; animation-timing-function: linear;
     animation-iteration-count: infinite; animation-play-state: paused; }
-  .mkagg { --pg: clamp(0, calc((var(--t2) - .999) * 100000), 1); }
   @keyframes mk-akis { from { offset-distance: 0%; } to { offset-distance: 100%; } }
   .mkgor .mkagp, .mkgor .mkznp, .mkgor .mkb { animation-play-state: running; }
   /* zincir: hammadde → üretim (t1 = EA(clamp((p−.60)/.14))) */
@@ -839,6 +877,7 @@ const egri = (c: any) => {
     .mkmade, .mkmc, .mkcomp, .mkrk, .mkin, .mkcore, .mkhy, .mkdc, .mkjc, .mkch,
     .mkinf, .mkhand, .mkhr, .mkwire, .mkkara, .mkco, .mkag, .mkdg, .mkbl { animation: none; }
     .mkcore i { animation: none !important; }
+    .mkag-yay .mkagg, .mkag-pak .mkagg { animation: none; }
     .mkwire :global(.kiv) { animation: none; opacity: 0; }
     .mkcv polyline { stroke-dashoffset: 0; }
   }
