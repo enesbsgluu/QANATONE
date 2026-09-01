@@ -98,6 +98,23 @@
    tasiyan kucuk kopya oynatilir (ayni CRF/cozunurluk -> gecis gorunmez).
    Tam kopya inip AYNI kareye sarilinca tek sinif degisimiyle takas edilir.
 
+   YUKLEME TAMPONU — AMBLEMSIZ (2 Eyl 2026, Enes: giris sahnesi sokumu).
+   Eski tasarimda ilk kliplerin inme suresini acilis amblemi dolduracakti;
+   amblem prologu tumden sokulunce o gorev tampona gecti. Kural: film
+   ILK KARESINDE SABIT durur, kilit konumundaki klip + yondeki komsusu
+   tamamen inene kadar hedef ILERLEMEZ. Ayri perde, sayac, yuzde
+   gostergesi YOK - kullanici filmin durdugunu degil henuz baslamadigini
+   gorur. Kilit konumu 0 DEGIL, ilk karedeki scrub konumudur: tarayici
+   scroll'u sayfa ortasina geri getirirse (yenileme) film oraya kilitlenir,
+   basa sarmaz. Acilinca yay mevcut haliyle hedefe yurur (tavan katched-up
+   hizini zaten sinirlar); sicrama yok. Durusta akis tampon acilana kadar
+   calismaz (sayfa kaydirilir ama film ilerleyemezdi - sahte akis).
+   Gerekce OLCULDU (TUR 3, 1-2 Eyl): tur taramasindaki takilmalarin
+   kumesi T=0,3-7,5 sn'deydi - klipler inmeden scrub baslamasi.
+   OLCUM: IZ.tamponMs (kilidin acildigi an) + IZ.ilkHareketMs (gosterilen
+   konumun kilitten ilk ayrildigi an) - yavas ag kapisi ikisini yan yana
+   koyar; hareket hazirliktan once baslayamaz.
+
    OLCUM YUZEYI: `window.__fl` — durum + istek/sunum kaydi (rVFC ile
    GERCEKTEN BOYANAN kare). yeni/film/olc.cjs bunu okur. Kayit kapaliyken
    maliyeti sifir (dizilere itilmez).
@@ -146,6 +163,14 @@ const TAVAN_VARSAYILAN = AYAR.tavan;
 /* "geride" olayi esigi: gosterilen hedefin bu kadar film-sn gerisindeyse
    sayfa atla dugmesini gosterebilir. */
 const GERIDE_SN = 1.0;
+/* Yukleme tamponu ISINLANMA esigi: tampon kapaliyken hedef TEK karede
+   bundan fazla sicrarsa bu kaydirma degil teleporttur (scrollTo/geri
+   yukleme/atla) ve tampon DELINIR — bilincli sicrama eski (olculmus)
+   davranisa duser, yoksa film 0'a kilitlenip acilinca tavan hiziyla
+   dakikalarca yol kat ederdi (olculdu: olc-devir zaman asimlari, 2 Eyl).
+   Gercek kaydirmanin kare basi hedef adimi ~0,1 film-sn'nin altinda;
+   1,0 guvenli ayirac. */
+const TAMPON_SICRAMA_SN = 1.0;
 
 type Durum = 'yok' | 'iniyor' | 'hazir' | 'hata';
 
@@ -187,6 +212,9 @@ interface Iz {
   devir: number;              /* devralma sayisi */
   acilisMs: number | null;    /* acilis kopyasinin ilk karesi (sahne1) */
   acilisTakasMs: number | null;
+  tamponMs: number | null;    /* yukleme tamponunun acildigi an (kilit klip + komsu hazir) */
+  ilkHareketMs: number | null;/* gosterilen konumun kilitten ilk ayrildigi an */
+  tamponYolu: string | null;  /* nasil acildi: 'bekledi' (hazirlik) | 'atla' | 'teleport' */
   sahne: () => { n: number; durum: Durum; bayt: number; inmeMs: number }[];
   konum: (T: number) => number;
   etkin: () => number;
@@ -282,6 +310,7 @@ export function baslat(bolum: HTMLElement): () => void {
     istek: [], sunum: [], ilkKareMs: null,
     yon: 1, hiz: 0, pencere: PENCERE, onPencere: ON_PENCERE_TABAN, mbit: null, onsar: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
+    tamponMs: null, ilkHareketMs: null, tamponYolu: null,
     birakilan: 0,   /* PENCERE TURU (1 Eyl): sayac init edilmemisti — undefined++ = NaN, olcum yuzeyi bozuktu */
     sert: SERT, sonum: SONUM, tavan: TAVAN, akis: AKIS, moment: MOMENT, hizala: HIZALA, hizalama: 0,
     akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
@@ -540,6 +569,10 @@ export function baslat(bolum: HTMLElement): () => void {
   let sonT: number | null = null;
   let sonKareMs = 0;
   let ilkKareGecti = false;
+  /* yukleme tamponu: acilana kadar hedef kilit konumunda tutulur */
+  let tamponAcik = false;
+  let tamponT: number | null = null;
+  let hedefHamOnce = 0;   /* kelepce ONCESI hedef (teleport ayraci icin) */
   let atlaIstek = false;
   let gerideydi = false;
   /* yay durumu: x (konum), v (hiz); onceki fizik durumu (harman icin); birikim */
@@ -559,7 +592,7 @@ export function baslat(bolum: HTMLElement): () => void {
 
     /* --- DURUSTA AKIS: kullanici sessizse sayfayi kendimiz kaydiririz (tek kaynak scrollY) --- */
     IZ.akiyor = false;
-    if (IZ.akis > 0 && ilkKareGecti && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
+    if (IZ.akis > 0 && ilkKareGecti && tamponAcik && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
       const sonPx = ust + yol;                                   /* rayin sonu */
       if (scrollY < sonPx - 1) {
         akisPx += IZ.akis * pxSn * (dt / 1000);                  /* film-sn/sn -> px/sn */
@@ -570,7 +603,27 @@ export function baslat(bolum: HTMLElement): () => void {
       }
     } else akisPx = 0;
     const p = Math.min(1, Math.max(0, (scrollY - ust) / yol));
-    const hedefT = Math.min(toplam - 1e-3, p * toplam);
+    let hedefT = Math.min(toplam - 1e-3, p * toplam);
+    /* --- YUKLEME TAMPONU (2 Eyl 2026, Enes; dosya basindaki blok) ---
+       Acilana kadar hedef KILIT konumunda tutulur: sayfa kayar ama film
+       ilk karesinde bekler. Hazirlik = kilit klibi TAM + yondeki komsu
+       TAM (taze acilista sahne1+sahne2). Kosul indirme bitislerindeki
+       tik() ile yeniden denenir; burada ekstra dongu kurulmaz (pil). */
+    if (!tamponAcik) {
+      const ham = hedefT;
+      if (tamponT === null) { tamponT = hedefT; hedefHamOnce = hedefT; }   /* ilk kare: kilit konumu */
+      const sk = S[i], komsu = S[i + (IZ.yon >= 0 ? 1 : -1)];
+      const ac = (yol: string) => { tamponAcik = true; IZ.tamponMs = Math.round(simdi - yeni); IZ.tamponYolu = yol; };
+      if (atlaIstek || Math.abs(ham - hedefHamOnce) > TAMPON_SICRAMA_SN) {
+        /* bilincli sicrama (atla / scrollTo / geri yukleme): tampon delinir,
+           eski davranis — asagidaki atla dali hedefe oturtur. */
+        ac(atlaIstek ? 'atla' : 'teleport');
+        atlaIstek = true;
+      } else if (sk.durum === 'hazir' && (!komsu || komsu.durum === 'hazir')) {
+        ac('bekledi');
+      } else hedefT = tamponT;
+      hedefHamOnce = ham;
+    }
     IZ.hedefT = hedefT;
 
     /* SONUMLEME: gosterilen konum hedefe ustel yaklasir. Katsayi 60 Hz'e
@@ -667,6 +720,11 @@ export function baslat(bolum: HTMLElement): () => void {
     }
 
     const T = IZ.gosterilenT;
+    /* tampon olcumu: gosterilen konum kilitten ilk kez yarim kareden fazla
+       ayrildi = filmin ILK HAREKETI. Yavas ag kapisi bunu tamponMs ile
+       yan yana koyar; hareket hazirliktan once baslayamaz. */
+    if (IZ.ilkHareketMs === null && tamponT !== null && Math.abs(T - tamponT) > OTUR)
+      IZ.ilkHareketMs = Math.round(simdi - yeni);
     /* hedefe oturmadiysa dongu kendi kendini surdurur — kaydirma olayi
        bitmis olsa da sonumleme tamamlanir.
        HIZ SARTI (30 Agu 2026, TUR 3 — DONMA KUSURU): eskiden burada yalniz

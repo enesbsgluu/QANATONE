@@ -43,12 +43,16 @@ const BOSLUK_ESIK_MS = 100;        /* sunumsuz bosluk esigi (ev tanimi) */
 const TUR_SINIR_SN = 120;          /* v2 degismez 4 */
 const P95_SINIR_MS = 20;           /* v2 degismez 2 */
 
-/* Durulan noktalar: film saniyesi. Cekirdek sahne7'nin basi (kanon
-   surelerinden turetilir, ELLE yazilmaz). */
+/* Durulan nokta: TEK — cekirdek, p95 <= 9,5 ms (2 Eyl 2026, Enes:
+   "durulan iki nokta kapisi tek noktaya iner"). Acilis (film basi)
+   duragi acilis AMBLEMININ satiriydi; amblem prologu sokulunce belgeden
+   ve buradan kalkti. Acilis ani artik yukleme tamponunun konusu (motor
+   IZ.tamponMs / IZ.ilkHareketMs; olc-tampon.cjs olcer). Cekirdek
+   sahne7'nin basi (kanon surelerinden turetilir, ELLE yazilmaz). */
+const DURULAN_P95_MS = 9.5;
 const KANON = require('../src/film/kanon.json');
 const basSn = (n) => KANON.klip.slice(0, n - 1).reduce((t, k) => t + k.sure, 0);
 const DURAKLAR = [
-  { ad: 'acilis (film basi)', T: 0.5 },
   { ad: 'cekirdek (sahne7)', T: +(basSn(7) + 1.5).toFixed(2) },
 ];
 
@@ -144,11 +148,12 @@ async function tur(browser, tavan) {
 
   /* ISINMA = YUKLEME TAMPONU (v2 4. adim). Ilk taramada takilmalarin
      buyuk kismi T=0..4 sn'deydi: tur, sahne1 hazir olur olmaz basliyor
-     ama sahne2/3 daha inmemis oluyor. Urun tarafinda bu ani ACILIS
-     AMBLEMI dolduracak ("amblem yasarken ilk klipler tamponlanir, ayri
-     bir yukleme perdesi eklenmez"). Olcum de o anin karsiligini
-     beklemeli, yoksa amblemin kapatacagi bir kusuru tavana yaziyoruz.
-     ISINMA=0 ile kapatilir (tamponsuz halin karsilastirmasi icin). */
+     ama sahne2/3 daha inmemis oluyor. Urun tarafinda bu ani artik
+     MOTORUN KENDI TAMPONU karsiliyor (2 Eyl 2026, amblemsiz: film ilk
+     karesinde sabit durur, kilit klip + komsu inene kadar hedef
+     ilerlemez — motor.ts basligindaki blok). Olcum de o anin
+     karsiligini beklemeli, yoksa tamponun kapattigi bir kusuru tavana
+     yaziyoruz. ISINMA=0 ile kapatilir (tamponsuz halin kiyasi icin). */
   const ISINMA_KLIP = Number(process.env.ISINMA ?? 3);
   let isinmaMs = 0;
   if (ISINMA_KLIP > 0) {
@@ -290,7 +295,10 @@ async function tur(browser, tavan) {
       toplam_ms_hepsi: kosumlar.map((k) => k.takilma.toplam_ms),
       sinirda_hepsi: kosumlar.map((k) => k.takilma.sinirda),
       en_uzun_ms: Math.max(...kosumlar.map((k) => k.takilma.en_uzun_ms)),
-      ornek: kosumlar[0].takilma.ornek,
+      /* kosum-basina ornekler: [6,1,1] gibi desenlerde 2-3. kosumun TEK
+         takilmasinin NEREDE oldugu soruluyor — ilk kosumla ayni sahnedeyse
+         yapisal, degilse gurultu. */
+      ornek_kosum_basina: kosumlar.map((k) => k.takilma.ornek),
     };
     r.borc_tepe_sn = ortanca(kosumlar.map((k) => k.borc_tepe_sn));
     r.tipik_oturum_mib = ortanca(kosumlar.map((k) => k.tipik_oturum_mib));
@@ -318,7 +326,7 @@ async function tur(browser, tavan) {
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
-    degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN },
+    degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS },
     takilma_esigi_ms: BOSLUK_ESIK_MS, durulan_noktalar: DURAKLAR,
     aday: sonuc,
   }, null, 1));

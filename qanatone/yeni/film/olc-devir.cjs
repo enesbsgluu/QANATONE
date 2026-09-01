@@ -250,7 +250,13 @@ async function kos(g) {
 const TEKRAR = Number(process.env.TEKRAR || 3);
 (async () => {
   const srv = await sunucu();
-  const sonuc = { _: 'yeni/film/olc-devir.cjs — devir v3 kapilari: sayfa 1,0 · kapanan <2px · tasma yazildi/bosluk 0 · 3 oran · dusen kare 0 (TEKRAR kosum medyani) · hiz farki. Bagimsiz dogrulama CSS matrisinden.', olcum: new Date().toISOString(), tarayici_istek: TARAYICI, headless: HEADLESS !== false, tekrar: TEKRAR, kosum: [] };
+  const sonuc = { _: 'yeni/film/olc-devir.cjs — devir v3 kapilari: sayfa 1,0 · kapanan <2px · tasma yazildi/bosluk 0 · 3 oran · dusen kare 0 (TEKRAR kosum medyani) · hiz farki. Bagimsiz dogrulama CSS matrisinden.', olcum: new Date().toISOString(), tarayici_istek: TARAYICI, headless: HEADLESS !== false, tekrar: TEKRAR,
+    /* AZALT damgasi (2 Eyl): oturmus-hal matris dogrulamasi ANCAK sade
+       yolda (AZALT=1) anlamli — TV cokusu scaleY~0 birakir, bosluk
+       ust/alt ~yarim ekran cikar ve tasma kapisi YANLIS KIRMIZI olur
+       (olculdu, 2 Eyl: 538/398 px bosluk + 565 px tutarlilik). Kosul
+       artik ciktiya yazilir ki hangi yolda olculdugu tartisilmasin. */
+    azalt: process.env.AZALT === '1', kosum: [] };
   for (const g of GORUNUMLER) {
     process.stdout.write(`\n== ${g.ad} (${g.w}x${g.h}) ==\n`);
     try {
