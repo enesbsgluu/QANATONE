@@ -164,6 +164,68 @@ async function tur(browser, tavan) {
   }
   const ray = await page.evaluate(() => ({ ...window.__fl.ray(), toplam: window.__fl.toplam, tavan: window.__fl.tavan }));
 
+  /* ---- TABAN GECERLILIK DAMGASI (2 Eyl 2026, Enes talimati) ----
+     Makine gurultusu UC KEZ olcumu hukumsuzlestirdi (halka turu, efekt
+     turu, bugunku A/B: ayni ikili [6,8,3] <-> [175,445,421]). Kural:
+     her kosumda, tur baslamadan once, HAZIR sahne1 klibi uzerinde
+     TABAN_SN sn SENTETIK SCRUB kosulur (rAF'ta UCGEN dalga deseniyle
+     currentTime yazimi — gercek olcumun kullandigi seek+decode+present
+     yolunun kendisi; akis pencere suresince kapatilir) ve AYNI sayacla
+     (sunumsuz bosluk > BOSLUK_ESIK_MS) taban sayilir. Taban
+     TABAN_TAVAN'i asarsa kosum HUKUM DISI isaretlenir ve toplu hukum
+     "ortam gurultulu" damgasi tasir — yanlis kirmizi da yanlis esik de
+     uretilmez. (Halka turundaki halkasiz-taban ayristirmasinin kurala
+     donmus hali.)
+     ILK TASLAK DUZ OYNATMAYDI VE KIRMIZI-ONCE KOSUMUNDA ELENDI
+     (2 Eyl): 12 surec %100 CPU altinda tur takilmasi 64'e cikarken duz
+     oynatma tabani [0] kaldi — donanim dekoderli duz oynatma ana-islik
+     yukunu GORMUYOR. Sentetik scrub ayni yuk altinda kirmizi yandi
+     (asagida, kosum kaydi JSON'da). */
+  const TABAN_SN = Number(process.env.TABAN_SN ?? 15);
+  const TABAN_TAVAN = Number(process.env.TABAN_TAVAN ?? 1);
+  let taban = { sayi: null, toplam_ms: null, en_uzun_ms: null, sure_sn: TABAN_SN, gecerli: null };
+  if (TABAN_SN > 0) {
+    const sun = await page.evaluate(async (sureMs) => {
+      const v = document.querySelector('.fl-sahne video');
+      if (!v || !v.src) return null;
+      const konum = v.currentTime;
+      const eskiAkis = window.__fl.akis; window.__fl.akis = 0;   /* akis karismaz */
+      const sure = Math.max(1, v.duration - 0.2);
+      window.__zBasla();
+      await new Promise((res) => {
+        /* UCGEN dalga, sabit 1x tempo: hiz hic sifirlanmaz. Ilk taslak
+           SINUSTU ve kendi kusurunu olctu: tepe/dipte hiz->0, hedef
+           yarim kareden az degisiyor, seek yazilmiyor, sunum duruyor —
+           sayac o YAPISAL duraklamalari bosluk sayip sakin makinede
+           [5,7,6] uretti (yuklu [7] ile ayrismadi). Ucgende duraklama
+           yok; kalan her bosluk ORTAMINDIR. */
+        const t0 = performance.now();
+        const adim = () => {
+          const gecen = performance.now() - t0;
+          if (gecen >= sureMs) return res();
+          const faz = (gecen / 1000) % (2 * sure);
+          const hedef = faz < sure ? faz : 2 * sure - faz;
+          if (Math.abs(v.currentTime - hedef) > 1 / 48) v.currentTime = hedef;
+          requestAnimationFrame(adim);
+        };
+        requestAnimationFrame(adim);
+      });
+      const g = window.__zBitir();
+      window.__fl.akis = eskiAkis;
+      v.currentTime = konum;                     /* scrub konumuna geri */
+      return g.sunum.map((s) => s.t);
+    }, TABAN_SN * 1000);
+    if (sun && sun.length >= 2) {
+      let sayi = 0, toplam = 0, enUzun = 0;
+      for (let i = 1; i < sun.length; i++) {
+        const d = sun[i] - sun[i - 1];
+        if (d > BOSLUK_ESIK_MS) { sayi++; toplam += d; if (d > enUzun) enUzun = d; }
+      }
+      taban = { sayi, toplam_ms: +toplam.toFixed(0), en_uzun_ms: +enUzun.toFixed(0),
+        sure_sn: TABAN_SN, gecerli: sayi <= TABAN_TAVAN };
+    } else taban = { ...taban, gecerli: false, not: 'oynatma/sunum alinamadi' };
+  }
+
   /* TIPIK OTURUM (v2 8. adim): ilk 15 sn izleyip gecen ziyaretci */
   await page.evaluate(() => window.__zBasla());
   const t15 = Date.now();
@@ -227,6 +289,7 @@ async function tur(browser, tavan) {
   await page.close();
   return {
     tavan, isinma_klip: ISINMA_KLIP, isinma_ms: isinmaMs, ray_px: Math.round(ray.rayPx), pxSn: ray.pxSn, toplam_sn: ray.toplam,
+    taban,
     alt_sinir_sn: +(ray.toplam / tavan).toFixed(1),
     tur_sn: +turSn.toFixed(1),
     tur_120_sinirinda: turSn <= TUR_SINIR_SN ? 'GECER' : 'ASIYOR',
@@ -273,7 +336,7 @@ async function tur(browser, tavan) {
     for (let i = 0; i < TEKRAR; i++) {
       const k = await tur(browser, t);
       kosumlar.push(k);
-      if (TEKRAR > 1) console.log(`  [${i + 1}/${TEKRAR}] isinma ${k.isinma_ms} ms · tur ${k.tur_sn} sn · p95 ${k.kare_p95} ms · takilma ${k.takilma.sayi} (${k.takilma.toplam_ms} ms)`);
+      if (TEKRAR > 1) console.log(`  [${i + 1}/${TEKRAR}] taban ${k.taban.sayi}${k.taban.gecerli === false ? ' ORTAM-GURULTULU' : ''} · isinma ${k.isinma_ms} ms · tur ${k.tur_sn} sn · p95 ${k.kare_p95} ms · takilma ${k.takilma.sayi} (${k.takilma.toplam_ms} ms)`);
     }
     /* ORTANCA — TEK KOSUM HUKUM VERMEZ. v2 kapisi p50/p95 icin ucun
        ortancasini istiyor; takilma sayisi daha da gurultulu: ilk tarama
@@ -281,6 +344,16 @@ async function tur(browser, tavan) {
        tavani degil kosumu olcuyordu. Butun kosumlar da yaziliyor —
        ortanca yayilimi gizlemesin. */
     const r = { ...kosumlar[0], kosum: TEKRAR };
+    /* TABAN DAMGASI: tek kosum bile gurultuluyse toplu hukum verilmez —
+       sayilar yine yazilir (yayilim gorunsun) ama etiketle. */
+    r.taban = {
+      sayi_hepsi: kosumlar.map((k) => k.taban.sayi),
+      gecerli_hepsi: kosumlar.map((k) => k.taban.gecerli),
+      hukum_disi: kosumlar.filter((k) => k.taban.gecerli === false).length,
+    };
+    r.ortam = r.taban.hukum_disi > 0
+      ? `GURULTULU — hukum verilmez (${r.taban.hukum_disi}/${TEKRAR} kosum hukum disi)`
+      : 'sakin';
     r.isinma_ms = ortanca(kosumlar.map((k) => k.isinma_ms));
     r.tur_sn = ortanca(kosumlar.map((k) => k.tur_sn));
     r.kare_p50 = ortanca(kosumlar.map((k) => k.kare_p50));
@@ -316,6 +389,7 @@ async function tur(browser, tavan) {
       geriye_sardi: kosumlar.every((k) => k.geri.geriye_sardi),
     };
     sonuc.push(r);
+    console.log(`  ORTAM: ${r.ortam} · taban [${r.taban.sayi_hepsi.join(',')}]`);
     console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] · ${r.takilma.toplam_ms_ortanca} ms · borc tepe ${r.borc_tepe_sn} sn`);
     for (const d of r.duraklar) console.log(`    durulan · ${d.ad}: p50 ${d.kare_p50} / p95 ${d.kare_p95} ms · takilma [${d.takilma_hepsi.join(',')}]`);
     console.log(`    geri: p50 ${r.geri.kare_p50} / p95 ${r.geri.kare_p95} ms · takilma [${r.geri.takilma_hepsi.join(',')}] · sardi ${r.geri.geriye_sardi}`);
@@ -326,7 +400,8 @@ async function tur(browser, tavan) {
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
-    degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS },
+    degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS,
+      taban_tavan: Number(process.env.TABAN_TAVAN ?? 1) },
     takilma_esigi_ms: BOSLUK_ESIK_MS, durulan_noktalar: DURAKLAR,
     aday: sonuc,
   }, null, 1));
