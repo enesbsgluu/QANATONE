@@ -135,3 +135,18 @@
 @media (prefers-reduced-motion:reduce){
   .ste-h2 .ste-lt i{animation:none}
 }
+
+/* ---- DUZELTME LISTESI (sokum turu, 4 Eyl) — kaynak .dgfix/.dgfh/.dgfl 1795-1804 birebir, aile token ---- */
+.ste-fix{margin-top:clamp(14px,2vw,22px);border:1px solid rgba(239,35,60,.34);border-radius:16px;
+  background:linear-gradient(140deg,rgba(239,35,60,.1),rgba(255,255,255,.02));padding:22px 24px}
+.ste-fix-bas{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--red);margin:0 0 16px}
+.ste-fix-liste{list-style:none;margin:0;padding:0;counter-reset:n}
+.ste-fix-liste li{display:flex;gap:15px;padding:12px 0;border-bottom:1px dashed var(--line);counter-increment:n}
+.ste-fix-liste li:last-child{border-bottom:0}
+.ste-fix-liste li::before{content:counter(n);width:24px;height:24px;border-radius:8px;flex-shrink:0;
+  display:grid;place-items:center;background:var(--red);color:#fff;font-family:var(--f-tek);font-size:10px}
+.ste-fix-liste li[data-k="yok"]::before{content:'✓'}
+.ste-fix-liste b{display:block;font-size:.92rem;margin-bottom:4px;letter-spacing:-.02em}
+.ste-fix-liste span{font-size:.85rem;color:var(--tx3);line-height:1.6;font-weight:300}
+.ste-fix .dugme{margin-top:18px}

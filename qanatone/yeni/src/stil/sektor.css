@@ -163,3 +163,40 @@
 @media (prefers-reduced-motion: reduce){
   .sse-sec{transition:none}
 }
+
+/* ---- KAYDIRICILAR (sokum turu, 4 Eyl) — kaynak .skcalc/.sl/.slp 1696-1722 birebir,
+   aile token; giris hareketi (opacity/translate .55s) TASINMADI: pano zaten
+   radyo secimiyle geliyor, kaydiricilar onun icinde dogar. ---- */
+.sse-calc{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02);
+  padding:20px;margin:14px 0}
+.sse-calc-bas{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:16px;flex-wrap:wrap}
+.sse-calc-bas span:first-child{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--tx4)}
+.sse-ipucu{font-size:.72rem;color:var(--tx4);font-weight:300}
+.sse-sl{margin-bottom:16px}
+.sse-sl:last-child{margin-bottom:0}
+.sse-sl label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-size:.78rem;color:var(--tx2);margin-bottom:9px;font-weight:500}
+.sse-sl label b{font-family:var(--f-tek);font-size:.92rem;color:#fff;font-weight:500}
+.sse-sl input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;
+  border-radius:3px;outline:0;cursor:pointer;
+  background:linear-gradient(90deg,var(--red) var(--p,50%),rgba(255,255,255,.11) var(--p,50%))}
+.sse-sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;
+  border-radius:50%;background:var(--red);cursor:pointer;border:3px solid #0d0d0d}
+/* H14: golge yalniz fare ortaminda (kaynak thumb parlamasi) */
+@media(hover:hover){.sse-sl input[type=range]::-webkit-slider-thumb{
+  box-shadow:0 0 0 1px rgba(239,35,60,.6),0 0 14px rgba(239,35,60,.45)}}
+.sse-sl input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;
+  background:var(--red);cursor:pointer;border:3px solid #0d0d0d}
+.sse-sl input[type=range]:focus-visible{outline:2px solid var(--red);outline-offset:6px}
+.sse-slp{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.sse-slp button{flex:1;min-width:56px;font-family:var(--f-tek);font-size:9.5px;
+  letter-spacing:.1em;padding:7px 5px;border-radius:9px;border:1px solid var(--line);
+  background:var(--card2);color:var(--tx4);cursor:pointer;transition:.2s var(--e)}
+.sse-slp button:hover{color:var(--tx2);border-color:var(--line2)}
+.sse-slp button.on{color:var(--red-soft);border-color:rgba(239,35,60,.5);background:var(--red-dim)}
+/* ikinci dugme (kaynak .btn-g): cerceveli, zemin yok */
+.sse-cagri{display:flex;gap:10px;flex-wrap:wrap}
+.sse-dugme-g{background:transparent;color:var(--tx2);border:1px solid var(--line2)}
+.sse-dugme-g:hover{color:var(--tx);border-color:var(--red)}

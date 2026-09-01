@@ -30,6 +30,12 @@ const en = dil === 'en';
 /* Halkanın çevresi: r=43 → 2πr. JS aynı sayıyı yeniden hesaplamasın diye
    burada bir kez yazılır ve stroke-dasharray olarak basılır. */
 const CEVRE = (2 * Math.PI * 43).toFixed(1);
+/* DUZELTME LISTESI (sokum turu, 4 Eyl) — kaynak render() 11406-11416:
+   kirmizi/sari kalemler PRIO sirasinda ilk uc. Sozluk (kaynak L.tr.f /
+   L.en.f, PRIO) kabuk/tespit-fix.mjs'te; kabuk-derle varlik/
+   tespit-fix.<dil>.json yazar, ada GONDERIMDE indirir (olculdu: HTML
+   <template> hali gzip'e 1,3 KB ekliyor ve H18'i asiyordu). */
+const WA = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
 
 /* KAYNAK VERİSİNDE BOZULMA — `strings.tr.dgh` 2.825 BAYT (31 karakterlik
    cümle için). İçinde eski sitenin harf-harf düşme iskelesi var ve İKİ
@@ -140,6 +146,13 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         </div>
         <p class="ste-uyari" id="steUyari" hidden></p>
         <ul class="ste-izgara" id="steIzgara"></ul>
+        {/* DUZELTME LISTESI — iskelet HTML'de, `hidden`; ada secip klonlar. */}
+        <div class="ste-fix" id="steFix" hidden data-wa={WA} data-sozluk={`/yeni/varlik/tespit-fix.${dil}.json`}
+          data-msg={en ? 'Hi, I ran the check for {host} — score {skor}.' : 'Merhaba, {host} için kontrolü yaptım — skor {skor}. Bunları konuşmak istiyorum.'}>
+          <p class="ste-fix-bas">{en ? 'Start with these three' : 'Önce şu üçü'}</p>
+          <ol class="ste-fix-liste" id="steFixListe"></ol>
+          <a class="dugme" id="steFixCta" target="_blank" rel="noopener" hidden>{en ? 'Have us fix these three' : 'Bu üçünü biz düzeltelim'}</a>
+        </div>
       </div>
     </div>
   </div>
@@ -234,6 +247,28 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
             li.appendChild(v);
           }
           izgara.appendChild(li);
+        }
+        /* DUZELTME LISTESI: sozluk JSON'u gonderimle iner ([anahtar, baslik,
+           aciklama] dizisi PRIO sirasinda; son kayit "yok"); kirmizi/sari
+           kalemlerden ilk uc, yoksa "yok" satiri; CTA WhatsApp (kaynak 11413). */
+        const fix = document.getElementById('steFix') as HTMLElement;
+        if (fix) {
+          const sz: [string, string, string][] = await (await fetch(fix.dataset.sozluk!)).json();
+          const kotu = new Set((j.items || []).filter((it: any) => it.state !== 'ok').map((it: any) => it.k));
+          const aday = sz.filter((k) => kotu.has(k[0])).slice(0, 3);
+          const liste = document.getElementById('steFixListe') as HTMLElement;
+          liste.textContent = '';
+          for (const [k, b, a] of (aday.length ? aday : sz.filter((k) => k[0] === 'yok'))) {
+            const li = document.createElement('li'); li.dataset.k = k;
+            const bb = document.createElement('b'); bb.textContent = b;
+            const sp = document.createElement('span'); sp.textContent = a;
+            li.append(bb, sp); liste.appendChild(li);
+          }
+          const cta = document.getElementById('steFixCta') as HTMLAnchorElement;
+          const wa = fix.dataset.wa;
+          cta.hidden = !(aday.length && wa);
+          if (wa) cta.href = `https://wa.me/${wa}?text=${encodeURIComponent((fix.dataset.msg || '').replace('{host}', j.host || j.finalUrl || '').replace('{skor}', String(j.score)))}`;
+          fix.hidden = false;
         }
         sonuc.hidden = false;
       } catch (err) {

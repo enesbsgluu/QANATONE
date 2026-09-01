@@ -25,6 +25,11 @@ const g = (k: string): string => T(s[k], dil);
     <span class="sus-a3"></span><span class="sus-a4"></span>
   </div>
 
+  {/* TUPLER (sokum turu, 4 Eyl): kaynak markup 4527, CSS 399-401 — WebGL
+      tup alani kok js/tubes.min.js'ten (devir sahnesiyle AYNI kaynak),
+      bosta dinamik ithal; yalniz hero ekrandayken calisir (IO play/pause,
+      kaynak 9077-9133). Dar ekran / dokunmatik / azaltma / t-notubes: yok. */}
+  <canvas id="tubes" class="sus-tubes" aria-hidden="true"></canvas>
   <div class="sus-eller" aria-hidden="true">
     <div class="sus-el sus-el-h"><span class="sus-suzul">
       <picture>
@@ -66,6 +71,10 @@ const g = (k: string): string => T(s[k], dil);
 
   <div class="sus-kaydir" aria-hidden="true"><span>{g('scr')}</span><i></i></div>
 </section>
+
+{/* TUP YUKLEYICI kabuk/efekt.js'te (tubes()): satir ici hali 1.699 B'ti ve
+    J1'i 13.792'ye tasiyordu (tavan 12.800) — kaynakta da tubesKur ayni
+    dosyadaydi; bosta inen kabuk modulu onu da kurar (0 satir ici bayt). */}
 
 <script>
   /* Saat adasi. Yanindaki yazi "Istanbul · Dubai" — ziyaretcinin cihaz
