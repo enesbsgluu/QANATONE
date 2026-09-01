@@ -1040,8 +1040,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
           if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, '')))) {
             /* TUR 2c: kayip dosya git-disi film medyasindansa sebep
                kurulum adimidir — adiyla basilir, yigin basilmaz. */
-            if (!MEDYA.kuruldu && u.startsWith('/yeni/varlik/film/'))
-              kusur.push(MEDYA.mesaj);
+            if (!MEDYA.kuruldu && u.startsWith('/yeni/varlik/film/')) {
+              if (!kusur.includes(MEDYA.mesaj)) kusur.push(MEDYA.mesaj);
+            }
             else kusur.push(rel(p2) + ':kayip:' + u);
           }
         }
