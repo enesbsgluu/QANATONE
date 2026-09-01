@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.",
- "olcum": "2026-08-31T15:28:46.838Z",
+ "olcum": "2026-08-31T23:29:51.163Z",
  "tarayici": "brave Chrome/152.0.7977.64",
  "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
  "degismezler": {
@@ -21,253 +21,114 @@
  ],
  "aday": [
   {
-   "tavan": 1.5,
-   "isinma_klip": 3,
-   "isinma_ms": 7,
-   "ray_px": 115487,
-   "pxSn": 450,
-   "toplam_sn": 256.638,
-   "alt_sinir_sn": 171.1,
-   "tur_sn": 156.1,
-   "tur_120_sinirinda": "ASIYOR",
-   "kare_p50": 8.3,
-   "kare_p95": 11.3,
-   "p95_20ms": "GECER",
-   "ort_fps": 116.7,
-   "takilma": {
-    "sayi_ortanca": 37,
-    "sayi_hepsi": [
-     19,
-     37,
-     92
-    ],
-    "toplam_ms_ortanca": 4518,
-    "toplam_ms_hepsi": [
-     2786,
-     4518,
-     16240
-    ],
-    "sinirda_hepsi": [
-     1,
-     9,
-     15
-    ],
-    "en_uzun_ms": 892,
-    "ornek": [
-     {
-      "ms": 142,
-      "T": 21.55,
-      "sinira_sn": 0.43
-     },
-     {
-      "ms": 133,
-      "T": 25.57,
-      "sinira_sn": -3.6
-     },
-     {
-      "ms": 117,
-      "T": 62.74,
-      "sinira_sn": -0.64
-     },
-     {
-      "ms": 158,
-      "T": 68.66,
-      "sinira_sn": 0.24
-     },
-     {
-      "ms": 117,
-      "T": 88.21,
-      "sinira_sn": -0.38
-     },
-     {
-      "ms": 112,
-      "T": 88.95,
-      "sinira_sn": 0.36
-     },
-     {
-      "ms": 200,
-      "T": 89.58,
-      "sinira_sn": 0.99
-     },
-     {
-      "ms": 142,
-      "T": 102.29,
-      "sinira_sn": 0.62
-     }
-    ]
-   },
-   "borc_tepe_sn": 22.91,
-   "bellek_tepe_mib": 68.4,
-   "gorulen_sahne": 39,
-   "eksik": [],
-   "sira_bozulmasi": 0,
-   "tipik_oturum_mib": 33.1,
-   "tam_tur_mib": 331.1,
-   "tam_tur_istek": 49,
-   "duraklar": [
-    {
-     "ad": "acilis (film basi)",
-     "T": 0.5,
-     "kare_p50": 8.3,
-     "kare_p95": 9.5,
-     "takilma_hepsi": [
-      0,
-      0,
-      0
-     ]
-    },
-    {
-     "ad": "cekirdek (sahne7)",
-     "T": 46.75,
-     "kare_p50": 8.3,
-     "kare_p95": 9.2,
-     "takilma_hepsi": [
-      0,
-      0,
-      0
-     ]
-    }
-   ],
-   "geri": {
-    "kare_p50": 8.3,
-    "kare_p95": 12.8,
-    "takilma_hepsi": [
-     8,
-     12,
-     8
-    ],
-    "geriye_sardi": true
-   },
-   "kosum": 3,
-   "kare_p95_hepsi": [
-    11.3,
-    11.2,
-    14
-   ]
-  },
-  {
    "tavan": 2,
    "isinma_klip": 3,
-   "isinma_ms": 4,
+   "isinma_ms": 8,
    "ray_px": 115487,
    "pxSn": 450,
    "toplam_sn": 256.638,
    "alt_sinir_sn": 128.3,
-   "tur_sn": 113,
+   "tur_sn": 115.6,
    "tur_120_sinirinda": "GECER",
    "kare_p50": 8.3,
-   "kare_p95": 10.8,
+   "kare_p95": 16.8,
    "p95_20ms": "GECER",
-   "ort_fps": 117.1,
+   "ort_fps": 104.9,
    "takilma": {
-    "sayi_ortanca": 16,
+    "sayi_ortanca": 170,
     "sayi_hepsi": [
-     16,
-     4,
-     19
+     170
     ],
-    "toplam_ms_ortanca": 2442,
+    "toplam_ms_ortanca": 26172,
     "toplam_ms_hepsi": [
-     3023,
-     500,
-     2442
+     26172
     ],
     "sinirda_hepsi": [
-     0,
-     1,
-     2
+     14
     ],
-    "en_uzun_ms": 775,
+    "en_uzun_ms": 941,
     "ornek": [
      {
+      "ms": 158,
+      "T": 2.29,
+      "sinira_sn": -5.75
+     },
+     {
+      "ms": 342,
+      "T": 3.26,
+      "sinira_sn": -4.78
+     },
+     {
+      "ms": 200,
+      "T": 4.46,
+      "sinira_sn": -3.58
+     },
+     {
+      "ms": 132,
+      "T": 5,
+      "sinira_sn": -3.04
+     },
+     {
+      "ms": 150,
+      "T": 6.61,
+      "sinira_sn": -1.43
+     },
+     {
       "ms": 108,
-      "T": 0.26,
-      "sinira_sn": -7.78
+      "T": 7.1,
+      "sinira_sn": -0.94
      },
      {
-      "ms": 125,
-      "T": 4.12,
-      "sinira_sn": -3.92
+      "ms": 150,
+      "T": 9.76,
+      "sinira_sn": 1.72
      },
      {
-      "ms": 117,
-      "T": 12.14,
-      "sinira_sn": -0.95
-     },
-     {
-      "ms": 217,
-      "T": 21.69,
-      "sinira_sn": 0.56
-     },
-     {
-      "ms": 100,
-      "T": 22.97,
-      "sinira_sn": 1.84
-     },
-     {
-      "ms": 216,
-      "T": 23.31,
-      "sinira_sn": 2.18
-     },
-     {
-      "ms": 100,
-      "T": 24.16,
-      "sinira_sn": 3.03
-     },
-     {
-      "ms": 300,
-      "T": 24.35,
-      "sinira_sn": 3.23
+      "ms": 108,
+      "T": 11.14,
+      "sinira_sn": -1.94
      }
     ]
    },
-   "borc_tepe_sn": 23.37,
-   "bellek_tepe_mib": 68.4,
+   "borc_tepe_sn": 23.2,
+   "bellek_tepe_mib": 61.3,
    "gorulen_sahne": 39,
    "eksik": [],
    "sira_bozulmasi": 0,
-   "tipik_oturum_mib": 38.8,
-   "tam_tur_mib": 345.8,
-   "tam_tur_istek": 51,
+   "tipik_oturum_mib": 33.4,
+   "tam_tur_mib": 308.8,
+   "tam_tur_istek": 52,
    "duraklar": [
     {
      "ad": "acilis (film basi)",
      "T": 0.5,
      "kare_p50": 8.3,
-     "kare_p95": 9.4,
+     "kare_p95": 9.9,
      "takilma_hepsi": [
-      0,
-      0,
       0
      ]
     },
     {
      "ad": "cekirdek (sahne7)",
      "T": 46.75,
-     "kare_p50": 8.3,
-     "kare_p95": 9.3,
+     "kare_p50": 8.4,
+     "kare_p95": 10.9,
      "takilma_hepsi": [
-      0,
-      0,
       0
      ]
     }
    ],
    "geri": {
-    "kare_p50": 8.3,
-    "kare_p95": 12.4,
+    "kare_p50": 16.2,
+    "kare_p95": 23.3,
     "takilma_hepsi": [
-     3,
-     14,
-     6
+     17
     ],
     "geriye_sardi": true
    },
-   "kosum": 3,
+   "kosum": 1,
    "kare_p95_hepsi": [
-    10.8,
-    10.4,
-    12.2
+    16.8
    ]
   }
  ]
