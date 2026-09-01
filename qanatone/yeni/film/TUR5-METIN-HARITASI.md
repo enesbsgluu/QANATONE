@@ -113,3 +113,53 @@ KALKTI (push kararı yine Enes'in). Kaynak satırı sayfada (.fl-kaynak).
 2 Eyl'de metni 21 blok + 6 künyeyle yeniden yazdı — 6 cümle 113
 saniyeye çok seyrek düşüyordu ve teklif düz söylenmiyordu. v1'in sahne
 seçim gerekçeleri git tarihinde (0fb4bdc'deki bu dosya).
+
+## ALTYAZI TEMASI (4 Eyl 2026) — metin katmanı yeniden kuruldu
+
+Enes onayladı, yapı bağlayıcı (referans altyazi-son.html; diskte
+bulunamadı, yapı brief'teki sayılardan kuruldu). Önceki katman (İş A:
+alt bant, tek ölçek, sönümlenerek belirme, sol üstte sürekli künye)
+okunuyordu ama karakteri yoktu.
+
+**Yapı (yukarıdan aşağı, ortalanmış; film.css "ALTYAZI TEMASI"):**
+perde künyesi 11,5 px · .16em · 600 · #ff4d63, alttan .35em yükselir →
+kızıl çizgi 1 px · min(%38, 260 px) · iki uca sönen gradyan · merkezden
+açılır (scaleX 0→1, origin center) → satırlar, her biri kendi
+overflow:hidden maskesinde, translateY(110%)→0, cubic-bezier(.22,1,.36,1),
+ikinci satır 90 ms gecikmeli → alt perde %32, tabanda rgba(3,4,6,.90).
+Ağırlık 500, Uncut Sans. Text-shadow kalktı (okunurluk perdeden).
+
+**Yapı değişikliği:** künye artık ayrı sürekli katman DEĞİL — her bloğun
+ilk satırı, blokla gelir gider; sol üstteki sürekli künye KALKTI. Satır
+= cümle: çok cümleli blok en dengeli noktadan iki satıra bölünür
+(Film.astro `satirla`, metin birebir). Motor DEĞİŞMEDİ: sınıfı
+konteynere yazar, parçalar CSS'le gelir; perde `:has()` ile.
+
+**Ölçüm (olc-soz.cjs v3, 4 Eyl, Brave 152, 1440×900):** HÜKÜM GEÇTİ.
+TR ve EN ayrı, 3 koşum: 21/21 blok her koşumda; kaplama en çok %10,1
+(künye + çizgi dahil; tavan %20); merkez örtülmüyor; gecikme 83-97 ms
+(yarı-yol anından, hedef 90); çizgi merkez kayması 0 px; künye alttan;
+hareket azaltma (CDP emülasyonu): geçişler 0, metin + perde görünür;
+VI okunurluk 3073-3131 ms; düşen kare TABAN DAMGALI: taban 0/10 sn,
+metinli [2,0,0] / metinsiz [0,1,0], medyan 0 = 0. J1 film sayfası
+10.796 B (önce 10.691; tavan 11.264). Kontak: kontak-soz/blok01-21.jpg
++ yanyana-koyu.png (blok 1, dağ) + yanyana-acik.png (blok 16, uzaydan
+dünya) — hüküm Enes'in gözünde.
+
+**Kırmızı-önce:** (a) v3 rig eski yapıya karşı YALNIZ_SAYIM=1 ile
+koşuldu → YAPI KALDI (blok 27≠21, eski sürekli künye 6, perde 0);
+(b) her koşumda `?boz=soz` (gecikme 0 + çizgi orijini sol + maske açık)
+→ gecikme 0 ms, merkez kayması 112,5 px, maske: üçü de KIRMIZI.
+
+**Düzeneğin kendi hataları (ilk koşumda yanlış kırmızı, düzeltildi):**
+perde "önce" anı önceki bloğun penceresine düşüyordu (blok 1 3,9'da
+biter, blok 2 5,3'te başlar) → o anda blok varsa perde açık olmalı;
+ortalama innerWidth'e göreydi, kaydırma çubuğu 7,6 px yanlış kırmızı
+verdi → clientWidth; gecikme oturma anından ölçülüyordu, sarılan satır
+aynı eğrinin kuyruğunda daha geç oturur (EN b21 50 ms) → yarı-yol anı.
+
+**Prolog kapanış tablosu YENİDEN koşuldu (aynı gece):** devir 3 oran
+GEÇTİ (AZALT=1 damgalı; damgasız koşum bilinen yanlış kırmızı: 538/398
+px); efekt A düşen kalemi ÖNCEKİYLE AYNI bilinçli açık (düşen 5/4/5,
+zoom 14 — değişiklik öncesi 5/4/5, 14/12/12), B + halka + ibare GEÇTİ;
+yeni/test 15/15; kök denetim suite 128/0. Kırılan kapı yok.

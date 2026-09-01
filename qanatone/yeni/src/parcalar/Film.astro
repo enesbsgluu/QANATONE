@@ -116,6 +116,12 @@ const SOZLER = [
 const YAVAS = { bas: 228.43, son: TOPLAM_SN, k: 1.4 };
 const RAY_SN = +(TOPLAM_SN + (YAVAS.k - 1) * (YAVAS.son - YAVAS.bas)).toFixed(3);
 
+/* ALTYAZI TEMASI (4 Eyl 2026, Enes onayli yapi — referans altyazi-son.html):
+   perde kunyesi ARTIK AYRI SUREKLI KATMAN DEGIL, her blogun ilk satiri
+   (sol ustteki surekli kunye KALKTI). Araliklar yalniz blogun hangi
+   perdeye dustugunu secmek icin durur; kunye blokla gelir, blokla gider.
+   Blok yapisi (yukaridan asagi, ortalanmis): kunye · kizil cizgi · satirlar
+   (her satir kendi overflow:hidden maskesinde) — stil film.css. */
 const KUNYELER = [
   { bas: 0.30, son: 13.08, tr: 'I · KAYNAK · 0 km · yüzeyden 300 m', en: 'I · THE SOURCE · 0 km · 300 m below' },
   { bas: 13.38, son: 53.29, tr: 'II · İKİ YOL · 0 km · 300 m', en: 'II · TWO WAYS · 0 km · 300 m' },
@@ -124,6 +130,26 @@ const KUNYELER = [
   { bas: 122.14, son: 228.43, tr: 'V · ÖLÇEK · 33 km', en: 'V · SCALE · 33 km' },
   { bas: 228.73, son: 256.64, tr: 'VI · KENT · 33 km · yüzey', en: 'VI · THE CITY · 33 km · surface' },
 ];
+const kunyeBul = (z: { bas: number }) => {
+  const k = KUNYELER.find((p) => z.bas >= p.bas - 0.01 && z.bas <= p.son);
+  if (!k) throw new Error(`blok ${z.bas} hicbir perdeye dusmuyor — kunyesiz blok olamaz`);
+  return k;
+};
+/* SATIRLAMA: satir cumledir. Cok cumleli blok EN DENGELI noktadan iki
+   satira bolunur (karakter farki en az); tek cumle tek satir (dar
+   ekranda kendi maskesinin icinde sarar). Metin BIREBIR kalir — bolme
+   yalniz cumle sinirinda, PROLOG-ANLATI-METNI.md kaynagi degismez.
+   Kelime kelime DEGIL (talimat: kelime basina oge + bulaniklik elendi). */
+const satirla = (m: string): string[] => {
+  const c = (m.match(/[^.!?]+[.!?]+(?=\s|$)/g) || [m]).map((s) => s.trim()).filter(Boolean);
+  if (c.length < 2) return [m];
+  let enIyi = 1, fark = Infinity;
+  for (let i = 1; i < c.length; i++) {
+    const f = Math.abs(c.slice(0, i).join(' ').length - c.slice(i).join(' ').length);
+    if (f < fark) { fark = f; enIyi = i; }
+  }
+  return [c.slice(0, enIyi).join(' '), c.slice(enIyi).join(' ')];
+};
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
@@ -152,17 +178,22 @@ const KUNYELER = [
             fl-halka ayni dil, degerler bekcide (film-halka.test.mjs) */}
         <a class="fl-gec" href="#fl-son"><i class="fl-halka" aria-hidden="true"></i><span>{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</span></a>
       </div>
-      {/* TUR 5 v2 · anlati bloklari + perde kunyeleri: motor ikisini de
-          `.fl-soz-gor` sinifiyla surer (kunye .fl-soz'u paylasir, stili
-          .fl-kunye ezer — motor degismedi). Motorsuz/azaltma yolunda CSS
-          hepsini onsoz blogu olarak basar (metin kaybolmaz). */}
+      {/* ALTYAZI TEMASI (4 Eyl): motor bloklari `.fl-soz-gor` sinifiyla
+          surer (motor DEGISMEDI — sinif konteynere yazilir, parcalar CSS'le
+          gelir). Alt perde `.fl-perde` tek eleman: blok varken :has()
+          ile opak. Motorsuz/azaltma yolunda CSS hepsini onsoz blogu
+          olarak basar (metin kaybolmaz). */}
       <div class="fl-sozler">
-        {KUNYELER.map((z) => (
-          <p class="fl-soz fl-kunye" data-bas={z.bas} data-son={z.son}>{dil === 'en' ? z.en : z.tr}</p>
-        ))}
-        {SOZLER.map((z) => (
-          <p class="fl-soz" data-bas={z.bas} data-son={z.son}>{dil === 'en' ? z.en : z.tr}</p>
-        ))}
+        <i class="fl-perde" aria-hidden="true"></i>
+        {SOZLER.map((z) => { const k = kunyeBul(z); return (
+          <p class="fl-soz" data-bas={z.bas} data-son={z.son}>
+            <span class="fl-kunye">{dil === 'en' ? k.en : k.tr}</span>
+            <i class="fl-cizgi" aria-hidden="true"></i>
+            {satirla(dil === 'en' ? z.en : z.tr).map((s) => (
+              <span class="fl-satir"><span>{s}</span></span>
+            ))}
+          </p>
+        ); })}
         {/* rakam kaynagi (uydurma rakam yasagi): kucuk, surekli degil —
             son perdeyle gorunur; motorsuz yolda blok sonunda okunur */}
         <p class="fl-soz fl-kaynak" data-bas={228.73} data-son={256.64}>
@@ -238,6 +269,9 @@ const KUNYELER = [
     KOKE.dataset.film = 'atlandi';
   } else if (bolum && !azalt) {
     KOKE.classList.add('fl-js');
+    /* ?boz=soz — ALTYAZI olcum duzeneginin kirmizi kontrolu (olc-soz):
+       gecikme 0 + cizgi orijini sol + maske acik (film.css). Urun yolunda etkisiz. */
+    if (new URLSearchParams(location.search).get('boz') === 'soz') bolum.classList.add('fl-boz-soz');
     /* YETIS DUGMESI KALKTI (1 Eyl, Enes) — `fl-geride` olayini dinleyen
        kalmadi; olay motor yuzeyinde duruyor (olcum kullanir). */
     /* PROLOG ADASI KALKTI (1-2 Eyl gece, Enes): giris sahnesi (PRDag +
