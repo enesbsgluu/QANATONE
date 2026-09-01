@@ -42,6 +42,15 @@ const TAVANLAR = (process.env.TAVANLAR || '1.5,2,2.25,2.5').split(',').map(Numbe
 const BOSLUK_ESIK_MS = 100;        /* sunumsuz bosluk esigi (ev tanimi) */
 const TUR_SINIR_SN = 120;          /* v2 degismez 4 */
 const P95_SINIR_MS = 20;           /* v2 degismez 2 */
+/* TAKILMA KAPISI DEGISTI (Enes, 3 Eyl 2026): SAYI HUKUM VERMEZ —
+   "yirmi tane 20 ms gorunmez, tek bir 800 ms filmi keser; sayi ikisini
+   esit goruyordu." Yeni kapi: toplam takilma suresi <= turun %3'u VE
+   tek takilma <= 250 ms. Sayi bilgi olarak yazilmaya devam eder.
+   Ilk uygulama (temiz set, taban [0,0,0]): yuzdeler [2,45/1,93/0,91]
+   GECER, en uzun tek 267 ms KALIR — eski sayi kapisi (16) korlukle
+   kirmiziydi, yenisi dogru sebebi gosteriyor. */
+const TAKILMA_YUZDE_TAVAN = 3;
+const TAKILMA_TEK_MS = 250;
 
 /* Durulan nokta: TEK — cekirdek, p95 <= 9,5 ms (2 Eyl 2026, Enes:
    "durulan iki nokta kapisi tek noktaya iner"). Acilis (film basi)
@@ -369,6 +378,10 @@ async function tur(browser, tavan) {
       sayi_hepsi: kosumlar.map((k) => k.takilma.sayi),
       toplam_ms_ortanca: ortanca(kosumlar.map((k) => k.takilma.toplam_ms)),
       toplam_ms_hepsi: kosumlar.map((k) => k.takilma.toplam_ms),
+      /* yeni kapi (3 Eyl): yuzde + tek — sayi yalniz bilgi */
+      yuzde_hepsi: kosumlar.map((k) => +(100 * k.takilma.toplam_ms / 1000 / k.tur_sn).toFixed(2)),
+      kapi_yuzde: ortanca(kosumlar.map((k) => 100 * k.takilma.toplam_ms / 1000 / k.tur_sn)) <= TAKILMA_YUZDE_TAVAN ? 'GECER' : 'ASIYOR',
+      kapi_tek: kosumlar.every((k) => k.takilma.en_uzun_ms <= TAKILMA_TEK_MS) ? 'GECER' : 'ASIYOR',
       sinirda_hepsi: kosumlar.map((k) => k.takilma.sinirda),
       en_uzun_ms: Math.max(...kosumlar.map((k) => k.takilma.en_uzun_ms)),
       /* kosum-basina ornekler: [6,1,1] gibi desenlerde 2-3. kosumun TEK
@@ -393,7 +406,7 @@ async function tur(browser, tavan) {
     };
     sonuc.push(r);
     console.log(`  ORTAM: ${r.ortam} · taban [${r.taban.sayi_hepsi.join(',')}]`);
-    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] · ${r.takilma.toplam_ms_ortanca} ms · borc tepe ${r.borc_tepe_sn} sn`);
+    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma %[${r.takilma.yuzde_hepsi.join(',')}] (${r.takilma.kapi_yuzde}) · tek en-uzun ${r.takilma.en_uzun_ms} ms (${r.takilma.kapi_tek}) · sayi ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] (bilgi) · borc tepe ${r.borc_tepe_sn} sn`);
     for (const d of r.duraklar) console.log(`    durulan · ${d.ad}: p50 ${d.kare_p50} / p95 ${d.kare_p95} ms · takilma [${d.takilma_hepsi.join(',')}]`);
     console.log(`    geri: p50 ${r.geri.kare_p50} / p95 ${r.geri.kare_p95} ms · takilma [${r.geri.takilma_hepsi.join(',')}] · sardi ${r.geri.geriye_sardi}`);
     console.log(`    bayt: tipik oturum (15 sn) ${r.tipik_oturum_mib} MiB · tam tur ${r.tam_tur_mib} MiB · bellek tepe ${r.bellek_tepe_mib} MiB`);
@@ -404,7 +417,9 @@ async function tur(browser, tavan) {
     _: 'yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
     sorgu: process.env.SORGU || null,
-    degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS,
+    degismezler: { takilma_toplam_yuzde_tavan: TAKILMA_YUZDE_TAVAN, takilma_tek_ms_tavan: TAKILMA_TEK_MS,
+      takilma_sayisi: 'bilgi — hukum vermez (Enes, 3 Eyl)',
+      kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS,
       taban_tavan: Number(process.env.TABAN_TAVAN ?? 1) },
     takilma_esigi_ms: BOSLUK_ESIK_MS, durulan_noktalar: DURAKLAR,
     aday: sonuc,

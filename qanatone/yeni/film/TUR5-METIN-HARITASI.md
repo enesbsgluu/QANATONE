@@ -36,20 +36,26 @@ perde sınırını anlatı sınırı sayar, içerik etiketi değil.
 | 5 | 40,13 - 43,73 | 6 | 4,9 | Kanalı seçenler işe tek bir kuyuyla başladı. Üç yüz metre… |
 | 6 | 54,59 - 58,19 | 8 | 8,6 | Gerisi tek bir sayıdır. Her kilometrede bir metre iniş. |
 | 7 | 70,34 - 73,94 | 11 | 5,7 | Fazlası kanalı aşındırır. Azı suyu durdurur. |
-| 8 | 76,09 - 79,69 | 12 | 11,8 | Otuz üç kilometre boyunca her elli metrede bir kuyu açılır. |
+| 8 | 76,09 - 79,69 | 12 | 11,8 | Otuz üç kilometre boyunca yüzlerce dikey kuyu açılır. |
 | 9 | 84,84 - 88,44 | 14 | 13,5 | Kazı, ancak ölçülebildiği yerde ilerler. |
-| 10 | 92,14 - 95,74 | 15 | 12,7 | Üç bin yıl geçti. Problem yerinde duruyor. |
+| 10 | 92,14 - 95,74 | 15 | 12,7 | İki bin beş yüz yıl geçti. Problem yerinde duruyor. |
 | 11 | 99,64 - 103,24 | 16 | 11,7 | Kanal hâlâ kanal. Değişen, içinden akan şey. |
 | 12 | 104,64 - 108,24 | 17 | 5,1 | Su değil. Talep. **(MENTEŞE — tek başına, zemin bölgenin en durgunu)** |
 | 13 | 118,14 - 121,74 | 20 | 12,5 | Müşterin bir yerde arıyor. Sen başka yerdesin. Arası kazılmamış. |
 | 14 | 131,89 - 135,49 | 22 | 1,4 | Qanat kazan hiçbir uygarlıkta su eksik değildi. |
-| 15 | 192,64 - 196,24 | 30 | 2,8 | Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır… |
+| 15 | 192,64 - 196,24 | 30 | 2,8 | Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, bakımı bırakılırsa dolar. |
 | 16 | 200,89 - 204,49 | 31 | 2,3 | Bırakılanı çöl geri alır. |
-| 17 | 228,73 - 232,33 | 35 | 12,8 | Her şehir bir kanalın ucunda kurulmuştur. |
-| 18 | 234,73 - 238,33 | 35 | 17,3 | Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır. |
-| 19 | 241,73 - 245,33 | 37 | 10,6 | Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında… |
-| 20 | 247,98 - 251,58 | 38 | 13,4 | Pompayı da kurarız. Ama kanal yoksa… **(KİLİTLİ metin)** |
-| 21 | 252,98 - 256,58 | 39 | 13,9 | Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz. |
+| 17 | 228,73 - 233,13 | 35 | 14,2 | Her şehir bir kanalın ucunda kurulmuştur. |
+| 18 | 234,23 - 238,63 | 35 | 18,1 | Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır. |
+| 19 | 241,23 - 245,63 | 36 | 17,4 | Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında… |
+| 20 | 246,73 - 251,13 | 38 | 15,4 | Pompayı da kurarız. Ama kanalın nereye kazıldığını bilmeden… **(KİLİTLİ metin)** |
+| 21 | 252,23 - 256,63 | 39 | 13,8 | Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz. |
+
+**3 Eyl güncellemesi:** VI pencereleri 4,4 sn (ara 1,0) — İş B okunurluk
+kapısı için; VI rayı yerel k=1,4 (data-yavas; motor parçalı harita).
+Blok 8/10/15/20 metinleri rakam düzeltmesiyle değişti (kaynak dosya).
+İş A: metin sinema altyazısına indi (bottom %18, tek ölçek 56→36 tavan,
+ağırlık 500) — merkez kapısı eski yerleşimde adıyla kırmızıydı.
 
 ## İşaretli bölgeler (dürüstlük satırları)
 
@@ -94,11 +100,12 @@ perde sınırını anlatı sınırı sayar, içerik etiketi değil.
 | 50 m'de bir kuyu | AÇIK — literatür 20-50 m aralık verir, spesifik teyit yok | — |
 | su düştükçe derinleştirme | AÇIK — genel qanat pratiği, kayıt cümlesi aranacak | — |
 
-Üç AÇIK + bir ✗ kapanmadan PUSH YOK (zaten yok). "Üç bin yıl" metni
-Enes'in — 2.500'e mi çekilir, kaynağı mı bulunur, karar onun.
-UNESCO sayfasının kendisi (whc.unesco.org/en/list/1506) bu ağdan 403
-veriyor — doğrulama ikincil kaynaklardan, sayfa doğrudan açılıp
-teyit edilmeli (bot duvarı / yanlış yeşil dersi).
+**RAKAM KAPISI KAPANDI (Enes, 1 Eyl doğrulaması + 3 Eyl metin):**
+33 km ✓ 300 m ✓ kaldı; "50 m'de kuyu" → "yüzlerce dikey kuyu"
+(aralık 20-200 m, sabit sayı yok); "3000 yıl" → "iki bin beş yüz"
+(Gonabad 2.500-2.700); derinleştirme iddiası çıktı → "bakımı
+bırakılırsa dolar". #20 pompa cümlesi yeniden yazıldı. PUSH ENGELİ
+KALKTI (push kararı yine Enes'in). Kaynak satırı sayfada (.fl-kaynak).
 
 ## v1 ARŞİVİ (1-2 Eyl gece)
 

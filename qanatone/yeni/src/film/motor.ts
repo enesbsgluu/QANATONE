@@ -329,6 +329,32 @@ export function baslat(bolum: HTMLElement): () => void {
   const son = S[S.length - 1];
   const toplam = son.bas + son.sure;
 
+  /* IS B · YEREL RAY YAVASLAMASI (3 Eyl 2026, Enes: "filmi degil rayi
+     degistir"). data-yavas="bas,son,k": [bas,son] film-sn araliginda
+     ayni film-sn icin k kat kaydirma gerekir — film ayni hizda akar,
+     kamera hizli VI perdesi okunur yavaslikta gecilir. Harita PARCALI
+     DOGRUSAL ve SUREKLIDIR (girip cikarken konum sicramaz; yalniz
+     turev kirilir). "hedefT = f(scrollY)" degismezi korunur: f artik
+     parcali, konum() hala tam tersi. Ray yuksekligi sayfadan sanal
+     sureyle gelir (--fl-sn = RAY_SN, Film.astro). */
+  const YAVAS = (() => {
+    const d = (bolum.dataset.yavas || '').split(',').map(Number);
+    return d.length === 3 && d[0] >= 0 && d[1] > d[0] && d[2] > 1
+      ? { b: d[0], s: d[1], k: d[2] } : null;
+  })();
+  const sanalToplam = YAVAS ? toplam + (YAVAS.k - 1) * (YAVAS.s - YAVAS.b) : toplam;
+  const sanalT = (T: number) => !YAVAS ? T
+    : T <= YAVAS.b ? T
+    : T <= YAVAS.s ? YAVAS.b + (T - YAVAS.b) * YAVAS.k
+    : T + (YAVAS.k - 1) * (YAVAS.s - YAVAS.b);
+  const gercekT = (sv: number) => {
+    if (!YAVAS) return sv;
+    const ust2 = YAVAS.b + (YAVAS.s - YAVAS.b) * YAVAS.k;
+    return sv <= YAVAS.b ? sv
+      : sv <= ust2 ? YAVAS.b + (sv - YAVAS.b) / YAVAS.k
+      : sv - (YAVAS.k - 1) * (YAVAS.s - YAVAS.b);
+  };
+
   /* TUR 5 · HIKAYE CUMLELERI (2 Eyl 2026): pencereler DOM'da
      (data-bas/son, kaynak TUR5-METIN-HARITASI.md — sayilar burada
      TEKRAR YAZILMAZ). Motor yalniz sinif surer; metin/yerlesim
@@ -352,11 +378,11 @@ export function baslat(bolum: HTMLElement): () => void {
     akiyor: false, hedefT: 0, gosterilenT: 0, hizT: 0, hedefHiz: 0,
     atla: () => { atlaIstek = true; tik(); },
     geride: () => IZ.hedefT - IZ.gosterilenT,
-    ray: () => ({ pxSn, rayPx: Math.round(toplam * pxSn), ekranBoyu: +(toplam * pxSn / innerHeight).toFixed(1),
+    ray: () => ({ pxSn, rayPx: Math.round(sanalToplam * pxSn), ekranBoyu: +(sanalToplam * pxSn / innerHeight).toFixed(1),
       snBasinaEkran: +(pxSn / innerHeight).toFixed(3), birEkranSn: +(innerHeight / pxSn).toFixed(2) }),
     bellekMib: () => +(S.reduce((a, x) => a + (x.blob ? x.bayt : 0), 0) / 1048576).toFixed(1),
     sahne: () => S.map((s) => ({ n: s.n, durum: s.durum, bayt: s.bayt, inmeMs: s.inmeMs })),
-    konum: (T) => ust + (T / toplam) * yol,
+    konum: (T) => ust + (sanalT(T) / sanalToplam) * yol,
     etkin: () => (etkin ? etkin.n : 0),
     sifirla: () => { IZ.istek = []; IZ.sunum = []; },
   };
@@ -638,7 +664,8 @@ export function baslat(bolum: HTMLElement): () => void {
     if (IZ.akis > 0 && ilkKareGecti && tamponAcik && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
       const sonPx = ust + yol;                                   /* rayin sonu */
       if (scrollY < sonPx - 1) {
-        akisPx += IZ.akis * pxSn * (dt / 1000);                  /* film-sn/sn -> px/sn */
+        /* yavas bolgede ayni film-sn daha cok px ister (Is B) */
+        akisPx += IZ.akis * pxSn * (YAVAS && yx >= YAVAS.b ? YAVAS.k : 1) * (dt / 1000);
         const tam = Math.floor(akisPx);
         if (tam >= 1) { akisPx -= tam; scrollBy(0, Math.min(tam, sonPx - scrollY)); }
         IZ.akiyor = true;
@@ -646,7 +673,7 @@ export function baslat(bolum: HTMLElement): () => void {
       }
     } else akisPx = 0;
     const p = Math.min(1, Math.max(0, (scrollY - ust) / yol));
-    let hedefT = Math.min(toplam - 1e-3, p * toplam);
+    let hedefT = Math.min(toplam - 1e-3, gercekT(p * sanalToplam));
     /* --- YUKLEME TAMPONU (2 Eyl 2026, Enes; dosya basindaki blok) ---
        Acilana kadar hedef KILIT konumunda tutulur: sayfa kayar ama film
        ilk karesinde bekler. Hazirlik = kilit klibi TAM + yondeki komsu

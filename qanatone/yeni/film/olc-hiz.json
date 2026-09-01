@@ -1,11 +1,13 @@
 {
  "_": "yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.",
- "olcum": "2026-09-01T15:57:18.249Z",
+ "olcum": "2026-09-01T16:48:00.500Z",
  "tarayici": "brave Chrome/152.0.7977.64",
  "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
  "sorgu": null,
  "degismezler": {
-  "takilma_sifir": true,
+  "takilma_toplam_yuzde_tavan": 3,
+  "takilma_tek_ms_tavan": 250,
+  "takilma_sayisi": "bilgi — hukum vermez (Enes, 3 Eyl)",
   "kare_p95_ms": 20,
   "tur_sn": 120,
   "durulan_p95_ms": 9.5,
@@ -22,8 +24,8 @@
   {
    "tavan": 2,
    "isinma_klip": 3,
-   "isinma_ms": 11,
-   "ray_px": 115487,
+   "isinma_ms": 12,
+   "ray_px": 120565,
    "pxSn": 450,
    "toplam_sn": 256.638,
    "taban": {
@@ -43,158 +45,115 @@
    "tur_sn": 113.8,
    "tur_120_sinirinda": "GECER",
    "kare_p50": 8.3,
-   "kare_p95": 10.6,
+   "kare_p95": 10.2,
    "p95_20ms": "GECER",
-   "ort_fps": 117.5,
+   "ort_fps": 117.9,
    "takilma": {
-    "sayi_ortanca": 16,
+    "sayi_ortanca": 5,
     "sayi_hepsi": [
-     19,
-     16,
-     8
+     5,
+     5,
+     4
     ],
-    "toplam_ms_ortanca": 2192,
+    "toplam_ms_ortanca": 584,
     "toplam_ms_hepsi": [
-     2783,
-     2192,
-     1033
+     758,
+     584,
+     500
     ],
+    "yuzde_hepsi": [
+     0.67,
+     0.51,
+     0.44
+    ],
+    "kapi_yuzde": "GECER",
+    "kapi_tek": "ASIYOR",
     "sinirda_hepsi": [
-     3,
      1,
-     1
+     1,
+     0
     ],
-    "en_uzun_ms": 267,
+    "en_uzun_ms": 258,
     "ornek_kosum_basina": [
      [
       {
-       "ms": 183,
-       "T": 23.49,
-       "sinira_sn": 2.36
-      },
-      {
-       "ms": 158,
-       "T": 29.52,
-       "sinira_sn": 0.35
-      },
-      {
-       "ms": 108,
-       "T": 83.87,
-       "sinira_sn": 0.32
-      },
-      {
-       "ms": 117,
-       "T": 161.71,
-       "sinira_sn": 2.66
-      },
-      {
-       "ms": 108,
-       "T": 175.64,
-       "sinira_sn": 0.51
-      },
-      {
-       "ms": 150,
-       "T": 189.04,
-       "sinira_sn": 0.82
-      },
-      {
-       "ms": 117,
-       "T": 203.13,
-       "sinira_sn": -1.17
-      },
-      {
-       "ms": 150,
-       "T": 205.21,
-       "sinira_sn": 0.91
-      }
-     ],
-     [
-      {
-       "ms": 175,
-       "T": 8.32,
-       "sinira_sn": 0.28
-      },
-      {
-       "ms": 100,
-       "T": 24.83,
-       "sinira_sn": 3.7
-      },
-      {
-       "ms": 108,
-       "T": 27.28,
-       "sinira_sn": -1.88
-      },
-      {
-       "ms": 175,
-       "T": 28.14,
-       "sinira_sn": -1.03
-      },
-      {
-       "ms": 100,
-       "T": 174.11,
-       "sinira_sn": -1.02
-      },
-      {
-       "ms": 150,
-       "T": 182,
-       "sinira_sn": 1.82
-      },
-      {
-       "ms": 109,
-       "T": 211.29,
-       "sinira_sn": -1.05
-      },
-      {
        "ms": 133,
-       "T": 214.54,
-       "sinira_sn": 2.2
-      }
-     ],
-     [
-      {
-       "ms": 142,
-       "T": 63.57,
-       "sinira_sn": 0.19
+       "T": 159.27,
+       "sinira_sn": 0.22
       },
       {
-       "ms": 108,
-       "T": 99.38,
-       "sinira_sn": -2.3
+       "ms": 100,
+       "T": 173.24,
+       "sinira_sn": -1.89
       },
       {
-       "ms": 108,
-       "T": 152.73,
-       "sinira_sn": -1.28
-      },
-      {
-       "ms": 108,
-       "T": 160.13,
+       "ms": 125,
+       "T": 213.42,
        "sinira_sn": 1.08
       },
       {
-       "ms": 167,
-       "T": 176.15,
-       "sinira_sn": 1.01
+       "ms": 142,
+       "T": 219.33,
+       "sinira_sn": -1.06
+      },
+      {
+       "ms": 258,
+       "T": 240.04,
+       "sinira_sn": -1.47
+      }
+     ],
+     [
+      {
+       "ms": 100,
+       "T": 154.16,
+       "sinira_sn": 0.16
+      },
+      {
+       "ms": 108,
+       "T": 229.5,
+       "sinira_sn": 1.08
       },
       {
        "ms": 142,
-       "T": 212.71,
-       "sinira_sn": 0.37
+       "T": 229.61,
+       "sinira_sn": 1.18
+      },
+      {
+       "ms": 100,
+       "T": 231.59,
+       "sinira_sn": 3.16
+      },
+      {
+       "ms": 133,
+       "T": 234.43,
+       "sinira_sn": -2.04
+      }
+     ],
+     [
+      {
+       "ms": 100,
+       "T": 211.28,
+       "sinira_sn": -1.06
       },
       {
        "ms": 142,
-       "T": 219.68,
-       "sinira_sn": -0.71
+       "T": 219.05,
+       "sinira_sn": -1.34
       },
       {
-       "ms": 117,
-       "T": 233.1,
-       "sinira_sn": -3.37
+       "ms": 150,
+       "T": 231.91,
+       "sinira_sn": 3.48
+      },
+      {
+       "ms": 108,
+       "T": 233.18,
+       "sinira_sn": -3.29
       }
      ]
     ]
    },
-   "borc_tepe_sn": 24.08,
+   "borc_tepe_sn": 21.48,
    "bellek_tepe_mib": 68.4,
    "gorulen_sahne": 39,
    "eksik": [],
@@ -206,7 +165,7 @@
     {
      "ad": "cekirdek (sahne7)",
      "T": 46.75,
-     "kare_p50": 8.3,
+     "kare_p50": 8.4,
      "kare_p95": 8.8,
      "takilma_hepsi": [
       0,
@@ -216,21 +175,21 @@
     }
    ],
    "geri": {
-    "kare_p50": 10.2,
-    "kare_p95": 18.7,
+    "kare_p50": 9,
+    "kare_p95": 17.8,
     "takilma_hepsi": [
+     4,
      2,
-     12,
-     4
+     3
     ],
     "geriye_sardi": true
    },
    "kosum": 3,
    "ortam": "sakin",
    "kare_p95_hepsi": [
-    10.7,
-    10.6,
-    10.6
+    10.3,
+    10.2,
+    10.2
    ]
   }
  ]

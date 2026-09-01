@@ -1,9 +1,10 @@
 {
  "_": "yeni/film/olc-devir.cjs — devir v3 kapilari: sayfa 1,0 · kapanan <2px · tasma yazildi/bosluk 0 · 3 oran · dusen kare 0 (TEKRAR kosum medyani) · hiz farki. Bagimsiz dogrulama CSS matrisinden.",
- "olcum": "2026-09-01T12:58:27.282Z",
+ "olcum": "2026-09-01T16:48:51.123Z",
  "tarayici_istek": "brave",
  "headless": false,
  "tekrar": 3,
+ "azalt": true,
  "kosum": [
   {
    "gorunum": "1.6",
@@ -19,7 +20,7 @@
    ],
    "varis": {
     "sapma": 0,
-    "adim": 245
+    "adim": 333
    },
    "geri_yolu": {
     "transform": "(bos)",
@@ -38,19 +39,19 @@
    "hedef_olcek": 1.17079,
    "oturan_olcek": 1.17079,
    "kapanan_eksen": "dikey",
-   "devir_suresi_ms": 927,
-   "fade_gecikme_ms": 701,
+   "devir_suresi_ms": 939,
+   "fade_gecikme_ms": 705,
    "devir_durum": "tam",
    "sayfa_opaklik": "1",
    "eski_giris_yuklendi": true,
-   "matris": "matrix(1.1704, 0, 0, 1.1704, 0.42, -4.89)",
+   "matris": "matrix(1.17038, 0, 0, 1.17038, 0.42, -4.89)",
    "bagimsiz_kenar_px": {
-    "sol": -41.59051584000004,
-    "sag": 1481.5923884800004,
-    "ust": 0.15739680000000167,
-    "alt": 899.8585068000001
+    "sol": -41.57750164800002,
+    "sag": 1481.5793742560002,
+    "ust": 0.16508396000004755,
+    "alt": 899.85081971
    },
-   "tutarlilik_px": 0.254,
+   "tutarlilik_px": 0.267,
    "kapilar": {
     "sayfa_olcek_1": {
      "deger": "none",
@@ -64,21 +65,21 @@
       1.69
      ],
      "oturmus_px": [
-      0.16,
-      0.14
+      0.17,
+      0.15
      ],
      "gecti": true
     },
     "tasma_ve_bosluk": {
      "tasan_eksen_px": {
-      "sol": 41.59,
-      "sag": 41.59
+      "sol": 41.58,
+      "sag": 41.58
      },
      "bosluk_px": {
-      "sol": -41.59,
-      "sag": -41.59,
-      "ust": 0.16,
-      "alt": 0.14
+      "sol": -41.58,
+      "sag": -41.58,
+      "ust": 0.17,
+      "alt": 0.15
      },
      "gecti": true
     },
@@ -89,35 +90,35 @@
       0
      ],
      "tekrar_taban": [
-      1,
       0,
-      1
+      0,
+      0
      ],
      "medyan_dusen": 0,
      "ayrinti": [
       {
-       "pencere_kare": 86,
-       "kadans_ms": 8.5,
-       "medyan_ms": 10.6,
-       "taban_dusen_1500ms": 1,
-       "dusen": 0,
-       "dusenler": [],
-       "gecti": true
-      },
-      {
-       "pencere_kare": 89,
-       "kadans_ms": 8.3,
-       "medyan_ms": 10.3,
+       "pencere_kare": 113,
+       "kadans_ms": 7.5,
+       "medyan_ms": 8.3,
        "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
        "gecti": true
       },
       {
-       "pencere_kare": 104,
-       "kadans_ms": 7.2,
-       "medyan_ms": 8.7,
-       "taban_dusen_1500ms": 1,
+       "pencere_kare": 105,
+       "kadans_ms": 7,
+       "medyan_ms": 8.5,
+       "taban_dusen_1500ms": 0,
+       "dusen": 0,
+       "dusenler": [],
+       "gecti": true
+      },
+      {
+       "pencere_kare": 108,
+       "kadans_ms": 7.5,
+       "medyan_ms": 8.3,
+       "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
        "gecti": true
@@ -126,11 +127,11 @@
      "gecti": true
     },
     "hiz_farki": {
-     "video": 0.0024661,
-     "bizim": 0.0024661,
+     "video": 0.002376,
+     "bizim": 0.002376,
      "fark": 0,
-     "tempo_varis": 0.3275,
-     "ilk_kare_olcek_hizi": 0.15104,
+     "tempo_varis": 0.3155,
+     "ilk_kare_olcek_hizi": 0.11735,
      "gecti": true
     }
    },
@@ -150,7 +151,7 @@
    ],
    "varis": {
     "sapma": 0,
-    "adim": 254
+    "adim": 340
    },
    "geri_yolu": {
     "transform": "(bos)",
@@ -169,8 +170,8 @@
    "hedef_olcek": 1.22943,
    "oturan_olcek": 1.22943,
    "kapanan_eksen": "yatay",
-   "devir_suresi_ms": 1092,
-   "fade_gecikme_ms": 850,
+   "devir_suresi_ms": 1078,
+   "fade_gecikme_ms": 854,
    "devir_durum": "tam",
    "sayfa_opaklik": "1",
    "eski_giris_yuklendi": true,
@@ -191,8 +192,8 @@
     "kapanan_eksen_2px": {
      "eksen": "yatay",
      "fadeAninda_px": [
-      1.95,
-      1.96
+      1.93,
+      1.94
      ],
      "oturmus_px": [
       0.31,
@@ -215,7 +216,7 @@
     },
     "dusen_kare": {
      "tekrar_dusen": [
-      1,
+      0,
       0,
       0
      ],
@@ -227,35 +228,27 @@
      "medyan_dusen": 0,
      "ayrinti": [
       {
-       "pencere_kare": 104,
-       "kadans_ms": 8.6,
-       "medyan_ms": 10.1,
-       "taban_dusen_1500ms": 0,
-       "dusen": 1,
-       "dusenler": [
-        {
-         "d": 27.6,
-         "i": 101,
-         "tBas": 1066,
-         "tFade": 216,
-         "exec": 0.5
-        }
-       ],
-       "gecti": false
-      },
-      {
-       "pencere_kare": 98,
-       "kadans_ms": 8.4,
-       "medyan_ms": 10.6,
+       "pencere_kare": 127,
+       "kadans_ms": 7.5,
+       "medyan_ms": 8.4,
        "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
        "gecti": true
       },
       {
-       "pencere_kare": 107,
+       "pencere_kare": 128,
        "kadans_ms": 7.9,
-       "medyan_ms": 9.9,
+       "medyan_ms": 8.3,
+       "taban_dusen_1500ms": 0,
+       "dusen": 0,
+       "dusenler": [],
+       "gecti": true
+      },
+      {
+       "pencere_kare": 126,
+       "kadans_ms": 7.3,
+       "medyan_ms": 8.3,
        "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
@@ -265,11 +258,11 @@
      "gecti": true
     },
     "hiz_farki": {
-     "video": 0.0024553,
-     "bizim": 0.0024553,
+     "video": 0.0023658,
+     "bizim": 0.0023658,
      "fark": 0,
-     "tempo_varis": 0.3261,
-     "ilk_kare_olcek_hizi": 0.18807,
+     "tempo_varis": 0.3142,
+     "ilk_kare_olcek_hizi": 0.14823,
      "gecti": true
     }
    },
@@ -289,7 +282,7 @@
    ],
    "varis": {
     "sapma": 0,
-    "adim": 255
+    "adim": 295
    },
    "geri_yolu": {
     "transform": "(bos)",
@@ -308,8 +301,8 @@
    "hedef_olcek": 1.22943,
    "oturan_olcek": 1.22943,
    "kapanan_eksen": "yatay",
-   "devir_suresi_ms": 1052,
-   "fade_gecikme_ms": 821,
+   "devir_suresi_ms": 1051,
+   "fade_gecikme_ms": 824,
    "devir_durum": "tam",
    "sayfa_opaklik": "1",
    "eski_giris_yuklendi": true,
@@ -330,8 +323,8 @@
     "kapanan_eksen_2px": {
      "eksen": "yatay",
      "fadeAninda_px": [
-      1.94,
-      1.95
+      1.95,
+      1.96
      ],
      "oturmus_px": [
       0.25,
@@ -360,34 +353,34 @@
      ],
      "tekrar_taban": [
       0,
-      1,
-      0
+      0,
+      1
      ],
      "medyan_dusen": 0,
      "ayrinti": [
       {
-       "pencere_kare": 102,
-       "kadans_ms": 8.2,
-       "medyan_ms": 10.1,
+       "pencere_kare": 125,
+       "kadans_ms": 7.3,
+       "medyan_ms": 8.4,
        "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
        "gecti": true
       },
       {
-       "pencere_kare": 100,
-       "kadans_ms": 8.3,
-       "medyan_ms": 10.3,
+       "pencere_kare": 122,
+       "kadans_ms": 7.3,
+       "medyan_ms": 8.5,
+       "taban_dusen_1500ms": 0,
+       "dusen": 0,
+       "dusenler": [],
+       "gecti": true
+      },
+      {
+       "pencere_kare": 113,
+       "kadans_ms": 7.7,
+       "medyan_ms": 8.8,
        "taban_dusen_1500ms": 1,
-       "dusen": 0,
-       "dusenler": [],
-       "gecti": true
-      },
-      {
-       "pencere_kare": 93,
-       "kadans_ms": 9.1,
-       "medyan_ms": 11.1,
-       "taban_dusen_1500ms": 0,
        "dusen": 0,
        "dusenler": [],
        "gecti": true
@@ -396,11 +389,11 @@
      "gecti": true
     },
     "hiz_farki": {
-     "video": 0.0024761,
-     "bizim": 0.0024761,
+     "video": 0.0025433,
+     "bizim": 0.0025433,
      "fark": 0,
-     "tempo_varis": 0.3288,
-     "ilk_kare_olcek_hizi": 0.19769,
+     "tempo_varis": 0.3378,
+     "ilk_kare_olcek_hizi": 0.14038,
      "gecti": true
     }
    },

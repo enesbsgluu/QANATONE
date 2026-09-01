@@ -77,9 +77,12 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
    gerekceler yeni/film/TUR5-METIN-HARITASI.md. Gorunurlugu MOTOR surer
    (kaydirma konumuna bagli — geri sarilirsa geri gelir); kunyeler de
    ayni mekanizma (fl-soz sinifini paylasir), perde araligi boyunca
-   surekli. RAKAMLAR (33 km · 300 m · 1:1000 · 50 m · 3000 yil) UNESCO
-   Persian Qanat kaydina bagli — asagida kaynak satiri; dogrulanmadan
-   yayina cikmaz (push yok kurali). */
+   surekli. RAKAM KAPISI KAPANDI (Enes, 1 Eyl dogrulamasi + 3 Eyl
+   metin duzeltmesi): 33 km ve 300 m Gonabad'dan; "50 m'de kuyu"
+   UYDURMA KESINLIKTI -> "yuzlerce dikey kuyu"; "3000 yil" yuvarlamaydi
+   -> "iki bin bes yuz"; derinlestirme iddiasi dogrulanamadi -> "bakimi
+   birakilirsa dolar"; #20 pompa cumlesi yeniden yazildi. Kaynak satiri
+   .fl-kaynak (son perde). Ayrinti: PROLOG-ANLATI-METNI.md "RAKAMLAR". */
 const SOZLER = [
   { bas: 0.30, son: 3.90, tr: 'Su dağın altında. Şehir çölün ortasında. Arada otuz üç kilometre kaya.', en: 'The water is under the mountain. The city is in the middle of the desert. Thirty-three kilometres of rock between them.' },
   { bas: 5.30, son: 8.90, tr: 'Bunu geçmenin iki yolu var.', en: 'There are two ways to cross that.' },
@@ -88,21 +91,31 @@ const SOZLER = [
   { bas: 40.13, son: 43.73, tr: 'Kanalı seçenler işe tek bir kuyuyla başladı. Üç yüz metre, yalnızca suyun nerede olduğunu bulmak için.', en: 'The ones who chose the channel began with a single well. Three hundred metres, only to find where the water was.' },
   { bas: 54.59, son: 58.19, tr: 'Gerisi tek bir sayıdır. Her kilometrede bir metre iniş.', en: 'The rest comes down to one number. One metre of drop for every kilometre.' },
   { bas: 70.34, son: 73.94, tr: 'Fazlası kanalı aşındırır. Azı suyu durdurur.', en: 'Too much and the channel erodes. Too little and the water stops.' },
-  { bas: 76.09, son: 79.69, tr: 'Otuz üç kilometre boyunca her elli metrede bir kuyu açılır.', en: 'Across thirty-three kilometres, a shaft is sunk every fifty metres.' },
+  { bas: 76.09, son: 79.69, tr: 'Otuz üç kilometre boyunca yüzlerce dikey kuyu açılır.', en: 'Across thirty-three kilometres, hundreds of vertical shafts are sunk.' },
   { bas: 84.84, son: 88.44, tr: 'Kazı, ancak ölçülebildiği yerde ilerler.', en: 'Digging only advances where it can be measured.' },
-  { bas: 92.14, son: 95.74, tr: 'Üç bin yıl geçti. Problem yerinde duruyor.', en: 'Three thousand years on, the problem is unchanged.' },
+  { bas: 92.14, son: 95.74, tr: 'İki bin beş yüz yıl geçti. Problem yerinde duruyor.', en: 'Two and a half thousand years on, the problem is unchanged.' },
   { bas: 99.64, son: 103.24, tr: 'Kanal hâlâ kanal. Değişen, içinden akan şey.', en: 'The channel is still a channel. What runs through it is not.' },
   { bas: 104.64, son: 108.24, tr: 'Su değil. Talep.', en: 'Not water. Demand.' },
   { bas: 118.14, son: 121.74, tr: 'Müşterin bir yerde arıyor. Sen başka yerdesin. Arası kazılmamış.', en: 'Your customer is looking somewhere. You are somewhere else. Nothing has been dug between you.' },
   { bas: 131.89, son: 135.49, tr: 'Qanat kazan hiçbir uygarlıkta su eksik değildi.', en: 'No civilisation that dug qanats was short of water.' },
-  { bas: 192.64, son: 196.24, tr: 'Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, su çekildikçe derinleştirilir.', en: 'A channel is not finished the day it is dug. It is extended as the city grows, deepened as the water falls.' },
+  { bas: 192.64, son: 196.24, tr: 'Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, bakımı bırakılırsa dolar.', en: 'A channel is not finished the day it is dug. It is extended as the city grows; left untended, it silts up.' },
   { bas: 200.89, son: 204.49, tr: 'Bırakılanı çöl geri alır.', en: 'What is abandoned, the desert takes back.' },
-  { bas: 228.73, son: 232.33, tr: 'Her şehir bir kanalın ucunda kurulmuştur.', en: 'Every city was built at the end of a channel.' },
-  { bas: 234.73, son: 238.33, tr: 'Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır.', en: 'So was yours. It has either been dug or it has not.' },
-  { bas: 241.73, son: 245.33, tr: 'Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında, reklamda, kendi sitende.', en: 'We dig it. In search, in AI answers, in ads, on your own site.' },
-  { bas: 247.98, son: 251.58, tr: 'Pompayı da kurarız. Ama kanal yoksa, pompa durduğu gün her şey durur.', en: 'We will run the pump too. But with no channel, the day the pump stops, everything stops.' },
-  { bas: 252.98, son: 256.58, tr: 'Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz.', en: "We don't measure where demand comes from. We know, and we create it." },
+  { bas: 228.73, son: 233.13, tr: 'Her şehir bir kanalın ucunda kurulmuştur.', en: 'Every city was built at the end of a channel.' },
+  { bas: 234.23, son: 238.63, tr: 'Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır.', en: 'So was yours. It has either been dug or it has not.' },
+  { bas: 241.23, son: 245.63, tr: 'Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında, reklamda, kendi sitende.', en: 'We dig it. In search, in AI answers, in ads, on your own site.' },
+  { bas: 246.73, son: 251.13, tr: 'Pompayı da kurarız. Ama kanalın nereye kazıldığını bilmeden kurulan pompa boşa çeker.', en: 'We will run the pump too. But a pump set without knowing where the channel runs draws on nothing.' },
+  { bas: 252.23, son: 256.63, tr: 'Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz.', en: "We don't measure where demand comes from. We know, and we create it." },
 ];
+/* IS B (3 Eyl 2026, Enes): VI PERDESININ RAYI YEREL YAVASLAR — film
+   ayni hizda akar ama ayni film-sn icin 1,4 kat kaydirma gerekir.
+   k SECIMI OLCUMLE: tur kapisi (<=120 sn) k<=1,5'e sinirlar (ek yol
+   (k-1)*28,2sn*450px / ~1035px-s tur temposu); 900 px/s okunurluk
+   kapisi k=1,4 + 4,4 sn pencereyle saglaniyor (olc-soz vi_okunurluk).
+   Ray yuksekligi sanal sureyle buyur (--fl-sn); motor parcali haritayi
+   data-yavas'tan okur (bas,son,k — film-sn). */
+const YAVAS = { bas: 228.43, son: TOPLAM_SN, k: 1.4 };
+const RAY_SN = +(TOPLAM_SN + (YAVAS.k - 1) * (YAVAS.son - YAVAS.bas)).toFixed(3);
+
 const KUNYELER = [
   { bas: 0.30, son: 13.08, tr: 'I · KAYNAK · 0 km · yüzeyden 300 m', en: 'I · THE SOURCE · 0 km · 300 m below' },
   { bas: 13.38, son: 53.29, tr: 'II · İKİ YOL · 0 km · 300 m', en: 'II · TWO WAYS · 0 km · 300 m' },
@@ -115,7 +128,8 @@ const KUNYELER = [
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
-  style={`--fl-sn:${TOPLAM_SN};--fl-pxsn:${PX_SN}`}>
+  data-yavas={`${YAVAS.bas},${YAVAS.son},${YAVAS.k}`}
+  style={`--fl-sn:${RAY_SN};--fl-pxsn:${PX_SN}`}>
   <div class="fl-ray">
     <div class="fl-yapis">
       {/* KUMANDA: tek dugme `.fl-gec` (PROLOGU GEC — filmi tumden atlar,

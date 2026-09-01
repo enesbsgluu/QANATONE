@@ -88,6 +88,11 @@ const durum = (page) => page.evaluate(() => {
     const b = e.getBoundingClientRect();
     return { op: +s.opacity, gor: s.visibility === 'visible',
       kutu: { sol: b.left, ust: b.top, sag: b.right, alt: b.bottom },
+      /* IS A (3 Eyl): metin misafir — kutunun kadraja orani + merkez.
+         Sinema altyazisi gibi: %20 tavan, merkez nokta ortulmez. */
+      kaplama: +((b.width * b.height) / (innerWidth * innerHeight)).toFixed(4),
+      merkez: b.left <= innerWidth / 2 && innerWidth / 2 <= b.right
+        && b.top <= innerHeight / 2 && innerHeight / 2 <= b.bottom,
       tasma: e.scrollWidth > e.clientWidth + 1 || b.left < 0 || b.right > innerWidth };
   };
   return {
@@ -171,6 +176,7 @@ async function kosum(browser, dil, kontakCek) {
     }
     bloklar.push({
       metin: B.metin, sure_sn: +(B.son - B.bas).toFixed(2),
+      kaplama: ic.blok[i].kaplama, merkezde: ic.blok[i].merkez,
       gorundu: gorunur(ic.blok[i]),
       oncesinde_yok: !azGorunur(once.blok[i]),
       sonrasinda_yok: sonrasindaYok,             /* null = atlandi (film sonu) */
@@ -184,6 +190,46 @@ async function kosum(browser, dil, kontakCek) {
   const geriGeldi = gorunur(geri.blok[0]);
   await page.close();
   return { bloklar, geri_sarmada_geldi: geriGeldi, sayim: 'tam' };
+}
+
+/* IS B (3 Eyl) · VI OKUNURLUK: sabit 900 px/s surusunde VI'nin bes
+   vurusunun gorunur kaldigi sure >= 3000 ms.
+   TEMPO SECIMI OLCULDU (rapor da yazar): 450 px/s'te (1x) k'siz yapi
+   bile 3,6 s verir — kapi orada korduk; 900 px/s (hizli ama insani,
+   tavanin hemen alti) ayirt eder: k'siz ~1,8 s KALIR, k=1,4 +
+   4,4 sn'lik VI penceresi ~3,1 s GECER. Yerel ray yavaslamasi ayni
+   film-sn icin daha cok kaydirma ister — olcum tam bunu gorur.
+   Akis pencere boyunca 0; surus evaluate-rAF (olculen sey motor
+   sinif suresi, gercek girdi sart degil). */
+async function viOkunurluk(browser) {
+  const { page } = await sayfaAc(browser, 'tr', '');
+  const s = await page.evaluate(async () => {
+    const f = window.__fl;
+    const eskiAkis = f.akis; f.akis = 0;
+    const bloklar = [...document.querySelectorAll('.fl-soz:not(.fl-kunye):not(.fl-kaynak)')];
+    const vi = bloklar.filter((e) => +e.dataset.bas >= 228);
+    const basPx = f.konum(Math.max(0, Math.min(...vi.map((e) => +e.dataset.bas)) - 2));
+    const sonT = f.toplam - 0.05;
+    scrollTo(0, basPx); f.atla();
+    await new Promise((r) => setTimeout(r, 700));
+    const sure = vi.map(() => 0);
+    await new Promise((res) => {
+      let son = performance.now();
+      const adim = () => {
+        const simdi = performance.now();
+        const dt = simdi - son; son = simdi;
+        vi.forEach((e, i) => { if (e.classList.contains('fl-soz-gor')) sure[i] += dt; });
+        if (f.gosterilenT >= sonT) return res();
+        scrollBy(0, Math.max(1, 900 * dt / 1000));
+        requestAnimationFrame(adim);
+      };
+      requestAnimationFrame(adim);
+    });
+    f.akis = eskiAkis;
+    return vi.map((e, i) => ({ metin: e.textContent.trim().slice(0, 30), gorunur_ms: +sure[i].toFixed(0) }));
+  });
+  await page.close();
+  return { vuruslar: s, gecti: s.length === 5 && s.every((v) => v.gorunur_ms >= 3000) };
 }
 
 async function dusenKiyas(browser, sorgu) {
@@ -242,11 +288,18 @@ async function dusenKiyas(browser, sorgu) {
         teklik: kosumlar.every((k) => k.bloklar.every((b) => b.tek)) ? 'GECTI' : 'KALDI',
         okunur_3sn: kosumlar[0].bloklar.every((b) => b.sure_sn >= 3) ? 'GECTI' : 'KALDI',
         tasma: kosumlar.every((k) => k.bloklar.every((b) => !b.tasma)) ? 'GECTI' : 'KALDI',
+        /* IS A kapilari (3 Eyl): kaplama <= %20 · merkez ortulmuyor */
+        kaplama_20: kosumlar.every((k) => k.bloklar.every((b) => b.kaplama <= 0.20)) ? 'GECTI' : 'KALDI',
+        merkez: kosumlar.every((k) => k.bloklar.every((b) => !b.merkezde)) ? 'GECTI' : 'KALDI',
         kunye: kosumlar.every((k) => k.bloklar.every((b) => b.kunye_dogru && !b.kunye_cakisti)) ? 'GECTI' : 'KALDI',
         geri_sarma: kosumlar.every((k) => k.geri_sarmada_geldi) ? 'GECTI' : 'KALDI',
       },
     };
   }
+
+  console.log('VI okunurluk (450 px/s surus) ...');
+  const vi = await viOkunurluk(browser);
+  console.log(`  ${vi.vuruslar.map((v) => v.gorunur_ms + 'ms').join(' · ')} → ${vi.gecti ? 'GECTI' : 'KALDI'}`);
 
   console.log('dusen kare kiyasi (blok-1 penceresi, 0-8 sn) ...');
   const metinli = await dusenKiyas(browser, '');
@@ -254,13 +307,13 @@ async function dusenKiyas(browser, sorgu) {
   console.log(`  metinli ${metinli.dusen} (${metinli.toplam_ms} ms) · metinsiz ${metinsiz.dusen} (${metinsiz.toplam_ms} ms)`);
   await browser.close();
 
-  const hepsi = Object.values(diller).every((d) => Object.values(d.kapilar).every((x) => x === 'GECTI'));
+  const hepsi = Object.values(diller).every((d) => Object.values(d.kapilar).every((x) => x === 'GECTI')) && vi.gecti;
   const hukum = !tb.gecerli ? 'ORTAM-GURULTULU (hukum verilmez)' : (hepsi ? 'GECTI' : 'KALDI');
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-soz.cjs v2 — 21 blok + 6 kunye kapilari, TR+EN ayri. Pencereler DOM data-bas/son (kaynak TUR5-METIN-HARITASI.md). Dusen kiyasi RAPOR. Kontak: kontak-soz/blok01-21.jpg (TR).',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, tekrar: TEKRAR,
     taban_tavan: TABAN_TAVAN, taban: tb,
-    hukum, diller, dusen_kiyasi: { metinli, metinsiz },
+    hukum, diller, vi_okunurluk: vi, dusen_kiyasi: { metinli, metinsiz },
   }, null, 1));
   console.log(`\nHUKUM: ${hukum}`);
   for (const [dil, d] of Object.entries(diller)) console.log(`  ${dil}: ${JSON.stringify(d.kapilar)}`);
