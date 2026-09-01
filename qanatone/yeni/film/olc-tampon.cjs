@@ -160,6 +160,50 @@ async function kosum(browser, agAdi) {
   };
 }
 
+/* TABAN GECERLILIK DAMGASI (2 Eyl 2026, Enes talimati; ayrintili
+   gerekce olc-hiz.cjs'te). Bu rigde kosum-basina oynatma her agda
+   mumkun degil (yavas hatta klip gec iner); RIG BASINA TEK pencere:
+   dolu hatta sahne1 hazir olunca TABAN_SN sn SENTETIK SCRUB (sinus
+   deseniyle currentTime — duz oynatma kirmizi-once kosumunda elendi,
+   %100 CPU'yu gormedi; gerekce olc-hiz.cjs), ayni sayac (sunumsuz
+   bosluk > esik). Taban asarsa TUM kosum ORTAM-GURULTULU damgasi
+   tasir, hukum verilmez. */
+const TABAN_SN = Number(process.env.TABAN_SN ?? 10);
+const TABAN_TAVAN = Number(process.env.TABAN_TAVAN ?? 1);
+async function tabanPenceresi(browser) {
+  const { page } = await sayfaAc(browser, 'dolu-hat');
+  await page.waitForFunction('window.__fl.sahne()[0].durum === "hazir"', { timeout: 60000 });
+  const sun = await page.evaluate(async (ms) => {
+    const v = document.querySelector('.fl-sahne video');
+    if (!v || !v.src) return null;
+    const eskiAkis = window.__fl.akis; window.__fl.akis = 0;
+    const sure = Math.max(1, v.duration - 0.2);
+    window.__sun.length = 0;
+    await new Promise((res) => {
+      /* ucgen dalga, sabit 1x tempo — sinusun tepe/dip duraklamasi
+         yapisal bosluk uretiyordu (gerekce olc-hiz.cjs taban blogu) */
+      const t0 = performance.now();
+      const adim = () => {
+        const gecen = performance.now() - t0;
+        if (gecen >= ms) return res();
+        const faz = (gecen / 1000) % (2 * sure);
+        const hedef = faz < sure ? faz : 2 * sure - faz;
+        if (Math.abs(v.currentTime - hedef) > 1 / 48) v.currentTime = hedef;
+        requestAnimationFrame(adim);
+      };
+      requestAnimationFrame(adim);
+    });
+    window.__fl.akis = eskiAkis;
+    return window.__sun.slice();
+  }, TABAN_SN * 1000);
+  await page.close();
+  if (!sun || sun.length < 2) return { sayi: null, toplam_ms: null, sure_sn: TABAN_SN, gecerli: false, not: 'oynatma/sunum alinamadi' };
+  let sayi = 0, toplam = 0;
+  const s = [...sun].sort((a, b) => a - b);
+  for (let i = 1; i < s.length; i++) { const d = s[i] - s[i - 1]; if (d > BOSLUK_ESIK_MS) { sayi++; toplam += d; } }
+  return { sayi, toplam_ms: +toplam.toFixed(0), sure_sn: TABAN_SN, gecerli: sayi <= TABAN_TAVAN };
+}
+
 /* ATLA / ISINLANMA DELME KONTROLU (dolu hat, tek kosum yeter):
    sayfa acilir acilmaz sona yakina scrollTo + atla — tampon delinmeli,
    hareket 3 sn icinde baslamali, yol atla|teleport olmali. */
@@ -195,6 +239,10 @@ async function atlaKontrol(browser) {
   console.log(`HIZLANDIRMA: ${hizlandirma}`);
   console.log(`SINIR    : ${SINIR_MS} ms (+${SINIR_TOLERANS_MS} tolerans) · takilma penceresi ${PENCERE_MS} ms\n`);
 
+  console.log('taban penceresi (dolu hat, sahne1 duz oynatma) ...');
+  const taban = await tabanPenceresi(browser);
+  console.log(`  taban ${taban.sayi} bosluk (${taban.toplam_ms} ms / ${taban.sure_sn} sn) → ${taban.gecerli ? 'sakin' : 'ORTAM GURULTULU'}\n`);
+
   const ortanca = (a) => { const s = [...a].filter((x) => x != null).sort((x, y) => x - y); return s.length ? +s[Math.floor(s.length / 2)].toFixed(0) : null; };
   const sonuc = [];
   for (const agAdi of Object.keys(AGLAR)) {
@@ -225,15 +273,18 @@ async function atlaKontrol(browser) {
   console.log(`  yol ${atla.yol} · hareket ${atla.hareket_ms} ms · ${atla.gecti ? 'GECTI' : 'KALDI'}`);
   await browser.close();
 
-  const hukum = sonuc.every((s) =>
+  const kapilar = sonuc.every((s) =>
     s.kapi_hareket_once === 'GECTI' && s.kapi_bagimsiz_kacak === 'GECTI'
     && s.kapi_sinir === 'GECTI' && (s.kapi_dolu_hatta_sinirsiz === undefined || s.kapi_dolu_hatta_sinirsiz === 'GECTI'))
-    && atla.gecti ? 'GECTI' : 'KALDI';
+    && atla.gecti;
+  /* taban gurultuluyse hukum VERILMEZ — kapilar gecmis gorunse bile */
+  const hukum = !taban.gecerli ? 'ORTAM-GURULTULU (hukum verilmez)' : (kapilar ? 'GECTI' : 'KALDI');
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-tampon.cjs v2 — tampon: sahne1 tam + sahne2 kismi + 6 sn sinir. KAPILAR: hareket hazirliktan once baslamaz (motor izi + bagimsiz ornekleyici) · tampon <= sinir+tolerans her agda · dolu hatta sinir devreye girmez · atla/teleport deler. Takilma sayilari RAPOR (Enes bilerek kabul etti).',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
     senaryo: 'sabirsiz ziyaretci (yukleme sirasinda surekli kaydirma) + atla kontrolu', tekrar: TEKRAR,
     sinir_ms: SINIR_MS, pencere_ms: PENCERE_MS,
+    taban_tavan: TABAN_TAVAN, taban,
     hukum, sonuc, atla_kontrol: atla,
   }, null, 1));
   console.log(`\nHUKUM: ${hukum}\n→ ${CIKTI}`);
