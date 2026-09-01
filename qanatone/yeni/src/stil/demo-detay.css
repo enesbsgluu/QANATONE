@@ -160,32 +160,38 @@
   border-bottom:1px solid rgba(255,255,255,.1);font-family:var(--f-tek);
   font-size:.78em;letter-spacing:.1em;text-transform:uppercase}
 .akhd2 i{color:var(--tx4)}.akhd2 em{color:var(--red-soft)}
+/* GECE ZINCIRI TUR 1 (2 Eyl 2026): RENK KARELERI KOMPOZITORE. akJob/akTick
+   arka plan + kenar RENGI, akJobT yazi rengi animasyonuydu — renk ana is
+   parcaciginda boyama ister; kaydirma cizelgesine baglaninca her kaydirma
+   karesinde boyaniyordu (olculdu: p95 16,7 bandi). Simdi "acik" hali ayri
+   bir katman (::before, kizil zemin+kenar) ve YALNIZ OPAKLIGI animasyonlu;
+   yazi rengi tx4 (#fff .48) -> tx (#fff) ayni beyazin opakligi: .48 -> 1.
+   Gorsel sonuc ayni (kontak: kontak-gece/tur1-demo-once/sonra). */
 .akjob{position:relative;display:flex;align-items:center;justify-content:space-between;
   gap:2cqw;padding:2.3cqw 2.8cqw;border-radius:2.2cqw;overflow:hidden;
-  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
-  animation:akJob 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)}
+.akjob::before{content:'';position:absolute;inset:-1px;border-radius:inherit;
+  background:rgba(239,35,60,.1);border:1px solid rgba(239,35,60,.34);opacity:0;
+  animation:akJobOn 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
   animation-play-state:var(--akps,paused)}
-.akjob i{position:relative;color:var(--tx2);
+.akjob i{position:relative;color:var(--tx);opacity:.48;
   animation:akJobT 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
   animation-play-state:var(--akps,paused)}
 .akjob b{position:relative;width:3.2cqw;height:3.2cqw;border-radius:50%;flex:none;
-  border:1px solid rgba(255,255,255,.2);
-  animation:akTick 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
+  border:1px solid rgba(255,255,255,.2)}
+.akjob b::before{content:'';position:absolute;inset:-1px;border-radius:50%;background:var(--red);opacity:0;
+  animation:akTickOn 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
   animation-play-state:var(--akps,paused)}
 .akjob b::after{content:'';position:absolute;left:1cqw;top:1.3cqw;width:1cqw;height:.5cqw;
   border-left:1.3px solid var(--tx);border-bottom:1.3px solid var(--tx);
   transform:rotate(-45deg) scale(0);transform-origin:center;
   animation:akTickIn 5.6s var(--e) infinite;animation-delay:calc(var(--i)*.44s);
   animation-play-state:var(--akps,paused)}
-@keyframes akJob{0%,10%{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.07)}
-  24%,86%{background:rgba(239,35,60,.1);border-color:rgba(239,35,60,.34)}
-  96%,100%{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.07)}}
-@keyframes akJobT{0%,10%{transform:translateX(0);color:var(--tx4)}
-  24%,86%{transform:translateX(1.4cqw);color:var(--tx)}
-  96%,100%{transform:translateX(0);color:var(--tx4)}}
-@keyframes akTick{0%,10%{background:transparent;border-color:rgba(255,255,255,.2)}
-  20%,86%{background:var(--red);border-color:var(--red)}
-  96%,100%{background:transparent;border-color:rgba(255,255,255,.2)}}
+@keyframes akJobOn{0%,10%{opacity:0}24%,86%{opacity:1}96%,100%{opacity:0}}
+@keyframes akJobT{0%,10%{transform:translateX(0);opacity:.48}
+  24%,86%{transform:translateX(1.4cqw);opacity:1}
+  96%,100%{transform:translateX(0);opacity:.48}}
+@keyframes akTickOn{0%,10%{opacity:0}20%,86%{opacity:1}96%,100%{opacity:0}}
 @keyframes akTickIn{0%,12%{transform:rotate(-45deg) scale(0)}
   22%,86%{transform:rotate(-45deg) scale(1)}96%,100%{transform:rotate(-45deg) scale(0)}}
 .aksum{display:flex;align-items:center;gap:2cqw;margin-top:.8cqw;color:var(--red-soft);
