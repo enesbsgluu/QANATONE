@@ -86,12 +86,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 18; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
+    + 19; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
              +deneme-react (GEÇİCİ — React+motion bütçe ölçüm sayfası,
              Enes talebi 20 Ağu; gerçek React adası gelince sayfa ve
              bu +1 birlikte kalkar)
-             +film (27 Ağu — 39 kliplik scroll-scrub iskeletinin ÖLÇÜM
-             zemini; film ana sayfaya oturunca sayfa ve bu +1 kalkar) */
+             +film TR ve EN (27 Ağu; EN 2 Eyl TUR 5 v2 ile — anlatı iki
+             dilli ve kapı "TR ve EN ayrı ölçülür" diyor, ölçüm sayfasız
+             olmaz. Film ana sayfaya oturunca iki sayfa ve bu +2 kalkar) */
   ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
      `${sayfalar.length}/${beklenen}`);
 }
