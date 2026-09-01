@@ -55,6 +55,10 @@ const ayar = icerik.settings || {};
 const waNum = String(ayar.whatsapp || '').replace(/\D/g, '');
 const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
 const on = en ? '/en' : '';
+/* OLCUM (kaynak analytics 10765-10783 birebir): settings.gtm doluysa
+   GTM-… ya da G-… yuklenir; boska HICBIR SEY basilmaz (bugun bos). */
+const gtm = String(ayar.gtm || '').trim();
+const GTM_KOD = gtm ? `(function(){var id=${JSON.stringify(gtm)};window.dataLayer=window.dataLayer||[];var add=function(s){var sc=document.createElement('script');sc.async=true;sc.src=s;document.head.appendChild(sc)};if(/^GTM-/i.test(id)){window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});add('https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(id))}else{add('https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id));window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',id)}})()` : '';
 const SAYFALAR: [string, string, string, string][] = [
   ['/projeler', 'nav1', 'Projeler', 'Projects'], ['/hizmetler', 'nav2', 'Hizmetler', 'Services'],
   ['/bulten', 'nav6', 'Bülten', 'Newsletter'], ['/otomasyon', 'nav3', 'Otomasyon', 'Automation'],
@@ -74,6 +78,7 @@ const SAYFALAR: [string, string, string, string][] = [
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
   {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
   <slot name="bas" />
+  {GTM_KOD && <script is:inline set:html={GTM_KOD} />}
 </head>
 <body>
   {perde && <Perde />}

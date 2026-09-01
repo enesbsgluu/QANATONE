@@ -67,3 +67,13 @@ export function bicimKisa(n, dil = 'tr') {
   if (a >= 1000) return birim + Math.round(n / 1000) + (dil === 'en' ? 'K' : ' B');
   return birim + Math.round(n);
 }
+
+/* Tam para biçimi — kaynak `fmt` 10305 (kaydırıcı etiketleri: bütçe ve
+   satış tutarı). Derlemede ilk değer, istemcide (varlik/pano.js) her
+   kaydırışta aynı fonksiyon — iki üreteç yok.
+ * @param {number} n  @param {'tr'|'en'} [dil]  @returns {string} */
+export function bicimTam(n, dil = 'tr') {
+  const birim = dil === 'en' ? '$' : '₺', yer = dil === 'en' ? 'en-US' : 'tr-TR';
+  if (Math.abs(n) >= 1e6) return birim + (n / 1e6).toFixed(1).replace('.', dil === 'en' ? '.' : ',') + (dil === 'en' ? 'M' : ' Mn');
+  return birim + Math.round(n).toLocaleString(yer);
+}

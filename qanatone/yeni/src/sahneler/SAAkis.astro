@@ -75,9 +75,17 @@ const demoK = (h: any): string => {
 <section class="sa-sahne" id="akis" data-sahne="a">
   <div class="sa-ic">
     <div class="sa-bas">
-      <p class="kunye"><i></i>{g('akk')}</p>
-      <h2 class="s1-buyuk" set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
-      <p class="s1-alt">{g('akp')}</p>
+      <div class="sa-metin">
+        <p class="kunye"><i></i>{g('akk')}</p>
+        <h2 class="s1-buyuk" set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
+        <p class="s1-alt">{g('akp')}</p>
+      </div>
+      {/* OK DUGMELERI (sokum turu, 4 Eyl): kaynak 4651-4654 (.aknav) —
+          serit yerli kaydirma, dugmeler scrollBy; fare surukleme adada. */}
+      <div class="sa-nav">
+        <button type="button" id="akPrev" aria-label={en ? 'Back' : 'Geri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button type="button" id="akNext" aria-label={en ? 'Next' : 'İleri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      </div>
     </div>
   </div>
 
@@ -118,6 +126,24 @@ const demoK = (h: any): string => {
      Acilista sinif YAZILMAZ (S-K dersi: acilis yazimi LCP itmisti) —
      kartlar paused dogar, IO gorunenleri oynatir. content-visibility
      kullanilmiyor (sart c). Ada butcesi <=0,7 KB. */
+  /* OK DUGMELERI + FARE SURUKLEMESI (sokum turu, 4 Eyl) — kaynak
+     akisScrollKur 6863-6888 birebir: adim = kart genisligi + bosluk,
+     6 px esigiyle tiklama yutma, .drag sinifi (snap kapali, grabbing). */
+  const ray = document.querySelector<HTMLElement>('.sa-ray');
+  if (ray) {
+    /* H12: duzen OKUNMAZ — adim, kartin CSS olcusunden (akis.css .sa-kart
+       flex-basis clamp) innerWidth ile turetilir; snap zaten hizalar. */
+    const adim = () => { const w = innerWidth; return (w > 900 ? Math.min(360, Math.max(300, w * .26)) : Math.min(360, Math.max(260, w * .78))) + Math.min(18, Math.max(12, w * .014)); };
+    document.getElementById('akPrev')?.addEventListener('click', () => ray.scrollBy({ left: -adim(), behavior: 'smooth' }));
+    document.getElementById('akNext')?.addEventListener('click', () => ray.scrollBy({ left: adim(), behavior: 'smooth' }));
+    /* H12: scrollLeft OKUNMAZ/YAZILMAZ — surukleme artimli scrollBy ile
+       (son isaretci konumundan fark); okuma yok, dinleyici pointermove. */
+    let down = false, sx = 0, lx = 0, moved = 0;
+    ray.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; down = true; moved = 0; sx = lx = e.clientX; ray.classList.add('drag'); });
+    addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > moved) moved = Math.abs(dx); ray.scrollBy(lx - e.clientX, 0); lx = e.clientX; }, { passive: true });
+    addEventListener('pointerup', () => { down = false; ray.classList.remove('drag'); });
+    ray.addEventListener('click', (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
+  }
   const kartlar = document.querySelectorAll('.sa-kart');
   if (kartlar.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {
