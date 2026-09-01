@@ -93,3 +93,16 @@ Kapı genişledi: kadraja girişle başlayan ya da kadrajda kendi kendine dönen
 | perde | oturumda bir kez, açılış |
 
 Düzenek `olc-surucu.cjs` istisnaları adıyla listeler; 59 sayfa 0 ihlal, enjekte kırmızı yakalandı. /otomasyon önce/sonra: `olc-sayfa-A.json` ↔ `olc-sayfa-otomasyon-sonra.json`.
+
+### v2 sonrası sayfa kapısı (etkilenen sayfalar, 3 koşum medyanı)
+
+| sayfa | p95 | takılma | tek | JS | sonuç |
+|---|---|---|---|---|---|
+| / (ana) | 16,7 ms | %0,94 | 117 ms | 12.758 / 12.800 | GEÇTİ |
+| /hizmet/ai-ajan | 8,5 | %0 | 0 | 5.577 | GEÇTİ |
+| /hizmet/web-tasarim | 8,5 | %0 | 0 | 4.671 | GEÇTİ |
+| /hizmet/web-sitesi-araclar | 16,7 | %0 | 75 | 5.682 | GEÇTİ |
+| /hizmet/otomasyon | 16,6 (tekrar) · ilk koşum 24,9 | %0 | 0 | 5.022 | GEÇTİ — SINIRDA |
+| /hizmet/finans | 25,0 | %0,48 | 67 | 7.346 | KALDI (MotorSahne, tur öncesi) |
+
+`/hizmet/otomasyon` notu: ilk üçlüde 16,7/24,9/25 (medyan 24,9, kapı kırmızı), tekrar 16,8/16,6/16,6; demo gizlenince 8,6. Demonun akJob/akTick kareleri background/border-color animasyonu (ana iş parçacığında boyama); kaydırma çizelgesine bağlı olduğu için her kaydırma karesinde boyanıyor. Kapı geçiyor ama pay yok — demo renk karelerini opaklık/dönüşüme çevirmek ayrı bir kalem (`olc-sayfa-hoto-*.json`).
