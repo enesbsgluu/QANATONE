@@ -30,7 +30,7 @@ const TARAYICILAR = {
 const TARAYICI = process.env.TARAYICI || 'brave';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
 const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
-const CIKTI = path.join(__dirname, 'olc-sayfa.json');
+const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-sayfa.json');
 const TEKRAR = Number(process.env.TEKRAR || 3);
 const P95_MS = 20, TAKILMA_ESIK = 50, TEK_TAKILMA_MS = 250, TOPLAM_ORAN = 0.03;
 const TAVAN = { ana: 12.5 * 1024, film: 11 * 1024, obur: 10 * 1024 };
@@ -48,7 +48,8 @@ const sayfalar = [];
     else if (e.name === 'index.html') sayfalar.push('/yeni/' + path.relative(DIST, p).replace(/\\/g, '/').replace(/index\.html$/, ''));
   }
 })(DIST);
-const secim = process.env.SAYFA ? [process.env.SAYFA] : sayfalar.sort();
+/* FILTRE=regex: sayfa alt kumesi (10 dakikalik parcalar halinde kosmak icin) · CIKTI=dosya adi */
+const secim = process.env.SAYFA ? [process.env.SAYFA] : sayfalar.sort().filter((y) => !process.env.FILTRE || new RegExp(process.env.FILTRE).test(y));
 
 /* J1 ile ayni bayt sayimi (denetim.cjs) */
 function jsBayt(yol) {

@@ -1,9 +1,23 @@
 ---
 /* Yazı gövdesi — panelin HTML'i (güvenilir kaynak) derleme anında
    basılır; bölümler [başlık, html] çiftleri. */
+import { getCollection } from 'astro:content';
 import { T, type Dil } from '../icerik';
 interface Props { p: any; dil: Dil }
 const { p, dil } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const on = dil === 'en' ? '/en' : '';
+/* "DIGER YAZILAR" SERIDI (sokum turu, 4 Eyl) — kaynak #bdRail 5175-5183 +
+   buildRail 7265-7288: siradaki yazidan baslayip basa dolanan serit, ok
+   dugmeleri, disabled senkronu. Kartlar DERLEMEDE (bot okur); dugme/senkron
+   kucuk ada. Sira kaynaktaki gibi tarihe gore yeni->eski. */
+const tum = (await getCollection('yazilar')).map((e) => e.data)
+  .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
+const ben = Math.max(0, tum.findIndex((x: any) => x.slug === p.slug));
+const digerleri = tum.length > 1 ? Array.from({ length: tum.length - 1 }, (_, k) => tum[(ben + 1 + k) % tum.length]) : [];
+const kisaTarih = (d: string) => { const t = new Date(d + 'T00:00:00'); const ay = dil === 'en'
+  ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  : ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return `${t.getDate()} ${ay[t.getMonth()]} ${t.getFullYear()}`; };
 const bolumler: [string, string][] = (p.body && (p.body[dil] || p.body.tr)) || [];
 const tarih = new Date(p.date + 'T00:00:00');
 const ay = dil === 'en'
@@ -11,6 +25,12 @@ const ay = dil === 'en'
   : ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
 const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYear()}`;
 ---
+{/* Geri bagi (kaynak 5168 .pgback -> /bulten) */}
+<a class="pgback" href={`${B}${on}/bulten`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{dil === 'en' ? 'Newsletter' : 'Bülten'}</span>
+</a>
 <article>
   <h1>{T(p.title, dil)}</h1>
   <div class="yazimeta">
@@ -32,4 +52,60 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
       ))}
     </ul>
   </div>}
+  {digerleri.length > 0 && <div class="nrail" id="bdRail">
+    <div class="nrhead"><span class="k">{dil === 'en' ? 'More articles' : 'Diğer yazılar'}</span></div>
+    <div class="nrbody">
+      <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Back' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+      <div class="nrtrack" id="railTrack">
+        {digerleri.map((x: any) => (
+          <a class="nrcard" href={`${B}${on}/bulten/${x.slug}`}>
+            <span class="m">{T(x.tag, dil)}</span>
+            <h4>{T(x.title, dil)}</h4>
+            <span class="d">{kisaTarih(x.date)} · {x.read || 3}{dil === 'en' ? ' min' : ' dk'}</span>
+          </a>
+        ))}
+      </div>
+      <button class="nrbtn next" id="railNext" type="button" aria-label={dil === 'en' ? 'Next' : 'İleri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+    </div>
+  </div>}
 </article>
+
+<script>
+  /* serit ok dugmeleri + disabled senkronu (kaynak buildRail 7276-7287) */
+  const track = document.getElementById('railTrack');
+  if (track) {
+    const prev = document.getElementById('railPrev') as HTMLButtonElement, next = document.getElementById('railNext') as HTMLButtonElement;
+    const adim = () => { const c = track.firstElementChild as HTMLElement | null; return c ? c.getBoundingClientRect().width + 12 : 280; };
+    const sync = () => { const max = track.scrollWidth - track.clientWidth - 2; prev.disabled = track.scrollLeft <= 2; next.disabled = track.scrollLeft >= max || max <= 0; };
+    prev.onclick = () => { track.scrollBy({ left: -adim(), behavior: 'smooth' }); setTimeout(sync, 420); };
+    next.onclick = () => { track.scrollBy({ left: adim(), behavior: 'smooth' }); setTimeout(sync, 420); };
+    track.addEventListener('scroll', sync, { passive: true });
+    requestAnimationFrame(sync);
+  }
+</script>
+
+<style>
+  /* geri bagi (kaynak .pgback 365-374) */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  /* "diger yazilar" seridi — kaynak .nrail/.nrcard/.nrbtn 2284-2310 birebir, aile token */
+  .nrail { margin-top: clamp(30px, 4vw, 50px); padding-top: 24px; border-top: 1px solid var(--line); }
+  .nrhead .k { font-family: var(--f-tek); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--tx4); }
+  .nrbody { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .nrtrack { flex: 1; min-width: 0; display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 0; }
+  .nrtrack::-webkit-scrollbar { display: none; }
+  .nrcard { flex: 0 0 min(268px, 72vw); scroll-snap-align: start; display: flex; flex-direction: column; gap: 8px;
+    padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+    color: var(--tx); text-decoration: none; transition: border-color .3s var(--e); }
+  .nrcard:hover { border-color: rgba(239,35,60,.45); }
+  .nrcard .m { font-family: var(--f-tek); font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--red-soft); }
+  .nrcard h4 { font-weight: 500; font-size: 1rem; line-height: 1.35; margin: 0; }
+  .nrcard span.d { font-family: var(--f-tek); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); }
+  .nrbtn { flex: none; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;
+    border-radius: 50%; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--tx2); }
+  .nrbtn:hover:not(:disabled) { color: #fff; border-color: var(--red); background: rgba(239,35,60,.14); }
+  .nrbtn:disabled { opacity: .28; cursor: default; }
+  .nrbtn svg { width: 16px; height: 16px; }
+</style>

@@ -27,6 +27,19 @@ const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
 const yazilar = (await getCollection('yazilar')).map(e => e.data)
   .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
 const on = dil === 'en' ? '/en' : '';
+/* SEKTOR CIPLERI (sokum turu, 4 Eyl) — kaynak #bkFilter + bkFilter()
+   7208-7224, etiket haritasi BKC 7031-7034 BIREBIR. Cipler ve suzme
+   kurallari AYNI derlemede posts[].sector'dan dogar (projeler dizininin
+   deseni): panelden yeni anahtar gelirse cip etiketsiz kalmaz — anahtarin
+   kendisi basilir, sessiz bayatlama yok. Ada JS'i 0: radyo + :has(). */
+const BKC: Record<string, [string, string]> = {
+  talep: ['Talep yönetimi', 'Lead handling'], reklam: ['Reklam & bütçe', 'Ads & budget'],
+  arama: ['Arama & yapay zekâ', 'Search & AI'], sektor: ['Sektör verisi', 'Sector data'],
+};
+const sektorler: string[] = [...new Set(yazilar.map((p: any) => String(p.sector || '')))].filter(Boolean) as string[];
+const sektorAd = (k: string) => (BKC[k] ? (dil === 'en' ? BKC[k][1] : BKC[k][0]) : k);
+const sayim = (k: string) => yazilar.filter((p: any) => p.sector === k).length;
+const suzKural = sektorler.map((k, i) => `.bkf:has(#bkf-${i + 1}:checked)~.yazilar .yazi:not([data-k="${i + 1}"]){display:none}`).join('');
 /* Tarih ELDEKİ listeyle basılır, toLocaleDateString ile değil: yerel
    Node 24 ↔ Netlify Node 20 ICU farkı çıktıyı sessizce değiştirebilir;
    YaziGovde da aynı sebepten kendi listesini taşıyor. Biçim eski
@@ -45,9 +58,18 @@ const tarihYaz = (d: string) => {
   <p class="lede">{m('bkp', 'Yapay zekâ, arama ve talep yönetimi tarafında işine dokunan gelişmeleri kaynağıyla birlikte yazıyoruz. Görüş değil rakam; her yazının sonunda "bu senin işin için ne demek" var.')}</p>
 </section>
 
+{sektorler.length > 0 && <div class="bkf">
+  <input type="radio" name="bkf" id="bkf-0" checked />
+  <label class="bkc" for="bkf-0">{M('Tümü', 'All')}<em>{yazilar.length}</em></label>
+  {sektorler.map((k, i) => <>
+    <input type="radio" name="bkf" id={`bkf-${i + 1}`} />
+    <label class="bkc" for={`bkf-${i + 1}`}>{sektorAd(k)}<em>{sayim(k)}</em></label>
+  </>)}
+</div>}
+<style set:html={suzKural} />
 <div class="yazilar">
   {yazilar.map((p: any) => (
-    <article class="yazi">
+    <article class="yazi" data-k={sektorler.indexOf(String(p.sector || '')) + 1}>
       <p class="kunye">{T(p.tag, dil)} · <time datetime={p.date}>{tarihYaz(p.date)}</time>{p.read &&
         <> · {p.read}{M(' dk okuma', ' min read')}</>}</p>
       <h2>{T(p.title, dil)}</h2>
@@ -73,6 +95,15 @@ const tarihYaz = (d: string) => {
 </div>
 
 <style>
+  .bkf { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: clamp(22px, 3vw, 36px); }
+  .bkf input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .bkc { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+    border: 1px solid var(--line2); color: var(--tx2); font-size: .84rem; cursor: pointer; }
+  .bkc em { font-style: normal; font-family: var(--f-tek); font-size: .7rem; color: var(--tx4); }
+  .bkf input:checked + .bkc { background: rgba(239,35,60,.12); border-color: rgba(239,35,60,.5); color: #fff; }
+  .bkf input:checked + .bkc em { color: var(--red-soft); }
+  .bkf input:focus-visible + .bkc { outline: 2px solid var(--red); outline-offset: 2px; }
+
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
   .yazilar { display: flex; flex-direction: column; gap: 14px; }
   .yazi { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
