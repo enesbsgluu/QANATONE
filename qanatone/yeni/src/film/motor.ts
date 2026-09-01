@@ -98,13 +98,16 @@
    tasiyan kucuk kopya oynatilir (ayni CRF/cozunurluk -> gecis gorunmez).
    Tam kopya inip AYNI kareye sarilinca tek sinif degisimiyle takas edilir.
 
-   YUKLEME TAMPONU — AMBLEMSIZ (2 Eyl 2026, Enes: giris sahnesi sokumu).
-   Eski tasarimda ilk kliplerin inme suresini acilis amblemi dolduracakti;
-   amblem prologu tumden sokulunce o gorev tampona gecti. Kural: film
-   ILK KARESINDE SABIT durur, kilit konumundaki klip + yondeki komsusu
-   tamamen inene kadar hedef ILERLEMEZ. Ayri perde, sayac, yuzde
-   gostergesi YOK - kullanici filmin durdugunu degil henuz baslamadigini
-   gorur. Kilit konumu 0 DEGIL, ilk karedeki scrub konumudur: tarayici
+   YUKLEME TAMPONU — AMBLEMSIZ (2 Eyl 2026, Enes: giris sahnesi sokumu;
+   ayni gun v2 gevsemesi). Eski tasarimda ilk kliplerin inme suresini
+   acilis amblemi dolduracakti; amblem prologu tumden sokulunce o gorev
+   tampona gecti. Kural (v2): film ILK KARESINDE SABIT durur, kilit
+   konumundaki klip + yondeki komsusu tamamen inene kadar hedef
+   ILERLEMEZ — ama en cok TAMPON_SINIR_MS: sure dolunca eldekiyle
+   baslanir, kalan akarken iner (v1'in sinirsiz hali yavas-4G'de ~50 sn
+   bekletiyordu; "komsu kismi" sarti da denendi, OLU ve PAHALI cikti —
+   sabitler blogundaki gerekce). Ayri perde, sayac, yuzde gostergesi
+   YOK - kullanici filmin durdugunu degil henuz baslamadigini gorur. Kilit konumu 0 DEGIL, ilk karedeki scrub konumudur: tarayici
    scroll'u sayfa ortasina geri getirirse (yenileme) film oraya kilitlenir,
    basa sarmaz. Acilinca yay mevcut haliyle hedefe yurur (tavan katched-up
    hizini zaten sinirlar); sicrama yok. Durusta akis tampon acilana kadar
@@ -171,6 +174,19 @@ const GERIDE_SN = 1.0;
    Gercek kaydirmanin kare basi hedef adimi ~0,1 film-sn'nin altinda;
    1,0 guvenli ayirac. */
 const TAMPON_SICRAMA_SN = 1.0;
+/* TAMPON v2 (2 Eyl 2026, Enes tavsiyesi + olcumun duzeltmesi):
+   v1 sarti (kilit + komsu TAM, sinirsiz) yavas-4G'de ~50 sn, 4G'de
+   ~9,1 sn statik ekran bekletiyordu (olc-tampon.json, kirmizi-once) —
+   ziyaretci kaybettiren sure. Enes tavsiyesi "sahne2 kismi yeterli +
+   6 sn sinir" idi ve kapiyi acik birakmisti ("olcum daha iyi bir esik
+   gosteriyorsa oner"). OLCUM GOSTERDI: kismi sart HICBIR agda acilisi
+   erkene almadi (dolu hatta tam sart <1 sn'de zaten yetisiyor; 4G ve
+   yavas-4G'de acan sinirdir) ve onu olcmek icin gereken akisli fetch
+   tam tur takilmasini [6,8,3]->[63,44,52] yapti. Kalan sart: kilit
+   klip TAM + komsu TAM, VEYA SINIR_MS doldu (eldekiyle baslanir,
+   kalan akarken iner; olasi takilma olculur ve yazilir — Enes bilerek
+   kabul etti). Sayac/yuzde/perde yine YOK. */
+const TAMPON_SINIR_MS = 6000;
 
 type Durum = 'yok' | 'iniyor' | 'hazir' | 'hata';
 
@@ -416,6 +432,13 @@ export function baslat(bolum: HTMLElement): () => void {
     try {
       const r = await fetch(s.url);
       if (!r.ok) throw new Error('HTTP ' + r.status);
+      /* AKISLI OKUMA DENENDI VE GERI ALINDI (2 Eyl 2026): "komsu KISMI
+         indi" sartini olcmek icin reader dongusu + parca birlestirme
+         kurulmustu; olculdu, tam tur takilmasi [6,8,3] -> [63,44,52],
+         durulan cekirdek p95 8,8 -> 9,9 — ana islikteki parca dongusu
+         indirme/cozmeyle yarisiyor. Kismi sartin kendisi de OLU cikti
+         (olc-tampon: hicbir agda acilisi erkene almadi), toplu blob'a
+         donuldu. */
       const b = await r.blob();
       s.bayt = b.size;
       s.blob = URL.createObjectURL(b);
@@ -613,13 +636,18 @@ export function baslat(bolum: HTMLElement): () => void {
       const ham = hedefT;
       if (tamponT === null) { tamponT = hedefT; hedefHamOnce = hedefT; }   /* ilk kare: kilit konumu */
       const sk = S[i], komsu = S[i + (IZ.yon >= 0 ? 1 : -1)];
+      const komsuTamam = !komsu || komsu.durum === 'hazir';
       const ac = (yol: string) => { tamponAcik = true; IZ.tamponMs = Math.round(simdi - yeni); IZ.tamponYolu = yol; };
       if (atlaIstek || Math.abs(ham - hedefHamOnce) > TAMPON_SICRAMA_SN) {
         /* bilincli sicrama (atla / scrollTo / geri yukleme): tampon delinir,
            eski davranis — asagidaki atla dali hedefe oturtur. */
         ac(atlaIstek ? 'atla' : 'teleport');
         atlaIstek = true;
-      } else if (sk.durum === 'hazir' && (!komsu || komsu.durum === 'hazir')) {
+      } else if (simdi - yeni > TAMPON_SINIR_MS) {
+        /* sert ust sinir: sure doldu, eldekiyle baslanir; kalan akarken
+           iner. Olasi takilma olc-tampon'da sayilir ve yazilir. */
+        ac('sure-siniri');
+      } else if (sk.durum === 'hazir' && komsuTamam) {
         ac('bekledi');
       } else hedefT = tamponT;
       hedefHamOnce = ham;
@@ -787,6 +815,10 @@ export function baslat(bolum: HTMLElement): () => void {
   for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) addEventListener(ad, girdi, { passive: true });
   olc();
   etkinYap(S[0]);
+  /* tampon sure siniri UYANDIRICISI: kullanici hic kimildamazsa ve
+     indirme parca dondurmuyorsa (hat koptu) dongu durur, sinir kosulu
+     hic degerlendirilemezdi — tek atimlik zamanlayici garantiler. */
+  const tamponSayaci = setTimeout(tik, TAMPON_SINIR_MS + 30);
   kare();
   addEventListener('scroll', tik, { passive: true });
   addEventListener('resize', boyut, { passive: true });
@@ -795,6 +827,7 @@ export function baslat(bolum: HTMLElement): () => void {
   /* --- sokum --- */
   return function sok() {
     durdu = true;
+    clearTimeout(tamponSayaci);
     if (rafId) cancelAnimationFrame(rafId);
     bekleyen = false;
     removeEventListener('scroll', tik);

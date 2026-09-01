@@ -2080,10 +2080,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          31 Agu'da eklenen `durdu`/`rafId` kapilari 71 B (9608 -> 9679).
          10 KB bugunku olcunun ~%3 ustu: yeni katman tavani YINE zorlar.
          ONERI (Enes'in karari): olcum-icin-var olan `?kodek=h265` dali
-         urun paketinden cikarilabilir; motor o zaman tek hat kalir. */
-      if (b > 10 * 1024) kusur.push('motor-tavan:' + b);
+         urun paketinden cikarilabilir; motor o zaman tek hat kalir.
+         2 EYL: tavan 10.240 -> 10.752 RAKAMLI GEREKCEYLE. Yukleme
+         tamponu (Enes talimati, giris sokumu paketi) motora girdi:
+         v1 kilit+delme 9.532->9.988 (456 B), v2 kismi sart + 6 sn
+         siniri + AKISLI fetch (inenB ilerlemesi) 9.988->10.301 (313 B).
+         Toplam +769 B'in tamami talimatla istenen davranis; pay ~450 B
+         sonraki katman icin. Sessiz gevseme degil: bu satirin tarihi
+         ve sayilari kaydin kendisi. */
+      if (b > 10.5 * 1024) kusur.push('motor-tavan:' + b);
       if (h.includes(motor[0])) kusur.push('motor-sayfaya-bagli');
-      rapor += `motor ${(b / 1024).toFixed(1)}/10 KB`;
+      rapor += `motor ${(b / 1024).toFixed(1)}/10,5 KB`;
       const kod = fs.readFileSync(path.join(astro, motor[0]), 'utf8');
       /* blob seek + rVFC olcum yuzeyi + sokum */
       if (!/createObjectURL/.test(kod)) kusur.push('motor-blob-yok');
