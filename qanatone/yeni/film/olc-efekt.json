@@ -1,97 +1,97 @@
 {
  "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
- "olcum": "2026-09-01T18:37:10.123Z",
+ "olcum": "2026-09-01T21:22:05.256Z",
  "tarayici": "chrome",
  "headless": true,
  "tekrar": 3,
  "kirmizi_A": {
-  "sure_ms": 717,
+  "sure_ms": 741,
   "yakalandi": true
  },
  "kirmizi_B": {
-  "dusen": 2,
+  "dusen": 3,
   "yakalandi": true
  },
  "A": {
   "tekrar": [
    {
     "yol": "tv",
-    "sure_ms": 461,
+    "sure_ms": 668,
     "fazlar": {
-     "cokus": 153,
-     "parlama": 59,
-     "acilis": 250
+     "cokus": 180,
+     "parlama": 123,
+     "acilis": 365
     },
-    "dusen": 5,
+    "dusen": 6,
     "dusen_faz": {
-     "cokus": 3,
+     "cokus": 2,
      "parlama": 2,
-     "acilis": 0,
+     "acilis": 2,
      "zamanlar_ms": [
       0,
-      65,
-      121,
-      153,
-      211
+      102,
+      180,
+      218,
+      303,
+      374
      ]
     },
-    "zoom_dusen": 14,
+    "zoom_dusen": 12,
     "devirDurum": "tam"
    },
    {
     "yol": "tv",
-    "sure_ms": 457,
+    "sure_ms": 466,
     "fazlar": {
-     "cokus": 133,
+     "cokus": 131,
      "parlama": 84,
-     "acilis": 241
+     "acilis": 250
     },
     "dusen": 4,
     "dusen_faz": {
      "cokus": 2,
-     "parlama": 2,
-     "acilis": 0,
-     "zamanlar_ms": [
-      0,
-      62,
-      157,
-      216
-     ]
-    },
-    "zoom_dusen": 14,
-    "devirDurum": "tam"
-   },
-   {
-    "yol": "tv",
-    "sure_ms": 454,
-    "fazlar": {
-     "cokus": 152,
-     "parlama": 67,
-     "acilis": 235
-    },
-    "dusen": 5,
-    "dusen_faz": {
-     "cokus": 3,
      "parlama": 1,
      "acilis": 1,
      "zamanlar_ms": [
       0,
-      66,
-      126,
-      152,
-      219
+      58,
+      147,
+      216
      ]
     },
-    "zoom_dusen": 14,
+    "zoom_dusen": 12,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 450,
+    "fazlar": {
+     "cokus": 131,
+     "parlama": 99,
+     "acilis": 220
+    },
+    "dusen": 4,
+    "dusen_faz": {
+     "cokus": 2,
+     "parlama": 1,
+     "acilis": 1,
+     "zamanlar_ms": [
+      0,
+      64,
+      131,
+      230
+     ]
+    },
+    "zoom_dusen": 13,
     "devirDurum": "tam"
    }
   ],
-  "medyan_sure": 457,
-  "medyan_dusen": 5,
+  "medyan_sure": 466,
+  "medyan_dusen": 4,
   "taban": {
    "dusen": 2,
-   "sure_ms": 2891,
-   "hiz_sn": 0.69
+   "sure_ms": 2999,
+   "hiz_sn": 0.67
   },
   "beklenen_taban_duseni": 1,
   "gecti": false
@@ -106,19 +106,15 @@
   "noktalar": {
    "bas": {
     "yol": "isinlanma",
-    "sure_ms": 446,
-    "tepe_ms": 255,
+    "sure_ms": 457,
+    "tepe_ms": 259,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 25,
+    "takas_gap_ms": 17,
     "buyuk_aralar": [
      {
-      "d": 24.9,
-      "tBas": 292
-     },
-     {
-      "d": 291.6,
-      "tBas": 583
+      "d": 341.5,
+      "tBas": 633
      }
     ],
     "iz": {
@@ -126,24 +122,20 @@
      "flGizli": true,
      "govdeAkista": "static",
      "scrollY": 0,
-     "kalanSinif": ""
+     "kalanSinif": "t-nostars"
     }
    },
    "orta": {
     "yol": "isinlanma",
-    "sure_ms": 454,
-    "tepe_ms": 254,
+    "sure_ms": 447,
+    "tepe_ms": 256,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 25,
+    "takas_gap_ms": 17,
     "buyuk_aralar": [
      {
-      "d": 25,
-      "tBas": 275
-     },
-     {
-      "d": 366.5,
-      "tBas": 666
+      "d": 424.8,
+      "tBas": 716
      }
     ],
     "iz": {
@@ -151,24 +143,24 @@
      "flGizli": true,
      "govdeAkista": "static",
      "scrollY": 0,
-     "kalanSinif": ""
+     "kalanSinif": "t-nostars"
     }
    },
    "son": {
     "yol": "isinlanma",
-    "sure_ms": 456,
-    "tepe_ms": 254,
+    "sure_ms": 444,
+    "tepe_ms": 253,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 33,
+    "takas_gap_ms": 17,
     "buyuk_aralar": [
      {
-      "d": 33.2,
-      "tBas": 300
+      "d": 133.1,
+      "tBas": 416
      },
      {
-      "d": 366.5,
-      "tBas": 667
+      "d": 33.5,
+      "tBas": 450
      }
     ],
     "iz": {
@@ -176,7 +168,7 @@
      "flGizli": true,
      "govdeAkista": "static",
      "scrollY": 0,
-     "kalanSinif": ""
+     "kalanSinif": "t-nostars"
     }
    }
   },
@@ -185,7 +177,7 @@
  },
  "B_azalt": {
   "yol": "sade",
-  "sure_ms": 290,
+  "sure_ms": 289,
   "film": "atlandi",
   "gecti": true
  },
@@ -235,11 +227,11 @@
     "hiza_px": 11,
     "yazi": {
      "ibare": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      },
      "gec": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      }
     }
@@ -253,11 +245,11 @@
     "hiza_px": 11,
     "yazi": {
      "ibare": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      },
      "gec": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      }
     }
@@ -271,28 +263,28 @@
     "hiza_px": 11,
     "yazi": {
      "ibare": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      },
      "gec": {
-      "aile": "system-ui, sans-serif",
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
       "punto": "14px"
      }
     }
    }
   },
   "sonme": {
-   "sonme_ms": 282,
+   "sonme_ms": 156,
    "opaklik": "0"
   },
   "hiza_px": 11,
   "yazi": {
    "ibare": {
-    "aile": "system-ui, sans-serif",
+    "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "punto": "14px"
    },
    "gec": {
-    "aile": "system-ui, sans-serif",
+    "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "punto": "14px"
    }
   },

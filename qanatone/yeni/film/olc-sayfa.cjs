@@ -75,6 +75,8 @@ async function kosum(browser, yol) {
   await page.setViewport({ width: 1440, height: 900 });
   const cdp = await page.target().createCDPSession();
   await page.goto(SUNUCU + yol, { waitUntil: 'networkidle0', timeout: 60000 });
+  /* GIZLE=secici — TESHIS KOLU: bolum gizlenip ayni tur olculur (pay atfi) */
+  if (process.env.GIZLE) await page.addStyleTag({ content: `${process.env.GIZLE}{display:none!important}` });
   await page.evaluate(KAYITCI);
   await page.bringToFront();
   await page.mouse.move(720, 450);

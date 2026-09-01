@@ -1,0 +1,926 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-01T21:19:31.513Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "tekrar": 3,
+ "esik": {
+  "p95_ms": 20,
+  "takilma_esik_ms": 50,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03
+ },
+ "hukum": "GECTI",
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/en/bulten/donusum-oranlari-sektor-sektor/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 176,
+     "tur_ms": 1550,
+     "p95_ms": 16.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3066,
+      "takilma_sayi": 1,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1005.5999755859375,
+     "toplam_px": 1006
+    },
+    {
+     "kare": 177,
+     "tur_ms": 1558,
+     "p95_ms": 16.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1005.5999755859375,
+     "toplam_px": 1006
+    },
+    {
+     "kare": 181,
+     "tur_ms": 1541,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1005.5999755859375,
+     "toplam_px": 1006
+    }
+   ],
+   "p95_medyan": 16.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    1,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/bulten/google-ads-maliyetleri-2026/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 185,
+     "tur_ms": 1566,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1032.800048828125,
+     "toplam_px": 1033
+    },
+    {
+     "kare": 186,
+     "tur_ms": 1566,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1032.800048828125,
+     "toplam_px": 1033
+    },
+    {
+     "kare": 190,
+     "tur_ms": 1591,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1032.800048828125,
+     "toplam_px": 1033
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 187,
+     "tur_ms": 1616,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1066.4000244140625,
+     "toplam_px": 1066
+    },
+    {
+     "kare": 193,
+     "tur_ms": 1616,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1066.4000244140625,
+     "toplam_px": 1066
+    },
+    {
+     "kare": 191,
+     "tur_ms": 1616,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1066.4000244140625,
+     "toplam_px": 1066
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/bulten/talebe-bes-dakikada-donmek/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 233,
+     "tur_ms": 1949,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1332.800048828125,
+     "toplam_px": 1333
+    },
+    {
+     "kare": 234,
+     "tur_ms": 1958,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1332.800048828125,
+     "toplam_px": 1333
+    },
+    {
+     "kare": 231,
+     "tur_ms": 1949,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 1332.800048828125,
+     "toplam_px": 1333
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 237,
+     "tur_ms": 2008,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1380.800048828125,
+     "toplam_px": 1381
+    },
+    {
+     "kare": 237,
+     "tur_ms": 2008,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1380.800048828125,
+     "toplam_px": 1381
+    },
+    {
+     "kare": 242,
+     "tur_ms": 2024,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1380.800048828125,
+     "toplam_px": 1381
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "js_bayt": 4061,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 184,
+     "tur_ms": 1566,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1017.5999755859375,
+     "toplam_px": 1018
+    },
+    {
+     "kare": 183,
+     "tur_ms": 1566,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1017.5999755859375,
+     "toplam_px": 1018
+    },
+    {
+     "kare": 184,
+     "tur_ms": 1566,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1017.5999755859375,
+     "toplam_px": 1018
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/bab-ic-mimarlik/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 274,
+     "tur_ms": 2283,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1634.4000244140625,
+     "toplam_px": 1634
+    },
+    {
+     "kare": 271,
+     "tur_ms": 2283,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1634.4000244140625,
+     "toplam_px": 1634
+    },
+    {
+     "kare": 276,
+     "tur_ms": 2299,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1634.4000244140625,
+     "toplam_px": 1634
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/charles-schwab/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 276,
+     "tur_ms": 2324,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    },
+    {
+     "kare": 276,
+     "tur_ms": 2333,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    },
+    {
+     "kare": 276,
+     "tur_ms": 2324,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/cmblu-energy/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 248,
+     "tur_ms": 2149,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 257,
+     "tur_ms": 2166,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 255,
+     "tur_ms": 2158,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/kononenko-group/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 257,
+     "tur_ms": 2149,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 254,
+     "tur_ms": 2149,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 257,
+     "tur_ms": 2149,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/mercedes-benz/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 273,
+     "tur_ms": 2341,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    },
+    {
+     "kare": 281,
+     "tur_ms": 2349,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    },
+    {
+     "kare": 270,
+     "tur_ms": 2341,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1666.4000244140625,
+     "toplam_px": 1666
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/skyclinics/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 249,
+     "tur_ms": 2158,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 255,
+     "tur_ms": 2141,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 256,
+     "tur_ms": 2149,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/en/projeler/terawulf/",
+   "js_bayt": 3518,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 255,
+     "tur_ms": 2149,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 255,
+     "tur_ms": 2149,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    },
+    {
+     "kare": 252,
+     "tur_ms": 2166,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1506.4000244140625,
+     "toplam_px": 1506
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  }
+ ]
+}
