@@ -67,6 +67,23 @@ const DEVIR = {
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* TUR 5 · HIKAYE METINLERI (2 Eyl 2026). Alti cumle, alti durak.
+   PENCERELER ELLE SECILMEDI: durgun anlar olc-kamera-hizi.py ile
+   olculdu (160x90 gri ardisik kare farki), harita ve gerekceler
+   yeni/film/TUR5-METIN-HARITASI.md. Cumleler HTML katmaninda (videoya
+   metin basilmaz); gorunurlugu MOTOR surer (kaydirma konumuna bagli,
+   zamanlayici yok — geri sarilirsa geri gelir). Bir anda tek cumle:
+   pencereler ayrik, en yakin ikisi arasi 96+ sn. 2. cumle Enes onayina
+   acik (haritadaki not). EN cevirileri ONERI — Enes gormedi. */
+const SOZLER = [
+  { bas: 0.3, son: 4.0, tr: 'Kaynak hep vardı.', en: 'The source was always there.' },
+  { bas: 17.8, son: 21.0, tr: 'Önce ağzını bulursun.', en: 'First, you find its mouth.' },
+  { bas: 70.7, son: 73.4, tr: 'Kazmadan önce ölçen kazanır.', en: 'Who measures before digging, wins.' },
+  { bas: 103.9, son: 106.7, tr: 'Yerin altında kayıp yok.', en: 'Nothing is lost underground.' },
+  { bas: 201.5, son: 204.3, tr: 'Kıt olan ölçülür.', en: 'What is scarce gets measured.' },
+  { bas: 228.7, son: 232.4, tr: 'Şehirler kanalın üstüne kurulur.', en: 'Cities are built over the canal.' },
+];
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
@@ -93,6 +110,14 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
         {/* DONEN CIZGI (Enes, 31 Agu gece): kaynak eski site .void .ring —
             fl-halka ayni dil, degerler bekcide (film-halka.test.mjs) */}
         <a class="fl-gec" href="#fl-son"><i class="fl-halka" aria-hidden="true"></i><span>{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</span></a>
+      </div>
+      {/* TUR 5 · hikaye cumleleri: motor `.fl-soz-gor` sinifiyla surer;
+          motorsuz/azaltma yolunda CSS hepsini onsoz blogu olarak basar
+          (metin kaybolmaz). Yerlesim film.css "HIKAYE METINLERI". */}
+      <div class="fl-sozler">
+        {SOZLER.map((z) => (
+          <p class="fl-soz" data-bas={z.bas} data-son={z.son}>{dil === 'en' ? z.en : z.tr}</p>
+        ))}
       </div>
       {SAHNELER.map((s, j) => (
         <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
