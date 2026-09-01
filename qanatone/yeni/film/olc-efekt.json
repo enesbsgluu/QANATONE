@@ -1,59 +1,59 @@
 {
  "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
- "olcum": "2026-09-01T00:21:41.088Z",
- "tarayici": "brave",
- "headless": false,
+ "olcum": "2026-09-01T15:03:50.413Z",
+ "tarayici": "chrome",
+ "headless": true,
  "tekrar": 3,
  "kirmizi_A": {
-  "sure_ms": 721,
+  "sure_ms": 717,
   "yakalandi": true
  },
  "kirmizi_B": {
-  "dusen": 1,
+  "dusen": 2,
   "yakalandi": true
  },
  "A": {
   "tekrar": [
    {
     "yol": "tv",
-    "sure_ms": 336,
+    "sure_ms": 482,
     "fazlar": {
-     "cokus": 135,
-     "parlama": 52,
-     "acilis": 149
+     "cokus": 145,
+     "parlama": 123,
+     "acilis": 214
     },
-    "dusen": 0,
-    "zoom_dusen": 0,
+    "dusen": 4,
+    "zoom_dusen": 12,
     "devirDurum": "tam"
    },
    {
     "yol": "tv",
-    "sure_ms": 330,
+    "sure_ms": 558,
     "fazlar": {
-     "cokus": 132,
-     "parlama": 57,
-     "acilis": 142
+     "cokus": 151,
+     "parlama": 114,
+     "acilis": 294
     },
-    "dusen": 0,
-    "zoom_dusen": 7,
+    "dusen": 5,
+    "zoom_dusen": 13,
     "devirDurum": "tam"
    },
    {
     "yol": "tv",
-    "sure_ms": 336,
+    "sure_ms": 472,
     "fazlar": {
-     "cokus": 134,
-     "parlama": 57,
-     "acilis": 145
+     "cokus": 145,
+     "parlama": 100,
+     "acilis": 227
     },
-    "dusen": 0,
-    "zoom_dusen": 0,
+    "dusen": 4,
+    "zoom_dusen": 14,
     "devirDurum": "tam"
    }
   ],
-  "medyan_sure": 336,
-  "medyan_dusen": 0,
-  "gecti": true
+  "medyan_sure": 482,
+  "medyan_dusen": 4,
+  "gecti": false
  },
  "A_azalt": {
   "yol": "sade",
@@ -65,12 +65,17 @@
   "noktalar": {
    "bas": {
     "yol": "isinlanma",
-    "sure_ms": 446,
-    "tepe_ms": 252,
+    "sure_ms": 444,
+    "tepe_ms": 253,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 9,
-    "buyuk_aralar": [],
+    "takas_gap_ms": 8,
+    "buyuk_aralar": [
+     {
+      "d": 308.3,
+      "tBas": 583
+     }
+    ],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -82,11 +87,16 @@
    "orta": {
     "yol": "isinlanma",
     "sure_ms": 446,
-    "tepe_ms": 253,
+    "tepe_ms": 254,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 17,
-    "buyuk_aralar": [],
+    "takas_gap_ms": 8,
+    "buyuk_aralar": [
+     {
+      "d": 433.2,
+      "tBas": 708
+     }
+    ],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -97,12 +107,21 @@
    },
    "son": {
     "yol": "isinlanma",
-    "sure_ms": 448,
-    "tepe_ms": 254,
+    "sure_ms": 462,
+    "tepe_ms": 261,
     "toplanma_dusen": 0,
     "sonus_dusen": 0,
-    "takas_gap_ms": 17,
-    "buyuk_aralar": [],
+    "takas_gap_ms": 33,
+    "buyuk_aralar": [
+     {
+      "d": 33.4,
+      "tBas": 317
+     },
+     {
+      "d": 499.7,
+      "tBas": 816
+     }
+    ],
     "iz": {
      "film": "atlandi",
      "flGizli": true,
@@ -117,7 +136,7 @@
  },
  "B_azalt": {
   "yol": "sade",
-  "sure_ms": 288,
+  "sure_ms": 300,
   "film": "atlandi",
   "gecti": true
  },
@@ -127,8 +146,8 @@
   "gecti": true
  },
  "halka_filmsonu_bilgi": {
-  "dusen": 12,
-  "taban": 2,
+  "dusen": 0,
+  "taban": 0,
   "not": "iframe (eski sayfa) yuklu — idle JS yuku; ana olcum ortada"
  },
  "halka": {
@@ -164,7 +183,7 @@
     "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
     "metin": "KAYDIR",
-    "hiza_px": 10.8,
+    "hiza_px": 11,
     "yazi": {
      "ibare": {
       "aile": "system-ui, sans-serif",
@@ -182,7 +201,7 @@
     "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
     "metin": "KAYDIR",
-    "hiza_px": 10.8,
+    "hiza_px": 11,
     "yazi": {
      "ibare": {
       "aile": "system-ui, sans-serif",
@@ -200,7 +219,7 @@
     "okAnim": "fl-ok-kay",
     "okSure": "3.6s",
     "metin": "KAYDIR",
-    "hiza_px": 10.8,
+    "hiza_px": 11,
     "yazi": {
      "ibare": {
       "aile": "system-ui, sans-serif",
@@ -214,10 +233,10 @@
    }
   },
   "sonme": {
-   "sonme_ms": 135,
+   "sonme_ms": 196,
    "opaklik": "0"
   },
-  "hiza_px": 10.8,
+  "hiza_px": 11,
   "yazi": {
    "ibare": {
     "aile": "system-ui, sans-serif",
@@ -236,5 +255,5 @@
   "metin": "KAYDIR",
   "gecti": true
  },
- "hukum": "GECTI"
+ "hukum": "KALDI"
 }

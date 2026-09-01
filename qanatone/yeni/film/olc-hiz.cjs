@@ -140,7 +140,10 @@ async function tur(browser, tavan) {
      birincinin indirdigini bedava buluyor ve takilma sayilari kosumlar
      arasinda kiyaslanamaz hale geliyor. Ilk ziyaretcinin kosulu budur. */
   await cdp.send('Network.clearBrowserCache').catch(() => {});
-  await page.goto(`${SUNUCU}/yeni/film/?tavan=${tavan}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  /* SORGU: daraltma deneyleri icin ek URL parametreleri (or. SORGU=tampon=0).
+     Ciktiya da damgalanir — hangi kollarla olculdugu tartisilmasin. */
+  const SORGU = process.env.SORGU ? `&${process.env.SORGU}` : '';
+  await page.goto(`${SUNUCU}/yeni/film/?tavan=${tavan}${SORGU}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForFunction('window.__fl && window.__fl.sahne()[0].durum === "hazir"', { timeout: 90000 });
   await page.evaluate(KAYITCI);
   await page.bringToFront();
@@ -400,6 +403,7 @@ async function tur(browser, tavan) {
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
+    sorgu: process.env.SORGU || null,
     degismezler: { takilma_sifir: true, kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS,
       taban_tavan: Number(process.env.TABAN_TAVAN ?? 1) },
     takilma_esigi_ms: BOSLUK_ESIK_MS, durulan_noktalar: DURAKLAR,

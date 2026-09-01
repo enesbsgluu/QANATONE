@@ -297,6 +297,14 @@ export function baslat(bolum: HTMLElement): () => void {
   const MOMENT = oku('moment', 2, AYAR.moment);
   /* hizalama kolu (30 Agu 2026, TUR 7): 0 = kapali (varsayilan). */
   const HIZALA = oku('hizala', 5, AYAR.hizala);
+  /* tampon OLCUM KOLU (?tampon=0, 2 Eyl daraltma turu): yukleme
+     tamponunu devre disi birakir — daraltma deneyleri tek degiskenle
+     kossun diye. Urun varsayilani 1 (acik); DOM'dan okunmaz, yalniz
+     URL (yanlislikla kapali kalamaz). */
+  const TAMPON_DEVREDE = (() => {
+    const u = new URLSearchParams(location.search).get('tampon');
+    return u === null || Number(u) !== 0;
+  })();
   /* hiz tavani: URL > DOM > varsayilan; 0 = kapali */
   const TAVAN = (() => {
     const u = new URLSearchParams(location.search).get('tavan');
@@ -593,7 +601,7 @@ export function baslat(bolum: HTMLElement): () => void {
   let sonKareMs = 0;
   let ilkKareGecti = false;
   /* yukleme tamponu: acilana kadar hedef kilit konumunda tutulur */
-  let tamponAcik = false;
+  let tamponAcik = !TAMPON_DEVREDE;   /* ?tampon=0 -> bastan acik (devre disi) */
   let tamponT: number | null = null;
   let hedefHamOnce = 0;   /* kelepce ONCESI hedef (teleport ayraci icin) */
   let atlaIstek = false;
