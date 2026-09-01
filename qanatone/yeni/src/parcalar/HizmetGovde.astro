@@ -375,7 +375,29 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
      paused doğar, IO göründüğünde oynatır. Demosuz beş hizmet
      sayfasında seçici boş döner, iş yapılmaz. .tsa: TradeSelf
      amblemi (A2) aynı kapıyı kullanır (kaynağın .mkact.on eşi). */
-  const dl = document.querySelectorAll('.hd-demo,.tsa');
+  /* SURUCU KURALI (Enes, 5 Eyl 2026): bir sureci anlatan hareket
+     KAYDIRMAYA baglanir; dongu yok. Demo animasyonlari (CSS, zaman
+     tabanli, --akps ile duraklatilmis) ViewTimeline'a baglanir: her
+     kartin hareketleri ayni toplam sureye (T) normalize edilir ki goreli
+     tempolar korunsun (WAAPI normalizasyonu: gecikme+sure*tekrar orani
+     cizelgeye yayilir); sonsuz tekrar cizelgede DURUYORDU (olculdu),
+     tekrar sayisi T/sure'den sonlu verilir. Desteksiz tarayicida eski
+     IO play/pause kalir. */
+  const sur = (kok: Element, ozne: Element): boolean => {
+    if (!('ViewTimeline' in window)) return false;
+    const vt = new (window as any).ViewTimeline({ subject: ozne });
+    (kok as HTMLElement).style.setProperty('--akps', 'running');
+    for (const a of kok.getAnimations({ subtree: true })) {
+      const t = a.effect!.getTiming();
+      a.effect!.updateTiming({ iterations: Math.round((16e3 - +(t.delay || 0)) / (+(t.duration as number) || 1e3)) || 1 });
+      (a as any).timeline = vt;
+    }
+    return true;
+  };
+  /* .hd-demo: kaydirma surucusu (surec anlatimi); .tsa: ISTISNA (amblem,
+     dekor — Enes 5 Eyl) IO play/pause'da kalir. */
+  const demolar = [...document.querySelectorAll('.hd-demo')].filter((d) => !sur(d, d));
+  const dl = [...demolar, ...document.querySelectorAll('.tsa')];
   if (dl.length) {
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => {
