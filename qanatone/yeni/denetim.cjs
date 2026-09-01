@@ -32,6 +32,38 @@ const tumSayfalar = [];
 const oku = p => fs.readFileSync(p, 'utf8');
 const rel = p => path.relative(KOK, p).replace(/\\/g, '/');
 
+/* ---- MEDYA KURULUM KAPISI (GECE TUR 2c, 1-2 Eyl 2026) ----
+   Film medyasi (~680 MB) bilincli git disi; onu getiren KURULUM ADIMI
+   `yeni/film/kur-medya.cjs`. Denetim o adimin ARDINA konur: adim
+   kosmamissa (damga yok / manifest'e uymuyor / dosya eksik) G2 ve FM1
+   sebebini ADIYLA basar — eski hal "dosya-yok" yigini basiyordu, temiz
+   klonda kirmizinin sebebi okunmuyordu. Hizli yoklama: damga + varlik +
+   bayt (sha1'i kurulum adimi ve FM1'in kendi kunye zinciri dogrular). */
+const MEDYA = (() => {
+  const manifestY = path.join(__dirname, 'film', 'medya-manifest.json');
+  const damgaY = path.join(__dirname, 'film', '.medya-kurulum.json');
+  const KUR = 'once `node yeni/film/kur-medya.cjs` kos (kaynak: arguman ya da MEDYA_KAYNAK)';
+  if (!fs.existsSync(manifestY))
+    return { kuruldu: false, mesaj: 'medya-manifesti-yok: ana agacta `kur-medya.cjs --damgala` kosulmali' };
+  if (!fs.existsSync(damgaY))
+    return { kuruldu: false, mesaj: 'medya-kurulmamis: ' + KUR };
+  try {
+    /* \r ayiklanir — git autocrlf manifesti CRLF cikarabilir, damga LF
+       govdenin sha1'ini tasir (kur-medya.cjs ile ayni normalizasyon). */
+    const govde = Buffer.from(fs.readFileSync(manifestY, 'utf8').replace(/\r/g, ''));
+    const D = JSON.parse(fs.readFileSync(damgaY, 'utf8'));
+    if (D.manifest_sha1 !== require('crypto').createHash('sha1').update(govde).digest('hex'))
+      return { kuruldu: false, mesaj: 'medya-damgasi-bayat (manifest degismis): ' + KUR };
+    const M = JSON.parse(govde);
+    for (const d of M.dosya) {
+      const p = path.join(__dirname, 'public', 'varlik', 'film', d.ad);
+      if (!fs.existsSync(p) || fs.statSync(p).size !== d.bayt)
+        return { kuruldu: false, mesaj: 'medya-eksik(' + d.ad + '): ' + KUR };
+    }
+    return { kuruldu: true, mesaj: '' };
+  } catch (e) { return { kuruldu: false, mesaj: 'medya-damgasi-okunamadi: ' + e.message }; }
+})();
+
 /* ---- PROTOTIP AYRIMI (31 Agu 2026, PROLOG-ISKELET 6. adim) ----
    `public/prototip/**` altindakiler URUN SAYFASI DEGIL, OLCUM DUZENEGI:
    kendi kopya nav'i, kendi three.js surucusu, kendi varlik yolu var;
@@ -157,9 +189,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    Brave'de calisiyor" gozlemi bir tur boyunca teshis edilemedi. 7 B
    ugruna bir teshis dalini kesmek, ayni korlugu geri getirirdi. Dal
    listesi R15'te kilitli.
-     Yeni tavan 12,5 KB, kalan pay ~505 B. */
+     Yeni tavan 12,5 KB, kalan pay ~505 B.
+
+   FILM SAYFASINA AYRI TAVAN — 10.240 -> 11.264 B (1-2 Eyl gece, giris
+   sahnesi sokumu). BU BUYUME DEGIL, MUHASEBE KAYMASI, RAKAMLARIYLA:
+     sokum oncesi film sayfasi 10.196 B = prefetch 2.253 + surucu 7.423
+       + satir ici 520 (nvS 224 + PRDag acilisi 296)
+     sokum sonrasi           10.691 B = prefetch 2.253 + surucu 8.214
+       + satir ici 224
+   Surucu neden buyudu: Vite ortak yardimciyi (__vitePreload zinciri,
+   791 B) prolog-ada parcasina koymus, surucu onu ORADAN statik ithal
+   ediyordu — o bayt sayfaya bagli olmadigi icin J1 disiydi. Ada gidince
+   yardimci sayfaya bagli surucuye gomuldu: ayni bayt, sayilan tarafa
+   gecti. Ziyaretcinin toplam yuku ise KUCULDU: prolog zincirinin alti
+   parcasi (ada 1,8 + gl 17,2 + halka + isci + metal + paralaks,
+   ~50 KB) artik hic uretilmiyor, PRDag acilisi (296 B) sayfadan gitti.
+   Yeni tavan 11 KB; kalan pay 573 B = TUR 5 hikaye metinlerinin payi. */
   const TAVAN = 10 * 1024;
   const TAVAN_ANA = 12.5 * 1024;
+  const TAVAN_FILM = 11 * 1024;
   const kusur = [];
   let enBuyuk = 0, anaToplam = 0;
   for (const p of sayfalar) {
@@ -173,11 +221,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
       if (!/application\/ld\+json/.test(m[1])) toplam += Buffer.byteLength(m[2]);
     const anaMi = /^(index|en[\\/]index)[.]html$/.test(rel(p));
+    const filmMi = /^(film|en[\\/]film)[\\/]index[.]html$/.test(rel(p));
     if (anaMi) anaToplam = toplam;
-    if (toplam > (anaMi ? TAVAN_ANA : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
+    if (toplam > (anaMi ? TAVAN_ANA : filmMi ? TAVAN_FILM : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
     if (!anaMi) enBuyuk = Math.max(enBuyuk, toplam);
   }
-  ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B · öbür sayfalar ≤ ${TAVAN} B`,
+  ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B · film ≤ ${TAVAN_FILM} B · öbür sayfalar ≤ ${TAVAN} B`,
      kusur.length === 0,
      kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B`);
 }
@@ -988,8 +1037,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
             continue;
           }
           if (!u.startsWith('/yeni/')) { kusur.push(rel(p2) + ':yabanci:' + u); continue; }
-          if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, ''))))
-            kusur.push(rel(p2) + ':kayip:' + u);
+          if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, '')))) {
+            /* TUR 2c: kayip dosya git-disi film medyasindansa sebep
+               kurulum adimidir — adiyla basilir, yigin basilmaz. */
+            if (!MEDYA.kuruldu && u.startsWith('/yeni/varlik/film/'))
+              kusur.push(MEDYA.mesaj);
+            else kusur.push(rel(p2) + ':kayip:' + u);
+          }
         }
       }
       ol('G2 · gorseller kendi alanimizdan (/yeni/) + dosyalar diskte',
@@ -1667,6 +1721,21 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
+/* ---- GIRIS SAHNESI UYKU KAPISI (1-2 Eyl 2026 gece, Enes karari) ----
+   "Giris sahnesindeki logonun nav'a yukselme kismini cikart. Direkt
+   video girisiyle baslayacak ve hikaye anlatisi baslayacak." — PRDag +
+   amblem dogusu/nav'a oturma (halka.ts zinciri) film sayfasindan
+   SOKULDU. Konusu sayfadan kalkan bes kural (R12, R14, R15, R16, R18)
+   SILINMEDI, UYKUYA ALINDI: sayfalardan birinde `.pr` bolumu yeniden
+   dogarsa besi de kendiliginden geri doner — sessiz curume yok. Uyku
+   sessiz de degil: asagida adiyla BASILIR. Kaynagi hala diskte duran
+   prolog kodunun (src/prolog/, prolog.css, img/prolog) kaderi TUR 4
+   sokum kesfinin konusu; kaynak-dosya kurallari (R17, R19-R22) o
+   kesif kapanana kadar yerinde. */
+const PROLOG_SAYFADA = sayfalar.some((p) => /<section class="pr"/.test(oku(p)));
+if (!PROLOG_SAYFADA)
+  console.log('  --  giris sahnesi sokuk (1-2 Eyl, Enes): R12/R14/R15/R16/R18 uykuda — sayfada .pr dogarsa geri donerler');
+
 /* R12 · PROLOG SOZLESMESI (CODE-TALIMATI-PROLOG-1 kapisi).
    Sozlesme metinden degil CIKTIDAN olculuyor: yedi katman ve hepsi
    TEMBEL · her katmanin mobil kaynagi var · cumle ham HTML'de ·
@@ -1687,7 +1756,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    Hareketi veren dugum de degisti: .pr-kat -> .pr-sar (katmanlar artik
    kendi sinir kutularina kirpik, yer degistirme KARENIN yuzdesi
    olmali). Durdurma kurali onunla ayni dugumde. */
-{
+if (PROLOG_SAYFADA) {
   const kusur = [];
   /* GECE TUR 2b (1-2 Eyl, Enes karari): prolog ana sayfadan FILM
      sayfasina tasindi (ana sayfa H18 icin hafifledi; akis tek parca).
@@ -1745,7 +1814,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 
    Genislikler ve kutular ELLE yazilamaz: kunye ile diskteki dosyalar
    birebir tutmali. Kunye bayatladigi anda kural kirmizi doner. */
-{
+if (PROLOG_SAYFADA) {
   const kusur = [];
   const pkok = path.join(__dirname, 'src', 'prolog');
   const S = JSON.parse(fs.readFileSync(path.join(pkok, 'sahne.json'), 'utf8'));
@@ -1883,7 +1952,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          konsol ucucu, oznitelik ekran goruntusunden bile okunur;
      (c) yedek yolun KENDI surucusu yoklaniyor: animation-timeline
          yoksa sahne sabit karedir, bu ayri bir hukumdur. */
-{
+if (PROLOG_SAYFADA) {
   const SEBEP = [
     'atla-oturum', 'hareket-azaltma', 'gl-modulu-inmedi',
     'sahne-yapisi-yok', 'worker-yok', 'offscreen-yok', 'tuval-olcusuz',
@@ -1919,7 +1988,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      (c) surucu modulu ciktida var ve `.pr-js` sinifini kuruyor.
    Kareler (`@keyframes pr-kay`) TEK YERDE olmali: kural, ikinci bir
    kopya dogarsa degil, SURUCU KAYBOLURSA kirmizi doner. */
-{
+if (PROLOG_SAYFADA) {
   const kusur = [];
   const pc = fs.readFileSync(path.join(__dirname, 'src', 'stil', 'prolog.css'), 'utf8');
   if (!/@supports\s+not\s*\(animation-timeline:\s*view\(\)\)/.test(pc))
@@ -2033,7 +2102,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      (e) parca sayfaya baglanmiyor ve tavanini asmiyor; durak 2
          kapaliyken parca HIC uretilmemeli (Vite `if (false)` dalini
          eler, kapali durak sifir bayt eder). */
-{
+if (PROLOG_SAYFADA) {
   const kusur = [];
   const pkok = path.join(__dirname, 'src', 'prolog');
   const A = JSON.parse(fs.readFileSync(path.join(pkok, 'amblem.json'), 'utf8'));
@@ -2786,6 +2855,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const uretimY = path.join(__dirname, 'film', 'uretim.json');
     if (!fs.existsSync(kanonY)) kusur.push('kanon.json-yok');
     if (!fs.existsSync(uretimY)) kusur.push('uretim.json-yok (film olcum dizini eksik)');
+    /* TUR 2c: medya kurulum kapisi — adim kosmamissa sebep ADIYLA
+       kirmizi, "dosya-yok" yigini degil (temiz klon dersi). */
+    if (!MEDYA.kuruldu) kusur.push(MEDYA.mesaj);
     if (kusur.length) { ol('FM1 · film iskeleti: girdi eksik', false, kusur.join(' ')); return; }
     const K = JSON.parse(fs.readFileSync(kanonY, 'utf8'));
     const U = JSON.parse(fs.readFileSync(uretimY, 'utf8'));

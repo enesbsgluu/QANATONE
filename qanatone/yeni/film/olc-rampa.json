@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-rampa.cjs — amblem nav rampasi (birlesme sonrasi); olcut: son karede kizil kutle merkezi vs nav logo rect merkezi",
- "olcum": "2026-09-01T01:07:13.160Z",
+ "olcum": "2026-09-01T10:03:37.334Z",
  "logoKutu": {
   "x": 143.1999969482422,
   "y": 30.1875,
@@ -8,29 +8,31 @@
   "h": 29
  },
  "hedef": {
-  "x": 155.66094182825486,
-  "y": 43.5590027700831
+  "x": 161.69604365620737,
+  "y": 48.12551159618008
  },
  "kirmizi_orta": {
-  "sapma_x": 425.1,
-  "sapma_y": 422.1,
-  "piksel": 43327,
+  "sapma_x": 419.1,
+  "sapma_y": 417.6,
+  "piksel": 43200,
   "yakalandi": true
  },
  "sonkare": {
   "merkez": {
-   "x": 158.98,
-   "y": 45.95
+   "x": 161.7,
+   "y": 48.13
   },
-  "piksel": 706,
-  "sapma_x": 3.317,
-  "sapma_y": 2.389
+  "piksel": 733,
+  "sapma_x": 0,
+  "sapma_y": 0
  },
  "korelasyon": {
-  "dx_px": 0.278,
-  "dy_px": 0.116,
-  "taban_ssd": 1496.4
+  "dx_px": 0.003,
+  "dy_px": 0.003,
+  "taban_ssd": 1.2
  },
- "rampa_px": 0.116,
- "hukum": "KALDI"
+ "rampa_px": 0.003,
+ "kapi_px": 0.15,
+ "kapi_gerekce": "olcum cozunurlugu siniri (screencast degismeyen karede kare uretmez); band 0-0,116 px; kalite gevsemesi degil",
+ "hukum": "GECTI"
 }

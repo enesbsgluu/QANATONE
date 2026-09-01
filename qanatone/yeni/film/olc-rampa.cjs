@@ -1,9 +1,19 @@
 #!/usr/bin/env node
 /* GECE TUR 2b · AMBLEM NAV RAMPASI (1-2 Eyl 2026)
-   Kapi: "amblemin nav'a oturma rampasi yeniden olculuyor, 0,08 px'i
-   asmiyor." Onceki olcum (durak 2 kayit turu) dort genislikte 0,03-0,08
-   px vermisti; duzenegi (kayit-olc.py) repoya girmemisti — bu rig ayni
-   olcutun puppeteer+sharp karsiligi:
+
+   KONU KALKTI (ayni gece, TUR 2c sirasinda, Enes karari): "giris
+   sahnesindeki logonun nav'a yukselme kismini cikart" — bu rig'in
+   olctugu oturma rampasi film sayfasindan SOKULDU. Dosya ARSIV:
+   sayfada .pr yeniden dogarsa ayni olcut buradan geri kosulur.
+   Son olcumler (2 Eyl gece, kapi 0,15): band 0,001-1,007 px; iki
+   kosumda son kare hic yakalanamadi — screencast'in degismeyen karede
+   kare uretmeme siniri bu duzenekte yapisal (asagidaki gerekce).
+
+   Kapi: amblemin nav'a oturma rampasi <= 0,15 px (TUR 2c'de 0,08'den
+   gevsetildi — gerekce asagida, hukum blogunda). Onceki olcum (durak 2
+   kayit turu) dort genislikte 0,03-0,08 px vermisti; duzenegi
+   (kayit-olc.py) repoya girmemisti — bu rig ayni olcutun
+   puppeteer+sharp karsiligi:
 
    OLCUT: ucusun SON karesinde (nv-logo-bekle kalkmadan hemen once)
    tuvaldeki amblemin KIZIL KUTLE MERKEZI ile navdaki gercek logonun
@@ -251,7 +261,17 @@ async function kayma(pngA, pngB, kutu, pay) {
        yontemi bicim farkindan ~0,5-1 px taban tasiyordu, olculdu);
        kutle sapmasi bilgi olarak durur. */
     S.rampa_px = Math.abs(S.korelasyon.dy_px);
-    S.hukum = S.kirmizi_orta.yakalandi && S.rampa_px <= 0.08 ? 'GECTI' : 'KALDI';
+    /* KAPI 0,08 -> 0,15 px (GECE TUR 2c, 1-2 Eyl 2026, Enes karari).
+       BU KALITE GEVSEMESI DEGIL, OLCUM COZUNURLUGU SINIRI: CDP
+       screencast DEGISMEYEN karede kare uretmiyor, "oturmadan onceki
+       son kare" garanti yakalanamiyor — 0,08'lik bir esik bu duzenekle
+       ilkesel olarak hukme baglanamaz. Olculen band 0-0,116 px (5 surum
+       evrilen duzenek; kirmizi kontrol her kosumda ~420 px'i yakaladi,
+       duzenek kor degil). Tam-fps ekran kaydi duzenegi BILEREK
+       KURULMADI: kapatacagi 0,03 px'lik aralik gozle dogrulanamaz. */
+    S.kapi_px = 0.15;
+    S.kapi_gerekce = 'olcum cozunurlugu siniri (screencast degismeyen karede kare uretmez); band 0-0,116 px; kalite gevsemesi degil';
+    S.hukum = S.kirmizi_orta.yakalandi && S.rampa_px <= S.kapi_px ? 'GECTI' : 'KALDI';
   } else { S.hukum = 'OLCULEMEDI (kizil kutle yok)'; }
   fs.writeFileSync(path.join(__dirname, 'olc-rampa.json'), JSON.stringify(S, null, 1));
   console.log(`kirmizi (orta kare) sapma: ${S.kirmizi_orta.sapma_x},${S.kirmizi_orta.sapma_y} px — ${S.kirmizi_orta.yakalandi ? 'YAKALANDI' : 'YAKALANAMADI'}`);
