@@ -8,29 +8,24 @@
    noindex kabuk geneli; sitemap/R8 disinda (KOK'suz canonical). */
 import Temel from '../layouts/Temel.astro';
 import Film from '../parcalar/Film.astro';
+import EskiGiris from '../parcalar/EskiGiris.astro';
 const canon = 'https://qanatone.netlify.app/yeni/film';
 ---
 {/* GOVDE = ESKI SITENIN GIRISI (31 Agu 2026, Enes): "Videonun son sahnesi
     eski — yani ilk versiyon — sitenin giris goruntusu. O siteye oturt.
     Siteyi yeni haline getirirken o versiyonu kullanacagiz zaten."
-    v2'deki SHHero (yeni tasarim) KALKTI: gorsel tutmama sebebi buydu —
-    devir /yeni tasarimina degil, videodaki karenin asli olan eski girise
-    oturmali. Zeminde bunun kopyasiz hali AYNI ORIGIN iframe: dist kokunde
-    eski site duruyor ("/" = eski giris), canli kokte de oyle. iframe src
-    GEC yazilir (fl-hazirla aninda, Film.astro surucusu) — film boyunca
-    845 KB'lik eski sayfa inmesin. Perde (#boot) sitenin KENDI oturum
-    bayragiyla atlanir (qanat-splash-seen): acilis torenini prolog filmi
-    ustlendi, devirde ikinci perde oynamaz.
-    NIHAI KURGUDA iframe YOK: film eski girisin kendisine gomulur (devir
-    kopyaya degil sayfanin kendisine devreder — v2 ilkesi). iframe yalniz
-    bu OLCUM ZEMININ govdesi; yerlesim karari Enes'te. */}
+    GECE TUR 2 (birlesme): iframe SOKULDU. Govde artik EskiGiris —
+    eski sitenin nav+hero'su DERLEMEDE kokten cekilip Shadow DOM'a
+    gomuluyor (kopya degil kaynaga bagli; ayrinti EskiGiris.astro).
+    Boot perdesi/oturum bayragi gereksizlesti (perde gomulmedi);
+    tubes devir tamamlaninca surucuden baslatilir. */}
 <Temel dil="tr" baslik="Film iskeleti — QANATONE"
   aciklama="Prolog filminin 39 kliplik scroll-scrub iskeleti; motor, dikiş, bütçe ve savurma ölçüm zemini. Ürün sayfası değildir."
   canonical={canon}>
   <h1 class="fl-gizli">Film iskeleti</h1>
   <Film dil="tr" />
   <div class="fl-govde" id="fl-govde">
-    <iframe id="fl-eski" title="QANATONE giriş" data-src="/" aria-hidden="true" tabindex="-1"></iframe>
+    <EskiGiris />
   </div>
 </Temel>
 
