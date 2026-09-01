@@ -82,5 +82,10 @@ export default defineConfig({
      ithal edilir, bu ES bicimi ister (IIFE kod bolmeyi desteklemez).
      Iscinin kendi eklenti hatti var - kunye soyucu orada da kosmali,
      yoksa sahne.json'in prozu metal parcasina iner. */
-  vite: { plugins: [kunyeyiSoy()], worker: { format: 'es', plugins: () => [kunyeyiSoy()] } }
+  vite: { plugins: [kunyeyiSoy()], worker: { format: 'es', plugins: () => [kunyeyiSoy()] },
+    /* GECE TUR 2b: prolog adasi (src/prolog/ada.ts) dinamik modul olarak
+       J1 DISI kalmali (motor emsali) — Rollup tek-kullanicili kucuk
+       dinamik importu Film chunk'ina inline edip J1'i 11,2K'ya tasidi
+       (olculdu). Ayri chunk zorlanir. */
+    build: { rollupOptions: { output: { manualChunks: (id) => (id.includes('/src/prolog/ada') ? 'prolog-ada' : undefined) } } } }
 });

@@ -86,80 +86,14 @@ const sozY = ((1 - SAHNE.soz.merkez[1]) / 2 * 100).toFixed(2);
     sahne yedek yola düşer. J1 tavanına giren tek satır bu. */}
 <script is:inline>
   try {
-    if (!matchMedia('(prefers-reduced-motion:reduce)').matches
-      && sessionStorage.getItem('pr1') !== '1')
+    if (sessionStorage.getItem('pr1') === '1')
+      document.documentElement.classList.add('pr-atla');
+    else if (!matchMedia('(prefers-reduced-motion:reduce)').matches)
       document.documentElement.classList.add('pr-gl');
   } catch (e) { /* gizli sekme: yedek yol çalışır */ }
 </script>
 
-<script>
-  /* ADA — prologun sayfaya inen tek betiği. Üç iş:
-     (1) OTURUMDA BİR KEZ: bayrak varsa `<html>`e `pr-atla` yazılır ve
-         sahne hiç kurulmaz (CSS `display:none`). Bayrağı "Geç" yazar.
-     (2) "GEÇ": bayrağı yazar ve gövdenin başına gider.
-     (3) 3B: `pr-gl` duruyorsa sahne modülünü ÇEKER. Modül J1/H3'ün
-         ölçtüğü `<script src>`/satır içi baytın dışında; kendi tavanı
-         denetimde R14.
-     DÜZEN OKUMASI YOK (H12): hedef `offsetTop` ile hesaplanmıyor,
-     gövdenin kendisine `scrollIntoView` deniyor. */
-  /* TANI - ADA KOPYASI (iki satir). `src/prolog/tani.ts` MODUL OLARAK
-     IMPORT EDILMIYOR: ada J1 tavanina giriyor, olculdu - tam modul
-     tavani 327 B, sadelestirilmis hali 146 B asiyordu. Burada kalan
-     tek is `<html data-prolog>` + tek konsol satiri.
-     PARALAKS YOKLAMASI BILEREK BURADA YOK: bu uc dalda yedek yolun
-     hareketli olup olmamasi hukum degistirmiyor - `atla-oturum` ve
-     `bolum-yok` dallarinda sahne zaten `display:none`, `hareket-
-     azaltma` dalinda paralaks BILEREK kapali. Yoklama, gercekten B
-     yoluna dusulen yerde duruyor: `tani.ts` (gl.ts tarafi). */
-  const yedek = (sebep: string, ek?: unknown) => {
-    document.documentElement.dataset.prolog = sebep;
-    console.warn('[prolog] yedek yol - ' + sebep, ek ?? '');
-  };
-
-  let gorulmus = false;
-  try { gorulmus = sessionStorage.getItem('pr1') === '1'; } catch {}
-  const bolum = document.querySelector<HTMLElement>('.pr');
-  if (gorulmus || !bolum) {
-    document.documentElement.classList.add('pr-atla');
-    /* `!bolum` icin ayri ad YOK: sahne markup'i ana sayfada her zaman
-       basiliyor (R12 olcuyor), o dal pratikte olusamaz ve adi J1
-       tavanindan 18 B goturuyordu. Oturum bayragi ise gercek dal. */
-    if (gorulmus) yedek('atla-oturum');
-  } else {
-    const gec = bolum.querySelector<HTMLElement>('.pr-gec');
-    const govde = document.querySelector<HTMLElement>('.ana');
-    if (gec && govde) {
-      gec.hidden = false;
-      gec.addEventListener('click', () => {
-        try { sessionStorage.setItem('pr1', '1'); } catch {}
-        govde.scrollIntoView({ block: 'start' });
-      });
-    }
-    /* 3B YUKLEME SONRASINA VE BOS BIR ANA ERTELENIR. Sahne ilk
-       ekranda ama SIRA ONUN DEGIL: parcasi da yedi katmani da
-       kritik yolun disinda kalmali (olculdu — varliklar yarisa
-       girdiginde LCP 540 ms itiliyordu). Cumle bu sure boyunca
-       zaten okunuyor, sahne uzerine yumusakca geliyor. */
-    if (!document.documentElement.classList.contains('pr-gl')) {
-      /* `pr-gl` satir ici adada yazilir; yoksa sebep ikiden biridir. */
-      yedek('hareket-azaltma');
-    }
-    /* YEDEK YOLUN SURUCUSU. CSS `view-timeline` yoksa (Safari < 26)
-       paralaks JS'ten surulur - yoksa sahne sabit kare kalirdi.
-       Modul yalniz o tarayicilarda iniyor. Hareket azaltmada HIC
-       yuklenmiyor: orada sabit kare zaten talimatin kendisi. */
-    if (!CSS.supports('animation-timeline', 'view()')
-      && !matchMedia('(prefers-reduced-motion:reduce)').matches)
-      import('../prolog/paralaks').then((m) => m.kur(bolum)).catch(() => {});
-    if (document.documentElement.classList.contains('pr-gl')) {
-      const ac = () => import('../prolog/gl').then((m) => m.baslat(bolum))
-        .catch((e) => {
-          document.documentElement.classList.remove('pr-gl');
-          yedek('gl-modulu-inmedi', e);
-        });
-      if (document.readyState === 'complete')
-        (window.requestIdleCallback || ((g: any) => setTimeout(g, 200)))(ac, { timeout: 2000 });
-      else addEventListener('load', ac, { once: true });
-    }
-  }
-</script>
+{/* ADA MODULE TASINDI (gece TUR 2b): src/prolog/ada.ts — J1 disi
+    dinamik modul, Film surucusu kurulumda import eder. pr-atla erken
+    gizleme yukaridaki is:inline'da (tekrar ziyarette tek kare flas
+    olmasin). */}

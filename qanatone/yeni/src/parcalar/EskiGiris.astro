@@ -37,7 +37,11 @@ const yolDuzelt = (h: string) => h
   .replace(/(src|srcset)="img\//g, '$1="/img/')
   .replace(/(href)="(?!https?:|\/|#)/g, '$1="/');
 const markup = yolDuzelt(navM[0] + heroM[0])
-  .replace(/ fetchpriority="high"/g, ' loading="lazy" fetchpriority="low"');
+  .replace(/ fetchpriority="high"/g, ' fetchpriority="low"')
+  /* G1: gomudeki HER gorsel tembel isaretli olsun (gizli govdede istek
+     atmaz; hazirlikta iner) — kaynakta isaretsiz olanlar dahil */
+  .replace(/<img (?![^>]*loading=)/g, '<img loading="lazy" ')
+  .replace(/ loading="lazy" loading="lazy"/g, ' loading="lazy"');
 const stil = stilM[1]
   .replace(/url\((['"]?)img\//g, 'url($1/img/')
   .replace(/:root\b/g, ':host')
