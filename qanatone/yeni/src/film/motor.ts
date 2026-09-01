@@ -198,6 +198,7 @@ interface Sahne {
   /* acilis kopyasi: ayri <video>, kendi blob'u; takas sonrasi birakilir */
   aVideo: HTMLVideoElement | null; aUrl: string | null; aSn: number;
   aBlob: string | null; aDurum: Durum; takas: boolean;
+  canli: boolean;   /* video kare SUNDU — poster katmani gizli (GPU kirpmasi) */
 }
 
 interface Iz {
@@ -324,7 +325,7 @@ export function baslat(bolum: HTMLElement): () => void {
     aVideo: el.querySelector<HTMLVideoElement>('.fl-acilis'),
     aUrl: (() => { const a = el.querySelector<HTMLElement>('.fl-acilis'); return a ? kok + '/' + (mobil ? a.dataset.macilis! : a.dataset.acilis!) : null; })(),
     aSn: Number(el.querySelector<HTMLElement>('.fl-acilis')?.dataset.asn || 0),
-    aBlob: null, aDurum: 'yok', takas: false,
+    aBlob: null, aDurum: 'yok', takas: false, canli: false,
   }));
   const son = S[S.length - 1];
   const toplam = son.bas + son.sure;
@@ -402,6 +403,12 @@ export function baslat(bolum: HTMLElement): () => void {
     if (!v.requestVideoFrameCallback) return;
     const f = (now: number, md: { mediaTime: number }) => {
       if (IZ.ilkKareMs === null && s === S[0]) IZ.ilkKareMs = Math.round(now - yeni);
+      /* GPU KATMAN KIRPMASI (3 Eyl daraltma, TRACE ile bulundu): video
+         GERCEKTEN kare sunar sunmaz posterin katmani gereksiz — ikisi
+         birden tam-ekran GPU dokusuydu, kompozitor butcesi devirde
+         tasiyordu (GPUTask 13-16 ms, her 3-4 karede vsync kacagi).
+         fl-canli posteri gizler (CSS); birak() geri getirir. */
+      if (!s.canli) { s.canli = true; s.el.classList.add('fl-canli'); }
       /* `g`: bu kare EKRANDA MIYDI. Yerlesik ama gorunmez komsu klipler de
          rVFC atesler; onlari sunulmus saymak "max bosluk"u kirletirdi. */
       if (IZ.kayit) IZ.sunum.push({ t: now, n: s.n, kare: Math.round(md.mediaTime * fps), g: s === etkin, mt: md.mediaTime });
@@ -441,6 +448,7 @@ export function baslat(bolum: HTMLElement): () => void {
       if (av.requestVideoFrameCallback) av.requestVideoFrameCallback((now) => {
         if (IZ.acilisMs === null) IZ.acilisMs = Math.round(now - yeni);
         if (IZ.ilkKareMs === null && s === S[0]) IZ.ilkKareMs = IZ.acilisMs;   /* BOYANAN kare, loadeddata degil */
+        if (!s.canli) { s.canli = true; s.el.classList.add('fl-canli'); }      /* acilis kopyasi da sunum */
       });
       await new Promise<void>((res, rej) => {
         const z = setTimeout(() => rej(new Error('acilis zaman asimi')), 20000);
@@ -542,6 +550,7 @@ export function baslat(bolum: HTMLElement): () => void {
     URL.revokeObjectURL(s.blob);
     s.blob = null;
     s.durum = 'yok';                  /* geri gelinirse yeniden iner */
+    if (s.canli) { s.canli = false; s.el.classList.remove('fl-canli'); }   /* poster geri devrede */
     IZ.birakilan++;
   };
   const budaP = () => {

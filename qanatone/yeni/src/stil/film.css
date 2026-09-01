@@ -172,6 +172,10 @@ html:not(.fl-js) .fl-yapis { position: static; height: auto; overflow: visible; 
 html:not(.fl-js) .fl-sahne { position: relative; }
 html:not(.fl-js) .fl-poster { display: block; width: 100%; height: auto; }
 html:not(.fl-js) .fl-video { display: none; }
+/* GPU KATMAN KIRPMASI (3 Eyl daraltma; gerekce motor.ts izle()):
+   video kare sunan sahnede poster gizli — cift tam-ekran doku kalkti.
+   birak() sinifi kaldirir, pencere disina cikan sahnede poster geri. */
+.fl-js .fl-sahne.fl-canli .fl-poster { visibility: hidden; }
 
 /* ============================================================
    NAV KOREOGRAFISI + DEVIR (31 Agu 2026, PROLOG-KAPANIS-v2)
@@ -250,12 +254,24 @@ html[data-devir="tam"] .fl-yapis { visibility: hidden; }
    z 3'te altta), cizgi z 6 (coken goruntunun USTUNDE parlar), film z 5.
    Hareket azaltmada bu katmanlar hic kullanilmaz (surucu sade yolda). */
 .fl-tv { display: none; position: fixed; inset: 0; z-index: 4; pointer-events: none; }
-html.fl-tv-goster .fl-tv { display: block; }
+/* DARALTMA TURU DENEY KAYDI (3 Eyl gece): ilk hipotez "ilk raster"di,
+   fl-hazirla isitmasi denendi ve TERS TEPTI — hazirla efekt sonrasi da
+   acik kaldigi icin paneller sahnede kaliyor, sinif temizliginde
+   transform geri-donusu olcume/ekrana siziyordu (acilis 207-262 ms ->
+   2.524-3.156 ms) VE @0 duseni YERINDE kaldi. Geri alindi. Ikinci
+   hipotez asagida (kok recalc) — dusenler sinif-ekleme anlarinda ve
+   siniflar html KOKUNE basiliyor: her ekleme tum sayfada stil yeniden
+   hesabi (39 sahnelik DOM). */
+/* IKINCI HIPOTEZ UYGULAMASI: tv siniflari KOKTEN INDI — 'tvg/tvp/tva'
+   dogrudan .fl-tv ve .fl-tv-cizgi elementlerine basilir (Film.astro
+   tvSinif). Kok sinifiyla her ekleme TUM belgede secici eslesmesini
+   yeniden kosturuyordu; elementte yalniz iki kucuk alt agac. */
+.fl-tv.tvg { display: block; }
 .fl-tv-ust, .fl-tv-alt { position: absolute; left: 0; right: 0; height: calc(50% + 1px); background: #050505; transition: transform .13s cubic-bezier(.2, .7, .3, 1); }
 .fl-tv-ust { top: 0; }
 .fl-tv-alt { bottom: 0; }
-html.fl-tv-ac .fl-tv-ust { transform: translateY(-102%); }
-html.fl-tv-ac .fl-tv-alt { transform: translateY(102%); }
+.fl-tv.tva .fl-tv-ust { transform: translateY(-102%); }
+.fl-tv.tva .fl-tv-alt { transform: translateY(102%); }
 /* cizgi HEP yerlesik (opacity 0 boyanmaz): display flip ile gelseydi
    opacity gecisi atlanir, cizgi cokusle belirmek yerine ANIDEN yanardi */
 .fl-tv-cizgi {
@@ -263,10 +279,10 @@ html.fl-tv-ac .fl-tv-alt { transform: translateY(102%); }
   z-index: 6; pointer-events: none; opacity: 0; transition: opacity .12s linear;
   background: linear-gradient(to bottom, transparent, rgba(239, 35, 60, .35) 30%, #ff4d63 45%, #fff 50%, #ff4d63 55%, rgba(239, 35, 60, .35) 70%, transparent);
 }
-html.fl-tv-goster .fl-tv-cizgi { opacity: 1; }
-html.fl-tv-parla .fl-tv-cizgi { animation: fl-tv-parla .1s ease-out both; }
+.fl-tv-cizgi.tvg { opacity: 1; }
+.fl-tv-cizgi.tvp { animation: fl-tv-parla .1s ease-out both; }
 @keyframes fl-tv-parla { 0% { transform: scaleY(1); } 60% { transform: scaleY(1.9); } 100% { transform: scaleY(1.2); } }
-html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
+.fl-tv-cizgi.tva { opacity: 0; transition: opacity .13s linear; }
 
 /* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
 /* IBARE (Enes, 1 Eyl netlestirme): DUGME DEGIL — cerceve/zemin/kose yok,

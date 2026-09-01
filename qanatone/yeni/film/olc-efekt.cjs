@@ -79,6 +79,15 @@ const dusenSay = (kareler, bas, son) => {
   const p = kareler.filter((t) => t >= bas && t <= son);
   return p.slice(1).map((t, i) => t - p[i]).filter((d) => d > 25).length;
 };
+/* DARALTMA TURU TESHISI (3 Eyl gece): dusen karelerin ZAMANLARI —
+   hangi FAZDA dustugu bilinmeden supheli secilemez. Bosluk > 25 ms
+   olan araligin BASLANGIC zamani doner (efekt basina gore ms). */
+const dusenZaman = (kareler, bas, son) => {
+  const p = kareler.filter((t) => t >= bas && t <= son);
+  const z = [];
+  for (let i = 1; i < p.length; i++) if (p[i] - p[i - 1] > 25) z.push(+(p[i - 1] - bas).toFixed(0));
+  return z;
+};
 
 async function ac(url, azaltSonradan) {
   const b = await pt.launch({ executablePath: CHROME, headless: HEADLESS, args: ['--no-sandbox', '--autoplay-policy=no-user-gesture-required', '--ignore-gpu-blocklist', ...(HEADLESS ? [] : ['--window-size=1940,1180'])] });
@@ -173,16 +182,31 @@ async function gecSur(p, nokta) {
   console.log('\n== EFEKT A · tv acma ==');
   const aTekrar = [];
   for (let i = 0; i < TEKRAR; i++) {
-    const { b, p } = await ac('');
+    const { b, p } = await ac(process.env.SORGU ? `?${process.env.SORGU}` : '');
+    /* TESHIS=1 (3 Eyl daraltma): ilk kosumda efekt penceresi izlenir —
+       dusenler ritmikti (55-70 ms arayla), sinif/raster hipotezleri
+       olcumle elendi; uzun gorevin ADINI trace soyler. */
+    if (i === 0 && process.env.TESHIS === '1')
+      await p.tracing.start({ path: path.join(__dirname, 'efekt-trace.json'),
+        categories: ['devtools.timeline', 'disabled-by-default-devtools.timeline', 'blink.user_timing', 'v8.execute'] });
     const d = await devirSur(p, true);
+    if (i === 0 && process.env.TESHIS === '1') await p.tracing.stop();
     const sure = Math.round(d.tv.sonMs - d.tv.basMs);
     const fazlar = { cokus: Math.round(d.tv.parlaMs - d.tv.basMs), parlama: Math.round(d.tv.acMs - d.tv.parlaMs), acilis: Math.round(d.tv.sonMs - d.tv.acMs) };
     /* efekt kapisinin penceresi tv.bas -> tv.son; devir zoom'u onceki
        turun kapisiydi (olculdu, ayri yazilir, kapiya girmez) */
     const dus = dusenSay(d.kareler, d.tv.basMs, d.tv.sonMs);
     const zoomDus = dusenSay(d.kareler, d.basMs, d.tv.basMs);
-    aTekrar.push({ yol: d.yol, sure_ms: sure, fazlar, dusen: dus, zoom_dusen: zoomDus, devirDurum: d.devirDurum });
-    console.log(` #${i + 1} yol ${d.yol} · sure ${sure} ms (${fazlar.cokus}+${fazlar.parlama}+${fazlar.acilis}) · efekt dusen ${dus} · zoom dusen ${zoomDus}`);
+    /* daraltma teshisi: dusenler hangi fazda (cokus/parlama/acilis) */
+    const dz = dusenZaman(d.kareler, d.tv.basMs, d.tv.sonMs);
+    const dusenFaz = {
+      cokus: dz.filter((t) => t < fazlar.cokus).length,
+      parlama: dz.filter((t) => t >= fazlar.cokus && t < fazlar.cokus + fazlar.parlama).length,
+      acilis: dz.filter((t) => t >= fazlar.cokus + fazlar.parlama).length,
+      zamanlar_ms: dz,
+    };
+    aTekrar.push({ yol: d.yol, sure_ms: sure, fazlar, dusen: dus, dusen_faz: dusenFaz, zoom_dusen: zoomDus, devirDurum: d.devirDurum });
+    console.log(` #${i + 1} yol ${d.yol} · sure ${sure} ms (${fazlar.cokus}+${fazlar.parlama}+${fazlar.acilis}) · efekt dusen ${dus} [cokus ${dusenFaz.cokus} · parla ${dusenFaz.parlama} · acilis ${dusenFaz.acilis} @ ${dz.join(',')}ms] · zoom dusen ${zoomDus}`);
     await b.close();
   }
   S.A = {

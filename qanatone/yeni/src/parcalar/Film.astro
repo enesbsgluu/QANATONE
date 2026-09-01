@@ -317,6 +317,40 @@ const KUNYELER = [
     const BOZ = new URLSearchParams(location.search).get('boz') === '1';
     const TV_COK_MS = BOZ ? 520 : 130;
     const tvEl = bolum.querySelector<HTMLElement>('.fl-tv');
+    const cizgiEl = bolum.querySelector<HTMLElement>('.fl-tv-cizgi');
+    /* DARALTMA (3 Eyl gece): tv siniflari KOKTEN elemente indi
+       (tvg/tvp/tva) — kok sinifi her eklemede TUM belgede stil yeniden
+       hesabi kosturuyordu (olculdu: dusenler uc kosumda ayni sinif-
+       ekleme anlarinda [@0/@149/@202]); elementte yalniz iki kucuk
+       alt agac. CSS karsiliklari film.css'te. */
+    const tvSinif = (ad: string, ac: boolean) => {
+      if (tvEl) tvEl.classList.toggle(ad, ac);
+      if (cizgiEl) cizgiEl.classList.toggle(ad, ac);
+    };
+    /* DONUK KARE (3 Eyl daraltma, TRACE ile): efekt penceresi dusenleri
+       GPU'daydi (13-16 ms GPUTask, her 3-4 karede vsync kacagi) ve dort
+       hipotez olcumle elendi (sinif-raster isitmasi / kok recalc / metin
+       katmanlari / poster katmani — hicbiri desenleri degistirmedi).
+       Kalan buyuk doku CANLI VIDEO HATTI. Efekt basinda goruntu zaten
+       DONUK (son kare): kare canvas'a cekilir, video gorunmez olur —
+       kompozisyon statik dokuya doner. Efekt bitince cozulur. */
+    let donuk: HTMLCanvasElement | null = null;
+    let donukVideo: HTMLVideoElement | null = null;
+    const donukTak = () => {
+      const v = bolum.querySelector<HTMLVideoElement>('.fl-sahne.fl-etkin video');
+      if (!v || !v.videoWidth || donuk) return;
+      const c = document.createElement('canvas');
+      c.width = v.videoWidth; c.height = v.videoHeight;
+      c.className = v.className + ' fl-donuk';       /* videoyla ayni yerlesim */
+      try { c.getContext('2d')!.drawImage(v, 0, 0); } catch { return; }
+      v.parentElement!.appendChild(c);
+      v.style.visibility = 'hidden';
+      donuk = c; donukVideo = v;
+    };
+    const donukSok = () => {
+      if (donuk) { donuk.remove(); donuk = null; }
+      if (donukVideo) { donukVideo.style.visibility = ''; donukVideo = null; }
+    };
     const azaltMi = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     let vw = 0, vh = 0, vidO = 16 / 9, devirBas = 0;
@@ -455,7 +489,8 @@ const KUNYELER = [
              TV efekti SURERKEN girilmez (310 ms'lik koreografi bolunmez;
              bitince ayni dal calisir). */
           fadeAcik = false;
-          KOKE.classList.remove('fl-devir-net', 'fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+          KOKE.classList.remove('fl-devir-net');
+          tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
           delete KOKE.dataset.devir;
           KAYIT.fadeBasMs = null; KAYIT.tamMs = null;
         }
@@ -479,19 +514,19 @@ const KUNYELER = [
           yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)}, ${sy.toFixed(5)})`;
           if (kk >= 1) {
             tvFaz = 2; tvT0 = simdi; KAYIT.tv.parlaMs = simdi;
-            KOKE.classList.add('fl-tv-parla');
+            tvSinif('tvp', true);
             KOKE.classList.add('fl-devir-net');
             tamYap();                                            /* film gizli; cizgi sahnede */
           }
         } else if (tvFaz === 2) {
           if (simdi - tvT0 >= TV_PARLA_MS) {
             tvFaz = 3; tvT0 = simdi; KAYIT.tv.acMs = simdi;
-            KOKE.classList.add('fl-tv-ac');  /* paneller acilir, site belirir */
+            tvSinif('tva', true);  /* paneller acilir, site belirir */
           }
         } else if (tvFaz === 3) {
           if (simdi - tvT0 >= TV_AC_MS + 10) {   /* +10: transition bitisi; +40 tamponu sureyi 350 sinirina dayiyordu (olculdu) */
             tvFaz = 0; KAYIT.tv.sonMs = simdi;
-            KOKE.classList.remove('fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+            tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
             setTimeout(eskiCanlandir, 40);     /* huzme kurulumu efekt penceresinin disinda */
           }
         } else {
@@ -531,7 +566,8 @@ const KUNYELER = [
                her seyi ortuyor — gorunmez degisim), cizgi cokusle belirir */
             KAYIT.kapanisYolu = 'tv';
             tvFaz = 1; tvT0 = simdi; KAYIT.tv.basMs = simdi;
-            KOKE.classList.add('fl-tv-goster');
+            donukTak();               /* video -> donuk kare (GPU kirpmasi) */
+            tvSinif('tvg', true);
           } else {
             /* SADE yol (hareket azaltma): flassiz duz sonumleme */
             KAYIT.kapanisYolu = 'sade';
@@ -606,7 +642,8 @@ const KUNYELER = [
         KOKE.classList.remove('fl-js');
         /* devir ortasinda basilirsa devir/efekt kalintilari da sokulur */
         KOKE.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk',
-          'fl-hazirla', 'fl-tv-goster', 'fl-tv-ac', 'fl-tv-parla');
+          'fl-hazirla');
+        tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
         delete KOKE.dataset.devir;
         KOKE.dataset.film = 'atlandi';
         scrollTo(0, 0);                          /* isinlanma sitenin basina */
