@@ -11,11 +11,18 @@ gorsel-kaynak/
 # Local Netlify folder
 .netlify
 
+# GECE TUR 2c (1-2 Eyl 2026): film medyasi git disi kalir; onu getiren
+# kurulum adimi yeni/film/kur-medya.cjs, kunyesi medya-manifest.json
+# (TAKIPTE). Damga makineye ozgu, git disi — denetim MEDYA kapisi okur.
+yeni/film/.medya-kurulum.json
 # film uretim hattinin OLCUM artiklari (yeni/film/uret.cjs `bounds` + dikis.cjs
 # kiyas kareleri, ~150 MB PNG): yeniden uretilir, hukmu dikis.json tasir.
+# olcum/ `/*` ile dislanir ki FM1'in HUKUM kaydi sonuc.json ISTISNAYLA
+# takibe girebilsin — "Sonuc JSON'lari takipte, uretim artiklari degil".
 yeni/film/dikis/
 yeni/film/dikis-ham/
-yeni/film/olcum/
+yeni/film/olcum/*
+!yeni/film/olcum/sonuc.json
 # PNG posterler ARA URUN: sayfa WebP okur. public/ disinda tutulur ki
 # dist'e kopyalanip yayina cikmasin (olculdu: 87,9 MiB bos yuk).
 yeni/film/poster-ham/

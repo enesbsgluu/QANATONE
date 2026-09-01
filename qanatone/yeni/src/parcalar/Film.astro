@@ -165,10 +165,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     KOKE.classList.add('fl-js');
     /* YETIS DUGMESI KALKTI (1 Eyl, Enes) — `fl-geride` olayini dinleyen
        kalmadi; olay motor yuzeyinde duruyor (olcum kullanir). */
-    /* PROLOG ADASI (TUR 2b): J1 disi modul — prolog bolumu bu sayfada,
-       adasini biz cagiririz (ana sayfadan tasindi; sayfada .pr yoksa
-       kur() kendi icinde no-op'a yakindir). */
-    import('../prolog/ada').then((m) => m.kur()).catch(() => {});
+    /* PROLOG ADASI KALKTI (1-2 Eyl gece, Enes): giris sahnesi (PRDag +
+       amblemin nav'a yukselmesi) sayfadan sokuldu, ada cagrisi da
+       onunla gitti — sayfa direkt video girisiyle baslar. */
     import('../film/motor').then((m) => {
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
@@ -263,7 +262,6 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       const Sx = vw / qg, Sy = vh / qh;
       G = { qg, qh, cx, cy, S: Math.max(Sx, Sy), kapanan: Sx >= Sy ? 'yatay' : 'dikey', txSon: vw / 2 - cx, tySon: vh / 2 - cy };
       yapis.style.transformOrigin = `${cx.toFixed(2)}px ${cy.toFixed(2)}px`;
-      prSonu = prBolum ? Math.max(4, prBolum.offsetHeight - vh) : 4;   /* nav cekilme esigi (TUR 2b) */
     };
 
     /* ---- devir yayi: motorla ayni disiplin (sabit 4 ms adim + harman) ---- */
@@ -285,19 +283,11 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
     } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [],
       tv: { basMs: null, parlaMs: null, acMs: null, sonMs: null }, kapanisYolu: null, gec: null, ibareSonduMs: null };
 
-    /* NAV KOREOGRAFISI (gece TUR 2b — prolog artik bu sayfada):
-       prolog fazinda nav GORUNUR kalir (amblem ona oturacak); amblem
-       oturup (halka.ts: nv-logo-bekle kalkar) kaydirma prolog sonunu
-       gecince nav AMBLEMLE BIRLIKTE cekilir; devirde kalkik kalir
-       (govdenin kendi navi var — cift nav olurdu). Prolog yoksa eski
-       davranis (scrollY > 4). Dusen kare kurali: offsetHeight kurulum/
-       resize'da bir kez (olcDevir), dongude yalniz scrollY + classList. */
-    const prBolum = document.querySelector<HTMLElement>('.pr');
-    const navLogoI = document.querySelector<HTMLElement>('.nv-logo i');
-    let prSonu = 4;
+    /* NAV: prolog sokulunce (1-2 Eyl gece, Enes) koreografi eski
+       davranisa dondu — kaydirma baslar baslamaz nav cekilir; devirde
+       kalkik kalir (govdenin kendi navi var — cift nav olurdu). */
     const navBak = () => {
-      const oturdu = !prBolum || !navLogoI || !navLogoI.classList.contains('nv-logo-bekle');
-      const kalk = scrollY > prSonu && oturdu;
+      const kalk = scrollY > 4;
       if (kalk !== navKalkti) { navKalkti = kalk; KOKE.classList.toggle('fl-nav-kalk', kalk); }
     };
     /* TUTUNMA (CSS fl-tutun): scrollY ray sonundaysa yapis sabitlenir —
