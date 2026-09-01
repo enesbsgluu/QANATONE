@@ -71,6 +71,14 @@ ISLER = [
     ('playfair-display-500i-latin-ext.woff2', 'playfair-display-500i-tr.woff2',   TR_GLIF, []),
     ('jetbrains-mono-400-latin.woff2',       'jetbrains-mono-400-latin.woff2', TREN,    []),
     ('jetbrains-mono-400-latin-ext.woff2',   'jetbrains-mono-400-tr.woff2',    TR_GLIF, []),
+    # UNCUT SANS (2 Eyl 2026, TUR 5 hikaye metinleri — talimat sarti
+    # "Uncut Sans, agirlik 300-700"). Kaynak resmi depo
+    # github.com/kaspernordkvist/uncut_sans, SIL OFL 1.1
+    # (font-kaynak/UNCUT-SANS-LICENSE.txt). Google bolmesi yok: tek
+    # DEGISKEN dosyadan iki altkume (latin TREN + tr) burada uretilir;
+    # eksen talimattaki araliga kirpilir.
+    ('uncut-sans-variable.woff2',            'uncut-sans-latin.woff2',      TREN,    ['wght=300:700']),
+    ('uncut-sans-variable.woff2',            'uncut-sans-tr.woff2',         TR_GLIF, ['wght=300:700']),
 ]
 
 

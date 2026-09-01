@@ -329,6 +329,18 @@ export function baslat(bolum: HTMLElement): () => void {
   const son = S[S.length - 1];
   const toplam = son.bas + son.sure;
 
+  /* TUR 5 · HIKAYE CUMLELERI (2 Eyl 2026): pencereler DOM'da
+     (data-bas/son, kaynak TUR5-METIN-HARITASI.md — sayilar burada
+     TEKRAR YAZILMAZ). Motor yalniz sinif surer; metin/yerlesim
+     sayfanin (sert degismez #6). ?soz=0 OLCUM KOLU: metinli/metinsiz
+     dusen kare kiyasi icin (olc-soz.cjs). */
+  const SOZ_ACIK = new URLSearchParams(location.search).get('soz') !== '0';
+  const SOZLER = SOZ_ACIK
+    ? [...bolum.querySelectorAll<HTMLElement>('.fl-soz')].map((el) => ({
+        el, bas: Number(el.dataset.bas), son: Number(el.dataset.son), g: false }))
+    : [];
+  if (!SOZ_ACIK) bolum.querySelector<HTMLElement>('.fl-sozler')?.setAttribute('hidden', '');
+
   const IZ: Iz = {
     hazir: false, kayit: false, mobil, kodek: KODEK, toplam, pxSn, fps,
     istek: [], sunum: [], ilkKareMs: null,
@@ -761,6 +773,12 @@ export function baslat(bolum: HTMLElement): () => void {
        yan yana koyar; hareket hazirliktan once baslayamaz. */
     if (IZ.ilkHareketMs === null && tamponT !== null && Math.abs(T - tamponT) > OTUR)
       IZ.ilkHareketMs = Math.round(simdi - yeni);
+    /* TUR 5: cumle pencereleri — sinif yalniz GECISLERDE yazilir
+       (kare basina DOM yazimi yok; g bayragi onler). */
+    for (const z of SOZLER) {
+      const g = T >= z.bas && T <= z.son;
+      if (g !== z.g) { z.g = g; z.el.classList.toggle('fl-soz-gor', g); }
+    }
     /* hedefe oturmadiysa dongu kendi kendini surdurur — kaydirma olayi
        bitmis olsa da sonumleme tamamlanir.
        HIZ SARTI (30 Agu 2026, TUR 3 — DONMA KUSURU): eskiden burada yalniz
