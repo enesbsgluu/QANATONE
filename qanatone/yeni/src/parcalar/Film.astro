@@ -327,30 +327,6 @@ const KUNYELER = [
       if (tvEl) tvEl.classList.toggle(ad, ac);
       if (cizgiEl) cizgiEl.classList.toggle(ad, ac);
     };
-    /* DONUK KARE (3 Eyl daraltma, TRACE ile): efekt penceresi dusenleri
-       GPU'daydi (13-16 ms GPUTask, her 3-4 karede vsync kacagi) ve dort
-       hipotez olcumle elendi (sinif-raster isitmasi / kok recalc / metin
-       katmanlari / poster katmani — hicbiri desenleri degistirmedi).
-       Kalan buyuk doku CANLI VIDEO HATTI. Efekt basinda goruntu zaten
-       DONUK (son kare): kare canvas'a cekilir, video gorunmez olur —
-       kompozisyon statik dokuya doner. Efekt bitince cozulur. */
-    let donuk: HTMLCanvasElement | null = null;
-    let donukVideo: HTMLVideoElement | null = null;
-    const donukTak = () => {
-      const v = bolum.querySelector<HTMLVideoElement>('.fl-sahne.fl-etkin video');
-      if (!v || !v.videoWidth || donuk) return;
-      const c = document.createElement('canvas');
-      c.width = v.videoWidth; c.height = v.videoHeight;
-      c.className = v.className + ' fl-donuk';       /* videoyla ayni yerlesim */
-      try { c.getContext('2d')!.drawImage(v, 0, 0); } catch { return; }
-      v.parentElement!.appendChild(c);
-      v.style.visibility = 'hidden';
-      donuk = c; donukVideo = v;
-    };
-    const donukSok = () => {
-      if (donuk) { donuk.remove(); donuk = null; }
-      if (donukVideo) { donukVideo.style.visibility = ''; donukVideo = null; }
-    };
     const azaltMi = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     let vw = 0, vh = 0, vidO = 16 / 9, devirBas = 0;
@@ -490,7 +466,7 @@ const KUNYELER = [
              bitince ayni dal calisir). */
           fadeAcik = false;
           KOKE.classList.remove('fl-devir-net');
-          tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
+          tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
           delete KOKE.dataset.devir;
           KAYIT.fadeBasMs = null; KAYIT.tamMs = null;
         }
@@ -526,7 +502,7 @@ const KUNYELER = [
         } else if (tvFaz === 3) {
           if (simdi - tvT0 >= TV_AC_MS + 10) {   /* +10: transition bitisi; +40 tamponu sureyi 350 sinirina dayiyordu (olculdu) */
             tvFaz = 0; KAYIT.tv.sonMs = simdi;
-            tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
+            tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
             setTimeout(eskiCanlandir, 40);     /* huzme kurulumu efekt penceresinin disinda */
           }
         } else {
@@ -566,7 +542,6 @@ const KUNYELER = [
                her seyi ortuyor — gorunmez degisim), cizgi cokusle belirir */
             KAYIT.kapanisYolu = 'tv';
             tvFaz = 1; tvT0 = simdi; KAYIT.tv.basMs = simdi;
-            donukTak();               /* video -> donuk kare (GPU kirpmasi) */
             tvSinif('tvg', true);
           } else {
             /* SADE yol (hareket azaltma): flassiz duz sonumleme */
@@ -643,7 +618,7 @@ const KUNYELER = [
         /* devir ortasinda basilirsa devir/efekt kalintilari da sokulur */
         KOKE.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk',
           'fl-hazirla');
-        tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false); donukSok();
+        tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
         delete KOKE.dataset.devir;
         KOKE.dataset.film = 'atlandi';
         scrollTo(0, 0);                          /* isinlanma sitenin basina */
