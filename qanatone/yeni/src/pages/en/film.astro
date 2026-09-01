@@ -1,0 +1,25 @@
+---
+/* /en/film — TR film sayfasinin EN esi (TUR 5 v2, 2 Eyl 2026).
+   NEDEN DOGDU: anlati metni iki dilli ve talimat kapisi "TR ve EN ayri
+   ayri olculur" diyor (EN satirlari uzun, tasma riski) — olcum sayfasiz
+   olmaz. Yapi TR sayfasiyla BIREBIR (../film.astro; oradaki karar
+   yorumlari tekrarlanmadi — kaynak orasi), tek fark dil='en' ve
+   canonical. */
+import Temel from '../../layouts/Temel.astro';
+import Film from '../../parcalar/Film.astro';
+import EskiGiris from '../../parcalar/EskiGiris.astro';
+const canon = 'https://qanatone.netlify.app/yeni/en/film';
+---
+<Temel dil="en" baslik="Film skeleton — QANATONE"
+  aciklama="The 39-clip scroll-scrub skeleton of the prologue film; measurement ground for motor, stitching, budget and fling. Not a product page."
+  canonical={canon}>
+  <h1 class="fl-gizli">Film skeleton</h1>
+  <Film dil="en" />
+  <div class="fl-govde" id="fl-govde">
+    <EskiGiris />
+  </div>
+</Temel>
+
+<style>
+  .fl-gizli { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: -1px; }
+</style>

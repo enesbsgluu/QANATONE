@@ -338,6 +338,28 @@ html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
 @media (prefers-reduced-motion: reduce) {
   .fl-soz { transition: none; transform: translate(-50%, -50%); }
 }
+/* PERDE KUNYESI (TUR 5 v2): kucuk, surekli, SOL UST — vurus merkezde,
+   kutulari kesismez (kapi olcuyor). Perde basinda degisir (motor ayni
+   mekanizmayla surer). Nav filmde cekik oldugundan ust bant bos. */
+.fl-soz.fl-kunye {
+  left: 24px; top: 20px; transform: translateY(6px);
+  max-width: 60vw; text-align: left;
+  font-weight: 400; font-size: 12px; letter-spacing: .14em;
+  line-height: 1.3; color: rgba(255, 255, 255, .72);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+}
+.fl-soz.fl-kunye.fl-soz-gor { transform: none; }
+/* RAKAM KAYNAGI (uydurma rakam yasagi): sol alt, kucuk; ibare (alt
+   orta) ve gec dugmesi (sag alt) ile kesismez. Son perdeyle gorunur. */
+.fl-soz.fl-kaynak {
+  left: 24px; top: auto; bottom: 16px; transform: translateY(6px);
+  max-width: 46vw; text-align: left;
+  font-weight: 300; font-size: 11px; letter-spacing: .04em;
+  line-height: 1.3; color: rgba(255, 255, 255, .5);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+}
+.fl-soz.fl-kaynak.fl-soz-gor { transform: none; }
+
 /* MOTORSUZ YOL (azaltma / JS yok): cumleler duz sutunun basinda ONSOZ
    blogu olarak okunur — hicbir sart altinda kaybolmazlar. */
 html:not(.fl-js) .fl-sozler { position: static; pointer-events: auto; padding: 10vh 8vw 6vh; }

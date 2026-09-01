@@ -1,27 +1,29 @@
 #!/usr/bin/env node
 /* ============================================================
-   TUR 5 · HIKAYE METINLERI OLCUMU (2 Eyl 2026).
-   Harita ve uygulama sartlari: yeni/film/TUR5-METIN-HARITASI.md.
+   TUR 5 v2 · ANLATI METNI OLCUMU (2 Eyl 2026 gece).
+   Harita: TUR5-METIN-HARITASI.md (21 blok + 6 kunye, vurus-harita.py).
 
-   KAPILAR:
-   1. GORUNURLUK: alti cumlenin her biri kendi penceresinin ortasinda
-      GORUNUR (opacity > 0.9, visibility visible) — uc kosumda.
-   2. PENCERE DISI: pencerenin 3 sn disinda GORUNMEZ.
-   3. TEKLIK: hicbir olcum aninda birden fazla cumle gorunmez.
-   4. Geri sarma: pencereye GERIDEN gelinince cumle geri gelir
-      (kaydirma konumuna baglilik — zamanlayici yasak).
-   RAPOR (kapi degil):
-   - metinli / metinsiz (?soz=0) ayni scrub penceresinde dusen kare
-     kiyasi (harita sarti "kiyas olculur"; esik verilmedi).
-   - kontak: alti cumlenin ekran goruntusu yeni/film/kontak-soz/
-     (KALICI — onceki kontak scratchpad'de ucup gitmisti, ders).
-   TABAN DAMGASI (8a3af8b kurali): rig basina ucgen-scrub tabani;
-   gurultuluyse hukum verilmez.
+   KAPILAR (talimattan):
+   1. 21 blogun her biri kendi araliginda GORUNUR — uc kosumda, TR ve
+      EN AYRI AYRI (EN satirlari uzun).
+   2. Hicbir iki VURUS ayni anda ekranda degil (kunyeler surekli
+      katman, teklik hesabinin DISINDA — talimat onlari ayirdi).
+   3. Her vurus penceresi >= 3 sn okunur (haritada pencere 3,6 sn —
+      DOM'dan dogrulanir, elle sayi tasinmaz).
+   4. Kunye katmani vuruslarla CAKISMIYOR (bounding-box kesisimi 0) ve
+      dogru perdenin kunyesi gorunuyor, obur besi gorunmuyor.
+   5. TASMA: gorunur blok viewport'a sigiyor (scrollWidth ve kutu).
+   6. Pencere disi (once/sonra 3 sn) gorunmez; film sonuna dayanan son
+      blokta "sonra" kontrolu ATLANIR (pencere disina cikacak yer yok)
+      — atlandigi yazilir.
+   7. Geri sarma: son bloktan ilkine donunce blok 1 geri gelir.
+   RAPOR: metinli / ?soz=0 dusen kiyasi (taban damgali rig genelinde),
+   kontak 21 kare (TR, kontak-soz/).
+   KIRMIZI-ONCE: rig v2, 6-cumlelik ESKI yapiya karsi kosuldu — blok
+   sayisi 6!=21 adiyla kirmizi.
 
-   KIRMIZI-ONCE: rig, motor surucusu eklenmeden ONCE kosuldu — cumleler
-   DOM'da ama sinif atayan yoktu, GORUNURLUK adiyla kirmizi yandi.
-
-   Kullanim: node yeni/film/olc-soz.cjs   (once: node yerel-sun.cjs) */
+   Kullanim: node yeni/film/olc-soz.cjs   (once: node yerel-sun.cjs)
+   Cevre   : TEKRAR=3 · DIL=tr,en · TARAYICI=brave */
 const path = require('path');
 const fs = require('fs');
 const pt = require(process.env.PUPPETEER_CORE
@@ -36,6 +38,8 @@ const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
 const CIKTI = path.join(__dirname, 'olc-soz.json');
 const KONTAK = path.join(__dirname, 'kontak-soz');
 const TEKRAR = Number(process.env.TEKRAR || 3);
+const DILLER = (process.env.DIL || 'tr,en').split(',');
+const BLOK_BEKLENEN = 21, KUNYE_BEKLENEN = 6;
 const BOSLUK_ESIK_MS = 100;
 const TABAN_SN = Number(process.env.TABAN_SN ?? 10);
 const TABAN_TAVAN = Number(process.env.TABAN_TAVAN ?? 1);
@@ -57,35 +61,52 @@ const KAYITCI = `(() => {
   bagla(); setInterval(bagla, 500);
 })()`;
 
-async function sayfaAc(browser, sorgu) {
+async function sayfaAc(browser, dil, sorgu) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900 });
   const cdp = await page.target().createCDPSession();
-  await page.goto(`${SUNUCU}/yeni/film/?tavan=2${sorgu || ''}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  const on = dil === 'en' ? 'en/' : '';
+  await page.goto(`${SUNUCU}/yeni/${on}film/?tavan=2${sorgu || ''}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.evaluate(KAYITCI);
   await page.bringToFront();
   await page.waitForFunction('window.__fl && window.__fl.sahne()[0].durum === "hazir"', { timeout: 90000 });
   return { page, cdp };
 }
 
-/* cumle pencereleri DOM'dan okunur — rig sayilari tekrar yazmaz */
-const pencereler = (page) => page.evaluate(() =>
-  [...document.querySelectorAll('.fl-soz')].map((e) => ({
-    bas: +e.dataset.bas, son: +e.dataset.son, metin: e.textContent.trim().slice(0, 40) })));
+/* bloklar/kunyeler DOM'dan — rig sayilari tekrar yazmaz */
+const oku = (page) => page.evaluate(() => ({
+  blok: [...document.querySelectorAll('.fl-soz:not(.fl-kunye):not(.fl-kaynak)')].map((e) => ({
+    bas: +e.dataset.bas, son: +e.dataset.son, metin: e.textContent.trim().slice(0, 40) })),
+  kunye: [...document.querySelectorAll('.fl-kunye')].map((e) => ({
+    bas: +e.dataset.bas, son: +e.dataset.son, metin: e.textContent.trim().slice(0, 40) })),
+  toplam: window.__fl.toplam,
+}));
 
-const durum = (page) => page.evaluate(() =>
-  [...document.querySelectorAll('.fl-soz')].map((e) => {
+const durum = (page) => page.evaluate(() => {
+  const al = (e) => {
     const s = getComputedStyle(e);
-    return { op: +s.opacity, gor: s.visibility === 'visible' };
-  }));
+    const b = e.getBoundingClientRect();
+    return { op: +s.opacity, gor: s.visibility === 'visible',
+      kutu: { sol: b.left, ust: b.top, sag: b.right, alt: b.bottom },
+      tasma: e.scrollWidth > e.clientWidth + 1 || b.left < 0 || b.right > innerWidth };
+  };
+  return {
+    blok: [...document.querySelectorAll('.fl-soz:not(.fl-kunye):not(.fl-kaynak)')].map(al),
+    kunye: [...document.querySelectorAll('.fl-kunye')].map(al),
+  };
+});
+
+const gorunur = (d) => d.op > 0.9 && d.gor;
+const azGorunur = (d) => d.op > 0.05 && d.gor;
+const kesisir = (a, b) => !(a.sag <= b.sol || b.sag <= a.sol || a.alt <= b.ust || b.alt <= a.ust);
 
 async function git(page, T) {
   await page.evaluate((t) => { scrollTo(0, window.__fl.konum(t)); window.__fl.atla(); }, T);
-  await bekle(650);   /* yay otursun + .4s gecis bitsin */
+  await bekle(650);
 }
 
 async function taban(browser) {
-  const { page } = await sayfaAc(browser, '');
+  const { page } = await sayfaAc(browser, 'tr', '');
   const sun = await page.evaluate(async (ms) => {
     const v = document.querySelector('.fl-sahne video');
     if (!v || !v.src) return null;
@@ -115,45 +136,58 @@ async function taban(browser) {
   return { sayi, sure_sn: TABAN_SN, gecerli: sayi <= TABAN_TAVAN };
 }
 
-async function kosum(browser, kontakCek) {
-  const { page } = await sayfaAc(browser, '');
-  const P = await pencereler(page);
-  const sonuc = [];
-  for (let i = 0; i < P.length; i++) {
-    const orta = (P[i].bas + P[i].son) / 2;
-    /* GERIDEN GELME (kapi 4): once pencerenin 3 sn ONUNE, sonra icine —
-       gorunum "oraya kaydirilinca" dogmali. */
-    await git(page, Math.max(0, P[i].bas - 3));
+async function kosum(browser, dil, kontakCek) {
+  const { page } = await sayfaAc(browser, dil, '');
+  const Y = await oku(page);
+  if (Y.blok.length !== BLOK_BEKLENEN || Y.kunye.length !== KUNYE_BEKLENEN) {
+    await page.close();
+    return { sayim: `blok:${Y.blok.length}!=${BLOK_BEKLENEN} kunye:${Y.kunye.length}!=${KUNYE_BEKLENEN}`, bloklar: [], geri_sarmada_geldi: false };
+  }
+  const bloklar = [];
+  for (let i = 0; i < Y.blok.length; i++) {
+    const B = Y.blok[i];
+    const orta = (B.bas + B.son) / 2;
+    await git(page, Math.max(0, B.bas - 3));
     const once = await durum(page);
     await git(page, orta);
-    const icinde = await durum(page);
+    const ic = await durum(page);
     if (kontakCek) {
       fs.mkdirSync(KONTAK, { recursive: true });
-      await page.screenshot({ path: path.join(KONTAK, `soz${i + 1}.jpg`), type: 'jpeg', quality: 72 });
+      await page.screenshot({ path: path.join(KONTAK, `blok${String(i + 1).padStart(2, '0')}.jpg`), type: 'jpeg', quality: 70 });
     }
-    /* pencerenin 3 sn ARKASI (kapi 2) */
-    await git(page, Math.min(P[i].son + 3, (await page.evaluate(() => window.__fl.toplam)) - 0.2));
-    const sonra = await durum(page);
-    sonuc.push({
-      cumle: P[i].metin,
-      gorundu: icinde[i].op > 0.9 && icinde[i].gor,
-      oncesinde_yok: !(once[i].op > 0.05 && once[i].gor),
-      sonrasinda_yok: !(sonra[i].op > 0.05 && sonra[i].gor),
-      tek: icinde.filter((d) => d.op > 0.05 && d.gor).length <= 1,
+    /* dogru kunye + kesisim, GORUNUR blok kutusuyla */
+    const kunyeIdx = Y.kunye.findIndex((k) => orta >= k.bas && orta <= k.son);
+    const kunyeDogru = kunyeIdx >= 0 && gorunur(ic.kunye[kunyeIdx])
+      && ic.kunye.every((d, j) => j === kunyeIdx || !azGorunur(d));
+    const cakisma = kunyeIdx >= 0 && gorunur(ic.blok[i]) && gorunur(ic.kunye[kunyeIdx])
+      && kesisir(ic.blok[i].kutu, ic.kunye[kunyeIdx].kutu);
+    /* film sonuna dayanan blokta sonra-kontrolu atlanir */
+    const sonraT = B.son + 3;
+    let sonrasindaYok = null;
+    if (sonraT <= Y.toplam - 0.3) {
+      await git(page, sonraT);
+      const so = await durum(page);
+      sonrasindaYok = !azGorunur(so.blok[i]);
+    }
+    bloklar.push({
+      metin: B.metin, sure_sn: +(B.son - B.bas).toFixed(2),
+      gorundu: gorunur(ic.blok[i]),
+      oncesinde_yok: !azGorunur(once.blok[i]),
+      sonrasinda_yok: sonrasindaYok,             /* null = atlandi (film sonu) */
+      tek: ic.blok.filter(azGorunur).length <= 1,
+      tasma: gorunur(ic.blok[i]) && ic.blok[i].tasma,
+      kunye_dogru: kunyeDogru, kunye_cakisti: cakisma,
     });
   }
-  /* GERI SARMA: son pencereden ilkine geri don — cumle 1 GERI GELMELI */
-  await git(page, (P[0].bas + P[0].son) / 2);
+  await git(page, (Y.blok[0].bas + Y.blok[0].son) / 2);
   const geri = await durum(page);
-  const geriGeldi = geri[0].op > 0.9 && geri[0].gor;
+  const geriGeldi = gorunur(geri.blok[0]);
   await page.close();
-  return { cumleler: sonuc, geri_sarmada_geldi: geriGeldi };
+  return { bloklar, geri_sarmada_geldi: geriGeldi, sayim: 'tam' };
 }
 
-/* dusen kare kiyasi: cumle-1 penceresini kapsayan scrubda (0 -> 8 sn)
-   sunum bosluklari, metinli vs ?soz=0 */
 async function dusenKiyas(browser, sorgu) {
-  const { page, cdp } = await sayfaAc(browser, sorgu);
+  const { page, cdp } = await sayfaAc(browser, 'tr', sorgu);
   await page.evaluate(() => { scrollTo(0, 0); window.__fl.atla(); });
   await bekle(400);
   await page.evaluate(() => { window.__sun.length = 0; });
@@ -187,33 +221,48 @@ async function dusenKiyas(browser, sorgu) {
   const tb = await taban(browser);
   console.log(`  taban ${tb.sayi} → ${tb.gecerli ? 'sakin' : 'ORTAM GURULTULU'}\n`);
 
-  const kosumlar = [];
-  for (let i = 0; i < TEKRAR; i++) {
-    const k = await kosum(browser, i === 0);
-    kosumlar.push(k);
-    const ozet = k.cumleler.map((c) => (c.gorundu && c.oncesinde_yok && c.sonrasinda_yok && c.tek ? '+' : 'X')).join('');
-    console.log(`  [${i + 1}/${TEKRAR}] ${ozet} · geri-sarma ${k.geri_sarmada_geldi ? '+' : 'X'}`);
+  const diller = {};
+  for (const dil of DILLER) {
+    console.log(`== ${dil.toUpperCase()} · ${TEKRAR} kosum ==`);
+    const kosumlar = [];
+    for (let i = 0; i < TEKRAR; i++) {
+      const k = await kosum(browser, dil, dil === 'tr' && i === 0);
+      kosumlar.push(k);
+      if (k.sayim !== 'tam') { console.log(`  [${i + 1}] SAYIM KIRMIZI: ${k.sayim}`); continue; }
+      const oz = k.bloklar.map((b) => (b.gorundu && b.oncesinde_yok && b.sonrasinda_yok !== false && b.tek && !b.tasma && b.kunye_dogru && !b.kunye_cakisti ? '+' : 'X')).join('');
+      console.log(`  [${i + 1}] ${oz} · geri ${k.geri_sarmada_geldi ? '+' : 'X'}`);
+    }
+    const tam = kosumlar.every((k) => k.sayim === 'tam');
+    diller[dil] = {
+      kosum: kosumlar,
+      kapilar: !tam ? { sayim: 'KALDI' } : {
+        sayim: 'GECTI',
+        gorunurluk: kosumlar.every((k) => k.bloklar.every((b) => b.gorundu)) ? 'GECTI' : 'KALDI',
+        pencere_disi: kosumlar.every((k) => k.bloklar.every((b) => b.oncesinde_yok && b.sonrasinda_yok !== false)) ? 'GECTI' : 'KALDI',
+        teklik: kosumlar.every((k) => k.bloklar.every((b) => b.tek)) ? 'GECTI' : 'KALDI',
+        okunur_3sn: kosumlar[0].bloklar.every((b) => b.sure_sn >= 3) ? 'GECTI' : 'KALDI',
+        tasma: kosumlar.every((k) => k.bloklar.every((b) => !b.tasma)) ? 'GECTI' : 'KALDI',
+        kunye: kosumlar.every((k) => k.bloklar.every((b) => b.kunye_dogru && !b.kunye_cakisti)) ? 'GECTI' : 'KALDI',
+        geri_sarma: kosumlar.every((k) => k.geri_sarmada_geldi) ? 'GECTI' : 'KALDI',
+      },
+    };
   }
 
-  console.log('dusen kare kiyasi (cumle-1 penceresi, 0-8 sn) ...');
+  console.log('dusen kare kiyasi (blok-1 penceresi, 0-8 sn) ...');
   const metinli = await dusenKiyas(browser, '');
   const metinsiz = await dusenKiyas(browser, '&soz=0');
   console.log(`  metinli ${metinli.dusen} (${metinli.toplam_ms} ms) · metinsiz ${metinsiz.dusen} (${metinsiz.toplam_ms} ms)`);
   await browser.close();
 
-  const kapilar = {
-    gorunurluk: kosumlar.every((k) => k.cumleler.every((c) => c.gorundu)) ? 'GECTI' : 'KALDI',
-    pencere_disi: kosumlar.every((k) => k.cumleler.every((c) => c.oncesinde_yok && c.sonrasinda_yok)) ? 'GECTI' : 'KALDI',
-    teklik: kosumlar.every((k) => k.cumleler.every((c) => c.tek)) ? 'GECTI' : 'KALDI',
-    geri_sarma: kosumlar.every((k) => k.geri_sarmada_geldi) ? 'GECTI' : 'KALDI',
-  };
-  const hukum = !tb.gecerli ? 'ORTAM-GURULTULU (hukum verilmez)'
-    : (Object.values(kapilar).every((x) => x === 'GECTI') ? 'GECTI' : 'KALDI');
+  const hepsi = Object.values(diller).every((d) => Object.values(d.kapilar).every((x) => x === 'GECTI'));
+  const hukum = !tb.gecerli ? 'ORTAM-GURULTULU (hukum verilmez)' : (hepsi ? 'GECTI' : 'KALDI');
   fs.writeFileSync(CIKTI, JSON.stringify({
-    _: 'yeni/film/olc-soz.cjs — TUR 5 hikaye metinleri kapilari. Pencereler DOM data-bas/son (kaynak TUR5-METIN-HARITASI.md). Dusen kiyasi RAPOR. Kontak: kontak-soz/soz1-6.jpg.',
+    _: 'yeni/film/olc-soz.cjs v2 — 21 blok + 6 kunye kapilari, TR+EN ayri. Pencereler DOM data-bas/son (kaynak TUR5-METIN-HARITASI.md). Dusen kiyasi RAPOR. Kontak: kontak-soz/blok01-21.jpg (TR).',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, tekrar: TEKRAR,
     taban_tavan: TABAN_TAVAN, taban: tb,
-    hukum, kapilar, dusen_kiyasi: { metinli, metinsiz }, kosum: kosumlar,
+    hukum, diller, dusen_kiyasi: { metinli, metinsiz },
   }, null, 1));
-  console.log(`\nHUKUM: ${hukum} · ${JSON.stringify(kapilar)}\n→ ${CIKTI}`);
+  console.log(`\nHUKUM: ${hukum}`);
+  for (const [dil, d] of Object.entries(diller)) console.log(`  ${dil}: ${JSON.stringify(d.kapilar)}`);
+  console.log(`→ ${CIKTI}`);
 })().catch((e) => { console.error(e); process.exit(1); });

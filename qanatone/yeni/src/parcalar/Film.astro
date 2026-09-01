@@ -68,21 +68,48 @@ interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-/* TUR 5 · HIKAYE METINLERI (2 Eyl 2026). Alti cumle, alti durak.
-   PENCERELER ELLE SECILMEDI: durgun anlar olc-kamera-hizi.py ile
-   olculdu (160x90 gri ardisik kare farki), harita ve gerekceler
-   yeni/film/TUR5-METIN-HARITASI.md. Cumleler HTML katmaninda (videoya
-   metin basilmaz); gorunurlugu MOTOR surer (kaydirma konumuna bagli,
-   zamanlayici yok — geri sarilirsa geri gelir). Bir anda tek cumle:
-   pencereler ayrik, en yakin ikisi arasi 96+ sn. 2. cumle Enes onayina
-   acik (haritadaki not). EN cevirileri ONERI — Enes gormedi. */
+/* TUR 5 v2 · ANLATI METNI (2 Eyl 2026 gece, Enes yeniden yazdi —
+   v1'in alti cumlesi 113 saniyeye cok seyrek dusuyordu ve teklif duz
+   soylenmiyordu). 21 metin blogu (18 vurus; 1/5/13 cift cumleli tek
+   vurus) + 6 perde kunyesi, iki dil. Metin kaynagi:
+   PROLOG-ANLATI-METNI.md (BIREBIR — #20 kilitli). PENCERELER ELLE
+   SECILMEDI: vurus-harita.py, kamera-fark olcumunden DP ile; harita ve
+   gerekceler yeni/film/TUR5-METIN-HARITASI.md. Gorunurlugu MOTOR surer
+   (kaydirma konumuna bagli — geri sarilirsa geri gelir); kunyeler de
+   ayni mekanizma (fl-soz sinifini paylasir), perde araligi boyunca
+   surekli. RAKAMLAR (33 km · 300 m · 1:1000 · 50 m · 3000 yil) UNESCO
+   Persian Qanat kaydina bagli — asagida kaynak satiri; dogrulanmadan
+   yayina cikmaz (push yok kurali). */
 const SOZLER = [
-  { bas: 0.3, son: 4.0, tr: 'Kaynak hep vardı.', en: 'The source was always there.' },
-  { bas: 17.8, son: 21.0, tr: 'Önce ağzını bulursun.', en: 'First, you find its mouth.' },
-  { bas: 70.7, son: 73.4, tr: 'Kazmadan önce ölçen kazanır.', en: 'Who measures before digging, wins.' },
-  { bas: 103.9, son: 106.7, tr: 'Yerin altında kayıp yok.', en: 'Nothing is lost underground.' },
-  { bas: 201.5, son: 204.3, tr: 'Kıt olan ölçülür.', en: 'What is scarce gets measured.' },
-  { bas: 228.7, son: 232.4, tr: 'Şehirler kanalın üstüne kurulur.', en: 'Cities are built over the canal.' },
+  { bas: 0.30, son: 3.90, tr: 'Su dağın altında. Şehir çölün ortasında. Arada otuz üç kilometre kaya.', en: 'The water is under the mountain. The city is in the middle of the desert. Thirty-three kilometres of rock between them.' },
+  { bas: 5.30, son: 8.90, tr: 'Bunu geçmenin iki yolu var.', en: 'There are two ways to cross that.' },
+  { bas: 20.38, son: 23.98, tr: 'Pompa çalıştığı sürece su verir. Durduğu anda keser.', en: 'A pump gives water while it runs. It stops the moment it stops.' },
+  { bas: 25.38, son: 28.98, tr: 'Kanal bir kez kazılır. Sonra kendi kendine akar.', en: 'A channel is dug once. After that it flows on its own.' },
+  { bas: 40.13, son: 43.73, tr: 'Kanalı seçenler işe tek bir kuyuyla başladı. Üç yüz metre, yalnızca suyun nerede olduğunu bulmak için.', en: 'The ones who chose the channel began with a single well. Three hundred metres, only to find where the water was.' },
+  { bas: 54.59, son: 58.19, tr: 'Gerisi tek bir sayıdır. Her kilometrede bir metre iniş.', en: 'The rest comes down to one number. One metre of drop for every kilometre.' },
+  { bas: 70.34, son: 73.94, tr: 'Fazlası kanalı aşındırır. Azı suyu durdurur.', en: 'Too much and the channel erodes. Too little and the water stops.' },
+  { bas: 76.09, son: 79.69, tr: 'Otuz üç kilometre boyunca her elli metrede bir kuyu açılır.', en: 'Across thirty-three kilometres, a shaft is sunk every fifty metres.' },
+  { bas: 84.84, son: 88.44, tr: 'Kazı, ancak ölçülebildiği yerde ilerler.', en: 'Digging only advances where it can be measured.' },
+  { bas: 92.14, son: 95.74, tr: 'Üç bin yıl geçti. Problem yerinde duruyor.', en: 'Three thousand years on, the problem is unchanged.' },
+  { bas: 99.64, son: 103.24, tr: 'Kanal hâlâ kanal. Değişen, içinden akan şey.', en: 'The channel is still a channel. What runs through it is not.' },
+  { bas: 104.64, son: 108.24, tr: 'Su değil. Talep.', en: 'Not water. Demand.' },
+  { bas: 118.14, son: 121.74, tr: 'Müşterin bir yerde arıyor. Sen başka yerdesin. Arası kazılmamış.', en: 'Your customer is looking somewhere. You are somewhere else. Nothing has been dug between you.' },
+  { bas: 131.89, son: 135.49, tr: 'Qanat kazan hiçbir uygarlıkta su eksik değildi.', en: 'No civilisation that dug qanats was short of water.' },
+  { bas: 192.64, son: 196.24, tr: 'Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, su çekildikçe derinleştirilir.', en: 'A channel is not finished the day it is dug. It is extended as the city grows, deepened as the water falls.' },
+  { bas: 200.89, son: 204.49, tr: 'Bırakılanı çöl geri alır.', en: 'What is abandoned, the desert takes back.' },
+  { bas: 228.73, son: 232.33, tr: 'Her şehir bir kanalın ucunda kurulmuştur.', en: 'Every city was built at the end of a channel.' },
+  { bas: 234.73, son: 238.33, tr: 'Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır.', en: 'So was yours. It has either been dug or it has not.' },
+  { bas: 241.73, son: 245.33, tr: 'Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında, reklamda, kendi sitende.', en: 'We dig it. In search, in AI answers, in ads, on your own site.' },
+  { bas: 247.98, son: 251.58, tr: 'Pompayı da kurarız. Ama kanal yoksa, pompa durduğu gün her şey durur.', en: 'We will run the pump too. But with no channel, the day the pump stops, everything stops.' },
+  { bas: 252.98, son: 256.58, tr: 'Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz.', en: "We don't measure where demand comes from. We know, and we create it." },
+];
+const KUNYELER = [
+  { bas: 0.30, son: 13.08, tr: 'I · KAYNAK · 0 km · yüzeyden 300 m', en: 'I · THE SOURCE · 0 km · 300 m below' },
+  { bas: 13.38, son: 53.29, tr: 'II · İKİ YOL · 0 km · 300 m', en: 'II · TWO WAYS · 0 km · 300 m' },
+  { bas: 53.59, son: 88.59, tr: 'III · EĞİM · 8 km · 210 m · 1:1000', en: 'III · THE GRADIENT · 8 km · 210 m · 1:1000' },
+  { bas: 88.89, son: 121.84, tr: 'IV · KANAL', en: 'IV · THE CHANNEL' },
+  { bas: 122.14, son: 228.43, tr: 'V · ÖLÇEK · 33 km', en: 'V · SCALE · 33 km' },
+  { bas: 228.73, son: 256.64, tr: 'VI · KENT · 33 km · yüzey', en: 'VI · THE CITY · 33 km · surface' },
 ];
 ---
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
@@ -111,13 +138,22 @@ const SOZLER = [
             fl-halka ayni dil, degerler bekcide (film-halka.test.mjs) */}
         <a class="fl-gec" href="#fl-son"><i class="fl-halka" aria-hidden="true"></i><span>{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</span></a>
       </div>
-      {/* TUR 5 · hikaye cumleleri: motor `.fl-soz-gor` sinifiyla surer;
-          motorsuz/azaltma yolunda CSS hepsini onsoz blogu olarak basar
-          (metin kaybolmaz). Yerlesim film.css "HIKAYE METINLERI". */}
+      {/* TUR 5 v2 · anlati bloklari + perde kunyeleri: motor ikisini de
+          `.fl-soz-gor` sinifiyla surer (kunye .fl-soz'u paylasir, stili
+          .fl-kunye ezer — motor degismedi). Motorsuz/azaltma yolunda CSS
+          hepsini onsoz blogu olarak basar (metin kaybolmaz). */}
       <div class="fl-sozler">
+        {KUNYELER.map((z) => (
+          <p class="fl-soz fl-kunye" data-bas={z.bas} data-son={z.son}>{dil === 'en' ? z.en : z.tr}</p>
+        ))}
         {SOZLER.map((z) => (
           <p class="fl-soz" data-bas={z.bas} data-son={z.son}>{dil === 'en' ? z.en : z.tr}</p>
         ))}
+        {/* rakam kaynagi (uydurma rakam yasagi): kucuk, surekli degil —
+            son perdeyle gorunur; motorsuz yolda blok sonunda okunur */}
+        <p class="fl-soz fl-kaynak" data-bas={228.73} data-son={256.64}>
+          {dil === 'en' ? 'Figures: UNESCO World Heritage — The Persian Qanat (2016)' : 'Rakamlar: UNESCO Dünya Mirası — The Persian Qanat (2016)'}
+        </p>
       </div>
       {SAHNELER.map((s, j) => (
         <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
