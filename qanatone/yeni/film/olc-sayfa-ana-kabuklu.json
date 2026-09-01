@@ -1,0 +1,86 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-01T20:03:12.940Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "tekrar": 3,
+ "esik": {
+  "p95_ms": 20,
+  "takilma_esik_ms": 50,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03
+ },
+ "hukum": "GECTI",
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/",
+   "js_bayt": 10301,
+   "js_tavan": 12800,
+   "kosum": [
+    {
+     "kare": 2024,
+     "tur_ms": 18428,
+     "p95_ms": 16.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 450,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 14007.2001953125,
+     "toplam_px": 15925
+    },
+    {
+     "kare": 2088,
+     "tur_ms": 18453,
+     "p95_ms": 8.9,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 14007.2001953125,
+     "toplam_px": 15925
+    },
+    {
+     "kare": 2117,
+     "tur_ms": 18336,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 14007.2001953125,
+     "toplam_px": 15925
+    }
+   ],
+   "p95_medyan": 8.9,
+   "takilma_oran_medyan": 0.0032,
+   "takilma_tek_max": 150,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  }
+ ]
+}

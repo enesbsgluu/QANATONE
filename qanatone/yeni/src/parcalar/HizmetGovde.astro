@@ -64,7 +64,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   <span>{M('Tüm hizmetler', 'All services')}</span>
 </a>
 
-<section class="giris">
+<section class="giris" id="hizmetdetay">
   {/* Künye şeridi: kaynak 4986 `#sdTag` — hizmetin `tag` alanı, `.mono`.
       `etiket` prop'u kabuğa gidiyordu ve kabuk onu BASMIYOR; sayfa
       etiketi gövde künyesinde yaşar (dizin sayfasının kararıyla aynı). */}
@@ -280,7 +280,8 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     border-radius: 0 0 18px 18px; padding: 4px 22px 22px; margin-top: -6px; }
   .xc[open] .step { border-radius: 18px 18px 0 0; border-bottom-color: transparent;
     padding-bottom: 14px; }
-  .xcl h4 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; }
+  /* 4 Eyl tipografi turu: Uncut Sans 1,35rem "Doğrulanamayan" 190 px kartta 21 px tasiyordu (olc-tasma) — uzun tek kelime kirilir */
+  .xcl h4 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; overflow-wrap: anywhere; hyphens: auto; }
   .xcl .xcs { display: block; font-family: var(--f-tek); font-size: 12px;
     letter-spacing: .18em; text-transform: uppercase; color: var(--red-soft);
     margin-bottom: 18px; }

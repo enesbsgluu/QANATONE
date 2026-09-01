@@ -133,7 +133,7 @@
   text-transform:uppercase;color:rgba(255,255,255,.78);line-height:1.4}
 
 /* referans tipografisi: serif, ince, isikli */
-.sh-h1{font-family:var(--f-baslik);font-weight:500;
+.sh-h1{font-family:var(--f-hero);font-weight:500;
   font-size:clamp(2.8rem,7.6vw,5.9rem);line-height:1.06;letter-spacing:-.028em;
   color:#fff;margin-bottom:26px;
   text-shadow:0 1px 22px rgba(0,0,0,.5),0 0 34px rgba(255,198,204,.28)}

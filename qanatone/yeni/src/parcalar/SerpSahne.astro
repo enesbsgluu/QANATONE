@@ -70,9 +70,9 @@ const W = [74, 58, 66, 49];
 <style>
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec > .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
 
   /* --- kap ve sahne: kaynak 721-745 birebir (Manrope→gövde F1) --- */
@@ -82,8 +82,8 @@ const W = [74, 58, 66, 49];
     margin-bottom: 18px; border: 1px solid var(--line2); border-radius: 999px;
     background: #0c0c0d; }
   .clsearch svg { width: 16px; height: 16px; color: var(--tx3); flex: none; }
-  .clsearch span { font-size: .9rem; color: var(--tx2); font-family: ui-monospace, monospace; }
-  .clpos { margin-left: auto; font-family: ui-monospace, monospace; font-size: 12px;
+  .clsearch span { font-size: .9rem; color: var(--tx2); font-family:var(--f-tek); }
+  .clpos { margin-left: auto; font-family:var(--f-tek); font-size: 12px;
     color: var(--red-soft); border: 1px solid rgba(239, 35, 60, .35); border-radius: 8px;
     padding: 4px 10px; background: rgba(239, 35, 60, .07); font-variant-numeric: tabular-nums; }
   .cllist { display: flex; flex-direction: column; gap: 10px; }
@@ -95,11 +95,11 @@ const W = [74, 58, 66, 49];
   .clrt b { font-size: .84rem; font-weight: 600; letter-spacing: -.01em; }
   .clrt i { display: block; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .07); }
   .clyt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .clyt em { font-style: normal; font-family: ui-monospace, monospace; font-size: 10px;
+  .clyt em { font-style: normal; font-family:var(--f-tek); font-size: 10px;
     letter-spacing: .08em; color: var(--red-soft); }
   .clyt b { font-size: .94rem; font-weight: 600; letter-spacing: -.01em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .clms { font-size: .66rem; color: var(--tx4); font-family: ui-monospace, monospace; }
+  .clms { font-size: .66rem; color: var(--tx4); font-family:var(--f-tek); }
   .clr.you { border-color: rgba(239, 35, 60, .45);
     background: linear-gradient(90deg, rgba(239, 35, 60, .10), rgba(239, 35, 60, .02));
     position: relative; z-index: 2; }
@@ -135,7 +135,7 @@ const W = [74, 58, 66, 49];
     border-color: color-mix(in srgb, var(--red) calc(var(--zirve) * 100%), rgba(239, 35, 60, .45)); }
   /* zirve rozeti — kaynak .clr.you::after (784-789) */
   .clr.you::after { content: '#1'; position: absolute; top: -9px; right: 12px;
-    font-family: ui-monospace, monospace; font-size: 10px; color: #fff;
+    font-family:var(--f-tek); font-size: 10px; color: #fff;
     background: var(--red); border-radius: 7px; padding: 2px 8px;
     opacity: var(--zirve);
     transform: translateY(calc((1 - var(--zirve)) * 4px)) scale(calc(.8 + .2 * var(--zirve))); }

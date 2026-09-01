@@ -149,9 +149,9 @@ let ki = -1;
   /* ═══ KAP · kaynak 3746-3775 birebir ═══ */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
   .qtstage { border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
     display: flex; flex-direction: column; max-height: calc(100vh - 60px);
@@ -163,7 +163,7 @@ let ki = -1;
     font-size: clamp(12.5px, 1.05vw, 14.5px); color: #fff; flex: none; }
   .qtlogo b { width: 16px; height: 16px; border-radius: 5px; background: var(--red); }
   .qtrail { display: flex; align-items: center; gap: clamp(8px, 1.1vw, 16px); flex-wrap: wrap;
-    margin-left: auto; font-family: ui-monospace, monospace;
+    margin-left: auto; font-family:var(--f-tek);
     font-size: clamp(9px, .78vw, 10.5px); letter-spacing: .1em; text-transform: uppercase; }
   .qtstep { display: flex; align-items: center; gap: 6px; }
   .qtstep b { width: 6px; height: 6px; border-radius: 50%; flex: none; }
@@ -181,13 +181,13 @@ let ki = -1;
   .qtq { color: #fff; font-size: clamp(13px, 1.15vw, 16px); white-space: nowrap; }
   .qtq i { font-style: normal; }
   .qtcar { width: 1.5px; height: 1.1em; background: var(--red-soft); opacity: 0; flex: none; }
-  .qths { margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px;
+  .qths { margin-left: auto; font-family:var(--f-tek); font-size: 11px;
     letter-spacing: .08em; color: var(--tx4); flex: none; }
   .qtchips { display: flex; gap: 8px; flex-wrap: wrap; }
   .qtchip { padding: 7px 14px; border-radius: 999px; font-size: clamp(11px, .92vw, 12.5px);
     background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
   .qtfound { margin-top: auto; display: flex; align-items: baseline; gap: 12px; }
-  .qtfound em { font-family: ui-monospace, monospace; font-style: normal; font-weight: 700;
+  .qtfound em { font-family:var(--f-tek); font-style: normal; font-weight: 700;
     font-size: clamp(26px, 3.4vw, 46px); color: var(--red-soft); letter-spacing: -.02em;
     font-variant-numeric: tabular-nums; }
   .qtfound i { font-style: normal; color: var(--tx3); font-size: clamp(12px, 1vw, 14px); }
@@ -196,7 +196,7 @@ let ki = -1;
   .qthead, .qtrow { display: grid; grid-template-columns: 1.9fr .8fr .9fr 1fr; gap: 10px;
     align-items: center; }
   .qthead { padding: 0 12px 10px; border-bottom: 1px solid var(--line);
-    font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em;
+    font-family:var(--f-tek); font-size: 9.5px; letter-spacing: .12em;
     text-transform: uppercase; color: var(--tx4); }
   .qthead span:not(:first-child), .qtm { text-align: right; }
   .qtlist { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; overflow: hidden; }
@@ -207,7 +207,7 @@ let ki = -1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .qtco i { font-style: normal; color: var(--tx4); font-size: clamp(10px, .82vw, 11.5px); }
   .qtm { display: flex; flex-direction: column; gap: 2px; }
-  .qtm em { font-style: normal; font-family: ui-monospace, monospace; color: var(--tx2);
+  .qtm em { font-style: normal; font-family:var(--f-tek); color: var(--tx2);
     font-size: clamp(11.5px, .95vw, 13px); font-variant-numeric: tabular-nums; }
   .qtm i { font-style: normal; color: var(--tx4); font-size: 9.5px; letter-spacing: .06em; }
 
@@ -232,13 +232,13 @@ let ki = -1;
   .qtsum li::before { content: ''; position: absolute; left: 0; top: .55em; width: 7px;
     height: 7px; border-radius: 2px; background: var(--red); }
   .qtdm { padding: clamp(12px, 1.4vw, 17px); margin-top: auto; }
-  .qtrole { font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em;
+  .qtrole { font-family:var(--f-tek); font-size: 9.5px; letter-spacing: .12em;
     text-transform: uppercase; color: var(--tx4); }
   .qtname { display: block; margin: 4px 0 10px; color: #fff; font-weight: 650;
     font-size: clamp(13px, 1.1vw, 15.5px); }
   .qtcon { display: flex; gap: 8px; flex-wrap: wrap; }
   .qtcon i { font-style: normal; padding: 7px 13px; border-radius: 9px;
-    font-family: ui-monospace, monospace; font-size: clamp(10.5px, .86vw, 12px);
+    font-family:var(--f-tek); font-size: clamp(10.5px, .86vw, 12px);
     color: var(--tx2); background: rgba(255, 255, 255, .05); border: 1px solid var(--line2); }
 
   /* perde 4 — ilk temas (3862-3890) */
@@ -247,7 +247,7 @@ let ki = -1;
     flex: 1; min-height: 0; }
   .qtmh { display: flex; gap: 10px; align-items: baseline; padding-bottom: 8px;
     border-bottom: 1px solid var(--line); }
-  .qtmh i { font-style: normal; font-family: ui-monospace, monospace; font-size: 9.5px;
+  .qtmh i { font-style: normal; font-family:var(--f-tek); font-size: 9.5px;
     letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); flex: none; min-width: 52px; }
   .qtmh b { color: #fff; font-weight: 500; font-size: clamp(11.5px, .95vw, 13px);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

@@ -57,3 +57,16 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
   Content-Security-Policy-Report-Only: default-src 'self'; base-uri 'self'; object-src 'none'; media-src 'self' blob:; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src https:; form-action 'self'
+
+# SOKUM VE TASIMA TURU (4 Eyl 2026) — TUR4 §4 kesfinin uc boslugu:
+# /yeni/404.html kok /404.html deseninin disindaydi (noindex yalniz meta),
+# /yeni/font ve /yeni/img hicbir onbellek desenine girmiyordu. Font ve
+# gorsel adlari hash'siz: 1 gun, immutable DEGIL (klip politikasiyla ayni).
+/yeni/404.html
+  X-Robots-Tag: noindex
+
+/yeni/font/*
+  Cache-Control: public, max-age=86400
+
+/yeni/img/*
+  Cache-Control: public, max-age=86400

@@ -43,6 +43,10 @@ const markup = yolDuzelt(navM[0] + heroM[0])
   .replace(/<img (?![^>]*loading=)/g, '<img loading="lazy" ')
   .replace(/ loading="lazy" loading="lazy"/g, ' loading="lazy"');
 const stil = stilM[1]
+  /* YORUMLAR SOYULUR (4 Eyl): kaynagin yorumlari GSAP/Lenis/Manrope
+     anlatiyor — kapi "ciktida 0 eslesme" yorumu da sayar; ustelik gomuye
+     bayt tasiyorlar (kunye kaynakta kalir, ciktiya girmez ilkesi). */
+  .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/url\((['"]?)img\//g, 'url($1/img/')
   .replace(/:root\b/g, ':host')
   .replace(/\bhtml,body\b/g, ':host')
@@ -51,7 +55,16 @@ const stil = stilM[1]
   /* kapi: uretilen sayfada 'iframe' 0 eslesme — gomulen stilde vitrin
      bolumunun OLU kurali (.stlvw iframe) kaliyordu; iframe secicili
      kurallar dusurulur (hero hicbirini kullanmiyor). */
-  .replace(/[^{}]*iframe[^{}]*\{[^}]*\}/g, '');
+  .replace(/[^{}]*iframe[^{}]*\{[^}]*\}/g, '')
+  /* SOKUM VE TASIMA TURU (4 Eyl): tipografi Uncut Sans — gomulen eski
+     stildeki CDN aileleri (Manrope/Inter/JetBrains) gomude zaten
+     yuklenmiyordu (CDN bagi gomulmez, sisteme dusuyordu); kabugun
+     ailesine baglanir. Playfair hero basligi olduğu gibi kalir. */
+  .replace(/'?(Manrope|Inter|JetBrains Mono)'?\s*,\s*((system-ui|ui-monospace)\s*,\s*)?(sans-serif|monospace)/g, "'Uncut Sans',system-ui,sans-serif")
+  .replace(/font-family:\s*'?(Manrope|Inter|JetBrains Mono)'?(?=[;}])/g, "font-family:'Uncut Sans',system-ui,sans-serif")
+  /* kapi: gsap/lenis 0 eslesme — gomulen stilde Lenis'in kaydirma
+     sinif kurallari (html.lenis*) kaliyordu; motor yok, kural olu. */
+  .replace(/[^{}]*\.lenis[^{}]*\{[^}]*\}/g, '');
 ---
 <div class="fl-eski-giris" id="fl-eski" data-tubes={tubesM[1]}>
   <template shadowrootmode="open">
