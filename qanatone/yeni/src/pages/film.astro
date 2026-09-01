@@ -9,6 +9,7 @@
 import Temel from '../layouts/Temel.astro';
 import Film from '../parcalar/Film.astro';
 import EskiGiris from '../parcalar/EskiGiris.astro';
+import PRDag from '../sahneler/PRDag.astro';
 const canon = 'https://qanatone.netlify.app/yeni/film';
 ---
 {/* GOVDE = ESKI SITENIN GIRISI (31 Agu 2026, Enes): "Videonun son sahnesi
@@ -23,6 +24,11 @@ const canon = 'https://qanatone.netlify.app/yeni/film';
   aciklama="Prolog filminin 39 kliplik scroll-scrub iskeleti; motor, dikiş, bütçe ve savurma ölçüm zemini. Ürün sayfası değildir."
   canonical={canon}>
   <h1 class="fl-gizli">Film iskeleti</h1>
+  {/* GECE TUR 2b (birlesme, Enes tercihi): amblem prologu ANA SAYFADAN
+      buraya tasindi — ana sayfa hafifledi (H18), akis tek parca oldu:
+      amblem dogar -> canli durur -> nav'a oturur (halka.ts, olculmus
+      rampa) -> nav amblemle cekilir -> film -> TV kapanisi -> site. */}
+  <PRDag dil="tr" />
   <Film dil="tr" />
   <div class="fl-govde" id="fl-govde">
     <EskiGiris />

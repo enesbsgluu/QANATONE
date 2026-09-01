@@ -978,6 +978,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
           .concat([...g.matchAll(/<source[^>]*\bsrcset="([^"]+)"/g)]
             .map(m => m[1].split(',')[0].trim().split(/\s+/)[0]));
         for (const u of yollar) {
+          /* GECE TUR 2b ISTISNASI (gevseme degil genisleme): gomulu eski
+             giris (EskiGiris.astro) KAYNAGA BAGLI olarak kok varliklari
+             kullanir — /img/ ayni origin, birlesme talimatinin geregi.
+             Yol yine de DISKTE denetlenir (kok dist'inde). */
+          if (u.startsWith('/img/')) {
+            if (!fs.existsSync(path.join(KOK, '..', u.replace(/^\//, ''))))
+              kusur.push(rel(p2) + ':kayip-kok:' + u);
+            continue;
+          }
           if (!u.startsWith('/yeni/')) { kusur.push(rel(p2) + ':yabanci:' + u); continue; }
           if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, ''))))
             kusur.push(rel(p2) + ':kayip:' + u);
@@ -1680,7 +1689,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    olmali). Durdurma kurali onunla ayni dugumde. */
 {
   const kusur = [];
-  const h = oku(path.join(KOK, 'index.html'));
+  /* GECE TUR 2b (1-2 Eyl, Enes karari): prolog ana sayfadan FILM
+     sayfasina tasindi (ana sayfa H18 icin hafifledi; akis tek parca).
+     Kural ayni, hedef sayfa degisti — sessiz gevseme yok. */
+  const h = oku(path.join(KOK, 'film', 'index.html'));
   const sahne = (h.match(/<section class="pr"[\s\S]*?<\/section>/) || [''])[0];
   if (!sahne) kusur.push('sahne-yok');
   else {
@@ -1797,7 +1809,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   /* metal 10 -> 12 KB (24 Agu): dogus (iki bicim) +~0,6 KB; olcup cekildi. */
   const TAVAN = { gl: 6 * 1024, isci: 22 * 1024, metal: 12 * 1024 };
   const astro = path.join(KOK, '_astro');
-  const hh = oku(path.join(KOK, 'index.html'));
+  const hh = oku(path.join(KOK, 'film', 'index.html'));   /* TUR 2b: prolog film sayfasinda */
   const dosyalar = fs.existsSync(astro) ? fs.readdirSync(astro) : [];
   for (const [ad, kalip] of [['gl', /^gl\..*\.js$/], ['isci', /^isci-.*\.js$/], ['metal', /^metal-.*\.js$/]]) {
     const parca = dosyalar.filter(f => kalip.test(f));
@@ -2197,7 +2209,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (fs.readFileSync(path.join(pkok, j), 'utf8').indexOf('"_"') < 0)
       kusur.push('kunye-kaynaktan-silinmis:' + j);
 
-  const ana = oku(path.join(KOK, 'index.html'));
+  const ana = oku(path.join(KOK, 'film', 'index.html'));   /* TUR 2b: prolog film sayfasinda */
   if (adi && ana.indexOf(adi) >= 0) kusur.push('amblem-parcasi-sayfaya-baglanmis');
 
   /* (g) KATMAN VE KIZIL - ikisi de 23 Agu'da ekranda OLCULEREK kondu.
