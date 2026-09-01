@@ -914,12 +914,12 @@ async function calisma() {
     const { dom } = ortam(html, ORIGIN + '/', { kur: stub });
     const w = dom.window, d = w.document;
     await dur(1200);
-    const ertelenen = ['demandMap', 'kanal', 'flow', 'sizinti', 'hesap',
+    const ertelenen = ['kanal', 'flow', 'sizinti', 'hesap',
                        'projectsArchive', 'subscribe', 'diag'];
     const K = w.__kapiDurum || {};
     const bekleyen = ertelenen.filter(a => K[a] === 'bekliyor');
-    const damgasiz = !(d.querySelector('#globe') || {}).__kur
-                  && !(d.querySelector('#msn') || {}).__kur;
+    const damgasiz = !(d.querySelector('#msn') || {}).__kur
+                  && !(d.querySelector('#hsSec') || {}).__kur;
     const istisna = (d.getElementById('akis') || {}).__kur === 1;
     /* gözlemcileri elle tetikle: bölümler kadraja girmiş gibi */
     w.__ioKayit.forEach(o => { try {
@@ -927,13 +927,13 @@ async function calisma() {
     } catch (e) {} });
     await dur(250);
     const kosan = ertelenen.filter(a => (w.__kapiDurum || {})[a] === 'kostu');
-    const kuruldu = (d.querySelector('#globe') || {}).__kur === 1;
+    const kuruldu = (d.querySelector('#msn') || {}).__kur === 1;
     dom.window.close();
-    ol('görünürlük kapısı: 8 kurulum ertelenir, tetikte kurulur, ilk ekran hep kurulu',
-       bekleyen.length === 8 && damgasiz && istisna
-         && kosan.length === 8 && kuruldu,
-       `bekleyen=${bekleyen.length}/8 damgasiz=${damgasiz} istisna=${istisna}` +
-       ` kosan=${kosan.length}/8 globe=${kuruldu}`);
+    ol('görünürlük kapısı: 7 kurulum ertelenir, tetikte kurulur, ilk ekran hep kurulu',
+       bekleyen.length === 7 && damgasiz && istisna
+         && kosan.length === 7 && kuruldu,
+       `bekleyen=${bekleyen.length}/7 damgasiz=${damgasiz} istisna=${istisna}` +
+       ` kosan=${kosan.length}/7 msn=${kuruldu}`);
   }
 
   /* 127 · BİLEŞEN KİMLİĞİ SÜSTEN AYRI YAŞAR (2026-08 regresyon dersi,
@@ -1360,8 +1360,10 @@ async function ciktiDenetimi() {
       if (IZIN.some(k => parca.indexOf(k.replace(/\s+/g, '')) > -1)) continue;
       ham.push(kod.slice(m.index, m.index + 58).replace(/\s+/g, ' '));
     }
-    /* Kapı gerçekten KULLANILIYOR mu — korunan yedi sistem. Tanım satırı
-       `genislikDegisince=(` olduğu için bu sayıma girmiyor.            */
+    /* Kapı gerçekten KULLANILIYOR mu — korunan ALTI sistem (4 Eyl 2026:
+       yediydi; talep akış haritası söküldü, 400×142 ızgara abonesi de
+       onunla gitti — Enes'in söküm kararı, SOKUM-KARAR-LISTESI). Tanım
+       satırı `genislikDegisince=(` olduğu için bu sayıma girmiyor.     */
     const abone = (kod.match(/genislikDegisince\(/g) || []).length;
 
     /* #wmk ayrıca GÖRÜNÜRLÜĞE bağlı: footer'da ve `.pg` damgası yok, yani
@@ -1372,7 +1374,7 @@ async function ciktiDenetimi() {
                        && /if\(bayat\)\{bayat=false;stop\(\);boot\(\);return;\}/.test(kod.replace(/\s+/g, ''));
 
     ol('adres çubuğu (yalnız yükseklik) yeniden kurulum tetiklemiyor',
-       kapiVar && kapiGenislik && vvYok && ham.length === 0 && abone >= 7 && wmkGorunurluk,
+       kapiVar && kapiGenislik && vvYok && ham.length === 0 && abone >= 6 && wmkGorunurluk,
        `kapi=${kapiVar}/${kapiGenislik} vvYok=${vvYok} abone=${abone} wmkGorunurluk=${wmkGorunurluk}` +
        (ham.length ? ` · IZINSIZ HAM BAG=${ham.length}: ${ham.slice(0, 3).join(' | ')}` : ' · izinsiz ham bag yok'));
   }
