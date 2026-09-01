@@ -976,4 +976,28 @@ const TELI = [0, 1, 2, 3];
   .hoz b, .hpara b { font-family:var(--f-tek); }
   .hpara b:first-of-type { font-size: 1.3rem; color: var(--red-soft); }
   .hnot { color: var(--tx3); font-size: .82rem; margin-top: 12px; }
+  /* --- #flow kaydirma cizelgesi: `animation` KISAYOLU animation-timeline'i
+     sifirlar, bu blok o kurallardan SONRA gelmeli (olculdu: bloktan once
+     dururken .adugum/.ajan-kart/.bi dongude kaliyordu) --- */
+  /* SURUCU KURALI (Enes, 5 Eyl): akis diyagrami bir SURECI anlatir —
+     kaydirmaya baglanir, dongu yok. .akis3 adli view cizelgesi tasir
+     (--flow); tel paketleri, dugum dalgasi, ajan satirlari ve beyin
+     nabzi o cizelgede SONLU tekrarla akar (sonsuz tekrar cizelgede
+     durur). Zaman gecikmeleri cizelgede yok: tellerin sira hissi
+     aralik kaydirmasiyla (gecikme/sure orani x tekrar payi). */
+  @supports (animation-timeline: view()) {
+    .akis3 { view-timeline: --flow block; }
+    .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation-timeline: --flow; animation-iteration-count: 6; animation-delay: 0s; animation-range: cover 0% cover 100%; }
+    .sus-tel .iz1, .sus-tel-m .iz1 { animation-range: cover -4.2% cover 95.8%; }
+    .sus-tel .iz2, .sus-tel-m .iz2 { animation-range: cover -8.3% cover 91.7%; }
+    .sus-tel .iz3, .sus-tel-m .iz3 { animation-range: cover -12.5% cover 87.5%; }
+    .sus-tel.sag .tel-iz, .sus-tel-m.sag .tel-iz { animation-range: cover -2.1% cover 97.9%; }
+    .sus-tel.sag .iz1, .sus-tel-m.sag .iz1 { animation-range: cover -6.3% cover 93.7%; }
+    .sus-tel.sag .iz2, .sus-tel-m.sag .iz2 { animation-range: cover -10.4% cover 89.6%; }
+    .sus-tel.sag .iz3, .sus-tel-m.sag .iz3 { animation-range: cover -14.6% cover 85.4%; }
+    .adugum { animation-timeline: --flow; animation-iteration-count: 6; animation-delay: 0s;
+      animation-range: cover calc(var(--hi, 0) * -4.2%) cover calc(100% - var(--hi, 0) * 4.2%); }
+    .ajan-kart ol { animation-timeline: --flow; animation-iteration-count: 5; }
+    .bi { animation-timeline: --flow; animation-iteration-count: 6; }
+  }
 </style>

@@ -47,7 +47,7 @@
 | finans | detay görseli yuvası | 8208 | statik | — (det.img bugün boş) |
 | ai-ajan | ajan kadrosu | 7656-7699 | ada ~500 B (çip → ayrıntı) | KAYDIRMA (view(): satırlar) |
 | /otomasyon | sızıntı pini | 11603-11611 | statik (CSS sticky) | KAYDIRMA (adlı view, contain 0-100) |
-| /otomasyon | sızıntı tanecikleri | 9803-9944 | dinamik (sizinti.js, IO) | IO doğuş tetiği → rAF; ilerleme `--szt` |
+| /otomasyon | sızıntı tanecikleri | 9803-9944 | dinamik (sizinti.js, IO) | KAYDIRMA: akış `--szt` ilerlemesinden, scroll olayında tek kare (v2) |
 | /otomasyon | canlı iş akışı şeridi + sayaç | 5024-5051 | — | TAŞINMADI: sahte canlılık (uydurma rakam çizgisi) — karar Enes'te |
 | /bulten | sektör filtre çipleri | 7208-7224 | statik (radyo + :has) | yok |
 | yazı | geri bağı + "diğer yazılar" şeridi | 5168 · 7265-7288 | ada ~450 B | tıklama / scroll senkron |
@@ -55,7 +55,7 @@
 ## Düzenekler (yeni)
 
 - `yeni/film/olc-tasma.cjs` — tipografi aile + taşma, 63 sayfa × 2 genişlik.
-- `yeni/film/olc-surucu.cjs` — sürücü kapısı (kadraja girişle başlayan sonlu animasyon).
+- `yeni/film/olc-surucu.cjs` — sürücü kapısı v2 (kadrajda kendi kendine dönen/girişle başlayan her hareket; istisnalar adıyla).
 - `yeni/film/olc-sayfa.cjs` — EK KAPI: kare p95 / takılma / taban / JS, sayfa sayfa (FILTRE, GIZLE, `?kabuk=0` kolları).
 - `yeni/kabuk-derle.cjs` — kabuk.js · pano.js · sizinti.js · tespit-fix.json (esbuild).
 
@@ -65,3 +65,31 @@
 - Bölüm bileşenlerinin `<script>`i yalnız o bileşen basılınca sayfaya girer (seo sayfası kadro/teslimat betiğini taşımıyor) — ama CSS'i her hizmet sayfasına iner.
 - `olc-devir` daima `AZALT=1` ile; damgasız koşum 538/398 px yanlış kırmızı.
 - Arka plan bash zinciri öldürülünce node/brave çocukları yetim kalır; uzun rig'ler ön planda, 10 dakikalık parçalarla.
+
+## Sürücü kapısı v2 (5 Eyl 2026) — AYRIM KURALI (kalıcı)
+
+**Bir süreci anlatan hareket kaydırmaya bağlanır. Doku, amblem ve dekor serbest kalır.** Gerekçe (Enes): kendi kendine dönen süreç görseli izleyiciye "sen buna dahil değilsin" der.
+
+Kapı genişledi: kadraja girişle başlayan ya da kadrajda kendi kendine dönen HER hareket kapsamda, sonlu ya da sonsuz. İstisna: kullanıcı etkileşimiyle başlayanlar ve saf dekoratif döngüler.
+
+| kapsam (kaydırmaya bağlandı) | nasıl |
+|---|---|
+| /otomasyon akış diyagramı `#flow` (tel paketleri, düğüm dalgası, ajan satırları, beyin nabzı) | `.akis3` adlı view çizelgesi `--flow`; sonlu tekrar (5-6) kaydırma aralığına yayılır; zaman gecikmeleri aralık kaydırmasıyla |
+| ana sayfa #akis mini demolar (5 kart) | `ViewTimeline({subject: .sa-ray})`; karttaki her animasyon aynı toplam süreye (16 s) normalize, tekrar sayısı süre/16 s — göreli tempolar korunur, döngü yok |
+| hizmet giriş demoları `.hd-demo` (4 sayfa) | aynı yardımcı, özne demonun kendisi |
+| sızıntı tanecikleri | zaman değil `--szt`: kaydırmayla akar, durunca durur; sürekli rAF yok (scroll olayında tek kare) |
+
+| istisna | gerekçe |
+|---|---|
+| pazar motoru amblemi + kıvılcımlar (`amCW/amCCW/kivGit`) | dekor; MotorSahne ayrı tur, dokunulmadı |
+| TradeSelf amblemi `.tsa` | amblem, dekor (IO play/pause kaldı) |
+| `qtCar` imleç yanıp sönmesi | dekor |
+| hero tüpleri (WebGL) | zemin dokusu |
+| düğme huzmesi `sus-gaspin` | saf dekor, geç düğmesi halkasıyla aynı sınıf |
+| şerit `st-akis` | logo dokusu, yüklemede başlar |
+| hero açılışı `sh-*` | yüklemeyle bir kez, kadraj tetiği değil |
+| yıldız tuvali, bit damgası | dekor kabuk |
+| ajan imleci, ayrıntı şeridi parlamaları (`blok-parla`, `kdIn`) | kullanıcı etkileşimi |
+| perde | oturumda bir kez, açılış |
+
+Düzenek `olc-surucu.cjs` istisnaları adıyla listeler; 59 sayfa 0 ihlal, enjekte kırmızı yakalandı. /otomasyon önce/sonra: `olc-sayfa-A.json` ↔ `olc-sayfa-otomasyon-sonra.json`.
