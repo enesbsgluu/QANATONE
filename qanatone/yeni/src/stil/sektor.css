@@ -198,5 +198,5 @@
 .sse-slp button.on{color:var(--red-soft);border-color:rgba(239,35,60,.5);background:var(--red-dim)}
 /* ikinci dugme (kaynak .btn-g): cerceveli, zemin yok */
 .sse-cagri{display:flex;gap:10px;flex-wrap:wrap}
-.sse-dugme-g{background:transparent;color:var(--tx2);border:1px solid var(--line2)}
-.sse-dugme-g:hover{color:var(--tx);border-color:var(--red)}
+.dugme.sse-dugme-g{background:transparent;color:var(--tx2);border:1px solid var(--line2)}
+.dugme.sse-dugme-g:hover{color:var(--tx);border-color:var(--red)}

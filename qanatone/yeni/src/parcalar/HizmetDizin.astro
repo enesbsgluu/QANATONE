@@ -56,6 +56,13 @@
       Görünüm aynı (`list-style:none`), ekran okuyucuda sayı kazanılıyor. */
 import { getCollection } from 'astro:content';
 import { icerik, T, type Dil } from '../icerik';
+/* SOKUM VE TASIMA TURU (4 Eyl): kaynagin /hizmetler sayfasi bento
+   altinda ikinci bir demo talep formu tasiyordu (SOKUM-KARAR-LISTESI §2
+   "alt demo formu", karar: birebir geri) — ana sayfanin SILIletisim
+   sahnesi (CTA + lead formu) burada da basilir; ana.css .kunye/.s1-*
+   kunyeleri icin iner. */
+import '../stil/ana.css';
+import SILIletisim from '../sahneler/SILIletisim.astro';
 import Ikon from './Ikon.astro';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
@@ -117,9 +124,9 @@ const on = dil === 'en' ? '/en' : '';
   })}
 </ol>
 
-<p class="son">
-  <a class="dugme sus-isik" href={`${B}${on}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
-</p>
+{/* ALT DEMO FORMU (kaynak 5011 sonrasi #lead kopyasi): "Konusalim"
+    dugmesi yerine formun kendisi — sayfa icinde talep birakilir. */}
+<SILIletisim dil={dil} />
 
 <style>
   /* ---- BAŞ: kaynağın `.pgback` + `.shead` ailesi (365-374, 2516-2519) ---- */

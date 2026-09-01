@@ -22,6 +22,13 @@ import AracSahne from './AracSahne.astro';
 import PlatformSahne from './PlatformSahne.astro';
 import CanliSahne from './CanliSahne.astro';
 import MotorSahne from './MotorSahne.astro';
+/* SOKUM VE TASIMA TURU (4 Eyl): kaynagin SDT haritasindaki (8211-8231)
+   uc blok geri geldi — finans: tradeMfst + deliverStage, ai-ajan:
+   kadroStage; det.img gorsel yuvasi. Sira kaynaktan: sahne · vuruslar ·
+   [manifesto · pazar motoru · teslimat] / [kadro] · gorsel · kartlar · cagri. */
+import MfstBlok from './MfstBlok.astro';
+import KadroBlok from './KadroBlok.astro';
+import TeslimatBlok from './TeslimatBlok.astro';
 import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
@@ -87,7 +94,6 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 {d.story?.tools && <AracSahne story={d.story} dil={dil} />}
 {d.trade && <PlatformSahne trade={d.trade} dil={dil} />}
 {(d.story?.sites || d.story?.live) && <CanliSahne story={d.story} dil={dil} />}
-{d.market && <MotorSahne market={d.market} dil={dil} />}
 
 {/* ÜÇ VURUŞ — kaynağın `sdHits`i (7575-7579) ve SIRASI: SDT haritasının
     hepsinde `stage + sdHits + ...`, yani vuruşlar sahneden SONRA gelir.
@@ -101,12 +107,22 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   ))}
 </div>}
 
+{/* GERI GELEN BLOKLAR (sokum turu) — kaynak sirasi: finans `tradeStage +
+    sdHits + tradeMfst + marketStage + deliverStage`, ai-ajan `flowStage +
+    sdHits + kadroStage`. Pazar motoru bu yuzden vuruslardan SONRA. */}
+{d.mfst && <MfstBlok mfst={d.mfst} dil={dil} />}
+{d.market && <MotorSahne market={d.market} dil={dil} />}
 {/* TradeSelf amblemi (A2) — yalnız finans; künye demo-detay.css'te.
     role="img" + engineLab kaynaktan (8232). Katman sırası kaynak
     markup'ıyla aynı: dış → beyin → iç. */}
 {s.slug === 'finans' && <div class="tsa" role="img" aria-label="TradeSelf">
   <i class="tsa-dis"></i><i class="tsa-beyin"></i><i class="tsa-ic"></i>
 </div>}
+{d.kadro && <KadroBlok kadro={d.kadro} dil={dil} />}
+{d.deliver && <TeslimatBlok deliver={d.deliver} dil={dil} />}
+{/* DETAY GORSELI (kaynak sdImg 8208-8210): det.img varsa tam genislik;
+    bugun hicbir hizmet tasimiyor (finans '' ) — yuva duruyor. */}
+{d.img && <div class="sdsec"><img class="sdimg" src={d.img} alt="" loading="lazy" decoding="async" /></div>}
 
 {/* ALTI GENİŞLEYEN KART — kaynağın `sdGrid`i (7586-7606) birebir SIRA:
     üç dert + "Nasıl yürütürüz" + "Eline geçenler" + "Hedefler & SSS".
@@ -226,6 +242,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
   .pgback svg { width: 14px; height: 14px; }
   .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .sdimg { width: 100%; border-radius: var(--r-lg, 20px); border: 1px solid var(--line); display: block; }
   .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px;
     font-family: var(--f-tek); font-size: 12px; letter-spacing: .22em;
     text-transform: uppercase; color: var(--tx3); }

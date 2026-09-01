@@ -226,6 +226,13 @@ const TELI = [0, 1, 2, 3];
     PIN hâlâ YOK (D2c açık, Enes kararı): kaynak max-height'i
     (100vh-44px) pin kilidi içindi, pin'siz alınsa içeriği keserdi —
     bilinçli alınmadı. Sürücü view() scrub aynı. */}
+{/* SOKUM VE TASIMA TURU (4 Eyl): PIN GERI GELDI (kaynak ST pin +=2.2vh,
+    11603-11611) — CSS sticky: .sz-ray kilit rayi (320vh), sahne icinde
+    yapisik; surucu rayin ADLI view cizelgesi (contain 0-100 = kilitli
+    pencere). Mobilde de sticky (Anayasa'nin "mobilde pin yok" maddesi GSAP
+    pinlerini kapsar, CSS yapisik serbest — denetim H notu). Tanecik
+    rAF'i da geri geldi: varlik/sizinti.js, IO dogus tetigiyle iner. */}
+<div class="sz-ray">
 <div class="blok szstage sz-surus">
   <div class="szhd">
     <div>
@@ -237,6 +244,7 @@ const TELI = [0, 1, 2, 3];
   <p class="szchans">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
   <div class="szwrap" id="szWrap">
     <svg class="sus-huni" aria-hidden="true"></svg>
+    <canvas class="sus-sizinti" id="szCv" aria-hidden="true"></canvas>
     <div class="szside left">
       {[0, 2].map(k => { const [sorun, belirti, cozum] = SIZINTI[k]; return (
         <span class="szleak" style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
@@ -269,6 +277,10 @@ const TELI = [0, 1, 2, 3];
     <p class="szend" set:html={suz(m('szg', 'Yeni bütçe değil, <em>kaçan müşteri</em> geri geldi.'), ['em'])} />
   </div>
 </div>
+</div>
+{/* TANECIK TETIGI — sahne kadraja yaklasinca varlik/sizinti.js dinamik iner
+    (J1 disi); azaltmada modul tek kare cizer. YORUMSUZ satir ici. */}
+<script is:inline>(function(){var s=document.querySelector('.szstage');if(!s||!('IntersectionObserver'in window))return;var io=new IntersectionObserver(function(es){if(!es.some(function(e){return e.isIntersecting}))return;io.disconnect();import('/yeni/varlik/sizinti.js').then(function(m){m.baslat()}).catch(function(){})},{rootMargin:'300px 0px'});io.observe(s)})()</script>
 
 {/* ---- HUNİ (ada) ---- */}
 <div class="blok" id="huni">
@@ -731,9 +743,15 @@ const TELI = [0, 1, 2, 3];
      2804-2807 (max-height pin kilidi içindi — pin'siz ALINMADI, D2c;
      gölge H14 masaüstü). Fontlar F1: Manrope→gövde 700, JetBrains→
      ui-monospace. ==== */
-  .szstage { border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+  /* PIN (sokum turu): ray 100vh + 220vh (kaynak +=innerHeight*2.2), sahne
+     yapisik, ust bosluk 22px; kaynak max-height (2806) kilit icindi, geri
+     geldi. Ray adli view cizelgesi tasir; sahne onu surer. */
+  .sz-ray { position: relative; height: 320vh; view-timeline: --sz block; }
+  .szstage { position: sticky; top: 22px; max-height: calc(100vh - 44px);
+    border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
     display: flex; flex-direction: column;
     background: linear-gradient(168deg, #131316, #0b0b0d); }
+  .sus-sizinti { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
   .szhd { padding: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 40px) clamp(12px, 1.6vw, 22px);
     border-bottom: 1px solid var(--line); display: flex; align-items: flex-end;
     justify-content: space-between; gap: 20px; flex-wrap: wrap; }
@@ -897,8 +915,8 @@ const TELI = [0, 1, 2, 3];
      tetiklemez; bilinçli mekanizma eşlemesi, oranlar aynı). */
   @property --szt { syntax: '<number>'; inherits: true; initial-value: 1; }
   @supports (animation-timeline: view()) {
-    .sz-surus { animation: szt-surus linear both; animation-timeline: view();
-      animation-range: cover 5% cover 90%; }
+    .sz-surus { animation: szt-surus linear both; animation-timeline: --sz;
+      animation-range: contain 0% contain 100%; }
   }
   @keyframes szt-surus { from { --szt: 0; } to { --szt: 1; } }
   .cip, .szleak, .szst {

@@ -1,0 +1,78 @@
+---
+/* TESLIMAT ANATOMISI (sokum ve tasima turu, 4 Eyl 2026) — kaynak
+   `deliverStage` 7705-7752 BIREBIR markup (tphd/tpbar/tpfan: klasor +
+   teller + numarali kartlar + dosya cipleri / tpdetail / tpend), yalniz
+   det.deliver tasiyan hizmet (finans). Referans thefounderos
+   "encoded-company/". Cipe dokun/uzerine gel -> ayrinti seridi (kaynak
+   7754-7770). Teller sabit viewBox + pathLength=1: kaynagin telHizala
+   olcumu (offsetParent zinciri, resize) TASINMADI — non-scaling-stroke
+   ile olcum gerekmiyor. Beliris kaydirmayla (blok.css view() scrub). */
+import '../stil/blok.css';
+import { T, suz } from '../icerik';
+interface Props { deliver: any; dil?: 'tr' | 'en' }
+const { deliver: t, dil = 'tr' } = Astro.props;
+const en = dil === 'en';
+const tx = (v: unknown) => T(v, dil);
+const K: any[] = t.folders || [];
+const n = Math.max(1, K.length);
+const teller = K.map((_: any, i: number) => { const y = ((100 / n) * (i + .5)).toFixed(1); return `M0,50 C46,50 54,${y} 100,${y}`; });
+const ilk = (K[0] && K[0].files && K[0].files[0]) || { n: '', d: '' };
+---
+<div class="sdsec">
+  <span class="mono">{en ? 'The delivery — the anatomy every report shares' : 'Teslimat — her raporun taşıdığı anatomi'}</span>
+  <div class="tpbox" id="tpBox">
+    <div class="tphd">
+      <span class="tpk"><i></i>{tx(t.k)}</span>
+      <h3 set:html={suz(tx(t.h), ['em', 'br'])} />
+      <p>{tx(t.p)}</p>
+    </div>
+    <div class="tpbar"><span class="tppath">pazar-raporu/</span><em>· {en ? 'the anatomy every delivery shares' : 'her teslimin taşıdığı anatomi'}</em></div>
+    <div class="tpfan">
+      <span class="sus-tppx" aria-hidden="true"></span>
+      <div class="sus-tpleft">
+        <span class="tpfolder" aria-hidden="true">
+          <svg viewBox="0 0 120 96" fill="none">
+            <path d="M6 20a8 8 0 0 1 8-8h30l10 11h52a8 8 0 0 1 8 8v53a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8z" fill="url(#tpg1)"/>
+            <path d="M6 34h108v45a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8z" fill="url(#tpg2)"/>
+            <path d="M18 45h48" stroke="rgba(255,255,255,.34)" stroke-width="3" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="tpg1" x1="6" y1="12" x2="114" y2="92" gradientUnits="userSpaceOnUse"><stop stop-color="#ff4459"/><stop offset="1" stop-color="#a10f22"/></linearGradient>
+              <linearGradient id="tpg2" x1="6" y1="34" x2="114" y2="87" gradientUnits="userSpaceOnUse"><stop stop-color="#ef233c"/><stop offset="1" stop-color="#7d0d1c"/></linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <b>pazar-raporu/</b><i>{tx(t.lab)}</i>
+      </div>
+      <div class="sus-tpmid" aria-hidden="true">
+        <svg class="tpwires" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {teller.map((d) => <path d={d} pathLength="1" />)}
+        </svg>
+      </div>
+      <div class="tpcards">
+        {K.map((k: any, i: number) => (
+          <div class="sus-tpcard">
+            <span class="tpch"><b>0{i + 1}</b><em>{tx(k.t)}</em><i>{tx(k.d)}</i><u>{k.n}</u></span>
+            <span class="tpchips">
+              {(k.files || []).map((f: any) => <button class="tpchip" type="button" data-fd={tx(f.d)} data-fn={f.n}><s></s>{f.n}</button>)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="tpdetail" id="tpDetail"><b>{ilk.n}</b><i>{tx(ilk.d)}</i></div>
+    <div class="tpend" set:html={suz(tx(t.end), ['em', 'br'])} />
+  </div>
+</div>
+
+<script>
+  /* cip -> ayrinti seridi (kaynak 7754-7770): tik, uzerine gelme, odak */
+  const goster = (b: HTMLElement) => {
+    const box = b.closest('.tpbox'); const det = box && box.querySelector('.tpdetail') as HTMLElement | null; if (!det) return;
+    box!.querySelectorAll('.tpchip').forEach((x) => x.classList.toggle('on', x === b));
+    det.querySelector('b')!.textContent = b.dataset.fn || '';
+    det.querySelector('i')!.textContent = b.dataset.fd || '';
+    det.classList.remove('sus-flash'); requestAnimationFrame(() => det.classList.add('sus-flash'));
+  };
+  for (const t of ['click', 'mouseover', 'focusin'])
+    document.addEventListener(t, (e) => { const b = (e.target as Element).closest && (e.target as Element).closest('.tpchip') as HTMLElement | null; if (b) goster(b); });
+</script>

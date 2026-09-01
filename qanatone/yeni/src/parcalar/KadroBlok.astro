@@ -1,0 +1,58 @@
+---
+/* AJAN KADROSU (sokum ve tasima turu, 4 Eyl 2026) — kaynak `kadroStage`
+   7656-7686 BIREBIR markup (kdhd/kdbar/kdtree/kddet/kdend), yalniz
+   det.kadro tasiyan hizmet (ai-ajan). Referans FounderOS personas/.
+   Ajana dokun -> ne yaptigi ve neye dokundugu (delegasyon, kaynak
+   7687-7699). Satirlarin belirisi kaydirmayla (blok.css view() scrub). */
+import '../stil/blok.css';
+import { T, suz } from '../icerik';
+interface Props { kadro: any; dil?: 'tr' | 'en' }
+const { kadro: K, dil = 'tr' } = Astro.props;
+const en = dil === 'en';
+const tx = (v: unknown) => T(v, dil);
+let n = 1; (K.dept || []).forEach((x: any) => { n += 1 + (x.ajan || []).length; });
+const cip = (a: any, tip: string, ad?: string) => ({ ad: ad || a.n, tip, kd: tx(a.a), ks: tx(a.s) });
+const kok = cip(K.kok || {}, 'kok');
+const satirlar = (K.dept || []).map((x: any) => ({
+  sef: cip({ a: x.a, s: '' }, 'sef', String(x.n || '').replace(/\/$/, '') + '-sefi'),
+  ad: tx(x.t),
+  ajan: (x.ajan || []).map((a: any) => cip(a, 'uz')),
+}));
+---
+<div class="sdsec">
+  <span class="mono">{en ? 'The roster — tap an agent to see its job' : 'Kadro — bir ajana dokun, işini gör'}</span>
+  <div class="kdbox" id="kdBox">
+    <div class="kdhd">
+      <span class="kdk"><i></i>{tx(K.k)}</span>
+      <h3 set:html={suz(tx(K.h), ['em', 'br'])} />
+      <p>{tx(K.p)}</p>
+    </div>
+    <div class="kdbar"><span class="kdpath">{K.yol || 'kadro/'}</span><em>· {tx(K.ipucu)}</em><b>{n} {en ? 'AGENTS' : 'AJAN'}</b></div>
+    <div class="kdtree">
+      <div class="kdkok"><button class={`kdc kdc-${kok.tip}`} type="button" data-ka={kok.ad} data-kd={kok.kd} data-ks={kok.ks}><s></s>{kok.ad}</button></div>
+      {satirlar.map((r: any) => (
+        <div class="sus-kdrow">
+          <div class="kdsef"><button class="kdc kdc-sef" type="button" data-ka={r.sef.ad} data-kd={r.sef.kd} data-ks=""><s></s>{r.sef.ad}</button><i>{r.ad}</i></div>
+          <div class="kdlist">{r.ajan.map((a: any) => <button class="kdc kdc-uz" type="button" data-ka={a.ad} data-kd={a.kd} data-ks={a.ks}><s></s>{a.ad}</button>)}</div>
+        </div>
+      ))}
+    </div>
+    <div class="kddet" id="kdDet"><b></b><i></i><span class="kdsc" hidden><u>{en ? 'scope' : 'kapsam'}</u><em></em></span></div>
+    <div class="kdend" set:html={suz(tx(K.end), ['em', 'br'])} />
+  </div>
+</div>
+
+<script>
+  /* ajana dokun -> ayrinti seridi (kaynak 7687-7699); delegasyon, tek dinleyici */
+  document.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest('[data-ka]') as HTMLElement | null; if (!b) return;
+    const box = b.closest('.kdbox'); const det = box && box.querySelector('.kddet') as HTMLElement | null; if (!det) return;
+    box!.querySelectorAll('[data-ka]').forEach((x) => x.classList.toggle('on', x === b));
+    det.querySelector('b')!.textContent = b.dataset.ka || '';
+    det.querySelector('i')!.textContent = b.dataset.kd || '';
+    const sc = det.querySelector('.kdsc') as HTMLElement;
+    sc.hidden = !b.dataset.ks; sc.querySelector('em')!.textContent = b.dataset.ks || '';
+    det.classList.add('on'); det.classList.remove('sus-flash');
+    requestAnimationFrame(() => det.classList.add('sus-flash'));
+  });
+</script>
