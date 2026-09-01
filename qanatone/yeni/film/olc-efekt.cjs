@@ -180,9 +180,34 @@ async function gecSur(p, nokta) {
 
   /* ---- 2) EFEKT A gercek olcum (TEKRAR, medyan) ---- */
   console.log('\n== EFEKT A · tv acma ==');
+  /* DURGUN TABAN PENCERESI (Enes, 3 Eyl gece — taban damgasi ilkesi bu
+     rig'e): dusenler ritmikti ve iz GPU'yu gosterdi; bes tek-degisken
+     hipotezi elendi. Soru su: 25 ms esiginde sayfanin DURGUN halinin
+     "dusen" tabani kac? Ayni sinyal turu (rAF araligi — GPU geri-
+     basinci BeginFrame'i geciktirir, rAF'a yansir), efekt penceresi
+     sayaciyla ayni esik. KAPI TABAN-GORECELI (asagida): efekt, tabanin
+     ustune kare EKLEMIYORSA gecer; taban 0 cikarsa eski kapi (0)
+     kendiliginden geri gelir. */
+  let taban = { dusen: null, sure_ms: null, hiz_sn: null };
   const aTekrar = [];
   for (let i = 0; i < TEKRAR; i++) {
     const { b, p } = await ac(process.env.SORGU ? `?${process.env.SORGU}` : '');
+    if (i === 0) {
+      /* taban: sayfa yuklu, film basinda, motor oturmus — 3 sn durgun */
+      const t = await p.evaluate(async (sureMs) => {
+        const ts = [];
+        await new Promise((res) => {
+          const t0 = performance.now();
+          const f = (x) => { ts.push(x); if (x - t0 >= sureMs) return res(); requestAnimationFrame(f); };
+          requestAnimationFrame(f);
+        });
+        let n = 0;
+        for (let j = 1; j < ts.length; j++) if (ts[j] - ts[j - 1] > 25) n++;
+        return { n, sure_ms: Math.round(ts[ts.length - 1] - ts[0]) };
+      }, 3000);
+      taban = { dusen: t.n, sure_ms: t.sure_ms, hiz_sn: +(t.n / (t.sure_ms / 1000)).toFixed(2) };
+      console.log(` taban (durgun ${t.sure_ms} ms, esik 25 ms): ${t.n} dusen → ${taban.hiz_sn}/sn`);
+    }
     /* TESHIS=1 (3 Eyl daraltma): ilk kosumda efekt penceresi izlenir —
        dusenler ritmikti (55-70 ms arayla), sinif/raster hipotezleri
        olcumle elendi; uzun gorevin ADINI trace soyler. */
@@ -209,13 +234,19 @@ async function gecSur(p, nokta) {
     console.log(` #${i + 1} yol ${d.yol} · sure ${sure} ms (${fazlar.cokus}+${fazlar.parlama}+${fazlar.acilis}) · efekt dusen ${dus} [cokus ${dusenFaz.cokus} · parla ${dusenFaz.parlama} · acilis ${dusenFaz.acilis} @ ${dz.join(',')}ms] · zoom dusen ${zoomDus}`);
     await b.close();
   }
+  /* KAPI TABAN-GORECELI (Enes, 3 Eyl gece): efekt penceresi basina
+     beklenen taban duseni = taban_hizi x medyan_sure; efekt bunun
+     USTUNE eklemiyorsa gecer. Taban 0 ise beklenen 0 -> eski kapi. */
+  const beklenenTaban = taban.hiz_sn == null ? 0
+    : Math.ceil(taban.hiz_sn * medyan(aTekrar.map((x) => x.sure_ms)) / 1000);
   S.A = {
     tekrar: aTekrar, medyan_sure: medyan(aTekrar.map((x) => x.sure_ms)), medyan_dusen: medyan(aTekrar.map((x) => x.dusen)),
+    taban, beklenen_taban_duseni: beklenenTaban,
     gecti: aTekrar.every((x) => x.yol === 'tv' && x.devirDurum === 'tam')
       && medyan(aTekrar.map((x) => x.sure_ms)) >= 400 && medyan(aTekrar.map((x) => x.sure_ms)) <= 550
-      && medyan(aTekrar.map((x) => x.dusen)) === 0,
+      && medyan(aTekrar.map((x) => x.dusen)) <= beklenenTaban,
   };
-  raporla('A: sure 400-550 + dusen 0 + tam', S.A);
+  raporla(`A: sure 400-550 + dusen<=taban(${S.A.beklenen_taban_duseni}) + tam`, S.A);
 
   /* ---- 3) EFEKT A hareket azaltma: sade yol ---- */
   {
