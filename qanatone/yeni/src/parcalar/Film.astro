@@ -303,27 +303,9 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       if (haz !== hazirlandi && (haz || scrollY < devirBas - 3 * vh)) {
         hazirlandi = haz;
         KOKE.classList.toggle('fl-hazirla', haz);
-        /* ESKI GIRIS GEC YUKLEME (Enes, 31 Agu): govde eski sitenin
-           girisi; 845 KB'lik sayfa film boyunca inmesin, ilk hazirlikta
-           insin. Perde bayragi ONCE yazilir — acilis torenini prolog
-           filmi ustlendi, devirde eski #boot perdesi oynamaz (sitenin
-           kendi 'oturumda bir kez' mekanizmasi). */
-        const eski = document.getElementById('fl-eski') as HTMLIFrameElement | null;
-        if (haz && eski && !eski.src) {
-          try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch {}
-          eski.addEventListener('load', () => {
-            KAYIT.eskiYuklendiMs = AN();
-            /* ESKI SAYFANIN KENDI YUMUSAK-HAREKET ANAHTARI: t-mo-soft
-               (noise+stars+tubes kapali — sitenin motion panel kipi).
-               Olculdu: huzme canvas'i acikken devirin hizli fazinda
-               15-20 dusen kare. Devir boyunca takili durur; tamYap
-               kaldirir ve sayfa devralinca huzmeler kendi 1,8 s'lik
-               gecisiyle dogar (__tubesInit — panelin kullandigi ayni
-               kurulum cagrisi). Ayni origin; olmazsa sessiz gecilir. */
-            try { eski.contentDocument?.documentElement.classList.add('t-mo-soft'); } catch {}
-          }, { once: true });
-          eski.src = eski.dataset.src || '/';
-        }
+        /* GOMULU ESKI GIRIS (gece TUR 2): iframe SOKULDU — hero
+           gorselleri lazy; govde hazirlikta gorunur olunca kendiliginden
+           inerler. Burada is kalmadi; tubes devir tamamlaninca baslar. */
       }
     };
     /* dortgenin o olcekteki ekran kenarlari (mikro ortalama dahil) */
@@ -333,16 +315,27 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
       const mx = g.cx + g.txSon * u, my = g.cy + g.tySon * u;
       return { sol: mx - g.qg * ss / 2, sag: mx + g.qg * ss / 2, ust: my - g.qh * ss / 2, alt: my + g.qh * ss / 2, u };
     };
-    /* eski girisi canlandirma: etkilesim + huzmelerin dogusu. TV yolunda
-       efektin SONUNA ertelenir — olculdu: __tubesInit parlama karesine
-       binince efekt penceresinde 1-2 dusen kare uretiyordu. */
+    /* eski girisi canlandirma: huzmelerin (tubes) dogusu. TV yolunda
+       efektin SONUNA ertelenir — olculdu: kurulum parlama karesine
+       binince efekt penceresinde 1-2 dusen kare uretiyordu. Kurulum
+       AYARI kokten cekilip data-tubes'ta (EskiGiris.astro); DPR kapagi
+       1,25 kaynaktaki gerekceyle ayni (giris kasmasinin GPU ayagi).
+       Basarisizlik sessiz — huzme dekor. */
+    let tubesApp: unknown = null;
     const eskiCanlandir = () => {
-      const eski = document.getElementById('fl-eski') as HTMLIFrameElement | null;
-      if (!eski) return;
-      eski.removeAttribute('aria-hidden'); eski.removeAttribute('tabindex');
+      const eski = document.getElementById('fl-eski');
+      const cv = eski?.shadowRoot?.getElementById('tubes') as HTMLCanvasElement | null;
+      if (!eski || !cv || tubesApp) return;
       try {
-        eski.contentDocument?.documentElement.classList.remove('t-mo-soft');
-        (eski.contentWindow as any)?.__tubesInit?.();
+        const ayar = new Function('return ' + (eski as HTMLElement).dataset.tubes)();
+        const gercekDpr = devicePixelRatio || 1;
+        try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => Math.min(gercekDpr, 1.25) }); } catch {}
+        /* yol degiskende: Vite derlemede cozmeye kalkmasin (kok varligi) */
+        const tubesYol = '/js/tubes.min.js';
+        import(/* @vite-ignore */ tubesYol).then((m: any) => {
+          try { tubesApp = m.default(cv, ayar); if (tubesApp) { cv.classList.add('on'); KAYIT.eskiYuklendiMs = AN(); } } catch {}
+          try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => gercekDpr }); } catch {}
+        }).catch(() => {});
       } catch {}
     };
     const tamYap = () => {

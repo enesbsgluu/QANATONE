@@ -1,0 +1,57 @@
+---
+/* ESKI GIRIS GOMUMU (GECE TUR 2 — birlesme, 1-2 Eyl 2026)
+   Devirin hedefi artik iframe DEGIL: eski sitenin nav + hero bolumu bu
+   parcayla filmin govdesine gomulur. KOPYA DEGIL, KAYNAGA BAGLI: kok
+   index.html DERLEMEDE okunur, <style> blogu + <nav id=nav> + <section
+   id=hero> + tubes kurulum ayari regex'le cekilir — eski site degisirse
+   bu gomum de degisir; cekim bozulursa DERLEME KIRMIZI.
+
+   IZOLASYON: Declarative Shadow DOM. Eski CSS (150 KB, global kurallar)
+   /yeni kabugunun stiline CARPMASIN diye shadow root'a gomulur; JS'siz
+   calisir (tarayici DSD'yi ayristirma aninda kurar). Shadow'da :root ve
+   html/body seciciler eslesmez — :host'a cevrilir (degiskenler + zemin
+   tipografisi tasinir). Yollar koke mutlaklanir (sayfa /yeni/film/,
+   goreli img/ kirilirdi — pencere turu /varlik dersi gibi yol tuzagi).
+
+   TEMBELLIK KORUNUR: hands gorselleri fetchpriority=high geliyordu —
+   film sayfasinin LCP'sine carpardi; lazy + low'a cevrilir. Govde
+   fl-hazirla'ya kadar visibility:hidden: gizli tembel gorsel istek
+   atmaz (prolog dersi), goruntuler ancak hazirlikta iner.
+
+   TUBES: kurulum AYARI kokten cekilip data-tubes'a basilir (Astro attr
+   escape'i guvenli); baslatma filmin surucusunde, devir TAMAMLANINCA
+   (efekt penceresine binmesin — t-mo-soft dersinin karsiligi). Saat
+   (#clock) statik 00:00 kalir, heroCta dugmesi JS'siz olu — bilinen
+   eksikler, gorsel hukum sabaha. */
+import fs from 'node:fs';
+
+const ham = fs.readFileSync(new URL('../../../index.html', import.meta.url), 'utf8');
+const stilM = /<style>([\s\S]*?)<\/style>/.exec(ham);
+const navM = /<nav id="nav">[\s\S]*?<\/nav>/.exec(ham);
+const heroM = /<section id="hero">[\s\S]*?<\/section>/.exec(ham);
+const tubesM = /app=F\(cv,(\{[\s\S]*?\})\);/.exec(ham);
+if (!stilM || !navM || !heroM || !tubesM)
+  throw new Error('EskiGiris: kök index.html bölümleri çekilemedi (style/nav/hero/tubes) — kaynak değişti mi?');
+
+const yolDuzelt = (h: string) => h
+  .replace(/(src|srcset)="img\//g, '$1="/img/')
+  .replace(/(href)="(?!https?:|\/|#)/g, '$1="/');
+const markup = yolDuzelt(navM[0] + heroM[0])
+  .replace(/ fetchpriority="high"/g, ' loading="lazy" fetchpriority="low"');
+const stil = stilM[1]
+  .replace(/url\((['"]?)img\//g, 'url($1/img/')
+  .replace(/:root\b/g, ':host')
+  .replace(/\bhtml,body\b/g, ':host')
+  .replace(/(^|\})\s*body\b/g, '$1 :host')
+  .replace(/(^|\})\s*html\b/g, '$1 :host')
+  /* kapi: uretilen sayfada 'iframe' 0 eslesme — gomulen stilde vitrin
+     bolumunun OLU kurali (.stlvw iframe) kaliyordu; iframe secicili
+     kurallar dusurulur (hero hicbirini kullanmiyor). */
+  .replace(/[^{}]*iframe[^{}]*\{[^}]*\}/g, '');
+---
+<div class="fl-eski-giris" id="fl-eski" data-tubes={tubesM[1]}>
+  <template shadowrootmode="open">
+    <style is:inline set:html={stil}></style>
+    <Fragment set:html={markup} />
+  </template>
+</div>
