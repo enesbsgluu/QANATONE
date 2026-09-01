@@ -17,7 +17,7 @@ const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
 const sorular = icerik.faq || [];
 ---
-<section class="giris">
+<section class="giris" id="sss">
   <p class="ust-etiket">{m('s5e', 'Sık sorulan sorular')}</p>
   <h1>{m('s5h', 'Dürüst cevaplar.')}
     <span class="say">({sorular.length})</span></h1>
@@ -38,7 +38,7 @@ const sorular = icerik.faq || [];
 </p>
 
 <style>
-  .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
+  .ust-etiket { color: var(--tx3); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
   .sorular { display: flex; flex-direction: column; gap: 10px; }

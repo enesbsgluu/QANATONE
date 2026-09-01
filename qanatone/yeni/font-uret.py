@@ -62,17 +62,16 @@ TREN = ','.join([
 TR_GLIF = 'U+011E-011F,U+0130,U+015E-015F,U+20BA'
 
 # (kaynak, hedef, kume, eksen daraltma)
+# SOKUM VE TASIMA TURU (4 Eyl 2026): Nunito Sans ve JetBrains Mono EMEKLI —
+# Uncut Sans her sayfa her alan; Playfair yalniz ana sayfa hero basligi.
+# Kaynak dosyalari font-kaynak/ta duruyor (geri donus izi), uretilmiyor.
 ISLER = [
-    ('nunito-sans-200-1000-latin.woff2',     'nunito-sans-latin.woff2',     TREN,    ['wght=300:800', 'opsz=12']),
-    ('nunito-sans-200-1000-latin-ext.woff2', 'nunito-sans-tr.woff2',        TR_GLIF, ['wght=300:800', 'opsz=12']),
     ('playfair-display-500-latin.woff2',     'playfair-display-500-latin.woff2',  TREN,    []),
     ('playfair-display-500-latin-ext.woff2', 'playfair-display-500-tr.woff2',     TR_GLIF, []),
     ('playfair-display-500i-latin.woff2',    'playfair-display-500i-latin.woff2', TREN,    []),
     ('playfair-display-500i-latin-ext.woff2', 'playfair-display-500i-tr.woff2',   TR_GLIF, []),
-    ('jetbrains-mono-400-latin.woff2',       'jetbrains-mono-400-latin.woff2', TREN,    []),
-    ('jetbrains-mono-400-latin-ext.woff2',   'jetbrains-mono-400-tr.woff2',    TR_GLIF, []),
-    # UNCUT SANS (2 Eyl 2026, TUR 5 hikaye metinleri — talimat sarti
-    # "Uncut Sans, agirlik 300-700"). Kaynak resmi depo
+    # UNCUT SANS (2 Eyl 2026 filmle geldi; 4 Eyl sokum turuyla SITENIN
+    # GOVDE FONTU oldu, agirlik 300-700). Kaynak resmi depo
     # github.com/kaspernordkvist/uncut_sans, SIL OFL 1.1
     # (font-kaynak/UNCUT-SANS-LICENSE.txt). Google bolmesi yok: tek
     # DEGISKEN dosyadan iki altkume (latin TREN + tr) burada uretilir;

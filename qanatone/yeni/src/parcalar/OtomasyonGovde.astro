@@ -99,7 +99,7 @@ const KAYDIRICI = [
    dasharray akan parça) kaynak paketlerinin eşleniği. */
 const TELI = [0, 1, 2, 3];
 ---
-<section class="giris">
+<section class="giris" id="ajan">
   <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
   <h1 set:html={suz(m('s8h', 'Hazır bot değil.<br><span class="thin">Senin işini öğrenen ajan.</span>'), ['br', 'span.thin'])} />
   <p class="lede">{m('s8p', 'Her kanal tek bir merkeze bağlanır. Ajan gelen talebi karşılar, eler, yönlendirir — sonuç elinde hazır olarak durur.')}</p>
@@ -493,10 +493,10 @@ const TELI = [0, 1, 2, 3];
 </script>
 
 <style>
-  .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
+  .ust-etiket { color: var(--tx3); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok { margin-top: 46px; }
-  .kicker { color: var(--red-soft); font-family: ui-monospace, monospace;
+  .kicker { color: var(--red-soft); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok h2 { font-size: 1.35rem; margin: 0 0 10px; }
   .aciklama { color: var(--tx2); font-size: .95rem; max-width: 60ch; }
@@ -603,7 +603,7 @@ const TELI = [0, 1, 2, 3];
     /* .ajan-ad öneki: taban display:none dosyada SONRA geldiğinden
        özgüllükle kazanılır (ölçümle yakalandı) */
     .ajan-ad .fbadge { display: inline-flex; align-items: center; gap: 6px; margin-left: auto;
-      font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .16em;
+      font-family:var(--f-tek); font-size: 9px; letter-spacing: .16em;
       text-transform: uppercase; color: var(--red-soft);
       border: 1px solid rgba(239, 35, 60, .4); border-radius: 999px;
       padding: 4px 9px; background: rgba(239, 35, 60, .08); }
@@ -615,7 +615,7 @@ const TELI = [0, 1, 2, 3];
     .ajan-kart li em { font-size: 10px; }
   }
 
-  .akbas { color: var(--tx3); font-size: .78rem; font-family: ui-monospace, monospace;
+  .akbas { color: var(--tx3); font-size: .78rem; font-family:var(--f-tek);
     letter-spacing: .08em; margin-bottom: 8px; }
   /* ---- DÜĞÜM KOMPOZİSYONU — kaynak .fnode 1336-1354 birebir.
      HOT DALGASI: kaynakta rAF tick'i 1.5 adım/sn ile düğümleri sırayla
@@ -644,7 +644,7 @@ const TELI = [0, 1, 2, 3];
   .nt { flex: 1; min-width: 0; }
   .nt b { display: block; font-size: .83rem; font-weight: 600; letter-spacing: -.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .nt span { font-size: .68rem; color: var(--tx4); font-family: ui-monospace, monospace;
+  .nt span { font-size: .68rem; color: var(--tx4); font-family:var(--f-tek);
     letter-spacing: .08em; }
   .nd { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
     background: color-mix(in srgb, var(--red) calc(var(--hp, 0) * 100%), var(--line2)); }
@@ -660,7 +660,7 @@ const TELI = [0, 1, 2, 3];
   .bi :global(svg) { width: 20px; height: 20px; }
   .bt { min-width: 0; }
   .bt b { display: block; font-size: 1rem; font-weight: 700; letter-spacing: -.03em; }
-  .bt span { font-family: ui-monospace, monospace; font-size: 9.5px;
+  .bt span { font-family:var(--f-tek); font-size: 9.5px;
     letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
   /* rozet kaynakta YALNIZ MOBİL (1384: taban gizli, 1410: ≤900 açık);
      noktası kaynakta ping2 TANIMSIZ keyframe'deydi → SABİT basılır;
@@ -691,7 +691,7 @@ const TELI = [0, 1, 2, 3];
     opacity: var(--on); }
   .ajan-kart li span { min-width: 0; }
   .ajan-kart li em { margin-left: auto; font-style: normal;
-    font-family: ui-monospace, monospace; font-size: 9px;
+    font-family:var(--f-tek); font-size: 9px;
     color: color-mix(in srgb, var(--red-soft) calc(var(--on) * 100%), var(--tx4)); }
 
   /* gölgeli vurgular yalnız masaüstü (H14): hot kutu/nokta glow'u,
@@ -722,7 +722,7 @@ const TELI = [0, 1, 2, 3];
 
   .gun { list-style: none; margin: 18px 0 0; padding: 0; }
   .gun li { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
-  .saat { font-family: ui-monospace, monospace; color: var(--red-soft);
+  .saat { font-family:var(--f-tek); color: var(--red-soft);
     font-size: .85rem; min-width: 58px; }
   .gun b { font-size: .95rem; }
   .gun p { color: var(--tx2); font-size: .88rem; margin-top: 4px; }
@@ -743,14 +743,14 @@ const TELI = [0, 1, 2, 3];
   /* :global — set:html içeriği scope damgası taşımaz (akış dersi) */
   .szhd h2 :global(em) { font-style: normal; color: var(--red-soft); }
   .szk { display: inline-flex; align-items: center; gap: 8px;
-    font-family: ui-monospace, monospace; font-size: clamp(9px, .76vw, 10.6px);
+    font-family:var(--f-tek); font-size: clamp(9px, .76vw, 10.6px);
     letter-spacing: .16em; text-transform: uppercase; color: var(--red-soft);
     margin: 0 0 10px; }
   .szk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
   .szbudget { flex: none; display: flex; flex-direction: column; gap: 3px; text-align: right; }
   .szbudget b { font-weight: 700; color: #fff; font-size: clamp(.98rem, 1.3vw, 1.24rem);
     letter-spacing: -.02em; }
-  .szbudget i { font-style: normal; color: var(--tx4); font-family: ui-monospace, monospace;
+  .szbudget i { font-style: normal; color: var(--tx4); font-family:var(--f-tek);
     font-size: clamp(8.6px, .74vw, 10.2px); letter-spacing: .12em; text-transform: uppercase; }
   /* çipler — kaynak .szch 2827-2835; on renkleri (kızıl kenar + beyaz
      metin) scrub'dan color-mix'le */
@@ -800,7 +800,7 @@ const TELI = [0, 1, 2, 3];
   .szfix { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px;
     border-radius: 999px; background: rgba(239, 35, 60, .12);
     border: 1px solid rgba(239, 35, 60, .4); color: var(--red-soft);
-    font-family: ui-monospace, monospace; font-size: clamp(9.2px, .8vw, 10.8px);
+    font-family:var(--f-tek); font-size: clamp(9.2px, .8vw, 10.8px);
     letter-spacing: .04em; white-space: nowrap;
     opacity: var(--mp, 0); transform: scale(calc(.9 + .1 * var(--mp, 0))); }
   .szfix s { width: 12px; height: 12px; border-radius: 50%; background: var(--red);
@@ -811,7 +811,7 @@ const TELI = [0, 1, 2, 3];
   /* "kalan müşteri" + beat rozeti — kaynak 2887-2898; beat penceresi
      p .435-.522 (10792), rampa ×22 ≈ kaynağın .4s geçişi */
   .szout { position: absolute; left: 50%; bottom: clamp(8px, 1.2vw, 18px);
-    transform: translateX(-50%); font-family: ui-monospace, monospace;
+    transform: translateX(-50%); font-family:var(--f-tek);
     font-size: clamp(9px, .8vw, 10.8px); letter-spacing: .14em; text-transform: uppercase;
     color: var(--tx3); opacity: clamp(0, (var(--szt, 1) - .30) * 20, 1); }
   .szbeat { position: absolute; left: 50%; top: 50%;
@@ -830,7 +830,7 @@ const TELI = [0, 1, 2, 3];
   .szst { display: flex; flex-direction: column; align-items: center; gap: 5px;
     height: 24%; justify-content: flex-start;
     opacity: var(--sp, 1); transform: translateY(calc((1 - var(--sp, 1)) * 6px)); }
-  .szst b { font-family: ui-monospace, monospace; font-size: clamp(9px, .8vw, 10.8px);
+  .szst b { font-family:var(--f-tek); font-size: clamp(9px, .8vw, 10.8px);
     letter-spacing: .14em; text-transform: uppercase; color: var(--tx3);
     font-weight: 500; }
   .szsb { width: min(70%, 150px); height: 4px; border-radius: 3px;
@@ -847,10 +847,13 @@ const TELI = [0, 1, 2, 3];
      tetiklemez, oranlar aynı — bilinçli mekanizma eşlemesi) */
   .szfoot { border-top: 1px solid var(--line);
     padding: clamp(16px, 2vw, 28px) clamp(20px, 2.6vw, 40px);
-    display: grid; grid-template-columns: 1fr auto;
+    /* 4 Eyl (olc-tasma, EN): `1fr auto` — auto sutun EN metninde 653 px'e
+       buyuyup cubuk sutununu 35 px'e sikistiriyordu, etiketler tasiyordu.
+       Ikinci sutun kapanis cumlesinin kendi tavani (300 px) ile sinirli. */
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
     gap: clamp(16px, 2.4vw, 36px); align-items: center; }
   .szbars { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
-  .szcap { font-family: ui-monospace, monospace; font-size: clamp(8.4px, .72vw, 10px);
+  .szcap { font-family:var(--f-tek); font-size: clamp(8.4px, .72vw, 10px);
     letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); }
   .cubuk { display: grid; grid-template-columns: clamp(46px, 5vw, 64px) 1fr;
     gap: 12px; align-items: center; margin: 0; }
@@ -937,7 +940,7 @@ const TELI = [0, 1, 2, 3];
   @media (max-width: 820px) { .hgrid { grid-template-columns: 1fr; } }
   .hrow { display: block; margin-top: 12px; }
   .hrow > span { display: flex; justify-content: space-between; font-size: .88rem; }
-  .hrow em { font-style: normal; font-family: ui-monospace, monospace;
+  .hrow em { font-style: normal; font-family:var(--f-tek);
     color: var(--red-soft); }
   .hrow input { width: 100%; accent-color: var(--red-soft); }
   .ara { color: var(--tx3); font-size: .8rem; margin-top: 16px; }
@@ -945,14 +948,14 @@ const TELI = [0, 1, 2, 3];
   .hakis li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
     padding: 7px 0; border-top: 1px solid var(--line); font-size: .86rem; }
   .hakis i { color: var(--tx2); }
-  .hakis b { font-family: ui-monospace, monospace; }
+  .hakis b { font-family:var(--f-tek); }
   .hbar { grid-column: 1 / -1; display: block; height: 5px; border-radius: 4px;
     background: var(--line); overflow: hidden; }
   .hbar u { display: block; height: 100%; background: rgba(239, 35, 60, .7); }
   .hoz, .hpara { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
     margin-top: 14px; font-size: .88rem; }
   .hoz span, .hpara span { color: var(--tx3); }
-  .hoz b, .hpara b { font-family: ui-monospace, monospace; }
+  .hoz b, .hpara b { font-family:var(--f-tek); }
   .hpara b:first-of-type { font-size: 1.3rem; color: var(--red-soft); }
   .hnot { color: var(--tx3); font-size: .82rem; margin-top: 12px; }
 </style>

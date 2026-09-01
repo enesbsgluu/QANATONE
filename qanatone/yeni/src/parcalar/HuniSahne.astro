@@ -53,7 +53,7 @@ const rows = (fun?.rows || []) as any[];
   /* --- kap ve satırlar: kaynak 626-638 birebir --- */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec > .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
   .fnstage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
     padding: clamp(20px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; }
@@ -64,9 +64,9 @@ const rows = (fun?.rows || []) as any[];
     border: 1px solid var(--line); overflow: hidden; }
   .fnbar i { display: block; height: 100%; font-style: normal; border-radius: 7px;
     background: linear-gradient(90deg, rgba(239, 35, 60, .28), var(--red)); }
-  .fnrow em { font-style: normal; font-family: ui-monospace, monospace; font-size: 12px;
+  .fnrow em { font-style: normal; font-family:var(--f-tek); font-size: 12px;
     color: var(--red-soft); text-align: right; font-variant-numeric: tabular-nums; }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 6px; }
   .fncn { display: flex; justify-content: center; margin: -4px 0; color: var(--tx4); }
   .fncn svg { width: 14px; height: 14px; }

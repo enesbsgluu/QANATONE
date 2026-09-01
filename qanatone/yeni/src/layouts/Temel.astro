@@ -1,14 +1,25 @@
 ---
-/* Ortak kabuk (Faz 1). Şölen yok — bilinçli (Faz 2'nin işi).
-   Baş sözleşmesi: title/description/canonical/hreflang/şema mevcut
-   sitedekiyle eşdeğer; kesmeye kadar noindex (N1) ve canonical canlı
-   kök karşılığına (kopya içerik doğmaz). Fontlar: sistem yığını —
-   marka yazı tipi Faz 2'de KENDİ alanımızdan gelecek (F1 bunu şimdiden
-   kilitliyor: üçüncü parti font sunucusu yasak). */
+/* Ortak kabuk. Baş sözleşmesi: title/description/canonical/hreflang/şema
+   mevcut sitedekiyle eşdeğer; kesmeye kadar noindex (N1) ve canonical
+   canlı kök karşılığına (kopya içerik doğmaz).
+
+   SÖKÜM VE TAŞIMA TURU (4 Eyl 2026, Enes kararı) — eski sitenin ORTAK
+   KABUĞU birebir geri geldi: perde (58 sayfanın hepsinde; film hariç),
+   yıldız tuvali, grain, ajan imleci, üç sütunlu footer + bit damgası +
+   alt satır. Markup kaynak kök index.html 4621-4629 (katmanlar) ve
+   5478-5512 (footer). Hareket dili YENİ: rAF katmanları kabuk/efekt.js
+   (dinamik ithal, boşta), GSAP/Lenis yok. Panel anahtarları
+   (content.json theme.motion) derlemede <html> sınıfı/verisi olur —
+   eskide applyTheme çalışma anında basıyordu (7257-7276).
+   `kabuk={false}`: film sayfası — kendi tam ekran sahnesi, kabuk
+   katmanları (yıldız/grain/imleç) ve perde orada doğmaz (prolog kapanış
+   tabloları kabuksuz ölçüldü; footer kalır). */
 import '../stil/aile.css';
 import '../stil/font.css';
 import '../stil/temel.css';
+import '../stil/kabuk.css';
 import Nav from '../parcalar/Nav.astro';
+import Perde from '../parcalar/Perde.astro';
 import { icerik, T } from '../icerik';
 
 interface Props {
@@ -25,12 +36,32 @@ interface Props {
      11056 `host.clientWidth`), 800 px'lik varsayılan gövdede o hesap
      kaynaktakinin yarısına düşüyordu. Opt-in — başka sayfa etkilenmez. */
   genis?: boolean;
+  perde?: boolean;            /* karşılama perdesi (varsayılan var) */
+  kabuk?: boolean;            /* yıldız/grain/imleç katmanları (varsayılan var) */
 }
 const { dil = 'tr', baslik, aciklama, canonical,
-        heleftr, helefen, sema = null, etiket, genis = false } = Astro.props;
+        heleftr, helefen, sema = null, etiket, genis = false,
+        perde = true, kabuk = true } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const en = dil === 'en';
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, tr: string, enV: string): string => T((s as any)[k], dil) || (en ? enV : tr);
+/* panel anahtarları — kaynak applyTheme 7257-7276: off(x) = x === 0 */
+const mo = (icerik.theme && icerik.theme.motion) || {};
+const off = (v: unknown) => v === 0 || v === '0' || v === false;
+const htmlSinif = [off(mo.grain) && 't-nograin', off(mo.stars) && 't-nostars', off(mo.cursor) && 't-noagent'].filter(Boolean).join(' ') || undefined;
+/* footer verisi — kaynak renderWa 7457-7467 (sahte 905000000000 düşüşü TAŞINMADI: numara yoksa bağ basılmaz) */
+const ayar = icerik.settings || {};
+const waNum = String(ayar.whatsapp || '').replace(/\D/g, '');
+const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
+const on = en ? '/en' : '';
+const SAYFALAR: [string, string, string, string][] = [
+  ['/projeler', 'nav1', 'Projeler', 'Projects'], ['/hizmetler', 'nav2', 'Hizmetler', 'Services'],
+  ['/bulten', 'nav6', 'Bülten', 'Newsletter'], ['/otomasyon', 'nav3', 'Otomasyon', 'Automation'],
+  ['/surec', 'nav4', 'Süreç', 'Process'], ['/sss', 'nav5', 'SSS', 'FAQ'],
+];
 ---
-<html lang={dil}>
+<html lang={dil} class={htmlSinif} data-imlec-gizle={off(mo.hideCursor) ? '0' : undefined} data-tur={off(mo.tour) ? '0' : undefined}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,24 +76,68 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
   <slot name="bas" />
 </head>
 <body>
+  {perde && <Perde />}
+  {/* KAYNAK 4621-4629: yıldız tuvali · grain · ajan imleci katmanları.
+      Hepsi aria-hidden dekor; balon (#bitsay) diyalog. Tuvaller JS'siz
+      boş durur (CSS gizler: dar ekran/dokunmatik/azaltma). */}
+  {kabuk && <canvas id="stars" aria-hidden="true"></canvas>}
+  {kabuk && <div id="noise" aria-hidden="true"></div>}
+  {kabuk && <div id="bit" class="kb-bit" aria-hidden="true"><span class="kb-ring"></span><span class="kb-core"></span></div>}
+  {kabuk && <div id="bittip" class="kb-tip" aria-hidden="true"></div>}
+  {kabuk && <div id="bitsay" class="kb-say" role="dialog" aria-label={m('bitw', 'QANATONE ajanı', 'QANATONE agent')} aria-live="polite">
+    <div class="who"><i></i><span>{m('bitw', 'QANATONE ajanı', 'QANATONE agent')}</span></div>
+    <p id="bitmsg"></p><div class="acts" id="bitacts"></div>
+  </div>}
   {/* Tasarım turu A1: Faz 1'in minimal .ust kabuğu yerini gerçek
-      NAV'a bıraktı (Enes hükmü: "menü bile yok, logo bile yok").
-      Etiket rozeti nav'a TAŞINMADI — kaynağın nav'ında yoktu, Faz 1
-      kabuğunun uydurmasıydı; sayfa etiketi gövde künyelerinde yaşar. */}
+      NAV'a bıraktı (Enes hükmü: "menü bile yok, logo bile yok"). */}
   <Nav dil={dil} />
   <main class={genis ? 'genis' : undefined}>
     <slot />
   </main>
+  {/* FOOTER — kaynak 5478-5512 birebir: üç sütun (tanıtım / Sayfalar /
+      İletişim) + QANATONE bit damgası + alt satır. Sosyal (#footSocial)
+      kaynakta da boştu (settings.social yok). /hukuki bağı yeni sayfanın
+      (öksüz kalmasın); "ana site" göç iskelesi bağı KALKTI. */}
   <footer>
-    <span>{T(icerik.legal?.line, dil) || '© QANATONE'}</span>
-    <span class="fright">
-      <a href={B + '/hukuki'}>{dil === 'en' ? 'Legal' : 'Hukuki'}</a> ·
-      {/* Kok siteye giden bag PREFETCH EDILMEZ: Astro'nun viewport
-          stratejisi eski ana sayfayi (28 KB, olculdu) ilk ekran hala
-          inerken cekiyordu. Gocte yeni sayfadan eski sayfayi onden
-          indirmek saf israf — hedef zaten terk edilecek. */}
-      <a href="/" data-astro-prefetch="false">{dil === 'en' ? 'main site' : 'ana site'}</a>
-    </span>
+    <div class="wrap">
+      <div class="fgrid">
+        <div class="lead">
+          <a class="flogo" href={`${B}${on || '/'}`}>
+            <i><picture>
+              <source srcset={`${B}/img/qanatone.avif`} type="image/avif" />
+              <img src={`${B}/img/qanatone.webp`} alt="" width="240" height="270" decoding="async" loading="lazy" />
+            </picture></i>
+            <b>QANAT<span>ONE</span></b>
+          </a>
+          <p>{m('foot1', 'Talebi yakalayan sistemler kuruyoruz: arama görünürlüğü, reklam ve 7/24 çalışan yapay zekâ ajanları.', 'We build systems that catch demand: search visibility, ads and AI agents working 24/7.')}</p>
+        </div>
+        <div class="fcol">
+          <h5>{m('fc1', 'Sayfalar', 'Pages')}</h5>
+          {SAYFALAR.map(([r, k, tr, enV]) => <a href={`${B}${on}${r}`}>{m(k, tr, enV)}</a>)}
+        </div>
+        <div class="fcol">
+          <h5>{m('fc2', 'İletişim', 'Contact')}</h5>
+          {waUrl && <a href={waUrl} target="_blank" rel="noopener">WhatsApp</a>}
+          {ayar.email && <a href={`mailto:${ayar.email}`}>{m('fmail', 'E-posta', 'Email')}</a>}
+        </div>
+      </div>
+    </div>
+    <div class="watermark"><h2 class="vh">QANATONE</h2><canvas id="wmk" aria-hidden="true"></canvas></div>
+    <div class="wrap">
+      <div class="fbot">
+        <span>{T(icerik.legal?.line, dil) || '© QANATONE'} · <a href={B + '/hukuki'}>{en ? 'Legal' : 'Hukuki'}</a></span>
+        <span class="r">
+          <span>{m('fb1', 'İstanbul · Dubai', 'Istanbul · Dubai')}</span>
+          <span>{m('fb2', 'SEO · GEO · Ads · AI', 'SEO · GEO · Ads · AI')}</span>
+        </span>
+      </div>
+    </div>
   </footer>
+  {/* KABUK TETİĞİ: rAF katmanları (yıldız, bit damgası, imleç) boşta
+      dinamik ithal — J1 dışı (film motoru deseni), kendi tavanı K1.
+      Hareket azaltmada damga statik kare çizer, öbürleri hiç kurulmaz
+      (modül içinde de kapılı). `?kabuk=0` ÖLÇÜM KOLU: kabuksuz taban
+      (olc-sayfa yan yana kıyası). YORUMSUZ satır içi: her bayt çıktıya gider. */}
+  {kabuk && <script is:inline>(function(){if(location.search.indexOf('kabuk=0')>-1)return;var f=function(){import('/yeni/varlik/kabuk.js').then(function(m){m.baslat()}).catch(function(){})};'requestIdleCallback'in window?requestIdleCallback(f,{timeout:2500}):setTimeout(f,600)})()</script>}
 </body>
 </html>

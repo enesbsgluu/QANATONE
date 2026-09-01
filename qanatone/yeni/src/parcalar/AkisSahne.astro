@@ -51,7 +51,7 @@ const rows = (flow?.rows || []) as any[];
   /* --- kap ve düğümler: kaynak 697-714 birebir (Manrope→gövde F1) --- */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec > .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
   .flstage { position: relative; display: flex; gap: 14px; border: 1px solid var(--line);
     border-radius: 18px; background: var(--card); padding: clamp(20px, 3vw, 32px);
@@ -79,7 +79,7 @@ const rows = (flow?.rows || []) as any[];
     height: 17px; border-radius: 50%;
     background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4L19 7'/%3E%3C/svg%3E") center / 9px 9px no-repeat;
     opacity: var(--lit); transform: scale(calc(.4 + .6 * var(--lit))); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
 
   /* --- sürücü: huni sahnesiyle aynı, kaynağın ST aralığı birebir --- */

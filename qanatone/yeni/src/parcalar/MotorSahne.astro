@@ -305,9 +305,9 @@ const egri = (c: any) => {
   /* ═══ KAP · kaynak 3379-3392 ═══ */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec > .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
   .mkstage { border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
     position: relative; display: flex; flex-direction: column; max-height: calc(100vh - 60px);
@@ -320,7 +320,7 @@ const egri = (c: any) => {
   .mklogo b { width: 15px; height: 15px; display: block; color: var(--red); }
   .mklogo svg { width: 100%; height: 100%; display: block; }
   .mkrail { display: flex; align-items: center; gap: clamp(6px, .9vw, 13px); flex-wrap: wrap;
-    margin-left: auto; font-family: ui-monospace, monospace;
+    margin-left: auto; font-family:var(--f-tek);
     font-size: clamp(8.4px, .72vw, 10px); letter-spacing: .09em; text-transform: uppercase; }
   .mkstep { display: flex; align-items: center; gap: 5px; }
   .mkstep b { width: 5px; height: 5px; border-radius: 50%; flex: none; }
@@ -334,7 +334,7 @@ const egri = (c: any) => {
   .mkact { width: 12.5%; height: 100%; flex: none; padding: clamp(16px, 2vw, 26px);
     overflow: hidden; display: flex; flex-direction: column; gap: clamp(10px, 1.3vw, 16px);
     content-visibility: auto; }
-  .mklab { font-family: ui-monospace, monospace; font-size: clamp(8.6px, .74vw, 10.2px);
+  .mklab { font-family:var(--f-tek); font-size: clamp(8.6px, .74vw, 10.2px);
     letter-spacing: .11em; text-transform: uppercase; color: var(--tx4); flex: none; }
   .mkstage b, .mkstage i, .mkstage em, .mkstage u, .mkstage s {
     font-style: normal; text-decoration: none; }
@@ -342,13 +342,13 @@ const egri = (c: any) => {
   /* 1 — ham veri (kaynak 3414-3451) */
   .mkcount { display: flex; gap: clamp(10px, 1.4vw, 20px); flex: none; }
   .mkcount span { display: flex; flex-direction: column; gap: 2px; }
-  .mkcount em { font-family: ui-monospace, monospace; font-weight: 700; color: var(--red-soft);
+  .mkcount em { font-family:var(--f-tek); font-weight: 700; color: var(--red-soft);
     font-size: clamp(16px, 1.9vw, 26px); letter-spacing: -.02em; }
   .mkcount i { color: var(--tx4); font-size: clamp(9.5px, .8vw, 11px); }
   .mksplit { display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(12px, 1.6vw, 22px);
     flex: 1; min-height: 0; }
   .mkfeed { display: flex; flex-direction: column; gap: 3px; overflow: hidden;
-    justify-content: center; font-family: ui-monospace, monospace;
+    justify-content: center; font-family:var(--f-tek);
     font-size: clamp(8.6px, .76vw, 10.4px); }
   .mkfr { display: grid; grid-template-columns: auto auto auto auto 1fr auto; gap: 6px;
     align-items: center; padding: 4px 8px; border-radius: 6px;
@@ -368,7 +368,7 @@ const egri = (c: any) => {
   .mkbar b { display: block; height: 100%; width: 0; border-radius: 4px;
     background: rgba(255, 255, 255, .22); }
   .mksec.hot .mkbar b { background: linear-gradient(90deg, var(--red), var(--red-soft)); }
-  .mksec em { font-family: ui-monospace, monospace; font-size: .92em; color: var(--tx4); }
+  .mksec em { font-family:var(--f-tek); font-size: .92em; color: var(--tx4); }
   .mksec.hot em { color: var(--red-soft); }
 
   /* 2 — sinyal (3453-3477) */
@@ -380,17 +380,17 @@ const egri = (c: any) => {
     border-right: 7px solid transparent; border-bottom: 12px solid var(--red); }
   .mksig b { display: block; color: #fff; font-weight: 650; font-size: clamp(12px, 1.1vw, 15px); }
   .mksig i { display: block; color: var(--tx3); font-size: clamp(10px, .86vw, 12px); margin-top: 2px; }
-  .mksig em { margin-left: auto; font-family: ui-monospace, monospace; font-weight: 700;
+  .mksig em { margin-left: auto; font-family:var(--f-tek); font-weight: 700;
     color: var(--red-soft); font-size: clamp(15px, 1.7vw, 23px); }
   .mkitems { display: flex; gap: 7px; flex-wrap: wrap; }
   .mkit { display: flex; flex-direction: column; gap: 2px; padding: 7px 12px; border-radius: 9px;
     background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
   .mkit i { color: var(--tx3); font-size: clamp(9.4px, .78vw, 10.8px); }
-  .mkit em { font-family: ui-monospace, monospace; color: #fff; font-size: clamp(10px, .86vw, 12px); }
+  .mkit em { font-family:var(--f-tek); color: #fff; font-size: clamp(10px, .86vw, 12px); }
   .mkarrow { width: 2px; height: 16px; margin: 0 auto;
     background: linear-gradient(180deg, var(--red), transparent); }
   .mkmades { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; }
-  .mkmlab { width: 100%; font-family: ui-monospace, monospace;
+  .mkmlab { width: 100%; font-family:var(--f-tek);
     font-size: clamp(8.6px, .74vw, 10.2px); letter-spacing: .11em; text-transform: uppercase;
     color: var(--tx4); }
   .mkmade { padding: 8px 15px; border-radius: 999px; background: var(--red-dim);
@@ -405,7 +405,7 @@ const egri = (c: any) => {
     border: 1px solid var(--line); }
   .mkmh { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
   .mkmh b { color: #fff; font-weight: 650; font-size: clamp(11.5px, 1vw, 13.6px); }
-  .mkdelta { font-family: ui-monospace, monospace; color: var(--red-soft);
+  .mkdelta { font-family:var(--f-tek); color: var(--red-soft);
     font-size: clamp(10px, .86vw, 12px); font-weight: 700; }
   .mkcv { width: 100%; flex: 1; min-height: 60px; }
   .mkcv polyline { fill: none; stroke: var(--red); stroke-width: 2.4;
@@ -413,12 +413,12 @@ const egri = (c: any) => {
     stroke-dasharray: 240; }
   .mkcv polygon { fill: url(#mkgrad); }
   .mkcv line { stroke: rgba(255, 255, 255, .07); stroke-width: 1; vector-effect: non-scaling-stroke; }
-  .mkax { display: flex; justify-content: space-between; font-family: ui-monospace, monospace;
+  .mkax { display: flex; justify-content: space-between; font-family:var(--f-tek);
     font-size: 8.6px; letter-spacing: .06em; color: var(--tx4); margin-top: -2px; }
   .mkline { display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
     padding-top: 7px; border-top: 1px solid var(--line); }
   .mkline i { color: var(--tx3); font-size: clamp(9.4px, .8vw, 11px); }
-  .mkline em { font-family: ui-monospace, monospace; color: #fff; font-size: clamp(10px, .86vw, 12px); }
+  .mkline em { font-family:var(--f-tek); color: #fff; font-size: clamp(10px, .86vw, 12px); }
 
   /* 4 — risk iştahı (3505-3536) */
   .mksplit2 { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(12px, 1.8vw, 26px);
@@ -426,13 +426,13 @@ const egri = (c: any) => {
   .mkcomps, .mkranks { display: flex; flex-direction: column; gap: 9px; }
   .mkcomp { display: grid; grid-template-columns: 1.5fr 1.6fr auto; gap: 9px; align-items: center;
     font-size: clamp(9.6px, .82vw, 11.4px); color: var(--tx2); }
-  .mkcomp em { font-family: ui-monospace, monospace; color: #fff; font-size: .94em; }
+  .mkcomp em { font-family:var(--f-tek); color: #fff; font-size: .94em; }
   .mkrkbox { position: relative; flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px; }
   .mkrk { display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: clamp(9px, 1.1vw, 14px) clamp(11px, 1.3vw, 16px); border-radius: 11px;
     background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
   .mkrk i { color: #fff; font-weight: 600; font-size: clamp(11px, .95vw, 13px); }
-  .mkrk em { font-family: ui-monospace, monospace; color: var(--tx3);
+  .mkrk em { font-family:var(--f-tek); color: var(--tx3);
     font-size: clamp(11px, .95vw, 13px); }
 
   /* 5 — davranışsal motor + amblem (3538-3586) */
@@ -475,13 +475,13 @@ const egri = (c: any) => {
     padding: 9px 13px; border-radius: 10px; background: rgba(255, 255, 255, .04);
     border: 1px solid var(--line2); }
   .mkhy i { color: var(--tx2); font-size: clamp(9.6px, .82vw, 11.4px); line-height: 1.3; }
-  .mkhy em { font-family: ui-monospace, monospace; color: var(--tx4); font-size: .94em; flex: none; }
+  .mkhy em { font-family:var(--f-tek); color: var(--tx4); font-size: .94em; flex: none; }
 
   /* 6 — karar ve sıçrama (3640-3663) */
   .mkdecs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex: none; }
   .mkdc { display: flex; flex-direction: column; gap: 3px; padding: clamp(9px, 1.1vw, 14px);
     border-radius: 11px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
-  .mkdc i { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+  .mkdc i { font-family:var(--f-tek); font-size: 8.6px; letter-spacing: .11em;
     text-transform: uppercase; color: var(--tx4); }
   .mkdc b { color: #fff; font-weight: 650; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.25; }
   .mkjump { display: grid; grid-template-columns: .85fr 1.3fr; gap: clamp(10px, 1.4vw, 18px);
@@ -491,7 +491,7 @@ const egri = (c: any) => {
   .mkjc.ask { background: rgba(255, 255, 255, .035); border: 1px solid var(--line2); }
   .mkjc.got { background: linear-gradient(150deg, rgba(239, 35, 60, .16), rgba(255, 255, 255, .02));
     border: 1px solid rgba(239, 35, 60, .45); }
-  .mkjl { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+  .mkjl { font-family:var(--f-tek); font-size: 8.6px; letter-spacing: .11em;
     text-transform: uppercase; color: var(--tx4); }
   .mkjc.got .mkjl { color: var(--red-soft); }
   .mkjc b { color: #fff; font-weight: 650; font-size: clamp(12px, 1.15vw, 16px); line-height: 1.25; }
@@ -502,14 +502,14 @@ const egri = (c: any) => {
   .mkch { display: flex; flex-direction: column; gap: 4px; padding: clamp(10px, 1.2vw, 15px);
     border-radius: 11px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line2); }
   .mkch i { color: var(--tx2); font-size: clamp(9.4px, .8vw, 11.2px); line-height: 1.25; }
-  .mkch em { font-family: ui-monospace, monospace; color: var(--red-soft); font-weight: 700;
+  .mkch em { font-family:var(--f-tek); color: var(--red-soft); font-weight: 700;
     font-size: clamp(12px, 1.1vw, 15px); }
   .mkinf { display: flex; align-items: center; gap: 12px; padding: clamp(11px, 1.3vw, 17px);
     border-radius: 12px; background: rgba(239, 35, 60, .08); border: 1px solid rgba(239, 35, 60, .3); }
   .mkinf > b { width: 30px; height: 30px; border-radius: 9px; flex: none;
     background: radial-gradient(120% 120% at 30% 20%, var(--red), #7d0d1c); }
   .mkinf span { display: flex; flex-direction: column; gap: 2px; }
-  .mkinf i { color: var(--red-soft); font-family: ui-monospace, monospace; font-size: 9px;
+  .mkinf i { color: var(--red-soft); font-family:var(--f-tek); font-size: 9px;
     letter-spacing: .11em; text-transform: uppercase; }
   .mkinf em { color: #fff; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.35; }
   .mkhand { margin-top: auto; padding-top: 11px; border-top: 1px solid var(--line);
@@ -522,7 +522,7 @@ const egri = (c: any) => {
     z-index: 2; display: flex; flex-direction: column; gap: 6px; padding: clamp(11px, 1.3vw, 17px);
     border-radius: 13px; background: rgba(10, 10, 11, .82);
     border: 1px solid rgba(239, 35, 60, .3); max-width: min(300px, 58%); }
-  .mkhl { font-family: ui-monospace, monospace; font-size: 8.6px; letter-spacing: .11em;
+  .mkhl { font-family:var(--f-tek); font-size: 8.6px; letter-spacing: .11em;
     text-transform: uppercase; color: var(--red-soft); margin-bottom: 2px; }
   .mkhr { display: flex; flex-direction: column; gap: 1px; }
   .mkhr i { color: var(--tx4); font-size: clamp(8.8px, .74vw, 10.2px); }

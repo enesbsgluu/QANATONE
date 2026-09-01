@@ -1,7 +1,14 @@
-/* Aile adlari TEK yerde (Goc Anayasasi 1.4): Proxima Nova lisansi
-   alinirsa yalniz bu dosya degisir. */
+/* Aile adlari TEK yerde (Goc Anayasasi 1.4).
+   SOKUM VE TASIMA TURU (4 Eyl 2026, Enes): tipografi Uncut Sans'a gecti —
+   her sayfa, her alan (govde, kunye, mono etiket, baslik). TEK ISTISNA
+   ana sayfa hero basligi: Playfair Display italik, oldugu gibi.
+   Iki rol: --f-govde (Uncut Sans) · --f-hero (Playfair). --f-baslik ve
+   --f-tek eski kullanim noktalari icin govdeye BAGLI takma ad — ayri aile
+   degil; yeni kod --f-govde yazar. Uncut Sans 700'de biter: 800 kullanan
+   yerler 700'e indi (perde harfleri, logo). */
 :root{
-  --f-govde:'Nunito Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --f-baslik:'Playfair Display',Georgia,serif;
-  --f-tek:'JetBrains Mono',ui-monospace,monospace;
+  --f-govde:'Uncut Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-hero:'Playfair Display',Georgia,serif;
+  --f-baslik:var(--f-govde);
+  --f-tek:var(--f-govde);
 }

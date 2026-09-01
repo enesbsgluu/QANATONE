@@ -26,7 +26,6 @@ import SSZSozler from '../../sahneler/SSZSozler.astro';
 import SSBSozBandi from '../../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../../sahneler/SKUKurucu.astro';
 import SILIletisim from '../../sahneler/SILIletisim.astro';
-import Perde from '../../parcalar/Perde.astro';
 import { KOK, icerik } from '../../icerik';
 import { anaSema } from '../../sema.mjs';
 
@@ -39,14 +38,13 @@ const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA,
   {/* Ön yükleme TR ana sayfayla aynı — yüzler latin altkümesi,
       dil-bağımsız; gerekçeler orada. */}
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
-    href="/yeni/font/nunito-sans-latin.woff2" />
+    href="/yeni/font/uncut-sans-latin.woff2" />
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
     href="/yeni/font/playfair-display-500-latin.woff2" />
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
     href="/yeni/font/playfair-display-500i-latin.woff2" />
-  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
-    href="/yeni/font/jetbrains-mono-400-latin.woff2" />
-  <Perde />
+  {/* PERDE artik KABUKTA (Temel.astro, 4 Eyl sokum turu): eski sitede 58
+      sayfanin hepsindeydi; film sayfasi haric her sayfada. */}
   <div class="ana">
     <SHHero dil="en" />
     <STSerit dil="en" />

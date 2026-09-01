@@ -738,7 +738,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        BİLEREK girmedi: H2 "içerik görünür doğar"ı mobil menü linklerine
        uygulamak yanlış olur (kapalı katmanın içeriği görünmez doğar,
        menü açılınca mmrow'la gelir — kaynağın kendi davranışı). */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|pr-|ak[a-z]|nv-)/; /* + süs + ak demo ailesi + global katman + PROLOG (pr-) */
+    /* `kb-` ONEKI (4 Eyl 2026, SOKUM VE TASIMA TURU): Anayasa madde 3 —
+       "H1 yeni sahne onekleriyle GENISLETILIR". KABUK katmani: eski
+       sitenin ajan imleci (#bit/#bittip/#bitsay/#bitback) her sayfaya
+       geri geldi; hareketi (halka nabzi, balon gecisi, imlec sonumu)
+       .kb-* siniflarinda. nv- gibi global katman: SAHNE_ONEK'e girmez. */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|pr-|ak[a-z]|nv-|kb-)/; /* + süs + ak demo ailesi + global katman + PROLOG (pr-) */
 
     /* `pr-` ONEKI (22 Agu, prolog 1. durak): Anayasa madde 3'un ongordugu
        genisletme — "H1 yeni sahne onekleriyle genisletilir", ayri ve acik
@@ -2243,6 +2248,29 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   }
   ol('FM2 · prologu geç: klavyeyle erişilir + sticky kumandada + atlanınca zincir söküm + oturumda bir kez',
      kusur.length === 0, kusur.join(' '));
+}
+
+/* K1 · KABUK MODULU TAVANI (4 Eyl 2026, SOKUM VE TASIMA TURU). Eski
+   sitenin uc rAF katmani (yildiz, bit damgasi, ajan imleci) kabuk.js'e
+   tasindi: film motoru deseniyle DINAMIK ITHAL — sayfaya bagli degil,
+   J1 disi. Kendi tavani burada: dosya <= 12 KB (olculdu: 10,8 KB ham /
+   5,0 KB gzip), diskte var, film disindaki her sayfada tetik satiri var,
+   film sayfasinda YOK (kabuk={false}: kapanis tablolari kabuksuz olculdu),
+   her sayfada uc sutunlu footer + #wmk tuvali var. Kural sayisi 54->55. */
+{
+  const kusur = [];
+  const mod = path.join(KOK, 'varlik', 'kabuk.js');
+  const boy = fs.existsSync(mod) ? fs.statSync(mod).size : -1;
+  if (boy < 0) kusur.push('varlik/kabuk.js yok');
+  else if (boy > 12 * 1024) kusur.push(`kabuk.js ${boy} B > 12288`);
+  for (const p of sayfalar) {
+    const h = oku(p), r = rel(p), filmMi = /^(film|en[\/]film)[\/]index[.]html$/.test(r);
+    const tetik = /import\('\/yeni\/varlik\/kabuk\.js'\)/.test(h);
+    if (filmMi ? tetik : !tetik) kusur.push(r + (filmMi ? ':film-sayfasinda-kabuk-tetigi' : ':kabuk-tetigi-yok'));
+    if (!/<canvas id="wmk"/.test(h) || !/class="fgrid"/.test(h)) kusur.push(r + ':footer-eksik');
+  }
+  ol('K1 · kabuk modülü ≤ 12 KB, film dışı her sayfada tetik, her sayfada üç sütunlu footer + bit damgası',
+     kusur.length === 0, kusur.slice(0, 3).join(' ') || `kabuk.js ${boy} B`);
 }
 
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);

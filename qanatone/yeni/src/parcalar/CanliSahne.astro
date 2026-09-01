@@ -91,9 +91,9 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
   /* ═══ KAP · kaynak 921-928 (kardeş K7 sahneleriyle aynı yarıçap) ═══ */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec > .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
   .ststage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
     overflow: hidden; }
@@ -102,7 +102,7 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
   .stbar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .13);
     font-style: normal; }
   .stbar i:first-child { background: rgba(239, 35, 60, .75); }
-  .stbar span { margin-left: 10px; font-family: ui-monospace, monospace; font-size: 10px;
+  .stbar span { margin-left: 10px; font-family:var(--f-tek); font-size: 10px;
     letter-spacing: .08em; color: var(--tx4); }
 
   /* ═══ CANLI YERLEŞTİRME · kaynak 793-824 ═══ */
@@ -111,7 +111,7 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
      kaynağın davranışına döndürülür (mobil karede yakalandı) */
   .stpost, .stopen, .stmore { text-decoration: none; }
   .stopen { margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
-    font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: 9px; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx3); transition: color .25s; }
   .stopen:hover { color: var(--red-soft); }
   .stopen svg { width: 11px; height: 11px; }
@@ -139,7 +139,7 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
   .stpost img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: center top; }
   .stlive.nofr .stpost span { position: relative; z-index: 2; display: inline-flex;
-    align-items: center; gap: 8px; margin: 0 auto 16px; font-family: ui-monospace, monospace;
+    align-items: center; gap: 8px; margin: 0 auto 16px; font-family:var(--f-tek);
     font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: #fff;
     border: 1px solid rgba(239, 35, 60, .5); border-radius: 999px; padding: 9px 16px;
     background: rgba(239, 35, 60, .16); }
@@ -170,7 +170,7 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
     .stpost::before { content: ''; position: absolute; inset: 0; z-index: 1;
       background: linear-gradient(180deg, rgba(5, 5, 6, 0) 26%, rgba(5, 5, 6, .88)); }
     .stpost span { position: relative; z-index: 2; display: inline-flex; align-items: center;
-      gap: 8px; margin: 0 auto 14px; font-family: ui-monospace, monospace; font-size: 10px;
+      gap: 8px; margin: 0 auto 14px; font-family:var(--f-tek); font-size: 10px;
       letter-spacing: .14em; text-transform: uppercase; color: #fff;
       border: 1px solid rgba(239, 35, 60, .5); border-radius: 999px; padding: 8px 15px;
       background: rgba(239, 35, 60, .16); }

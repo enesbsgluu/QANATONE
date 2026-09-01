@@ -32,7 +32,7 @@ const ETIKET = dil === 'en'
   ? ['Notices', 'Searches', 'Asks', 'Compares', 'Buys']
   : ['Fark ediliyor', 'Arıyor', 'Soruyor', 'Karşılaştırıyor', 'Satın alıyor'];
 ---
-<section class="giris">
+<section class="giris" id="surec">
   <p class="ust-etiket">{m('s3e', 'Süreç')}</p>
   <h1 set:html={suz(m('s3h', 'Müşteri yolu,<br><span class="thin">baştan sona.</span>'), ['br', 'span.thin'])} />
   <p class="lede">{m('s3p', 'Her aşamada ne yaptığımız, ne ölçtüğümüz ve ne beklendiği belli. Sürpriz yok.')}</p>
@@ -84,7 +84,7 @@ const ETIKET = dil === 'en'
 </p>
 
 <style>
-  .ust-etiket { color: var(--tx3); font-family: ui-monospace, monospace;
+  .ust-etiket { color: var(--tx3); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   /* ÇİZİLME SÜRÜCÜSÜ — tek anonim view() animasyonu @property'li --yt
      sayısını 0→1 sürer; SVG değerleri değişkenden TÜRER (calc), SVG
@@ -127,13 +127,13 @@ const ETIKET = dil === 'en'
   .adimlar-s { list-style: none; display: flex; flex-direction: column; gap: 14px; }
   .adimlar-s li { display: flex; gap: 14px; border: 1px solid var(--line);
     border-radius: 14px; padding: 18px; }
-  .adimlar-s b { font-family: ui-monospace, monospace; color: var(--red-soft);
+  .adimlar-s b { font-family:var(--f-tek); color: var(--red-soft);
     font-size: .85rem; }
   .adimlar-s h2 { font-size: 1.05rem; margin: 0 0 6px; }
   .adimlar-s div > p { color: var(--tx2); font-size: .92rem; }
   .olcum { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 14px;
     margin-top: 10px; padding: 0; }
   .olcum li { color: var(--tx3); font-size: .82rem;
-    font-family: ui-monospace, monospace; }
+    font-family:var(--f-tek); }
   .son { margin-top: 34px; text-align: center; }
 </style>

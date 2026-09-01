@@ -142,9 +142,9 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
          kaynak var(--r-lg)=26px — sapma yazılı) ═══ */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
   .sdsec .mono { display: block; margin-bottom: 18px;
-    font-family: ui-monospace, monospace; font-size: .7rem; letter-spacing: .14em;
+    font-family:var(--f-tek); font-size: .7rem; letter-spacing: .14em;
     text-transform: uppercase; color: var(--tx4); }
-  .fnnote { font-family: ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em;
+  .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
   .ststage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
     overflow: hidden; }
@@ -153,7 +153,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .stbar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .13);
     font-style: normal; }
   .stbar i:first-child { background: rgba(239, 35, 60, .75); }
-  .stbar span { margin-left: 10px; font-family: ui-monospace, monospace; font-size: 10px;
+  .stbar span { margin-left: 10px; font-family:var(--f-tek); font-size: 10px;
     letter-spacing: .08em; color: var(--tx4); }
   /* araçlarda görüntü kutusu kaynak 1012; yükseklik ayrıca öteleme
      formülünde de geçtiği için tek yerden (--stvh) okunur */
@@ -161,7 +161,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .stview { height: var(--stvh); overflow: hidden; position: relative; }
   .stsec { padding: clamp(22px, 3vw, 36px) clamp(20px, 3.4vw, 40px);
     border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
-  .stlab { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .22em;
+  .stlab { font-family:var(--f-tek); font-size: 9px; letter-spacing: .22em;
     color: var(--tx4); }
   /* ray: kaynak 882-886 + 1013-1016 */
   .strail { position: absolute; top: 10px; bottom: 10px; right: 7px; width: 3px;
@@ -194,7 +194,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .tlch { display: inline-block; width: auto; padding: 5px 11px; border-radius: 999px;
     border: 1px solid var(--line2); background: transparent;
     font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); font-style: normal; white-space: nowrap; }
-  .tlnum { font-family: ui-monospace, monospace; font-size: clamp(13px, 1.32vw, 17px);
+  .tlnum { font-family:var(--f-tek); font-size: clamp(13px, 1.32vw, 17px);
     color: var(--tx); font-variant-numeric: tabular-nums; }
   .tlrng { position: relative; height: 5px; border-radius: 3px;
     background: rgba(255, 255, 255, .09); margin: 1px 0; }
@@ -205,7 +205,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .tlout { display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
     padding-top: 9px; border-top: 1px solid var(--line); }
   .tlout span { font-size: clamp(10.5px, .92vw, 11.8px); color: var(--tx3); }
-  .tlprice { font-family: ui-monospace, monospace; font-size: clamp(15px, 1.75vw, 23px);
+  .tlprice { font-family:var(--f-tek); font-size: clamp(15px, 1.75vw, 23px);
     font-weight: 600; color: var(--red-soft); font-variant-numeric: tabular-nums;
     letter-spacing: -.01em; }
 
@@ -213,7 +213,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .tlcal { border: 1px solid var(--line); border-radius: 11px; padding: 9px 10px;
     background: rgba(255, 255, 255, .02); }
   .tlhead, .tlgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .tldh { text-align: center; font-family: ui-monospace, monospace; font-size: 8.5px;
+  .tldh { text-align: center; font-family:var(--f-tek); font-size: 8.5px;
     letter-spacing: .08em; color: var(--tx4); padding-bottom: 5px; }
   .tldd { display: flex; width: auto; align-items: center; justify-content: center;
     height: clamp(18px, 1.95vw, 24px); border-radius: 6px; font-size: clamp(9.4px, .84vw, 10.8px);
@@ -222,7 +222,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .tlslots { display: flex; gap: 7px; flex-wrap: wrap; }
   .tlsl { display: inline-block; width: auto; padding: 6px 11px; border-radius: 8px;
     border: 1px solid var(--line2); background: transparent; font-style: normal;
-    font-family: ui-monospace, monospace; font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); }
+    font-family:var(--f-tek); font-size: clamp(10px, .88vw, 11.4px); color: var(--tx3); }
   .tlok { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
     border-radius: 9px; background: rgba(239, 35, 60, .1); border: 1px solid rgba(239, 35, 60, .3);
     color: var(--red-soft); font-size: clamp(10.5px, .92vw, 11.8px); font-weight: 550;
@@ -236,7 +236,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
   .tlprj { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .tlprj b { font-size: clamp(11.6px, 1.06vw, 13.6px); font-weight: 600; color: var(--tx);
     letter-spacing: -.01em; }
-  .tlpct { font-family: ui-monospace, monospace; font-size: clamp(12px, 1.2vw, 15px);
+  .tlpct { font-family:var(--f-tek); font-size: clamp(12px, 1.2vw, 15px);
     color: var(--red-soft); font-style: normal; font-variant-numeric: tabular-nums; }
   .tlbar { height: 6px; border-radius: 4px; background: rgba(255, 255, 255, .08); overflow: hidden; }
   .tlbarf { display: block; height: 100%; border-radius: 4px;
