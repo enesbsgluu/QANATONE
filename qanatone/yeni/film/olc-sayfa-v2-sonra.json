@@ -1,0 +1,436 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-01T22:55:49.143Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "tekrar": 3,
+ "esik": {
+  "p95_ms": 20,
+  "takilma_esik_ms": 50,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03
+ },
+ "hukum": "KALDI",
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/",
+   "js_bayt": 12758,
+   "js_tavan": 12800,
+   "kosum": [
+    {
+     "kare": 1937,
+     "tur_ms": 18403,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 600,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3249,
+      "takilma_sayi": 5,
+      "p95_ms": 25.1
+     },
+     "scroll_px": 14399.2001953125,
+     "toplam_px": 15925
+    },
+    {
+     "kare": 2080,
+     "tur_ms": 18386,
+     "p95_ms": 16.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7
+     },
+     "scroll_px": 14399.2001953125,
+     "toplam_px": 15925
+    },
+    {
+     "kare": 1888,
+     "tur_ms": 18628,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 175,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3024,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7
+     },
+     "scroll_px": 14399.2001953125,
+     "toplam_px": 15925
+    }
+   ],
+   "p95_medyan": 16.7,
+   "takilma_oran_medyan": 0.0094,
+   "takilma_tek_max": 117,
+   "taban_takilma": [
+    5,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/hizmet/ai-ajan/",
+   "js_bayt": 5577,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 332,
+     "tur_ms": 2941,
+     "p95_ms": 16.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2191.199951171875,
+     "toplam_px": 2191
+    },
+    {
+     "kare": 344,
+     "tur_ms": 2982,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2191.199951171875,
+     "toplam_px": 2191
+    },
+    {
+     "kare": 340,
+     "tur_ms": 2949,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2191.199951171875,
+     "toplam_px": 2191
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/hizmet/finans/",
+   "js_bayt": 7346,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 1211,
+     "tur_ms": 14004,
+     "p95_ms": 25,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 117,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11300,
+     "toplam_px": 11300
+    },
+    {
+     "kare": 1240,
+     "tur_ms": 14012,
+     "p95_ms": 25,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 67,
+     "takilma_tek_max_ms": 67,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11300,
+     "toplam_px": 11300
+    },
+    {
+     "kare": 1228,
+     "tur_ms": 14029,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11300,
+     "toplam_px": 11300
+    }
+   ],
+   "p95_medyan": 25,
+   "takilma_oran_medyan": 0.0048,
+   "takilma_tek_max": 67,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": false,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": false
+  },
+  {
+   "yol": "/yeni/hizmet/otomasyon/",
+   "js_bayt": 5022,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 264,
+     "tur_ms": 2566,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1838.4000244140625,
+     "toplam_px": 1838
+    },
+    {
+     "kare": 243,
+     "tur_ms": 2616,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1838.4000244140625,
+     "toplam_px": 1838
+    },
+    {
+     "kare": 255,
+     "tur_ms": 2583,
+     "p95_ms": 25,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1838.4000244140625,
+     "toplam_px": 1838
+    }
+   ],
+   "p95_medyan": 24.9,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": false,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": false
+  },
+  {
+   "yol": "/yeni/hizmet/web-sitesi-araclar/",
+   "js_bayt": 5682,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 384,
+     "tur_ms": 3924,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 75,
+     "takilma_tek_max_ms": 75,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2999.199951171875,
+     "toplam_px": 2999
+    },
+    {
+     "kare": 401,
+     "tur_ms": 3915,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2999.199951171875,
+     "toplam_px": 2999
+    },
+    {
+     "kare": 398,
+     "tur_ms": 3916,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2999.199951171875,
+     "toplam_px": 2999
+    }
+   ],
+   "p95_medyan": 16.7,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 75,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  },
+  {
+   "yol": "/yeni/hizmet/web-tasarim/",
+   "js_bayt": 4671,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 288,
+     "tur_ms": 2682,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1930.4000244140625,
+     "toplam_px": 1930
+    },
+    {
+     "kare": 313,
+     "tur_ms": 2674,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1930.4000244140625,
+     "toplam_px": 1930
+    },
+    {
+     "kare": 316,
+     "tur_ms": 2666,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1930.4000244140625,
+     "toplam_px": 1930
+    }
+   ],
+   "p95_medyan": 8.5,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": true
+  }
+ ]
+}
