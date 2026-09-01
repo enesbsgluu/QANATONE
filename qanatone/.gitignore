@@ -15,6 +15,12 @@ gorsel-kaynak/
 # kurulum adimi yeni/film/kur-medya.cjs, kunyesi medya-manifest.json
 # (TAKIPTE). Damga makineye ozgu, git disi — denetim MEDYA kapisi okur.
 yeni/film/.medya-kurulum.json
+# 2 Eyl: medya dosyalarinin kendisi de KALIPLA git disi. Eskiden yalniz
+# "eklenmemis" duruyorlardi ve bir `git add -A` 679 MiB'i sahneledi
+# (yakalandi, geri alindi). Kalip tuzagi kapatir; kur-medya kurar.
+yeni/public/varlik/film/
+# film olcum log artiklari (json sonuclar TAKIPTE, loglar degil)
+yeni/film/*.log
 # film uretim hattinin OLCUM artiklari (yeni/film/uret.cjs `bounds` + dikis.cjs
 # kiyas kareleri, ~150 MB PNG): yeniden uretilir, hukmu dikis.json tasir.
 # olcum/ `/*` ile dislanir ki FM1'in HUKUM kaydi sonuc.json ISTISNAYLA

@@ -1,0 +1,185 @@
+{
+ "_": "yeni/film/olc-tampon.cjs — yukleme tamponu olcumu. KAPI: ilk hareket hazirliktan once baslayamaz (motor izi + bagimsiz rAF ornekleyicisi, ikisi birden). BOSLUK rapor: hazirlik ile ilk hareket arasi.",
+ "olcum": "2026-09-01T13:04:05.917Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
+ "senaryo": "sabirsiz ziyaretci (yukleme sirasinda surekli kaydirma)",
+ "tekrar": 3,
+ "hukum": "GECTI",
+ "sonuc": [
+  {
+   "ag": "dolu-hat",
+   "kosum": [
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 572,
+     "ilk_hareket_ms": 740,
+     "bosluk_ms": 168,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 3,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "olculen_mbit": 419.95,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 485,
+     "ilk_hareket_ms": 485,
+     "bosluk_ms": 0,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 23,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "olculen_mbit": 255.81,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 263,
+     "ilk_hareket_ms": 263,
+     "bosluk_ms": 0,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 16,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "olculen_mbit": 266.64,
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 485,
+   "ilk_hareket_ms_ortanca": 485,
+   "bosluk_ms_ortanca": 0,
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI"
+  },
+  {
+   "ag": "4g",
+   "kosum": [
+    {
+     "ag": "4g",
+     "tampon_ms": 9096,
+     "ilk_hareket_ms": 9103,
+     "bosluk_ms": 7,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 1053,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 8.82,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "4g",
+     "tampon_ms": 9095,
+     "ilk_hareket_ms": 9111,
+     "bosluk_ms": 16,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 1063,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 8.81,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "4g",
+     "tampon_ms": 9071,
+     "ilk_hareket_ms": 9086,
+     "bosluk_ms": 15,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 1055,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 8.84,
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 9095,
+   "ilk_hareket_ms_ortanca": 9103,
+   "bosluk_ms_ortanca": 15,
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI"
+  },
+  {
+   "ag": "yavas-4g",
+   "kosum": [
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 50168,
+     "ilk_hareket_ms": 50184,
+     "bosluk_ms": 16,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 5977,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 1.64,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 49610,
+     "ilk_hareket_ms": 49622,
+     "bosluk_ms": 12,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 5827,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 1.64,
+     "zaman_asimi": false
+    },
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 49925,
+     "ilk_hareket_ms": 49942,
+     "bosluk_ms": 17,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 5404,
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "iniyor"
+     ],
+     "olculen_mbit": 1.63,
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 49925,
+   "ilk_hareket_ms_ortanca": 49942,
+   "bosluk_ms_ortanca": 16,
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI"
+  }
+ ]
+}

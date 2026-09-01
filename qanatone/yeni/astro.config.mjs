@@ -18,8 +18,10 @@ const kunyeyiSoy = () => ({
   name: 'qanatone-kunye-soy',
   enforce: 'pre',
   transform(kod, kimlik) {
-    /* 24 Agu: SDF kunyesi de metal parcasina giriyor; onun `_` prozu da soyulur. */
-    if (!/[\\/]src[\\/](prolog[\\/][^\\/]+|veri[\\/]amblem-sdf-kunye)\.json$/.test(kimlik)) return null;
+    /* 2 Eyl 2026 (R23): sokum sonrasi tek aday src/prolog/amblem.json
+       (nav logosu kaynagi, R19). Bugun onu ithal eden yok; desen, biri
+       ithal ederse kunye prozunun pakete sizmamasi icin duruyor. */
+    if (!/[\\/]src[\\/]prolog[\\/][^\\/]+\.json$/.test(kimlik)) return null;
     const soy = (o) => Array.isArray(o)
       ? o.map(soy)
       : (o && typeof o === 'object'
@@ -78,14 +80,8 @@ export default defineConfig({
 
   integrations: [react()],
 
-  /* ISCI PAKETI AYRI HATTA (24 Agu): metal.ts iscinin icinden DINAMIK
-     ithal edilir, bu ES bicimi ister (IIFE kod bolmeyi desteklemez).
-     Iscinin kendi eklenti hatti var - kunye soyucu orada da kosmali,
-     yoksa sahne.json'in prozu metal parcasina iner. */
-  vite: { plugins: [kunyeyiSoy()], worker: { format: 'es', plugins: () => [kunyeyiSoy()] },
-    /* GECE TUR 2b: prolog adasi (src/prolog/ada.ts) dinamik modul olarak
-       J1 DISI kalmali (motor emsali) — Rollup tek-kullanicili kucuk
-       dinamik importu Film chunk'ina inline edip J1'i 11,2K'ya tasidi
-       (olculdu). Ayri chunk zorlanir. */
-    build: { rollupOptions: { output: { manualChunks: (id) => (id.includes('/src/prolog/ada') ? 'prolog-ada' : undefined) } } } }
+  /* 2 Eyl 2026 (R23 sokumu): prolog-ada manualChunks ve isci (worker)
+     hatti kalkti — ada betigi ve isci paketi kaynaktan sokuldu, kod
+     tabaninda worker kalmadi. */
+  vite: { plugins: [kunyeyiSoy()] }
 });
