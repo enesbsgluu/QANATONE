@@ -44,7 +44,7 @@ Plate: `III · THE GRADIENT · 8 km · 210 m · 1:1000`
 |---|---|---|
 | 6 | Gerisi tek bir sayıdır. Her kilometrede bir metre iniş. | The rest comes down to one number. One metre of drop for every kilometre. |
 | 7 | Fazlası kanalı aşındırır. Azı suyu durdurur. | Too much and the channel erodes. Too little and the water stops. |
-| 8 | Otuz üç kilometre boyunca her elli metrede bir kuyu açılır. | Across thirty-three kilometres, a shaft is sunk every fifty metres. |
+| 8 | Otuz üç kilometre boyunca yüzlerce dikey kuyu açılır. | Across thirty-three kilometres, hundreds of vertical shafts are sunk. |
 | 9 | Kazı, ancak ölçülebildiği yerde ilerler. | Digging only advances where it can be measured. |
 
 ---
@@ -59,7 +59,7 @@ konuşan satırı. Vuruş 11'in tek başına ekranda kalması önemli.
 
 | # | TR | EN |
 |---|---|---|
-| 10 | Üç bin yıl geçti. Problem yerinde duruyor. | Three thousand years on, the problem is unchanged. |
+| 10 | İki bin beş yüz yıl geçti. Problem yerinde duruyor. | Two and a half thousand years on, the problem is unchanged. |
 | 11 | Kanal hâlâ kanal. Değişen, içinden akan şey. | The channel is still a channel. What runs through it is not. |
 | 12 | Su değil. Talep. | Not water. Demand. |
 | 13 | Müşterin bir yerde arıyor. Sen başka yerdesin. Arası kazılmamış. | Your customer is looking somewhere. You are somewhere else. Nothing has been dug between you. |
@@ -74,7 +74,7 @@ Plate: `V · SCALE · 33 km`
 | # | TR | EN |
 |---|---|---|
 | 14 | Qanat kazan hiçbir uygarlıkta su eksik değildi. | No civilisation that dug qanats was short of water. |
-| 15 | Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, su çekildikçe derinleştirilir. | A channel is not finished the day it is dug. It is extended as the city grows, deepened as the water falls. |
+| 15 | Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, bakımı bırakılırsa dolar. | A channel is not finished the day it is dug. It is extended as the city grows; left untended, it silts up. |
 | 16 | Bırakılanı çöl geri alır. | What is abandoned, the desert takes back. |
 
 Vuruş 16 ile VI'nın ilk vuruşu arasında bağlaç yok, olmayacak. Bağı
@@ -95,7 +95,7 @@ açıklamasındaki hâliyle birebir aynı.
 | 17 | Her şehir bir kanalın ucunda kurulmuştur. | Every city was built at the end of a channel. |
 | 18 | Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır. | So was yours. It has either been dug or it has not. |
 | 19 | Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında, reklamda, kendi sitende. | We dig it. In search, in AI answers, in ads, on your own site. |
-| 20 | Pompayı da kurarız. Ama kanal yoksa, pompa durduğu gün her şey durur. | We will run the pump too. But with no channel, the day the pump stops, everything stops. |
+| 20 | Pompayı da kurarız. Ama kanalın nereye kazıldığını bilmeden kurulan pompa boşa çeker. | We will run the pump too. But a pump set without knowing where the channel runs draws on nothing. |
 | 21 | Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz. | We don't measure where demand comes from. We know, and we create it. |
 
 ---
@@ -121,17 +121,23 @@ Motor için bağlayıcı sayı: **21 metin bloğu, 6 künye.**
 
 ## RAKAMLAR — KAYNAĞA BAĞLANMADAN PUSH YOK
 
-Metindeki her sayı doğrulanacak:
+**Hepsi doğrulandı (1 Eyl).**
 
-- otuz üç kilometre kanal uzunluğu
-- üç yüz metre ana kuyu derinliği
-- binde bir eğim (kilometrede bir metre)
-- elli metrede bir dikey kuyu
-- üç bin yıl
-- ana kuyunun su tablası düştükçe derinleştirilmesi
+- otuz üç kilometre kanal uzunluğu — Gonabad
+- üç yüz metre ana kuyu — Gonabad, bilinen en derin ana kuyu
+- binde bir eğim — kısa qanatlarda 1:1000 ile 1:1500 arası
+- yüzlerce dikey kuyu — aralık 20-200 m, sabit sayı YOK. Bu yüzden
+  "her elli metrede bir" metinden çıkarıldı, uydurma kesinlikti
+- iki bin beş yüz yıl — Gonabad 2.500-2.700 yıl. "Üç bin" yuvarlamaydı,
+  çıkarıldı
+- derinleştirme iddiası doğrulanamadı, metinden çıkarıldı
 
-Kaynak: UNESCO Persian Qanat kaydı ve qanat literatürü. Sayfaya küçük bir
-kaynak satırı konur.
+Aşınma mekanizması da doğrulandı ve metinden daha ilginç: eğim, suyun
+süperkritik/subkritik akış arasında geçiş yapacağı kadar dik olursa
+oluşan dalgalar kanalı yok ediyor. Hassasiyet su terazisi ve iple
+sağlanıyor.
+
+Sayfaya küçük bir kaynak satırı konur.
 
 Gerekçe bizim kendi kuralımız: teşhis aracına uydurma rakam yasağı koyduk,
 aynı yasak anlatı için de geçerli. Ölçüm satan bir firmanın kendi

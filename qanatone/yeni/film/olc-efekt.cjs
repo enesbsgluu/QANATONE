@@ -4,7 +4,12 @@
    KAPILAR:
      · iki efektte de dusen kare 0 (25 ms tabani, TEKRAR medyani — devir
        turunun olcum disiplini)
-     · efekt sureleri ms cinsinden olculur (A hedefi 250-350; B ~400)
+     · efekt sureleri ms cinsinden olculur (A hedefi 400-550; B ~400).
+       A KAPISI GUNCELLENDI (Enes, 3 Eyl 2026): eski 250-350 efekt
+       yokken yazilmisti; temiz oturumda (taban [0,0,0]) olculen gercek
+       sure 447-509 ms ve GORSEL HUKUM GECTI — kapi geregi tasarima
+       cekildi. DUSEN KARE KAPISI 0 KALIYOR: taban temizken 4-5 dusen
+       gercek kusur, bir daraltma turu hakki var (acik is).
      · gec dugmesi filmin BAS/ORTA/SON noktasinda ayri sinanir, ucunde de
        ayni calisir (durum parmak izi karsilastirilir)
      · prefers-reduced-motion aciksa iki efekt de sade sonumlemeye iner
@@ -149,7 +154,7 @@ async function gecSur(p, nokta) {
     const { b, p } = await ac('?boz=1');
     const d = await devirSur(p, false);
     const sure = d.tv.sonMs && d.tv.basMs ? Math.round(d.tv.sonMs - d.tv.basMs) : null;
-    S.kirmizi_A = { sure_ms: sure, yakalandi: sure !== null && (sure < 250 || sure > 350) };
+    S.kirmizi_A = { sure_ms: sure, yakalandi: sure !== null && (sure < 400 || sure > 550) };
     raporla('A sure kapisi kirmiziya dondu mu', { ...S.kirmizi_A, gecti: S.kirmizi_A.yakalandi });
     await b.close();
   }
@@ -183,10 +188,10 @@ async function gecSur(p, nokta) {
   S.A = {
     tekrar: aTekrar, medyan_sure: medyan(aTekrar.map((x) => x.sure_ms)), medyan_dusen: medyan(aTekrar.map((x) => x.dusen)),
     gecti: aTekrar.every((x) => x.yol === 'tv' && x.devirDurum === 'tam')
-      && medyan(aTekrar.map((x) => x.sure_ms)) >= 250 && medyan(aTekrar.map((x) => x.sure_ms)) <= 350
+      && medyan(aTekrar.map((x) => x.sure_ms)) >= 400 && medyan(aTekrar.map((x) => x.sure_ms)) <= 550
       && medyan(aTekrar.map((x) => x.dusen)) === 0,
   };
-  raporla('A: sure 250-350 + dusen 0 + tam', S.A);
+  raporla('A: sure 400-550 + dusen 0 + tam', S.A);
 
   /* ---- 3) EFEKT A hareket azaltma: sade yol ---- */
   {

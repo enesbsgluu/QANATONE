@@ -2088,10 +2088,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          siniri + AKISLI fetch (inenB ilerlemesi) 9.988->10.301 (313 B).
          Toplam +769 B'in tamami talimatla istenen davranis; pay ~450 B
          sonraki katman icin. Sessiz gevseme degil: bu satirin tarihi
-         ve sayilari kaydin kendisi. */
-      if (b > 10.5 * 1024) kusur.push('motor-tavan:' + b);
+         ve sayilari kaydin kendisi.
+         3 EYL: 10.752 -> 11.264. TUR 5 v2 soz surucusu + ?soz kolu +
+         IS B parcali ray haritasi (data-yavas, sanal/gercek donusum,
+         akis carpani) 10.301->10.832 (+531 B) — ikisi de Enes
+         talimatiyla istenen davranis. Pay 432 B. */
+      if (b > 11 * 1024) kusur.push('motor-tavan:' + b);
       if (h.includes(motor[0])) kusur.push('motor-sayfaya-bagli');
-      rapor += `motor ${(b / 1024).toFixed(1)}/10,5 KB`;
+      rapor += `motor ${(b / 1024).toFixed(1)}/11 KB`;
       const kod = fs.readFileSync(path.join(astro, motor[0]), 'utf8');
       /* blob seek + rVFC olcum yuzeyi + sokum */
       if (!/createObjectURL/.test(kod)) kusur.push('motor-blob-yok');

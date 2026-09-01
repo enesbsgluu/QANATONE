@@ -319,30 +319,37 @@ html.fl-tv-ac .fl-tv-cizgi { opacity: 0; transition: opacity .13s linear; }
    gecis sadelesir ama METIN KAYBOLMAZ (talimat sarti). Devirde yapis
    zaten sonuyor (fl-devir-net), cumleler onunla gider. */
 .fl-sozler { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+/* IS A (3 Eyl 2026, Enes): "film kadrajin sahibi, metin misafir" —
+   basliktan SINEMA ALTYAZISINA. Olculdu: eski yerlesim (top 38%,
+   56px'e kadar) MERKEZ kapisini yakiyordu (21 blogun cogu kadraj
+   merkezini ortuyordu; kaplama %20 icindeydi). Punto TEK OLCEKLE indi
+   (56->36 tavan, ~0,64x — blok blok degil, talimat sarti); konum alt
+   banda (bottom %18: ibarenin [alt-orta 14px] ustunde, kaynak
+   satiriyla [sol alt] kesismez). Agirlik 600->500 ayni karar. */
 .fl-soz {
-  position: absolute; left: 50%; top: 38%;
-  transform: translate(-50%, -50%) translateY(14px);
-  max-width: min(84vw, 720px); margin: 0; text-align: center;
+  position: absolute; left: 50%; top: auto; bottom: 18%;
+  transform: translateX(-50%) translateY(14px);
+  max-width: min(78vw, 640px); margin: 0; text-align: center;
   font-family: 'Uncut Sans', system-ui, sans-serif;
-  font-weight: 600; font-size: clamp(28px, 4.6vw, 56px);
-  line-height: 1.12; letter-spacing: -0.01em; color: #fff;
+  font-weight: 500; font-size: clamp(20px, 3vw, 36px);
+  line-height: 1.18; letter-spacing: -0.005em; color: #fff;
   text-shadow: 0 2px 24px rgba(0, 0, 0, .55);
   opacity: 0; visibility: hidden;
   transition: opacity .4s ease, transform .4s ease, visibility 0s .4s;
 }
 .fl-soz.fl-soz-gor {
   opacity: 1; visibility: visible;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   transition: opacity .4s ease, transform .4s ease, visibility 0s;
 }
 @media (prefers-reduced-motion: reduce) {
-  .fl-soz { transition: none; transform: translate(-50%, -50%); }
+  .fl-soz { transition: none; transform: translateX(-50%); }
 }
 /* PERDE KUNYESI (TUR 5 v2): kucuk, surekli, SOL UST — vurus merkezde,
    kutulari kesismez (kapi olcuyor). Perde basinda degisir (motor ayni
    mekanizmayla surer). Nav filmde cekik oldugundan ust bant bos. */
 .fl-soz.fl-kunye {
-  left: 24px; top: 20px; transform: translateY(6px);
+  left: 24px; top: 20px; bottom: auto; transform: translateY(6px);
   max-width: 60vw; text-align: left;
   font-weight: 400; font-size: 12px; letter-spacing: .14em;
   line-height: 1.3; color: rgba(255, 255, 255, .72);

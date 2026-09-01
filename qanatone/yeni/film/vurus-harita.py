@@ -17,8 +17,6 @@ B = pathlib.Path(__file__).parent
 H = json.load(open(B / 'olc-kamera-hizi.json', encoding='utf-8'))
 K = json.load(open(B / '..' / 'src' / 'film' / 'kanon.json', encoding='utf-8'))
 
-PENCERE_SN = 3.6
-ARA_SN = 1.2
 ADIM = 0.25
 
 # film-sn ekseninde birlesik fark egrisi (saniyelik; dogrusal ara deger)
@@ -46,6 +44,9 @@ def fark(T):
             u = yerel - i
             return e[i] * (1 - u) + e[j] * u
     return 99.0
+
+PENCERE_SN = 3.6   # sec() cagri basina guncellenir (perde parametresi)
+ARA_SN = 1.2
 
 def pencere_skor(b0, b1):
     n = 0
@@ -100,17 +101,22 @@ def sec(bolge_bas, bolge_son, adet):
 #   simdiki: II 3-7 / III 8-14 — sahne8 durgun (7,9) ve tema hala
 #     tunel/kuyu; "her kilometrede bir metre inis" orada oturur,
 #     blok 6 farki 19,3 -> ~8. II'nin uc vurusu (20/25/40) etkilenmez.
+# IS B (3 Eyl): VI'da yerel ray yavaslamasi (k=1,4) + pencereler 4,4 sn
+# (ara 1,0) — 900 px/s temposunda >=3 sn okunurluk ancak ikisiyle
+# birlikte saglaniyor (olcum olc-soz vi_okunurluk). Diger perdeler 3,6.
 PERDELER = [
-    ('I · KAYNAK',  1, 2, 2),
-    ('II · İKİ YOL', 3, 7, 3),
-    ('III · EĞİM',  8, 14, 4),
-    ('IV · KANAL', 15, 20, 4),
-    ('V · ÖLÇEK',  21, 34, 3),
-    ('VI · KENT',  35, 39, 5),
+    ('I · KAYNAK',  1, 2, 2, 3.6, 1.2),
+    ('II · İKİ YOL', 3, 7, 3, 3.6, 1.2),
+    ('III · EĞİM',  8, 14, 4, 3.6, 1.2),
+    ('IV · KANAL', 15, 20, 4, 3.6, 1.2),
+    ('V · ÖLÇEK',  21, 34, 3, 3.6, 1.2),
+    ('VI · KENT',  35, 39, 5, 4.4, 1.0),
 ]
 
 blok = 1
-for ad, s0, s1, adet in PERDELER:
+for ad, s0, s1, adet, PENCERE_SN, ARA_SN in PERDELER:
+    globals()['PENCERE_SN'] = PENCERE_SN
+    globals()['ARA_SN'] = ARA_SN
     b0 = bas[s0] + 0.3          # perde basina nefes payi (ilk karede metin patlamasin)
     b1 = bas[s1] + (K['klip'][s1 - 1]['sure'])
     print(f"\n== {ad} · sahne{s0}-{s1} · film-sn {b0:.2f}-{b1:.2f} (kunye araligi) ==")
