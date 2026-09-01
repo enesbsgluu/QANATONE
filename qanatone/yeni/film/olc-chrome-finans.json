@@ -1,0 +1,135 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-01T23:33:34.180Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "kirmizi_kontrol": {
+  "yakalandi": false,
+  "lcp": 1464,
+  "lcpEl": "h1",
+  "cls": 0.0017,
+  "clsKaynak": [
+   {
+    "t": 8840,
+    "v": 0.0017,
+    "el": "span.mkrk"
+   }
+  ],
+  "inp": 32,
+  "inpHedef": "body pointerdown",
+  "etkilesim": 8,
+  "loaf": 7,
+  "loafToplam": 1735,
+  "loafEnUzun": 861,
+  "loafKaynak": [
+   {
+    "t": 173,
+    "sure": 861,
+    "engel": 289,
+    "betik": 851,
+    "stilDuzen": 10,
+    "render": 10,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/yeni/hizmet/finans/",
+      "sure": 188
+     },
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/yeni/hizmet/finans/",
+      "sure": 13
+     },
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/yeni/hizmet/finans/",
+      "sure": 69
+     }
+    ]
+   },
+   {
+    "t": 1055,
+    "sure": 455,
+    "engel": 404,
+    "betik": 454,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "import.then",
+      "sure": 452
+     }
+    ]
+   },
+   {
+    "t": 8213,
+    "sure": 133,
+    "engel": 0,
+    "betik": 123,
+    "stilDuzen": 10,
+    "render": 11,
+    "kaynak": []
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 244,
+   "lcpEl": "h1",
+   "cls": 0.006,
+   "clsKaynak": [
+    {
+     "t": 330,
+     "v": 0.006,
+     "el": "div.hd-demo"
+    }
+   ],
+   "inp": 96,
+   "inpHedef": "body keydown",
+   "etkilesim": 9,
+   "loaf": 4,
+   "loafToplam": 401,
+   "loafEnUzun": 182,
+   "loafKaynak": [
+    {
+     "t": 24,
+     "sure": 182,
+     "engel": 120,
+     "betik": 22,
+     "stilDuzen": 160,
+     "render": 160,
+     "kaynak": []
+    },
+    {
+     "t": 250,
+     "sure": 80,
+     "engel": 20,
+     "betik": 21,
+     "stilDuzen": 59,
+     "render": 60,
+     "kaynak": []
+    },
+    {
+     "t": 2752,
+     "sure": 73,
+     "engel": 18,
+     "betik": 62,
+     "stilDuzen": 9,
+     "render": 12,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/hizmet/finans/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}
