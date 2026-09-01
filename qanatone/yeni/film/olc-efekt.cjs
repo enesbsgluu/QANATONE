@@ -114,6 +114,11 @@ async function devirSur(p, isinma) {
 
 /* gec dugmesine basip efektin bitmesini bekler; durum parmak izi dondurur */
 async function gecSur(p, nokta) {
+  /* isitma payi (gece TUR 1): modul bosta import ediliyor; sayfa hazir
+     olur olmaz tiklaninca yaris stokastik sade yola dusuyordu (tasarim
+     geregi zarif dusus — ama kapi isinlanmayi olcuyor). Gercek kullanici
+     ilk yarim saniyede tiklamaz. */
+  await new Promise((r) => setTimeout(r, 1200));
   if (nokta === 'orta') { await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam / 2)); __fl.atla(); }); await new Promise((r) => setTimeout(r, 400)); }
   if (nokta === 'son') { await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam) - innerHeight * 2.2); __fl.atla(); }); await new Promise((r) => setTimeout(r, 400)); }
   await p.click('.fl-gec');
@@ -251,11 +256,25 @@ async function gecSur(p, nokta) {
      ?akis=0 ile sahne tamamen statik — olculen maliyet yalniz bu ucun.
      TEKRAR kosum, medyan. Reduce: cizgi durur, dugme gorunur. */
   console.log('== HALKA + IBARE ==');
+  /* SENARYO ORTA NOKTA (gece zinciri TUR 1 teshisi): eski senaryo film
+     SONUNDAYDI (ipucu yalniz orada gorunurdu — 604911c'den beri ibare
+     film boyunca ekranda, sart dustu). Sonda fl-hazirla ESKI SAYFA
+     iframe'ini yukluyor ve onun idle JS'i (tubes canvas) ana is
+     parcacigini boluyor — taban bile 4-10 dusen veriyordu, makine degil.
+     Uc oge (dugme+cizgi+ibare) ortada da birlikte; ana olcum ORTADA,
+     film-sonu degeri asagida AYRI bilgi satiri (saklanmaz). */
   const hTekrar = [];
   for (let i = 0; i < TEKRAR; i++) {
     const { b, p } = await ac('?akis=0');
-    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam - 0.3)); __fl.atla(); });
+    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam / 2)); __fl.atla(); });
     await p.waitForFunction('getComputedStyle(document.querySelector(".fl-ipucu")).opacity === "1"', { timeout: 10000 });
+    /* SUKUNET (gece TUR 1, olculdu: 0/1/3 dagilimi): halkali pencere
+       olcum sirasi geregi acilistaki KLIP INISLERINE denk geliyordu,
+       taban penceresi inisler bitince kosuyordu — sistematik haksizlik.
+       Iki pencere de ayni sukunette olculur: inen klip kalmayana kadar
+       bekle + 600 ms yerlesme. */
+    await p.waitForFunction('__fl.sahne().every((s) => s.durum !== "iniyor")', { timeout: 60000 });
+    await new Promise((r) => setTimeout(r, 600));
     /* ayni kosumda iki pencere: halkali ve halkasiz (taban) — fark
        halkanin GERCEK maliyeti; makine gurultusu ikisine esit girer */
     const r = await p.evaluate(() => new Promise((res) => {
@@ -293,6 +312,23 @@ async function gecSur(p, nokta) {
     });
     S.halka_azalt = { ...rz, gecti: rz.anim === 'none' && rz.gecGorunur };
     raporla('halka azaltma: cizgi durdu, dugme gorunur', S.halka_azalt);
+    await b.close();
+  }
+  /* BILGI: film sonunda ayni olcum (iframe idle yuku gorunur kalsin) */
+  {
+    const { b, p } = await ac('?akis=0');
+    await p.evaluate(() => { scrollTo(0, __fl.konum(__fl.toplam - 0.3)); __fl.atla(); });
+    await new Promise((r) => setTimeout(r, 600));
+    const r2 = await p.evaluate(() => new Promise((res) => {
+      const halka = document.querySelector('.fl-halka');
+      const olc = (sure) => new Promise((r3) => { const k = []; const t0 = performance.now();
+        const ad = (n) => { k.push(n); if (n - t0 < sure) requestAnimationFrame(ad); else r3(k); };
+        requestAnimationFrame(ad); });
+      (async () => { const a = await olc(1500); halka.style.display = 'none'; const b2 = await olc(1500); halka.style.display = ''; res({ a, b2 }); })();
+    }));
+    const say = (k) => k.slice(1).map((x, j) => x - k[j]).filter((d) => d > 25).length;
+    S.halka_filmsonu_bilgi = { dusen: say(r2.a), taban: say(r2.b2), not: 'iframe (eski sayfa) yuklu — idle JS yuku; ana olcum ortada' };
+    console.log(` bilgi (film sonu, iframe yuklu): dusen ${S.halka_filmsonu_bilgi.dusen} · taban ${S.halka_filmsonu_bilgi.taban}`);
     await b.close();
   }
   S.halka = {

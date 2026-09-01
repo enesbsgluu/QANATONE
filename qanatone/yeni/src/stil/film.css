@@ -130,6 +130,12 @@ main:has(> .fl) { max-width: none; padding: 0; }
 }
 .fl-halka::before {
   content: ''; position: absolute; left: 50%; top: 50%;
+  /* GECE TUR 1 (olculdu): maskeli parentin donen cocugu kompozit katmana
+     ayrilmayinca donus her kare ana-thread'e ugruyor, statik sahnede bile
+     1,5 sn'de 1-2 kez 25 ms+ bosluk. will-change katmani sabitler —
+     surekli animasyonda katman zaten kalici, H14'un yasakladigi bosta
+     katman zorlamasi degil (alan ~%0,3 ekran). */
+  will-change: transform;
   width: 260%; aspect-ratio: 1; transform: translate(-50%, -50%);
   background: conic-gradient(from 0deg,
     transparent 0 calc(100% - 56%),
