@@ -57,7 +57,7 @@
   border:1px solid var(--line);border-radius:34px;padding:clamp(26px,4vw,54px);scroll-margin-top:24px;
   background:radial-gradient(88% 100% at 0% 0%,rgba(239,35,60,.10),transparent 62%),
              linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.006))}
-.sil-yazi .kunye{margin-bottom:0}.sil-yazi .kunye::before{display:none} /* kaynak .ldt .mono: cizgisiz, marjsiz (5192) */
+.sil-yazi .kunye{margin-bottom:0;font-size:11px;gap:0}.sil-yazi .kunye::before{display:none} /* kaynak .ldt .mono: .mono tabani 11px (208), cizgisiz, marjsiz (5192); olcum 108x16 <-> 103x20 (3 Eyl) */
 .sil-yazi h3{font-size:clamp(1.55rem,3vw,2.4rem);line-height:1.04;
   letter-spacing:-.04em;margin:14px 0 14px}
 .sil-yazi h3 em{font-style:normal;color:var(--red)}

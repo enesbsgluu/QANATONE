@@ -88,6 +88,13 @@ body:not(:has(#bg))::before{content:'';position:fixed;inset:0;z-index:-1;
 .ust{display:flex;align-items:center;justify-content:space-between;
   max-width:840px;margin:0 auto;padding:22px 20px}
 .logo{color:var(--tx);text-decoration:none;font-weight:700;letter-spacing:.14em;font-size:.95rem}
+/* KUNYE ETIKETI — kaynak .mono (208) + .shead .mono (366-367) birebir: 12px tek,
+   .22em, gri, onunde 26px kizil cizgi. GLOBAL (kaynakta da global): lead formu her
+   sayfada (LeadKutu) — ana.css'ten tasindi, 3 Eyl 2026. */
+.kunye{font-family:var(--f-tek);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--tx3);display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
+.kunye::before{content:'';width:26px;height:1px;background:var(--red)}
+.kunye i{display:none}
 .tag{font-family:var(--f-tek);font-size:.7rem;letter-spacing:.18em;color:var(--red-soft);
   border:1px solid rgba(239,35,60,.45);border-radius:999px;padding:5px 12px}
 main{max-width:840px;margin:0 auto;padding:24px 20px 60px}
