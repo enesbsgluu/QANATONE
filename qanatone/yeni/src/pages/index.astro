@@ -43,7 +43,7 @@ const BASLIK = 'QANATONE — Talebi yakalayan sistem';
 const ACIKLAMA = 'Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında.';
 const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
 ---
-<Temel dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
+<Temel lead={false} dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
   canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
   {/* ON YUKLEME: yalniz GOVDE fontu. LCP elemani hero'nun lede'si
       (Lighthouse ile olculdu) ve o Nunito ile boyanir. Nunito

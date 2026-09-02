@@ -158,6 +158,9 @@ async function agacCek(browser, kok, etiketAd, boz) {
   await page.setCacheEnabled(false);
   await page.setViewport({ width: GENISLIK, height: YUKSEKLIK, deviceScaleFactor: 1 });
   await page.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {} });
+  /* PROLOG ANA SAYFADA (3 Eyl 2026): film oturum bayragi da konur — govde kiyasi
+     filmin sabit katmanini degil siteyi gorsun (PROLOG_ATLA=0 ile film olculur). */
+  if (process.env.PROLOG_ATLA !== '0') await page.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-prolog-atlandi', '1'); } catch (e) {} });
   const url = kok + (etiketAd === 'once' ? SAYFA_ONCE : SAYFA_SONRA);
   let yukleme = 'networkidle0', yanit = null;
   try { yanit = await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 }); }

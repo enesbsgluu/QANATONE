@@ -20,6 +20,7 @@ import '../stil/temel.css';
 import '../stil/kabuk.css';
 import Nav from '../parcalar/Nav.astro';
 import Perde from '../parcalar/Perde.astro';
+import LeadKutu from '../parcalar/LeadKutu.astro';
 import { icerik, T, KOK } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
 
@@ -39,10 +40,13 @@ interface Props {
   genis?: boolean;
   perde?: boolean;            /* karşılama perdesi (varsayılan var) */
   kabuk?: boolean;            /* yıldız/grain/imleç katmanları (varsayılan var) */
+  /* lead formu footer'ın önünde (kaynak: her rotada en sonda, 11742). Sayfa
+     formu kendi gövdesinde basıyorsa (SILIletisim: ana, /hizmetler) false. */
+  lead?: boolean;
 }
 const { dil = 'tr', baslik, aciklama, canonical,
         heleftr, helefen, sema = null, etiket, genis = false,
-        perde = true, kabuk = true } = Astro.props;
+        perde = true, kabuk = true, lead = true } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const en = dil === 'en';
 const s = (icerik.strings && icerik.strings[dil]) || {};
@@ -128,6 +132,8 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
       İletişim) + QANATONE bit damgası + alt satır. Sosyal (#footSocial)
       kaynakta da boştu (settings.social yok). /hukuki bağı yeni sayfanın
       (öksüz kalmasın); "ana site" göç iskelesi bağı KALKTI. */}
+  {/* LEAD FORMU — kaynak #lead her rotada en sonda (0 üst / clamp(50,7vw,90) alt) */}
+  {kabuk && lead && <section class="sil-lead" aria-label={en ? 'Request a demo' : 'Demo talebi'}><div class="sil-ic"><LeadKutu dil={dil} /></div></section>}
   <footer>
     <div class="wrap">
       <div class="fgrid">
