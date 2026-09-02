@@ -68,13 +68,16 @@ async function olc(browser, yol, boz) {
   await page.setViewport({ width: 1440, height: 900 });
   await page.evaluateOnNewDocument(GOZLEMCI);
   if (boz) await page.evaluateOnNewDocument(() => {
-    /* KIRMIZI KONTROL: yuklemede 120 ms zorla uzun gorev + 0,3 duzen kaymasi */
-    addEventListener('load', () => { const t = performance.now(); while (performance.now() - t < 120) {} const d = document.createElement('div'); d.style.height = '300px'; document.body.prepend(d); });
+    /* KIRMIZI KONTROL: yuklemeden 2 s sonra 120 ms zorla uzun gorev + 300 px
+       duzen kaymasi (perde suprulmus, sayfa boyanmis — ilk denemede load
+       aninda eklenen kayma perde altinda kaldi ve API onu saymadi) */
+    try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {}
+    addEventListener('load', () => setTimeout(() => { const t = performance.now(); while (performance.now() - t < 120) {} const d = document.createElement('div'); d.style.height = '300px'; document.querySelector('main').prepend(d); }, 2000));
   });
   const cdp = await page.target().createCDPSession();
   const t0 = Date.now();
   await page.goto(SUNUCU + yol, { waitUntil: 'load', timeout: 60000 });
-  await bekle(1800);
+  await bekle(boz ? 3200 : 1800);
   /* ETKILESIMLER: gercek girdi (CDP Input) — bos alana tiklama, Tab, Escape, tekerlek */
   await page.evaluate(() => { document.addEventListener('click', (e) => { const a = e.target.closest('a'); if (a) e.preventDefault(); }, true); });
   const tikla = async (x, y) => { await cdp.send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 }); await cdp.send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 }); await bekle(250); };

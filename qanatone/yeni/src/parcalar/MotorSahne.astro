@@ -142,7 +142,9 @@ const egri = (c: any) => {
 <div class="sdsec mk-kap">
   <div class="mk-sabit">
     <span class="mono">{M('Pazar zekâsı — kaydırdıkça çözülür', 'Market intelligence — solved as you scroll')}</span>
-    <div class="mkstage" id="mkStage">
+    {/* TUR 4 (2 Eyl 2026): inert — klavye odak gezintisi seride girmez; serit
+        dekoratif (odaklanabilir oge yok, isaretci olayi yok). Ilk Tab 52 -> 26-36 ms. */}
+    <div class="mkstage" id="mkStage" inert>
       <div class="mkbar2">
         <span class="mklogo"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
           ><path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm0 5.8a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" /><path
@@ -371,6 +373,14 @@ const egri = (c: any) => {
   .mkact { width: 12.5%; height: 100%; flex: none; padding: clamp(16px, 2vw, 26px);
     overflow: hidden; display: flex; flex-direction: column; gap: clamp(10px, 1.3vw, 16px);
     content-visibility: auto; }
+  /* GECE ZINCIRI TUR 4 (2 Eyl 2026): bu c-v KALIYOR, yeniden olculdu —
+     kaldirilinca finans kaydirma p95 16,9 -> 25,2 ms (KALDI, takilma %2).
+     Bedeli: klavye odak gezintisi (ilk Tab) kilitli perdeleri her adayda
+     zorla acip kapatiyor — CDP izi: keydown icinde 2584 zorla stil+yerlesim,
+     10 yerlesim / 44 ms ("Added to layout" I.mkc, circle.mkagp); perdeler
+     gizlenince 52 -> 11 ms. Cozum: serit `inert` (odak gezintisi icine
+     girmez; serit dekoratif, icinde odaklanabilir oge yok) — olcum
+     TUR4-CHROME-DENETIM.md. */
   .mklab { font-family:var(--f-tek); font-size: clamp(8.6px, .74vw, 10.2px);
     letter-spacing: .11em; text-transform: uppercase; color: var(--tx4); flex: none; }
   .mkstage b, .mkstage i, .mkstage em, .mkstage u, .mkstage s {

@@ -1,0 +1,1171 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-02T00:51:20.889Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1832,
+  "lcpEl": "i",
+  "cls": 0.2106,
+  "clsKaynak": [
+   {
+    "t": 14458,
+    "v": 0.0005,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 14479,
+    "v": 0.0008,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 14514,
+    "v": 0.0009,
+    "el": "article.ssz-kart"
+   }
+  ],
+  "inp": 48,
+  "inpHedef": "body keydown",
+  "etkilesim": 10,
+  "loaf": 15,
+  "loafToplam": 3092,
+  "loafEnUzun": 954,
+  "loafKaynak": [
+   {
+    "t": 91,
+    "sure": 954,
+    "engel": 68,
+    "betik": 943,
+    "stilDuzen": 11,
+    "render": 11,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/yeni/en/",
+      "sure": 108
+     }
+    ]
+   },
+   {
+    "t": 1291,
+    "sure": 539,
+    "engel": 0,
+    "betik": 537,
+    "stilDuzen": 2,
+    "render": 2,
+    "kaynak": []
+   },
+   {
+    "t": 2553,
+    "sure": 283,
+    "engel": 0,
+    "betik": 271,
+    "stilDuzen": 1,
+    "render": 12,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 10
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 228,
+   "lcpEl": "i",
+   "cls": 0.0083,
+   "clsKaynak": [
+    {
+     "t": 12969,
+     "v": 0.0005,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 12985,
+     "v": 0.0009,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 13002,
+     "v": 0.0007,
+     "el": "article.ssz-kart"
+    }
+   ],
+   "inp": 48,
+   "inpHedef": "section.sh-sahne pointerup",
+   "etkilesim": 10,
+   "loaf": 5,
+   "loafToplam": 570,
+   "loafEnUzun": 161,
+   "loafKaynak": [
+    {
+     "t": 18,
+     "sure": 161,
+     "engel": 72,
+     "betik": 48,
+     "stilDuzen": 113,
+     "render": 113,
+     "kaynak": []
+    },
+    {
+     "t": 757,
+     "sure": 124,
+     "engel": 50,
+     "betik": 24,
+     "stilDuzen": 1,
+     "render": 100,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 99
+      }
+     ]
+    },
+    {
+     "t": 645,
+     "sure": 111,
+     "engel": 0,
+     "betik": 109,
+     "stilDuzen": 1,
+     "render": 2,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 184,
+   "lcpEl": "p",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 142,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 69,
+   "loafEnUzun": 69,
+   "loafKaynak": [
+    {
+     "t": 74,
+     "sure": 69,
+     "engel": 16,
+     "betik": 12,
+     "stilDuzen": 57,
+     "render": 57,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 148,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 123,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 58,
+   "loafEnUzun": 58,
+   "loafKaynak": [
+    {
+     "t": 66,
+     "sure": 58,
+     "engel": 6,
+     "betik": 12,
+     "stilDuzen": 46,
+     "render": 46,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/donusum-oranlari-sektor-sektor/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 188,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 136,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 69,
+   "loafEnUzun": 69,
+   "loafKaynak": [
+    {
+     "t": 67,
+     "sure": 69,
+     "engel": 16,
+     "betik": 12,
+     "stilDuzen": 57,
+     "render": 57,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/google-ads-maliyetleri-2026/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "h1",
+   "cls": 0.0299,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 112,
+   "loafEnUzun": 112,
+   "loafKaynak": [
+    {
+     "t": 22,
+     "sure": 112,
+     "engel": 43,
+     "betik": 23,
+     "stilDuzen": 89,
+     "render": 89,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 160,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 130,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "h2 pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 61,
+   "loafEnUzun": 61,
+   "loafKaynak": [
+    {
+     "t": 70,
+     "sure": 61,
+     "engel": 9,
+     "betik": 11,
+     "stilDuzen": 50,
+     "render": 50,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/talebe-bes-dakikada-donmek/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 184,
+   "lcpEl": "h1",
+   "cls": 0.0371,
+   "clsKaynak": [],
+   "inp": 56,
+   "inpHedef": "body keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 122,
+   "loafEnUzun": 122,
+   "loafKaynak": [
+    {
+     "t": 24,
+     "sure": 122,
+     "engel": 49,
+     "betik": 26,
+     "stilDuzen": 96,
+     "render": 96,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "p",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 134,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 66,
+   "loafEnUzun": 66,
+   "loafKaynak": [
+    {
+     "t": 68,
+     "sure": 66,
+     "engel": 14,
+     "betik": 10,
+     "stilDuzen": 56,
+     "render": 56,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 192,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 152,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 6,
+   "loaf": 1,
+   "loafToplam": 84,
+   "loafEnUzun": 84,
+   "loafKaynak": [
+    {
+     "t": 71,
+     "sure": 84,
+     "engel": 30,
+     "betik": 14,
+     "stilDuzen": 69,
+     "render": 69,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/ai-ajan/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 268,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 225,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 152,
+   "inpHedef": "body keydown",
+   "etkilesim": 8,
+   "loaf": 2,
+   "loafToplam": 245,
+   "loafEnUzun": 150,
+   "loafKaynak": [
+    {
+     "t": 75,
+     "sure": 150,
+     "engel": 91,
+     "betik": 17,
+     "stilDuzen": 132,
+     "render": 133,
+     "kaynak": []
+    },
+    {
+     "t": 2651,
+     "sure": 95,
+     "engel": 41,
+     "betik": 82,
+     "stilDuzen": 11,
+     "render": 13,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/finans/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 224,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 157,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 89,
+   "loafEnUzun": 89,
+   "loafKaynak": [
+    {
+     "t": 76,
+     "sure": 89,
+     "engel": 35,
+     "betik": 14,
+     "stilDuzen": 74,
+     "render": 75,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/geo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 188,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 138,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 76,
+   "loafEnUzun": 76,
+   "loafKaynak": [
+    {
+     "t": 70,
+     "sure": 76,
+     "engel": 22,
+     "betik": 14,
+     "stilDuzen": 62,
+     "render": 62,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/google-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 204,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 147,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 76,
+   "loafEnUzun": 76,
+   "loafKaynak": [
+    {
+     "t": 78,
+     "sure": 76,
+     "engel": 23,
+     "betik": 12,
+     "stilDuzen": 64,
+     "render": 64,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/meta-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 220,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 163,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 56,
+   "inpHedef": "body keydown",
+   "etkilesim": 9,
+   "loaf": 1,
+   "loafToplam": 90,
+   "loafEnUzun": 90,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 90,
+     "engel": 34,
+     "betik": 19,
+     "stilDuzen": 71,
+     "render": 72,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 140,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "summary.xco keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 69,
+   "loafEnUzun": 69,
+   "loafKaynak": [
+    {
+     "t": 71,
+     "sure": 69,
+     "engel": 16,
+     "betik": 11,
+     "stilDuzen": 58,
+     "render": 58,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/seo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 196,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 161,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 98,
+   "loafEnUzun": 98,
+   "loafKaynak": [
+    {
+     "t": 63,
+     "sure": 98,
+     "engel": 45,
+     "betik": 12,
+     "stilDuzen": 86,
+     "render": 86,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/web-sitesi-araclar/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 137,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 75,
+   "loafEnUzun": 75,
+   "loafKaynak": [
+    {
+     "t": 69,
+     "sure": 75,
+     "engel": 22,
+     "betik": 12,
+     "stilDuzen": 64,
+     "render": 64,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmet/web-tasarim/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 188,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 146,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 76,
+   "loafEnUzun": 76,
+   "loafKaynak": [
+    {
+     "t": 70,
+     "sure": 76,
+     "engel": 22,
+     "betik": 15,
+     "stilDuzen": 61,
+     "render": 61,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/hizmetler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 236,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 165,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 2,
+   "loafToplam": 181,
+   "loafEnUzun": 106,
+   "loafKaynak": [
+    {
+     "t": 79,
+     "sure": 106,
+     "engel": 51,
+     "betik": 15,
+     "stilDuzen": 91,
+     "render": 91,
+     "kaynak": []
+    },
+    {
+     "t": 5952,
+     "sure": 75,
+     "engel": 23,
+     "betik": 72,
+     "stilDuzen": 1,
+     "render": 3,
+     "kaynak": [
+      {
+       "src": "kabuk.js",
+       "fn": "",
+       "cagiran": "IntersectionObserverCallback",
+       "sure": 70
+      }
+     ]
+    }
+   ],
+   "yol": "/yeni/en/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 220,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 138,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 48,
+   "inpHedef": "#msf-0 keydown",
+   "etkilesim": 13,
+   "loaf": 1,
+   "loafToplam": 67,
+   "loafEnUzun": 67,
+   "loafKaynak": [
+    {
+     "t": 70,
+     "sure": 67,
+     "engel": 14,
+     "betik": 11,
+     "stilDuzen": 56,
+     "render": 56,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "img bab-ic-mimarlik.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 135,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 9,
+   "loaf": 1,
+   "loafToplam": 63,
+   "loafEnUzun": 63,
+   "loafKaynak": [
+    {
+     "t": 72,
+     "sure": 63,
+     "engel": 10,
+     "betik": 16,
+     "stilDuzen": 47,
+     "render": 48,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/bab-ic-mimarlik/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 160,
+   "lcpEl": "img charles-schwab.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 128,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 61,
+   "loafEnUzun": 61,
+   "loafKaynak": [
+    {
+     "t": 67,
+     "sure": 61,
+     "engel": 9,
+     "betik": 11,
+     "stilDuzen": 50,
+     "render": 50,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/charles-schwab/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 156,
+   "lcpEl": "img cmblu-energy.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 127,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 58,
+   "loafEnUzun": 58,
+   "loafKaynak": [
+    {
+     "t": 68,
+     "sure": 58,
+     "engel": 6,
+     "betik": 11,
+     "stilDuzen": 47,
+     "render": 47,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/cmblu-energy/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 148,
+   "lcpEl": "img kononenko-group.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 124,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 48,
+   "inpHedef": "body keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 55,
+   "loafEnUzun": 55,
+   "loafKaynak": [
+    {
+     "t": 70,
+     "sure": 55,
+     "engel": 3,
+     "betik": 10,
+     "stilDuzen": 45,
+     "render": 45,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/kononenko-group/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 184,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 140,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 48,
+   "inpHedef": "a.dkgo keyup",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 68,
+   "loafEnUzun": 68,
+   "loafKaynak": [
+    {
+     "t": 72,
+     "sure": 68,
+     "engel": 15,
+     "betik": 15,
+     "stilDuzen": 53,
+     "render": 53,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/mercedes-benz/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 156,
+   "lcpEl": "img skyclinics.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 127,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body keydown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 60,
+   "loafEnUzun": 60,
+   "loafKaynak": [
+    {
+     "t": 67,
+     "sure": 60,
+     "engel": 8,
+     "betik": 10,
+     "stilDuzen": 49,
+     "render": 50,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/skyclinics/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 160,
+   "lcpEl": "img terawulf.webp",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 127,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "a.dkgo keyup",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 61,
+   "loafEnUzun": 61,
+   "loafKaynak": [
+    {
+     "t": 66,
+     "sure": 61,
+     "engel": 7,
+     "betik": 15,
+     "stilDuzen": 46,
+     "render": 46,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/projeler/terawulf/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 144,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 114,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerup",
+   "etkilesim": 9,
+   "loaf": 1,
+   "loafToplam": 52,
+   "loafEnUzun": 52,
+   "loafKaynak": [
+    {
+     "t": 62,
+     "sure": 52,
+     "engel": 0,
+     "betik": 12,
+     "stilDuzen": 40,
+     "render": 40,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/sss/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 168,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 129,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "a.dugme keyup",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 63,
+   "loafEnUzun": 63,
+   "loafKaynak": [
+    {
+     "t": 65,
+     "sure": 63,
+     "engel": 11,
+     "betik": 11,
+     "stilDuzen": 52,
+     "render": 52,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/surec/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

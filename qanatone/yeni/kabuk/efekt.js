@@ -88,7 +88,10 @@ function wordmark() {
     const host = cv.parentElement; if (!host) return;
     const W = host.clientWidth; if (!W) return;
     dpr = Math.min(devicePixelRatio || 1, LOW ? 1 : 2);
-    const off = document.createElement('canvas'), oc = off.getContext('2d');
+    /* TUR 4 (2 Eyl 2026): willReadFrequently — getImageData GPU tuvalinden
+       geri okumuyor; taze tarayicida ilk geri okuma 547 ms olculdu (CDP
+       profil, b@kabuk.js), sicakta 31-67 ms. */
+    const off = document.createElement('canvas'), oc = off.getContext('2d', { willReadFrequently: true });
     /* kaynak '800 Manrope' — Uncut Sans 700'de biter (sokum turu tipografi karari) */
     const font = (px) => '700 ' + px + 'px "Uncut Sans",system-ui,sans-serif';
     oc.font = font(100);
@@ -150,20 +153,31 @@ function wordmark() {
   }
   function start() { if (raf || RDC) return; raf = requestAnimationFrame(draw); }
   function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-  function boot() { build(); if (RDC) { t0 = 0; draw(performance.now()); } else { t0 = 0; if (seen) start(); } }
-  boot();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
-  /* iki kapi: genislik (bayat isaretle, kadraja girince insa) + gorunurluk */
-  let rt, bayat = false;
-  genislikDegisince(() => { clearTimeout(rt); rt = setTimeout(() => { if (!seen) { bayat = true; return; } stop(); boot(); }, 200); });
+  function boot() { kuruldu = true; build(); if (RDC) { t0 = 0; draw(performance.now()); } else { t0 = 0; if (seen) start(); } }
+  /* TUR 4 (2 Eyl 2026): INSA KADRAJA YAKLASINCA (IO, 600 px pay), yuklemede
+     DEGIL. Once yuklemede iki kez kuruluyordu (hemen + fonts.ready): altbilgi
+     tuvali ilk boyamada gorunmezken 121 KB'lik sayfanin en uzun karesini
+     (import.then 584-606 ms soguk, 50-67 ms sicak) o uretiyordu. Font sonra
+     gelirse: kuruluysa ve kadrajdaysa yeniden kurulur, degilse bayat isaretlenir.
+     Yeniden kurulumda stop() gerekmez: suren cizim dongusu yeni bitleri alir
+     (boot t0'i sifirlar, giris yeniden oynar). */
+  let kuruldu = false, rt, bayat = false;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!kuruldu) return; if (seen) boot(); else bayat = true; });
+  /* uc kapi: yaklasma (ilk insa) + genislik (bayat isaretle) + gorunurluk (ciz/durdur) */
+  genislikDegisince(() => { clearTimeout(rt); rt = setTimeout(() => { if (!seen || !kuruldu) { bayat = true; return; } boot(); }, 200); });
   if ('IntersectionObserver' in window) {
+    const yakin = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting || kuruldu) return;
+      yakin.disconnect(); bayat = false; boot();
+    }), { rootMargin: '600px' });
+    yakin.observe(cv);
     new IntersectionObserver((es) => es.forEach((e) => {
       seen = e.isIntersecting;
       if (!e.isIntersecting) { stop(); return; }
-      if (bayat) { bayat = false; stop(); boot(); return; }
+      if (!kuruldu || bayat) { bayat = false; boot(); return; }
       start();
     }), { threshold: .02 }).observe(cv);
-  } else { seen = true; start(); }
+  } else { seen = true; boot(); }
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : (seen && start())));
 }
 

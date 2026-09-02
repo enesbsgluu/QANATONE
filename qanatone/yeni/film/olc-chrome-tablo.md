@@ -1,0 +1,61 @@
+| Sayfa | LCP ms | CLS | INP ms (hedef) | LoAF adet / toplam ms | en uzun ms (kaynak) | önce LoAF toplam |
+|---|---|---|---|---|---|---|
+| /yeni/ | 228 | 0.0077 | 48 (section.sh-sahne point) | 5 / 526 | 160 (stil+düzen) | 587 |
+| /yeni/bulten/ | 184 | 0.0014 | 32 (body pointerdown) | 1 / 73 | 73 (stil+düzen) | 74 |
+| /yeni/bulten/donusum-oranlari-sektor-sektor/ | 176 | 0.0013 | 72 (body keydown) | 2 / 131 | 74 (stil+düzen) | 75 |
+| /yeni/bulten/google-ads-maliyetleri-2026/ | 180 | 0.0013 | 40 (body keydown) | 1 / 75 | 75 (stil+düzen) | 75 |
+| /yeni/bulten/saglik-turizmi-hasta-basina-gelir/ | 148 | 0.0000 | 32 (body pointerdown) | 1 / 84 | 84 (betik (adsız)) | 88 |
+| /yeni/bulten/talebe-bes-dakikada-donmek/ | 188 | 0.0013 | 40 (a keyup) | 1 / 82 | 82 (stil+düzen) | 71 |
+| /yeni/bulten/yapay-zeka-trafigi-tiklama-degil/ | 172 | 0.0013 | 32 (body pointerdown) | 1 / 74 | 74 (stil+düzen) | 74 |
+| /yeni/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/ | 176 | 0.0064 | 40 (body keydown) | 1 / 119 | 119 (stil+düzen) | 76 |
+| /yeni/en/ | 228 | 0.0083 | 48 (section.sh-sahne point) | 5 / 570 | 161 (stil+düzen) | 617 |
+| /yeni/en/bulten/ | 184 | 0.0013 | 32 (body pointerup) | 1 / 69 | 69 (stil+düzen) | 155 |
+| /yeni/en/bulten/donusum-oranlari-sektor-sektor/ | 148 | 0.0013 | 32 (body pointerdown) | 1 / 58 | 58 (stil+düzen) | 59 |
+| /yeni/en/bulten/google-ads-maliyetleri-2026/ | 188 | 0.0013 | 24 (body pointerdown) | 1 / 69 | 69 (stil+düzen) | 134 |
+| /yeni/en/bulten/saglik-turizmi-hasta-basina-gelir/ | 172 | 0.0299 | 32 (body keydown) | 1 / 112 | 112 (stil+düzen) | 127 |
+| /yeni/en/bulten/talebe-bes-dakikada-donmek/ | 160 | 0.0013 | 40 (h2 pointerdown) | 1 / 61 | 61 (stil+düzen) | 65 |
+| /yeni/en/bulten/yapay-zeka-trafigi-tiklama-degil/ | 184 | 0.0371 | 56 (body keydown) | 1 / 122 | 122 (stil+düzen) | 131 |
+| /yeni/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/ | 172 | 0.0013 | 32 (body pointerdown) | 1 / 66 | 66 (stil+düzen) | 112 |
+| /yeni/en/hizmet/ai-ajan/ | 192 | 0.0013 | 24 (body pointerdown) | 1 / 84 | 84 (stil+düzen) | 89 |
+| /yeni/en/hizmet/finans/ | 268 | 0.0013 | 152 (body keydown) | 2 / 245 | 150 (stil+düzen) | 325 |
+| /yeni/en/hizmet/geo/ | 224 | 0.0013 | 32 (body pointerdown) | 1 / 89 | 89 (stil+düzen) | 84 |
+| /yeni/en/hizmet/google-ads/ | 188 | 0.0013 | 32 (body pointerdown) | 1 / 76 | 76 (stil+düzen) | 71 |
+| /yeni/en/hizmet/meta-ads/ | 204 | 0.0013 | 32 (body pointerdown) | 1 / 76 | 76 (stil+düzen) | 124 |
+| /yeni/en/hizmet/otomasyon/ | 220 | 0.0013 | 56 (body keydown) | 1 / 90 | 90 (stil+düzen) | 132 |
+| /yeni/en/hizmet/seo/ | 180 | 0.0013 | 40 (summary.xco keydown) | 1 / 69 | 69 (stil+düzen) | 74 |
+| /yeni/en/hizmet/web-sitesi-araclar/ | 196 | 0.0013 | 32 (body pointerup) | 1 / 98 | 98 (stil+düzen) | 238 |
+| /yeni/en/hizmet/web-tasarim/ | 200 | 0.0013 | 40 (body pointerdown) | 1 / 75 | 75 (stil+düzen) | 160 |
+| /yeni/en/hizmetler/ | 188 | 0.0013 | 32 (body pointerdown) | 1 / 76 | 76 (stil+düzen) | 153 |
+| /yeni/en/otomasyon/ | 236 | 0.0013 | 32 (body pointerup) | 2 / 181 | 106 (stil+düzen) | 255 |
+| /yeni/en/projeler/ | 220 | 0.0013 | 48 (#msf-0 keydown) | 1 / 67 | 67 (stil+düzen) | 280 |
+| /yeni/en/projeler/bab-ic-mimarlik/ | 176 | 0.0013 | 32 (body pointerup) | 1 / 63 | 63 (stil+düzen) | 70 |
+| /yeni/en/projeler/charles-schwab/ | 160 | 0.0013 | 40 (body keydown) | 1 / 61 | 61 (stil+düzen) | 144 |
+| /yeni/en/projeler/cmblu-energy/ | 156 | 0.0013 | 32 (body pointerdown) | 1 / 58 | 58 (stil+düzen) | 122 |
+| /yeni/en/projeler/kononenko-group/ | 148 | 0.0013 | 48 (body keydown) | 1 / 55 | 55 (stil+düzen) | 53 |
+| /yeni/en/projeler/mercedes-benz/ | 184 | 0.0013 | 48 (a.dkgo keyup) | 1 / 68 | 68 (stil+düzen) | 115 |
+| /yeni/en/projeler/skyclinics/ | 156 | 0.0013 | 40 (body keydown) | 1 / 60 | 60 (stil+düzen) | 110 |
+| /yeni/en/projeler/terawulf/ | 160 | 0.0013 | 32 (a.dkgo keyup) | 1 / 61 | 61 (stil+düzen) | 118 |
+| /yeni/en/sss/ | 144 | 0.0013 | 40 (body pointerup) | 1 / 52 | 52 (stil+düzen) | 175 |
+| /yeni/en/surec/ | 168 | 0.0013 | 40 (a.dugme keyup) | 1 / 63 | 63 (stil+düzen) | 119 |
+| /yeni/hizmet/ai-ajan/ | 204 | 0.0013 | 32 (body pointerdown) | 1 / 95 | 95 (stil+düzen) | 107 |
+| /yeni/hizmet/finans/ | 268 | 0.0013 | 184 (body keydown) | 2 / 283 | 165 (stil+düzen) | 367 |
+| /yeni/hizmet/geo/ | 208 | 0.0013 | 32 (body pointerdown) | 1 / 86 | 86 (stil+düzen) | 87 |
+| /yeni/hizmet/google-ads/ | 188 | 0.0013 | 64 (body keydown) | 1 / 82 | 82 (stil+düzen) | 86 |
+| /yeni/hizmet/meta-ads/ | 188 | 0.0013 | 40 (body pointerup) | 1 / 82 | 82 (stil+düzen) | 83 |
+| /yeni/hizmet/otomasyon/ | 204 | 0.0013 | 32 (body keydown) | 1 / 102 | 102 (stil+düzen) | 103 |
+| /yeni/hizmet/seo/ | 192 | 0.0013 | 32 (body pointerup) | 1 / 91 | 91 (stil+düzen) | 93 |
+| /yeni/hizmet/web-sitesi-araclar/ | 300 | 0.0000 | 64 (body keydown) | 1 / 233 | 233 (betik: http://127.0.0.1:8790/) | 232 |
+| /yeni/hizmet/web-tasarim/ | 208 | 0.0013 | 40 (body keydown) | 1 / 87 | 87 (stil+düzen) | 93 |
+| /yeni/hizmetler/ | 200 | 0.0013 | 32 (body pointerup) | 1 / 88 | 88 (stil+düzen) | 89 |
+| /yeni/hukuki/ | 156 | 0.0001 | 40 (body pointerdown) | 1 / 102 | 102 (stil+düzen) | 59 |
+| /yeni/otomasyon/ | 224 | 0.0013 | 40 (body keydown) | 2 / 174 | 119 (stil+düzen) | 200 |
+| /yeni/projeler/ | 240 | 0.0013 | 80 (label.mc pointerup) | 1 / 83 | 83 (stil+düzen) | 156 |
+| /yeni/projeler/bab-ic-mimarlik/ | 180 | 0.0013 | 32 (body pointerdown) | 1 / 75 | 75 (stil+düzen) | 125 |
+| /yeni/projeler/charles-schwab/ | 164 | 0.0013 | 48 (body keydown) | 1 / 69 | 69 (stil+düzen) | 69 |
+| /yeni/projeler/cmblu-energy/ | 200 | 0.0013 | 32 (body keydown) | 1 / 78 | 78 (stil+düzen) | 68 |
+| /yeni/projeler/kononenko-group/ | 164 | 0.0013 | 40 (body keydown) | 1 / 65 | 65 (stil+düzen) | 66 |
+| /yeni/projeler/mercedes-benz/ | 164 | 0.0013 | 40 (body keydown) | 2 / 125 | 70 (stil+düzen) | 138 |
+| /yeni/projeler/skyclinics/ | 160 | 0.0013 | 48 (body keydown) | 1 / 68 | 68 (stil+düzen) | 64 |
+| /yeni/projeler/terawulf/ | 164 | 0.0013 | 32 (a.dkgo keydown) | 1 / 68 | 68 (stil+düzen) | 66 |
+| /yeni/sss/ | 136 | 0.0000 | 32 (body pointerdown) | 1 / 74 | 74 (betik (adsız)) | 61 |
+| /yeni/surec/ | 172 | 0.0013 | 32 (body pointerdown) | 1 / 70 | 70 (stil+düzen) | 126 |
