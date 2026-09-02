@@ -149,6 +149,12 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
           <h5>{m('fc2', 'İletişim', 'Contact')}</h5>
           {waUrl && <a href={waUrl} target="_blank" rel="noopener">WhatsApp</a>}
           {ayar.email && <a href={`mailto:${ayar.email}`}>{m('fmail', 'E-posta', 'Email')}</a>}
+          {/* ANAYASA (3 Eyl): kaynak #footSocial (7152-7155) C.socials'tan
+              basar — varsayilan Instagram (6374), sema H25'in sameAs kaynagi.
+              "Kaynakta bostu" notu yanlisti; yan yana kare: eski WhatsApp +
+              Instagram, yeni yalniz WhatsApp (kontak-tur9/sadakat-e-kabuk-100). */}
+          {(icerik.socials || []).filter((s: any) => s && s.url).map((s: any) =>
+            <a href={s.url} target="_blank" rel="noopener">{s.label || s.url}</a>)}
         </div>
       </div>
     </div>

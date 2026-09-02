@@ -211,8 +211,10 @@ html:has(#nvAc:checked){overflow:hidden}
 #nvAc:checked ~ .nv-m .nv-mlg{animation:mmrow .5s var(--e) forwards;animation-delay:.54s}
 .nv-mlg span{display:flex;gap:6px}
 .nv-mlg a{min-height:40px;padding:var(--hap-y3) var(--hap-x3);border-radius:999px;border:1px solid var(--line);
-  display:inline-flex;align-items:center;font-family:var(--f-tek);font-size:10px;
+  display:inline-flex;align-items:center;font-family:var(--f-tek);font-size:12px;
   letter-spacing:.14em;color:var(--tx3);transition:.24s;text-decoration:none}
+/* font-size 12px: kaynak 2405'te 10px yazili ama "12 piksel tabani" blogu
+   (4185-4206, `#mmenu .mlg button{font-size:12px}`) sonda kazanir — ANAYASA 3 Eyl */
 .nv-mlg a.on{background:rgba(255,255,255,.1);color:var(--tx);border-color:var(--line2)}
 .nv-mcta{display:flex;flex-direction:column;gap:10px;padding-top:16px;
   opacity:0;transform:translateY(16px)}

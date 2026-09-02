@@ -1,0 +1,161 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T22:22:19.471Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 5,
+   "farkliPiksel": 64809,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 7/8 sutun 8/8 (x 1260-1440, y 675-788; hucrede 11088 px, tum farkin %17)",
+   "md5": {
+    "once": "9fe5fa878c719880cd44e1709cfcdfac",
+    "sonra": "ad91b5a77484f595d35efaa40bd3c3d6"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/sadakat-e-kabuk-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/sadakat-e-kabuk-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/sadakat-e-kabuk-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 100,
+   "farkYuzde": 3.47,
+   "farkliPiksel": 44975,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 2/8 sutun 5/8 (x 720-900, y 113-225; hucrede 8319 px, tum farkin %18)",
+   "md5": {
+    "once": "dbda526c6d06436339cd190270156d9a",
+    "sonra": "1046d96c4aa9fc7fa1f8330735255d4d"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 9545,
+     "sonra": 12259
+    },
+    "gercek": {
+     "once": 9545,
+     "sonra": 11697
+    }
+   },
+   "sapma": {
+    "once": 0,
+    "sonra": -562
+   },
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/sadakat-e-kabuk-once-100.png",
+    "sonra": "yeni/film/kontak-tur9/sadakat-e-kabuk-sonra-100.png",
+    "yanyana": "yeni/film/kontak-tur9/sadakat-e-kabuk-yanyana-100.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 105,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 99,
+   "video": 0
+  },
+  "scrollHeight": 10445,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "9fe5fa878c719880cd44e1709cfcdfac",
+    "png": "yeni/film/kontak-tur9/sadakat-e-kabuk-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 105
+   },
+   {
+    "konum": 100,
+    "hedef": 9545,
+    "gercek": 9545,
+    "sapma": 0,
+    "md5": "dbda526c6d06436339cd190270156d9a",
+    "png": "yeni/film/kontak-tur9/sadakat-e-kabuk-once-100.png",
+    "raf": "raf",
+    "animasyonSonradan": 105
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 12,
+   "sonsuzSifirlanan": 5,
+   "sonluBitirilen": 7,
+   "video": 0
+  },
+  "scrollHeight": 13159,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "ad91b5a77484f595d35efaa40bd3c3d6",
+    "png": "yeni/film/kontak-tur9/sadakat-e-kabuk-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 12
+   },
+   {
+    "konum": 100,
+    "hedef": 12259,
+    "gercek": 11697,
+    "sapma": -562,
+    "md5": "1046d96c4aa9fc7fa1f8330735255d4d",
+    "png": "yeni/film/kontak-tur9/sadakat-e-kabuk-sonra-100.png",
+    "raf": "raf",
+    "animasyonSonradan": 12
+   }
+  ]
+ }
+}
