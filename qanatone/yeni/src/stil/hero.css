@@ -25,22 +25,35 @@
    8) will-change tasinmadi (gerekcesi asagida, .sus-el basinda).
    9) Rozetteki nokta iki ust uste <i> yerine tek eleman: eskide iki
       ayni daire vardi, alttaki %75 opaklikta — nabiz kaldirildiginda
-      geriye kalan sey tek bir noktanin biraz parlak hali. Tek eleman
-      %85 opaklikla ayni goruntuyu veriyor.
+      geriye kalan sey tek bir noktanin biraz parlak hali. Ustteki daire
+      tam opak oldugundan tek eleman da opak (kadraj turunda .85 kalkti).
+
+   KADRAJ TURU (2 Eyl 2026, Enes: "hiza kok sitedeki gibi degil, sayfa
+   hareket ediyor, kadraja oturmuyor; baslik eski el yazisi tema").
+   Kaynak satirlari eski.css (kok <style> ayiklanmis): #hero 357-358,
+   .wrap 180 + 433, .heroin 437, .pill 443-452, h1 454-465, .lede 466,
+   .hcta 470, .void 475-487, .hmeta 531-536, .scrollcue 537-548, mobil
+   2393-2420, 12 piksel tabani 4142-4179. Gercek tarayicida (Brave,
+   1440x900) yan yana olculup duzeltilenler: hero 836->900 · metin adasi
+   680->940 · h1 ailesi Uncut Sans->Playfair (ozgulluk) · rozet/meta/
+   kaydir 10/10/9 -> 12 px · mobil meta gap · void gecis .34s.
+   Kaydirma paralaksi (sh-par-*) KAYNAKTA DA VAR (kok 11474-11477 ve
+   11663, GSAP scrub) ve olcumde ayni degeri verdi; kaldirilmadi.
    ============================================================ */
 
-.ana .sh-sahne{position:relative;min-height:calc(100svh - 4rem);
+/* KADRAJ (2 Eyl, Enes: "tam kadraja oturmuyor / hareket ediyor") — kaynak
+   #hero (eski.css 357-358) BIREBIR: min-height 100svh, dolgu 150px 0 110px,
+   her genislikte (kaynagin mobil blogu dolguya dokunmuyor). Onceki hal
+   `calc(100svh - 4rem)` + clamp(56px,9vh,110px) ust dolguydu; nav eskide
+   de yenide de FIXED (nv-bar), akista hero'nun onunde hicbir sey yok
+   (olculdu: .sh-sahne top=0). 4rem cikarmak ilk ekrani 64 px kisa
+   birakiyordu: 1440x900'de hero 836, metin adasi 62 px yukarida,
+   kaydir isareti pencere dibinden 90 px yukarida ve serit ilk ekrana
+   giriyordu — "sayfa hareket ediyor" hissinin olculen kaynagi bu. */
+.ana .sh-sahne{position:relative;min-height:100svh;
   display:flex;align-items:center;justify-content:center;
-  padding:clamp(56px,9vh,110px) 0 clamp(64px,10vh,110px);
+  padding:150px 0 110px;
   overflow:hidden;text-align:center}
-/* ALT DOLGU MASAUSTUNDE KAYNAKTAKI DEGER (110px) — clamp DEGIL.
-   Kaydir isareti bolume gore konumlanir: alttan 26px + ~62px boy = 88px'lik
-   bir bant kaplar. Alt dolgu bu banttan kucuk olursa isaret hmeta satirinin
-   USTUNE biner. Gercek tarayicida yakalandi: 730px yuksek pencerede
-   clamp(64px,10vh,110px) 73px veriyordu ve "KAYDIR" ile "DUBAI" ust uste
-   dusuyordu. Eski kaynak 110px sabit yaziyordu — sebebi tam buymus.
-   Mobilde isaret zaten yok (<=900px), orada clamp kaliyor. */
-@media(min-width:901px){.ana .sh-sahne{padding-bottom:110px}}
 
 /* NEDEN `.ana .sh-sahne` — sade `.sh-sahne` DEGIL (gercek tarayicida
    yakalandi, 19 Agu): ana.css'te `.ana section{padding:11vh 0}` var ve
@@ -123,9 +136,14 @@ html.t-notubes .sus-tubes{display:none!important}
 @keyframes sh-suzulB{0%,100%{transform:translate3d(0,0,0) rotate(0)}
   50%{transform:translate3d(-5px,12px,0) rotate(.8deg)}}
 
-/* ---------- metin adasi ---------- */
-.sh-ic{position:relative;z-index:4;max-width:940px;margin:0 auto;
-  padding:0 clamp(20px,4vw,40px)}
+/* ---------- metin adasi ----------
+   Kaynak iki katman: `.wrap` (eski.css 180 + #hero .wrap 433) ve icinde
+   `.heroin` (437). Tek katmana indirilmis hali hero'nun flex cocugu
+   olarak icerige buzuluyordu (940 yerine 680 px olculdu; ::before zemin
+   golgesi de 1165 yerine 843 px kaliyordu). Kaynak `--max` 1280px. */
+.sh-kap{position:relative;z-index:4;width:100%;max-width:1280px;margin:0 auto;
+  padding:0 var(--gut)}
+.sh-ic{position:relative;max-width:940px;margin:0 auto}
 /* metnin altindaki zemin koyulasir: kizil sis yazinin icinden degil
    cevresinden gecer, boylece beyaz beyaz kirmizi kirmizi okunur */
 .sh-ic::before{content:'';position:absolute;left:50%;top:47%;z-index:-1;
@@ -134,13 +152,23 @@ html.t-notubes .sus-tubes{display:none!important}
 
 .sh-rozet{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);margin-bottom:34px}
+/* Nokta: kaynakta ust uste iki daire, ustteki TAM opak (450: yalniz
+   first-child .75) — gorunen sonuc opak tek daire; .85 sapmasi kalkti. */
 .sh-nokta{position:relative;display:flex;width:7px;height:7px;border-radius:50%;
-  background:var(--red);opacity:.85}
-.sh-rozet span:last-child{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(255,255,255,.78);line-height:1.4}
+  background:var(--red)}
+/* 12 PIKSEL TABANI (eski.css 4142-4179): kaynak `.pill span`, `.hmeta`,
+   `.scrollcue span`i 12px'e ceker ve satir araligi govdeden (1,66) miras
+   kalir — rozet boyu 37,9 px. Buradaki 10px + 1,4 rozeti 32 px'e
+   dusuruyordu (olculdu), basligi 6 px yukari itiyordu. */
+.sh-rozet span:last-child{font-family:var(--f-tek);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.78)}
 
-/* referans tipografisi: serif, ince, isikli */
-.sh-h1{font-family:var(--f-hero);font-weight:500;
+/* referans tipografisi: serif, ince, isikli (eski.css 454-457).
+   `.ana .sh-h1` — sade `.sh-h1` DEGIL: ana.css:21 `.ana h1{font-family:
+   var(--f-baslik)}` (0,1,1) sinif seciciyi (0,1,0) yeniyordu; gercek
+   tarayicida h1'in IKI satiri da Uncut Sans olculdu (2 Eyl), Playfair hic
+   yururluge girmiyordu. H10 dersinin ayni: ozgulluk, metin degil. */
+.ana .sh-h1{font-family:var(--f-hero);font-weight:500;
   font-size:clamp(2.8rem,7.6vw,5.9rem);line-height:1.06;letter-spacing:-.028em;
   color:#fff;margin-bottom:26px;
   text-shadow:0 1px 22px rgba(0,0,0,.5),0 0 34px rgba(255,198,204,.28)}
@@ -172,7 +200,7 @@ html.t-notubes .sus-tubes{display:none!important}
   font-size:.92rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;
   color:var(--tx);
   transition-property:transform,background,color,border-color,box-shadow;
-  transition-duration:.26s;transition-timing-function:var(--e)}
+  transition-duration:.34s;transition-timing-function:var(--e)} /* kaynak 480: .34s */
 .sh-void::before{content:'';position:absolute;inset:0;border-radius:999px;
   background:radial-gradient(60% 100% at 50% 100%,rgba(239,35,60,.55),transparent 72%);
   opacity:0;transition:opacity .45s var(--e)}
@@ -213,8 +241,9 @@ html.t-notubes .sus-tubes{display:none!important}
 .sh-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
 .sh-btn:active{transform:scale(.965);transition-duration:.08s}
 
+/* font-size 12px: 12 piksel tabani (eski.css 4154), 531-534'teki 10px'i ezer */
 .sh-meta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:52px;
-  flex-wrap:wrap;font-family:var(--f-tek);font-size:10px;letter-spacing:.22em;
+  flex-wrap:wrap;font-family:var(--f-tek);font-size:12px;letter-spacing:.22em;
   text-transform:uppercase;color:rgba(255,255,255,.34);
   animation:sh-yukari 1s var(--e) 1s backwards}
 .sh-meta i{width:1px;height:11px;background:rgba(255,255,255,.2);font-style:normal}
@@ -227,7 +256,8 @@ html.t-notubes .sus-tubes{display:none!important}
   animation:sh-yukari-sus 1s var(--e) 1.35s forwards;pointer-events:none}
 @keyframes sh-yukari-sus{from{opacity:0;transform:translate(-50%,18px)}
   to{opacity:1;transform:translate(-50%,0)}}
-.sus-kaydir span{font-family:var(--f-tek);font-size:9px;letter-spacing:.26em;
+/* font-size 12px: 12 piksel tabani (eski.css 4155), 540'taki 9px'i ezer */
+.sus-kaydir span{font-family:var(--f-tek);font-size:12px;letter-spacing:.26em;
   text-transform:uppercase;color:rgba(255,255,255,.3)}
 .sus-kaydir i{position:relative;width:1px;height:44px;font-style:normal;overflow:hidden;
   background:linear-gradient(180deg,rgba(239,35,60,.22),rgba(239,35,60,.04))}
@@ -259,7 +289,7 @@ html.t-notubes .sus-tubes{display:none!important}
   .sh-ic{display:flex;flex-direction:column;align-items:center}
   .sh-h1{order:1}
   .sh-lede{order:2}
-  .sh-meta{order:3;margin-top:22px;gap:12px}
+  .sh-meta{order:3;margin-top:22px} /* kaynak 2400: gap degismez (16px) */
   .sh-cta{order:4;margin-top:20px}
   /* KAYNAK DÜĞME STANDARDI (kök 2593-2595): tek boy, yazı ortada */
   .sh-cta{width:100%;flex-direction:column;align-items:center;gap:11px}

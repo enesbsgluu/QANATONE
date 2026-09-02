@@ -75,13 +75,18 @@ const demoK = (h: any): string => {
   return 'serp';
 };
 ---
+{/* SADAKAT (sokum turu): kaynak `#akis` (kok index.html 4643-4660) .shead
+    KULLANMIYOR — baslik blogu `.akht` (kuralsiz), etiket `.mono` (12px,
+    cizgisiz), h2 UA olcusunde (1.5em = 24,75 px, olculdu), p govde
+    varsayilani (16,5 px, beyaz). Bu yuzden .kunye/.s1-buyuk/.s1-alt
+    BURADA YOK: uclu ortak olcegi (66 px h2) basardi. Kurallar akis.css. */}
 <section class="sa-sahne" id="akis" data-sahne="a">
   <div class="sa-ic">
     <div class="sa-bas">
       <div class="sa-metin">
-        <p class="kunye"><i></i>{g('akk')}</p>
-        <h2 class="s1-buyuk" set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
-        <p class="s1-alt">{g('akp')}</p>
+        <span class="sa-etiket">{g('akk')}</span>
+        <h2 set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
+        <p>{g('akp')}</p>
       </div>
       {/* OK DUGMELERI (sokum turu, 4 Eyl): kaynak 4651-4654 (.aknav) —
           serit yerli kaydirma, dugmeler scrollBy; fare surukleme adada. */}
@@ -134,9 +139,14 @@ const demoK = (h: any): string => {
      6 px esigiyle tiklama yutma, .drag sinifi (snap kapali, grabbing). */
   const ray = document.querySelector<HTMLElement>('.sa-ray');
   if (ray) {
-    /* H12: duzen OKUNMAZ — adim, kartin CSS olcusunden (akis.css .sa-kart
-       flex-basis clamp) innerWidth ile turetilir; snap zaten hizalar. */
-    const adim = () => { const w = innerWidth; return (w > 900 ? Math.min(360, Math.max(300, w * .26)) : Math.min(360, Math.max(260, w * .78))) + Math.min(18, Math.max(12, w * .014)); };
+    /* H12: duzen OKUNMAZ — adim, kartin CSS olcusunden innerWidth ile
+       turetilir; snap zaten hizalar. OLCULER KAYNAKTAN (3 Eyl, akis
+       ajani kart genisligini kaynaga cekti; kok index.html 2520/2525/
+       2551 = akis.css 110/120/152): kart clamp(272px,23vw,336px), <=640
+       min(280px,76vw); bosluk clamp(16px,2vw,24px). Kaynak JS (6866)
+       gercek genisligi okuyup +20 SABIT ekliyordu — burada bosluk CSS
+       gap'in kendisi (kart+gap = gercek adim), sapma bilincli. */
+    const adim = () => { const w = innerWidth; return (w > 640 ? Math.min(336, Math.max(272, w * .23)) : Math.min(280, w * .76)) + Math.min(24, Math.max(16, w * .02)); };
     document.getElementById('akPrev')?.addEventListener('click', () => ray.scrollBy({ left: -adim(), behavior: 'smooth' }));
     document.getElementById('akNext')?.addEventListener('click', () => ray.scrollBy({ left: adim(), behavior: 'smooth' }));
     /* H12: scrollLeft OKUNMAZ/YAZILMAZ — surukleme artimli scrollBy ile
@@ -147,30 +157,19 @@ const demoK = (h: any): string => {
     addEventListener('pointerup', () => { down = false; ray.classList.remove('drag'); });
     ray.addEventListener('click', (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
   }
-  /* SURUCU KURALI (Enes, 5 Eyl 2026): bir sureci anlatan hareket
-     KAYDIRMAYA baglanir; dongu yok. Demo animasyonlari (CSS, zaman
-     tabanli, --akps ile duraklatilmis) ViewTimeline'a baglanir: her
-     kartin hareketleri ayni toplam sureye (T) normalize edilir ki goreli
-     tempolar korunsun (WAAPI normalizasyonu: gecikme+sure*tekrar orani
-     cizelgeye yayilir); sonsuz tekrar cizelgede DURUYORDU (olculdu),
-     tekrar sayisi T/sure'den sonlu verilir. Desteksiz tarayicida eski
-     IO play/pause kalir. */
-  const sur = (kok: Element, ozne: Element): boolean => {
-    if (!('ViewTimeline' in window)) return false;
-    const vt = new (window as any).ViewTimeline({ subject: ozne });
-    (kok as HTMLElement).style.setProperty('--akps', 'running');
-    for (const a of kok.getAnimations({ subtree: true })) {
-      const t = a.effect!.getTiming();
-      a.effect!.updateTiming({ iterations: Math.round((16e3 - +(t.delay || 0)) / (+(t.duration as number) || 1e3)) || 1 });
-      (a as any).timeline = vt;
-    }
-    return true;
-  };
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"; onceki 5 Eyl "kaydirmaya baglanir" kurali
+     KALKTI, ViewTimeline sur() SOKULDU): demo kaydirdikca ilerlemez;
+     kart kadraja girince kendi ritminde SONSUZ doner, cikinca durur —
+     kaynagin #akis.aklive deseni (kok index.html 3757 `.akd *
+     {animation-play-state:running}` + 6853-6857 IO toggle). Burada
+     anahtar kart kokunde: .sa-kart{--akps:paused} / .sa-kart.akoynar
+     {--akps:running} (akis.css 169-170); keyframe sureleri kaynak
+     degerleri (akis.css: 5.6s/5.4s/6s/4.8s/2.6s infinite). Esik .25:
+     kartin ceyregi gorununce oynar. Kaydirma dinleyicisi yok (H12),
+     rAF yok; reduced-motion CSS'te animation:none (H11). */
   const kartlar = document.querySelectorAll('.sa-kart');
-  /* ozne: seridin kendisi (.sa-ray yatay kaydirma kabi — kartin kendi
-     dikey view cizelgesi o kabin icinde takilirdi) */
-  if (ray && kartlar.length && sur(ray, ray)) kartlar.forEach((k) => k.classList.add('akoynar'));
-  else if (kartlar.length && 'IntersectionObserver' in window) {
+  if (kartlar.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {
       for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
     }, { threshold: 0.25 });

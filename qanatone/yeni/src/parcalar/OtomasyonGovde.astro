@@ -108,8 +108,11 @@ const TELI = [0, 1, 2, 3];
 {/* ---- AKIŞ MANTIĞI (içerik statik; teller süs) ----
      A3-D1 (sürücü düzeltmesi): kaynağın reveal(p) scrub'ı geri geldi —
      eşikler kökün 10632-10639 formülleri BİREBİR: giriş .06+i·.07,
-     beyin .34, çıkış .50+i·.08, teller .12+i·.07 / .52+i·.08; sürücü
-     ST scrub yerine anonim view() (--fyt, SurecGovde deseni). */}
+     beyin .34, çıkış .50+i·.08, teller .12+i·.07 / .52+i·.08.
+     3 EYL 2026 (Enes, CLAUDE.md "görünürlükte canlı"): sürücü artık
+     view() DEĞİL — .akis3 kadraja girince (IO .akoynar) --fyt zamanla
+     bir kez açılır, döngüler (teller/dalga/nabız) sonsuz döner, çıkınca
+     durur. Ayrıntı stil bloğundaki SURUCU KURALI yorumları. */}
 <div class="akis3">
   {/* Düğüm yapısı kaynak .fnode birebiri (build 10538-10539): ikon
       kutusu .ni + metin .nt + durum noktası .nd. Kaynakta tik YOK —
@@ -520,25 +523,28 @@ const TELI = [0, 1, 2, 3];
 
   .akis3 { display: grid; grid-template-columns: 1fr 44px 1.3fr 44px 1fr; gap: 6px;
     margin-top: 26px; }
-  /* AKIŞ SCRUB SÜRÜCÜSÜ (A3-D1) — kaynak: ST scrub .5, top 86%→bottom
-     90% (kök 12461) + reveal(p) eşikleri (10632-10639, markup'ta --fe
-     olarak BİREBİR basılı). Sürücü kaydırma (IO değil): anonim view()
-     tek animasyon --fyt'yi 0→1 sürer, hâller eşikten türer (SurecGovde
-     --yt deseninin eşi). Aralık cover 5%→60%: kaynağın "blok tam
-     görünürken tamamlanır" hedefinin (Enes ayarı, 12456-2460) view
-     eşleniği. TABAN = TAMAMLANMIŞ (--fyt initial 1): desteksiz
-     tarayıcı ve reduced-motion tam hâli görür — kaynak REDUCE'da
-     reveal(1) çağırıyordu, birebir. Pencere ×20 (~0.05p): kaynağın
-     sınıf+.45s transition yumuşamasının scrub eşleniği (bilinçli
-     eşleme, ani sınıf geçişi değil). */
+  /* AKIŞ AÇILIŞI (A3-D1 eşikleri korunur) — kaynak reveal(p) eşikleri
+     (10632-10639, markup'ta --fe olarak BİREBİR basılı); hâller --fyt
+     eşiğinden türer (SurecGovde --yt deseninin eşi). TABAN =
+     TAMAMLANMIŞ (--fyt initial 1): desteksiz tarayıcı ve reduced-motion
+     tam hâli görür — kaynak REDUCE'da reveal(1) çağırıyordu, birebir.
+     (A3-D1'in ST scrub .5 / cover 5%→60% view() sürücüsü 3 Eyl'de
+     kalktı — aşağıdaki SURUCU KURALI.) */
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"): akis demosu KAYDIRDIKCA ILERLEMEZ. Yukaridaki
+     view() scrub (cover 5%→60%) SOKULDU; --fyt artik ZAMAN tabanli tek
+     seferlik acilis (2.4 s, both) — .akis3 kadraja girince (.akoynar,
+     IO esik .25) oynar, cikinca --akps ile durur, tamamlaninca son
+     karede kalir. Pencere ×20 → ×5: 0,2p × 2,4 s = 0,48 s ≈ kaynagin
+     .45 s sinif gecisi (10632-10639 + .45s transition). Sure kaynakta
+     yok (ST scrub'di) — 2,4 s bilincli secim, hukum Enes'te. TABAN =
+     TAMAMLANMIS (initial 1) korunur: reduced-motion animation:none. */
   @property --fyt { syntax: '<number>'; inherits: true; initial-value: 1; }
-  @supports (animation-timeline: view()) {
-    .akis3 { animation: fyt-surus linear both; animation-timeline: view();
-      animation-range: cover 5% cover 60%; }
-  }
-  @keyframes fyt-surus { from { --fyt: 0; } to { --fyt: 1; } }
+  .akis3 { animation: fyt-giris 2.4s linear both;
+    animation-play-state: var(--akps, paused); }
+  @keyframes fyt-giris { from { --fyt: 0; } to { --fyt: 1; } }
   .adugum, .ajan-kart, .tel-yak {
-    --fp: clamp(0, (var(--fyt, 1) - var(--fe, 0)) * 20, 1); }
+    --fp: clamp(0, (var(--fyt, 1) - var(--fe, 0)) * 5, 1); }
   /* düğüm: kaynak .fnode kapalı hâli (1336-1339): opacity 0 +
      translateY(10px) scale(.96) → on'da 1/none. (D1'in ".fln .55→1"
      künyesi YANLIŞ bileşendendi — .fln 701 başka sahnenin düğümü;
@@ -979,28 +985,34 @@ const TELI = [0, 1, 2, 3];
   .hoz b, .hpara b { font-family:var(--f-tek); }
   .hpara b:first-of-type { font-size: 1.3rem; color: var(--red-soft); }
   .hnot { color: var(--tx3); font-size: .82rem; margin-top: 12px; }
-  /* --- #flow kaydirma cizelgesi: `animation` KISAYOLU animation-timeline'i
-     sifirlar, bu blok o kurallardan SONRA gelmeli (olculdu: bloktan once
-     dururken .adugum/.ajan-kart/.bi dongude kaliyordu) --- */
-  /* SURUCU KURALI (Enes, 5 Eyl): akis diyagrami bir SURECI anlatir —
-     kaydirmaya baglanir, dongu yok. .akis3 adli view cizelgesi tasir
-     (--flow); tel paketleri, dugum dalgasi, ajan satirlari ve beyin
-     nabzi o cizelgede SONLU tekrarla akar (sonsuz tekrar cizelgede
-     durur). Zaman gecikmeleri cizelgede yok: tellerin sira hissi
-     aralik kaydirmasiyla (gecikme/sure orani x tekrar payi). */
-  @supports (animation-timeline: view()) {
-    .akis3 { view-timeline: --flow block; }
-    .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation-timeline: --flow; animation-iteration-count: 6; animation-delay: 0s; animation-range: cover 0% cover 100%; }
-    .sus-tel .iz1, .sus-tel-m .iz1 { animation-range: cover -4.2% cover 95.8%; }
-    .sus-tel .iz2, .sus-tel-m .iz2 { animation-range: cover -8.3% cover 91.7%; }
-    .sus-tel .iz3, .sus-tel-m .iz3 { animation-range: cover -12.5% cover 87.5%; }
-    .sus-tel.sag .tel-iz, .sus-tel-m.sag .tel-iz { animation-range: cover -2.1% cover 97.9%; }
-    .sus-tel.sag .iz1, .sus-tel-m.sag .iz1 { animation-range: cover -6.3% cover 93.7%; }
-    .sus-tel.sag .iz2, .sus-tel-m.sag .iz2 { animation-range: cover -10.4% cover 89.6%; }
-    .sus-tel.sag .iz3, .sus-tel-m.sag .iz3 { animation-range: cover -14.6% cover 85.4%; }
-    .adugum { animation-timeline: --flow; animation-iteration-count: 6; animation-delay: 0s;
-      animation-range: cover calc(var(--hi, 0) * -4.2%) cover calc(100% - var(--hi, 0) * 4.2%); }
-    .ajan-kart ol { animation-timeline: --flow; animation-iteration-count: 5; }
-    .bi { animation-timeline: --flow; animation-iteration-count: 6; }
-  }
+  /* --- #flow GORUNURLUK KAPISI: `animation` KISAYOLU play-state'i
+     sifirlar, bu blok o kurallardan SONRA gelmeli (ayni ders: bloktan
+     once dururken .adugum/.ajan-kart/.bi dongude kaliyordu) --- */
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"; 5 Eyl'un --flow view cizelgesi + sonlu tekrar
+     SOKULDU): tel paketleri (ak-iz 3.4s / ak-iz-m 2.6s), dugum dalgasi
+     (hp-dalga 2.667s), ajan satirlari (fsp-dalga 3.18s) ve beyin nabzi
+     (brainPulse 2.6s) kendi zaman gecikmeleriyle SONSUZ doner — yalniz
+     .akis3 kadrajdayken (.akoynar, IO esik .25), cikinca paused.
+     Kaynagin #flow'u da boyleydi: IO(.04) start/stop + rAF tick
+     (kok 9786-9788); burada rAF yok, CSS play-state. */
+  .akis3 { --akps: paused; }
+  .akis3.akoynar { --akps: running; }
+  .adugum, .ajan-kart ol, .bi,
+  .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation-play-state: var(--akps, paused); }
 </style>
+
+<script>
+  /* AKIS KAPISI (Enes, 3 Eyl 2026): .akis3 kadraja girince .akoynar,
+     cikinca kalkar — kaynagin flowKur IO'su (kok 9786-9787, esik .04)
+     ile ayni is; esik .25 (SAAkis/HizmetGovde ile bir). Kaydirma
+     dinleyicisi yok (H12), rAF yok; IO yoksa surekli oynasin (sus). */
+  const akis3 = document.querySelector('.akis3');
+  if (akis3) {
+    if ('IntersectionObserver' in window)
+      new IntersectionObserver((es) => {
+        for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
+      }, { threshold: 0.25 }).observe(akis3);
+    else akis3.classList.add('akoynar');
+  }
+</script>

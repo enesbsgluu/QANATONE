@@ -1,151 +1,156 @@
 /* ============================================================
    S-SZ · SÖZLER (kanal genişliği kartları)
-   Kaynak: kök index.html · markup 5268-5320 · CSS 1989-2160.
+   Kaynak: kök index.html · markup 5042-5100 · CSS (eski.css ayıklaması)
+   1810-1978 + görsel katmanı 1901-1956 + mobil görünürlük 4195.
    Anayasa: "statik + reveal + hover".
 
    Adlandırma: .ssz-* içerik · .sus-* süs.
 
-   MEKANİZMA — kaynağın kendi fikri korundu, ada JS'i 0:
-     · kartlar `flex-grow` ile büyür, komşusu daralır (JS'siz)
-     · açıklama `grid-template-rows: 0fr → 1fr` ile süzülür — yükseklik
-       hesabı yok, geçiş akıcı
+   SADAKAT TURU (3 Eyl 2026, Enes: "eski düzen, yeni mimari"): bu dosya
+   kaynağın kanal bloğunun FORMÜLÜYLE yeniden yazıldı — her kuralın
+   yanında kaynak satırı var. Kaynak masaüstü-tabanlı (max-width:900px
+   ile daraltıyor), burası MOBİL-tabanlı (min-width:901px ile açıyor);
+   hesaplanmış değerler iki kırılımda da aynı, sıra farkı H14 (mobil
+   tabanda pahalı katman yok) ve H2 (görünür doğar) sözleşmeleri için.
+   Giydirme turunun eklediği ŞERİT (opak/cam alt bant, ikon yüzer, görsel
+   kartın çoğunu kaplar, padding 0) kaynakta YOKTU — çıktı. Kaynakta
+   görsel kartın ALTINDA duran atmosfer katmanı (`.tbg` + soldan sağa
+   perde), içerik üstünde, dolgu 24px (mobil 22/18).
+
+   MEKANİZMA — kaynağın kendi fikri, ada JS'i 0:
+     · kartlar `flex-grow` ile büyür, komşusu daralır (1823-1826)
+     · açıklama `grid-template-rows: 0fr → 1fr` ile süzülür (1835-1841)
      · giriş kaydırma güdümlü (`animation-timeline: view()`), sınıf
        yazan betik YOK (S-K turunun 158 ms'lik dersi)
 
    BU ADADA ALINAN SAPMALAR (madde 6):
-   1) GİRİŞ OPAKLIĞA VE FİLTREYE DOKUNMUYOR. Kaynak giriş
-      `opacity:0 + translateY(-18px) + blur(10px)` idi. İkisi de yasak:
-      madde 5/H2 içeriğin görünür doğmasını, madde 7 + H14 mobilde
-      `filter`i yasaklıyor (blur'lu giriş altı kartta altı filtre katmanı
-      demek). Giriş yalnız transform; mesafe ve süre aynı.
-   2) KART GÖRSELLERİ 21 AĞUSTOS GİYDİRME TURUNDA GELDİ (aşağıdaki
-      "GÖRSELLİ YÜZ" bölümü). Aşağıdaki iskelet turu gerekçesi tarih
-      olarak duruyor; şartı ("mobil kaynak + kendi alanımız") karşılandı:
-      üç kırılım, 18 dosya / 158 KB, hepsi `yeni/public/img/kanal/` ve
-      tembel. Kaynağın 202 KB'lık tek boy seti kullanılmadı.
-   2-eski) KART GÖRSELLERİ (content.json `chimg`, altı webp) O TURDA GELMEDİ.
-      Kaynağın kendi yorumu "görsel kartın ATMOSFERİ, konusu değil" diyor;
-      altısı toplam 202 KB ve sahnenin işi (altı kanalı anlatmak) onlarsız
-      tam çalışıyor. Bayt eşiği dersi (H18: ~14,6 KB'ta bir RTT) tazeyken
-      atmosfer için 202 KB açmak iskelet turunun işi değil — kartın kimliği
-      şimdilik üç yüzden (desen / kızıl / koyu) geliyor. Giydirme turunda
-      gelirse mobil kaynak + G2 (kendi alanımız) şartıyla gelir.
-   3) `.tct` Manrope taşımıyor (madde 4: Manrope EMEKLİ).
-   4) Kart görselleriyle birlikte gelen perde katmanları (`.tbg::after`
-      üç ayrı degrade) da doğal olarak gelmedi.
+   1) GİRİŞ OPAKLIĞA VE FİLTREYE DOKUNMUYOR. Kaynak (1816-1821)
+      `opacity:0 + translateY(-18px) + blur(10px)`, `.tin` sınıfıyla ve
+      `--ti*.1s` kademesiyle açılıyordu. H2 içeriğin görünür doğmasını,
+      H14 mobilde `filter`i yasaklıyor. Giriş yalnız transform, mesafe
+      aynı (-18px); kademe yerine her kart kendi görünüm penceresinde.
+      Kaynağın `.shead.rv` (26px) girişi de aynı yolla, `.ssz-bas`ta.
+   2) KAPALI AÇIKLAMA `opacity:0` TAŞIMIYOR (kaynak 1837). H2: sahne
+      sınıfında hover dışı opacity:0 yok. 0fr + overflow:hidden zaten
+      görünmez kılıyor; `translateY(8px)` süzülmesi duruyor.
+   3) `.tct` Manrope taşımıyor (madde 4: Manrope EMEKLİ) — `--f-baslik`.
+   4) `outline:none` (kaynak 1824) yazılmadı — TUR 9 E4: tabindex=0 kartta
+      odak halkası temel.css küresel :focus-visible'dan gelir.
+   5) Kart görselleri kaynağın `chimg` seti değil, kendi alanımızdaki üç
+      kırılımlı set (veri/kanal-gorselleri.json); `.tbg` span'ının
+      background-image'ı yerine `<picture>` + `object-position`. Perde
+      (1913-1920) ve kart kart odak (1929-1934) formülüyle taşındı.
+   6) Kaynağın `#sozler{contain:layout paint}` (436) küresel listedeydi,
+      bu adanın kuralı değil — yazılmadı.
 
-   MOBİL SÖZLEŞMESİ (kaynağın kendi kuralı, aynen): dokunmatikte ve dar
-   ekranda AÇIKLAMA HEP AÇIK ve artı işareti gizli. Hover'sız cihazda
-   açılır kutu, içeriği kimsenin göremeyeceği bir kutudur.
+   MOBİL SÖZLEŞMESİ (kaynağın kendi kuralı, 1958-1971): dokunmatikte ve
+   dar ekranda AÇIKLAMA HEP AÇIK ve artı işareti gizli.
    ============================================================ */
 
-.ssz-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
-.ssz-bas{max-width:62ch;margin-bottom:clamp(22px,3vw,40px)}
-.ssz-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.ssz-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
-.ssz-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
-  letter-spacing:-.035em;margin-bottom:0}
-.ssz-bas h2 em{font-style:normal;color:var(--red)}
-.ssz-bas p{margin-top:clamp(11px,1.3vw,18px)}
+/* kabin kaynak `.wrap` (180: 1280 + --gut); başlık `.shead` (338: 920 /
+   clamp(40,5vw,66)). Etiket / h2 / lede ana.css ortak ölçekten
+   (.kunye / .s1-buyuk / .s1-alt) — burada yeniden yazılmaz. */
+.ssz-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ssz-bas{max-width:920px;margin-bottom:clamp(40px,5vw,66px)}
 
-/* ---- TABAN = MOBİL: tek sütun, açıklama açık, artı yok ---- */
-.ssz-izgara{display:grid;grid-template-columns:1fr;gap:12px}
-.ssz-sutun{display:flex;flex-direction:column;gap:12px;min-width:0}
-.ssz-kart{position:relative;display:flex;flex-direction:column;
+/* ---- TABAN = MOBİL (kaynak 1958-1966 + 1810-1813) ---- */
+.ssz-izgara{display:grid;grid-template-columns:1fr;gap:12px;min-height:0}      /* 1958 */
+.ssz-sutun{display:flex;flex-direction:column;gap:12px;min-width:0}           /* 1812 + 1959 */
+.ssz-kart{position:relative;display:flex;flex-direction:column;flex:none;      /* 1813-1815 + 1960 */
   border-radius:18px;border:1px solid var(--line);padding:22px 18px;
-  overflow:clip;min-width:0}
-.ssz-kart>*{position:relative;z-index:1}
-.ssz-arti{display:none}
-.ssz-ikon{flex:none;width:46px;height:46px;border-radius:13px;
+  overflow:hidden;min-height:0;cursor:default}
+.ssz-kart>*{position:relative;z-index:1}                                       /* 1822 */
+.ssz-arti{display:none}                                                        /* 1965 */
+.ssz-ikon{flex:none;width:46px;height:46px;border-radius:13px;                 /* 1827-1828 */
   display:flex;align-items:center;justify-content:center}
-.ssz-ikon svg{width:22px;height:22px}
-.ssz-kart h3{font-size:clamp(1.06rem,1.15vw,1.2rem);letter-spacing:-.02em;
-  margin:16px 0 0}
+.ssz-ikon svg{width:22px;height:22px}                                          /* 1829 */
+/* kaynak `.tct` (1831-1832) — Manrope yerine --f-baslik (sapma 3);
+   1834'ün `.tcard.big .tct{margin-top:16px}` mobil değeri taban ile aynı */
+.ssz-kart h3{font-family:var(--f-baslik);font-size:clamp(1.06rem,1.15vw,1.2rem);
+  font-weight:700;letter-spacing:-.02em;line-height:1.04;margin:16px 0 0;color:var(--tx)}
+/* kaynak `.tcx` / `.tcd` (1835-1842); mobilde açık (1963-1964) */
 .ssz-acilir{display:grid;grid-template-rows:1fr}
 .ssz-acilir p{overflow:hidden;min-height:0;padding-top:8px;
-  font-size:clamp(.88rem,.95vw,.95rem);line-height:1.6}
+  font-size:clamp(.88rem,.95vw,.95rem);line-height:1.6;font-weight:500}
 
 /* ---- üç yüz ---- */
-.ssz-desen{background:var(--card2,#141418)}
-/* ince çizgi ızgarası + tepeden kızıl ışık; ikisi de sözde elemanda,
-   içerik katmanına dokunmuyor */
-.ssz-desen::before{content:'';position:absolute;inset:0;pointer-events:none;
+/* desenli kart (kaynak `.t-pat` 1852-1866): ince çizgi ızgarası + tepeden
+   kızıl ışık, radyal maske; ikisi de sözde elemanda */
+.ssz-desen{background:var(--card2)}                                            /* 1852 */
+.ssz-desen::before{content:'';position:absolute;inset:0;pointer-events:none;   /* 1853-1858 */
   background-image:linear-gradient(to right,rgba(255,255,255,.055) 1px,transparent 1px),
     linear-gradient(to bottom,rgba(255,255,255,.055) 1px,transparent 1px);
   background-size:50px 56px;
   -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%);
   mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 60%,transparent 108%)}
-.ssz-desen::after{content:'';position:absolute;inset:0 0 auto;height:60%;
-  pointer-events:none;opacity:.75;
-  background:radial-gradient(60% 70% at 50% 0%,var(--red-dim,rgba(239,35,60,.12)),transparent 72%)}
-.ssz-desen .ssz-ikon{background:var(--red-dim,rgba(239,35,60,.12));color:var(--red-soft);
+.ssz-desen::after{content:'';position:absolute;inset:0 0 auto;height:60%;      /* 1859-1861 */
+  pointer-events:none;
+  background:radial-gradient(60% 70% at 50% 0%,var(--red-dim),transparent 72%);
+  opacity:.75;transition:opacity .4s var(--e)}
+.ssz-desen:hover::after{opacity:1}                                             /* 1862 */
+.ssz-desen h3{color:var(--tx)}                                                 /* 1863 */
+.ssz-desen p{color:#c9c9ce}                                                    /* 1864 */
+.ssz-desen .ssz-ikon{background:var(--red-dim);color:var(--red-soft);          /* 1865-1866 */
   border:1px solid rgba(239,35,60,.28)}
-.ssz-desen p{color:var(--tx2)}
 
-.ssz-kizil{background:var(--red);border-color:rgba(0,0,0,.18)}
-.ssz-kizil::before{content:'';position:absolute;inset:0;pointer-events:none;
+/* kızıl kart (kaynak `.t-red` 1868-1882): kızıl zemin, koyu mürekkep */
+.ssz-kizil{background:var(--red);border-color:rgba(0,0,0,.18)}                 /* 1868 */
+.ssz-kizil::before{content:'';position:absolute;inset:0;pointer-events:none;   /* 1869-1870 */
   background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 42%)}
-.ssz-kizil h3{color:#0a0a0a}
-.ssz-kizil p{color:rgba(0,0,0,.72)}
-.ssz-kizil .ssz-ikon{background:#0a0a0a;color:#fff}
+.ssz-kizil h3{color:#0a0a0a}                                                   /* 1871 */
+.ssz-kizil p{color:rgba(0,0,0,.72)}                                            /* 1878 */
+.ssz-kizil .ssz-ikon{background:#0a0a0a;color:#fff}                            /* 1879 */
+.ssz-kizil .ssz-arti{border-color:rgba(0,0,0,.3);color:rgba(0,0,0,.6)}         /* 1880 */
+.ssz-kizil:hover .ssz-arti,.ssz-kizil:focus-visible .ssz-arti{                 /* 1881-1882 */
+  color:#0a0a0a;border-color:rgba(0,0,0,.55)}
 
-.ssz-koyu{background:var(--card)}
-.ssz-koyu p{color:var(--tx2)}
-.ssz-koyu .ssz-ikon{background:var(--card2,#141418);border:1px solid var(--line2);
+/* koyu kart (kaynak `.t-drk` 1884-1887) */
+.ssz-koyu{background:var(--card)}                                              /* 1884 */
+.ssz-koyu h3{color:var(--tx)}                                                  /* 1885 */
+.ssz-koyu p{color:#c9c9ce}                                                     /* 1886 */
+.ssz-koyu .ssz-ikon{background:var(--card2);border:1px solid var(--line2);     /* 1887 */
   color:var(--tx2)}
 
+/* ---- GÖRSEL KATMANI (kaynak `.tbg` / `.hasimg` 1895-1956) ----
+   Kaynağın kendi yorumu: "görsel kartın ATMOSFERİ, konusu değil: her zaman
+   perde altında durur, metin her koşulda okunur kalır. Altı görselin de
+   konusu sağ tarafta, sol üçte biri sessiz — perde de o yüzden soldan
+   sağa açılıyor."
+   DİKKAT: `.ssz-kart>*{z-index:1}` var; katman ondan daha özgül
+   (`.ssz-kart>.ssz-gorsel`) yazıldı, yoksa görsel metnin ÜSTÜNE biner
+   (kaynağın 1899-1900 notu). */
+.ssz-kart>.ssz-gorsel{position:absolute;inset:0;z-index:0;border-radius:inherit; /* 1901-1905 */
+  pointer-events:none;overflow:hidden;display:block;
+  transform:scale(1.01);
+  transition:opacity .55s var(--e),transform .55s var(--e)}
+.ssz-gorsel img{width:100%;height:100%;object-fit:cover;display:block}       /* 1902-1903 background-size:cover */
+/* mobil odak/opaklık (kaynak 1941: opacity .8, 76% 50%) — taban */
+.ssz-gorselli>.ssz-gorsel{opacity:.8}
+.ssz-gorsel img{object-position:76% 50%}
+/* perde: kırmızı kartta KIRMIZIDAN açılır (kaynak 1913-1920); mobil sert
+   perde (1943-1948) tabanda, masaüstü yumuşak perde aşağıda */
+.ssz-gorsel::after{content:'';position:absolute;inset:0}                       /* 1913 */
+.ssz-koyu>.ssz-gorsel::after,.ssz-desen>.ssz-gorsel::after{                    /* 1943-1945 */
+  background:linear-gradient(101deg,rgba(10,10,11,.98) 0%,rgba(10,10,11,.93) 46%,rgba(10,10,11,.6) 100%),
+             rgba(10,10,11,.42)}
+.ssz-kizil>.ssz-gorsel::after{                                                 /* 1946-1948 */
+  background:linear-gradient(101deg,rgba(143,15,33,.98) 0%,rgba(143,15,33,.92) 46%,rgba(143,15,33,.6) 100%),
+             rgba(143,15,33,.42)}
+/* görselli kızıl kart (kaynak 1872-1877): zemin koyu kızıl, mürekkep açığa döner */
+.ssz-kizil.ssz-gorselli{background:#8f0f21}                                    /* 1872 */
+.ssz-kizil.ssz-gorselli h3{color:var(--tx)}                                    /* 1873 */
+.ssz-kizil.ssz-gorselli p{color:#f0dfe2}                                       /* 1874 */
+.ssz-kizil.ssz-gorselli .ssz-ikon{background:rgba(0,0,0,.62);color:#fff;      /* 1875 */
+  border:1px solid rgba(255,255,255,.18)}
+.ssz-kizil.ssz-gorselli .ssz-arti{border-color:rgba(255,255,255,.34);         /* 1876 */
+  color:rgba(255,255,255,.72)}
+.ssz-kizil.ssz-gorselli:hover .ssz-arti,.ssz-kizil.ssz-gorselli:focus-visible .ssz-arti{ /* 1877 */
+  color:#fff;border-color:rgba(255,255,255,.7)}
+/* görsel varken dekoratif katmanlar susar (kaynak 1926) */
+.ssz-desen.ssz-gorselli::before,.ssz-desen.ssz-gorselli::after,
+.ssz-kizil.ssz-gorselli::before{display:none}
 
-/* ---- GÖRSELLİ YÜZ (giydirme, 21 Ağustos) --------------------------------
-   Kart görseli gelince üç yüz (desen/kızıl/koyu) DEVRE DIŞI kalır: altı kart
-   tek dile döner, kimlik desenden değil fotoğraftan gelir. Kızıl kartın siyah
-   yazısı da bu yüzden açığa döner — koyu görselin üstünde siyah okunmaz.
-
-   BENTO DÜZELTMESİ (Enes, 21 Ağustos): görsel kartın çoğunu kaplar, içerik
-   görselin ÜSTÜNE biner. Perde artık degrade değil, tanımlı bir ŞERİT:
-   mobilde opak, masaüstünde hafif bulanık cam. Degrade perde bırakılmadı —
-   şerit zaten kendi zeminini taşıyor, ikisi üst üste binince görsel
-   gereksiz kararıyordu.
-
-   `::before` artık perde değil, ÜST KENARDAN İÇE PARLAMA. Gölge (box-shadow)
-   kullanılmadı: H14 mobil bağlamda pahalı katmanı (filter/backdrop/gölge)
-   reddediyor, parlama degradeyle kuruluyor. Bulanıklık yalnız masaüstü
-   bloğunda — mobilde `backdrop-filter` aynı kuralın kapsamında.
-
-   HANGİ ADIMLAR GİRDİ (Enes, 21 Ağustos — beş adım tek tek denendi):
-   girmedi 1) yarıçap 22/26 + ızgara iç köşeleri keskin  ·  girmedi 2) boşluk
-   14 → 8. İkisi birlikte kartı "kart" olmaktan çıkarıp panel dilimine
-   çeviriyordu; yarıçap 18 ve boşluk 14/12 KALDI.
-   girdi 3) şeridin karta yapışması  ·  girdi 4) üstten içe parlama  ·
-   girdi 5) ince açık kenarlık (`--line2`).
-
-   Bu blok üç yüzden SONRA gelmeli — aynı özgüllükte, sıra kazandırıyor. */
-.ssz-gorsel{position:absolute;inset:0;z-index:0;pointer-events:none}
-.ssz-gorsel img{width:100%;height:100%;object-fit:cover;display:block}
-
-.ssz-gorselli{background:var(--card);border-color:var(--line2);padding:0}
-/* üst kenardan içe parlama: beyaz ince hat + markanın kızılı, ikisi de degrade */
-.ssz-gorselli::before{content:'';position:absolute;inset:0;z-index:0;
-  pointer-events:none;background:none;
-  background-image:
-    linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 22%),
-    radial-gradient(74% 42% at 50% 0%,rgba(239,35,60,.26),transparent 72%);
-  -webkit-mask-image:none;mask-image:none}
-.ssz-gorselli::after{display:none}
-
-/* ikon görselin üstünde yüzer, şeride girmez */
-.ssz-gorselli .ssz-ikon{position:absolute;top:15px;left:15px;z-index:2;
-  background:rgba(255,255,255,.09);border:1px solid var(--line2);color:#fff}
-.ssz-gorselli .ssz-arti{color:var(--tx2)}
-
-/* ŞERİT — taban (mobil): opak. Üstündeki boşluk görselin kartın çoğunu
-   kaplamasını sağlıyor; kart yüksekliği içerikten değil bu paydan doğuyor. */
-.ssz-serit{margin-top:auto}
-.ssz-gorselli .ssz-serit{margin-top:152px;padding:15px 17px 17px;
-  background:var(--bg);border-top:1px solid rgba(255,255,255,.09)}
-.ssz-gorselli h3{color:var(--tx)}
-.ssz-gorselli p{color:var(--tx2)}
-
-/* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule`) ---- */
+/* ---- alt cetvel: uçlarında kare olan ince çizgi (kaynak `.trule` 1889-1893) ---- */
 .sus-cetvel{position:relative;height:1px;background:var(--line2);
   margin-top:clamp(30px,4vw,46px)}
 .sus-cetvel::before,.sus-cetvel::after{content:'';position:absolute;top:50%;
@@ -154,74 +159,104 @@
 .sus-cetvel::before{left:-4px}
 .sus-cetvel::after{right:-4px}
 
-/* ---- MASAÜSTÜ: üç sütun + açılır kutu ---- */
-@media (min-width:901px) and (hover:hover) and (pointer:fine){
-  .ssz-izgara{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;
+/* ---- MASAÜSTÜ: üç sütun bento (kaynak taban 1810-1850) ----
+   Kaynağın eşiği 900 (1957); açılır kutu ve artı hover'lı cihaz şartına
+   aşağıdaki (hover:none) bloğunda bağlanıyor — kaynak 1967-1972 ile aynı. */
+@media(min-width:901px){
+  .ssz-izgara{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;         /* 1810-1811 */
     align-items:stretch;min-height:clamp(400px,40vw,540px)}
-  .ssz-sutun{gap:14px}
-  .ssz-kart{flex:4 1 0;padding:24px;min-height:150px;cursor:default;
+  .ssz-sutun{gap:14px}                                                          /* 1812 */
+  .ssz-kart{flex:4 1 0;padding:24px;min-height:150px;                          /* 1813-1815 + 1820 */
     transition:flex-grow .55s var(--e),border-color .3s var(--e)}
-  .ssz-buyuk{flex:7 1 0}
-  .ssz-kucuk{flex:3 1 0}
-  /* TUR 9 E4 (3 Eyl 2026): outline:none kaldirildi — tabindex=0 kartta odak
-     halkasi siliniyordu (WCAG 2.4.7); halka artik temel.css kuresel
-     :focus-visible'dan gelir, buyume ve kenarlik ipucu olarak kalir. */
-  .ssz-kart:hover,.ssz-kart:focus-visible{border-color:var(--line2);
-    flex-grow:7.4}
-  .ssz-buyuk:hover,.ssz-buyuk:focus-visible{flex-grow:12}
-  .ssz-kucuk:hover,.ssz-kucuk:focus-visible{flex-grow:10.5}
-  .ssz-buyuk .ssz-ikon{margin-bottom:auto}
-  .ssz-buyuk h3{margin-top:20px}
-  /* görselli kartta perde masaüstünde hafifler: açıklama kapalı başlıyor,
-     alt bantta yalnız başlık var. Hover'da açılınca perde geri güçlenir. */
-  /* Görselli kartta içerik HER YÜZDE alta iner: B1 sözleşmesi "büyük görsel
-     + üstünde okunur bir şerit" diyor, şerit de altta. */
-
-  /* ŞERİT masaüstünde hafif bulanık cam, kartın altına oturur.
-     `.ssz-kart{padding:24px}` bu blokta yeniden yazıldığı için görselli
-     kartın dolgusunu BURADA da sıfırlamak gerekiyor — taban bloğundaki
-     `.ssz-gorselli{padding:0}` aynı özgüllükte ve DAHA ÖNCE geliyor.
-     `backdrop-filter` yalnız burada: blok (hover:hover)+(pointer:fine)
-     ile kapılı, mobil bağlama sızmıyor (H14). */
-  .ssz-gorselli{padding:0}
-  .ssz-gorselli .ssz-serit{margin-top:auto;padding:16px 18px 18px;
-    background:rgba(8,8,8,.5);
-    -webkit-backdrop-filter:blur(14px) saturate(1.08);
-    backdrop-filter:blur(14px) saturate(1.08);
-    border-top:1px solid rgba(255,255,255,.1)}
-  /* açıklama kapalı başlar, açılırken süzülür */
+  .ssz-buyuk{flex:7 1 0}                                                        /* 1823 */
+  .ssz-kucuk{flex:3 1 0}                                                        /* 1823 */
+  .ssz-kart:hover,.ssz-kart:focus-visible{border-color:var(--line2);flex-grow:7.4} /* 1824 (outline:none yok — sapma 4) */
+  .ssz-buyuk:hover,.ssz-buyuk:focus-visible{flex-grow:12}                       /* 1825 */
+  .ssz-kucuk:hover,.ssz-kucuk:focus-visible{flex-grow:10.5}                     /* 1826 */
+  .ssz-buyuk .ssz-ikon{margin-bottom:auto}                                      /* 1830 */
+  .ssz-buyuk h3{margin-top:20px}                                                /* 1833 */
+  /* açıklama 0fr'de kapalı başlar, hover'da 1fr'a açılır (1835-1841) */
   .ssz-acilir{grid-template-rows:0fr;transition:grid-template-rows .55s var(--e)}
-  .ssz-acilir p{transform:translateY(8px);
-    transition:transform .38s var(--e)}
-  .ssz-kart:hover .ssz-acilir,.ssz-kart:focus-visible .ssz-acilir{grid-template-rows:1fr}
-  .ssz-kart:hover .ssz-acilir p,.ssz-kart:focus-visible .ssz-acilir p{
+  .ssz-acilir p{transform:translateY(8px);transition:transform .38s var(--e)}   /* 1837-1838 (opacity yok — sapma 2) */
+  .ssz-kart:hover .ssz-acilir,.ssz-kart:focus-visible .ssz-acilir{grid-template-rows:1fr} /* 1839 */
+  .ssz-kart:hover .ssz-acilir p,.ssz-kart:focus-visible .ssz-acilir p{          /* 1840-1841 */
     transform:none;transition-delay:.09s}
-  /* sağ üst artı: "burada dahası var" — açılınca 45° döner */
-  .ssz-arti{display:flex;position:absolute;top:20px;right:20px;
-    width:26px;height:26px;align-items:center;justify-content:center;
-    border-radius:50%;border:1px solid var(--line2);color:var(--tx3);
-    transition:transform .45s var(--e),color .3s var(--e),border-color .3s var(--e)}
-  .ssz-arti svg{width:12px;height:12px}
-  .ssz-kart:hover .ssz-arti,.ssz-kart:focus-visible .ssz-arti{
+  /* sağ üst artı: "burada dahası var" — hover'da 45° dönüp ×'e yaklaşır (1844-1850) */
+  .ssz-arti{position:absolute;top:20px;right:20px;width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;border-radius:50%;
+    border:1px solid var(--line2);color:var(--tx3);
+    transition:transform .45s var(--e),color .3s,border-color .3s}
+  .ssz-arti svg{width:12px;height:12px}                                         /* 1848 */
+  .ssz-kart:hover .ssz-arti,.ssz-kart:focus-visible .ssz-arti{                  /* 1849-1850 */
     transform:rotate(45deg);color:var(--tx);border-color:var(--tx3)}
-  .ssz-kizil .ssz-arti{border-color:rgba(0,0,0,.3);color:rgba(0,0,0,.6)}
-  .ssz-kizil:hover .ssz-arti,.ssz-kizil:focus-visible .ssz-arti{
-    color:#0a0a0a;border-color:rgba(0,0,0,.55)}
-  .ssz-desen:hover::after{opacity:1}
+  /* görsel: masaüstü opaklık + hover yakınlaşma (1906-1907) */
+  .ssz-gorselli>.ssz-gorsel{opacity:.94}
+  .ssz-gorselli:hover>.ssz-gorsel,.ssz-gorselli:focus-visible>.ssz-gorsel{opacity:1;transform:scale(1.05)}
+  /* yumuşak perde (1914-1920) */
+  .ssz-koyu>.ssz-gorsel::after,.ssz-desen>.ssz-gorsel::after{
+    background:linear-gradient(101deg,rgba(10,10,11,.97) 0%,rgba(10,10,11,.88) 32%,rgba(10,10,11,.42) 82%),
+               linear-gradient(0deg,rgba(10,10,11,.84) 0%,rgba(10,10,11,0) 62%),
+               rgba(10,10,11,.38)}
+  .ssz-kizil>.ssz-gorsel::after{
+    background:linear-gradient(101deg,rgba(143,15,33,.97) 0%,rgba(143,15,33,.88) 32%,rgba(143,15,33,.42) 82%),
+               linear-gradient(0deg,rgba(143,15,33,.84) 0%,rgba(143,15,33,0) 62%),
+               rgba(143,15,33,.38)}
+  /* her görselin konusu farklı yerde — odak kart kart (1903 taban + 1929-1934) */
+  .ssz-gorsel img{object-position:58% 48%}
+  .ssz-kart[data-ci="0"] .ssz-gorsel img{object-position:63% 40%}   /* arama: parlak çubuk üstte */
+  .ssz-kart[data-ci="1"] .ssz-gorsel img{object-position:64% 50%}   /* akış: paneller sağda */
+  .ssz-kart[data-ci="2"] .ssz-gorsel img{object-position:54% 52%}   /* havuz: ortada */
+  .ssz-kart[data-ci="3"] .ssz-gorsel img{object-position:60% 56%}   /* çubuklar: zemine yakın */
+  .ssz-kart[data-ci="4"] .ssz-gorsel img{object-position:56% 48%}   /* patlama: ortada */
+  .ssz-kart[data-ci="5"] .ssz-gorsel img{object-position:57% 40%}   /* düğüm: merkezin üstü */
 }
 
-/* ---- giriş: SIFIR JS, kaydırma güdümlü, YALNIZ transform ----
-   Taban bitmiş hâl: desteklemeyen tarayıcıda ve botta kartlar yerinde. */
+/* ---- HOVER'SIZ CİHAZ (kaynak 1939-1942 + 1967-1972): açıklama hep açık,
+   artı gizli, kartlar eşit pay; görsel mobil odak/perdeye döner.
+   Masaüstü bloğundan SONRA: aynı özgüllükte sıra kazandırıyor. */
+@media(hover:none){
+  .ssz-acilir{grid-template-rows:1fr}                                           /* 1968 */
+  .ssz-acilir p{transform:none}                                                 /* 1969 */
+  .ssz-arti{display:none}                                                       /* 1970 */
+  .ssz-kart,.ssz-buyuk,.ssz-kucuk{flex:1 1 auto;min-height:0}                   /* 1971 */
+  .ssz-gorselli>.ssz-gorsel{opacity:.8}                                         /* 1941 */
+  .ssz-kart[data-ci] .ssz-gorsel img{object-position:76% 50%}                   /* 1941 (!important yerine özgüllük+sıra) */
+  .ssz-gorselli:hover>.ssz-gorsel{transform:none}                               /* 1942 */
+  .ssz-koyu>.ssz-gorsel::after,.ssz-desen>.ssz-gorsel::after{                   /* 1943-1945 */
+    background:linear-gradient(101deg,rgba(10,10,11,.98) 0%,rgba(10,10,11,.93) 46%,rgba(10,10,11,.6) 100%),
+               rgba(10,10,11,.42)}
+  .ssz-kizil>.ssz-gorsel::after{                                                /* 1946-1948 */
+    background:linear-gradient(101deg,rgba(143,15,33,.98) 0%,rgba(143,15,33,.92) 46%,rgba(143,15,33,.6) 100%),
+               rgba(143,15,33,.42)}
+}
+
+/* ---- dar telefon (kaynak 1950-1952): perde altında daha da sessiz, odak
+   sağa. hover:none bloğundan SONRA — kaynakta da 1939'dan sonra geliyor. */
+@media(max-width:520px){
+  .ssz-gorselli>.ssz-gorsel{opacity:.68}
+  .ssz-kart[data-ci] .ssz-gorsel img{object-position:82% 50%}
+}
+
+/* ---- giriş: SIFIR JS, kaydırma güdümlü, YALNIZ transform (sapma 1) ----
+   Taban bitmiş hâl: desteklemeyen tarayıcıda ve botta her şey yerinde.
+   Kart -18px (kaynak 1816), başlık 26px (kaynak `.rv` 349). */
 @supports (animation-timeline: view()){
+  .ssz-bas{animation:ssz-bas-gir linear both;
+    animation-timeline:view();animation-range:entry 0% entry 100%}
   .ssz-kart{animation:ssz-gir linear both;
     animation-timeline:view();animation-range:entry 0% entry 100%}
 }
+@keyframes ssz-bas-gir{from{transform:translateY(26px)}}
 @keyframes ssz-gir{from{transform:translateY(-18px)}}
 
-/* ---- hareket azaltma: durduran seçici hareketi verenin aynısı ---- */
+/* ---- hareket azaltma (kaynak 1954-1956 + 1973-1978): geçişler durur,
+   kartlar eşit pay, açıklama açık; durduran seçici verenin aynısı ---- */
 @media (prefers-reduced-motion: reduce){
-  .ssz-kart{animation:none;transition:none}
-  .ssz-acilir{transition:none}
-  .ssz-acilir p{transform:none;transition:none}
-  .ssz-arti{transition:none}
+  .ssz-bas,.ssz-kart{animation:none}
+  .ssz-kart,.ssz-acilir,.ssz-acilir p,.ssz-arti,.ssz-desen::after{transition:none}  /* 1974 */
+  .ssz-kart,.ssz-buyuk,.ssz-kucuk{transform:none;flex:1 1 auto;min-height:0}   /* 1975 */
+  .ssz-acilir{grid-template-rows:1fr}                                           /* 1976 */
+  .ssz-acilir p{transform:none}                                                 /* 1977 */
+  .ssz-kart>.ssz-gorsel{transition:none}                                        /* 1954 */
+  .ssz-gorselli:hover>.ssz-gorsel,.ssz-gorselli:focus-visible>.ssz-gorsel{transform:none} /* 1955 */
 }

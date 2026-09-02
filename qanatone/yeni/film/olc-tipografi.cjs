@@ -22,7 +22,7 @@ const GENISLIK = +(process.env.GENISLIK || 1440);
 const CIFTLER = (process.env.CIFTLER || '').split(';').map((s) => s.trim()).filter(Boolean)
   .map((c) => { const [a, b] = c.split('|'); return [a.trim(), (b || a).trim()]; });
 if (!CIFTLER.length) { console.error('CIFTLER ver'); process.exit(1); }
-const OZ = ['fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textTransform', 'color', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'marginTop', 'marginBottom', 'borderTopWidth', 'borderTopColor', 'borderRadius', 'backgroundColor', 'maxWidth', 'gap'];
+const OZ = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textTransform', 'color', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'marginTop', 'marginBottom', 'borderTopWidth', 'borderTopColor', 'borderRadius', 'backgroundColor', 'maxWidth', 'gap'];
 
 (async () => {
   const b = await pt.launch({ executablePath: TARAYICILAR[process.env.TARAYICI || 'brave'], headless: 'new', args: ['--no-sandbox'] });
