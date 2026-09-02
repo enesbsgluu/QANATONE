@@ -116,7 +116,7 @@
 .nv-lang a.on{background:rgba(255,255,255,.1);color:var(--tx)}
 /* CTA — kaynak .btn+.btn-p+.btn-sm ölçüleri (339-348) */
 .nv-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:10px 18px;border-radius:999px;font-size:.82rem;font-weight:600;
+  padding:var(--hap-y2) var(--hap-x2);border-radius:999px;font-size:.82rem;font-weight:600;
   font-family:var(--f-govde);letter-spacing:-.01em;white-space:nowrap;
   background:var(--red-dolgu);color:#fff;text-decoration:none;transition:.3s var(--e)}
 .nv-burger{display:none;width:38px;height:34px;border-radius:9px;border:1px solid var(--line);
@@ -210,7 +210,7 @@ html:has(#nvAc:checked){overflow:hidden}
   opacity:0;transform:translateY(16px)}
 #nvAc:checked ~ .nv-m .nv-mlg{animation:mmrow .5s var(--e) forwards;animation-delay:.54s}
 .nv-mlg span{display:flex;gap:6px}
-.nv-mlg a{min-height:40px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);
+.nv-mlg a{min-height:40px;padding:var(--hap-y3) var(--hap-x3);border-radius:999px;border:1px solid var(--line);
   display:inline-flex;align-items:center;font-family:var(--f-tek);font-size:10px;
   letter-spacing:.14em;color:var(--tx3);transition:.24s;text-decoration:none}
 .nv-mlg a.on{background:rgba(255,255,255,.1);color:var(--tx);border-color:var(--line2)}

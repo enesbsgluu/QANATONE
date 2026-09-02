@@ -1,0 +1,156 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T13:12:24.346Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 0.25,
+   "farkliPiksel": 3303,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 1/8 sutun 7/8 (x 1080-1260, y 0-113; hucrede 2079 px, tum farkin %63)",
+   "md5": {
+    "once": "b175d3e9688a9ccec4ea7d7923860487",
+    "sonra": "ddf0826e722bbf7efa74607c844e32b2"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t7-ana-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t7-ana-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t7-ana-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 60,
+   "farkYuzde": 1.13,
+   "farkliPiksel": 14648,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 2/8 sutun 2/8 (x 180-360, y 113-225; hucrede 5186 px, tum farkin %35)",
+   "md5": {
+    "once": "a5e8e5439d02f9c8415415d4b67dd23f",
+    "sonra": "d464023d65ec76b9553487f97075d41c"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 9545,
+     "sonra": 9545
+    },
+    "gercek": {
+     "once": 9545,
+     "sonra": 9545
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t7-ana-once-60.png",
+    "sonra": "yeni/film/kontak-tur9/t7-ana-sonra-60.png",
+    "yanyana": "yeni/film/kontak-tur9/t7-ana-yanyana-60.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8791/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 91,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 84,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "b175d3e9688a9ccec4ea7d7923860487",
+    "png": "yeni/film/kontak-tur9/t7-ana-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 60,
+    "hedef": 9545,
+    "gercek": 9545,
+    "sapma": 0,
+    "md5": "a5e8e5439d02f9c8415415d4b67dd23f",
+    "png": "yeni/film/kontak-tur9/t7-ana-once-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 87,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 80,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "ddf0826e722bbf7efa74607c844e32b2",
+    "png": "yeni/film/kontak-tur9/t7-ana-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 60,
+    "hedef": 9545,
+    "gercek": 9545,
+    "sapma": 0,
+    "md5": "d464023d65ec76b9553487f97075d41c",
+    "png": "yeni/film/kontak-tur9/t7-ana-sonra-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   }
+  ]
+ }
+}
