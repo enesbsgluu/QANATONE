@@ -39,6 +39,8 @@ const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 const en = dil === 'en';
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR otomasyon sayfasina bagliyordu (H26). */
+const on = en ? '/en' : '';
 
 const sektorler = icerik.sectors || [];
 /* Kanal adları — kaynak `NM` (10207). Kod tarafında, content.json'da
@@ -176,7 +178,7 @@ const panolar = sektorler.map((x: any, i: number) => {
                 "Genel gorunume don" (data-sreset 4711) TASINMADI — hedefi
                 talep akis haritasiydi, harita Enes'in kararıyla cikti. */}
             <div class="sse-cagri">
-              <a class="dugme" href={`${B}/hizmetler/otomasyon`}>{en ? 'See this setup running' : 'Bu kurulumu çalışırken gör'}</a>
+              <a class="dugme" href={`${B}${on}/hizmetler/otomasyon`}>{en ? 'See this setup running' : 'Bu kurulumu çalışırken gör'}</a>
               <a class="dugme sse-dugme-g" href="#sektor">{g('skchange') || 'Sektör değiştir'}</a>
             </div>
           </article>

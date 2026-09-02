@@ -43,6 +43,9 @@ const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const en = dil === 'en';
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR hizmet sayfalarina bagliyordu
+   (dil sizintisi, bekci H26). Nav/HizmetDizin ile ayni kalip. */
+const on = en ? '/en' : '';
 
 /* Şeritte kaç kart duracağı ve HANGİLERİ: kaynağın kuralı aynen —
    hizmet sırasının ilk beşi, sıra panelden değiştirilebilir (kaynak
@@ -94,7 +97,7 @@ const demoK = (h: any): string => {
   <div class="sa-ray" tabindex="0" role="group"
     aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
     {kartlar.map((h: any, i: number) => (
-      <a class="sa-kart" href={`${B}/hizmetler/${h.slug}`} style={ton(i)}>
+      <a class="sa-kart" href={`${B}${on}/hizmetler/${h.slug}`} style={ton(i)}>
         {/* Gorsel alan artik CALISAN mini demo (giydirme); ikon kucijlup
             basligin yanina gecti — kaynagin kendi dili (6898). Demo
             aria-hidden: ayni bilgi kartin yazisinda ve hizmet sayfasinda. */}
@@ -109,7 +112,7 @@ const demoK = (h: any): string => {
         Kök sitenin /hizmetler ızgarası — yeni kabukta henüz o rota yok,
         deste sahnesindeki /projeler kararının aynısı. */}
     {/* Dizin artık adada — rota turu 1. sayfa; H16 bekçiliyor. */}
-    <a class="sa-kart sa-tum" href={`${B}/hizmetler`}>
+    <a class="sa-kart sa-tum" href={`${B}${on}/hizmetler`}>
       <span class="sa-yazi">
         <h3>{en ? 'All services' : 'Tüm hizmetler'}<Ikon ad="arrow" sinif="sa-ok" /></h3>
         <p>{en ? 'Nine services, one line. See the whole list.'

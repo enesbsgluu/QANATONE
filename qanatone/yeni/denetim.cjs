@@ -2339,6 +2339,43 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 3).join(' ') || `kabuk.js ${boy} B`);
 }
 
+/* ---- H26 · EN SAYFADA TR IC BAGLANTI YOK (TUR 9, 3 Eyl 2026) ----
+   Rota turunda bulundu: SAAkis/SKKatman/SPDeste/SSESektor href'lerini
+   `${B}/...` ile kuruyor, `${on}` ('/en') onekini kullanmiyordu; EN ana
+   sayfa 20+ TR sayfaya bagliyordu (dil sizintisi). H16 bunu gormez
+   (hedef dosya var). Kural: EN sayfadaki her `/yeni/...` href'i `/yeni/en`
+   ile baslar; istisna yalniz (a) sayfanin KENDI TR esi (head'deki
+   hreflang="tr" — dil degistirici), (b) /yeni/hukuki (tek dilli, Temel
+   bilincli TR'ye baglar), (c) varlik/img/font yollari. Kirmizi-once:
+   3 Eyl, duzeltmeden once en/index.html 21 TR baglanti. */
+{
+  const kusur = [];
+  let sayi = 0;
+  const enSayfalar = sayfalar.filter((p) => /(^|\/)en\//.test(rel(p)) || /^en\/index\.html$/.test(rel(p)));
+  for (const p of enSayfalar) {
+    const h = oku(p);
+    const trEs = (h.match(/<link rel="alternate" hreflang="tr" href="([^"]+)"/) || [])[1] || '';
+    /* hreflang yoksa (film: canonical netlify.app, hreflang basilmiyor) TR esi
+       dosya yolundan turetilir: en/film/index.html -> /yeni/film */
+    const trYol = trEs
+      ? (trEs.replace(/^https:\/\/qanatone\.com/, '/yeni').replace(/\/$/, '') || '/yeni')
+      : ('/yeni/' + rel(p).replace(/^en\//, '').replace(/\/?index\.html$/, '')).replace(/\/$/, '');
+    for (const m of h.matchAll(/<a[^>]*\bhref="(\/yeni(?:\/[^"#?]*)?)/g)) {
+      const yol = m[1].replace(/\/$/, '') || '/yeni';
+      sayi++;
+      if (yol === '/yeni/en' || yol.startsWith('/yeni/en/')) continue;
+      if (yol === trYol) continue;                          /* dil degistirici: kendi TR esi */
+      if (yol === '/yeni/hukuki') continue;                 /* tek dilli hukuki */
+      if (/^\/yeni\/(varlik|img|font|_astro)\//.test(yol)) continue;
+      kusur.push(rel(p) + ' -> ' + m[1]);
+    }
+  }
+  const ozet = {};
+  for (const k of kusur) { const s = k.split(' -> ')[0]; ozet[s] = (ozet[s] || 0) + 1; }
+  ol('H26 · EN sayfalarda ic baglantilar /yeni/en/ altinda (istisna: kendi TR esi, hukuki)', kusur.length === 0,
+     kusur.length ? Object.entries(ozet).slice(0, 3).map(([s, n]) => `${s}:${n}`).join(' ') + ` (ilk: ${kusur[0]})` : `${enSayfalar.length} EN sayfa · ${sayi} baglanti`);
+}
+
 /* ---- K2 · KABUK PAKETI TAZE (TUR 9, 3 Eyl 2026) ----
    K1 yalniz boyuta bakiyordu: kabuk/efekt.js duzenlenip kabuk-derle.cjs
    unutulunca eski JS yayina gidiyor, hicbir kural kirmizi yakmiyordu
