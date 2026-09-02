@@ -106,10 +106,14 @@
 /* ---- serit: kaynak .aktrack (2493-2497) birebir; kap tam genislikte,
    yatay dolgu --gut (basligin .wrap'iyle ayni hiza). scroll-padding-inline
    yeni mimarinin snap ayari (kaynakta yoktu; kart dinlenmede kenara degil
-   dolguya oturur — mekanizma, korundu). */
+   dolguya oturur — mekanizma, korundu).
+   ANAYASA (3 Eyl): scroll-padding-inline KALKTI — kaynakta yoktu; kaynakta
+   ilk kart proximity snap ile dolguyu asip kenara oturur (masaustu + mobil
+   yan yana kare: eski kart x=0, yeni x=gut). Listede olmayan sapma, eski
+   hal geri geldi. */
 .sa-ray{display:flex;gap:clamp(16px,2vw,24px);padding:4px var(--gut) 14px;
   overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
-  scrollbar-width:none;cursor:grab;scroll-padding-inline:var(--gut)}
+  scrollbar-width:none;cursor:grab}
 .sa-ray::-webkit-scrollbar{display:none}
 .sa-ray.drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
 /* klavyeyle odaklanınca görünür olsun (odak halkası bastırılmıyor) */

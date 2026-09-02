@@ -49,8 +49,11 @@
 /* ---- seçici şeridi — kaynak .secs (1580): altı sütun tek sıra ----
    Alt boşluk: kaynakta #sektor'un alt dolgusu + #sekpanel.on padding-top:0
    (337, 1614) → iki blok arası tek bölüm dolgusu (1440'ta 122px). */
-.sse-secici{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;
-  margin-bottom:clamp(66px,8.6vw,122px)}
+.sse-secici{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+/* ANAYASA (3 Eyl): secici-pano boslugu YALNIZ pano acikken — kaynakta pano
+   ayri bolum (#sekpanel display:none), secimsizken #sektor kendi alt dolgusuyla
+   biter; olcum: bolum boyu eski 701 / yeni 823 (masaustu) fazlaydi. */
+.sse-kap:has(.sus-radyo:checked) .sse-secici{margin-bottom:clamp(66px,8.6vw,122px)}
 /* sekme — kaynak .sc (1581-1584) + zemin (4123-4125) + geçiş listesi (2432-2435) */
 .sse-sec{position:relative;display:flex;flex-direction:column;align-items:flex-start;
   justify-content:flex-start;border:1px solid var(--line);border-radius:26px;
