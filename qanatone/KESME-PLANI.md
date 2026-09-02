@@ -1,10 +1,92 @@
-# FAZ 4 — KESME PLANI (hazırlık, 20 Ağu 2026)
+# FAZ 4 — KESME PLANI (hazırlık, 20 Ağu 2026 · EK 2 Eyl 2026)
 
 **Durum: HAZIRLIK. Kesmenin kendisi bu belgeyle DEĞİL, Enes'in üç savurma
 hükmü kapandıktan sonra ayrı bir commit'le yapılır.** Bu belge kesme
 gününün adım listesini, hazır blokları ve geri dönüş yolunu kayda alır.
 Kaynak raporlar: `GOC-TUR-KAPANIS.md` (ana sayfa) · `GOC-ROTA-KAPANIS.md`
 (29 rota) · Göç Anayasası v2.
+
+
+## EK · 2 EYLÜL 2026 GÜNCELLEMESİ (gece zinciri TUR 8, uygulama YOK)
+
+Aşağıdaki blok 20 Ağustos gövdesinin yerine geçer; gövde tarih kaydı olarak
+durur. Hiçbir adım çalıştırılmadı; push yok; kesme Enes'in açık sözüne bağlı.
+
+### E1 · Ön şartlar, bugünkü durum
+
+| Şart | 20 Ağu | 2 Eyl |
+|---|---|---|
+| qanatone.com bağlı (Adım 0) | ❌ | ❌ Enes'te (Netlify paneli + DNS; SNI engeli gerekçesi aynen geçerli) |
+| Global katman (nav / mobil menü / footer / dil geçişi / #bit / #wmk) | ❌ | ✅ söküm ve taşıma turu (ef4f955…0194646); footer wordmark tembel kurulum (TUR 4) |
+| Üç savurma hükmü (rota, EN, giydirme) | ❌ | ❌ Enes'te (değişmedi) |
+| Prolog / film | açık | ✅ kapandı (6d00bc6); efekt A düşen kare bilinçli açık |
+| NODE_VERSION | 20 | ✅ 22 (netlify.toml) |
+| Hizmet rotası tekil → çoğul (2a) | bekliyor | bekliyor (`src/pages/hizmet/[slug].astro`, canonical çoğul) |
+| `/yeni` sabit yol envanteri | 22+… | kaynakta 51 geçiş / 25 dosya; `yeni/denetim.cjs` 27; `_headers` 141 (120'si Link bloğu) |
+| Panel: her alan yönetilir ve üretimde görünür | ❌ | ✅ TUR 5 kapısı (12 alan + 2 bayrak; sabit metinler 269 anahtar) |
+| Ajan hazırlığı (robots AI botları, Content-Signal, Link başlıkları, sameAs) | ❌ | ✅ TUR 6 |
+| Chrome kapıları (59 sayfa LCP/CLS/INP/LoAF; p95/takılma) | — | ✅ TUR 4 eşik dışı 0 |
+| og/twitter meta | yoktu | ✅ TUR 5 (settings.og; boşsa og.png 1200×614, ölçü Enes'te) |
+
+### E2 · Kesme günü adımları, numaralı, her adımın geri alması
+
+Tek dal, adım başına bir commit; her commit `[skip ci]` DEĞİL (kesme deploy
+ister) ama push yalnız Enes'in sözüyle. Geri alma her adımda tek komut.
+
+| # | Adım | Ne yapılır | Bekçi | Geri alma |
+|---|---|---|---|---|
+| 0 | Alan adı | Netlify panelinden qanatone.com + www bağlanır, sertifika doğrulanır (kesmeden bağımsız, önce) | `curl -sI https://qanatone.com/` 200 | Domain management'tan alan adı kaldırılır (DNS geri alınmaz, gerek yok) |
+| 1 | Hizmet rotası çoğula | `git mv yeni/src/pages/hizmet yeni/src/pages/hizmetler` (+ `en/`); iç bağlantı sabitleri | H16 + S1 yeşil | `git revert <c1>` |
+| 2 | Yayın hedefi | `astro.config.mjs`: `base '/'`, `outDir '../dist'`; `netlify.toml` command: `npm --prefix yeni ci && npm --prefix yeni run build && node yeni/denetim.cjs` (kök build.js zincirden çıkar) | derleme yeşil; `grep -rn "/yeni" yeni/src` = 0 (geçici bekçi K-KES: dist'te `/yeni/` geçmez) | `git revert <c2>` |
+| 3 | `/yeni` önek temizliği | 25 dosya + `yeni/denetim.cjs` 27 satır: `BASE_URL` kullananlar kendiliğinden düzelir, sabit yollar elle (`font.css` 8, `SHHero` 8, index/en-index 8, ana.css/STSerit/SPDeste/ProjeGovde/sitemap/404 2'şer, kurucu.css/SKUKurucu/ProjeDizin/hukuki 1'er) | K-KES | `git revert <c3>` |
+| 4 | Redirect'ler | `yeni/public/_redirects`: `/hizmet/:slug /hizmetler/:slug 301!`, `/en/hizmet/:slug /en/hizmetler/:slug 301!`, `/yeni/* /:splat 301!`, `/admin.html /.netlify/functions/panel 200!` (panel korunur) | curl taraması: eski 61 kök URL'nin hepsi 200 ya da 301→200 | `git revert <c4>` |
+| 5 | N1 tersine | `Temel.astro` `<meta name="robots" content="noindex">` kalkar; `yeni/denetim.cjs` N1 ters yöne (her sayfa indekslenebilir, 404 istisna); `hukuki` canonical `KOK/hukuki` | N1(ters) + R8 sitemap `/hukuki` | `git revert <c5>` |
+| 6 | robots.txt + sitemap | `yeni/public/robots.txt` statik: build.js `robots()` içeriği birebir (11 AI botu Allow + Content-Signal satırı + Disallow admin/404 + Sitemap). `sitemap.xml.ts` zaten var (R8) | eski suite'in robots kuralları yeni suite'e taşınır (2 kural) | `git revert <c6>` |
+| 7 | `_headers` | `/yeni/_astro/*`, `/yeni/varlik/*`, `/yeni/font/*`, `/yeni/img/*`, `/yeni/404.html` desenleri köke; Link bloğu `node yeni/link-basliklari.cjs` ile YENİDEN üretilir (yollar değişti), `_headers` `yeni/public/`e taşınır | `KONTROL=1 node yeni/link-basliklari.cjs` TAZE; curl'de `link:` + `content-signal:` | `git revert <c7>` |
+| 8 | Panel yolu | `netlify.toml` `[functions] included_files=["admin.html"]` ve `yayinla.js`'in yazdığı yol (depo kökü `content.json`) kesmeden etkilenmez; `panel-kapi.cjs` kesme sonrası bir kez koşar | panel-kapi GEÇTİ | adım 4'ün geri alması |
+| 9 | IndexNow | build.js `INDEXNOW_KEY` akışı yeni tarafa: anahtar dosyası `yeni/public/<anahtar>.txt` + deploy sonrası bildirim (Netlify build plugin ya da elle `curl` POST) | bildirim yanıtı 200/202 | anahtar dosyası silinir; bildirim geri alınmaz (zararsız) |
+| 10 | Eski sitenin akıbeti | KARAR (Enes): tamamen kalkar mı, `/eski/` arşivi mi (arşivse eski build çıktısı alt klasöre, noindex + `_headers` X-Robots-Tag) | robots/H kuralları | `git revert <c10>` |
+| 11 | Deploy + doğrulama | push (Enes'in sözü) → E3 listesi | E3 | `git revert` zinciri ters sırayla + deploy; Search Console'a eski sitemap yeniden gönderilir |
+
+### E3 · Kesme öncesi kontrol listesi
+
+Yeşil olması ŞART olan kapılar (hepsi bu gece koşuldu, tarih damgalı):
+
+| Kapı | Komut | Bu gece |
+|---|---|---|
+| Yeni suite | `node yeni/denetim.cjs` | 56/0 |
+| Eski suite (kesmeden önce son kez) | `node test/denetim.js` | 135/0 |
+| Sürücü kapısı | `olc-surucu.cjs` (finans, otomasyon, araçlar) | GEÇTİ |
+| Bütün sayfalar p95 ≤ 20 / takılma ≤ %3 / tek ≤ 250 | `olc-sayfa.cjs` | söküm turu kapanışı + TUR 4 (finans 16,9, otomasyon 16,7, araçlar 16,7) |
+| Chrome 59 sayfa LCP<2,5 s / CLS<0,1 / INP<200 | `olc-chrome.cjs` | eşik dışı 0 (INP en yüksek 64) |
+| Panel kapısı | `node yeni/panel-kapi.cjs` | GEÇTİ (12 alan + 2 bayrak; kırmızı kontrol yakalandı) |
+| Sabit metin haritası taze | `KONTROL=1 node yeni/metin-harita.cjs` | TAZE (269) |
+| Link başlıkları taze | `KONTROL=1 node yeni/link-basliklari.cjs` | TAZE (120 sayfa) |
+| Kalıcı will-change | grep | 0 (+2 ölçülmüş istisna) |
+| Bütçeler | J1 ana 12.758/12.800 · K1 12.277/12.288 · gzip ana 22,4/24 KB · admin 78,8/96 KB | yeşil, payı az |
+
+Dolu olması ŞART olan panel alanları (boş hâli sayfayı bozmaz ama kesme
+"gerçek site" ister): `settings.whatsapp` (gerçek numara; yer tutucu
+uyarısı panelde), `settings.orgDesc`, `settings.knowsAbout`, `settings.og`
+(1200×630 yeni görsel; bugünkü og.png 1200×614), `socials` (en az bir
+adres, sameAs), `legal.line`, `legal.kvkk`, `founder.*`, `settings.email`
+(boşsa footer bağlantısı çıkmaz), `settings.gtm` (isteğe bağlı; açılırsa
+çerez onayı Enes'in kararı), `theme.testi.on` (sözler gerçekse aç).
+
+### E4 · Enes'te bekleyen kararlar (2 Eyl)
+
+1. Üç savurma hükmü (rota sayfaları, EN çeviriler, giydirme/telefon).
+2. Adım 0 zamanı (öneri: hemen).
+3. Eski sitenin akıbeti (adım 10).
+4. IndexNow taşınsın mı (adım 9).
+5. og görseli ölçüsü (1200×614 → 1200×630 yeni görsel?).
+6. Kaldırılacak dört bölüm (2c, R13 bekçisi): prolog kapandı, kaldırma
+   kapısı artık Enes'in "kaldır" sözü.
+7. Ana sayfa `content-visibility` bedeli (ilk Tab 45-57 ms) için "ilk
+   boyamadan sonra aç" tasarımı: J1/K1 bütçesi dolu, yer açmak karar ister
+   (TUR4-CHROME-DENETIM.md §3).
+8. Hizmet CSS parçası (138 KB) bölme: ilk kare stil+düzen 100-200 ms'nin
+   tek adayı; ölçülmedi.
 
 ---
 
