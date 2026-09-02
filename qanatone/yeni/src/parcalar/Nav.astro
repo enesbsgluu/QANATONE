@@ -14,6 +14,10 @@
 import '../stil/nav.css';
 import Ikon from './Ikon.astro';
 import { icerik, T, type Dil } from '../icerik';
+/* TUR 9 (3 Eyl 2026): sayfa listesi TEK KAYNAK — dil esi, Studyo sozlugu ve
+   mobil menu sirasi veri/sayfalar.json'dan (onceden uc ayri elle liste). */
+import sayfalarVeri from '../veri/sayfalar.json';
+const SAYFA: any[] = (sayfalarVeri as any).statik;
 
 interface Props { dil?: Dil }
 const { dil = 'tr' } = Astro.props;
@@ -31,7 +35,12 @@ const ham = Astro.url.pathname.replace(B, '').replace(/\/$/, '') || '/';
 const cip = en ? (ham.replace(/^\/en(?=\/|$)/, '') || '/') : ham;
 /* eşi olmayan rotalar (hukuki EN'siz, 404 dil-üstü) dil ANASINA gider —
    H16 üretilmemiş rotaya bağlantıyı kırmızıya döndürür, doğru da yapar */
-const essiz = cip === '/hukuki' || cip === '/404' || cip === '/deneme-react' || cip === '/film';
+/* essiz = statik kayitta EN dili yok (hukuki, 404, deneme-react). /film
+   ESKI listede essizdi ama en/film.astro VAR — bayat kopya (MIMARI M4);
+   tek kaynakla EN dugmesi artik /en/film'e gider. Koleksiyon sayfalari
+   (hizmet/proje/yazi detayi) kayitsizdir ve iki dilde var: essiz degil. */
+const kayit = SAYFA.find((s) => s.yol === (cip === '/' ? '' : cip));
+const essiz = !!kayit && !kayit.dil.includes('en');
 const trYol = essiz && cip === '/404' ? `${B}/` : `${B}${cip === '/' ? '/' : cip}`;
 const enYol = essiz ? `${B}/en` : `${B}/en${cip === '/' ? '' : cip}`;
 
@@ -41,15 +50,11 @@ const bultenMi = cip.startsWith('/bulten');
 
 const hizmetler = (icerik.services || []).slice(0, 8);
 const projeler = icerik.projects || [];
-/* Stüdyo sözlüğü — kaynak NDTXT.st (9022-9028) birebir */
-const ST = [
-  { r: '/otomasyon', i: 'bot', t: ['Otomasyon', 'Automation'],
-    d: ['Yapay zekâ ajanı talebi karşılar, eler, yönlendirir.', 'The AI agent answers, filters and routes demand.'] },
-  { r: '/surec', i: 'refresh', t: ['Süreç', 'Process'],
-    d: ['Müşteri yolculuğu baştan sona — sürpriz yok.', 'The journey end to end — no surprises.'] },
-  { r: '/sss', i: 'chat', t: ['SSS', 'FAQ'],
-    d: ['Dürüst cevaplar, küçük yazısız.', 'Honest answers, no fine print.'] },
-];
+/* Stüdyo sözlüğü — kaynak NDTXT.st (9022-9028) birebir; metinler ve sıra
+   sayfalar.json `studyo` alanında (başlıklar bilinçli SABİT, m() değil:
+   paneli Stüdyo menüsüne bağlamak davranış değişikliği, ayrı karar). */
+const ST = SAYFA.filter((s) => s.studyo).sort((a, b) => a.studyo.sira - b.studyo.sira)
+  .map((s) => ({ r: s.yol, i: s.studyo.ikon, t: [s.tr, s.en] as [string, string], d: s.studyo.d as [string, string] }));
 const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
 ---
 {/* checkbox önce gelmeli: burger/menü durumları kardeş seçicisiyle */}
@@ -137,15 +142,9 @@ const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
     </label>
   </div>
   <div class="nv-mlinks">
-    {[
-      [`${B}${on || '/'}`, m('nav0', 'Ana sayfa', 'Home')],
-      [`${B}${on}/projeler`, m('nav1', 'Projeler', 'Projects')],
-      [`${B}${on}/hizmetler`, m('nav2', 'Hizmetler', 'Services')],
-      [`${B}${on}/bulten`, m('nav6', 'Bülten', 'Newsletter')],
-      [`${B}${on}/otomasyon`, m('nav3', 'Otomasyon', 'Automation')],
-      [`${B}${on}/surec`, m('nav4', 'Süreç', 'Process')],
-      [`${B}${on}/sss`, m('nav5', 'SSS', 'FAQ')],
-    ].map(([h, t], i) => (
+    {SAYFA.filter((s) => s.mobil != null).sort((a, b) => a.mobil - b.mobil)
+      .map((s) => [s.yol ? `${B}${on}${s.yol}` : `${B}${on || '/'}`, m(s.anahtar, s.tr, s.en)])
+      .map(([h, t], i) => (
       <a href={h} style={`--i:${i}`}><span>{t}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       </a>
