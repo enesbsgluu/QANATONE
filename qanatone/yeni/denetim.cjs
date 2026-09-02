@@ -1546,6 +1546,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          kusur.length === 0, kusur.slice(0, 3).join(' ') || `${turler.size} tur`);
     }
 
+    /* H25 · ORGANIZATION.sameAs PANELDEN (gece zinciri TUR 6, 2 Eyl 2026).
+       Kaynak content.json socials[].url (panel Kurucu > Footer sosyal medya).
+       Iki yon: liste doluysa sema ayni siralamayla ayni adresleri tasir;
+       bossa `sameAs: []` (uydurma adres girmez, alan da silinmez). */
+    {
+      const c7 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const beklenen = (c7.socials || []).map(x => x && x.url).filter(Boolean);
+      let org7 = null;
+      for (const m of h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+        try { const j = JSON.parse(m[1]); org7 = (j['@graph'] || [j]).find(n => n['@id'] === 'https://qanatone.com/#org') || org7; } catch (e) {}
+      }
+      const olan = org7 && Array.isArray(org7.sameAs) ? org7.sameAs : null;
+      ol(`H25 · Organization.sameAs = panel socials (${beklenen.length} adres${beklenen.length ? '' : ' → []'})`,
+         !!olan && JSON.stringify(olan) === JSON.stringify(beklenen),
+         olan ? `sema ${olan.length} · panel ${beklenen.length}` : 'sameAs dizisi yok');
+    }
+
     /* H23 · PERDE SOZLESMESI — KOSULLU (perde yoksa olcecek sey yok).
        Anayasa'nin dort sarti olculebilir kalemlere cevrildi:
          a) icerigi BEKLETMEZ: perde `pointer-events:none` tasir ve eski

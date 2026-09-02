@@ -2576,6 +2576,23 @@ async function guvenlik() {
   catch (e) { haritaNot = String(e.stdout || e.message).trim(); }
   ol('admin.html: gömülü sabit metin haritası kaynakla aynı (metin-harita.cjs KONTROL)', haritaTaze, haritaNot.slice(0, 90));
   ol('admin.html bütçesi <= 96 KB', Buffer.byteLength(ad) <= 96 * 1024, Buffer.byteLength(ad) + ' B');
+  /* GECE ZINCIRI TUR 6 (2 Eyl 2026): ajan hazırlığı — Content-Signal iki yerde
+     (robots.txt + HTTP başlığı), AI botları açık, Link başlıkları üretilmiş
+     ve taze (yeni/link-basliklari.cjs KONTROL=1). */
+  {
+    const rb6 = fs.existsSync(path.join(DIST, 'robots.txt')) ? fs.readFileSync(path.join(DIST, 'robots.txt'), 'utf8') : '';
+    ol('robots.txt: Content-Signal: search=yes, ai-input=yes, ai-train=no',
+       /^Content-Signal: search=yes, ai-input=yes, ai-train=no$/m.test(rb6), '');
+    const botlar = ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'];
+    const eksik = botlar.filter(b => !new RegExp('User-agent: ' + b + '\\s*\\nAllow: /').test(rb6));
+    ol('robots.txt: AI tarayıcıları AÇIK (' + botlar.join(', ') + ')', eksik.length === 0, eksik.join(' ') || '');
+    const hd6 = fs.existsSync(path.join(KOK, '_headers')) ? fs.readFileSync(path.join(KOK, '_headers'), 'utf8') : '';
+    ol('_headers: /* bloğunda Content-Signal başlığı', /\n\/\*\n(?:[^\n]*\n)*?\s+Content-Signal: search=yes, ai-input=yes, ai-train=no/.test(hd6), '');
+    let linkTaze = false, linkNot = '';
+    try { linkNot = require('child_process').execSync('node yeni/link-basliklari.cjs', { cwd: KOK, env: Object.assign({}, process.env, { KONTROL: '1' }), encoding: 'utf8', timeout: 60000 }).trim(); linkTaze = true; }
+    catch (e) { linkNot = String(e.stdout || e.message).trim(); }
+    ol('_headers: Link başlıkları (canonical + alternate) her sayfa için üretilmiş ve taze', linkTaze, linkNot.slice(0, 100));
+  }
   /* Yorum satırlarını AT: ilk yazımda `hd.includes(...)` kullanmıştım ve
      başlık silinmiş olmasına rağmen aynı kelime yorumda geçtiği için kural
      yeşil kaldı. Yanlış YEŞİL, yanlış kırmızıdan tehlikelidir — bir daha
