@@ -1868,38 +1868,40 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   ol('R23 · giris sokumu kalici: kaynakta ve ciktida amblem/rampa kalintisi yok (R19 logo zinciri muaf)',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
-/* R13 · KESME ADAYI ISARETLERI YERINDE. Talimat (21 Agu): "Kaldirilacak
-   dort bolum (katman, akis, sektor+panel, kanal izgarasi) ISARETLENSIN,
-   KALDIRILMASIN. Kesme prolog calisinca yapilacak."
-   Kural iki yonlu calisir:
-     (a) dort dosyanin dordunde de isaret DURUYOR — isaret sessizce
-         silinirse kirmizi doner ve kesme listesi kaybolmaz;
-     (b) dort sahne HALA ana sayfada BASILIYOR — biri erken kaldirilirsa
-         kirmizi doner. Kaldirma karari Enes'in, kural onun yerine karar
-         vermez ama sessiz olmasina izin vermez.
-   Kesme gunu bu kural, dort dosyayla BIRLIKTE ve acik mesajla kalkar. */
+/* R13 · KALDIRILAN BOLUMLER GERI GELMEZ. Tarihce: 21 Agu talimati dort
+   bolumu (katman, akis, sektor+panel, kanal izgarasi) "isaretle, kaldirma"
+   diyordu ve kural her ikisini bekliyordu. 3 Eyl 2026 (TUR 9): prolog
+   kapandi, Enes "kaldir" dedi ve eski duzene donuldu (hero → serit →
+   projeler → tespit → soz bandi → kurucu → iletisim). Dort bolum ve
+   eskide olmayan dort anlati sahnesi ana sayfadan cikti; kural artik
+   YOKLUKLARINI tutar. Dosyalar bir sonraki temizlik commit'inde silinir
+   (kullanim taramasiyla: pano.js/hesap.mjs yalniz sektor panosunun
+   miydi?). */
 {
   /* Sahnenin KOKU aranir (`<section class="xx-sahne">`), gecici bir alt
      sinif degil: bolum gercekten kalkarsa kok de kalkar, tek bir ic
      dugumun adi degisirse kural gurultu uretmez. */
-  const ADAYLAR = [
-    ['SKKatman.astro',  'sk-sahne'],
-    ['SAAkis.astro',    'sa-sahne'],
-    ['SSESektor.astro', 'sse-sahne'],
-    ['SSZSozler.astro', 'ssz-sahne'],
+  /* TUR 9 (3 Eyl 2026): Enes'in "kaldir" sozu geldi (TUR9 belgesi: "R13'teki
+     dort bolum kalkiyor", sorulup yeniden onaylandi). Kural TERS DONDU:
+     dort bolumun hicbiri TR ve EN ana sayfada basilmaz; biri geri gelirse
+     kirmizi. Eskide olmayan dort anlati sahnesi (S2/S3/S5/S6) de ayni
+     kararla ana sayfadan cikti; onlar da burada denetlenir. */
+  const KALKAN = [
+    ['katman', 'sk-sahne'], ['akis', 'sa-sahne'], ['sektor', 'sse-sahne'], ['sozler', 'ssz-sahne'],
   ];
   const kusur = [];
-  const ana = oku(path.join(KOK, 'index.html'));
-  for (const [dosya, onek] of ADAYLAR) {
-    const yol = path.join(__dirname, 'src', 'sahneler', dosya);
-    if (!fs.existsSync(yol)) { kusur.push(dosya + ':dosya-yok'); continue; }
-    if (!/KESME ADAYI/.test(fs.readFileSync(yol, 'utf8')))
-      kusur.push(dosya + ':isaret-yok');
-    if (!ana.includes('<section class="' + onek + '"'))
-      kusur.push(dosya + ':ana-sayfada-basilmiyor');
+  for (const p of [path.join(KOK, 'index.html'), path.join(KOK, 'en', 'index.html')]) {
+    if (!fs.existsSync(p)) { kusur.push(rel(p) + ':yok'); continue; }
+    const h = oku(p);
+    for (const [ad, onek] of KALKAN) if (h.includes('<section class="' + onek + '"')) kusur.push(rel(p) + ':' + ad + ':geri-gelmis');
+    /* anlati sahneleri data-sahne="2|3|5|6" tasiyordu (S2Kayip, S3Mekanizma,
+       S5Surec, S6Sektor); data-anlati niteligi tespit/deste/iletisim'de de
+       var, o yuzden ayirici olan sahne numarasi. */
+    const anlati = (h.match(/data-sahne="[2356]"/g) || []).length;
+    if (anlati) kusur.push(rel(p) + ':anlati-sahnesi:' + anlati);
   }
-  ol('R13 · kesme adayi dort bolum isaretli ve HALA yerinde',
-     kusur.length === 0, kusur.slice(0, 4).join(' ') || ADAYLAR.length + ' bolum');
+  ol('R13 · kaldirilan dort bolum (katman/akis/sektor/sozler) ve anlati sahneleri ana sayfada YOK (TR+EN)',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') || 'eski duzen sirasi');
 }
 
 
