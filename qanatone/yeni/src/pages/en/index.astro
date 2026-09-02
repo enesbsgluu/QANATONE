@@ -22,6 +22,7 @@ import SSZSozler from '../../sahneler/SSZSozler.astro';
 import SSBSozBandi from '../../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../../sahneler/SKUKurucu.astro';
 import SILIletisim from '../../sahneler/SILIletisim.astro';
+import Film from '../../parcalar/Film.astro';
 import { KOK, icerik } from '../../icerik';
 import { anaSema } from '../../sema.mjs';
 
@@ -41,6 +42,12 @@ const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA,
     href="/yeni/font/playfair-display-500i-latin.woff2" />
   {/* PERDE artik KABUKTA (Temel.astro, 4 Eyl sokum turu): eski sitede 58
       sayfanin hepsindeydi; film sayfasi haric her sayfada. */}
+  {/* PROLOG (3 Eyl 2026, ANAYASA istisna 4 — 'Yeni, eskide yoktu'): film ana
+      sayfanin ONUNDE; govde .fl-govde sarmalinda (film.css: JS + hareket
+      acikken sabit katman, devir bitince static). Atlama / oturumda bir kez /
+      hareket azaltma: Film.astro + film.css. Bot ve JS'siz yol govdeyi gorur. */}
+  <Film dil="en" sayfa="ana" />
+  <div class="fl-govde" id="fl-govde">
   <div class="ana">
     {/* SADAKAT (3 Eyl 2026, Enes): eski kok site birebir — sira TR ile ayni. */}
     <SHHero dil="en" />
@@ -54,5 +61,6 @@ const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA,
     <SSBSozBandi dil="en" />
     <SKUKurucu dil="en" />
     <SILIletisim dil="en" />
+  </div>
   </div>
 </Temel>
