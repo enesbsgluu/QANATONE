@@ -2566,6 +2566,16 @@ async function guvenlik() {
   ol('admin.html: parola alanı password + autocomplete kapalı',
      /type="password"/.test(parolaAlani) && /autocomplete="off"/.test(parolaAlani),
      parolaAlani.slice(0, 70));
+  /* GECE ZINCIRI TUR 5 (2 Eyl 2026): sabit metinler sekmesi + gomulu harita
+     taze (yeni/metin-harita.cjs KONTROL=1 cikis kodu) + panel butcesi. */
+  ol('admin.html: "Sabit metinler" sekmesi (metin) + arama + bölüm süzgeci',
+     /metin:\{t:'Sabit metinler'/.test(ad) && /id="mtQ"/.test(ad) && /id="mtB"/.test(ad) && /\['metin',/.test(ad),
+     '');
+  let haritaTaze = false, haritaNot = '';
+  try { haritaNot = require('child_process').execSync('node yeni/metin-harita.cjs', { cwd: KOK, env: Object.assign({}, process.env, { KONTROL: '1' }), encoding: 'utf8', timeout: 30000 }).trim(); haritaTaze = true; }
+  catch (e) { haritaNot = String(e.stdout || e.message).trim(); }
+  ol('admin.html: gömülü sabit metin haritası kaynakla aynı (metin-harita.cjs KONTROL)', haritaTaze, haritaNot.slice(0, 90));
+  ol('admin.html bütçesi <= 96 KB', Buffer.byteLength(ad) <= 96 * 1024, Buffer.byteLength(ad) + ' B');
   /* Yorum satırlarını AT: ilk yazımda `hd.includes(...)` kullanmıştım ve
      başlık silinmiş olmasına rağmen aynı kelime yorumda geçtiği için kural
      yeşil kaldı. Yanlış YEŞİL, yanlış kırmızıdan tehlikelidir — bir daha

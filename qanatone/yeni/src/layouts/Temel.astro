@@ -20,7 +20,7 @@ import '../stil/temel.css';
 import '../stil/kabuk.css';
 import Nav from '../parcalar/Nav.astro';
 import Perde from '../parcalar/Perde.astro';
-import { icerik, T } from '../icerik';
+import { icerik, T, KOK } from '../icerik';
 
 interface Props {
   dil?: 'tr' | 'en';
@@ -58,6 +58,11 @@ const on = en ? '/en' : '';
 /* OLCUM (kaynak analytics 10765-10783 birebir): settings.gtm doluysa
    GTM-… ya da G-… yuklenir; boska HICBIR SEY basilmaz (bugun bos). */
 const gtm = String(ayar.gtm || '').trim();
+/* PAYLASIM KARTI (gece zinciri TUR 5, 2 Eyl 2026): yeni site og ve twitter
+   etiketi basmiyordu (eski sitede vardi: og:image kok/og.png + summary_large_image).
+   settings.og doluysa o (tam adres), bossa canli kok og.png (1200x614 —
+   olcusu Enes'in kararinda, F1 notu). Baslik/aciklama S1 ile ayni kaynak. */
+const ogImg = String(ayar.og || '').trim() || KOK + '/og.png';
 const GTM_KOD = gtm ? `(function(){var id=${JSON.stringify(gtm)};window.dataLayer=window.dataLayer||[];var add=function(s){var sc=document.createElement('script');sc.async=true;sc.src=s;document.head.appendChild(sc)};if(/^GTM-/i.test(id)){window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});add('https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(id))}else{add('https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id));window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',id)}})()` : '';
 const SAYFALAR: [string, string, string, string][] = [
   ['/projeler', 'nav1', 'Projeler', 'Projects'], ['/hizmetler', 'nav2', 'Hizmetler', 'Services'],
@@ -73,6 +78,13 @@ const SAYFALAR: [string, string, string, string][] = [
   <title>{baslik}</title>
   <meta name="description" content={aciklama} />
   <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={baslik} />
+  <meta property="og:description" content={aciklama} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImg} />
+  <meta property="og:locale" content={en ? 'en_US' : 'tr_TR'} />
+  <meta name="twitter:card" content="summary_large_image" />
   {heleftr && <link rel="alternate" hreflang="tr" href={heleftr} />}
   {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}

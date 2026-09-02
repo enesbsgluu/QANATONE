@@ -26,7 +26,12 @@ import { icerik, T } from '../icerik';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
-const ayar = (icerik.settings && icerik.settings.testi) || {};
+/* GECE ZINCIRI TUR 5 (2 Eyl 2026) — YANLIS YESIL YAKALANDI: panel bayragi
+   `theme.testi.on` yaziyor (admin.html sw('Bandı sitede göster','theme.testi.on'),
+   content.json theme.testi {interval:7,on:0}); bu dosya `settings.testi`
+   okuyordu — panelden acilan bant uretimde dogmuyordu (panel-kapi.cjs:
+   testimonials.0.q.tr "hicbir sayfada"). Once theme.testi, eski yol yedek. */
+const ayar = (icerik.theme && icerik.theme.testi) || (icerik.settings && icerik.settings.testi) || {};
 const acik = !!ayar.on;
 /* Sözü ve unvanı OLAN kayıtlar — yarım kayıt banda çıkmaz. */
 const sozler = acik
