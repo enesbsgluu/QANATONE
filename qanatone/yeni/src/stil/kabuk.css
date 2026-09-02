@@ -14,7 +14,9 @@
    .fade ust kizil gecis · .orb blur'lu kizil kure · .grid nokta kafesi +
    kizil isik banyosu. Sokum turunda atlanmisti; her bolumun ustundeki
    kizil hale bu katmandan geliyor. Tek statik boya, JS yok. ---- */
-#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* z-index -1: kaynakta 0 + main z-index:2 idi; burada temel.css body::before
+   zemininin kanitli yolu (hero turunun dersi: 0'da icerigin ustune biner). */
+#bg{position:fixed;inset:0;z-index:-1;pointer-events:none}
 #bg .fade{position:absolute;inset:0;background:linear-gradient(180deg,#170406 0%,#050505 46%)}
 #bg .orb{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
   width:min(900px,120vw);height:min(900px,120vw);border-radius:50%;
@@ -27,10 +29,6 @@
   background-size:28px 28px,140px 140px,100% 100%;
   -webkit-mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%);
   mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%)}
-/* icerik #bg'nin ustunde (kaynak 249 `main{z-index:2}`; asagidaki :has kurali
-   #stars'a bagli, #bg ile de ayni sonuc) */
-body:has(#bg) main{position:relative;z-index:2}
-
 /* ---- yildiz tuvali + grain (kaynak 228-232, 244-248) ---- */
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55}
 /* grain: kaynak 128 px tuvali calisma aninda uretip data URL basiyordu;
