@@ -1,0 +1,198 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-02T23:14:43.315Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1316,
+  "lcpEl": "span",
+  "cls": 0.2106,
+  "clsKaynak": [
+   {
+    "t": 2571,
+    "v": 0.2106,
+    "el": "div.fl-ray"
+   }
+  ],
+  "inp": 344,
+  "inpHedef": "video.fl-video keydown",
+  "etkilesim": 10,
+  "loaf": 40,
+  "loafToplam": 6600,
+  "loafEnUzun": 917,
+  "loafKaynak": [
+   {
+    "t": 9209,
+    "sure": 917,
+    "engel": 0,
+    "betik": 896,
+    "stilDuzen": 1,
+    "render": 21,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 15
+     }
+    ]
+   },
+   {
+    "t": 565,
+    "sure": 762,
+    "engel": 0,
+    "betik": 751,
+    "stilDuzen": 3,
+    "render": 11,
+    "kaynak": []
+   },
+   {
+    "t": 5075,
+    "sure": 544,
+    "engel": 0,
+    "betik": 532,
+    "stilDuzen": 1,
+    "render": 12,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 8
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 248,
+   "lcpEl": "span",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 224,
+     "v": 0.0011,
+     "el": "svg"
+    }
+   ],
+   "inp": 160,
+   "inpHedef": "video.fl-video keydown",
+   "etkilesim": 10,
+   "loaf": 10,
+   "loafToplam": 899,
+   "loafEnUzun": 195,
+   "loafKaynak": [
+    {
+     "t": 1154,
+     "sure": 195,
+     "engel": 112,
+     "betik": 37,
+     "stilDuzen": 2,
+     "render": 158,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 155
+      }
+     ]
+    },
+    {
+     "t": 39,
+     "sure": 117,
+     "engel": 0,
+     "betik": 77,
+     "stilDuzen": 40,
+     "render": 40,
+     "kaynak": []
+    },
+    {
+     "t": 1023,
+     "sure": 107,
+     "engel": 0,
+     "betik": 103,
+     "stilDuzen": 3,
+     "render": 4,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 304,
+   "lcpEl": "span",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 192,
+     "v": 0.0011,
+     "el": "svg"
+    }
+   ],
+   "inp": 152,
+   "inpHedef": "video.fl-video keydown",
+   "etkilesim": 10,
+   "loaf": 15,
+   "loafToplam": 1127,
+   "loafEnUzun": 156,
+   "loafKaynak": [
+    {
+     "t": 992,
+     "sure": 156,
+     "engel": 53,
+     "betik": 55,
+     "stilDuzen": 1,
+     "render": 101,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 97
+      }
+     ]
+    },
+    {
+     "t": 830,
+     "sure": 123,
+     "engel": 0,
+     "betik": 118,
+     "stilDuzen": 1,
+     "render": 5,
+     "kaynak": []
+    },
+    {
+     "t": 548,
+     "sure": 106,
+     "engel": 46,
+     "betik": 105,
+     "stilDuzen": 0,
+     "render": 1,
+     "kaynak": [
+      {
+       "src": "",
+       "fn": "",
+       "cagiran": "import.then",
+       "sure": 5
+      }
+     ]
+    }
+   ],
+   "yol": "/yeni/en/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

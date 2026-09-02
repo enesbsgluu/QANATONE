@@ -156,6 +156,15 @@ const satirla = (m: string): string[] => {
   return [c.slice(0, enIyi).join(' '), c.slice(enIyi).join(' ')];
 };
 ---
+{/* ERKEN KARAR (3 Eyl 2026, performans turu): fl-js / fl-ana / atlandi /
+    hareket-azaltma karari ILK YERLESIMDEN ONCE, satir ici. Modul betigi
+    (asagida) ayni karari yeniden verir (idempotent); bu betik yalniz JS'siz
+    yerlesimin (39 poster sutunu) bir kare bile boyanmasini onler — olculdu:
+    modul gec gelince onceki yerlesim boyaniyor, ana sayfada 0,54 CLS ve
+    oturumda-atlanmis ziyaretcide poster sutunu flasi. Yorumsuz, ~330 B (J1).
+    YALNIZ ANA SAYFADA: /film olcum zemininin J1 tavani (11.264 B) 252 B ile
+    asiliyordu; /film'de kabuk/#bg yok, kayma da yok — modul karari yeter. */}
+{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}H.classList.add('fl-js','fl-ana')}catch(e){}})()`} />}
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B} data-sayfa={sayfa}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
