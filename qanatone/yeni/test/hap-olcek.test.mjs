@@ -32,13 +32,14 @@ const OLCEKTE = [
   ['stil/nav.css', '.nv-mlg a{', 'var(--hap-y3) var(--hap-x3)'],
   ['stil/temel.css', '.atla{', 'var(--hap-y2) var(--hap-x2)'],
   ['parcalar/HizmetGovde.astro', '.sdbtns .dugme {', 'var(--hap-y1) var(--hap-x1)'],
+  /* sadakat turu (3 Eyl): kaynak .btn / .btn-g 14/26 .92rem — .dugme ve .sil-ikincil olcege girdi */
+  ['stil/temel.css', '.dugme{', 'var(--hap-y1) var(--hap-x1)'],
+  ['stil/iletisim.css', '.sil-ikincil{', 'var(--hap-y1) var(--hap-x1)'],
 ];
 /* olcek DISI istisnalar: literal aynen durmali (tasinmasi Enes karari) */
 const ISTISNA = [
-  ['stil/temel.css', '.dugme{', '12px 26px', 'birincil dugme — 9 markup, tasinmasi en genis piksel farki'],
   ['stil/hero.css', '.sh-void{', '14px 30px', 'kaynak .void 14/30 birebir (sadakat)'],
   ['stil/kabuk.css', '.kb-say .acts button{', '8px 14px', 'ajan balonu dugmeleri'],
-  ['stil/iletisim.css', '.sil-ikincil{', '12px 26px', 'iletisim hayalet dugme (.dugme ile ayni boy)'],
   ['stil/deste.css', '.sp-tum{', '13px 26px', 'deste "tum projeler" (kaynak .btn.btn-g)'],
   ['parcalar/HizmetGovde.astro', '.sdbtns .dugme.koyu {', '15px 32px', 'hizmet detayi koyu cagri (.shiny kaynagi)'],
 ];

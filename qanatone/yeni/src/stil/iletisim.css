@@ -23,47 +23,62 @@
       çünkü kaynak da aynı alanları `required` ile işaretliyordu.
    ============================================================ */
 
-.sil-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+/* SADAKAT (3 Eyl 2026): kaynak `.cta` (2133-2137) + `.ctarow` + `#lead`
+   / `.ldbox` / `.ldt` / `.ldf` / `.fld` / `.chk` (2288-2311) birebir.
+   Kaynakta CTA'nin etiketi YOK; iletisim + lead iki ayri bolumdu (cta 150
+   dolgu, lead 0 ust / clamp(50,7vw,90) alt) — burada tek sahne, araligi
+   .sil-cagri alt marjini tasir. */
+.sil-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ana .sil-sahne{padding:clamp(80px,11vw,150px) 0 clamp(50px,7vw,90px)}
 
-/* ---- çağrı ---- */
-.sil-cagri{text-align:center;max-width:60ch;margin:0 auto clamp(28px,4vw,52px)}
-.sil-cagri .kunye{display:inline-flex;align-items:center;gap:10px}
-.sil-cagri h2{font-size:clamp(1.7rem,4.4vw,3.2rem);line-height:1.06;
-  letter-spacing:-.035em;margin-bottom:0}
+/* ---- çağrı (kaynak .cta) ---- */
+.sil-cagri{text-align:center;margin:0 auto clamp(80px,11vw,150px)}
+.sil-cagri h2{font-size:clamp(2.4rem,7vw,5.4rem);line-height:1.04;
+  letter-spacing:-.055em;margin-bottom:22px}
 .sil-cagri h2 em{font-style:normal;color:var(--red)}
-.sil-cagri>p{margin:clamp(11px,1.3vw,18px) auto 0}
-.sil-dugmeler{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
-  margin-top:clamp(18px,2.4vw,28px)}
-.sil-dugmeler .dugme{display:inline-flex;align-items:center;gap:10px}
-.sil-dugmeler svg{width:16px;height:16px}
-.sil-ikincil{display:inline-flex;align-items:center;padding:12px 26px;
-  border-radius:999px;border:1px solid var(--line2);color:var(--tx);
-  text-decoration:none;font-weight:600;background:rgba(255,255,255,.045)}
+.sil-cagri>p{font-size:clamp(1rem,1.6vw,1.2rem);color:var(--tx3);font-weight:300;
+  max-width:52ch;margin:0 auto 38px;line-height:1.7}
+.sil-dugmeler{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:0}
+.sil-dugmeler svg{width:15px;height:15px}
+/* kaynak .btn-g (319-320) */
+.sil-ikincil{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:var(--hap-y1) var(--hap-x1);border-radius:999px;font-size:.92rem;font-weight:600;
+  letter-spacing:-.01em;white-space:nowrap;border:1px solid var(--line2);color:var(--tx);
+  text-decoration:none;background:rgba(255,255,255,.045);transition:.3s var(--e)}
+.sil-ikincil:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
 
-/* ---- form kutusu ---- */
-.sil-kutu{display:grid;gap:clamp(18px,2.6vw,34px);
-  border:1px solid var(--line);border-radius:20px;background:var(--card);
-  padding:clamp(20px,2.8vw,36px);scroll-margin-top:24px}
-.sil-yazi h3{font-size:clamp(1.2rem,2.4vw,1.8rem);line-height:1.12;
-  letter-spacing:-.03em;margin:0 0 10px}
-.sil-yazi h3 em{font-style:normal;color:var(--red-soft)}
-.sil-yazi>p{color:var(--tx2);font-size:.94rem;line-height:1.65;max-width:56ch}
-.sil-yazi .kunye{display:inline-flex;align-items:center;gap:8px}
-.sil-yazi .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
+/* ---- form kutusu (kaynak .ldbox) ---- */
+.sil-kutu{display:grid;gap:clamp(26px,4vw,60px);
+  border:1px solid var(--line);border-radius:34px;padding:clamp(26px,4vw,54px);scroll-margin-top:24px;
+  background:radial-gradient(88% 100% at 0% 0%,rgba(239,35,60,.10),transparent 62%),
+             linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.006))}
+.sil-yazi .kunye{margin-bottom:0}.sil-yazi .kunye::before{display:none} /* kaynak .ldt .mono: cizgisiz, marjsiz (5192) */
+.sil-yazi h3{font-size:clamp(1.55rem,3vw,2.4rem);line-height:1.04;
+  letter-spacing:-.04em;margin:14px 0 14px}
+.sil-yazi h3 em{font-style:normal;color:var(--red)}
+.sil-yazi>p:not(.kunye){color:var(--tx3);font-size:.92rem;line-height:1.72;font-weight:300;max-width:40ch}
 
-.sil-form{display:grid;gap:12px}
-.sil-alan{display:grid;gap:6px}
-.sil-alan>span{font-size:.82rem;color:var(--tx3)}
-.sil-alan input,.sil-alan textarea{width:100%;background:var(--bg);
-  border:1px solid var(--line2);border-radius:12px;padding:12px 14px;
-  color:var(--tx);font:inherit;font-size:.94rem}
-.sil-alan textarea{resize:vertical;min-height:84px}
+.sil-form{display:grid;gap:14px}
+.sil-alan{display:block}
+.sil-alan>span{display:block;font-family:var(--f-tek);font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tx4);margin-bottom:7px}
+.sil-alan input,.sil-alan textarea{width:100%;background:rgba(0,0,0,.45);
+  border:1px solid var(--line2);border-radius:12px;padding:13px 15px;
+  color:var(--tx);font:inherit;font-size:.94rem;
+  transition:border-color .26s var(--e),box-shadow .26s var(--e)}
+.sil-alan input::placeholder,.sil-alan textarea::placeholder{color:var(--tx4)}
+.sil-alan textarea{resize:vertical;min-height:82px;line-height:1.55}
+/* kaynak odak: kizil kenarlik + 3px parilti; kuresel :focus-visible halkasi (E6) ustune eklenir */
 .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{
-  outline:2px solid var(--red);outline-offset:1px}
+  border-color:var(--red);outline:2px solid var(--red);outline-offset:1px}
+/* kaynagin 3px odak piriltisi yalniz masaustunde: H14 mobil tabanda golge yasak (madde 7) */
+@media(min-width:901px){
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{box-shadow:0 0 0 3px rgba(239,35,60,.15)}
+}
 .sil-onay{display:flex;gap:10px;align-items:flex-start;
-  color:var(--tx3);font-size:.82rem;line-height:1.5}
-.sil-onay input{flex:none;margin-top:2px;width:16px;height:16px;accent-color:var(--red)}
-.sil-form .dugme{justify-self:start;display:inline-flex;align-items:center;gap:10px}
+  color:var(--tx3);font-size:.79rem;line-height:1.55;margin-top:2px;cursor:pointer}
+.sil-onay input{flex:none;margin-top:3px;width:15px;height:15px;accent-color:var(--red)}
+.sil-form .dugme{justify-self:start;margin-top:4px} /* kaynak .ldf>button (2309) */
 .sil-form .dugme svg{width:16px;height:16px}
 .sil-durum{min-height:1.2em;color:var(--red-soft);font-size:.88rem}
 .sil-durum a{color:var(--tx);text-decoration:underline}

@@ -60,9 +60,18 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   künyeler kompozisyon sütunu taşır (kap·ayraç·ikon·vurgu); iki öğeyi
   birleştiren hiçbir şey göz kararı çizilmez — ya kaynaktan okunur ya
   ölçülür. Ayrıntı `TASARIM-A3-KUNYE.md` bölüm 0.
-- **Sürücü ayrım kuralı (5 Eyl):** bir süreci anlatan hareket kaydırmaya
-  bağlanır; doku, amblem ve dekor serbest. Kendi kendine dönen süreç
-  görseli izleyiciye "sen buna dahil değilsin" der. Bekçi `olc-surucu.cjs`.
+- **Süreç demoları görünürlükte canlı (Enes, 3 Eyl 2026 — önceki "sürücü
+  ayrım kuralı"nı DEĞİŞTİRİR):** akış/otomasyon demoları kaydırdıkça
+  ilerlemez; bölüm kadraja girince kendi ritminde sonsuz döner, çıkınca
+  durur (eski sitenin `#akis.aklive` deseni). Doku, amblem, dekor serbest.
+  Kaydırma çizelgesine bağlı kalan tek şey film/deste gibi kaydırmanın
+  kendisini anlatan sahneler. Bekçi `olc-surucu.cjs` bu kurala göre
+  yeniden yazılacak (bugün eski kuralı ölçüyor).
+- **Ana sayfa eski düzen, yeni mimari (Enes, 3 Eyl 2026):** bölüm sırası ve
+  her bölümün ölçüsü kök `index.html`'den birebir okunur; eskide olmayan
+  öğe (anlatı sahnesi, numaralı etiket, kızıl nokta, halka) eklenmez.
+  Kanıt yan yana kare + ölçülmüş fark listesi (`olc-tipografi.cjs`,
+  `kontak-tasarim.cjs SECICI_*`). R13'ün dört bölümü kaldırıldı.
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.

@@ -76,6 +76,18 @@ const SAYFA = process.env.SAYFA || '/yeni/';
 const SAYFA_ONCE = process.env.SAYFA_ONCE || SAYFA;
 const SAYFA_SONRA = process.env.SAYFA_SONRA || SAYFA;
 const KONUMLAR = (process.env.KONUM || '0,50').split(',').map((s) => s.trim()).filter(Boolean).map(Number);
+/* SECICI MODU (sadakat turu, 3 Eyl 2026): iki agac farkli yukseklikte ise
+   yuzde konumlar hizalanmaz; bolum bolum kiyas icin her agacta bir secici
+   listesi verilir, kare o bolumun UST kenarina kaydirilarak cekilir.
+   SECICI_ONCE="#projeler,#tespit" SECICI_SONRA=".sp-sahne,#tespit"
+   (esit uzunlukta; KONUM yerine gecer; kare etiketi s1, s2, ...) */
+const SECICI = {
+  once: (process.env.SECICI_ONCE || process.env.SECICI || '').split(',').map((s) => s.trim()).filter(Boolean),
+  sonra: (process.env.SECICI_SONRA || process.env.SECICI || '').split(',').map((s) => s.trim()).filter(Boolean),
+};
+const SECICI_MOD = SECICI.once.length > 0;
+if (SECICI_MOD && SECICI.once.length !== SECICI.sonra.length) { console.error('SECICI_ONCE ve SECICI_SONRA esit sayida secici tasimali'); process.exit(1); }
+const HEDEFLER = SECICI_MOD ? SECICI.once.map((_, i) => 's' + (i + 1)) : KONUMLAR;
 const GENISLIK = +(process.env.GENISLIK || 1440);
 const YUKSEKLIK = +(process.env.YUKSEKLIK || (GENISLIK === 390 ? 844 : 900));
 const AD = process.env.AD || 'kontak';
@@ -86,7 +98,7 @@ const BASLIK = 44;
    WebGL karesi CSS animasyonu degildir, pause() etkilemez; yukleme anina
    gore iki agacta farkli kare cikar (3 Eyl: /yeni/ konum 0'da %17 "fark",
    kaynagi tamamen bu tuvaldi). Gizlenir; tup katmani kiyasa girmez. */
-const GIZLENEN = ['#stars', '#noise', '.kb-bit', '.kb-tip', '#tubes'];
+const GIZLENEN = ['#stars', '#noise', '.kb-bit', '.kb-tip', '#tubes', '#bit', '#bittip'];  /* #bit/#bittip: eski sitenin imleci (sadakat karelerinde kirmizi nokta) */
 const KONTAK = path.join(__dirname, 'kontak-tur9');
 const CIKTI = path.join(__dirname, `kontak-tasarim-${AD}.json`);
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -122,6 +134,12 @@ const dondur = (page) => page.evaluate(() => {
      SONSUZ olanlar (halka, huzme) duraklatilip 0'a alinir. */
   let f = 0;
   try { document.getAnimations().forEach((x) => { try {
+    /* kaydirma/gorunurluk cizelgeli animasyon (ScrollTimeline/ViewTimeline):
+       ilerlemesini KAYDIRMA KONUMU belirler, finish() onu sona itip sahte
+       fark uretir (3 Eyl: hero metni "soluk" cikti — hero'nun kaydirmayla
+       sonmesi). Dokunulmaz. */
+    const tl = x.timeline && x.timeline.constructor ? x.timeline.constructor.name : '';
+    if (/Scroll|View/.test(tl)) return;
     const t = x.effect && x.effect.getComputedTiming ? x.effect.getComputedTiming() : null;
     if (t && t.iterations === Infinity) { x.pause(); x.currentTime = 0; s++; }
     else { x.finish(); f++; }
@@ -156,8 +174,17 @@ async function agacCek(browser, kok, etiketAd, boz) {
   await ikiKare(page);
   const olcek = await page.evaluate(() => ({ scrollHeight: document.documentElement.scrollHeight, innerHeight, innerWidth, dugme: document.querySelectorAll('.dugme').length }));
   const kareler = [];
-  for (const konum of KONUMLAR) {
-    const hedef = Math.round((konum / 100) * Math.max(0, olcek.scrollHeight - olcek.innerHeight));
+  for (let hi = 0; hi < HEDEFLER.length; hi++) {
+    const konum = HEDEFLER[hi];
+    const enCok = Math.max(0, olcek.scrollHeight - olcek.innerHeight);
+    let hedef;
+    if (SECICI_MOD) {
+      const sec = SECICI[etiketAd][hi];
+      const ust = await page.evaluate((s) => { const e = document.querySelector(s); return e ? Math.round(e.getBoundingClientRect().top + scrollY) : -1; }, sec);
+      if (ust < 0) throw new Error(`${etiketAd}: secici bulunamadi: ${sec}`);
+      hedef = Math.min(ust, enCok);
+      if (ust > enCok) console.warn(`  UYARI ${etiketAd} ${konum} (${sec}): bolum ustu ${ust} px, sayfa en cok ${enCok} px kaydirilir`);
+    } else hedef = Math.round((konum / 100) * enCok);
     await page.evaluate((y) => window.scrollTo(0, y), hedef);
     await ikiKare(page);
     const d2 = await dondur(page); /* kaydirmayla dogan animasyonlar (IO tetigi) */
@@ -213,7 +240,7 @@ function fark(a, b) {
   if (!browser) throw new Error('tarayici acilamadi');
   const surum = await browser.version();
   console.log(`TARAYICI : ${TARAYICI} · ${surum} · headless ${JSON.stringify(headless)} · ${GENISLIK}x${YUKSEKLIK} · esik ${ESIK}${BOZ ? ' · BOZ=1 (SONRA .dugme padding enjekte)' : ''}`);
-  console.log(`SAYFA    : ${SAYFA} · konum ${KONUMLAR.join(',')}% · ONCE ${ONCE} · SONRA ${SONRA}`);
+  console.log(`SAYFA    : ${SAYFA_ONCE}${SAYFA_SONRA !== SAYFA_ONCE ? ' <-> ' + SAYFA_SONRA : ''} · ${SECICI_MOD ? 'secici ' + SECICI.once.join(',') + ' <-> ' + SECICI.sonra.join(',') : 'konum ' + KONUMLAR.join(',') + '%'} · ONCE ${ONCE} · SONRA ${SONRA}`);
   const once = await agacCek(browser, ONCE, 'once', false);
   const sonra = await agacCek(browser, SONRA, 'sonra', BOZ);
   await browser.close();
@@ -224,12 +251,12 @@ function fark(a, b) {
     const k = ag.kareler;
     for (let i = 0; i < k.length; i++) for (let j = i + 1; j < k.length; j++) if (k[i].md5 === k[j].md5) bayat.push(`${ad}: konum ${k[i].konum}% (scrollY ${k[i].gercek}) ↔ ${k[j].konum}% (scrollY ${k[j].gercek}) md5 ${k[i].md5.slice(0, 10)} AYNI`);
   }
-  const ozKontrol = KONUMLAR.length < 2 ? 'atlandi (tek konum — en az iki konum ver)' : bayat.length ? 'KIRMIZI: bayat yuzey' : 'gecti (her agacta konumlar md5 olarak farkli)';
-  if (KONUMLAR.length < 2) console.warn('UYARI: oz-kontrol icin en az iki konum gerekir, atlandi.');
+  const ozKontrol = HEDEFLER.length < 2 ? 'atlandi (tek konum — en az iki konum ver)' : bayat.length ? 'KIRMIZI: bayat yuzey' : 'gecti (her agacta konumlar md5 olarak farkli)';
+  if (HEDEFLER.length < 2) console.warn('UYARI: oz-kontrol icin en az iki konum gerekir, atlandi.');
 
   const sonuc = [];
   if (!bayat.length) {
-    for (let i = 0; i < KONUMLAR.length; i++) {
+    for (let i = 0; i < HEDEFLER.length; i++) {
       const ko = once.kareler[i], ks = sonra.kareler[i];
       const f = fark(ko.ham, ks.ham);
       const solB = await sharp(ko.ham.data, { raw: ko.ham.info }).png().toBuffer();

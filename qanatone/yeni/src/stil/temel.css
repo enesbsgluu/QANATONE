@@ -123,8 +123,13 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
 .cta{border:1px solid rgba(239,35,60,.4);border-radius:18px;padding:28px;text-align:center;
   background:linear-gradient(180deg,rgba(239,35,60,.09),transparent)}
 .cta p{color:var(--tx2);max-width:56ch;margin:10px auto 20px}
-.dugme{display:inline-block;background:var(--red-dolgu);color:#fff;text-decoration:none;
-  padding:12px 26px;border-radius:999px;font-weight:600}
+/* SADAKAT (3 Eyl 2026): kaynak `.btn` + `.btn-p` (312-317) birebir — 14/26,
+   .92rem, 600, -.01em, inline-flex, gap 9. 12/26 goc sapmasiydi (hap olcegi
+   istisnasi); artik K1 cagri kademesi. */
+.dugme{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  background:var(--red-dolgu);color:#fff;text-decoration:none;white-space:nowrap;
+  border:0;cursor:pointer;font:inherit;line-height:1.66;
+  padding:var(--hap-y1) var(--hap-x1);border-radius:999px;font-size:.92rem;font-weight:600;letter-spacing:-.01em}
 
 /* ============ B2 · DÖNEN IŞIK HUZMESİ KENARLIK (giydirme turu) ============
    Görev belgesi B2: "@property --ga ile konik degradeyi döndürerek
