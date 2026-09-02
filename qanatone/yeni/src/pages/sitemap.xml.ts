@@ -24,27 +24,30 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { KOK } from '../icerik';
+import sayfalarVeri from '../veri/sayfalar.json';
 
 export const GET: APIRoute = async () => {
-  const hizmetler = (await getCollection('hizmetler')).map(e => e.data);
-  const projeler = (await getCollection('projeler')).map(e => e.data);
-  const yazilar = (await getCollection('yazilar')).map(e => e.data);
+  const kol: Record<string, any[]> = {
+    hizmetler: (await getCollection('hizmetler')).map(e => e.data),
+    projeler: (await getCollection('projeler')).map(e => e.data),
+    yazilar: (await getCollection('yazilar')).map(e => e.data),
+  };
   const bugun = new Date().toISOString().slice(0, 10);
 
-  /* yol '' = ana sayfa (tr '/', en '/en'). Sıra eski üretecin rota
-     sırası: ana → dizinler+detaylar → otomasyon/surec/sss. */
-  const yollar: { yol: string; p: string; d?: string }[] = [
-    { yol: '', p: '1.0' },
-    { yol: '/hizmetler', p: '0.8' },
-    ...hizmetler.map((s: any) => ({ yol: `/hizmetler/${s.slug}`, p: '0.7' })),
-    { yol: '/projeler', p: '0.8' },
-    ...projeler.map((s: any) => ({ yol: `/projeler/${s.slug}`, p: '0.6' })),
-    { yol: '/bulten', p: '0.8' },
-    ...yazilar.map((s: any) => ({ yol: `/bulten/${s.slug}`, p: '0.7', d: s.date })),
-    { yol: '/otomasyon', p: '0.8' },
-    { yol: '/surec', p: '0.8' },
-    { yol: '/sss', p: '0.8' },
-  ];
+  /* TUR 9 (3 Eyl 2026): yollar TEK KAYNAKTAN (veri/sayfalar.json). Sıra
+     eski üretecin rota sırası korunur: statik kayıt sırası, koleksiyon
+     kayıtları `dizin`inden hemen sonra (ana → hizmetler+detay → projeler
+     +detay → bülten+yazı → otomasyon/surec/sss). `sitemap: null` olanlar
+     (canonical KOK dışı: hukuki, film, deneme-react, 404) girmez. */
+  const S = sayfalarVeri as any;
+  const yollar: { yol: string; p: string; d?: string }[] = [];
+  for (const s of S.statik) {
+    if (!s.sitemap) continue;
+    yollar.push({ yol: s.yol, p: s.sitemap });
+    for (const k of S.koleksiyon.filter((k: any) => k.dizin === s.yol))
+      for (const e of kol[k.ad] || [])
+        yollar.push({ yol: k.yol.replace('{slug}', e.slug), p: k.sitemap, d: k.lastmod ? e[k.lastmod] : undefined });
+  }
 
   const kayit = (loc: string, y: { yol: string; p: string; d?: string }) =>
     `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${y.d || bugun}</lastmod>\n` +

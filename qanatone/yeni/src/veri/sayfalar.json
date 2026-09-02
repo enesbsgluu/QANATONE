@@ -1,0 +1,27 @@
+{
+  "_": "SAYFA LISTESI TEK KAYNAK (TUR 9, 3 Eyl 2026 — MIMARI M4/M19). Onceden 8 yerde elle duruyordu ve tutarsizdi (/film EN'siz saniliyordu, sayim '+19' sihirli sabitti). Tuketiciler: layouts/Temel.astro (footer sirasi), parcalar/Nav.astro (dil esi, Studyo acilir menusu, mobil menu sirasi), pages/sitemap.xml.ts (yollar + oncelik), yeni/denetim.cjs (dist sayfa KUMESI iki yonlu), yeni/metin-harita.cjs (bolum etiketleri). Eski site listeleri (build.js `liste`, admin.html buildSitemap) BILINCLI disarida: eski site kesmede tamamen kalkiyor (Enes 3 Eyl; KESME-PLANI adim 2/6, MIMARI M6 uc sitemap uretecinden ikisi onunla gider). Sira alanlari (footer/mobil/studyo.sira) bugunku uc farkli sirayi AYNEN tasir — birlestirme gorunur degisiklik olur, Enes karari. `dil`: hangi dillerde sayfa var (EN esi yoksa Nav dil dugmesi /en anasina gider). `sitemap` null: canonical KOK disi (netlify.app) — kesmede /hukuki KOK'a donunce '0.8' verilir. statik sirasi = sitemap sirasi (koleksiyon kayitlari `dizin`inden sonra gelir).",
+  "statik": [
+    { "yol": "", "anahtar": "nav0", "tr": "Ana sayfa", "en": "Home", "dil": ["tr", "en"], "mobil": 1, "footer": null, "sitemap": "1.0" },
+    { "yol": "/hizmetler", "anahtar": "nav2", "tr": "Hizmetler", "en": "Services", "dil": ["tr", "en"], "mobil": 3, "footer": 2, "sitemap": "0.8" },
+    { "yol": "/projeler", "anahtar": "nav1", "tr": "Projeler", "en": "Projects", "dil": ["tr", "en"], "mobil": 2, "footer": 1, "sitemap": "0.8" },
+    { "yol": "/bulten", "anahtar": "nav6", "tr": "Bülten", "en": "Newsletter", "dil": ["tr", "en"], "mobil": 4, "footer": 3, "sitemap": "0.8" },
+    { "yol": "/otomasyon", "anahtar": "nav3", "tr": "Otomasyon", "en": "Automation", "dil": ["tr", "en"], "mobil": 5, "footer": 4, "sitemap": "0.8",
+      "studyo": { "sira": 1, "ikon": "bot", "d": ["Yapay zekâ ajanı talebi karşılar, eler, yönlendirir.", "The AI agent answers, filters and routes demand."] },
+      "parca": "parcalar/OtomasyonGovde.astro" },
+    { "yol": "/surec", "anahtar": "nav4", "tr": "Süreç", "en": "Process", "dil": ["tr", "en"], "mobil": 6, "footer": 5, "sitemap": "0.8",
+      "studyo": { "sira": 2, "ikon": "refresh", "d": ["Müşteri yolculuğu baştan sona — sürpriz yok.", "The journey end to end — no surprises."] },
+      "parca": "parcalar/SurecGovde.astro" },
+    { "yol": "/sss", "anahtar": "nav5", "tr": "SSS", "en": "FAQ", "dil": ["tr", "en"], "mobil": 7, "footer": 6, "sitemap": "0.8",
+      "studyo": { "sira": 3, "ikon": "chat", "d": ["Dürüst cevaplar, küçük yazısız.", "Honest answers, no fine print."] },
+      "parca": "parcalar/SssGovde.astro" },
+    { "yol": "/hukuki", "tr": "Hukuki", "en": "Legal", "dil": ["tr"], "sitemap": null },
+    { "yol": "/film", "dil": ["tr", "en"], "sitemap": null },
+    { "yol": "/deneme-react", "dil": ["tr"], "sitemap": null, "gecici": "React+motion butce olcum sayfasi (Enes 20 Agu); gercek React adasi gelince sayfa ve bu kayit birlikte kalkar" },
+    { "yol": "/404", "dil": ["tr"], "sitemap": null }
+  ],
+  "koleksiyon": [
+    { "ad": "hizmetler", "kaynak": "services", "dizin": "/hizmetler", "yol": "/hizmetler/{slug}", "sitemap": "0.7" },
+    { "ad": "projeler", "kaynak": "projects", "dizin": "/projeler", "yol": "/projeler/{slug}", "sitemap": "0.6" },
+    { "ad": "yazilar", "kaynak": "posts", "dizin": "/bulten", "yol": "/bulten/{slug}", "sitemap": "0.7", "lastmod": "date" }
+  ]
+}

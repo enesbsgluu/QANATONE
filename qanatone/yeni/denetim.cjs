@@ -95,19 +95,28 @@ const prototipler = tumSayfalar.filter((p) => PROTOTIP.test(rel(p)));
 console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   (prototipler.length ? ` (+ ${prototipler.length} prototip, ürün kuralları dışında: ${prototipler.map(rel).join(', ')})` : '') + `\n`);
 
-/* sayfa sayısı content.json'dan türetilir — rota sessiz düşmesin */
+/* SAYFA KUMESI (TUR 9, 3 Eyl 2026) — onceden SAYI kiyaslaniyordu
+   (koleksiyon x2 + "19" sihirli sabit): bir sayfa eklenip biri silinirse
+   yesil kaliyordu (MIMARI M4/M19). Simdi beklenen KUME tek kaynaktan
+   (src/veri/sayfalar.json statik kayitlari x dil + koleksiyon slug'lari x2)
+   ve dist'teki sayfa yollariyla IKI YONLU kiyaslanir: listede olup dist'te
+   olmayan "eksik", dist'te olup listede olmayan "fazla". Kirmizi-once:
+   3 Eyl, /film kaydi gecici cikarilinca 2 fazla; sahte kayit eklenince 1 eksik. */
 {
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-  const beklenen = c.services.length * 2 + c.posts.length * 2 + c.projects.length * 2
-    + 19; /* +hukuki +404 +ana (tr/en) +hizmetler/projeler/bülten dizinleri +sss +surec +otomasyon (tr/en)
-             +deneme-react (GEÇİCİ — React+motion bütçe ölçüm sayfası,
-             Enes talebi 20 Ağu; gerçek React adası gelince sayfa ve
-             bu +1 birlikte kalkar)
-             +film TR ve EN (27 Ağu; EN 2 Eyl TUR 5 v2 ile — anlatı iki
-             dilli ve kapı "TR ve EN ayrı ölçülür" diyor, ölçüm sayfasız
-             olmaz. Film ana sayfaya oturunca iki sayfa ve bu +2 kalkar) */
-  ol('sayfa sayısı content.json ile örtüşüyor', sayfalar.length === beklenen,
-     `${sayfalar.length}/${beklenen}`);
+  const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+  const beklenen = new Set();
+  for (const s of S.statik) for (const d of s.dil) beklenen.add(((d === 'en' ? '/en' : '') + (s.yol || '')) || '/');
+  for (const k of S.koleksiyon) for (const e of (c[k.kaynak] || [])) for (const d of ['tr', 'en'])
+    beklenen.add((d === 'en' ? '/en' : '') + k.yol.replace('{slug}', e.slug));
+  const gercek = new Set(sayfalar.map((p) =>
+    ('/' + rel(p).replace(/\/?index\.html$/, '').replace(/\.html$/, '')).replace(/\/$/, '') || '/'));
+  const eksik = [...beklenen].filter((x) => !gercek.has(x));
+  const fazla = [...gercek].filter((x) => !beklenen.has(x));
+  ol('sayfa kümesi = sayfalar.json × dil + content.json koleksiyonları × 2 (iki yönlü)',
+     eksik.length === 0 && fazla.length === 0,
+     (eksik.length ? 'eksik:' + eksik.slice(0, 3).join(',') + ' ' : '') + (fazla.length ? 'fazla:' + fazla.slice(0, 3).join(',') : '')
+       || `${gercek.size} sayfa`);
 }
 
 /* F1 · yazı tipi zinciri: üçüncü parti font sunucusu SIFIR; engelleyici
