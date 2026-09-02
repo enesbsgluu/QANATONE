@@ -23,8 +23,32 @@
   --line2:rgba(255,255,255,.16);--tx4:rgba(255,255,255,.48);
   /* Tasarim turu A1 (nav) ile geldi — kaynak :root 44 ve 65 birebir. */
   --red-dim:rgba(239,35,60,.12);--gut:clamp(20px,4vw,40px);
-  --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1)}
+  --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.4,0,.2,1);
+  /* TUR 9 E3 (3 Eyl 2026): DOLGU tokeni. Beyaz metin / #ef233c = 4,22:1,
+     WCAG AA normal metin 4,5 ister (dugme metni 16,5px/600 normal sinif).
+     Marka kizili --red KORUNUR (kenarlik, parilti, vurgu, bag rengi); yalniz
+     beyaz metin tasiyan DOLGU bir ton koyu: #d92037 = 4,99:1, hover #e0202f
+     = 4,75:1 (eski hover #ff2f47 3,65 idi). Koyu metin secenegi (#050505 /
+     #ef233c 4,83) kimlik dilini tersine cevirirdi (beyaz metinli kizil =
+     birincil, koyu metinli beyaz = ikincil .nv-mw). Palet karari Enes'te —
+     yan yana kare kontak-tur9/e3-*.png. */
+  --red-dolgu:#d92037;--red-dolgu-hover:#e0202f}
 *{margin:0;padding:0;box-sizing:border-box}
+/* TUR 9 E6 (3 Eyl 2026): KURESEL odak halkasi. Onceden kabukta hic yoktu;
+   12 dosyada nokta atisi kural vardi, gerisi UA varsayilani (#050505 uzerinde
+   kizil bagda ayirt edilmiyor). --red-soft #ff4d63 / #050505 = 6,30:1
+   (metin disi 3:1 esiginin ustunde), kart #0D0D0D uzerinde 6,01. Offset 3px:
+   kizil dugmenin CEVRESINDE zemine duser, kizil ustune kizil degil. Nokta
+   atisi kurallar ozgullukle ustte kalir. #icerik (atlama hedefi, tabindex=-1)
+   halka tasimaz: etkilesimli degil, odak icerik basina inmis olur. */
+:focus-visible{outline:2px solid var(--red-soft);outline-offset:3px}
+#icerik:focus-visible{outline:none}
+/* TUR 9 E1: atlama baglantisi — ekran disi, odaklaninca gorunur. Beyaz
+   zemin/koyu metin (19,8:1): kizil dolgu kontrast kapisina takilmasin.
+   z-index nav(50) / mobil menu(70) / ajan balonu(121) ustunde. */
+.atla{position:fixed;left:12px;top:-60px;z-index:200;padding:10px 16px;border-radius:999px;
+  background:var(--tx);color:var(--bg);font-weight:600;text-decoration:none;font-size:.9rem}
+.atla:focus-visible{top:12px}
 /* GOVDE TIPOGRAFI KUNYESI (kaynak 198-200): 16,5px / 1,66 / 400.
    Goc 16px / 1,65 yazmisti — olculdu, her kartin yuksekligini ve her
    satirin kirilmasini kaydiriyordu. Aile BILINCLI farkli (Anayasa 1.4:
@@ -91,7 +115,7 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
 .cta{border:1px solid rgba(239,35,60,.4);border-radius:18px;padding:28px;text-align:center;
   background:linear-gradient(180deg,rgba(239,35,60,.09),transparent)}
 .cta p{color:var(--tx2);max-width:56ch;margin:10px auto 20px}
-.dugme{display:inline-block;background:var(--red);color:#fff;text-decoration:none;
+.dugme{display:inline-block;background:var(--red-dolgu);color:#fff;text-decoration:none;
   padding:12px 26px;border-radius:999px;font-weight:600}
 
 /* ============ B2 · DÖNEN IŞIK HUZMESİ KENARLIK (giydirme turu) ============
@@ -130,7 +154,7 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
     #fff 275deg,var(--red-soft) 300deg,transparent 345deg 360deg);
   animation:sus-gaspin 3s linear infinite}
 .dugme.sus-isik::after{content:'';position:absolute;inset:2px;z-index:-1;
-  border-radius:999px;background:var(--red)}
+  border-radius:999px;background:var(--red-dolgu)}
 @keyframes sus-gaspin{to{transform:rotate(360deg)}}
 /* hover ölçeği 1,02 · dokunuş 0,98 · süre ≤200 ms (görev belgesi B2) */
 @media (hover:hover) and (pointer:fine){

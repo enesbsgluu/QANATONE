@@ -71,7 +71,7 @@ html.bitcursor .kb-tip.on{opacity:.9}
   border:1px solid var(--line2);color:var(--tx2);background:none;cursor:pointer;
   font-family:inherit;transition:.24s var(--e)}
 .kb-say .acts button:hover{border-color:var(--red);color:var(--red-soft);background:var(--red-dim)}
-.kb-say .acts button.p{background:var(--red);border-color:var(--red);color:#fff}
+.kb-say .acts button.p{background:var(--red-dolgu);border-color:var(--red-dolgu);color:#fff}
 .kb-say .acts button.q{border-color:transparent;color:var(--tx4);padding-left:4px;padding-right:4px}
 .kb-say .acts button.q:hover{border-color:transparent;background:none;color:var(--tx3)}
 .kb-back{position:fixed;right:20px;bottom:20px;z-index:118;width:38px;height:38px;

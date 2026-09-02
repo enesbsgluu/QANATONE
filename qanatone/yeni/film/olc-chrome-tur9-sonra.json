@@ -1,0 +1,265 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-02T12:58:11.146Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 2012,
+  "lcpEl": "p.sh-lede",
+  "cls": 0.2106,
+  "clsKaynak": [
+   {
+    "t": 16314,
+    "v": 0.0005,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 16393,
+    "v": 0.0031,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 16475,
+    "v": 0.0014,
+    "el": "article.ssz-kart"
+   }
+  ],
+  "inp": 136,
+  "inpHedef": "section.sh-sahne pointerup",
+  "etkilesim": 10,
+  "loaf": 66,
+  "loafToplam": 9027,
+  "loafEnUzun": 846,
+  "loafKaynak": [
+   {
+    "t": 1168,
+    "sure": 846,
+    "engel": 0,
+    "betik": 842,
+    "stilDuzen": 3,
+    "render": 4,
+    "kaynak": []
+   },
+   {
+    "t": 107,
+    "sure": 601,
+    "engel": 156,
+    "betik": 564,
+    "stilDuzen": 36,
+    "render": 37,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/yeni/",
+      "sure": 169
+     }
+    ]
+   },
+   {
+    "t": 3158,
+    "sure": 528,
+    "engel": 0,
+    "betik": 499,
+    "stilDuzen": 5,
+    "render": 29,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 21
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 376,
+   "lcpEl": "p.sh-lede",
+   "cls": 0.0065,
+   "clsKaynak": [
+    {
+     "t": 14193,
+     "v": 0.0009,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 14252,
+     "v": 0.0026,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 14319,
+     "v": 0.0021,
+     "el": "article.ssz-kart"
+    }
+   ],
+   "inp": 104,
+   "inpHedef": "p.sh-lede pointerup",
+   "etkilesim": 10,
+   "loaf": 68,
+   "loafToplam": 6665,
+   "loafEnUzun": 277,
+   "loafKaynak": [
+    {
+     "t": 3684,
+     "sure": 277,
+     "engel": 0,
+     "betik": 251,
+     "stilDuzen": 1,
+     "render": 26,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 24
+      }
+     ]
+    },
+    {
+     "t": 12594,
+     "sure": 252,
+     "engel": 0,
+     "betik": 247,
+     "stilDuzen": 3,
+     "render": 5,
+     "kaynak": []
+    },
+    {
+     "t": 3964,
+     "sure": 240,
+     "engel": 0,
+     "betik": 233,
+     "stilDuzen": 1,
+     "render": 8,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 6
+      }
+     ]
+    }
+   ],
+   "yol": "/yeni/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 316,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 3395,
+     "v": 0.0003,
+     "el": "div.nv-ic"
+    }
+   ],
+   "inp": 88,
+   "inpHedef": "a.pgback keyup",
+   "etkilesim": 8,
+   "loaf": 13,
+   "loafToplam": 1024,
+   "loafEnUzun": 149,
+   "loafKaynak": [
+    {
+     "t": 3749,
+     "sure": 149,
+     "engel": 0,
+     "betik": 147,
+     "stilDuzen": 1,
+     "render": 2,
+     "kaynak": []
+    },
+    {
+     "t": 3463,
+     "sure": 106,
+     "engel": 0,
+     "betik": 103,
+     "stilDuzen": 2,
+     "render": 4,
+     "kaynak": []
+    },
+    {
+     "t": 3571,
+     "sure": 97,
+     "engel": 0,
+     "betik": 87,
+     "stilDuzen": 9,
+     "render": 10,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/hizmetler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 356,
+   "lcpEl": "h1",
+   "cls": 0.0017,
+   "clsKaynak": [
+    {
+     "t": 9065,
+     "v": 0.0017,
+     "el": "span.mkrk"
+    }
+   ],
+   "inp": 96,
+   "inpHedef": "#hizmetdetay pointerdown",
+   "etkilesim": 10,
+   "loaf": 61,
+   "loafToplam": 6440,
+   "loafEnUzun": 283,
+   "loafKaynak": [
+    {
+     "t": 11883,
+     "sure": 283,
+     "engel": 0,
+     "betik": 274,
+     "stilDuzen": 5,
+     "render": 9,
+     "kaynak": []
+    },
+    {
+     "t": 10862,
+     "sure": 263,
+     "engel": 0,
+     "betik": 245,
+     "stilDuzen": 16,
+     "render": 18,
+     "kaynak": []
+    },
+    {
+     "t": 11241,
+     "sure": 210,
+     "engel": 0,
+     "betik": 201,
+     "stilDuzen": 5,
+     "render": 9,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/hizmetler/finans/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

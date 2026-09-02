@@ -1758,7 +1758,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (!/class="pgback"/.test(h)) kusur.push(rota + ':pgback-yok');
     if (!/class="mono"/.test(h)) kusur.push(rota + ':kunye-seridi-yok');
     if (!/class="cnt"/.test(h)) kusur.push(rota + ':sayac-yok');
-    if (!/<main class="genis"/.test(h)) kusur.push(rota + ':govde-sutunu-dar');
+    if (!/<main[^>]*\bclass="genis"/.test(h)) kusur.push(rota + ':govde-sutunu-dar');
   }
   ol('R10 · /hizmetler: dokuz bento karti + kunye + tek vurgulu kart',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
@@ -1780,7 +1780,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const h = oku(p), r = rel(p);
     if (!/class="pgback"/.test(h)) kusur.push(r + ':pgback-yok');
     if (!/class="mono"/.test(h)) kusur.push(r + ':kunye-yok');
-    if (!/<main class="genis"/.test(h)) kusur.push(r + ':govde-sutunu-dar');
+    if (!/<main[^>]*\bclass="genis"/.test(h)) kusur.push(r + ':govde-sutunu-dar');
     const xc = (h.match(/<details class="xc"/g) || []).length;
     if (xc !== 6) kusur.push(r + ':genisleyen-kart=' + xc);
     /* Sinif GOVDESINDE aranir, tam esitlikle degil: kap `sdsec sdhits`

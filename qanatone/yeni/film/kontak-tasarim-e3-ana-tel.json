@@ -1,0 +1,210 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T12:56:08.451Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 390,
+ "yukseklik": 844,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 0.12,
+   "farkliPiksel": 396,
+   "toplamPiksel": 329160,
+   "bolge": "satir 8/8 sutun 4/8 (x 146-195, y 739-844; hucrede 121 px, tum farkin %31)",
+   "md5": {
+    "once": "23b73df48824486f9fb56896adeb2c3e",
+    "sonra": "a4fafd7aaffe6257b23a6e78b746e3e0"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/e3-ana-tel-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/e3-ana-tel-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/e3-ana-tel-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 60,
+   "farkYuzde": 0,
+   "farkliPiksel": 0,
+   "toplamPiksel": 329160,
+   "bolge": "fark yok",
+   "md5": {
+    "once": "0d8a240742c7eaec7118bd4d3ce226fd",
+    "sonra": "971105f9b0ca96b2debc99a3ae34d876"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 9199,
+     "sonra": 9199
+    },
+    "gercek": {
+     "once": 9199,
+     "sonra": 9199
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/e3-ana-tel-once-60.png",
+    "sonra": "yeni/film/kontak-tur9/e3-ana-tel-sonra-60.png",
+    "yanyana": "yeni/film/kontak-tur9/e3-ana-tel-yanyana-60.png"
+   }
+  },
+  {
+   "konum": 100,
+   "farkYuzde": 2.6,
+   "farkliPiksel": 8556,
+   "toplamPiksel": 329160,
+   "bolge": "satir 2/8 sutun 6/8 (x 244-293, y 106-211; hucrede 2151 px, tum farkin %25)",
+   "md5": {
+    "once": "042ddbf09a401d83d650227a8491c24b",
+    "sonra": "e10f040bdf8012b6244bcfff6c5b9cac"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 15332,
+     "sonra": 15332
+    },
+    "gercek": {
+     "once": 15816,
+     "sonra": 15816
+    }
+   },
+   "sapma": {
+    "once": 484,
+    "sonra": 484
+   },
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/e3-ana-tel-once-100.png",
+    "sonra": "yeni/film/kontak-tur9/e3-ana-tel-sonra-100.png",
+    "yanyana": "yeni/film/kontak-tur9/e3-ana-tel-yanyana-100.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8791/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 87,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 81,
+   "video": 0
+  },
+  "scrollHeight": 16176,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "23b73df48824486f9fb56896adeb2c3e",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   },
+   {
+    "konum": 60,
+    "hedef": 9199,
+    "gercek": 9199,
+    "sapma": 0,
+    "md5": "0d8a240742c7eaec7118bd4d3ce226fd",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-once-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   },
+   {
+    "konum": 100,
+    "hedef": 15332,
+    "gercek": 15816,
+    "sapma": 484,
+    "md5": "042ddbf09a401d83d650227a8491c24b",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-once-100.png",
+    "raf": "raf",
+    "animasyonSonradan": 88
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 82,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 76,
+   "video": 0
+  },
+  "scrollHeight": 16176,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "a4fafd7aaffe6257b23a6e78b746e3e0",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   },
+   {
+    "konum": 60,
+    "hedef": 9199,
+    "gercek": 9199,
+    "sapma": 0,
+    "md5": "971105f9b0ca96b2debc99a3ae34d876",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-sonra-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   },
+   {
+    "konum": 100,
+    "hedef": 15332,
+    "gercek": 15816,
+    "sapma": 484,
+    "md5": "e10f040bdf8012b6244bcfff6c5b9cac",
+    "png": "yeni/film/kontak-tur9/e3-ana-tel-sonra-100.png",
+    "raf": "raf",
+    "animasyonSonradan": 88
+   }
+  ]
+ }
+}
