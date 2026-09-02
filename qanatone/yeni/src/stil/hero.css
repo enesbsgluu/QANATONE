@@ -192,30 +192,10 @@ html.t-notubes .sus-tubes{display:none!important}
 .sh-void span{position:relative;z-index:1}
 
 /* --- kenarda dolasan kirmizi isik ---
-   Donen koni gradyani, maske farkiyla yalniz 2px'lik kenar bandina
-   kirpiliyor. Tur suresi TEK yerde (--sh-halka-spd): eskiden bolenle
-   ikinci bir oran vardi ve ayrisiyordu.                              */
-.sus-halka{--sh-halka-spd:3.6s;--sh-halka-kuyruk:56%;
-  position:absolute;inset:-1px;border-radius:999px;padding:2px;
-  pointer-events:none;z-index:0;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  mask-composite:exclude;
-  filter:drop-shadow(0 0 7px rgba(239,35,60,.7));transition:filter .34s var(--e)}
-.sus-halka::before{content:'';position:absolute;left:50%;top:50%;
-  width:260%;aspect-ratio:1;transform:translate(-50%,-50%);
-  background:conic-gradient(from 0deg,
-    transparent 0 calc(100% - var(--sh-halka-kuyruk)),
-    rgba(239,35,60,.30) calc(100% - var(--sh-halka-kuyruk)*.72),
-    rgba(255,77,99,.88) calc(100% - var(--sh-halka-kuyruk)*.34),
-    #ffe6ea calc(100% - var(--sh-halka-kuyruk)*.15),
-    rgba(255,77,99,.85) calc(100% - var(--sh-halka-kuyruk)*.04),
-    transparent 100%);
-  animation:sh-halka var(--sh-halka-spd) linear infinite}
-@keyframes sh-halka{
-  from{transform:translate(-50%,-50%) rotate(0turn)}
-  to{transform:translate(-50%,-50%) rotate(1turn)}}
+   TUR 9 T2 (3 Eyl 2026): .sus-halka govdesi temel.css'e TASINDI (tek
+   uygulama; film ile ayni kopyaydi, bekci film-halka.test.mjs). Burada
+   yalniz hero'ya ozgu hover parlatisi kaldi. Degiskenler --halka-* (kaynak
+   .void .ring: --ring-w/spd/tail/glow). */
 /* Ayni gerekce: dokunmatikte takilan hover, halkanin filtresini 7 px'ten
    12 px'e cikarip orada birakiyordu — donen bir elemanda kare basina
    filtre demek. Halkanin TABAN filtresi (7 px) hala kapisiz ve mobilde
@@ -223,9 +203,6 @@ html.t-notubes .sus-tubes{display:none!important}
 @media(hover:hover) and (pointer:fine){
   .sh-void:hover .sus-halka{filter:drop-shadow(0 0 12px rgba(239,35,60,.95))}
 }
-/* maske farki desteklenmiyorsa halkayi hic gosterme — yoksa dugmeyi doldurur */
-@supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
-  .sus-halka{display:none}}
 
 .sh-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
   padding:14px 26px;border-radius:999px;font-size:.92rem;font-weight:600;
@@ -336,5 +313,5 @@ html.t-notubes .sus-tubes{display:none!important}
   .sus-suzul::before,.sus-suzul::after{animation:none;opacity:1}
   .sh-l i,.sh-lede,.sh-cta,.sh-meta{animation:none}
   .sus-kaydir{animation:none;opacity:1}
-  .sus-halka::before,.sus-kaydir i::after{animation:none}
+  .sus-kaydir i::after{animation:none} /* .sus-halka reduce kurali temel.css'te */
 }

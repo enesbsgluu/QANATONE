@@ -107,55 +107,17 @@ main:has(> .fl) { max-width: none; padding: 0; }
 
 /* ---- DONEN CIZGI: PROLOGU GEC (Enes, 31 Agu gece) ----
    KAYNAK: eski site `.void .ring` (index.html ~502-557) — "kenarda
-   dolasan kirmizi isik": donen koni gradyani, maske farkiyla kenar
-   bandina kirpilir. BIREBIR AYNI DIL: kalinlik 2px (--t-ring-w yedegi) ·
-   tur 3.6s linear infinite (--t-ring-spd) · kuyruk 56% (--t-ring-tail) ·
-   conic duraklari ayni. BEKCI: yeni/test/film-halka.test.mjs iki kaynagi
-   YAN YANA okur, ayrisirsa kirmizi — sayilar burada elle durur ama
-   sessizce eskiyemez.
-   BILINCLI SAPMA (tek): drop-shadow parilti katmani ALINMADI — kaynagin
-   KENDI lowfx kipi de ayni gerekceyle filter'i kaldiriyor ("pahali olan
-   parilti, her karede yeniden boyama"); film sayfasi video scrub'li +
-   H14 filter yasagi + dusen kare 0 kapisi. Donen sey sozde-elemanin
-   TRANSFORM'u: kompozitor katmaninda kosar, JS kare dongusu ACMAZ. */
+   dolasan kirmizi isik". TUR 9 T2 (3 Eyl 2026): govde temel.css
+   `.sus-halka`ya TASINDI (tek uygulama; hero ile ayni kopyaydi). Film
+   markup'i `sus-halka duz` kullanir: `.duz` = parilti YOK (bilincli sapma:
+   kaynagin KENDI lowfx kipi de ayni gerekceyle filter'i kaldiriyor — pahali
+   olan parilti, her karede yeniden boyama; video scrub + H14 filter yasagi
+   + dusen kare 0 kapisi) + will-change katmani (GECE TUR 1 olcumu: maskeli
+   parentin donen cocugu katmana ayrilmayinca 1,5 sn'de 1-2 kez 25 ms+
+   bosluk). Sayilar (2px · 3.6s · %56 · duraklar) temel.css'te tek yerde,
+   bekci film-halka.test.mjs kaynakla kiyaslar. */
 .fl-gec { position: relative; }
 .fl-gec span { position: relative; z-index: 1; }
-.fl-halka {
-  position: absolute; inset: -1px; border-radius: 999px; padding: 2px;
-  pointer-events: none; z-index: 0;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
-.fl-halka::before {
-  content: ''; position: absolute; left: 50%; top: 50%;
-  /* GECE TUR 1 (olculdu): maskeli parentin donen cocugu kompozit katmana
-     ayrilmayinca donus her kare ana-thread'e ugruyor, statik sahnede bile
-     1,5 sn'de 1-2 kez 25 ms+ bosluk. will-change katmani sabitler —
-     surekli animasyonda katman zaten kalici, H14'un yasakladigi bosta
-     katman zorlamasi degil (alan ~%0,3 ekran). */
-  will-change: transform;
-  width: 260%; aspect-ratio: 1; transform: translate(-50%, -50%);
-  background: conic-gradient(from 0deg,
-    transparent 0 calc(100% - 56%),
-    rgba(239, 35, 60, .30) calc(100% - 56% * .72),
-    rgba(255, 77, 99, .88) calc(100% - 56% * .34),
-    #ffe6ea calc(100% - 56% * .15),
-    rgba(255, 77, 99, .85) calc(100% - 56% * .04),
-    transparent 100%);
-  animation: fl-halka-don 3.6s linear infinite;
-}
-@keyframes fl-halka-don {
-  from { transform: translate(-50%, -50%) rotate(0turn); }
-  to { transform: translate(-50%, -50%) rotate(1turn); }
-}
-/* maske farki desteklenmiyorsa halka hic gorunmez (kaynaktaki kural) */
-@supports not ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
-  .fl-halka { display: none; }
-}
-/* hareket azaltma: cizgi DURUR (statik kivilcim gorunur), dugme gorunur kalir */
-@media (prefers-reduced-motion: reduce) { .fl-halka::before { animation: none; } }
 /* motorsuz yolda PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider */
 html:not(.fl-js) .fl-kumanda { position: sticky; top: 12px; bottom: auto; justify-content: flex-end; }
 

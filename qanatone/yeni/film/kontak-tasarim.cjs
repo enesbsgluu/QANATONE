@@ -131,6 +131,9 @@ const dondur = (page) => page.evaluate(() => {
 
 async function agacCek(browser, kok, etiketAd, boz) {
   const page = await browser.newPage();
+  /* onbellek kapali: yerel-sun ETag ile 304 donduruyordu ve 304 "200 degil"
+     diye kiyas duruyordu (3 Eyl, /yeni/film/ ikinci cekim). Her cekim taze. */
+  await page.setCacheEnabled(false);
   await page.setViewport({ width: GENISLIK, height: YUKSEKLIK, deviceScaleFactor: 1 });
   await page.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {} });
   const url = kok + SAYFA;

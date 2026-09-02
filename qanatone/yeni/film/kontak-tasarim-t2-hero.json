@@ -1,0 +1,156 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T13:04:47.995Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 0.25,
+   "farkliPiksel": 3303,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 1/8 sutun 7/8 (x 1080-1260, y 0-113; hucrede 2079 px, tum farkin %63)",
+   "md5": {
+    "once": "6bbd84ad1f6dd512a160d1ccd8796391",
+    "sonra": "5fb9bac2f159c1667e9df89765299e7d"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-hero-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t2-hero-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-hero-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 3,
+   "farkYuzde": 0.25,
+   "farkliPiksel": 3303,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 1/8 sutun 7/8 (x 1080-1260, y 0-113; hucrede 2079 px, tum farkin %63)",
+   "md5": {
+    "once": "6b2e483cb7b15593e0da3f330bba5242",
+    "sonra": "4cf041a02b58bff5bda4444bc9c706ca"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 477,
+     "sonra": 477
+    },
+    "gercek": {
+     "once": 477,
+     "sonra": 477
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-hero-once-3.png",
+    "sonra": "yeni/film/kontak-tur9/t2-hero-sonra-3.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-hero-yanyana-3.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8791/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 91,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 84,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "6bbd84ad1f6dd512a160d1ccd8796391",
+    "png": "yeni/film/kontak-tur9/t2-hero-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 3,
+    "hedef": 477,
+    "gercek": 477,
+    "sapma": 0,
+    "md5": "6b2e483cb7b15593e0da3f330bba5242",
+    "png": "yeni/film/kontak-tur9/t2-hero-once-3.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 88,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 81,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "5fb9bac2f159c1667e9df89765299e7d",
+    "png": "yeni/film/kontak-tur9/t2-hero-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 3,
+    "hedef": 477,
+    "gercek": 477,
+    "sapma": 0,
+    "md5": "4cf041a02b58bff5bda4444bc9c706ca",
+    "png": "yeni/film/kontak-tur9/t2-hero-sonra-3.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   }
+  ]
+ }
+}
