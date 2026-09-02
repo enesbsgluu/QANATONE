@@ -285,10 +285,14 @@
 @media (prefers-reduced-motion: reduce){
   .akpg,.akcta,.aksend,.akdone,.akcur,
   .akm2,.akpr,.aktr b,.aktr u,
-  .akjob,.akjob i,.akjob b,.akjob b::after,.aksum,
+  .akjob,.akjob::before,.akjob i,.akjob b,.akjob b::before,.akjob b::after,.aksum,
   .aktr2,.akdm{animation:none}
   .aksum{opacity:1;transform:none}
-  .akjob i{transform:translateX(1.4cqw);color:var(--tx)}
+  /* sadakat(D) 3 Eyl: gece zinciri tur 1 akJobOn/akTickOn'u ::before katmanina
+     tasidi, durduran liste eski seciciyle kalmisti (olc-surucu H11 kirmizi:
+     /hizmetler/otomasyon 8 animasyon). Son hal: acik katman gorunur. */
+  .akjob::before,.akjob b::before{opacity:1}
+  .akjob i{transform:translateX(1.4cqw);color:var(--tx);opacity:1}
   .akjob b{background:var(--red);border-color:var(--red)}
   .akjob b::after{transform:rotate(-45deg) scale(1)}
   .aktr b{transform:scaleX(.78)}

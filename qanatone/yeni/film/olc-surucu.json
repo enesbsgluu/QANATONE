@@ -1,31 +1,836 @@
 {
- "_": "yeni/film/olc-surucu.cjs — surucu kapisi: bolum gorununce oynayan sonlu DocumentTimeline animasyonu = kirmizi; view/scroll timeline serbest; sonsuz dongu ayri (sus).",
- "olcum": "2026-09-02T00:42:55.776Z",
+ "_": "yeni/film/olc-surucu.cjs — surucu kapisi (3 Eyl 2026 kurali): demo koku kadraj disinda paused, kadrajda running + sonsuz dongu, cikinca paused, ViewTimeline/ScrollTimeline yok; reduced-motion altinda kosan 0.",
+ "olcum": "2026-09-02T21:53:34.642Z",
+ "kokler": ".sa-kart, .hd-demo, .tsa, .akis3",
  "kirmizi_kontrol": {
-  "yakalandi": true
+  "yol": "/yeni/",
+  "disarida": true,
+  "cizelge": true
  },
  "hukum": "GECTI",
- "istisnalar": {
-  "sus-gaspin": "dugme huzmesi — saf dekor, gec dugmesi halkasiyla ayni sinif"
- },
  "sayfa": [
   {
-   "yol": "/yeni/hizmet/web-sitesi-araclar/",
-   "bolum": 6,
+   "yol": "/yeni/",
+   "kok": 6,
    "kirmizi": [],
-   "dongu": [],
-   "kaydirma": 19,
-   "acilis": 1,
-   "acilisListe": [
+   "kokler": [
     {
-     "anim": "sus-gaspin",
-     "hedef": "a.dugme::before",
-     "sonsuz": true
+     "kok": "a.sa-kart",
+     "anim": 4,
+     "dongu": 4,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akDown",
+      "akUp"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 3,
+     "dongu": 3,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akIn"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 8,
+     "dongu": 8,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akCaret",
+      "akType",
+      "akRise"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 7,
+     "dongu": 7,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akChip",
+      "akFeed",
+      "akSpon",
+      "akRise"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 7,
+     "dongu": 7,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akBlink",
+      "akPk",
+      "akPulse",
+      "akStep"
+     ]
+    },
+    {
+     "kok": "a.sa-kart.sa-tum",
+     "anim": 0,
+     "dongu": 0,
+     "kirmizi": [],
+     "not": [
+      "animasyonsuz kok"
+     ],
+     "adlar": []
     }
    ],
-   "istisna": {
-    "sus-gaspin": "dugme huzmesi — saf dekor, gec dugmesi halkasiyla ayni sinif"
-   }
+   "reduced": [
+    {
+     "kok": "a.sa-kart",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.sa-tum",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/bulten/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/donusum-oranlari-sektor-sektor/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/google-ads-maliyetleri-2026/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/talebe-bes-dakikada-donmek/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/",
+   "kok": 6,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "a.sa-kart",
+     "anim": 4,
+     "dongu": 4,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akDown",
+      "akUp"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 3,
+     "dongu": 3,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akIn"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 8,
+     "dongu": 8,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akCaret",
+      "akType",
+      "akRise"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 7,
+     "dongu": 7,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akChip",
+      "akFeed",
+      "akSpon",
+      "akRise"
+     ]
+    },
+    {
+     "kok": "a.sa-kart",
+     "anim": 7,
+     "dongu": 7,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akBlink",
+      "akPk",
+      "akPulse",
+      "akStep"
+     ]
+    },
+    {
+     "kok": "a.sa-kart.sa-tum",
+     "anim": 0,
+     "dongu": 0,
+     "kirmizi": [],
+     "not": [
+      "animasyonsuz kok"
+     ],
+     "adlar": []
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "a.sa-kart",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "a.sa-kart.sa-tum",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/bulten/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/donusum-oranlari-sektor-sektor/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/google-ads-maliyetleri-2026/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/talebe-bes-dakikada-donmek/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/ai-ajan/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/finans/",
+   "kok": 2,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 6,
+     "dongu": 6,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akRise"
+     ]
+    },
+    {
+     "kok": "div.tsa",
+     "anim": 2,
+     "dongu": 2,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "amCCW",
+      "amCW"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "div.tsa",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/hizmetler/geo/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/google-ads/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/meta-ads/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/otomasyon/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 17,
+     "dongu": 17,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akJobOn",
+      "akJobT",
+      "akTickOn",
+      "akTickIn",
+      "akRise"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/hizmetler/seo/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/hizmetler/web-sitesi-araclar/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 4,
+     "dongu": 4,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akCount",
+      "akFill",
+      "akKnob",
+      "akPrIn"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/hizmetler/web-tasarim/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 5,
+     "dongu": 5,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akScroll",
+      "akCta",
+      "akSend",
+      "akCur",
+      "akDone"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/otomasyon/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.akis3.akoynar",
+     "anim": 19,
+     "dongu": 18,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "fyt-giris",
+      "hp-dalga",
+      "ak-iz",
+      "brainPulse",
+      "fsp-dalga"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.akis3.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/en/projeler/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/bab-ic-mimarlik/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/charles-schwab/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/cmblu-energy/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/kononenko-group/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/mercedes-benz/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/skyclinics/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/projeler/terawulf/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/sss/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/en/surec/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/ai-ajan/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/finans/",
+   "kok": 2,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 6,
+     "dongu": 6,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akRise"
+     ]
+    },
+    {
+     "kok": "div.tsa",
+     "anim": 2,
+     "dongu": 2,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "amCCW",
+      "amCW"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    },
+    {
+     "kok": "div.tsa",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/hizmetler/geo/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/google-ads/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/meta-ads/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/otomasyon/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 17,
+     "dongu": 17,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akJobOn",
+      "akJobT",
+      "akTickOn",
+      "akTickIn",
+      "akRise"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/hizmetler/seo/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/hizmetler/web-sitesi-araclar/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 4,
+     "dongu": 4,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akCount",
+      "akFill",
+      "akKnob",
+      "akPrIn"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/hizmetler/web-tasarim/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "anim": 5,
+     "dongu": 5,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "akScroll",
+      "akCta",
+      "akSend",
+      "akCur",
+      "akDone"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.hd-demo.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/hukuki/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/otomasyon/",
+   "kok": 1,
+   "kirmizi": [],
+   "kokler": [
+    {
+     "kok": "div.akis3.akoynar",
+     "anim": 19,
+     "dongu": 18,
+     "kirmizi": [],
+     "not": [],
+     "adlar": [
+      "fyt-giris",
+      "hp-dalga",
+      "ak-iz",
+      "brainPulse",
+      "fsp-dalga"
+     ]
+    }
+   ],
+   "reduced": [
+    {
+     "kok": "div.akis3.akoynar",
+     "kirmizi": []
+    }
+   ]
+  },
+  {
+   "yol": "/yeni/projeler/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/bab-ic-mimarlik/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/charles-schwab/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/cmblu-energy/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/kononenko-group/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/mercedes-benz/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/skyclinics/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/projeler/terawulf/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/sss/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
+  },
+  {
+   "yol": "/yeni/surec/",
+   "kok": 0,
+   "kirmizi": [],
+   "kokler": [],
+   "reduced": []
   }
  ]
 }
