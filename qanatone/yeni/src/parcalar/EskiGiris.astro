@@ -48,6 +48,10 @@ const stil = stilM[1]
      bayt tasiyorlar (kunye kaynakta kalir, ciktiya girmez ilkesi). */
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/url\((['"]?)img\//g, 'url($1/img/')
+  /* TUR 4 (2 Eyl 2026): eski sitenin kalici will-change'leri (#boot.out, .hand,
+     .hfloat, .mktrack, .qttrack) gomuye tasinmaz — gomude eski JS calismaz,
+     bu katmanlar statiktir; kalici will-change sizintisi 0 kapisi. */
+  .replace(/will-change:[^;}]+;?/g, '')
   .replace(/:root\b/g, ':host')
   .replace(/\bhtml,body\b/g, ':host')
   .replace(/(^|\})\s*body\b/g, '$1 :host')

@@ -253,6 +253,12 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
   /* ---- bölüm aralığı: kaynağın `.sdsec`i (624-625) ---- */
   .sdsec { margin-top: clamp(44px, 6vw, 72px); }
+  /* GECE ZINCIRI TUR 4 (2 Eyl 2026) — ELENEN HIPOTEZ: `.sdsec:not(.mk-kap)
+     { content-visibility: auto }` denendi ve GERI ALINDI. Olcum (finans,
+     3 kosum): ilk kare stil+duzen 150 -> 149 ms (kazanc yok; Chrome ilk
+     karede auto alt agaclarini atlamiyor), CLS ayni; buna karsilik ilk Tab
+     tusu 44 -> 52 ms (klavye odak gezintisi kilitli alt agaclari zorla
+     yerlestiriyor). Kazanci olmayan degisken tasinmaz. TUR4-CHROME-DENETIM.md */
   @media (max-width: 760px) { .sdsec { margin-top: clamp(36px, 9vw, 52px); } }
 
   /* ---- ÜÇ VURUŞ (891-896) ---- */

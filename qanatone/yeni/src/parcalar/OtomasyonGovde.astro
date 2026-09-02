@@ -508,6 +508,9 @@ const TELI = [0, 1, 2, 3];
   .ust-etiket { color: var(--tx3); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok { margin-top: 46px; }
+  /* TUR 4 (2 Eyl 2026) — ELENEN HIPOTEZ: `.blok:not(.szstage)
+     { content-visibility: auto }` denendi, ilk kare 131 -> 132 ms (kazanc
+     yok), geri alindi. Gerekce HizmetGovde.astro'da. */
   .kicker { color: var(--red-soft); font-family:var(--f-tek);
     font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
   .blok h2 { font-size: 1.35rem; margin: 0 0 10px; }

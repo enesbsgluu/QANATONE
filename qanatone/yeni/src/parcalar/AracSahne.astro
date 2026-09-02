@@ -610,46 +610,51 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
       ['.tlbar', 'fx3a', 'fy3a'], ['.tlst[data-k="2"]', 'fx3b', 'fy3b'],
       ['.tlst[data-k="3"]', 'fx3c', 'fy3c'],
     ];
+    /* TUR 4 (2 Eyl 2026): YAZ → OKU → YAZ, TEK YERLEŞİM. Önceki döngü her
+       hedef için yaz-oku yapıyordu (11 hedef × zorunlu yerleşim + araya
+       kap değişkeni yazımı = her çağrı 145 ms sıcak, 211 ms soğuk; CDP
+       profil r@satır içi). Şimdi bütün hedefler önce tamamlanmış kadraja
+       alınır, bütün kutular tek yerleşimle okunur, sonra geri alınıp
+       değişkenler yazılır. Kurulumda üç çağrı (hemen + fonts.ready +
+       ResizeObserver'ın ilk bildirimi) tek çağrıya indi. */
     const olc = () => {
       if (!sabit || !view || !sayfa) return;
-      const rv = view.getBoundingClientRect();
-      if (rv.width < 40) return;
-      /* y SAYFA UZAYINDA ölçülür: hedef ile .stpage aynı ötelemeyi yediği
-         için fark ilerlemeden BAĞIMSIZDIR (eski sürüm görüntü kutusuna
-         göre ölçüp öteleme geri ekliyordu; sürücü tüketiciye dağıtılınca
-         o varsayım çöktü ve fare 787 px kaydı — ölçüm yakaladı). */
-      const rp = sayfa.getBoundingClientRect();
+      const hedef: { el: HTMLElement; ax: string | null; ay: string; onceki: string }[] = [];
       for (const [sec, ax, ay] of HEDEF) {
         const el = kap.querySelector(sec) as HTMLElement | null;
-        if (!el) continue;
-        /* hedefi TAMAMLANMIŞ kadrajında oku: fiyat kutusunun genişliği ve
-           giriş ötelemeleri (gün 3px, saat 4px, onay 5px) ilerlemeye bağlı;
-           imleç oraya zaten yerleşmiş hâlinde varır */
-        const onceki = el.style.cssText;
-        el.style.animation = 'none';
-        el.style.setProperty('--stp', '1');
-        const r = el.getBoundingClientRect();
-        if (r.width || r.height) {
-          if (ax) kap.style.setProperty('--' + ax, (r.left - rv.left + r.width * .5).toFixed(2));
-          kap.style.setProperty('--' + ay, (r.top - rp.top + r.height * .5).toFixed(2));
-        }
-        el.style.cssText = onceki;
+        if (el) hedef.push({ el, ax, ay, onceki: el.style.cssText });
       }
+      /* 1) yaz: hedefler TAMAMLANMIŞ kadrajına (fiyat kutusunun genişliği ve
+         giriş ötelemeleri ilerlemeye bağlı; imleç oraya yerleşmiş hâlinde varır) */
+      for (const h of hedef) { h.el.style.animation = 'none'; h.el.style.setProperty('--stp', '1'); }
+      /* 2) oku: tek yerleşim. y SAYFA UZAYINDA ölçülür: hedef ile .stpage aynı
+         ötelemeyi yediği için fark ilerlemeden BAĞIMSIZDIR (eski sürüm görüntü
+         kutusuna göre ölçüp öteleme geri ekliyordu; sürücü tüketiciye
+         dağıtılınca o varsayım çöktü ve fare 787 px kaydı — ölçüm yakaladı). */
+      const rv = view.getBoundingClientRect();
+      const rp = sayfa.getBoundingClientRect();
+      const kutu = hedef.map((h) => h.el.getBoundingClientRect());
       const rng = kap.querySelector('.tlrng') as HTMLElement | null;
-      if (rng) {
-        const rr = rng.getBoundingClientRect();
-        kap.style.setProperty('--frx', (rr.left - rv.left).toFixed(2));
-        kap.style.setProperty('--frw', rr.width.toFixed(2));
-      }
-      kap.style.setProperty('--fmx', String(sayfa.scrollHeight - view.clientHeight));
-      kap.style.setProperty('--fvh', String(view.clientHeight));
-      kap.style.setProperty('--sth', sabit.offsetHeight + 'px');
+      const rr = rng ? rng.getBoundingClientRect() : null;
+      const fmx = sayfa.scrollHeight - view.clientHeight, fvh = view.clientHeight, sth = sabit.offsetHeight;
+      /* 3) geri al + yaz */
+      for (const h of hedef) h.el.style.cssText = h.onceki;
+      if (rv.width < 40) return;
+      hedef.forEach((h, i) => {
+        const r = kutu[i]; if (!(r.width || r.height)) return;
+        if (h.ax) kap.style.setProperty('--' + h.ax, (r.left - rv.left + r.width * .5).toFixed(2));
+        kap.style.setProperty('--' + h.ay, (r.top - rp.top + r.height * .5).toFixed(2));
+      });
+      if (rr) { kap.style.setProperty('--frx', (rr.left - rv.left).toFixed(2)); kap.style.setProperty('--frw', rr.width.toFixed(2)); }
+      kap.style.setProperty('--fmx', String(fmx));
+      kap.style.setProperty('--fvh', String(fvh));
+      kap.style.setProperty('--sth', sth + 'px');
       kap.style.setProperty('--folc', '1');
     };
     let zm: ReturnType<typeof setTimeout>;
     addEventListener('resize', () => { clearTimeout(zm); zm = setTimeout(olc, 180); });
-    document.fonts?.ready?.then(olc);
-    if ('ResizeObserver' in window) new ResizeObserver(olc).observe(sabit);
-    olc();
+    if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(olc);
+    if ('ResizeObserver' in window) new ResizeObserver(olc).observe(sabit); /* ilk bildirim kurulumdur */
+    else olc();
   }
 </script>
