@@ -63,12 +63,13 @@
    eski destenin ölçüsü (kaynak `.deck{max-width:1120px}`). Sahnenin
    dolgusu YAZILMIYOR — `.ana section{padding:11vh 0}` yürürlükte
    kalsın diye (H10'un konusu olan çakışma bu sahnede hiç doğmuyor). */
-.sp-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
-.sp-giris{margin-bottom:clamp(40px,5vw,66px)}
-/* künye kaynak biçimi (kök 366-367): 26px kızıl çizgi + mono metin —
-   sadakat denetimi 21 Ağu, anlatı sayacı ("04") kaynakta yoktu */
-.sp-kunye::before{content:'';display:inline-block;width:26px;height:1px;
-  background:var(--red);vertical-align:middle;margin-right:10px}
+/* SADAKAT (3 Eyl 2026): kabin kaynak `.wrap` (1280 − gut = 1200), deste
+   icinde `.deck{max-width:1120px}` (1157) — onceki 1120'lik kabin karti
+   1040'a sikistiriyordu (olculdu: .dk 1120 <-> .sp-kart 1040). Etiket
+   cizgisi artik ana.css `.kunye::before` (tek kaynak). */
+.sp-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.sp-giris{margin-bottom:clamp(40px,5vw,66px);max-width:920px}
+.sp-deste{max-width:1120px;margin:0 auto}
 .sp-sayi{font-family:var(--f-tek);font-size:.9rem;color:var(--tx4);
   vertical-align:super;margin-left:10px;letter-spacing:0}
 
@@ -117,7 +118,8 @@
    yüzden aynı okunurluk opaklıkla kuruluyor. Rozetin görselin kendi
    yazısıyla ÇAKIŞMASI ayrı bir kalem — canlı sitede de var, raporda
    Enes'e açık soru olarak duruyor. */
-.sp-yil{position:absolute;z-index:2;top:12px;left:12px;font-family:var(--f-tek);
+/* SADAKAT (3 Eyl): kaynakta rozet markup'ta var (dkimg .yr) ama gorselin ALTINDA kaliyor (img z-index 1, rozet z-index'siz) — canlida GORUNMUYOR. Gorunen sonuc esas: gizli; acmak Enes karari. */
+.sp-yil{display:none;position:absolute;z-index:2;top:12px;left:12px;font-family:var(--f-tek);
   font-size:10px;letter-spacing:.16em;padding:7px 13px;border-radius:999px;
   background:rgba(5,5,5,.86);border:1px solid var(--line2);color:var(--tx2)}
 
@@ -130,10 +132,10 @@
              radial-gradient(66% 64% at 30% 8%,var(--g2,rgba(239,35,60,.12)),transparent 72%)}
 .sp-yazi>*{position:relative;z-index:1}
 .sp-no{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;color:var(--tx4);
-  margin-bottom:12px;display:flex;align-items:center;gap:12px}
+  margin-bottom:18px;display:flex;align-items:center;gap:12px} /* kaynak .dknum 1222: 18px */
 .sp-no::after{content:'';flex:1;height:1px;background:var(--line)}
 .sp-etiket{font-size:.82rem;font-weight:500;color:var(--red);margin-bottom:12px}
-.sp-yazi h3{font-size:1.42rem;margin-bottom:9px;letter-spacing:-.02em}
+.sp-yazi h3{font-size:1.42rem;margin-bottom:9px;letter-spacing:-.045em} /* kaynak h1-h5 -.045em (olculdu: .dk h3 -1.728px @38.4) */
 .sp-yazi p{font-size:.9rem;color:var(--tx2);line-height:1.58;font-weight:300;
   margin-bottom:15px;max-width:50ch;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}

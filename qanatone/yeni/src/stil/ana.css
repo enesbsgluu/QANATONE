@@ -12,26 +12,27 @@
    .sh-ic) — main'de kalsaydi tam genislikli sahne yine kirpilirdi. */
 body:has(.ana) main{max-width:none;padding:0}
 .ana{font-family:var(--f-govde)}
-.ana h1,.ana h2{font-family:var(--f-baslik);font-weight:500}
+/* SADAKAT TURU (3 Eyl 2026, Enes: "eski düzen, yeni mimari"). Ortak ölçek
+   eski kaynaktan (kök index.html): h2 700 (kaynak h1-h5 700; buradaki 500
+   giydirme sapmasıydı — T12), bölüm dolgusu `section{padding:clamp(66px,
+   8.6vw,122px) 0}` (kaynak 337), etiket `.shead .mono` (kaynak 181, 339-340),
+   h2 `.shead h2` (341), lede `.shead p` (344). Ölçüm: olc-tipografi.cjs,
+   yan yana kare kontak-tur9/sadakat-bolum-*. Hero h1 dokunulmaz (Anayasa 3). */
+.ana h1,.ana h2{font-family:var(--f-baslik)}
+.ana h1{font-weight:500}
+.ana h2{font-weight:700}
 .ana .tek{font-family:var(--f-tek)}
-.ana section{margin-bottom:0;padding:11vh 0}
+.ana section{margin-bottom:0;padding:clamp(66px,8.6vw,122px) 0}
 .ana .icgen{max-width:840px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
 
 /* etiket satırı — her sahnenin künyesi */
-.kunye{font-family:var(--f-tek);font-size:.68rem;
-  letter-spacing:.22em;color:var(--red-soft);margin-bottom:18px;text-transform:uppercase}
-.kunye i{font-style:normal;color:var(--tx3);margin-right:10px}
-/* KUNYE RITMI (giydirme, 20 Agu): anlati numaralari artik ELLE degil —
-   DOM sirasindan CSS sayaciyla dogar. Elle "04"/"07" devir sirasinda
-   iki kez elle kaydirildi (deste S4Kanit'i, tespit S7Arac'i alirken);
-   artik sahne eklenince/cikinca numara kendiliginden oturur, kayma
-   imkansiz. Sayac 1'den baslar: anlatinin 01'i hero'dur (rozet tasir,
-   numara basmaz — eski davranisin aynisi). Numarasiz kunyeler (goc
-   sahneleri: katman, akis, pano, sozler, kurucu) BILINCLI numarasiz —
-   anlati/goc ayrimi ritmin kendisi (S-K karari). */
-.ana{counter-reset:anlati 1}
-.ana [data-anlati]{counter-increment:anlati}
-.ana [data-anlati] .kunye i.no::before{content:counter(anlati,decimal-leading-zero)}
+/* etiket satırı — kaynak `.shead .mono` birebir (181 + 339-340): 11px mono,
+   .22em, gri (--tx3), önünde 26px kızıl çizgi. Anlatı sayacı ("02") ve
+   kızıl nokta kaynakta YOKTU — sadakat turunda kalktı (anlatı sahneleri de). */
+.kunye{font-family:var(--f-tek);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--tx3);display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
+.kunye::before{content:'';width:26px;height:1px;background:var(--red)}
+.kunye i{display:none}
 
 /* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
    Faz 2'nin "iddia" sahnesi ile göçün S-H hero'su aynı sözü söylüyordu
@@ -40,9 +41,11 @@ body:has(.ana) main{max-width:none;padding:0}
    bileşeni ve .s1-sahne/.s1-giris kuralları kaldırıldı.
    .s1-buyuk / .s1-alt KALIYOR — S2-S7 başlık ve alt metinleri bu iki
    sınıfı kullanıyor (ölçüldü, 11 kullanım). */
-.s1-buyuk{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.06;letter-spacing:-.02em;margin-bottom:22px}
-.s1-buyuk em{font-style:normal;color:var(--red-soft)}
-.s1-alt{color:var(--tx2);font-size:clamp(1rem,2vw,1.18rem);max-width:56ch;line-height:1.7}
+/* kaynak `.shead h1,.shead h2` (341-343) ve `.shead p` (344-345) birebir */
+.s1-buyuk{font-size:clamp(2.3rem,5.6vw,4.15rem);line-height:1.04;letter-spacing:-.045em;margin-bottom:18px}
+.s1-buyuk em{font-style:normal;color:var(--red)}
+.s1-buyuk .thin{font-weight:300;color:var(--tx3)}
+.s1-alt{color:var(--tx2);font-size:clamp(1.02rem,1.5vw,1.18rem);font-weight:400;max-width:62ch;line-height:1.7}
 
 /* ============ S2 · KAYIP ============ */
 .s2-yol{position:relative;padding-left:34px;display:flex;flex-direction:column;gap:34px}
@@ -123,11 +126,11 @@ body:has(.ana) main{max-width:none;padding:0}
    kaldırıldı, künye numarası (08) S-IL'de yaşıyor. */
 
 /* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
-.ana .dugme{transition:transform .15s ease,box-shadow .15s ease}
-.ana .dugme:hover{transform:translateY(-1px);box-shadow:0 8px 26px -12px var(--red)}
+/* kaynak `.btn-p:hover` (318) birebir: -2px kalkış + kızıl parıltı */
+.ana .dugme{transition:.3s var(--e)}
+.ana .dugme:hover{transform:translateY(-2px);box-shadow:0 12px 40px -10px var(--red-glow)}
 
 @media(max-width:640px){
-  .ana section{padding:8vh 0}
   .s2-yol{gap:26px}
 }
 

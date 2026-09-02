@@ -28,33 +28,42 @@
    3) Manrope taşınmadı (madde 4).
    ============================================================ */
 
-.sku-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
-.sku-bas{margin-bottom:clamp(18px,2.4vw,30px)}
-.sku-bas .kunye{display:inline-flex;align-items:center;gap:8px}
-.sku-bas .kunye i{width:6px;height:6px;border-radius:50%;background:var(--red)}
-.sku-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
-  letter-spacing:-.035em;margin-bottom:0}
+/* SADAKAT (3 Eyl 2026): kabin `.wrap` 1280, baslik `.shead` olcusu; etiket
+   ve h2 ana.css ortak olcekten (kizil nokta kaynakta yoktu, cizgi var). */
+.sku-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.sku-bas{max-width:920px;margin-bottom:clamp(40px,5vw,66px)}
+.sku-bas h2{margin-bottom:18px}
 
+/* SADAKAT (3 Eyl 2026): kaynak `.kteam/.krow/.krow-h/.knum/.kname/.krole`
+   (2029-2046) birebir. temel.css'in genel `details{border;radius;padding;
+   margin}` kurali satiri kart yapiyordu (olculdu: 14/16 dolgu, 12 yaricap)
+   — kaynakta satir ACIK, yalniz alt cizgi. */
 .sku-liste{border-top:1px solid var(--line)}
-.sku-satir{border-bottom:1px solid var(--line)}
+.sku-satir{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0;margin:0}
 
 /* Satır başlığı: numara + dev ad + unvan + aç/kapa işareti.
    `list-style:none` + `::-webkit-details-marker` — native üçgen yerine
    kendi işaretimiz duruyor. */
-.sku-bas-satir{display:flex;align-items:center;gap:clamp(12px,2vw,24px);
-  padding:clamp(16px,2.2vw,26px) 0;cursor:pointer;list-style:none}
+.sku-bas-satir{display:flex;align-items:center;gap:clamp(18px,3vw,48px);font-weight:400;
+  padding:clamp(26px,4vw,46px) 4px;cursor:pointer;list-style:none;transition:padding .5s var(--e)}
+.sku-bas-satir:hover{padding-left:16px}
 .sku-bas-satir::-webkit-details-marker{display:none}
-.sku-no{flex:none;font-family:var(--f-tek);font-size:.72rem;letter-spacing:.18em;
+/* kaynak 2026-08 erisilebilirlik ust kurali (4150-4172): mikro mono etiketler 12px */
+.sku-no{flex:none;font-family:var(--f-tek);font-size:12px;letter-spacing:.12em;
   color:var(--tx4)}
-.sku-ad{font-size:clamp(1.3rem,4vw,2.4rem);line-height:1.05;
-  letter-spacing:-.03em;font-weight:600}
-.sku-unvan{color:var(--tx3);font-size:.86rem;line-height:1.4;
-  margin-left:auto;text-align:right;max-width:34ch}
+.sku-ad{font-size:clamp(1.7rem,5.2vw,3.6rem);line-height:1.05;flex:1;min-width:0;
+  letter-spacing:-.04em;font-weight:600;color:var(--tx3);transition:color .35s var(--e)}
+.sku-bas-satir:hover .sku-ad,.sku-satir[open] .sku-ad{color:var(--tx)}
+.sku-unvan{font-family:var(--f-tek);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--tx4);flex:none;max-width:34%;text-align:right;transition:color .35s var(--e)}
+.sku-bas-satir:hover .sku-unvan,.sku-satir[open] .sku-unvan{color:var(--red-soft)}
 /* aç/kapa: iki çizgi, açıkken artı X'e döner (kaynaktaki `.ktog`) */
 .sus-tog{position:relative;flex:none;width:30px;height:30px;border-radius:50%;
   border:1px solid var(--line2)}
 .sus-tog i{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  background:var(--tx2)}
+  background:var(--tx3);border-radius:2px} /* kaynak .ktog i (2050) */
+.sku-satir[open] .sus-tog{border-color:var(--red)}
+.sku-satir[open] .sus-tog i{background:var(--red-soft)}
 .sus-tog i:first-child{width:11px;height:1.5px}
 .sus-tog i:last-child{width:1.5px;height:11px}
 .sku-satir[open] .sus-tog i:last-child{transform:translate(-50%,-50%) scaleY(0)}

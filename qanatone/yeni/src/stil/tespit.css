@@ -25,33 +25,38 @@
       — şeritteki araç listesiyle aynı durum, panelin işi değil.
    ============================================================ */
 
-.ste-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
-.ste-bas{max-width:62ch;margin-bottom:clamp(20px,2.6vw,34px)}
-.ste-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
-  letter-spacing:-.035em;margin-bottom:0}
+/* SADAKAT (3 Eyl 2026): kabin kaynak `.wrap` (1280, gut), baslik `.shead`
+   (920 / clamp(40,5vw,66)), h2/lede ana.css ortak olcekten (.s1-buyuk /
+   .s1-alt). Kaynakta form KUTUSUZ: `.dgform` acik satir (4726-4732). */
+.ste-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ste-bas{max-width:920px;margin-bottom:clamp(40px,5vw,66px)}
+.ste-bas h2{margin-bottom:18px}
 .ste-bas h2 .thin{font-weight:300;color:var(--tx3)}
-.ste-bas p{margin-top:clamp(11px,1.3vw,18px)}
+.ste-bas p{margin-top:0}
 
-.ste-kutu{border:1px solid var(--line);border-radius:20px;
-  background:var(--card);padding:clamp(18px,2.4vw,32px)}
+/* kaynak `.dg{max-width:860px}` (1712) — kutu degil, genislik siniri */
+.ste-kutu{padding:0;max-width:860px}
 
-/* ---- form ---- */
-.ste-form{display:flex;gap:10px;flex-wrap:wrap}
-.ste-giris{flex:1 1 260px;display:flex;align-items:center;gap:10px;
+/* ---- form (kaynak .dgform/.dgin 1713-1721 birebir) ---- */
+.ste-form{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:14px}
+.ste-giris{flex:1 1 260px;display:flex;align-items:center;gap:13px;
   border:1px solid var(--line2);border-radius:999px;
-  padding:0 18px;background:rgba(255,255,255,.03)}
-.ste-giris svg{flex:none;width:18px;height:18px;color:var(--tx4)}
+  padding:4px 6px 4px 20px;background:rgba(255,255,255,.035);transition:.3s var(--e)}
+.ste-giris svg{flex:none;width:17px;height:17px;color:var(--tx4)}
 .ste-giris input{flex:1;background:none;border:0;color:var(--tx);
-  font:inherit;font-size:.95rem;padding:14px 0;min-width:0}
+  font:inherit;font-size:1rem;padding:14px 0;min-width:0}
 .ste-giris input::placeholder{color:var(--tx4)}
 .ste-giris input:focus{outline:none}
 /* TUR 9 E6 (3 Eyl 2026): odak halkasi KAPSAYICIDA — input'un kendi halkasi
    hap kutunun icinde kalirdi; kenarlik rengi tek basina olcumde gorunmedi
    (olc-klavye: halkasiz 1). Kuresel :focus-visible ile ayni dil. */
 .ste-giris:focus-within{border-color:var(--red);outline:2px solid var(--red-soft);outline-offset:3px}
+/* kaynagin 4px odak piriltisi (1717) yalniz masaustunde — H14 mobil golge yasagi */
+@media(min-width:901px){.ste-giris:focus-within{box-shadow:0 0 0 4px rgba(239,35,60,.1)}}
 .ste-form .dugme{flex:none}
-.ste-not{margin-top:12px;color:var(--tx3);font-size:.82rem;line-height:1.5}
-.ste-not b{color:var(--tx2)}
+/* kaynak .dgnote (1722-1723) */
+.ste-not{margin-top:0;color:var(--tx4);font-size:.8rem;line-height:1.6;font-weight:300}
+.ste-not b{color:var(--tx2);font-weight:500}
 .ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
 
 /* ---- sonuç ---- */
