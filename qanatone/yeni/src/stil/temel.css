@@ -163,8 +163,51 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
 }
 .dugme.sus-isik:active{transform:scale(.98);transition-duration:.08s}
 /* hareket azaltma: huzme durur, düğme yerinde kalır */
+/* SUS-HALKA — kenarda dolasan kirmizi isik, TEK UYGULAMA (TUR 9 T2, 3 Eyl 2026).
+   Onceden uc kopya vardi: hero.css .sus-halka (degiskenli), film.css
+   .fl-halka (sabit sayili, parlatisiz, will-change'li) ve kaynak .void .ring;
+   bekci (film-halka.test.mjs) yalniz film kopyasini kaynakla kiyasliyordu,
+   hero'nunki bekcisizdi. Degisken seti KAYNAKTAN (index.html 502: --ring-w /
+   --ring-spd / --ring-tail / --ring-glow, panelden ayarli): kalinlik 2px ·
+   tur 3.6s linear · kuyruk %56 · parilti 7px · ayni bes konik durak.
+   Maske farki 2px kenar bandina kirpar; donen sey sozde-elemanin TRANSFORM'u
+   (kompozitor). Kullanim: hero .sh-void (parlatili) ve film .fl-gec
+   (`.duz`: parilti yok — H14 filter yasagi + dusen kare 0 kapisi, film.css
+   kunyesi; will-change katmani sabitler — GECE TUR 1 olcumu, maskeli
+   parentin donen cocugu katmana ayrilmayinca 25 ms+ bosluk).
+   .dugme.sus-isik AYRI mekanizma (.shiny soyu: maske yok, 3s, 145deg) —
+   halka degil, birlestirilmedi (yazili karar, rapor). ProjeDizin .mi-t::after
+   donmez (imlec isigi) — aile disi. Bekci: film-halka.test.mjs temel.css'i
+   kaynakla kiyaslar + `conic-gradient(from 0deg,` kaynak agacinda TEK. */
+.sus-halka{--halka-w:2px;--halka-spd:3.6s;--halka-kuyruk:56%;--halka-glow:7px;
+  position:absolute;inset:-1px;border-radius:999px;padding:var(--halka-w);
+  pointer-events:none;z-index:0;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 var(--halka-glow) rgba(239,35,60,.7));transition:filter .34s var(--e)}
+.sus-halka::before{content:'';position:absolute;left:50%;top:50%;
+  width:260%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,
+    transparent 0 calc(100% - var(--halka-kuyruk)),
+    rgba(239,35,60,.30) calc(100% - var(--halka-kuyruk)*.72),
+    rgba(255,77,99,.88) calc(100% - var(--halka-kuyruk)*.34),
+    #ffe6ea calc(100% - var(--halka-kuyruk)*.15),
+    rgba(255,77,99,.85) calc(100% - var(--halka-kuyruk)*.04),
+    transparent 100%);
+  animation:sus-halka-don var(--halka-spd) linear infinite}
+@keyframes sus-halka-don{
+  from{transform:translate(-50%,-50%) rotate(0turn)}
+  to{transform:translate(-50%,-50%) rotate(1turn)}}
+.sus-halka.duz{filter:none;transition:none}
+.sus-halka.duz::before{will-change:transform}
+/* maske farki desteklenmiyorsa halkayi hic gosterme — yoksa dugmeyi doldurur */
+@supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
+  .sus-halka{display:none}}
 @media (prefers-reduced-motion:reduce){
   .dugme.sus-isik::before{animation:none}
+  .sus-halka::before{animation:none}
 }
 /* FOOTER STILI kabuk.css'te (4 Eyl sokum turu: uc sutun + bit damgasi + alt satir) */
 
