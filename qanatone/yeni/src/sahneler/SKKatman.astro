@@ -74,13 +74,13 @@ const cipAd = (c: any): string => (c.k ? duz(c.k) : c.ad);
             <p>{g(k.p)}</p>
             <span class="sk-cipler">
               {k.cipler.map((c: any) => (c.slug
-                ? <a class="sk-cip" href={`${B}/hizmet/${c.slug}`}>{cipAd(c)}</a>
+                ? <a class="sk-cip" href={`${B}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
                 : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
             </span>
           </>
         );
         return k.yol
-          ? <a class="sk-kart" href={`${B}/hizmet/${k.yol}`}>{govde}</a>
+          ? <a class="sk-kart" href={`${B}/hizmetler/${k.yol}`}>{govde}</a>
           : <div class="sk-kart">{govde}</div>;
       })}
     </div>

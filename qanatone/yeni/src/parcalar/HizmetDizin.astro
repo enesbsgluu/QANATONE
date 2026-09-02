@@ -108,7 +108,7 @@ const on = dil === 'en' ? '/en' : '';
     const b = bicim.get(s.slug) || { size: '', hi: false, icon: 'zap' };
     return (
       <li class={`${b.size} ${b.hi ? 'hi' : ''}`.trim()}>
-        <a class="card" href={`${B}${on}/hizmet/${s.slug}`}>
+        <a class="card" href={`${B}${on}/hizmetler/${s.slug}`}>
           <span class="num">{String(i + 1).padStart(2, '0')}</span>
           <span class="ic"><Ikon ad={b.icon} /></span>
           <h2>{T(s.title, dil)}</h2>

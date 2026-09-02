@@ -44,7 +44,7 @@ const statik = sayfalar.sort().map((p) => {
 });
 const ort = (k) => +(statik.reduce((a, s) => a + s[k], 0) / statik.length).toFixed(3);
 console.log(`STATIK: ${statik.length} sayfa · satir ici oran ort ${ort('oran')} · HTML ort ${Math.round(ort('html'))} B · gzip ort ${Math.round(ort('gzip'))} B · dis dosya ort ${ort('dis')}`);
-for (const y of ['/yeni/', '/yeni/hizmetler/', '/yeni/hizmet/finans/', '/yeni/otomasyon/', '/yeni/sss/']) { const s = statik.find((x) => x.yol === y); if (s) console.log(`  ${y.padEnd(24)} HTML ${s.html} · gzip ${s.gzip} · satir ici ${s.satirIci} (${(s.oran * 100).toFixed(1)}%) · dis ${s.dis} dosya ${s.disBayt} B`); }
+for (const y of ['/yeni/', '/yeni/hizmetler/', '/yeni/hizmetler/finans/', '/yeni/otomasyon/', '/yeni/sss/']) { const s = statik.find((x) => x.yol === y); if (s) console.log(`  ${y.padEnd(24)} HTML ${s.html} · gzip ${s.gzip} · satir ici ${s.satirIci} (${(s.oran * 100).toFixed(1)}%) · dis ${s.dis} dosya ${s.disBayt} B`); }
 
 (async () => {
   const browser = await pt.launch({ executablePath: CHROME, headless: true, args: ['--window-size=1460,980'], defaultViewport: null, protocolTimeout: 300000 });
@@ -68,7 +68,7 @@ for (const y of ['/yeni/', '/yeni/hizmetler/', '/yeni/hizmet/finans/', '/yeni/ot
   }
   /* 3) LCP 4G kisitli, soguk */
   const lcp = {};
-  for (const yol of ['/yeni/', '/yeni/hizmet/finans/']) {
+  for (const yol of ['/yeni/', '/yeni/hizmetler/finans/']) {
     const olc = [];
     for (let i = 0; i < 3; i++) {
       const ctx = await browser.createBrowserContext();

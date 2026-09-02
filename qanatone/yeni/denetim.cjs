@@ -378,7 +378,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     for (const s of c.services) {
       if (!duz.includes(coz(D(s.title, dil)))) kusur.push(`${dil}:${s.slug}:ad`);
       if (!duz.includes(coz(D(s.text, dil)))) kusur.push(`${dil}:${s.slug}:metin`);
-      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/hizmet/${s.slug}`))
+      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`))
         kusur.push(`${dil}:${s.slug}:bağlantı`);
     }
   }
@@ -629,12 +629,28 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const norm = (u) => u.replace(/\/$/, '');
     const smN = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => norm(m[1])));
     const canonN = new Set();
+    /* (c) TUR 9 (3 Eyl 2026) — KESME MAYINI: sayfanin DISKTEKI yolu ile
+       canonical'inin yolu ayni olmali. Onceden yalniz canonical <-> sitemap
+       kiyaslaniyordu; ikisi ayni formulden geldigi icin rota klasoru
+       /hizmet/ iken canonical /hizmetler/ olsa da yesil kaliyordu
+       (MIMARI M15/A15: kesmede 18 URL 404). Dosya yolu dist/yeni'ye gore,
+       canonical yolu KOK'a gore alinir: /yeni oneki iki tarafta da yok,
+       kesmede KOK dist'e donunce formul degismeden calisir. Kirmizi-once:
+       3 Eyl, klasor adi degismeden 18 sayfa (9 slug x 2 dil) kirmizi. */
+    const yolKusur = [];
     for (const p of sayfalar) {
       const m = oku(p).match(/<link rel="canonical" href="([^"]+)"/);
-      if (m && m[1].startsWith('https://qanatone.com')) canonN.add(norm(m[1]));
+      if (m && m[1].startsWith('https://qanatone.com')) {
+        canonN.add(norm(m[1]));
+        const dosyaYolu = ('/' + path.relative(KOK, path.dirname(p)).replace(/\\/g, '/')).replace(/^\/\.$/, '/');
+        const canonYolu = norm(new URL(m[1]).pathname) || '/';
+        if (norm(dosyaYolu) !== norm(canonYolu) && !(dosyaYolu === '/' && canonYolu === '/'))
+          yolKusur.push(dosyaYolu + ' ↔ ' + canonYolu);
+      }
     }
     for (const c of canonN) if (!smN.has(c)) kusur.push('sitemapte-yok:' + c);
     for (const l of smN) if (!canonN.has(l)) kusur.push('sayfasi-yok:' + l);
+    if (yolKusur.length) kusur.push(`yol≠canonical ${yolKusur.length} sayfa: ` + yolKusur.slice(0, 2).join(', '));
     if (smN.size < 10) kusur.push('sitemap süpheli kisa:' + smN.size);
   }
   const rssYol = path.join(KOK, 'bulten', 'rss.xml');
@@ -648,7 +664,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (guidler.length !== (c.posts || []).length) kusur.push(`rss-sayi:${guidler.length}/${(c.posts || []).length}`);
     if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
   }
-  ol('R8 · sitemap loc seti = canonical seti + rss item seti = posts',
+  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + rss item seti = posts',
      kusur.length === 0, kusur.slice(0, 3).join(' | '));
 }
 
@@ -1344,7 +1360,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         if (!metin.includes(coz(T4(x.title)).trim())) kusur.push(x.slug + ':ad-yok');
         const c = coz(ilkCumle(T4(x.text))).trim();
         if (c && !metin.includes(c)) kusur.push(x.slug + ':cumle-yok');
-        if (!ham.includes(`/hizmet/${x.slug}"`)) kusur.push(x.slug + ':baglanti-yok');
+        if (!ham.includes(`/hizmetler/${x.slug}"`)) kusur.push(x.slug + ':baglanti-yok');
       }
       ol(`H19 · akis seridinde ${hiz.length} hizmetin adi/cumlesi/baglantisi ham HTML'de`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
@@ -1754,7 +1770,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    sahneden SONRA gelmesi de kaynagin sirasi (SDT haritasi). */
 {
   const kusur = [];
-  const detaylar = sayfalar.filter(p => /(^|\/)(en\/)?hizmet\/[^/]+\/index\.html$/
+  /* TUR 9 (3 Eyl 2026): rota /hizmet/ -> /hizmetler/ (kesme mayini, R8c).
+     Bu kural, R1 ve H19 yolu SABIT tasiyordu ve yeniden adlandirmada
+     kirmiziya dustu — dogru davranis; uc kural birlikte cogula alindi. */
+  const detaylar = sayfalar.filter(p => /(^|\/)(en\/)?hizmetler\/[^/]+\/index\.html$/
     .test(rel(p)));
   if (detaylar.length !== 18) kusur.push('detay-sayfasi=' + detaylar.length);
   for (const p of detaylar) {

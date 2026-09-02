@@ -5,7 +5,7 @@
    `display:none!important` ile gizlenir (ilk yerlesimden ONCE), sayfa
    TEKRAR kez soguk baglamda yuklenir, t<600 ms icindeki LoAF'larin
    toplami ve en uzunu (stil+duzen payiyla) medyanlanir.
-   Kullanim: SAYFA=/yeni/hizmet/finans/ GIZLE='.mk-kap|.sdsec|nav' node yeni/film/olc-ilkkare.cjs
+   Kullanim: SAYFA=/yeni/hizmetler/finans/ GIZLE='.mk-kap|.sdsec|nav' node yeni/film/olc-ilkkare.cjs
    Cevre: TEKRAR (3) · GIZLE ('|' ile ayrilmis secici kumeleri; bos = taban;
    'css:' onekiyle ham CSS kurali da verilebilir) */
 const path = require('path');
@@ -13,7 +13,7 @@ const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
-const SAYFA = process.env.SAYFA || '/yeni/hizmet/finans/';
+const SAYFA = process.env.SAYFA || '/yeni/hizmetler/finans/';
 const TEKRAR = +(process.env.TEKRAR || 3);
 const KUME = [''].concat((process.env.GIZLE || '').split('|').filter(Boolean));
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
