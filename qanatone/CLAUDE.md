@@ -66,12 +66,19 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   durur (eski sitenin `#akis.aklive` deseni). Doku, amblem, dekor serbest.
   Kaydırma çizelgesine bağlı kalan tek şey film/deste gibi kaydırmanın
   kendisini anlatan sahneler. Bekçi `olc-surucu.cjs` bu kurala göre
-  yeniden yazılacak (bugün eski kuralı ölçüyor).
+  yeniden yazıldı (3 Eyl: 63 sayfa GEÇTİ, kırmızı-önce iki tuzak; H11
+  ayağı reduced-motion altında koşan animasyonu da yakalar — dersi:
+  animasyon sözde öğeye (::before) taşınınca durduran liste de taşınır).
 - **Ana sayfa eski düzen, yeni mimari (Enes, 3 Eyl 2026):** bölüm sırası ve
   her bölümün ölçüsü kök `index.html`'den birebir okunur; eskide olmayan
   öğe (anlatı sahnesi, numaralı etiket, kızıl nokta, halka) eklenmez.
   Kanıt yan yana kare + ölçülmüş fark listesi (`olc-tipografi.cjs`,
-  `kontak-tasarim.cjs SECICI_*`). R13'ün dört bölümü kaldırıldı.
+  `kontak-tasarim.cjs SECICI_*`). R13'ün dört bölümü GERİ geldi (Enes
+  3 Eyl akşam: "eski siteyi komple al"); R13 kök sırayı tutar. Kabuk da
+  kaynağın katmanlarıyla birebir: `#bg` (fade/orb/grid) her kabuk
+  sayfasında, ana sayfa dahil (+71,5 ms LCP ölçüldü, karar Enes'te).
+  Sektörde varsayılan seçim yok, pano seçilene kadar gizli (kaynak).
+  Bilinçli tek sapma yazı ailesi (Uncut Sans; aile.css).
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
