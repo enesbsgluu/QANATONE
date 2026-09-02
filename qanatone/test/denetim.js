@@ -2588,10 +2588,20 @@ async function guvenlik() {
     ol('robots.txt: AI tarayıcıları AÇIK (' + botlar.join(', ') + ')', eksik.length === 0, eksik.join(' ') || '');
     const hd6 = fs.existsSync(path.join(KOK, '_headers')) ? fs.readFileSync(path.join(KOK, '_headers'), 'utf8') : '';
     ol('_headers: /* bloğunda Content-Signal başlığı', /\n\/\*\n(?:[^\n]*\n)*?\s+Content-Signal: search=yes, ai-input=yes, ai-train=no/.test(hd6), '');
-    let linkTaze = false, linkNot = '';
-    try { linkNot = require('child_process').execSync('node yeni/link-basliklari.cjs', { cwd: KOK, env: Object.assign({}, process.env, { KONTROL: '1' }), encoding: 'utf8', timeout: 60000 }).trim(); linkTaze = true; }
-    catch (e) { linkNot = String(e.stdout || e.message).trim(); }
-    ol('_headers: Link başlıkları (canonical + alternate) her sayfa için üretilmiş ve taze', linkTaze, linkNot.slice(0, 100));
+    /* TUR 9 (3 Eyl 2026): bu suite build.js icinden, astro derlemesinden
+       ONCE kosar; dist/yeni yokken alt kume kontrolu 60 Astro sayfasini hic
+       gormeden "taze" diyordu (yanlis yesil, MIMARI M3/A13). dist/yeni
+       yoksa kural burada ERTELENIR (sayilmaz, adiyla yazilir) ve
+       yeni/denetim.cjs L1 dist/yeni varken BIREBIR olcer. dist/yeni varsa
+       (tam zincirden sonra `npm test`) burada da birebir olculur. */
+    if (!fs.existsSync(path.join(DIST, 'yeni'))) {
+      console.log('  ..  _headers: Link başlıkları — ERTELENDİ (dist/yeni yok; yeni/denetim.cjs L1 astro derlemesinden sonra birebir ölçer)');
+    } else {
+      let linkTaze = false, linkNot = '';
+      try { linkNot = require('child_process').execSync('node yeni/link-basliklari.cjs', { cwd: KOK, env: Object.assign({}, process.env, { KONTROL: '1', LINK_BIREBIR: '1' }), encoding: 'utf8', timeout: 60000 }).trim(); linkTaze = true; }
+      catch (e) { linkNot = String(e.stdout || e.message).trim(); }
+      ol('_headers: Link başlıkları (canonical + alternate) her sayfa için üretilmiş ve taze (birebir)', linkTaze, linkNot.slice(0, 100));
+    }
   }
   /* Yorum satırlarını AT: ilk yazımda `hd.includes(...)` kullanmıştım ve
      başlık silinmiş olmasına rağmen aynı kelime yorumda geçtiği için kural

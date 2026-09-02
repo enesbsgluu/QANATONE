@@ -2320,6 +2320,58 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 3).join(' ') || `kabuk.js ${boy} B`);
 }
 
+/* ---- K2 · KABUK PAKETI TAZE (TUR 9, 3 Eyl 2026) ----
+   K1 yalniz boyuta bakiyordu: kabuk/efekt.js duzenlenip kabuk-derle.cjs
+   unutulunca eski JS yayina gidiyor, hicbir kural kirmizi yakmiyordu
+   (MIMARI M1/A3 — bu depodaki en sessiz kirilma yolu). Simdi kaynak,
+   kabuk-derle.cjs'in PAYLASILAN derle() fonksiyonuyla bellekte yeniden
+   derlenir ve dist/yeni/varlik/{kabuk,pano,sizinti}.js + tespit-fix.*.json
+   ile BAYT-BIREBIR kiyaslanir. esbuild deterministik: 3 Eyl'de refactor
+   git'teki ciktiyi birebir uretti (git status bos). Derleme hatti artik
+   kabuk-derle'yi `npm run build` icinde kosturuyor; bu kural o adimin
+   atlandigi (dogrudan `astro build`) ya da eski ciktinin basildigi her
+   durumu yakalar. Ayar tek yerde (derle()) — iki yerde olsaydi ayrisir,
+   kural yanlis kirmizi verirdi. */
+{
+  const kusur = [];
+  let ozet = '';
+  try {
+    const { derle } = require(path.join(__dirname, 'kabuk-derle.cjs'));
+    const beklenen = derle();
+    for (const [ad, buf] of Object.entries(beklenen)) {
+      const y = path.join(KOK, 'varlik', ad);
+      if (!fs.existsSync(y)) { kusur.push(ad + ':yok'); continue; }
+      const d = fs.readFileSync(y);
+      if (!d.equals(buf)) kusur.push(`${ad}:BAYAT (dist ${d.length} B ↔ kaynaktan ${buf.length} B) — npm --prefix yeni run build`);
+    }
+    ozet = Object.keys(beklenen).length + ' dosya bayt-birebir';
+  } catch (e) { kusur.push('derlenemedi: ' + String(e && e.message).split('\n')[0].slice(0, 100)); }
+  ol('K2 · kabuk paketi taze: kaynaktan derlenen çıktı dist ile bayt-birebir (kabuk-derle.cjs derle())',
+     kusur.length === 0, kusur.slice(0, 3).join(' ') || ozet);
+}
+
+/* ---- L1 · LINK BASLIKLARI BIREBIR (TUR 9, 3 Eyl 2026) ----
+   Onceden tek bekci test/denetim.js'teydi ve Netlify sirasinda dist/yeni
+   yokken kosuyordu: alt kume kontrolu 60 Astro sayfasini hic gormeden
+   "taze" diyordu (MIMARI M3/A13); silinen sayfanin satiri da sonsuza
+   kadar kaliyordu (M2). Burada dist ve dist/yeni ikisi de var: blok
+   BIREBIR olmali (LINK_BIREBIR=1). Ayrica yayina giden kopya
+   dist/_headers, kaynak _headers ile ayni olmali (build.js KOPYA ile
+   kopyalar; arada elle uretim yapildiysa bayat kalir). */
+{
+  const kusur = [];
+  let not = '';
+  try {
+    not = require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'link-basliklari.cjs')],
+      { cwd: path.join(__dirname, '..'), env: Object.assign({}, process.env, { KONTROL: '1', LINK_BIREBIR: '1' }), encoding: 'utf8', timeout: 60000 }).trim();
+  } catch (e) { kusur.push(String(e.stdout || e.message).trim().slice(0, 140)); }
+  const kaynakH = path.join(__dirname, '..', '_headers'), distH = path.join(__dirname, '..', 'dist', '_headers');
+  if (!fs.existsSync(distH)) kusur.push('dist/_headers yok');
+  else if (fs.readFileSync(kaynakH, 'utf8') !== fs.readFileSync(distH, 'utf8')) kusur.push('dist/_headers ≠ _headers (kok derleme kopyasi bayat: node build.js)');
+  ol('L1 · _headers Link bloğu dist/yeni ile birebir + dist/_headers kaynakla aynı', kusur.length === 0,
+     kusur.join(' | ') || not.replace(/^LINK BASLIKLARI TAZE: /, '').slice(0, 90));
+}
+
 ozetBasildi = true;
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
