@@ -76,8 +76,14 @@ body{background:var(--bg);color:var(--tx);
    pay dekoratif bir katmana verilemez. Ic sayfalarda ayni katmanin
    bedeli olcum gurultusunun icinde (LCP ~1,3-1,5 sn, ~600 ms pay).
    Ana sayfaya alinip alinmayacagi ENES'IN KARARI — rakam yukarida,
-   nav kararindaki (+90 ms, kabul edildi) gibi acik birakildi. */
-body:not(:has(.ana))::before{content:'';position:fixed;inset:0;z-index:-1;
+   nav kararindaki (+90 ms, kabul edildi) gibi acik birakildi.
+
+   SADAKAT(D) 3 Eyl 2026 (Enes: eski site birebir): kaynagin #bg katmani
+   DORT parcasiyla kabuga geldi (kabuk.css #bg .fade/.orb/.grid, Temel.astro
+   kabuk sayfalari — ana sayfa DAHIL). Asagidaki degrade artik yalniz #bg'siz
+   sayfalarda (film) kalir; ana sayfa LCP bedeli yeniden olculdu, rapor
+   Desktop/3.09.2026.md EK D; katmanin ana sayfada kalip kalmayacagi Enes'te. */
+body:not(:has(#bg))::before{content:'';position:fixed;inset:0;z-index:-1;
   pointer-events:none;background:linear-gradient(180deg,#170406 0%,#050505 46%)}
 .ust{display:flex;align-items:center;justify-content:space-between;
   max-width:840px;margin:0 auto;padding:22px 20px}
