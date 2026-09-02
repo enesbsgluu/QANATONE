@@ -1886,22 +1886,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      dort bolumun hicbiri TR ve EN ana sayfada basilmaz; biri geri gelirse
      kirmizi. Eskide olmayan dort anlati sahnesi (S2/S3/S5/S6) de ayni
      kararla ana sayfadan cikti; onlar da burada denetlenir. */
-  const KALKAN = [
-    ['katman', 'sk-sahne'], ['akis', 'sa-sahne'], ['sektor', 'sse-sahne'], ['sozler', 'ssz-sahne'],
-  ];
+  /* 3 Eyl aksam (Enes, onizleme geri bildirimi): "eski kok siteyi birebir
+     al, yalniz dedigim kalemleri cikar" — dort bolum GERI GELDI. Kural artik
+     ESKI DUZEN SIRASINI tutar: kok index.html'in bolum sirasi (hero, serit,
+     projeler, katman, akis, sektor, tespit, kanal izgarasi, [soz bandi:
+     bayrak], kurucu, iletisim). Anlati sahneleri (S2/S3/S5/S6) yok. */
+  const ESKI = ['sh', 'st', 'sp', 'sk', 'sa', 'sse', 'ste', 'ssz', 'sku', 'sil'];
   const kusur = [];
   for (const p of [path.join(KOK, 'index.html'), path.join(KOK, 'en', 'index.html')]) {
     if (!fs.existsSync(p)) { kusur.push(rel(p) + ':yok'); continue; }
     const h = oku(p);
-    for (const [ad, onek] of KALKAN) if (h.includes('<section class="' + onek + '"')) kusur.push(rel(p) + ':' + ad + ':geri-gelmis');
-    /* anlati sahneleri data-sahne="2|3|5|6" tasiyordu (S2Kayip, S3Mekanizma,
-       S5Surec, S6Sektor); data-anlati niteligi tespit/deste/iletisim'de de
-       var, o yuzden ayirici olan sahne numarasi. */
+    const sira = [...h.matchAll(/<section class="([a-z]+)-sahne/g)].map((m) => m[1]).filter((k) => k !== 'ssb');
+    if (sira.join(',') !== ESKI.join(',')) kusur.push(rel(p) + ':sira ' + sira.join(',') + ' ≠ ' + ESKI.join(','));
     const anlati = (h.match(/data-sahne="[2356]"/g) || []).length;
     if (anlati) kusur.push(rel(p) + ':anlati-sahnesi:' + anlati);
   }
-  ol('R13 · kaldirilan dort bolum (katman/akis/sektor/sozler) ve anlati sahneleri ana sayfada YOK (TR+EN)',
-     kusur.length === 0, kusur.slice(0, 4).join(' ') || 'eski duzen sirasi');
+  ol('R13 · ana sayfa bolum sirasi = kok index.html (10 bolum, soz bandi bayrakli), anlati sahnesi yok (TR+EN)',
+     kusur.length === 0, kusur.slice(0, 2).join(' ') || ESKI.join(' → '));
 }
 
 
