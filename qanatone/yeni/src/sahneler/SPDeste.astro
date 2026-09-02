@@ -23,6 +23,8 @@ import kunye from '../veri/deste-gorselleri.json';
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR proje sayfalarina bagliyordu (H26). */
+const on = dil === 'en' ? '/en' : '';
 
 const tum = icerik.projects || [];
 const bul = (s: string) => tum.find((p: any) => p.slug === s);
@@ -61,7 +63,7 @@ const en = dil === 'en';
       {kartlar.map((k: any, i: number) => (
         <div class="sp-kart" style={ton(i)}>
           {/* Detaylar artık adada — rota turu 2. sayfa; H16 bekçiliyor. */}
-          <a class="sp-govde" href={`${B}/projeler/${k.slug}`} data-astro-prefetch="false">
+          <a class="sp-govde" href={`${B}${on}/projeler/${k.slug}`} data-astro-prefetch="false">
             <span class="sp-gorsel" data-pj={k.slug}>
               <picture>
                 <source media="(max-width:900px)" type="image/webp"
@@ -88,7 +90,7 @@ const en = dil === 'en';
     </div>
 
     <div class="sp-tumu">
-      <a class="sp-tum" href={`${B}/projeler`} data-astro-prefetch="false">{en ? 'All projects' : 'Tüm projeler'}
+      <a class="sp-tum" href={`${B}${on}/projeler`} data-astro-prefetch="false">{en ? 'All projects' : 'Tüm projeler'}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
         ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a>

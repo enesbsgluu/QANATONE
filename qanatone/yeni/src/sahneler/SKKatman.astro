@@ -38,6 +38,8 @@ const g = (k: string): string => T(s[k], dil);
    yoksa ekranda "&amp;" görünür. Çözülen tek varlık `&amp;`. */
 const duz = (k: string): string => g(k).replace(/&amp;/g, '&');
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR hizmet sayfalarina bagliyordu (H26). */
+const on = dil === 'en' ? '/en' : '';
 
 /* Kartların TEK tanımı. `yol` varsa kartın kendisi bağlantıdır (kaynakta
    Veri kartı finans sayfasına gidiyordu); yoksa çipler bağlantı taşır. */
@@ -74,13 +76,13 @@ const cipAd = (c: any): string => (c.k ? duz(c.k) : c.ad);
             <p>{g(k.p)}</p>
             <span class="sk-cipler">
               {k.cipler.map((c: any) => (c.slug
-                ? <a class="sk-cip" href={`${B}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
+                ? <a class="sk-cip" href={`${B}${on}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
                 : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
             </span>
           </>
         );
         return k.yol
-          ? <a class="sk-kart" href={`${B}/hizmetler/${k.yol}`}>{govde}</a>
+          ? <a class="sk-kart" href={`${B}${on}/hizmetler/${k.yol}`}>{govde}</a>
           : <div class="sk-kart">{govde}</div>;
       })}
     </div>
