@@ -118,6 +118,13 @@ main:has(> .fl) { max-width: none; padding: 0; }
    bekci film-halka.test.mjs kaynakla kiyaslar. */
 .fl-gec { position: relative; }
 .fl-gec span { position: relative; z-index: 1; }
+/* YATAY TASMA (3 Eyl 2026, performans turu — olculdu): halkanin ::before'u
+   %260 kare; dugme sag kenarda oldugu icin kare belgeyi 84 px tasiriyordu
+   (JS'siz/ilk yerlesimde scrollWidth 1524, klasik kaydirma cubugu belirip
+   fl-js gelince kayboluyor -> sabit #bg 7 px oynuyor, olc-chrome CLS 0,54).
+   Maske zaten kare disini boyamiyor; overflow:hidden yalniz kaydirma
+   tasmasini keser, gorunum ayni. */
+.fl-gec .sus-halka { overflow: hidden; }
 /* motorsuz yolda PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider */
 html:not(.fl-js) .fl-kumanda { position: sticky; top: 12px; bottom: auto; justify-content: flex-end; }
 
