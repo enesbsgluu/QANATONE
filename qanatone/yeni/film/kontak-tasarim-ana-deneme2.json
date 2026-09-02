@@ -1,0 +1,210 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T12:36:18.592Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 0,
+   "farkliPiksel": 0,
+   "toplamPiksel": 1296000,
+   "bolge": "fark yok",
+   "md5": {
+    "once": "ace25e81a123f9f77060cdc93d925b7b",
+    "sonra": "ace25e81a123f9f77060cdc93d925b7b"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/ana-deneme2-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/ana-deneme2-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/ana-deneme2-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 40,
+   "farkYuzde": 0,
+   "farkliPiksel": 0,
+   "toplamPiksel": 1296000,
+   "bolge": "fark yok",
+   "md5": {
+    "once": "509ac081fc4b60de141bd1dc6eb37ad5",
+    "sonra": "509ac081fc4b60de141bd1dc6eb37ad5"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 6364,
+     "sonra": 6364
+    },
+    "gercek": {
+     "once": 6364,
+     "sonra": 6364
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/ana-deneme2-once-40.png",
+    "sonra": "yeni/film/kontak-tur9/ana-deneme2-sonra-40.png",
+    "yanyana": "yeni/film/kontak-tur9/ana-deneme2-yanyana-40.png"
+   }
+  },
+  {
+   "konum": 80,
+   "farkYuzde": 0,
+   "farkliPiksel": 0,
+   "toplamPiksel": 1296000,
+   "bolge": "fark yok",
+   "md5": {
+    "once": "1ccce02a6635df15f5c6ca3ba5bd63a0",
+    "sonra": "1ccce02a6635df15f5c6ca3ba5bd63a0"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 12727,
+     "sonra": 12727
+    },
+    "gercek": {
+     "once": 11842,
+     "sonra": 11842
+    }
+   },
+   "sapma": {
+    "once": -885,
+    "sonra": -885
+   },
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/ana-deneme2-once-80.png",
+    "sonra": "yeni/film/kontak-tur9/ana-deneme2-sonra-80.png",
+    "yanyana": "yeni/film/kontak-tur9/ana-deneme2-yanyana-80.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8791/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 86,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 79,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "ace25e81a123f9f77060cdc93d925b7b",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 40,
+    "hedef": 6364,
+    "gercek": 6364,
+    "sapma": 0,
+    "md5": "509ac081fc4b60de141bd1dc6eb37ad5",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-once-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 96
+   },
+   {
+    "konum": 80,
+    "hedef": 12727,
+    "gercek": 11842,
+    "sapma": -885,
+    "md5": "1ccce02a6635df15f5c6ca3ba5bd63a0",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-once-80.png",
+    "raf": "raf",
+    "animasyonSonradan": 102
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 86,
+   "sonsuzSifirlanan": 7,
+   "sonluBitirilen": 79,
+   "video": 0
+  },
+  "scrollHeight": 16809,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "ace25e81a123f9f77060cdc93d925b7b",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 86
+   },
+   {
+    "konum": 40,
+    "hedef": 6364,
+    "gercek": 6364,
+    "sapma": 0,
+    "md5": "509ac081fc4b60de141bd1dc6eb37ad5",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-sonra-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 96
+   },
+   {
+    "konum": 80,
+    "hedef": 12727,
+    "gercek": 11842,
+    "sapma": -885,
+    "md5": "1ccce02a6635df15f5c6ca3ba5bd63a0",
+    "png": "yeni/film/kontak-tur9/ana-deneme2-sonra-80.png",
+    "raf": "raf",
+    "animasyonSonradan": 102
+   }
+  ]
+ }
+}
