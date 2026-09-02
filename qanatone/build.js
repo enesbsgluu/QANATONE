@@ -389,6 +389,11 @@ function robots() {
   yaz('robots.txt',
     '# QANATONE\n' +
     'User-agent: *\nAllow: /\n' +
+    /* GECE ZINCIRI TUR 6 (2 Eyl 2026) — Content Signals (Cloudflare/IETF
+       taslagi): arama evet, AI cevaplarinda kullanim EVET (GEO satan site
+       bunu reddedemez), egitim HAYIR (Enes'in politika karari). Ayni satir
+       HTTP basligi olarak _headers'ta da var. */
+    'Content-Signal: search=yes, ai-input=yes, ai-train=no\n' +
     '# shell.html bir SAYFA degil, tarayicinin gezinebilmesi icin gereken\n' +
     '# bolum iskeleti. Basliksiz, tekrar iceren bir parca — indekslenirse\n' +
     '# ince/kopya sayfa olarak gorunur.\n' +
