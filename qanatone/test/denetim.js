@@ -2586,7 +2586,13 @@ async function guvenlik() {
     const botlar = ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'];
     const eksik = botlar.filter(b => !new RegExp('User-agent: ' + b + '\\s*\\nAllow: /').test(rb6));
     ol('robots.txt: AI tarayıcıları AÇIK (' + botlar.join(', ') + ')', eksik.length === 0, eksik.join(' ') || '');
-    const hd6 = fs.existsSync(path.join(KOK, '_headers')) ? fs.readFileSync(path.join(KOK, '_headers'), 'utf8') : '';
+    /* TUR 9 (3 Eyl 2026): satir sonu normalize — git autocrlf=true ile temiz
+       Windows klonu _headers'i CRLF acar, asagidaki regex `\n` bekliyordu ve
+       kural KLONDA KIRMIZI, calisma kopyasinda yesildi (Node 22 klon
+       zincirinde yakalandi: 133/1). Netlify (Linux) LF verir, orada
+       gorunmezdi; ama "temiz klonda zincir kosar" kapisi bu makinede
+       Windows klonudur. Ayni sinif: kur-medya manifest \r ayiklamasi. */
+    const hd6 = fs.existsSync(path.join(KOK, '_headers')) ? fs.readFileSync(path.join(KOK, '_headers'), 'utf8').replace(/\r\n/g, '\n') : '';
     ol('_headers: /* bloğunda Content-Signal başlığı', /\n\/\*\n(?:[^\n]*\n)*?\s+Content-Signal: search=yes, ai-input=yes, ai-train=no/.test(hd6), '');
     /* TUR 9 (3 Eyl 2026): bu suite build.js icinden, astro derlemesinden
        ONCE kosar; dist/yeni yokken alt kume kontrolu 60 Astro sayfasini hic
