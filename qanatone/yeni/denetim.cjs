@@ -10,6 +10,19 @@ const path = require('path');
 
 const KOK = path.join(__dirname, '..', 'dist', 'yeni');
 let gecti = 0, kaldi = 0;
+/* ERKEN CIKIS BEKCISI (TUR 9, 3 Eyl 2026). Bu dosya CommonJS: modul
+   seviyesinde `return` gecerlidir ve dosyayi sessizce bitirir — FM1'in
+   "girdi eksik" dali tam bunu yapiyordu; kalan kurallar, ozet ve exit(1)
+   atlaniyor, surec 0 ile cikiyordu (yanlis yesil, olculdu). Cikista ozet
+   satirina ulasilmamissa cikis kodu 1'e zorlanir: bu siniftaki her erken
+   cikis (return, throw'suz process.exit(0) vb.) kirmiziya doner. */
+let ozetBasildi = false;
+process.on('exit', (kod) => {
+  if (!ozetBasildi && kod === 0) {
+    console.log('\n  !! DENETİM ÖZETE ULAŞMADAN BİTTİ (erken return/çıkış) — yanlış yeşil engellendi, çıkış 1');
+    process.exitCode = 1;
+  }
+});
 const ol = (ad, ok, not) => {
   console.log(`  ${ok ? 'ok ' : '!! '} ${ad}${not ? '  ' + not : ''}`);
   ok ? gecti++ : kaldi++;
@@ -1985,7 +1998,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    teslim listesi CIKTIDAN olculur. Kaynak sayilar uretim.json (uret.cjs)
    ve kanon.json (ffprobe); ikisi de "urettim" demekle degil sha1/bayt ile
    dist'teki dosyaya baglanir. */
-{
+/* TUR 9 (3 Eyl 2026): blok IIFE — icindeki `return` (girdi eksik dali)
+   onceden MODULU bitiriyordu: FM2/K1/ozet/exit(1) kosmuyor, surec 0 ile
+   cikiyordu. Olculdu: damga gizliyken `node yeni/denetim.cjs` EXIT=0.
+   CI'da bu "deploy duser" degil "medyasiz site YESIL cikar" demekti. */
+(() => {
   const crypto = require('crypto');
   const sha1 = (f) => crypto.createHash('sha1').update(fs.readFileSync(f)).digest('hex');
   const sayfa = path.join(KOK, 'film', 'index.html');
@@ -2203,7 +2220,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   }
   ol('FM1 · film iskeleti: 39 sahne kanonla + video src\'siz + poster zinciri encode\'dan + motor ayrı + CSP blob + dikiş ölçülü + KAPI (4G ilk kare<1,5sn · sınır 4/4 · bellek tavanı)',
      kusur.length === 0, kusur.slice(0, 4).join(' ') + (rapor ? '  [' + rapor + ']' : ''));
-}
+})();
 
 /* ---- FM2 · PROLOGU GEC SOZLESMESI (31 Agu 2026, PROLOG-ISKELET 5. adim)
    Gorevin uc tamamlanma sarti kural haline getirildi, cunku ucu de "kodda
@@ -2303,6 +2320,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 3).join(' ') || `kabuk.js ${boy} B`);
 }
 
+ozetBasildi = true;
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
