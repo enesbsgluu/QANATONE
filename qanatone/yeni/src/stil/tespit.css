@@ -58,6 +58,10 @@
 .ste-not{margin-top:0;color:var(--tx4);font-size:.8rem;line-height:1.6;font-weight:300}
 .ste-not b{color:var(--tx2);font-weight:500}
 .ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
+/* ANAYASA (3 Eyl): kaynakta durum/tarama kutulari bos iken YOK (.dgscan/.dgerr
+   display:none, .on ile acilir — 1751/1753); bos satir yer tutuyordu: bolum 29 px
+   uzundu (olc-tipografi #tespit .wrap 434 <-> 463). */
+.ste-durum:empty{display:none}
 
 /* ---- sonuç ---- */
 .ste-sonuc{margin-top:clamp(16px,2vw,24px);border-top:1px solid var(--line);

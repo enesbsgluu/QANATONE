@@ -239,7 +239,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const TAVAN_ANA = 12.5 * 1024;
   const TAVAN_FILM = 11 * 1024;
   const kusur = [];
-  let enBuyuk = 0, anaToplam = 0;
+  let enBuyuk = 0, anaToplam = 0, leadSon = 0;
   for (const p of sayfalar) {
     let toplam = 0;
     const h = oku(p);
@@ -248,8 +248,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       if (fs.existsSync(dosya)) toplam += fs.statSync(dosya).size;
       else kusur.push(rel(p) + ':kayıp-js:' + m[1]);
     }
+    /* LEAD FORMU HER SAYFADA (3 Eyl 2026, ANAYASA 'kabuk katmanlari'; kaynak 11742
+       'form her rotada en sonda'): gonderim betigi (LeadKutu.astro, satir ici) kabuk
+       kalemi — sayfa tavanindan DUSULUR, ayrica raporlanir. Kaynakta da her rotada
+       ayni betik kosuyordu; form JS'siz de calisir (native POST). Olculen ~1,1 KB. */
+    let leadJs = 0;
     for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
-      if (!/application\/ld\+json/.test(m[1])) toplam += Buffer.byteLength(m[2]);
+      if (!/application\/ld\+json/.test(m[1])) { const b = Buffer.byteLength(m[2]); if (/getElementById\('silForm'\)/.test(m[2])) leadJs += b; else toplam += b; }
     const anaMi = /^(index|en[\\/]index)[.]html$/.test(rel(p));
     const filmMi = /^(film|en[\\/]film)[\\/]index[.]html$/.test(rel(p));
     /* PROLOG ANA SAYFADA (3 Eyl 2026, ANAYASA istisna 4): ana sayfa film
@@ -258,12 +263,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        sayi ana 12,5 + film 11 = 23,5 KB; olculen 21.033 B. */
     const prologlu = anaMi && /<section class="fl"/.test(h);
     if (anaMi) anaToplam = toplam;
+    if (leadJs) leadSon = leadJs;
     if (toplam > (anaMi ? TAVAN_ANA + (prologlu ? TAVAN_FILM : 0) : filmMi ? TAVAN_FILM : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
     if (!anaMi) enBuyuk = Math.max(enBuyuk, toplam);
   }
   ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B (+film ${TAVAN_FILM} B prologluysa) · film ≤ ${TAVAN_FILM} B · öbür sayfalar ≤ ${TAVAN} B`,
      kusur.length === 0,
-     kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B`);
+     kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B · lead betiği ${leadSon} B (kabuk, tavan dışı)`);
 }
 
 /* F1c · font kapsamı: sayfalarda GEÇEN her kod noktasının bir

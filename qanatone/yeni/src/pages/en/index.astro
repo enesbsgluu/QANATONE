@@ -30,7 +30,7 @@ const BASLIK = 'QANATONE — The system that catches demand';
 const ACIKLAMA = 'Demand exists; nothing catches it. QANATONE builds the system that does: SEO, GEO, ads and AI automation under one measurement.';
 const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'en' });
 ---
-<Temel dil="en" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
+<Temel lead={false} dil="en" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
   canonical={`${KOK}/en`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
   {/* Ön yükleme TR ana sayfayla aynı — yüzler latin altkümesi,
       dil-bağımsız; gerekçeler orada. */}

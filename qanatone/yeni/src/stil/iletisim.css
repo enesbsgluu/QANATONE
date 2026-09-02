@@ -29,7 +29,12 @@
    dolgu, lead 0 ust / clamp(50,7vw,90) alt) — burada tek sahne, araligi
    .sil-cagri alt marjini tasir. */
 .sil-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+/* kaynak: .cta (2160) 150/150 + ayri #lead bolumu (2315) 0/90 — burada tek bolum:
+   ust 150 (.cta), alt 90 (#lead); .cta alt dolgusu 150 .sil-kutu ust bosluguna gecer.
+   (3 Eyl olcumu: bolum boyu 1302 = eski .cta 570 + #lead; paddingBottom 90 dogru) */
 .ana .sil-sahne{padding:clamp(80px,11vw,150px) 0 clamp(50px,7vw,90px)}
+/* kabuk lead bolumu (Temel.astro): kaynak #lead{padding:0 0 clamp(50px,7vw,90px)} (2315) */
+.sil-lead{padding:0 0 clamp(50px,7vw,90px)}
 
 /* ---- çağrı (kaynak .cta) ---- */
 .sil-cagri{text-align:center;margin:0 auto clamp(80px,11vw,150px)}

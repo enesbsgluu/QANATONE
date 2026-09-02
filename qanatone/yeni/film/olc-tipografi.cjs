@@ -31,15 +31,22 @@ const OZ = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing
     await p.setCacheEnabled(false);
     await p.setViewport({ width: GENISLIK, height: 900 });
     await p.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {} });
+    /* PROLOG ANA SAYFADA (3 Eyl 2026): film bayragi konur, govde olculur (PROLOG_ATLA=0 ile film) */
+    if (process.env.PROLOG_ATLA !== '0') await p.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-prolog-atlandi', '1'); sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {} });
     await p.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
     await p.evaluate(() => document.fonts && document.fonts.ready ? document.fonts.ready.then(() => true) : true);
-    const r = await p.evaluate((secs, OZ) => secs.map((s) => {
-      const e = document.querySelector(s); if (!e) return null;
+    /* KADRAJ (3 Eyl 2026): her oge olcumden once kadraja alinir + iki kare beklenir —
+       content-visibility:auto bolumler kadraj disinda yer tutucu boyda (1032/1144 px)
+       olculuyordu (yanlis fark); eski sitenin gec kurulan demolari da (akis karti 420
+       <-> 463) boyle yakalanmisti. */
+    const r = await p.evaluate(async (secs, OZ) => { const out = []; for (const s of secs) {
+      const e = document.querySelector(s); if (!e) { out.push(null); continue; }
+      e.scrollIntoView({ block: 'start' }); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
       const c = getComputedStyle(e), rc = e.getBoundingClientRect();
       const o = { secici: s, w: Math.round(rc.width), h: Math.round(rc.height), metin: (e.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 28) };
       for (const k of OZ) o[k] = c[k];
-      return o;
-    }), secici, OZ);
+      out.push(o);
+    } return out; }, secici, OZ);
     await p.close();
     return r;
   };

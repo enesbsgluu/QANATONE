@@ -22,6 +22,7 @@
    boş kalır ve kullanıcı Netlify'ın kendi teşekkür sayfasını görür. */
 import '../stil/iletisim.css';
 import { icerik, T, suz } from '../icerik';
+import LeadKutu from '../parcalar/LeadKutu.astro';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -34,10 +35,6 @@ const g = (k: string): string => T(s[k], dil);
 const yalinMetin = (k: string): string => g(k).replace(/<[^>]*>/g, '').trim();
 const en = dil === 'en';
 const wa = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
-/* KVKK metninin özeti kayda düşer: hangi metne onay verildiği sonradan
-   okunabilsin (kaynak `ldKvkkOzet`, orada JS dolduruyordu — burada
-   derlemede pişiyor, yani kayıt JS'e bağlı değil). */
-const kvkkOzet = g('ld4').replace(/<[^>]*>/g, '').slice(0, 180);
 const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
 ---
 <section class="sil-sahne" data-sahne="il" id="iletisim" data-anlati>
@@ -56,118 +53,10 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
       </p>
     </div>
 
-    {/* ---- LEAD FORMU ---- */}
-    <div class="sil-kutu" id="lead">
-      <div class="sil-yazi">
-        <p class="kunye">{g('ldk')}</p>
-        <h3 set:html={suz(g('ldh'), ['em', 'b'])} />
-        <p>{g('ldp')}</p>
-      </div>
-
-      <form class="sil-form" id="silForm" name="lead" method="POST"
-        data-netlify="true" netlify-honeypot="company">
-        <input type="hidden" name="form-name" value="lead" />
-        {/* Honeypot: gerçek kullanıcı görmez, bot doldurur. */}
-        <p class="sus-tuzak"><label>{g('hpSirket')}
-          <input name="company" tabindex="-1" autocomplete="off" /></label></p>
-
-        <label class="sil-alan"><span>{g('ld1')}</span>
-          <input type="text" name="name" required maxlength="80" autocomplete="name" /></label>
-        <label class="sil-alan"><span>{g('ld2')}</span>
-          <input type="email" name="email" required maxlength="120" autocomplete="email" /></label>
-        <label class="sil-alan"><span>{g('ld3')}</span>
-          <input type="tel" name="phone" required maxlength="24" autocomplete="tel"
-            placeholder="+90 5xx xxx xx xx" /></label>
-        <label class="sil-alan"><span>{g('ld6')}</span>
-          <textarea name="message" maxlength="600" rows="3"
-            placeholder={en ? 'e.g. site + WhatsApp agent for health tourism'
-                            : 'Örn: sağlık turizmi için site + WhatsApp ajanı'}></textarea></label>
-
-        {/* KVKK onayı — kaynağın kendi sınırı aynen: `required` kullanıcı
-            deneyimidir, hazırlanmış bir POST onu atlar; Netlify Forms
-            sunucu tarafı doğrulama sunmuyor. Hedef zorlamak değil
-            KAYDETMEK: alan gelmediyse kayıtta yoktur. */}
-        <label class="sil-onay"><input type="checkbox" name="kvkk_onay" value="evet" required />
-          <span>{g('ld4')}</span></label>
-        <input type="hidden" name="kvkk_metin_ozet" value={kvkkOzet} />
-
-        {/* ATIF ALANLARI — değerleri BOŞ doğar, gönderim anında dolar. */}
-        <input type="hidden" name="utm_source" value="" />
-        <input type="hidden" name="utm_medium" value="" />
-        <input type="hidden" name="utm_campaign" value="" />
-        <input type="hidden" name="utm_term" value="" />
-        <input type="hidden" name="utm_content" value="" />
-        <input type="hidden" name="gclid" value="" />
-        <input type="hidden" name="fbclid" value="" />
-        <input type="hidden" name="msclkid" value="" />
-        <input type="hidden" name="inilen_sayfa" value="" />
-        <input type="hidden" name="yonlendiren" value="" />
-
-        <button class="dugme" type="submit">{yalinMetin('ld5')}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ok} />
-        </button>
-        <p class="sil-durum" id="silDurum" role="status" aria-live="polite"></p>
-      </form>
-    </div>
+    {/* LEAD FORMU: ortak parca (LeadKutu.astro) — kaynakta form her rotada
+        en sonda; obur sayfalarda Temel.astro basar (3 Eyl 2026). */}
+    <LeadKutu dil={dil} />
   </div>
 </section>
 
-<script define:vars={{ waNum: wa }}>
-  /* ADA — yalnız `submit`. Açılışta sıfır iş.
-     1) Atıf alanları burada doldurulur (açılışta değil): utm_*, tıklama
-        kimlikleri, inilen sayfa, yönlendiren.
-     2) Gönderim `fetch` ile yapılır ki kullanıcı sayfada kalsın —
-        V1'in adıyla yazılmış istisnası (kullanıcı eylemi).
-     3) Sunucuya ulaşılamazsa WhatsApp'a düşürülür: talep kaybolmasın
-        (kaynağın kendi davranışı).
-     JS koşmazsa bu betiğin hiçbiri olmaz ve form NATIVE POST'la gider —
-     talep yine kaydedilir. */
-  const f = document.getElementById('silForm');
-  if (f) {
-    const durum = document.getElementById('silDurum');
-    const atif = () => {
-      const p = new URLSearchParams(location.search);
-      const yaz = (ad, deger) => {
-        const el = f.elements.namedItem(ad);
-        if (el && !el.value) el.value = deger || '';
-      };
-      for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-                       'gclid', 'fbclid', 'msclkid']) yaz(k, p.get(k));
-      yaz('inilen_sayfa', location.pathname + location.search);
-      yaz('yonlendiren', document.referrer);
-    };
-    const waBaglanti = (d) => {
-      const govde = 'QANATONE — demo talebi\n' +
-        'Ad soyad: ' + (d.get('name') || '') + '\n' +
-        'E-posta: ' + (d.get('email') || '') + '\n' +
-        'Telefon: ' + (d.get('phone') || '') +
-        (d.get('message') ? '\nTalep: ' + d.get('message') : '');
-      return 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(govde);
-    };
-    f.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      atif();
-      const veri = new FormData(f);
-      durum.textContent = 'Gönderiliyor…';
-      try {
-        const r = await fetch('/', {
-          method: 'POST',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(veri).toString(),
-        });
-        if (!r.ok) throw new Error(String(r.status));
-        durum.textContent = 'Talebin bize ulaştı — en geç bir iş günü içinde döneriz.';
-        f.reset();
-      } catch (err) {
-        durum.textContent = 'Kayıt sunucuya ulaşmadı. ';
-        const a = document.createElement('a');
-        a.href = waBaglanti(veri);
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = "WhatsApp'tan gönder";
-        durum.appendChild(a);
-      }
-    });
-  }
-</script>
+
