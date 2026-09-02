@@ -93,6 +93,10 @@ const SAYFALAR: [string, string, string, string][] = [
   {GTM_KOD && <script is:inline set:html={GTM_KOD} />}
 </head>
 <body>
+  {/* TUR 9 E1 (3 Eyl 2026): atlama bağlantısı — ilk Tab durağı. Ölçüldü:
+      klavye kullanıcısı ana sayfada içeriğe 31. durakta varıyordu (WCAG
+      2.4.1). Ekran dışı durur, odaklanınca görünür (temel.css .atla). */}
+  <a class="atla" href="#icerik">{m('atla', 'İçeriğe geç', 'Skip to content')}</a>
   {perde && <Perde />}
   {/* KAYNAK 4621-4629: yıldız tuvali · grain · ajan imleci katmanları.
       Hepsi aria-hidden dekor; balon (#bitsay) diyalog. Tuvaller JS'siz
@@ -108,7 +112,9 @@ const SAYFALAR: [string, string, string, string][] = [
   {/* Tasarım turu A1: Faz 1'in minimal .ust kabuğu yerini gerçek
       NAV'a bıraktı (Enes hükmü: "menü bile yok, logo bile yok"). */}
   <Nav dil={dil} />
-  <main class={genis ? 'genis' : undefined}>
+  {/* id + tabindex=-1: atlama bağlantısı hedefi; odak main'e düşer, sonraki
+      Tab içerikten sürer (Chrome/Safari çapaya atlayınca odağı taşımıyor). */}
+  <main id="icerik" tabindex="-1" class={genis ? 'genis' : undefined}>
     <slot />
   </main>
   {/* FOOTER — kaynak 5478-5512 birebir: üç sütun (tanıtım / Sayfalar /

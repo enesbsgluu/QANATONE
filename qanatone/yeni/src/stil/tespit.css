@@ -45,7 +45,10 @@
   font:inherit;font-size:.95rem;padding:14px 0;min-width:0}
 .ste-giris input::placeholder{color:var(--tx4)}
 .ste-giris input:focus{outline:none}
-.ste-giris:focus-within{border-color:var(--red)}
+/* TUR 9 E6 (3 Eyl 2026): odak halkasi KAPSAYICIDA — input'un kendi halkasi
+   hap kutunun icinde kalirdi; kenarlik rengi tek basina olcumde gorunmedi
+   (olc-klavye: halkasiz 1). Kuresel :focus-visible ile ayni dil. */
+.ste-giris:focus-within{border-color:var(--red);outline:2px solid var(--red-soft);outline-offset:3px}
 .ste-form .dugme{flex:none}
 .ste-not{margin-top:12px;color:var(--tx3);font-size:.82rem;line-height:1.5}
 .ste-not b{color:var(--tx2)}
@@ -145,7 +148,7 @@
 .ste-fix-liste li{display:flex;gap:15px;padding:12px 0;border-bottom:1px dashed var(--line);counter-increment:n}
 .ste-fix-liste li:last-child{border-bottom:0}
 .ste-fix-liste li::before{content:counter(n);width:24px;height:24px;border-radius:8px;flex-shrink:0;
-  display:grid;place-items:center;background:var(--red);color:#fff;font-family:var(--f-tek);font-size:10px}
+  display:grid;place-items:center;background:var(--red-dolgu);color:#fff;font-family:var(--f-tek);font-size:10px}
 .ste-fix-liste li[data-k="yok"]::before{content:'✓'}
 .ste-fix-liste b{display:block;font-size:.92rem;margin-bottom:4px;letter-spacing:-.02em}
 .ste-fix-liste span{font-size:.85rem;color:var(--tx3);line-height:1.6;font-weight:300}

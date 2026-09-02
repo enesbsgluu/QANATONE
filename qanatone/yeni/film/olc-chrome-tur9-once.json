@@ -1,0 +1,223 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-02T12:57:10.079Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1804,
+  "lcpEl": "p.sh-lede",
+  "cls": 0.2106,
+  "clsKaynak": [
+   {
+    "t": 16690,
+    "v": 0.0025,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 16767,
+    "v": 0.0021,
+    "el": "article.ssz-kart"
+   },
+   {
+    "t": 16870,
+    "v": 0.0008,
+    "el": "article.ssz-kart"
+   }
+  ],
+  "inp": 104,
+  "inpHedef": "section.sh-sahne pointerdown",
+  "etkilesim": 10,
+  "loaf": 70,
+  "loafToplam": 9551,
+  "loafEnUzun": 787,
+  "loafKaynak": [
+   {
+    "t": 1019,
+    "sure": 787,
+    "engel": 0,
+    "betik": 784,
+    "stilDuzen": 2,
+    "render": 3,
+    "kaynak": []
+   },
+   {
+    "t": 554,
+    "sure": 442,
+    "engel": 6,
+    "betik": 422,
+    "stilDuzen": 17,
+    "render": 20,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "IntersectionObserverCallback",
+      "sure": 36
+     },
+     {
+      "src": "page.sJrt8mpm.js",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 5
+     },
+     {
+      "src": "page.sJrt8mpm.js",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 5
+     }
+    ]
+   },
+   {
+    "t": 109,
+    "sure": 424,
+    "engel": 168,
+    "betik": 396,
+    "stilDuzen": 27,
+    "render": 28,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8791/yeni/",
+      "sure": 189
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 448,
+   "lcpEl": "p.sh-lede",
+   "cls": 0.0066,
+   "clsKaynak": [
+    {
+     "t": 14762,
+     "v": 0.0009,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 14845,
+     "v": 0.0026,
+     "el": "article.ssz-kart"
+    },
+    {
+     "t": 14969,
+     "v": 0.0029,
+     "el": "article.ssz-kart"
+    }
+   ],
+   "inp": 112,
+   "inpHedef": "section.sh-sahne pointerup",
+   "etkilesim": 10,
+   "loaf": 64,
+   "loafToplam": 7038,
+   "loafEnUzun": 397,
+   "loafKaynak": [
+    {
+     "t": 3595,
+     "sure": 397,
+     "engel": 0,
+     "betik": 387,
+     "stilDuzen": 1,
+     "render": 11,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 9
+      }
+     ]
+    },
+    {
+     "t": 3994,
+     "sure": 311,
+     "engel": 0,
+     "betik": 278,
+     "stilDuzen": 2,
+     "render": 33,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 26
+      }
+     ]
+    },
+    {
+     "t": 13073,
+     "sure": 304,
+     "engel": 0,
+     "betik": 303,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 348,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 3434,
+     "v": 0.0003,
+     "el": "div.nv-ic"
+    }
+   ],
+   "inp": 88,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 16,
+   "loafToplam": 1154,
+   "loafEnUzun": 134,
+   "loafKaynak": [
+    {
+     "t": 137,
+     "sure": 134,
+     "engel": 84,
+     "betik": 8,
+     "stilDuzen": 127,
+     "render": 127,
+     "kaynak": []
+    },
+    {
+     "t": 3436,
+     "sure": 107,
+     "engel": 0,
+     "betik": 99,
+     "stilDuzen": 7,
+     "render": 8,
+     "kaynak": []
+    },
+    {
+     "t": 3822,
+     "sure": 90,
+     "engel": 0,
+     "betik": 87,
+     "stilDuzen": 2,
+     "render": 3,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/hizmetler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

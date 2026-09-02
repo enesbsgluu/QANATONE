@@ -118,7 +118,7 @@
 .nv-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;
   padding:10px 18px;border-radius:999px;font-size:.82rem;font-weight:600;
   font-family:var(--f-govde);letter-spacing:-.01em;white-space:nowrap;
-  background:var(--red);color:#fff;text-decoration:none;transition:.3s var(--e)}
+  background:var(--red-dolgu);color:#fff;text-decoration:none;transition:.3s var(--e)}
 .nv-burger{display:none;width:38px;height:34px;border-radius:9px;border:1px solid var(--line);
   align-items:center;justify-content:center;cursor:pointer}
 .nv-burger i{position:relative;width:15px;height:1.5px;background:var(--tx);font-style:normal;
@@ -143,7 +143,7 @@
   .nv-di:hover{background:rgba(255,255,255,.05)}
   .nv-di:hover .nv-din{background:var(--red-dim);border-color:rgba(239,35,60,.4);color:var(--red-soft)}
   .nv-df:hover{color:var(--red-soft)}
-  .nv-cta:hover{background:#ff2f47;box-shadow:0 12px 40px -10px var(--red-glow);transform:translateY(-2px)}
+  .nv-cta:hover{background:var(--red-dolgu-hover);box-shadow:0 12px 40px -10px var(--red-glow);transform:translateY(-2px)}
 }
 @media(min-width:981px){
   .nv-ic{background:rgba(10,10,10,.6);backdrop-filter:blur(20px);
@@ -179,9 +179,15 @@
   padding:calc(12px + env(safe-area-inset-top)) 20px calc(18px + env(safe-area-inset-bottom));
   opacity:0;pointer-events:none;
   clip-path:inset(0 0 100% 0);
-  transition:clip-path .55s var(--e),opacity .35s var(--e)}
+  /* TUR 9 E2 (3 Eyl 2026): visibility:hidden — kapali menu yalniz
+     opacity+clip-path ile gizliydi, 12 baglantisi tab sirasinda kaliyordu
+     (olculdu: telefonda 12 gorunmez durak). Gecikmeli visibility (0s .55s)
+     kapanis animasyonunu korur: clip-path bitince gizlenir. JS yok. */
+  visibility:hidden;
+  transition:clip-path .55s var(--e),opacity .35s var(--e),visibility 0s .55s}
 @media(max-width:980px){.nv-m{display:flex}}
-#nvAc:checked ~ .nv-m{opacity:1;pointer-events:auto;clip-path:inset(0 0 0% 0)}
+#nvAc:checked ~ .nv-m{opacity:1;pointer-events:auto;visibility:visible;clip-path:inset(0 0 0% 0);
+  transition:clip-path .55s var(--e),opacity .35s var(--e),visibility 0s}
 html:has(#nvAc:checked){overflow:hidden}
 .nv-mtop{display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px}
 .nv-mx{width:44px;height:44px;display:flex;align-items:center;justify-content:center;
@@ -215,7 +221,7 @@ html:has(#nvAc:checked){overflow:hidden}
   gap:9px;text-align:center;border-radius:999px;font-family:var(--f-govde);
   font-size:.96rem;font-weight:600;letter-spacing:-.01em;text-decoration:none;
   transition:.3s var(--e)}
-.nv-mcta .nv-mp{background:var(--red);color:#fff}
+.nv-mcta .nv-mp{background:var(--red-dolgu);color:#fff}
 .nv-mcta .nv-mw{background:#fff;color:#0a0a0b}
 @keyframes mmrow{to{opacity:1;transform:none}}
 

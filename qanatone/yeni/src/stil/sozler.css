@@ -163,8 +163,11 @@
     transition:flex-grow .55s var(--e),border-color .3s var(--e)}
   .ssz-buyuk{flex:7 1 0}
   .ssz-kucuk{flex:3 1 0}
+  /* TUR 9 E4 (3 Eyl 2026): outline:none kaldirildi — tabindex=0 kartta odak
+     halkasi siliniyordu (WCAG 2.4.7); halka artik temel.css kuresel
+     :focus-visible'dan gelir, buyume ve kenarlik ipucu olarak kalir. */
   .ssz-kart:hover,.ssz-kart:focus-visible{border-color:var(--line2);
-    flex-grow:7.4;outline:none}
+    flex-grow:7.4}
   .ssz-buyuk:hover,.ssz-buyuk:focus-visible{flex-grow:12}
   .ssz-kucuk:hover,.ssz-kucuk:focus-visible{flex-grow:10.5}
   .ssz-buyuk .ssz-ikon{margin-bottom:auto}
