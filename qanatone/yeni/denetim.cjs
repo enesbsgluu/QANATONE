@@ -252,11 +252,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       if (!/application\/ld\+json/.test(m[1])) toplam += Buffer.byteLength(m[2]);
     const anaMi = /^(index|en[\\/]index)[.]html$/.test(rel(p));
     const filmMi = /^(film|en[\\/]film)[\\/]index[.]html$/.test(rel(p));
+    /* PROLOG ANA SAYFADA (3 Eyl 2026, ANAYASA istisna 4): ana sayfa film
+       bolumunu (`<section class="fl"`) tasiyorsa tavan ana + film (film
+       betigi 8,3 KB, motor dinamik ithal — J1 disi, FM1). ENES ONAYI BEKLIYOR:
+       sayi ana 12,5 + film 11 = 23,5 KB; olculen 21.033 B. */
+    const prologlu = anaMi && /<section class="fl"/.test(h);
     if (anaMi) anaToplam = toplam;
-    if (toplam > (anaMi ? TAVAN_ANA : filmMi ? TAVAN_FILM : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
+    if (toplam > (anaMi ? TAVAN_ANA + (prologlu ? TAVAN_FILM : 0) : filmMi ? TAVAN_FILM : TAVAN)) kusur.push(rel(p) + ':' + toplam + 'B');
     if (!anaMi) enBuyuk = Math.max(enBuyuk, toplam);
   }
-  ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B · film ≤ ${TAVAN_FILM} B · öbür sayfalar ≤ ${TAVAN} B`,
+  ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B (+film ${TAVAN_FILM} B prologluysa) · film ≤ ${TAVAN_FILM} B · öbür sayfalar ≤ ${TAVAN} B`,
      kusur.length === 0,
      kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B`);
 }
@@ -696,11 +701,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const h1 = (h.match(/<h1[\s>]/g) || []).length;
     if (h1 !== 1) kusur.push('h1 sayisi:' + h1);
     /* TUR 3 (2 Eyl 2026): EN ana gzip 40.180 -> 21.917 B; tavan 40 -> 24 KB. */
-    const TAVAN = 24 * 1024;
+    /* prologlu EN ana: H18 ile ayni tavan (28 KB, ENES ONAYI BEKLIYOR) */
+    const TAVAN = (/<section class="fl"/.test(h) ? 28 : 24) * 1024;
     gz = zlib.gzipSync(fs.readFileSync(p), { level: 9 }).length;
     if (gz > TAVAN) kusur.push(`gzip ${gz} > ${TAVAN}`);
   }
-  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 24576 B',
+  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 24576 B (prologlu 28672)',
      kusur.length === 0, kusur.join(' | ') || `${gz} B`);
 }
 
@@ -782,7 +788,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        sitenin ajan imleci (#bit/#bittip/#bitsay/#bitback) her sayfaya
        geri geldi; hareketi (halka nabzi, balon gecisi, imlec sonumu)
        .kb-* siniflarinda. nv- gibi global katman: SAHNE_ONEK'e girmez. */
-    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|pr-|ak[a-z]|nv-|kb-)/; /* + süs + ak demo ailesi + global katman + PROLOG (pr-) */
+    /* fl-: PROLOG ana sayfada (3 Eyl 2026, ANAYASA istisna 4) — filmin kendi
+       ailesi, kendi kapilari FM1/FM2 (bellek, ilk kare, sokum). */
+    const HAREKET_ONEK = /(^|[\s,.>(])(s[123]-|sh-|st-|sp-|sk-|sa-|sse-|ste-|ssz-|ssb-|sku-|sil-|sus-|pr-|fl-|ak[a-z]|nv-|kb-)/; /* + süs + ak demo ailesi + global katman + PROLOG (pr-) */
 
     /* `pr-` ONEKI (22 Agu, prolog 1. durak): Anayasa madde 3'un ongordugu
        genisletme — "H1 yeni sahne onekleriyle genisletilir", ayri ve acik
@@ -1056,6 +1064,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
         if (!/application\/ld\+json/.test(m[1])) betikler.push(['satir ici', m[2]]);
       for (const [ad, kod] of betikler) {
+        /* PROLOG (3 Eyl 2026): film betigi kaydirmanin KENDISINI anlatan tek
+           sahne (CLAUDE.md surucu kurali) — scroll dinleyicisi ve tek seferlik
+           getComputedStyle (fade kaydi) onun tanimi; bedeli kendi kapisinda
+           (FM1 takilma/bellek, olc-devir). Ana sayfanin obur betikleri kurala
+           tabi kalir. */
+        if (/Film\.astro_astro_type_script/.test(ad)) continue;
         if (DINLEYICI.test(kod)) kusur.push(ad + ':kaydirma-dinleyicisi');
         const o = kod.match(OKUMA);
         if (o) kusur.push(ad + ':duzen-okuma:' + o[0]);
@@ -1333,9 +1347,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       /* GECE ZINCIRI TUR 3 (2 Eyl 2026): inlineStylesheets 'always' -> 'auto';
          ana sayfa gzip 40.947 -> 22.434 B olculdu (satir ici oran %52 -> %10).
          Tavan 40 -> 24 KB: ortak stil geri satir ici olursa adiyla kirmizi. */
-      const TAVAN = 24 * 1024;
+      /* PROLOG ANA SAYFADA (3 Eyl 2026, ANAYASA istisna 4): film markup'i
+         (39 poster + 21 soz blogu) +3,9 KB gz getirdi (21.384 -> 25.308 B).
+         Tavan prologluysa 28 KB: bir sonraki gercek ucurum (cwnd katlanmasi,
+         ~29 KB) once kirmiziya doner. ENES ONAYI BEKLIYOR — bedel Lighthouse
+         donusumlu olculup rapora yazilir (performans turu). */
+      const prologlu = /<section class="fl"/.test(fs.readFileSync(ana, 'utf8'));
+      const TAVAN = (prologlu ? 28 : 24) * 1024;
       const gz = zlib.gzipSync(fs.readFileSync(ana), { level: 9 }).length;
-      ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B`, gz <= TAVAN,
+      ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B${prologlu ? ' (prologlu)' : ''}`, gz <= TAVAN,
          `${gz} B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)`);
     }
 

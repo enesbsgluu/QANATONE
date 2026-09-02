@@ -396,3 +396,19 @@ html:not(.fl-js) .fl-satir { display: inline; padding: 0; margin: 0; overflow: v
 html:not(.fl-js) .fl-satir > span { display: inline; transform: none; }
 html:not(.fl-js) .fl-satir + .fl-satir::before { content: ' '; }
 html:not(.fl-js) .fl-soz.fl-kaynak { opacity: 1; font-size: 12px; }
+
+/* ============ ANA SAYFA PROLOGU (3 Eyl 2026, ANAYASA istisna 4) ============
+   Film ana sayfanin onunde (Film sayfa='ana'); govde .fl-govde sarmalinda.
+   · kabuk navi (Nav.astro .nv-bar/.nv-fade, z 50) film boyunca gizli — site
+     filmin ustunde netlesirken (fl-devir-net) beraber belirir; /film'de
+     govdenin kendi navi vardi, burada kabugun navi ayni isi gorur.
+   · devir tamamlaninca betik siteyeGec: data-film="bitti" -> film katmani
+     yok, .fl-govde static (html:not(.fl-js) kurali), sayfa 0'dan akar.
+   · hareket azaltma: ana sayfada 39 posterlik sutun gosterilmez, dogrudan
+     site (film sayfasinda poster sutunu KALIR — olcum zemini). Karar Enes'te. */
+html.fl-ana:not(.fl-devir-net) .nv-bar, html.fl-ana:not(.fl-devir-net) .nv-fade { visibility: hidden; }
+/* site netlesirken nav da yerinde (fl-nav-kalk film boyunca yukari cekmisti;
+   /film'de 'devirde kalkik kalir' — orada govdenin kendi navi vardi) */
+html.fl-ana.fl-devir-net .nv-bar { transform: none; }
+html[data-film="bitti"] .fl { display: none; }
+html[data-film="hareket-azaltma"] .fl[data-sayfa="ana"] { display: none; }

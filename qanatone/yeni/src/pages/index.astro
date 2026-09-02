@@ -31,6 +31,7 @@ import SSZSozler from '../sahneler/SSZSozler.astro';
 import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
+import Film from '../parcalar/Film.astro';
 import { KOK, icerik } from '../icerik';
 import { anaSema } from '../sema.mjs';
 
@@ -75,6 +76,12 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
       sahne; gövde arkada normal akışta hazır durur ve h1 hero'da
       kalır — bot prologu değil gövdeyi görür. 2. durak (logo
       hizalanması) Enes'in hükmünden sonra. */}
+  {/* PROLOG (3 Eyl 2026, ANAYASA istisna 4 — 'Yeni, eskide yoktu'): film ana
+      sayfanin ONUNDE; govde .fl-govde sarmalinda (film.css: JS + hareket
+      acikken sabit katman, devir bitince static). Atlama / oturumda bir kez /
+      hareket azaltma: Film.astro + film.css. Bot ve JS'siz yol govdeyi gorur. */}
+  <Film dil="tr" sayfa="ana" />
+  <div class="fl-govde" id="fl-govde">
   <div class="ana">
     {/* SADAKAT (3 Eyl 2026, Enes): ESKİ KÖK SİTE BİREBİR, yeni mimari. Sıra
         kök index.html'in kendisi: hero → şerit → projeler → katman → akış →
@@ -91,5 +98,6 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
     <SSBSozBandi />
     <SKUKurucu />
     <SILIletisim />
+  </div>
   </div>
 </Temel>

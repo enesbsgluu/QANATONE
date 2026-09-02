@@ -64,8 +64,13 @@ const DEVIR = {
   hiz: ((e120.sag - e120.sol) - (e119.sag - e119.sol)) * FPS / (e120.sag - e120.sol),
 };
 
-interface Props { dil?: 'tr' | 'en' }
-const { dil = 'tr' } = Astro.props;
+/* PROLOG ANA SAYFAYA (3 Eyl 2026, ANAYASA istisna 4 'Prolog. Yeni'):
+   sayfa='ana' -> film ana sayfanin ONUNDE; devir tamamlaninca (TV acilisi
+   bitince) film katmani SOKULUR ve site normal akisa gecer (atlama yolunun
+   sokumuyle ayni: sok + siniflar + scrollTo(0,0)). sayfa='film' -> /film
+   olcum zemini, davranis DEGISMEDI (govde sabit katman, tubes). */
+interface Props { dil?: 'tr' | 'en'; sayfa?: 'film' | 'ana' }
+const { dil = 'tr', sayfa = 'film' } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /* TUR 5 v2 · ANLATI METNI (2 Eyl 2026 gece, Enes yeniden yazdi —
@@ -151,7 +156,7 @@ const satirla = (m: string): string[] => {
   return [c.slice(0, enIyi).join(' '), c.slice(enIyi).join(' ')];
 };
 ---
-<section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B}
+<section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B} data-sayfa={sayfa}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
   data-yavas={`${YAVAS.bas},${YAVAS.son},${YAVAS.k}`}
@@ -261,6 +266,9 @@ const satirla = (m: string): string[] => {
   const AN = () => performance.now();
   const azalt = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const ANAHTAR = 'qanat-prolog-atlandi';
+  /* ANA SAYFA PROLOGU: bolum data-sayfa='ana' ise devir sonunda siteye gecilir
+     (siteyeGec) ve kabuk navi film boyunca gizli (film.css html.fl-ana). */
+  const ANA = bolum?.dataset.sayfa === 'ana';
   let atlandi = false;
   try { atlandi = sessionStorage.getItem(ANAHTAR) === '1'; } catch {}
 
@@ -269,6 +277,7 @@ const satirla = (m: string): string[] => {
     KOKE.dataset.film = 'atlandi';
   } else if (bolum && !azalt) {
     KOKE.classList.add('fl-js');
+    if (ANA) KOKE.classList.add('fl-ana');
     /* ?boz=soz — ALTYAZI olcum duzeneginin kirmizi kontrolu (olc-soz):
        gecikme 0 + cizgi orijini sol + maske acik (film.css). Urun yolunda etkisiz. */
     if (new URLSearchParams(location.search).get('boz') === 'soz') bolum.classList.add('fl-boz-soz');
@@ -443,7 +452,25 @@ const satirla = (m: string): string[] => {
        1,25 kaynaktaki gerekceyle ayni (giris kasmasinin GPU ayagi).
        Basarisizlik sessiz — huzme dekor. */
     let tubesApp: unknown = null;
+    /* ANA SAYFA: devir tamamlaninca (TV acilisi bitti ya da sade yol) film
+       sokulur, site akisa gecer. Sabit .fl-govde katmani sitenin TEPESINI
+       gosteriyordu; scrollTo(0,0) + static ayni pikselleri verir (goze
+       gorunmez takas). Oturum bayragi: prolog bir kez izlendiyse ayni
+       oturumda tekrar kurulmaz (FM2 'oturumda bir kez'). Sokum 50 ms sonra
+       (gecYap dersi: 39 blob revoke + duzen tek karede 25 ms'i asiyor). */
+    let siteGecti = false;
+    const siteyeGec = () => {
+      if (siteGecti) return; siteGecti = true;
+      try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
+      KOKE.classList.remove('fl-js', 'fl-ana', 'fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk', 'fl-hazirla');
+      tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
+      delete KOKE.dataset.devir;
+      KOKE.dataset.film = 'bitti';
+      scrollTo(0, 0);
+      setTimeout(sok, 50);
+    };
     const eskiCanlandir = () => {
+      if (ANA) { siteyeGec(); return; }
       const eski = document.getElementById('fl-eski');
       const cv = eski?.shadowRoot?.getElementById('tubes') as HTMLCanvasElement | null;
       if (!eski || !cv || tubesApp) return;
@@ -619,8 +646,10 @@ const satirla = (m: string): string[] => {
        durduktan sonra en cok ~1 sn surer ve son scroll olayinda kurulan
        rAF dongusu (sona-yakin kosulu) o pencereyi zaten tasiyor. */
     olcDevir();
-    addEventListener('scroll', () => { navBak(); tutunBak(); devirTik(); }, { passive: true });
-    addEventListener('resize', () => { olcDevir(); tutunBak(); devirTik(); }, { passive: true });
+    /* film bitti/atlandi (data-film yazildi): dinleyiciler bos doner — site
+       kaydirmasi filmden is almaz (H12 ruhu; siteyeGec/gecYap sonrasi). */
+    addEventListener('scroll', () => { if (KOKE.dataset.film) return; navBak(); tutunBak(); devirTik(); }, { passive: true });
+    addEventListener('resize', () => { if (KOKE.dataset.film) return; olcDevir(); tutunBak(); devirTik(); }, { passive: true });
     navBak(); tutunBak(); devirTik();
     /* OLCUM YUZEYI (olc-devir.cjs okur): kunye + geometri + yay durumu +
        devir penceresi kaydi (v0, fade/tam anlari, rAF zamanlari, olcek izi). */
@@ -651,7 +680,7 @@ const satirla = (m: string): string[] => {
         KOKE.classList.remove('fl-js');
         /* devir ortasinda basilirsa devir/efekt kalintilari da sokulur */
         KOKE.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk',
-          'fl-hazirla');
+          'fl-hazirla', 'fl-ana');            /* fl-ana: ana sayfada kabuk navi geri gelsin */
         tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
         delete KOKE.dataset.devir;
         KOKE.dataset.film = 'atlandi';
