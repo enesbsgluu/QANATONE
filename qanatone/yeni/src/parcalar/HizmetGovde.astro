@@ -13,7 +13,6 @@
    kalsın; aria-hidden — aynı bilgi sayfanın metninde. */
 import { T, type Dil, icerik } from '../icerik';
 import { ton } from '../ton';
-import AkisDemo from './AkisDemo.astro';
 import HuniSahne from './HuniSahne.astro';
 import AkisSahne from './AkisSahne.astro';
 import SerpSahne from './SerpSahne.astro';
@@ -35,20 +34,7 @@ const { s, dil } = Astro.props;
 const d = s.det;
 const M = (tr: string, en: string) => dil === 'en' ? en : tr;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
-/* Anahtar kaynağın akKind kuralı (kök 6908) — burada yalnız dördü:
-   slug eşlemesi + panelden yeni hizmet gelirse aile yedeği (craft →
-   story.tools varsa tool yoksa site; trade ailesi trade — kaynakta
-   'trust' anahtarı da fiilen trade markup'ına düşüyordu). funnel/
-   flow/climb aileleri şerit demolarına eşlenir → burada demosuz. */
-const DEMO_MAP: Record<string, string> = { 'web-tasarim': 'site',
-  'web-sitesi-araclar': 'tool', 'otomasyon': 'auto', 'finans': 'trade' };
-const demoAnahtar = (h: any): string | null => {
-  if (DEMO_MAP[h.slug]) return DEMO_MAP[h.slug];
-  if (h.fam === 'craft') return h.det?.story?.tools ? 'tool' : 'site';
-  if (h.fam === 'trade') return 'trade';
-  return null;
-};
-const dk = demoAnahtar(s);
+/* Giris demosu anahtari (DEMO_MAP/demoAnahtar) KALKTI — anayasa, 3 Eyl 2026. */
 const on = dil === 'en' ? '/en' : '';
 /* WhatsApp adresi kaynağın kendi kurulumundan (7457-7462): panel
    `settings.whatsapp` + `settings.waMessage` yazıyor, numara rakama
@@ -78,9 +64,12 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   {s.tag && <span class="mono">{T(s.tag, dil)}</span>}
   <h1>{T(d.h, dil)}</h1>
   <p class="lede">{T(d.lede, dil)}</p>
-  {dk && <div class="hd-demo" aria-hidden="true" style={ton(sira)}>
-    <AkisDemo k={dk} dil={dil} />
-  </div>}
+  {/* ANAYASA (3 Eyl 2026): giris demosu (.hd-demo, AkisDemo site/tool/auto/trade)
+      KALDIRILDI — kaynagin hizmet detayinda yok (kok renderHizmetDetay; akd
+      demolari yalniz ana sayfa akis seridinde). Yan yana kare: hz-web-tasarim-0,
+      hz-otomasyon-0, hz-finans-0 (eski giris demosuz, yeni demolu). Listede
+      olmayan ekleme; sokuldu. Sinif kapisi (.hd-demo/.akoynar) betikte durur,
+      secici bos doner. */}
 </section>
 
 {/* K7 SAHNELERİ (D4) — kaynakta her hizmet ailesinin kendi kaydırma
