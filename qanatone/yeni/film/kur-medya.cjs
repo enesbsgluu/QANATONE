@@ -141,8 +141,13 @@ async function havuz(isler, n) {
 async function kur() {
   const t0 = Date.now();
   const { govde, M } = manifestOku();
+  /* Oncelik: acik verilen kazanir. Arguman dizin > MEDYA_KAYNAK dizin >
+     MEDYA_URL (acik) > ana agac dizini (ortuk, yalniz bu makinede var) >
+     manifest.uzak. 3 Eyl dersi: ana agac dizini URL'den once geliyordu,
+     klon sinamasinda MEDYA_URL verilmesine ragmen indirme yolu hic
+     kosmadi (238 kopyalandi) — acik env ortuk sabite yenilmez. */
   const dizinler = [process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null,
-    process.env.MEDYA_KAYNAK, ANA_AGAC].filter(Boolean);
+    process.env.MEDYA_KAYNAK, process.env.MEDYA_URL ? null : ANA_AGAC].filter(Boolean);
   const kaynak = dizinler.find((k) => fs.existsSync(k) && path.resolve(k) !== path.resolve(HEDEF));
   const uzak = process.env.MEDYA_URL || M.uzak || null;
   fs.mkdirSync(HEDEF, { recursive: true });
