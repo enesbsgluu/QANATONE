@@ -97,6 +97,17 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   kaydırma çubuğu olan tarayıcıda çubuk belirip kaybolunca sabit katmanları
   oynatır ve büyük CLS üretir; headless overlay çubukta görünmez. Taşma
   ikili aramayla bulunur (çocukları gizleyip scrollWidth'e bak).
+- **LCP: kapı 2,5 sn (Core Web Vitals), 2,0 sn HEDEF (Enes, 3 Eyl):** kapı
+  geçilmezse tur kapanmaz; hedef geçilmezse yalnızca daha iyisi yapılamamıştır.
+  2,0 kapı sayılıp başka yerden (tasarımdan) ödün verilmez.
+- **Kabuk lead formu (3 Eyl, anayasa):** kaynakta `#lead` her rotada en sonda
+  (11742); `LeadKutu.astro` tek parça, `Temel.astro` footer önüne basar,
+  gövdesinde basan sayfa `lead={false}` verir. Gönderim betiği J1 dışı kabuk
+  kalemi. `.kunye` etiketi global (temel.css; kaynakta `.mono` global).
+- **Hizmet detayı giriş demosu YOK (3 Eyl, anayasa):** kaynağın detay
+  sayfasında `akd` demoları yoktu (yalnız ana sayfa şeridi); `.hd-demo` kalktı.
+  Detay sayfalarında animasyon = kaynağın kendi sahneleri (Tırmanış/huni/akış/
+  platform/canlı işler), kareleri ve sürücüsü kaynaktan.
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
