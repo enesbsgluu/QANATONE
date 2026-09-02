@@ -2,7 +2,19 @@
 [build]
   # Faz 0 (Astro karari): yeni kabuk dist/yeni altina basar, /yeni/* den
   # yayinlanir. Mevcut site aynen yasar; kok adrese alma Faz 4 un isi.
-  command = "npm ci && node build.js && npm --prefix yeni ci && npm --prefix yeni run build && node yeni/denetim.cjs"
+  # TUR 9 (3 Eyl 2026) — zincir dort adimdan yediye:
+  #   npm ci                        kok bagimliliklar
+  #   node build.js                 eski kok site + test/denetim.js (dist/ sifirlanir)
+  #   npm --prefix yeni ci          Astro bagimliliklari (esbuild dahil)
+  #   node yeni/film/kur-medya.cjs  film medyasi: onbellek (plugins/onbellek) -> yoksa
+  #                                 manifest.uzak'tan (GitHub Release) indirir, sha1 dogrular, damga yazar.
+  #                                 ONCEDEN YOKTU: temiz klonda damga yok -> FM1 kirmizi, ustune
+  #                                 FM1'in modul-seviyesi return'u exit(1)'i atliyordu -> deploy
+  #                                 medyasiz YESIL cikacakti (3 Eyl olculdu: exit 0).
+  #   npm --prefix yeni run build   = node kabuk-derle.cjs && astro build (kabuk paketi artik hatta)
+  #   node yeni/denetim.cjs         yeni kabuk denetimi; kirmizi -> exit 1 -> deploy dusmez
+  #   node yeni/surum-yaz.cjs       dist/yeni/surum.json: commit/dal/baglam/medya sureleri (CI gozlemi)
+  command = "npm ci && node build.js && npm --prefix yeni ci && node yeni/film/kur-medya.cjs && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
   publish = "dist"
 
 [build.environment]
