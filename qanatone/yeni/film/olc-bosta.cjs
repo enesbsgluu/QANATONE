@@ -5,12 +5,12 @@
    2 s iz: UpdateLayoutTree / Layout / Paint / Animation olay sayisi ve
    toplam suresi; iki konum: tepe (scroll 0) ve KONUM px (ornegin motor
    sahnesi kadrajda).
-   Kullanim: SAYFA=/yeni/hizmet/finans/ KONUM=2600 node yeni/film/olc-bosta.cjs */
+   Kullanim: SAYFA=/yeni/hizmetler/finans/ KONUM=2600 node yeni/film/olc-bosta.cjs */
 const path = require('path');
 const pt = require(process.env.PUPPETEER_CORE || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
-const SAYFA = process.env.SAYFA || '/yeni/hizmet/finans/';
+const SAYFA = process.env.SAYFA || '/yeni/hizmetler/finans/';
 const KONUM = +(process.env.KONUM || 0);
 const IZ = +(process.env.IZ || 2000);
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));

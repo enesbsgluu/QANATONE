@@ -75,7 +75,7 @@ const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
         </button>
         <div class="nv-dp nv-dpg">
           {hizmetler.map((h: any) => (
-            <a class="nv-di" href={h.det && h.slug ? `${B}${on}/hizmet/${h.slug}` : `${B}${on}/hizmetler`}>
+            <a class="nv-di" href={h.det && h.slug ? `${B}${on}/hizmetler/${h.slug}` : `${B}${on}/hizmetler`}>
               <span class="nv-din"><Ikon ad={h.icon} /></span>
               <span><b>{T(h.title, dil)}</b><em>{T(h.tag, dil)}</em></span>
             </a>

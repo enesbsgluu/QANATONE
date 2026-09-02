@@ -797,6 +797,14 @@ function kopyala(src, dst) {
       '# bir admin.html kopyasi sizarsa statik dosya kapiyi gecersiz\n' +
       '# kilardi; force bunu imkansiz yapar.\n' +
       '/admin.html  /.netlify/functions/panel  200!\n' +
+      '\n# TUR 9 (3 Eyl 2026) — kesme mayini kapatildi: yeni kabugun hizmet\n' +
+      '# rotasi tekilden (/hizmet/) coğula (/hizmetler/) dondu; canonical,\n' +
+      '# sitemap ve eski site zaten cogulu. Eski onizleme adresleri (yer imi,\n' +
+      '# tarayici gecmisi) 301 ile yenisine. 301! zorlamali: statik dosya\n' +
+      '# yok ama kural sirasi/gelecek kopya riskine karsi. Splat 404 kurali\n' +
+      '# SONDA kalmali.\n' +
+      '/yeni/hizmet/:slug  /yeni/hizmetler/:slug  301!\n' +
+      '/yeni/en/hizmet/:slug  /yeni/en/hizmetler/:slug  301!\n' +
       '\n# Taninmayan adres: gercek 404. Yumusak 404 uretmemek icin sart.\n' +
       '/*  /404.html  404\n');
 
