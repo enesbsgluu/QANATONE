@@ -4,30 +4,59 @@
    __vitePreload yardimcisi (~0,8 KB) binerdi ve J1'e girerdi. Film
    motoruyla ayni desen: satir ici tetik `import('/yeni/varlik/kabuk.js')`,
    dosya statik varlik (1 gun onbellek, _headers /yeni/varlik/*).
-   Kosum: node yeni/kabuk-derle.cjs  (astro build'den ONCE) */
+
+   TUR 9 (3 Eyl 2026) — TEK AYAR, IKI TUKETICI: derleme ayarlari `derle()`
+   icinde bir kez durur; bu betik (CLI) ciktilari public/varlik'a yazar,
+   yeni/denetim.cjs K2 kurali ayni fonksiyonu bellekte kosturup dist'teki
+   dosyayla BAYT-BIREBIR kiyaslar. Ayar iki yerde elle tekrarlansaydi bir
+   gun ayrisir ve kural yanlis kirmizi verirdi. esbuild deterministiktir:
+   ayni girdi + ayni surum (lock: 0.27.7) + ayni ayar = ayni bayt; ciktiya
+   zaman damgasi, mutlak yol ya da makine adi girmez.
+   Kosum: yeni/package.json "build" = node kabuk-derle.cjs && astro build
+   (astro build'den ONCE — Astro public/'i dist'e oldugu gibi kopyalar). */
 const path = require('path');
 const fs = require('fs');
 const { buildSync } = require(path.join(__dirname, 'node_modules', 'esbuild'));
-const giris = path.join(__dirname, 'kabuk', 'efekt.js');
-const cikti = path.join(__dirname, 'public', 'varlik', 'kabuk.js');
-fs.mkdirSync(path.dirname(cikti), { recursive: true });
-buildSync({ entryPoints: [giris], bundle: true, minify: true, format: 'esm', target: ['es2019'], outfile: cikti, legalComments: 'none' });
-console.log(`kabuk.js ${fs.statSync(cikti).size} B (kaynak ${fs.statSync(giris).size} B)`);
-/* pano.js — sektor panosu kaydiricilari (hesap.mjs ile birlikte paketlenir) */
-const pGiris = path.join(__dirname, 'kabuk', 'pano.js'), pCikti = path.join(__dirname, 'public', 'varlik', 'pano.js');
-buildSync({ entryPoints: [pGiris], bundle: true, minify: true, format: 'esm', target: ['es2019'], outfile: pCikti, legalComments: 'none' });
-console.log(`pano.js ${fs.statSync(pCikti).size} B`);
-/* sizinti.js — otomasyon sizinti tanecikleri (IO tetigiyle iner) */
-const sGiris = path.join(__dirname, 'kabuk', 'sizinti.js'), sCikti = path.join(__dirname, 'public', 'varlik', 'sizinti.js');
-buildSync({ entryPoints: [sGiris], bundle: true, minify: true, format: 'esm', target: ['es2019'], outfile: sCikti, legalComments: 'none' });
-console.log(`sizinti.js ${fs.statSync(sCikti).size} B`);
-/* teshis duzeltme sozlugu -> JSON (gonderimde iner; HTML'e girmez) */
-import(path.join(__dirname, 'kabuk', 'tespit-fix.mjs').replace(/\\/g, '/').replace(/^([A-Za-z]):/, 'file:///$1:')).then(({ PRIO, FIX }) => {
+
+const KABUK = path.join(__dirname, 'kabuk');
+const VARLIK = path.join(__dirname, 'public', 'varlik');
+const AYAR = { bundle: true, minify: true, format: 'esm', target: ['es2019'], legalComments: 'none', write: false };
+/* cikti adi -> giris dosyasi. pano.js src/hesap.mjs'i, digerleri hicbir
+   seyi ithal etmez; efekt.js icindeki import('/js/tubes.min.js') calisma
+   zamani yoludur, pakete girmez. */
+const GIRISLER = { 'kabuk.js': 'efekt.js', 'pano.js': 'pano.js', 'sizinti.js': 'sizinti.js' };
+
+/* -> { 'kabuk.js': Buffer, 'pano.js': Buffer, 'sizinti.js': Buffer,
+        'tespit-fix.tr.json': Buffer, 'tespit-fix.en.json': Buffer } */
+function derle() {
+  const out = {};
+  for (const [cikti, giris] of Object.entries(GIRISLER)) {
+    const r = buildSync({ ...AYAR, entryPoints: [path.join(KABUK, giris)], outfile: path.join(VARLIK, cikti) });
+    out[cikti] = Buffer.from(r.outputFiles[0].contents);
+  }
+  /* teshis duzeltme sozlugu -> JSON (gonderimde iner; HTML'e girmez).
+     tespit-fix.mjs ESM; senkron kalmak icin esbuild ile CJS'e cevrilip
+     bellekte degerlendirilir (import() asenkron olurdu, denetimin ol()
+     akisi senkron). */
+  const m = buildSync({ entryPoints: [path.join(KABUK, 'tespit-fix.mjs')], bundle: true, format: 'cjs', platform: 'node', write: false, logLevel: 'silent' });
+  const mod = { exports: {} };
+  new Function('module', 'exports', 'require', m.outputFiles[0].text)(mod, mod.exports, require);
+  const { PRIO, FIX } = mod.exports;
   for (const dil of ['tr', 'en']) {
     const d = FIX[dil];
     const dizi = [...PRIO.filter((k) => d[k]).map((k) => [k, ...d[k]]), ['yok', ...d.yok]];
-    const y = path.join(__dirname, 'public', 'varlik', `tespit-fix.${dil}.json`);
-    fs.writeFileSync(y, JSON.stringify(dizi));
-    console.log(`tespit-fix.${dil}.json ${fs.statSync(y).size} B`);
+    out[`tespit-fix.${dil}.json`] = Buffer.from(JSON.stringify(dizi));
   }
-});
+  return out;
+}
+
+module.exports = { derle, VARLIK, GIRISLER };
+
+if (require.main === module) {
+  fs.mkdirSync(VARLIK, { recursive: true });
+  const kaynakBoy = (ad) => { const g = GIRISLER[ad]; return g ? ` (kaynak ${fs.statSync(path.join(KABUK, g)).size} B)` : ''; };
+  for (const [ad, buf] of Object.entries(derle())) {
+    fs.writeFileSync(path.join(VARLIK, ad), buf);
+    console.log(`${ad} ${buf.length} B${kaynakBoy(ad)}`);
+  }
+}

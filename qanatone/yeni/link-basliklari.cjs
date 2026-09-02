@@ -46,11 +46,19 @@ if (process.env.KONTROL) {
   /* ALT KUME kontrolu: Netlify'da kok derleme (ve icindeki eski suite) astro
      derlemesinden ONCE kosar, o anda dist/yeni yoktur. Kural "mevcut her
      sayfanin girdisi blokta birebir var mi" diye bakar; tam esitlik ancak iki
-     dist de varken saglanir (uretim modu her zaman tam yazar). */
+     dist de varken saglanir (uretim modu her zaman tam yazar).
+     TUR 9 (3 Eyl 2026): LINK_BIREBIR=1 ile TAM ESITLIK sart — dist/yeni
+     varken (yeni/denetim.cjs L1) alt kume yetmez: silinen sayfanin satiri
+     sonsuza kadar kalirdi (MIMARI M2). Eski suite dist/yeni yokken bu
+     kurali artik ERTELER, alt kume dali yalniz dist/yeni varken ve
+     LINK_BIREBIR verilmeden cagrilirsa kalir. */
   const m2 = mevcut.replace(/\r\n/g, '\n');
   const eksik = satirlar.filter((s2) => !m2.includes(s2));
-  const taze = eksik.length === 0;
-  const not = taze ? (m2 === blok ? 'blok birebir' : 'blok ust kume (dist eksik olabilir)') : 'eksik/farkli ' + eksik.length + ' girdi, ilki: ' + eksik[0].split('\n')[0];
+  const birebir = !!process.env.LINK_BIREBIR;
+  const taze = birebir ? m2 === blok : eksik.length === 0;
+  const not = taze ? (m2 === blok ? 'blok birebir' : 'blok ust kume (dist eksik olabilir)')
+    : (eksik.length === 0 ? 'blok birebir DEGIL: fazla/bayat satir var (dist/yeni varken tam esitlik sart) — node yeni/link-basliklari.cjs'
+      : 'eksik/farkli ' + eksik.length + ' girdi, ilki: ' + eksik[0].split('\n')[0]);
   console.log(`LINK BASLIKLARI ${taze ? 'TAZE' : 'BAYAT'}: ${sayfaSayisi} sayfa · ${satirlar.length} yol · ${altSayisi} alternate · ${not}`);
   process.exit(taze ? 0 : 1);
 }
