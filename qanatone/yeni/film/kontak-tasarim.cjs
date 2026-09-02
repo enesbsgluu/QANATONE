@@ -71,6 +71,10 @@ const TARAYICI = process.env.TARAYICI || 'brave';
 const ONCE = (process.env.ONCE || 'http://127.0.0.1:8791').replace(/\/$/, '');
 const SONRA = (process.env.SONRA || 'http://127.0.0.1:8790').replace(/\/$/, '');
 const SAYFA = process.env.SAYFA || '/yeni/';
+/* iki agacta FARKLI yol (eski site `/` <-> yeni kabuk `/yeni/`, ya da
+   /yeni/hizmet/x <-> /yeni/hizmetler/x): SAYFA_ONCE / SAYFA_SONRA; yoksa SAYFA. */
+const SAYFA_ONCE = process.env.SAYFA_ONCE || SAYFA;
+const SAYFA_SONRA = process.env.SAYFA_SONRA || SAYFA;
 const KONUMLAR = (process.env.KONUM || '0,50').split(',').map((s) => s.trim()).filter(Boolean).map(Number);
 const GENISLIK = +(process.env.GENISLIK || 1440);
 const YUKSEKLIK = +(process.env.YUKSEKLIK || (GENISLIK === 390 ? 844 : 900));
@@ -136,7 +140,7 @@ async function agacCek(browser, kok, etiketAd, boz) {
   await page.setCacheEnabled(false);
   await page.setViewport({ width: GENISLIK, height: YUKSEKLIK, deviceScaleFactor: 1 });
   await page.evaluateOnNewDocument(() => { try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {} });
-  const url = kok + SAYFA;
+  const url = kok + (etiketAd === 'once' ? SAYFA_ONCE : SAYFA_SONRA);
   let yukleme = 'networkidle0', yanit = null;
   try { yanit = await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 }); }
   catch (e) { yukleme = 'load (networkidle0 60 sn dolmadi: ' + String(e.message).slice(0, 60) + ')'; yanit = await page.goto(url, { waitUntil: 'load', timeout: 60000 }); }
