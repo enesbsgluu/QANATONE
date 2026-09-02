@@ -32,7 +32,15 @@
      #ef233c 4,83) kimlik dilini tersine cevirirdi (beyaz metinli kizil =
      birincil, koyu metinli beyaz = ikincil .nv-mw). Palet karari Enes'te —
      yan yana kare kontak-tur9/e3-*.png. */
-  --red-dolgu:#d92037;--red-dolgu-hover:#e0202f}
+  --red-dolgu:#d92037;--red-dolgu-hover:#e0202f;
+  /* TUR 9 T7 (3 Eyl 2026): HAP DUGME DOLGU OLCEGI — uc kademe. 9 kuralda 8
+     ayri deger vardi (MIMARI T7). Bu tur piksel degistirmedi: olcekte zaten
+     olan siniflar (.sh-btn, .sdbtns .dugme -> cagri; .nv-cta, .atla -> kompakt;
+     .nv-mlg a -> cip) tokena baglandi; olcek disi besi (.dugme 12/26,
+     .sh-void 14/30, .acts button 8/14, .sil-ikincil 12/26, .sp-tum 13/26,
+     .dugme.koyu 15/32) ADIYLA istisna (yeni/test/hap-olcek.test.mjs) —
+     tasinmalari gorunur sonucu degistirir, yan yana kare + Enes karari. */
+  --hap-y1:14px;--hap-x1:26px;--hap-y2:10px;--hap-x2:18px;--hap-y3:8px;--hap-x3:16px}
 *{margin:0;padding:0;box-sizing:border-box}
 /* TUR 9 E6 (3 Eyl 2026): KURESEL odak halkasi. Onceden kabukta hic yoktu;
    12 dosyada nokta atisi kural vardi, gerisi UA varsayilani (#050505 uzerinde
@@ -46,7 +54,7 @@
 /* TUR 9 E1: atlama baglantisi — ekran disi, odaklaninca gorunur. Beyaz
    zemin/koyu metin (19,8:1): kizil dolgu kontrast kapisina takilmasin.
    z-index nav(50) / mobil menu(70) / ajan balonu(121) ustunde. */
-.atla{position:fixed;left:12px;top:-60px;z-index:200;padding:10px 16px;border-radius:999px;
+.atla{position:fixed;left:12px;top:-60px;z-index:200;padding:var(--hap-y2) var(--hap-x2);border-radius:999px;
   background:var(--tx);color:var(--bg);font-weight:600;text-decoration:none;font-size:.9rem}
 .atla:focus-visible{top:12px}
 /* GOVDE TIPOGRAFI KUNYESI (kaynak 198-200): 16,5px / 1,66 / 400.
