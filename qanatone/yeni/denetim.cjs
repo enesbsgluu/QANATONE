@@ -1481,9 +1481,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        calisan bir yasak olmaz. */
     {
       const c6 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-      const bayrak = !!((c6.settings || {}).testi || {}).on;
+      /* TUR 5 (2 Eyl 2026): bayragin gercek yuvasi panelin yazdigi theme.testi
+         (admin.html sw 'theme.testi.on'); settings.testi yalniz yedek. Kural
+         settings'i okurken bayrak acilinca yanlis kirmizi verdi (panel-kapi). */
+      const bayrak = !!(((c6.theme || {}).testi || (c6.settings || {}).testi || {}).on);
       const T6 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
+      /* Bant yalniz SOZU VE UNVANI olan kaydi basar (SSBSozBandi: "yarim kayit
+         banda cikmaz"); kural da ayni suzgeci uygular — unvansiz kaydin metni
+         acikken aranmaz (TUR 5: rol bos kayit yanlis kirmizi verdi). */
       const sozler = (c6.testimonials || [])
+        .filter(x => T6(x.role).trim())
         .map(x => T6(x.q).trim()).filter(Boolean);
       /* Karsilastirma COZULMUS metinle: sozlerde tirnak var ve HTML'de
          `&quot;` olarak duruyor; ham karsilastirma yanlis kirmizi verir
@@ -1506,7 +1513,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         }
       } else {
         if (!bandVar.length) kusur.push('acikken bant basilmamis');
-        const ana2 = bandVar[0] ? coz6(oku(bandVar[0])) : '';
+        /* TUR 5: bandVar[0] EN ana sayfa cikabiliyor (dizin sirasi) ve orada
+           TR sozler yok — yanlis kirmizi. Butun bant sayfalarina birlikte bakilir. */
+        const ana2 = bandVar.map(p2 => coz6(oku(p2))).join(' ');
         for (const q of sozler)
           if (!ana2.includes(coz6(q).slice(0, 40))) { kusur.push('acikken soz metni yok: ' + coz6(q).slice(0, 24)); break; }
       }
