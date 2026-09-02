@@ -79,6 +79,24 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   sayfasında, ana sayfa dahil (+71,5 ms LCP ölçüldü, karar Enes'te).
   Sektörde varsayılan seçim yok, pano seçilene kadar gizli (kaynak).
   Bilinçli tek sapma yazı ailesi (Uncut Sans; aile.css).
+- **TASARIM ANAYASASI (3 Eyl 2026, `Intel/Downloads/TASARIM-ANAYASASI.md`):**
+  eski site kaynaktır, farklı olan her şey KAPALI istisna listesinde
+  olmalı (yazı ailesi · kızıl harita yok · sürücü · prolog · mimari ·
+  erişilebilirlik · görünümü değiştirmeyen performans · Enes'in saydığı
+  fazlalıklar · sahte canlılık yok). Listede olmayan sapma kırmızı; şüphede
+  DUR ve "İSTİSNA TALEBİ" kalıbıyla sor. AÇIK ÇELİŞKİ: belgenin istisna 3'ü
+  "süreç hareketi kaydırmaya bağlanır" der, Enes'in 3 Eyl sözü
+  "görünürlükte canlı" — sözü esas alındı, hüküm Enes'te.
+- **Prolog ana sayfada (3 Eyl 2026, istisna 4):** `Film sayfa="ana"` gövdenin
+  önünde, gövde `.fl-govde` sarmalında; devir bitince film sökülür, site
+  0'dan akar (`siteyeGec`); atlama/oturumda bir kez/hareket azaltma kararı
+  ilk yerleşimden önce satır içi betikle (CLS dersi). Kabuk navı film
+  boyunca gizli. Prologlu ana sayfada bekçi tavanları: J1 ana+film, H18/H24
+  28 KB, H1 `fl-`, H12 film betiği dışarıda — ENES ONAYI BEKLİYOR.
+- **CLS ölçüm dersi (3 Eyl):** yatay taşma (scrollWidth > viewport) klasik
+  kaydırma çubuğu olan tarayıcıda çubuk belirip kaybolunca sabit katmanları
+  oynatır ve büyük CLS üretir; headless overlay çubukta görünmez. Taşma
+  ikili aramayla bulunur (çocukları gizleyip scrollWidth'e bak).
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
