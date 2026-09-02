@@ -29,12 +29,37 @@ const coz = (u) => {
   return null;
 };
 
+/* _HEADERS UYGULANIR (gece zinciri tur 3, 2 Eyl): kok `_headers` dosyasi
+   okunur, desen (`*` joker) eslesen yollara basliklar basilir — Netlify'in
+   yaptigi gibi, sonraki blok oncekini ezer. Eslesmeyen: Netlify HTML
+   varsayilani (max-age=0, must-revalidate + ETag -> 304). Boylece "ikinci
+   sayfa bayti" olcumu yayindaki onbellek davranisini gorur; eskiden hepsi
+   no-store idi ve her sayfa her seyi yeniden indiriyordu (olculdu: 616 KB). */
+const KURAL = (() => {
+  try {
+    const out = []; let cur = null;
+    for (const ham of fs.readFileSync(path.join(__dirname, '_headers'), 'utf8').split(/\r?\n/)) {
+      const l = ham.replace(/#.*$/, '').replace(/\s+$/, '');
+      if (!l.trim()) continue;
+      if (!/^\s/.test(l)) { cur = { re: new RegExp('^' + l.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$'), h: {} }; out.push(cur); }
+      else if (cur) { const i = l.indexOf(':'); if (i > 0) cur.h[l.slice(0, i).trim().toLowerCase()] = l.slice(i + 1).trim(); }
+    }
+    return out;
+  } catch (e) { return []; }
+})();
+const basliklar = (u) => { const h = {}; for (const k of KURAL) if (k.re.test(u)) Object.assign(h, k.h); return h; };
+
 http.createServer((req, res) => {
   const f = coz(req.url);
   if (!f) { res.writeHead(404, { 'content-type': 'text/plain' }); return res.end('yok: ' + req.url); }
   const ext = path.extname(f).toLowerCase();
+  const st = fs.statSync(f);
+  const etag = '"' + st.size.toString(16) + '-' + Math.floor(st.mtimeMs).toString(16) + '"';
+  const yol = decodeURIComponent(req.url.split('?')[0]);
+  const ozel = basliklar(yol);
+  if (req.headers['if-none-match'] === etag) { res.writeHead(304, { etag, ...ozel }); return res.end(); }
   const buf = fs.readFileSync(f);
-  const h = { 'content-type': TIP[ext] || 'application/octet-stream', 'cache-control': 'no-store' };
+  const h = { 'content-type': TIP[ext] || 'application/octet-stream', 'cache-control': 'public, max-age=0, must-revalidate', etag, ...ozel };
   if (GZIP.has(ext) && /gzip/.test(req.headers['accept-encoding'] || '')) {
     const g = zlib.gzipSync(buf, { level: 6 });
     res.writeHead(200, { ...h, 'content-encoding': 'gzip', 'content-length': g.length });

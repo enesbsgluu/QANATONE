@@ -70,7 +70,13 @@ export default defineConfig({
      LCP'nin olculdugu GIRIS sayfasi satir icini istiyor.
      SONUC: bayt tavaninin kaldiraci "CSS'i disari almak" DEGIL, "daha az
      CSS yazmak". H18 tavani (28 KB) bu yuzden duruyor. */
-  build: { inlineStylesheets: 'always' },
+  /* GECE ZINCIRI TUR 3 (2 Eyl 2026) — ORTAK VARLIK AYRISTIRMA: 'always' ->
+     'auto'. Olculdu (once): satir ici oran ort %65, ikinci sayfa agdan
+     43-90 KB (yerel sunucu _headers'i uyguluyor). 'auto': 4 KB altindaki
+     sayfaya ozgu stil satir ici kalir (kritik), ortak/buyuk stil hash'li
+     _astro/*.css dosyasina cikar ve immutable onbellekten gelir. Sonuc
+     ve LCP kiyasi olc-varlik-once/sonra.json + gece raporu. */
+  build: { inlineStylesheets: 'auto' },
 
   trailingSlash: 'ignore',
 

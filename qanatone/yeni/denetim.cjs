@@ -657,11 +657,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const h = oku(p);
     const h1 = (h.match(/<h1[\s>]/g) || []).length;
     if (h1 !== 1) kusur.push('h1 sayisi:' + h1);
-    const TAVAN = 40 * 1024;
+    /* TUR 3 (2 Eyl 2026): EN ana gzip 40.180 -> 21.917 B; tavan 40 -> 24 KB. */
+    const TAVAN = 24 * 1024;
     gz = zlib.gzipSync(fs.readFileSync(p), { level: 9 }).length;
     if (gz > TAVAN) kusur.push(`gzip ${gz} > ${TAVAN}`);
   }
-  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 40960 B',
+  ol('H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 24576 B',
      kusur.length === 0, kusur.join(' | ') || `${gz} B`);
 }
 
@@ -1291,7 +1292,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        ~44 KB) once kirmiziya doner. */
     {
       const zlib = require('zlib');
-      const TAVAN = 40 * 1024;
+      /* GECE ZINCIRI TUR 3 (2 Eyl 2026): inlineStylesheets 'always' -> 'auto';
+         ana sayfa gzip 40.947 -> 22.434 B olculdu (satir ici oran %52 -> %10).
+         Tavan 40 -> 24 KB: ortak stil geri satir ici olursa adiyla kirmizi. */
+      const TAVAN = 24 * 1024;
       const gz = zlib.gzipSync(fs.readFileSync(ana), { level: 9 }).length;
       ol(`H18 · ana sayfa gzip HTML <= ${TAVAN} B`, gz <= TAVAN,
          `${gz} B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)`);
