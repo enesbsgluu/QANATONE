@@ -103,6 +103,11 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   {/* KAYNAK 4621-4629: yıldız tuvali · grain · ajan imleci katmanları.
       Hepsi aria-hidden dekor; balon (#bitsay) diyalog. Tuvaller JS'siz
       boş durur (CSS gizler: dar ekran/dokunmatik/azaltma). */}
+  {/* SADAKAT(D) 3 Eyl 2026: kaynak 4458-4460 `#bg` — sabit arka plan
+      katmani (ust kizil gecis .fade + orb + nokta kafesi .grid). Sokum
+      turunda stars/noise tasinmis, #bg atlanmisti; yan yana karede her
+      bolumun ustundeki kizil hale bundan eksikti (kontak-tur9/sadakat-d). */}
+  {kabuk && <div id="bg" aria-hidden="true"><span class="fade"></span><span class="orb"></span><span class="grid"></span></div>}
   {kabuk && <canvas id="stars" aria-hidden="true"></canvas>}
   {kabuk && <div id="noise" aria-hidden="true"></div>}
   {kabuk && <div id="bit" class="kb-bit" aria-hidden="true"><span class="kb-ring"></span><span class="kb-core"></span></div>}

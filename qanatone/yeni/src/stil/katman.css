@@ -2,8 +2,15 @@
    S-K · KATMAN — Göç Anayasası: "4 kart; tek seferlik reveal
    (IO + unobserve, ≤0,3 KB) veya scroll-driven; hover transition'ları
    `(hover:hover)` kapılı."
-   Kaynak: kök index.html · markup 4757-4801 · CSS 2948-2999 ·
-   reveal gözlemcisi 9210-9218.
+   Kaynak: kök index.html · markup 4598-4648 · CSS (scratchpad eski.css)
+   2762-2813 · reveal gözlemcisi 9210-9218.
+
+   SADAKAT TURU (3 Eyl 2026, Enes: "eski düzen, yeni mimari"). Bu dosya
+   eski `#katman` bloğunun satır satır karşılığı; her kural yanında
+   kaynağın satır numarası. Ortak ölçek (ana.css .kunye/.s1-buyuk/
+   .s1-alt) YALNIZ kaynakta `.shead` kullanan bölümler içindir; #katman
+   kendi ölçüsünü taşıyordu (.ktk/.kthd), o ölçü burada birebir yazılır
+   (sapma 8'in geri alınışı — aşağıda).
 
    Adlandırma: .sk-* içerik (H2/H5/H14 kapsamında) · .sus-* süs (H4).
 
@@ -14,54 +21,78 @@
    2) Kart üstündeki kırmızı çubuk `width:0→100%` yerine
       `transform:scaleX(0→1)`. Eskisi her karede DÜZEN hesabı tetikliyordu
       (madde 7C: yalnız transform ve opacity). Görüntü birebir aynı,
-      kademeli gecikmeler (0 / .12 / .24 / .36 sn) korundu.
+      kademe kartların ekrana sırayla girmesinden kendiliğinden oluşur.
    3) Giriş kaydırma güdümlü ve ADA JS'İ YOK (aşağıda 7. sapma).
       Taban her hâlde bitmiş görüntü: desteklemeyen tarayıcıda ve botta
       bölüm yerinde, çubuklar çizili — "içerik üç hâlde de eksiksiz".
    4) Manrope EMEKLİ (madde 4): başlıklar sayfanın kendi ailesini
-      kullanır. Kaynaktaki `font-family:Manrope` taşınmadı.
-   5) Kart zemini `#0d0d10` yerine `var(--card)`, hover tonu tek ham
-      değer olarak kaldı — renk göçünde `--yuzey` tokenine bağlanacak
-      (RENK-SISTEMI.md, giydirme turu).
-   6) `text-wrap:balance` TAŞINMADI. Kaynakta iki yerde vardı (başlık ve
-      kapanış cümlesi) ve ÖLÇÜLDÜ: yalnız o iki bildirim, sahne kapısını
-      düşürecek kadar pahalı. Aynı yapı, iki koşum ortancasıyla:
+      kullanır (--f-baslik). Kaynaktaki `font-family:Manrope` taşınmadı;
+      ağırlık 700 ve harf aralığı aynen.
+   5) (GERİ ALINDI, sadakat turu) Kart zemini `#0d0d10` ve hover
+      `#131317` kaynaktaki HAM değerlerle durur; token (--card/--card2)
+      3 birim sapıyordu, birebir istendi.
+   6) (GERİ ALINDI, sadakat turu) `text-wrap:balance` kaynaktaki iki
+      yerde (h2 2769, kapanış p 2808) YENİDEN VAR. Eski ölçüm kaydı —
+      yalnız bu iki bildirim, iki koşum ortancasıyla:
         balance VAR : LCP 1.836 ms · FCP 1.192 ms · 97 puan
         balance YOK : LCP 1.721 ms · FCP 1.058 ms · 99 puan
-      Fark tek değişkenle daraltıldı (önce betik çıkarıldı — değişmedi;
-      sonra sahne CSS'i boşaltıldı — düzeldi; sonra CSS'te yalnız bu iki
-      satır çıkarıldı — düzeldi). Sebebi: `balance` blok başına çok
-      geçişli satır kırma çalıştırır, kısıtlı CPU'da bedeli ölçülebilir.
-      NOT: eski kaynakta bu bildirim 11 yerde geçiyor — göçün geri
-      kalanında ve giydirme turunda aynı ölçüm tekrarlanmalı; her biri
-      için "yazı dengesi mi, LCP mi" kararı ayrı verilir.
+      "Yazı dengesi mi, LCP mi" kararı koordinatörde; ölçüm tekrarı
+      onun işi.
    7) IO tabanlı tek seferlik reveal TAŞINMADI (Anayasa iki yolu da
       tanıyor: "IO + unobserve ... VEYA scroll-driven"). Sebep ölçüm:
       betikli ve betiksiz iki derleme, aynı dakikada koşum düzeyinde
-      dönüşümlü ölçüldü (A,B,A,B — makinenin setler arası kayması
-      ikisini de aynı yöne iter):
+      dönüşümlü ölçüldü (A,B,A,B):
         betiksiz : LCP 1.674 ms · FCP 1.053 ms · 98 puan
         betikli  : LCP 1.832 ms · FCP 1.180 ms · 97 puan
       233 baytlık betik açılışta `.sk-hazir` sınıfını yazıyor; bu, altı
       elemanın stilini ve düzenini LCP penceresinin tam ortasında
       yeniden hesaplatıyor. Ada JS'i 0'a indi, kapı geri geçti.
+   8) BAŞLIK ÖLÇEĞİ BU BÖLÜMÜN KENDİSİ (sadakat turu, düzeltilmiş karar).
+      Kaynak #katman `.shead` KULLANMIYORDU; kendi ölçüsü vardı: etiket
+      .ktk 10,6px/.16em kızıl + nokta (2764-2767), h2 clamp(1.6rem,4vw,
+      3.1rem)=49,6px (2768-2769), lede 15,84px/1.62 (2770-2771), kutu
+      62ch (2763). Ortak .s1-buyuk/.s1-alt markup'ta YOK; etiket ortak
+      .kunye sınıfını taşır ama ölçüsü burada .ktk'dan yazılır: ana.css
+      `.kunye i{display:none}` daha özgül `.sk-bas .kunye i` ile açılır,
+      `.kunye::before` çizgisi `.sk-bas .kunye::before` ile kapanır.
+      Noktanın `box-shadow`u (2767) yalnız masaüstünde (mobil taban
+      gölgesiz — yeni mimari kısıtı).
+   9) `.thin` KAYNAKTA BU BÖLÜMDE KURALSIZ: `.thin` yalnız `.shead h2`
+      altında tanımlı (343); #katman'da span var, kural yok → "Dört
+      katman." beyaz ve 700 basılıyor (ölçüldü: 700 / rgb 255,255,255).
+      .s1-buyuk artık markup'ta olmadığı için gri kural gelmiyor; yine
+      de `.sk-bas h2 .thin` açıkça 700/beyaz yazar — ileride global bir
+      `.thin` doğarsa Enes'in "grileşmiş" farkı geri gelmesin.
    ============================================================ */
 
-.sk-ic{max-width:1120px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+/* ---- kabin: kaynak `.wrap` (180) + `.ktsec` (2762) ---- */
+.sk-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.sk-govde{margin-top:clamp(30px,4vw,64px)}
 
-/* ---- başlık ---- */
+/* ---- başlık: kaynak `.kthd` (2763) — bölümün KENDİ ölçüsü (sapma 8) ---- */
 .sk-bas{max-width:62ch;margin-bottom:clamp(20px,2.6vw,38px)}
-.sk-etiket{display:inline-flex;align-items:center;gap:8px;
+/* etiket: kaynak `.ktk` (2764-2766) — ortak .kunye'nin 12px/.22em/gri/
+   çizgi ölçüsü burada eski .ktk ile ezilir */
+.sk-bas .kunye{display:inline-flex;align-items:center;gap:8px;
   font-family:var(--f-tek);font-size:clamp(9px,.76vw,10.6px);
   letter-spacing:.16em;text-transform:uppercase;color:var(--red-soft);
-  margin-bottom:12px}
-.sk-etiket i{width:6px;height:6px;border-radius:50%;background:var(--red)}
-.sk-bas h2{font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;
-  letter-spacing:-.035em;margin-bottom:0}
-.sk-bas h2 .thin{font-weight:300;color:var(--tx3)}
-.sk-bas p{margin-top:clamp(11px,1.3vw,18px)}
+  margin:0 0 12px}
+.sk-bas .kunye::before{display:none}                       /* ana.css 26px çizgi kapalı */
+/* nokta: kaynak `.ktk i` (2767); ana.css `.kunye i{display:none}` açılır */
+.sk-bas .kunye i{display:block;width:6px;height:6px;border-radius:50%;background:var(--red)}
+@media(min-width:901px){
+  .sk-bas .kunye i{box-shadow:0 0 10px var(--red-glow)}   /* 2767 — mobil tabanda gölge yok */
+}
+/* h2: kaynak `.kthd h2` (2768-2769); aile sapma 4 */
+.sk-bas h2{margin:0;font-family:var(--f-baslik);font-weight:700;letter-spacing:-.035em;
+  font-size:clamp(1.6rem,4vw,3.1rem);line-height:1.06;color:var(--tx);text-wrap:balance}
+.sk-bas h2 .thin{font-weight:700;color:var(--tx)}          /* sapma 9 */
+/* lede: kaynak `.kthd p` (2770-2771) */
+.sk-alt{margin:clamp(11px,1.3vw,18px) 0 0;color:var(--tx2);
+  font-size:clamp(.94rem,1.1vw,1.08rem);line-height:1.62}
 
-/* ---- ızgara: 1 px'lik boşluklar zemin rengiyle kılcal çizgi üretir ---- */
+/* ---- ızgara: kaynak `.ktgrid` (2773-2774) — 1 px'lik boşluklar zemin
+   rengiyle kılcal çizgi üretir, dış çerçeve + 20px köşe ---- */
 /* `overflow:clip`, `hidden` DEĞİL — GERÇEK TARAYICIDA ÖLÇÜLDÜ:
    `hidden` ızgarayı kaydırma kabı (scrollport) yapıyor ve kartların
    `view()` zaman çizelgesi sayfaya değil ızgaraya bağlanıyor; kartlar
@@ -72,53 +103,58 @@
 .sk-izgara{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
   background:var(--line);border:1px solid var(--line);
   border-radius:20px;overflow:clip}
+/* kart: kaynak `.ktcard` (2775-2777) */
 .sk-kart{position:relative;display:flex;flex-direction:column;gap:9px;
   padding:clamp(20px,2.3vw,32px) clamp(18px,2vw,28px) clamp(18px,2vw,28px);
-  background:var(--card);color:var(--tx);text-decoration:none}
-/* Üstteki ilerleme çubuğu — scaleX, width DEĞİL (sapma 2).
-   TABAN = BİTMİŞ HÂL (çubuk çizili). Ötelenme gibi bunun da sıfır hâli
-   `.sk-hazir`e bağlı: JS koşmazsa sahne eksik değil, TAM görünür. */
+  background:#0d0d10;color:var(--tx);text-decoration:none}          /* ham: 2777 */
+/* Üstteki ince kızıl vurgu: kaynak `.ktcard::before` (2778-2780) —
+   scaleX, width DEĞİL (sapma 2). TABAN = BİTMİŞ HÂL (çubuk çizili). */
 .sk-kart::before{content:'';position:absolute;left:0;top:0;height:2px;width:100%;
   transform:scaleX(1);transform-origin:left;
   background:linear-gradient(90deg,var(--red),transparent)}
+/* numara: kaynak `.ktnum` (2785-2786) */
 .sk-no{font-family:var(--f-tek);font-size:clamp(9.4px,.8vw,11px);
   letter-spacing:.18em;color:var(--red-soft)}
-.sk-kart h3{font-size:clamp(1.24rem,1.9vw,1.72rem);line-height:1.1;
-  letter-spacing:-.03em}
+/* kart başlığı: kaynak `.ktcard h3` (2787-2788); temel h3'ün 6px alt
+   marjı kaynakta yok (margin:0), aile sapma 4 */
+.sk-kart h3{margin:0;font-family:var(--f-baslik);font-weight:700;
+  font-size:clamp(1.24rem,1.9vw,1.72rem);line-height:1.1;
+  letter-spacing:-.03em;color:var(--tx)}
+/* soru: kaynak `.ktq` (2789-2790) */
 .sk-soru{color:var(--tx3);font-size:clamp(.86rem,.95vw,.98rem);line-height:1.35;
   padding-bottom:9px;border-bottom:1px solid var(--line)}
-.sk-kart p{color:var(--tx2);font-size:clamp(.85rem,.92vw,.96rem);
+/* metin: kaynak `.ktcard p` (2791-2792) */
+.sk-kart p{margin:0;color:var(--tx2);font-size:clamp(.85rem,.92vw,.96rem);
   line-height:1.58;flex:1}
+/* çipler: kaynak `.ktsvc` (2793) ve `.ktsvc a,.ktsvc i` (2794-2797) */
 .sk-cipler{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .sk-cip{padding:5px 11px;border-radius:999px;
   font-size:clamp(10.4px,.86vw,11.8px);font-weight:500;white-space:nowrap;
   border:1px solid var(--line2);background:rgba(255,255,255,.035);
-  color:var(--tx3);text-decoration:none}
-/* bağlantı olmayan çip (Ölçüm): kesikli çerçeve — "hizmet değil, çıktı" */
+  color:var(--tx3);text-decoration:none;font-style:normal}
+/* bağlantı olmayan çip (Ölçüm): kaynak `.ktsvc i` (2799) — kesikli */
 .sk-cip-yok{border-style:dashed;color:var(--tx4)}
-/* kartın kendisi bağlantıysa içindeki çip onun rengini taşır */
+/* kartın kendisi bağlantıysa: kaynak `a.ktcard .ktsvc i` (2800-2801) */
 a.sk-kart .sk-cip-yok{border-style:solid;border-color:rgba(239,35,60,.4);
   color:var(--red-soft);background:rgba(239,35,60,.1)}
 
-/* ---- kapanış ---- */
+/* ---- kapanış: kaynak `.ktend` (2804-2805) / `.ktline` (2806) /
+   `.ktend p` (2807-2808) / `.ktend p em` (2809) ---- */
 .sk-son{display:flex;align-items:center;gap:clamp(14px,2vw,26px);
   margin-top:clamp(18px,2.2vw,30px);flex-wrap:wrap}
 .sus-cizgi{flex:1;min-width:60px;height:1px;
   background:linear-gradient(90deg,var(--red),transparent)}
-.sk-son p{font-size:clamp(1.02rem,1.7vw,1.5rem);line-height:1.2;
-  font-weight:600;letter-spacing:-.025em}
+.sk-son p{margin:0;font-family:var(--f-baslik);font-weight:700;
+  font-size:clamp(1.02rem,1.7vw,1.5rem);line-height:1.2;
+  letter-spacing:-.025em;color:var(--tx);text-wrap:balance}
 .sk-son p em{font-style:normal;color:var(--red-soft)}
 
-/* ---- giriş: SIFIR JS, kaydırma güdümlü ----
-   ADA BETİĞİ KALDIRILDI, sebebi ölçüldü (sapma 7): IO'lu sürüm 233 B'lık
-   bir betikti ama açılışta `.sk-hazir` sınıfını yazınca sahnenin tamamı
-   için stil+düzen hesabı tetikliyor ve bu, kısıtlı CPU'da LCP'yi
-   158 ms itiyordu (koşum düzeyinde dönüşümlü ölçüm, 4 tur).
-   Yerine merdivenin ÜST basamağı: her eleman kendi `view()` zaman
-   çizelgesiyle girer — kademe için gecikme yazmaya gerek yok, kartlar
-   ekrana sırayla girdiği için sıra kendiliğinden oluşur.
-   TABAN = BİTMİŞ HÂL: destekleyip desteklemediğine bakmaksızın içerik
-   yerinde ve tam; animasyon yalnız `@supports` içinde doğar. */
+/* ---- giriş: SIFIR JS, kaydırma güdümlü (kaynak .rv 350-353 + çubuk
+   2780-2783; sapma 1/2/3/7) ----
+   Her eleman kendi `view()` zaman çizelgesiyle girer — kademe için
+   gecikme yazmaya gerek yok, kartlar ekrana sırayla girdiği için sıra
+   kendiliğinden oluşur. TABAN = BİTMİŞ HÂL: içerik yerinde ve tam;
+   animasyon yalnız `@supports` içinde doğar. */
 @supports (animation-timeline: view()){
   .sk-bas,.sk-kart,.sk-son{animation:sk-gir linear both;
     animation-timeline:view();animation-range:entry 0% entry 100%}
@@ -128,21 +164,22 @@ a.sk-kart .sk-cip-yok{border-style:solid;border-color:rgba(239,35,60,.4);
 @keyframes sk-gir{from{transform:translateY(26px)}}
 @keyframes sk-cubuk{from{transform:scaleX(0)}}
 
-/* ---- ızgara kırılımları (kaynağın kendi eşikleri) ---- */
+/* ---- ızgara kırılımları: kaynak 2811-2812 ---- */
 @media(max-width:980px){.sk-izgara{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.sk-izgara{grid-template-columns:1fr}}
 
-/* ---- hover: yalnız gerçek imleçte (dokunmatikte :hover takılır) ---- */
+/* ---- hover: kaynak 2777/2784/2797-2798/2802 — yalnız gerçek imleçte
+   (dokunmatikte :hover takılır) ---- */
 @media (hover:hover) and (pointer:fine){
   .sk-kart{transition:background-color .4s var(--e)}
-  .sk-kart:hover{background:rgba(255,255,255,.03)}
+  .sk-kart:hover{background:#131317}                       /* ham: 2784/2802 */
   .sk-cip{transition:border-color .28s var(--e),color .28s var(--e),
     background-color .28s var(--e)}
   a.sk-cip:hover{border-color:rgba(239,35,60,.5);color:var(--tx);
     background:rgba(239,35,60,.12)}
 }
 
-/* ---- hareket azaltma ----
+/* ---- hareket azaltma: kaynak 354 + 2813 ----
    Durduran seçiciler, hareketi VEREN seçicilerin AYNISI (H11 dersi).
    İçerik son durumunda kalır: bölüm yerinde, çubuklar çizili. */
 @media (prefers-reduced-motion: reduce){

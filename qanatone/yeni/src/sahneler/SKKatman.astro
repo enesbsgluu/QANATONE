@@ -15,8 +15,18 @@
 /* S-K · KATMAN — göçün dördüncü sahnesi. "Dokuz hizmet değil. Dört
    katman." Sayfanın hizmet sayfalarına açılan tek kapısı: dokuz rotanın
    yedisine bu sahneden bağlanılıyor (iç bağlantı omurgası).
-   Kaynak: kök index.html · markup 4757-4801 · CSS 2948-2999.
-   Sapmalar ve gerekçeleri stil/katman.css başında.
+   Kaynak: kök index.html · markup 4598-4648 (`<section id="katman">`) ·
+   CSS 2762-2813 (scratchpad eski.css). Sapmalar ve gerekçeleri
+   stil/katman.css başında.
+
+   SADAKAT TURU (3 Eyl 2026): markup kaynağın iskeletine çekildi —
+   .wrap → .sk-ic · .ktsec → .sk-govde · .kthd → .sk-bas · .ktk → .kunye
+   (sınıf ortak, ölçü katman.css'te eski .ktk: kızıl, noktalı <i> görünür,
+   çizgi kapalı) · .kthd h2/.kthd p → .sk-bas h2/.sk-alt (ortak .s1-buyuk/
+   .s1-alt BU BÖLÜME UYGULANMAZ: kaynak .shead kullanmıyordu) · .ktgrid →
+   .sk-izgara · .ktcard → .sk-kart · .ktnum/.ktq/.ktsvc → .sk-no/.sk-soru/
+   .sk-cipler · .ktend/.ktline → .sk-son/.sus-cizgi. Alt cümle (ktg)
+   kaynaktaki yerinde: ızgaranın hemen altında, çizgi + cümle.
 
    İÇERİK NEREDEN: 21 anahtarın 21'i de content.json'un `strings` alanında
    (panelin ürünü) — kt0..ktg. Yani metin zaten tek kaynakta yaşıyordu;
@@ -58,38 +68,40 @@ const cipAd = (c: any): string => (c.k ? duz(c.k) : c.ad);
 ---
 <section class="sk-sahne" data-sahne="k" id="skKatman">
   <div class="sk-ic">
-    <div class="sk-bas">
-      <p class="sk-etiket"><i aria-hidden="true"></i><span>{g('kt0')}</span></p>
-      {/* kt1 ve ktg panelden HTML parçası taşır — tek beyaz liste
-          süzgecinden geçer (icerik.ts `suz`, Anayasa madde 6). */}
-      <h2 class="s1-buyuk" set:html={suz(g('kt1'), ['em', 'b', 'span.thin'])} />
-      <p class="s1-alt">{g('kt2')}</p>
-    </div>
+    <div class="sk-govde">
+      <div class="sk-bas">
+        <p class="kunye"><i aria-hidden="true"></i><span>{g('kt0')}</span></p>
+        {/* kt1 ve ktg panelden HTML parçası taşır — tek beyaz liste
+            süzgecinden geçer (icerik.ts `suz`, Anayasa madde 6). */}
+        <h2 set:html={suz(g('kt1'), ['em', 'b', 'span.thin'])} />
+        <p class="sk-alt">{g('kt2')}</p>
+      </div>
 
-    <div class="sk-izgara">
-      {kartlar.map((k) => {
-        const govde = (
-          <>
-            <span class="sk-no">{k.n}</span>
-            <h3>{g(k.ad)}</h3>
-            <span class="sk-soru">{g(k.soru)}</span>
-            <p>{g(k.p)}</p>
-            <span class="sk-cipler">
-              {k.cipler.map((c: any) => (c.slug
-                ? <a class="sk-cip" href={`${B}${on}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
-                : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
-            </span>
-          </>
-        );
-        return k.yol
-          ? <a class="sk-kart" href={`${B}${on}/hizmetler/${k.yol}`}>{govde}</a>
-          : <div class="sk-kart">{govde}</div>;
-      })}
-    </div>
+      <div class="sk-izgara">
+        {kartlar.map((k) => {
+          const govde = (
+            <>
+              <span class="sk-no">{k.n}</span>
+              <h3>{g(k.ad)}</h3>
+              <span class="sk-soru">{g(k.soru)}</span>
+              <p>{g(k.p)}</p>
+              <span class="sk-cipler">
+                {k.cipler.map((c: any) => (c.slug
+                  ? <a class="sk-cip" href={`${B}${on}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
+                  : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
+              </span>
+            </>
+          );
+          return k.yol
+            ? <a class="sk-kart" href={`${B}${on}/hizmetler/${k.yol}`}>{govde}</a>
+            : <div class="sk-kart">{govde}</div>;
+        })}
+      </div>
 
-    <div class="sk-son">
-      <span class="sus-cizgi" aria-hidden="true"></span>
-      <p set:html={suz(g('ktg'))} />
+      <div class="sk-son">
+        <span class="sus-cizgi" aria-hidden="true"></span>
+        <p set:html={suz(g('ktg'))} />
+      </div>
     </div>
   </div>
 </section>

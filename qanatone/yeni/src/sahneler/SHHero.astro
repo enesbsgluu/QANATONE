@@ -1,6 +1,7 @@
 ---
 /* S-H · HERO — Goc Anayasasi madde 3 (dokunulmaz, birebir).
-   Kaynak: kok index.html markup 4685-4723, CSS 383-585, saat 9276.
+   Kaynak: kok index.html markup 4525-4564 (2 Eyl itibariyla), CSS
+   ayiklanmis eski.css 357-556 (+ mobil 2393-2420, 12px tabani 4142-4179).
    Sapmalarin listesi ve gerekceleri stil/hero.css basinda.
 
    Icerik content.json -> strings[dil] (tek kaynak); h1'in ikinci satiri
@@ -51,6 +52,13 @@ const g = (k: string): string => T(s[k], dil);
     </span></div>
   </div>
 
+  {/* KADRAJ TURU (2 Eyl, Enes: "tam kadraja oturmuyor"): kaynakta metin
+      adasi IKI katman — `.wrap` (4540: genislik %100, max 1280, gut dolgu,
+      z4) icinde `.heroin` (4541: max 940). Yenide tek `.sh-ic` vardi ve
+      hero'nun flex cocugu olarak ICERIK genisligine buzuluyordu: gercek
+      tarayicida 940 yerine 680 px olculdu (lede'nin 600'u + 2 gut).
+      `.sh-kap` = kaynak `.wrap`, `.sh-ic` = kaynak `.heroin`. */}
+  <div class="sh-kap">
   <div class="sh-ic">
     <p class="sh-rozet"><span class="sh-nokta"></span><span>{g('badge')}</span></p>
     <h1 class="sh-h1">
@@ -67,6 +75,7 @@ const g = (k: string): string => T(s[k], dil);
       <span class="sh-saat" id="shSaat">--:--</span><i></i>
       <span>{g('hm2')}</span><i></i><b>{g('hm3')}</b>
     </p>
+  </div>
   </div>
 
   <div class="sus-kaydir" aria-hidden="true"><span>{g('scr')}</span><i></i></div>

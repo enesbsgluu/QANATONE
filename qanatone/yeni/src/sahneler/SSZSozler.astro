@@ -13,9 +13,17 @@
    BU BOLUM: kanal izgarasi — kanal genisligi kartlari
    ============================================================ */
 /* S-SZ · SÖZLER (kanal genişliği kartları) — göçün sekizinci sahnesi.
-   Kaynak: kök index.html · markup 5268-5320 · CSS 1989-2160.
+   Kaynak: kök index.html · markup 5042-5100 (`#sozler .tgrid .tcol
+   .tcard`) · CSS 1810-1978 (eski.css ayıklaması) · içerikli prerender
+   dist/index.html 583-640 (`.hasimg` + `.tbg` görsel katmanı).
    Anayasa: "S-SZ sozler (kanal genişliği kartları): statik + reveal +
    hover." Sapmalar ve gerekçeler stil/sozler.css başında.
+
+   SADAKAT TURU (3 Eyl 2026, "eski düzen, yeni mimari"): kart ağacı
+   kaynağın makalesiyle BİREBİR — görsel katmanı, artı, ikon, başlık,
+   açılır açıklama. Giydirme turunun eklediği `.ssz-serit` sarmalayıcısı
+   kaynakta yoktu, çıktı; `data-ci` kaynağın kendi tutamağı (görsel odağı
+   kart kart ona bağlı, CSS 1929-1934).
 
    İÇERİK: altı kanalın adı ve anlatımı content.json `strings`ten
    (che · chh · chp · ch1t/ch1d … ch6t/ch6d). Eski tarafta da statik
@@ -26,12 +34,11 @@
 import '../stil/sozler.css';
 import Ikon from '../parcalar/Ikon.astro';
 import { icerik, T, suz } from '../icerik';
-/* Kart görselleri (giydirme, 21 Ağu): ölçüler künyeden — üreteç
-   `gorsel-kanal.cjs` yazar, bileşen ELLE ölçü yazmaz. Künyede olmayan
-   kart görselsiz, bugünkü üç yüzüyle (desen/kızıl/koyu) basılır.
-   Kaynağın `chimg` görselleri 202 KB'tı ve iskelet turunda ertelenmişti;
-   şartı "mobil kaynak + kendi alanımız" idi, bu set ikisini de karşılıyor
-   (18 dosya / 158 KB, üç kırılım, hepsi tembel). */
+/* Kart görselleri: kaynağın `chimg` seti (img/ch1..ch6.webp, 202 KB) yerine
+   kendi alanımızdaki üç kırılımlı set (veri/kanal-gorselleri.json, üreteç
+   `gorsel-kanal.cjs`); ölçüler künyeden, bileşen ELLE ölçü yazmaz.
+   Künyede olmayan kart görselsiz, üç yüzüyle (desen/kızıl/koyu) basılır —
+   kaynağın `.tcard` / `.tcard.hasimg` ikiliğiyle aynı. */
 import kanalGorsel from '../veri/kanal-gorselleri.json';
 const gorselMap = new Map(kanalGorsel.map((g: any) => [g.k, g]));
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -42,8 +49,8 @@ const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 
 /* Bento düzeni kaynaktaki sırayla: üç sütun, her sütunda iki kart.
-   `deri` = kartın yüzü (desenli / kızıl / koyu), `boy` = flex payı.
-   Sütun dizilimi kaynağın markup'ından birebir (5276-5316). */
+   `deri` = kartın yüzü (t-pat / t-red / t-drk), `boy` = flex payı
+   (big / sml). Sütun dizilimi kaynağın markup'ından birebir (5048-5096). */
 const KARTLAR = [
   { k: 1, ikon: 'seo',    deri: 'desen', boy: 'buyuk' },
   { k: 2, ikon: 'camera', deri: 'kizil', boy: 'kucuk' },
@@ -56,8 +63,9 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
 ---
 <section class="ssz-sahne" id="sozler" data-sahne="sz">
   <div class="ssz-ic">
+    {/* kaynak `.shead` (5044-5046): etiket + h2 + lede; ölçek ana.css ortak */}
     <div class="ssz-bas">
-      <p class="kunye"><i></i>{g('che')}</p>
+      <p class="kunye">{g('che')}</p>
       <h2 class="s1-buyuk" set:html={suz(g('chh'), ['em', 'b'])} />
       <p class="s1-alt">{g('chp')}</p>
     </div>
@@ -67,37 +75,37 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
         <div class="ssz-sutun">
           {sutun.map((c) => { const gr: any = gorselMap.get(c.k); return (
             <article class={`ssz-kart ssz-${c.deri}${c.boy ? ' ssz-' + c.boy : ''}${gr ? ' ssz-gorselli' : ''}`}
-              style={`--i:${c.k - 1}`} tabindex="0">
-              {/* Üç kırılım üç ayrı dosya: masaüstü 337 kutu → 680,
-                  tablet tam genişlik satır → 1000x240, mobil → 700x470.
-                  Kırılımlar sozler.css'teki kutu değişimleriyle aynı. */}
+              data-ci={c.k - 1} style={`--i:${c.k - 1}`} tabindex="0">
+              {/* kaynak `.tbg` (görsel katmanı, kartın altında; perde ::after'da).
+                  Üç kırılım üç dosya: masaüstü kutu 680x700, tablet tam
+                  genişlik satır 1000x240, mobil 700x470. Kırılımlar
+                  sozler.css'in ızgara eşikleriyle aynı (900 / 560). */}
               {gr && (
-                <picture class="ssz-gorsel">
+                <picture class="ssz-gorsel" aria-hidden="true">
                   <source media="(min-width:901px)" srcset={`${B}/img/kanal/${gr.kod}.webp`} />
                   <source media="(min-width:561px)" srcset={`${B}/img/kanal/${gr.kod}-g.webp`} />
                   <img src={`${B}/img/kanal/${gr.kod}-m.webp`} width={gr.mw} height={gr.mh}
                     loading="lazy" decoding="async" alt="" />
                 </picture>
               )}
+              {/* kaynak `.tmore`: sağ üst artı, hover'da 45° döner */}
               <span class="ssz-arti" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               </span>
+              {/* kaynak `.tic` */}
               <span class="ssz-ikon"><Ikon ad={c.ikon} /></span>
-              {/* Şerit: görselli kartta içerik görselin ÜSTÜNE biner —
-                  mobilde opak, masaüstünde hafif bulanık cam. Görselsiz
-                  kartta şeridin hiçbir stili yok, akış eskisi gibi. */}
-              <div class="ssz-serit">
-                <h3>{g('ch' + c.k + 't')}</h3>
-                {/* Açıklama masaüstünde 0fr ızgarayla kapalı başlar, hover/odakta
-                    açılır; dokunmatikte ve dar ekranda HEP AÇIK (aşağıda). */}
-                <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
-              </div>
+              {/* kaynak `.tct` */}
+              <h3>{g('ch' + c.k + 't')}</h3>
+              {/* kaynak `.tcx > .tcd`: masaüstünde 0fr ızgarayla kapalı başlar,
+                  hover/odakta açılır; dokunmatikte ve dar ekranda HEP AÇIK. */}
+              <div class="ssz-acilir"><p>{g('ch' + c.k + 'd')}</p></div>
             </article>
           ); })}
         </div>
       ))}
     </div>
+    {/* kaynak `.trule` */}
     <div class="sus-cetvel" aria-hidden="true"></div>
   </div>
 </section>

@@ -10,6 +10,27 @@
    kabuk.js'te — dinamik ithal, bosta, hareket azaltmada inmez.
    ============================================================ */
 
+/* ---- sabit arka plan katmani: kaynak 212-227 BIREBIR (sadakat(D), 3 Eyl 2026)
+   .fade ust kizil gecis · .orb blur'lu kizil kure · .grid nokta kafesi +
+   kizil isik banyosu. Sokum turunda atlanmisti; her bolumun ustundeki
+   kizil hale bu katmandan geliyor. Tek statik boya, JS yok. ---- */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bg .fade{position:absolute;inset:0;background:linear-gradient(180deg,#170406 0%,#050505 46%)}
+#bg .orb{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
+  width:min(900px,120vw);height:min(900px,120vw);border-radius:50%;
+  background:rgba(239,35,60,.055);filter:blur(130px)}
+#bg .grid{position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 1.6px),
+    radial-gradient(circle at 1px 1px,rgba(255,120,140,.06) 1.4px,transparent 2.2px),
+    linear-gradient(180deg,rgba(239,35,60,.05),transparent 34%);
+  background-size:28px 28px,140px 140px,100% 100%;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%);
+  mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%)}
+/* icerik #bg'nin ustunde (kaynak 249 `main{z-index:2}`; asagidaki :has kurali
+   #stars'a bagli, #bg ile de ayni sonuc) */
+body:has(#bg) main{position:relative;z-index:2}
+
 /* ---- yildiz tuvali + grain (kaynak 228-232, 244-248) ---- */
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55}
 /* grain: kaynak 128 px tuvali calisma aninda uretip data URL basiyordu;

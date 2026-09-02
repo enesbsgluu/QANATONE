@@ -13,9 +13,9 @@
    BU BOLUM: sektor + pano — eski szStage pinli sahne
    ============================================================ */
 /* S-SE · SEKTÖR + PANO — göçün altıncı sahnesi.
-   Kaynak: kök index.html · markup 4820-4940 · seçici üreteci
-   `renderSectors` 7172 · pano `panel()` 10229 · para hesabı `calc()`
-   10286 · sabitler 10285 (REACH .55 · LATE .6 · BAND .3).
+   Kaynak: kök index.html · markup 4661-4713 (#sektor + #sekpanel) ·
+   seçici üreteci `renderSectors` 6935 · pano `panel()` 9365 · para
+   hesabı `calc()` 9422 · sabitler (REACH .55 · LATE .6 · BAND .3).
    Sapmalar ve gerekçeler stil/sektor.css başında.
 
    İÇERİK: content.json'un `sectors` dizisi (6 sektör, panelin ürünü).
@@ -24,10 +24,22 @@
    sektörün hiçbirini görmüyordu. Bu sahne ALTISINI DA derlemede HTML'e
    pişiriyor; geçiş saf CSS (radyo + kardeş seçici), ada JS'i 0.
 
-   PARA HESABI DERLEME ANINDA. Kaydırıcılar bu turda gelmedi (sapma 3),
-   ama rakamlar duruyor: her sektörün kendi başlangıç değerleriyle
-   (finance.budget/ticket/miss + market.cpc/lead/close) aynı formül
-   burada koşuyor. Formül birebir kaynaktan; testi `test/hesap.test.mjs`. */
+   SADAKAT TURU (sektör, 4 Eyl 2026 — Enes: "eski dizilim, yeni mimari"):
+   markup kaynağın sırasına ve sınıf yapısına döndü —
+     .sc      → .sse-sec  (ck + ic + b + span; 6'lı tek sıra)
+     .skwrap  → .sse-panolar (kart; makale display:contents, sıra flex order)
+     .skh     → .sse-pano-bas   .skm → .sse-kutular   .skcalc → .sse-calc
+     .skdelta → .sse-kazanc     .skassum → .sse-varsayim
+     .skcols/.skbox → .sse-sutunlar/.sse-kutu   .skch → .sse-kanal (ikonlu)
+     .skq → .sse-soru (div>p+span)   .skact → .sse-isler (ul>li>b+span)
+     .skcta → .sse-cagri (btn-p ok ikonlu + btn-g)
+   Metinler content.json `strings` anahtarlarından (spe/sph/spp, calct,
+   calch, cal1-3, dlt, dltl, dltn, skch, skqt, skac, skcta, skchange);
+   TR'de anahtar yoksa kaynağın data-t varsayılanı (kök 4681-4713).
+
+   PARA HESABI DERLEME ANINDA; kaydırıcılar (sökum turu) TEK BLOK, artık
+   kartın İÇİNDE (kaynak sırası: skm → skcalc → skdelta). Formül birebir
+   kaynaktan; testi `test/hesap.test.mjs`. */
 import '../stil/sektor.css';
 import Ikon from '../parcalar/Ikon.astro';
 import { icerik, T, suz } from '../icerik';
@@ -43,14 +55,28 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const on = en ? '/en' : '';
 
 const sektorler = icerik.sectors || [];
-/* Kanal adları — kaynak `NM` (10207). Kod tarafında, content.json'da
+/* Kanal adları — kaynak `NM` (9345). Kod tarafında, content.json'da
    karşılığı yok (şeritteki araç listesiyle aynı durum). */
 const KANAL: Record<string, string> = {
   google: 'Google Ads', seo: 'SEO / GEO', meta: 'Meta Ads',
   tiktok: 'TikTok Ads', linkedin: 'LinkedIn', reddit: 'Reddit',
   site: en ? 'Website' : 'Web sitesi',
 };
+/* Kaynak `HUE` + renderSectors (6935-6945): --sA hsl(h 78% 46%), --sB hsl(h 85% 58%). */
 const HUE = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+
+/* Kaynağın data-t varsayılanları (kök 4681-4713) — TR'de strings'te
+   karşılığı yok, EN'de var. */
+const M = {
+  calct: 'Kendi rakamlarınla dene', calch: 'Kaydedilmez, bize gitmez',
+  cal1: 'Aylık reklam bütçesi', cal2: 'Ortalama satış tutarı', cal3: 'Şu an yanıtsız kalan talep',
+  dlt: 'Bu para <b>yeni reklam bütçesinden gelmiyor</b> — yukarıdaki "yanıtsız kalanın ciro karşılığı" yığınının içinden geliyor. Ajan o yığının tamamını değil, yaklaşık üçte birini geri getiriyor.',
+  dltl: 'Ajanla kurtarılabilecek aylık ciro',
+  dltn: 'Varsayımlar: bütçenin tamamı reklama gidiyor ve bütçe büyüdükçe tıklama maliyeti artıyor (ucuz, niyetli trafik tükenir). Ajan yanıtsız kalan talebin ~%55\'ine ulaşıyor; geç dönülen talep canlı karşılananın %60\'ı kadar kapanıyor — araştırmalar talebin %78\'inin ilk dönen firmadan alındığını gösteriyor. Çıkan rakam ciro, kâr değil. Kendi tıklama maliyetini ve kapanma oranını biliyorsan gerçek sayı bundan sapar.',
+  skch: 'Talebin geleceği kanallar', skqt: 'Ajanın karşılayacağı tipik talep', skac: 'İlk 30 gün',
+  skcta: 'Bu kurulumu çalışırken gör', skchange: 'Sektör değiştir',
+};
+const m = (k: keyof typeof M): string => g(k) || M[k];
 
 /* Her sektör için pano verisi derleme anında hazırlanır. */
 const panolar = sektorler.map((x: any, i: number) => {
@@ -62,11 +88,13 @@ const panolar = sektorler.map((x: any, i: number) => {
   const toplam = Object.values(x.ch || {}).reduce((a: number, b: any) => a + (+b || 0), 0) || 1;
   const sirali = Object.entries(x.ch || {}).sort((a: any, b: any) => b[1] - a[1]).slice(0, 4);
   const enBuyuk = sirali.length ? Number(sirali[0][1]) : 1;
+  const hue = HUE[i % HUE.length][0];
   return {
     k: x.k, ad: T(x.n, dil2), ozet: T(x.d, dil2), ikon: x.icon,
-    ton: `--sA:hsl(${HUE[i % HUE.length][0]} 78% 46%)`,
+    ton: `--sA:hsl(${hue} 78% 46%);--sB:hsl(${hue} 85% 58%)`,
     baslik: bas[0] || '', anlatim: bas[1] || '',
     f: x.finance || {}, m: x.market || {},
+    /* kaynak metrics() M dizisi (9460-9468): '' / good / warn / good */
     kutular: [
       { s: '', kutu: 'talep', b: h.talep.toLocaleString(en ? 'en-US' : 'tr-TR'),
         a: en ? 'enquiries a month at this budget' : 'bu bütçeyle aylık gelen talep' },
@@ -80,8 +108,10 @@ const panolar = sektorler.map((x: any, i: number) => {
         a: en ? 'sales now vs with the agent' : 'satış: şimdi ve ajanla' },
     ],
     kazanc: `${bicimKisa(h.kazancAlt, dil2)} – ${bicimKisa(h.kazancUst, dil2)}`,
+    /* kaynak panel() 9380-9386: ikon ic(k) (google/meta/tiktok/linkedin/
+       reddit IC'de yok → zap; Ikon aynı yedeği verir), ad, çubuk, yüzde */
     kanallar: sirali.map(([ad, w]: any) => ({
-      ad: KANAL[ad] || ad,
+      k: ad, ad: KANAL[ad] || ad,
       pay: Math.round((Number(w) / toplam) * 100),
       bar: Math.round((Number(w) / enBuyuk) * 100),
     })),
@@ -92,6 +122,7 @@ const panolar = sektorler.map((x: any, i: number) => {
 ---
 <section class="sse-sahne" id="sektor" data-sahne="se">
   <div class="sse-ic">
+    {/* kaynak .shead (338-345): ortak ölçek ana.css'te (.kunye/.s1-buyuk/.s1-alt) */}
     <div class="sse-bas">
       <p class="kunye"><i></i>{g('spe')}</p>
       <h2 class="s1-buyuk" set:html={suz(g('sph'), ['em', 'b'])} />
@@ -100,37 +131,49 @@ const panolar = sektorler.map((x: any, i: number) => {
 
     {/* Seçici + panolar TEK kap içinde: radyo `:checked` kardeş seçiciyle
         panoyu açar, JS yok. Radyolar native olduğu için klavye (ok
-        tuşları) ve ekran okuyucu kendiliğinden çalışır. */}
+        tuşları) ve ekran okuyucu kendiliğinden çalışır.
+        SADAKAT(D) 3 Eyl 2026: VARSAYILAN SEÇİM YOK — kaynakta SEC.active
+        null başlar (kök 9347), pano `#sekpanel` seçilene kadar gizli
+        (1640-1641); "İşini seç" çağrısı bu yüzden var. `checked={i===0}`
+        göç sapmasıydı: yan yana karede yenide pano açık, eskide tespit
+        bölümü hemen altta (kontak-tur9/sadakat-d-yanyana-s4.png). */}
     <div class="sse-kap">
       {panolar.map((p: any, i: number) => (
-        <input class="sus-radyo" type="radio" name="sse" id={`sse-${p.k}`}
-          checked={i === 0} />
+        <input class="sus-radyo" type="radio" name="sse" id={`sse-${p.k}`} />
       ))}
 
+      {/* kaynak .secs > button.sc (renderSectors 6939-6943): ck + ic + b + span */}
       <div class="sse-secici" role="radiogroup"
         aria-label={en ? 'Choose your industry' : 'Sektörünü seç'}>
         {panolar.map((p: any) => (
           <label class="sse-sec" for={`sse-${p.k}`} style={p.ton}>
+            <span class="sus-ck"><Ikon ad="check" /></span>
             <span class="sse-sec-ik"><Ikon ad={p.ikon} /></span>
             <b>{p.ad}</b><span>{p.ozet}</span>
           </label>
         ))}
       </div>
 
+      {/* kaynak .skwrap (4676): TEK kart. Altı makale kartın içinde, seçili
+          olan display:contents ile kartın akışına katılır; kaydırıcı bloğu
+          (.sse-calc) kartın altında tek kopya durur, kaynak sırasındaki
+          yerini (skm → skcalc → skdelta) sektor.css'teki flex order verir. */}
       <div class="sse-panolar">
         {panolar.map((p: any) => (
           <article class={`sse-pano sse-pano-${p.k}`} style={p.ton}
             data-butce={p.f.budget} data-tutar={p.f.ticket} data-kacan={p.f.miss}
             data-cpc={p.m.cpc} data-lead={p.m.lead} data-close={p.m.close}>
+            {/* .skh (4677-4680): ic + t(lb + h3 + p) */}
             <div class="sse-pano-bas">
               <span class="sse-pano-ik"><Ikon ad={p.ikon} /></span>
-              <div>
+              <div class="sse-pano-t">
                 <span class="sse-etiket">{p.ad}</span>
                 <h3>{p.baslik}</h3>
                 <p>{p.anlatim}</p>
               </div>
             </div>
 
+            {/* .skm (4680) */}
             <div class="sse-kutular">
               {p.kutular.map((k: any) => (
                 <div class={k.s}>
@@ -142,76 +185,78 @@ const panolar = sektorler.map((x: any, i: number) => {
               ))}
             </div>
 
+            {/* .skdelta (4695-4698): l + v(span + b) */}
             <div class="sse-kazanc">
-              <p>{en
-                ? 'This money does not come from a bigger ad budget — it comes out of the "revenue lost in silence" pile above. The agent brings back roughly a third of it.'
-                : 'Bu para yeni reklam bütçesinden gelmiyor — yukarıdaki "yanıtsız kalanın ciro karşılığı" yığınının içinden geliyor. Ajan o yığının yaklaşık üçte birini geri getiriyor.'}</p>
-              <span><em>{en ? 'Monthly revenue the agent can recover' : 'Ajanla kurtarılabilecek aylık ciro'}</em><b data-kutu="kazanc">{p.kazanc}</b></span>
+              <p set:html={suz(m('dlt'), ['b'])} />
+              <span><em>{m('dltl')}</em><b data-kutu="kazanc">{p.kazanc}</b></span>
             </div>
 
+            {/* .skassum (4699) */}
+            <p class="sse-varsayim">{m('dltn')}</p>
+
+            {/* .skcols (4700-4708) */}
             <div class="sse-sutunlar">
               <div class="sse-kutu">
-                <p class="sse-kutu-bas">{en ? 'Where the demand will come from' : 'Talebin geleceği kanallar'}</p>
-                {p.kanallar.map((c: any) => (
-                  <div class="sse-kanal">
-                    <span class="sse-kanal-ad">{c.ad}</span>
-                    <span class="sse-kanal-cubuk"><i style={`width:${c.bar}%`}></i></span>
-                    <span class="sse-kanal-pay">%{c.pay}</span>
-                  </div>
-                ))}
+                <div class="sse-kutu-bas">{m('skch')}</div>
+                <div class="sse-kanallar">
+                  {p.kanallar.map((c: any) => (
+                    <div class="sse-kanal">
+                      <span class="sse-kanal-ik"><Ikon ad={c.k} /></span>
+                      <span class="sse-kanal-ad">{c.ad}</span>
+                      <span class="sse-kanal-cubuk"><i style={`width:${c.bar}%`}></i></span>
+                      <span class="sse-kanal-pay">%{c.pay}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div class="sse-kutu">
-                <p class="sse-kutu-bas">{en ? 'A typical enquiry the agent will handle' : 'Ajanın karşılayacağı tipik talep'}</p>
-                <blockquote class="sse-soru">“{p.soru}”<span>{(en ? 'AGENT VERDICT: ' : 'AJAN KARARI: ') + p.karar}</span></blockquote>
-                <p class="sse-kutu-bas">{en ? 'First 30 days' : 'İlk 30 gün'}</p>
-                <ol class="sse-isler">
-                  {p.isler.map((a: string) => <li>{a}</li>)}
-                </ol>
+                <div class="sse-kutu-bas">{m('skqt')}</div>
+                <div class="sse-soru"><p>“{p.soru}”</p><span>{(en ? 'AGENT VERDICT: ' : 'AJAN KARARI: ') + p.karar}</span></div>
+                <div class="sse-kutu-bas">{m('skac')}</div>
+                <ul class="sse-isler">
+                  {p.isler.map((a: string, i: number) => <li><b>{'0' + (i + 1)}</b><span>{a}</span></li>)}
+                </ul>
               </div>
             </div>
 
-            <p class="sse-varsayim">{en
-              ? 'Assumptions: the whole budget goes to ads and clicks get more expensive as the budget grows. The agent reaches ~55% of unanswered enquiries; a late reply closes at ~60% of a live one. The figure is revenue, not profit.'
-              : 'Varsayımlar: bütçenin tamamı reklama gidiyor ve bütçe büyüdükçe tıklama maliyeti artıyor. Ajan yanıtsız kalan talebin ~%55\'ine ulaşıyor; geç dönülen talep canlı karşılananın %60\'ı kadar kapanıyor. Çıkan rakam ciro, kâr değil.'}</p>
-
-            {/* "Sektor degistir" (kaynak #skChange 4710): seciciye doner.
-                "Genel gorunume don" (data-sreset 4711) TASINMADI — hedefi
-                talep akis haritasiydi, harita Enes'in kararıyla cikti. */}
+            {/* .skcta (4709-4713): btn-p (ok ikonlu) + #skChange. "Genel
+                gorunume don" (data-sreset 4712) TASINMADI — hedefi talep
+                akis haritasiydi, harita Enes'in kararıyla cikti. */}
             <div class="sse-cagri">
-              <a class="dugme" href={`${B}${on}/hizmetler/otomasyon`}>{en ? 'See this setup running' : 'Bu kurulumu çalışırken gör'}</a>
-              <a class="dugme sse-dugme-g" href="#sektor">{g('skchange') || 'Sektör değiştir'}</a>
+              <a class="dugme" href={`${B}${on}/hizmetler/otomasyon`}>{m('skcta')}<Ikon ad="arrow" /></a>
+              <a class="dugme sse-dugme-g" href="#sektor">{m('skchange')}</a>
             </div>
           </article>
         ))}
-      </div>
 
-      {/* KAYDIRICILAR (sokum turu, 4 Eyl) — kaynak #skCalc 4681-4694 +
-          calc/metrics/syncSliders 9422-9500: butce / satis tutari /
-          yanitsiz oran; on ayar dugmeleri PRE. TEK BLOK (kaynakta da
-          tekti): olculdu, pano basina kopya HTML gzip'ini 42,9 KB'a
-          tasiyordu (H18 tavani 40,9). Ilk degerler ilk sektorun;
-          sektor degisince varlik/pano.js secili panonun verisiyle
-          yeniden kurar (formul hesap.mjs, tek kaynak; modul ILK
-          DOKUNUS/ilk sektor degisiminde dinamik iner — J1 disi). */}
-      {panolar.length > 0 && (() => { const p = panolar[0]; return (
-        <div class="sse-calc" data-ilk={p.k}>
-          <div class="sse-calc-bas"><span>{g('calct') || 'Kendi rakamlarınla dene'}</span><span class="sse-ipucu">{g('calch') || 'Kaydedilmez, bize gitmez'}</span></div>
-          {[
-            ['butce', g('cal1') || 'Aylık reklam bütçesi', 5000, 500000, 5000, p.f.budget, [15000, 40000, 120000, 300000]],
-            ['tutar', g('cal2') || 'Ortalama satış tutarı', 500, 300000, 500, p.f.ticket, [1500, 12000, 45000, 150000]],
-            ['kacan', g('cal3') || 'Şu an yanıtsız kalan talep', 0, 70, 1, p.f.miss, null],
-          ].map(([ad, etiket, min, max, adim, deger, on]: any) => (
-            <div class="sse-sl">
-              <label for={`sse-c-${ad}`}><span>{etiket}</span><b data-v={ad}>{ad === 'kacan' ? '%' + Math.round(deger || 0) : bicimTam(Number(deger) || 0, dil)}</b></label>
-              <input id={`sse-c-${ad}`} type="range" name={ad} min={min} max={max} step={adim} value={deger}
-                style={`--p:${(((Number(deger) || 0) - min) / (max - min) * 100).toFixed(1)}%`} />
-              {on && <div class="sse-slp">{on.map((v: number) => (
-                <button type="button" data-a={ad} data-v={v} class={v === Number(deger) ? 'on' : undefined}>{v >= 1000 ? (v / 1000) + 'B' : v}</button>
-              ))}</div>}
-            </div>
-          ))}
-        </div>
-      ); })()}
+        {/* KAYDIRICILAR (sokum turu, 4 Eyl) — kaynak #skCalc 4681-4694 +
+            calc/metrics/syncSliders 9422-9500: butce / satis tutari /
+            yanitsiz oran; on ayar dugmeleri PRE. TEK BLOK (kaynakta da
+            tekti): olculdu, pano basina kopya HTML gzip'ini 42,9 KB'a
+            tasiyordu (H18 tavani 40,9). Ilk degerler ilk sektorun;
+            sektor degisince varlik/pano.js secili panonun verisiyle
+            yeniden kurar (formul hesap.mjs, tek kaynak; modul ILK
+            DOKUNUS/ilk sektor degisiminde dinamik iner — J1 disi). */}
+        {panolar.length > 0 && (() => { const p = panolar[0]; return (
+          <div class="sse-calc" data-ilk={p.k}>
+            <div class="sse-calc-bas"><span>{m('calct')}</span><span class="sse-ipucu">{m('calch')}</span></div>
+            {[
+              ['butce', m('cal1'), 5000, 500000, 5000, p.f.budget, [15000, 40000, 120000, 300000]],
+              ['tutar', m('cal2'), 500, 300000, 500, p.f.ticket, [1500, 12000, 45000, 150000]],
+              ['kacan', m('cal3'), 0, 70, 1, p.f.miss, null],
+            ].map(([ad, etiket, min, max, adim, deger, on]: any) => (
+              <div class="sse-sl">
+                <label for={`sse-c-${ad}`}><span>{etiket}</span><b data-v={ad}>{ad === 'kacan' ? '%' + Math.round(deger || 0) : bicimTam(Number(deger) || 0, dil)}</b></label>
+                <input id={`sse-c-${ad}`} type="range" name={ad} min={min} max={max} step={adim} value={deger}
+                  style={`--p:${(((Number(deger) || 0) - min) / (max - min) * 100).toFixed(1)}%`} />
+                {on && <div class="sse-slp">{on.map((v: number) => (
+                  <button type="button" data-a={ad} data-v={v} class={v === Number(deger) ? 'on' : undefined}>{v >= 1000 ? (v / 1000) + 'B' : v}</button>
+                ))}</div>}
+              </div>
+            ))}
+          </div>
+        ); })()}
+      </div>
     </div>
   </div>
 </section>
