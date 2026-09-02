@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-09-02 01:40 UTC
+> Üretim tarihi: 2026-09-02 13:35 UTC
 
 ## Yeni sohbete geçerken
 
@@ -978,7 +978,7 @@
 | `.netlify/db/global/6247` |  | 8 KB | `7f102156` |
 | `.netlify/db/global/6302` |  | 16 KB | `b3b1d48b` |
 | `.netlify/db/global/6303` |  | 16 KB | `22c7d4d9` |
-| `.netlify/db/global/pg_control` |  | 8 KB | `37220cd2` |
+| `.netlify/db/global/pg_control` |  | 8 KB | `0e45afeb` |
 | `.netlify/db/global/pg_filenode.map` |  | 1 KB | `3de878cf` |
 | `.netlify/db/global/pg_internal.init` |  | 22 KB | `9fa5cb02` |
 | `.netlify/db/pg_hba.conf` |  | 6 KB | `feae4132` |
@@ -987,7 +987,7 @@
 | `.netlify/db/pg_multixact/members/0000` |  | 8 KB | `06314572` |
 | `.netlify/db/pg_multixact/offsets/0000` |  | 8 KB | `06314572` |
 | `.netlify/db/pg_subtrans/0000` |  | 8 KB | `06314572` |
-| `.netlify/db/pg_wal/000000010000000000000005` |  | 1024 KB | `b58ee6a1` |
+| `.netlify/db/pg_wal/000000010000000000000005` |  | 1024 KB | `bae9df52` |
 | `.netlify/db/pg_wal/000000010000000000000006` |  | 1024 KB | `23e3a972` |
 | `.netlify/db/pg_wal/000000010000000000000007` |  | 1024 KB | `22a7c0ef` |
 | `.netlify/db/pg_wal/000000010000000000000008` |  | 1024 KB | `f796763b` |
@@ -995,19 +995,20 @@
 | `.netlify/db/pg_xact/0000` |  | 8 KB | `1b694dc5` |
 | `.netlify/db/postgresql.auto.conf` |  | 0 KB | `c6b93d1c` |
 | `.netlify/db/postgresql.conf` |  | 30 KB | `495059aa` |
-| `.netlify/db/postmaster.pid` |  | 0 KB | `e08244ff` |
-| `.netlify/state.json` |  | 0 KB | `cf2fdf98` |
+| `.netlify/db/postmaster.pid` |  | 0 KB | `38c5e9e5` |
+| `.netlify/state.json` |  | 0 KB | `c3e6d59c` |
 | `AJAN-HOLDING.md` |  | 26 KB | `405925f8` |
 | `CLAUDE.md` |  | 9 KB | `056faa00` |
 | `CODE-TALIMAT.md` |  | 3 KB | `91008615` |
 | `DENETIM-GOC-KOVALARI.md` |  | 3 KB | `960b852f` |
-| `DEVIR.md` | bu dosya | 151 KB |  |
+| `DEVIR.md` | bu dosya | 162 KB |  |
 | `FILM-ISKELET-TURU.md` |  | 46 KB | `8fb5414d` |
 | `GOC-ENVANTER.md` |  | 4 KB | `83d8f590` |
 | `GOC-ROTA-KAPANIS.md` |  | 9 KB | `a533badc` |
 | `GOC-TUR-KAPANIS.md` |  | 10 KB | `06a17752` |
 | `GORSEL-LISTESI-B1-B7.md` |  | 14 KB | `79b2ee50` |
-| `KESME-PLANI.md` |  | 13 KB | `6765842d` |
+| `KESME-PLANI.md` |  | 20 KB | `e4bb17e5` |
+| `MIMARI-DENETIM.md` |  | 26 KB | `69acc110` |
 | `NETLIFY-KURULUM.md` |  | 8 KB | `393fe495` |
 | `OLCUM-FAZ0-KIYAS.md` |  | 4 KB | `d38b1f7e` |
 | `PERFORMANS-MIMARI-INCELEME-2026-08-16.md` |  | 17 KB | `12e3bdde` |
@@ -1017,12 +1018,13 @@
 | `TASIMA-TURU-KAPANIS.md` |  | 9 KB | `dba0f668` |
 | `TEST.md` |  | 2 KB | `fe469648` |
 | `TUR4-SOKUM-KESIF.md` |  | 7 KB | `e4be086a` |
-| `_headers` |  | 82 KB | `06b3788f` |
-| `admin.html` |  | 77 KB | `ffba6fb5` |
+| `YONLENDIRME-HARITASI.md` |  | 10 KB | `8b3a256d` |
+| `_headers` |  | 82 KB | `ec751928` |
+| `admin.html` |  | 77 KB | `3dcd5ac9` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
-| `build.js` |  | 43 KB | `f9627c1c` |
+| `build.js` |  | 44 KB | `800c34e3` |
 | `content.json` |  | 238 KB | `0d393912` |
 | `deno.lock` |  | 1 KB | `bc6015c9` |
 | `gece.diff` |  | 17 KB | `db9e81c7` |
@@ -1183,12 +1185,12 @@
 | `netlify/functions/submission-created.js` |  | 4 KB | `e0667e9d` |
 | `netlify/functions/yayinla.js` |  | 8 KB | `cf9ce06e` |
 | `netlify/parola-hash.js` |  | 1 KB | `c6ba3af4` |
-| `netlify.toml` |  | 2 KB | `bbec7e2b` |
+| `netlify.toml` |  | 3 KB | `adda09f1` |
 | `og.png` |  | 128 KB | `4bcf0d3e` |
 | `olcum-sozlugu.md` |  | 3 KB | `e2de2b84` |
 | `package-lock.json` |  | 50 KB | `baf52f2b` |
 | `package.json` |  | 1 KB | `7e45799a` |
-| `plugins/onbellek/index.js` |  | 0 KB | `166d0599` |
+| `plugins/onbellek/index.js` |  | 1 KB | `ca55b7eb` |
 | `plugins/onbellek/manifest.yml` |  | 0 KB | `53c73417` |
 | `qanat-tek-dosya_130.html` |  | 3501 KB | `0ee2469d` |
 | `referans/kompozisyon-hedef.png` |  | 535 KB | `eec5ccd8` |
@@ -1197,7 +1199,7 @@
 | `tekdosya.py` |  | 5 KB | `5d2ff2e1` |
 | `tel-birim.diff` |  | 5 KB | `b2e4fe5a` |
 | `tel-tek-birim.diff` |  | 9 KB | `74b175f0` |
-| `test/denetim.js` |  | 188 KB | `14ea9d57` |
+| `test/denetim.js` |  | 189 KB | `dec34fa6` |
 | `test/fikstur/r10-cf-challenge.html` |  | 5 KB | `6ff83d83` |
 | `test/fikstur/r10-cf-challenge.json` |  | 3 KB | `803498ca` |
 | `test/fikstur/taban-cizgisi.json` |  | 3 KB | `b3e9b338` |
@@ -1205,11 +1207,11 @@
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 | `yeni/amblem-sdf.py` |  | 21 KB | `fc819785` |
 | `yeni/astro.config.mjs` |  | 5 KB | `52ff37d6` |
-| `yeni/denetim.cjs` |  | 126 KB | `641e2b43` |
+| `yeni/denetim.cjs` |  | 134 KB | `3cdd54e8` |
 | `yeni/film/.404.cjs` |  | 2 KB | `3b938d14` |
 | `yeni/film/.kodek/p-amf.mp4` |  | 0 KB | `da39a3ee` |
 | `yeni/film/.kodek/ref-1440.mp4` |  | 33793 KB | `c01d021e` |
-| `yeni/film/.medya-kurulum.json` |  | 0 KB | `7f16b6a2` |
+| `yeni/film/.medya-kurulum.json` |  | 0 KB | `6e68faf8` |
 | `yeni/film/DUZELTME-paylasilan-kare.md` |  | 3 KB | `da829178` |
 | `yeni/film/PROLOG-ANLATI-METNI.md` |  | 6 KB | `e2f3da0d` |
 | `yeni/film/TUR4-CHROME-DENETIM.md` |  | 7 KB | `966d3feb` |
@@ -1763,12 +1765,69 @@
 | `yeni/film/kontak-soz/blok21.jpg` |  | 109 KB | `5f3ce540` |
 | `yeni/film/kontak-soz/yanyana-acik.png` |  | 1970 KB | `31a1293f` |
 | `yeni/film/kontak-soz/yanyana-koyu.png` |  | 756 KB | `0e6d0c1e` |
+| `yeni/film/kontak-tasarim-ana-deneme2.json` |  | 4 KB | `981cb62c` |
+| `yeni/film/kontak-tasarim-e3-ana-tel.json` |  | 5 KB | `082525c6` |
+| `yeni/film/kontak-tasarim-e3-ana.json` |  | 5 KB | `6fa129d8` |
+| `yeni/film/kontak-tasarim-e3-hizmetler.json` |  | 3 KB | `852fe0ec` |
+| `yeni/film/kontak-tasarim-e3-sss.json` |  | 3 KB | `f519b5bf` |
+| `yeni/film/kontak-tasarim-m4-ana.json` |  | 3 KB | `13e9b811` |
+| `yeni/film/kontak-tasarim-m4-en.json` |  | 3 KB | `da25f38b` |
+| `yeni/film/kontak-tasarim-m4-tel.json` |  | 2 KB | `69209134` |
+| `yeni/film/kontak-tasarim-t2-film.json` |  | 3 KB | `753fb052` |
+| `yeni/film/kontak-tasarim-t2-hero.json` |  | 3 KB | `94438d51` |
+| `yeni/film/kontak-tasarim-t7-ana-tel.json` |  | 2 KB | `bf475ad5` |
+| `yeni/film/kontak-tasarim-t7-ana.json` |  | 3 KB | `5d03a349` |
+| `yeni/film/kontak-tasarim-t7-hizmetler.json` |  | 3 KB | `e9a5dd28` |
+| `yeni/film/kontak-tasarim.cjs` |  | 18 KB | `e28e2e8e` |
+| `yeni/film/kontak-tur9/ana-deneme2-yanyana-0.png` |  | 972 KB | `07159322` |
+| `yeni/film/kontak-tur9/ana-deneme2-yanyana-40.png` |  | 123 KB | `b69bcf7d` |
+| `yeni/film/kontak-tur9/ana-deneme2-yanyana-80.png` |  | 364 KB | `06235377` |
+| `yeni/film/kontak-tur9/e3-ana-tel-yanyana-0.png` |  | 259 KB | `71cf81b7` |
+| `yeni/film/kontak-tur9/e3-ana-tel-yanyana-100.png` |  | 64 KB | `3a7d17ef` |
+| `yeni/film/kontak-tur9/e3-ana-tel-yanyana-60.png` |  | 68 KB | `6158de61` |
+| `yeni/film/kontak-tur9/e3-ana-yanyana-0.png` |  | 976 KB | `c3c35f6e` |
+| `yeni/film/kontak-tur9/e3-ana-yanyana-100.png` |  | 86 KB | `527f3532` |
+| `yeni/film/kontak-tur9/e3-ana-yanyana-60.png` |  | 93 KB | `47460781` |
+| `yeni/film/kontak-tur9/e3-hizmetler-yanyana-0.png` |  | 152 KB | `88ed7dfc` |
+| `yeni/film/kontak-tur9/e3-hizmetler-yanyana-100.png` |  | 105 KB | `76bcedb3` |
+| `yeni/film/kontak-tur9/e3-sss-yanyana-0.png` |  | 100 KB | `d4e8e41a` |
+| `yeni/film/kontak-tur9/e3-sss-yanyana-100.png` |  | 102 KB | `6c02a9ad` |
+| `yeni/film/kontak-tur9/klavye-ana-masa-001.png` |  | 1228 KB | `d0267218` |
+| `yeni/film/kontak-tur9/klavye-ana-masa-072.png` |  | 247 KB | `032d3aff` |
+| `yeni/film/kontak-tur9/klavye-ana-masa-073.png` |  | 247 KB | `5de769c9` |
+| `yeni/film/kontak-tur9/klavye-ana-tel-001.png` |  | 202 KB | `fbecc4a9` |
+| `yeni/film/kontak-tur9/klavye-ana-tel-045.png` |  | 51 KB | `2f762a26` |
+| `yeni/film/kontak-tur9/klavye-ana-tel-056.png` |  | 51 KB | `007f7639` |
+| `yeni/film/kontak-tur9/klavye-hizmetler-masa-001.png` |  | 335 KB | `c05920ec` |
+| `yeni/film/kontak-tur9/klavye-hizmetler-tel-001.png` |  | 70 KB | `f20ca61a` |
+| `yeni/film/kontak-tur9/m4-ana-yanyana-0.png` |  | 1118 KB | `c5e2df66` |
+| `yeni/film/kontak-tur9/m4-ana-yanyana-100.png` |  | 83 KB | `bc2c3d89` |
+| `yeni/film/kontak-tur9/m4-en-yanyana-0.png` |  | 989 KB | `80270bf2` |
+| `yeni/film/kontak-tur9/m4-en-yanyana-100.png` |  | 85 KB | `0d4ad913` |
+| `yeni/film/kontak-tur9/m4-tel-yanyana-0.png` |  | 222 KB | `89bd355a` |
+| `yeni/film/kontak-tur9/t2-film-once-0.png` |  | 549 KB | `dd01ce84` |
+| `yeni/film/kontak-tur9/t2-film-once-2.png` |  | 563 KB | `186d39ba` |
+| `yeni/film/kontak-tur9/t2-film-sonra-0.png` |  | 563 KB | `75b587e1` |
+| `yeni/film/kontak-tur9/t2-film-sonra-2.png` |  | 564 KB | `06094365` |
+| `yeni/film/kontak-tur9/t2-film-yanyana-0.png` |  | 1146 KB | `9bafa226` |
+| `yeni/film/kontak-tur9/t2-film-yanyana-2.png` |  | 1162 KB | `9c52fcbc` |
+| `yeni/film/kontak-tur9/t2-hero-once-0.png` |  | 705 KB | `5ed011cc` |
+| `yeni/film/kontak-tur9/t2-hero-once-3.png` |  | 253 KB | `9ce26344` |
+| `yeni/film/kontak-tur9/t2-hero-sonra-0.png` |  | 705 KB | `e9d405e0` |
+| `yeni/film/kontak-tur9/t2-hero-sonra-3.png` |  | 253 KB | `219ada34` |
+| `yeni/film/kontak-tur9/t2-hero-yanyana-0.png` |  | 976 KB | `0dca13c2` |
+| `yeni/film/kontak-tur9/t2-hero-yanyana-3.png` |  | 304 KB | `c57fa393` |
+| `yeni/film/kontak-tur9/t7-ana-tel-yanyana-0.png` |  | 222 KB | `89bd355a` |
+| `yeni/film/kontak-tur9/t7-ana-yanyana-0.png` |  | 976 KB | `5ee25fe2` |
+| `yeni/film/kontak-tur9/t7-ana-yanyana-60.png` |  | 93 KB | `47460781` |
+| `yeni/film/kontak-tur9/t7-hizmetler-yanyana-0.png` |  | 152 KB | `88ed7dfc` |
+| `yeni/film/kontak-tur9/t7-hizmetler-yanyana-100.png` |  | 104 KB | `caa53cf1` |
 | `yeni/film/kontak.cjs` |  | 5 KB | `b7c54eeb` |
 | `yeni/film/kontak39.cjs` |  | 3 KB | `ab17cfe2` |
-| `yeni/film/kur-medya.cjs` |  | 5 KB | `2c309a72` |
-| `yeni/film/medya-manifest.json` |  | 27 KB | `ba851072` |
+| `yeni/film/kur-medya.cjs` |  | 11 KB | `d283a4d8` |
+| `yeni/film/medya-manifest.json` |  | 27 KB | `6be82598` |
 | `yeni/film/olc-birakma.cjs` |  | 9 KB | `515aaba2` |
-| `yeni/film/olc-bosta.cjs` |  | 3 KB | `5aca9139` |
+| `yeni/film/olc-bosta.cjs` |  | 3 KB | `85c1bae6` |
 | `yeni/film/olc-butce.cjs` |  | 7 KB | `f9638e5a` |
 | `yeni/film/olc-butce.json` |  | 4 KB | `cc67ea3c` |
 | `yeni/film/olc-chrome-A.json` |  | 20 KB | `1328a0ae` |
@@ -1777,6 +1836,8 @@
 | `yeni/film/olc-chrome-B2.json` |  | 18 KB | `3f55c555` |
 | `yeni/film/olc-chrome-finans.json` |  | 2 KB | `22fd10ed` |
 | `yeni/film/olc-chrome-tablo.md` |  | 6 KB | `556c5bce` |
+| `yeni/film/olc-chrome-tur9-once.json` |  | 4 KB | `e23ff629` |
+| `yeni/film/olc-chrome-tur9-sonra.json` |  | 4 KB | `7dff70b3` |
 | `yeni/film/olc-chrome.cjs` |  | 11 KB | `480e87c5` |
 | `yeni/film/olc-devir.cjs` |  | 17 KB | `85176825` |
 | `yeni/film/olc-devir.json` |  | 8 KB | `7f88c58c` |
@@ -1784,12 +1845,17 @@
 | `yeni/film/olc-efekt.cjs` |  | 27 KB | `1bcde405` |
 | `yeni/film/olc-efekt.json` |  | 5 KB | `873f3fba` |
 | `yeni/film/olc-giris.cjs` |  | 4 KB | `1bf7f86c` |
+| `yeni/film/olc-hap.cjs` |  | 3 KB | `207ff0dd` |
 | `yeni/film/olc-hiz.cjs` |  | 24 KB | `d23dcdcb` |
 | `yeni/film/olc-hiz.json` |  | 3 KB | `a0a7e89d` |
-| `yeni/film/olc-ilkkare.cjs` |  | 4 KB | `e2bc1f0a` |
+| `yeni/film/olc-ilkkare.cjs` |  | 4 KB | `8e759232` |
 | `yeni/film/olc-kamera-hizi.json` |  | 8 KB | `82da07d7` |
 | `yeni/film/olc-kamera-hizi.py` |  | 2 KB | `a79381e2` |
 | `yeni/film/olc-karehizi.cjs` |  | 7 KB | `6749479a` |
+| `yeni/film/olc-klavye-once-8791.json` |  | 150 KB | `ff157da7` |
+| `yeni/film/olc-klavye-once.json` |  | 150 KB | `5b1fbcde` |
+| `yeni/film/olc-klavye-sonra.json` |  | 91 KB | `a80a9b9b` |
+| `yeni/film/olc-klavye.cjs` |  | 15 KB | `542cffef` |
 | `yeni/film/olc-pencere-tarama.cjs` |  | 3 KB | `9b1b96f1` |
 | `yeni/film/olc-pencere.cjs` |  | 10 KB | `b747b267` |
 | `yeni/film/olc-pencere.json` |  | 9 KB | `f80261f3` |
@@ -1834,7 +1900,7 @@
 | `yeni/film/olc-titreme4.cjs` |  | 5 KB | `ed91069c` |
 | `yeni/film/olc-varlik-once.json` |  | 10 KB | `92e62c05` |
 | `yeni/film/olc-varlik-sonra.json` |  | 10 KB | `dcf4fb5b` |
-| `yeni/film/olc-varlik.cjs` |  | 6 KB | `7128c79c` |
+| `yeni/film/olc-varlik.cjs` |  | 6 KB | `1e32eb81` |
 | `yeni/film/olc-zincir.cjs` |  | 28 KB | `43a8792a` |
 | `yeni/film/olc-zincir.json` |  | 4 KB | `00098289` |
 | `yeni/film/olc.cjs` |  | 18 KB | `9f4026bc` |
@@ -2076,15 +2142,15 @@
 | `yeni/gorsel-kanal.cjs` |  | 9 KB | `36b6483f` |
 | `yeni/gorsel-kompoze.cjs` |  | 11 KB | `16abd0f0` |
 | `yeni/gorsel-uret.cjs` |  | 21 KB | `2b0e75af` |
-| `yeni/kabuk/efekt.js` |  | 20 KB | `6423e0ca` |
+| `yeni/kabuk/efekt.js` |  | 20 KB | `87e26687` |
 | `yeni/kabuk/pano.js` |  | 3 KB | `8beb0de4` |
 | `yeni/kabuk/sizinti.js` |  | 5 KB | `0e547d9b` |
 | `yeni/kabuk/tespit-fix.mjs` |  | 5 KB | `0f32de9e` |
-| `yeni/kabuk-derle.cjs` |  | 2 KB | `0d87261b` |
-| `yeni/link-basliklari.cjs` |  | 3 KB | `daa248a1` |
-| `yeni/metin-harita.cjs` |  | 4 KB | `ba53146a` |
+| `yeni/kabuk-derle.cjs` |  | 3 KB | `b9715956` |
+| `yeni/link-basliklari.cjs` |  | 4 KB | `45be498a` |
+| `yeni/metin-harita.cjs` |  | 5 KB | `dc41824e` |
 | `yeni/package-lock.json` |  | 240 KB | `b336378b` |
-| `yeni/package.json` |  | 0 KB | `ec75d21c` |
+| `yeni/package.json` |  | 0 KB | `5dc442a0` |
 | `yeni/panel-kapi.cjs` |  | 12 KB | `bc6ca8e9` |
 | `yeni/public/font/playfair-display-500-latin.woff2` |  | 16 KB | `1313c67a` |
 | `yeni/public/font/playfair-display-500-tr.woff2` |  | 2 KB | `36b3dc84` |
@@ -2461,7 +2527,7 @@
 | `yeni/src/hesap.mjs` |  | 4 KB | `7bc715e2` |
 | `yeni/src/huni.mjs` |  | 2 KB | `2d8aaec1` |
 | `yeni/src/icerik.ts` |  | 3 KB | `9faf4e68` |
-| `yeni/src/layouts/Temel.astro` |  | 9 KB | `c3dbf08b` |
+| `yeni/src/layouts/Temel.astro` |  | 10 KB | `a9e97c0d` |
 | `yeni/src/pages/404.astro` |  | 1 KB | `e6cf5204` |
 | `yeni/src/pages/bulten/[slug].astro` |  | 1 KB | `10fac856` |
 | `yeni/src/pages/bulten/index.astro` |  | 1 KB | `f1c4c873` |
@@ -2470,7 +2536,7 @@
 | `yeni/src/pages/en/bulten/[slug].astro` |  | 1 KB | `20d630e3` |
 | `yeni/src/pages/en/bulten/index.astro` |  | 1 KB | `e9a658b7` |
 | `yeni/src/pages/en/film.astro` |  | 1 KB | `a6a323f5` |
-| `yeni/src/pages/en/hizmet/[slug].astro` |  | 1 KB | `a964c1e4` |
+| `yeni/src/pages/en/hizmetler/[slug].astro` |  | 1 KB | `a964c1e4` |
 | `yeni/src/pages/en/hizmetler.astro` |  | 1 KB | `5e9630b4` |
 | `yeni/src/pages/en/index.astro` |  | 3 KB | `c0a98f6a` |
 | `yeni/src/pages/en/otomasyon.astro` |  | 1 KB | `baf4a70d` |
@@ -2479,14 +2545,14 @@
 | `yeni/src/pages/en/sss.astro` |  | 1 KB | `1348318d` |
 | `yeni/src/pages/en/surec.astro` |  | 1 KB | `8c4fd9eb` |
 | `yeni/src/pages/film.astro` |  | 2 KB | `c329e911` |
-| `yeni/src/pages/hizmet/[slug].astro` |  | 1 KB | `7fef1de8` |
+| `yeni/src/pages/hizmetler/[slug].astro` |  | 1 KB | `7fef1de8` |
 | `yeni/src/pages/hizmetler.astro` |  | 1 KB | `b920089d` |
 | `yeni/src/pages/hukuki.astro` |  | 1 KB | `f37f3220` |
 | `yeni/src/pages/index.astro` |  | 5 KB | `bf65ea8e` |
 | `yeni/src/pages/otomasyon.astro` |  | 1 KB | `532e3100` |
 | `yeni/src/pages/projeler/[slug].astro` |  | 1 KB | `efd9ca9a` |
 | `yeni/src/pages/projeler/index.astro` |  | 1 KB | `2f7f3cbe` |
-| `yeni/src/pages/sitemap.xml.ts` |  | 3 KB | `64b89125` |
+| `yeni/src/pages/sitemap.xml.ts` |  | 3 KB | `54e34b97` |
 | `yeni/src/pages/sss.astro` |  | 1 KB | `b6112ca2` |
 | `yeni/src/pages/surec.astro` |  | 1 KB | `7e4af769` |
 | `yeni/src/parcalar/AkisDemo.astro` |  | 7 KB | `12f16198` |
@@ -2496,15 +2562,15 @@
 | `yeni/src/parcalar/CanliSahne.astro` |  | 12 KB | `faecb89c` |
 | `yeni/src/parcalar/DenemeAda.tsx` |  | 1 KB | `5175c65b` |
 | `yeni/src/parcalar/EskiGiris.astro` |  | 4 KB | `ed439c89` |
-| `yeni/src/parcalar/Film.astro` |  | 42 KB | `f646d1b1` |
-| `yeni/src/parcalar/HizmetDizin.astro` |  | 14 KB | `b0566a53` |
-| `yeni/src/parcalar/HizmetGovde.astro` |  | 22 KB | `b694114a` |
+| `yeni/src/parcalar/Film.astro` |  | 42 KB | `c909ce2c` |
+| `yeni/src/parcalar/HizmetDizin.astro` |  | 14 KB | `df3b1ab0` |
+| `yeni/src/parcalar/HizmetGovde.astro` |  | 22 KB | `d103090a` |
 | `yeni/src/parcalar/HuniSahne.astro` |  | 5 KB | `c7d950a8` |
 | `yeni/src/parcalar/Ikon.astro` |  | 4 KB | `ab1c6954` |
 | `yeni/src/parcalar/KadroBlok.astro` |  | 3 KB | `7d227bc3` |
 | `yeni/src/parcalar/MfstBlok.astro` |  | 1 KB | `18988afd` |
 | `yeni/src/parcalar/MotorSahne.astro` |  | 60 KB | `d2d35e7b` |
-| `yeni/src/parcalar/Nav.astro` |  | 8 KB | `300006d8` |
+| `yeni/src/parcalar/Nav.astro` |  | 9 KB | `57b3a5c9` |
 | `yeni/src/parcalar/OtomasyonGovde.astro` |  | 61 KB | `7b865657` |
 | `yeni/src/parcalar/Perde.astro` |  | 5 KB | `e4bc7f00` |
 | `yeni/src/parcalar/PlatformSahne.astro` |  | 28 KB | `6c4299fa` |
@@ -2521,40 +2587,40 @@
 | `yeni/src/sahneler/S3Mekanizma.astro` |  | 3 KB | `2c52c5af` |
 | `yeni/src/sahneler/S5Surec.astro` |  | 2 KB | `d85e8dee` |
 | `yeni/src/sahneler/S6Sektor.astro` |  | 1 KB | `e67033d7` |
-| `yeni/src/sahneler/SAAkis.astro` |  | 10 KB | `23cf4504` |
+| `yeni/src/sahneler/SAAkis.astro` |  | 10 KB | `1d00de85` |
 | `yeni/src/sahneler/SHHero.astro` |  | 5 KB | `1f073063` |
 | `yeni/src/sahneler/SILIletisim.astro` |  | 9 KB | `78a74e17` |
-| `yeni/src/sahneler/SKKatman.astro` |  | 4 KB | `b8dc75bc` |
+| `yeni/src/sahneler/SKKatman.astro` |  | 5 KB | `bf9ac397` |
 | `yeni/src/sahneler/SKUKurucu.astro` |  | 3 KB | `c0b62031` |
-| `yeni/src/sahneler/SPDeste.astro` |  | 6 KB | `5c9ea694` |
+| `yeni/src/sahneler/SPDeste.astro` |  | 7 KB | `d6b84315` |
 | `yeni/src/sahneler/SSBSozBandi.astro` |  | 3 KB | `1c503862` |
-| `yeni/src/sahneler/SSESektor.astro` |  | 12 KB | `19482009` |
+| `yeni/src/sahneler/SSESektor.astro` |  | 12 KB | `2ca43443` |
 | `yeni/src/sahneler/SSZSozler.astro` |  | 5 KB | `3e30e45b` |
 | `yeni/src/sahneler/STETespit.astro` |  | 15 KB | `88b74e25` |
 | `yeni/src/sahneler/STSerit.astro` |  | 2 KB | `00e649e0` |
 | `yeni/src/sema.mjs` |  | 10 KB | `e30e15db` |
 | `yeni/src/stil/aile.css` |  | 1 KB | `71532d9a` |
-| `yeni/src/stil/akis.css` |  | 19 KB | `2c4d82ee` |
+| `yeni/src/stil/akis.css` |  | 19 KB | `d951445c` |
 | `yeni/src/stil/ana.css` |  | 9 KB | `25a17010` |
 | `yeni/src/stil/blok.css` |  | 15 KB | `190fd8f5` |
-| `yeni/src/stil/demo-detay.css` |  | 19 KB | `65226dc6` |
+| `yeni/src/stil/demo-detay.css` |  | 19 KB | `fd4fbcda` |
 | `yeni/src/stil/demo-taban.css` |  | 3 KB | `18b9f1a8` |
 | `yeni/src/stil/deste.css` |  | 15 KB | `0e30c4b2` |
-| `yeni/src/stil/film.css` |  | 23 KB | `2d775fd2` |
+| `yeni/src/stil/film.css` |  | 22 KB | `3a75e2ee` |
 | `yeni/src/stil/font.css` |  | 3 KB | `bbb9e0d5` |
-| `yeni/src/stil/hero.css` |  | 19 KB | `a9e3e03d` |
+| `yeni/src/stil/hero.css` |  | 18 KB | `cb7bbe86` |
 | `yeni/src/stil/iletisim.css` |  | 4 KB | `430584df` |
-| `yeni/src/stil/kabuk.css` |  | 7 KB | `ff79b01c` |
+| `yeni/src/stil/kabuk.css` |  | 7 KB | `27719beb` |
 | `yeni/src/stil/katman.css` |  | 9 KB | `20ff5b53` |
 | `yeni/src/stil/kurucu.css` |  | 5 KB | `9fa221c5` |
-| `yeni/src/stil/nav.css` |  | 13 KB | `a2ee3bcf` |
+| `yeni/src/stil/nav.css` |  | 14 KB | `379a2552` |
 | `yeni/src/stil/perde.css` |  | 8 KB | `8b215d9e` |
 | `yeni/src/stil/sektor.css` |  | 11 KB | `7852e327` |
 | `yeni/src/stil/serit.css` |  | 4 KB | `409b1c40` |
 | `yeni/src/stil/sozband.css` |  | 5 KB | `743ed6c0` |
-| `yeni/src/stil/sozler.css` |  | 12 KB | `760d4831` |
-| `yeni/src/stil/temel.css` |  | 10 KB | `aa77f487` |
-| `yeni/src/stil/tespit.css` |  | 8 KB | `3534e888` |
+| `yeni/src/stil/sozler.css` |  | 12 KB | `a3e11a71` |
+| `yeni/src/stil/temel.css` |  | 15 KB | `137fdf32` |
+| `yeni/src/stil/tespit.css` |  | 8 KB | `5839d0ff` |
 | `yeni/src/ton.ts` |  | 1 KB | `b77eab8a` |
 | `yeni/src/veri/deste-gorselleri.json` |  | 1 KB | `ee5c49f2` |
 | `yeni/src/veri/kanal-gorselleri.json` |  | 1 KB | `6e44f8f9` |
@@ -2562,10 +2628,13 @@
 | `yeni/src/veri/kurucu-gorsel.json` |  | 0 KB | `17def14d` |
 | `yeni/src/veri/logo-kunye.json` |  | 2 KB | `d02a6f4a` |
 | `yeni/src/veri/proje-gorselleri.json` |  | 3 KB | `b9c6db24` |
+| `yeni/src/veri/sayfalar.json` |  | 3 KB | `61fb76aa` |
 | `yeni/src/veri/serit-logolari.json` |  | 1 KB | `12ea05d7` |
 | `yeni/src/veri/ulkeler.json` |  | 9 KB | `f32566a3` |
+| `yeni/surum-yaz.cjs` |  | 3 KB | `2ec3bfbb` |
 | `yeni/test/film-ayar.test.mjs` |  | 5 KB | `1f809cbb` |
-| `yeni/test/film-halka.test.mjs` |  | 4 KB | `9d24495b` |
+| `yeni/test/film-halka.test.mjs` |  | 6 KB | `e641971a` |
+| `yeni/test/hap-olcek.test.mjs` |  | 5 KB | `1afc1e6c` |
 | `yeni/test/hesap.test.mjs` |  | 4 KB | `38ead451` |
 | `yeni/test/huni.test.mjs` |  | 2 KB | `44c34fc7` |
 | `yeni/tsconfig.json` |  | 0 KB | `302e8bc4` |
@@ -2581,7 +2650,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 56 sn (basılan 0, önbellekten 58) |
+| son derleme | 61 sn (basılan 0, önbellekten 58) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma
