@@ -29,10 +29,9 @@ body:has(.ana) main{max-width:none;padding:0}
 /* etiket satırı — kaynak `.shead .mono` birebir (181 + 339-340): 11px mono,
    .22em, gri (--tx3), önünde 26px kızıl çizgi. Anlatı sayacı ("02") ve
    kızıl nokta kaynakta YOKTU — sadakat turunda kalktı (anlatı sahneleri de). */
-.kunye{font-family:var(--f-tek);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--tx3);display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
-.kunye::before{content:'';width:26px;height:1px;background:var(--red)}
-.kunye i{display:none}
+/* .kunye kurali temel.css'e TASINDI (3 Eyl 2026, anayasa): lead formu artik her
+   sayfada (LeadKutu) ve kunye orada da basiliyor; ana.css yalniz ana sayfada
+   yukleniyordu — hizmet detayinda "Demo talebi" duz metin kalmisti (hz-geo-60). */
 
 /* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
    Faz 2'nin "iddia" sahnesi ile göçün S-H hero'su aynı sözü söylüyordu
