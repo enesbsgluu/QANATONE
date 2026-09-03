@@ -95,7 +95,8 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
     text-transform: uppercase; color: var(--tx4); }
   .fnnote { font-family:var(--f-tek); font-size: .68rem; letter-spacing: .06em;
     color: var(--tx4); margin-top: 10px; }
-  .ststage { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+  /* ANAYASA (3/4 Eyl): kaynak yariçapi var(--r-lg) = 26px, 18 sapmaydi (olculdu) */
+  .ststage { border: 1px solid var(--line); border-radius: 26px; background: var(--card);
     overflow: hidden; }
   .stbar { display: flex; align-items: center; gap: 6px; padding: 11px 15px;
     border-bottom: 1px solid var(--line); background: #0c0c0d; }
@@ -124,7 +125,10 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
   .stopts { display: none; }
   .stlive.nofr .stlv { height: auto; }
   .stlive.nofr .stopts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
-  .stlive.nofr .stpost { position: relative; display: flex; align-items: flex-end; height: 236px;
+  /* Kaynakta baglantilar rengi devralirdi; yeni kabugun kuresel bag rengi
+     (kizil) bu kartin metnini kizillastiriyordu — kaynakta beyaz (olculdu,
+     3/4 Eyl: .stpost rengi 255,255,255 iken 255,77,99 cikiyordu). */
+  .stlive.nofr .stpost { color: inherit; position: relative; display: flex; align-items: flex-end; height: 236px;
     border-radius: 14px; overflow: hidden; border: 1px solid var(--line2);
     background-color: #0c0c0d;
     transition: transform .4s var(--e), border-color .4s var(--e); }
