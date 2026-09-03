@@ -82,18 +82,6 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
   <title>{baslik}</title>
-  {/* GOVDE FONTU ON YUKLEME — HER SAYFA (TUR 3, 4 Eyl 2026).
-      Ana sayfada zaten vardi ve gerekcesi index.astro'da yazili ("swap ile
-      gelen her yuz ilk boyadan SONRA gelirse metni yeniden dizer"); obur
-      58 sayfada YOKTU ve CLS aykiri degerinin kosulu tam buydu — soguk
-      onbellekte Uncut ilk boyadan sonra geliyor, satirlar yeniden sariliyor.
-      OLCULDU (/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/, Chrome, uc
-      kosum): sicak onbellek 0 · soguk onbellek 0,1588. `swap` karari
-      degismiyor (Anayasa madde 4); on yukleme takasi ilk boyadan ONCE
-      bitirir. TR altkumesi (1,7 KB) on YUKLENMEZ — ana sayfanin kendi
-      notundaki gerekce: gec gelirse yalniz bes glif etkilenir. */}
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href={`${B}/font/uncut-sans-latin.woff2`} />
   <meta name="description" content={aciklama} />
   <link rel="canonical" href={canonical} />
   <meta property="og:type" content="website" />
@@ -107,6 +95,25 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
   {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
+  {/* GOVDE FONTU ON YUKLEME — HER SAYFA (TUR 3, 4 Eyl 2026).
+      Ana sayfada zaten vardi ve gerekcesi index.astro'da yazili ("swap ile
+      gelen her yuz ilk boyadan SONRA gelirse metni yeniden dizer"); obur
+      58 sayfada YOKTU ve CLS aykiri degerinin kosulu tam buydu — soguk
+      onbellekte Uncut ilk boyadan sonra geliyor, satirlar yeniden sariliyor.
+      OLCULDU (/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/, Chrome, uc
+      kosum): sicak onbellek 0 · soguk onbellek 0,1588. `swap` karari
+      degismiyor (Anayasa madde 4); on yukleme takasi ilk boyadan ONCE
+      bitirir. TR altkumesi (1,7 KB) on YUKLENMEZ — ana sayfanin kendi
+      notundaki gerekce: gec gelirse yalniz bes glif etkilenir.
+      KONUM OLCULDU (TUR 5, ayni gece): bu baglanti head'in BASINA, <title>
+      hemen altina konunca ana sayfanin kare kapisi COKTU — p95 24,9 -> 58,3 ms,
+      takilma orani %1,84 -> %24,47 (uc kosum, ayni makine, ayni yuk; kirmizi
+      once/sonra ile iki kez dogrulandi). Erken on yukleme kritik yolla
+      yarisiyor. Bagalanti bu yuzden head'in SONUNDA, tam da ana sayfanin
+      onceden kullandigi yerde duruyor — CLS kazanci aynen korunuyor
+      (soguk onbellek 0, yavas 4G 0,0407). */}
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href={`${B}/font/uncut-sans-latin.woff2`} />
   <slot name="bas" />
   {/* OLCUM BETIGI YALNIZ KABUK SAYFALARINDA (TUR 4, 4 Eyl 2026 — PANEL KAPISI).
       Panelden `settings.gtm` DOLDURULUNCA /film sayfasinin J1 tavani asiliyordu
