@@ -10,13 +10,10 @@
   "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
   "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
  ],
- "olcum": "2026-09-03T17:13:18.678Z",
+ "olcum": "2026-09-03T17:13:33.232Z",
  "tarayici": "brave",
  "tekrar": 1,
- "boz": {
-  "ms": "tik x 2,4",
-  "_": "KIRMIZI-ONCE kolu acikti: bu kayit olcum degil, duzenegin bozulmayi ayirt edebildiginin kanitidir"
- },
+ "boz": false,
  "esik": {
   "kacirilan_kare": 2,
   "toplam_oran": 0.08,
@@ -31,17 +28,15 @@
   "takilma_esik_ms": 50,
   "_": "Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar"
  },
- "hukum": "KISMI (1/9 sayfa) — HUKUM DEGIL · ham: KALDI — /yeni/projeler/",
+ "hukum": "KISMI (1/9 sayfa) — HUKUM DEGIL · ham: GECTI",
  "kismi": {
   "olculen": 1,
   "tum": 9,
   "_": "kismi kosum HUKUM DEGIL: B'nin hukmu varsayilan dokuz sayfanin tamami kosuldugunda kurulur"
  },
- "hedefte_olmayan": [
-  "/yeni/projeler/"
- ],
+ "hedefte_olmayan": [],
  "dagilim": {
-  "4": 1
+  "0": 1
  },
  "sayfa": [
   {
@@ -53,20 +48,20 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
+      "min": 8,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 106,
-     "tur_ms": 3641,
-     "p95_ms": 41.7,
-     "medyan_ms": 33.3,
-     "kare_p95": 5.024,
-     "kacirilan_kare": 4,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 108,
-     "takilma_tek_max_ms": 108,
+     "kare": 369,
+     "tur_ms": 3341,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "kare_p95": 1.024,
+     "kacirilan_kare": 0,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 216,
+     "takilma_tek_max_ms": 150,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
@@ -79,15 +74,15 @@
      "tur_tam": true
     }
    ],
-   "p95_medyan": 41.7,
-   "kacirilan_medyan": 4,
+   "p95_medyan": 8.5,
+   "kacirilan_medyan": 0,
    "kacirilan_kosumlar": [
-    4
+    0
    ],
-   "kacirilan_en_yuksek": 4,
-   "kare_p95_medyan": 5.024,
-   "takilma_oran_medyan": 0.0297,
-   "takilma_tek_max": 108,
+   "kacirilan_en_yuksek": 0,
+   "kare_p95_medyan": 1.024,
+   "takilma_oran_medyan": 0.0647,
+   "takilma_tek_max": 150,
    "taban_takilma": [
     0
    ],
@@ -96,13 +91,13 @@
    ],
    "tur_tam": true,
    "kapi": {
-    "kacirilan_kare": false,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
-   "gecti": false,
-   "hedefte": false
+   "gecti": true,
+   "hedefte": true
   }
  ]
 }

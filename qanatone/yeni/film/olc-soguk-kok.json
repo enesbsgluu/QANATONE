@@ -1,0 +1,676 @@
+{
+ "_": "yeni/film/olc-soguk-kok.cjs — SOGUK GIRIS TAKILMASININ KOKU. TESHIS ARACI, KAPI DEGIL: hukum yok, cikis kodu her zaman 0. Kollar tek degisken: K kontrol · G1 gorsel onbellekli (yalniz indirme payi kalkar) · G2 gorselsiz (indirme+cozme+raster kalkar) · A1 hareketsiz (prefers-reduced-motion).",
+ "olcum": "2026-09-03T18:01:10.639Z",
+ "tarayici": "brave",
+ "tekrar": 4,
+ "kollar": [
+  "K",
+  "A1"
+ ],
+ "sinyal": {
+  "takilma_esik_ms": 50,
+  "_": "kapi A/B ile ayni"
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/projeler/",
+   "gorsel_adres_sayisi": 16,
+   "kol": {
+    "K": {
+     "takilma_oran_medyan": 0.0896,
+     "kacirilan_medyan": 2,
+     "p95_medyan": 25.1,
+     "toplam_px_medyan": 2473,
+     "tur_icinde_gorsel_bayt_medyan": 0,
+     "tur_icinde_gorsel_istek_medyan": 0,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 272,
+       "tur_ms": 3432,
+       "p95_ms": 33.4,
+       "kacirilan_kare": 3,
+       "takilma_sayi": 4,
+       "takilma_toplam_ms": 375,
+       "takilma_oran": 0.1092,
+       "takilma_tek_max_ms": 141,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 308,
+       "tur_ms": 3424,
+       "p95_ms": 25.1,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 267,
+       "takilma_oran": 0.0779,
+       "takilma_tek_max_ms": 108,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 308,
+       "tur_ms": 3440,
+       "p95_ms": 25,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 4,
+       "takilma_toplam_ms": 308,
+       "takilma_oran": 0.0896,
+       "takilma_tek_max_ms": 117,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 310,
+       "tur_ms": 3366,
+       "p95_ms": 24.9,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 300,
+       "takilma_oran": 0.089,
+       "takilma_tek_max_ms": 150,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      }
+     ]
+    },
+    "A1": {
+     "takilma_oran_medyan": 0.0746,
+     "kacirilan_medyan": 0,
+     "p95_medyan": 8.5,
+     "toplam_px_medyan": 2473,
+     "tur_icinde_gorsel_bayt_medyan": 0,
+     "tur_icinde_gorsel_istek_medyan": 0,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 365,
+       "tur_ms": 3349,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 250,
+       "takilma_oran": 0.0746,
+       "takilma_tek_max_ms": 92,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 367,
+       "tur_ms": 3366,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 250,
+       "takilma_oran": 0.0743,
+       "takilma_tek_max_ms": 100,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 369,
+       "tur_ms": 3341,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 2,
+       "takilma_toplam_ms": 167,
+       "takilma_oran": 0.0499,
+       "takilma_tek_max_ms": 92,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 364,
+       "tur_ms": 3341,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 258,
+       "takilma_oran": 0.0772,
+       "takilma_tek_max_ms": 125,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 2473,
+       "toplam_px": 2473,
+       "toplam_px_bas": 2451,
+       "tur_tam": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "yol": "/yeni/",
+   "gorsel_adres_sayisi": 133,
+   "kol": {
+    "K": {
+     "takilma_oran_medyan": 0.0554,
+     "kacirilan_medyan": 1,
+     "p95_medyan": 16.8,
+     "toplam_px_medyan": 9580,
+     "tur_icinde_gorsel_bayt_medyan": 175374,
+     "tur_icinde_gorsel_istek_medyan": 8,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1159,
+       "tur_ms": 11921,
+       "p95_ms": 16.8,
+       "kacirilan_kare": 1,
+       "takilma_sayi": 7,
+       "takilma_toplam_ms": 608,
+       "takilma_oran": 0.051,
+       "takilma_tek_max_ms": 125,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 8,
+        "gorsel_bayt": 175374,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1226,
+       "tur_ms": 11805,
+       "p95_ms": 16.7,
+       "kacirilan_kare": 1,
+       "takilma_sayi": 5,
+       "takilma_toplam_ms": 433,
+       "takilma_oran": 0.0367,
+       "takilma_tek_max_ms": 142,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 6,
+        "gorsel_bayt": 72606,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1163,
+       "tur_ms": 12030,
+       "p95_ms": 16.8,
+       "kacirilan_kare": 1,
+       "takilma_sayi": 9,
+       "takilma_toplam_ms": 666,
+       "takilma_oran": 0.0554,
+       "takilma_tek_max_ms": 117,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 6,
+        "gorsel_bayt": 72606,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1137,
+       "tur_ms": 11922,
+       "p95_ms": 16.7,
+       "kacirilan_kare": 1,
+       "takilma_sayi": 9,
+       "takilma_toplam_ms": 725,
+       "takilma_oran": 0.0608,
+       "takilma_tek_max_ms": 158,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 8,
+        "gorsel_bayt": 175374,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      }
+     ]
+    },
+    "A1": {
+     "takilma_oran_medyan": 0.0493,
+     "kacirilan_medyan": 0,
+     "p95_medyan": 8.5,
+     "toplam_px_medyan": 9580,
+     "tur_icinde_gorsel_bayt_medyan": 175374,
+     "tur_icinde_gorsel_istek_medyan": 8,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1307,
+       "tur_ms": 11855,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 8,
+       "takilma_toplam_ms": 600,
+       "takilma_oran": 0.0506,
+       "takilma_tek_max_ms": 108,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 8,
+        "gorsel_bayt": 175374,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1304,
+       "tur_ms": 11830,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 6,
+       "takilma_toplam_ms": 583,
+       "takilma_oran": 0.0493,
+       "takilma_tek_max_ms": 133,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 8,
+        "gorsel_bayt": 175374,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1320,
+       "tur_ms": 11988,
+       "p95_ms": 8.6,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 6,
+       "takilma_toplam_ms": 466,
+       "takilma_oran": 0.0389,
+       "takilma_tek_max_ms": 125,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 6,
+        "gorsel_bayt": 72606,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1324,
+       "tur_ms": 11921,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 5,
+       "takilma_toplam_ms": 417,
+       "takilma_oran": 0.0349,
+       "takilma_tek_max_ms": 117,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 6,
+        "gorsel_bayt": 72606,
+        "obur_istek": 2,
+        "obur_bayt": 32105
+       },
+       "scroll_px": 9580,
+       "toplam_px": 9580,
+       "toplam_px_bas": 11356,
+       "tur_tam": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/finans/",
+   "gorsel_adres_sayisi": 4,
+   "kol": {
+    "K": {
+     "takilma_oran_medyan": 0.0309,
+     "kacirilan_medyan": 2,
+     "p95_medyan": 24.9,
+     "toplam_px_medyan": 11703,
+     "tur_icinde_gorsel_bayt_medyan": 20426,
+     "tur_icinde_gorsel_istek_medyan": 1,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1305,
+       "tur_ms": 14546,
+       "p95_ms": 16.8,
+       "kacirilan_kare": 1,
+       "takilma_sayi": 5,
+       "takilma_toplam_ms": 450,
+       "takilma_oran": 0.0309,
+       "takilma_tek_max_ms": 183,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 1,
+        "gorsel_bayt": 20426,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 11703,
+       "toplam_px": 11703,
+       "toplam_px_bas": 11682,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1264,
+       "tur_ms": 14512,
+       "p95_ms": 25,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 7,
+       "takilma_toplam_ms": 592,
+       "takilma_oran": 0.0408,
+       "takilma_tek_max_ms": 208,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 1,
+        "gorsel_bayt": 20426,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 11703,
+       "toplam_px": 11703,
+       "toplam_px_bas": 11682,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1295,
+       "tur_ms": 14471,
+       "p95_ms": 24.9,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 4,
+       "takilma_toplam_ms": 392,
+       "takilma_oran": 0.0271,
+       "takilma_tek_max_ms": 167,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 1,
+        "gorsel_bayt": 20426,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 11703,
+       "toplam_px": 11703,
+       "toplam_px_bas": 11682,
+       "tur_tam": true
+      },
+      {
+       "kol": "K",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 1291,
+       "tur_ms": 14496,
+       "p95_ms": 24.9,
+       "kacirilan_kare": 2,
+       "takilma_sayi": 4,
+       "takilma_toplam_ms": 400,
+       "takilma_oran": 0.0276,
+       "takilma_tek_max_ms": 150,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 1,
+        "gorsel_bayt": 20426,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 11703,
+       "toplam_px": 11703,
+       "toplam_px_bas": 11682,
+       "tur_tam": true
+      }
+     ]
+    },
+    "A1": {
+     "takilma_oran_medyan": 0.0279,
+     "kacirilan_medyan": 0,
+     "p95_medyan": 8.5,
+     "toplam_px_medyan": 5314,
+     "tur_icinde_gorsel_bayt_medyan": 0,
+     "tur_icinde_gorsel_istek_medyan": 0,
+     "tur_tam": true,
+     "kosum": [
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 758,
+       "tur_ms": 6615,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 3,
+       "takilma_toplam_ms": 233,
+       "takilma_oran": 0.0352,
+       "takilma_tek_max_ms": 116,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 5314,
+       "toplam_px": 5314,
+       "toplam_px_bas": 5293,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 770,
+       "tur_ms": 6623,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 2,
+       "takilma_toplam_ms": 158,
+       "takilma_oran": 0.0239,
+       "takilma_tek_max_ms": 92,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 5314,
+       "toplam_px": 5314,
+       "toplam_px_bas": 5293,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 767,
+       "tur_ms": 6598,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 2,
+       "takilma_toplam_ms": 158,
+       "takilma_oran": 0.024,
+       "takilma_tek_max_ms": 100,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 5314,
+       "toplam_px": 5314,
+       "toplam_px_bas": 5293,
+       "tur_tam": true
+      },
+      {
+       "kol": "A1",
+       "tik_ms": 8.3,
+       "isitilan_gorsel": 0,
+       "kare": 757,
+       "tur_ms": 6573,
+       "p95_ms": 8.5,
+       "kacirilan_kare": 0,
+       "takilma_sayi": 2,
+       "takilma_toplam_ms": 183,
+       "takilma_oran": 0.0279,
+       "takilma_tek_max_ms": 108,
+       "taban_takilma": 0,
+       "tur_icinde_inen": {
+        "gorsel_istek": 0,
+        "gorsel_bayt": 0,
+        "obur_istek": 1,
+        "obur_bayt": 7164
+       },
+       "scroll_px": 5314,
+       "toplam_px": 5314,
+       "toplam_px_bas": 5293,
+       "tur_tam": true
+      }
+     ]
+    }
+   }
+  }
+ ]
+}
