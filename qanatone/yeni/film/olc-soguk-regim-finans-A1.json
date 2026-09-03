@@ -1,0 +1,453 @@
+{
+ "_": "yeni/film/olc-soguk-regim.cjs — TESHIS, KAPI DEGIL. Ayni sayfanin ayni gun iki farkli rejimde okunmasinin sebebini adlandirmak icin: animasyon kosuyor mu, gorsel tur icinde iniyor mu, motorun hangi asamasi yiyor.",
+ "olcum": "2026-09-03T19:04:30.708Z",
+ "tarayici": "brave",
+ "sayfa": "/yeni/hizmetler/finans/",
+ "kol": "A1",
+ "tekrar": 2,
+ "ozet": {
+  "kare_saniye_medyan": 115.9,
+  "p95_medyan": 8.5,
+  "kacirilan_medyan": 0,
+  "takilma_toplam_medyan": 192,
+  "kaydirmali_anim_medyan": 0,
+  "kaydirmali_kosan_medyan": 0,
+  "gorsel_tur_icinde_medyan": 0,
+  "layout_medyan": 4,
+  "layout_sn_medyan": 0.0196,
+  "stil_medyan": 82,
+  "stil_sn_medyan": 0.0188,
+  "betik_sn_medyan": 0.0704,
+  "gorev_sn_medyan": 0.7306
+ },
+ "kosum": [
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": true,
+   "kare": 766,
+   "tur_ms": 6606,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 115.9,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 2,
+   "takilma_toplam_ms": 167,
+   "takilma_tek_max_ms": 100,
+   "takilmalar": [
+    {
+     "ms": 66.6,
+     "y": 2399
+    },
+    {
+     "ms": 100,
+     "y": 4028
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 0,
+    "kosan": 0,
+    "kaydirmali": 0,
+    "kaydirmali_kosan": 0,
+    "durumlar": []
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1200,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 3000,
+     "toplam": 4,
+     "kosan": 4,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 3600,
+     "toplam": 4,
+     "kosan": 4,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 4200,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 4800,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 5314,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {},
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 4,
+    "kosan_en_yuksek": 4,
+    "kaydirmali_en_yuksek": 0,
+    "kaydirmali_kosan_en_yuksek": 0
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     192.7,
+     203.1,
+     205.1,
+     207.3,
+     292.5
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 4,
+    "RecalcStyleCount": 82,
+    "LayoutDuration": 0.0182,
+    "RecalcStyleDuration": 0.0186,
+    "ScriptDuration": 0.067,
+    "TaskDuration": 0.7252,
+    "JSHeapUsedSize": 593640
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 5313.60009765625,
+   "toplam_px": 5314,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": true,
+   "kare": 759,
+   "tur_ms": 6623,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 114.6,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 2,
+   "takilma_toplam_ms": 192,
+   "takilma_tek_max_ms": 100,
+   "takilmalar": [
+    {
+     "ms": 100,
+     "y": 2400
+    },
+    {
+     "ms": 91.6,
+     "y": 4028
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 0,
+    "kosan": 0,
+    "kaydirmali": 0,
+    "kaydirmali_kosan": 0,
+    "durumlar": []
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1200,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 3000,
+     "toplam": 4,
+     "kosan": 4,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 3600,
+     "toplam": 4,
+     "kosan": 4,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 4200,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 4800,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 5314,
+     "toplam": 0,
+     "kosan": 0,
+     "kaydirmali": 0,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {},
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 4,
+    "kosan_en_yuksek": 4,
+    "kaydirmali_en_yuksek": 0,
+    "kaydirmali_kosan_en_yuksek": 0
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     181.2,
+     192.1,
+     194.3,
+     196.4,
+     264.8
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 4,
+    "RecalcStyleCount": 81,
+    "LayoutDuration": 0.0196,
+    "RecalcStyleDuration": 0.0188,
+    "ScriptDuration": 0.0704,
+    "TaskDuration": 0.7306,
+    "JSHeapUsedSize": 573368
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 5313.60009765625,
+   "toplam_px": 5314,
+   "tur_tam": true
+  }
+ ]
+}

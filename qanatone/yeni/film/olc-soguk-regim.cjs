@@ -90,6 +90,24 @@ const KAYITCI = `(() => {
     return { toplam: a.length, kosan, kaydirmali, kaydirmali_kosan: kaydirmaliKosan,
       durumlar: a.slice(0, 40).map((x) => x.playState) };
   };
+  window.__dokum = () => {
+    /* Kaydirmaya bagli animasyonlarin DOKUMU: hangi kural, hangi ogede, kac
+       tane. 149 sayisi tek basina is gormez; hangi seciciden geldigi gorunmeli.
+       Hedefin sinifi kisaltilmadan yazilir, astro-cid soneki atilir. */
+    const g = {};
+    for (const a of document.getAnimations()) {
+      const zc = a.timeline && a.timeline.constructor ? a.timeline.constructor.name : '';
+      if (zc !== 'ViewTimeline' && zc !== 'ScrollTimeline') continue;
+      const h = a.effect && a.effect.target;
+      const sinif = h ? (h.className && h.className.baseVal !== undefined ? h.className.baseVal : String(h.className || '')) : '(hedefsiz)';
+      const ad = (a.animationName) || (a.effect && a.effect.getKeyframes && a.effect.getKeyframes().length ? '(kesikkare)' : '(adsiz)');
+      const anahtar = ad + '  <-  ' + (h ? h.tagName.toLowerCase() : '?') + '.' + String(sinif).replace(/\\s+/g, '.').slice(0, 60);
+      g[anahtar] = g[anahtar] || { toplam: 0, kosan: 0, zaman_cizelgesi: zc };
+      g[anahtar].toplam++;
+      if (a.playState === 'running') g[anahtar].kosan++;
+    }
+    return g;
+  };
   window.__gorsel = () => {
     const r = performance.getEntriesByType('resource').filter((e) => e.initiatorType === 'img' || /\\.(webp|avif|png|jpe?g|svg)(\\?|$)/i.test(e.name));
     const im = [...document.images].map((i) => ({ src: (i.currentSrc || i.src).split('/').pop(), tam: i.complete, gen: i.naturalWidth, lazy: i.loading }));
@@ -192,6 +210,11 @@ async function kosum(yol) {
       if (performance.now() - t0 > 90000) { zamanAsimi = true; break; }
     }
     const turTam = !zamanAsimi && y >= toplamPx - 4;
+    /* DOKUM turun SONUNDA alinir — tur bittiginde butun kaydirmali
+       animasyonlar dogmus olur; ortada alinsa henuz dogmamis olanlar eksik
+       sayilir. Kosan sayisi burada dusuk cikar (tur bitti), o yuzden
+       "kosan" tepe degeri turun ICINDEKI orneklerden okunuyor. */
+    const dokum = await page.evaluate(() => __dokum());
     await bekle(300);
     const K = await page.evaluate(() => __kBitir());
     const m1 = await metrikAl(cdp);
@@ -209,7 +232,7 @@ async function kosum(yol) {
       takilma_sayi: tak.length, takilma_toplam_ms: Math.round(tak.reduce((a, b) => a + b.ms, 0)),
       takilma_tek_max_ms: tak.length ? Math.round(Math.max(...tak.map((t) => t.ms))) : 0,
       takilmalar: tak,
-      animasyon_once: animOnce, animasyon_tur: animOrnek,
+      animasyon_once: animOnce, animasyon_tur: animOrnek, animasyon_dokumu: dokum,
       animasyon_tur_ozet: {
         toplam_en_yuksek: Math.max(0, ...animOrnek.map((a) => a.toplam)),
         kosan_en_yuksek: Math.max(0, ...animOrnek.map((a) => a.kosan)),
