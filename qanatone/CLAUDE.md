@@ -83,7 +83,9 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   eski site kaynaktır, farklı olan her şey KAPALI istisna listesinde
   olmalı (yazı ailesi · kızıl harita yok · sürücü · prolog · mimari ·
   erişilebilirlik · görünümü değiştirmeyen performans · Enes'in saydığı
-  fazlalıklar · sahte canlılık yok). Listede olmayan sapma kırmızı; şüphede
+  fazlalıklar · sahte canlılık yok · **10** projeler arşivi CSS sütunları ·
+  **11** gerçek referans kartında metrik yok — 10 ve 11 Enes'in 4 Eyl açık
+  sözüyle eklendi). Listede olmayan sapma kırmızı; şüphede
   DUR ve "İSTİSNA TALEBİ" kalıbıyla sor. AÇIK ÇELİŞKİ: belgenin istisna 3'ü
   "süreç hareketi kaydırmaya bağlanır" der, Enes'in 3 Eyl sözü
   "görünürlükte canlı" — sözü esas alındı, hüküm Enes'te.

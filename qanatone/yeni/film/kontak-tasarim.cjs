@@ -132,14 +132,30 @@ const dondur = (page) => page.evaluate(() => {
      animasyonun bittigi hal, gercek kullanicinin bir saniye sonra gordugu
      haldir; fill'siz olanin taban stile dusmesi de o gercegin parcasidir.
      SONSUZ olanlar (halka, huzme) duraklatilip 0'a alinir. */
-  let f = 0;
+  let f = 0, c = 0;   /* c: cizelgeli (scroll/view) animasyon, perdeden muaf */
   try { document.getAnimations().forEach((x) => { try {
     /* kaydirma/gorunurluk cizelgeli animasyon (ScrollTimeline/ViewTimeline):
        ilerlemesini KAYDIRMA KONUMU belirler, finish() onu sona itip sahte
        fark uretir (3 Eyl: hero metni "soluk" cikti — hero'nun kaydirmayla
        sonmesi). Dokunulmaz. */
     const tl = x.timeline && x.timeline.constructor ? x.timeline.constructor.name : '';
-    if (/Scroll|View/.test(tl)) return;
+    if (/Scroll|View/.test(tl)) {
+      /* 4 EYL 2026 — OLCULMUS TUZAK: asagidaki `*{animation-play-state:paused}`
+         perdesi kaydirma/gorunurluk cizelgeli animasyonlari da duraklatiyor ve
+         kosumun KAYDIRDIGI blok progress 0'da cakiliyor; `opacity:0` ile dogan
+         her acilis karede BOS cikiyor, ustunden gecilmis bloklar aciliyor.
+         Sonuc: hedef blok icin sisirilmis fark (yanlis kirmizi). Olculdu:
+         /yeni/otomasyon `.sus-gnrow` canlida opacity 1 / progress 1, perde
+         altinda 0 / 0; ayni sayfada ustte kalan `.sus-mfg` 1. Cizelgeli
+         animasyon SURUCUSU KAYDIRMADIR, donmasi gereken sey degil — ogenin
+         kendi satir ici stiliyle geri acilir. */
+      try {
+        const hedef = x.effect && x.effect.target;
+        if (hedef && hedef.style && !x.effect.pseudoElement) hedef.style.setProperty('animation-play-state', 'running', 'important');
+      } catch (e) {}
+      c++;
+      return;
+    }
     const t = x.effect && x.effect.getComputedTiming ? x.effect.getComputedTiming() : null;
     if (t && t.iterations === Infinity) { x.pause(); x.currentTime = 0; s++; }
     else { x.finish(); f++; }
@@ -148,7 +164,7 @@ const dondur = (page) => page.evaluate(() => {
   let v = 0; document.querySelectorAll('video').forEach((x) => { try { x.pause(); v++; } catch (e) {} });
   /* saat metni dakikaya bagli — iki cekim farkli dakikaya duserse sahte fark */
   document.querySelectorAll('#shSaat').forEach((e) => { e.textContent = '--:--'; });
-  return { animasyon: a, sonsuzSifirlanan: s, sonluBitirilen: f, video: v };
+  return { animasyon: a, sonsuzSifirlanan: s, sonluBitirilen: f, cizelgeli: c, video: v };
 });
 
 async function agacCek(browser, kok, etiketAd, boz) {
