@@ -203,6 +203,24 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   (kayıtta `tazeleme` bloğu: Hz, tik, örnek, süzülen). Eski 20 ms'lik eşik iki
   tikle üç tik ARASINDA duran ikili bir kapıydı ve değeri ekrana bağlıydı —
   60 Hz makinede aynı site hiç geçemezdi. **ms cinsinden eşik yazma.**
+- **KAPI BİRİMİ MUTLAK OLMALI — ORAN TÜREVDİR** (Enes, 5 Eyl 2026 gecesi).
+  Kapı B'nin "takılma oranı ≤ %8" eşiği **kapı olmaktan çıktı, bilgi satırına
+  düştü**. Gevşetme değil, **yanlış birimin düzeltilmesi** — bir üstteki maddede
+  aynı hata ms/tik olarak yapılmıştı. Oranın paydası tur boyudur ve tur boyu
+  sayfadan sayfaya 3,4 ↔ 14,7 saniye değişir; kısa sayfada oran örnekleme
+  hatasına döner. 5 Eylül'ün 45 soğuk koşumu bunu **ters sıralamayla** gösterdi:
+  `/yeni/projeler/` 308 ms toplam takılmayla %9,13 verip KALIYOR,
+  `/yeni/` 667 ms toplam takılmayla %5,63 verip GEÇİYORDU — yani ziyaretçinin
+  **daha çok** takıldığı sayfa geçiyordu. Aynı sayfa üç ölçümde %2,99 / %9,13 /
+  %11,01; 3,4 saniyelik turda tek bir 150 ms takılma %4,45 ederken finansta
+  %1,02 ediyor. **Kural: bir eşik yazmadan önce birimini söyle. Payda ölçülen
+  şeyler arasında değişiyorsa o sayı kapı olamaz — bilgi satırıdır.**
+  Üç sayının işbölümü yazılıdır: kaçırılan kare (p95) dağılımın **gövdesini**,
+  tek takılma (max) **tek en kötüyü**, takılma toplam süresi ikisinin
+  **arasındaki kütleyi** gösterir; ilk ikisi kapı, üçüncüsü bilgi.
+  Kapı A'nın %3'ü **bilerek ellenmedi** (tarama koşulunda gözlenen tavan %0,92,
+  yani bağlayıcı değil — uyuyan yanlış birim); A'ya da uygulanması Enes'in
+  kararı, `olc-esik.test.mjs` A'nın bugünkü hâlini sabitler.
 - **İKİ KAPI, İKİ KOŞUL — her kare rakamı koşuluyla birlikte yazılır** (Enes,
   5 Eyl). `olc-sayfa.cjs` = **KAPI A**, tarama koşulu (59 sayfa tek tarayıcıda),
   gerileme kapısı; turlar bununla kapanır. `olc-soguk.cjs` = **KAPI B**, ziyaretçi

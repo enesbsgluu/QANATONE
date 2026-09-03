@@ -17,13 +17,33 @@
                                      bugun 9 sayfanin 4'unu duşururdu ve
                                      duşurdugu sey gerileme degil, sitenin
                                      bugunku hali.
-     takilma orani (medyan)   <= %8  Gozlenen en yuksek medyan %6,89, en yuksek
-                                     tek kosum %8,25. A'nin %3'u soguk giriste
-                                     GECERSIZ (9 sayfanin 5'i asiyordu).
      tek takilma              <= 250 ms  A ile ayni; gozlenen tavan 208 ms.
    TEKRAR VARSAYILANI 5 (A'da 3): ilk olcumde 9 sayfanin 4'u kosumlar arasi
    bant degistirdi (1/2/2 · 2/1/2 · 1/2/1 · 2/1/2), uc kosumun medyani o
    sayfalar icin SABIT DEGILDI. Bes kosum medyani gurultuyu yutar.
+
+   ORAN KAPIDAN DUSTU — YANLIS BIRIM (Enes, 5 Eyl 2026 gecesi). Ilk esik
+   listesinde "takilma orani (medyan) <= %8" BLOKLAYICI idi. Dusuruldu.
+   Gevsetme degil, birim duzeltmesi; kare kapisinda ayni hata ms/tik olarak
+   yapilmisti (bkz. CLAUDE.md "ms cinsinden esik yazma").
+   ORAN TUR BOYUNA BAGIMLI BIR TUREVDIR ve kisa sayfalarda ornekleme hatasina
+   doner. 5 Eyl'in 45 soguk kosumu bunu ters siralamayla gosterdi:
+     /yeni/projeler/  toplam takilma 308 ms · tur 3,37 sn -> %9,13  KALDI
+     /yeni/           toplam takilma 667 ms · tur 12,0 sn -> %5,63  GECTI
+   Ziyaretcinin hissettigi sey 667 ms'lik sayfada DAHA COK takiliyor olmasidir;
+   oran onu tersine siraliyordu. Ayni sayfa uc olcumde %2,99 / %9,13 / %11,01
+   verdi — 3,4 saniyelik turda tek bir 150 ms takilma %4,45 ediyor, finansta
+   ayni takilma %1,02. Payda kucukse oran gurultudur.
+
+   UC SAYININ ISBOLUMU (yeni tanimin gerekcesi — hangisi dagilimin neresini
+   gorur):
+     kacirilan kare (p95)   dagilimin GOVDESI      -> KAPI, medyan <= 2
+     tek takilma (max)      dagilimin TEK EN KOTU  -> KAPI, <= 250 ms
+     takilma TOPLAM SURESI  p95 ile max ARASI kutle -> BILGI SATIRI, kapi degil
+   p95 son %5'i gormez, tek-takilma o %5'in yalniz en tepesini gorur; aradaki
+   kutleyi gosteren tek sayi mutlak toplamdir. Bu yuzden yazilir ama hukum
+   VERMEZ: kapiya donerse ayni turev sorunu geri gelir. Oran da yazilir, ayni
+   sebeple hukumsuzdur.
    A'NIN ESIKLERIYLE AYNI OLMAMASI KUSUR DEGIL TASARIM: A tarama kosulunu,
    B ziyaretci kosulunu olcer; ayni sayfa iki kosulda farkli okur, iki rakam
    birbirinin yerine GECMEZ. Ortak olmasi gereken SINYALDIR (neyin takilma
@@ -54,9 +74,14 @@
    SINYAL kapi A ile BIREBIR AYNI, ESIKLER BILEREK FARKLI. Ayni olan: rAF
    araligi, takilmanin tanimi (> 50 ms), kaydirma turu (900 px/s, 600 px
    adim, payda her adimda tazelenir), tik kestirimi, kacirilan kare formulu
-   (round(p95/tik) - 1). Farkli olan: kacirilan kapisi (A 1 / B 2) ve takilma
-   orani (A %3 / B %8) — cunku kosullar farkli. olc-esik.test.mjs ikisini de
-   sinar: sinyalin AYNI, esiklerin FARKLI oldugunu.
+   (round(p95/tik) - 1). Farkli olan: kacirilan kapisi (A 1 / B 2) — cunku
+   kosullar farkli — ve artik KAPI SAYISI (A ucu de kapi tutar, B'de oran
+   bilgiye dustu). olc-esik.test.mjs ikisini de sinar: sinyalin AYNI,
+   esiklerin FARKLI, ve B'de oranin kapi blogunda OLMADIGINI.
+   A'NIN ORANI BU TURDE ELLENMEDI: A tarama kosulunu olcer ve oradaki gozlenen
+   tavan %0,92 ile kapinin (%3) cok altinda — yani A'da oran bugun BAGLAYICI
+   degil, uyuyan bir yanlis birim. Ayni duzeltmenin A'ya da uygulanmasi Enes'in
+   karari; tek tarafli degistirmedim, iki birimdeki rakamlari rapora yazdim.
 
    Kullanim: node yeni/film/olc-soguk.cjs        (once: node yerel-sun.cjs)
    Cevre   : TEKRAR=3 · SAYFA=/yeni/ (tek sayfa) · TARAYICI=brave
@@ -80,11 +105,17 @@ const TEKRAR = Number(process.env.TEKRAR || 5);
 /* SINYAL — KAPI A ILE BIREBIR AYNI OLMALI (olc-esik.test.mjs sinar): neyin
    "takilma" sayildigi iki kapida ayrisirsa rakamlar kiyaslanamaz hale gelir. */
 const TAKILMA_ESIK = 50;
-/* KAPI B ESIKLERI — kunyeye bak: olculerek konuldu, A'dan farkli olmasi tasarim */
+/* KAPI B ESIKLERI — kunyeye bak: olculerek konuldu, A'dan farkli olmasi tasarim.
+   BLOKLAYICI OLAN IKI TANE: kacirilan kare medyani ve tek takilma. Ikisi de
+   MUTLAK birim (tik ve ms); oran/toplam bilgi satiridir, asagida ayri blok. */
 const KACIRILAN_KAPI = Number(process.env.KACIRILAN_KAPI || 2);  /* BLOKLAYICI */
 const KACIRILAN_HEDEF = 1;      /* HEDEF — KAPI DEGIL, yalnizca kayda gecer */
-const TOPLAM_ORAN = 0.08;       /* A'da 0,03 — soguk giriste gozlenen tavan %6,89 */
-const TEK_TAKILMA_MS = 250;     /* A ile ayni — gozlenen tavan 208 ms */
+const TEK_TAKILMA_MS = 250;     /* BLOKLAYICI — A ile ayni, gozlenen tavan 208 ms */
+/* BILGI SATIRLARI — HUKUM VERMEZ (Enes, 5 Eyl gecesi: "yanlis birimin
+   duzeltilmesi"). Asagidaki iki sayi kayda ve konsola YAZILIR, `oz.kapi`
+   nesnesine GIRMEZ. Kapiya geri koyacak olan once kunyedeki "ORAN KAPIDAN
+   DUSTU" blogunu okusun: oran tur boyuna bagimli bir turevdir. */
+const ORAN_ESKI_KAPI = 0.08;    /* 5 Eyl sabahi kapiydi — artik yalniz kiyas icin yazilir */
 const BOZ = process.env.BOZ === '1' || !!process.env.BOZ_MS;
 
 /* KAPSAM — DAR TUTULUYOR (Enes): 59 sayfa degil. Kapi A'nin 4 Eyl tam
@@ -229,7 +260,8 @@ async function sogukKosum(yol) {
 
 (async () => {
   console.log(`KAPI B — SOGUK GIRIS · ${TARAYICI} · ${secim.length} sayfa · ${TEKRAR} kosum · HER KOSUM AYRI TARAYICI${BOZ ? '  [BOZ KIRMIZI-ONCE]' : ''}`);
-  console.log(`KAPI     : kacirilan kare <= ${KACIRILAN_KAPI} (medyan, BLOKLAYICI) · takilma orani <= %${TOPLAM_ORAN * 100} · tek takilma <= ${TEK_TAKILMA_MS} ms   [HEDEF kacirilan <= ${KACIRILAN_HEDEF} — kapi degil]`);
+  console.log(`KAPI     : kacirilan kare <= ${KACIRILAN_KAPI} (medyan, BLOKLAYICI) · tek takilma <= ${TEK_TAKILMA_MS} ms (BLOKLAYICI) · tur tam`);
+  console.log(`BILGI    : takilma TOPLAM SURESI (ms) ve orani yazilir, HUKUM VERMEZ — oran tur boyuna bagimli turev  [HEDEF kacirilan <= ${KACIRILAN_HEDEF} — kapi degil]`);
   const sonuc = [];
   for (const yol of secim) {
     const k = [];
@@ -241,25 +273,47 @@ async function sogukKosum(yol) {
       kacirilan_kosumlar: k.map((x) => x.kacirilan_kare),
       kacirilan_en_yuksek: Math.max(...k.map((x) => x.kacirilan_kare)),
       kare_p95_medyan: +medyan(k.map((x) => x.kare_p95)).toFixed(3),
-      takilma_oran_medyan: +medyan(k.map((x) => x.tur_ms ? x.takilma_toplam_ms / x.tur_ms : 0)).toFixed(4),
       takilma_tek_max: Math.max(...k.map((x) => x.takilma_tek_max_ms)),
       taban_takilma: k.map((x) => x.taban.takilma_sayi),
       tik_kosumlar: k.map((x) => x.tazeleme.tik_ms),
     };
+    /* BILGI — hukum vermez. `oz.kapi` icine GIRMEZ, `gecti` hesabina girmez.
+       Mutlak toplam once yazilir cunku ziyaretcinin hissettigi odur; oran
+       onun yaninda tur boyuyla birlikte durur ki turev oldugu gorunsun. */
+    oz.bilgi = {
+      takilma_toplam_medyan_ms: medyan(k.map((x) => x.takilma_toplam_ms)),
+      takilma_toplam_kosumlar: k.map((x) => x.takilma_toplam_ms),
+      takilma_sayi_medyan: medyan(k.map((x) => x.takilma_sayi)),
+      tur_ms_medyan: medyan(k.map((x) => x.tur_ms)),
+      takilma_oran_medyan: +medyan(k.map((x) => x.tur_ms ? x.takilma_toplam_ms / x.tur_ms : 0)).toFixed(4),
+      _: 'BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir.',
+    };
+    oz.takilma_oran_medyan = oz.bilgi.takilma_oran_medyan;   /* geriye donuk kayit alani */
+    oz.eski_oran_kapisi = oz.bilgi.takilma_oran_medyan <= ORAN_ESKI_KAPI;  /* yalniz kiyas */
     oz.tur_tam = k.every((x) => x.tur_tam);
     oz.kapi = {
       kacirilan_kare: oz.kacirilan_medyan <= KACIRILAN_KAPI,
-      takilma_oran: oz.takilma_oran_medyan <= TOPLAM_ORAN,
       takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS,
       tur_tam: oz.tur_tam,
     };
     oz.gecti = Object.values(oz.kapi).every(Boolean);
     oz.hedefte = oz.kacirilan_medyan <= KACIRILAN_HEDEF;   /* HEDEF — kapi degil */
     sonuc.push(oz);
-    console.log(`${oz.gecti ? 'GECTI' : 'KALDI'}${oz.gecti && !oz.hedefte ? '*' : ' '} ${yol.padEnd(38)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95_medyan.toFixed(2)} tik · KACIRILAN ${oz.kacirilan_kosumlar.join('/')} → ${oz.kacirilan_medyan}/${KACIRILAN_KAPI} · takilma oran ${(oz.takilma_oran_medyan * 100).toFixed(2)}% tek ${oz.takilma_tek_max} ms · taban ${oz.taban_takilma.join('/')}${oz.gecti ? '' : '  !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',')}`);
+    console.log(`${oz.gecti ? 'GECTI' : 'KALDI'}${oz.gecti && !oz.hedefte ? '*' : ' '} ${yol.padEnd(38)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95_medyan.toFixed(2)} tik · KACIRILAN ${oz.kacirilan_kosumlar.join('/')} → ${oz.kacirilan_medyan}/${KACIRILAN_KAPI} · tek ${oz.takilma_tek_max}/${TEK_TAKILMA_MS} ms · taban ${oz.taban_takilma.join('/')}${oz.gecti ? '' : '  !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',')}`);
+    console.log(`       bilgi (kapi degil) takilma toplam ${oz.bilgi.takilma_toplam_kosumlar.join('/')} → ${oz.bilgi.takilma_toplam_medyan_ms} ms · ${oz.bilgi.takilma_sayi_medyan} takilma · tur ${(oz.bilgi.tur_ms_medyan / 1000).toFixed(2)} sn · oran %${(oz.bilgi.takilma_oran_medyan * 100).toFixed(2)}${oz.eski_oran_kapisi ? '' : `  (eski %${ORAN_ESKI_KAPI * 100} kapisini asardi)`}`);
   }
   const dagilim = {};
   for (const s of sonuc) dagilim[s.kacirilan_medyan] = (dagilim[s.kacirilan_medyan] || 0) + 1;
+  /* IKI BIRIMDE SIRALAMA — her kosumda yeniden hesaplanir ki oranin turev
+     oldugu gorunur kalsin. 5 Eyl'de bu iki sira BIRBIRININ TERSIYDI; birim
+     tartismasi bir daha acilirsa kanit kayitta hazir dursun. */
+  const sirala = (alan) => [...sonuc].sort((a, b) => b.bilgi[alan] - a.bilgi[alan]).map((s) => s.yol);
+  const siralama = {
+    mutlak_toplam_ms: sirala('takilma_toplam_medyan_ms'),
+    oran: sirala('takilma_oran_medyan'),
+    _: 'Ustteki MUTLAK sira ziyaretcinin hissettigi siradir; alttaki TUREV siradir. Ikisi ayrisiyorsa oranin paydasi (tur boyu) konusuyordur, sayfa degil.',
+  };
+  siralama.ayrisiyor = siralama.mutlak_toplam_ms[0] !== siralama.oran[0];
   const kalanlar = sonuc.filter((s) => !s.gecti).map((s) => s.yol);
   const ham = kalanlar.length ? `KALDI — ${kalanlar.join(', ')}` : 'GECTI';
   const hukum = KISMI ? `KISMI (${secim.length}/${VARSAYILAN.length} sayfa) — HUKUM DEGIL · ham: ${ham}` : ham;
@@ -278,15 +332,25 @@ async function sogukKosum(yol) {
     olcum: new Date().toISOString(), tarayici: TARAYICI, tekrar: TEKRAR,
     boz: BOZ ? { ms: Number(process.env.BOZ_MS || 0) || 'tik x 2,4', _: 'KIRMIZI-ONCE kolu acikti: bu kayit olcum degil, duzenegin bozulmayi ayirt edebildiginin kanitidir' } : false,
     esik: {
-      kacirilan_kare: KACIRILAN_KAPI, toplam_oran: TOPLAM_ORAN, tek_takilma_ms: TEK_TAKILMA_MS,
-      _: 'Enes, 5 Eyl — B\'nin ilk 27 soguk kosumunun dagilimindan turetildi. A\'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu.',
+      kacirilan_kare: KACIRILAN_KAPI, tek_takilma_ms: TEK_TAKILMA_MS,
+      _: 'BLOKLAYICI OLAN HEPSI BU (+ tur tamligi). Ikisi de MUTLAK birim: tik ve ms. Enes, 5 Eyl — B\'nin ilk 27 soguk kosumunun dagilimindan turetildi. A\'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu.',
+    },
+    bilgi_kalemleri: {
+      takilma_toplam_ms: 'MUTLAK — ziyaretcinin hissettigi. Kapi degil.',
+      takilma_orani: 'TUREV — tur boyuna bagimli. Kapi degil.',
+      oran_eski_kapi: ORAN_ESKI_KAPI,
+      _: 'Enes, 5 Eyl 2026 gecesi — ORAN KAPIDAN DUSTU. Gerekce: kisa turda oran ornekleme hatasidir. 5 Eyl olcumu ters siralama gosterdi: /yeni/projeler/ 308 ms toplam takilmayla 3,37 sn turda %9,13 (KALIYORDU), /yeni/ 667 ms toplam takilmayla 12,0 sn turda %5,63 (GECIYORDU). Ziyaretcinin daha cok takildigi sayfa geciyordu. Bu bir gevsetme degil yanlis birimin duzeltilmesi — ayni hata kare kapisinda ms/tik olarak yapilmisti.',
     },
     hedef: { kacirilan_kare: KACIRILAN_HEDEF, _: 'HEDEF — KAPI DEGIL. Kayda gecer, hukmu etkilemez.' },
     sinyal: { takilma_esik_ms: TAKILMA_ESIK, _: 'Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar' },
     hukum, kismi: KISMI ? { olculen: secim.length, tum: VARSAYILAN.length, _: 'kismi kosum HUKUM DEGIL: B\'nin hukmu varsayilan dokuz sayfanin tamami kosuldugunda kurulur' } : false,
     hedefte_olmayan: sonuc.filter((s) => !s.hedefte).map((s) => s.yol),
-    dagilim, sayfa: sonuc,
+    dagilim, siralama, sayfa: sonuc,
   }, null, 1));
+  console.log('\nBILGI — TAKILMA SIRASI IKI BIRIMDE (hicbiri kapi degil):');
+  console.log(`  mutlak (ms) : ${siralama.mutlak_toplam_ms.slice(0, 3).join('  >  ')}`);
+  console.log(`  oran   (%)  : ${siralama.oran.slice(0, 3).join('  >  ')}`);
+  if (siralama.ayrisiyor) console.log('  !! SIRALAR AYRISIYOR — orani okuyan payda konusuyor, sayfa degil.');
   console.log('\nDAGILIM (kacirilan kare medyani):');
   for (const k of Object.keys(dagilim).sort()) console.log(`  ${k} kare  x${dagilim[k]}`);
   const hedefsiz = sonuc.filter((s) => !s.hedefte).length;
