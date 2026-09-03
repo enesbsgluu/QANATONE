@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
- "olcum": "2026-09-03T11:41:50.384Z",
+ "olcum": "2026-09-03T11:53:30.894Z",
  "tarayici": "brave Chrome/152.0.7977.76",
  "tekrar": 3,
  "esik": {
@@ -18,60 +18,60 @@
    "js_tavan": 24064,
    "kosum": [
     {
-     "kare": 682,
-     "tur_ms": 13888,
-     "p95_ms": 58.2,
+     "kare": 733,
+     "tur_ms": 14521,
+     "p95_ms": 58.3,
      "medyan_ms": 16.5,
-     "takilma_sayi": 42,
-     "takilma_toplam_ms": 3749,
-     "takilma_tek_max_ms": 217,
+     "takilma_sayi": 48,
+     "takilma_toplam_ms": 3983,
+     "takilma_tek_max_ms": 216,
      "taban": {
-      "sure_ms": 3774,
-      "takilma_sayi": 8,
-      "p95_ms": 716.3
+      "sure_ms": 4240,
+      "takilma_sayi": 10,
+      "p95_ms": 566.6
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     },
     {
-     "kare": 749,
-     "tur_ms": 13421,
-     "p95_ms": 50,
-     "medyan_ms": 8.5,
-     "takilma_sayi": 33,
-     "takilma_toplam_ms": 2650,
+     "kare": 776,
+     "tur_ms": 14187,
+     "p95_ms": 50.1,
+     "medyan_ms": 16.4,
+     "takilma_sayi": 39,
+     "takilma_toplam_ms": 3050,
      "takilma_tek_max_ms": 175,
      "taban": {
-      "sure_ms": 3049,
-      "takilma_sayi": 0,
-      "p95_ms": 34.6
+      "sure_ms": 3032,
+      "takilma_sayi": 1,
+      "p95_ms": 41.7
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     },
     {
-     "kare": 698,
-     "tur_ms": 13521,
-     "p95_ms": 58.3,
-     "medyan_ms": 16.2,
-     "takilma_sayi": 45,
-     "takilma_toplam_ms": 3574,
-     "takilma_tek_max_ms": 192,
+     "kare": 697,
+     "tur_ms": 13829,
+     "p95_ms": 58.5,
+     "medyan_ms": 16.6,
+     "takilma_sayi": 41,
+     "takilma_toplam_ms": 3384,
+     "takilma_tek_max_ms": 175,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3057,
       "takilma_sayi": 0,
-      "p95_ms": 33.6
+      "p95_ms": 41.7
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     }
    ],
-   "p95_medyan": 58.2,
-   "takilma_oran_medyan": 0.2643,
-   "takilma_tek_max": 217,
+   "p95_medyan": 58.3,
+   "takilma_oran_medyan": 0.2447,
+   "takilma_tek_max": 216,
    "taban_takilma": [
-    8,
-    0,
+    10,
+    1,
     0
    ],
    "kapi": {
