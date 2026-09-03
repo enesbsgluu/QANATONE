@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:57:27.057Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 390,
+ "yukseklik": 844,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 15.21,
+   "farkliPiksel": 50068,
+   "toplamPiksel": 329160,
+   "bolge": "satir 5/8 sutun 2/8 (x 49-98, y 422-528; hucrede 2844 px, tum farkin %6)",
+   "md5": {
+    "once": "9a5bad549e182cfacf808dcd61e08e2f",
+    "sonra": "dd438b363fd71bcb8d19229ed3c88ced"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-bulten-m-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t4-bulten-m-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-bulten-m-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 40,
+   "farkYuzde": 16.72,
+   "farkliPiksel": 55052,
+   "toplamPiksel": 329160,
+   "bolge": "satir 2/8 sutun 3/8 (x 98-146, y 106-211; hucrede 1976 px, tum farkin %4)",
+   "md5": {
+    "once": "cd890496345a3cf77cb1d9a74a0a01bc",
+    "sonra": "98ccbce47f879df68b7b874ea4155589"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1513,
+     "sonra": 1530
+    },
+    "gercek": {
+     "once": 1513,
+     "sonra": 1530
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-bulten-m-once-40.png",
+    "sonra": "yeni/film/kontak-tur9/t4-bulten-m-sonra-40.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-bulten-m-yanyana-40.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/bulten/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 0,
+   "sonsuzSifirlanan": 0,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4627,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "9a5bad549e182cfacf808dcd61e08e2f",
+    "png": "yeni/film/kontak-tur9/t4-bulten-m-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   },
+   {
+    "konum": 40,
+    "hedef": 1513,
+    "gercek": 1513,
+    "sapma": 0,
+    "md5": "cd890496345a3cf77cb1d9a74a0a01bc",
+    "png": "yeni/film/kontak-tur9/t4-bulten-m-once-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/bulten/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4670,
+  "dugmeSayisi": 2,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "dd438b363fd71bcb8d19229ed3c88ced",
+    "png": "yeni/film/kontak-tur9/t4-bulten-m-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 40,
+    "hedef": 1530,
+    "gercek": 1530,
+    "sapma": 0,
+    "md5": "98ccbce47f879df68b7b874ea4155589",
+    "png": "yeni/film/kontak-tur9/t4-bulten-m-sonra-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ }
+}

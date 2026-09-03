@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:54:57.341Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 390,
+ "yukseklik": 844,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 28.38,
+   "farkliPiksel": 93419,
+   "toplamPiksel": 329160,
+   "bolge": "satir 6/8 sutun 5/8 (x 195-244, y 528-633; hucrede 5121 px, tum farkin %5)",
+   "md5": {
+    "once": "f5f63378ea5a3bb536ef4aebd51a0326",
+    "sonra": "0869c5f60d83acebb3a5a3213b6e2af8"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-projeler-m-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t4-projeler-m-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-projeler-m-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 50,
+   "farkYuzde": 38.93,
+   "farkliPiksel": 128132,
+   "toplamPiksel": 329160,
+   "bolge": "satir 2/8 sutun 7/8 (x 293-341, y 106-211; hucrede 5095 px, tum farkin %4)",
+   "md5": {
+    "once": "31907c99651b10fa6379287c46720df6",
+    "sonra": "2e31d0c0e05496dd14d47851f406c635"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 2290,
+     "sonra": 2368
+    },
+    "gercek": {
+     "once": 2290,
+     "sonra": 2368
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-projeler-m-once-50.png",
+    "sonra": "yeni/film/kontak-tur9/t4-projeler-m-sonra-50.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-projeler-m-yanyana-50.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/projeler/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 0,
+   "sonsuzSifirlanan": 0,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 5424,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "f5f63378ea5a3bb536ef4aebd51a0326",
+    "png": "yeni/film/kontak-tur9/t4-projeler-m-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   },
+   {
+    "konum": 50,
+    "hedef": 2290,
+    "gercek": 2290,
+    "sapma": 0,
+    "md5": "31907c99651b10fa6379287c46720df6",
+    "png": "yeni/film/kontak-tur9/t4-projeler-m-once-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/projeler/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 0,
+   "sonsuzSifirlanan": 0,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 5580,
+  "dugmeSayisi": 1,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "0869c5f60d83acebb3a5a3213b6e2af8",
+    "png": "yeni/film/kontak-tur9/t4-projeler-m-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   },
+   {
+    "konum": 50,
+    "hedef": 2368,
+    "gercek": 2368,
+    "sapma": 0,
+    "md5": "2e31d0c0e05496dd14d47851f406c635",
+    "png": "yeni/film/kontak-tur9/t4-projeler-m-sonra-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   }
+  ]
+ }
+}
