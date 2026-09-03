@@ -188,7 +188,10 @@ async function kosum(browser, yol, tik) {
      kuralindan gelsin, taban gurultusunden degil. Her karede ~2,4 tik yakan
      bir dongu: sayfa IKI kare kacirmaya baslar, kural kirmizi yanmalidir. */
   if (BOZ) {
-    const bozMs = Number(process.env.BOZ_MS || (tik * 2.4).toFixed(1));
+    /* YAKMA, SINANAN KAPIYA GORE OLCEKLENIR (5 Eyl dersi): sabit yakma kapi
+       degisince sinirda kalir. Kapi <=N ise yakma (N+1,4) tik — hukum esigin
+       BIR USTUNE dusmeli. A'da N=1 -> 2,4 tik (eski deger, kanit korunur). */
+    const bozMs = Number(process.env.BOZ_MS || (tik * (KACIRILAN_KAPI + 1.4)).toFixed(1));
     await page.evaluate((ms) => {
       window.__bozDur = false;
       const yak = (s) => { const t0 = performance.now(); while (performance.now() - t0 < s) { /* mesgul bekle */ } };
@@ -197,18 +200,28 @@ async function kosum(browser, yol, tik) {
     }, bozMs);
   }
   /* tur: gercek girdi, 900 px/s */
-  const toplamPx = await page.evaluate(() => Math.max(0, document.documentElement.scrollHeight - innerHeight));
+  /* PAYDA HER ADIMDA TAZELENIR (4 Eyl 2026, olculdu). Sayfa yuksekligi tur
+     boyunca DEGISIR: ana sayfada scrollHeight 12.256 -> 10.480 px dusuyor
+     (content-visibility bolumleri gorunume girince tahmini boyu birakip
+     gercek boyuna oturuyor). Payda bir kez alinirsa tur dibe ULASSA BILE
+     kayda "%84,4 gezildi" diye yazilir — bayat payda. Kanit: probda tur
+     y=9580'de bitti, o andaki max 9580, zorla scrollTo(dip) 0 px fark verdi. */
+  let toplamPx = await page.evaluate(() => Math.max(0, document.documentElement.scrollHeight - innerHeight));
+  const toplamPxBas = toplamPx;
   await page.evaluate(() => __kBasla());
   const t0 = performance.now();
-  let y = 0;
+  let y = 0, zamanAsimi = false;
   while (y < toplamPx - 4) {
     const adim = Math.min(600, toplamPx - y);
     await cdp.send('Input.synthesizeScrollGesture', { x: 720, y: 450, xDistance: 0, yDistance: -adim, speed: 900, gestureSourceType: 'mouse' });
-    const yeniY = await page.evaluate(() => scrollY);
-    if (yeniY <= y) break;                           /* ilerlemiyorsa (kisa sayfa) cik */
-    y = yeniY;
-    if (performance.now() - t0 > 90000) break;
+    const d = await page.evaluate(() => ({ y: scrollY, max: Math.max(0, document.documentElement.scrollHeight - innerHeight) }));
+    toplamPx = d.max;
+    if (d.y <= y) break;                             /* ilerlemiyorsa cik */
+    y = d.y;
+    if (performance.now() - t0 > 90000) { zamanAsimi = true; break; }
   }
+  /* TUR TAMLIGI KAPI SARTIDIR: sayfayi gezmeyen kosum o sayfayi belgeleyemez */
+  const turTam = !zamanAsimi && y >= toplamPx - 4;
   await bekle(300);
   const ara = await page.evaluate(() => __kBitir());
   await page.close();
@@ -218,7 +231,7 @@ async function kosum(browser, yol, tik) {
     kare: ara.length, tur_ms: Math.round(turMs), p95_ms: p95(ara), medyan_ms: medyan(ara),
     takilma_sayi: tak.length, takilma_toplam_ms: Math.round(tak.reduce((a, b) => a + b, 0)), takilma_tek_max_ms: tak.length ? Math.round(Math.max(...tak)) : 0,
     taban: { sure_ms: Math.round(tabanAra.reduce((a, b) => a + b, 0)), takilma_sayi: tabanTak.length, p95_ms: p95(tabanAra), tik_p10: p10(tabanAra) },
-    scroll_px: y, toplam_px: toplamPx,
+    scroll_px: y, toplam_px: toplamPx, toplam_px_bas: toplamPxBas, tur_tam: turTam,
   };
 }
 
@@ -258,9 +271,10 @@ async function kosum(browser, yol, tik) {
        %20'den fazla ayrilirsa ekran hizi kosum ortasinda degismis olabilir */
     const tikCapraz = medyan(k.map((x) => x.taban.tik_p10).filter((x) => x != null));
     oz.tik_sapma = (tikCapraz != null && Math.abs(tikCapraz - tz.tik_ms) / tz.tik_ms > 0.20) ? +tikCapraz.toFixed(3) : false;
+    oz.tur_tam = k.every((x) => x.tur_tam);
     oz.kapi = {
       kacirilan_kare: oz.kacirilan_kare <= KACIRILAN_KAPI, takilma_oran: oz.takilma_oran_medyan <= TOPLAM_ORAN,
-      takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS, js: js <= tv,
+      takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS, js: js <= tv, tur_tam: oz.tur_tam,
     };
     oz.gecti = Object.values(oz.kapi).every(Boolean);
     sonuc.push(oz);

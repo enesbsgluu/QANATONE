@@ -41,10 +41,39 @@ const sayi = (kaynak, ad) => {
   return Number(m[1]);
 };
 
-test('takilma sinyali iki kapida birebir ayni', () => {
-  for (const ad of ['TAKILMA_ESIK', 'TEK_TAKILMA_MS', 'TOPLAM_ORAN']) {
-    assert.equal(sayi(A, ad), sayi(B, ad), `${ad} A ve B'de farkli — iki kapinin rakamlari kiyaslanamaz`);
-  }
+const varsayilan = (kaynak, ad) => {
+  const m = kaynak.match(new RegExp(ad + '\\s*\\|\\|\\s*(-?[0-9.]+)'));
+  assert.ok(m, `${ad} varsayilani kaynakta bulunamadi`);
+  return Number(m[1]);
+};
+
+/* SINYAL ortak olmali; ESIK ortak OLMAMALI. Ayrimi bilerek yaziyorum:
+   "neyin takilma sayildigi" iki kapida ayni degilse rakamlar kiyaslanamaz;
+   "kac takilmaya izin verildigi" ise kosula gore FARKLI olmak zorunda. */
+test('takilma SINYALI iki kapida birebir ayni (neyin takilma sayildigi)', () => {
+  assert.equal(sayi(A, 'TAKILMA_ESIK'), sayi(B, 'TAKILMA_ESIK'),
+    'TAKILMA_ESIK A ve B\'de farkli — iki kapinin rakamlari kiyaslanamaz');
+});
+
+/* Enes'in 5 Eyl karari koda PINLENDI: sessizce degisirse test yanar. */
+test('KAPI A esikleri: kacirilan <= 1 · takilma orani %3 · tek 250 ms', () => {
+  assert.equal(varsayilan(A, 'KACIRILAN_KAPI'), 1, 'A kacirilan kapisi degismis');
+  assert.equal(sayi(A, 'TOPLAM_ORAN'), 0.03, 'A takilma orani esigi degismis');
+  assert.equal(sayi(A, 'TEK_TAKILMA_MS'), 250, 'A tek takilma tavani degismis');
+});
+
+test('KAPI B esikleri: kacirilan <= 2 · takilma orani %8 · tek 250 ms · TEKRAR 5', () => {
+  assert.equal(varsayilan(B, 'KACIRILAN_KAPI'), 2, 'B kacirilan kapisi degismis');
+  assert.equal(sayi(B, 'TOPLAM_ORAN'), 0.08, 'B takilma orani esigi degismis');
+  assert.equal(sayi(B, 'TEK_TAKILMA_MS'), 250, 'B tek takilma tavani degismis');
+  assert.equal(varsayilan(B, 'TEKRAR'), 5, 'B tekrar sayisi 5 degil — uc kosum medyani bant degistiren sayfalarda sabit degildi');
+});
+
+test('B\'nin esikleri A\'nınkinden FARKLI olmali (ayni olmasi kosul karisikligidir)', () => {
+  assert.notEqual(varsayilan(A, 'KACIRILAN_KAPI'), varsayilan(B, 'KACIRILAN_KAPI'),
+    'A ve B ayni kacirilan esigini tasiyor: biri tarama, oteki ziyaretci kosulu — esikleri ayni olamaz');
+  assert.notEqual(sayi(A, 'TOPLAM_ORAN'), sayi(B, 'TOPLAM_ORAN'),
+    'A ve B ayni takilma orani esigini tasiyor');
 });
 
 test('kaydirma turu iki kapida birebir ayni (hiz ve adim)', () => {
@@ -70,7 +99,37 @@ test('kacirilan kare formulu iki kapida ayni: round(p95/tik) - 1', () => {
   }
 });
 
-test('kapi B esik TASIMAZ (olcum araci) — kapi A tasir', () => {
-  assert.match(B, /esik:\s*null/, 'B bir esik kazanmis: kapi olduysa bu test ve olc-soguk kunyesi guncellenmeli');
-  assert.match(A, /KACIRILAN_KAPI/, 'A kapi esigini kaybetmis');
+test('B HEDEF tasir ve hedef KAPIYA KARISMAZ', () => {
+  assert.match(B, /KACIRILAN_HEDEF\s*=\s*1/, 'B hedefi (kacirilan <= 1) kaybolmus');
+  /* hedef, gecti hesabina giren `kapi` nesnesinde GECMEMELI */
+  const kapiBlok = B.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/);
+  assert.ok(kapiBlok, 'B kapi blogu bulunamadi');
+  assert.doesNotMatch(kapiBlok[0], /HEDEF/, 'HEDEF kapi blogunun icine girmis — hedef kapiya donmus');
+});
+
+/* 5 Eyl: ana sayfanin scrollHeight'i tur boyunca 12.256 -> 10.480 px dusuyor
+   (content-visibility). Payda bir kez alinirsa tur DIBE ULASSA BILE kayda
+   "%84,4 gezildi" yazilir; tersi de mumkun — tur yarida kalir ve kimse
+   gormez. Iki kapida da payda her adimda tazelenmeli ve tamlik KAPI SARTI
+   olmali. */
+test('tur tamligi iki kapida da olculuyor ve kapi sarti', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    assert.match(s, /toplamPx\s*=\s*d\.max/, `${ad}: payda her adimda tazelenmiyor (bayat payda)`);
+    assert.match(s, /const turTam\s*=/, `${ad}: tur tamligi hesaplanmiyor`);
+    assert.match(s, /tur_tam:\s*oz\.tur_tam/, `${ad}: tur tamligi kapi sartina baglanmamis`);
+  }
+});
+
+test('kirmizi-once yakmasi sinanan kapiya gore olcekleniyor', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    assert.match(s, /KACIRILAN_KAPI\s*\+\s*1\.4/,
+      `${ad}: BOZ yakmasi sabit — kapi degisince kol sinirda kalir ve kirmizi-once yanmaz`);
+  }
+});
+
+test('kismi kosum bekcisi iki kapida da duruyor', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    assert.match(s, /const KISMI\s*=/, `${ad}: kismi kosum bekcisi yok`);
+    assert.match(s, /KISMI\s*&&\s*!BOZ/, `${ad}: kismi kosum cikis kodunu dusurmeme kurali yok (BOZ istisnasiyla)`);
+  }
 });
