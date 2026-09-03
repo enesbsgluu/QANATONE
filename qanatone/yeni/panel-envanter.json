@@ -1,11 +1,11 @@
 {
  "_": "yeni/panel-envanter.cjs — kaynak taramasi: hangi metin panelden geliyor, hangisi sabit. HUKUM DEGIL envanter. Istisnalar SILINMEZ, gerekcesiyle ayri sayilir.",
- "olcum": "2026-09-03T19:11:50.209Z",
+ "olcum": "2026-09-03T20:08:12.951Z",
  "toplam": {
   "panelli": 232,
   "sabit_metin": 0,
   "sabit_nitelik": 0,
-  "gerekceli_istisna": 12,
+  "gerekceli_istisna": 15,
   "teknik_meta": 3
  },
  "dosya": {
@@ -15,6 +15,16 @@
    "sabit_nitelik": 0,
    "ornek": [],
    "ornek_nitelik": [],
+   "istisna_metin": [
+    "QANAT",
+    "ONE",
+    "QANATONE"
+   ],
+   "istisna_neden": [
+    "marka kelimesi — alt bilgi logosu, Nav ile ayni gerekce (<b>QANAT<span>ONE</span></b>)",
+    "marka kelimesinin ikinci parcasi — alt bilgi logosu",
+    "filigranin gorunmez basligi (<h2 class=\"vh\">) — ekran okuyucuya sayfanin KIMLIGINI verir, cevrilecek kopya degil"
+   ],
    "teknik_meta": [
     "viewport=\"width=device-width, initial-scale=1\"",
     "robots=\"noindex\"",
@@ -111,7 +121,16 @@
    "sabit_metin": 0,
    "sabit_nitelik": 0,
    "ornek": [],
-   "ornek_nitelik": []
+   "ornek_nitelik": [],
+   "betik_metni": {
+    "yuva": [
+     "Gönderiliyor…",
+     "Talebin bize ulaştı — en geç bir iş günü içinde döneriz.",
+     "Kayıt sunucuya ulaşmadı.",
+     "WhatsApp'tan gönder"
+    ],
+    "turkce": []
+   }
   },
   "parcalar/MotorSahne.astro": {
    "panelli": 2,
@@ -206,6 +225,51 @@
    "sabit_nitelik": 0,
    "ornek": [],
    "ornek_nitelik": []
+  },
+  "sahneler/STETespit.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "betik_metni": {
+    "yuva": [
+     "Taranıyor…",
+     "Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}",
+     "robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.",
+     "Bağlantı hatası — tekrar dener misin?"
+    ],
+    "turkce": [
+     "steHuküm",
+     "Başlık",
+     "Açıklama",
+     "Şema",
+     "Paylaşım kartı",
+     "Görsel alt metni",
+     "Görsel ölçüsü",
+     "Görsel biçimi",
+     "Yazı tipi",
+     "Satır içi yük",
+     "Sıkıştırma",
+     "Önbellek",
+     "İstek sayısı",
+     "Ölçümleme",
+     "İletişim",
+     "Yerel işaret",
+     "Sistem çalışıyor.",
+     "Yapı sağlam. Buradan sonrası hız ve içerik işi.",
+     "İyi ama açık var.",
+     "Temel yerinde; birkaç kalem talebi kaçırıyor.",
+     "Yarısı eksik.",
+     "Talebi kaçırıyor.",
+     "Bu hâliyle gelen kişi seni bulamıyor ya da ulaşamıyor.",
+     "Bu adres taranamıyor (site otomatik erişimi engelliyor).",
+     "Siteye ulaşılamadı — adresi kontrol eder misin?",
+     "Günlük tarama hakkı doldu. Yarın yine dene.",
+     "Tarama tamamlanamadı.",
+     "Bugün ${j.kalan} tarama hakkın kaldı."
+    ]
+   }
   }
  }
 }
