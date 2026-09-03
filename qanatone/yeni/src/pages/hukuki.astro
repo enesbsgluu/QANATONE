@@ -1,14 +1,20 @@
 ---
 /* Hukuki metinler — content.json legal.kvkk (panelin HTML'i, TR).
    Mevcut sitede ayrı sayfası yok (modalda yaşıyor); burada sayfa olur.
-   Canonical kendine — kök karşılığı olmayan tek Faz 1 sayfası. */
+   Canonical kendine — kök karşılığı olmayan tek Faz 1 sayfası.
+   TUR 2 (5 Eyl 2026): gövde zaten panelden geliyordu, BAŞLIK gelmiyordu;
+   aynı sayfanın iki metni iki ayrı yerden yönetiliyordu. Başlık da açıldı. */
 import Temel from '../layouts/Temel.astro';
-import { icerik } from '../icerik';
+import { icerik, T, type Dil } from '../icerik';
 const canon = 'https://qanatone.netlify.app/yeni/hukuki';
+const dil: Dil = 'tr';
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, tr: string, en: string): string =>
+  T((s as any)[k], dil) || (dil === 'en' ? en : tr);
 ---
 <Temel dil="tr" baslik="Hukuki metinler — QANATONE"
   aciklama="QANATONE aydınlatma metni (KVKK): formlar aracılığıyla paylaşılan bilgilerin nasıl işlendiği."
   canonical={canon} etiket="HUKUKİ">
-  <h1>Hukuki metinler</h1>
+  <h1>{m('hkh', 'Hukuki metinler', 'Legal texts')}</h1>
   <div class="govde" set:html={icerik.legal?.kvkk || ''} />
 </Temel>

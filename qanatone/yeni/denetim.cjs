@@ -2523,15 +2523,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    Kanit araci: yeni/panel-kapi.cjs (yazildi -> derlendi -> uretimde gorundu). */
 {
   const kusur = [];
+  const bilgi = [];   /* HUKUM VERMEZ — kayda ve satira gecer */
   const SRC = path.join(__dirname, 'src');
   /* 1 · harita taze mi */
   try {
     const cikti = require('child_process').execSync('node metin-harita.cjs',
       { cwd: __dirname, env: Object.assign({}, process.env, { KONTROL: '1' }), encoding: 'utf8', timeout: 60000 });
-    if (!/TAZE/.test(cikti)) kusur.push('harita-bayat');
+    /* 5 EYL 2026 — ISARET IKIYE AYRILDI (metin-harita.cjs kunyesinde
+       gerekce). BLOKLAYICI olan KAYNAK yarisi: gelistirici m()/M() ile yeni
+       metin acip haritayi uretmediyse alan panelde GORUNMEZ, kuralin sordugu
+       soru budur. ICERIK yarisi (content.json'un "Eski site" kovasi)
+       PANELDEN YAYINLAYINCA degisir; onu bloklayici tutmak paneli her
+       kullanildiginda DEPLOY'U DUSURUYORDU (olculdu: yayinla.js govdeyi
+       birebir yazar, taslak 43 olu glb* anahtarini tasimaz; netlify.toml
+       zincirinde denetim exit 1 -> deploy duser). Bilgi olarak yazilir. */
+    if (!/KAYNAK-TAZE/.test(cikti)) kusur.push('harita-bayat-kaynak');
+    if (/ICERIK-FARKLI/.test(cikti)) bilgi.push('harita-icerik-farkli');
   } catch (e) {
     const o = String((e && e.stdout) || '');
-    kusur.push(/BAYAT/.test(o) ? 'harita-bayat' : 'harita-kontrol-hatasi');
+    kusur.push(/KAYNAK-BAYAT/.test(o) ? 'harita-bayat-kaynak' : 'harita-kontrol-hatasi');
   }
   /* 2 · anahtarsiz M( cagrisi: ilk arguman duz tirnakli anahtar olmali */
   const anahtarsiz = [];
@@ -2568,8 +2578,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const ithal = tumKaynak.filter(([r, k]) => !r.endsWith(ad + '.astro') && new RegExp('[\'"/]' + ad + '[\'"]|/' + ad + '\\.astro').test(k));
     if (ithal.length) kusur.push('olu-sanilan-bilesen-ithal-edilmis:' + ad);
   }
-  ol('P2 · panel metin hattı: harita taze + anahtarsız M( yok + ölü bileşen listesi geçerli',
-     kusur.length === 0, kusur.slice(0, 3).join(' '));
+  ol('P2 · panel metin hattı: kaynak haritası taze + anahtarsız M( yok + ölü bileşen listesi geçerli',
+     kusur.length === 0, [kusur.slice(0, 3).join(' '), bilgi.length ? '(bilgi: ' + bilgi.join(' ') + ')' : ''].filter(Boolean).join(' '));
 }
 
 /* K1 · KABUK MODULU TAVANI (4 Eyl 2026, SOKUM VE TASIMA TURU). Eski

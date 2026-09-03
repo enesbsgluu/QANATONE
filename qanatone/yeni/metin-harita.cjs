@@ -31,6 +31,12 @@ const BOLUM = {
   'parcalar/CanliSahne.astro': 'Hizmet detayı · canlı işler sahnesi',
   'parcalar/MotorSahne.astro': 'Hizmet detayı · motor sahnesi',
   'parcalar/SohbetSahne.astro': 'Hizmet detayı · sohbet sahnesi',
+  /* TUR 2 (5 Eyl 2026): panelin kalan kalemleri açıldı. Etiket yine DOSYA
+     ADI DEĞİL metnin göründüğü yer — Enes panelde "LeadKutu.astro" değil
+     "İletişim formu" arar. */
+  'pages/404.astro': 'Sayfa bulunamadı (404)',
+  'pages/hukuki.astro': '/hukuki',
+  'parcalar/LeadKutu.astro': 'İletişim formu',
 };
 /* OLU BILESENLER (olculdu 4 Eyl: hicbir sayfa/parca bunlari ithal etmiyor —
    R13 "anlati sahneleri yok" karariyla sokulduler, dosyalari kaldi).
@@ -88,9 +94,35 @@ if (i < 0 || j < 0) { console.error('admin.html isaretleri yok: ' + BAS + ' ... 
 const mevcut = admin.slice(i + BAS.length, j);
 const yeniSayi = Object.keys(sirali).length - eskiSayi;
 if (process.env.KONTROL) {
-  const taze = mevcut === gomu;
-  console.log(`METIN HARITASI ${taze ? 'TAZE' : 'BAYAT'}: ${Object.keys(sirali).length} anahtar (yeni site ${yeniSayi}, eski site ${eskiSayi})`);
-  process.exit(taze ? 0 : 1);
+  /* 5 EYL 2026 — KONTROL IKIYE AYRILDI, SEBEBI OLCULDU.
+     Bu betigin urettigi harita IKI KAYNAKTAN besleniyor:
+       KAYNAK yarisi  m()/M() cagrilarindan gelir. Bayatlarsa GERCEK kusur:
+                      gelistirici yeni bir metin acmis ama haritayi
+                      uretmemistir, alan panelde GORUNMEZ.
+       ICERIK yarisi  content.json'un anahtar kumesinden gelir ("Eski site"
+                      kovasi). Bu kume PANELDEN YAYINLAYINCA DEGISIR ve
+                      degismesi normaldir.
+     Ikisi tek bayrakta toplaniyordu ve sonucu su oldu: panelden "Yayinla"
+     denince content.json'dan 43 olu `glb*` anahtari dusuyor (olculdu:
+     yeni/panel-taslak-farki.cjs — yayinla.js govdeyi BIREBIR yazar,
+     birlestirmez), gomulu harita bayat sayiliyor, denetim P2 kirmizi
+     yaniyor ve netlify.toml zincirindeki `node yeni/denetim.cjs` exit 1
+     verdigi icin DEPLOY DUSUYORDU. Yani panel calistikca yayin kiriliyordu.
+     Dusen 43 anahtarin HICBIRI ne eski ne yeni sitede okunuyor (olculdu).
+     Bu bir gevsetme degil: bloklayici olan KAYNAK yarisi, ki kuralin
+     sordugu soru zaten oydu. ICERIK yarisi bilgi olarak yazilir. */
+  const suz = (m) => JSON.stringify(Object.fromEntries(
+    Object.entries(m).filter(([, v]) => v && v.b !== 'Eski site')));
+  let kaynakTaze = mevcut === gomu, icerikAyni = mevcut === gomu, ayrilabildi = false;
+  try {
+    const gomulu = JSON.parse(mevcut.replace(/^const METIN_HARITA=/, '').replace(/;$/, ''));
+    kaynakTaze = suz(gomulu) === suz(sirali);
+    const kovaAd = (m) => JSON.stringify(Object.keys(m).filter((k) => m[k] && m[k].b === 'Eski site').sort());
+    icerikAyni = kovaAd(gomulu) === kovaAd(sirali);
+    ayrilabildi = true;
+  } catch (e) { /* gomulu harita okunamadi: tam kiyasa duser, guvenli taraf */ }
+  console.log(`METIN HARITASI ${kaynakTaze ? 'KAYNAK-TAZE' : 'KAYNAK-BAYAT'} · ${icerikAyni ? 'ICERIK-AYNI' : 'ICERIK-FARKLI'}${ayrilabildi ? '' : ' (ayrilamadi, tam kiyas)'}: ${Object.keys(sirali).length} anahtar (yeni site ${yeniSayi}, eski site ${eskiSayi})`);
+  process.exit(kaynakTaze ? 0 : 1);
 }
 fs.writeFileSync(A, admin.slice(0, i + BAS.length) + gomu + admin.slice(j));
 const bolumler = {}; for (const k in sirali) bolumler[sirali[k].b] = (bolumler[sirali[k].b] || 0) + 1;

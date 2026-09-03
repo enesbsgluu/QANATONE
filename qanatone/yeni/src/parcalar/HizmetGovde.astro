@@ -110,8 +110,13 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 {d.market && <MotorSahne market={d.market} dil={dil} />}
 {/* TradeSelf amblemi (A2) — yalnız finans; künye demo-detay.css'te.
     role="img" + engineLab kaynaktan (8232). Katman sırası kaynak
-    markup'ıyla aynı: dış → beyin → iç. */}
-{s.slug === 'finans' && <div class="tsa" role="img" aria-label="TradeSelf">
+    markup'ıyla aynı: dış → beyin → iç.
+    TUR 2 (5 Eyl 2026): erişilebilir ad panele açıldı. Bu bir `role="img"`
+    ve ekran okuyucunun duyduğu TEK metin bu — bugün yalnız "TradeSelf",
+    yani NE olduğunu söylemiyor (kodun kendi künyesi "TradeSelf amblemi"
+    diyor). Varsayılan BİLEREK değiştirilmedi: erişilebilir adın ne olacağı
+    içerik kararı, uydurulmaz; alan artık panelde. */}
+{s.slug === 'finans' && <div class="tsa" role="img" aria-label={M('tsalt', 'TradeSelf', 'TradeSelf')}
   <i class="tsa-dis"></i><i class="tsa-beyin"></i><i class="tsa-ic"></i>
 </div>}
 {d.kadro && <KadroBlok kadro={d.kadro} dil={dil} />}

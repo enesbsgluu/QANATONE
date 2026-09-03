@@ -1,16 +1,24 @@
 ---
 /* Yeni kabuğun 404'ü. Kesmeye (Faz 4) kadar Netlify'ın 404'ü eski
-   sitede kalır; bu sayfa dist/yeni/404.html olarak hazır bekler. */
+   sitede kalır; bu sayfa dist/yeni/404.html olarak hazır bekler.
+   TUR 2 (5 Eyl 2026): üç metin panele açıldı. Sayfa TR-only (Nav'da
+   `essiz`), ama m() yine de EN varsayılanı taşır: panelde strings.en
+   dolarsa ve sayfa ileride EN'e açılırsa metin hazır olur. */
 import Temel from '../layouts/Temel.astro';
+import { icerik, T, type Dil } from '../icerik';
 const canon = 'https://qanatone.netlify.app/yeni/404';
+const dil: Dil = 'tr';
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, tr: string, en: string): string =>
+  T((s as any)[k], dil) || (dil === 'en' ? en : tr);
 ---
 <Temel dil="tr" baslik="Sayfa bulunamadı — QANATONE"
   aciklama="Aradığın sayfa burada değil. Ana sayfadan ya da hizmetlerden devam edebilirsin."
   canonical={canon}>
   <div class="b404">
     <b>404</b>
-    <h1>Bu sayfa burada değil</h1>
-    <p class="lede" style="margin:12px auto 24px">Adres değişmiş ya da hiç var olmamış olabilir.</p>
-    <a class="dugme sus-isik" href="/">Ana sayfaya dön</a>
+    <h1>{m('nfh', 'Bu sayfa burada değil', 'This page is not here')}</h1>
+    <p class="lede" style="margin:12px auto 24px">{m('nfp', 'Adres değişmiş ya da hiç var olmamış olabilir.', 'The address may have changed, or it may never have existed.')}</p>
+    <a class="dugme sus-isik" href="/">{m('nfc', 'Ana sayfaya dön', 'Back to home')}</a>
   </div>
 </Temel>

@@ -33,7 +33,25 @@ const ALAN = [
   { sekme: 'metin', p: 'strings.en.nav0', deger: N + '-NAVEN', sayfa: ['en/index.html'], not: 'menü ilk madde EN' },
   { sekme: 'metin', p: 'strings.tr.foot1', deger: N + '-FOOT', sayfa: ['index.html', 'sss/index.html'], not: 'alt bilgi (Temel)' },
   { sekme: 'metin', p: 'strings.tr.gn3', deger: N + '-GN3', sayfa: ['otomasyon/index.html'], not: '/otomasyon sabit metni' },
-  { sekme: 'metin', p: 'strings.tr.@ESKI', deger: N + '-KIRMIZI', sayfa: ['index.html'], not: 'KIRMIZI KONTROL: yalniz eski site okur, yeni sitede gorunmemeli', kirmizi: true },
+  /* KIRMIZI KONTROL — yalniz eski sitenin okudugu bir anahtar yazilir ve
+     yeni sitede GORUNMEMESI beklenir; boylece kapinin "gorundu" demesi
+     lastik damga olmadigi gosterilir.
+     5 Eyl 2026 — ANAHTAR DEGISTI, SEBEBI OLCULDU. Eski hali `strings.tr.@ESKI`
+     idi: content.json'da OLMAYAN bir anahtar. Yazilinca content.json'un
+     anahtar kumesi buyuyor (358 -> 359), admin.html'e gomulu metin haritasi
+     BAYATLIYOR ve TUR 4'te eklenen P2 kurali dogru sekilde "harita-bayat"
+     diye kirmizi yaniyordu. Yani kapi kendi ayak izini olcuyordu: panel
+     alanlarinin 30'u da GECERKEN hukum "KALDI" cikiyordu. Uretilerek
+     dogrulandi (iki kol: TUR 2'nin yeni alanlariyla ve onlarsiz, ikisinde
+     de ayni tek kirmizi; anahtar tek basina yazilinca da harita bayatliyor).
+     Yeni anahtar `glbSim`. ILK SECIM ch1d YANLISTI ve kapi onu yakaladi:
+     ch1d kaynakta hic gecmiyor ama uretilen index.html'de GORUNDU, cunku
+     anahtar HESAPLANARAK okunuyor ('ch'+i+'d' gibi) — kaynak taramasi bu
+     bicimi goremez. Dogru yontem OLCMEK: 97 aday anahtara ayni anda nobetci
+     yazildi, derlendi, uretilen 63 sayfada arandi; 74'u GORUNDU, 23'u
+     gorunmedi. glbSim o 23'ten biri. Ayni kosumda deger degisikliginin
+     haritayi BAYATLATMADIGI da olculdu (97 nobetci, harita TAZE). */
+  { sekme: 'metin', p: 'strings.tr.glbSim', deger: N + '-KIRMIZI', sayfa: ['index.html'], not: 'KIRMIZI KONTROL: yalniz eski site okur, yeni sitede gorunmemeli', kirmizi: true },
   { sekme: 'genel', p: 'settings.og', deger: 'https://qanatone.com/img/' + N + '-og.png', sayfa: ['index.html', 'en/index.html'], not: 'og:image' },
   { sekme: 'genel', p: 'settings.orgDesc', deger: N + ' kurum tanimi cumlesi', sayfa: ['index.html'], not: 'Organization description (şema)' },
   { sekme: 'genel', p: 'legal.line', deger: N + ' Dijital', sayfa: ['index.html'], not: 'alt bilgi şirket satırı' },
@@ -69,6 +87,16 @@ const ALAN = [
   { sekme: 'metin', p: 'strings.tr.arc01', deger: N + '-ARC', sayfa: ['hizmetler/web-sitesi-araclar/index.html'], not: 'araç sahnesi künyesi' },
   { sekme: 'metin', p: 'strings.tr.plt01', deger: N + '-PLT', sayfa: ['hizmetler/finans/index.html'], not: 'platform sahnesi künyesi' },
   { sekme: 'metin', p: 'strings.tr.mtr01', deger: N + '-MTR', sayfa: ['hizmetler/finans/index.html'], not: 'motor sahnesi künyesi' },
+  /* TUR 2 (5 Eyl 2026) · PANELIN KALANI — envanterin gosterdigi son kalemler.
+     Ucu METIN, ikisi GORUNUR OZNITELIK: oznitelik yolu daha once kapidan hic
+     gecmemisti (butun alanlar metin dugumuydu), o yuzden ikisi de burada. */
+  { sekme: 'metin', p: 'strings.tr.nfh', deger: N + '-404H', sayfa: ['404.html'], not: '404 başlığı' },
+  { sekme: 'metin', p: 'strings.tr.nfc', deger: N + '-404C', sayfa: ['404.html'], not: '404 dönüş bağı' },
+  { sekme: 'metin', p: 'strings.tr.hkh', deger: N + '-HUKUK', sayfa: ['hukuki/index.html'], not: '/hukuki başlığı (gövde zaten panelden geliyordu)' },
+  { sekme: 'metin', p: 'strings.tr.navdil', deger: N + '-DIL', sayfa: ['index.html'], not: 'mobil menü dil bölümü etiketi' },
+  { sekme: 'metin', p: 'strings.tr.ldtel', deger: N + '-TEL', sayfa: ['index.html'], not: 'iletişim formu telefon ipucu (GORUNUR OZNITELIK: placeholder)' },
+  { sekme: 'metin', p: 'strings.tr.tsalt', deger: N + '-TSALT', sayfa: ['hizmetler/finans/index.html'], not: 'TradeSelf amblemi erişilebilir adı (GORUNUR OZNITELIK: aria-label)' },
+  { sekme: 'metin', p: 'strings.en.nfh', deger: N + '-404HEN', sayfa: ['404.html'], not: 'KIRMIZI KONTROL: /404 TR-only, EN degeri uretilen sayfada GORUNMEMELI', kirmizi: true },
 ];
 const ANAHTAR = [ /* dugmeler: data-sw yolu, beklenen iz (deger 1 iken dist'te ARANMAYAN sinif) */
   { sekme: 'gorunum', sw: 'theme.motion.stars', iz: 't-nostars', not: 'yıldız tuvali' },
@@ -87,7 +115,45 @@ function sunucu() {
   });
 }
 function derle() { execSync('npm run build --silent', { cwd: __dirname, stdio: 'pipe', timeout: 300000 }); }
-function denetim() { try { const o = execSync('node denetim.cjs', { cwd: __dirname, encoding: 'utf8', timeout: 120000 }); const m = o.match(/(\d+) geçti · (\d+) kaldı/); return m ? { gecti: +m[1], kaldi: +m[2] } : { gecti: 0, kaldi: -1 }; } catch (e) { const m = String(e.stdout || '').match(/(\d+) geçti · (\d+) kaldı/); return m ? { gecti: +m[1], kaldi: +m[2] } : { gecti: 0, kaldi: -1 }; } }
+/* 5 Eyl 2026: kapi bugune kadar denetimin yalniz SAYISINI tasiyordu ve
+   "DENETIM 61 gecti 1 kaldi" satiri hangi kuralin yandigini soylemiyordu —
+   kirmizinin kaynagi kapinin kendi ayak izi mi yoksa gercek bir kusur mu,
+   ayirt edilemiyordu (bu gece bir saat bu yuzden gitti). Artik yanan
+   kurallarin adi da doner ve basilir. */
+/* 5 Eyl 2026: kapi, panelin YAZMA YOLUNUN content.json anahtar kumesini
+   degistirip degistirmedigini kendisi raporlar. Sebep: P2 kurali
+   "harita-bayat" diye yaniyordu ve kapi bunu sayiyla (61/1) bildiriyordu;
+   hangi anahtarin eklenip silindigi gorunmuyordu. Deger degisikligi haritayi
+   BAYATLATMAZ (97 nobetci yazilarak olculdu), yalniz anahtar kumesi. */
+function anahtarKumesi(o, on = '') {
+  const s = new Set();
+  for (const [k, v] of Object.entries(o || {})) {
+    const y = on ? on + '.' + k : k;
+    s.add(y);
+    if (v && typeof v === 'object' && !Array.isArray(v)) for (const x of anahtarKumesi(v, y)) s.add(x);
+  }
+  return s;
+}
+function anahtarFarki(yedekHam, C, ad) {
+  try {
+    const A = anahtarKumesi(JSON.parse(yedekHam)), B = anahtarKumesi(C);
+    const eklenen = [...B].filter((k) => !A.has(k));
+    const silinen = [...A].filter((k) => !B.has(k));
+    if (eklenen.length || silinen.length) {
+      console.log(`  PANEL AYAK IZI (${ad}): +${eklenen.length} anahtar [${eklenen.slice(0, 12).join(' ')}] · -${silinen.length} anahtar [${silinen.slice(0, 12).join(' ')}]`);
+    } else console.log(`  PANEL AYAK IZI (${ad}): anahtar kumesi DEGISMEDI`);
+  } catch (e) { console.log('  PANEL AYAK IZI: okunamadi ' + e.message); }
+}
+
+function denetim() {
+  const coz = (o) => {
+    const m = o.match(/(\d+) geçti · (\d+) kaldı/);
+    const kirmizilar = o.split('\n').filter((s) => s.startsWith('  !! ')).map((s) => s.trim());
+    return m ? { gecti: +m[1], kaldi: +m[2], kirmizilar } : { gecti: 0, kaldi: -1, kirmizilar };
+  };
+  try { return coz(execSync('node denetim.cjs', { cwd: __dirname, encoding: 'utf8', timeout: 120000 })); }
+  catch (e) { return coz(String(e.stdout || '') + String(e.stderr || '')); }
+}
 const oku = (rel) => { const f = path.join(DIST, rel); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; };
 const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
 
@@ -141,6 +207,7 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
   for (const a of ALAN) a.taslakta = String(a.p.split('.').reduce((o, k) => o?.[k], C) ?? '') === a.deger;
   for (const k of ANAHTAR) k.taslakta = k.sw.split('.').reduce((o, kk) => o?.[kk], C) === 1;
   fs.writeFileSync(path.join(KOK, 'content.json'), JSON.stringify(C, null, 1));
+  anahtarFarki(yedek, C, 'dolu');
   console.log('derleniyor (dolu)…'); derle();
   const dn1 = denetim();
   for (const a of ALAN) { a.gorundu = a.sayfa.filter((s) => oku(s).includes(a.deger)); }
@@ -155,6 +222,7 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
   t = await taslak(); C = JSON.parse(t);
   for (const a of ALAN) if (!a.kirmizi) a.bosTaslakta = String(a.p.split('.').reduce((o, k) => o?.[k], C) ?? '') === '';
   fs.writeFileSync(path.join(KOK, 'content.json'), JSON.stringify(C, null, 1));
+  anahtarFarki(yedek, C, 'bos');
   console.log('derleniyor (boş)…'); derle();
   const dn2 = denetim();
   const sizinti = ['index.html', 'en/index.html', 'hukuki/index.html', 'otomasyon/index.html'].map((s) => [s, (oku(s).match(/>(undefined|null|\[object Object\])</g) || []).length]).filter((x) => x[1]);
@@ -180,6 +248,7 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
     console.log(`| ${k.sw} (${k.not}) | ${k.yazildi ? '✓' : '✗'} | ${k.taslakta ? '✓' : '✗'} | ✓ | ${k.iz ? (k.gorundu ? '✓ açıkken ' + k.iz + ' yok' : '✗') : 'bayrak (görsel bant eski sitede)'} | ${k.iz ? (k.kapali ? 'kapalıyken ' + k.iz + ' var' : 'SIZINTI') : '—'} | ${ok ? 'GEÇTİ' : 'KALDI'} |`);
   }
   console.log(`\nDENETIM (dolu): ${dn1.gecti} geçti · ${dn1.kaldi} kaldı · DENETIM (boş): ${dn2.gecti} geçti · ${dn2.kaldi} kaldı · boş hâlde undefined/null sızıntısı: ${sizinti.length ? JSON.stringify(sizinti) : 'yok'}`);
+  for (const [ad, dn] of [['dolu', dn1], ['bos', dn2]]) for (const k of dn.kirmizilar || []) console.log(`  DENETIM ${ad} KIRMIZI: ${k}`);
   console.log(`ARAMA: ${toplam} metin · "whatsapp" ${aramaSonuc} · bölüm Menü ${bolumSonuc} · admin.html ${fs.statSync(path.join(KOK, 'admin.html')).size} B`);
   console.log(`HÜKÜM: ${kaldi === 0 && dn1.kaldi === 0 && dn2.kaldi === 0 && !sizinti.length ? 'GEÇTİ' : 'KALDI (' + kaldi + ' alan)'}`);
 })().catch((e) => { console.error(e); try { fs.writeFileSync(path.join(KOK, 'content.json'), fs.readFileSync(YEDEK, 'utf8')); } catch (x) {} process.exit(1); });

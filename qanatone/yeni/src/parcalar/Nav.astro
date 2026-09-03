@@ -149,7 +149,10 @@ const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       </a>
     ))}
-    <div class="nv-mlg"><em style="font-style:normal">Dil / Language</em>
+    {/* TUR 2 (5 Eyl 2026): dil bölümü etiketi panele açıldı. İki dilde de
+        AYNI değer bilinçli — etiket her iki dilden okunabilsin diye ikisini
+        birden taşıyor; panelde ayrışabilir. */}
+    <div class="nv-mlg"><em style="font-style:normal">{m('navdil', 'Dil / Language', 'Dil / Language')}</em>
       <span>
         <a href={trYol} class:list={[!en && 'on']}>TR</a>
         <a href={enYol} class:list={[en && 'on']}>EN</a>
