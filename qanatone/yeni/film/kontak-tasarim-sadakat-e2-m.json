@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T22:37:05.933Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 390,
+ "yukseklik": 844,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": "s1",
+   "farkYuzde": 50.76,
+   "farkliPiksel": 167067,
+   "toplamPiksel": 329160,
+   "bolge": "satir 5/8 sutun 3/8 (x 98-146, y 422-528; hucrede 5039 px, tum farkin %3)",
+   "md5": {
+    "once": "c4417a64cfa58479874b107947141ff9",
+    "sonra": "af05b7377497b06519d1bdb480c7fdda"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 4777,
+     "sonra": 5150
+    },
+    "gercek": {
+     "once": 4777,
+     "sonra": 5150
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/sadakat-e2-m-once-s1.png",
+    "sonra": "yeni/film/kontak-tur9/sadakat-e2-m-sonra-s1.png",
+    "yanyana": "yeni/film/kontak-tur9/sadakat-e2-m-yanyana-s1.png"
+   }
+  },
+  {
+   "konum": "s2",
+   "farkYuzde": 14.13,
+   "farkliPiksel": 46498,
+   "toplamPiksel": 329160,
+   "bolge": "satir 4/8 sutun 2/8 (x 49-98, y 317-422; hucrede 2041 px, tum farkin %4)",
+   "md5": {
+    "once": "6558a6452ac24d6f3a8e2d826c6b954d",
+    "sonra": "4d365999f6798f903a62d91d3ae5ef5a"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 5593,
+     "sonra": 6249
+    },
+    "gercek": {
+     "once": 5593,
+     "sonra": 6249
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/sadakat-e2-m-once-s2.png",
+    "sonra": "yeni/film/kontak-tur9/sadakat-e2-m-sonra-s2.png",
+    "yanyana": "yeni/film/kontak-tur9/sadakat-e2-m-yanyana-s2.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 96,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 94,
+   "video": 0
+  },
+  "scrollHeight": 11468,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 4777,
+    "gercek": 4777,
+    "sapma": 0,
+    "md5": "c4417a64cfa58479874b107947141ff9",
+    "png": "yeni/film/kontak-tur9/sadakat-e2-m-once-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 118
+   },
+   {
+    "konum": "s2",
+    "hedef": 5593,
+    "gercek": 5593,
+    "sapma": 0,
+    "md5": "6558a6452ac24d6f3a8e2d826c6b954d",
+    "png": "yeni/film/kontak-tur9/sadakat-e2-m-once-s2.png",
+    "raf": "raf",
+    "animasyonSonradan": 118
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 15,
+   "sonsuzSifirlanan": 4,
+   "sonluBitirilen": 11,
+   "video": 0
+  },
+  "scrollHeight": 12342,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 5150,
+    "gercek": 5150,
+    "sapma": 0,
+    "md5": "af05b7377497b06519d1bdb480c7fdda",
+    "png": "yeni/film/kontak-tur9/sadakat-e2-m-sonra-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 37
+   },
+   {
+    "konum": "s2",
+    "hedef": 6249,
+    "gercek": 6249,
+    "sapma": 0,
+    "md5": "4d365999f6798f903a62d91d3ae5ef5a",
+    "png": "yeni/film/kontak-tur9/sadakat-e2-m-sonra-s2.png",
+    "raf": "raf",
+    "animasyonSonradan": 37
+   }
+  ]
+ }
+}

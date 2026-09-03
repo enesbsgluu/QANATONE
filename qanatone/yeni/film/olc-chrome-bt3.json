@@ -1,0 +1,129 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T03:18:02.550Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1124,
+  "lcpEl": "h1",
+  "cls": 0.2325,
+  "clsKaynak": [
+   {
+    "t": 2371,
+    "v": 0.2325,
+    "el": "article",
+    "kaynak": [
+     {
+      "el": "article",
+      "once": [
+       312,
+       164,
+       800,
+       736
+      ],
+      "sonra": [
+       312,
+       884,
+       800,
+       16
+      ]
+     },
+     {
+      "el": "a.pgback",
+      "once": [
+       312,
+       119,
+       61,
+       22
+      ],
+      "sonra": [
+       312,
+       839,
+       61,
+       22
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars bitcursor"
+   }
+  ],
+  "inp": 32,
+  "inpHedef": "#icerik keydown",
+  "etkilesim": 8,
+  "loaf": 5,
+  "loafToplam": 988,
+  "loafEnUzun": 534,
+  "loafKaynak": [
+   {
+    "t": 96,
+    "sure": 534,
+    "engel": 58,
+    "betik": 533,
+    "stilDuzen": 0,
+    "render": 0,
+    "kaynak": []
+   },
+   {
+    "t": 944,
+    "sure": 181,
+    "engel": 0,
+    "betik": 180,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": []
+   },
+   {
+    "t": 2248,
+    "sure": 123,
+    "engel": 73,
+    "betik": 121,
+    "stilDuzen": 1,
+    "render": 2,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 121
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 284,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 195,
+   "loafEnUzun": 195,
+   "loafKaynak": [
+    {
+     "t": 19,
+     "sure": 195,
+     "engel": 72,
+     "betik": 195,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

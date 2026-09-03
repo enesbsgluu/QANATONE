@@ -1,0 +1,137 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-02T23:04:43.317Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1872,
+  "lcpEl": "span",
+  "cls": 0.2106,
+  "clsKaynak": [
+   {
+    "t": 2455,
+    "v": 0.2106,
+    "el": "div.fl-ray"
+   }
+  ],
+  "inp": 320,
+  "inpHedef": "video.fl-video keydown",
+  "etkilesim": 10,
+  "loaf": 19,
+  "loafToplam": 3510,
+  "loafEnUzun": 1031,
+  "loafKaynak": [
+   {
+    "t": 85,
+    "sure": 1031,
+    "engel": 811,
+    "betik": 1028,
+    "stilDuzen": 2,
+    "render": 3,
+    "kaynak": [
+     {
+      "src": "Film.astro_astro_type_script_index_0_lang.BbC15Q94.js",
+      "fn": "",
+      "cagiran": "import.then",
+      "sure": 5
+     }
+    ]
+   },
+   {
+    "t": 1174,
+    "sure": 701,
+    "engel": 0,
+    "betik": 693,
+    "stilDuzen": 2,
+    "render": 8,
+    "kaynak": []
+   },
+   {
+    "t": 8647,
+    "sure": 246,
+    "engel": 0,
+    "betik": 226,
+    "stilDuzen": 1,
+    "render": 20,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 17
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 484,
+   "lcpEl": "span",
+   "cls": 0.5381,
+   "clsKaynak": [
+    {
+     "t": 342,
+     "v": 0.5381,
+     "el": "span.orb"
+    }
+   ],
+   "inp": 136,
+   "inpHedef": "video.fl-video keydown",
+   "etkilesim": 10,
+   "loaf": 14,
+   "loafToplam": 1345,
+   "loafEnUzun": 154,
+   "loafKaynak": [
+    {
+     "t": 29,
+     "sure": 154,
+     "engel": 45,
+     "betik": 70,
+     "stilDuzen": 84,
+     "render": 84,
+     "kaynak": []
+    },
+    {
+     "t": 2034,
+     "sure": 134,
+     "engel": 47,
+     "betik": 38,
+     "stilDuzen": 1,
+     "render": 96,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 94
+      }
+     ]
+    },
+    {
+     "t": 7302,
+     "sure": 133,
+     "engel": 0,
+     "betik": 120,
+     "stilDuzen": 2,
+     "render": 13,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 10
+      }
+     ]
+    }
+   ],
+   "yol": "/yeni/",
+   "kapi": {
+    "lcp": true,
+    "cls": false,
+    "inp": true
+   },
+   "gecti": false
+  }
+ ]
+}

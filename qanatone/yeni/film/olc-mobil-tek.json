@@ -1,0 +1,99 @@
+{
+ "_": "yeni/film/olc-mobil.cjs — 1440x900 anayasa denetimi: yatay tasma (kapi 0) · dokunma hedefi <44px (yenide fazla olan kirmizi) · sabit katman · bolum boylari",
+ "olcum": "2026-09-03T01:43:25.409Z",
+ "tarayici": "brave",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "hedef": 44,
+ "kirmizi_kontrol": {
+  "tasma": true,
+  "hedef": true
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/",
+   "eskiYol": "/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 29,
+    "yeni": 30,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 10445,
+    "yeni": 10486
+   },
+   "bolum": {
+    "eski": [
+     "hero:900",
+     "ticker:143",
+     "projeler:2484",
+     "prjall:0",
+     "katman:943",
+     "akis:828",
+     "sektor:701",
+     "sekpanel:0",
+     "tespit:678",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:1134",
+     "sozband:0",
+     "kurucu:582",
+     "sss:0",
+     "iletisim:570",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:732"
+    ],
+    "yeni": [
+     "fl:0"
+    ]
+   }
+  }
+ ],
+ "kirmizi": []
+}
