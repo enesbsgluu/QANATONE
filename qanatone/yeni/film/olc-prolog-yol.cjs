@@ -87,6 +87,26 @@ const EXE = (process.env.TARAYICI === 'chrome')
       + (kusur.length ? '  !! ' + kusur.join(' | ') : ''));
   }
   await browser.close();
+  /* PROLOG ANAHTARI KAPALIYSA DORT YOL KONUSUZDUR (6 Eyl 2026).
+     content.json'da theme.motion.prolog = 0 ise ana sayfada film YOK; o
+     halde "yol 1 normal kurulmadi" demek YANLIS KIRMIZI olur. Sessizce
+     gecmek de YANLIS YESIL olurdu, o yuzden durum ADIYLA yazilir ve TEK
+     ters sart sinanir: hicbir yolda film izi GORUNMEMELI. */
+  let prologAcik = true;
+  try {
+    const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'content.json'), 'utf8'));
+    prologAcik = ((c.theme || {}).motion || {}).prolog !== 0;
+  } catch (e) { /* okunamazsa acik varsay */ }
+  if (!prologAcik) {
+    const sizan = sonuc.filter((r) => r.flVar);
+    console.log('\n!! PROLOG ANAHTARI KAPALI (theme.motion.prolog = 0) — dort yol KONUSUZ.');
+    console.log('   Ters sart: hicbir yolda film izi olmamali -> ' + (sizan.length ? 'SIZINTI: ' + sizan.map((r) => r.yol).join(', ') : 'TEMIZ'));
+    fs.writeFileSync(path.join(__dirname, 'olc-prolog-yol.json'), JSON.stringify({
+      _: 'yeni/film/olc-prolog-yol.cjs — PROLOG KAPALI: dort yol konusuz, yalniz ters sart (film izi yok) sinandi.',
+      olcum: new Date().toISOString(), prolog_acik: false, ters_sart_temiz: sizan.length === 0, sonuc,
+    }, null, 1));
+    process.exit(sizan.length === 0 ? 0 : 1);
+  }
   const kaldi = sonuc.filter((s) => s.kusur.length).length;
   fs.writeFileSync(path.join(__dirname, 'olc-prolog-yol.json'), JSON.stringify({ _: 'yeni/film/olc-prolog-yol.cjs — prologun dort yolu: normal / atlandi / hareket-azaltma / mobil.', olcum: new Date().toISOString(), sayfa: SAYFA, boz: BOZ, sonuc }, null, 1));
   console.log('\nHUKUM: ' + (kaldi === 0 ? 'GECTI' : 'KALDI (' + kaldi + ' yol)'));
