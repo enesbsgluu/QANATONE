@@ -364,6 +364,16 @@ gorunum:{t:'Görünüm & Hareket',n:()=>'yeni',f:()=>`
   <b>kapalı</b> tüm animasyonları durdurur. Ziyaretçinin cihazında "hareketi azalt"
   açıksa site zaten kendiliğinden kapalı davranır.</div>
   ${opt('Hareket seviyesi','theme.motion.level',[['full','Tam'],['soft','Sakin'],['off','Kapalı']])}
+  <h4 class="sec">Ana sayfa prologu</h4>
+  <div class="sws">
+    ${sw('Prolog (ana sayfa açılış filmi)','theme.motion.prolog')}
+  </div>
+  <p class="hint">Kapatınca prolog filmi ana sayfaya <b>hiç girmez</b> — bölüm,
+    film.css ve motorun betiği derlemeye dahil edilmez. Yani kapalı hâli açık
+    hâliyle aynı yükü taşımaz; sayfa küçülür ve kaydırma bedeli düşer.
+    TR ve EN ana sayfa aynı anahtarı kullanır. Kapalıyken gövde normal akışta
+    başlar; site geri kalanı etkilenmez. Değişiklik <b>Yayınla</b> dedikten
+    sonra yeniden derlemeyle geçerli olur.</p>
   <h4 class="sec">Katmanlar</h4>
   <div class="sws">
     ${sw('Tanecik dokusu','theme.motion.grain')}

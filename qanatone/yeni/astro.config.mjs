@@ -2,6 +2,14 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 
+/* PROLOG ANAHTARI BURADA DEGIL — denendi ve OLCUMLE ELENDI (6 Eyl 2026).
+   `vite.define` ile `import.meta.env.PROLOG_ACIK` sabiti gomulup sayfada
+   olu dal uretildi; Astro sayfanin CSS'ini TREE-SHAKE'ten ONCE modul
+   grafiginden topladigi icin `film.<hash>.css` (8.011 B) kapaliyken de
+   sayfaya BAGLI kaldi (css farki 0 B). Calisan yol: ITHALIN METNINI
+   uretmek — `yeni/kabuk-derle.cjs` her derlemede `PrologYuvasi.astro`
+   yazar. Bu not, ayni yolun ikinci kez denenmemesi icin duruyor. */
+
 /* KUNYE TARAYICIYA GITMIYOR (24 Agu). Prolog JSON'lari hem VERI hem
    KUNYE tasiyor: her blogun `_` alani o sayinin NEDEN o oldugunu
    yaziyor ve bu bilerek boyle - sayi ile gerekcesi ayni dosyada durur,

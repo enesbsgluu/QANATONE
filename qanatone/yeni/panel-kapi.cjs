@@ -101,6 +101,11 @@ const ALAN = [
 const ANAHTAR = [ /* dugmeler: data-sw yolu, beklenen iz (deger 1 iken dist'te ARANMAYAN sinif) */
   { sekme: 'gorunum', sw: 'theme.motion.stars', iz: 't-nostars', not: 'yıldız tuvali' },
   { sekme: 'soz', sw: 'theme.testi.on', iz: null, not: 'söz bandı bayrağı' },
+  /* PROLOG ANAHTARI (Enes, 6 Eyl 2026 — "panelde tek tus"). TERS IZ:
+     acikken `<section class="fl"` VAR, kapaninca YOK. Kapatinca sayfaya
+     film.css de motorun betigi de GIRMEZ (olculdu: -53.824 B, -%20,3;
+     film ETKINKEN INP 824 -> 48 ms, LCP 1.304 -> 260 ms). */
+  { sekme: 'gorunum', sw: 'theme.motion.prolog', iz: '<section class="fl"', ters: true, not: 'ana sayfa prologu (film)' },
 ];
 
 function sunucu() {
@@ -211,7 +216,11 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
   console.log('derleniyor (dolu)…'); derle();
   const dn1 = denetim();
   for (const a of ALAN) { a.gorundu = a.sayfa.filter((s) => oku(s).includes(a.deger)); }
-  for (const k of ANAHTAR) { k.gorundu = k.iz ? !oku('index.html').includes(k.iz) : true; }
+  /* TERS IZ (6 Eyl 2026): normalde `iz` anahtar KAPALIYKEN gorunen
+     isarettir; `ters: true` olanlarda isaret ACIKKEN gorunur (prolog:
+     `<section class="fl"`). Ikisi de ayni seyi kanitlar — anahtarin
+     uretilen sayfayi GERCEKTEN degistirdigini. */
+  for (const k of ANAHTAR) { k.gorundu = k.iz ? (k.ters ? oku('index.html').includes(k.iz) : !oku('index.html').includes(k.iz)) : true; }
   const sozBant = oku('index.html');
   /* 2) BOS */
   for (const a of ALAN) { if (a.kirmizi) continue; await yaz(a.sekme, a.p, ''); }
@@ -227,7 +236,7 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
   const dn2 = denetim();
   const sizinti = ['index.html', 'en/index.html', 'hukuki/index.html', 'otomasyon/index.html'].map((s) => [s, (oku(s).match(/>(undefined|null|\[object Object\])</g) || []).length]).filter((x) => x[1]);
   for (const a of ALAN) { if (!a.kirmizi) a.bosSizinti = a.sayfa.filter((s) => oku(s).includes(a.deger)); }
-  for (const k of ANAHTAR) { k.kapali = k.iz ? oku('index.html').includes(k.iz) : true; }
+  for (const k of ANAHTAR) { k.kapali = k.iz ? (k.ters ? !oku('index.html').includes(k.iz) : oku('index.html').includes(k.iz)) : true; }
   /* 3) GERI YUKLE */
   fs.writeFileSync(path.join(KOK, 'content.json'), yedek);
   console.log('derleniyor (geri yükleme)…'); derle();
@@ -245,7 +254,7 @@ const idOf = (p) => '#f-' + String(p).replace(/\W+/g, '-');
   }
   for (const k of ANAHTAR) {
     const ok = k.yazildi && k.taslakta && k.gorundu && k.kapali; if (!ok) kaldi++;
-    console.log(`| ${k.sw} (${k.not}) | ${k.yazildi ? '✓' : '✗'} | ${k.taslakta ? '✓' : '✗'} | ✓ | ${k.iz ? (k.gorundu ? '✓ açıkken ' + k.iz + ' yok' : '✗') : 'bayrak (görsel bant eski sitede)'} | ${k.iz ? (k.kapali ? 'kapalıyken ' + k.iz + ' var' : 'SIZINTI') : '—'} | ${ok ? 'GEÇTİ' : 'KALDI'} |`);
+    console.log(`| ${k.sw} (${k.not}) | ${k.yazildi ? '✓' : '✗'} | ${k.taslakta ? '✓' : '✗'} | ✓ | ${k.iz ? (k.gorundu ? '✓ açıkken ' + k.iz + (k.ters ? ' VAR' : ' yok') : '✗') : 'bayrak (görsel bant eski sitede)'} | ${k.iz ? (k.kapali ? 'kapalıyken ' + k.iz + (k.ters ? ' YOK' : ' var') : 'SIZINTI') : '—'} | ${ok ? 'GEÇTİ' : 'KALDI'} |`);
   }
   console.log(`\nDENETIM (dolu): ${dn1.gecti} geçti · ${dn1.kaldi} kaldı · DENETIM (boş): ${dn2.gecti} geçti · ${dn2.kaldi} kaldı · boş hâlde undefined/null sızıntısı: ${sizinti.length ? JSON.stringify(sizinti) : 'yok'}`);
   for (const [ad, dn] of [['dolu', dn1], ['bos', dn2]]) for (const k of dn.kirmizilar || []) console.log(`  DENETIM ${ad} KIRMIZI: ${k}`);
