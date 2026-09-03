@@ -108,6 +108,29 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   sayfasında `akd` demoları yoktu (yalnız ana sayfa şeridi); `.hd-demo` kalktı.
   Detay sayfalarında animasyon = kaynağın kendi sahneleri (Tırmanış/huni/akış/
   platform/canlı işler), kareleri ve sürücüsü kaynaktan.
+- **Mobilde prolog yok (Enes, 3/4 Eyl):** ana sayfa telefonda doğrudan siteyi
+  gösterir. Karar TEK yerde verilir: satır içi erken betik `data-film="mobil"`
+  yazar, modül onu görünce hiçbir şey kurmaz, CSS aynı kapıyı ayrıca tutar.
+  Modül kendi ölçümünü kurarsa `/film` sayfasının JS tavanı aşılır.
+- **Yazı ailesi (anayasa istisna 1):** Uncut Sans her alan; tek istisna ana
+  sayfa hero başlığı. Kaynakta Playfair olan bir başlığı taşırken aile
+  `--f-baslik` tokenine bağlanır, ölçüler (boy, ağırlık, satır aralığı)
+  kaynaktan kalır. Playfair'i geri yazmak istisna listesini deler.
+- **Ana sayfa destesi dört kart** (kaynak `DESTE_PROJE=4`); tam arşiv
+  `/projeler`'de. Deste rayının boyu kart sayısıdır: kart yüksekliği, marj
+  ve sticky üst zaten birebirdi, altı kart 972 px fazla ray demekti.
+- **Ölçüm düzeneği: eski ağaç kendini çalışma anında kurar.** Uzun turda
+  (100+ yükleme) yarım ölçülür ve sahte sapma üretir. Üç kalıcı kural:
+  (a) bekleme ölçütü süre değil KARARLILIK (yapısal sinyal iki okumada aynı),
+  (b) varlık kümesi opaklığa bakmaz (eski ağaç `.rv` ile opacity 0 doğar),
+  (c) kabuk öğeleri (nav/footer) SİTE GENELİ kümede aranır — bir sayfada
+  görüldüyse vardır. Tek sayfa koşumu temizken tur kirliyse sebep budur.
+- **Kilitli sahnede kare almak (`olc-kilitli.cjs`):** yan yana kare çalışmaz,
+  iki farklı scrollY aynı kareyi verebilir. Sahnenin KENDİ ilerlemesi okunur,
+  etkin aralık ölçülür (formül iki ağaçta farklı), p=0..1 örneklenir, her
+  adımda değer DURULANA kadar beklenir (eski ağaçta scrub var). CSS sayacı
+  `::after` içeriği `textContent`e girmez ve `getComputedStyle` sayacı çözmez
+  — değer `counterReset`ten okunur.
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
