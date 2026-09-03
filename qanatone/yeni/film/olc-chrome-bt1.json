@@ -1,0 +1,157 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T03:17:33.759Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 784,
+  "lcpEl": "h1",
+  "cls": 0.2325,
+  "clsKaynak": [
+   {
+    "t": 2422,
+    "v": 0.2325,
+    "el": "article",
+    "kaynak": [
+     {
+      "el": "article",
+      "once": [
+       312,
+       164,
+       800,
+       736
+      ],
+      "sonra": [
+       312,
+       884,
+       800,
+       16
+      ]
+     },
+     {
+      "el": "a.pgback",
+      "once": [
+       312,
+       119,
+       61,
+       22
+      ],
+      "sonra": [
+       312,
+       839,
+       61,
+       22
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars bitcursor"
+   }
+  ],
+  "inp": 32,
+  "inpHedef": "#icerik keydown",
+  "etkilesim": 7,
+  "loaf": 6,
+  "loafToplam": 920,
+  "loafEnUzun": 297,
+  "loafKaynak": [
+   {
+    "t": 488,
+    "sure": 297,
+    "engel": 0,
+    "betik": 296,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": []
+   },
+   {
+    "t": 85,
+    "sure": 253,
+    "engel": 62,
+    "betik": 252,
+    "stilDuzen": 0,
+    "render": 0,
+    "kaynak": []
+   },
+   {
+    "t": 2301,
+    "sure": 121,
+    "engel": 71,
+    "betik": 120,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 120
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 130,
+     "v": 0.0013,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 66,
+   "loafEnUzun": 66,
+   "loafKaynak": [
+    {
+     "t": 64,
+     "sure": 66,
+     "engel": 5,
+     "betik": 18,
+     "stilDuzen": 0,
+     "render": 48,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

@@ -1,0 +1,134 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T03:06:07.784Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1460,
+  "lcpEl": "p.sh-lede",
+  "cls": 0.5053,
+  "clsKaynak": [
+   {
+    "t": 2463,
+    "v": 0.5053,
+    "el": "#fl-govde"
+   }
+  ],
+  "inp": 88,
+  "inpHedef": "#icerik keydown",
+  "etkilesim": 10,
+  "loaf": 9,
+  "loafToplam": 2254,
+  "loafEnUzun": 739,
+  "loafKaynak": [
+   {
+    "t": 726,
+    "sure": 739,
+    "engel": 0,
+    "betik": 735,
+    "stilDuzen": 1,
+    "render": 4,
+    "kaynak": []
+   },
+   {
+    "t": 136,
+    "sure": 548,
+    "engel": 63,
+    "betik": 547,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": []
+   },
+   {
+    "t": 2164,
+    "sure": 299,
+    "engel": 87,
+    "betik": 283,
+    "stilDuzen": 4,
+    "render": 16,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 121
+     },
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 12
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 276,
+   "lcpEl": "p.sh-lede",
+   "cls": 0.0012,
+   "clsKaynak": [
+    {
+     "t": 185,
+     "v": 0.0012,
+     "el": "svg"
+    },
+    {
+     "t": 314,
+     "v": 0,
+     "el": "span"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "section.sh-sahne pointerdown",
+   "etkilesim": 10,
+   "loaf": 6,
+   "loafToplam": 529,
+   "loafEnUzun": 153,
+   "loafKaynak": [
+    {
+     "t": 573,
+     "sure": 153,
+     "engel": 66,
+     "betik": 38,
+     "stilDuzen": 2,
+     "render": 115,
+     "kaynak": [
+      {
+       "src": "tubes.min.js",
+       "fn": "e",
+       "cagiran": "FrameRequestCallback",
+       "sure": 113
+      }
+     ]
+    },
+    {
+     "t": 23,
+     "sure": 103,
+     "engel": 15,
+     "betik": 49,
+     "stilDuzen": 54,
+     "render": 54,
+     "kaynak": []
+    },
+    {
+     "t": 463,
+     "sure": 96,
+     "engel": 0,
+     "betik": 93,
+     "stilDuzen": 3,
+     "render": 3,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

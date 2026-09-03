@@ -1,0 +1,161 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T23:53:58.465Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 60,
+   "farkYuzde": 9.36,
+   "farkliPiksel": 121344,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 2/8 sutun 4/8 (x 540-720, y 113-225; hucrede 12204 px, tum farkin %10)",
+   "md5": {
+    "once": "4f3d43632effd0a183cedde4b462bbcc",
+    "sonra": "a79ce7cc99c9a0c83cfb4642565946de"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1454,
+     "sonra": 1580
+    },
+    "gercek": {
+     "once": 1731,
+     "sonra": 1580
+    }
+   },
+   "sapma": {
+    "once": 277,
+    "sonra": 0
+   },
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-geo-once-60.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-geo-sonra-60.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-geo-yanyana-60.png"
+   }
+  },
+  {
+   "konum": 80,
+   "farkYuzde": 7.29,
+   "farkliPiksel": 94518,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 8088 px, tum farkin %9)",
+   "md5": {
+    "once": "75cdc36321de86dcd9969d73ec1c3be8",
+    "sonra": "73d5e9af61a995aa5b866d3105b4c0ae"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1938,
+     "sonra": 2107
+    },
+    "gercek": {
+     "once": 1938,
+     "sonra": 2107
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-geo-once-80.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-geo-sonra-80.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-geo-yanyana-80.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/hizmetler/geo/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 2,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 3323,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 60,
+    "hedef": 1454,
+    "gercek": 1731,
+    "sapma": 277,
+    "md5": "4f3d43632effd0a183cedde4b462bbcc",
+    "png": "yeni/film/kontak-tur9/hz2-geo-once-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": 80,
+    "hedef": 1938,
+    "gercek": 1938,
+    "sapma": 0,
+    "md5": "75cdc36321de86dcd9969d73ec1c3be8",
+    "png": "yeni/film/kontak-tur9/hz2-geo-once-80.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/hizmetler/geo/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 3534,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": 60,
+    "hedef": 1580,
+    "gercek": 1580,
+    "sapma": 0,
+    "md5": "a79ce7cc99c9a0c83cfb4642565946de",
+    "png": "yeni/film/kontak-tur9/hz2-geo-sonra-60.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 80,
+    "hedef": 2107,
+    "gercek": 2107,
+    "sapma": 0,
+    "md5": "73d5e9af61a995aa5b866d3105b4c0ae",
+    "png": "yeni/film/kontak-tur9/hz2-geo-sonra-80.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ }
+}

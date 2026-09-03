@@ -1,0 +1,110 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T22:30:42.722Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "atlandi (tek konum — en az iki konum ver)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": "s1",
+   "farkYuzde": 3.5,
+   "farkliPiksel": 45380,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 2/8 sutun 5/8 (x 720-900, y 113-225; hucrede 8319 px, tum farkin %18)",
+   "md5": {
+    "once": "e3608824748571442df8adcadb34cf78",
+    "sonra": "c2f8db74621a2def791330242fc1adba"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 9545,
+     "sonra": 12259
+    },
+    "gercek": {
+     "once": 9545,
+     "sonra": 11697
+    }
+   },
+   "sapma": {
+    "once": 0,
+    "sonra": -562
+   },
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/sadakat-e-footer-once-s1.png",
+    "sonra": "yeni/film/kontak-tur9/sadakat-e-footer-sonra-s1.png",
+    "yanyana": "yeni/film/kontak-tur9/sadakat-e-footer-yanyana-s1.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 105,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 99,
+   "video": 0
+  },
+  "scrollHeight": 10445,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 9545,
+    "gercek": 9545,
+    "sapma": 0,
+    "md5": "e3608824748571442df8adcadb34cf78",
+    "png": "yeni/film/kontak-tur9/sadakat-e-footer-once-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 105
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 12,
+   "sonsuzSifirlanan": 5,
+   "sonluBitirilen": 7,
+   "video": 0
+  },
+  "scrollHeight": 13159,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 12259,
+    "gercek": 11697,
+    "sapma": -562,
+    "md5": "c2f8db74621a2def791330242fc1adba",
+    "png": "yeni/film/kontak-tur9/sadakat-e-footer-sonra-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 12
+   }
+  ]
+ }
+}
