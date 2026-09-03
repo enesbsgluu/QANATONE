@@ -1,7 +1,7 @@
 {
- "_": "BIRIM DENETIMI — TARAMA CIKTISI, DOGRULANMADI. Is akisi dogrulama fazi bitmeden DURDURULDU (oturum limiti). Bu liste HUKUM DEGIL, IZ: her kalem karsit merceklerden gecmeden findi sayilmaz. Sorulan soru: esigin birimi MUTLAK mi yoksa olculen nesneler arasinda DEGISEN bir seye bolunen TUREV mi (Kapi B nin 5 Eyl gecesi duzeltilen hatasinin ayni sinifi).",
+ "_": "BIRIM DENETIMI — tarama + ELDE DOGRULAMA (5/6 Eyl 2026). Sorulan soru: esigin birimi MUTLAK mi, yoksa OLCULEN NESNELER ARASINDA DEGISEN bir seye bolunen TUREV mi (Kapi B nin 5 Eyl gecesi duzeltilen hatasinin ayni sinifi). Tarama 80 iz cikardi; dogrulamada bunlarin cogu CURUDU cunku tarama RAPOR EDILEN ORANI KAPI SANDI.",
  "olcum": "2026-09-03T20:10:13.586Z",
- "durum": "TARAMA TAMAM · DOGRULAMA YARIM",
+ "durum": "TARAMA TAMAM · DOGRULAMA ELDE YAPILDI (verdikt ureten yerler tek tek okundu)",
  "kalem": 80,
  "bulgu": [
   {
@@ -1121,5 +1121,63 @@
    "kanit": "if (d > 1) atlanan += d - 1;",
    "mutlak_karsiligi": "atlanan kareyi sureye cevirmek: (d - 1) / fps saniye — butun surumlerde ayni birim"
   }
- ]
+ ],
+ "dogrulama": {
+  "yontem": "Her aday dosyada once \"hukum ureten satir var mi\" olculdu (GECTI/KALDI/GECER/ASIYOR/exit kodu), sonra hukum verenlerin paydasi okundu. Tarama fazi bu ayrimi yapmamisti: 37 aracin cogunda oran YALNIZCA RAPOR SATIRI.",
+  "ayakta": [
+   {
+    "dosya": "yeni/film/olc-hiz.cjs",
+    "satir": 389,
+    "sabit": "kapi_yuzde (TAKILMA_YUZDE_TAVAN = 3)",
+    "neden": "GERCEK KAPI: ortanca(100 * takilma.toplam_ms / 1000 / tur_sn) <= 3 -> \"GECER\"/\"ASIYOR\". Payda tur_sn.",
+    "agirlastiran": "PAYDA, SINANAN DEGISKENIN TA KENDISI. Arac TAVANLAR=1.5,2,2.25,2.5 adaylarini kiyasliyor ve kunyesinde yazdigi gibi \"bir tavan turu KISALTIYOR\". Aracin kendi sabitlerinden turetilir: ray_px 120.565 / pxSn 450 = 268 sn (1x); tavan 1,5 -> ~179 sn, 2,0 -> 128 sn (olculen tur 113,8), 2,5 -> ~107 sn. Yani aday kumesi boyunca payda 1,67 KAT degisiyor ve HIZLI ADAY, ayni mutlak takilmayla, orantili olarak 1,67 kat kotu okunuyor.",
+    "not": "Kapi B den FARKI ve DAHA AGIR olmasinin sebebi bu: orada payda sayfadan sayfaya degisiyordu, burada payda KARARIN KENDISI. Enes bu araci \"hangi tavan\" karari icin kosuyor.",
+    "dayanak_ayni_kunyeden": "Enes in aracin basina yazdigi degismez: \"klibin hic takilmadan ilerlemesi\" — mutlak takilma, oran degil.",
+    "onerilen": "kapi_yuzde bilgi satirina dussun; bloklayici olarak zaten var olan MUTLAK kalemler kalsin (kapi_tek = TAKILMA_TEK_MS ve kare p95). KARAR ENES IN — bu turda DEGISTIRILMEDI.",
+    "ek_gozlem": "Mevcut kayitta kapi_tek zaten \"ASIYOR\" durumda (tavan 2). Bu bu gecenin isi degil, ayri acik kalem."
+   },
+   {
+    "dosya": "yeni/film/olc-sayfa.cjs",
+    "satir": 276,
+    "sabit": "TOPLAM_ORAN = 0.03",
+    "neden": "GERCEK KAPI (Kapi A). Payda tur_ms. Ayni sinif.",
+    "not": "ZATEN BILINIYOR: 5 Eyl gecesi rapora ve Enes in karar listesine yazildi. Tarama koşulunda gozlenen tavan %0,92 oldugu icin BUGUN BAGLAYICI DEGIL — uyuyan yanlis birim.",
+    "onerilen": "Kapi B ile ayni duzeltme. KARAR ENES IN."
+   }
+  ],
+  "curuyen": [
+   {
+    "dosya": "yeni/film/olc-karehizi.cjs",
+    "sabit": "atlamaOrani · savurma penceresi",
+    "neden": "ARACTA HIC KAPI YOK — ne GECTI/KALDI, ne esik, ne cikis kodu. Oran yalnizca rapor satirinda basiliyor. Ayrica arac fps kiyaslanabilirligini BILEREK cozmus: farkliGoruntu, kaynagin 24 fps ine esleniyor (kunyede yazili)."
+   },
+   {
+    "dosya": "yeni/film/olc-tavan-sonum.cjs",
+    "sabit": "atlamaOrani · atlamaliGecisOrani",
+    "neden": "ARACTA HIC KAPI YOK. Rapor satiri."
+   },
+   {
+    "dosya": "yeni/film/olc-zincir.cjs",
+    "sabit": "rAF dusme orani · dusen kare · devir penceresi",
+    "neden": "AKIS KAPISI zaten MUTLAK birimde: oturum basina inen bayt (MiB) ve bellek tepesi (MiB). Kunye acikca \"toplam disk bayti kapi DEGIL\" diyor — dogru birim SECILMIS. Oranlar rapor satiri."
+   },
+   {
+    "dosya": "yeni/film/olc-cls-kosul.cjs",
+    "sabit": "KAPI = 0.1",
+    "neden": "CLS TANIMI GEREGI normalize bir puandir ve 0,1 sektorun mutlak esigidir; \"payda degisiyor\" demek CLS nin kendi tanimina itiraz etmek olur. Kusur degil."
+   },
+   {
+    "dosya": "yeni/film/olc-kilitli.cjs",
+    "sabit": "N = 26",
+    "neden": "ESIK DEGIL: kaba taramanin adim sayisi. Hicbir hukum uretmiyor."
+   },
+   {
+    "dosya": "yeni/film/olc-varlik.cjs",
+    "sabit": "oran (satirIci / html)",
+    "neden": "KAPI DEGIL, rapor. Yine de kucuk bir istatistik notu birakiliyor: ozet satiri ORANLARIN ORTALAMASINI aliyor (ort(\"oran\")), bu TOPLAMLARIN ORANI degildir; kucuk sayfalar buyuk sayfalarla ayni agirligi aliyor. Hukum uretmedigi icin acil degil."
+   }
+  ],
+  "ozet": "Tarama 80 iz cikardi; hukum ureten yer sayisi cok daha az. YENI ve GERCEK tek bulgu: olc-hiz.cjs kapi_yuzde. Ikincisi (olc-sayfa TOPLAM_ORAN) zaten biliniyordu. Kalanlar rapor satiri ya da dogru birim.",
+  "kalan_is": "Tarama 8 kumede 9.757 satir gezdi ama DOGRULAMA yalnizca en agir izler icin yapildi. Geri kalan izler ayni yontemle (once \"hukum uretiyor mu\") elenebilir; beklenti cogunun curumesi."
+ }
 }
