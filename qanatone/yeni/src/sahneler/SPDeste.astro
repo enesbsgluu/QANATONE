@@ -28,10 +28,18 @@ const on = dil === 'en' ? '/en' : '';
 
 const tum = icerik.projects || [];
 const bul = (s: string) => tum.find((p: any) => p.slug === s);
+/* ANA SAYFA DESTESI DORT KART (kaynak `const DESTE_PROJE=4`, kok 6975;
+   `renderProjects` 6996: `TUM.slice(0, DESTE_PROJE)`). Yeni deste kunyedeki
+   HER karti basiyordu (alti) ve ray 972 px uzuyordu — kart boyu (442), marj
+   (44) ve sticky ust (96) iki agacta ZATEN birebirdi, fark yalniz SAYIYDI:
+   iki fazla kart x (442 + 44) = 972. Olcum: eski kap 1900 px / 4 oge, yeni
+   2872 px / 6 oge (3/4 Eyl, ray-olc). Tam arsiv /projeler'de duruyor. */
+const DESTE_PROJE = 4;
 const kartlar = kunye
   .map((k: { slug: string; w: number; h: number; mw: number; mh: number }) =>
     ({ ...k, p: bul(k.slug) }))
-  .filter((k: any) => k.p);
+  .filter((k: any) => k.p)
+  .slice(0, DESTE_PROJE);
 
 /* Karta özel iki ton — kaynak `HUE` dizisi (index.html 6889) ve
    `hueVars` (6890). Renkler kartın kimliği: aynı sırada aynı ton. */

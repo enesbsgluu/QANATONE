@@ -1238,8 +1238,17 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          Uzunlugu kunyeden alip ayni diziyi kesmek dairesel olurdu —
          her kunye kendini dogrulardi; olculen sey SIRA ve KIMLIK. */
       const fotograflilar = (c2.projects || []).filter(x => x.image && !x.imgc);
-      const beklenen = fotograflilar.slice(0, kunye.length);
-      const onek = kunye.every((k, i) => beklenen[i] && beklenen[i].slug === k.slug);
+      /* ANA SAYFA DESTESI DORT KART (kaynak `const DESTE_PROJE=4`, kok 6975).
+         Kural once kunye uzunlugunu (alti) bekliyordu; deste kaynaga donunce
+         iki is ana sayfada basilmaz oldu. KURAL GEVSEMEDI, ikiye ayrildi:
+         (a) ana sayfada DORT kart TAM olacak, (b) fotografli islerin HEPSI
+         arsivde (/projeler) tam olacak — kanit yuzeyi bir butun olarak
+         korunur, yalniz yeri kaynaktaki gibi. */
+      const DESTE_PROJE = 4;
+      const beklenen = fotograflilar.slice(0, Math.min(DESTE_PROJE, kunye.length));
+      /* kunye sirasi content.json onekiyle ayni mi — TAM listeye bakar
+         (ana sayfa destesi artik dortle kesiliyor, kunye alti tasiyor) */
+      const onek = kunye.every((k, i) => fotograflilar[i] && fotograflilar[i].slug === k.slug);
       const bolum1 = h.slice(h.indexOf('class="sp-sahne"'));
       const deste = bolum1.slice(0, bolum1.indexOf('</section>'));
       /* Karsilastirma COZULMUS metinle: hangi kacis bicimi kullanildigi
@@ -1259,7 +1268,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         for (const [ad, deger] of [['ad', x.name], ['yil', String(x.year)],
                                    ['etiket', T2(x.tag)], ['anlatim', T2(x.text)]])
           if (!metin.includes(String(deger))) kusur.push(`${x.slug}:${ad}-yok`);
-      ol(`H15 · deste icerigi ham HTML'de tam (${beklenen.length} is x ad/yil/etiket/anlatim)`,
+      /* (b) arsiv: fotografli islerin hepsi /projeler'de ham HTML'de */
+      const arsivYol = path.join(KOK, 'projeler', 'index.html');
+      let arsivMetin = '';
+      if (fs.existsSync(arsivYol)) arsivMetin = coz(oku(arsivYol));
+      else kusur.push('arsiv:/projeler yok');
+      for (const x of fotograflilar)
+        for (const [ad, deger] of [['ad', x.name], ['etiket', T2(x.tag)]])
+          if (arsivMetin && !arsivMetin.includes(String(deger))) kusur.push(`arsiv:${x.slug}:${ad}-yok`);
+      ol(`H15 · deste icerigi ham HTML'de tam (ana ${beklenen.length} is x ad/yil/etiket/anlatim · arsiv ${fotograflilar.length} is)`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
