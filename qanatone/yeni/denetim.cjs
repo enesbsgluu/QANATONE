@@ -2472,6 +2472,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const kusur = [];
   const aY = path.join(KOK, 'index.html');
   const fY = path.join(KOK, 'film', 'index.html');
+  /* PROLOG ANAHTARI (6 Eyl 2026): panelden `theme.motion.prolog = 0`
+     denince film ana sayfaya HIC girmez — kural o halde KONUSUZ olur.
+     Sessizce atlanmaz: kapali halde TERS SART sinanir, cunku kapali
+     anahtarin arkasindan olu kod sizmasi da bir kusurdur. */
+  let prologVar = null;
   if (!fs.existsSync(aY)) kusur.push('ana-sayfa-yok');
   else {
     const h = oku(aY);
@@ -2479,7 +2484,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        daraltma dersi: butun betikleri birlestirmek yanlis yesil verir) */
     const erken = [...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)]
       .map((m) => m[1]).filter((b) => /fl-ana/.test(b) && /qanat-prolog-atlandi/.test(b)).join('\n');
-    if (!erken) kusur.push('erken-karar-betigi-yok');
+    prologVar = /<section class="fl"/.test(h);
+    if (!prologVar) {
+      /* KAPALI HAL — kural konusuz, ama olu kod sizmamali */
+      if (erken) kusur.push('prolog-kapali-ama-erken-karar-betigi-var');
+      if (/toggleAttribute\(['"]inert/.test(h)) kusur.push('prolog-kapali-ama-inert-duzenegi-var');
+      if (/class="[^"]*\bfl-govde\b/.test(h)) kusur.push('prolog-kapali-ama-fl-govde-kancasi-var');
+    }
+    else if (!erken) kusur.push('erken-karar-betigi-yok');
     else {
       if (!/inert/.test(erken)) kusur.push('inert-kurulmuyor');
       /* geri alma: fl-js dusunce inert kalkmali — sinifi izleyen bir
@@ -2500,7 +2512,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   /* /film sayfasi bu betigi TASIMAMALI (J1 tavani nedeni yukarida) */
   if (fs.existsSync(fY) && /toggleAttribute\(['"]inert/.test(oku(fY))) kusur.push('film-sayfasina-sizmis');
   ol('FM3 · film önündeyken odak film içinde: kabuk katmanları inert + fl-js düşünce geri alınır',
-     kusur.length === 0, kusur.join(' '));
+     kusur.length === 0, [kusur.join(' '), prologVar === false ? '(prolog KAPALI — kural konusuz; ters şart sınandı: ölü kod yok)' : ''].filter(Boolean).join(' '));
 }
 
 /* ---- P2 · PANEL METIN HATTI (TUR 4, 4 Eyl 2026) ----

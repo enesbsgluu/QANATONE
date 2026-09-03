@@ -1,0 +1,236 @@
+{
+ "_": "Prolog anahtarinin GERCEK kasma bedeli: olc-chrome PROLOG=1 kolu (film ETKINKEN) iki halde. Kapi B prologu atladigi icin onunla olculemez.",
+ "acik": {
+  "lcp": 1304,
+  "lcpEl": "span",
+  "cls": 0.0011,
+  "clsKaynak": [
+   {
+    "t": 1265,
+    "v": 0.0011,
+    "el": "svg",
+    "kaynak": [
+     {
+      "el": "svg",
+      "once": [
+       380,
+       260,
+       680,
+       380
+      ],
+      "sonra": [
+       372,
+       260,
+       680,
+       380
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars prd fl-js fl-ana"
+   }
+  ],
+  "inp": 824,
+  "inpHedef": "video.fl-video keydown",
+  "etkilesim": 10,
+  "loaf": 13,
+  "loafToplam": 2722,
+  "loafEnUzun": 967,
+  "loafKaynak": [
+   {
+    "t": 254,
+    "sure": 967,
+    "engel": 336,
+    "betik": 589,
+    "stilDuzen": 378,
+    "render": 378,
+    "kaynak": []
+   },
+   {
+    "t": 3893,
+    "sure": 806,
+    "engel": 755,
+    "betik": 785,
+    "stilDuzen": 2,
+    "render": 21,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 15
+     }
+    ]
+   },
+   {
+    "t": 2332,
+    "sure": 189,
+    "engel": 66,
+    "betik": 73,
+    "stilDuzen": 2,
+    "render": 116,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 114
+     }
+    ]
+   }
+  ],
+  "yol": "/yeni/",
+  "kapi": {
+   "lcp": true,
+   "cls": true,
+   "inp": false
+  },
+  "gecti": false
+ },
+ "kapali": {
+  "lcp": 260,
+  "lcpEl": "p.sh-lede",
+  "cls": 0.0011,
+  "clsKaynak": [
+   {
+    "t": 171,
+    "v": 0.0011,
+    "el": "svg",
+    "kaynak": [
+     {
+      "el": "svg",
+      "once": [
+       380,
+       260,
+       680,
+       380
+      ],
+      "sonra": [
+       372,
+       260,
+       680,
+       380
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars prd"
+   },
+   {
+    "t": 317,
+    "v": 0,
+    "el": "span",
+    "kaynak": [
+     {
+      "el": "span",
+      "once": [
+       596,
+       749,
+       138,
+       20
+      ],
+      "sonra": [
+       599,
+       749,
+       138,
+       20
+      ]
+     },
+     {
+      "el": "b",
+      "once": [
+       767,
+       749,
+       135,
+       20
+      ],
+      "sonra": [
+       770,
+       749,
+       135,
+       20
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars prd"
+   }
+  ],
+  "inp": 48,
+  "inpHedef": "section.sh-sahne pointerdown",
+  "etkilesim": 10,
+  "loaf": 6,
+  "loafToplam": 571,
+  "loafEnUzun": 173,
+  "loafKaynak": [
+   {
+    "t": 663,
+    "sure": 173,
+    "engel": 92,
+    "betik": 32,
+    "stilDuzen": 1,
+    "render": 141,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "e",
+      "cagiran": "FrameRequestCallback",
+      "sure": 139
+     }
+    ]
+   },
+   {
+    "t": 515,
+    "sure": 107,
+    "engel": 0,
+    "betik": 102,
+    "stilDuzen": 4,
+    "render": 6,
+    "kaynak": []
+   },
+   {
+    "t": 403,
+    "sure": 93,
+    "engel": 40,
+    "betik": 88,
+    "stilDuzen": 1,
+    "render": 5,
+    "kaynak": [
+     {
+      "src": "tubes.min.js",
+      "fn": "",
+      "cagiran": "http://127.0.0.1:8790/js/tubes.min.js",
+      "sure": 27
+     },
+     {
+      "src": "kabuk.js",
+      "fn": "",
+      "cagiran": "import.then",
+      "sure": 58
+     }
+    ]
+   }
+  ],
+  "yol": "/yeni/",
+  "kapi": {
+   "lcp": true,
+   "cls": true,
+   "inp": true
+  },
+  "gecti": true
+ },
+ "fark": {
+  "lcp": -1044,
+  "cls": 0,
+  "inp": -776
+ }
+}

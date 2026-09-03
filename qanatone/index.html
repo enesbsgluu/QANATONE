@@ -5399,7 +5399,13 @@ theme:{
     boyunca duran bir rAF döngüsüydü; kaydırıp geçince bile durmuyordu.
     Tüpler kaldı, imza görünüm o. Panelden Görünüm & Hareket sekmesinden
     tek tıkla geri açılır.                                              */
- motion:{level:'full',grain:1,stars:0,tubes:1,cursor:1,hideCursor:1,tour:1,splash:1},
+ /* prolog: YENI KABUGUN ana sayfa filmi (Enes, 6 Eyl 2026 — "panelde tek tus").
+    Eski site bu anahtari OKUMAZ; buraya girmesinin tek sebebi panelin
+    varsayilan semasini BURADAN alması (__qanatDefaults -> DATA): sema disi
+    anahtarlar taslakta DUSUYOR ve panel kapisi bunu yakaladi (ayak izi
+    "-43 anahtar [theme.motion.prolog ...]"). Semada olmasaydi Enes anahtari
+    kapatip yayinlasa anahtar SILINIR ve prolog sessizce hep acik kalirdi. */
+ motion:{level:'full',grain:1,stars:0,tubes:1,cursor:1,hideCursor:1,tour:1,splash:1,prolog:1},
  hero:{hw:33,hx:-2,hy:-2,rw:33,rx:-2,ry:-2,mask:10,
        ringW:2,ringSpd:3.6,ringTail:56,ringGlow:7},
  /* testi.on: müşteri sözleri bandı (#sozband) açık mı. VARSAYILAN KAPALI —

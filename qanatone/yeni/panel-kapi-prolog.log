@@ -1,0 +1,57 @@
+SEKME: 358 metin listelendi · arama "whatsapp" -> 5 · bölüm "Menü" -> 8
+  PANEL AYAK IZI (dolu): +155 anahtar [settings.orgDesc settings.knowsAbout settings.og strings.tr.pae strings.tr.pah strings.tr.pap strings.tr.calct strings.tr.calch strings.tr.cal1 strings.tr.cal2 strings.tr.cal3 strings.tr.dlt] · -42 anahtar [strings.tr.glb strings.tr.glb1 strings.tr.glb2 strings.tr.glb5 strings.tr.glb3 strings.tr.glb6 strings.tr.glbA strings.tr.glbE strings.tr.glbF strings.tr.glbG strings.tr.glbH strings.tr.glbB]
+derleniyor (dolu)…
+  PANEL AYAK IZI (bos): +155 anahtar [settings.orgDesc settings.knowsAbout settings.og strings.tr.pae strings.tr.pah strings.tr.pap strings.tr.calct strings.tr.calch strings.tr.cal1 strings.tr.cal2 strings.tr.cal3 strings.tr.dlt] · -42 anahtar [strings.tr.glb strings.tr.glb1 strings.tr.glb2 strings.tr.glb5 strings.tr.glb3 strings.tr.glb6 strings.tr.glbA strings.tr.glbE strings.tr.glbF strings.tr.glbG strings.tr.glbH strings.tr.glbB]
+derleniyor (boş)…
+derleniyor (geri yükleme)…
+
+| Alan | Panelde yazıldı | Taslakta | Derlendi | Üretimde göründü | Boş hâli | Hüküm |
+|---|---|---|---|---|---|---|
+| strings.tr.nav0 (menü ilk madde (Nav)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| strings.en.nav0 (menü ilk madde EN) | ✓ | ✓ | ✓ | ✓ en/index.html | temiz | GEÇTİ |
+| strings.tr.foot1 (alt bilgi (Temel)) | ✓ | ✓ | ✓ | ✓ index.html, sss/index.html | temiz | GEÇTİ |
+| strings.tr.gn3 (/otomasyon sabit metni) | ✓ | ✓ | ✓ | ✓ otomasyon/index.html | temiz | GEÇTİ |
+| strings.tr.glbSim (KIRMIZI KONTROL: yalniz eski site okur, yeni sitede gorunmemeli) | ✓ | ✓ | ✓ | görünmedi (beklenen) | — | KIRMIZI YAKALANDI |
+| settings.og (og:image) | ✓ | ✓ | ✓ | ✓ index.html, en/index.html | temiz | GEÇTİ |
+| settings.orgDesc (Organization description (şema)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| legal.line (alt bilgi şirket satırı) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| legal.kvkk (KVKK metni (/hukuki)) | ✓ | ✓ | ✓ | ✓ hukuki/index.html | temiz | GEÇTİ |
+| founder.bio.tr (kurucu biyografisi) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| socials.0.url (sosyal adres (alt bilgi + sameAs)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| testimonials.0.q.tr (müşteri sözü (theme.testi.on=1 ile)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| settings.gtm (ölçüm betiği (GTM/GA)) | ✓ | ✓ | ✓ | ✓ index.html, sss/index.html | temiz | GEÇTİ |
+| settings.whatsapp (WhatsApp numarası (bütün düğmeler)) | ✓ | ✓ | ✓ | ✓ index.html, sss/index.html | temiz | GEÇTİ |
+| founder.bio.en (kurucu biyografisi EN) | ✓ | ✓ | ✓ | ✓ en/index.html | temiz | GEÇTİ |
+| socials.0.label (sosyal hesap etiketi (alt bilgi)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| strings.tr.bkh (bülten dizini başlığı) | ✓ | ✓ | ✓ | ✓ bulten/index.html | temiz | GEÇTİ |
+| strings.tr.s3h (/surec başlığı) | ✓ | ✓ | ✓ | ✓ surec/index.html | temiz | GEÇTİ |
+| strings.tr.s5h (/sss başlığı) | ✓ | ✓ | ✓ | ✓ sss/index.html | temiz | GEÇTİ |
+| strings.tr.hs1 (hesaplayıcı başlığı (TUR 1 kartı)) | ✓ | ✓ | ✓ | ✓ otomasyon/index.html | temiz | GEÇTİ |
+| strings.tr.mf1 (doğru model kartı başlığı (TUR 1)) | ✓ | ✓ | ✓ | ✓ otomasyon/index.html | temiz | GEÇTİ |
+| strings.tr.gn1 (bir gün rayı başlığı (TUR 1)) | ✓ | ✓ | ✓ | ✓ otomasyon/index.html | temiz | GEÇTİ |
+| strings.en.foot1 (alt bilgi EN) | ✓ | ✓ | ✓ | ✓ en/index.html | temiz | GEÇTİ |
+| strings.tr.hzg01 (hizmet detayı — geri bağı) | ✓ | ✓ | ✓ | ✓ hizmetler/seo/index.html | temiz | GEÇTİ |
+| strings.en.hzg13 (hizmet detayı çağrı düğmesi EN) | ✓ | ✓ | ✓ | ✓ en/hizmetler/seo/index.html | temiz | GEÇTİ |
+| strings.tr.hzd01 (/hizmetler dizini) | ✓ | ✓ | ✓ | ✓ hizmetler/index.html | temiz | GEÇTİ |
+| strings.tr.prd01 (/projeler dizini) | ✓ | ✓ | ✓ | ✓ projeler/index.html | temiz | GEÇTİ |
+| strings.tr.prg01 (proje detayı) | ✓ | ✓ | ✓ | ✓ projeler/skyclinics/index.html | temiz | GEÇTİ |
+| strings.tr.bld01 (bülten dizini (M ailesi)) | ✓ | ✓ | ✓ | ✓ bulten/index.html | temiz | GEÇTİ |
+| strings.tr.srg01 (/surec (M ailesi)) | ✓ | ✓ | ✓ | ✓ surec/index.html | temiz | GEÇTİ |
+| strings.tr.ssg01 (/sss (M ailesi)) | ✓ | ✓ | ✓ | ✓ sss/index.html | temiz | GEÇTİ |
+| strings.tr.arc01 (araç sahnesi künyesi) | ✓ | ✓ | ✓ | ✓ hizmetler/web-sitesi-araclar/index.html | temiz | GEÇTİ |
+| strings.tr.plt01 (platform sahnesi künyesi) | ✓ | ✓ | ✓ | ✓ hizmetler/finans/index.html | temiz | GEÇTİ |
+| strings.tr.mtr01 (motor sahnesi künyesi) | ✓ | ✓ | ✓ | ✓ hizmetler/finans/index.html | temiz | GEÇTİ |
+| strings.tr.nfh (404 başlığı) | ✓ | ✓ | ✓ | ✓ 404.html | temiz | GEÇTİ |
+| strings.tr.nfc (404 dönüş bağı) | ✓ | ✓ | ✓ | ✓ 404.html | temiz | GEÇTİ |
+| strings.tr.hkh (/hukuki başlığı (gövde zaten panelden geliyordu)) | ✓ | ✓ | ✓ | ✓ hukuki/index.html | temiz | GEÇTİ |
+| strings.tr.navdil (mobil menü dil bölümü etiketi) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| strings.tr.ldtel (iletişim formu telefon ipucu (GORUNUR OZNITELIK: placeholder)) | ✓ | ✓ | ✓ | ✓ index.html | temiz | GEÇTİ |
+| strings.tr.tsalt (TradeSelf amblemi erişilebilir adı (GORUNUR OZNITELIK: aria-label)) | ✓ | ✓ | ✓ | ✓ hizmetler/finans/index.html | temiz | GEÇTİ |
+| strings.en.nfh (KIRMIZI KONTROL: /404 TR-only, EN degeri uretilen sayfada GORUNMEMELI) | ✓ | ✓ | ✓ | görünmedi (beklenen) | — | KIRMIZI YAKALANDI |
+| theme.motion.stars (yıldız tuvali) | ✓ | ✓ | ✓ | ✓ açıkken t-nostars yok | kapalıyken t-nostars var | GEÇTİ |
+| theme.testi.on (söz bandı bayrağı) | ✓ | ✓ | ✓ | bayrak (görsel bant eski sitede) | — | GEÇTİ |
+| theme.motion.prolog (ana sayfa prologu (film)) | ✓ | ✓ | ✓ | ✓ açıkken <section class="fl" VAR | kapalıyken <section class="fl" YOK | GEÇTİ |
+
+DENETIM (dolu): 62 geçti · 0 kaldı · DENETIM (boş): 62 geçti · 0 kaldı · boş hâlde undefined/null sızıntısı: yok
+ARAMA: 358 metin · "whatsapp" 5 · bölüm Menü 8 · admin.html 88108 B
+HÜKÜM: GEÇTİ

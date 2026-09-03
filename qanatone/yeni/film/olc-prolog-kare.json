@@ -1,0 +1,120 @@
+{
+ "acik": {
+  "/yeni/": {
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "p95_medyan": 16.7,
+   "kare_p95_medyan": 2.012,
+   "takilma_toplam_medyan_ms": 533,
+   "takilma_sayi_medyan": 7,
+   "takilma_tek_max": 142,
+   "tur_ms_medyan": 11863,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "/yeni/en/": {
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "p95_medyan": 16.7,
+   "kare_p95_medyan": 2.012,
+   "takilma_toplam_medyan_ms": 500,
+   "takilma_sayi_medyan": 6,
+   "takilma_tek_max": 142,
+   "tur_ms_medyan": 11880,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "kapali": {
+  "/yeni/": {
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "p95_medyan": 16.7,
+   "kare_p95_medyan": 2.012,
+   "takilma_toplam_medyan_ms": 425,
+   "takilma_sayi_medyan": 5,
+   "takilma_tek_max": 150,
+   "tur_ms_medyan": 11922,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "/yeni/en/": {
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "p95_medyan": 16.7,
+   "kare_p95_medyan": 2.012,
+   "takilma_toplam_medyan_ms": 450,
+   "takilma_sayi_medyan": 6,
+   "takilma_tek_max": 183,
+   "tur_ms_medyan": 11963,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "fark": {
+  "/yeni/": {
+   "kacirilan": 0,
+   "p95_ms": 0,
+   "takilma_toplam_ms": -108,
+   "takilma_sayi": -2,
+   "tek_ms": 8,
+   "tur_ms": 59
+  },
+  "/yeni/en/": {
+   "kacirilan": 0,
+   "p95_ms": 0,
+   "takilma_toplam_ms": -50,
+   "takilma_sayi": 0,
+   "tek_ms": 41,
+   "tur_ms": 83
+  }
+ },
+ "hukum": {
+  "kasma_dustu": true
+ },
+ "_": "yeni/film/olc-prolog-kare.cjs — prolog anahtarinin KARE bedeli. Kapi B araciyla (soguk giris) iki halde olculur; KISMI kapsam (yalniz iki ana sayfa) oldugu icin HUKUM DEGIL FARK olcumudur."
+}

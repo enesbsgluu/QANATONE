@@ -1,0 +1,123 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-03T21:41:42.952Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "tekrar": 3,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.9,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir"
+ },
+ "hukum": "KISMI (1/59 sayfa) — HUKUM DEGIL · ham: GECTI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 59,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/otomasyon/",
+   "js_bayt": 8891,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 845,
+     "tur_ms": 8756,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 308,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "kare": 842,
+     "tur_ms": 8681,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 125,
+     "takilma_tek_max_ms": 67,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "kare": 855,
+     "tur_ms": 8656,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.8,
+   "takilma_oran_medyan": 0.0144,
+   "takilma_tek_max": 100,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kare_p95": 2.024,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "gecti": true
+  }
+ ]
+}

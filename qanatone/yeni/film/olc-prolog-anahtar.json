@@ -1,0 +1,110 @@
+{
+ "acik": {
+  "denetim": {
+   "gecti": 62,
+   "kaldi": 0,
+   "kirmizilar": []
+  },
+  "sayfa": {
+   "index.html": {
+    "html": 149650,
+    "html_gzip": 26484,
+    "css_dosya": 3,
+    "css_bayt": 103976,
+    "js_dosya": 2,
+    "js_bayt": 11011,
+    "satir_ici_betik": 10661,
+    "satir_ici_stil": 3849,
+    "iz": {
+     "film_bolumu": true,
+     "film_css": true,
+     "fl_govde_kancasi": true,
+     "fl_gizli_h1": false
+    }
+   },
+   "en/index.html": {
+    "html": 146414,
+    "html_gzip": 25730,
+    "css_dosya": 3,
+    "css_bayt": 103976,
+    "js_dosya": 2,
+    "js_bayt": 11011,
+    "satir_ici_betik": 10661,
+    "satir_ici_stil": 3849,
+    "iz": {
+     "film_bolumu": true,
+     "film_css": true,
+     "fl_govde_kancasi": true,
+     "fl_gizli_h1": false
+    }
+   }
+  }
+ },
+ "kapali": {
+  "denetim": {
+   "gecti": 62,
+   "kaldi": 0,
+   "kirmizilar": []
+  },
+  "sayfa": {
+   "index.html": {
+    "html": 112595,
+    "html_gzip": 22228,
+    "css_dosya": 2,
+    "css_bayt": 95965,
+    "js_dosya": 1,
+    "js_bayt": 2253,
+    "satir_ici_betik": 9949,
+    "satir_ici_stil": 3849,
+    "iz": {
+     "film_bolumu": false,
+     "film_css": false,
+     "fl_govde_kancasi": false,
+     "fl_gizli_h1": false
+    }
+   },
+   "en/index.html": {
+    "html": 109229,
+    "html_gzip": 21455,
+    "css_dosya": 2,
+    "css_bayt": 95965,
+    "js_dosya": 1,
+    "js_bayt": 2253,
+    "satir_ici_betik": 9949,
+    "satir_ici_stil": 3849,
+    "iz": {
+     "film_bolumu": false,
+     "film_css": false,
+     "fl_govde_kancasi": false,
+     "fl_gizli_h1": false
+    }
+   }
+  }
+ },
+ "fark": {
+  "index.html": {
+   "html": -37055,
+   "html_gzip": -4256,
+   "css_bayt": -8011,
+   "js_bayt": -8758,
+   "satir_ici_betik": -712,
+   "toplam": -53824,
+   "yuzde": -20.3
+  },
+  "en/index.html": {
+   "html": -37185,
+   "html_gzip": -4275,
+   "css_bayt": -8011,
+   "js_bayt": -8758,
+   "satir_ici_betik": -712,
+   "toplam": -53954,
+   "yuzde": -20.6
+  }
+ },
+ "hukum": {
+  "iz_temiz": true,
+  "yuk_dustu": true,
+  "bagimsiz": true
+ },
+ "_": "yeni/film/olc-prolog-anahtar.cjs — panel anahtarinin ACIK/KAPALI yuk farki. Enes in sarti: \"kapali hali acik haliyle ayni yuklenme degerlerinde olmamali\". Tek degisken: theme.motion.prolog. Kare bedeli ayri olculur (olc-soguk.cjs)."
+}

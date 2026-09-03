@@ -52,7 +52,45 @@ function derle() {
 
 module.exports = { derle, VARLIK, GIRISLER };
 
+/* ---- PROLOG YUVASI (Enes, 6 Eyl 2026 — "panelde tek tus") ----
+   `theme.motion.prolog` = 0 ise ana sayfalar prologu HIC ITHAL ETMEZ.
+   Neden URETILEN DOSYA, neden sayfada kosul: uc yol olculdu, ucu de
+   `film.<hash>.css` (8.011 B) baglantisini KALDIRAMADI — statik ithal +
+   kosullu render · dinamik ithal + kosullu render · derleme sabitiyle olu
+   dal. Astro sayfanin CSS'ini modul grafiginden topluyor; grafikte duran
+   ithal, render edilmese de CSS'i sayfaya baglatiyor. Ithal METNI uretilince
+   grafikte de kalmiyor.
+   Dosya HER DERLEMEDE yeniden yazilir (astro build'den ONCE kosar). */
+const YUVA_YOL = path.join(__dirname, 'src', 'parcalar', 'PrologYuvasi.astro');
+function prologAcikMi() {
+  try {
+    const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    return ((c.theme || {}).motion || {}).prolog !== 0;
+  } catch (e) { return true; }   /* okunamazsa ACIK — sessizce dusmesin */
+}
+function yuvaYaz() {
+  const acik = prologAcikMi();
+  const bas = '---\n/* URETILEN DOSYA — yeni/kabuk-derle.cjs yazar, ELLE DUZENLEME.\n'
+    + '   Kaynak: content.json theme.motion.prolog (panelin anahtari).\n';
+  const govde = acik
+    ? bas + '   Prolog ACIK: Film ithal edilir. */\n'
+      + "import Film from './Film.astro';\n"
+      + "interface Props { dil?: 'tr' | 'en' }\n"
+      + "const { dil = 'tr' } = Astro.props;\n---\n"
+      + '<Film dil={dil} sayfa="ana" />\n'
+    : bas + '   Prolog KAPALI: Film ITHAL EDILMEZ — boylece film.css de\n'
+      + '   sayfanin modul grafigine ve <link> zincirine girmez. */\n'
+      + "interface Props { dil?: 'tr' | 'en' }\n---\n";
+  const eski = fs.existsSync(YUVA_YOL) ? fs.readFileSync(YUVA_YOL, 'utf8') : '';
+  if (eski !== govde) fs.writeFileSync(YUVA_YOL, govde);
+  return { acik, degisti: eski !== govde };
+}
+module.exports.yuvaYaz = yuvaYaz;
+module.exports.prologAcikMi = prologAcikMi;
+
 if (require.main === module) {
+  const y = yuvaYaz();
+  console.log(`PrologYuvasi.astro  prolog ${y.acik ? 'ACIK' : 'KAPALI'}${y.degisti ? ' (yeniden yazildi)' : ''}`);
   fs.mkdirSync(VARLIK, { recursive: true });
   const kaynakBoy = (ad) => { const g = GIRISLER[ad]; return g ? ` (kaynak ${fs.statSync(path.join(KABUK, g)).size} B)` : ''; };
   for (const [ad, buf] of Object.entries(derle())) {

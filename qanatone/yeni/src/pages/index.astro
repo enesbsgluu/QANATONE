@@ -31,7 +31,7 @@ import SSZSozler from '../sahneler/SSZSozler.astro';
 import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
-import Film from '../parcalar/Film.astro';
+import PrologYuvasi from '../parcalar/PrologYuvasi.astro';
 import { KOK, icerik } from '../icerik';
 import { anaSema } from '../sema.mjs';
 
@@ -42,6 +42,30 @@ import { anaSema } from '../sema.mjs';
 const BASLIK = 'QANATONE — Talebi yakalayan sistem';
 const ACIKLAMA = 'Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında.';
 const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
+
+/* PROLOG ANAHTARI — `theme.motion.prolog` (Enes, 6 Eyl 2026: "panelde tek
+   tuşla açıp kapatabileyim; kapalı hâli açık hâliyle aynı yüklenme
+   değerlerinde OLMAMALI").
+   VARSAYILAN AÇIK ve anahtar YOKSA da açık (`!== 0`): panelin eski bir
+   içeriği yayınlaması prologu sessizce düşürmesin.
+   Karar DERLEME ANINDA verilir, çalışma anında değil — istenen şey buydu:
+   kapalıyken film bölümü, film.css ve motorun satır içi betiği sayfaya
+   HİÇ girmez, yani bayt da kare bedeli de gerçekten düşer. Çalışma anında
+   gizlemek (display:none) aynı yükü taşırdı.
+   Denetim bunu zaten biliyor: J1/H18/H24 tavanları `<section class="fl"`
+   izine bakıp prologluysa yükseliyor — prolog kapanınca tavan kendiliğinden
+   SIKILAŞIR, bedava geçiş olmaz. */
+/* İTHALİN KENDİSİ ÜRETİLİR — `PrologYuvasi.astro`'yu her derlemede
+   `yeni/kabuk-derle.cjs` yazar (astro build'den önce koşar): prolog açıkken
+   Film'i ithal eder, kapalıyken HİÇBİR ŞEY ithal etmez.
+   NEDEN BÖYLE, ÖLÇÜLDÜ: üç yol denendi ve üçü de `film.<hash>.css`
+   (8.011 B) bağlantısını kaldıramadı — statik ithal + koşullu render,
+   dinamik ithal + koşullu render, derleme sabitiyle ölü dal. Astro sayfanın
+   CSS'ini modül grafiğinden topluyor; grafikte duran ithal, render edilmese
+   de CSS'i sayfaya bağlatıyor.
+   Sayfanın kendi okuması yalnız SARMALIN SINIFI için — o çalışma zamanı
+   okuması modül grafiğine dokunmaz. Kaynak yine tek: content.json. */
+const prologAcik = ((icerik.theme as any)?.motion?.prolog) !== 0;
 ---
 <Temel lead={false} dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
   canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
@@ -81,8 +105,13 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
       sayfanin ONUNDE; govde .fl-govde sarmalinda (film.css: JS + hareket
       acikken sabit katman, devir bitince static). Atlama / oturumda bir kez /
       hareket azaltma: Film.astro + film.css. Bot ve JS'siz yol govdeyi gorur. */}
-  <Film dil="tr" sayfa="ana" />
-  <div class="fl-govde" id="fl-govde">
+  <PrologYuvasi dil="tr" />
+  {/* Sarmalın SINIFI ve ID'si de anahtara bağlı: prolog kapalıyken
+      `.fl-govde` kancası kalırsa geride film.css'i olmayan ölü bir kanca
+      kalır. Sarmalın KENDİSİ duruyor (koşullu açılıp kapanan etiket gövdeyi
+      ikiye kopyalamayı gerektirirdi); sınıfsız hâli düz bir blok, başka
+      hiçbir stil `.fl-govde`ye dokunmuyor — ölçüldü, yalnız film.css. */}
+  <div class:list={[prologAcik && 'fl-govde']} id={prologAcik ? 'fl-govde' : undefined}>
   <div class="ana">
     {/* SADAKAT (3 Eyl 2026, Enes): ESKİ KÖK SİTE BİREBİR, yeni mimari. Sıra
         kök index.html'in kendisi: hero → şerit → projeler → katman → akış →
