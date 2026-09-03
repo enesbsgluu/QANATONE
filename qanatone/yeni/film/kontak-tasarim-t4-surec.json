@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:54:39.291Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 6.31,
+   "farkliPiksel": 81804,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 6274 px, tum farkin %8)",
+   "md5": {
+    "once": "2e390fc3684e517bd45d20d72707b9ba",
+    "sonra": "fef8fff62aba2912e51e11f882e7852b"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-surec-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t4-surec-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-surec-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 50,
+   "farkYuzde": 11.93,
+   "farkliPiksel": 154562,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 17724 px, tum farkin %11)",
+   "md5": {
+    "once": "56a2953d8a41df71e9001632fb24243e",
+    "sonra": "e3779444e9ac8177277c52cdc46cf05c"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 823,
+     "sonra": 1067
+    },
+    "gercek": {
+     "once": 823,
+     "sonra": 1067
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t4-surec-once-50.png",
+    "sonra": "yeni/film/kontak-tur9/t4-surec-sonra-50.png",
+    "yanyana": "yeni/film/kontak-tur9/t4-surec-yanyana-50.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/surec/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 2545,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "2e390fc3684e517bd45d20d72707b9ba",
+    "png": "yeni/film/kontak-tur9/t4-surec-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 50,
+    "hedef": 823,
+    "gercek": 823,
+    "sapma": 0,
+    "md5": "56a2953d8a41df71e9001632fb24243e",
+    "png": "yeni/film/kontak-tur9/t4-surec-once-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/surec/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 3034,
+  "dugmeSayisi": 2,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "fef8fff62aba2912e51e11f882e7852b",
+    "png": "yeni/film/kontak-tur9/t4-surec-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 50,
+    "hedef": 1067,
+    "gercek": 1067,
+    "sapma": 0,
+    "md5": "e3779444e9ac8177277c52cdc46cf05c",
+    "png": "yeni/film/kontak-tur9/t4-surec-sonra-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ }
+}

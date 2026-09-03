@@ -39,7 +39,8 @@ const BKC: Record<string, [string, string]> = {
 const sektorler: string[] = [...new Set(yazilar.map((p: any) => String(p.sector || '')))].filter(Boolean) as string[];
 const sektorAd = (k: string) => (BKC[k] ? (dil === 'en' ? BKC[k][1] : BKC[k][0]) : k);
 const sayim = (k: string) => yazilar.filter((p: any) => p.sector === k).length;
-const suzKural = sektorler.map((k, i) => `.bkf:has(#bkf-${i + 1}:checked)~.yazilar .yazi:not([data-k="${i + 1}"]){display:none}`).join('');
+const suzKural = sektorler.map((k, i) => `.bkf:has(#bkf-${i + 1}:checked)~.bkgrid .bkc:not([data-k="${i + 1}"]){display:none}`).join('');
+const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
 /* Tarih ELDEKİ listeyle basılır, toLocaleDateString ile değil: yerel
    Node 24 ↔ Netlify Node 20 ICU farkı çıktıyı sessizce değiştirebilir;
    YaziGovde da aynı sebepten kendi listesini taşıyor. Biçim eski
@@ -52,7 +53,20 @@ const tarihYaz = (d: string) => {
   return `${t.getDate()} ${AY[t.getMonth()]} ${t.getFullYear()}`;
 };
 ---
+{/* GERI BAGI: kaynakta dizinin ustunde `.pgback` -> "Ana sayfa" (kok bulten
+    bolumu, `data-t="back"`); yeni dizinde yoktu. Hizmet ve proje dizinlerinde
+    zaten var, bulten atlanmis. */}
+<a class="pgback" href={`${B}${on || '/'}`}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('Ana sayfa', 'Home')}</span>
+</a>
+
 <section class="giris">
+  {/* ANAYASA (3/4 Eyl 2026): kaynakta baslik ustunde `.mono` kunyesi var
+      (kok bulten bolumu: `<span class="mono" data-t="bke">Bülten</span>`);
+      yeni dizinde hic basilmiyordu. */}
+  <p class="kunye">{m('bke', 'Bülten')}</p>
   <h1>{m('bkh', 'Veriyle konuşuyoruz.')}
     <span class="say">({yazilar.length})</span></h1>
   <p class="lede">{m('bkp', 'Yapay zekâ, arama ve talep yönetimi tarafında işine dokunan gelişmeleri kaynağıyla birlikte yazıyoruz. Görüş değil rakam; her yazının sonunda "bu senin işin için ne demek" var.')}</p>
@@ -67,15 +81,29 @@ const tarihYaz = (d: string) => {
   </>)}
 </div>}
 <style set:html={suzKural} />
-<div class="yazilar">
+{/* KART = BAGIN KENDISI (ANAYASA, 3/4 Eyl 2026). Kaynakta her yazi karti
+    tek bir `<a class="bkc" href="/bulten/<slug>">` idi: meta satiri (`.m`),
+    Playfair basligi (`h3`), ozet ve alttaki "Oku →" (`.go`). Yeni dizin
+    kartı tiklanabilir DEGILDI — govde `<article>`, tek bag 25x23 px'lik
+    "Oku" idi (mobil denetimde olculdu). Davranis kurali: ayni etkilesim
+    ayni sonucu verir; kartin her yeri yazıya gider. Izgara da kaynagin
+    kendisi: auto-fill minmax(320px, 1fr). */}
+<div class="bkgrid">
   {yazilar.map((p: any) => (
-    <article class="yazi" data-k={sektorler.indexOf(String(p.sector || '')) + 1}>
-      <p class="kunye">{T(p.tag, dil)} · <time datetime={p.date}>{tarihYaz(p.date)}</time>{p.read &&
-        <> · {p.read}{M(' dk okuma', ' min read')}</>}</p>
-      <h2>{T(p.title, dil)}</h2>
+    <a class="bkc" href={`${B}${on}/bulten/${p.slug}`}
+      data-k={sektorler.indexOf(String(p.sector || '')) + 1}>
+      <span class="m">
+        <b>{T(p.tag, dil)}</b>
+        <i></i><span><time datetime={p.date}>{tarihYaz(p.date)}</time></span>
+        {p.read && <><i></i><span>{p.read}{M(' dk okuma', ' min read')}</span></>}
+      </span>
+      <h3>{T(p.title, dil)}</h3>
       <p>{T(p.lede, dil)}</p>
-      <a class="git" href={`${B}${on}/bulten/${p.slug}`}>{M('Oku', 'Read')}</a>
-    </article>
+      <span class="go">{M('Oku', 'Read')}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ok} />
+      </span>
+    </a>
   ))}
 </div>
 
@@ -105,12 +133,44 @@ const tarihYaz = (d: string) => {
   .bkf input:focus-visible + .bkc { outline: 2px solid var(--red); outline-offset: 2px; }
 
   .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
-  .yazilar { display: flex; flex-direction: column; gap: 14px; }
-  .yazi { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-  .yazi .kunye { color: var(--tx3); font-size: .8rem; margin-bottom: 6px; }
-  .yazi h2 { font-size: 1.05rem; margin: 0 0 6px; }
-  .yazi > p:not(.kunye) { color: var(--tx2); font-size: .92rem; }
-  .git { display: inline-block; margin-top: 12px; font-size: .85rem; }
+  /* geri bagi — obur dizinlerdeki kunyenin aynisi (YaziGovde 89-91) */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  /* IZGARA + KART: kaynak `.bkgrid` (2191-2192) ve `.bkc` (2193-2211) birebir.
+     ANAYASA ISTISNA 1: "Uncut Sans her alan; tek istisna ana sayfa hero
+     basligi". Kaynagin Playfair kart basligi bu yuzden --f-baslik tokenine
+     baglanir — arsiv kartinin (.mi h3) yaptiginin aynisi; olculer (400,
+     clamp, satir araligi) kaynaktan kalir. Mono satirlar --f-tek. */
+  .bkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: clamp(14px, 1.6vw, 20px); }
+  .bkc { display: flex; flex-direction: column; gap: 11px; border: 1px solid var(--line);
+    border-radius: var(--r, 18px); padding: clamp(20px, 2.4vw, 28px); color: inherit;
+    text-decoration: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.006)); }
+  .bkc .m { display: flex; align-items: center; gap: 10px; font-family: var(--f-tek);
+    font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
+  .bkc .m b { color: var(--red-soft); font-weight: 500; }
+  .bkc .m i { width: 3px; height: 3px; border-radius: 50%; background: var(--tx4); font-style: normal; }
+  .bkc h3 { font-family: var(--f-baslik); font-weight: 400;
+    font-size: clamp(1.14rem, 1.7vw, 1.38rem); line-height: 1.24; letter-spacing: -.01em; }
+  .bkc p { font-size: .88rem; line-height: 1.68; color: var(--tx3); font-weight: 300; }
+  .bkc .go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--f-tek); font-size: 9.5px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--tx3); }
+  .bkc .go svg { width: 13px; height: 13px; }
+  /* hover yalniz gercek imlecte (dokunmatikte :hover takilir) */
+  @media (hover: hover) and (pointer: fine) {
+    .bkc { transition: border-color .34s var(--e), transform .34s var(--e), box-shadow .34s var(--e); }
+    .bkc:hover { border-color: rgba(239,35,60,.42); transform: translateY(-3px);
+      box-shadow: 0 26px 60px -34px var(--red-glow); }
+    .bkc .go, .bkc .go svg { transition: color .3s var(--e), transform .3s var(--e); }
+    .bkc:hover .go { color: var(--red-soft); }
+    .bkc:hover .go svg { transform: translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bkc, .bkc .go, .bkc .go svg { transition: none; }
+  }
   .abone { border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 34px; }
   .abone h3 { font-size: 1rem; margin: 0 0 4px; }
   .abone > p { color: var(--tx2); font-size: .9rem; margin: 0 0 12px; }
