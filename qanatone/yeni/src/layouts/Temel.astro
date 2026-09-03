@@ -83,6 +83,14 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   <meta name="robots" content="noindex" />
   <title>{baslik}</title>
   <meta name="description" content={aciklama} />
+  {/* SIMGE — EKSIK TASINAN KALEM (6 Eyl 2026, prolog bagimsizlik denetimi
+      sirasinda bulundu). Eski kok site satir ici SVG simge tanimliyor
+      (index.html <link rel="icon" data:image/svg+xml>), yeni kabukta HIC
+      YOKTU: 63 sayfanin hepsinde tarayici /favicon.ico ariyor ve 404
+      aliyordu — sekmede QANATONE isareti yerine tarayicinin varsayilani
+      goruluyordu. Kaynagin KENDI satiri birebir tasindi (sadakat kurali);
+      satir ici oldugu icin ek istek DOGURMAZ, ~330 B. */}
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050505'/%3E%3Crect x='9' y='9' width='14' height='14' rx='3' fill='%23ef233c' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
   <link rel="canonical" href={canonical} />
   <meta property="og:type" content="website" />
   <meta property="og:title" content={baslik} />
