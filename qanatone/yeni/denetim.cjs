@@ -2371,6 +2371,59 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.join(' '));
 }
 
+/* ---- FM3 · FILM ONUNDEYKEN ODAK FILMIN ICINDE (TUR 2, 4 Eyl 2026) ----
+   OLCULMUS KUSUR: film onundeyken belge 122.000 px uzundu ve `#fl-govde`
+   DISINDA kalan kabuk katmanlari (atlama bagi, gizli nav anahtari, nav,
+   lead bolumu, footer) hala tab sirasindaydi. Video odaktayken Tab,
+   121.364 px asagidaki `a.flogo`yu seciyor, tarayici oraya kaydiriyor ve
+   o dev belgenin duzenini zorluyordu: keydown 232 / 304 / 264 ms (Chrome,
+   filmin bas/orta/son noktasi, uc kosum medyani; isleme 79-134 ms +
+   sunum 118-265 ms). Dun "film etkinken INP 256-304 ms, video.fl-video
+   keydown" diye raporlanan sey BUYDU — sebep motorun isi degil, odagin
+   filmin disina kacmasi. Duzeltmeden sonra 136 / 168 / 120 ms.
+   KURAL NEYI TUTAR (ucu de sessizce bozulabilir):
+     1. ana sayfanin ERKEN satir ici betigi inert'i KURAR — modulde degil,
+        cunku modul /film'de de iniyor ve ayni kod orada J1 tavanini
+        158 B asti (11.422 > 11.264). Kural bu kararin yerini de tutar.
+     2. inert GERI ALINIR — `fl-js` dusunce (uc sokum yolunun ucu de onu
+        dusuruyor); kalici inert footer'i olduren sessiz a11y kusuru olur.
+     3. `.fl-gec` HICBIR ZAMAN inert kapsaminda olmaz (FM2 ile celisirdi).
+   Olcen arac: yeni/film/olc-gec-inp.cjs (Event Timing, gercek girdi). */
+{
+  const kusur = [];
+  const aY = path.join(KOK, 'index.html');
+  const fY = path.join(KOK, 'film', 'index.html');
+  if (!fs.existsSync(aY)) kusur.push('ana-sayfa-yok');
+  else {
+    const h = oku(aY);
+    /* yalniz PROLOG KARARINI veren erken betik taranir (FM2'nin kapsam
+       daraltma dersi: butun betikleri birlestirmek yanlis yesil verir) */
+    const erken = [...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)]
+      .map((m) => m[1]).filter((b) => /fl-ana/.test(b) && /qanat-prolog-atlandi/.test(b)).join('\n');
+    if (!erken) kusur.push('erken-karar-betigi-yok');
+    else {
+      if (!/inert/.test(erken)) kusur.push('inert-kurulmuyor');
+      /* geri alma: fl-js dusunce inert kalkmali — sinifi izleyen bir
+         gozlemci ya da acik bir kaldirma olmali */
+      if (!/MutationObserver|removeAttribute\(['"]inert|toggleAttribute\(['"]inert/.test(erken))
+        kusur.push('inert-geri-alinmiyor');
+      if (!/fl-js/.test(erken)) kusur.push('geri-alma-bayragi-yok');
+      /* kapsam: gec dugmesi ve film katmani ASLA icinde olmamali */
+      const kap = erken.match(/Q\s*=\s*(['"])([^'"]*)\1/);
+      const kapsam = kap ? kap[2] : '';
+      if (!kapsam) kusur.push('inert-kapsami-okunamadi');
+      else {
+        if (/fl-gec|\.fl[^-a-z]|#fl-|body\s*>\s*\*/.test(kapsam)) kusur.push('gec-dugmesi-inert-kapsaminda:' + kapsam.slice(0, 40));
+        if (!/footer/.test(kapsam)) kusur.push('footer-kapsam-disi:' + kapsam.slice(0, 40));
+      }
+    }
+  }
+  /* /film sayfasi bu betigi TASIMAMALI (J1 tavani nedeni yukarida) */
+  if (fs.existsSync(fY) && /toggleAttribute\(['"]inert/.test(oku(fY))) kusur.push('film-sayfasina-sizmis');
+  ol('FM3 · film önündeyken odak film içinde: kabuk katmanları inert + fl-js düşünce geri alınır',
+     kusur.length === 0, kusur.join(' '));
+}
+
 /* K1 · KABUK MODULU TAVANI (4 Eyl 2026, SOKUM VE TASIMA TURU). Eski
    sitenin uc rAF katmani (yildiz, bit damgasi, ajan imleci) kabuk.js'e
    tasindi: film motoru deseniyle DINAMIK ITHAL — sayfaya bagli degil,

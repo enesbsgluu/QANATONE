@@ -1,0 +1,149 @@
+{
+ "_": "yeni/film/olc-gec-inp.cjs — gec dugmesinin basma->boyama suresi (Event Timing), filmin bas/orta/son noktasinda, uc kosum medyani.",
+ "olcum": "2026-09-03T10:12:56.149Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "sayfa": "/yeni/",
+ "kok": "http://127.0.0.1:8790",
+ "tekrar": 3,
+ "kapi_ms": 200,
+ "boz": false,
+ "tetik": "tab",
+ "nokta": {
+  "bas": {
+   "medyan_ms": 64,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "bas",
+     "sure": 64,
+     "olay": "keydown",
+     "girdi_gecikmesi": 5,
+     "isleme": 37,
+     "sunum": 22,
+     "hepsi": "keydown:64 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "bas",
+     "sure": 64,
+     "olay": "keydown",
+     "girdi_gecikmesi": 6,
+     "isleme": 35,
+     "sunum": 22,
+     "hepsi": "keydown:64 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "bas",
+     "sure": 64,
+     "olay": "keydown",
+     "girdi_gecikmesi": 6,
+     "isleme": 36,
+     "sunum": 22,
+     "hepsi": "keydown:64 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    }
+   ],
+   "girdi_gecikmesi_medyan": 6,
+   "isleme_medyan": 36,
+   "sunum_medyan": 22
+  },
+  "orta": {
+   "medyan_ms": 56,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "orta",
+     "sure": 56,
+     "olay": "keydown",
+     "girdi_gecikmesi": 0,
+     "isleme": 36,
+     "sunum": 20,
+     "hepsi": "keydown:56 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "orta",
+     "sure": 64,
+     "olay": "keydown",
+     "girdi_gecikmesi": 6,
+     "isleme": 36,
+     "sunum": 22,
+     "hepsi": "keydown:64 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "orta",
+     "sure": 56,
+     "olay": "keydown",
+     "girdi_gecikmesi": 0,
+     "isleme": 34,
+     "sunum": 22,
+     "hepsi": "keydown:56 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    }
+   ],
+   "girdi_gecikmesi_medyan": 0,
+   "isleme_medyan": 36,
+   "sunum_medyan": 22
+  },
+  "son": {
+   "medyan_ms": 56,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "son",
+     "sure": 56,
+     "olay": "keydown",
+     "girdi_gecikmesi": 0,
+     "isleme": 36,
+     "sunum": 20,
+     "hepsi": "keydown:56 keyup:32",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "son",
+     "sure": 64,
+     "olay": "keydown",
+     "girdi_gecikmesi": 0,
+     "isleme": 36,
+     "sunum": 28,
+     "hepsi": "keydown:64 keyup:40",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    },
+    {
+     "nokta": "son",
+     "sure": 56,
+     "olay": "keydown",
+     "girdi_gecikmesi": 0,
+     "isleme": 38,
+     "sunum": 18,
+     "hepsi": "keydown:56 keyup:24",
+     "film": null,
+     "gecYolu": null,
+     "efektSuresi": null
+    }
+   ],
+   "girdi_gecikmesi_medyan": 0,
+   "isleme_medyan": 36,
+   "sunum_medyan": 20
+  }
+ },
+ "kaldi": 0
+}

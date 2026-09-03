@@ -1,0 +1,149 @@
+{
+ "_": "yeni/film/olc-gec-inp.cjs — gec dugmesinin basma->boyama suresi (Event Timing), filmin bas/orta/son noktasinda, uc kosum medyani.",
+ "olcum": "2026-09-03T09:58:51.499Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "sayfa": "/yeni/",
+ "kok": "http://127.0.0.1:8790",
+ "tekrar": 3,
+ "kapi_ms": 200,
+ "boz": false,
+ "tetik": "klavye",
+ "nokta": {
+  "bas": {
+   "medyan_ms": 32,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "bas",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 4,
+     "isleme": 2,
+     "sunum": 27,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 465
+    },
+    {
+     "nokta": "bas",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 6,
+     "isleme": 1,
+     "sunum": 25,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 467
+    },
+    {
+     "nokta": "bas",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 6,
+     "isleme": 1,
+     "sunum": 25,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 465
+    }
+   ],
+   "girdi_gecikmesi_medyan": 6,
+   "isleme_medyan": 1,
+   "sunum_medyan": 25
+  },
+  "orta": {
+   "medyan_ms": 32,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "orta",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 3,
+     "isleme": 1,
+     "sunum": 28,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 459
+    },
+    {
+     "nokta": "orta",
+     "sure": 24,
+     "olay": "keydown",
+     "girdi_gecikmesi": 3,
+     "isleme": 2,
+     "sunum": 19,
+     "hepsi": "keydown:24 click:24 keyup:24",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 464
+    },
+    {
+     "nokta": "orta",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 4,
+     "isleme": 2,
+     "sunum": 26,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 461
+    }
+   ],
+   "girdi_gecikmesi_medyan": 3,
+   "isleme_medyan": 2,
+   "sunum_medyan": 26
+  },
+  "son": {
+   "medyan_ms": 32,
+   "gecti": true,
+   "kosumlar": [
+    {
+     "nokta": "son",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 3,
+     "isleme": 2,
+     "sunum": 27,
+     "hepsi": "keydown:32 click:32 keyup:24",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 447
+    },
+    {
+     "nokta": "son",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 5,
+     "isleme": 2,
+     "sunum": 26,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 455
+    },
+    {
+     "nokta": "son",
+     "sure": 32,
+     "olay": "keydown",
+     "girdi_gecikmesi": 4,
+     "isleme": 2,
+     "sunum": 27,
+     "hepsi": "keydown:32 click:32 keyup:32",
+     "film": "atlandi",
+     "gecYolu": "isinlanma",
+     "efektSuresi": 457
+    }
+   ],
+   "girdi_gecikmesi_medyan": 4,
+   "isleme_medyan": 2,
+   "sunum_medyan": 27
+  }
+ },
+ "kaldi": 0
+}

@@ -95,6 +95,15 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   ilk yerleşimden önce satır içi betikle (CLS dersi). Kabuk navı film
   boyunca gizli. Prologlu ana sayfada bekçi tavanları: J1 ana+film, H18/H24
   28 KB, H1 `fl-`, H12 film betiği dışarıda — ENES ONAYI BEKLİYOR.
+- **Film önündeyken odak filmin içinde (4 Eyl, FM3):** prolog öndeyken belge
+  122.000 px uzun; `#fl-govde` DIŞINDA kalan kabuk katmanları (atlama bağı,
+  `#nvAc`, nav, lead, footer) tab sırasında kalırsa Tab 121.364 px aşağıdaki
+  bağa gider ve tarayıcı o dev belgeyi yerleştirir — ölçüldü 232/304/264 ms,
+  `inert` ile 136/168/120. İnert'i **ana sayfanın erken satır içi betiği**
+  kurar (modüle konursa `/film`'in J1 tavanı 158 B aşılıyor), `fl-js`
+  düşünce MutationObserver geri alır. `.fl-gec` asla kapsamda değil (FM2).
+  **Dün "film etkinken INP 256-304 ms" diye yazılan rakam buydu**; motorun
+  işi değildi. Ölçen araç `olc-gec-inp.cjs` (Event Timing, gerçek girdi).
 - **CLS ölçüm dersi (3 Eyl):** yatay taşma (scrollWidth > viewport) klasik
   kaydırma çubuğu olan tarayıcıda çubuk belirip kaybolunca sabit katmanları
   oynatır ve büyük CLS üretir; headless overlay çubukta görünmez. Taşma

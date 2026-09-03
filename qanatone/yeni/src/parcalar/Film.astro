@@ -156,6 +156,23 @@ const satirla = (m: string): string[] => {
   return [c.slice(0, enIyi).join(' '), c.slice(enIyi).join(' ')];
 };
 ---
+{/* KLAVYE ODAGI FILM DISINA KACIYORDU (TUR 2, 4 Eyl 2026 — OLCULMUS KOK).
+    Film onundeyken belge 122.000 px uzun ve `#fl-govde` DISINDA kalan kabuk
+    katmanlari (atlama bagi, nav, lead bolumu, footer) hala tab sirasindaydi:
+    video odaktayken Tab, 121.364 px asagidaki `a.flogo`yu secip tarayiciyi
+    oraya kaydirtiyor ve o dev belgenin duzenini zorluyordu. Olculdu (Chrome,
+    filmin bas/orta/son noktasi, uc kosum medyani): keydown 232 / 304 / 264 ms
+    — isleme 79-134 ms + sunum 118-265 ms. Dun raporlanan "film etkinken INP
+    256-304 ms, `video.fl-video` keydown" TAM BU olaydi; sebep motorun isi
+    degil, odagin filmin disina kacmasiydi. `#fl-govde` zaten visibility:hidden
+    ile sirada degil — sorun onun KARDESLERI.
+    NEDEN BURADA, MODULDE DEGIL: modul `/film` sayfasinda da iniyor ve ayni
+    kod orada J1 tavanini 158 B asti (11.422 > 11.264). Bu satir ici betik
+    YALNIZ ana sayfaya basiliyor, yani bedeli filmin tavanina yazilmiyor.
+    Geri alma da burada: modul sokum yollarinin UCUNDE de `fl-js` sinifini
+    dusuruyor (siteyeGec · gec · motor inmedi), MutationObserver onu gorup
+    inert'i kaldiriyor — tek bayrak, uc yol, ayri kod yok.
+    `.fl-gec` film katmaninda oldugu icin klavyeyle erisilebilir KALIR (FM2). */}
 {/* ERKEN KARAR (3 Eyl 2026, performans turu): fl-js / fl-ana / atlandi /
     hareket-azaltma karari ILK YERLESIMDEN ONCE, satir ici. Modul betigi
     (asagida) ayni karari yeniden verir (idempotent); bu betik yalniz JS'siz
@@ -164,7 +181,7 @@ const satirla = (m: string): string[] => {
     oturumda-atlanmis ziyaretcide poster sutunu flasi. Yorumsuz, ~330 B (J1).
     YALNIZ ANA SAYFADA: /film olcum zemininin J1 tavani (11.264 B) 252 B ile
     asiliyordu; /film'de kabuk/#bg yok, kayma da yok — modul karari yeter. */}
-{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}if(matchMedia('(max-width:900px),(pointer:coarse)').matches){H.dataset.film='mobil';return}H.classList.add('fl-js','fl-ana')}catch(e){}})()`} />}
+{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}if(matchMedia('(max-width:900px),(pointer:coarse)').matches){H.dataset.film='mobil';return}H.classList.add('fl-js','fl-ana');var Q='.atla,#nvAc,nav,.sil-lead,body>footer',I=function(a){document.querySelectorAll(Q).forEach(function(e){e.toggleAttribute('inert',a)})};document.addEventListener('DOMContentLoaded',function(){I(true);new MutationObserver(function(){if(!H.classList.contains('fl-js'))I(false)}).observe(H,{attributes:true,attributeFilter:['class']})})}catch(e){}})()`} />}
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B} data-sayfa={sayfa}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
