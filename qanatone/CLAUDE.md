@@ -203,6 +203,14 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   (kayıtta `tazeleme` bloğu: Hz, tik, örnek, süzülen). Eski 20 ms'lik eşik iki
   tikle üç tik ARASINDA duran ikili bir kapıydı ve değeri ekrana bağlıydı —
   60 Hz makinede aynı site hiç geçemezdi. **ms cinsinden eşik yazma.**
+- **İKİ KAPI, İKİ KOŞUL — her kare rakamı koşuluyla birlikte yazılır** (Enes,
+  5 Eyl). `olc-sayfa.cjs` = **KAPI A**, tarama koşulu (59 sayfa tek tarayıcıda),
+  gerileme kapısı; turlar bununla kapanır. `olc-soguk.cjs` = **KAPI B**, ziyaretçi
+  koşulu (her ölçüme taze profil + sabit ısınma dizisi + tek sayfa). Aynı sayfa
+  iki koşulda farklı okur ve **iki rakam birbirinin yerine geçmez**: A'da 51 sayfa
+  sıfır kare kaçırıyor, B'de 27 soğuk koşumun HİÇBİRİ sıfır kaçırmıyor. "51 sayfa
+  sıfır kare" gibi koşulsuz cümle yanlıştır; koşul yazılmayan kare rakamı rapora
+  girmez.
 - **Kısmi `olc-sayfa` koşumu HÜKÜM DEĞİLDİR — araç bunu kendi etiketler.**
   Aynı sayfa, aynı ağaç, aynı makine: `/hizmetler/finans/` tam taramada
   16,7 ms (2,01 tik · geçer), tek başına ya da üç sayfalık kesitte 25,0 ms
