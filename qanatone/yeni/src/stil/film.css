@@ -419,3 +419,8 @@ html.fl-ana:not(.fl-devir-net) .nv-bar, html.fl-ana:not(.fl-devir-net) .nv-fade 
 html.fl-ana.fl-devir-net .nv-bar { transform: none; }
 html[data-film="bitti"] .fl { display: none; }
 html[data-film="hareket-azaltma"] .fl[data-sayfa="ana"] { display: none; }
+/* MOBIL ANA SAYFA: prolog basilmaz (Enes, gece zinciri 3/4 Eyl). Kural CSS'te
+   de durur ki betik gec kalsa bile film katmani bir kare gorunmesin; erken
+   karar betigi `data-film="mobil"` yazar. /film olcum zemini etkilenmez. */
+html[data-film="mobil"] .fl[data-sayfa="ana"] { display: none; }
+@media (max-width: 900px), (pointer: coarse) { .fl[data-sayfa="ana"] { display: none; } }

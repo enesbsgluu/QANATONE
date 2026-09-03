@@ -164,7 +164,7 @@ const satirla = (m: string): string[] => {
     oturumda-atlanmis ziyaretcide poster sutunu flasi. Yorumsuz, ~330 B (J1).
     YALNIZ ANA SAYFADA: /film olcum zemininin J1 tavani (11.264 B) 252 B ile
     asiliyordu; /film'de kabuk/#bg yok, kayma da yok — modul karari yeter. */}
-{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}H.classList.add('fl-js','fl-ana')}catch(e){}})()`} />}
+{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}if(matchMedia('(max-width:900px),(pointer:coarse)').matches){H.dataset.film='mobil';return}H.classList.add('fl-js','fl-ana')}catch(e){}})()`} />}
 <section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B} data-sayfa={sayfa}
   data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
   data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
@@ -284,6 +284,15 @@ const satirla = (m: string): string[] => {
   if (bolum && atlandi) {
     /* 2. madde: oturumda zaten atlanmis — hicbir sey kurulmaz. */
     KOKE.dataset.film = 'atlandi';
+  } else if (bolum && KOKE.dataset.film === 'mobil') {
+    /* MOBILDE PROLOG YOK (Enes, 3/4 Eyl gece zinciri): ana sayfa telefonda
+       dogrudan siteyi gosterir — kaydirma-scrub filmi kucuk ekranda ve
+       dokunmatikte tasinmaz (kabuk sus katmanlariyla ayni kapi
+       `(pointer:coarse),(max-width:900px)`). KARAR TEK YERDE: yukaridaki
+       erken satir ici betik `data-film="mobil"` yazar, modul onu gorunce
+       hicbir sey kurmaz — ayni karar iki kez verilmez, /film'in J1 tavani
+       da bu yuzden asilmaz (olculdu: iki karar 11.297 B, tek karar 11.264
+       tavanin altinda). CSS ayrica ayni kapiyi tutar (film.css). */
   } else if (bolum && !azalt) {
     KOKE.classList.add('fl-js');
     if (ANA) KOKE.classList.add('fl-ana');
