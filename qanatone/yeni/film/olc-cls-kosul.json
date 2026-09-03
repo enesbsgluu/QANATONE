@@ -1,9 +1,9 @@
 {
  "_": "yeni/film/olc-cls-kosul.cjs — ayni sayfa, degisen ORTAM: CLS aykiri degerinin kosulunu arar.",
- "olcum": "2026-09-03T10:51:52.139Z",
+ "olcum": "2026-09-03T12:08:04.196Z",
  "tarayici": "chrome Chrome/152.0.7977.65",
- "sayfa": "/yeni/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
- "tekrar": 2,
+ "sayfa": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+ "tekrar": 3,
  "kapi": 0.1,
  "font_gec_ms": 900,
  "kol": {
@@ -30,30 +30,434 @@
      "kaynak": [],
      "hata": null,
      "yuklenenFont": 3
+    },
+    {
+     "kol": "soguk",
+     "durum": 200,
+     "cls": 0,
+     "toplam": 0,
+     "enBuyukPencere": 0,
+     "kaynak": [],
+     "hata": null,
+     "yuklenenFont": 3
+    }
+   ]
+  },
+  "sicak": {
+   "medyan": 0,
+   "en_yuksek": 0,
+   "kosumlar": [
+    {
+     "kol": "sicak",
+     "durum": 304,
+     "cls": 0,
+     "toplam": 0,
+     "enBuyukPencere": 0,
+     "kaynak": [],
+     "hata": null,
+     "yuklenenFont": 3
+    },
+    {
+     "kol": "sicak",
+     "durum": 304,
+     "cls": 0,
+     "toplam": 0,
+     "enBuyukPencere": 0,
+     "kaynak": [],
+     "hata": null,
+     "yuklenenFont": 3
+    },
+    {
+     "kol": "sicak",
+     "durum": 304,
+     "cls": 0,
+     "toplam": 0,
+     "enBuyukPencere": 0,
+     "kaynak": [],
+     "hata": null,
+     "yuklenenFont": 3
     }
    ]
   },
   "font-gec": {
-   "medyan": 0.0004,
-   "en_yuksek": 0.0004,
+   "medyan": 0.0407,
+   "en_yuksek": 0.0407,
    "kosumlar": [
     {
      "kol": "font-gec",
      "durum": 200,
-     "cls": 0.0004,
-     "toplam": 0.0004,
-     "enBuyukPencere": 0.0004,
-     "kaynak": [],
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 1039,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
      "hata": null,
      "yuklenenFont": 3
     },
     {
      "kol": "font-gec",
      "durum": 200,
-     "cls": 0.0004,
-     "toplam": 0.0004,
-     "enBuyukPencere": 0.0003,
-     "kaynak": [],
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 1051,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
+     "hata": null,
+     "yuklenenFont": 3
+    },
+    {
+     "kol": "font-gec",
+     "durum": 200,
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 1002,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
+     "hata": null,
+     "yuklenenFont": 3
+    }
+   ]
+  },
+  "yavas": {
+   "medyan": 0.0407,
+   "en_yuksek": 0.0407,
+   "kosumlar": [
+    {
+     "kol": "yavas",
+     "durum": 200,
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 2619,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
+     "hata": null,
+     "yuklenenFont": 3
+    },
+    {
+     "kol": "yavas",
+     "durum": 200,
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 2518,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
+     "hata": null,
+     "yuklenenFont": 3
+    },
+    {
+     "kol": "yavas",
+     "durum": 200,
+     "cls": 0.0407,
+     "toplam": 0.0407,
+     "enBuyukPencere": 0.0407,
+     "kaynak": [
+      {
+       "t": 2463,
+       "v": 0.0407,
+       "ogeler": [
+        {
+         "el": "",
+         "once": [
+          320,
+          476,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          476,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          320,
+          449,
+          800,
+          47
+         ],
+         "sonra": [
+          320,
+          449,
+          800,
+          47
+         ]
+        },
+        {
+         "el": "",
+         "once": [
+          319,
+          676,
+          801,
+          20
+         ],
+         "sonra": [
+          320,
+          703,
+          800,
+          20
+         ]
+        }
+       ]
+      }
+     ],
      "hata": null,
      "yuklenenFont": 3
     }
