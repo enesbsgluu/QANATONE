@@ -51,16 +51,29 @@ const sayfalar = [];
 /* FILTRE=regex: sayfa alt kumesi (10 dakikalik parcalar halinde kosmak icin) · CIKTI=dosya adi */
 const secim = process.env.SAYFA ? [process.env.SAYFA] : sayfalar.sort().filter((y) => !process.env.FILTRE || new RegExp(process.env.FILTRE).test(y));
 
-/* J1 ile ayni bayt sayimi (denetim.cjs) */
+/* J1 ile ayni bayt sayimi (denetim.cjs). IKI KALEM J1 ILE AYNI SEBEPLE
+   DISARIDA (Enes onayi, 3/4 Eyl gece zinciri — "prologlu butce tavanlari
+   onaylandi, sarti her tavanin gerekcesi rakamiyla dosyada dursun"):
+     · LEAD FORMU BETIGI (~2,3 KB): kaynakta da her rotanin sonundaydi,
+       kabuk kalemi — sayfa tavanindan dusulur, ayrica raporlanir.
+     · PROLOG: ana sayfa film bolumunu tasiyorsa tavan ana + film
+       (12,5 + 11 = 23,5 KB); filmin kendi kapilari ayri (FM1). */
 function jsBayt(yol) {
   const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/yeni\//, ''), 'index.html');
   const h = fs.readFileSync(f, 'utf8');
   let t = 0;
   for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) { const d = path.join(DIST, m[1].replace(/^\/yeni\//, '')); if (fs.existsSync(d)) t += fs.statSync(d).size; }
-  for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) if (!/ld\+json/.test(m[1])) t += Buffer.byteLength(m[2]);
+  for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) if (!/ld\+json/.test(m[1]) && !/getElementById\('silForm'\)/.test(m[2])) t += Buffer.byteLength(m[2]);
   return t;
 }
-const tavan = (yol) => (/^\/yeni\/(en\/)?$/.test(yol.replace(/\?.*$/, '')) ? TAVAN.ana : /film/.test(yol) ? TAVAN.film : TAVAN.obur);
+/* prologlu ana sayfa: film bolumu ham HTML'de mi */
+const prologlu = (yol) => {
+  const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/yeni\//, ''), 'index.html');
+  return fs.existsSync(f) && /<section class="fl"/.test(fs.readFileSync(f, 'utf8'));
+};
+const tavan = (yol) => (/^\/yeni\/(en\/)?$/.test(yol.replace(/\?.*$/, ''))
+  ? TAVAN.ana + (prologlu(yol) ? TAVAN.film : 0)
+  : /film/.test(yol) ? TAVAN.film : TAVAN.obur);
 
 const KAYITCI = `(() => {
   window.__k = { ara: [], on: false, son: null };
@@ -74,6 +87,19 @@ async function kosum(browser, yol) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900 });
   const cdp = await page.target().createCDPSession();
+  /* PROLOG ATLANMIS OTURUM (3/4 Eyl 2026): ana sayfanin onunde artik film
+     var; motor klipleri surekli cektigi icin `networkidle0` HIC gelmiyor ve
+     kapi zaman asimina dusuyordu. Bu kapi SITE GOVDESINI olcer — filmin
+     kendi kapilari ayri (FM1 bellek/ilk kare/sinir, olc-devir, olc-efekt) ve
+     /film sayfasi zaten atlaniyor. Oturum bayragi konunca ana sayfa, prologu
+     bir kez gormus ziyaretcinin gordugu sayfadir. Perde bayragi da ayni
+     sebeple (kapi kaydirma turunu olcer, acilis selamini degil). */
+  await page.evaluateOnNewDocument(() => {
+    try {
+      sessionStorage.setItem('qanat-splash-seen', '1');
+      sessionStorage.setItem('qanat-prolog-atlandi', '1');
+    } catch (e) {}
+  });
   await page.goto(SUNUCU + yol, { waitUntil: 'networkidle0', timeout: 60000 });
   /* GIZLE=secici — TESHIS KOLU: bolum gizlenip ayni tur olculur (pay atfi) */
   if (process.env.GIZLE) await page.addStyleTag({ content: `${process.env.GIZLE}{display:none!important}` });
