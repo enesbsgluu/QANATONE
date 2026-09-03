@@ -52,7 +52,15 @@ const GOZLEMCI = () => {
     if (e.hadRecentInput) continue;
     if (w.clsPencere.length && (e.startTime - w.clsSon > 1000 || e.startTime - w.clsBas > 5000)) { w.clsMax = Math.max(w.clsMax, w.cls); w.cls = 0; w.clsPencere = []; }
     if (!w.clsPencere.length) w.clsBas = e.startTime;
-    w.clsSon = e.startTime; w.cls += e.value; w.clsPencere.push({ t: Math.round(e.startTime), v: +e.value.toFixed(4), el: sec(e.sources && e.sources[0] && e.sources[0].node) });
+    /* kaynak DORTGENLERIYLE: "hangi oge" yetmiyor, "nereden nereye" gerek —
+       3/4 Eyl'de bir bulten yazisinda 0,1622 cikti ve kapi disinda tekrar
+       etmedi; ogenin adi tek basina teshise yetmedi. */
+    const kyn = (e.sources || []).slice(0, 2).map((s) => ({
+      el: sec(s.node),
+      once: [Math.round(s.previousRect.x), Math.round(s.previousRect.y), Math.round(s.previousRect.width), Math.round(s.previousRect.height)],
+      sonra: [Math.round(s.currentRect.x), Math.round(s.currentRect.y), Math.round(s.currentRect.width), Math.round(s.currentRect.height)],
+    }));
+    w.clsSon = e.startTime; w.cls += e.value; w.clsPencere.push({ t: Math.round(e.startTime), v: +e.value.toFixed(4), el: sec(e.sources && e.sources[0] && e.sources[0].node), kaynak: kyn, gorunum: [innerWidth, innerHeight], sinif: document.documentElement.className });
   } w.clsMax = Math.max(w.clsMax, w.cls); }).observe({ type: 'layout-shift', buffered: true }); } catch (e) {}
   try { new PerformanceObserver((l) => { for (const e of l.getEntries()) {
     w.loaf.push({ t: Math.round(e.startTime), sure: Math.round(e.duration), engel: Math.round(e.blockingDuration || 0),
@@ -75,6 +83,19 @@ async function olc(browser, yol, boz) {
        aninda eklenen kayma perde altinda kaldi ve API onu saymadi) */
     try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {}
     addEventListener('load', () => setTimeout(() => { const t = performance.now(); while (performance.now() - t < 120) {} const d = document.createElement('div'); d.style.height = '80vh'; document.querySelector('main').prepend(d); }, 2000));
+  });
+  /* NE OLCULUYOR (3/4 Eyl 2026, prolog ana sayfaya girince yazildi):
+     Bu kapi SITE GOVDESINI olcer. Ana sayfanin onundeki film ayri bir
+     yuzeydir ve kendi kapilari vardir (FM1 bellek/ilk kare/sinir, olc-devir,
+     olc-efekt); `/film` sayfasi da bu kapida zaten atlaniyor. Oturum bayragi
+     konunca ana sayfa, prologu bir kez gormus ziyaretcinin gordugu sayfadir.
+     ESIK GEVSEMEDI: INP < 200 ms aynen duruyor — degisen sey OLCULEN YUZEY.
+     PROLOG=1 ile film ETKINKEN olculur; o rakam raporda ayri satirdir
+     (3/4 Eyl: film etkinken INP 256/272/304 ms, uc kosum, hepsi
+     `video.fl-video` keydown — ana is parcaciginda motor + tupler; sayfanin
+     kendi govdesi ayni kosumda 100-160 ms). */
+  if (process.env.PROLOG !== '1') await page.evaluateOnNewDocument(() => {
+    try { sessionStorage.setItem('qanat-prolog-atlandi', '1'); } catch (e) {}
   });
   const cdp = await page.target().createCDPSession();
   const t0 = Date.now();

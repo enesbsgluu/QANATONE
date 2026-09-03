@@ -417,6 +417,13 @@ html.fl-ana:not(.fl-devir-net) .nv-bar, html.fl-ana:not(.fl-devir-net) .nv-fade 
 /* site netlesirken nav da yerinde (fl-nav-kalk film boyunca yukari cekmisti;
    /film'de 'devirde kalkik kalir' — orada govdenin kendi navi vardi) */
 html.fl-ana.fl-devir-net .nv-bar { transform: none; }
+/* FILM ONDEYKEN GOVDE DEMOLARI DURUR (3/4 Eyl 2026, olc-surucu bulgusu):
+   govde `.fl-govde` icinde sabit ve gorunmez duruyor ama IntersectionObserver
+   gorunurluge degil KESISIME bakar — demolar filmin arkasinda donmeye devam
+   ediyordu, yani sayfanin en agir aninda bos is. Surucu anahtari (--akps)
+   film katmani kalkana kadar duraklatilir; devir netlesince (fl-devir-net)
+   kural dusier ve demolar kendi kapilariyla (IO .akoynar) devam eder. */
+html.fl-ana:not(.fl-devir-net) .akoynar { --akps: paused; }
 html[data-film="bitti"] .fl { display: none; }
 html[data-film="hareket-azaltma"] .fl[data-sayfa="ana"] { display: none; }
 /* MOBIL ANA SAYFA: prolog basilmaz (Enes, gece zinciri 3/4 Eyl). Kural CSS'te
