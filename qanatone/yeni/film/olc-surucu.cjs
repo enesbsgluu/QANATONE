@@ -122,6 +122,15 @@ const TARA = `(async (KOKLER, boz, reduce) => {
 (async () => {
   const browser = await pt.launch({ executablePath: CHROME, headless: false, args: ['--window-size=1460,980'], defaultViewport: null, protocolTimeout: 300000 });
   const page = await browser.newPage(); await page.setViewport({ width: 1440, height: 900 });
+  /* PROLOG ATLANMIS OTURUM (3/4 Eyl 2026): ana sayfanin onunde film var ve
+     film etkinken govde `.fl-govde` icinde SABIT duruyor — kaydirma govdeyi
+     oynatmadigi icin bolum kadrajdan hic cikmiyor, kapi "cikinca durmuyor"
+     diyordu. Bu kapi GOVDENIN surucusunu olcer; filmin kendi katmani ayri
+     (FM1/olc-devir). Film ONDEYKEN govde demolarinin durmasi ayri bir kural
+     ve film.css'te duruyor (html.fl-ana:not(.fl-devir-net) .akoynar). */
+  await page.evaluateOnNewDocument(() => {
+    try { sessionStorage.setItem('qanat-splash-seen', '1'); sessionStorage.setItem('qanat-prolog-atlandi', '1'); } catch (e) {}
+  });
   const kos = (boz, reduce) => page.evaluate(`${TARA}(${JSON.stringify(KOKLER)}, ${JSON.stringify(boz)}, ${reduce ? 'true' : 'false'})`);
   const sonuc = [];
   let kirmiziOnce = null;

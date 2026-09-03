@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-surucu.cjs — surucu kapisi (3 Eyl 2026 kurali): demo koku kadraj disinda paused, kadrajda running + sonsuz dongu, cikinca paused, ViewTimeline/ScrollTimeline yok; reduced-motion altinda kosan 0.",
- "olcum": "2026-09-02T21:53:34.642Z",
+ "olcum": "2026-09-03T03:34:12.199Z",
  "kokler": ".sa-kart, .hd-demo, .tsa, .akis3",
  "kirmizi_kontrol": {
   "yol": "/yeni/",
@@ -327,19 +327,9 @@
   },
   {
    "yol": "/yeni/en/hizmetler/finans/",
-   "kok": 2,
+   "kok": 1,
    "kirmizi": [],
    "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 6,
-     "dongu": 6,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akRise"
-     ]
-    },
     {
      "kok": "div.tsa",
      "anim": 2,
@@ -353,10 +343,6 @@
     }
    ],
    "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    },
     {
      "kok": "div.tsa",
      "kirmizi": []
@@ -386,30 +372,10 @@
   },
   {
    "yol": "/yeni/en/hizmetler/otomasyon/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 17,
-     "dongu": 17,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akJobOn",
-      "akJobT",
-      "akTickOn",
-      "akTickIn",
-      "akRise"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/en/hizmetler/seo/",
@@ -420,56 +386,17 @@
   },
   {
    "yol": "/yeni/en/hizmetler/web-sitesi-araclar/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 4,
-     "dongu": 4,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akCount",
-      "akFill",
-      "akKnob",
-      "akPrIn"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/en/hizmetler/web-tasarim/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 5,
-     "dongu": 5,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akScroll",
-      "akCta",
-      "akSend",
-      "akCur",
-      "akDone"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/en/otomasyon/",
@@ -584,19 +511,9 @@
   },
   {
    "yol": "/yeni/hizmetler/finans/",
-   "kok": 2,
+   "kok": 1,
    "kirmizi": [],
    "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 6,
-     "dongu": 6,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akRise"
-     ]
-    },
     {
      "kok": "div.tsa",
      "anim": 2,
@@ -610,10 +527,6 @@
     }
    ],
    "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    },
     {
      "kok": "div.tsa",
      "kirmizi": []
@@ -643,30 +556,10 @@
   },
   {
    "yol": "/yeni/hizmetler/otomasyon/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 17,
-     "dongu": 17,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akJobOn",
-      "akJobT",
-      "akTickOn",
-      "akTickIn",
-      "akRise"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/hizmetler/seo/",
@@ -677,56 +570,17 @@
   },
   {
    "yol": "/yeni/hizmetler/web-sitesi-araclar/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 4,
-     "dongu": 4,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akCount",
-      "akFill",
-      "akKnob",
-      "akPrIn"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/hizmetler/web-tasarim/",
-   "kok": 1,
+   "kok": 0,
    "kirmizi": [],
-   "kokler": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "anim": 5,
-     "dongu": 5,
-     "kirmizi": [],
-     "not": [],
-     "adlar": [
-      "akScroll",
-      "akCta",
-      "akSend",
-      "akCur",
-      "akDone"
-     ]
-    }
-   ],
-   "reduced": [
-    {
-     "kok": "div.hd-demo.akoynar",
-     "kirmizi": []
-    }
-   ]
+   "kokler": [],
+   "reduced": []
   },
   {
    "yol": "/yeni/hukuki/",
