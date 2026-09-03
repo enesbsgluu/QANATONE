@@ -45,11 +45,18 @@
    TABAN = TAMAMLANMIŞ (kaynak REDUCE dalı draw(1), 8972): desteksiz
    tarayıcı ve reduced-motion son kadrajı görür. İçerik JS'siz tam;
    sayılar CSS sayacı (huni/tırmanış dersi, ada JS'i yalnız fare için). */
-import { T, type Dil } from '../icerik';
+import { T, icerik, type Dil } from '../icerik';
 interface Props { story: any; dil: Dil }
 const { story, dil } = Astro.props;
 const en = dil === 'en';
-const M = (tr: string, eng: string) => en ? eng : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, eng: string) =>
+  T(((icerik.strings || {})[en ? 'en' : 'tr'] || {})[k], en ? 'en' : 'tr') || (en ? eng : tr);
 const dom = story?.dom || 'seninfirman.com';
 const marka = dom.replace(/\..*$/, '');
 /* takvim kaynağı (8378-8381): 21 gün · dolu 3,4,9,10,16 · hedef 11 */
@@ -64,7 +71,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
 {story?.tools && (
 <div class="sdsec st-kap">
   <div class="st-sabit">
-    <span class="mono">{M('Araçlar — kaydırdıkça çalışır', 'The tools — they run as you scroll')}</span>
+    <span class="mono">{M('arc01', 'Araçlar — kaydırdıkça çalışır', 'The tools — they run as you scroll')}</span>
     <div class="ststage sttools" id="stStage">
       <div class="stbar"><i /><i /><i /><span>{dom}</span></div>
       <div class="stview">
@@ -73,36 +80,36 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
 
           {/* perde 0 — sitenin kendisi */}
           <div class="stsec tl-act tl-site" style="--i:0">
-            <span class="stlab">{M('SENİN SİTEN', 'YOUR SITE')}</span>
+            <span class="stlab">{M('arc02', 'SENİN SİTEN', 'YOUR SITE')}</span>
             <div class="tlnav"><b>{marka}</b>
-              <span>{M('Hizmetler', 'Services')}</span>
-              <span>{M('İşler', 'Work')}</span>
-              <span>{M('İletişim', 'Contact')}</span></div>
-            <p class="tlh">{M('Fiyatı sitede öğrensin,', 'Let them see the price on the site,')}
-              <em>{M(' seni beklemeden.', ' without waiting for you.')}</em></p>
-            <span class="tlbtn">{M('Anında teklif al', 'Get an instant quote')}</span>
-            <p class="tlsay">{M('Broşür burada biter. Araç burada başlar.',
+              <span>{M('arc03', 'Hizmetler', 'Services')}</span>
+              <span>{M('arc04', 'İşler', 'Work')}</span>
+              <span>{M('arc05', 'İletişim', 'Contact')}</span></div>
+            <p class="tlh">{M('arc06', 'Fiyatı sitede öğrensin,', 'Let them see the price on the site,')}
+              <em>{M('arc07', ' seni beklemeden.', ' without waiting for you.')}</em></p>
+            <span class="tlbtn">{M('arc08', 'Anında teklif al', 'Get an instant quote')}</span>
+            <p class="tlsay">{M('arc09', 'Broşür burada biter. Araç burada başlar.',
               'A brochure ends here. A tool starts here.')}</p>
           </div>
 
           {/* perde 1 — teklif hesaplayıcı */}
           <div class="stsec tl-act tl-quote" style="--i:1">
-            <span class="stlab">{M('ARAÇ 01 — ANINDA TEKLİF', 'TOOL 01 — INSTANT QUOTE')}</span>
-            <div class="tlrow"><span class="tlk">{M('İş türü', 'Job type')}</span>
+            <span class="stlab">{M('arc10', 'ARAÇ 01 — ANINDA TEKLİF', 'TOOL 01 — INSTANT QUOTE')}</span>
+            <div class="tlrow"><span class="tlk">{M('arc11', 'İş türü', 'Job type')}</span>
               <span class="tlchips">{CIP.map((c, i) =>
                 <i class={'tlch' + (i === 2 ? ' aim' : '')}>{c}</i>)}</span></div>
-            <div class="tlrow"><span class="tlk">{M('Alan', 'Area')}</span>
+            <div class="tlrow"><span class="tlk">{M('arc12', 'Alan', 'Area')}</span>
               <b class="tlnum tlarea" /></div>
             <div class="tlrng"><i class="tlfill" /><b class="tlknob" /></div>
-            <div class="tlout"><span>{M('Tahmini bütçe', 'Estimated budget')}</span>
+            <div class="tlout"><span>{M('arc13', 'Tahmini bütçe', 'Estimated budget')}</span>
               <b class="tlprice" /></div>
-            <p class="tlsay">{M('Ziyaretçi rakamı dört saniyede görür — sen telefona hiç bakmazsın.',
+            <p class="tlsay">{M('arc14', 'Ziyaretçi rakamı dört saniyede görür — sen telefona hiç bakmazsın.',
               'The visitor gets a number in four seconds — you never pick up the phone.')}</p>
           </div>
 
           {/* perde 2 — rezervasyon */}
           <div class="stsec tl-act tl-book" style="--i:2">
-            <span class="stlab">{M('ARAÇ 02 — REZERVASYON', 'TOOL 02 — BOOKING')}</span>
+            <span class="stlab">{M('arc15', 'ARAÇ 02 — REZERVASYON', 'TOOL 02 — BOOKING')}</span>
             <div class="tlcal">
               <div class="tlhead">{BAS.map(x => <span class="tldh">{x}</span>)}</div>
               <div class="tlgrid">{GUN.map((n, i) =>
@@ -111,20 +118,20 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
             </div>
             <div class="tlslots">{SAAT.map((h, i) =>
               <i class={'tlsl' + (i === 1 ? ' aim' : '')} style={`--i:${i}`}>{h}</i>)}</div>
-            <div class="tlok"><i />{M('Randevu alındı · Perşembe 14:30', 'Booked · Thu 14:30')}</div>
-            <p class="tlsay">{M('Dolu günler kapalı gelir. Takvim senin yerine hayır der.',
+            <div class="tlok"><i />{M('arc16', 'Randevu alındı · Perşembe 14:30', 'Booked · Thu 14:30')}</div>
+            <p class="tlsay">{M('arc17', 'Dolu günler kapalı gelir. Takvim senin yerine hayır der.',
               'Full days are already closed. The calendar says no for you.')}</p>
           </div>
 
           {/* perde 3 — müşteri paneli */}
           <div class="stsec tl-act tl-panel" style="--i:3">
-            <span class="stlab">{M('ARAÇ 03 — MÜŞTERİ PANELİ', 'TOOL 03 — CLIENT PANEL')}</span>
-            <div class="tlprj"><b>{M('İstanbul — ofis tadilatı', 'Dubai — office refit')}</b>
+            <span class="stlab">{M('arc18', 'ARAÇ 03 — MÜŞTERİ PANELİ', 'TOOL 03 — CLIENT PANEL')}</span>
+            <div class="tlprj"><b>{M('arc19', 'İstanbul — ofis tadilatı', 'Dubai — office refit')}</b>
               <em class="tlpct" /></div>
             <div class="tlbar"><i class="tlbarf" /></div>
             <div class="tlsteps">{ADIM.map((t, i) =>
               <span class="tlst" data-k={i}><i class="tltick" />{t}</span>)}</div>
-            <p class="tlsay">{M('Kimse ne durumda diye aramaz. Panelden kendi bakar.',
+            <p class="tlsay">{M('arc20', 'Kimse ne durumda diye aramaz. Panelden kendi bakar.',
               'Nobody calls to ask where things stand. They open the panel.')}</p>
           </div>
 

@@ -1,0 +1,148 @@
+{
+ "_": "yeni/panel-envanter.cjs — kaynak taramasi: hangi metin panelden geliyor, hangisi sabit. HUKUM DEGIL envanter.",
+ "olcum": "2026-09-03T11:16:55.129Z",
+ "toplam": {
+  "panelli": 143,
+  "sabit_metin": 17,
+  "sabit_nitelik": 5
+ },
+ "dosya": {
+  "layouts/Temel.astro": {
+   "panelli": 9,
+   "sabit_metin": 0,
+   "sabit_nitelik": 3,
+   "ornek": [],
+   "ornek_nitelik": [
+    "content=\"width=device-width, initial-scale=1\"",
+    "content=\"noindex\"",
+    "content=\"summary_large_image\""
+   ]
+  },
+  "pages/404.astro": {
+   "panelli": 0,
+   "sabit_metin": 3,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "Bu sayfa burada değil",
+    "Adres değişmiş ya da hiç var olmamış olabilir.",
+    "Ana sayfaya dön"
+   ],
+   "ornek_nitelik": []
+  },
+  "pages/deneme-react.astro": {
+   "panelli": 0,
+   "sabit_metin": 4,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "React ada denemesi",
+    "Bu sayfa ürün değil, ölçüm zemini: aşağıdaki kart React + motion adasıdır — sürükle, bırak, yarıda kes. Bütçe rakamları commit raporunda; ada",
+    "client:visible",
+    "ile yalnız bu sayfada yaşar."
+   ],
+   "ornek_nitelik": []
+  },
+  "pages/en/film.astro": {
+   "panelli": 0,
+   "sabit_metin": 1,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "Film skeleton"
+   ],
+   "ornek_nitelik": []
+  },
+  "pages/film.astro": {
+   "panelli": 0,
+   "sabit_metin": 1,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "Film iskeleti"
+   ],
+   "ornek_nitelik": []
+  },
+  "pages/hukuki.astro": {
+   "panelli": 0,
+   "sabit_metin": 1,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "Hukuki metinler"
+   ],
+   "ornek_nitelik": []
+  },
+  "parcalar/BultenDizin.astro": {
+   "panelli": 9,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/HizmetGovde.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 1,
+   "ornek": [],
+   "ornek_nitelik": [
+    "aria-label=\"TradeSelf\""
+   ]
+  },
+  "parcalar/LeadKutu.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 1,
+   "ornek": [],
+   "ornek_nitelik": [
+    "placeholder=\"+90 5xx xxx xx xx\""
+   ]
+  },
+  "parcalar/Nav.astro": {
+   "panelli": 8,
+   "sabit_metin": 5,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "QANAT",
+    "ONE",
+    "QANAT",
+    "ONE",
+    "Dil / Language"
+   ],
+   "ornek_nitelik": []
+  },
+  "parcalar/OtomasyonGovde.astro": {
+   "panelli": 99,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/SssGovde.astro": {
+   "panelli": 2,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/SurecGovde.astro": {
+   "panelli": 3,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/TeslimatBlok.astro": {
+   "panelli": 0,
+   "sabit_metin": 2,
+   "sabit_nitelik": 0,
+   "ornek": [
+    "pazar-raporu/",
+    "pazar-raporu/"
+   ],
+   "ornek_nitelik": []
+  },
+  "sahneler/SSESektor.astro": {
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  }
+ }
+}

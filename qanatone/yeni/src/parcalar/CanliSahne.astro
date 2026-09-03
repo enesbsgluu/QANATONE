@@ -36,7 +36,14 @@ import prjGorsel from '../veri/proje-gorselleri.json';
 interface Props { story: any; dil: Dil }
 const { story, dil } = Astro.props;
 const en = dil === 'en';
-const M = (tr: string, eng: string) => en ? eng : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, eng: string) =>
+  T(((icerik.strings || {})[en ? 'en' : 'tr'] || {})[k], en ? 'en' : 'tr') || (en ? eng : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const gorsel = new Map((prjGorsel as any[]).map(g => [g.slug, g]));
 /* kaynak 8337-8341 birebir */
@@ -44,16 +51,16 @@ const S: any[] = (story?.sites?.length ? story.sites : (story?.live ? [{ u: stor
 const FR = S.filter(o => o.frame !== false);
 const P = FR[0] || null;
 const cip = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '');
-const dom = P ? cip(P.u) : M('canlı işlerimiz', 'our live builds');
+const dom = P ? cip(P.u) : M('cnl01', 'canlı işlerimiz', 'our live builds');
 const digerleri = P ? S.filter(x => x !== P) : [];
 const daha = P && digerleri[0] ? digerleri[0] : null;
 ---
 {S.length > 0 && (
 <div class="sdsec">
-  <span class="mono">{M('Canlı hikâyeler — içlerinde gez', 'Live stories — experience them')}</span>
+  <span class="mono">{M('cnl02', 'Canlı hikâyeler — içlerinde gez', 'Live stories — experience them')}</span>
   <div class={'ststage stlive' + (P ? '' : ' nofr')} id="stStage">
     <div class="stbar"><i /><i /><i /><span>{dom}</span>
-      {P && <a class="stopen" href={P.u} target="_blank" rel="noopener">{M('yeni sekmede aç', 'open')}
+      {P && <a class="stopen" href={P.u} target="_blank" rel="noopener">{M('cnl03', 'yeni sekmede aç', 'open')}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
           ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a>}
@@ -66,7 +73,7 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
           <a class="stpost" href={o.u} target="_blank" rel="noopener">
             {g && <img src={`${B}/img/pd/${o.ps}-m.webp`} width={g.herom.w} height={g.herom.h}
               loading="lazy" decoding="async" alt="" />}
-            <span>{(o.t ? T(o.t, dil) : cip(o.u)) + ' — ' + M('ziyaret et', 'visit')}
+            <span>{(o.t ? T(o.t, dil) : cip(o.u)) + ' — ' + M('cnl04', 'ziyaret et', 'visit')}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
                 ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></span>
@@ -76,10 +83,10 @@ const daha = P && digerleri[0] ? digerleri[0] : null;
     </div>
   </div>
   <div class="fnnote">{P
-    ? M('Canlı yerleştirme — mobilde karta dokunuş siteye götürür.', 'Live embed — tap a card on mobile to visit.')
-    : M('Hikâye anlatılı işlerimizden ikisi — tıkla, canlı deneyimle.', 'Two of our story-driven builds — click to experience them live.')}
+    ? M('cnl05', 'Canlı yerleştirme — mobilde karta dokunuş siteye götürür.', 'Live embed — tap a card on mobile to visit.')
+    : M('cnl06', 'Hikâye anlatılı işlerimizden ikisi — tıkla, canlı deneyimle.', 'Two of our story-driven builds — click to experience them live.')}
     {daha && <> · <a class="stmore" href={daha.u} target="_blank" rel="noopener"
-      >{M('Bir örnek daha: ', 'One more build: ') + (daha.t ? T(daha.t, dil) : cip(daha.u))}
+      >{M('cnl07', 'Bir örnek daha: ', 'One more build: ') + (daha.t ? T(daha.t, dil) : cip(daha.u))}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
         ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a></>}

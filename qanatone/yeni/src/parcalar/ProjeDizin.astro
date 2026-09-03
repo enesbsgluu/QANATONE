@@ -68,7 +68,14 @@ import prjGorsel from '../veri/proje-gorselleri.json';
 const gorselMap = new Map(prjGorsel.map((g: any) => [g.slug, g]));
 interface Props { dil: Dil }
 const { dil } = Astro.props;
-const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sira = (icerik.projects || []).map((p: any) => p.slug);
 const projeler = (await getCollection('projeler')).map(e => e.data)
@@ -105,16 +112,15 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
 <a class="pgback" href={`${B}${on}/`}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-  <span>{M('Ana sayfa', 'Home')}</span>
+  <span>{M('prd01', 'Ana sayfa', 'Home')}</span>
 </a>
 
 <section class="giris" id="prjall">
   {/* Künye şeridi: kaynak 4748 `.shead .mono` — 26 px kızıl çizgi + ARŞİV.
       `etiket` prop'u kabukta bilerek basılmıyor, sayfa etiketi gövdede yaşar. */}
-  <span class="mono">{M('Arşiv', 'Archive')}</span>
-  <h1>{M('Tüm projeler.', 'All projects.')}<span class="cnt">({projeler.length})</span></h1>
-  <p class="lede">{M(
-    'Kurduğumuz her sistem burada. Sektöre göre filtrele, birine gir; neyi çözdüğümüzü ve ne çıktığını gör.',
+  <span class="mono">{M('prd02', 'Arşiv', 'Archive')}</span>
+  <h1>{M('prd03', 'Tüm projeler.', 'All projects.')}<span class="cnt">({projeler.length})</span></h1>
+  <p class="lede">{M('prd04', 'Kurduğumuz her sistem burada. Sektöre göre filtrele, birine gir; neyi çözdüğümüzü ve ne çıktığını gör.',
     'Every system we built. Filter by sector, open one, see what it solved and what came out.')}</p>
 </section>
 
@@ -122,7 +128,7 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
     Radyo + `:has()`; kartlar `data-k` taşır, kurallar derlemede üretilir. */}
 <div class="msf">
   <input type="radio" name="msf" id="msf-0" checked />
-  <label class="mc" for="msf-0">{M('Tümü', 'All')}<em>{projeler.length}</em></label>
+  <label class="mc" for="msf-0">{M('prd05', 'Tümü', 'All')}<em>{projeler.length}</em></label>
   {sektorler.map((sk: string, i: number) => (<>
     <input type="radio" name="msf" id={`msf-${i + 1}`} />
     <label class="mc" for={`msf-${i + 1}`}>{sk}<em>{sayim(sk)}</em></label>
@@ -168,7 +174,7 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
               <span><b>{T(r.v, dil)}</b><em>{T(r.l, dil)}</em></span>
             ))}
           </span>}
-          <span class="mgo"><span>{M('Projeyi gör', 'View project')}</span>
+          <span class="mgo"><span>{M('prd06', 'Projeyi gör', 'View project')}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
           </span>

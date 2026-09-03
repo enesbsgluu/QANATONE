@@ -66,7 +66,14 @@ import SILIletisim from '../sahneler/SILIletisim.astro';
 import Ikon from './Ikon.astro';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
-const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sira = (icerik.services || []).map((s: any) => s.slug);
 /* Boy (`size`) ve vurgu (`hi`) panelin verisinde duruyor ama koleksiyon
@@ -82,24 +89,23 @@ const on = dil === 'en' ? '/en' : '';
 <a class="pgback" href={`${B}${on}/`}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-  <span>{M('Ana sayfa', 'Home')}</span>
+  <span>{M('hzd01', 'Ana sayfa', 'Home')}</span>
 </a>
 
 <section class="giris" id="hizmet">
   {/* Künye şeridi: kaynak 5008 `.shead .mono` — 26 px kızıl çizgi + etiket.
       `etiket` prop'u kabukta bilerek basılmıyor, sayfa etiketi gövdede yaşar. */}
-  <span class="mono">{M('Ne yapıyoruz', 'What we do')}</span>
+  <span class="mono">{M('hzd02', 'Ne yapıyoruz', 'What we do')}</span>
   {/* Kaynak başlığı İKİ satır ve ikinci satır ince (`.thin`, 300/--tx3):
       5009 `Her hizmet<br><span class="thin">bir sorunu çözer.</span>`.
       `<br>` kaynağın KOMPOZİSYON kararı: 1200 px kapta cümle tek satıra
       sığıyor, kaynak yine de kırıyor — iki satırlık blok başlığın kendisi.
       Ölçüldü (yan yana kare, 1440): `<br>`siz hâlde başlık tek satır
       kalıyor ve künye/lede/ızgara 66 px yukarı çıkıyordu. */}
-  <h1><span>{M('Her hizmet', 'Every service')}</span><br
-    /><span class="thin">{M('bir sorunu çözer.', 'solves one problem.')}</span
+  <h1><span>{M('hzd03', 'Her hizmet', 'Every service')}</span><br
+    /><span class="thin">{M('hzd04', 'bir sorunu çözer.', 'solves one problem.')}</span
     ><span class="cnt">({hizmetler.length})</span></h1>
-  <p class="lede">{M(
-    'Hepsini birden satmıyoruz. Önce nerede para kaybettiğine bakar, bu çeyrekte hangisinin en hızlı geri döneceğine birlikte karar veririz.',
+  <p class="lede">{M('hzd05', 'Hepsini birden satmıyoruz. Önce nerede para kaybettiğine bakar, bu çeyrekte hangisinin en hızlı geri döneceğine birlikte karar veririz.',
     'We do not sell all of them at once. We look at where you are losing money first, then decide together which one pays back fastest this quarter.')}</p>
 </section>
 
@@ -113,7 +119,7 @@ const on = dil === 'en' ? '/en' : '';
           <span class="ic"><Ikon ad={b.icon} /></span>
           <h2>{T(s.title, dil)}</h2>
           <p>{T(s.text, dil)}</p>
-          <span class="svgo">{M('İncele', 'Explore')}
+          <span class="svgo">{M('hzd06', 'İncele', 'Explore')}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round"
               aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>

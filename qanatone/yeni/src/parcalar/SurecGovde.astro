@@ -14,7 +14,14 @@
 import { icerik, T, suz, type Dil } from '../icerik';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
-const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
 const adimlar = icerik.steps || [];
@@ -48,7 +55,7 @@ const ETIKET = dil === 'en'
     bitişte kaybolur (eski paint: t<.02 ve >.995 gizli). */}
 <div class="yolcu">
   <svg viewBox={`0 0 ${W} 140`} preserveAspectRatio="none" role="img"
-    aria-label={M('Müşteri yolculuğu: ' + ETIKET.join(', '), 'Customer journey: ' + ETIKET.join(', '))}>
+    aria-label={M('srg01', 'Müşteri yolculuğu: ' + ETIKET.join(', '), 'Customer journey: ' + ETIKET.join(', '))}>
     <defs><linearGradient id="yg" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#8f0f21" /><stop offset="1" stop-color="#ef233c" /></linearGradient></defs>
     <path class="y-cizgi" d={yol} pathLength="1" />
@@ -80,7 +87,7 @@ const ETIKET = dil === 'en'
 </ol>
 
 <p class="son">
-  <a class="dugme sus-isik" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  <a class="dugme sus-isik" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('srg02', 'Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>

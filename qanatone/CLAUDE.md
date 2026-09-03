@@ -155,6 +155,18 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   adımda değer DURULANA kadar beklenir (eski ağaçta scrub var). CSS sayacı
   `::after` içeriği `textContent`e girmez ve `getComputedStyle` sayacı çözmez
   — değer `counterReset`ten okunur.
+- **Panel metin hattı (4 Eyl, P2):** bileşenler sabit metni `m('anahtar','TR')`
+  ya da `M('anahtar','TR','EN')` ile okur; panelde `strings.<dil>.<anahtar>`
+  doluysa o kazanır. Harita `yeni/metin-harita.cjs` üretip `admin.html`e gömer
+  — **bileşene metin ekleyip haritayı yenilemezsen alan panelde YOKTUR.**
+  `M`'nin imzası (anahtar, TR, EN): anahtarı unutmak sessizce YANLIŞ DİL basar
+  (ölçüldü, 18 sayfa). Hiçbir sayfanın ithal etmediği bileşenin anahtarı panele
+  girmez (S2Kayip/S3Mekanizma/S5Surec/S6Sektor ölü, dosyaları duruyor).
+  Kanıt aracı `yeni/panel-kapi.cjs`: yazıldı → derlendi → **üretimde göründü**.
+- **Ölçüm betiği yalnız kabuk sayfalarında (4 Eyl):** `settings.gtm` dolunca
+  `/film`in J1 tavanı 510 B aşılıyordu; tavan gevşetilmedi, etiket `/film`e
+  basılmıyor — orası noindex, sitemap dışı, hiçbir yerden bağlanmıyor ve kendi
+  ölçüm koşumlarımızı Enes'in analitiğine yazardı.
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.

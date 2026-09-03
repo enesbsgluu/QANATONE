@@ -11,7 +11,14 @@
 import { icerik, T, type Dil } from '../icerik';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
-const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
@@ -34,7 +41,7 @@ const sorular = icerik.faq || [];
 
 {/* EN ana sayfa adası kuruldu — eski '/en#iletisim' kaçağı adaya döndü. */}
 <p class="son">
-  <a class="dugme sus-isik" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('Konuşalım', "Let's talk")}</a>
+  <a class="dugme sus-isik" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('ssg01', 'Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>

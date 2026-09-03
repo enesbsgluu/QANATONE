@@ -19,17 +19,39 @@ const BOLUM = {
   'parcalar/Nav.astro': 'Menü',
   'layouts/Temel.astro': 'Kabuk (alt bilgi, çerez)',
   'parcalar/BultenDizin.astro': 'Bülten dizini',
+  /* TUR 4 (4 Eyl 2026): 80 sabit metin panele acilinca bu bilesenler de
+     haritaya girdi. Etiket DOSYA ADI DEGIL, metnin GORUNDUGU YER olmali —
+     Enes panelde "AracSahne.astro" degil "Hizmet detayi" arar. */
+  'parcalar/HizmetDizin.astro': '/hizmetler',
+  'parcalar/HizmetGovde.astro': 'Hizmet detayı',
+  'parcalar/ProjeDizin.astro': '/projeler',
+  'parcalar/ProjeGovde.astro': 'Proje detayı',
+  'parcalar/AracSahne.astro': 'Hizmet detayı · araç sahnesi',
+  'parcalar/PlatformSahne.astro': 'Hizmet detayı · platform sahnesi',
+  'parcalar/CanliSahne.astro': 'Hizmet detayı · canlı işler sahnesi',
+  'parcalar/MotorSahne.astro': 'Hizmet detayı · motor sahnesi',
+  'parcalar/SohbetSahne.astro': 'Hizmet detayı · sohbet sahnesi',
 };
+/* OLU BILESENLER (olculdu 4 Eyl: hicbir sayfa/parca bunlari ithal etmiyor —
+   R13 "anlati sahneleri yok" karariyla sokulduler, dosyalari kaldi).
+   Anahtarlari panele girerse Enes yazar ve HICBIR SEY DEGISMEZ: tam da bu
+   turun kacindigi yanlis yesil. Dosyalarin silinmesi ayri bir karar. */
+const OLU = /^sahneler\/(S2Kayip|S3Mekanizma|S5Surec|S6Sektor)\.astro$/;
 for (const s of require(path.join(__dirname, 'src', 'veri', 'sayfalar.json')).statik) if (s.parca) BOLUM[s.parca] = s.yol;
 const harita = {};
 const dize = String.raw`(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"|` + '`' + String.raw`((?:[^` + '`' + String.raw`\\]|\\.)*)` + '`' + ')';
-const re = new RegExp(String.raw`\bm\(\s*'([a-zA-Z0-9_]+)'\s*,\s*` + dize + String.raw`\s*(?:,\s*` + dize + ')?', 'g');
+/* TUR 4 (4 Eyl 2026): buyuk `M(` de taranir. O gun 80 sabit iki dilli metin
+   `M('tr','en')` bicimindeydi ve panelde YUVASI YOKTU; hepsi dosyaya ozgu
+   sabit anahtarla `M('anahtar','tr','en')` haline geldi. Kucuk `m(` iki ve
+   uc argumanli surumleri tasir, buyuk `M(` uc argumanliyi. */
+const re = new RegExp(String.raw`\b[mM]\(\s*'([a-zA-Z0-9_]+)'\s*,\s*` + dize + String.raw`\s*(?:,\s*` + dize + ')?', 'g');
 (function gez(d) {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
     if (e.isDirectory()) gez(p);
     else if (/\.(astro|ts)$/.test(e.name)) {
       const rel = path.relative(path.join(__dirname, 'src'), p).replace(/\\/g, '/');
+      if (OLU.test(rel)) continue;              /* olu bilesen: panele girmez */
       const kaynak = fs.readFileSync(p, 'utf8');
       let m;
       while ((m = re.exec(kaynak))) {
