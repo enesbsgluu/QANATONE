@@ -40,12 +40,19 @@
 
    TABAN = TAMAMLANMIŞ (kaynak REDUCE dalı draw(1)); içerik JS'siz tam,
    ada JS'i yalnız sarmal yüksekliğini ölçer. */
-import { T, type Dil } from '../icerik';
+import { T, icerik, type Dil } from '../icerik';
 interface Props { trade: any; dil: Dil }
 const { trade, dil } = Astro.props;
 const t = trade || {};
 const en = dil === 'en';
-const M = (tr: string, eng: string) => en ? eng : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, eng: string) =>
+  T(((icerik.strings || {})[en ? 'en' : 'tr'] || {})[k], en ? 'en' : 'tr') || (en ? eng : tr);
 const adimlar = (t.steps || []) as any[];
 const cipler = (t.filters || []) as any[];
 const alicilar = (t.buyers || []) as any[];
@@ -72,7 +79,7 @@ let ki = -1;
 {t.q && (
 <div class="sdsec qt-kap">
   <div class="qt-sabit">
-    <span class="mono">{M('Platform akışı — kaydırdıkça çalışır', 'The platform — runs as you scroll')}</span>
+    <span class="mono">{M('plt01', 'Platform akışı — kaydırdıkça çalışır', 'The platform — runs as you scroll')}</span>
     <div class="qtstage" id="qtStage">
       <div class="qtbar">
         <span class="qtlogo"><b />TradeSelf</span>
@@ -93,19 +100,19 @@ let ki = -1;
           </div>
           <div class="qtchips">{cipler.map((f, i) =>
             <span class="qtchip" style={`--i:${i}`}>{T(f, dil)}</span>)}</div>
-          <div class="qtfound"><em class="qtn" style={`--bulunan:${bulunan}`} /><i>{M('doğrulanmış alıcı bulundu', 'verified buyers found')}</i></div>
+          <div class="qtfound"><em class="qtn" style={`--bulunan:${bulunan}`} /><i>{M('plt02', 'doğrulanmış alıcı bulundu', 'verified buyers found')}</i></div>
         </section>
 
         {/* perde 2 — alıcı listesi */}
         <section class="qtact" data-a="1" style="--i:1">
-          <div class="qthead"><span>{M('Firma', 'Company')}</span><span>{M('Sevkiyat', 'Shipments')}</span>
-            <span>{M('Hacim', 'Volume')}</span><span>{M('Son alım', 'Last buy')}</span></div>
+          <div class="qthead"><span>{M('plt03', 'Firma', 'Company')}</span><span>{M('plt04', 'Sevkiyat', 'Shipments')}</span>
+            <span>{M('plt05', 'Hacim', 'Volume')}</span><span>{M('plt06', 'Son alım', 'Last buy')}</span></div>
           <div class="qtlist">{alicilar.map((b: any, i: number) =>
             <div class={'qtrow' + (i === secim ? ' aim' : '')} data-b={i} style={`--i:${i}`}>
               <span class="qtco"><b>{b.n}</b><i>{b.c}</i></span>
-              <span class="qtm"><em>{b.s}</em><i>{M('sevkiyat', 'shipments')}</i></span>
-              <span class="qtm"><em>{b.v}</em><i>{M('hacim', 'volume')}</i></span>
-              <span class="qtm last"><em>{b.d}</em><i>{M('son alım', 'last buy')}</i></span>
+              <span class="qtm"><em>{b.s}</em><i>{M('plt07', 'sevkiyat', 'shipments')}</i></span>
+              <span class="qtm"><em>{b.v}</em><i>{M('plt08', 'hacim', 'volume')}</i></span>
+              <span class="qtm last"><em>{b.d}</em><i>{M('plt09', 'son alım', 'last buy')}</i></span>
             </div>)}</div>
         </section>
 
@@ -114,7 +121,7 @@ let ki = -1;
           <div class="qtcard">
             <div class="qtch"><b class="qtav" />
               <span><em>{t.pick || ''}</em><i>{t.pickc || ''}</i></span>
-              <span class="qtver">{M('doğrulandı', 'verified')}</span></div>
+              <span class="qtver">{M('plt10', 'doğrulandı', 'verified')}</span></div>
             <ul class="qtsum">{ozet.map((s, i) =>
               <li style={`--i:${i}`}>{T(s, dil)}</li>)}</ul>
             <div class="qtdm"><span class="qtrole">{T(dm.role, dil)}</span>
@@ -128,12 +135,12 @@ let ki = -1;
         {/* perde 4 — ilk temas */}
         <section class="qtact" data-a="3" style="--i:3">
           <div class="qtmail">
-            <div class="qtmh"><i>{M('Kime', 'To')}</i><b>{dm.mail || ''}</b></div>
-            <div class="qtmh"><i>{M('Konu', 'Subject')}</i><b>{T((t.mail || {}).sub, dil)}</b></div>
+            <div class="qtmh"><i>{M('plt11', 'Kime', 'To')}</i><b>{dm.mail || ''}</b></div>
+            <div class="qtmh"><i>{M('plt12', 'Konu', 'Subject')}</i><b>{T((t.mail || {}).sub, dil)}</b></div>
             <p class="qtbody" style={`--n:${KN}`}>{jetonlar.map(j => j.br
               ? <br />
               : <span class="qtw" style={`--k:${++ki}`}>{j.k}{' '}</span>)}</p>
-            <div class="qtsend"><b>{M('AI yazdı · gönderildi', 'Written by AI · sent')}</b></div>
+            <div class="qtsend"><b>{M('plt13', 'AI yazdı · gönderildi', 'Written by AI · sent')}</b></div>
           </div>
           <div class="qtreply"><b />{T((t.mail || {}).reply, dil)}</div>
         </section>

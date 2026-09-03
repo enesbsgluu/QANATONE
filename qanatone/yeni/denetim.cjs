@@ -1880,6 +1880,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    sahneden SONRA gelmesi de kaynagin sirasi (SDT haritasi). */
 {
   const kusur = [];
+  /* Panelin WhatsApp numarasi — asagidaki cagri kurali KOSULLU (bkz. yorum).
+     Okunamazsa numara VAR sayilir: kural gevsemesin. */
+  const WA_VAR = (() => {
+    try {
+      const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      return !!String((c.settings || {}).whatsapp || '').replace(/[^0-9]/g, '');
+    } catch (e) { return true; }
+  })();
   /* TUR 9 (3 Eyl 2026): rota /hizmet/ -> /hizmetler/ (kesme mayini, R8c).
      Bu kural, R1 ve H19 yolu SABIT tasiyordu ve yeniden adlandirmada
      kirmiziya dustu — dogru davranis; uc kural birlikte cogula alindi. */
@@ -1901,7 +1909,20 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const iS = h.search(/class="(hn|ak|cl|ai|st|qt|mk)[a-z-]*sahne|class="[a-z]*stage/);
     if (iV > 0 && iS > 0 && iS > iV) kusur.push(r + ':vurus-sahneden-once');
     const dugme = (h.match(/class="[^"]*\bsdbtns\b[\s\S]{0,3000}?<\/section>/) || [''])[0];
-    if ((dugme.match(/<a\s/g) || []).length < 2) kusur.push(r + ':cagri-tek-dugme');
+    /* CAGRI DUGMELERI KOSULA BAGLI (TUR 4, 4 Eyl 2026 — PANEL KAPISI).
+       Ikinci dugme WhatsApp dugmesidir ve numara PANELDEN BOSALTILABILIR;
+       kural "her zaman iki dugme" derse Enes numarayi silince deploy
+       denetimi kirmiziya doner (olculdu: dokuz hizmet sayfasi x TR/EN).
+       KURAL GEVSEMEDI, KOSULLU OLDU ve iki yonu birden tutar: numara
+       DOLUYSA iki dugme SART; BOSSA en az bir dugme olmali VE wa.me bagi
+       basilmamis olmali (bos numarayla 'https://wa.me/?text=' basmak
+       sessiz kusurdur). */
+    const dugmeSayi = (dugme.match(/<a\s/g) || []).length;
+    if (WA_VAR) { if (dugmeSayi < 2) kusur.push(r + ':cagri-tek-dugme'); }
+    else {
+      if (dugmeSayi < 1) kusur.push(r + ':cagri-dugmesi-yok');
+      if (/wa\.me\//.test(dugme)) kusur.push(r + ':bos-numarayla-wa-bagi');
+    }
   }
   ol('R11 · hizmet detayi: geri bagi + kunye + alti genisleyen kart + iki dugme',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
@@ -2480,6 +2501,75 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   if (fs.existsSync(fY) && /toggleAttribute\(['"]inert/.test(oku(fY))) kusur.push('film-sayfasina-sizmis');
   ol('FM3 · film önündeyken odak film içinde: kabuk katmanları inert + fl-js düşünce geri alınır',
      kusur.length === 0, kusur.join(' '));
+}
+
+/* ---- P2 · PANEL METIN HATTI (TUR 4, 4 Eyl 2026) ----
+   Uc sessiz kusuru birden tutar; ucu de bu turda YASANDI:
+     1. HARITA BAYAT. Panelin "Sabit metinler" sekmesi admin.html'e GOMULU
+        haritadan beslenir (yeni/metin-harita.cjs uretir). Bilesene yeni
+        metin girip haritayi yenilemeyi unutmak = alan panelde YOK ve
+        kimse fark etmez. Kural haritayi yeniden uretip GOMULU olanla
+        kiyaslar.
+     2. ANAHTARSIZ `M(` CAGRISI. `M` imzasi (anahtar, TR, EN); anahtar
+        unutulursa cagri SESSIZCE yanlis dili basar — bu tam olarak
+        olculdu: `M(`...adimda kurulum...`, `...steps...`)` TR sayfada
+        Ingilizce cikti ve 18 sayfanin gorunur metni degisti. Kural her
+        `M(` cagrisinin ilk argumaninin duz tirnakli anahtar olmasini ister.
+     3. OLU BILESEN ANAHTARI. Hicbir sayfanin ithal etmedigi bilesenin
+        anahtari panele girerse Enes yazar ve HICBIR SEY DEGISMEZ (bu
+        turun kacindigi yanlis yesil). Harita uretecinin OLU listesi var;
+        kural o listedeki dosyalarin gercekten ithal edilmedigini dogrular
+        — dosya yeniden baglanirsa liste bayatlar.
+   Kanit araci: yeni/panel-kapi.cjs (yazildi -> derlendi -> uretimde gorundu). */
+{
+  const kusur = [];
+  const SRC = path.join(__dirname, 'src');
+  /* 1 · harita taze mi */
+  try {
+    const cikti = require('child_process').execSync('node metin-harita.cjs',
+      { cwd: __dirname, env: Object.assign({}, process.env, { KONTROL: '1' }), encoding: 'utf8', timeout: 60000 });
+    if (!/TAZE/.test(cikti)) kusur.push('harita-bayat');
+  } catch (e) {
+    const o = String((e && e.stdout) || '');
+    kusur.push(/BAYAT/.test(o) ? 'harita-bayat' : 'harita-kontrol-hatasi');
+  }
+  /* 2 · anahtarsiz M( cagrisi: ilk arguman duz tirnakli anahtar olmali */
+  const anahtarsiz = [];
+  (function gez(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p2 = path.join(d, e.name);
+      if (e.isDirectory()) { gez(p2); continue; }
+      if (!e.name.endsWith('.astro')) continue;
+      const k = fs.readFileSync(p2, 'utf8');
+      if (!/const M = \(k: string/.test(k)) continue;      /* panele acilmis dosyalar */
+      /* ILK ARGUMAN ANAHTAR OLMALI. "tirnakla basliyor mu" YETMEZ: anahtari
+         silince cagri `M('Sik sorulan sorular', ...)` olur ve tirnakla baslar
+         — kural ilk surumde bunu KACIRDI (kirmizi-once denemesinde goruldu).
+         Anahtar bicimi: kucuk harf + rakam, 3-12 karakter, BOSLUKSUZ. */
+      for (const m of k.matchAll(/(^|[^A-Za-z0-9_$.])M\(\s*([^)]{0,40}?)\s*,/g)) {
+        const ilk = m[2].trim();
+        if (!/^'[a-z][a-z0-9]{2,11}'$/.test(ilk))
+          anahtarsiz.push(path.relative(SRC, p2).replace(/\\/g, '/') + ':' + ilk.slice(0, 24));
+      }
+    }
+  })(SRC);
+  if (anahtarsiz.length) kusur.push('anahtarsiz-M:' + anahtarsiz.slice(0, 3).join(','));
+  /* 3 · olu listesi hala olu mu */
+  const olu = ['S2Kayip', 'S3Mekanizma', 'S5Surec', 'S6Sektor'];
+  const tumKaynak = [];
+  (function gez2(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p2 = path.join(d, e.name);
+      if (e.isDirectory()) gez2(p2);
+      else if (/\.(astro|ts)$/.test(e.name)) tumKaynak.push([path.relative(SRC, p2).replace(/\\/g, '/'), fs.readFileSync(p2, 'utf8')]);
+    }
+  })(SRC);
+  for (const ad of olu) {
+    const ithal = tumKaynak.filter(([r, k]) => !r.endsWith(ad + '.astro') && new RegExp('[\'"/]' + ad + '[\'"]|/' + ad + '\\.astro').test(k));
+    if (ithal.length) kusur.push('olu-sanilan-bilesen-ithal-edilmis:' + ad);
+  }
+  ol('P2 · panel metin hattı: harita taze + anahtarsız M( yok + ölü bileşen listesi geçerli',
+     kusur.length === 0, kusur.slice(0, 3).join(' '));
 }
 
 /* K1 · KABUK MODULU TAVANI (4 Eyl 2026, SOKUM VE TASIMA TURU). Eski

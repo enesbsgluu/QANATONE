@@ -41,13 +41,20 @@
    Kaynak `.mkact.on` sınıfıyla duraklatıyordu; burada perde sınıfı yok,
    o yüzden kapı IntersectionObserver: görünmeyen dönmez (doktrinin
    IO'ya izin verdiği tek yer — [[qanatone-io-tetik-surucu]] madde 3). */
-import { T, type Dil } from '../icerik';
+import { T, icerik, type Dil } from '../icerik';
 import { ulkeler, agKur, yay, yuzde, nokta, VB } from '../harita.mjs';
 interface Props { market: any; dil: Dil }
 const { market, dil } = Astro.props;
 const m = market || {};
 const en = dil === 'en';
-const M = (tr: string, eng: string) => en ? eng : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, eng: string) =>
+  T(((icerik.strings || {})[en ? 'en' : 'tr'] || {})[k], en ? 'en' : 'tr') || (en ? eng : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const adimlar = (m.steps || []) as any[];
 const sayimlar = (m.counts || []) as any[];
@@ -141,7 +148,7 @@ const egri = (c: any) => {
 {m.steps && (
 <div class="sdsec mk-kap">
   <div class="mk-sabit">
-    <span class="mono">{M('Pazar zekâsı — kaydırdıkça çözülür', 'Market intelligence — solved as you scroll')}</span>
+    <span class="mono">{M('mtr01', 'Pazar zekâsı — kaydırdıkça çözülür', 'Market intelligence — solved as you scroll')}</span>
     {/* TUR 4 (2 Eyl 2026): inert — klavye odak gezintisi seride girmez; serit
         dekoratif (odaklanabilir oge yok, isaretci olayi yok). Ilk Tab 52 -> 26-36 ms. */}
     <div class="mkstage" id="mkStage" inert>
@@ -149,7 +156,7 @@ const egri = (c: any) => {
         <span class="mklogo"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
           ><path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm0 5.8a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" /><path
             d="M21.2 13.6a9.6 9.6 0 0 0 0-3.2l1.9-1.4-1.9-3.3-2.2.8a9.4 9.4 0 0 0-2.8-1.6L15.8 2h-3.8l-.4 2.9c-1 .3-2 .9-2.8 1.6l-2.2-.8-1.9 3.3 1.9 1.4a9.6 9.6 0 0 0 0 3.2l-1.9 1.4 1.9 3.3 2.2-.8c.8.7 1.8 1.3 2.8 1.6l.4 2.9h3.8l.4-2.9c1-.3 2-.9 2.8-1.6l2.2.8 1.9-3.3-1.9-1.4Z"
-            opacity=".92" /></svg></b>{M('TradeSelf · pazar motoru', 'TradeSelf · market engine')}</span>
+            opacity=".92" /></svg></b>{M('mtr02', 'TradeSelf · pazar motoru', 'TradeSelf · market engine')}</span>
         <span class="mkrail">{adimlar.map((s, i) =>
           <span class="mkstep" data-s={i} style={`--i:${i}`}><b />{T(s, dil)}</span>)}</span>
       </div>

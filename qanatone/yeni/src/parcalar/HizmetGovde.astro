@@ -32,7 +32,14 @@ import '../stil/demo-detay.css';
 interface Props { s: any; dil: Dil }
 const { s, dil } = Astro.props;
 const d = s.det;
-const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 /* Giris demosu anahtari (DEMO_MAP/demoAnahtar) KALKTI — anayasa, 3 Eyl 2026. */
 const on = dil === 'en' ? '/en' : '';
@@ -54,7 +61,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 <a class="pgback" href={`${B}${on}/hizmetler`}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-  <span>{M('Tüm hizmetler', 'All services')}</span>
+  <span>{M('hzg01', 'Tüm hizmetler', 'All services')}</span>
 </a>
 
 <section class="giris" id="hizmetdetay">
@@ -142,13 +149,16 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('Nasıl yürütürüz', 'How we run it')}</h3>
-        <p>{M(`${d.steps.length} adımda kurulum — aç, oku.`,
+        <h3>{M('hzg02', 'Nasıl yürütürüz', 'How we run it')}</h3>
+        {/* Sablon degismeli metin: adim SAYISI icinde. Anahtar hzg14; panelden
+            yazilirsa sayi da metnin icinde yazilir (yer tutucu yok — kaynakta da
+            cumlenin kendisi sayiyi tasiyordu). */}
+        <p>{M('hzg14', `${d.steps.length} adımda kurulum — aç, oku.`,
               `${d.steps.length} steps — open and read.`)}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('Nasıl yürütürüz', 'How we run it')}</h4>
-        <span class="xcs">{M('Adım adım', 'Step by step')}</span>
+        <h4>{M('hzg03', 'Nasıl yürütürüz', 'How we run it')}</h4>
+        <span class="xcs">{M('hzg04', 'Adım adım', 'Step by step')}</span>
         {d.steps.map((a: any) => (
           <div class="xstp"><b>{a.n}</b>
             <div><h5>{T(a.t, dil)}</h5><p>{T(a.d, dil)}</p></div></div>
@@ -158,12 +168,12 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('Eline geçenler', 'What you get')}</h3>
-        <p>{M('Somut teslim listesi — aç, say.', 'The concrete list — open and count.')}</p>
+        <h3>{M('hzg05', 'Eline geçenler', 'What you get')}</h3>
+        <p>{M('hzg06', 'Somut teslim listesi — aç, say.', 'The concrete list — open and count.')}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('Eline geçenler', 'What you get')}</h4>
-        <span class="xcs">{M('Teslimatlar', 'Deliverables')}</span>
+        <h4>{M('hzg07', 'Eline geçenler', 'What you get')}</h4>
+        <span class="xcs">{M('hzg08', 'Teslimatlar', 'Deliverables')}</span>
         <div class="xdel">
           {(d.del[dil] || d.del.tr).map((t: string) => (
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -176,17 +186,17 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('Hedefler & SSS', 'Targets & FAQ')}</h3>
-        <p>{M('Rakamlar ve dürüst cevaplar.', 'Numbers and honest answers.')}</p>
+        <h3>{M('hzg09', 'Hedefler & SSS', 'Targets & FAQ')}</h3>
+        <p>{M('hzg10', 'Rakamlar ve dürüst cevaplar.', 'Numbers and honest answers.')}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('Peşine düştüğümüz hedefler', 'Targets we chase')}</h4>
+        <h4>{M('hzg11', 'Peşine düştüğümüz hedefler', 'Targets we chase')}</h4>
         <div class="xmet">
           {d.met.map((m: any) => (
             <div><b>{T(m.v, dil)}</b><p>{T(m.l, dil)}</p></div>
           ))}
         </div>
-        <h4 class="xc-ara">{M('SSS', 'FAQ')}</h4>
+        <h4 class="xc-ara">{M('hzg12', 'SSS', 'FAQ')}</h4>
         {d.faq.map((f: any) => (
           <details class="xsss">
             <summary>{T(f.q, dil)}</summary>
@@ -210,7 +220,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   <h2>{T(d.cta.t, dil)}</h2>
   <p>{T(d.cta.s, dil)}</p>
   <div class="sdbtns">
-    <a class="dugme" href={`${B}${on}/#iletisim`}>{M('Kısa formu doldur', 'Fill the short form')}
+    <a class="dugme" href={`${B}${on}/#iletisim`}>{M('hzg13', 'Kısa formu doldur', 'Fill the short form')}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round"
         aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>

@@ -108,7 +108,14 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
   {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
   <slot name="bas" />
-  {GTM_KOD && <script is:inline set:html={GTM_KOD} />}
+  {/* OLCUM BETIGI YALNIZ KABUK SAYFALARINDA (TUR 4, 4 Eyl 2026 — PANEL KAPISI).
+      Panelden `settings.gtm` DOLDURULUNCA /film sayfasinin J1 tavani asiliyordu
+      (11.774 > 11.264 B; olculdu, 510 B fazla). TAVAN GEVSETILMEDI: `/film`
+      ziyaretci hedefi DEGIL — noindex, sitemap'te yok, hicbir sayfadan
+      baglanmiyor, kabuk={false} ile kendi tam ekran olcum yuzeyi. Oraya ucuncu
+      taraf olcum etiketi basmak zaten YANLIS olurdu: kendi olcum kosumlarimizi
+      Enes'in analitigine yazardi. Etiket kabuk sayfalarinda (63 sayfa) basilir. */}
+  {kabuk && GTM_KOD && <script is:inline set:html={GTM_KOD} />}
 </head>
 <body>
   {/* TUR 9 E1 (3 Eyl 2026): atlama bağlantısı — ilk Tab durağı. Ölçüldü:

@@ -41,6 +41,34 @@ const ALAN = [
   { sekme: 'kurucu', p: 'founder.bio.tr', deger: '<p>' + N + ' biyografi</p>', sayfa: ['index.html'], not: 'kurucu biyografisi' },
   { sekme: 'kurucu', p: 'socials.0.url', deger: 'https://www.instagram.com/' + N, sayfa: ['index.html'], not: 'sosyal adres (alt bilgi + sameAs)' },
   { sekme: 'soz', p: 'testimonials.0.q.tr', deger: N + ' müşteri sözü', sayfa: ['index.html'], not: 'müşteri sözü (theme.testi.on=1 ile)' },
+  /* TUR 4 (4 Eyl 2026) — planin saydigi kalan alanlar kapiya alindi. */
+  { sekme: 'genel', p: 'settings.gtm', deger: 'G-' + N.toUpperCase().slice(-8), sayfa: ['index.html', 'sss/index.html'], not: 'ölçüm betiği (GTM/GA)' },
+  { sekme: 'genel', p: 'settings.whatsapp', deger: '90' + (5000000000 + parseInt(N.slice(-4), 36) % 999999999), sayfa: ['index.html', 'sss/index.html'], not: 'WhatsApp numarası (bütün düğmeler)' },
+  { sekme: 'kurucu', p: 'founder.bio.en', deger: '<p>' + N + ' EN bio</p>', sayfa: ['en/index.html'], not: 'kurucu biyografisi EN' },
+  { sekme: 'kurucu', p: 'socials.0.label', deger: N + '-SOSYAL', sayfa: ['index.html'], not: 'sosyal hesap etiketi (alt bilgi)' },
+  { sekme: 'metin', p: 'strings.tr.bkh', deger: N + '-BULTEN', sayfa: ['bulten/index.html'], not: 'bülten dizini başlığı' },
+  { sekme: 'metin', p: 'strings.tr.s3h', deger: N + '-SUREC', sayfa: ['surec/index.html'], not: '/surec başlığı' },
+  { sekme: 'metin', p: 'strings.tr.s5h', deger: N + '-SSS', sayfa: ['sss/index.html'], not: '/sss başlığı' },
+  { sekme: 'metin', p: 'strings.tr.hs1', deger: N + '-HUNI', sayfa: ['otomasyon/index.html'], not: 'hesaplayıcı başlığı (TUR 1 kartı)' },
+  { sekme: 'metin', p: 'strings.tr.mf1', deger: N + '-MODEL', sayfa: ['otomasyon/index.html'], not: 'doğru model kartı başlığı (TUR 1)' },
+  { sekme: 'metin', p: 'strings.tr.gn1', deger: N + '-GUN', sayfa: ['otomasyon/index.html'], not: 'bir gün rayı başlığı (TUR 1)' },
+  { sekme: 'metin', p: 'strings.en.foot1', deger: N + '-FOOTEN', sayfa: ['en/index.html'], not: 'alt bilgi EN' },
+  /* TUR 4 · IKINCI DALGA: 80 sabit iki dilli metin panele acildi (M('anahtar',
+     'TR','EN')). Her acilan DOSYADAN en az bir anahtar kapiya girer — tek tek
+     hepsini yazmak kapiyi 4 dakikadan saatlere cikarirdi; dosya basina bir
+     ornek, bagin kurulup kurulmadigini gosterir (imza ve harita ortak). */
+  { sekme: 'metin', p: 'strings.tr.hzg01', deger: N + '-HZG', sayfa: ['hizmetler/seo/index.html'], not: 'hizmet detayı — geri bağı' },
+  { sekme: 'metin', p: 'strings.en.hzg13', deger: N + '-HZGEN', sayfa: ['en/hizmetler/seo/index.html'], not: 'hizmet detayı çağrı düğmesi EN' },
+  { sekme: 'metin', p: 'strings.tr.hzd01', deger: N + '-HZD', sayfa: ['hizmetler/index.html'], not: '/hizmetler dizini' },
+  { sekme: 'metin', p: 'strings.tr.prd01', deger: N + '-PRD', sayfa: ['projeler/index.html'], not: '/projeler dizini' },
+  { sekme: 'metin', p: 'strings.tr.prg01', deger: N + '-PRG', sayfa: ['projeler/skyclinics/index.html'], not: 'proje detayı' },
+  { sekme: 'metin', p: 'strings.tr.bld01', deger: N + '-BLD', sayfa: ['bulten/index.html'], not: 'bülten dizini (M ailesi)' },
+  { sekme: 'metin', p: 'strings.tr.srg01', deger: N + '-SRG', sayfa: ['surec/index.html'], not: '/surec (M ailesi)' },
+  { sekme: 'metin', p: 'strings.tr.ssg01', deger: N + '-SSG', sayfa: ['sss/index.html'], not: '/sss (M ailesi)' },
+  /* sahneler: hangi hizmet sayfasinda gorundukleri OLCULDU (dist'te arandi) */
+  { sekme: 'metin', p: 'strings.tr.arc01', deger: N + '-ARC', sayfa: ['hizmetler/web-sitesi-araclar/index.html'], not: 'araç sahnesi künyesi' },
+  { sekme: 'metin', p: 'strings.tr.plt01', deger: N + '-PLT', sayfa: ['hizmetler/finans/index.html'], not: 'platform sahnesi künyesi' },
+  { sekme: 'metin', p: 'strings.tr.mtr01', deger: N + '-MTR', sayfa: ['hizmetler/finans/index.html'], not: 'motor sahnesi künyesi' },
 ];
 const ANAHTAR = [ /* dugmeler: data-sw yolu, beklenen iz (deger 1 iken dist'te ARANMAYAN sinif) */
   { sekme: 'gorunum', sw: 'theme.motion.stars', iz: 't-nostars', not: 'yıldız tuvali' },
