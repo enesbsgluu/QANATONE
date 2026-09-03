@@ -19,6 +19,10 @@ interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
+/* TUR 2 (5 Eyl 2026): `g()` panelde YUVASI OLAN anahtari okur ve yoksa BOS
+   doner; yeni acilan alanin kod varsayilani olmasi gerektigi icin yanina
+   `m()` geldi (kucuk m, uc argumanli — metin-harita.cjs bu bicimi tarar). */
+const m = (k: string, tr: string, enV: string): string => T(s[k], dil) || (dil === 'en' ? enV : tr);
 const yalinMetin = (k: string): string => g(k).replace(/<[^>]*>/g, '').trim();
 const en = dil === 'en';
 const wa = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
@@ -45,8 +49,13 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
     <label class="sil-alan"><span>{g('ld2')}</span>
       <input type="email" name="email" required maxlength="120" autocomplete="email" /></label>
     <label class="sil-alan"><span>{g('ld3')}</span>
+      {/* TELEFON IPUCU PANELE ACILDI (TUR 2). Komsu iki alanin ipucu
+          `en ? ... : ...` ile cevriliyordu, bu SABITTI: EN ziyaretci
+          Turkce telefon bicimi goruyordu. EN varsayilani BILEREK TR ile
+          ayni birakildi — Ingilizce ipucunun ne olacagi icerik karari,
+          uydurulmaz; alan artik panelde, deger Enes'in. */}
       <input type="tel" name="phone" required maxlength="24" autocomplete="tel"
-        placeholder="+90 5xx xxx xx xx" /></label>
+        placeholder={m('ldtel', '+90 5xx xxx xx xx', '+90 5xx xxx xx xx')} /></label>
     <label class="sil-alan"><span>{g('ld6')}</span>
       <textarea name="message" maxlength="600" rows="3"
         placeholder={en ? 'e.g. site + WhatsApp agent for health tourism'

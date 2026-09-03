@@ -1,110 +1,141 @@
 {
- "_": "yeni/panel-envanter.cjs — kaynak taramasi: hangi metin panelden geliyor, hangisi sabit. HUKUM DEGIL envanter.",
- "olcum": "2026-09-03T18:27:10.241Z",
+ "_": "yeni/panel-envanter.cjs — kaynak taramasi: hangi metin panelden geliyor, hangisi sabit. HUKUM DEGIL envanter. Istisnalar SILINMEZ, gerekcesiyle ayri sayilir.",
+ "olcum": "2026-09-03T19:11:50.209Z",
  "toplam": {
-  "panelli": 143,
-  "sabit_metin": 17,
-  "sabit_nitelik": 5
+  "panelli": 232,
+  "sabit_metin": 0,
+  "sabit_nitelik": 0,
+  "gerekceli_istisna": 12,
+  "teknik_meta": 3
  },
  "dosya": {
   "layouts/Temel.astro": {
    "panelli": 9,
    "sabit_metin": 0,
-   "sabit_nitelik": 3,
+   "sabit_nitelik": 0,
    "ornek": [],
-   "ornek_nitelik": [
-    "content=\"width=device-width, initial-scale=1\"",
-    "content=\"noindex\"",
-    "content=\"summary_large_image\""
+   "ornek_nitelik": [],
+   "teknik_meta": [
+    "viewport=\"width=device-width, initial-scale=1\"",
+    "robots=\"noindex\"",
+    "twitter:card=\"summary_large_image\""
    ]
   },
   "pages/404.astro": {
-   "panelli": 0,
-   "sabit_metin": 3,
+   "panelli": 3,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
-    "Bu sayfa burada değil",
-    "Adres değişmiş ya da hiç var olmamış olabilir.",
-    "Ana sayfaya dön"
-   ],
+   "ornek": [],
    "ornek_nitelik": []
   },
   "pages/deneme-react.astro": {
    "panelli": 0,
-   "sabit_metin": 4,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
     "React ada denemesi",
     "Bu sayfa ürün değil, ölçüm zemini: aşağıdaki kart React + motion adasıdır — sürükle, bırak, yarıda kes. Bütçe rakamları commit raporunda; ada",
     "client:visible",
     "ile yalnız bu sayfada yaşar."
    ],
-   "ornek_nitelik": []
+   "istisna_neden": "olcum zemini — sayfa kendi icinde \"urun degil, olcum zemini: asagidaki kart React + motion adasidir\" diyor; dist e giriyor ama noindex ve sitemap disinda (kesme kalemi)"
   },
   "pages/en/film.astro": {
    "panelli": 0,
-   "sabit_metin": 1,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
     "Film skeleton"
    ],
-   "ornek_nitelik": []
+   "istisna_neden": "olcum zemini — film.astro nun EN esi, ayni kunye"
   },
   "pages/film.astro": {
    "panelli": 0,
-   "sabit_metin": 1,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
     "Film iskeleti"
    ],
-   "ornek_nitelik": []
+   "istisna_neden": "olcum zemini — kunye: \"39 kliplik scroll-scrub adasinin OLCUM ZEMINI; urun sayfasi degil\""
   },
   "pages/hukuki.astro": {
-   "panelli": 0,
-   "sabit_metin": 1,
+   "panelli": 1,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
-    "Hukuki metinler"
-   ],
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/AracSahne.astro": {
+   "panelli": 20,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
    "ornek_nitelik": []
   },
   "parcalar/BultenDizin.astro": {
-   "panelli": 9,
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/CanliSahne.astro": {
+   "panelli": 7,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/HizmetDizin.astro": {
+   "panelli": 6,
    "sabit_metin": 0,
    "sabit_nitelik": 0,
    "ornek": [],
    "ornek_nitelik": []
   },
   "parcalar/HizmetGovde.astro": {
-   "panelli": 0,
+   "panelli": 15,
    "sabit_metin": 0,
-   "sabit_nitelik": 1,
+   "sabit_nitelik": 0,
    "ornek": [],
-   "ornek_nitelik": [
-    "aria-label=\"TradeSelf\""
-   ]
+   "ornek_nitelik": []
   },
   "parcalar/LeadKutu.astro": {
-   "panelli": 0,
+   "panelli": 1,
    "sabit_metin": 0,
-   "sabit_nitelik": 1,
+   "sabit_nitelik": 0,
    "ornek": [],
-   "ornek_nitelik": [
-    "placeholder=\"+90 5xx xxx xx xx\""
-   ]
+   "ornek_nitelik": []
+  },
+  "parcalar/MotorSahne.astro": {
+   "panelli": 2,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
   },
   "parcalar/Nav.astro": {
-   "panelli": 8,
-   "sabit_metin": 5,
+   "panelli": 9,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
     "QANAT",
     "ONE",
     "QANAT",
-    "ONE",
-    "Dil / Language"
+    "ONE"
    ],
-   "ornek_nitelik": []
+   "istisna_neden": [
+    "marka kelimesi — logo tipografik olarak QANAT + ONE diye bolunmus (<b>QANAT<span>ONE</span></b>), metin degil GORSEL kimlik; panele acilirsa bir yazim hatasi site kimligini bozar",
+    "marka kelimesinin ikinci parcasi — yukaridakiyle ayni gerekce"
+   ]
   },
   "parcalar/OtomasyonGovde.astro": {
    "panelli": 99,
@@ -113,15 +144,36 @@
    "ornek": [],
    "ornek_nitelik": []
   },
+  "parcalar/PlatformSahne.astro": {
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/ProjeDizin.astro": {
+   "panelli": 6,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/ProjeGovde.astro": {
+   "panelli": 6,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
   "parcalar/SssGovde.astro": {
-   "panelli": 2,
+   "panelli": 3,
    "sabit_metin": 0,
    "sabit_nitelik": 0,
    "ornek": [],
    "ornek_nitelik": []
   },
   "parcalar/SurecGovde.astro": {
-   "panelli": 3,
+   "panelli": 5,
    "sabit_metin": 0,
    "sabit_nitelik": 0,
    "ornek": [],
@@ -129,12 +181,23 @@
   },
   "parcalar/TeslimatBlok.astro": {
    "panelli": 0,
-   "sabit_metin": 2,
+   "sabit_metin": 0,
    "sabit_nitelik": 0,
-   "ornek": [
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
     "pazar-raporu/",
     "pazar-raporu/"
    ],
+   "istisna_neden": [
+    "yol gorunumlu gorsel motif (.tppath / <b>), okunacak kopya degil; slug oldugu icin iki dilde de ayni"
+   ]
+  },
+  "sahneler/S2Kayip.astro": {
+   "panelli": 1,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
    "ornek_nitelik": []
   },
   "sahneler/SSESektor.astro": {
