@@ -69,10 +69,12 @@ async function olc(browser, yol, boz) {
   await page.evaluateOnNewDocument(GOZLEMCI);
   if (boz) await page.evaluateOnNewDocument(() => {
     /* KIRMIZI KONTROL: yuklemeden 2 s sonra 120 ms zorla uzun gorev + 300 px
-       duzen kaymasi (perde suprulmus, sayfa boyanmis — ilk denemede load
+       duzen kaymasi — 80vh (300 px YETMEDI: bulten dizininde CLS 0,091 kalip
+       kapinin 0,2 esigini gecemedi, 3/4 Eyl; esik gevsetilmedi, provokasyon
+       buyutuldu). Perde suprulmus, sayfa boyanmis — ilk denemede load
        aninda eklenen kayma perde altinda kaldi ve API onu saymadi) */
     try { sessionStorage.setItem('qanat-splash-seen', '1'); } catch (e) {}
-    addEventListener('load', () => setTimeout(() => { const t = performance.now(); while (performance.now() - t < 120) {} const d = document.createElement('div'); d.style.height = '300px'; document.querySelector('main').prepend(d); }, 2000));
+    addEventListener('load', () => setTimeout(() => { const t = performance.now(); while (performance.now() - t < 120) {} const d = document.createElement('div'); d.style.height = '80vh'; document.querySelector('main').prepend(d); }, 2000));
   });
   const cdp = await page.target().createCDPSession();
   const t0 = Date.now();
@@ -115,7 +117,7 @@ async function olc(browser, yol, boz) {
   console.log(`TARAYICI : ${TARAYICI} · ${surum} · ${secim.length} sayfa`);
   const kr = await olc(browser, secim[0], true);
   const yakalandi = kr.loaf > 0 && kr.loafEnUzun >= 100 && kr.cls >= 0.2;
-  console.log(`KIRMIZI KONTROL (${secim[0]} + 120 ms gorev + 300 px kayma): LoAF en uzun ${kr.loafEnUzun} ms · CLS ${kr.cls} → ${yakalandi ? 'YAKALANDI' : 'YAKALANAMADI'}`);
+  console.log(`KIRMIZI KONTROL (${secim[0]} + 120 ms gorev + 80vh kayma): LoAF en uzun ${kr.loafEnUzun} ms · CLS ${kr.cls} → ${yakalandi ? 'YAKALANDI' : 'YAKALANAMADI'}`);
   const sonuc = [];
   for (const yol of secim) {
     const r = await olc(browser, yol, false);

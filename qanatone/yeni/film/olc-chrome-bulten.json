@@ -1,0 +1,152 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T01:23:33.332Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1508,
+  "lcpEl": "p.lede",
+  "cls": 0.2184,
+  "clsKaynak": [
+   {
+    "t": 2356,
+    "v": 0.2184,
+    "el": "div.yazilar"
+   }
+  ],
+  "inp": 24,
+  "inpHedef": "body pointerup",
+  "etkilesim": 9,
+  "loaf": 4,
+  "loafToplam": 1332,
+  "loafEnUzun": 959,
+  "loafKaynak": [
+   {
+    "t": 87,
+    "sure": 959,
+    "engel": 46,
+    "betik": 959,
+    "stilDuzen": 0,
+    "render": 0,
+    "kaynak": []
+   },
+   {
+    "t": 1358,
+    "sure": 149,
+    "engel": 0,
+    "betik": 147,
+    "stilDuzen": 2,
+    "render": 2,
+    "kaynak": []
+   },
+   {
+    "t": 2234,
+    "sure": 123,
+    "engel": 71,
+    "betik": 122,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 120
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 172,
+   "lcpEl": "p.lede",
+   "cls": 0.0013,
+   "clsKaynak": [
+    {
+     "t": 127,
+     "v": 0.0013,
+     "el": "svg"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 11,
+   "loaf": 1,
+   "loafToplam": 61,
+   "loafEnUzun": 61,
+   "loafKaynak": [
+    {
+     "t": 67,
+     "sure": 61,
+     "engel": 2,
+     "betik": 16,
+     "stilDuzen": 0,
+     "render": 44,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 204,
+   "lcpEl": "p.lede",
+   "cls": 0.009,
+   "clsKaynak": [
+    {
+     "t": 222,
+     "v": 0.009,
+     "el": "div.yazilar"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 3,
+   "loafToplam": 290,
+   "loafEnUzun": 134,
+   "loafKaynak": [
+    {
+     "t": 29,
+     "sure": 134,
+     "engel": 62,
+     "betik": 27,
+     "stilDuzen": 107,
+     "render": 107,
+     "kaynak": []
+    },
+    {
+     "t": 296,
+     "sure": 101,
+     "engel": 0,
+     "betik": 98,
+     "stilDuzen": 3,
+     "render": 3,
+     "kaynak": []
+    },
+    {
+     "t": 168,
+     "sure": 55,
+     "engel": 0,
+     "betik": 53,
+     "stilDuzen": 0,
+     "render": 2,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/en/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

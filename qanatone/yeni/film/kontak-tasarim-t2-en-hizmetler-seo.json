@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:29:11.078Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 6.25,
+   "farkliPiksel": 81060,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 3/8 (x 360-540, y 225-338; hucrede 8732 px, tum farkin %11)",
+   "md5": {
+    "once": "5b3da3ee05cf49d79c181c9eb7f6008a",
+    "sonra": "c5842ef031130496093ab31e5053c040"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 50,
+   "farkYuzde": 10.31,
+   "farkliPiksel": 133581,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 4/8 sutun 2/8 (x 180-360, y 338-450; hucrede 11431 px, tum farkin %9)",
+   "md5": {
+    "once": "b6fa742920be04eda97f37ab2c15f679",
+    "sonra": "e788d62af417045f990698238594924c"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1761,
+     "sonra": 1927
+    },
+    "gercek": {
+     "once": 1761,
+     "sonra": 1927
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-once-50.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-sonra-50.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-yanyana-50.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/en/hizmetler/seo/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 2,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4422,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "5b3da3ee05cf49d79c181c9eb7f6008a",
+    "png": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": 50,
+    "hedef": 1761,
+    "gercek": 1761,
+    "sapma": 0,
+    "md5": "b6fa742920be04eda97f37ab2c15f679",
+    "png": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-once-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 5
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/en/hizmetler/seo/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4754,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "c5842ef031130496093ab31e5053c040",
+    "png": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 50,
+    "hedef": 1927,
+    "gercek": 1927,
+    "sapma": 0,
+    "md5": "e788d62af417045f990698238594924c",
+    "png": "yeni/film/kontak-tur9/t2-en-hizmetler-seo-sonra-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ }
+}

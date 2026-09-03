@@ -1,0 +1,5297 @@
+{
+ "_": "yeni/film/olc-mobil.cjs — 1440x900 anayasa denetimi: yatay tasma (kapi 0) · dokunma hedefi <44px (yenide fazla olan kirmizi) · sabit katman · bolum boylari",
+ "olcum": "2026-09-03T01:21:15.089Z",
+ "tarayici": "brave",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "hedef": 44,
+ "kirmizi_kontrol": {
+  "tasma": true,
+  "hedef": true
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/",
+   "eskiYol": "/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 29,
+    "yeni": 30,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 10488,
+    "yeni": 11458
+   },
+   "bolum": {
+    "eski": [
+     "hero:900",
+     "ticker:143",
+     "projeler:2484",
+     "prjall:0",
+     "katman:943",
+     "akis:871",
+     "sektor:701",
+     "sekpanel:0",
+     "tespit:678",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:1134",
+     "sozband:0",
+     "kurucu:582",
+     "sss:0",
+     "iletisim:570",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:732"
+    ],
+    "yeni": [
+     "fl:0"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/",
+   "eskiYol": "/bulten/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 26,
+    "yeni": 32,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "label|Tümü6",
+      "ad": "label.bkc",
+      "w": 78,
+      "h": 40
+     },
+     {
+      "k": "label|Talep yönetimi1",
+      "ad": "label.bkc",
+      "w": 131,
+      "h": 40
+     },
+     {
+      "k": "label|Arama & yapay zekâ2",
+      "ad": "label.bkc",
+      "w": 165,
+      "h": 40
+     },
+     {
+      "k": "label|Reklam & bütçe2",
+      "ad": "label.bkc",
+      "w": 138,
+      "h": 40
+     },
+     {
+      "k": "label|Sektör verisi1",
+      "ad": "label.bkc",
+      "w": 118,
+      "h": 40
+     },
+     {
+      "k": "a|Oku",
+      "ad": "a.git",
+      "w": 25,
+      "h": 23
+     },
+     {
+      "k": "a|Oku",
+      "ad": "a.git",
+      "w": 25,
+      "h": 23
+     },
+     {
+      "k": "a|Oku",
+      "ad": "a.git",
+      "w": 25,
+      "h": 23
+     }
+    ],
+    "yeniOgeSayi": 14
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3022,
+    "yeni": 3306
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:1539",
+     "bultendetay:0",
+     "lead:732"
+    ],
+    "yeni": [
+     "giris:115",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/donusum-oranlari-sektor-sektor/",
+   "eskiYol": "/bulten/donusum-oranlari-sektor-sektor/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3301,
+    "yeni": 3080
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1818",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/google-ads-maliyetleri-2026/",
+   "eskiYol": "/bulten/google-ads-maliyetleri-2026/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3382,
+    "yeni": 3177
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1899",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "eskiYol": "/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3286,
+    "yeni": 3126
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1803",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/talebe-bes-dakikada-donmek/",
+   "eskiYol": "/bulten/talebe-bes-dakikada-donmek/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3396,
+    "yeni": 3210
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1913",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "eskiYol": "/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 26,
+    "yeni": 27,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3710,
+    "yeni": 3477
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:2227",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "eskiYol": "/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3357,
+    "yeni": 3122
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1874",
+     "lead:732"
+    ],
+    "yeni": [
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/",
+   "eskiYol": "/en/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 28,
+    "yeni": 29,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 10527,
+    "yeni": 11477
+   },
+   "bolum": {
+    "eski": [
+     "hero:900",
+     "ticker:143",
+     "projeler:2484",
+     "prjall:0",
+     "katman:943",
+     "akis:871",
+     "sektor:701",
+     "sekpanel:0",
+     "tespit:678",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:1134",
+     "sozband:0",
+     "kurucu:582",
+     "sss:0",
+     "iletisim:570",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "fl:0"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/",
+   "eskiYol": "/en/bulten/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 31,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "label|All6",
+      "ad": "label.bkc",
+      "w": 59,
+      "h": 40
+     },
+     {
+      "k": "label|Lead handling1",
+      "ad": "label.bkc",
+      "w": 127,
+      "h": 40
+     },
+     {
+      "k": "label|Search & AI2",
+      "ad": "label.bkc",
+      "w": 113,
+      "h": 40
+     },
+     {
+      "k": "label|Ads & budget2",
+      "ad": "label.bkc",
+      "w": 126,
+      "h": 40
+     },
+     {
+      "k": "label|Sector data1",
+      "ad": "label.bkc",
+      "w": 114,
+      "h": 40
+     },
+     {
+      "k": "a|Read",
+      "ad": "a.git",
+      "w": 31,
+      "h": 23
+     },
+     {
+      "k": "a|Read",
+      "ad": "a.git",
+      "w": 31,
+      "h": 23
+     },
+     {
+      "k": "a|Read",
+      "ad": "a.git",
+      "w": 31,
+      "h": 23
+     }
+    ],
+    "yeniOgeSayi": 14
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2985,
+    "yeni": 3321
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:1463",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:115",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/donusum-oranlari-sektor-sektor/",
+   "eskiYol": "/en/bulten/donusum-oranlari-sektor-sektor/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 24,
+    "yeni": 25,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2946,
+    "yeni": 2806
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1424",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/google-ads-maliyetleri-2026/",
+   "eskiYol": "/en/bulten/google-ads-maliyetleri-2026/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 24,
+    "yeni": 25,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2946,
+    "yeni": 2833
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1424",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "eskiYol": "/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 24,
+    "yeni": 25,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2984,
+    "yeni": 2866
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1461",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/talebe-bes-dakikada-donmek/",
+   "eskiYol": "/en/bulten/talebe-bes-dakikada-donmek/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 24,
+    "yeni": 25,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3316,
+    "yeni": 3133
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1794",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "eskiYol": "/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 25,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3336,
+    "yeni": 3181
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1814",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "eskiYol": "/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 24,
+    "yeni": 25,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2952,
+    "yeni": 2817
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:1429",
+     "lead:771"
+    ],
+    "yeni": [
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/",
+   "eskiYol": "/en/hizmetler/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3787,
+    "yeni": 4112
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:2265",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmet:269",
+     "iletisim:1101"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/ai-ajan/",
+   "eskiYol": "/en/hizmetler/ai-ajan/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 39,
+    "yeni": 40,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4188,
+    "yeni": 3997
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2666",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/finans/",
+   "eskiYol": "/en/hizmetler/finans/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 35,
+    "yeni": 36,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "button|<firma-adi>.md",
+      "ad": "button.tpchip",
+      "w": 119,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 12650,
+    "yeni": 12802
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:11128",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/geo/",
+   "eskiYol": "/en/hizmetler/geo/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3363,
+    "yeni": 3621
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1840",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/google-ads/",
+   "eskiYol": "/en/hizmetler/google-ads/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3360,
+    "yeni": 3322
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1838",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/meta-ads/",
+   "eskiYol": "/en/hizmetler/meta-ads/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3375,
+    "yeni": 3273
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1853",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/otomasyon/",
+   "eskiYol": "/en/hizmetler/otomasyon/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3269,
+    "yeni": 3254
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1747",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/seo/",
+   "eskiYol": "/en/hizmetler/seo/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4422,
+    "yeni": 4775
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2900",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/web-sitesi-araclar/",
+   "eskiYol": "/en/hizmetler/web-sitesi-araclar/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4361,
+    "yeni": 4345
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2839",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/hizmetler/web-tasarim/",
+   "eskiYol": "/en/hizmetler/web-tasarim/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3342,
+    "yeni": 3277
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1819",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/otomasyon/",
+   "eskiYol": "/en/otomasyon/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 30,
+    "yeni": 26,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "input|Enquiries per month",
+      "ad": "input#hnR0",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Left unanswered",
+      "ad": "input#hnR1",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Never followed up",
+      "ad": "input#hnR2",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Went quiet after the quote",
+      "ad": "input#hnR3",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Missed the appointment",
+      "ad": "input#hnR4",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Average job value",
+      "ad": "input#hnR5",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 9
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 6161,
+    "yeni": 7239
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:4639",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "ajan:185",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/",
+   "eskiYol": "/en/projeler/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 27,
+    "yeni": 28,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "label|All7",
+      "ad": "label.mc",
+      "w": 62,
+      "h": 42
+     },
+     {
+      "k": "label|Automotive1",
+      "ad": "label.mc",
+      "w": 115,
+      "h": 42
+     },
+     {
+      "k": "label|Finance1",
+      "ad": "label.mc",
+      "w": 93,
+      "h": 42
+     },
+     {
+      "k": "label|Corporate1",
+      "ad": "label.mc",
+      "w": 108,
+      "h": 42
+     },
+     {
+      "k": "label|Health tourism1",
+      "ad": "label.mc",
+      "w": 134,
+      "h": 42
+     },
+     {
+      "k": "label|Energy2",
+      "ad": "label.mc",
+      "w": 89,
+      "h": 42
+     },
+     {
+      "k": "label|Interior design1",
+      "ad": "label.mc",
+      "w": 133,
+      "h": 42
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 10
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3447,
+    "yeni": 3362
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:1924",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "prjall:168",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/bab-ic-mimarlik/",
+   "eskiYol": "/en/projeler/bab-ic-mimarlik/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3393,
+    "yeni": 3435
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1871",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:168",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/charles-schwab/",
+   "eskiYol": "/en/projeler/charles-schwab/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3425,
+    "yeni": 3494
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1903",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/cmblu-energy/",
+   "eskiYol": "/en/projeler/cmblu-energy/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3307
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/kononenko-group/",
+   "eskiYol": "/en/projeler/kononenko-group/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3307
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/mercedes-benz/",
+   "eskiYol": "/en/projeler/mercedes-benz/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3425,
+    "yeni": 3494
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1903",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/skyclinics/",
+   "eskiYol": "/en/projeler/skyclinics/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3307
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/projeler/terawulf/",
+   "eskiYol": "/en/projeler/terawulf/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3307
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/sss/",
+   "eskiYol": "/en/sss/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 20,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2409,
+    "yeni": 2354
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:887",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "sss:70",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/en/surec/",
+   "eskiYol": "/en/surec/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 20,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Legal",
+      "ad": "a",
+      "w": 45,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2562,
+    "yeni": 3094
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:1040",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "surec:157",
+     "sil-lead:771"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/",
+   "eskiYol": "/hizmetler/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3787,
+    "yeni": 4098
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:2265",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmet:269",
+     "iletisim:1062"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/ai-ajan/",
+   "eskiYol": "/hizmetler/ai-ajan/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 39,
+    "yeni": 41,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4188,
+    "yeni": 3958
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2666",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/finans/",
+   "eskiYol": "/hizmetler/finans/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 35,
+    "yeni": 37,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "button|<firma-adi>.md",
+      "ad": "button.tpchip",
+      "w": 119,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 5
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 12650,
+    "yeni": 12633
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:11128",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/geo/",
+   "eskiYol": "/hizmetler/geo/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3363,
+    "yeni": 3555
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1840",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/google-ads/",
+   "eskiYol": "/hizmetler/google-ads/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3360,
+    "yeni": 3283
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1838",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/meta-ads/",
+   "eskiYol": "/hizmetler/meta-ads/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3375,
+    "yeni": 3251
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1853",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/otomasyon/",
+   "eskiYol": "/hizmetler/otomasyon/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3269,
+    "yeni": 3145
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1747",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:232",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/seo/",
+   "eskiYol": "/hizmetler/seo/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4422,
+    "yeni": 4736
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2900",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/web-sitesi-araclar/",
+   "eskiYol": "/hizmetler/web-sitesi-araclar/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 4361,
+    "yeni": 4306
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:2839",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:301",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/hizmetler/web-tasarim/",
+   "eskiYol": "/hizmetler/web-tasarim/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 22,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Tüm hizmetler",
+      "ad": "a.pgback",
+      "w": 107,
+      "h": 22
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 4
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3342,
+    "yeni": 3238
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:1819",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "hizmetdetay:269",
+     "sdcta:273",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/otomasyon/",
+   "eskiYol": "/otomasyon/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 30,
+    "yeni": 27,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "input|Ayda gelen talep",
+      "ad": "input#hnR0",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Cevapsız kalan",
+      "ad": "input#hnR1",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Takip edilmeyen",
+      "ad": "input#hnR2",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Teklif sonrası sessizleşen",
+      "ad": "input#hnR3",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Randevuya gelmeyen",
+      "ad": "input#hnR4",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "input|Ortalama iş değeri",
+      "ad": "input#hnR5",
+      "w": 389,
+      "h": 16
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 9
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 6161,
+    "yeni": 7194
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:4639",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "ajan:185",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/",
+   "eskiYol": "/projeler/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 27,
+    "yeni": 29,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "label|Tümü7",
+      "ad": "label.mc",
+      "w": 81,
+      "h": 42
+     },
+     {
+      "k": "label|Otomotiv1",
+      "ad": "label.mc",
+      "w": 103,
+      "h": 42
+     },
+     {
+      "k": "label|Finans1",
+      "ad": "label.mc",
+      "w": 86,
+      "h": 42
+     },
+     {
+      "k": "label|Kurumsal1",
+      "ad": "label.mc",
+      "w": 102,
+      "h": 42
+     },
+     {
+      "k": "label|Sağlık turizmi1",
+      "ad": "label.mc",
+      "w": 127,
+      "h": 42
+     },
+     {
+      "k": "label|Enerji2",
+      "ad": "label.mc",
+      "w": 81,
+      "h": 42
+     },
+     {
+      "k": "label|İç mimarlık1",
+      "ad": "label.mc",
+      "w": 111,
+      "h": 42
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 10
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3447,
+    "yeni": 3377
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:1924",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "prjall:200",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/bab-ic-mimarlik/",
+   "eskiYol": "/projeler/bab-ic-mimarlik/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3393,
+    "yeni": 3428
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1871",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/charles-schwab/",
+   "eskiYol": "/projeler/charles-schwab/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3425,
+    "yeni": 3455
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1903",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:88",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/cmblu-energy/",
+   "eskiYol": "/projeler/cmblu-energy/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3296
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:116",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/kononenko-group/",
+   "eskiYol": "/projeler/kononenko-group/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3296
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:116",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/mercedes-benz/",
+   "eskiYol": "/projeler/mercedes-benz/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3425,
+    "yeni": 3495
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1903",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:128",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/skyclinics/",
+   "eskiYol": "/projeler/skyclinics/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3325
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:116",
+     "govde:116",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/projeler/terawulf/",
+   "eskiYol": "/projeler/terawulf/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 21,
+    "yeni": 23,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 3265,
+    "yeni": 3296
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:1743",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "giris:200",
+     "govde:88",
+     "govde:116",
+     "govde:88",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/sss/",
+   "eskiYol": "/sss/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2409,
+    "yeni": 2315
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:0",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:887",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "sss:70",
+     "sil-lead:732"
+    ]
+   }
+  },
+  {
+   "yol": "/yeni/surec/",
+   "eskiYol": "/surec/",
+   "tasma": {
+    "eski": 0,
+    "yeni": 0,
+    "yol": []
+   },
+   "dokunma": {
+    "eski": 20,
+    "yeni": 21,
+    "kuculen": [],
+    "yeniOge": [
+     {
+      "k": "a|TR",
+      "ad": "a.on",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|EN",
+      "ad": "a",
+      "w": 34,
+      "h": 26
+     },
+     {
+      "k": "a|Hukuki",
+      "ad": "a",
+      "w": 52,
+      "h": 15
+     }
+    ],
+    "yeniOgeSayi": 3
+   },
+   "sabit": {
+    "eski": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.topfade:1440x110",
+     "div.on#bit:10x10",
+     "nav#nav:1440x106"
+    ],
+    "yeni": [
+     "div#bg:1440x900",
+     "div#noise:1440x900",
+     "div.kb-bit.on#bit:10x10",
+     "div.nv-fade:1440x110",
+     "nav.nv-bar#nv:1440x106"
+    ]
+   },
+   "docH": {
+    "eski": 2562,
+    "yeni": 3055
+   },
+   "bolum": {
+    "eski": [
+     "hero:0",
+     "ticker:0",
+     "projeler:0",
+     "prjall:0",
+     "katman:0",
+     "akis:0",
+     "sektor:0",
+     "sekpanel:0",
+     "tespit:0",
+     "hizmetdetay:0",
+     "projedetay:0",
+     "hizmet:0",
+     "ajan:0",
+     "surec:1040",
+     "sozler:0",
+     "sozband:0",
+     "kurucu:0",
+     "sss:0",
+     "iletisim:0",
+     "bulten:0",
+     "bultendetay:0",
+     "lead:771"
+    ],
+    "yeni": [
+     "surec:157",
+     "sil-lead:732"
+    ]
+   }
+  }
+ ],
+ "kirmizi": []
+}
