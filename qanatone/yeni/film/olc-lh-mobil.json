@@ -1,0 +1,108 @@
+{
+ "_": "Lighthouse MOBIL ana sayfa — uc kosum medyani. Kosum: CHROME_PATH=<chrome> node ~/.local/lib/film-olc/node_modules/lighthouse/cli/index.js http://127.0.0.1:8790/yeni/ --only-categories=performance --chrome-flags=\"--headless=new --no-sandbox\" (once: node yerel-sun.cjs). Depoda bundan onceki Lighthouse kaydi YOKTU: bu, bu duzenegin ILK TABANI.",
+ "olcum": "2026-09-03T15:04:47.219Z",
+ "agac": "269fb5a",
+ "lighthouse": "13.4.1",
+ "tarayici": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+ "hedef": "http://127.0.0.1:8790/yeni/",
+ "duzenek": {
+  "formFactor": "mobile",
+  "ekran": {
+   "mobile": true,
+   "width": 412,
+   "height": 823,
+   "deviceScaleFactor": 1.75,
+   "disabled": false
+  },
+  "kisitlama": {
+   "rttMs": 150,
+   "throughputKbps": 1638.4,
+   "requestLatencyMs": 562.5,
+   "downloadThroughputKbps": 1474.5600000000002,
+   "uploadThroughputKbps": 675,
+   "cpuSlowdownMultiplier": 4
+  },
+  "yontem": "simulate"
+ },
+ "kapi": {
+  "lcp_ms": 2500,
+  "lcp_hedef_ms": 2000
+ },
+ "hukum": "GECTI (LCP kapi 2500)",
+ "hedefte_mi": false,
+ "tekrar": 3,
+ "kosum": [
+  {
+   "skor": 98,
+   "first-contentful-paint": 1217.46045,
+   "largest-contentful-paint": 2342.46045,
+   "total-blocking-time": 15,
+   "cumulative-layout-shift": 0.00004406944714179785,
+   "speed-index": 2499.1098415595766,
+   "interactive": 2349.9604500000005,
+   "max-potential-fid": 185
+  },
+  {
+   "skor": 98,
+   "first-contentful-paint": 1216.6862999999998,
+   "largest-contentful-paint": 2341.6863000000003,
+   "total-blocking-time": 16,
+   "cumulative-layout-shift": 0.00004406944714179785,
+   "speed-index": 2505.750568131801,
+   "interactive": 2349.1863000000003,
+   "max-potential-fid": 66
+  },
+  {
+   "skor": 98,
+   "first-contentful-paint": 1215.9702,
+   "largest-contentful-paint": 2340.9701999999997,
+   "total-blocking-time": 41.353200000000015,
+   "cumulative-layout-shift": 0.00004406944714179785,
+   "speed-index": 2511.327149999691,
+   "interactive": 2348.4701999999997,
+   "max-potential-fid": 116
+  }
+ ],
+ "medyan": {
+  "skor": 98,
+  "first-contentful-paint": 1216.6862999999998,
+  "largest-contentful-paint": 2341.6863000000003,
+  "total-blocking-time": 16,
+  "cumulative-layout-shift": 0.00004406944714179785,
+  "speed-index": 2505.750568131801,
+  "interactive": 2349.1863000000003,
+  "max-potential-fid": 116
+ },
+ "en_buyuk_transfer": [
+  {
+   "yol": "/yeni/font/uncut-sans-latin.woff2",
+   "tip": "Font",
+   "bayt": 40382
+  },
+  {
+   "yol": "/yeni/varlik/film/sahne1-mobile-poster.webp",
+   "tip": "Image",
+   "bayt": 30524
+  },
+  {
+   "yol": "/yeni/",
+   "tip": "Document",
+   "bayt": 27798
+  },
+  {
+   "yol": "/yeni/img/pj/kononenko-group-m.webp",
+   "tip": "Image",
+   "bayt": 20726
+  },
+  {
+   "yol": "/yeni/img/hand-robot-m.avif",
+   "tip": "Image",
+   "bayt": 19447
+  },
+  {
+   "yol": "/yeni/font/playfair-display-500i-latin.woff2",
+   "tip": "Font",
+   "bayt": 18282
+  }
+ ]
+}

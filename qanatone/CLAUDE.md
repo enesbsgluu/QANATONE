@@ -196,6 +196,14 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - Minified betik satır içine alınırken IIFE'ye sar — `const T` çakışması.
 - Önbellek imzası üreteci de kapsar (`uretecOzet`); build.js değişince tam
   derleme normaldir (~150 sn), değilse ~45 sn.
+- **Kare p95 kuantalıdır: 8,5 / 16,7 / 25,0 — ekran tikinin 1/2/3 katı,
+  arada değer yok.** Sayfa "biraz yavaşlamaz", bir tik daha kaçırır; 20 ms'lik
+  kapı iki tikle üç tik arasında durur, yani üst banttaki sayfaların marjı
+  bir tiktir. `olc-sayfa` kırmızısı MAKİNE YÜKÜ yazılmadan hüküm değildir
+  (4 Eyl: yüklü 25,0 → boş 16,6-16,8, aynı ağaç; finansın 2 Eyl'deki 25,1'i
+  de gerileme değil aynı sayfanın iki tik hâliydi). Taban damgası ve
+  `node --test <dizin>` (Windows'ta yanlış kırmızı, dosya listesi ver) aynı
+  sınıf: koşum biçimi hükmü değiştirir.
 
 ## Mimari NEDEN'leri — koddan okunamayanlar
 
