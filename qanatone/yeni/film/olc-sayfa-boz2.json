@@ -1,0 +1,81 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-03T16:28:06.169Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "tekrar": 1,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "boz": {
+  "ms": 8,
+  "_": "KIRMIZI-ONCE kolu acikti: bu kayit hukum degil, duzenegin kirmizi yanabildiginin kanitidir"
+ },
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir"
+ },
+ "hukum": "KISMI (1/59 sayfa) — HUKUM DEGIL · ham: KALDI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 59,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/hizmetler/geo/",
+   "js_bayt": 3853,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 214,
+     "tur_ms": 3699,
+     "p95_ms": 25,
+     "medyan_ms": 16.7,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 108,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2628,
+     "toplam_px": 2628
+    }
+   ],
+   "p95_medyan": 25,
+   "takilma_oran_medyan": 0.0292,
+   "takilma_tek_max": 108,
+   "taban_takilma": [
+    0
+   ],
+   "kare_p95": 3.012,
+   "kacirilan_kare": 2,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": false,
+   "tik_sapma": false,
+   "kapi": {
+    "kacirilan_kare": false,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": false
+  }
+ ]
+}

@@ -1,13 +1,28 @@
 {
- "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
- "olcum": "2026-09-03T14:53:18.371Z",
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-03T16:23:59.037Z",
  "tarayici": "brave Chrome/152.0.7977.76",
  "tekrar": 3,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 6.9,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "boz": false,
  "esik": {
-  "p95_ms": 20,
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
   "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
   "tek_takilma_ms": 250,
-  "toplam_oran": 0.03
+  "toplam_oran": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir"
  },
  "hukum": "GECTI",
  "durulan": null,
@@ -18,64 +33,72 @@
    "js_tavan": 24064,
    "kosum": [
     {
-     "kare": 1246,
-     "tur_ms": 12630,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 8,
-     "takilma_toplam_ms": 650,
-     "takilma_tek_max_ms": 125,
-     "taban": {
-      "sure_ms": 3041,
-      "takilma_sayi": 5,
-      "p95_ms": 33.2
-     },
-     "scroll_px": 9580,
-     "toplam_px": 11356
-    },
-    {
-     "kare": 1375,
+     "kare": 1286,
      "tur_ms": 12580,
-     "p95_ms": 16.6,
+     "p95_ms": 16.7,
      "medyan_ms": 8.3,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 75,
-     "takilma_tek_max_ms": 75,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 408,
+     "takilma_tek_max_ms": 117,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 16.7,
+      "tik_p10": 8.2
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     },
     {
-     "kare": 1382,
-     "tur_ms": 12538,
-     "p95_ms": 16.6,
+     "kare": 1337,
+     "tur_ms": 12571,
+     "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 1,
-     "takilma_toplam_ms": 58,
-     "takilma_tek_max_ms": 58,
+     "takilma_toplam_ms": 67,
+     "takilma_tek_max_ms": 67,
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.7
+      "p95_ms": 16.7,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 9580,
+     "toplam_px": 11356
+    },
+    {
+     "kare": 1425,
+     "tur_ms": 12521,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4,
+      "tik_p10": 8.3
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     }
    ],
-   "p95_medyan": 16.6,
-   "takilma_oran_medyan": 0.006,
-   "takilma_tek_max": 125,
+   "p95_medyan": 16.7,
+   "takilma_oran_medyan": 0.0053,
+   "takilma_tek_max": 117,
    "taban_takilma": [
-    5,
+    0,
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -88,8 +111,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 330,
-     "tur_ms": 2757,
+     "kare": 325,
+     "tur_ms": 2758,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -98,14 +121,32 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2003.199951171875,
      "toplam_px": 2003
     },
     {
-     "kare": 326,
-     "tur_ms": 2732,
+     "kare": 324,
+     "tur_ms": 2741,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2003.199951171875,
+     "toplam_px": 2003
+    },
+    {
+     "kare": 328,
+     "tur_ms": 2741,
      "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -114,23 +155,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2003.199951171875,
-     "toplam_px": 2003
-    },
-    {
-     "kare": 326,
-     "tur_ms": 2741,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2003.199951171875,
      "toplam_px": 2003
@@ -144,8 +170,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -158,7 +189,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 340,
+     "kare": 342,
+     "tur_ms": 2907,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2156,
+     "toplam_px": 2156
+    },
+    {
+     "kare": 348,
      "tur_ms": 2908,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -166,41 +214,27 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2156,
      "toplam_px": 2156
     },
     {
-     "kare": 348,
+     "kare": 351,
      "tur_ms": 2924,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2156,
-     "toplam_px": 2156
-    },
-    {
-     "kare": 342,
-     "tur_ms": 2916,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2156,
      "toplam_px": 2156
@@ -214,8 +248,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -228,38 +267,6 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 362,
-     "tur_ms": 3033,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2252,
-     "toplam_px": 2252
-    },
-    {
-     "kare": 357,
-     "tur_ms": 3033,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2252,
-     "toplam_px": 2252
-    },
-    {
      "kare": 361,
      "tur_ms": 3024,
      "p95_ms": 8.4,
@@ -268,9 +275,44 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2252,
+     "toplam_px": 2252
+    },
+    {
+     "kare": 359,
+     "tur_ms": 3016,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2252,
+     "toplam_px": 2252
+    },
+    {
+     "kare": 358,
+     "tur_ms": 3016,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2252,
      "toplam_px": 2252
@@ -284,8 +326,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -298,7 +345,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 350,
+     "kare": 354,
      "tur_ms": 2966,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -306,9 +353,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2202.39990234375,
      "toplam_px": 2202
@@ -322,25 +370,27 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2202.39990234375,
      "toplam_px": 2202
     },
     {
-     "kare": 353,
-     "tur_ms": 2958,
-     "p95_ms": 8.4,
+     "kare": 354,
+     "tur_ms": 2974,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2202.39990234375,
      "toplam_px": 2202
@@ -354,8 +404,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -369,22 +424,40 @@
    "kosum": [
     {
      "kare": 363,
-     "tur_ms": 3049,
-     "p95_ms": 8.4,
+     "tur_ms": 3058,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2286.39990234375,
      "toplam_px": 2286
     },
     {
-     "kare": 365,
+     "kare": 360,
+     "tur_ms": 3057,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2286.39990234375,
+     "toplam_px": 2286
+    },
+    {
+     "kare": 366,
      "tur_ms": 3066,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -392,31 +465,16 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2286.39990234375,
-     "toplam_px": 2286
-    },
-    {
-     "kare": 366,
-     "tur_ms": 3057,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3000,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2286.39990234375,
      "toplam_px": 2286
     }
    ],
-   "p95_medyan": 8.4,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -424,8 +482,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -438,39 +501,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 407,
-     "tur_ms": 3399,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2552.800048828125,
-     "toplam_px": 2553
-    },
-    {
-     "kare": 401,
-     "tur_ms": 3382,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2552.800048828125,
-     "toplam_px": 2553
-    },
-    {
-     "kare": 407,
+     "kare": 408,
      "tur_ms": 3407,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -478,15 +509,50 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2552.800048828125,
+     "toplam_px": 2553
+    },
+    {
+     "kare": 406,
+     "tur_ms": 3391,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2552.800048828125,
+     "toplam_px": 2553
+    },
+    {
+     "kare": 406,
+     "tur_ms": 3391,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2552.800048828125,
      "toplam_px": 2553
     }
    ],
-   "p95_medyan": 8.4,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -494,8 +560,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -508,49 +579,52 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 345,
-     "tur_ms": 2941,
+     "kare": 354,
+     "tur_ms": 2966,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2198.39990234375,
      "toplam_px": 2198
     },
     {
      "kare": 352,
-     "tur_ms": 2957,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2198.39990234375,
-     "toplam_px": 2198
-    },
-    {
-     "kare": 351,
-     "tur_ms": 2958,
+     "tur_ms": 2966,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2198.39990234375,
+     "toplam_px": 2198
+    },
+    {
+     "kare": 355,
+     "tur_ms": 2966,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2198.39990234375,
      "toplam_px": 2198
@@ -564,8 +638,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -578,41 +657,43 @@
    "js_tavan": 24064,
    "kosum": [
     {
-     "kare": 1382,
-     "tur_ms": 12546,
+     "kare": 1383,
+     "tur_ms": 12571,
      "p95_ms": 16.6,
      "medyan_ms": 8.3,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 108,
-     "takilma_tek_max_ms": 58,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 75,
+     "takilma_tek_max_ms": 75,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4,
+      "tik_p10": 8.3
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 11356
     },
     {
-     "kare": 1324,
-     "tur_ms": 12563,
+     "kare": 1344,
+     "tur_ms": 12605,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 58,
-     "takilma_tek_max_ms": 58,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 11356
     },
     {
-     "kare": 1414,
+     "kare": 1423,
      "tur_ms": 12530,
-     "p95_ms": 16.5,
+     "p95_ms": 8.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 1,
      "takilma_toplam_ms": 58,
@@ -620,7 +701,8 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4,
+      "tik_p10": 8.3
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 11356
@@ -628,14 +710,19 @@
    ],
    "p95_medyan": 16.6,
    "takilma_oran_medyan": 0.0046,
-   "takilma_tek_max": 58,
+   "takilma_tek_max": 75,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 2,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -649,39 +736,7 @@
    "kosum": [
     {
      "kare": 332,
-     "tur_ms": 2766,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2031.199951171875,
-     "toplam_px": 2031
-    },
-    {
-     "kare": 331,
      "tur_ms": 2774,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2031.199951171875,
-     "toplam_px": 2031
-    },
-    {
-     "kare": 331,
-     "tur_ms": 2791,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -690,7 +745,42 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2031.199951171875,
+     "toplam_px": 2031
+    },
+    {
+     "kare": 328,
+     "tur_ms": 2766,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2031.199951171875,
+     "toplam_px": 2031
+    },
+    {
+     "kare": 330,
+     "tur_ms": 2766,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2031.199951171875,
      "toplam_px": 2031
@@ -704,8 +794,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -718,8 +813,42 @@
    "js_tavan": 10240,
    "kosum": [
     {
+     "kare": 307,
+     "tur_ms": 2599,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1882.4000244140625,
+     "toplam_px": 1882
+    },
+    {
      "kare": 310,
-     "tur_ms": 2591,
+     "tur_ms": 2608,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1882.4000244140625,
+     "toplam_px": 1882
+    },
+    {
+     "kare": 312,
+     "tur_ms": 2608,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -728,39 +857,8 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1882.4000244140625,
-     "toplam_px": 1882
-    },
-    {
-     "kare": 312,
-     "tur_ms": 2616,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1882.4000244140625,
-     "toplam_px": 1882
-    },
-    {
-     "kare": 310,
-     "tur_ms": 2591,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1882.4000244140625,
      "toplam_px": 1882
@@ -774,8 +872,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -788,40 +891,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 312,
-     "tur_ms": 2649,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 1908.800048828125,
-     "toplam_px": 1909
-    },
-    {
-     "kare": 316,
-     "tur_ms": 2649,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1908.800048828125,
-     "toplam_px": 1909
-    },
-    {
      "kare": 313,
-     "tur_ms": 2641,
+     "tur_ms": 2624,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -830,13 +901,48 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1908.800048828125,
+     "toplam_px": 1909
+    },
+    {
+     "kare": 313,
+     "tur_ms": 2624,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 1908.800048828125,
+     "toplam_px": 1909
+    },
+    {
+     "kare": 315,
+     "tur_ms": 2633,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1908.800048828125,
      "toplam_px": 1909
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -844,8 +950,13 @@
     0,
     0
    ],
+   "kare_p95": 1.012,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -858,41 +969,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 319,
-     "tur_ms": 2666,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1942.4000244140625,
-     "toplam_px": 1942
-    },
-    {
-     "kare": 319,
-     "tur_ms": 2666,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 1942.4000244140625,
-     "toplam_px": 1942
-    },
-    {
-     "kare": 318,
+     "kare": 317,
      "tur_ms": 2674,
-     "p95_ms": 8.4,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -900,7 +979,42 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1942.4000244140625,
+     "toplam_px": 1942
+    },
+    {
+     "kare": 317,
+     "tur_ms": 2674,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1942.4000244140625,
+     "toplam_px": 1942
+    },
+    {
+     "kare": 319,
+     "tur_ms": 2666,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1942.4000244140625,
      "toplam_px": 1942
@@ -914,8 +1028,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -928,8 +1047,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 356,
-     "tur_ms": 2983,
+     "kare": 352,
+     "tur_ms": 2974,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -938,13 +1057,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2208.800048828125,
      "toplam_px": 2209
     },
     {
-     "kare": 356,
+     "kare": 355,
      "tur_ms": 2982,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -954,23 +1074,25 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2208.800048828125,
      "toplam_px": 2209
     },
     {
-     "kare": 357,
+     "kare": 356,
      "tur_ms": 2974,
-     "p95_ms": 8.4,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2208.800048828125,
      "toplam_px": 2209
@@ -984,8 +1106,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -998,40 +1125,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 361,
-     "tur_ms": 3024,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2256.800048828125,
-     "toplam_px": 2257
-    },
-    {
      "kare": 362,
-     "tur_ms": 3024,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2256.800048828125,
-     "toplam_px": 2257
-    },
-    {
-     "kare": 356,
-     "tur_ms": 3016,
+     "tur_ms": 3032,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1040,13 +1135,48 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2256.800048828125,
+     "toplam_px": 2257
+    },
+    {
+     "kare": 361,
+     "tur_ms": 3032,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2256.800048828125,
+     "toplam_px": 2257
+    },
+    {
+     "kare": 360,
+     "tur_ms": 3024,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2256.800048828125,
      "toplam_px": 2257
     }
    ],
-   "p95_medyan": 8.4,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1054,8 +1184,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1068,39 +1203,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 308,
-     "tur_ms": 2608,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 1894.4000244140625,
-     "toplam_px": 1894
-    },
-    {
-     "kare": 312,
-     "tur_ms": 2608,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1894.4000244140625,
-     "toplam_px": 1894
-    },
-    {
-     "kare": 310,
+     "kare": 311,
      "tur_ms": 2608,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1110,7 +1213,42 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1894.4000244140625,
+     "toplam_px": 1894
+    },
+    {
+     "kare": 312,
+     "tur_ms": 2608,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1894.4000244140625,
+     "toplam_px": 1894
+    },
+    {
+     "kare": 312,
+     "tur_ms": 2624,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1894.4000244140625,
      "toplam_px": 1894
@@ -1124,8 +1262,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1138,7 +1281,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 498,
+     "kare": 496,
      "tur_ms": 4165,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1148,39 +1291,42 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3183.199951171875,
      "toplam_px": 3183
     },
     {
-     "kare": 493,
-     "tur_ms": 4157,
+     "kare": 497,
+     "tur_ms": 4174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 3183.199951171875,
      "toplam_px": 3183
     },
     {
-     "kare": 494,
-     "tur_ms": 4157,
+     "kare": 499,
+     "tur_ms": 4174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3183.199951171875,
      "toplam_px": 3183
@@ -1194,8 +1340,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1208,7 +1359,41 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 474,
+     "kare": 476,
+     "tur_ms": 4015,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3067.199951171875,
+     "toplam_px": 3067
+    },
+    {
+     "kare": 480,
+     "tur_ms": 4024,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 3067.199951171875,
+     "toplam_px": 3067
+    },
+    {
+     "kare": 479,
      "tur_ms": 4016,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1216,41 +1401,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3067.199951171875,
-     "toplam_px": 3067
-    },
-    {
-     "kare": 475,
-     "tur_ms": 4015,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3067.199951171875,
-     "toplam_px": 3067
-    },
-    {
-     "kare": 474,
-     "tur_ms": 4015,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3067.199951171875,
      "toplam_px": 3067
@@ -1264,8 +1418,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1278,64 +1437,72 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 1380,
-     "tur_ms": 14621,
+     "kare": 1403,
+     "tur_ms": 14579,
      "p95_ms": 16.8,
      "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 108,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
      "takilma_tek_max_ms": 58,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 11868,
-     "toplam_px": 11868
-    },
-    {
-     "kare": 1367,
-     "tur_ms": 14595,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 108,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4,
+      "tik_p10": 8.2
      },
      "scroll_px": 11868,
      "toplam_px": 11868
     },
     {
      "kare": 1388,
-     "tur_ms": 14621,
+     "tur_ms": 14587,
      "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 117,
-     "takilma_tek_max_ms": 58,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11868,
+     "toplam_px": 11868
+    },
+    {
+     "kare": 1375,
+     "tur_ms": 14595,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 66,
+     "takilma_tek_max_ms": 66,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 11868,
      "toplam_px": 11868
     }
    ],
    "p95_medyan": 16.8,
-   "takilma_oran_medyan": 0.0074,
-   "takilma_tek_max": 58,
+   "takilma_oran_medyan": 0.004,
+   "takilma_tek_max": 66,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 2.024,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1348,7 +1515,41 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 403,
+     "kare": 412,
+     "tur_ms": 3582,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 2694.39990234375,
+     "toplam_px": 2694
+    },
+    {
+     "kare": 392,
+     "tur_ms": 3566,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2694.39990234375,
+     "toplam_px": 2694
+    },
+    {
+     "kare": 414,
      "tur_ms": 3549,
      "p95_ms": 8.6,
      "medyan_ms": 8.3,
@@ -1358,45 +1559,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2694.39990234375,
-     "toplam_px": 2694
-    },
-    {
-     "kare": 405,
-     "tur_ms": 3566,
-     "p95_ms": 16.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2694.39990234375,
-     "toplam_px": 2694
-    },
-    {
-     "kare": 385,
-     "tur_ms": 3565,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 2694.39990234375,
      "toplam_px": 2694
     }
    ],
-   "p95_medyan": 16.5,
+   "p95_medyan": 8.6,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1404,8 +1574,13 @@
     0,
     0
    ],
+   "kare_p95": 1.036,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.036,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1418,25 +1593,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 358,
-     "tur_ms": 3182,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2398.39990234375,
-     "toplam_px": 2398
-    },
-    {
-     "kare": 370,
-     "tur_ms": 3191,
-     "p95_ms": 8.5,
+     "kare": 367,
+     "tur_ms": 3183,
+     "p95_ms": 8.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1444,23 +1603,42 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2398.39990234375,
      "toplam_px": 2398
     },
     {
-     "kare": 365,
-     "tur_ms": 3182,
+     "kare": 371,
+     "tur_ms": 3191,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 2398.39990234375,
+     "toplam_px": 2398
+    },
+    {
+     "kare": 374,
+     "tur_ms": 3183,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 2398.39990234375,
      "toplam_px": 2398
@@ -1474,8 +1652,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1488,6 +1671,40 @@
    "js_tavan": 10240,
    "kosum": [
     {
+     "kare": 350,
+     "tur_ms": 3133,
+     "p95_ms": 16.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2348.800048828125,
+     "toplam_px": 2349
+    },
+    {
+     "kare": 357,
+     "tur_ms": 3124,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2348.800048828125,
+     "toplam_px": 2349
+    },
+    {
      "kare": 365,
      "tur_ms": 3124,
      "p95_ms": 8.5,
@@ -1498,45 +1715,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2348.800048828125,
-     "toplam_px": 2349
-    },
-    {
-     "kare": 365,
-     "tur_ms": 3132,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2348.800048828125,
-     "toplam_px": 2349
-    },
-    {
-     "kare": 369,
-     "tur_ms": 3141,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2348.800048828125,
      "toplam_px": 2349
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.6,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1544,8 +1730,13 @@
     0,
     0
    ],
+   "kare_p95": 1.036,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.036,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1558,7 +1749,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 359,
+     "kare": 365,
      "tur_ms": 3107,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1568,13 +1759,31 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2328.800048828125,
      "toplam_px": 2329
     },
     {
-     "kare": 359,
+     "kare": 366,
+     "tur_ms": 3108,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2328.800048828125,
+     "toplam_px": 2329
+    },
+    {
+     "kare": 368,
      "tur_ms": 3107,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1584,23 +1793,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2328.800048828125,
-     "toplam_px": 2329
-    },
-    {
-     "kare": 359,
-     "tur_ms": 3099,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2328.800048828125,
      "toplam_px": 2329
@@ -1614,8 +1808,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1628,40 +1827,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 541,
-     "tur_ms": 4965,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 117,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3851.199951171875,
-     "toplam_px": 3851
-    },
-    {
-     "kare": 586,
-     "tur_ms": 4924,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3851.199951171875,
-     "toplam_px": 3851
-    },
-    {
-     "kare": 581,
-     "tur_ms": 4915,
+     "kare": 582,
+     "tur_ms": 4940,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1670,7 +1837,42 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 3851.199951171875,
+     "toplam_px": 3851
+    },
+    {
+     "kare": 575,
+     "tur_ms": 4948,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3851.199951171875,
+     "toplam_px": 3851
+    },
+    {
+     "kare": 583,
+     "tur_ms": 4940,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3851.199951171875,
      "toplam_px": 3851
@@ -1678,14 +1880,19 @@
    ],
    "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 58,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1698,23 +1905,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 458,
-     "tur_ms": 4449,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3420.800048828125,
-     "toplam_px": 3421
-    },
-    {
-     "kare": 459,
+     "kare": 462,
      "tur_ms": 4424,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
@@ -1722,16 +1913,17 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3420.800048828125,
      "toplam_px": 3421
     },
     {
-     "kare": 463,
-     "tur_ms": 4449,
+     "kare": 461,
+     "tur_ms": 4440,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1740,7 +1932,25 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3420.800048828125,
+     "toplam_px": 3421
+    },
+    {
+     "kare": 462,
+     "tur_ms": 4440,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3420.800048828125,
      "toplam_px": 3421
@@ -1754,8 +1964,13 @@
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1768,9 +1983,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 375,
+     "kare": 372,
      "tur_ms": 3133,
-     "p95_ms": 8.4,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1778,7 +1993,25 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 2352,
+     "toplam_px": 2352
+    },
+    {
+     "kare": 375,
+     "tur_ms": 3141,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2352,
      "toplam_px": 2352
@@ -1792,25 +2025,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2352,
-     "toplam_px": 2352
-    },
-    {
-     "kare": 368,
-     "tur_ms": 3116,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2352,
      "toplam_px": 2352
@@ -1824,8 +2042,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1838,49 +2061,52 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 916,
-     "tur_ms": 8689,
-     "p95_ms": 16.7,
+     "kare": 877,
+     "tur_ms": 8731,
+     "p95_ms": 16.8,
      "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 6894.39990234375,
-     "toplam_px": 6894
-    },
-    {
-     "kare": 939,
-     "tur_ms": 8672,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 92,
+     "takilma_tek_max_ms": 92,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 6894.39990234375,
      "toplam_px": 6894
     },
     {
-     "kare": 942,
-     "tur_ms": 8656,
+     "kare": 892,
+     "tur_ms": 8681,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6894.39990234375,
+     "toplam_px": 6894
+    },
+    {
+     "kare": 870,
+     "tur_ms": 8681,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 6894.39990234375,
      "toplam_px": 6894
@@ -1888,14 +2114,19 @@
    ],
    "p95_medyan": 16.7,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 0,
+   "takilma_tek_max": 92,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1909,7 +2140,7 @@
    "kosum": [
     {
      "kare": 392,
-     "tur_ms": 3291,
+     "tur_ms": 3282,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1918,23 +2149,25 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2436.800048828125,
      "toplam_px": 2437
     },
     {
-     "kare": 393,
-     "tur_ms": 3291,
+     "kare": 392,
+     "tur_ms": 3299,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2436.800048828125,
      "toplam_px": 2437
@@ -1950,7 +2183,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2436.800048828125,
      "toplam_px": 2437
@@ -1964,8 +2198,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -1978,8 +2217,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 401,
-     "tur_ms": 3349,
+     "kare": 400,
+     "tur_ms": 3357,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1988,14 +2227,15 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2510.39990234375,
      "toplam_px": 2510
     },
     {
      "kare": 400,
-     "tur_ms": 3349,
+     "tur_ms": 3357,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2004,13 +2244,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2510.39990234375,
      "toplam_px": 2510
     },
     {
-     "kare": 400,
+     "kare": 398,
      "tur_ms": 3349,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2020,7 +2261,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2510.39990234375,
      "toplam_px": 2510
@@ -2034,8 +2276,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2048,24 +2295,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 408,
-     "tur_ms": 3424,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2570.39990234375,
-     "toplam_px": 2570
-    },
-    {
-     "kare": 408,
-     "tur_ms": 3415,
+     "kare": 404,
+     "tur_ms": 3407,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2074,7 +2305,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
@@ -2088,9 +2320,27 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2570.39990234375,
+     "toplam_px": 2570
+    },
+    {
+     "kare": 408,
+     "tur_ms": 3416,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
@@ -2104,8 +2354,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2118,23 +2373,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 377,
-     "tur_ms": 3182,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 378,
+     "kare": 379,
      "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2144,23 +2383,42 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 377,
-     "tur_ms": 3157,
+     "kare": 381,
+     "tur_ms": 3183,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 375,
+     "tur_ms": 3166,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
@@ -2174,8 +2432,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2188,23 +2451,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 371,
-     "tur_ms": 3149,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 376,
+     "kare": 377,
      "tur_ms": 3174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2212,16 +2459,17 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 373,
-     "tur_ms": 3166,
+     "kare": 381,
+     "tur_ms": 3174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2230,7 +2478,25 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 378,
+     "tur_ms": 3157,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
@@ -2244,8 +2510,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2258,23 +2529,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 408,
-     "tur_ms": 3416,
-     "p95_ms": 8.4,
+     "kare": 405,
+     "tur_ms": 3407,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
     },
     {
-     "kare": 408,
+     "kare": 406,
      "tur_ms": 3424,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2284,23 +2556,25 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
     },
     {
      "kare": 407,
-     "tur_ms": 3432,
+     "tur_ms": 3416,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
@@ -2314,8 +2588,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2328,23 +2607,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 375,
-     "tur_ms": 3157,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 379,
+     "kare": 377,
      "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2352,16 +2615,17 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
      "kare": 378,
-     "tur_ms": 3166,
+     "tur_ms": 3174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2370,7 +2634,25 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 381,
+     "tur_ms": 3174,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
@@ -2384,8 +2666,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2399,48 +2686,51 @@
    "kosum": [
     {
      "kare": 378,
-     "tur_ms": 3166,
+     "tur_ms": 3174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 377,
-     "tur_ms": 3157,
+     "kare": 375,
+     "tur_ms": 3141,
      "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 379,
-     "tur_ms": 3182,
+     "kare": 378,
+     "tur_ms": 3158,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
@@ -2454,8 +2744,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2469,6 +2764,23 @@
    "kosum": [
     {
      "kare": 243,
+     "tur_ms": 2049,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 1428.800048828125,
+     "toplam_px": 1429
+    },
+    {
+     "kare": 240,
      "tur_ms": 2041,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2478,39 +2790,25 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1428.800048828125,
      "toplam_px": 1429
     },
     {
-     "kare": 244,
-     "tur_ms": 2058,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1428.800048828125,
-     "toplam_px": 1429
-    },
-    {
-     "kare": 243,
-     "tur_ms": 2074,
+     "kare": 246,
+     "tur_ms": 2066,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4,
+      "tik_p10": 8.2
      },
      "scroll_px": 1428.800048828125,
      "toplam_px": 1429
@@ -2524,8 +2822,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2538,7 +2841,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 351,
+     "kare": 347,
      "tur_ms": 2932,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2548,14 +2851,15 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2166.39990234375,
      "toplam_px": 2166
     },
     {
-     "kare": 351,
-     "tur_ms": 2932,
+     "kare": 345,
+     "tur_ms": 2924,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2564,14 +2868,15 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2166.39990234375,
      "toplam_px": 2166
     },
     {
-     "kare": 349,
-     "tur_ms": 2916,
+     "kare": 348,
+     "tur_ms": 2924,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2580,7 +2885,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2166.39990234375,
      "toplam_px": 2166
@@ -2594,8 +2900,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2608,7 +2919,41 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 495,
+     "kare": 498,
+     "tur_ms": 4157,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3168.800048828125,
+     "toplam_px": 3169
+    },
+    {
+     "kare": 496,
+     "tur_ms": 4149,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3168.800048828125,
+     "toplam_px": 3169
+    },
+    {
+     "kare": 493,
      "tur_ms": 4149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2616,41 +2961,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3168.800048828125,
-     "toplam_px": 3169
-    },
-    {
-     "kare": 498,
-     "tur_ms": 4157,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3168.800048828125,
-     "toplam_px": 3169
-    },
-    {
-     "kare": 496,
-     "tur_ms": 4165,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3168.800048828125,
      "toplam_px": 3169
@@ -2664,8 +2978,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2678,24 +2997,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 471,
-     "tur_ms": 3974,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 3028,
-     "toplam_px": 3028
-    },
-    {
-     "kare": 471,
-     "tur_ms": 3974,
+     "kare": 473,
+     "tur_ms": 3982,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2704,7 +3007,25 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 3028,
+     "toplam_px": 3028
+    },
+    {
+     "kare": 473,
+     "tur_ms": 3982,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3028,
      "toplam_px": 3028
@@ -2720,7 +3041,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3028,
      "toplam_px": 3028
@@ -2734,8 +3056,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2748,64 +3075,72 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 1384,
-     "tur_ms": 14429,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 58,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 11682.400390625,
-     "toplam_px": 11682
-    },
-    {
-     "kare": 1366,
+     "kare": 1378,
      "tur_ms": 14412,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 50,
-     "takilma_tek_max_ms": 50,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 11682.400390625,
-     "toplam_px": 11682
-    },
-    {
-     "kare": 1372,
-     "tur_ms": 14396,
      "p95_ms": 16.8,
      "medyan_ms": 8.4,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11682.400390625,
+     "toplam_px": 11682
+    },
+    {
+     "kare": 1410,
+     "tur_ms": 14371,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11682.400390625,
+     "toplam_px": 11682
+    },
+    {
+     "kare": 1403,
+     "tur_ms": 14387,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4,
+      "tik_p10": 8.2
      },
      "scroll_px": 11682.400390625,
      "toplam_px": 11682
     }
    ],
-   "p95_medyan": 16.8,
-   "takilma_oran_medyan": 0.0035,
-   "takilma_tek_max": 58,
+   "p95_medyan": 16.7,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2818,24 +3153,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 403,
-     "tur_ms": 3466,
+     "kare": 408,
+     "tur_ms": 3482,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 2628,
      "toplam_px": 2628
     },
     {
-     "kare": 402,
-     "tur_ms": 3482,
+     "kare": 405,
+     "tur_ms": 3474,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2844,14 +3180,15 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2628,
      "toplam_px": 2628
     },
     {
-     "kare": 398,
-     "tur_ms": 3482,
+     "kare": 409,
+     "tur_ms": 3499,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2860,7 +3197,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 2628,
      "toplam_px": 2628
@@ -2874,8 +3212,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2888,7 +3231,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 360,
+     "kare": 366,
+     "tur_ms": 3132,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2358.39990234375,
+     "toplam_px": 2358
+    },
+    {
+     "kare": 365,
      "tur_ms": 3141,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2896,41 +3256,27 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2358.39990234375,
      "toplam_px": 2358
     },
     {
-     "kare": 360,
-     "tur_ms": 3132,
+     "kare": 367,
+     "tur_ms": 3133,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2358.39990234375,
-     "toplam_px": 2358
-    },
-    {
-     "kare": 351,
-     "tur_ms": 3132,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.1
      },
      "scroll_px": 2358.39990234375,
      "toplam_px": 2358
@@ -2944,8 +3290,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -2958,39 +3309,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 357,
-     "tur_ms": 3091,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2326.39990234375,
-     "toplam_px": 2326
-    },
-    {
-     "kare": 361,
-     "tur_ms": 3083,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2326.39990234375,
-     "toplam_px": 2326
-    },
-    {
-     "kare": 362,
+     "kare": 368,
      "tur_ms": 3108,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3000,7 +3319,42 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 2326.39990234375,
+     "toplam_px": 2326
+    },
+    {
+     "kare": 366,
+     "tur_ms": 3099,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2326.39990234375,
+     "toplam_px": 2326
+    },
+    {
+     "kare": 362,
+     "tur_ms": 3099,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 2326.39990234375,
      "toplam_px": 2326
@@ -3014,8 +3368,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3028,24 +3387,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 356,
-     "tur_ms": 2999,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2220.800048828125,
-     "toplam_px": 2221
-    },
-    {
-     "kare": 352,
-     "tur_ms": 2999,
+     "kare": 355,
+     "tur_ms": 2982,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3054,13 +3397,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2220.800048828125,
      "toplam_px": 2221
     },
     {
-     "kare": 348,
+     "kare": 353,
      "tur_ms": 2983,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3068,9 +3412,27 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
+     },
+     "scroll_px": 2220.800048828125,
+     "toplam_px": 2221
+    },
+    {
+     "kare": 351,
+     "tur_ms": 2974,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 2220.800048828125,
      "toplam_px": 2221
@@ -3084,8 +3446,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3098,23 +3465,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 571,
-     "tur_ms": 4899,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3812,
-     "toplam_px": 3812
-    },
-    {
-     "kare": 576,
+     "kare": 579,
      "tur_ms": 4882,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3122,15 +3473,33 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3812,
      "toplam_px": 3812
     },
     {
-     "kare": 572,
+     "kare": 577,
+     "tur_ms": 4882,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3812,
+     "toplam_px": 3812
+    },
+    {
+     "kare": 573,
      "tur_ms": 4890,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3138,9 +3507,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 3812,
      "toplam_px": 3812
@@ -3154,8 +3524,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3168,24 +3543,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 444,
-     "tur_ms": 4407,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 125,
-     "takilma_tek_max_ms": 125,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3382.39990234375,
-     "toplam_px": 3382
-    },
-    {
-     "kare": 455,
-     "tur_ms": 4374,
+     "kare": 458,
+     "tur_ms": 4399,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3194,14 +3553,15 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 3382.39990234375,
      "toplam_px": 3382
     },
     {
-     "kare": 456,
-     "tur_ms": 4374,
+     "kare": 455,
+     "tur_ms": 4416,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3210,7 +3570,25 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3382.39990234375,
+     "toplam_px": 3382
+    },
+    {
+     "kare": 455,
+     "tur_ms": 4390,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.1
      },
      "scroll_px": 3382.39990234375,
      "toplam_px": 3382
@@ -3218,14 +3596,19 @@
    ],
    "p95_medyan": 16.7,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 125,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3238,24 +3621,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 363,
-     "tur_ms": 3074,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2312.800048828125,
-     "toplam_px": 2313
-    },
-    {
-     "kare": 368,
-     "tur_ms": 3083,
+     "kare": 366,
+     "tur_ms": 3091,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3264,14 +3631,32 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2312.800048828125,
+     "toplam_px": 2313
+    },
+    {
+     "kare": 366,
+     "tur_ms": 3091,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2312.800048828125,
      "toplam_px": 2313
     },
     {
      "kare": 369,
-     "tur_ms": 3082,
+     "tur_ms": 3099,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3280,7 +3665,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2312.800048828125,
      "toplam_px": 2313
@@ -3294,8 +3680,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3308,8 +3699,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 284,
-     "tur_ms": 2408,
+     "kare": 288,
+     "tur_ms": 2416,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3318,13 +3709,14 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1740,
      "toplam_px": 1740
     },
     {
-     "kare": 288,
+     "kare": 287,
      "tur_ms": 2399,
      "p95_ms": 8.4,
      "medyan_ms": 8.3,
@@ -3332,17 +3724,18 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1740,
      "toplam_px": 1740
     },
     {
-     "kare": 285,
-     "tur_ms": 2416,
-     "p95_ms": 8.5,
+     "kare": 289,
+     "tur_ms": 2408,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3350,13 +3743,14 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1740,
      "toplam_px": 1740
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3364,8 +3758,13 @@
     0,
     0
    ],
+   "kare_p95": 1.012,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3378,8 +3777,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 930,
-     "tur_ms": 8581,
+     "kare": 921,
+     "tur_ms": 8564,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6804.7998046875,
+     "toplam_px": 6805
+    },
+    {
+     "kare": 879,
+     "tur_ms": 8573,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3388,39 +3804,25 @@
      "taban": {
       "sure_ms": 2999,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
      },
      "scroll_px": 6804.7998046875,
      "toplam_px": 6805
     },
     {
-     "kare": 934,
-     "tur_ms": 8531,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
+     "kare": 810,
+     "tur_ms": 8672,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.4,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 6804.7998046875,
-     "toplam_px": 6805
-    },
-    {
-     "kare": 900,
-     "tur_ms": 8581,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 6804.7998046875,
      "toplam_px": 6805
@@ -3434,8 +3836,13 @@
     0,
     0
    ],
+   "kare_p95": 2.012,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3448,7 +3855,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 395,
+     "kare": 394,
      "tur_ms": 3316,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3458,14 +3865,32 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2451.199951171875,
      "toplam_px": 2451
     },
     {
-     "kare": 396,
-     "tur_ms": 3324,
+     "kare": 398,
+     "tur_ms": 3332,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2451.199951171875,
+     "toplam_px": 2451
+    },
+    {
+     "kare": 394,
+     "tur_ms": 3299,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3474,23 +3899,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2451.199951171875,
-     "toplam_px": 2451
-    },
-    {
-     "kare": 397,
-     "tur_ms": 3316,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2451.199951171875,
      "toplam_px": 2451
@@ -3504,8 +3914,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3518,17 +3933,35 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 399,
-     "tur_ms": 3349,
-     "p95_ms": 8.4,
+     "kare": 398,
+     "tur_ms": 3332,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2503.199951171875,
+     "toplam_px": 2503
+    },
+    {
+     "kare": 396,
+     "tur_ms": 3341,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2503.199951171875,
      "toplam_px": 2503
@@ -3544,23 +3977,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2503.199951171875,
-     "toplam_px": 2503
-    },
-    {
-     "kare": 394,
-     "tur_ms": 3341,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2503.199951171875,
      "toplam_px": 2503
@@ -3574,8 +3992,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3588,8 +4011,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
+     "kare": 406,
+     "tur_ms": 3391,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2530.39990234375,
+     "toplam_px": 2530
+    },
+    {
      "kare": 401,
-     "tur_ms": 3374,
+     "tur_ms": 3365,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3598,14 +4038,15 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2530.39990234375,
      "toplam_px": 2530
     },
     {
-     "kare": 403,
-     "tur_ms": 3382,
+     "kare": 399,
+     "tur_ms": 3366,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3614,23 +4055,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2530.39990234375,
-     "toplam_px": 2530
-    },
-    {
-     "kare": 400,
-     "tur_ms": 3357,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2530.39990234375,
      "toplam_px": 2530
@@ -3644,8 +4070,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3658,41 +4089,43 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 373,
-     "tur_ms": 3149,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2372,
-     "toplam_px": 2372
-    },
-    {
-     "kare": 377,
-     "tur_ms": 3149,
+     "kare": 378,
+     "tur_ms": 3157,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3015,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
     },
     {
-     "kare": 375,
-     "tur_ms": 3141,
-     "p95_ms": 8.4,
+     "kare": 374,
+     "tur_ms": 3157,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2372,
+     "toplam_px": 2372
+    },
+    {
+     "kare": 380,
+     "tur_ms": 3166,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3700,13 +4133,14 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
     }
    ],
-   "p95_medyan": 8.4,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3714,8 +4148,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3728,7 +4167,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 374,
+     "kare": 376,
+     "tur_ms": 3158,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2372,
+     "toplam_px": 2372
+    },
+    {
+     "kare": 371,
      "tur_ms": 3149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3738,29 +4194,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
     },
     {
-     "kare": 374,
-     "tur_ms": 3158,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2372,
-     "toplam_px": 2372
-    },
-    {
-     "kare": 377,
+     "kare": 380,
      "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3768,9 +4209,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
@@ -3784,8 +4226,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3798,23 +4245,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 410,
-     "tur_ms": 3432,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2571.199951171875,
-     "toplam_px": 2571
-    },
-    {
-     "kare": 406,
+     "kare": 407,
      "tur_ms": 3416,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3822,17 +4253,35 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2571.199951171875,
      "toplam_px": 2571
     },
     {
-     "kare": 406,
+     "kare": 408,
+     "tur_ms": 3416,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2571.199951171875,
+     "toplam_px": 2571
+    },
+    {
+     "kare": 408,
      "tur_ms": 3424,
-     "p95_ms": 8.4,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3840,7 +4289,8 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2571.199951171875,
      "toplam_px": 2571
@@ -3854,8 +4304,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3869,7 +4324,7 @@
    "kosum": [
     {
      "kare": 378,
-     "tur_ms": 3174,
+     "tur_ms": 3199,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3878,7 +4333,8 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2400,
      "toplam_px": 2401
@@ -3886,31 +4342,33 @@
     {
      "kare": 382,
      "tur_ms": 3191,
-     "p95_ms": 8.4,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2400,
-     "toplam_px": 2401
-    },
-    {
-     "kare": 383,
-     "tur_ms": 3199,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2400,
+     "toplam_px": 2401
+    },
+    {
+     "kare": 382,
+     "tur_ms": 3191,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2400,
      "toplam_px": 2401
@@ -3924,8 +4382,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -3938,23 +4401,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 377,
-     "tur_ms": 3157,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2372,
-     "toplam_px": 2372
-    },
-    {
-     "kare": 377,
+     "kare": 375,
      "tur_ms": 3149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3964,14 +4411,15 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
     },
     {
-     "kare": 373,
-     "tur_ms": 3133,
+     "kare": 375,
+     "tur_ms": 3158,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3980,7 +4428,25 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2372,
+     "toplam_px": 2372
+    },
+    {
+     "kare": 373,
+     "tur_ms": 3132,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2372,
      "toplam_px": 2372
@@ -3994,8 +4460,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -4008,24 +4479,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 240,
-     "tur_ms": 2024,
+     "kare": 236,
+     "tur_ms": 2016,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1390.4000244140625,
      "toplam_px": 1390
     },
     {
      "kare": 241,
-     "tur_ms": 2033,
+     "tur_ms": 2016,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -4034,23 +4506,25 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 1390.4000244140625,
      "toplam_px": 1390
     },
     {
-     "kare": 234,
-     "tur_ms": 2033,
+     "kare": 237,
+     "tur_ms": 2016,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4,
+      "tik_p10": 8.3
      },
      "scroll_px": 1390.4000244140625,
      "toplam_px": 1390
@@ -4058,14 +4532,19 @@
    ],
    "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 0,
+   "takilma_tek_max": 58,
    "taban_takilma": [
     0,
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
@@ -4079,22 +4558,6 @@
    "kosum": [
     {
      "kare": 342,
-     "tur_ms": 2882,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2127.199951171875,
-     "toplam_px": 2127
-    },
-    {
-     "kare": 341,
      "tur_ms": 2891,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -4104,13 +4567,31 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2127.199951171875,
      "toplam_px": 2127
     },
     {
-     "kare": 344,
+     "kare": 342,
+     "tur_ms": 2883,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2127.199951171875,
+     "toplam_px": 2127
+    },
+    {
+     "kare": 345,
      "tur_ms": 2874,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -4118,9 +4599,10 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 2127.199951171875,
      "toplam_px": 2127
@@ -4134,8 +4616,13 @@
     0,
     0
    ],
+   "kare_p95": 1.024,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
    "kapi": {
-    "p95": true,
+    "kacirilan_kare": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
