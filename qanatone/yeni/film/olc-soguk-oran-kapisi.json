@@ -10,20 +10,15 @@
   "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
   "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
  ],
- "olcum": "2026-09-03T18:38:31.295Z",
+ "olcum": "2026-09-03T17:30:38.684Z",
  "tarayici": "brave",
  "tekrar": 5,
  "boz": false,
  "esik": {
   "kacirilan_kare": 2,
+  "toplam_oran": 0.08,
   "tek_takilma_ms": 250,
-  "_": "BLOKLAYICI OLAN HEPSI BU (+ tur tamligi). Ikisi de MUTLAK birim: tik ve ms. Enes, 5 Eyl — B'nin ilk 27 soguk kosumunun dagilimindan turetildi. A'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu."
- },
- "bilgi_kalemleri": {
-  "takilma_toplam_ms": "MUTLAK — ziyaretcinin hissettigi. Kapi degil.",
-  "takilma_orani": "TUREV — tur boyuna bagimli. Kapi degil.",
-  "oran_eski_kapi": 0.08,
-  "_": "Enes, 5 Eyl 2026 gecesi — ORAN KAPIDAN DUSTU. Gerekce: kisa turda oran ornekleme hatasidir. 5 Eyl olcumu ters siralama gosterdi: /yeni/projeler/ 308 ms toplam takilmayla 3,37 sn turda %9,13 (KALIYORDU), /yeni/ 667 ms toplam takilmayla 12,0 sn turda %5,63 (GECIYORDU). Ziyaretcinin daha cok takildigi sayfa geciyordu. Bu bir gevsetme degil yanlis birimin duzeltilmesi — ayni hata kare kapisinda ms/tik olarak yapilmisti."
+  "_": "Enes, 5 Eyl — B'nin ilk 27 soguk kosumunun dagilimindan turetildi. A'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu."
  },
  "hedef": {
   "kacirilan_kare": 1,
@@ -33,45 +28,17 @@
   "takilma_esik_ms": 50,
   "_": "Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar"
  },
- "hukum": "GECTI",
+ "hukum": "KALDI — /yeni/projeler/",
  "kismi": false,
  "hedefte_olmayan": [
   "/yeni/",
-  "/yeni/en/",
   "/yeni/hizmetler/finans/",
   "/yeni/en/hizmetler/finans/",
-  "/yeni/en/hizmetler/web-sitesi-araclar/"
+  "/yeni/projeler/"
  ],
  "dagilim": {
-  "0": 1,
-  "1": 3,
-  "2": 5
- },
- "siralama": {
-  "mutlak_toplam_ms": [
-   "/yeni/en/",
-   "/yeni/",
-   "/yeni/hizmetler/finans/",
-   "/yeni/en/hizmetler/finans/",
-   "/yeni/en/hizmetler/web-sitesi-araclar/",
-   "/yeni/en/otomasyon/",
-   "/yeni/otomasyon/",
-   "/yeni/hizmetler/web-sitesi-araclar/",
-   "/yeni/projeler/"
-  ],
-  "oran": [
-   "/yeni/en/hizmetler/web-sitesi-araclar/",
-   "/yeni/en/",
-   "/yeni/hizmetler/web-sitesi-araclar/",
-   "/yeni/",
-   "/yeni/hizmetler/finans/",
-   "/yeni/en/hizmetler/finans/",
-   "/yeni/en/otomasyon/",
-   "/yeni/otomasyon/",
-   "/yeni/projeler/"
-  ],
-  "_": "Ustteki MUTLAK sira ziyaretcinin hissettigi siradir; alttaki TUREV siradir. Ikisi ayrisiyorsa oranin paydasi (tur boyu) konusuyordur, sayfa degil.",
-  "ayrisiyor": true
+  "1": 5,
+  "2": 4
  },
  "sayfa": [
   {
@@ -83,55 +50,24 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 7.7,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 997,
-     "tur_ms": 12005,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.4,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 7,
-     "takilma_toplam_ms": 633,
-     "takilma_tek_max_ms": 125,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 24.9,
-      "tik_p10": 8.3
-     },
-     "scroll_px": 9580,
-     "toplam_px": 9580,
-     "toplam_px_bas": 11356,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.8,
+      "min": 8,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 1040,
-     "tur_ms": 12080,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 9,
-     "takilma_toplam_ms": 700,
-     "takilma_tek_max_ms": 133,
+     "kare": 1223,
+     "tur_ms": 11863,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 400,
+     "takilma_tek_max_ms": 117,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 16.7,
+      "p95_ms": 16.9,
       "tik_p10": 8.3
      },
      "scroll_px": 9580,
@@ -145,24 +81,55 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 7.8,
+      "min": 7.3,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 1023,
-     "tur_ms": 11996,
+     "kare": 1200,
+     "tur_ms": 11838,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 9,
+     "takilma_toplam_ms": 667,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3024,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1016,
+     "tur_ms": 12021,
      "p95_ms": 24.9,
      "medyan_ms": 8.4,
      "kare_p95": 3,
      "kacirilan_kare": 2,
-     "takilma_sayi": 7,
-     "takilma_toplam_ms": 566,
-     "takilma_tek_max_ms": 158,
+     "takilma_sayi": 9,
+     "takilma_toplam_ms": 741,
+     "takilma_tek_max_ms": 125,
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 16.7,
+      "p95_ms": 16.8,
       "tik_p10": 8.2
      },
      "scroll_px": 9580,
@@ -178,20 +145,20 @@
       "suzulen": 0,
       "min": 8.1,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 1070,
-     "tur_ms": 11988,
-     "p95_ms": 16.8,
+     "kare": 1005,
+     "tur_ms": 12088,
+     "p95_ms": 25,
      "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 10,
-     "takilma_toplam_ms": 791,
-     "takilma_tek_max_ms": 150,
+     "kare_p95": 3.012,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 12,
+     "takilma_toplam_ms": 866,
+     "takilma_tek_max_ms": 125,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 16.7,
       "tik_p10": 8.3
@@ -207,24 +174,24 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 7.8,
+      "min": 8.1,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 977,
-     "tur_ms": 12055,
+     "kare": 1001,
+     "tur_ms": 12005,
      "p95_ms": 25,
      "medyan_ms": 8.4,
      "kare_p95": 3.012,
      "kacirilan_kare": 2,
      "takilma_sayi": 7,
-     "takilma_toplam_ms": 667,
-     "takilma_tek_max_ms": 175,
+     "takilma_toplam_ms": 567,
+     "takilma_tek_max_ms": 125,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 16.7,
+      "p95_ms": 16.8,
       "tik_p10": 8.3
      },
      "scroll_px": 9580,
@@ -236,15 +203,16 @@
    "p95_medyan": 24.9,
    "kacirilan_medyan": 2,
    "kacirilan_kosumlar": [
-    2,
-    2,
-    2,
     1,
+    1,
+    2,
+    2,
     2
    ],
    "kacirilan_en_yuksek": 2,
    "kare_p95_medyan": 3,
-   "takilma_tek_max": 175,
+   "takilma_oran_medyan": 0.0563,
+   "takilma_tek_max": 125,
    "taban_takilma": [
     0,
     0,
@@ -259,25 +227,10 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 667,
-    "takilma_toplam_kosumlar": [
-     633,
-     700,
-     566,
-     791,
-     667
-    ],
-    "takilma_sayi_medyan": 7,
-    "tur_ms_medyan": 12005,
-    "takilma_oran_medyan": 0.0553,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0553,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
@@ -293,24 +246,117 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
+      "min": 7.8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1020,
+     "tur_ms": 12088,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.4,
+     "kare_p95": 3,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 9,
+     "takilma_toplam_ms": 741,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 1,
       "min": 8,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 1041,
-     "tur_ms": 12063,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.4,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 13,
-     "takilma_toplam_ms": 950,
-     "takilma_tek_max_ms": 108,
+     "kare": 1154,
+     "tur_ms": 11930,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 583,
+     "takilma_tek_max_ms": 125,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3015,
       "takilma_sayi": 0,
       "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1180,
+     "tur_ms": 11996,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 566,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 7.9,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1197,
+     "tur_ms": 11913,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 575,
+     "takilma_tek_max_ms": 92,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
       "tik_p10": 8.2
      },
      "scroll_px": 9566.400390625,
@@ -329,113 +375,20 @@
       "p90": 8.4,
       "kararli": true
      },
-     "kare": 1095,
-     "tur_ms": 12130,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
+     "kare": 1158,
+     "tur_ms": 11963,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
      "kacirilan_kare": 1,
-     "takilma_sayi": 10,
-     "takilma_toplam_ms": 776,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 500,
      "takilma_tek_max_ms": 133,
      "taban": {
-      "sure_ms": 3024,
-      "takilma_sayi": 0,
-      "p95_ms": 16.8,
-      "tik_p10": 8.3
-     },
-     "scroll_px": 9566.400390625,
-     "toplam_px": 9566,
-     "toplam_px_bas": 11356,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 1086,
-     "tur_ms": 12013,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 11,
-     "takilma_toplam_ms": 800,
-     "takilma_tek_max_ms": 117,
-     "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 16.8,
-      "tik_p10": 8.3
-     },
-     "scroll_px": 9566.400390625,
-     "toplam_px": 9566,
-     "toplam_px_bas": 11356,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.9,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 1060,
-     "tur_ms": 12038,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.4,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 11,
-     "takilma_toplam_ms": 775,
-     "takilma_tek_max_ms": 117,
-     "taban": {
-      "sure_ms": 3024,
-      "takilma_sayi": 0,
-      "p95_ms": 16.7,
-      "tik_p10": 8.3
-     },
-     "scroll_px": 9566.400390625,
-     "toplam_px": 9566,
-     "toplam_px_bas": 11356,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 1057,
-     "tur_ms": 11996,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.4,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 11,
-     "takilma_toplam_ms": 792,
-     "takilma_tek_max_ms": 92,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 16.7,
-      "tik_p10": 8.3
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 9566,
@@ -443,17 +396,18 @@
      "tur_tam": true
     }
    ],
-   "p95_medyan": 24.9,
-   "kacirilan_medyan": 2,
+   "p95_medyan": 16.7,
+   "kacirilan_medyan": 1,
    "kacirilan_kosumlar": [
     2,
     1,
     1,
-    2,
-    2
+    1,
+    1
    ],
    "kacirilan_en_yuksek": 2,
-   "kare_p95_medyan": 3,
+   "kare_p95_medyan": 2.012,
+   "takilma_oran_medyan": 0.0483,
    "takilma_tek_max": 133,
    "taban_takilma": [
     0,
@@ -469,30 +423,15 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 792,
-    "takilma_toplam_kosumlar": [
-     950,
-     776,
-     800,
-     775,
-     792
-    ],
-    "takilma_sayi_medyan": 11,
-    "tur_ms_medyan": 12038,
-    "takilma_oran_medyan": 0.066,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.066,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
    "gecti": true,
-   "hedefte": false
+   "hedefte": true
   },
   {
    "yol": "/yeni/hizmetler/finans/",
@@ -503,51 +442,20 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 1196,
-     "tur_ms": 14545,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 9,
-     "takilma_toplam_ms": 708,
-     "takilma_tek_max_ms": 192,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 11703.2001953125,
-     "toplam_px": 11703,
-     "toplam_px_bas": 11682,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
+      "min": 7.9,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 1235,
-     "tur_ms": 14529,
+     "kare": 1249,
+     "tur_ms": 14521,
      "p95_ms": 25,
      "medyan_ms": 8.4,
      "kare_p95": 3.012,
      "kacirilan_kare": 2,
-     "takilma_sayi": 7,
-     "takilma_toplam_ms": 591,
-     "takilma_tek_max_ms": 192,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 508,
+     "takilma_tek_max_ms": 183,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
@@ -570,15 +478,15 @@
       "p90": 8.4,
       "kararli": true
      },
-     "kare": 1228,
-     "tur_ms": 14570,
+     "kare": 1250,
+     "tur_ms": 14521,
      "p95_ms": 25,
      "medyan_ms": 8.4,
      "kare_p95": 3.012,
      "kacirilan_kare": 2,
      "takilma_sayi": 7,
-     "takilma_toplam_ms": 583,
-     "takilma_tek_max_ms": 192,
+     "takilma_toplam_ms": 608,
+     "takilma_tek_max_ms": 175,
      "taban": {
       "sure_ms": 2999,
       "takilma_sayi": 0,
@@ -595,21 +503,52 @@
       "tik_ms": 8.3,
       "hz": 120.5,
       "ornek": 194,
-      "suzulen": 1,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.4,
+      "kararli": true
+     },
+     "kare": 1278,
+     "tur_ms": 14479,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.4,
+     "kare_p95": 3,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 541,
+     "takilma_tek_max_ms": 158,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11703.2001953125,
+     "toplam_px": 11703,
+     "toplam_px_bas": 11682,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
       "min": 7.9,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 1232,
-     "tur_ms": 14562,
+     "kare": 1250,
+     "tur_ms": 14554,
      "p95_ms": 25,
      "medyan_ms": 8.4,
      "kare_p95": 3.012,
      "kacirilan_kare": 2,
-     "takilma_sayi": 9,
-     "takilma_toplam_ms": 725,
-     "takilma_tek_max_ms": 183,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 383,
+     "takilma_tek_max_ms": 167,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
@@ -627,20 +566,20 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
+      "min": 8,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 1180,
-     "tur_ms": 14554,
+     "kare": 1297,
+     "tur_ms": 14496,
      "p95_ms": 25,
      "medyan_ms": 8.4,
      "kare_p95": 3.012,
      "kacirilan_kare": 2,
-     "takilma_sayi": 8,
-     "takilma_toplam_ms": 641,
-     "takilma_tek_max_ms": 183,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 508,
+     "takilma_tek_max_ms": 175,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
@@ -664,7 +603,8 @@
    ],
    "kacirilan_en_yuksek": 2,
    "kare_p95_medyan": 3.012,
-   "takilma_tek_max": 192,
+   "takilma_oran_medyan": 0.035,
+   "takilma_tek_max": 183,
    "taban_takilma": [
     0,
     0,
@@ -679,25 +619,10 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 641,
-    "takilma_toplam_kosumlar": [
-     708,
-     591,
-     583,
-     725,
-     641
-    ],
-    "takilma_sayi_medyan": 8,
-    "tur_ms_medyan": 14554,
-    "takilma_oran_medyan": 0.044,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.044,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
@@ -713,20 +638,82 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
+      "min": 7.9,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 1138,
-     "tur_ms": 14754,
-     "p95_ms": 33.2,
+     "kare": 1261,
+     "tur_ms": 14671,
+     "p95_ms": 25,
      "medyan_ms": 8.4,
-     "kare_p95": 4,
-     "kacirilan_kare": 3,
-     "takilma_sayi": 8,
-     "takilma_toplam_ms": 724,
-     "takilma_tek_max_ms": 233,
+     "kare_p95": 3.012,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 566,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11889.599609375,
+     "toplam_px": 11890,
+     "toplam_px_bas": 11868,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1323,
+     "tur_ms": 14604,
+     "p95_ms": 16.9,
+     "medyan_ms": 8.4,
+     "kare_p95": 2.036,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 416,
+     "takilma_tek_max_ms": 142,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 11889.599609375,
+     "toplam_px": 11890,
+     "toplam_px_bas": 11868,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1332,
+     "tur_ms": 14612,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "kare_p95": 2.024,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 317,
+     "takilma_tek_max_ms": 158,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
@@ -746,20 +733,20 @@
       "suzulen": 0,
       "min": 7.9,
       "p10": 8.2,
-      "p90": 8.5,
+      "p90": 8.4,
       "kararli": true
      },
-     "kare": 1246,
-     "tur_ms": 14746,
-     "p95_ms": 25,
+     "kare": 1323,
+     "tur_ms": 14720,
+     "p95_ms": 24.9,
      "medyan_ms": 8.4,
-     "kare_p95": 3.012,
+     "kare_p95": 3,
      "kacirilan_kare": 2,
-     "takilma_sayi": 6,
-     "takilma_toplam_ms": 542,
-     "takilma_tek_max_ms": 192,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 450,
+     "takilma_tek_max_ms": 133,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
@@ -775,82 +762,20 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
+      "min": 8,
       "p10": 8.2,
-      "p90": 8.5,
+      "p90": 8.4,
       "kararli": true
      },
-     "kare": 1240,
-     "tur_ms": 14679,
-     "p95_ms": 25,
+     "kare": 1318,
+     "tur_ms": 14654,
+     "p95_ms": 24.9,
      "medyan_ms": 8.4,
-     "kare_p95": 3.012,
+     "kare_p95": 3,
      "kacirilan_kare": 2,
-     "takilma_sayi": 6,
-     "takilma_toplam_ms": 483,
-     "takilma_tek_max_ms": 167,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 11889.599609375,
-     "toplam_px": 11890,
-     "toplam_px_bas": 11868,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 1238,
-     "tur_ms": 14687,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 10,
-     "takilma_toplam_ms": 775,
-     "takilma_tek_max_ms": 108,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 11889.599609375,
-     "toplam_px": 11890,
-     "toplam_px_bas": 11868,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.9,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 1196,
-     "tur_ms": 14746,
-     "p95_ms": 25.1,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.024,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 7,
-     "takilma_toplam_ms": 625,
-     "takilma_tek_max_ms": 158,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 383,
+     "takilma_tek_max_ms": 175,
      "taban": {
       "sure_ms": 2999,
       "takilma_sayi": 0,
@@ -863,18 +788,19 @@
      "tur_tam": true
     }
    ],
-   "p95_medyan": 25,
+   "p95_medyan": 24.9,
    "kacirilan_medyan": 2,
    "kacirilan_kosumlar": [
-    3,
     2,
-    2,
+    1,
+    1,
     2,
     2
    ],
-   "kacirilan_en_yuksek": 3,
-   "kare_p95_medyan": 3.012,
-   "takilma_tek_max": 233,
+   "kacirilan_en_yuksek": 2,
+   "kare_p95_medyan": 3,
+   "takilma_oran_medyan": 0.0285,
+   "takilma_tek_max": 175,
    "taban_takilma": [
     0,
     0,
@@ -889,25 +815,10 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 625,
-    "takilma_toplam_kosumlar": [
-     724,
-     542,
-     483,
-     775,
-     625
-    ],
-    "takilma_sayi_medyan": 7,
-    "tur_ms_medyan": 14746,
-    "takilma_oran_medyan": 0.0424,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0424,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
@@ -925,299 +836,27 @@
       "suzulen": 0,
       "min": 8,
       "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 430,
-     "tur_ms": 4441,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.3,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 275,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3402.39990234375,
-     "toplam_px": 3402,
-     "toplam_px_bas": 3382,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 1,
-      "min": 8,
-      "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 406,
-     "tur_ms": 4457,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.3,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 391,
-     "takilma_tek_max_ms": 150,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3402.39990234375,
-     "toplam_px": 3402,
-     "toplam_px_bas": 3382,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8.1,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 426,
-     "tur_ms": 4432,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.3,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 3,
-     "takilma_toplam_ms": 283,
-     "takilma_tek_max_ms": 167,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3402.39990234375,
-     "toplam_px": 3402,
-     "toplam_px_bas": 3382,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.7,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 420,
-     "tur_ms": 4457,
-     "p95_ms": 24.9,
-     "medyan_ms": 8.3,
-     "kare_p95": 3,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 333,
-     "takilma_tek_max_ms": 150,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3402.39990234375,
-     "toplam_px": 3402,
-     "toplam_px_bas": 3382,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.7,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 424,
-     "tur_ms": 4466,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.3,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 283,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3402.39990234375,
-     "toplam_px": 3402,
-     "toplam_px_bas": 3382,
-     "tur_tam": true
-    }
-   ],
-   "p95_medyan": 16.8,
-   "kacirilan_medyan": 1,
-   "kacirilan_kosumlar": [
-    1,
-    2,
-    1,
-    2,
-    1
-   ],
-   "kacirilan_en_yuksek": 2,
-   "kare_p95_medyan": 2.024,
-   "takilma_tek_max": 167,
-   "taban_takilma": [
-    0,
-    0,
-    0,
-    0,
-    0
-   ],
-   "tik_kosumlar": [
-    8.3,
-    8.3,
-    8.3,
-    8.3,
-    8.3
-   ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 283,
-    "takilma_toplam_kosumlar": [
-     275,
-     391,
-     283,
-     333,
-     283
-    ],
-    "takilma_sayi_medyan": 4,
-    "tur_ms_medyan": 4457,
-    "takilma_oran_medyan": 0.0639,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0639,
-   "eski_oran_kapisi": true,
-   "tur_tam": true,
-   "kapi": {
-    "kacirilan_kare": true,
-    "takilma_tek": true,
-    "tur_tam": true
-   },
-   "gecti": true,
-   "hedefte": true
-  },
-  {
-   "yol": "/yeni/en/hizmetler/web-sitesi-araclar/",
-   "kosum": [
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 429,
-     "tur_ms": 4474,
+     "kare": 428,
+     "tur_ms": 4482,
      "p95_ms": 16.9,
-     "medyan_ms": 8.3,
+     "medyan_ms": 8.4,
      "kare_p95": 2.036,
      "kacirilan_kare": 1,
      "takilma_sayi": 3,
-     "takilma_toplam_ms": 216,
+     "takilma_toplam_ms": 217,
      "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3441.60009765625,
-     "toplam_px": 3442,
-     "toplam_px_bas": 3421,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8.1,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 384,
-     "tur_ms": 4515,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 6,
-     "takilma_toplam_ms": 417,
-     "takilma_tek_max_ms": 125,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 3441.60009765625,
-     "toplam_px": 3442,
-     "toplam_px_bas": 3421,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 419,
-     "tur_ms": 4549,
-     "p95_ms": 25,
-     "medyan_ms": 8.3,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 6,
-     "takilma_toplam_ms": 441,
-     "takilma_tek_max_ms": 108,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
      },
-     "scroll_px": 3441.60009765625,
-     "toplam_px": 3442,
-     "toplam_px_bas": 3421,
+     "scroll_px": 3402.39990234375,
+     "toplam_px": 3402,
+     "toplam_px_bas": 3382,
      "tur_tam": true
     },
     {
@@ -1231,24 +870,24 @@
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 424,
-     "tur_ms": 4507,
-     "p95_ms": 16.8,
+     "kare": 426,
+     "tur_ms": 4474,
+     "p95_ms": 24.8,
      "medyan_ms": 8.3,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 5,
-     "takilma_toplam_ms": 392,
+     "kare_p95": 2.988,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 217,
      "takilma_tek_max_ms": 100,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
      },
-     "scroll_px": 3441.60009765625,
-     "toplam_px": 3442,
-     "toplam_px_bas": 3421,
+     "scroll_px": 3402.39990234375,
+     "toplam_px": 3402,
+     "toplam_px_bas": 3382,
      "tur_tam": true
     },
     {
@@ -1257,13 +896,13 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
-      "p10": 8.3,
-      "p90": 8.4,
+      "min": 7.9,
+      "p10": 8.2,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 425,
-     "tur_ms": 4540,
+     "kare": 418,
+     "tur_ms": 4465,
      "p95_ms": 24.9,
      "medyan_ms": 8.3,
      "kare_p95": 3,
@@ -1277,66 +916,11 @@
       "p95_ms": 8.5,
       "tik_p10": 8.2
      },
-     "scroll_px": 3441.60009765625,
-     "toplam_px": 3442,
-     "toplam_px_bas": 3421,
+     "scroll_px": 3402.39990234375,
+     "toplam_px": 3402,
+     "toplam_px_bas": 3382,
      "tur_tam": true
-    }
-   ],
-   "p95_medyan": 24.9,
-   "kacirilan_medyan": 2,
-   "kacirilan_kosumlar": [
-    1,
-    2,
-    2,
-    1,
-    2
-   ],
-   "kacirilan_en_yuksek": 2,
-   "kare_p95_medyan": 3,
-   "takilma_tek_max": 125,
-   "taban_takilma": [
-    0,
-    0,
-    0,
-    0,
-    0
-   ],
-   "tik_kosumlar": [
-    8.3,
-    8.3,
-    8.3,
-    8.3,
-    8.3
-   ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 392,
-    "takilma_toplam_kosumlar": [
-     216,
-     417,
-     441,
-     392,
-     300
-    ],
-    "takilma_sayi_medyan": 5,
-    "tur_ms_medyan": 4515,
-    "takilma_oran_medyan": 0.087,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.087,
-   "eski_oran_kapisi": false,
-   "tur_tam": true,
-   "kapi": {
-    "kacirilan_kare": true,
-    "takilma_tek": true,
-    "tur_tam": true
-   },
-   "gecti": true,
-   "hedefte": false
-  },
-  {
-   "yol": "/yeni/otomasyon/",
-   "kosum": [
+    },
     {
      "tazeleme": {
       "tik_ms": 8.3,
@@ -1348,76 +932,45 @@
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 844,
-     "tur_ms": 8697,
+     "kare": 437,
+     "tur_ms": 4449,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 158,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3402.39990234375,
+     "toplam_px": 3402,
+     "toplam_px_bas": 3382,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 7.9,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 435,
+     "tur_ms": 4457,
      "p95_ms": 16.8,
      "medyan_ms": 8.3,
      "kare_p95": 2.024,
      "kacirilan_kare": 1,
      "takilma_sayi": 5,
-     "takilma_toplam_ms": 367,
-     "takilma_tek_max_ms": 108,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6825.60009765625,
-     "toplam_px": 6826,
-     "toplam_px_bas": 6805,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.3,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 846,
-     "tur_ms": 8639,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.3,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 283,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6825.60009765625,
-     "toplam_px": 6826,
-     "toplam_px_bas": 6805,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 824,
-     "tur_ms": 8689,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 333,
+     "takilma_toplam_ms": 342,
      "takilma_tek_max_ms": 108,
      "taban": {
       "sure_ms": 3007,
@@ -1425,85 +978,24 @@
       "p95_ms": 8.5,
       "tik_p10": 8.2
      },
-     "scroll_px": 6825.60009765625,
-     "toplam_px": 6826,
-     "toplam_px_bas": 6805,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8.1,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 824,
-     "tur_ms": 8656,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 4,
-     "takilma_toplam_ms": 292,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6825.60009765625,
-     "toplam_px": 6826,
-     "toplam_px_bas": 6805,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 820,
-     "tur_ms": 8714,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 6,
-     "takilma_toplam_ms": 383,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6825.60009765625,
-     "toplam_px": 6826,
-     "toplam_px_bas": 6805,
+     "scroll_px": 3402.39990234375,
+     "toplam_px": 3402,
+     "toplam_px_bas": 3382,
      "tur_tam": true
     }
    ],
-   "p95_medyan": 16.8,
+   "p95_medyan": 16.9,
    "kacirilan_medyan": 1,
    "kacirilan_kosumlar": [
     1,
-    1,
-    1,
+    2,
+    2,
     1,
     1
    ],
-   "kacirilan_en_yuksek": 1,
-   "kare_p95_medyan": 2.024,
+   "kacirilan_en_yuksek": 2,
+   "kare_p95_medyan": 2.036,
+   "takilma_oran_medyan": 0.0485,
    "takilma_tek_max": 108,
    "taban_takilma": [
     0,
@@ -1519,25 +1011,402 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 333,
-    "takilma_toplam_kosumlar": [
-     367,
-     283,
-     333,
-     292,
-     383
-    ],
-    "takilma_sayi_medyan": 4,
-    "tur_ms_medyan": 8689,
-    "takilma_oran_medyan": 0.0383,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0383,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "gecti": true,
+   "hedefte": true
+  },
+  {
+   "yol": "/yeni/en/hizmetler/web-sitesi-araclar/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 1,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 425,
+     "tur_ms": 4524,
+     "p95_ms": 24.8,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.988,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 358,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3441.60009765625,
+     "toplam_px": 3442,
+     "toplam_px_bas": 3421,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 1,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 441,
+     "tur_ms": 4490,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.024,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 225,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3441.60009765625,
+     "toplam_px": 3442,
+     "toplam_px_bas": 3421,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 436,
+     "tur_ms": 4474,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.4,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 267,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3441.60009765625,
+     "toplam_px": 3442,
+     "toplam_px_bas": 3421,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 436,
+     "tur_ms": 4499,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.024,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 325,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3441.60009765625,
+     "toplam_px": 3442,
+     "toplam_px_bas": 3421,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 427,
+     "tur_ms": 4474,
+     "p95_ms": 24.9,
+     "medyan_ms": 8.3,
+     "kare_p95": 3,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 292,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 3441.60009765625,
+     "toplam_px": 3442,
+     "toplam_px_bas": 3421,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.8,
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    2,
+    1,
+    1,
+    1,
+    2
+   ],
+   "kacirilan_en_yuksek": 2,
+   "kare_p95_medyan": 2.024,
+   "takilma_oran_medyan": 0.0653,
+   "takilma_tek_max": 125,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tik_kosumlar": [
+    8.3,
+    8.3,
+    8.3,
+    8.3,
+    8.3
+   ],
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "gecti": true,
+   "hedefte": true
+  },
+  {
+   "yol": "/yeni/otomasyon/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 869,
+     "tur_ms": 8714,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 283,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 868,
+     "tur_ms": 8614,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 158,
+     "takilma_tek_max_ms": 92,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 891,
+     "tur_ms": 8639,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 242,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 869,
+     "tur_ms": 8656,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 342,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3032,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 886,
+     "tur_ms": 8672,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 200,
+     "takilma_tek_max_ms": 83,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6825.60009765625,
+     "toplam_px": 6826,
+     "toplam_px_bas": 6805,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.7,
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "kacirilan_en_yuksek": 1,
+   "kare_p95_medyan": 2.012,
+   "takilma_oran_medyan": 0.028,
+   "takilma_tek_max": 117,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tik_kosumlar": [
+    8.3,
+    8.3,
+    8.3,
+    8.3,
+    8.3
+   ],
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
@@ -1553,20 +1422,82 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 8.1,
+      "min": 8,
       "p10": 8.2,
       "p90": 8.4,
       "kararli": true
      },
-     "kare": 831,
-     "tur_ms": 8806,
-     "p95_ms": 16.8,
+     "kare": 879,
+     "tur_ms": 8739,
+     "p95_ms": 16.7,
      "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 241,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6916,
+     "toplam_px": 6916,
+     "toplam_px_bas": 6894,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 854,
+     "tur_ms": 8756,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
      "kare_p95": 2.024,
      "kacirilan_kare": 1,
-     "takilma_sayi": 5,
-     "takilma_toplam_ms": 383,
-     "takilma_tek_max_ms": 117,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 183,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6916,
+     "toplam_px": 6916,
+     "toplam_px_bas": 6894,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 891,
+     "tur_ms": 8722,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 158,
+     "takilma_tek_max_ms": 92,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
@@ -1589,112 +1520,50 @@
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 821,
-     "tur_ms": 8797,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 5,
-     "takilma_toplam_ms": 366,
-     "takilma_tek_max_ms": 125,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6916,
-     "toplam_px": 6916,
-     "toplam_px_bas": 6894,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 828,
-     "tur_ms": 8731,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "kare_p95": 2.024,
-     "kacirilan_kare": 1,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 158,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 16.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6916,
-     "toplam_px": 6916,
-     "toplam_px_bas": 6894,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 7.9,
-      "p10": 8.2,
-      "p90": 8.5,
-      "kararli": true
-     },
-     "kare": 801,
-     "tur_ms": 8756,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "kare_p95": 3.012,
-     "kacirilan_kare": 2,
-     "takilma_sayi": 5,
-     "takilma_toplam_ms": 341,
-     "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 6916,
-     "toplam_px": 6916,
-     "toplam_px_bas": 6894,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 1,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 850,
-     "tur_ms": 8706,
+     "kare": 877,
+     "tur_ms": 8714,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "kare_p95": 2.012,
      "kacirilan_kare": 1,
-     "takilma_sayi": 5,
-     "takilma_toplam_ms": 383,
-     "takilma_tek_max_ms": 125,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 258,
+     "takilma_tek_max_ms": 150,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.4,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 6916,
+     "toplam_px": 6916,
+     "toplam_px_bas": 6894,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 866,
+     "tur_ms": 8739,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 150,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.7,
       "tik_p10": 8.2
      },
      "scroll_px": 6916,
@@ -1703,18 +1572,19 @@
      "tur_tam": true
     }
    ],
-   "p95_medyan": 16.8,
+   "p95_medyan": 16.7,
    "kacirilan_medyan": 1,
    "kacirilan_kosumlar": [
     1,
     1,
     1,
-    2,
+    1,
     1
    ],
-   "kacirilan_en_yuksek": 2,
-   "kare_p95_medyan": 2.024,
-   "takilma_tek_max": 125,
+   "kacirilan_en_yuksek": 1,
+   "kare_p95_medyan": 2.012,
+   "takilma_oran_medyan": 0.0209,
+   "takilma_tek_max": 150,
    "taban_takilma": [
     0,
     0,
@@ -1729,25 +1599,10 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 366,
-    "takilma_toplam_kosumlar": [
-     383,
-     366,
-     158,
-     341,
-     383
-    ],
-    "takilma_sayi_medyan": 5,
-    "tur_ms_medyan": 8756,
-    "takilma_oran_medyan": 0.0416,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0416,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": true,
     "takilma_tek": true,
     "tur_tam": true
    },
@@ -1765,49 +1620,18 @@
       "suzulen": 0,
       "min": 8,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 378,
-     "tur_ms": 3357,
-     "p95_ms": 8.5,
+     "kare": 318,
+     "tur_ms": 3374,
+     "p95_ms": 25,
      "medyan_ms": 8.3,
-     "kare_p95": 1.024,
-     "kacirilan_kare": 0,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 100,
+     "kare_p95": 3.012,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 308,
      "takilma_tek_max_ms": 100,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4,
-      "tik_p10": 8.2
-     },
-     "scroll_px": 2472.800048828125,
-     "toplam_px": 2473,
-     "toplam_px_bas": 2451,
-     "tur_tam": true
-    },
-    {
-     "tazeleme": {
-      "tik_ms": 8.3,
-      "hz": 120.5,
-      "ornek": 194,
-      "suzulen": 0,
-      "min": 8,
-      "p10": 8.2,
-      "p90": 8.4,
-      "kararli": true
-     },
-     "kare": 385,
-     "tur_ms": 3357,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "kare_p95": 1.024,
-     "kacirilan_kare": 0,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 109,
-     "takilma_tek_max_ms": 109,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
@@ -1827,20 +1651,20 @@
       "suzulen": 0,
       "min": 8,
       "p10": 8.2,
-      "p90": 8.4,
+      "p90": 8.5,
       "kararli": true
      },
-     "kare": 381,
-     "tur_ms": 3349,
-     "p95_ms": 8.5,
+     "kare": 313,
+     "tur_ms": 3399,
+     "p95_ms": 25.5,
      "medyan_ms": 8.3,
-     "kare_p95": 1.024,
-     "kacirilan_kare": 0,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 100,
+     "kare_p95": 3.072,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 367,
      "takilma_tek_max_ms": 100,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
@@ -1856,23 +1680,54 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 7.9,
+      "min": 8,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 380,
-     "tur_ms": 3366,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "kare_p95": 1.024,
-     "kacirilan_kare": 0,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 92,
+     "kare": 302,
+     "tur_ms": 3424,
+     "p95_ms": 33.2,
+     "medyan_ms": 8.4,
+     "kare_p95": 4,
+     "kacirilan_kare": 3,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 325,
      "takilma_tek_max_ms": 92,
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
+      "p95_ms": 8.6,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2472.800048828125,
+     "toplam_px": 2473,
+     "toplam_px_bas": 2451,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 314,
+     "tur_ms": 3366,
+     "p95_ms": 25,
+     "medyan_ms": 8.3,
+     "kare_p95": 3.012,
+     "kacirilan_kare": 2,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 225,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
      },
@@ -1887,22 +1742,22 @@
       "hz": 120.5,
       "ornek": 194,
       "suzulen": 0,
-      "min": 7.7,
+      "min": 8,
       "p10": 8.2,
       "p90": 8.5,
       "kararli": true
      },
-     "kare": 381,
-     "tur_ms": 3357,
-     "p95_ms": 8.5,
+     "kare": 328,
+     "tur_ms": 3365,
+     "p95_ms": 16.8,
      "medyan_ms": 8.3,
-     "kare_p95": 1.024,
-     "kacirilan_kare": 0,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 100,
-     "takilma_tek_max_ms": 100,
+     "kare_p95": 2.024,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 3,
+     "takilma_toplam_ms": 250,
+     "takilma_tek_max_ms": 117,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5,
       "tik_p10": 8.2
@@ -1913,18 +1768,19 @@
      "tur_tam": true
     }
    ],
-   "p95_medyan": 8.5,
-   "kacirilan_medyan": 0,
+   "p95_medyan": 25,
+   "kacirilan_medyan": 2,
    "kacirilan_kosumlar": [
-    0,
-    0,
-    0,
-    0,
-    0
+    2,
+    2,
+    3,
+    2,
+    1
    ],
-   "kacirilan_en_yuksek": 0,
-   "kare_p95_medyan": 1.024,
-   "takilma_tek_max": 109,
+   "kacirilan_en_yuksek": 3,
+   "kare_p95_medyan": 3.012,
+   "takilma_oran_medyan": 0.0913,
+   "takilma_tek_max": 117,
    "taban_takilma": [
     0,
     0,
@@ -1939,30 +1795,15 @@
     8.3,
     8.3
    ],
-   "bilgi": {
-    "takilma_toplam_medyan_ms": 100,
-    "takilma_toplam_kosumlar": [
-     100,
-     109,
-     100,
-     92,
-     100
-    ],
-    "takilma_sayi_medyan": 1,
-    "tur_ms_medyan": 3357,
-    "takilma_oran_medyan": 0.0298,
-    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
-   },
-   "takilma_oran_medyan": 0.0298,
-   "eski_oran_kapisi": true,
    "tur_tam": true,
    "kapi": {
     "kacirilan_kare": true,
+    "takilma_oran": false,
     "takilma_tek": true,
     "tur_tam": true
    },
-   "gecti": true,
-   "hedefte": true
+   "gecti": false,
+   "hedefte": false
   }
  ]
 }

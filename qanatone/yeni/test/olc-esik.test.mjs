@@ -62,18 +62,61 @@ test('KAPI A esikleri: kacirilan <= 1 · takilma orani %3 · tek 250 ms', () => 
   assert.equal(sayi(A, 'TEK_TAKILMA_MS'), 250, 'A tek takilma tavani degismis');
 });
 
-test('KAPI B esikleri: kacirilan <= 2 · takilma orani %8 · tek 250 ms · TEKRAR 5', () => {
+test('KAPI B esikleri: kacirilan <= 2 · tek 250 ms · TEKRAR 5', () => {
   assert.equal(varsayilan(B, 'KACIRILAN_KAPI'), 2, 'B kacirilan kapisi degismis');
-  assert.equal(sayi(B, 'TOPLAM_ORAN'), 0.08, 'B takilma orani esigi degismis');
   assert.equal(sayi(B, 'TEK_TAKILMA_MS'), 250, 'B tek takilma tavani degismis');
   assert.equal(varsayilan(B, 'TEKRAR'), 5, 'B tekrar sayisi 5 degil — uc kosum medyani bant degistiren sayfalarda sabit degildi');
+});
+
+/* ENES, 5 EYL 2026 GECESI — ORAN KAPIDAN DUSTU, YANLIS BIRIM.
+   Oran tur boyuna bagimli bir turevdir: /yeni/projeler/ 308 ms toplam
+   takilmayla 3,37 sn turda %9,13 verip KALIYORDU, /yeni/ 667 ms toplam
+   takilmayla 12,0 sn turda %5,63 verip GECIYORDU — yani ziyaretcinin daha
+   cok takildigi sayfa geciyordu. Bu testin isi, orani "sadelestirme" ya da
+   "eski hali" adina kapiya geri koyan bir degisikligi KIRMIZI yakmaktir.
+   Kirmizi-once sinandi: kapi blogunda takilma_oran satiri geri konunca yandi. */
+test('KAPI B: takilma orani ve toplam suresi KAPI DEGIL, BILGI', () => {
+  const kapiBlok = B.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/);
+  assert.ok(kapiBlok, 'B kapi blogu bulunamadi');
+  assert.doesNotMatch(kapiBlok[0], /oran/i,
+    'B kapi bloguna ORAN geri girmis — oran tur boyuna bagimli turevdir, kisa sayfalarda ornekleme hatasidir (Enes, 5 Eyl gecesi)');
+  assert.doesNotMatch(kapiBlok[0], /toplam/i,
+    'B kapi bloguna takilma TOPLAM SURESI girmis — bilgi satiriydi, kapi degil');
+  assert.doesNotMatch(B, /const TOPLAM_ORAN\s*=/,
+    'B\'de TOPLAM_ORAN sabiti geri dogmus — kapi olarak okunacak isim tasima');
+  /* Bilgi satirlari kaybolmamali: hukum vermiyor olmasi yazilmiyor demek degil.
+     KURAL ALANA BAGLI, DIZGEYE DEGIL. Ilk yazimda `assert.match(B, /ad/)`
+     yazmistim ve kirmizi-once kolu YANMADI: alan adi `oz.bilgi`den silinse
+     bile ayni dizge dosyanin baska yerinde (siralama cagrisinda) geciyor ve
+     kural yesil kaliyordu. Alanin ATANDIGI blogun icine bakiliyor. */
+  const bilgiBlok = B.match(/oz\.bilgi\s*=\s*\{[\s\S]*?\n    \};/);
+  assert.ok(bilgiBlok, 'B bilgi blogu yok — oran ve toplam hukumsuz ama KAYDA GECMELI');
+  assert.match(bilgiBlok[0], /takilma_toplam_medyan_ms:/, 'B mutlak takilma toplami bilgi blogundan dusmus');
+  assert.match(bilgiBlok[0], /takilma_oran_medyan:/, 'B takilma orani bilgi blogundan dusmus — hukumsuz ama yazilmali');
+  assert.match(bilgiBlok[0], /tur_ms_medyan:/, 'B tur boyu yazilmiyor — oranin paydasi gorunmezse turev oldugu okunamaz');
+});
+
+test('KAPI B\'nin bloklayici kalemi SADECE MUTLAK birim tasir (tik ve ms)', () => {
+  const kapiBlok = B.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/)[0];
+  const kalemler = [...kapiBlok.matchAll(/(\w+):/g)].map((m) => m[1]).filter((a) => a !== 'kapi');
+  assert.deepEqual(kalemler.sort(), ['kacirilan_kare', 'takilma_tek', 'tur_tam'],
+    `B kapi kalemleri degismis: ${kalemler.join(',')} — bloklayici uc kalem disinda kalem eklendiyse birimi mutlak mi, once onu yaz`);
 });
 
 test('B\'nin esikleri A\'nınkinden FARKLI olmali (ayni olmasi kosul karisikligidir)', () => {
   assert.notEqual(varsayilan(A, 'KACIRILAN_KAPI'), varsayilan(B, 'KACIRILAN_KAPI'),
     'A ve B ayni kacirilan esigini tasiyor: biri tarama, oteki ziyaretci kosulu — esikleri ayni olamaz');
-  assert.notEqual(sayi(A, 'TOPLAM_ORAN'), sayi(B, 'TOPLAM_ORAN'),
-    'A ve B ayni takilma orani esigini tasiyor');
+});
+
+/* A'DA ORAN HALA KAPI — bilincli, Enes'in karari bekleniyor (5 Eyl gecesi).
+   A tarama kosulunu olcer, gozlenen tavani %0,92 ve kapisi %3: bugun
+   BAGLAYICI DEGIL, uyuyan bir yanlis birim. Bu test A'nin halini SABITLER;
+   A da duzeltilirse burasi kasten kirmizi yanar ve karar yazilmadan gecmez. */
+test('KAPI A\'da oran hala kapi — degistiyse karar yazilmadan gecmesin', () => {
+  const kapiBlokA = A.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/);
+  assert.ok(kapiBlokA, 'A kapi blogu bulunamadi');
+  assert.match(kapiBlokA[0], /takilma_oran/,
+    'A kapi blogundan oran dusmus: bu Enes\'in karari — dusuruldugunde bu testi ve CLAUDE.md\'deki BIRIM maddesini birlikte guncelle');
 });
 
 test('kaydirma turu iki kapida birebir ayni (hiz ve adim)', () => {
