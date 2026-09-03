@@ -196,14 +196,30 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - Minified betik satır içine alınırken IIFE'ye sar — `const T` çakışması.
 - Önbellek imzası üreteci de kapsar (`uretecOzet`); build.js değişince tam
   derleme normaldir (~150 sn), değilse ~45 sn.
-- **Kare p95 kuantalıdır: 8,5 / 16,7 / 25,0 — ekran tikinin 1/2/3 katı,
-  arada değer yok.** Sayfa "biraz yavaşlamaz", bir tik daha kaçırır; 20 ms'lik
-  kapı iki tikle üç tik arasında durur, yani üst banttaki sayfaların marjı
-  bir tiktir. `olc-sayfa` kırmızısı MAKİNE YÜKÜ yazılmadan hüküm değildir
-  (4 Eyl: yüklü 25,0 → boş 16,6-16,8, aynı ağaç; finansın 2 Eyl'deki 25,1'i
-  de gerileme değil aynı sayfanın iki tik hâliydi). Taban damgası ve
-  `node --test <dizin>` (Windows'ta yanlış kırmızı, dosya listesi ver) aynı
-  sınıf: koşum biçimi hükmü değiştirir.
+- **Kare p95 kuantalıdır: ekran tikinin katları, arada değer yok.** Sayfa
+  "biraz yavaşlamaz", bir tik daha kaçırır. Bu yüzden kare kapısı 4 Eyl 2026'da
+  MİLİSANİYEDEN TİKE çevrildi (Enes): `olc-sayfa` artık **p95'te kaçırılan
+  kare ≤ 1** sorar, tik değeri her koşumda `about:blank` üzerinde ölçülür
+  (kayıtta `tazeleme` bloğu: Hz, tik, örnek, süzülen). Eski 20 ms'lik eşik iki
+  tikle üç tik ARASINDA duran ikili bir kapıydı ve değeri ekrana bağlıydı —
+  60 Hz makinede aynı site hiç geçemezdi. **ms cinsinden eşik yazma.**
+- **Kısmi `olc-sayfa` koşumu HÜKÜM DEĞİLDİR — araç bunu kendi etiketler.**
+  Aynı sayfa, aynı ağaç, aynı makine: `/hizmetler/finans/` tam taramada
+  16,7 ms (2,01 tik · geçer), tek başına ya da üç sayfalık kesitte 25,0 ms
+  (3,01 tik · kalır) — üç kez ölçüldü, yük yok, taban 0/0/0. Tarayıcı
+  kendinden ÖNCEKİ SAYFALARIN ısınmasından faydalanıyor ve `TEKRAR=3` bunu
+  kapatmıyor (fayda aynı sayfadan değil başka sayfalardan geliyor). Araç
+  kısmi koşumda `kismi: true` yazar, hükmün başına `KISMI` koyar ve çıkış
+  kodunu düşürmez; tek istisna `BOZ` (kırmızıyı biz ürettik, atıf bizde).
+- `olc-sayfa` kırmızısı MAKİNE YÜKÜ yazılmadan da hüküm değildir (4 Eyl:
+  yüklü 25,0 → boş 16,6-16,8, aynı ağaç; finansın 2 Eyl'deki 25,1'i de
+  gerileme değil aynı sayfanın iki tik hâliydi). **Ortalama CPU yükü tek
+  çekirdek yiyen süreci gizler** — kare süresi tek-iplik sinyalidir, yük
+  bakarken süreç başına çekirdek-saniye ölç.
+- Koşum biçimi hükmü değiştirir, üç örnek: `node --test <dizin>` Windows'ta
+  yanlış kırmızı verir (dosya listesi ver) · Git Bash `SAYFA=/yeni/...`
+  değerini Windows yoluna çevirir ve URL'yi bozar (env'i PowerShell'den ver)
+  · kısmi koşum yukarıdaki madde.
 
 ## Mimari NEDEN'leri — koddan okunamayanlar
 
