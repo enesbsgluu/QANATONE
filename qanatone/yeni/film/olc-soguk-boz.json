@@ -1,0 +1,83 @@
+{
+ "_": "yeni/film/olc-soguk.cjs — KAPI B SOGUK GIRIS: taze tarayici profili + sabit isinma dizisi + TEK sayfa. Kapi A (olc-sayfa.cjs) gerileme kapisi, bu ziyaretci kapisi. ESIK YOK: dagilim olculur, esik veriye gore onerilir, karar Enes'te.",
+ "kapi": "B — SOGUK GIRIS (olcum araci, kapi degil)",
+ "isinma_dizisi": [
+  "her olcum icin AYRI TARAYICI (taze gecici profil)",
+  "about:blank acilir",
+  "tazeleme olculur (200 rAF araligi, ilk 5 atilir)",
+  "1500 ms bosta beklenir",
+  "about:blank kapatilir",
+  "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
+  "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
+ ],
+ "olcum": "2026-09-03T16:45:15.256Z",
+ "tarayici": "brave",
+ "tekrar": 1,
+ "boz": {
+  "ms": 8,
+  "_": "KIRMIZI-ONCE kolu acikti: bu kayit olcum degil, duzenegin bozulmayi ayirt edebildiginin kanitidir"
+ },
+ "esik": null,
+ "esik_notu": "ESIK BILEREK KONULMADI (Enes, 5 Eyl). Once dagilim, sonra veriye dayali oneri, karari Enes verir.",
+ "sinyal": {
+  "takilma_esik_ms": 50,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03,
+  "_": "Kapi A ile birebir ayni olmali — olc-esik.test.mjs sinar"
+ },
+ "hukum": "OLCUM — esik yok, hukum verilmez",
+ "dagilim": {
+  "6": 1
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/projeler/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 149,
+     "tur_ms": 3549,
+     "p95_ms": 58.4,
+     "medyan_ms": 16.7,
+     "kare_p95": 7.036,
+     "kacirilan_kare": 6,
+     "takilma_sayi": 15,
+     "takilma_toplam_ms": 1116,
+     "takilma_tek_max_ms": 158,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2451.199951171875,
+     "toplam_px": 2451
+    }
+   ],
+   "p95_medyan": 58.4,
+   "kacirilan_medyan": 6,
+   "kacirilan_kosumlar": [
+    6
+   ],
+   "kacirilan_en_yuksek": 6,
+   "kare_p95_medyan": 7.036,
+   "takilma_oran_medyan": 0.3145,
+   "takilma_tek_max": 158,
+   "taban_takilma": [
+    0
+   ],
+   "tik_kosumlar": [
+    8.3
+   ]
+  }
+ ]
+}
