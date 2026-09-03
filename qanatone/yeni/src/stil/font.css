@@ -22,6 +22,45 @@
 @font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/yeni/font/uncut-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/yeni/font/uncut-sans-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F, U+20BA}
 
+/* ---- OLCU ESLENMIS YEDEK (TUR 3, 4 Eyl 2026) — CLS AYKIRI DEGERININ KOKU ----
+   OLCULDU: /yeni/bulten/yapay-zeka-trafigi-tiklama-degil/ SOGUK ONBELLEKTE
+   UC KEZ ARKA ARKAYA CLS 0,1588; sicak onbellekte 0; woff2 REDDEDILINCE 0.
+   Yani kaymayi doguran sey yazi tipi TAKASI: Uncut ilk boyamadan SONRA
+   gelince satirlar yeniden sariliyor, `div.govde` 27 px yukari kayiyor ve
+   ekranin ALT KENARINDA (y 892) o ana kadar kutusu OLMAYAN bir metin satiri
+   dogdugu icin Chrome onun mesafesini ~892 px sayiyor — baska yazilarda
+   0,0157 olan ayni takas o sayfada 0,1588 oluyor. 3/4 Eyl'de "bir bulten
+   yazisinda 0,1622, sonra 0/0/0,0013" diye yazilan aykiri deger BUYDU;
+   tekrar etmemesinin sebebi sonraki kosumlarin SICAK onbellekle donmesiydi.
+   COZUM: yedek yazi tipine olcu bindirmesi. Yedek, Uncut'in yerini AYNI
+   genislikte tutar; takas geldiginde sarma degismez, kayma dogmaz.
+   `font-display:swap` KORUNUR (marka yazisi boyanmali karari, yukarida).
+   SAYILAR OLCULDU, TURETILMEDI — ve ilk turetme YANLISTI: OS/2 tablosunun
+   `xAvgCharWidth` alanindan hesaplanan size-adjust Arial icin %128,68
+   veriyordu, GERCEK oran %99,20; Segoe icin %105,46 veriyordu, gercek
+   %100,88. Sebep: o alan her fontun KENDI glif kumesi uzerinden hesaplanir,
+   iki fontun kumesi ayni degil. Ilk yamada bu sayilarla yedek %1,74 sisik
+   kaldi ve kayma (0,0112) tam kapanmadi.
+   DOGRU YONTEM (yeni/film/font-yedek-olc.cjs): sayfanin KENDI govde metni
+   ayni puntoda her yedekle cizdirilir, size-adjust = genislik_web /
+   genislik_yedek. Capraz kontrol olarak ayni metnin ilerleme genislikleri
+   font dosyalarindan da toplandi (12.629 karakter, altı bulten yazisi):
+   Segoe %101,70 - Arial %99,78 - Roboto %101,15; tarayici olcumuyle fark
+   %0,8 (kerning). Tarayici olcumu esas alindi.
+     Uncut Sans olculeri (fontTools): upem 1000 - asc 965 - desc -235 - gap 0
+     ascent/descent/line-gap = (metrik_web/upem_web) / size-adjust
+   ROBOTO KALIBRE EDILMEDI: bu makinede kurulu degil. Dosyadan turetilen
+   %101,15, obur ikisinde olculen dosya/tarayici duzeltmesiyle (x0,993)
+   %100,44'e cekildi — OLCUM DEGIL TUREV, Android'li bir cihazda
+   dogrulanmali.
+   UC AYRI YUZ, cunku uc yedegin olcusu farkli: tek size-adjust ucune de
+   uymaz. Yigin sirasi isletim sisteminde hangisi VARSA onu secer.
+   Yedek YALNIZ takas oncesi gorunur; takas sonrasi sayfa birebir ayni
+   (anayasa istisna 7: gorunen sonuc degismez). */
+@font-face{font-family:'Uncut Yedek Segoe';src:local('Segoe UI');size-adjust:100.88%;ascent-override:95.66%;descent-override:23.30%;line-gap-override:0%}
+@font-face{font-family:'Uncut Yedek Arial';src:local('Arial'),local('Helvetica Neue'),local('Liberation Sans');size-adjust:99.20%;ascent-override:97.28%;descent-override:23.69%;line-gap-override:0%}
+@font-face{font-family:'Uncut Yedek Roboto';src:local('Roboto'),local('Noto Sans');size-adjust:100.44%;ascent-override:96.08%;descent-override:23.40%;line-gap-override:0%}
+
 @font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
 @font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}

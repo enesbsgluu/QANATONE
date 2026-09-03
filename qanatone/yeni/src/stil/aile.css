@@ -7,7 +7,10 @@
    degil; yeni kod --f-govde yazar. Uncut Sans 700'de biter: 800 kullanan
    yerler 700'e indi (perde harfleri, logo). */
 :root{
-  --f-govde:'Uncut Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  /* Yedekler OLCU ESLENMIS (font.css, TUR 3): takas kaymasini sifirlar.
+     Sira isletim sisteminde ilk BULUNANI kullanir; hicbiri yoksa eski
+     yigina duser. */
+  --f-govde:'Uncut Sans','Uncut Yedek Segoe','Uncut Yedek Arial','Uncut Yedek Roboto',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --f-hero:'Playfair Display',Georgia,serif;
   --f-baslik:var(--f-govde);
   --f-tek:var(--f-govde);

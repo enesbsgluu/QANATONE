@@ -104,6 +104,19 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   düşünce MutationObserver geri alır. `.fl-gec` asla kapsamda değil (FM2).
   **Dün "film etkinken INP 256-304 ms" diye yazılan rakam buydu**; motorun
   işi değildi. Ölçen araç `olc-gec-inp.cjs` (Event Timing, gerçek girdi).
+- **CLS'in kökü yazı tipi takasıydı (4 Eyl, F1d):** ön yükleme YALNIZ ana
+  sayfadaydı; öbür 58 sayfada Uncut ilk boyamadan sonra gelip satırları
+  yeniden sarıyordu. Bir bülten yazısı **soğuk önbellekte üç kez 0,1588**
+  (sıcakta 0, font reddedilince 0) — 3 Eyl'in "0,1622 aykırı değeri" buydu,
+  tekrar etmemesinin sebebi koşumun sıcak önbellekle dönmesiydi. Üç ayaklı
+  düzeltme: (a) her kabuk sayfası gövde fontunu ön yükler, (b) yığında ölçü
+  eşlenmiş yedek yüzler (`size-adjust` **ölçülerek** bulunur — OS/2
+  `xAvgCharWidth` türevi Arial'de %128,68 diyordu, gerçeği %99,20), (c)
+  `.lede`nin `62ch`i `em`e çevrildi: **`ch` kutuyu yazı tipine bağlar.**
+  TOPLU `ch→em` ÇEVİRME YANLIŞ: Uncut değişken font, `0` genişliği ağırlığa
+  göre değişiyor (gövde 0,646 · footer 0,634) ve blanket çevirme iki yerde
+  satır sayısını değiştirdi. Ölçen araçlar `olc-cls-kosul.cjs` (soğuk/sıcak/
+  font-geç/font-yok/yavaş/süpür kolları) ve `font-yedek-olc.cjs`.
 - **CLS ölçüm dersi (3 Eyl):** yatay taşma (scrollWidth > viewport) klasik
   kaydırma çubuğu olan tarayıcıda çubuk belirip kaybolunca sabit katmanları
   oynatır ve büyük CLS üretir; headless overlay çubukta görünmez. Taşma

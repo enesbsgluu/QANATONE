@@ -60,8 +60,9 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
       bitirir, kurali degistirmez.
       TR altkumeleri (~7 KB) on YUKLENMEZ: gec gelirse yalniz bes glif
       etkilenir ve olcumde kayma uretmediler. */}
-  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
-    href="/yeni/font/uncut-sans-latin.woff2" />
+  {/* Uncut latin on yuklemesi 4 Eyl'de KABUGA tasindi (Temel.astro) — her
+      sayfa icin gecerli oldu; burada tekrarlanmaz. Playfair YALNIZ ana
+      sayfa hero'sunun yuzudur, o yuzden burada kalir. */}
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
     href="/yeni/font/playfair-display-500-latin.woff2" />
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
