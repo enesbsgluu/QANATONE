@@ -42,6 +42,10 @@ const ton = (i: number) => {
 };
 const iki = (n: number) => String(n).padStart(2, '0');
 const en = dil === 'en';
+/* panel metinleri (kaynak data-t anahtarlari): bos donerse cagri yerindeki
+   kaynak varsayilani kullanilir */
+const sz = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T((sz as any)[k], dil);
 ---
 {/* SADAKAT DENETİMİ (21 Ağu): bu sahnenin kaynak eşi VAR (kök #prjDeck)
     ve kaynak künyesi sayı değil 26px KIZIL ÇİZGİ + mono metindi
@@ -51,12 +55,18 @@ const en = dil === 'en';
 <section class="sp-sahne" data-sahne="p">
   <div class="sp-ic">
     <div class="sp-giris">
-      <p class="kunye sp-kunye">{en ? 'SELECTED WORK' : 'SEÇİLMİŞ İŞLER'}</p>
-      <h2 class="s1-buyuk">{en ? 'Projects.' : 'Projeler.'}<span
+      {/* METIN TEK KAYNAKTAN (ANAYASA, 3/4 Eyl 2026): kaynak bu uc satiri
+          content.json anahtarlarindan basiyor (kok 4573-4575: data-t pje/pjh/
+          pjp). Burada TR+EN elle yazilmisti ve EN'e kaynakta OLMAYAN bir cumle
+          eklenmisti ("Each one unblocks something different." — yan yana kare
+          t2-en-a-s2). Artik panelin metni kazanir; yedek deger kaynagin kendi
+          varsayilani. */}
+      <p class="kunye sp-kunye">{g('pje') || (en ? 'Selected work' : 'Seçilmiş işler')}</p>
+      <h2 class="s1-buyuk">{g('pjh') || (en ? 'Projects.' : 'Projeler.')}<span
         class="sp-sayi">({tum.length})</span></h2>
-      <p class="s1-alt">{en
-        ? 'The systems we built and what came out of them. Each one unblocks something different.'
-        : 'Kurduğumuz sistemler, çıkan sonuçlar. Her biri farklı bir tıkanmayı çözüyor.'}</p>
+      <p class="s1-alt">{g('pjp') || (en
+        ? 'The systems we built and what came out of them.'
+        : 'Kurduğumuz sistemler, çıkan sonuçlar. Her biri farklı bir tıkanmayı çözüyor.')}</p>
     </div>
 
     <div class="sp-deste" id="spDeste" style={`--n:${kartlar.length}`}>

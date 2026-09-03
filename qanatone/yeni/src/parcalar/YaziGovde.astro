@@ -55,7 +55,7 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
   {digerleri.length > 0 && <div class="nrail" id="bdRail">
     <div class="nrhead"><span class="k">{dil === 'en' ? 'More articles' : 'Diğer yazılar'}</span></div>
     <div class="nrbody">
-      <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Back' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+      <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Previous' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="nrtrack" id="railTrack">
         {digerleri.map((x: any) => (
           <a class="nrcard" href={`${B}${on}/bulten/${x.slug}`}>

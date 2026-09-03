@@ -91,7 +91,8 @@ const demoK = (h: any): string => {
       {/* OK DUGMELERI (sokum turu, 4 Eyl): kaynak 4651-4654 (.aknav) —
           serit yerli kaydirma, dugmeler scrollBy; fare surukleme adada. */}
       <div class="sa-nav">
-        <button type="button" id="akPrev" aria-label={en ? 'Back' : 'Geri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+        {/* EN etiketi kaynaktan: aria-label="Previous" (kok /en). "Back" sapmaydi — ANAYASA, 3/4 Eyl 2026 */}
+        <button type="button" id="akPrev" aria-label={en ? 'Previous' : 'Geri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
         <button type="button" id="akNext" aria-label={en ? 'Next' : 'İleri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
       </div>
     </div>
