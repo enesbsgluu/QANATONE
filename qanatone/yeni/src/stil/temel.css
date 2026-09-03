@@ -112,7 +112,23 @@ h1{font-size:clamp(1.7rem,5.4vw,2.6rem);margin-bottom:16px}
 h2{font-size:clamp(1.15rem,3vw,1.45rem);margin-bottom:18px}
 h3{font-size:1rem;margin-bottom:6px}
 a{color:var(--red-soft)}
-.lede{color:var(--tx2);font-size:1.05rem;max-width:62ch}
+/* LEDE GENISLIGI `ch` DEGIL `em` (TUR 3, 4 Eyl 2026 — OLCULDU).
+   `ch` birimi "0" glifinin ilerlemesidir, yani KUTU GENISLIGI YAZI TIPINE
+   BAGLIDIR: yazi tipi takasi gelince 62ch'in piksel karsiligi degisiyor,
+   lede iki satirdan uce dusuyor ve altindaki her sey 28 px kayiyor. Bu,
+   CLS aykiri degerinin ikinci ayagiydi (on yukleme ilk ayagi kapatti):
+   yazi tipi GEC gelen kosulda (yavas 4G / geciktirilmis woff2) sayfa
+   0,1596 veriyordu, bu satirdan sonra 0,0407.
+   62ch = 62 x 0,645957em (Uncut Sans '0' ilerlemesi, tarayicida olculdu:
+   62ch = 672,83 px / punto 16,8 px; fontTools hmtx 0,646 verir — VARIABLE
+   font oldugu icin agirliga gore degisir, sayi OLCULEREK alindi). Kutu
+   BIREBIR ayni: /yeni/hizmetler .lede 755,78 -> 756,14 px (0,36 px).
+   TOPLU DONUSUM YAPILMADI ve YAPILMAMALI: ayni oran her yerde gecerli
+   degil — footer `.fgrid .lead p` ve `.sil-yazi>p` daha hafif agirlikta
+   ve orani 0,634; blanket cevirme o iki yerde satir sayisini degistirdi
+   (olculdu, geri alindi). Baska bir `ch` kutusu kayma uretirse OLCULUP
+   kendi orani ile cevrilir. */
+.lede{color:var(--tx2);font-size:1.05rem;max-width:40.0493em}
 .hits{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:8px}
 .hits li{padding-left:18px;position:relative;color:var(--tx2)}
 .hits li::before{content:'';position:absolute;left:0;top:.55em;width:8px;height:2px;background:var(--red)}

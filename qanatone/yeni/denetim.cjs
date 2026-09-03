@@ -313,6 +313,64 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
                 : `${menziller.length} menzil`);
 }
 
+/* ---- F1d · GOVDE FONTU HER SAYFADA ON YUKLENIR + OLCU ESLENMIS YEDEK
+   (TUR 3, 4 Eyl 2026) ----
+   OLCULMUS KUSUR: on yukleme YALNIZ ana sayfadaydi; obur 58 sayfada
+   `font-display:swap` ile gelen Uncut ilk boyamadan SONRA geliyor,
+   satirlar yeniden sariliyor. /yeni/bulten/yapay-zeka-trafigi-tiklama-degil/
+   SOGUK ONBELLEKTE uc kez arka arkaya CLS 0,1588 verdi (sicak onbellekte 0,
+   woff2 reddedilince 0). 3/4 Eyl'de "bir bulten yazisinda 0,1622, sonra
+   0/0/0,0013" diye yazilan aykiri deger BUYDU — tekrar etmemesinin sebebi
+   sonraki kosumlarin sicak onbellekle donmesiydi.
+   KURAL UC AYAK TUTAR:
+     1. her kabuk sayfasi govde fontunu on yukler (ana sayfa istisna degil),
+     2. yigin olcu eslenmis yedekle baslar (yazi tipi gec gelirse yerini
+        ayni genislikte tutar),
+     3. o yedek yuzler font.css'te TANIMLI ve size-adjust tasiyor.
+   Olcen arac: yeni/film/olc-cls-kosul.cjs (kollar: sicak/soguk/font-gec/
+   font-yok/yavas/supur). Kalibrasyon: yeni/film/font-yedek-olc.cjs. */
+{
+  const kusur = [];
+  const YEDEK = ['Uncut Yedek Segoe', 'Uncut Yedek Arial', 'Uncut Yedek Roboto'];
+  /* 1 + 2: her kabuk sayfasinda on yukleme */
+  let bakilan = 0;
+  for (const y of tumSayfalar) {
+    const h = oku(y);
+    if (!/id="icerik"/.test(h)) continue;          /* kabuksuz sayfa (film) atlanir */
+    bakilan++;
+    if (!/rel="preload"[^>]*uncut-sans-latin\.woff2/.test(h)
+      && !/uncut-sans-latin\.woff2[^>]*rel="preload"/.test(h)) {
+      kusur.push('on-yukleme-yok:' + path.relative(KOK, y).replace(/\\/g, '/'));
+      if (kusur.length > 3) break;
+    }
+  }
+  if (!bakilan) kusur.push('kabuk-sayfasi-bulunamadi');
+  /* 3: yedek yuzler tanimli mi ve olcu bindirmesi tasiyor mu */
+  const cssler = [];
+  for (const d of ['_astro']) {
+    const kd = path.join(KOK, d);
+    if (!fs.existsSync(kd)) continue;
+    for (const f of fs.readdirSync(kd)) if (f.endsWith('.css')) cssler.push(oku(path.join(kd, f)));
+  }
+  /* satir ici stiller de sayilir (inlineStylesheets: auto) */
+  const anaH = path.join(KOK, 'index.html');
+  if (fs.existsSync(anaH)) cssler.push(...[...oku(anaH).matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]));
+  const css = cssler.join('\n');
+  for (const y of YEDEK) {
+    const re = new RegExp('@font-face\\{[^}]*' + y + '[^}]*\\}');
+    const blok = (css.match(re) || [''])[0];
+    if (!blok) { kusur.push('yedek-yuz-yok:' + y); continue; }
+    if (!/size-adjust\s*:/.test(blok)) kusur.push('size-adjust-yok:' + y);
+    if (!/ascent-override\s*:/.test(blok)) kusur.push('ascent-yok:' + y);
+  }
+  /* yigin: govde ailesi web fonttan HEMEN SONRA yedegi tasimali */
+  const aile = (css.match(/--f-govde:([^;}]+)/) || [])[1] || '';
+  if (!aile) kusur.push('f-govde-okunamadi');
+  else if (!/['"]Uncut Sans['"]\s*,\s*['"]Uncut Yedek/.test(aile)) kusur.push('yigin-yedeksiz:' + aile.slice(0, 60));
+  ol('F1d · gövde fontu her kabuk sayfasında ön yüklenir + ölçü eşlenmiş yedek yığında',
+     kusur.length === 0, kusur.slice(0, 4).join(' ') + (kusur.length ? '' : `  ${bakilan} kabuk sayfası · 3 yedek yüz`));
+}
+
 /* S1 · baş sözleşmesi: title/description menzilde, canonical var,
    hizmet+bülten sayfalarında hreflang çifti + geçerli şema. */
 {
