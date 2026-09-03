@@ -1,6 +1,6 @@
 {
  "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
- "olcum": "2026-09-03T13:31:16.727Z",
+ "olcum": "2026-09-03T14:53:18.371Z",
  "tarayici": "brave Chrome/152.0.7977.76",
  "tekrar": 3,
  "esik": {
@@ -9,7 +9,7 @@
   "tek_takilma_ms": 250,
   "toplam_oran": 0.03
  },
- "hukum": "KALDI",
+ "hukum": "GECTI",
  "durulan": null,
  "sayfa": [
   {
@@ -18,69 +18,69 @@
    "js_tavan": 24064,
    "kosum": [
     {
-     "kare": 1079,
-     "tur_ms": 12763,
-     "p95_ms": 24.9,
+     "kare": 1246,
+     "tur_ms": 12630,
+     "p95_ms": 16.7,
      "medyan_ms": 8.4,
-     "takilma_sayi": 7,
-     "takilma_toplam_ms": 641,
-     "takilma_tek_max_ms": 158,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 650,
+     "takilma_tek_max_ms": 125,
      "taban": {
-      "sure_ms": 3091,
-      "takilma_sayi": 4,
-      "p95_ms": 16.8
+      "sure_ms": 3041,
+      "takilma_sayi": 5,
+      "p95_ms": 33.2
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     },
     {
-     "kare": 1259,
-     "tur_ms": 12655,
-     "p95_ms": 16.7,
+     "kare": 1375,
+     "tur_ms": 12580,
+     "p95_ms": 16.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 1,
-     "takilma_toplam_ms": 67,
-     "takilma_tek_max_ms": 67,
+     "takilma_toplam_ms": 75,
+     "takilma_tek_max_ms": 75,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 9580,
+     "toplam_px": 11356
+    },
+    {
+     "kare": 1382,
+     "tur_ms": 12538,
+     "p95_ms": 16.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 16.7
-     },
-     "scroll_px": 9580,
-     "toplam_px": 11356
-    },
-    {
-     "kare": 1135,
-     "tur_ms": 12755,
-     "p95_ms": 24.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 117,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 16.7
+      "p95_ms": 8.7
      },
      "scroll_px": 9580,
      "toplam_px": 11356
     }
    ],
-   "p95_medyan": 24.8,
-   "takilma_oran_medyan": 0.0092,
-   "takilma_tek_max": 158,
+   "p95_medyan": 16.6,
+   "takilma_oran_medyan": 0.006,
+   "takilma_tek_max": 125,
    "taban_takilma": [
-    4,
+    5,
     0,
     0
    ],
    "kapi": {
-    "p95": false,
+    "p95": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
    },
-   "gecti": false
+   "gecti": true
   },
   {
    "yol": "/yeni/bulten/",
@@ -88,25 +88,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 282,
-     "tur_ms": 2741,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 58,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2003.199951171875,
-     "toplam_px": 2003
-    },
-    {
-     "kare": 301,
-     "tur_ms": 2733,
-     "p95_ms": 16.6,
+     "kare": 330,
+     "tur_ms": 2757,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -120,15 +104,31 @@
      "toplam_px": 2003
     },
     {
-     "kare": 289,
-     "tur_ms": 2724,
-     "p95_ms": 16.7,
+     "kare": 326,
+     "tur_ms": 2732,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2003.199951171875,
+     "toplam_px": 2003
+    },
+    {
+     "kare": 326,
+     "tur_ms": 2741,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -136,9 +136,9 @@
      "toplam_px": 2003
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 58,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
@@ -158,23 +158,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 338,
-     "tur_ms": 2908,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2156,
-     "toplam_px": 2156
-    },
-    {
-     "kare": 347,
+     "kare": 340,
      "tur_ms": 2908,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -190,7 +174,7 @@
      "toplam_px": 2156
     },
     {
-     "kare": 347,
+     "kare": 348,
      "tur_ms": 2924,
      "p95_ms": 8.4,
      "medyan_ms": 8.3,
@@ -201,6 +185,22 @@
       "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
+     },
+     "scroll_px": 2156,
+     "toplam_px": 2156
+    },
+    {
+     "kare": 342,
+     "tur_ms": 2916,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
      },
      "scroll_px": 2156,
      "toplam_px": 2156
@@ -228,24 +228,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 360,
-     "tur_ms": 3032,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2252,
-     "toplam_px": 2252
-    },
-    {
-     "kare": 360,
-     "tur_ms": 3016,
+     "kare": 362,
+     "tur_ms": 3033,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -260,8 +244,8 @@
      "toplam_px": 2252
     },
     {
-     "kare": 359,
-     "tur_ms": 3016,
+     "kare": 357,
+     "tur_ms": 3033,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -269,6 +253,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2252,
+     "toplam_px": 2252
+    },
+    {
+     "kare": 361,
+     "tur_ms": 3024,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -298,9 +298,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 356,
-     "tur_ms": 2974,
-     "p95_ms": 8.4,
+     "kare": 350,
+     "tur_ms": 2966,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -308,14 +308,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2202.39990234375,
      "toplam_px": 2202
     },
     {
-     "kare": 356,
-     "tur_ms": 2991,
+     "kare": 354,
+     "tur_ms": 2966,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -330,15 +330,15 @@
      "toplam_px": 2202
     },
     {
-     "kare": 351,
-     "tur_ms": 2957,
-     "p95_ms": 8.5,
+     "kare": 353,
+     "tur_ms": 2958,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -368,25 +368,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 361,
-     "tur_ms": 3057,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2286.39990234375,
-     "toplam_px": 2286
-    },
-    {
-     "kare": 348,
-     "tur_ms": 3066,
-     "p95_ms": 16.5,
+     "kare": 363,
+     "tur_ms": 3049,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -400,23 +384,39 @@
      "toplam_px": 2286
     },
     {
-     "kare": 366,
-     "tur_ms": 3082,
+     "kare": 365,
+     "tur_ms": 3066,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2286.39990234375,
+     "toplam_px": 2286
+    },
+    {
+     "kare": 366,
+     "tur_ms": 3057,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3000,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
      },
      "scroll_px": 2286.39990234375,
      "toplam_px": 2286
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -438,9 +438,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 405,
-     "tur_ms": 3391,
-     "p95_ms": 8.5,
+     "kare": 407,
+     "tur_ms": 3399,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -454,8 +454,24 @@
      "toplam_px": 2553
     },
     {
+     "kare": 401,
+     "tur_ms": 3382,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2552.800048828125,
+     "toplam_px": 2553
+    },
+    {
      "kare": 407,
-     "tur_ms": 3399,
+     "tur_ms": 3407,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -464,29 +480,13 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2552.800048828125,
-     "toplam_px": 2553
-    },
-    {
-     "kare": 407,
-     "tur_ms": 3399,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
       "p95_ms": 8.5
      },
      "scroll_px": 2552.800048828125,
      "toplam_px": 2553
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -508,24 +508,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 351,
-     "tur_ms": 2957,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2198.39990234375,
-     "toplam_px": 2198
-    },
-    {
-     "kare": 353,
-     "tur_ms": 2957,
+     "kare": 345,
+     "tur_ms": 2941,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -540,8 +524,24 @@
      "toplam_px": 2198
     },
     {
-     "kare": 353,
-     "tur_ms": 2966,
+     "kare": 352,
+     "tur_ms": 2957,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2198.39990234375,
+     "toplam_px": 2198
+    },
+    {
+     "kare": 351,
+     "tur_ms": 2958,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -550,7 +550,7 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2198.39990234375,
      "toplam_px": 2198
@@ -578,57 +578,57 @@
    "js_tavan": 24064,
    "kosum": [
     {
-     "kare": 1236,
-     "tur_ms": 12604,
-     "p95_ms": 16.7,
+     "kare": 1382,
+     "tur_ms": 12546,
+     "p95_ms": 16.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 2,
-     "takilma_toplam_ms": 142,
-     "takilma_tek_max_ms": 83,
-     "taban": {
-      "sure_ms": 3024,
-      "takilma_sayi": 0,
-      "p95_ms": 16.7
-     },
-     "scroll_px": 9566.400390625,
-     "toplam_px": 11356
-    },
-    {
-     "kare": 1178,
-     "tur_ms": 12663,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 117,
+     "takilma_toplam_ms": 108,
      "takilma_tek_max_ms": 58,
      "taban": {
-      "sure_ms": 3024,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 16.7
+      "p95_ms": 8.5
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 11356
     },
     {
-     "kare": 1231,
-     "tur_ms": 12638,
+     "kare": 1324,
+     "tur_ms": 12563,
      "p95_ms": 16.7,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 16.7
+      "p95_ms": 8.5
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 11356
+    },
+    {
+     "kare": 1414,
+     "tur_ms": 12530,
+     "p95_ms": 16.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
      },
      "scroll_px": 9566.400390625,
      "toplam_px": 11356
     }
    ],
-   "p95_medyan": 16.7,
-   "takilma_oran_medyan": 0.0092,
-   "takilma_tek_max": 83,
+   "p95_medyan": 16.6,
+   "takilma_oran_medyan": 0.0046,
+   "takilma_tek_max": 58,
    "taban_takilma": [
     0,
     0,
@@ -648,9 +648,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 298,
-     "tur_ms": 2799,
-     "p95_ms": 16.7,
+     "kare": 332,
+     "tur_ms": 2766,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -664,15 +664,15 @@
      "toplam_px": 2031
     },
     {
-     "kare": 301,
-     "tur_ms": 2791,
-     "p95_ms": 16.7,
+     "kare": 331,
+     "tur_ms": 2774,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -680,9 +680,9 @@
      "toplam_px": 2031
     },
     {
-     "kare": 297,
-     "tur_ms": 2774,
-     "p95_ms": 16.7,
+     "kare": 331,
+     "tur_ms": 2791,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -696,7 +696,7 @@
      "toplam_px": 2031
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -718,8 +718,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 307,
-     "tur_ms": 2624,
+     "kare": 310,
+     "tur_ms": 2591,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1882.4000244140625,
+     "toplam_px": 1882
+    },
+    {
+     "kare": 312,
+     "tur_ms": 2616,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -734,25 +750,9 @@
      "toplam_px": 1882
     },
     {
-     "kare": 307,
-     "tur_ms": 2608,
+     "kare": 310,
+     "tur_ms": 2591,
      "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1882.4000244140625,
-     "toplam_px": 1882
-    },
-    {
-     "kare": 298,
-     "tur_ms": 2624,
-     "p95_ms": 8.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -788,8 +788,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 308,
-     "tur_ms": 2641,
+     "kare": 312,
+     "tur_ms": 2649,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 1908.800048828125,
+     "toplam_px": 1909
+    },
+    {
+     "kare": 316,
+     "tur_ms": 2649,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -804,25 +820,9 @@
      "toplam_px": 1909
     },
     {
-     "kare": 298,
-     "tur_ms": 2649,
-     "p95_ms": 16.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 1908.800048828125,
-     "toplam_px": 1909
-    },
-    {
-     "kare": 300,
-     "tur_ms": 2624,
-     "p95_ms": 8.6,
+     "kare": 313,
+     "tur_ms": 2641,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -836,7 +836,7 @@
      "toplam_px": 1909
     }
    ],
-   "p95_medyan": 8.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -858,8 +858,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 314,
-     "tur_ms": 2691,
+     "kare": 319,
+     "tur_ms": 2666,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -874,8 +874,8 @@
      "toplam_px": 1942
     },
     {
-     "kare": 317,
-     "tur_ms": 2674,
+     "kare": 319,
+     "tur_ms": 2666,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -884,7 +884,7 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 1942.4000244140625,
      "toplam_px": 1942
@@ -892,13 +892,13 @@
     {
      "kare": 318,
      "tur_ms": 2674,
-     "p95_ms": 8.5,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -929,46 +929,46 @@
    "kosum": [
     {
      "kare": 356,
-     "tur_ms": 2974,
+     "tur_ms": 2983,
      "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2208.800048828125,
+     "toplam_px": 2209
+    },
+    {
+     "kare": 356,
+     "tur_ms": 2982,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2208.800048828125,
+     "toplam_px": 2209
+    },
+    {
+     "kare": 357,
+     "tur_ms": 2974,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2208.800048828125,
-     "toplam_px": 2209
-    },
-    {
-     "kare": 352,
-     "tur_ms": 2974,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2208.800048828125,
-     "toplam_px": 2209
-    },
-    {
-     "kare": 349,
-     "tur_ms": 2991,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -998,15 +998,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 362,
+     "kare": 361,
      "tur_ms": 3024,
-     "p95_ms": 8.5,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1014,8 +1014,24 @@
      "toplam_px": 2257
     },
     {
-     "kare": 354,
+     "kare": 362,
      "tur_ms": 3024,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2256.800048828125,
+     "toplam_px": 2257
+    },
+    {
+     "kare": 356,
+     "tur_ms": 3016,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1028,25 +1044,9 @@
      },
      "scroll_px": 2256.800048828125,
      "toplam_px": 2257
-    },
-    {
-     "kare": 360,
-     "tur_ms": 3024,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2256.800048828125,
-     "toplam_px": 2257
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1068,31 +1068,31 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 301,
-     "tur_ms": 2616,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1894.4000244140625,
-     "toplam_px": 1894
-    },
-    {
      "kare": 308,
-     "tur_ms": 2657,
+     "tur_ms": 2608,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 1894.4000244140625,
+     "toplam_px": 1894
+    },
+    {
+     "kare": 312,
+     "tur_ms": 2608,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1100,9 +1100,9 @@
      "toplam_px": 1894
     },
     {
-     "kare": 283,
-     "tur_ms": 2624,
-     "p95_ms": 16.6,
+     "kare": 310,
+     "tur_ms": 2608,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1138,9 +1138,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 447,
+     "kare": 498,
      "tur_ms": 4165,
-     "p95_ms": 16.7,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1154,15 +1154,15 @@
      "toplam_px": 3183
     },
     {
-     "kare": 439,
-     "tur_ms": 4182,
-     "p95_ms": 16.7,
+     "kare": 493,
+     "tur_ms": 4157,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1170,15 +1170,15 @@
      "toplam_px": 3183
     },
     {
-     "kare": 452,
-     "tur_ms": 4190,
-     "p95_ms": 16.6,
+     "kare": 494,
+     "tur_ms": 4157,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1186,7 +1186,7 @@
      "toplam_px": 3183
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1208,9 +1208,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 451,
-     "tur_ms": 4049,
-     "p95_ms": 16.6,
+     "kare": 474,
+     "tur_ms": 4016,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1224,15 +1224,15 @@
      "toplam_px": 3067
     },
     {
-     "kare": 460,
-     "tur_ms": 4024,
+     "kare": 475,
+     "tur_ms": 4015,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1240,15 +1240,15 @@
      "toplam_px": 3067
     },
     {
-     "kare": 460,
-     "tur_ms": 4032,
+     "kare": 474,
+     "tur_ms": 4015,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1278,15 +1278,31 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 1280,
-     "tur_ms": 14720,
-     "p95_ms": 25,
+     "kare": 1380,
+     "tur_ms": 14621,
+     "p95_ms": 16.8,
      "medyan_ms": 8.4,
-     "takilma_sayi": 8,
-     "takilma_toplam_ms": 483,
-     "takilma_tek_max_ms": 75,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 108,
+     "takilma_tek_max_ms": 58,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 11868,
+     "toplam_px": 11868
+    },
+    {
+     "kare": 1367,
+     "tur_ms": 14595,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 108,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1294,53 +1310,37 @@
      "toplam_px": 11868
     },
     {
-     "kare": 1299,
-     "tur_ms": 14754,
-     "p95_ms": 25,
+     "kare": 1388,
+     "tur_ms": 14621,
+     "p95_ms": 16.8,
      "medyan_ms": 8.4,
-     "takilma_sayi": 3,
-     "takilma_toplam_ms": 192,
-     "takilma_tek_max_ms": 67,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 117,
+     "takilma_tek_max_ms": 58,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 11868,
-     "toplam_px": 11868
-    },
-    {
-     "kare": 1283,
-     "tur_ms": 14704,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 125,
-     "takilma_tek_max_ms": 67,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
+      "p95_ms": 8.5
      },
      "scroll_px": 11868,
      "toplam_px": 11868
     }
    ],
-   "p95_medyan": 25,
-   "takilma_oran_medyan": 0.013,
-   "takilma_tek_max": 75,
+   "p95_medyan": 16.8,
+   "takilma_oran_medyan": 0.0074,
+   "takilma_tek_max": 58,
    "taban_takilma": [
     0,
     0,
     0
    ],
    "kapi": {
-    "p95": false,
+    "p95": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
    },
-   "gecti": false
+   "gecti": true
   },
   {
    "yol": "/yeni/en/hizmetler/geo/",
@@ -1348,9 +1348,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 382,
-     "tur_ms": 3557,
-     "p95_ms": 16.7,
+     "kare": 403,
+     "tur_ms": 3549,
+     "p95_ms": 8.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1364,9 +1364,9 @@
      "toplam_px": 2694
     },
     {
-     "kare": 392,
+     "kare": 405,
      "tur_ms": 3566,
-     "p95_ms": 16.7,
+     "p95_ms": 16.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1380,15 +1380,15 @@
      "toplam_px": 2694
     },
     {
-     "kare": 394,
-     "tur_ms": 3574,
-     "p95_ms": 16.6,
+     "kare": 385,
+     "tur_ms": 3565,
+     "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1396,7 +1396,7 @@
      "toplam_px": 2694
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 16.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1418,9 +1418,41 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 348,
-     "tur_ms": 3199,
-     "p95_ms": 16.7,
+     "kare": 358,
+     "tur_ms": 3182,
+     "p95_ms": 16.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 2398.39990234375,
+     "toplam_px": 2398
+    },
+    {
+     "kare": 370,
+     "tur_ms": 3191,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2398.39990234375,
+     "toplam_px": 2398
+    },
+    {
+     "kare": 365,
+     "tur_ms": 3182,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1432,41 +1464,9 @@
      },
      "scroll_px": 2398.39990234375,
      "toplam_px": 2398
-    },
-    {
-     "kare": 354,
-     "tur_ms": 3191,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 2999,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2398.39990234375,
-     "toplam_px": 2398
-    },
-    {
-     "kare": 356,
-     "tur_ms": 3174,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2398.39990234375,
-     "toplam_px": 2398
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1488,9 +1488,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 350,
+     "kare": 365,
      "tur_ms": 3124,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2348.800048828125,
+     "toplam_px": 2349
+    },
+    {
+     "kare": 365,
+     "tur_ms": 3132,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1504,25 +1520,9 @@
      "toplam_px": 2349
     },
     {
-     "kare": 344,
-     "tur_ms": 3133,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2348.800048828125,
-     "toplam_px": 2349
-    },
-    {
-     "kare": 339,
-     "tur_ms": 3149,
-     "p95_ms": 16.7,
+     "kare": 369,
+     "tur_ms": 3141,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1536,7 +1536,7 @@
      "toplam_px": 2349
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1558,25 +1558,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 349,
-     "tur_ms": 3124,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2328.800048828125,
-     "toplam_px": 2329
-    },
-    {
-     "kare": 347,
+     "kare": 359,
      "tur_ms": 3107,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1590,15 +1574,31 @@
      "toplam_px": 2329
     },
     {
-     "kare": 350,
+     "kare": 359,
      "tur_ms": 3107,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 2328.800048828125,
+     "toplam_px": 2329
+    },
+    {
+     "kare": 359,
+     "tur_ms": 3099,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1606,7 +1606,7 @@
      "toplam_px": 2329
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -1628,15 +1628,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 568,
-     "tur_ms": 4957,
-     "p95_ms": 8.5,
+     "kare": 541,
+     "tur_ms": 4965,
+     "p95_ms": 16.6,
      "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 117,
+     "takilma_tek_max_ms": 58,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1644,24 +1644,8 @@
      "toplam_px": 3851
     },
     {
-     "kare": 575,
-     "tur_ms": 4974,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 3851.199951171875,
-     "toplam_px": 3851
-    },
-    {
-     "kare": 582,
-     "tur_ms": 4957,
+     "kare": 586,
+     "tur_ms": 4924,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1674,11 +1658,27 @@
      },
      "scroll_px": 3851.199951171875,
      "toplam_px": 3851
+    },
+    {
+     "kare": 581,
+     "tur_ms": 4915,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 3851.199951171875,
+     "toplam_px": 3851
     }
    ],
    "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 0,
+   "takilma_tek_max": 58,
    "taban_takilma": [
     0,
     0,
@@ -1699,23 +1699,7 @@
    "kosum": [
     {
      "kare": 458,
-     "tur_ms": 4499,
-     "p95_ms": 16.7,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3420.800048828125,
-     "toplam_px": 3421
-    },
-    {
-     "kare": 458,
-     "tur_ms": 4457,
+     "tur_ms": 4449,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1731,7 +1715,7 @@
     },
     {
      "kare": 459,
-     "tur_ms": 4474,
+     "tur_ms": 4424,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -1739,6 +1723,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 3420.800048828125,
+     "toplam_px": 3421
+    },
+    {
+     "kare": 463,
+     "tur_ms": 4449,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1768,9 +1768,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 344,
-     "tur_ms": 3132,
-     "p95_ms": 16.6,
+     "kare": 375,
+     "tur_ms": 3133,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1784,7 +1784,7 @@
      "toplam_px": 2352
     },
     {
-     "kare": 363,
+     "kare": 375,
      "tur_ms": 3132,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1792,7 +1792,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1800,7 +1800,7 @@
      "toplam_px": 2352
     },
     {
-     "kare": 370,
+     "kare": 368,
      "tur_ms": 3116,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -1838,15 +1838,31 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 852,
-     "tur_ms": 8847,
-     "p95_ms": 16.8,
+     "kare": 916,
+     "tur_ms": 8689,
+     "p95_ms": 16.7,
      "medyan_ms": 8.3,
-     "takilma_sayi": 2,
-     "takilma_toplam_ms": 158,
-     "takilma_tek_max_ms": 100,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 6894.39990234375,
+     "toplam_px": 6894
+    },
+    {
+     "kare": 939,
+     "tur_ms": 8672,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1854,31 +1870,15 @@
      "toplam_px": 6894
     },
     {
-     "kare": 886,
+     "kare": 942,
      "tur_ms": 8656,
      "p95_ms": 16.7,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 6894.39990234375,
-     "toplam_px": 6894
-    },
-    {
-     "kare": 829,
-     "tur_ms": 8747,
-     "p95_ms": 24.9,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -1886,9 +1886,9 @@
      "toplam_px": 6894
     }
    ],
-   "p95_medyan": 16.8,
+   "p95_medyan": 16.7,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 100,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
@@ -1908,25 +1908,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 331,
-     "tur_ms": 3324,
-     "p95_ms": 16.8,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 58,
-     "takilma_tek_max_ms": 58,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2436.800048828125,
-     "toplam_px": 2437
-    },
-    {
-     "kare": 351,
-     "tur_ms": 3299,
-     "p95_ms": 16.7,
+     "kare": 392,
+     "tur_ms": 3291,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1940,9 +1924,25 @@
      "toplam_px": 2437
     },
     {
-     "kare": 357,
-     "tur_ms": 3349,
-     "p95_ms": 16.7,
+     "kare": 393,
+     "tur_ms": 3291,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2436.800048828125,
+     "toplam_px": 2437
+    },
+    {
+     "kare": 394,
+     "tur_ms": 3299,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -1956,9 +1956,9 @@
      "toplam_px": 2437
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 58,
+   "takilma_tek_max": 0,
    "taban_takilma": [
     0,
     0,
@@ -1978,23 +1978,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 399,
-     "tur_ms": 3349,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2510.39990234375,
-     "toplam_px": 2510
-    },
-    {
-     "kare": 395,
+     "kare": 401,
      "tur_ms": 3349,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2004,13 +1988,13 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2510.39990234375,
      "toplam_px": 2510
     },
     {
-     "kare": 394,
+     "kare": 400,
      "tur_ms": 3349,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2019,6 +2003,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2510.39990234375,
+     "toplam_px": 2510
+    },
+    {
+     "kare": 400,
+     "tur_ms": 3349,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2048,8 +2048,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 406,
-     "tur_ms": 3432,
+     "kare": 408,
+     "tur_ms": 3424,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2064,24 +2064,8 @@
      "toplam_px": 2570
     },
     {
-     "kare": 381,
-     "tur_ms": 3424,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2570.39990234375,
-     "toplam_px": 2570
-    },
-    {
-     "kare": 405,
-     "tur_ms": 3424,
+     "kare": 408,
+     "tur_ms": 3415,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2089,6 +2073,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2570.39990234375,
+     "toplam_px": 2570
+    },
+    {
+     "kare": 408,
+     "tur_ms": 3416,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2118,7 +2118,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 370,
+     "kare": 377,
      "tur_ms": 3182,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2126,7 +2126,23 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 378,
+     "tur_ms": 3166,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2135,7 +2151,7 @@
     },
     {
      "kare": 377,
-     "tur_ms": 3166,
+     "tur_ms": 3157,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2143,22 +2159,6 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 373,
-     "tur_ms": 3191,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2188,15 +2188,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 376,
-     "tur_ms": 3166,
+     "kare": 371,
+     "tur_ms": 3149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2205,6 +2205,22 @@
     },
     {
      "kare": 376,
+     "tur_ms": 3174,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 373,
      "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2212,23 +2228,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 365,
-     "tur_ms": 3199,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2258,15 +2258,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 393,
-     "tur_ms": 3457,
-     "p95_ms": 8.5,
+     "kare": 408,
+     "tur_ms": 3416,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2274,7 +2274,7 @@
      "toplam_px": 2570
     },
     {
-     "kare": 406,
+     "kare": 408,
      "tur_ms": 3424,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2282,23 +2282,23 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2570.39990234375,
      "toplam_px": 2570
     },
     {
-     "kare": 394,
-     "tur_ms": 3415,
+     "kare": 407,
+     "tur_ms": 3432,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2328,47 +2328,47 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 351,
-     "tur_ms": 3199,
-     "p95_ms": 16.6,
+     "kare": 375,
+     "tur_ms": 3157,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 361,
-     "tur_ms": 3174,
-     "p95_ms": 16.5,
+     "kare": 379,
+     "tur_ms": 3166,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
+      "p95_ms": 8.6
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
     },
     {
-     "kare": 352,
-     "tur_ms": 3191,
-     "p95_ms": 16.6,
+     "kare": 378,
+     "tur_ms": 3166,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2376,7 +2376,7 @@
      "toplam_px": 2382
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -2398,24 +2398,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 372,
-     "tur_ms": 3158,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2382.39990234375,
-     "toplam_px": 2382
-    },
-    {
-     "kare": 368,
-     "tur_ms": 3199,
+     "kare": 378,
+     "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2430,17 +2414,33 @@
      "toplam_px": 2382
     },
     {
-     "kare": 366,
-     "tur_ms": 3191,
+     "kare": 377,
+     "tur_ms": 3157,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2382.39990234375,
+     "toplam_px": 2382
+    },
+    {
+     "kare": 379,
+     "tur_ms": 3182,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2382.39990234375,
      "toplam_px": 2382
@@ -2469,24 +2469,8 @@
    "kosum": [
     {
      "kare": 243,
-     "tur_ms": 2074,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1428.800048828125,
-     "toplam_px": 1429
-    },
-    {
-     "kare": 228,
      "tur_ms": 2041,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2500,15 +2484,31 @@
      "toplam_px": 1429
     },
     {
-     "kare": 239,
+     "kare": 244,
      "tur_ms": 2058,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1428.800048828125,
+     "toplam_px": 1429
+    },
+    {
+     "kare": 243,
+     "tur_ms": 2074,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2538,9 +2538,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 350,
-     "tur_ms": 2924,
-     "p95_ms": 8.4,
+     "kare": 351,
+     "tur_ms": 2932,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2554,24 +2554,8 @@
      "toplam_px": 2166
     },
     {
-     "kare": 349,
-     "tur_ms": 2924,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2166.39990234375,
-     "toplam_px": 2166
-    },
-    {
-     "kare": 344,
-     "tur_ms": 2907,
+     "kare": 351,
+     "tur_ms": 2932,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2579,6 +2563,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2166.39990234375,
+     "toplam_px": 2166
+    },
+    {
+     "kare": 349,
+     "tur_ms": 2916,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2608,15 +2608,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 429,
-     "tur_ms": 4174,
-     "p95_ms": 16.7,
+     "kare": 495,
+     "tur_ms": 4149,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2624,9 +2624,9 @@
      "toplam_px": 3169
     },
     {
-     "kare": 481,
-     "tur_ms": 4182,
-     "p95_ms": 8.5,
+     "kare": 498,
+     "tur_ms": 4157,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2640,9 +2640,9 @@
      "toplam_px": 3169
     },
     {
-     "kare": 437,
-     "tur_ms": 4157,
-     "p95_ms": 16.7,
+     "kare": 496,
+     "tur_ms": 4165,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2656,7 +2656,7 @@
      "toplam_px": 3169
     }
    ],
-   "p95_medyan": 16.7,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -2678,7 +2678,23 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 454,
+     "kare": 471,
+     "tur_ms": 3974,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 3028,
+     "toplam_px": 3028
+    },
+    {
+     "kare": 471,
      "tur_ms": 3974,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -2694,8 +2710,8 @@
      "toplam_px": 3028
     },
     {
-     "kare": 456,
-     "tur_ms": 3982,
+     "kare": 467,
+     "tur_ms": 3974,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -2703,22 +2719,6 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3028,
-     "toplam_px": 3028
-    },
-    {
-     "kare": 457,
-     "tur_ms": 3991,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2748,47 +2748,47 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 1249,
-     "tur_ms": 14521,
-     "p95_ms": 25,
+     "kare": 1384,
+     "tur_ms": 14429,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 58,
+     "takilma_tek_max_ms": 58,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.4
+     },
+     "scroll_px": 11682.400390625,
+     "toplam_px": 11682
+    },
+    {
+     "kare": 1366,
+     "tur_ms": 14412,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 50,
+     "takilma_tek_max_ms": 50,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11682.400390625,
+     "toplam_px": 11682
+    },
+    {
+     "kare": 1372,
+     "tur_ms": 14396,
+     "p95_ms": 16.8,
      "medyan_ms": 8.4,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 11682.400390625,
-     "toplam_px": 11682
-    },
-    {
-     "kare": 1257,
-     "tur_ms": 14520,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 3,
-     "takilma_toplam_ms": 183,
-     "takilma_tek_max_ms": 67,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 11682.400390625,
-     "toplam_px": 11682
-    },
-    {
-     "kare": 1290,
-     "tur_ms": 14579,
-     "p95_ms": 25,
-     "medyan_ms": 8.4,
-     "takilma_sayi": 1,
-     "takilma_toplam_ms": 67,
-     "takilma_tek_max_ms": 67,
-     "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2796,21 +2796,21 @@
      "toplam_px": 11682
     }
    ],
-   "p95_medyan": 25,
-   "takilma_oran_medyan": 0.0046,
-   "takilma_tek_max": 67,
+   "p95_medyan": 16.8,
+   "takilma_oran_medyan": 0.0035,
+   "takilma_tek_max": 58,
    "taban_takilma": [
     0,
     0,
     0
    ],
    "kapi": {
-    "p95": false,
+    "p95": true,
     "takilma_oran": true,
     "takilma_tek": true,
     "js": true
    },
-   "gecti": false
+   "gecti": true
   },
   {
    "yol": "/yeni/hizmetler/geo/",
@@ -2818,25 +2818,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 396,
-     "tur_ms": 3482,
-     "p95_ms": 9,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2628,
-     "toplam_px": 2628
-    },
-    {
-     "kare": 393,
-     "tur_ms": 3499,
-     "p95_ms": 16.5,
+     "kare": 403,
+     "tur_ms": 3466,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2850,9 +2834,25 @@
      "toplam_px": 2628
     },
     {
-     "kare": 401,
-     "tur_ms": 3491,
-     "p95_ms": 8.6,
+     "kare": 402,
+     "tur_ms": 3482,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2628,
+     "toplam_px": 2628
+    },
+    {
+     "kare": 398,
+     "tur_ms": 3482,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2866,7 +2866,7 @@
      "toplam_px": 2628
     }
    ],
-   "p95_medyan": 9,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -2888,25 +2888,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 354,
-     "tur_ms": 3157,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
-     },
-     "scroll_px": 2358.39990234375,
-     "toplam_px": 2358
-    },
-    {
-     "kare": 350,
+     "kare": 360,
      "tur_ms": 3141,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2920,15 +2904,31 @@
      "toplam_px": 2358
     },
     {
-     "kare": 350,
-     "tur_ms": 3149,
+     "kare": 360,
+     "tur_ms": 3132,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2358.39990234375,
+     "toplam_px": 2358
+    },
+    {
+     "kare": 351,
+     "tur_ms": 3132,
      "p95_ms": 16.6,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -2936,7 +2936,7 @@
      "toplam_px": 2358
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -2958,9 +2958,41 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 348,
-     "tur_ms": 3099,
-     "p95_ms": 16.6,
+     "kare": 357,
+     "tur_ms": 3091,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2326.39990234375,
+     "toplam_px": 2326
+    },
+    {
+     "kare": 361,
+     "tur_ms": 3083,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2326.39990234375,
+     "toplam_px": 2326
+    },
+    {
+     "kare": 362,
+     "tur_ms": 3108,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -2972,41 +3004,9 @@
      },
      "scroll_px": 2326.39990234375,
      "toplam_px": 2326
-    },
-    {
-     "kare": 342,
-     "tur_ms": 3091,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2326.39990234375,
-     "toplam_px": 2326
-    },
-    {
-     "kare": 347,
-     "tur_ms": 3099,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2326.39990234375,
-     "toplam_px": 2326
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3028,9 +3028,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 329,
+     "kare": 356,
      "tur_ms": 2999,
-     "p95_ms": 16.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3044,9 +3044,25 @@
      "toplam_px": 2221
     },
     {
-     "kare": 340,
-     "tur_ms": 2991,
-     "p95_ms": 16.5,
+     "kare": 352,
+     "tur_ms": 2999,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2220.800048828125,
+     "toplam_px": 2221
+    },
+    {
+     "kare": 348,
+     "tur_ms": 2983,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3055,28 +3071,12 @@
       "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
-     },
-     "scroll_px": 2220.800048828125,
-     "toplam_px": 2221
-    },
-    {
-     "kare": 325,
-     "tur_ms": 3016,
-     "p95_ms": 16.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.4
      },
      "scroll_px": 2220.800048828125,
      "toplam_px": 2221
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3098,22 +3098,6 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 570,
-     "tur_ms": 4890,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 3812,
-     "toplam_px": 3812
-    },
-    {
      "kare": 571,
      "tur_ms": 4899,
      "p95_ms": 8.5,
@@ -3122,7 +3106,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -3131,16 +3115,32 @@
     },
     {
      "kare": 576,
-     "tur_ms": 4899,
+     "tur_ms": 4882,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5
+     },
+     "scroll_px": 3812,
+     "toplam_px": 3812
+    },
+    {
+     "kare": 572,
+     "tur_ms": 4890,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
      },
      "scroll_px": 3812,
      "toplam_px": 3812
@@ -3168,26 +3168,26 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 451,
-     "tur_ms": 4365,
+     "kare": 444,
+     "tur_ms": 4407,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 125,
+     "takilma_tek_max_ms": 125,
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5
      },
      "scroll_px": 3382.39990234375,
      "toplam_px": 3382
     },
     {
-     "kare": 452,
-     "tur_ms": 4390,
+     "kare": 455,
+     "tur_ms": 4374,
      "p95_ms": 16.7,
-     "medyan_ms": 8.4,
+     "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
@@ -3201,7 +3201,7 @@
     },
     {
      "kare": 456,
-     "tur_ms": 4382,
+     "tur_ms": 4374,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3218,7 +3218,7 @@
    ],
    "p95_medyan": 16.7,
    "takilma_oran_medyan": 0,
-   "takilma_tek_max": 0,
+   "takilma_tek_max": 125,
    "taban_takilma": [
     0,
     0,
@@ -3238,8 +3238,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 364,
-     "tur_ms": 3091,
+     "kare": 363,
+     "tur_ms": 3074,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2312.800048828125,
+     "toplam_px": 2313
+    },
+    {
+     "kare": 368,
+     "tur_ms": 3083,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3254,33 +3270,17 @@
      "toplam_px": 2313
     },
     {
-     "kare": 352,
-     "tur_ms": 3083,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2312.800048828125,
-     "toplam_px": 2313
-    },
-    {
-     "kare": 357,
-     "tur_ms": 3074,
+     "kare": 369,
+     "tur_ms": 3082,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5
      },
      "scroll_px": 2312.800048828125,
      "toplam_px": 2313
@@ -3308,23 +3308,7 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 286,
-     "tur_ms": 2416,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 1740,
-     "toplam_px": 1740
-    },
-    {
-     "kare": 285,
+     "kare": 284,
      "tur_ms": 2408,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3334,14 +3318,30 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 1740,
+     "toplam_px": 1740
+    },
+    {
+     "kare": 288,
+     "tur_ms": 2399,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
       "p95_ms": 8.5
      },
      "scroll_px": 1740,
      "toplam_px": 1740
     },
     {
-     "kare": 280,
-     "tur_ms": 2399,
+     "kare": 285,
+     "tur_ms": 2416,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3350,7 +3350,7 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 1740,
      "toplam_px": 1740
@@ -3378,8 +3378,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 927,
-     "tur_ms": 8556,
+     "kare": 930,
+     "tur_ms": 8581,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3394,7 +3394,7 @@
      "toplam_px": 6805
     },
     {
-     "kare": 943,
+     "kare": 934,
      "tur_ms": 8531,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
@@ -3402,7 +3402,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -3410,15 +3410,15 @@
      "toplam_px": 6805
     },
     {
-     "kare": 937,
-     "tur_ms": 8531,
+     "kare": 900,
+     "tur_ms": 8581,
      "p95_ms": 16.7,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 2999,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -3448,23 +3448,23 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 370,
-     "tur_ms": 3332,
-     "p95_ms": 16.6,
+     "kare": 395,
+     "tur_ms": 3316,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.4
      },
      "scroll_px": 2451.199951171875,
      "toplam_px": 2451
     },
     {
-     "kare": 384,
+     "kare": 396,
      "tur_ms": 3324,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3472,7 +3472,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -3480,9 +3480,9 @@
      "toplam_px": 2451
     },
     {
-     "kare": 373,
-     "tur_ms": 3332,
-     "p95_ms": 16.6,
+     "kare": 397,
+     "tur_ms": 3316,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3496,7 +3496,7 @@
      "toplam_px": 2451
     }
    ],
-   "p95_medyan": 16.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3518,25 +3518,25 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 396,
-     "tur_ms": 3366,
-     "p95_ms": 8.5,
+     "kare": 399,
+     "tur_ms": 3349,
+     "p95_ms": 8.4,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2503.199951171875,
      "toplam_px": 2503
     },
     {
-     "kare": 387,
+     "kare": 400,
      "tur_ms": 3349,
-     "p95_ms": 8.6,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3550,7 +3550,7 @@
      "toplam_px": 2503
     },
     {
-     "kare": 386,
+     "kare": 394,
      "tur_ms": 3341,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3558,9 +3558,9 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3016,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.5
+      "p95_ms": 8.6
      },
      "scroll_px": 2503.199951171875,
      "toplam_px": 2503
@@ -3588,40 +3588,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 390,
-     "tur_ms": 3382,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2530.39990234375,
-     "toplam_px": 2530
-    },
-    {
-     "kare": 391,
-     "tur_ms": 3366,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2530.39990234375,
-     "toplam_px": 2530
-    },
-    {
-     "kare": 387,
-     "tur_ms": 3357,
+     "kare": 401,
+     "tur_ms": 3374,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3630,7 +3598,39 @@
      "taban": {
       "sure_ms": 3008,
       "takilma_sayi": 0,
-      "p95_ms": 8.4
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2530.39990234375,
+     "toplam_px": 2530
+    },
+    {
+     "kare": 403,
+     "tur_ms": 3382,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2530.39990234375,
+     "toplam_px": 2530
+    },
+    {
+     "kare": 400,
+     "tur_ms": 3357,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
      },
      "scroll_px": 2530.39990234375,
      "toplam_px": 2530
@@ -3658,40 +3658,24 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 370,
-     "tur_ms": 3157,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2372,
-     "toplam_px": 2372
-    },
-    {
-     "kare": 368,
-     "tur_ms": 3157,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2372,
-     "toplam_px": 2372
-    },
-    {
      "kare": 373,
-     "tur_ms": 3166,
+     "tur_ms": 3149,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.6
+     },
+     "scroll_px": 2372,
+     "toplam_px": 2372
+    },
+    {
+     "kare": 377,
+     "tur_ms": 3149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3704,9 +3688,25 @@
      },
      "scroll_px": 2372,
      "toplam_px": 2372
+    },
+    {
+     "kare": 375,
+     "tur_ms": 3141,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2372,
+     "toplam_px": 2372
     }
    ],
-   "p95_medyan": 8.5,
+   "p95_medyan": 8.4,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3728,9 +3728,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 359,
-     "tur_ms": 3158,
-     "p95_ms": 8.6,
+     "kare": 374,
+     "tur_ms": 3149,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3738,14 +3738,14 @@
      "taban": {
       "sure_ms": 3007,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5
      },
      "scroll_px": 2372,
      "toplam_px": 2372
     },
     {
      "kare": 374,
-     "tur_ms": 3141,
+     "tur_ms": 3158,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3760,15 +3760,15 @@
      "toplam_px": 2372
     },
     {
-     "kare": 371,
-     "tur_ms": 3157,
+     "kare": 377,
+     "tur_ms": 3166,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3008,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -3798,9 +3798,9 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 396,
-     "tur_ms": 3441,
-     "p95_ms": 8.6,
+     "kare": 410,
+     "tur_ms": 3432,
+     "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
@@ -3814,23 +3814,7 @@
      "toplam_px": 2571
     },
     {
-     "kare": 388,
-     "tur_ms": 3408,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 2571.199951171875,
-     "toplam_px": 2571
-    },
-    {
-     "kare": 402,
+     "kare": 406,
      "tur_ms": 3416,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3844,9 +3828,25 @@
      },
      "scroll_px": 2571.199951171875,
      "toplam_px": 2571
+    },
+    {
+     "kare": 406,
+     "tur_ms": 3424,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2571.199951171875,
+     "toplam_px": 2571
     }
    ],
-   "p95_medyan": 8.6,
+   "p95_medyan": 8.5,
    "takilma_oran_medyan": 0,
    "takilma_tek_max": 0,
    "taban_takilma": [
@@ -3868,31 +3868,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 370,
-     "tur_ms": 3216,
-     "p95_ms": 8.6,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3016,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2400,
-     "toplam_px": 2401
-    },
-    {
-     "kare": 377,
-     "tur_ms": 3182,
+     "kare": 378,
+     "tur_ms": 3174,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3015,
+      "sure_ms": 3008,
       "takilma_sayi": 0,
       "p95_ms": 8.6
      },
@@ -3900,8 +3884,24 @@
      "toplam_px": 2401
     },
     {
-     "kare": 375,
+     "kare": 382,
      "tur_ms": 3191,
+     "p95_ms": 8.4,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2400,
+     "toplam_px": 2401
+    },
+    {
+     "kare": 383,
+     "tur_ms": 3199,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3910,7 +3910,7 @@
      "taban": {
       "sure_ms": 3016,
       "takilma_sayi": 0,
-      "p95_ms": 8.6
+      "p95_ms": 8.5
      },
      "scroll_px": 2400,
      "toplam_px": 2401
@@ -3938,8 +3938,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 369,
-     "tur_ms": 3166,
+     "kare": 377,
+     "tur_ms": 3157,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -3954,7 +3954,7 @@
      "toplam_px": 2372
     },
     {
-     "kare": 369,
+     "kare": 377,
      "tur_ms": 3149,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -3962,7 +3962,7 @@
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.6
      },
@@ -3970,15 +3970,15 @@
      "toplam_px": 2372
     },
     {
-     "kare": 371,
-     "tur_ms": 3166,
+     "kare": 373,
+     "tur_ms": 3133,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 2999,
+      "sure_ms": 3007,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -4008,24 +4008,8 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 236,
-     "tur_ms": 2008,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3008,
-      "takilma_sayi": 0,
-      "p95_ms": 8.5
-     },
-     "scroll_px": 1390.4000244140625,
-     "toplam_px": 1390
-    },
-    {
-     "kare": 236,
-     "tur_ms": 2016,
+     "kare": 240,
+     "tur_ms": 2024,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -4040,8 +4024,8 @@
      "toplam_px": 1390
     },
     {
-     "kare": 228,
-     "tur_ms": 2008,
+     "kare": 241,
+     "tur_ms": 2033,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
@@ -4049,6 +4033,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 1390.4000244140625,
+     "toplam_px": 1390
+    },
+    {
+     "kare": 234,
+     "tur_ms": 2033,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -4078,15 +4078,15 @@
    "js_tavan": 10240,
    "kosum": [
     {
-     "kare": 346,
-     "tur_ms": 2899,
+     "kare": 342,
+     "tur_ms": 2882,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
      "takilma_sayi": 0,
      "takilma_toplam_ms": 0,
      "takilma_tek_max_ms": 0,
      "taban": {
-      "sure_ms": 3007,
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
@@ -4094,23 +4094,7 @@
      "toplam_px": 2127
     },
     {
-     "kare": 342,
-     "tur_ms": 2891,
-     "p95_ms": 8.5,
-     "medyan_ms": 8.3,
-     "takilma_sayi": 0,
-     "takilma_toplam_ms": 0,
-     "takilma_tek_max_ms": 0,
-     "taban": {
-      "sure_ms": 3007,
-      "takilma_sayi": 0,
-      "p95_ms": 8.6
-     },
-     "scroll_px": 2127.199951171875,
-     "toplam_px": 2127
-    },
-    {
-     "kare": 344,
+     "kare": 341,
      "tur_ms": 2891,
      "p95_ms": 8.5,
      "medyan_ms": 8.3,
@@ -4119,6 +4103,22 @@
      "takilma_tek_max_ms": 0,
      "taban": {
       "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 2127.199951171875,
+     "toplam_px": 2127
+    },
+    {
+     "kare": 344,
+     "tur_ms": 2874,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3016,
       "takilma_sayi": 0,
       "p95_ms": 8.5
      },
