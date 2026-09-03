@@ -272,6 +272,7 @@ async function kosum(browser, yol, tik) {
   const hukum = KISMI ? `KISMI (${secim.length}/${sayfalar.length} sayfa) — HUKUM DEGIL · ham: ${ham}` : ham;
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.',
+    kapi: 'A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, tekrar: TEKRAR,
     tazeleme: tz,
     boz: BOZ ? { ms: Number(process.env.BOZ_MS || (tz.tik_ms * 2.4).toFixed(1)), _: 'KIRMIZI-ONCE kolu acikti: bu kayit hukum degil, duzenegin kirmizi yanabildiginin kanitidir' } : false,
