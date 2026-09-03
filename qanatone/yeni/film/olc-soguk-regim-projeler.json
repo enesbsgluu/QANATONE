@@ -1,0 +1,1097 @@
+{
+ "_": "yeni/film/olc-soguk-regim.cjs — TESHIS, KAPI DEGIL. Ayni sayfanin ayni gun iki farkli rejimde okunmasinin sebebini adlandirmak icin: animasyon kosuyor mu, gorsel tur icinde iniyor mu, motorun hangi asamasi yiyor.",
+ "olcum": "2026-09-03T18:58:35.757Z",
+ "tarayici": "brave",
+ "sayfa": "/yeni/projeler/",
+ "kol": "K",
+ "tekrar": 4,
+ "ozet": {
+  "kare_saniye_medyan": 113.7,
+  "p95_medyan": 8.5,
+  "kacirilan_medyan": 0,
+  "takilma_toplam_medyan": 142,
+  "kaydirmali_anim_medyan": 7,
+  "kaydirmali_kosan_medyan": 1,
+  "gorsel_tur_icinde_medyan": 0,
+  "layout_medyan": 47,
+  "layout_sn_medyan": 0.0088,
+  "stil_medyan": 381,
+  "stil_sn_medyan": 0.081,
+  "betik_sn_medyan": 0.1155,
+  "gorev_sn_medyan": 0.6707
+ },
+ "kosum": [
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 375,
+   "tur_ms": 3349,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 112,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 142,
+   "takilma_tek_max_ms": 142,
+   "takilmalar": [
+    {
+     "ms": 141.6,
+     "y": 1092
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 10,
+    "kosan": 10,
+    "kaydirmali": 7,
+    "kaydirmali_kosan": 7,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 8,
+     "kosan": 2,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 1200,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2473,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 8,
+    "kosan_en_yuksek": 2,
+    "kaydirmali_en_yuksek": 7,
+    "kaydirmali_kosan_en_yuksek": 1
+   },
+   "gorsel_once": {
+    "istek": 9,
+    "istek_ms": [
+     123.7,
+     166.6,
+     222.6,
+     226.9,
+     236.3,
+     236.6,
+     232.5,
+     243.6,
+     245.6
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 9,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 48,
+    "RecalcStyleCount": 375,
+    "LayoutDuration": 0.007,
+    "RecalcStyleDuration": 0.0727,
+    "ScriptDuration": 0.1237,
+    "TaskDuration": 0.6609,
+    "JSHeapUsedSize": -667080
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 2472.800048828125,
+   "toplam_px": 2473,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 373,
+   "tur_ms": 3357,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 111.1,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 158,
+   "takilma_tek_max_ms": 158,
+   "takilmalar": [
+    {
+     "ms": 158.3,
+     "y": 1110
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 10,
+    "kosan": 10,
+    "kaydirmali": 7,
+    "kaydirmali_kosan": 7,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 8,
+     "kosan": 2,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 1200,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2473,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 8,
+    "kosan_en_yuksek": 2,
+    "kaydirmali_en_yuksek": 7,
+    "kaydirmali_kosan_en_yuksek": 1
+   },
+   "gorsel_once": {
+    "istek": 9,
+    "istek_ms": [
+     127.6,
+     174.6,
+     238.7,
+     250,
+     254.3,
+     260.9,
+     267.6,
+     267.8,
+     261.4
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 9,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 44,
+    "RecalcStyleCount": 373,
+    "LayoutDuration": 0.0088,
+    "RecalcStyleDuration": 0.081,
+    "ScriptDuration": 0.1035,
+    "TaskDuration": 0.6707,
+    "JSHeapUsedSize": -101160
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 2472.800048828125,
+   "toplam_px": 2473,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 1,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 380,
+   "tur_ms": 3341,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 113.7,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 92,
+   "takilma_tek_max_ms": 92,
+   "takilmalar": [
+    {
+     "ms": 91.8,
+     "y": 1047
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 10,
+    "kosan": 10,
+    "kaydirmali": 7,
+    "kaydirmali_kosan": 7,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 8,
+     "kosan": 2,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 1200,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2473,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 8,
+    "kosan_en_yuksek": 2,
+    "kaydirmali_en_yuksek": 7,
+    "kaydirmali_kosan_en_yuksek": 1
+   },
+   "gorsel_once": {
+    "istek": 9,
+    "istek_ms": [
+     125.5,
+     166.5,
+     223.1,
+     231.9,
+     237.8,
+     238.5,
+     242.9,
+     244.6,
+     244
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 9,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 45,
+    "RecalcStyleCount": 381,
+    "LayoutDuration": 0.0072,
+    "RecalcStyleDuration": 0.0669,
+    "ScriptDuration": 0.0916,
+    "TaskDuration": 0.5652,
+    "JSHeapUsedSize": 338452
+   },
+   "taban": {
+    "sure_ms": 3007,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 2472.800048828125,
+   "toplam_px": 2473,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 384,
+   "tur_ms": 3366,
+   "p95_ms": 8.5,
+   "medyan_ms": 8.3,
+   "kare_saniye": 114.1,
+   "kacirilan_kare": 0,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 100,
+   "takilma_tek_max_ms": 100,
+   "takilmalar": [
+    {
+     "ms": 99.8,
+     "y": 1056
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 10,
+    "kosan": 10,
+    "kaydirmali": 7,
+    "kaydirmali_kosan": 7,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 8,
+     "kosan": 2,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 1200,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 1800,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2400,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 2473,
+     "toplam": 8,
+     "kosan": 1,
+     "kaydirmali": 7,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 8,
+    "kosan_en_yuksek": 2,
+    "kaydirmali_en_yuksek": 7,
+    "kaydirmali_kosan_en_yuksek": 1
+   },
+   "gorsel_once": {
+    "istek": 9,
+    "istek_ms": [
+     145.2,
+     194.3,
+     251.7,
+     259.2,
+     260.2,
+     264.9,
+     265.2,
+     271.4,
+     271
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 9,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "mercedes-benz.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "eager"
+     },
+     {
+      "src": "charles-schwab.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kononenko-group.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "skyclinics.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "cmblu-energy.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "terawulf.webp",
+      "tam": true,
+      "gen": 770,
+      "lazy": "lazy"
+     },
+     {
+      "src": "bab-ic-mimarlik.webp",
+      "tam": true,
+      "gen": 437,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 47,
+    "RecalcStyleCount": 384,
+    "LayoutDuration": 0.0094,
+    "RecalcStyleDuration": 0.0875,
+    "ScriptDuration": 0.1155,
+    "TaskDuration": 0.7613,
+    "JSHeapUsedSize": -647772
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 2472.800048828125,
+   "toplam_px": 2473,
+   "tur_tam": true
+  }
+ ]
+}
