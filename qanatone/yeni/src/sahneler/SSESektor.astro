@@ -223,7 +223,16 @@ const panolar = sektorler.map((x: any, i: number) => {
                 gorunume don" (data-sreset 4712) TASINMADI — hedefi talep
                 akis haritasiydi, harita Enes'in kararıyla cikti. */}
             <div class="sse-cagri">
-              <a class="dugme" href={`${B}${on}/hizmetler/otomasyon`}>{m('skcta')}<Ikon ad="arrow" /></a>
+              {/* 4 Eyl 2026 (Enes): bag `/hizmetler/otomasyon`a gidiyordu —
+                  YANLIS TARAF. Iki ayri otomasyon sayfasi var:
+                    /hizmetler/otomasyon  "Elle tasidigin isi sistem tasisin"
+                                          -> HIZMET anlatimi
+                    /otomasyon            "Otomasyon & AI Ajanlari"
+                                          -> STUDYO: akis semasi, ajan karti,
+                                             kurulumun CALISIR hali
+                  Dugmenin sozu "Bu kurulumu calisirken gor" — yani kurulumun
+                  kendisini gosteren sayfa, hizmet anlatimi degil. */}
+              <a class="dugme" href={`${B}${on}/otomasyon`}>{m('skcta')}<Ikon ad="arrow" /></a>
               <a class="dugme sse-dugme-g" href="#sektor">{m('skchange')}</a>
             </div>
           </article>
