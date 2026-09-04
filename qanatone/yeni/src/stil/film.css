@@ -87,19 +87,31 @@ main:has(> .fl) { max-width: none; padding: 0; }
    oldugu icin bu "ekranin dibi" degil RAYIN DIBI demekti — dugme filmin
    tamami boyunca ekran disindaydi ve ancak film bitince goruluyordu.
    Kumanda artik sticky `.fl-yapis` icinde; o kutu ekranin kendisi. */
+/* KUMANDA BELIRGINLESTI (4 Eyl 2026, Enes karari "B").
+   GEREKCE OLCUMDEN: acilista nav bilerek gizli (film.css asagisi,
+   `html.fl-ana:not(.fl-devir-net) .nv-bar{visibility:hidden}`) — yani
+   TAM EKRAN bir acilistan ziyaretcinin TEK cikis yolu bu kumanda.
+   Olculdu (1440x900, canli): kutu 105x36 px, sag alt kosede 1319,848.
+   Tek cikis yolu icin fazla kucuktu. Nav'a DOKUNULMADI (secenek C
+   elendi): `fl-nav-kalk` navi film boyunca bilerek yukari cekiyor,
+   navi acilista gostermek o hareketin karsisina gecerdi.
+   Yeni olcu 44 px'lik dokunma hedefi tabanini tutar (padding 14+14 +
+   16 satir = 44) — keyfi degil, erisilebilirlik tabani. */
 .fl-kumanda {
-  position: absolute; right: 16px; bottom: 16px; z-index: 5;
+  position: absolute; right: 20px; bottom: 20px; z-index: 5;
   display: flex; gap: 8px; align-items: center;
 }
 .fl-gec {
-  font: 600 14px/1 var(--f-govde); letter-spacing: -.01em;
-  color: #fff; background: rgba(8, 8, 8, .78); border: 1px solid rgba(255, 255, 255, .22);
-  border-radius: 999px; padding: 10px 14px; cursor: pointer;
+  font: 600 16px/1 var(--f-govde); letter-spacing: -.01em;
+  color: #fff; background: var(--red-dolgu, #ef233c); border: 0;
+  border-radius: 999px; padding: 14px 24px; cursor: pointer;
   text-decoration: none; white-space: nowrap;
+  /* koyu video uzerinde ayrissin: kendi golgesi + ince ic halka */
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(255, 255, 255, .18);
 }
-.fl-gec:hover { border-color: #ef233c; }
+.fl-gec:hover { background: #d90429; }
 /* KLAVYE: ikisi de odaklanabilir (a[href] ve button); odak HALKASI
-   gorunur olmali — kumanda koyu zeminde durdugu icin varsayilan halka
+   gorunur olmali - kumanda koyu zeminde durdugu icin varsayilan halka
    yetersiz kaliyordu. */
 .fl-gec:focus-visible {
   outline: 2px solid #ef233c; outline-offset: 3px; border-color: #ef233c;

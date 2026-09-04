@@ -24,7 +24,7 @@ const AYAR = { bundle: true, minify: true, format: 'esm', target: ['es2019'], le
 /* cikti adi -> giris dosyasi. pano.js src/hesap.mjs'i, digerleri hicbir
    seyi ithal etmez; efekt.js icindeki import('/js/tubes.min.js') calisma
    zamani yoludur, pakete girmez. */
-const GIRISLER = { 'kabuk.js': 'efekt.js', 'pano.js': 'pano.js', 'sizinti.js': 'sizinti.js' };
+const GIRISLER = { 'kabuk.js': 'efekt.js', 'pano.js': 'pano.js', 'sizinti.js': 'sizinti.js', 'tup.js': 'tup.js' };
 
 /* -> { 'kabuk.js': Buffer, 'pano.js': Buffer, 'sizinti.js': Buffer,
         'tespit-fix.tr.json': Buffer, 'tespit-fix.en.json': Buffer } */

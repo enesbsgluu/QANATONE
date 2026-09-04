@@ -108,15 +108,12 @@ test('B\'nin esikleri A\'nınkinden FARKLI olmali (ayni olmasi kosul karisikligi
     'A ve B ayni kacirilan esigini tasiyor: biri tarama, oteki ziyaretci kosulu — esikleri ayni olamaz');
 });
 
-/* A'DA ORAN HALA KAPI — bilincli, Enes'in karari bekleniyor (5 Eyl gecesi).
-   A tarama kosulunu olcer, gozlenen tavani %0,92 ve kapisi %3: bugun
-   BAGLAYICI DEGIL, uyuyan bir yanlis birim. Bu test A'nin halini SABITLER;
-   A da duzeltilirse burasi kasten kirmizi yanar ve karar yazilmadan gecmez. */
-test('KAPI A\'da oran hala kapi — degistiyse karar yazilmadan gecmesin', () => {
+/* A'DA ORAN KAPIDAN DUSTU (Enes, 6 Eyl 2026 kararı ile) */
+test('KAPI A\'da oran kapı değil, bilgiye düştü', () => {
   const kapiBlokA = A.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/);
   assert.ok(kapiBlokA, 'A kapi blogu bulunamadi');
-  assert.match(kapiBlokA[0], /takilma_oran/,
-    'A kapi blogundan oran dusmus: bu Enes\'in karari — dusuruldugunde bu testi ve CLAUDE.md\'deki BIRIM maddesini birlikte guncelle');
+  assert.doesNotMatch(kapiBlokA[0], /takilma_oran/,
+    'A kapi bloguna oran geri girmis - oran tur boyuna bagimli turevdir (Enes, 6 Eyl 2026)');
 });
 
 test('kaydirma turu iki kapida birebir ayni (hiz ve adim)', () => {

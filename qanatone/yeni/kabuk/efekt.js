@@ -347,38 +347,15 @@ function bit() {
   }, 1500);
 }
 
-/* =================== HERO TUPLERI (kaynak tubesKur 9077-9133) ===================
-   WebGL tup alani kok js/tubes.min.js'ten (devir sahnesiyle ayni kaynak):
-   DPR kapagi 1,25, renk/isik ayari, IO ile play/pause, gorunurluk,
-   cift tiklamada rastgele renk. Dar ekran / dokunmatik / azaltma /
-   t-notubes: kurulmaz. */
+/* =================== HERO TUPLERI — AYRI PARCADA ===================
+   Govde `kabuk/tup.js`e TASINDI (4 Eyl 2026). Sebep orada yazili, ozeti:
+   `#tubes` yalniz SHHero'da (iki sayfa) ama kod 65 sayfaya iniyordu ve
+   K1 tavani (12.288 B) 12.277 B ile zaten doluydu. Ayrica kurulum prolog
+   surerken kosup ~400 ms'lik donma uretiyordu (A/B ile olculdu).
+   Burada YALNIZ TETIK kalir: tuval yoksa parca hic indirilmez. */
 function tubes() {
-  const cv = $('#tubes');
-  if (!cv || REDUCE || R.classList.contains('t-notubes') || innerWidth < 900 || matchMedia('(pointer:coarse)').matches) return;
-  import('/js/tubes.min.js').then((m) => {
-    const F = m.default; if (typeof F !== 'function') return;
-    const d = window.devicePixelRatio || 1; let app = null;
-    try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => Math.min(d, 1.25) }); } catch (e) {}
-    try { app = F(cv, { tubes: { colors: ['#ef233c', '#8f0f21', '#ffffff'], lights: { intensity: 180, colors: ['#ef233c', '#ff4d63', '#ffffff', '#5a0d18'] } } }); } catch (e) {}
-    try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => d }); } catch (e) {}
-    if (!app) return;
-    cv.classList.add('on'); window.__tubes = app;
-    const hero = cv.closest('section');
-    const act = (on) => {
-      try {
-        if (app.pause && app.resume) { on ? app.resume() : app.pause(); return; }
-        if (app.setPaused) { app.setPaused(!on); return; }
-      } catch (e) {}
-      cv.style.visibility = on ? '' : 'hidden';
-    };
-    if ('IntersectionObserver' in window) new IntersectionObserver((es) => es.forEach((x) => act(x.isIntersecting)), { threshold: .02 }).observe(hero);
-    document.addEventListener('visibilitychange', () => act(!document.hidden));
-    hero.addEventListener('dblclick', (e) => {
-      if (e.target.closest('a,button,input,label,textarea,select') || !app.tubes) return;
-      const r = (n) => [...Array(n)].map(() => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
-      app.tubes.setColors(r(3)); app.tubes.setLightsColors(r(4));
-    });
-  }).catch(() => {});
+  if (!$('#tubes')) return;
+  import('/varlik/tup.js').then((m) => m.kur()).catch(() => {});
 }
 
 export function baslat() {
