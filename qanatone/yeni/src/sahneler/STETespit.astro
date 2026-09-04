@@ -194,10 +194,33 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       [50, 'Yarısı eksik.', 'Site duruyor ama seni bulan da bulamayan da var.'],
       [0, 'Talebi kaçırıyor.', 'Bu hâliyle gelen kişi seni bulamıyor ya da ulaşamıyor.'],
     ];
+    /* SEBEP SOZLUGU FONKSIYONUN DILIYLE HIZALANDI (4 Eyl 2026 — Enes:
+       "sitemi ucretsiz kontrol et kisminda hic sonuc vermiyor, 0").
+       BULGU: arac calisiyordu; kirilan sey MESAJDI. Canli olcum (mobil VE
+       masaustu, ikisi de ayni):
+         HTTP 429 · {"ok":false,"reason":"kota","kalan":0,"yenilenmeMs":...}
+       Ekranda ise "Tarama tamamlanamadi." yaziyordu — cunku bu sozluk
+       `quota` anahtarini ariyordu, fonksiyon `kota` gonderiyor.
+       Sozluk fonksiyonun URETTIGI bes kodun yalnizca IKISINI taniyordu:
+         blocked ✓ · unreachable ✓ · timeout ✗ · kota ✗ · oran ✗
+       Yani en sik iki durum (gunluk hak dolmasi ve hiz siniri) sessizce
+       genel hataya dusuyordu; ziyaretci neden sonuc alamadigini
+       ogrenemiyor, arac bozuk saniliyordu. `quota` OLU ANAHTARDI —
+       fonksiyon onu hic gondermiyor. Kota: KOTA_HAK = 2 / 24 saat, IP
+       basina (netlify/functions/diagnose.js). */
     const SEBEP: Record<string, string> = {
       blocked: 'Bu adres taranamıyor (site otomatik erişimi engelliyor).',
       unreachable: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
-      quota: 'Günlük tarama hakkı doldu. Yarın yine dene.',
+      timeout: 'Site zamanında yanıt vermedi — birazdan tekrar dene.',
+      kota: 'Günlük tarama hakkın doldu.',
+      oran: 'Çok sık denedin — biraz bekleyip tekrar dene.',
+    };
+    /* Fonksiyon `yenilenmeMs` gonderiyordu ve arayuz onu ATIYORDU. Hakkin
+       ne zaman yenilendigini soylemek, "tarama tamamlanamadi" cikmaz
+       sokagini kullanilabilir bir bilgiye cevirir. */
+    const yenilenme = (ms: number) => {
+      const dk = Math.max(1, Math.round((ms - Date.now()) / 60000));
+      return dk >= 60 ? ` ${Math.round(dk / 60)} saat sonra yenilenir.` : ` ${dk} dakika sonra yenilenir.`;
     };
 
     form.addEventListener('submit', async (e) => {
@@ -213,7 +236,8 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         });
         const j = await r.json();
         if (!j.ok) {
-          durum.textContent = SEBEP[j.reason] || 'Tarama tamamlanamadı.';
+          durum.textContent = (SEBEP[j.reason] || 'Tarama tamamlanamadı.')
+            + (typeof j.yenilenmeMs === 'number' ? yenilenme(j.yenilenmeMs) : '');
           return;
         }
         durum.textContent = typeof j.kalan === 'number'
