@@ -360,6 +360,8 @@ function tubes() {
 
 export function baslat() {
   try { tubes(); } catch (e) {}
+  /* nav koreografisi ayri ada — film markup'i yoksa parca inmez */
+  try { if (document.querySelector('.fl-yapis, #fl-son')) import('/varlik/nav.js').then((m) => m.kur()).catch(() => {}); } catch (e) {}
   try { stars(); } catch (e) {}
   try { wordmark(); } catch (e) {}
   try { bit(); } catch (e) {}

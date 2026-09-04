@@ -1,0 +1,1 @@
+var n=document.documentElement;function s(){if(!document.querySelector(".fl-yapis, #fl-son"))return;let l=!1,o=!1,t=()=>{let e=l&&scrollY>140;e!==o&&(o=e,n.classList.toggle("fl-nav-kalk",e))};for(let e of["wheel","touchmove","keydown"])addEventListener(e,()=>{l=!0,t()},{passive:!0});addEventListener("scroll",t,{passive:!0}),t()}export{s as kur};

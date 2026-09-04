@@ -87,27 +87,18 @@ main:has(> .fl) { max-width: none; padding: 0; }
    oldugu icin bu "ekranin dibi" degil RAYIN DIBI demekti — dugme filmin
    tamami boyunca ekran disindaydi ve ancak film bitince goruluyordu.
    Kumanda artik sticky `.fl-yapis` icinde; o kutu ekranin kendisi. */
-/* KUMANDA BELIRGINLESTI (4 Eyl 2026, Enes karari "B").
-   GEREKCE OLCUMDEN: acilista nav bilerek gizli (film.css asagisi,
-   `html.fl-ana:not(.fl-devir-net) .nv-bar{visibility:hidden}`) — yani
-   TAM EKRAN bir acilistan ziyaretcinin TEK cikis yolu bu kumanda.
-   Olculdu (1440x900, canli): kutu 105x36 px, sag alt kosede 1319,848.
-   Tek cikis yolu icin fazla kucuktu. Nav'a DOKUNULMADI (secenek C
-   elendi): `fl-nav-kalk` navi film boyunca bilerek yukari cekiyor,
-   navi acilista gostermek o hareketin karsisina gecerdi.
-   Yeni olcu 44 px'lik dokunma hedefi tabanini tutar (padding 14+14 +
-   16 satir = 44) — keyfi degil, erisilebilirlik tabani. */
+/* 4 Eyl 2026: kisa sure buyutulup vurgulanmisti (karar "B"); Enes ESKI
+   HALINE DONDURDU. Gerekce ortadan kalkti — nav artik acilista gorunuyor,
+   yani bu kumanda tek cikis yolu degil. */
 .fl-kumanda {
-  position: absolute; right: 20px; bottom: 20px; z-index: 5;
+  position: absolute; right: 16px; bottom: 16px; z-index: 5;
   display: flex; gap: 8px; align-items: center;
 }
 .fl-gec {
-  font: 600 16px/1 var(--f-govde); letter-spacing: -.01em;
+  font: 600 15px/1 var(--f-govde); letter-spacing: -.01em;
   color: #fff; background: var(--red-dolgu, #ef233c); border: 0;
-  border-radius: 999px; padding: 14px 24px; cursor: pointer;
+  border-radius: 999px; padding: 12px 20px; cursor: pointer;
   text-decoration: none; white-space: nowrap;
-  /* koyu video uzerinde ayrissin: kendi golgesi + ince ic halka */
-  box-shadow: 0 6px 22px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(255, 255, 255, .18);
 }
 .fl-gec:hover { background: #d90429; }
 /* KLAVYE: ikisi de odaklanabilir (a[href] ve button); odak HALKASI
@@ -425,7 +416,21 @@ html:not(.fl-js) .fl-soz.fl-kaynak { opacity: 1; font-size: 12px; }
      yok, .fl-govde static (html:not(.fl-js) kurali), sayfa 0'dan akar.
    · hareket azaltma: ana sayfada 39 posterlik sutun gosterilmez, dogrudan
      site (film sayfasinda poster sutunu KALIR — olcum zemini). Karar Enes'te. */
-html.fl-ana:not(.fl-devir-net) .nv-bar, html.fl-ana:not(.fl-devir-net) .nv-fade { visibility: hidden; }
+/* 4 EYL 2026 (Enes) — NAV ARTIK BASTA GORUNUR.
+   Eski kural `html.fl-ana:not(.fl-devir-net) .nv-bar{visibility:hidden}`
+   idi: nav TUM prolog boyunca gizliydi ve ancak devir netlesince
+   beliriyordu. Gerekce: "kisi bir siteye geldigini anlamayabilir" —
+   acilista gezinme yoksa sayfa site gibi okunmuyor.
+   ISTENEN KOREOGRAFI ZATEN KURULUYDU, onunde yalnizca bu kural duruyordu:
+   `Film.astro` navBak() -> `kalk = scrollY > 4` -> `fl-nav-kalk` sinifi;
+   asagidaki 169. satir da onu translateY(-115%) ile yukari cekiyor,
+   .55s'lik gecisle. Yani kaydirma baslayinca nav cekilir, ziyaretci basa
+   donunce (scrollY <= 4) kendiliginden geri iner.
+   BU YUZDEN YENI BIR ADA/BETIK EKLENMEDI: davranis icin tek satirlik CSS
+   kaldirmasi yetti, sifir JS, sifir kasma riski. Devirde nav yerinde
+   kalir (bir alttaki `fl-devir-net` kurali).
+   `/film` sayfasi ETKILENMEZ: kural `fl-ana` (ana sayfa) kapsamindaydi;
+   orada govdenin kendi navi var, cift nav dogmaz. */
 /* site netlesirken nav da yerinde (fl-nav-kalk film boyunca yukari cekmisti;
    /film'de 'devirde kalkik kalir' — orada govdenin kendi navi vardi) */
 html.fl-ana.fl-devir-net .nv-bar { transform: none; }
