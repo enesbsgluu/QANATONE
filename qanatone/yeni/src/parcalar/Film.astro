@@ -335,9 +335,15 @@ const satirla = (m: string): string[] => {
        .85); perde artik 3,4 sn'de supuruluyor, yani motora orten ~1,8
        sn'lik on pisme suresi kaliyor. Perde yoksa (donen ziyaretci,
        azaltilmis hareket, kapatma anahtari) BEKLEME YOK. */
-    const perdeli = KOKE.classList.contains('prd') && !!document.getElementById('perde');
-    (perdeli ? new Promise((r) => setTimeout(r, 1600)) : Promise.resolve())
-      .then(() => import('../film/motor')).then((m) => {
+    /* 1,6 SN'LIK BEKLEME KALKTI (4 Eyl 2026, ikinci tur). Perde ile filmin
+       on pismesini ayirmak icin konmustu; ama asil yuku motorun ACILIS
+       PENCERESI uretiyordu (uc klip birden, 15 MB). Pencere 0'a cekilince
+       (motor.ts, `onPencere`) ilk 1,5 saniyenin yuku 16.203 KB -> 679 KB'a
+       dustu ve bekleme gereksizlesti. USTELIK ZARARLIYDI: iki gecikme ust
+       uste binince acilis klibi de geciyordu ve ilk kaydirmada video
+       hazir olmuyordu (olculdu: ilk iki adimda readyState 1). Motor artik
+       hemen basliyor, ama YALNIZ ETKIN KLIBI cekiyor. */
+    import('../film/motor').then((m) => {
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
          once zinciri sokeriz, sonra tarayici bagi kendi isler. */
