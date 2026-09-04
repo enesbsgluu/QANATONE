@@ -127,15 +127,32 @@ const ilk = (K[0] && K[0].files && K[0].files[0]) || { n: '', d: '' };
 
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       svg.setAttribute('preserveAspectRatio', 'none');
+      /* YELPAZE (4 Eyl 2026, ikinci tur — Enes: "baslangic dagiliminda
+         cizgiler ust uste binmis, tek bir noktadan cikiyor goruntusu yok").
+         Ilk duzeltmede butun teller AYNI noktadan (hx,hy) cikiyor ve ilk
+         kontrol noktalari da ayni (hx+kv, hy) idi: hepsi once YATAY gidip
+         sonra ayriliyordu, yani ilk bolumde ust uste biniyorlardi.
+         MotorSahne'nin kablo hattindaki cozum: teller merkezden degil,
+         merkezin cevresindeki KUCUK BIR YARICAPTAN, her biri KENDI
+         yonunde ayrilir. Boylece cikis noktalari birbirinden ayri olur ve
+         "tek noktadan dagiliyor" goruntusu dogar. R noktanin yaricapi
+         kadar (nokta 9 px capinda) — tel gorsel olarak noktanin
+         KENARINDAN cikar, icinden degil. */
+      const R = 4.5;
       let ic = '';
       for (const kart of kartlar) {
         const c = konum(kart, fan);
         /* kartin sol kenarindaki nokta (.sus-tpcard::before, left:-4.5px,
            8px capinda -> merkezi kenardan ~0,5px disarida) */
         const ex = (c.x - 0.5) - m.x, ey = (c.y + c.h / 2) - m.y;
-        const kv = Math.max(12, Math.abs(ex - hx) * 0.45);
-        ic += `<path pathLength="1" d="M${hx.toFixed(1)},${hy.toFixed(1)} `
-          + `C${(hx + kv).toFixed(1)},${hy.toFixed(1)} ${(ex - kv).toFixed(1)},${ey.toFixed(1)} `
+        const dx = ex - hx, dy = ey - hy, u = Math.hypot(dx, dy) || 1;
+        const sx = hx + dx / u * R, sy = hy + dy / u * R;
+        /* cikista kontrol noktasi KENDI yonunu bir sure korur (yelpaze),
+           varista yataya doner (karta dik girmesin) */
+        const kv = Math.max(10, Math.abs(ex - sx) * 0.42);
+        ic += `<path pathLength="1" d="M${sx.toFixed(1)},${sy.toFixed(1)} `
+          + `C${(sx + dx / u * kv).toFixed(1)},${(sy + dy / u * kv * 0.55).toFixed(1)} `
+          + `${(ex - kv).toFixed(1)},${ey.toFixed(1)} `
           + `${ex.toFixed(1)},${ey.toFixed(1)}"/>`;
       }
       svg.innerHTML = ic;

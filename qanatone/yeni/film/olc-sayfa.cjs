@@ -245,7 +245,15 @@ async function kosum(browser, yol, tik) {
   const tz = await tazelemeOlc(browser);
   console.log(`TARAYICI : ${TARAYICI} · ${surum} · ${secim.length} sayfa · ${TEKRAR} kosum`);
   console.log(`TAZELEME : ${tz.hz} Hz · tik ${tz.tik_ms} ms · ornek ${tz.ornek} (suzulen ${tz.suzulen}) · min ${tz.min} p10 ${tz.p10} p90 ${tz.p90}${tz.kararli ? '' : ' !! KARARSIZ'}`);
-  console.log(`KAPI     : p95'te kacirilan kare <= ${KACIRILAN_KAPI} (yani p95 <= ${((KACIRILAN_KAPI + 1) * tz.tik_ms).toFixed(1)} ms bu ekranda) · takilma toplam <= %${TOPLAM_ORAN * 100} · tek <= ${TEK_TAKILMA_MS} ms${BOZ ? '  [BOZ=1 KIRMIZI-ONCE]' : ''}`);
+  /* 4 Eyl 2026 (Enes): takilma ORANI KAPI DEGIL, BILGI. Kodda zaten
+     `oz.bilgi`deydi ve `oz.kapi`ye hic girmiyordu — ama bu satir onu kapi
+     diye ILAN EDIYORDU. Arac kendi olcutunu yanlis anlatirsa kayit da
+     yanlis okunur: 4 Eyl'de `/en/sss/` "oran %3,52" yuzunden kirmizi
+     sanildi, oysa kapiyi hic asmamisti. Gerekce Kapi B'deki ile ayni
+     (kapi birimi MUTLAK olmali, oran turevdir; paydasi tur boyu ve tur
+     boyu sayfadan sayfaya degisiyor). */
+  console.log(`KAPI     : p95'te kacirilan kare <= ${KACIRILAN_KAPI} (yani p95 <= ${((KACIRILAN_KAPI + 1) * tz.tik_ms).toFixed(1)} ms bu ekranda) · tek takilma <= ${TEK_TAKILMA_MS} ms · JS tavani · tur tamligi${BOZ ? '  [BOZ=1 KIRMIZI-ONCE]' : ''}`);
+  console.log(`BILGI    : takilma toplam orani (esik %${TOPLAM_ORAN * 100} KAPI DEGIL, kiyas icin yazilir)`);
   const sonuc = [];
   let dur = null;
   for (const yol of secim) {
@@ -272,9 +280,10 @@ async function kosum(browser, yol, tik) {
     const tikCapraz = medyan(k.map((x) => x.taban.tik_p10).filter((x) => x != null));
     oz.tik_sapma = (tikCapraz != null && Math.abs(tikCapraz - tz.tik_ms) / tz.tik_ms > 0.20) ? +tikCapraz.toFixed(3) : false;
     oz.tur_tam = k.every((x) => x.tur_tam);
+    oz.bilgi = { takilma_oran_medyan: oz.takilma_oran_medyan };
     oz.kapi = {
-      kacirilan_kare: oz.kacirilan_kare <= KACIRILAN_KAPI, takilma_oran: oz.takilma_oran_medyan <= TOPLAM_ORAN,
-      takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS, js: js <= tv, tur_tam: oz.tur_tam,
+      kacirilan_kare: oz.kacirilan_kare <= KACIRILAN_KAPI, takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS,
+      js: js <= tv, tur_tam: oz.tur_tam,
     };
     oz.gecti = Object.values(oz.kapi).every(Boolean);
     sonuc.push(oz);
@@ -294,7 +303,8 @@ async function kosum(browser, yol, tik) {
       kacirilan_kare: KACIRILAN_KAPI,
       p95_esdeger_ms: +((KACIRILAN_KAPI + 1) * tz.tik_ms).toFixed(2),
       takilma_esik_ms: TAKILMA_ESIK, takilma_esik_tik: +(TAKILMA_ESIK / tz.tik_ms).toFixed(2),
-      tek_takilma_ms: TEK_TAKILMA_MS, toplam_oran: TOPLAM_ORAN,
+      tek_takilma_ms: TEK_TAKILMA_MS,
+      toplam_oran_BILGI: TOPLAM_ORAN,   /* KAPI DEGIL — 4 Eyl 2026, Enes; kiyas icin yazilir */
       p95_eski_ms: P95_ESKI_MS, _: 'p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir',
     },
     hukum, kismi: KISMI ? { olculen: secim.length, tum: sayfalar.length, _: 'kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)' } : false,

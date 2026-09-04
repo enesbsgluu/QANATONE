@@ -76,3 +76,42 @@ finans burada da +2 tikle en ağır sayfa.
 4 Eyl günü makine sürekli meşguldü (derlemeler, tarayıcı ölçümleri, 680 MB
 release yüklemesi). Yeni bir Kapı A koşumu bu koşullarda hüküm veremezdi;
 "kısmi koşum hüküm değil" kuralının yük karşılığı budur.
+
+---
+
+# DÜZELTME — SESSİZ MAKİNE TARAMASI (4 Eyl 2026, Enes talimatı)
+
+Yukarıdaki hüküm **YÜKLÜ MAKİNEDE** alınmıştı ve fazla genişti. Sessiz
+makinede tam tarama koşuldu (aynı tarayıcı, aynı 120,5 Hz / 8,3 ms tik,
+aynı tekrar, aynı eşikler). Sonuç tabloyu daraltıyor:
+
+| | yüklü makine | **sessiz makine** |
+|---|---|---|
+| kötüleşen | 37 | **9** |
+| aynı | 21 | **49** |
+| iyileşen | 1 | **1** |
+| kapıyı aşan (kırmızı) | 8 | **1** |
+
+**"Site geneli bir tik kayması" büyük ölçüde YÜKTÜ.** Emsal (`8de57c8`
+"sessiz makinede tam tarama: 59/59 geçti") bir kez daha tuttu; yedi kırmızı
+makine boşalınca kayboldu.
+
+## GERİYE KALAN TEK KIRMIZI
+
+`/hizmetler/finans/` — p95 25,0 ms = 3,01 tik → **kaçırılan 2** (kapı ≤1),
+takılma oranı %0,00, tek takılma 58 ms. Baz kayıtta 16,8 ms / 1 kare idi.
+
+Bu **gerçek bir gerileme** ve aracın kendi künyesi neden öyle olduğunu
+söylüyor (olc-sayfa.cjs, "KISMI KOSUM HUKUM DEGILDIR" notu): finans TAM
+TARAMA içinde 16,7 ms ölçülür, tek başına/kesitte 25,0 ms — çünkü tarayıcı
+önceki sayfaların ısınmasından faydalanır. Bugünkü **tam** tarama 25,0 ms
+verdi; yani ısınmadan artık faydalanamıyor.
+
+Kalan 8 sayfa 0→1 kareye çıktı ama kapı içinde (≤1).
+
+## SIRADAKİ ADIM (değişti)
+
+Yük hipotezi ELENDİ. Artık doğrudan finans'ın kendisine bakılır:
+`olc-soguk-regim.cjs` ile aynı anda koşan `view()` animasyonlarını say
+(daha önce finans'ta 100 ölçülmüştü). Sessiz makine taraması artık
+gerekli değil — koşuldu ve hükmünü verdi.
