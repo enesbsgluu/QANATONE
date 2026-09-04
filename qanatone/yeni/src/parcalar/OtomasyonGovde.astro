@@ -475,9 +475,22 @@ const TELI = [0, 1, 2, 3];
         const X = 400 / sr.width, Yv = 72 / sr.height;
         const sp = Math.min(34, sr.width * .08) * X;
         const kx = ((kr.left + kr.width / 2 - sr.left) * X).toFixed(1);
-        /* uç y'ler: kaynak +3/-3 px payı (10566-10575) */
-        const yKol = ((sol ? kolR.bottom + 3 : kolR.top - 3) - sr.top) * Yv;
-        const yKrt = ((sol ? kr.top - 3 : kr.bottom + 3) - sr.top) * Yv;
+        /* UC PAYI TERSINE CEVRILDI (4 Eyl 2026 — Enes: "mobilde kablo
+           animasyonlarinin cikis yerleri ve baglanti noktalari kartlarla
+           birlesmiyor, yani bosluk var").
+           ESKI HAL: kaynagin +3/-3 px payi (10566-10575) uclari kutulardan
+           UZAGA itiyordu — sol kolda tel sutunun altindan 3 px asagida
+           basliyor, kartin ustunden 3 px yukarida bitiyordu. Yani iki ucta
+           da TASARIMLA acilmis 3'er piksellik bosluk vardi.
+           OLCULDU (390x844): kutular arasi oluk zaten 10 px (sutun alti 166
+           -> serit 176-232 -> kart ustu 271); ustune 3 px pay eklenince
+           kopukluk yuksek yogunluklu ekranda 1,2 px'lik telle gorunur hale
+           geliyor.
+           YENI HAL: pay ICERI dogru 1 px — uc kutunun kenarina degmekle
+           kalmiyor, 1 px iceri giriyor ki kenar yumusatmasindan kilcal bir
+           bosluk kalmasin. */
+        const yKol = ((sol ? kolR.bottom - 1 : kolR.top + 1) - sr.top) * Yv;
+        const yKrt = ((sol ? kr.top + 1 : kr.bottom - 1) - sr.top) * Yv;
         const m = ((yKol + yKrt) / 2).toFixed(1);
         const xler = [...Array(dugum)].map((_, i) => (200 + (i - (dugum - 1) / 2) * sp).toFixed(1));
         yaz(svg, xler.map(x => sol
