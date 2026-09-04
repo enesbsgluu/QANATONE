@@ -353,8 +353,24 @@ function bit() {
    K1 tavani (12.288 B) 12.277 B ile zaten doluydu. Ayrica kurulum prolog
    surerken kosup ~400 ms'lik donma uretiyordu (A/B ile olculdu).
    Burada YALNIZ TETIK kalir: tuval yoksa parca hic indirilmez. */
+/* TUP ALANI KAPALI (4 Eyl 2026, Enes karari — geri acilabilir tek anahtar).
+   OLCULDU, A/B ile (ayni derleme, tek degisken /js/tubes.min.js):
+     tubes ENGELLI : p95  8,5 ms · kacirilan 0 · takilma YOK · en uzun  33,4 ms
+     tubes SERBEST : p95 16,7 ms · kacirilan 1 · 1 takilma   · EN UZUN 399,8 ms
+   Kurulumu geciktirmek (IO + prolog kapisi + bosta) donmayi 399,8 -> ~100 ms'e
+   indirdi ama SIFIRLAMADI: WebGL baglami + shader derlemesi ana is
+   parcaciginda kalir ve perde izleri `stroke-dashoffset` ile ayni yerde
+   boyanir. Enes'in hukmu: "webgl sadece prologu etkiliyorsa kapat, o sekilde
+   daha iyi calisiyordu."
+   TARIHCE — NE KAYBEDILIYOR: bu katman kesmeden 4 Eyl'e kadar ZATEN
+   calismiyordu (`/js/tubes.min.js` 404 veriyordu, eski kok sitenin
+   varligiydi). Yani kapatmak bir gerilemeyi geri almaktir, bir ozelligi
+   silmek degil. Dosya ve `tup.js` YERINDE DURUYOR; acmak icin asagidaki
+   satirdaki `false` kaldirilir. Acilmadan once maliyeti yeniden olculmeli
+   (olcum duzenegi: prolog-kasma A/B). */
+const TUP_ACIK = false;
 function tubes() {
-  if (!$('#tubes')) return;
+  if (!TUP_ACIK || !$('#tubes')) return;
   import('/varlik/tup.js').then((m) => m.kur()).catch(() => {});
 }
 

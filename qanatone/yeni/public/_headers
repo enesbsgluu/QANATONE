@@ -57,6 +57,20 @@
 # Önbelleksiz bırakmanın bedeli ölçülmüştü: prolog geri sarıldığında
 # pencere dışına atılan klip TAM GÖVDEYLE yeniden iniyordu — tam turda
 # 39 klip / 238 MiB yerine 75 istek / 456 MiB.
+# BETIK DOSYALARI AYRILDI (4 Eyl 2026 — BEDELI ODENDI).
+# `/varlik/*.js` adlari icerik-hash'li DEGIL (kabuk.js, tup.js, nav.js) ve
+# 1 gunluk max-age ile servis ediliyordu. Sonuc: 4 Eyl'de kabuk.js icine
+# giren WebGL tup katmani ziyaretcinin tarayicisina onbelleklendi ve
+# ARDINDAN GELEN BUTUN DUZELTMELER 24 SAAT BOYUNCA ULASMADI. Enes canli
+# sitede kasmayi bildirmeye devam etti, olcumler ise duzelmis surumu
+# olctugu icin "gecti" diyordu — yanlis yesilin en pahali cesidi: olcum
+# dogru, OLCULEN SURUM yanlis.
+# Kabuk betikleri ~11 KB; her istekte dogrulama (304) neredeyse bedava,
+# bayat kabuk ise sitenin davranisini gunlerce yanlis tutuyor.
+# Medya (mp4/webp) 1 gunde kalir — orada bayatlik zararsiz, bayt agir.
+/varlik/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
 /varlik/*
   Cache-Control: public, max-age=86400
 
