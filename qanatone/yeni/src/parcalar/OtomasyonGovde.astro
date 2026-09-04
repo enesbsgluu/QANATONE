@@ -475,21 +475,28 @@ const TELI = [0, 1, 2, 3];
         const X = 400 / sr.width, Yv = 72 / sr.height;
         const sp = Math.min(34, sr.width * .08) * X;
         const kx = ((kr.left + kr.width / 2 - sr.left) * X).toFixed(1);
-        /* UC PAYI TERSINE CEVRILDI (4 Eyl 2026 — Enes: "mobilde kablo
-           animasyonlarinin cikis yerleri ve baglanti noktalari kartlarla
-           birlesmiyor, yani bosluk var").
-           ESKI HAL: kaynagin +3/-3 px payi (10566-10575) uclari kutulardan
-           UZAGA itiyordu — sol kolda tel sutunun altindan 3 px asagida
-           basliyor, kartin ustunden 3 px yukarida bitiyordu. Yani iki ucta
-           da TASARIMLA acilmis 3'er piksellik bosluk vardi.
-           OLCULDU (390x844): kutular arasi oluk zaten 10 px (sutun alti 166
-           -> serit 176-232 -> kart ustu 271); ustune 3 px pay eklenince
-           kopukluk yuksek yogunluklu ekranda 1,2 px'lik telle gorunur hale
-           geliyor.
-           YENI HAL: pay ICERI dogru 1 px — uc kutunun kenarina degmekle
-           kalmiyor, 1 px iceri giriyor ki kenar yumusatmasindan kilcal bir
-           bosluk kalmasin. */
-        const yKol = ((sol ? kolR.bottom - 1 : kolR.top + 1) - sr.top) * Yv;
+        /* UCLAR BLOGUN KENDISINE BAGLANIR, SUTUN KUTUSUNA DEGIL
+           (4 Eyl 2026 — Enes: "gelen kisminin son basamagi olan web formu
+           blogundan cikan 4 kablo kolu o bloga dokunmuyor; ajan blogundan
+           cikan kol da randevu yazildi bloguna temas etmiyor").
+           ONCEKI IKI DENEME NEDEN YETMEDI:
+             1. kaynagin +3/-3 payi uclari kutudan UZAGA itiyordu -> pay
+                iceri cevrildi, ama hala YANLIS KUTUYA baglaniyordu;
+             2. capa `.akol` KUTUSUYDU — o kutu baslik ("Gelen"/"Cikan") ve
+                dolguyu da kapsiyor, yani son blogun ALTINDA olu bir serit
+                birakiyor. Tel o serit kadar uzakta bitiyordu.
+           OLCULDU (390x844, duzeltmeden once): sol kolun ucu son bloktan
+           9,6 px, sag kolun ucu ilk bloktan 27,6 px uzaktaydi — Enes'in
+           gordugu bosluk tam bu.
+           DOGRU CAPA: sol kol GELEN sutununun SON `.adugum`unun alt kenari,
+           sag kol CIKAN sutununun ILK `.adugum`unun ust kenari. Pay 1 px
+           ICERI (kenar yumusatmasindan kilcal bosluk kalmasin).
+           Blok yoksa sutun kutusuna duser — kural gorebildigini tutar. */
+        const dugumler = [...kol.querySelectorAll<HTMLElement>('.adugum')];
+        const uc = dugumler.length
+          ? kutu(sol ? dugumler[dugumler.length - 1] : dugumler[0], ar, ab)
+          : kolR;
+        const yKol = ((sol ? uc.bottom - 1 : uc.top + 1) - sr.top) * Yv;
         const yKrt = ((sol ? kr.top + 1 : kr.bottom - 1) - sr.top) * Yv;
         const m = ((yKol + yKrt) / 2).toFixed(1);
         const xler = [...Array(dugum)].map((_, i) => (200 + (i - (dugum - 1) / 2) * sp).toFixed(1));
