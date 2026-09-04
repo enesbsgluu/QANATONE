@@ -97,11 +97,21 @@ const MEDYA = (() => {
     if (D.manifest_sha1 !== require('crypto').createHash('sha1').update(govde).digest('hex'))
       return { kuruldu: false, mesaj: 'medya-damgasi-bayat (manifest degismis): ' + KUR };
     const M = JSON.parse(govde);
+    const dizin = path.join(__dirname, 'public', 'varlik', 'film');
     for (const d of M.dosya) {
-      const p = path.join(__dirname, 'public', 'varlik', 'film', d.ad);
+      const p = path.join(dizin, d.ad);
       if (!fs.existsSync(p) || fs.statSync(p).size !== d.bayt)
         return { kuruldu: false, mesaj: 'medya-eksik(' + d.ad + '): ' + KUR };
     }
+    /* IKINCI YON (4 Eyl 2026): eskiden yalniz manifest -> disk bakiliyordu,
+       yani diskteki FAZLA dosya sessizdi. Fazlalik zararsiz gorunur ama
+       degildir: manifest disi bir dosya yayina cikar, uzak kaynakta
+       KARSILIGI OLMAZ ve temiz klonda hicbir sey onu getirmez — "bende
+       calisiyordu"nun tam kaynagi. Kapi artik BIREBIR. */
+    const listede = new Set(M.dosya.map((d) => d.ad));
+    const fazla = (fs.existsSync(dizin) ? fs.readdirSync(dizin) : []).filter((a) => !listede.has(a));
+    if (fazla.length)
+      return { kuruldu: false, mesaj: 'medya-fazla(' + fazla.slice(0, 3).join(',') + '): manifest bayat — `kur-medya.cjs --damgala`' };
     return { kuruldu: true, mesaj: '' };
   } catch (e) { return { kuruldu: false, mesaj: 'medya-damgasi-okunamadi: ' + e.message }; }
 })();
@@ -146,6 +156,52 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      eksik.length === 0 && fazla.length === 0,
      (eksik.length ? 'eksik:' + eksik.slice(0, 3).join(',') + ' ' : '') + (fazla.length ? 'fazla:' + fazla.slice(0, 3).join(',') : '')
        || `${gercek.size} sayfa`);
+}
+
+/* FM4 · UZAK MEDYA KAYNAGI GERCEKTEN DOLU (4 Eyl 2026 — DEPLOY DUSTUKTEN
+   SONRA yazildi, bedeli odenmis kural).
+   NE OLDU: manifestin `uzak` alani
+   `github.com/enesbsgluu/QANATONE/releases/download/medya-v1` gosteriyordu;
+   o release HIC OLUSTURULMAMISTI (depoda sifir release). Yerelde medya
+   diskte durdugu icin `kur-medya.cjs` kaynak sirasindan DISKI secip yesil
+   geciyordu — 238 yerinde, 0 indirildi. CI'da disk yok: uzak tek kaynak,
+   238/238 dosya HTTP 404, zincir kur-medya adiminda dustu.
+   NEDEN HICBIR KURAL GORMEDI: yoklama araci (`--uzak-yokla`) VARDI ama
+   yalniz belgede duruyordu — hicbir kapiya, zincire, kontrol listesine
+   bagli degildi. Yani "release gercekten duruyor mu" sorusu bir kez bile
+   sorulmadi. Elle kosulan komut kapi degildir.
+   BU KURAL AG CAGRISI YAPMAZ (CI'da da kosuyor): yoklamanin KAYDINI okur.
+   Kayit `yeni/film/uzak-yokla.json`, git icinde, manifestin sha1'ini
+   tasir — manifest degisip yoklama tazelenmezse kural KIRMIZI yanar.
+   Boylece medya her degistiginde "release'i guncelledin mi" sorusu
+   OTOMATIK sorulur. */
+{
+  const kusur = [];
+  const ky = path.join(__dirname, 'film', 'uzak-yokla.json');
+  const my = path.join(__dirname, 'film', 'medya-manifest.json');
+  let not = '';
+  if (!fs.existsSync(my)) kusur.push('manifest-yok');
+  else if (!fs.existsSync(ky))
+    kusur.push('uzak-yoklama-kaydi-yok: `node yeni/film/kur-medya.cjs --uzak-yokla` kosulmali');
+  else {
+    try {
+      const K = JSON.parse(oku(ky));
+      const M = JSON.parse(oku(my).replace(/\r/g, ''));
+      const mSha = require('crypto').createHash('sha1')
+        .update(Buffer.from(oku(my).replace(/\r/g, ''))).digest('hex');
+      if (K.sonuc !== 'TAZE')
+        kusur.push('uzak-EKSIK(' + K.kusurlu + '/' + K.dosya_sayisi + '): ' + (K.ilk_kusur || []).slice(0, 2).join(' '));
+      if (K.manifest_sha1 !== mSha)
+        kusur.push('yoklama-BAYAT: manifest degismis, `--uzak-yokla` yeniden kosulmali');
+      if (K.uzak !== M.uzak)
+        kusur.push('yoklama-baska-adresi-olcmus: ' + K.uzak + ' != ' + M.uzak);
+      if (K.dosya_sayisi !== (M.dosya || []).length)
+        kusur.push('yoklama-dosya-sayisi:' + K.dosya_sayisi + '!=' + (M.dosya || []).length);
+      not = `${K.dosya_sayisi} varlık · ${K.uzak} · ${K.tarih}`;
+    } catch (e) { kusur.push('kayit-okunamadi:' + e.message); }
+  }
+  ol('FM4 · uzak medya kaynağı dolu ve yoklama TAZE (kayıtla kanıtlı, ağ çağrısı yok)',
+     kusur.length === 0, kusur.slice(0, 2).join(' ') || not);
 }
 
 /* K3 · BIRINCIL KONAK TEK KAYNAK (4 Eyl 2026). Iki uretec var ve ikisi de

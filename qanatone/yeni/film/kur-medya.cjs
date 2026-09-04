@@ -55,6 +55,7 @@ const KOK = __dirname;                                   /* yeni/film */
 const HEDEF = path.join(KOK, '..', 'public', 'varlik', 'film');
 const MANIFEST = path.join(KOK, 'medya-manifest.json');
 const DAMGA = path.join(KOK, '.medya-kurulum.json');
+const UZAK_KAYIT = path.join(KOK, 'uzak-yokla.json');
 const ANA_AGAC = 'C:\\projeler2\\qanatone\\yeni\\public\\varlik\\film';
 const PARALEL = +(process.env.MEDYA_PARALEL || 6);
 const DENEME = 3;
@@ -209,24 +210,65 @@ async function kur() {
     ` · ${M.dosya.length} toplam · ${sure.toFixed(1)} sn · damga yazildi`);
 }
 
-/* HEAD ile uzak varliklarin bayt sayisi manifestle tutuyor mu (indirme yok) */
+/* HEAD ile uzak varliklarin bayt sayisi manifestle tutuyor mu (indirme yok)
+
+   4 EYL 2026 — BU YOKLAMA ARTIK KAYIT BIRAKIYOR, sebebi pahali oduendi:
+   manifest `uzak` alani `.../releases/download/medya-v1` gosteriyordu ama
+   O RELEASE HIC OLUSTURULMAMISTI (depoda sifir release). Yerelde medya
+   diskte oldugu icin kurulum adimi kaynak sirasindan DISKI secip yesil
+   geciyordu; CI'da disk yok, uzak bos, 238/238 dosya 404 ve DEPLOY DUSTU.
+   Yoklama arac olarak VARDI ama hicbir kapiya bagli degildi — yani
+   "release gercekten duruyor mu" sorusu hic sorulmadi. Sozlu komut kapi
+   degildir: sonuc dosyaya yazilir, denetim onu okur (FM4) ve manifest
+   degisip yoklama tazelenmezse KIRMIZI yanar. */
 async function uzakYokla() {
-  const { M } = manifestOku();
+  const { M, govde } = manifestOku();
   const uzak = process.env.MEDYA_URL || M.uzak;
   if (!uzak) { console.error('manifestte uzak adres yok (--damgala --uzak <url>)'); process.exit(1); }
   const t0 = Date.now();
   const kusur = [];
+  /* YENIDEN DENEME (4 Eyl 2026): ilk halde deneme YOKTU ve 238 HEAD
+     istegi arasinda her kosumda BASKA bir dosya "fetch failed" veriyordu
+     — 2/238, sonra 1/238, hep farkli ad. Bu eksik varlik degil AG
+     DALGALANMASI; ama kural kaydi okudugu icin dalgalanma dogrudan
+     YANLIS KIRMIZIYA donusuyordu. Dalgalanan bekci bekci degildir.
+     Indirme yolunda zaten olan desen (DENEME + artan bekleme) buraya da
+     kondu. AYRIM KORUNUYOR: HTTP durum kodu (404 gibi) GERCEK kusurdur,
+     ilk denemede yazilir ve tekrarlanmaz — yalnizca AG hatasi yeniden
+     denenir. Yoksa deneme, eksik release'i gizleyen bir susturucuya
+     donerdi. */
   await havuz(M.dosya.map((d) => async () => {
-    try {
-      const r = await fetch(uzakUrl(uzak, d.ad), { method: 'HEAD', redirect: 'follow' });
-      if (!r.ok) { kusur.push(d.ad + ':HTTP ' + r.status); return; }
-      const b = +(r.headers.get('content-length') || -1);
-      if (b !== d.bayt) kusur.push(d.ad + ':bayt ' + b + ' ↔ ' + d.bayt);
-    } catch (e) { kusur.push(d.ad + ':' + (e && e.message)); }
+    let sonHata;
+    for (let n = 1; n <= DENEME; n++) {
+      try {
+        const r = await fetch(uzakUrl(uzak, d.ad), { method: 'HEAD', redirect: 'follow' });
+        if (!r.ok) { kusur.push(d.ad + ':HTTP ' + r.status); return; }   /* gercek kusur: tekrar yok */
+        const b = +(r.headers.get('content-length') || -1);
+        if (b !== d.bayt) kusur.push(d.ad + ':bayt ' + b + ' ↔ ' + d.bayt);
+        return;
+      } catch (e) {
+        sonHata = e;
+        if (n < DENEME) await new Promise((r) => setTimeout(r, 500 * n));
+      }
+    }
+    kusur.push(d.ad + ':' + (sonHata && sonHata.message) + ` (${DENEME} deneme)`);
   }), 8);
   const sn = ((Date.now() - t0) / 1000).toFixed(1);
-  if (kusur.length) { console.error(`UZAK BAYAT/EKSIK: ${kusur.length}/${M.dosya.length} · ilk: ${kusur.slice(0, 3).join(' | ')} (${sn} sn)`); process.exit(1); }
-  console.log(`uzak TAZE: ${M.dosya.length}/${M.dosya.length} varlik bayt-uyumlu · ${uzak} · ${sn} sn`);
+  fs.writeFileSync(UZAK_KAYIT, JSON.stringify({
+    _: 'kur-medya.cjs --uzak-yokla ciktisi. FM4 bunu okur: sonuc "TAZE" degilse ya da '
+     + 'manifest_sha1 tutmuyorsa denetim kirmizi yanar. Ag cagrisi CI\'da YAPILMAZ; '
+     + 'kanit burada durur, kural kaydi dogrular.',
+    sonuc: kusur.length ? 'EKSIK' : 'TAZE',
+    uzak,
+    dosya_sayisi: M.dosya.length,
+    kusurlu: kusur.length,
+    ilk_kusur: kusur.slice(0, 3),
+    saniye: +sn,
+    tarih: new Date().toISOString(),
+    manifest_sha1: sha1Buf(govde),
+  }, null, 1));
+  if (kusur.length) { console.error(`UZAK BAYAT/EKSIK: ${kusur.length}/${M.dosya.length} · ilk: ${kusur.slice(0, 3).join(' | ')} (${sn} sn) · kayit yazildi`); process.exit(1); }
+  console.log(`uzak TAZE: ${M.dosya.length}/${M.dosya.length} varlik bayt-uyumlu · ${uzak} · ${sn} sn · kayit yazildi`);
 }
 
 (process.argv.includes('--damgala') ? damgala()
