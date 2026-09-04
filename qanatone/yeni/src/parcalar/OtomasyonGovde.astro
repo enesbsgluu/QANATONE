@@ -412,20 +412,57 @@ const TELI = [0, 1, 2, 3];
     const NS = 'http://www.w3.org/2000/svg';
     const yaz = (svg: SVGSVGElement, dler: string[]) =>
       svg.querySelectorAll('path').forEach((p, i) => p.setAttribute('d', dler[i % dler.length] || ''));
+    /* YERLESIM KUTUSU (4 Eyl 2026) — gBCR DEGIL offsetParent zinciri.
+       gBCR DONUSUMLU kutuyu verir; `.ajan-kart` beliriste
+       `transform:scale(.9 -> 1)` tasiyor (bu dosyanin kendi CSS'i), yani
+       blok kadraj disindayken kartin gBCR'i %10 kucuk ve uclar oraya
+       cizilir. Sonuc: ilk cizim yanlis, sonra hicbir sey duzeltmez —
+       cunku YERLESIM degismedigi icin ResizeObserver da atesle(n)mez
+       (olculdu: akis3'e gore svg/kart/dugum kutulari iki anda birebir
+       ayni). offsetLeft/offsetTop ZINCIRI donusumu gormez; olcum boylece
+       hem zamandan hem donusumden bagimsiz olur. MotorSahne'nin kablo
+       hattindaki ders, ayni sebeple. */
+    const belge = (el: HTMLElement) => {
+      let x = 0, y = 0, n: any = el;
+      while (n) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    };
+    const kutu = (el: HTMLElement, ar: DOMRect, ab: { x: number, y: number }) => {
+      const b = belge(el);
+      const left = ar.left + (b.x - ab.x), top = ar.top + (b.y - ab.y);
+      return { left, top, width: b.w, height: b.h, right: left + b.w, bottom: top + b.h };
+    };
     const ciz = () => {
-      const kr = kartEl.getBoundingClientRect();
+      const ar = akis.getBoundingClientRect();
+      const ab = belge(akis);
+      const kr = kutu(kartEl, ar, ab);
       if (!kr.width) return;
       akis.querySelectorAll<SVGSVGElement>('svg.sus-tel').forEach(svg => {
         const sr = svg.getBoundingClientRect();
         if (!sr.width || !sr.height) return;
         const sol = svg.classList.contains('sol');
-        const Y = (v: number) => ((v - sr.top) / sr.height * 400).toFixed(1);
+        const Y = (v: number) => (v - sr.top) / sr.height * 400;
+        /* X DE OLCULUYOR (4 Eyl 2026 — Enes: "akiskan cizgilerin baslangic
+           ve bitis noktalari bloklara baglanmiyor").
+           ONCEKI HAL: Y olculuyordu ama X SVG KUTUSUNUN KENDI KENARLARIYDI
+           (`M0,...` ve `...100,ky`). Kenar, dugumun sag kenari ya da kartin
+           sol kenari degil; aradaki fark dogrudan BOSLUK olarak goruluyordu.
+           OLCULDU (1440 px, 8 telin hepsinde ayni): bas dugumden 11,7 px,
+           uc kartin kenarindan 6,0 px eksik — gurultu degil sistematik kayma.
+           Artik uclar gercek kenarlardan aliniyor; svg overflow:visible
+           oldugu icin 0..100 disina tasan degerler de cizilir. */
+        const X = (v: number) => (v - sr.left) / sr.width * 100;
         const ky = Y(kr.top + kr.height * (sol ? .42 : .58));
-        yaz(svg, [...kollar[sol ? 0 : 1].querySelectorAll('.adugum')].map(n => {
-          const q = n.getBoundingClientRect();
+        /* sol kol kartin SOL kenarina girer, sag kol SAG kenarindan cikar */
+        const kx = X(sol ? kr.left : kr.right);
+        yaz(svg, [...kollar[sol ? 0 : 1].querySelectorAll<HTMLElement>('.adugum')].map(n => {
+          const q = kutu(n, ar, ab);
           const ny = Y(q.top + q.height / 2);
-          return sol ? `M0,${ny} C50,${ny} 50,${ky} 100,${ky}`
-            : `M0,${ky} C50,${ky} 50,${ny} 100,${ny}`;
+          const nx = X(sol ? q.right : q.left);
+          const mx = ((nx + kx) / 2).toFixed(1);
+          return sol
+            ? `M${nx.toFixed(1)},${ny.toFixed(1)} C${mx},${ny.toFixed(1)} ${mx},${ky.toFixed(1)} ${kx.toFixed(1)},${ky.toFixed(1)}`
+            : `M${kx.toFixed(1)},${ky.toFixed(1)} C${mx},${ky.toFixed(1)} ${mx},${ny.toFixed(1)} ${nx.toFixed(1)},${ny.toFixed(1)}`;
         }));
       });
       akis.querySelectorAll<SVGSVGElement>('svg.sus-tel-m').forEach(svg => {
@@ -433,7 +470,7 @@ const TELI = [0, 1, 2, 3];
         if (!sr.width || !sr.height) return;
         const sol = svg.classList.contains('sol');
         const kol = kollar[sol ? 0 : 1] as HTMLElement;
-        const kolR = kol.getBoundingClientRect();
+        const kolR = kutu(kol, ar, ab);
         const dugum = kol.querySelectorAll('.adugum').length || 1;
         const X = 400 / sr.width, Yv = 72 / sr.height;
         const sp = Math.min(34, sr.width * .08) * X;
@@ -464,6 +501,32 @@ const TELI = [0, 1, 2, 3];
     addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
     document.fonts?.ready?.then(ciz);
     ciz();
+    /* YENIDEN CIZIM TETIGI EKSIKTI (4 Eyl 2026 — Enes: "baslangic ve bitis
+       noktalari bloklara baglanmiyor").
+       OLCULDU: sayfa yuklendigi gibi her telin basi dugumun sag kenarindan
+       dx -6,6 px / dy +10 px kayikti — sekiz telde de AYNI, yani gurultu
+       degil sistematik. Ayni sayfada `ciz()` bir kez daha kosturulunca
+       sapma TAM 0,0'a dustu. Yani hata olcumun YONTEMINDE degil ZAMANINDA:
+       kurulum anindaki kutular sonradan degisiyor (blok kadraja girerken
+       yerlesim oturuyor) ve eski tetikler — kurulum + resize + fonts.ready —
+       bunu hic gormuyordu; KAYDIRMA RESIZE DOGURMAZ.
+       CARE kaydirmada olcum DEGIL (doktrin: kaydirmada olcum yok):
+       ResizeObserver kutunun kendisi degistiginde bir kez yeniden cizer —
+       MotorSahne'nin kablo hattindaki desenin aynisi. */
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(ciz, 60); });
+      ro.observe(akis);
+      if (kartEl) ro.observe(kartEl);
+      akis.querySelectorAll('.akol').forEach((k) => ro.observe(k));
+    }
+    /* ...ve YUKLEME BITINCE bir kez daha. ResizeObserver tek basina YETMEDI,
+       sebebi olculdu: kutular kurulumdan sonra DEGISMIYOR (akis3'e gore
+       svg/kart/dugum kutulari iki anda birebir ayni cikti), yani RO'nun
+       ateslemesi icin bir sebep yok. Ilk `ciz()` yerlesim son halini
+       almadan kosuyor ve sonuc bir daha duzeltilmiyordu; `fonts.ready` de
+       yetmedi (ikonlar/alt kaynaklar sonra yerlesiyor). `load` + iki kare
+       bekleme, kaydirmadan bagimsiz ve tek seferlik bir duzeltme noktasi. */
+    addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(ciz)));
   }
 </script>
 
