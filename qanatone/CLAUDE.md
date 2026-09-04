@@ -201,6 +201,17 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 
 ## Tuzaklar — hepsi yaşandı
 
+- **METİN DOSYASININ HAM BAYT HASH'İ PLATFORMA BAĞLIDIR.** `core.autocrlf=true`:
+  Windows çalışma ağacı CRLF, depo ve Linux CI LF. Aynı dosya iki farklı sha1
+  verir. R19 nav logosu künyesi Windows değerini kaydetmişti → **yerelde 68/0,
+  CI'da `kunye-kaynaga-uymuyor`, deploy düştü** (4 Eyl 2026). `amblem.json`
+  CRLF'te 24.970 B / `09bc2f…`, LF'te 24.506 B / `cd1e52…`.
+  **Kural: metin dosyası hash'lenecekse `\r` ayıklanır; ikili dosya (webp,
+  avif, mp4, png) ham bayt kalır — git onlara dokunmaz.** Hash'i ÜRETEN ve
+  DENETLEYEN taraf aynı normalizasyonu kullanmalı, yoksa fark yine yalnız
+  CI'da görünür. Bu depoda üçüncü tekrar: `kur-medya.cjs` ve MEDYA kapısı
+  aynı tuzağa karşı zaten `\r` ayıklıyordu, R19 o muameleyi görmemişti.
+
 - rAF döngüsü içinde düzen okuma (getBoundingClientRect, offsetWidth,
   getComputedStyle, scrollTop) sayfayı kilitler → ölçümü döngü DIŞINDA al,
   önbellekle.
