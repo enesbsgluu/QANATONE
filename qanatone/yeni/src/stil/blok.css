@@ -122,8 +122,12 @@
   align-items:center;gap:0;padding:clamp(22px,2.8vw,44px) clamp(18px,2.4vw,36px)}
 .sus-tpleft{grid-column:1;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center}
 .sus-tpmid{grid-column:2;position:relative;align-self:stretch;min-height:120px}
-.sus-tpmid::before{content:'';position:absolute;left:-5px;top:50%;width:9px;height:9px;border-radius:50%;
-  background:var(--red);transform:translateY(-50%)}
+/* kirmizi nokta = tellerin cikis noktasi. Konum JS'te OLCULUR (klasorun sag
+   ortasi, TeslimatBlok telKur) ve --tphx/--tphy ile gelir; JS yoksa eski
+   kaba yer (sol kenar, %50) gecerli kalir — ilerleyici gelisme. */
+.sus-tpmid::before{content:'';position:absolute;left:var(--tphx,-5px);top:var(--tphy,50%);
+  width:9px;height:9px;border-radius:50%;
+  background:var(--red);transform:translate(-50%,-50%)}
 .tpcards{grid-column:3;position:relative;z-index:2;display:flex;flex-direction:column;gap:clamp(8px,1vw,13px)}
 /* piksel perdesi: kaynak .tppx (kadraja girince silinen izgara) */
 .sus-tppx{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;

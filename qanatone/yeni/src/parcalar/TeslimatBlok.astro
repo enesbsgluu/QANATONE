@@ -4,9 +4,32 @@
    teller + numarali kartlar + dosya cipleri / tpdetail / tpend), yalniz
    det.deliver tasiyan hizmet (finans). Referans thefounderos
    "encoded-company/". Cipe dokun/uzerine gel -> ayrinti seridi (kaynak
-   7754-7770). Teller sabit viewBox + pathLength=1: kaynagin telHizala
-   olcumu (offsetParent zinciri, resize) TASINMADI — non-scaling-stroke
-   ile olcum gerekmiyor. Beliris kaydirmayla (blok.css view() scrub). */
+   7754-7770). Beliris kaydirmayla (blok.css view() scrub).
+
+   TELLER OLCULUYOR (4 Eyl 2026 — Enes bildirdi: "cizgiler kesik kesik,
+   birlesme yok; kirmizi nokta klasorun sag ortasindan cikmali, oklar o
+   noktadan kutulara dagilmali").
+   ONCEKI HAL VE NEDEN YANLISTI: teller sabit `viewBox="0 0 100 100"`
+   icinde NORMALIZE koordinatla ciziliyordu — `M0,50 C46,50 54,y 100,y`,
+   y = (100/n)*(i+0,5). Yani uclar ESIT ARALIKLI KESIRLERDI. Iki sebeple
+   hicbir seye oturmuyorlardi:
+     (a) kartlar degisken yukseklikli bir flex sutun (baslik + degisen
+         sayida cip); merkezleri esit araliklarda DEGIL.
+     (b) `.sus-tpmid` align-self:stretch ile satirin tamamini kapliyor,
+         `.tpcards` ise align-items:center ile ortalaniyor — telin
+         koordinat uzayi kartlarin uzayi degil. Uc noktalar kartlarin
+         `::before` noktalarindan kayiyor, cizgi "birlesmemis" gorunuyor.
+   Dosyanin eski kunyesi "non-scaling-stroke ile olcum gerekmiyor" diyordu;
+   o yargi YANLISTI: non-scaling-stroke KALINLIGI cihaz uzayinda sabitler,
+   UC KONUMUNU hizalamaz. Kaynagin `telHizala` olcumu bu yuzden vardi.
+
+   OLCUM offsetLeft/offsetTop ZINCIRIYLE, gBCR ILE DEGIL — MotorSahne'nin
+   kablo hattinda odenmis ders: kartlar belirirken `translateX(10px)`
+   tasiyor (blok.css .sus-tpcard) ve gBCR o kaymayi uclara yazardi.
+   viewBox piksel biriminde: tek birim, zoom hepsini birlikte olcekler.
+   Kaydirmada olcum YOK — kurulum + resize + fonts.ready + ResizeObserver.
+   Sunucudan gelen kaba yollar JS'siz halde durur (ilerleyici gelisme);
+   JS varsa olculmus yollarla degistirilir. */
 import '../stil/blok.css';
 import { T, suz } from '../icerik';
 interface Props { deliver: any; dil?: 'tr' | 'en' }
@@ -75,4 +98,55 @@ const ilk = (K[0] && K[0].files && K[0].files[0]) || { n: '', d: '' };
   };
   for (const t of ['click', 'mouseover', 'focusin'])
     document.addEventListener(t, (e) => { const b = (e.target as Element).closest && (e.target as Element).closest('.tpchip') as HTMLElement | null; if (b) goster(b); });
+
+  /* ---- TEL HIZALAMA (4 Eyl 2026) ----
+     Kirmizi nokta klasorun SAG ORTASINDA; teller oradan her kartin sol
+     kenarindaki noktaya. Olcum offsetParent zinciriyle (yukaridaki kunye:
+     kartlar belirirken translateX tasiyor, gBCR uclari kaydirirdi). */
+  const konum = (el: HTMLElement, kok: HTMLElement) => {
+    let x = 0, y = 0, n: any = el;
+    while (n && n !== kok) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+    return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+  };
+  const telKur = () => {
+    for (const fan of document.querySelectorAll<HTMLElement>('.tpfan')) {
+      const mid = fan.querySelector<HTMLElement>('.sus-tpmid');
+      const svg = fan.querySelector<SVGSVGElement>('.tpwires');
+      const klasor = fan.querySelector<HTMLElement>('.tpfolder');
+      const kartlar = [...fan.querySelectorAll<HTMLElement>('.sus-tpcard')];
+      if (!mid || !svg || !klasor || !kartlar.length) continue;
+      /* dar ekranda orta sutun display:none — olculecek sey yok */
+      const W = mid.offsetWidth, H = mid.offsetHeight;
+      if (W < 8 || H < 8) continue;
+
+      const m = konum(mid, fan);
+      const k = konum(klasor, fan);
+      /* KLASORUN SAG ORTASI, orta sutunun koordinatlarinda. x negatif:
+         klasor sol sutunda, .tpwires overflow:visible ile disari cizer. */
+      const hx = (k.x + k.w) - m.x, hy = (k.y + k.h / 2) - m.y;
+
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      let ic = '';
+      for (const kart of kartlar) {
+        const c = konum(kart, fan);
+        /* kartin sol kenarindaki nokta (.sus-tpcard::before, left:-4.5px,
+           8px capinda -> merkezi kenardan ~0,5px disarida) */
+        const ex = (c.x - 0.5) - m.x, ey = (c.y + c.h / 2) - m.y;
+        const kv = Math.max(12, Math.abs(ex - hx) * 0.45);
+        ic += `<path pathLength="1" d="M${hx.toFixed(1)},${hy.toFixed(1)} `
+          + `C${(hx + kv).toFixed(1)},${hy.toFixed(1)} ${(ex - kv).toFixed(1)},${ey.toFixed(1)} `
+          + `${ex.toFixed(1)},${ey.toFixed(1)}"/>`;
+      }
+      svg.innerHTML = ic;
+      /* kirmizi nokta da olculen yere: CSS `top:var(--tphy,50%)` okur */
+      mid.style.setProperty('--tphy', hy.toFixed(1) + 'px');
+      mid.style.setProperty('--tphx', hx.toFixed(1) + 'px');
+    }
+  };
+  telKur();
+  addEventListener('resize', (() => { let z: any; return () => { clearTimeout(z); z = setTimeout(telKur, 180); }; })());
+  if ('ResizeObserver' in window)
+    for (const fan of document.querySelectorAll('.tpfan')) new ResizeObserver(telKur).observe(fan);
+  (document as any).fonts?.ready?.then?.(telKur);
 </script>
