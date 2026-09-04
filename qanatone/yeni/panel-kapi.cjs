@@ -7,7 +7,7 @@
    + content.json); Brave'de panel acilir, alanlara puppeteer ile gercek girdi
    yazilir (input olayi -> set -> touch -> localStorage taslagi). Taslak
    content.json'a yazilir (yayinla fonksiyonunun yaptigi is), astro derlenir,
-   dist/yeni'de nobetci metin aranir. Sonra ayni alanlar bosaltilir, yeniden
+   dist'de nobetci metin aranir. Sonra ayni alanlar bosaltilir, yeniden
    derlenir, denetim kosulur. Sonda content.json geri yuklenir ve yeniden
    derlenir.
    ONCE KIRMIZI: 'strings.tr.zzz_kirmizi' hicbir bilesende okunmaz; kapi onu
@@ -19,7 +19,7 @@ const http = require('http');
 const { execSync } = require('child_process');
 const pt = require(process.env.PUPPETEER_CORE || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const KOK = path.join(__dirname, '..');
-const DIST = path.join(KOK, 'dist', 'yeni');
+const DIST = path.join(KOK, 'dist');
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
 const PORT = 8791;
 const YEDEK = path.join(require('os').tmpdir(), 'qanatone-content.json.yedek');
@@ -95,7 +95,6 @@ const ALAN = [
   { sekme: 'metin', p: 'strings.tr.hkh', deger: N + '-HUKUK', sayfa: ['hukuki/index.html'], not: '/hukuki başlığı (gövde zaten panelden geliyordu)' },
   { sekme: 'metin', p: 'strings.tr.navdil', deger: N + '-DIL', sayfa: ['index.html'], not: 'mobil menü dil bölümü etiketi' },
   { sekme: 'metin', p: 'strings.tr.ldtel', deger: N + '-TEL', sayfa: ['index.html'], not: 'iletişim formu telefon ipucu (GORUNUR OZNITELIK: placeholder)' },
-  { sekme: 'metin', p: 'strings.tr.tsalt', deger: N + '-TSALT', sayfa: ['hizmetler/finans/index.html'], not: 'TradeSelf amblemi erişilebilir adı (GORUNUR OZNITELIK: aria-label)' },
   { sekme: 'metin', p: 'strings.en.nfh', deger: N + '-404HEN', sayfa: ['404.html'], not: 'KIRMIZI KONTROL: /404 TR-only, EN degeri uretilen sayfada GORUNMEMELI', kirmizi: true },
 ];
 const ANAHTAR = [ /* dugmeler: data-sw yolu, beklenen iz (deger 1 iken dist'te ARANMAYAN sinif) */

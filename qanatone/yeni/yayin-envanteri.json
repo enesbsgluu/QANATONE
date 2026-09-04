@@ -1,6 +1,6 @@
 {
  "_": "yeni/yayin-envanteri.cjs — yayin hattinin BAGLI OLDUGU her sey tek yerde: backend fonksiyonlari, ortam degiskenleri, dis servisler, panel zinciri, kesme oncesi dolu olmasi gereken alanlar. Ortam degiskeni DEGERLERI depoda durmaz ve durmamali; burada ADLARI listelenir.",
- "olcum": "2026-09-04T00:52:34.038Z",
+ "olcum": "2026-09-04T11:03:44.317Z",
  "fonksiyon": [
   {
    "dosya": "diagnose.js",
@@ -171,19 +171,14 @@
    "var": true
   },
   {
-   "dosya": "_headers",
+   "dosya": "yeni/public/_headers",
    "sart": true,
    "var": true
   },
   {
-   "dosya": "_redirects",
-   "sart": false,
-   "var": false
-  },
-  {
    "dosya": "yeni/public/_redirects",
-   "sart": false,
-   "not": "kesme adimi 4te dogar",
+   "sart": true,
+   "not": "kesme adimi 4te dogdu — 59 eski adresin tasiyicisi",
    "var": true
   },
   {
@@ -227,7 +222,7 @@
   },
   {
    "alan": "settings.email",
-   "dolu": false
+   "dolu": true
   },
   {
    "alan": "legal.line",
@@ -246,8 +241,6 @@
    "dolu": true
   }
  ],
- "kesme_oncesi_bos": [
-  "settings.email"
- ],
+ "kesme_oncesi_bos": [],
  "kusur": []
 }

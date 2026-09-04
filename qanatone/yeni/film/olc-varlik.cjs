@@ -3,7 +3,7 @@
    Kapi: satir ici oran once/sonra sayfa sayfa · ikinci sayfa ziyaretinde
    inen bayt once/sonra · LCP once/sonra (ana + bir hizmet sayfasi) ·
    gzip HTML.
-   1) STATIK: dist/yeni her sayfa — HTML bayt, satir ici <style> ve
+   1) STATIK: dist her sayfa — HTML bayt, satir ici <style> ve
       <script> bayti, oran; gzip HTML; dis CSS/JS dosyalari ve boyutlari.
    2) IKINCI SAYFA: ayni sekmede A -> B gezinmesi; B icin agdan inen bayt
       (CDP Network: encodedDataLength, onbellekten gelenler 0) — uc cift.
@@ -18,7 +18,7 @@ const zlib = require('zlib');
 const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-varlik.json');
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));

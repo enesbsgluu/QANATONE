@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const KOK = path.join(__dirname, '..', 'dist', 'yeni');
+const KOK = path.join(__dirname, '..', 'dist');
 let gecti = 0, kaldi = 0;
 /* ERKEN CIKIS BEKCISI (TUR 9, 3 Eyl 2026). Bu dosya CommonJS: modul
    seviyesinde `return` gecerlidir ve dosyayi sessizce bitirir — FM1'in
@@ -29,7 +29,7 @@ const ol = (ad, ok, not) => {
 };
 
 if (!fs.existsSync(KOK)) {
-  console.log('dist/yeni yok — önce astro build.');
+  console.log('dist yok — önce astro build.');
   process.exit(1);
 }
 
@@ -44,6 +44,35 @@ const tumSayfalar = [];
 })(KOK);
 const oku = p => fs.readFileSync(p, 'utf8');
 const rel = p => path.relative(KOK, p).replace(/\\/g, '/');
+
+/* ---- BIRINCIL KONAK · TEK KAYNAK (4 Eyl 2026) ----
+   www kararinda (6 Eyl, Enes) kaynak agacindaki 14 elle yazilmis konak
+   `src/icerik.ts`'teki tek `KOK`a baglandi — ama DENETLEYICININ KENDISI
+   supurulmedi: burada apex alti yerde sabit yaziliydi (R6 faq kimligi,
+   R8 sitemap+rss, S2 #org govdesi). Yani denetim, uretimin ARTIK
+   basmadigi bir adresi bekliyordu. Bu sinifin en sinsi hali: kural
+   dogru seyi olcuyor gorunur, olcutu bayattir.
+   Konak ARTIK TURETILIR, yazilmaz. Kaynak `src/icerik.ts` — sayfalarin,
+   sema.mjs'in ve robots.txt'in okudugu ayni satir. Node .ts calistiramaz
+   (yerel 24 / Netlify 22 farki ayri bir ders), o yuzden metin okunur;
+   satir bicimi degisirse desen tutmaz ve ASAGIDAKI KAPI yanar — sessiz
+   sapma yerine gurultulu kirmizi.
+   Ikinci bir kaynak da var: astro.config.mjs `site` (canonical/sitemap
+   Astro tarafinda ORADAN uretilir). Ikisi ayrisirsa cikti kendi icinde
+   celisir; K3 bunu tutar. */
+const KONAK = (() => {
+  const y = path.join(__dirname, 'src', 'icerik.ts');
+  const m = fs.existsSync(y) && oku(y).match(/export\s+const\s+KOK\s*=\s*['"]([^'"]+)['"]/);
+  return m ? m[1].replace(/\/+$/, '') : null;
+})();
+/* desen icine gomulecek hali — konak nokta tasir, kacirilmazsa `.`
+   herhangi bir karakter olur ve kural gevser (qanatoneXcom da gecerdi) */
+const KONAK_RE = KONAK ? KONAK.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
+const ASTRO_KONAK = (() => {
+  const y = path.join(__dirname, 'astro.config.mjs');
+  const m = fs.existsSync(y) && oku(y).match(/^\s*site:\s*['"]([^'"]+)['"]/m);
+  return m ? m[1].replace(/\/+$/, '') : null;
+})();
 
 /* ---- MEDYA KURULUM KAPISI (GECE TUR 2c, 1-2 Eyl 2026) ----
    Film medyasi (~680 MB) bilincli git disi; onu getiren KURULUM ADIMI
@@ -117,6 +146,22 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      eksik.length === 0 && fazla.length === 0,
      (eksik.length ? 'eksik:' + eksik.slice(0, 3).join(',') + ' ' : '') + (fazla.length ? 'fazla:' + fazla.slice(0, 3).join(',') : '')
        || `${gercek.size} sayfa`);
+}
+
+/* K3 · BIRINCIL KONAK TEK KAYNAK (4 Eyl 2026). Iki uretec var ve ikisi de
+   adresi kendi kaynagindan okur: sayfa/sema/robots tarafi `src/icerik.ts`
+   KOK'unu, canonical+sitemap tarafi Astro'nun `site`ini. Ayrisirlarsa
+   cikti kendi icinde celisir (canonical www, JSON-LD apex gibi) ve
+   hicbir sayfa kurali bunu tek basina goremez. Dosya basindaki KONAK
+   turetimi de buraya dayanir: asagidaki butun konak kiyaslari bu tek
+   degeri kullanir, apex/www artik denetleyicide SABIT YAZILI DEGIL. */
+{
+  const kusur = [];
+  if (!KONAK) kusur.push('icerik.ts-KOK-okunamadi');
+  if (!ASTRO_KONAK) kusur.push('astro.config-site-okunamadi');
+  if (KONAK && ASTRO_KONAK && KONAK !== ASTRO_KONAK) kusur.push(KONAK + ' != ' + ASTRO_KONAK);
+  ol('K3 · birincil konak TEK KAYNAK: icerik.ts KOK = astro.config site',
+     kusur.length === 0, kusur.join(' ') || KONAK);
 }
 
 /* F1 · yazı tipi zinciri: üçüncü parti font sunucusu SIFIR; engelleyici
@@ -244,7 +289,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     let toplam = 0;
     const h = oku(p);
     for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) {
-      const dosya = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      const dosya = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, ''));
       if (fs.existsSync(dosya)) toplam += fs.statSync(dosya).size;
       else kusur.push(rel(p) + ':kayıp-js:' + m[1]);
     }
@@ -285,7 +330,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   if (fs.existsSync(ana)) {
     let css = [...oku(ana).matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
     for (const m of oku(ana).matchAll(/<link rel="stylesheet" href="([^"]+)"/g)) {
-      const d = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      const d = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, ''));
       if (fs.existsSync(d)) css += '\n' + fs.readFileSync(d, 'utf8');
     }
     for (const m of css.matchAll(/unicode-range:([^;}]+)/g))
@@ -397,6 +442,153 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
+/* G3 · PAYLASIM KARTI (4 Eyl 2026, kesme oncesi son is — Enes: "bu push'tan
+   ONCE girecek"). G-ailesinin (gorsel hatti) uyesi, ama S1'in yaninda
+   duruyor cunku okudugu sey BAS ETIKETLERI.
+
+   NEYI TUTAR — dordu de sessizce bozulabilir:
+     (a) VARLIK: her sayfada og:image VAR. Yoksa paylasimda kart cikmaz,
+         hicbir yerde hata gorunmez; kimse fark etmez.
+     (b) TAM ADRES: goreli yol KIRMIZI. og:image'i sayfa baglaminda
+         cozmek kazicilarin garantisi degil, davranisi — Facebook coger,
+         baskasi cozmez. Ayrica konak BIZIM konagimiz olmali (K3'un tek
+         kaynagi): apex/www ayrismasi tam buradan sizardi.
+     (c) DIL: panel bosken TR sayfa og-tr, EN sayfa og-en gostermeli.
+         Kartlarin uzerinde METIN var; yanlis dil sessiz bir hatadir —
+         sayfa dogru, onizleme yanlis dilde.
+     (d) ETIKET YALAN SOYLEMESIN: og:image:type UZANTIYLA uyusmali ve
+         olcu etiketi basiliyorsa dosyanin GERCEK olcusu olmali. Bu yuzden
+         kart dosyalari ciktida ACILIP olculur — "1200x630 yaziyor" ile
+         "1200x630" ayri iki sey.
+
+   PANEL USTUNLUGU BILINCLI: `settings.og` doluysa dil dali DUSER (tek
+   alan, dil basina alan yok) ve olcu etiketleri hic basilmaz — bilmedigimiz
+   bir gorselin olcusunu iddia etmeyiz. Bos alan sayfayi BOZMAZ; bu davranis
+   kuralin kendisi tarafindan da korunuyor (asagidaki `panelli` dali).
+
+   KAPSAM `sayfalar`: prototipler P1 muafiyetinde (S1 ile ayni sinir).
+
+   KART ADLARI BURADA BILEREK ELLE YAZILI. `icerik.ts`'teki `OG_KART` tek
+   kaynak URETIM icin — Temel.astro ile sema.mjs oradan okur ki ayrismasinlar.
+   Denetim onu ITHAL ETMEZ: ayni sabiti okuyan bir kural, sabitin kendisi
+   yanlis degistiginde sessizce onaylar (kural ile uretec ayni yanilgiyi
+   paylasir). Buradaki liste BAGIMSIZ BEYANDIR — sozlesme "og-tr.jpg /
+   og-en.jpg, 1200x630". Uretimde ad degisirse bu kural KIRMIZI yanar ve
+   yanmasi DOGRUDUR: sozlesme degisiyorsa iki tarafta da bilerek degisir.
+
+   KIRMIZI-ONCE: yedi kol dist'e enjeksiyonla yakildi (etiketi sil · tam
+   adresi goreliye cevir · TR sayfaya EN kartini yaz · olcuyu yalanla ·
+   twitter:image'i sil · tipi celistir · olu og.png'yi geri getir), her
+   biri sonrasi dosya bayt-birebir geri yazildi. Sema kolu ENJEKSIYONSUZ
+   kanitlandi: kural yazildiginda uretimde DURAN kusuru (12 bulten sayfasi)
+   gercekten yakti. */
+{
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const panelOg = String(((c.settings || {}).og) || '').trim();
+  const panelli = panelOg !== '';
+  const KART = { tr: '/og-tr.jpg', en: '/og-en.jpg' };
+  const kusur = [];
+  const bilgi = new Set();
+
+  /* --- kart dosyalari ciktida ve GERCEKTEN 1200x630 mi --- */
+  const jpegOlc = (dosya) => {
+    const b = fs.readFileSync(dosya);
+    if (b.readUInt16BE(0) !== 0xffd8) return null;
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const im = b[i + 1];
+      /* SOF0..SOF15; DHT(C4)/JPG(C8)/DAC(CC) olcu tasimaz */
+      if (im >= 0xc0 && im <= 0xcf && im !== 0xc4 && im !== 0xc8 && im !== 0xcc)
+        return { y: b.readUInt16BE(i + 5), g: b.readUInt16BE(i + 7) };
+      if (im === 0xd8 || (im >= 0xd0 && im <= 0xd9)) { i += 2; continue; }
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+    return null;
+  };
+  for (const yol of Object.values(KART)) {
+    const d = path.join(KOK, yol.replace(/^\//, ''));
+    if (!fs.existsSync(d)) { kusur.push('kart-ciktida-yok:' + yol); continue; }
+    const o = jpegOlc(d);
+    if (!o) kusur.push('kart-jpeg-degil:' + yol);
+    else if (o.g !== 1200 || o.y !== 630) kusur.push('kart-olcu:' + yol + '=' + o.g + 'x' + o.y);
+  }
+
+  for (const p of sayfalar) {
+    const h = oku(p), r = rel(p);
+    const en2 = /^en\//.test(r);
+    const og = (h.match(/<meta property="og:image" content="([^"]*)"/) || [, ''])[1];
+    if (!og) { kusur.push(r + ':og-yok'); continue; }
+    if (!/^https?:\/\//i.test(og)) { kusur.push(r + ':og-goreli:' + og); continue; }
+    /* KONAK VE DIL SARTI YALNIZ GERI DUSUSTE (4 Eyl 2026 · panel dali
+       OLCULDU, kural burada DUZELDI). Ilk yazimda konak sarti panelli
+       hale de uygulaniyordu ve olcum bunu yakaladi: panele mesru bir CDN
+       adresi (`https://cdn.../kart.png`) konunca G3 65 sayfada birden
+       kirmizi yanip DEPLOY'U DUSURUYORDU. Bu, bu depoda bir kez bedeli
+       odenmis hata: "panelden yayinlamak deploy dusuruyordu" — panel
+       eylemi iceriktir, yayin hattini kilitlemez. Panelli halde kural
+       yalnizca BICIME bakar (tam adres · tip durustlugu · olcu iddiasi
+       yok); konak ve dil kendi kartlarimizin sarti. */
+    if (!panelli) {
+      if (KONAK && og.indexOf(KONAK + '/') !== 0) kusur.push(r + ':og-yabanci-konak:' + og);
+      if (og !== KONAK + KART[en2 ? 'en' : 'tr']) kusur.push(r + ':og-yanlis-dil:' + og.replace(KONAK, ''));
+    } else if (KONAK && og.indexOf(KONAK + '/') === 0) {
+      /* Panel KENDI konagimizi gosteriyorsa dosyanin ciktida olup
+         olmadigini KANITLAYABILIRIZ — ama yine kirmizi yakmiyoruz
+         (yukaridaki gerekce). BILGI olarak basilir: CI kutugunde
+         gorunur, operator sessiz kalmaz, yayin durmaz. */
+      if (!fs.existsSync(path.join(KOK, og.slice(KONAK.length).replace(/^\//, '').split(/[?#]/)[0])))
+        bilgi.add('panel-og-ciktida-yok:' + og.slice(KONAK.length));
+    }
+
+    const tw = (h.match(/<meta name="twitter:image" content="([^"]*)"/) || [, ''])[1];
+    if (!tw) kusur.push(r + ':twitter-image-yok');
+    else if (tw !== og) kusur.push(r + ':twitter-og-ayrismis');
+
+    /* tip etiketi uzantiyla uyusuyor mu (panel PNG koyarsa da) */
+    const uz = (og.match(/\.(jpe?g|png|webp|gif)(?:[?#]|$)/i) || [])[1];
+    const tip = (h.match(/<meta property="og:image:type" content="([^"]*)"/) || [, ''])[1];
+    if (uz) {
+      const bek = 'image/' + uz.toLowerCase().replace('jpg', 'jpeg');
+      if (tip !== bek) kusur.push(r + ':og-tip:' + (tip || 'yok') + '!=' + bek);
+    } else if (tip) kusur.push(r + ':og-tip-uydurulmus:' + tip);
+
+    /* olcu etiketi: panel bosken ZORUNLU ve 1200x630; panelliyken YASAK */
+    const gen = (h.match(/<meta property="og:image:width" content="([^"]*)"/) || [, ''])[1];
+    const yuk = (h.match(/<meta property="og:image:height" content="([^"]*)"/) || [, ''])[1];
+    if (panelli) {
+      if (gen || yuk) kusur.push(r + ':panelde-olcu-iddiasi');
+    } else if (gen !== '1200' || yuk !== '630') kusur.push(r + ':og-olcu:' + (gen || 'yok') + 'x' + (yuk || 'yok'));
+
+    /* SEMA GORSELLERI DE SAYILIR (4 Eyl 2026 — kural BU TURDA genisledi).
+       Meta etiketleri duzeltilirken `sema.mjs`'teki IKINCI geri dusus
+       gozden kacmisti: yazi semasi `yazi.image` boskan `/og.png`e
+       dusuyordu ve alti bulten yazisi (x2 dil) JSON-LD'de 404 veren bir
+       adresi ILAN EDIYORDU. G3'un ilk hali bunu goremezdi cunku yalniz
+       <meta>'ya bakiyordu — yani kural dogru seyi olcuyor gorunup
+       yarim kapsam tutuyordu.
+       Simdi JSON-LD bloklarindaki KENDI KONAGIMIZA ait her gorsel
+       adresi (image · logo · ImageObject.url — hepsi ayni desene duser)
+       ciktida ARANIR. Yabanci konak dogrulanamaz, dokunulmaz. */
+    const ldHam = [...h.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((x) => x[1]).join('\n');
+    for (const mi of ldHam.matchAll(/"(https?:\/\/[^"]+\.(?:jpe?g|png|webp|gif|svg|avif))"/gi)) {
+      const u = mi[1];
+      if (!KONAK || u.indexOf(KONAK + '/') !== 0) continue;
+      if (!fs.existsSync(path.join(KOK, u.slice(KONAK.length).replace(/^\//, '').split(/[?#]/)[0])))
+        kusur.push(r + ':sema-gorseli-ciktida-yok:' + u.slice(KONAK.length));
+    }
+
+    /* OLU BAGLANTI BEKCISI: `/og.png` eski KOK SITENIN dosyasiydi ve
+       build.js zincirden cikinca ciktida kalmadi. Geri gelirse 404
+       basar; ad ile yasaklaniyor ki bir daha sessizce donmesin. */
+    if (/\/og\.png/.test(og)) kusur.push(r + ':olu-og-png');
+  }
+  ol('G3 · paylaşım kartı: og:image tam adres + dile göre doğru + tip/ölçü dürüst + twitter:image',
+     kusur.length === 0,
+     [kusur.slice(0, 4).join(' ') || (panelli ? 'panel kartı (dil dalı düşük)' : sayfalar.length + ' sayfa · 1200×630 doğrulandı'),
+      bilgi.size ? '(bilgi: ' + [...bilgi].slice(0, 2).join(' ') + ')' : ''].filter(Boolean).join(' '));
+}
+
 /* N1 · göç bekçisi: kesmeye (Faz 4) kadar her sayfa noindex — canlı kök
    siteyle kopya içerik doğmaz. Faz 4'te bu kural TERSİNE çevrilir. */
 {
@@ -405,9 +597,36 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kural content="noindex" diye TAM eslesme ariyordu ve prototipe
      YANLIS KIRMIZI yakiyordu: sayfa zaten noindex'ti, kural bicimi
      okuyordu. Artik robots listesinde noindex var mi diye bakilir. */
-  const kusur = tumSayfalar.filter(p => !/name="robots"[^>]*content="[^"]*noindex/.test(oku(p)));
-  ol('N1 · göç bekçisi: her sayfa noindex (Faz 4\'te tersine döner)',
-     kusur.length === 0, kusur.slice(0, 3).map(rel).join(' '));
+  /* KESMEDE TERSINE DONDU (6 Eyl 2026, Faz 4). Eski hali "her sayfa
+     noindex"di — canli kok siteyle kopya icerik dogmasin diye. Kok site
+     ARTIK YOK, gerekce de yok; kural ters yone dondu ve IKI YONLU:
+       · indekslenmesi gereken sayfada noindex kalirsa -> KIRMIZI
+         (kesmenin en pahali sessiz hatasi: site yayinda ama gorunmez)
+       · bilerek disarida tutulan sayfada noindex DUSERSE -> KIRMIZI
+     Istisnalar ADIYLA ve GEREKCESIYLE; sessiz muafiyet yok.
+     Kaynak karsiligi: Temel.astro `indeks={false}` + `kesmeOncesi`. */
+  const NOINDEX_KALICI = {
+    '404.html': 'hata sayfasi — arama sonucunda gorunmesi anlamsiz',
+    'tesekkur/index.html': 'donusum ucu — dogrudan girilirse ziyaretciyi yaniltir',
+    'en/tesekkur/index.html': 'donusum ucu (EN)',
+    'film/index.html': 'olcum zemini — urun sayfasi degil',
+    'en/film/index.html': 'olcum zemini (EN)',
+    'deneme-react/index.html': 'olcum zemini — React adasi denemesi',
+  };
+  const kusur = [];
+  let indeksli = 0, kapali = 0;
+  for (const p2 of tumSayfalar) {
+    const r = rel(p2);
+    const noindex = /name="robots"[^>]*content="[^"]*noindex/.test(oku(p2));
+    /* prototip ayrimi TEK KAYNAK: satir 91 PROTOTIP. Kendi desenimi yazsaydim
+       prototip taniminin iki kopyasi olurdu ve sessizce ayrisirlardi. */
+    const kaliciMi = NOINDEX_KALICI[r] !== undefined || PROTOTIP.test(r);
+    if (kaliciMi) { if (!noindex) kusur.push(r + ':noindex-DUSMUS'); else kapali++; }
+    else if (noindex) kusur.push(r + ':HALA-noindex');
+    else indeksli++;
+  }
+  ol('N1 · kesme sonrası: her sayfa indekslenebilir; bilerek kapalı olanlar listede',
+     kusur.length === 0, kusur.slice(0, 3).join(' ') || indeksli + ' indekslenebilir · ' + kapali + ' bilerek kapalı');
 }
 
 /* P1 · PROTOTIP MUAFIYETININ BEDELI (31 Agu 2026, PROLOG-ISKELET 6. adim)
@@ -456,7 +675,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     for (const s of c.services) {
       if (!duz.includes(coz(D(s.title, dil)))) kusur.push(`${dil}:${s.slug}:ad`);
       if (!duz.includes(coz(D(s.text, dil)))) kusur.push(`${dil}:${s.slug}:metin`);
-      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`))
+      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`))
         kusur.push(`${dil}:${s.slug}:bağlantı`);
     }
   }
@@ -488,7 +707,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
            yakalandi). Olcum artik dil cozumunden sonra. */
         if (!duz.includes(coz(D(r.v, dil))))
           kusur.push(`${dil}:${pr.slug}:rakam(${D(r.v, dil)})`);
-      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/projeler/${pr.slug}`))
+      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/projeler/${pr.slug}`))
         kusur.push(`${dil}:${pr.slug}:bağlantı`);
     }
   }
@@ -555,7 +774,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       if (!duz.includes(coz(D(y.title, dil)))) kusur.push(`${dil}:${y.slug}:ad`);
       if (!duz.includes(coz(D(y.lede, dil)))) kusur.push(`${dil}:${y.slug}:lede`);
       if (!ham.includes(`datetime="${y.date}"`)) kusur.push(`${dil}:${y.slug}:tarih`);
-      if (!ham.includes(`/yeni${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
+      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
         kusur.push(`${dil}:${y.slug}:bağlantı`);
     }
     if (!/<form[^>]*name="bulletin"[^>]*method="POST"/i.test(ham) ||
@@ -597,7 +816,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     else {
       if ((faqDugum.mainEntity || []).length !== c.faq.length)
         kusur.push(`${dil}:mainEntity ${(faqDugum.mainEntity || []).length}/${c.faq.length}`);
-      const beklenenKimlik = `https://qanatone.com${dil === 'en' ? '/en' : ''}/sss#faq`;
+      const beklenenKimlik = `${KONAK}${dil === 'en' ? '/en' : ''}/sss#faq`;
       if (faqDugum['@id'] !== beklenenKimlik) kusur.push(dil + ':kimlik(' + faqDugum['@id'] + ')');
     }
   }
@@ -711,16 +930,30 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        canonical'inin yolu ayni olmali. Onceden yalniz canonical <-> sitemap
        kiyaslaniyordu; ikisi ayni formulden geldigi icin rota klasoru
        /hizmet/ iken canonical /hizmetler/ olsa da yesil kaliyordu
-       (MIMARI M15/A15: kesmede 18 URL 404). Dosya yolu dist/yeni'ye gore,
+       (MIMARI M15/A15: kesmede 18 URL 404). Dosya yolu dist'ye gore,
        canonical yolu KOK'a gore alinir: /yeni oneki iki tarafta da yok,
        kesmede KOK dist'e donunce formul degismeden calisir. Kirmizi-once:
        3 Eyl, klasor adi degismeden 18 sayfa (9 slug x 2 dil) kirmizi. */
     const yolKusur = [];
     for (const p of sayfalar) {
       const m = oku(p).match(/<link rel="canonical" href="([^"]+)"/);
-      if (m && m[1].startsWith('https://qanatone.com')) {
+      /* 4 EYL 2026 · SESSIZ ATLAMA KAPANDI. Bu satir bir FILTREYDI: konak
+         tutmayan sayfa `canonN`e hic girmiyordu, yani canonical'i yabanci
+         (ya da bayat) bir konaga bakan sayfa kirmizi yakmak yerine
+         KIYASTAN DUSUYORDU. www kararinda tam bu oldu — filtre apex
+         ariyordu, 65 sayfanin hicbiri kumeye girmedi ve kural "sitemap'te
+         var, sayfasi yok" diye SITEMAP'i sucladi. Artik atlanmaz: konak
+         tutmuyorsa kusur olarak ADIYLA basilir. */
+      if (!m) kusur.push(rel(p) + ':canonical-yok');
+      else if (KONAK && !m[1].startsWith(KONAK + '/') && m[1] !== KONAK) kusur.push(rel(p) + ':canonical-yabanci-konak:' + m[1]);
+      else {
         canonN.add(norm(m[1]));
-        const dosyaYolu = ('/' + path.relative(KOK, path.dirname(p)).replace(/\\/g, '/')).replace(/^\/\.$/, '/');
+        /* KESME (6 Eyl 2026): `404.html` gibi DIZIN OLMAYAN sayfalarda
+           dirname yolu '/' veriyordu ve canonical '/404' ile catisiyordu.
+           index disi dosya adinda yol DOSYADAN turetilir. */
+        const dizinYolu = ('/' + path.relative(KOK, path.dirname(p)).replace(/\\/g, '/')).replace(/^\/\.$/, '/');
+        const dosyaAdi = path.basename(p, '.html');
+        const dosyaYolu = dosyaAdi === 'index' ? dizinYolu : (dizinYolu === '/' ? '/' + dosyaAdi : dizinYolu + '/' + dosyaAdi);
         const canonYolu = norm(new URL(m[1]).pathname) || '/';
         if (norm(dosyaYolu) !== norm(canonYolu) && !(dosyaYolu === '/' && canonYolu === '/'))
           yolKusur.push(dosyaYolu + ' ↔ ' + canonYolu);
@@ -735,7 +968,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     try {
       const S8 = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
       for (const k of S8.statik) if (k.sitemap === null || k.sitemap === undefined) {
-        for (const d of (k.dil || ['tr'])) smDisi.add(norm('https://qanatone.com' + (d === 'en' ? '/en' : '') + k.yol));
+        for (const d of (k.dil || ['tr'])) smDisi.add(norm(KONAK + (d === 'en' ? '/en' : '') + k.yol));
       }
     } catch (e) { /* okunamazsa istisna yok: kural sert kalir */ }
     for (const c of canonN) if (!smN.has(c) && !smDisi.has(c)) kusur.push('sitemapte-yok:' + c);
@@ -750,7 +983,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const rss = oku(rssYol);
     const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
     for (const p of (c.posts || []))
-      if (!guidler.includes(`https://qanatone.com/bulten/${p.slug}`)) kusur.push('rss-eksik:' + p.slug);
+      if (!guidler.includes(`${KONAK}/bulten/${p.slug}`)) kusur.push('rss-eksik:' + p.slug);
     if (guidler.length !== (c.posts || []).length) kusur.push(`rss-sayi:${guidler.length}/${(c.posts || []).length}`);
     if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
   }
@@ -790,7 +1023,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const ana = path.join(KOK, 'index.html');
   const anaVar = fs.existsSync(ana);
-  ol('H0 · ana sayfa üretilmiş (/yeni/)', anaVar, anaVar ? '' : 'index.html yok');
+  ol('H0 · ana sayfa üretilmiş (kök)', anaVar, anaVar ? '' : 'index.html yok');
   if (anaVar) {
     const h = oku(ana);
     /* CSS iki yerde yaşayabilir: satır içi <style> + bağlı _astro/*.css
@@ -798,7 +1031,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        satır içine bakmak H kurallarını sessizce boşa düşürür (yaşandı). */
     let css = [...h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
     for (const m of h.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)) {
-      const dosya = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      const dosya = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, ''));
       if (fs.existsSync(dosya)) css += '\n' + fs.readFileSync(dosya, 'utf8');
     }
 
@@ -994,7 +1227,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         if (!eller.some(u => u.includes(el + '-m.avif'))) kusur.push(el + ':mobil-kaynak-yok');
       /* mobil ilk ekran: her el icin EN IYI bicim (avif) sayilir */
       for (const u of eller.filter(x => x.endsWith('.avif'))) {
-        const dosya = path.join(KOK, u.replace(/^\/yeni\//, ''));
+        const dosya = path.join(KOK, u.replace(/^\/(?:yeni\/)?/, ''));
         if (fs.existsSync(dosya)) mobilYuk += fs.statSync(dosya).size;
         else kusur.push('kayıp:' + u);
       }
@@ -1134,7 +1367,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const kusur = [];
       const betikler = [];
       for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) {
-        const dosya = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+        const dosya = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, ''));
         if (fs.existsSync(dosya)) betikler.push([m[1], fs.readFileSync(dosya, 'utf8')]);
       }
       for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
@@ -1169,27 +1402,26 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
           .concat([...g.matchAll(/<source[^>]*\bsrcset="([^"]+)"/g)]
             .map(m => m[1].split(',')[0].trim().split(/\s+/)[0]));
         for (const u of yollar) {
-          /* GECE TUR 2b ISTISNASI (gevseme degil genisleme): gomulu eski
-             giris (EskiGiris.astro) KAYNAGA BAGLI olarak kok varliklari
-             kullanir — /img/ ayni origin, birlesme talimatinin geregi.
-             Yol yine de DISKTE denetlenir (kok dist'inde). */
-          if (u.startsWith('/img/')) {
-            if (!fs.existsSync(path.join(KOK, '..', u.replace(/^\//, ''))))
-              kusur.push(rel(p2) + ':kayip-kok:' + u);
-            continue;
-          }
-          if (!u.startsWith('/yeni/')) { kusur.push(rel(p2) + ':yabanci:' + u); continue; }
-          if (!fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, '')))) {
+          /* `/img/` ISTISNASI KESMEDE DUSTU (6 Eyl 2026). Kesmeden once
+             gomulu eski giris (EskiGiris.astro) kok varliklarini
+             kullaniyordu ve onlar `dist/../img/` altindaydi — yani ESKI
+             sitenin klasoru. Kesmede eski site uretilmiyor; `/img/`
+             artik `yeni/public/img` -> `dist/img`, yani asagidaki GENEL
+             dalin tam olarak baktigi yer. Istisna gereksizlesti ve
+             KALDIRILDI: kalsaydi var olmayan bir klasore bakip her
+             gorseli "kayip-kok" diye kirmizi yakardi (yasandi). */
+          if (!u.startsWith('/')) { kusur.push(rel(p2) + ':yabanci:' + u); continue; }
+          if (!fs.existsSync(path.join(KOK, u.replace(/^\/(?:yeni\/)?/, '')))) {
             /* TUR 2c: kayip dosya git-disi film medyasindansa sebep
                kurulum adimidir — adiyla basilir, yigin basilmaz. */
-            if (!MEDYA.kuruldu && u.startsWith('/yeni/varlik/film/')) {
+            if (!MEDYA.kuruldu && u.startsWith('/varlik/film/')) {
               if (!kusur.includes(MEDYA.mesaj)) kusur.push(MEDYA.mesaj);
             }
             else kusur.push(rel(p2) + ':kayip:' + u);
           }
         }
       }
-      ol('G2 · gorseller kendi alanimizdan (/yeni/) + dosyalar diskte',
+      ol('G2 · görseller kendi alanımızdan (kök) + dosyalar diskte',
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 
@@ -1211,7 +1443,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         if (!/loading="lazy"/.test(img)) kusur.push('eager:' + img.slice(0, 40));
         const mob = kart.match(/<source[^>]*media="\(max-width:900px\)"[^>]*srcset="([^"]+)"/);
         if (!mob) { kusur.push('mobil-kaynak-yok'); continue; }
-        const dosya = path.join(KOK, mob[1].replace(/^\/yeni\//, ''));
+        const dosya = path.join(KOK, mob[1].replace(/^\/(?:yeni\/)?/, ''));
         if (!fs.existsSync(dosya)) { kusur.push('kayip:' + mob[1]); continue; }
         /* webp basligindan gercek piksel genisligi (VP8/VP8L/VP8X) */
         const b = fs.readFileSync(dosya);
@@ -1363,9 +1595,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const kusur = [];
       let sayi = 0;
       for (const p2 of sayfalar) {
-        for (const m of oku(p2).matchAll(/<a[^>]*\bhref="(\/yeni\/[^"#?]*)/g)) {
+        for (const m of oku(p2).matchAll(/<a[^>]*\bhref="(\/[^"#?]*)/g)) {
           sayi++;
-          const yol = m[1].replace(/^\/yeni\//, '').replace(/\/$/, '');
+          const yol = m[1].replace(/^\/(?:yeni\/)?/, '').replace(/\/$/, '');
           const adaylar = [path.join(KOK, yol), path.join(KOK, yol, 'index.html'),
                            path.join(KOK, yol + '.html')];
           if (!adaylar.some(a => fs.existsSync(a) && fs.statSync(a).isFile()))
@@ -1690,7 +1922,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const turler = new Set(dugumler.flatMap(n => [].concat(n['@type'] || [])));
       for (const t of ['Organization', 'WebSite', 'WebPage'])
         if (!turler.has(t)) kusur.push(t + '-yok');
-      const org = dugumler.find(n => n['@id'] === 'https://qanatone.com/#org');
+      const org = dugumler.find(n => n['@id'] === KONAK + '/#org');
       if (!org) kusur.push('#org-kimligi-yok');
       else if (!org.description || !(org.knowsAbout || []).length) kusur.push('#org-govdesi-eksik');
       ol('S2 · ana sayfa semasi: Organization+WebSite+WebPage + #org govdesi',
@@ -1706,7 +1938,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const beklenen = (c7.socials || []).map(x => x && x.url).filter(Boolean);
       let org7 = null;
       for (const m of h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
-        try { const j = JSON.parse(m[1]); org7 = (j['@graph'] || [j]).find(n => n['@id'] === 'https://qanatone.com/#org') || org7; } catch (e) {}
+        try { const j = JSON.parse(m[1]); org7 = (j['@graph'] || [j]).find(n => n['@id'] === KONAK + '/#org') || org7; } catch (e) {}
       }
       const olan = org7 && Array.isArray(org7.sameAs) ? org7.sameAs : null;
       ol(`H25 · Organization.sameAs = panel socials (${beklenen.length} adres${beklenen.length ? '' : ' → []'})`,
@@ -1757,7 +1989,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const TAVAN = 50 * 1024;
       let toplam = 0;
       for (const m4 of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) {
-        const dosya = path.join(KOK, m4[1].replace(/^\/yeni\//, ''));
+        const dosya = path.join(KOK, m4[1].replace(/^\/(?:yeni\/)?/, ''));
         if (fs.existsSync(dosya)) toplam += fs.statSync(dosya).size;
       }
       for (const m4 of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
@@ -1787,9 +2019,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        burada marka fontunun GERÇEKTEN yerelden geldiği kilitlenir. */
     {
       const yuzler = [...css.matchAll(/@font-face\{[^}]*src:url\(([^)]+)\)/g)].map(m => m[1]);
-      const yerel = yuzler.length > 0 && yuzler.every(u => u.startsWith('/yeni/font/'));
+      const yerel = yuzler.length > 0 && yuzler.every(u => u.startsWith('/font/'));
       const dosyalar = yuzler.every(u =>
-        fs.existsSync(path.join(KOK, u.replace(/^\/yeni\//, ''))));
+        fs.existsSync(path.join(KOK, u.replace(/^\/(?:yeni\/)?/, ''))));
       ol('F1b · marka fontları kendi alandan + dosyalar diskte',
          yerel && dosyalar, `${yuzler.length} yüz`);
     }
@@ -2331,7 +2563,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     }
     /* ada betigi: hareket azaltma kapisi + dinamik ithal */
     const ada = [...h.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)].map((m) => {
-      const d = path.join(KOK, m[1].replace(/^\/yeni\//, ''));
+      const d = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, ''));
       return fs.existsSync(d) ? fs.readFileSync(d, 'utf8') : '';
     }).join('\n');
     if (!/prefers-reduced-motion/.test(ada)) kusur.push('azaltma-kapisi-yok');
@@ -2339,7 +2571,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (/<[a-z-]+>/.test(fs.readFileSync(path.join(__dirname, 'src', 'film', 'sahneler.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')))
       kusur.push('sahneler.ts-yer-tutucu');
     /* CSP media-src blob: (sert degismez #5) */
-    if (!/media-src[^;]*blob:/.test(fs.readFileSync(path.join(__dirname, '..', '_headers'), 'utf8'))) kusur.push('csp-media-src-blob-yok');
+    if (!/media-src[^;]*blob:/.test(fs.readFileSync(path.join(__dirname, 'public', '_headers'), 'utf8'))) kusur.push('csp-media-src-blob-yok');
     /* dikis olcumu var ve uretimden taze, 38 dikis x 2 hat */
     const dY = path.join(__dirname, 'film', 'dikis.json');
     if (!fs.existsSync(dY)) kusur.push('dikis.json-yok');
@@ -2435,7 +2667,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        TIRNAK: minify `[data-film="atlandi"]` -> `[data-film=atlandi]`
        yaptigi icin tirnak istege bagli aranir. */
     const css = [...h.matchAll(/<link[^>]+href="([^"]+\.css)"/g)]
-      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/yeni\//, '')); return fs.existsSync(d) ? oku(d) : ''; })
+      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, '')); return fs.existsSync(d) ? oku(d) : ''; })
       .concat([...h.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]))
       .join('\n');
     if (!/fl-gec[^{]*:focus-visible/.test(css)) kusur.push('fl-gec-odak-halkasi-yok');
@@ -2448,7 +2680,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        silinse bile kural yesil yaniyordu — yanlis yesil. Artik yalniz
        PROLOG ANAHTARINI tasiyan betik(ler) taranir. */
     const betikler = [...h.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)]
-      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/yeni\//, '')); return fs.existsSync(d) ? oku(d) : ''; })
+      .map((m) => { const d = path.join(KOK, m[1].replace(/^\/(?:yeni\/)?/, '')); return fs.existsSync(d) ? oku(d) : ''; })
       .concat([...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]));
     const ada = betikler.filter((b) => /qanat-prolog-atlandi/.test(b)).join('\n');
     if (!ada) kusur.push('oturum-anahtari-tasiyan-betik-yok');
@@ -2621,7 +2853,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   else if (boy > 12 * 1024) kusur.push(`kabuk.js ${boy} B > 12288`);
   for (const p of sayfalar) {
     const h = oku(p), r = rel(p), filmMi = /^(film|en[\/]film)[\/]index[.]html$/.test(r);
-    const tetik = /import\('\/yeni\/varlik\/kabuk\.js'\)/.test(h);
+    const tetik = /import\('\/varlik\/kabuk\.js'\)/.test(h);
     if (filmMi ? tetik : !tetik) kusur.push(r + (filmMi ? ':film-sayfasinda-kabuk-tetigi' : ':kabuk-tetigi-yok'));
     if (!/<canvas id="wmk"/.test(h) || !/class="fgrid"/.test(h)) kusur.push(r + ':footer-eksik');
   }
@@ -2641,22 +2873,32 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const kusur = [];
   let sayi = 0;
-  const enSayfalar = sayfalar.filter((p) => /(^|\/)en\//.test(rel(p)) || /^en\/index\.html$/.test(rel(p)));
+  /* KESME (6 Eyl 2026) — `/en/film` KAPSAM DISI, gerekcesiyle: o sayfa
+     olcum zemini ve govdesi ESKI SITENIN GIRISI (EskiGiris.astro, Shadow
+     DOM'a gomulu birebir markup). Icindeki `/`, `/#lead`, `/bulten`
+     baglantilari eski sitenin kendi nav'i — yeni kabugun dil kurali
+     onlara islemez, cevrilmeleri de istenmiyor (birebir tasima karari).
+     Kesmeden once bu baglantilar `/yeni` oneki tasimadigi icin kural
+     onlari HIC gormuyordu; onek dusunce gorunur oldular. Susturma degil:
+     sayfa adiyla disarida ve sebebi burada yazili. */
+  const enSayfalar = sayfalar.filter((p) => (/(^|\/)en\//.test(rel(p)) || /^en\/index\.html$/.test(rel(p)))
+    && !/^en\/film\/index\.html$/.test(rel(p)));
   for (const p of enSayfalar) {
     const h = oku(p);
     const trEs = (h.match(/<link rel="alternate" hreflang="tr" href="([^"]+)"/) || [])[1] || '';
-    /* hreflang yoksa (film: canonical netlify.app, hreflang basilmiyor) TR esi
-       dosya yolundan turetilir: en/film/index.html -> /yeni/film */
+    /* hreflang yoksa (film: hreflang basilmiyor) TR esi dosya yolundan
+       turetilir: en/film/index.html -> /film
+       KESME (6 Eyl 2026): `/yeni` oneki dustu, yollar kok tabanli. */
     const trYol = trEs
-      ? (trEs.replace(/^https:\/\/qanatone\.com/, '/yeni').replace(/\/$/, '') || '/yeni')
-      : ('/yeni/' + rel(p).replace(/^en\//, '').replace(/\/?index\.html$/, '')).replace(/\/$/, '');
-    for (const m of h.matchAll(/<a[^>]*\bhref="(\/yeni(?:\/[^"#?]*)?)/g)) {
-      const yol = m[1].replace(/\/$/, '') || '/yeni';
+      ? (trEs.replace(new RegExp('^' + KONAK_RE), '').replace(/\/$/, '') || '/')
+      : ('/' + rel(p).replace(/^en\//, '').replace(/\/?index\.html$/, '')).replace(/\/$/, '');
+    for (const m of h.matchAll(/<a[^>]*\bhref="(\/[^"#?]*)/g)) {
+      const yol = m[1].replace(/\/$/, '') || '/';
       sayi++;
-      if (yol === '/yeni/en' || yol.startsWith('/yeni/en/')) continue;
+      if (yol === '/en' || yol.startsWith('/en/')) continue;
       if (yol === trYol) continue;                          /* dil degistirici: kendi TR esi */
-      if (yol === '/yeni/hukuki') continue;                 /* tek dilli hukuki */
-      if (/^\/yeni\/(varlik|img|font|_astro)\//.test(yol)) continue;
+      if (yol === '/hukuki') continue;                      /* tek dilli hukuki */
+      if (/^\/(varlik|img|font|_astro)\//.test(yol)) continue;
       kusur.push(rel(p) + ' -> ' + m[1]);
     }
   }
@@ -2671,7 +2913,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    unutulunca eski JS yayina gidiyor, hicbir kural kirmizi yakmiyordu
    (MIMARI M1/A3 — bu depodaki en sessiz kirilma yolu). Simdi kaynak,
    kabuk-derle.cjs'in PAYLASILAN derle() fonksiyonuyla bellekte yeniden
-   derlenir ve dist/yeni/varlik/{kabuk,pano,sizinti}.js + tespit-fix.*.json
+   derlenir ve dist/varlik/{kabuk,pano,sizinti}.js + tespit-fix.*.json
    ile BAYT-BIREBIR kiyaslanir. esbuild deterministik: 3 Eyl'de refactor
    git'teki ciktiyi birebir uretti (git status bos). Derleme hatti artik
    kabuk-derle'yi `npm run build` icinde kosturuyor; bu kural o adimin
@@ -2697,12 +2939,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 }
 
 /* ---- L1 · LINK BASLIKLARI BIREBIR (TUR 9, 3 Eyl 2026) ----
-   Onceden tek bekci test/denetim.js'teydi ve Netlify sirasinda dist/yeni
+   Onceden tek bekci test/denetim.js'teydi ve Netlify sirasinda dist
    yokken kosuyordu: alt kume kontrolu 60 Astro sayfasini hic gormeden
    "taze" diyordu (MIMARI M3/A13); silinen sayfanin satiri da sonsuza
-   kadar kaliyordu (M2). Burada dist ve dist/yeni ikisi de var: blok
+   kadar kaliyordu (M2). Burada dist ve dist ikisi de var: blok
    BIREBIR olmali (LINK_BIREBIR=1). Ayrica yayina giden kopya
-   dist/_headers, kaynak _headers ile ayni olmali (build.js KOPYA ile
+   dist/_headers, kaynak yeni/public/_headers ile ayni olmali (Astro public/'i
    kopyalar; arada elle uretim yapildiysa bayat kalir). */
 {
   const kusur = [];
@@ -2711,10 +2953,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     not = require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'link-basliklari.cjs')],
       { cwd: path.join(__dirname, '..'), env: Object.assign({}, process.env, { KONTROL: '1', LINK_BIREBIR: '1' }), encoding: 'utf8', timeout: 60000 }).trim();
   } catch (e) { kusur.push(String(e.stdout || e.message).trim().slice(0, 140)); }
-  const kaynakH = path.join(__dirname, '..', '_headers'), distH = path.join(__dirname, '..', 'dist', '_headers');
+  const kaynakH = path.join(__dirname, 'public', '_headers'), distH = path.join(__dirname, '..', 'dist', '_headers');
   if (!fs.existsSync(distH)) kusur.push('dist/_headers yok');
-  else if (fs.readFileSync(kaynakH, 'utf8') !== fs.readFileSync(distH, 'utf8')) kusur.push('dist/_headers ≠ _headers (kok derleme kopyasi bayat: node build.js)');
-  ol('L1 · _headers Link bloğu dist/yeni ile birebir + dist/_headers kaynakla aynı', kusur.length === 0,
+  else if (fs.readFileSync(kaynakH, 'utf8') !== fs.readFileSync(distH, 'utf8')) kusur.push('dist/_headers ≠ yeni/public/_headers (astro derlemesi bayat)');
+  ol('L1 · _headers Link bloğu dist ile birebir + dist/_headers kaynakla aynı', kusur.length === 0,
      kusur.join(' | ') || not.replace(/^LINK BASLIKLARI TAZE: /, '').slice(0, 90));
 }
 
@@ -2799,7 +3041,7 @@ ozetBasildi = true;
       'Claude-SearchBot', 'PerplexityBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent'];
     for (const b of botlar) if (!new RegExp('User-agent:\\s*' + b + '\\s*\\n\\s*Allow:\\s*/', 'i').test(r)) kusur.push('bot-davetsiz:' + b);
     if (!/Content-Signal:\s*search=yes,\s*ai-input=yes,\s*ai-train=no/.test(r)) kusur.push('content-signal-yok-ya-da-farkli');
-    if (!/^Sitemap:\s*https:\/\/qanatone\.com\/sitemap\.xml\s*$/m.test(r)) kusur.push('sitemap-satiri-yok');
+    if (!new RegExp('^Sitemap:\\s*' + KONAK_RE + '/sitemap\\.xml\\s*$', 'm').test(r)) kusur.push('sitemap-satiri-yok');
     for (const d of ['/admin.html', '/tesekkur', '/film', '/deneme-react'])
       if (!r.split('\n').some((sat) => sat.trim() === 'Disallow: ' + d)) kusur.push('disallow-eksik:' + d);
   }

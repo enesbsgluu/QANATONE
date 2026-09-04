@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* TIPOGRAFI TASMA KAPISI (SOKUM VE TASIMA TURU, 4 Eyl 2026).
    Talimat: "Uretilen ciktida eski govde ailesi icin 0 eslesme, TR ve EN
-   butun sayfalarda tasma yok." Bu rig ikinci yariyi olcer: dist/yeni
+   butun sayfalarda tasma yok." Bu rig ikinci yariyi olcer: dist
    altindaki HER sayfa (TR+EN) iki genislikte (1440 masaustu, 390 telefon)
    gercek tarayicida acilir;
      (a) sayfa yatay tasmiyor: documentElement.scrollWidth <= clientWidth
@@ -19,7 +19,7 @@ const fs = require('fs');
 const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, 'olc-tasma.json');
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
 const GENISLIK = [[1440, 900], [390, 844]];
@@ -79,7 +79,7 @@ else (function gez(d) {
   const aile = sonuc.every((s) => !ESKI_AILE.test(s.bodyAile) && !s.yuzler.some((y) => ESKI_AILE.test(y)));
   const tasma = sonuc.every((s) => s.sayfaTasma <= 0 && s.tasanSayi === 0);
   const hukum = aile && tasma ? 'GECTI' : 'KALDI';
-  fs.writeFileSync(CIKTI, JSON.stringify({ _: 'yeni/film/olc-tasma.cjs — tipografi tasma + aile kapisi, dist/yeni tum sayfalar x 2 genislik', olcum: new Date().toISOString(), sayfa: sayfalar.length, aile_kapisi: aile ? 'GECTI' : 'KALDI', tasma_kapisi: tasma ? 'GECTI' : 'KALDI', hukum, sonuc }, null, 1));
+  fs.writeFileSync(CIKTI, JSON.stringify({ _: 'yeni/film/olc-tasma.cjs — tipografi tasma + aile kapisi, dist tum sayfalar x 2 genislik', olcum: new Date().toISOString(), sayfa: sayfalar.length, aile_kapisi: aile ? 'GECTI' : 'KALDI', tasma_kapisi: tasma ? 'GECTI' : 'KALDI', hukum, sonuc }, null, 1));
   console.log(`\nsayfa ${sayfalar.length} x ${GENISLIK.length} · aile ${aile ? 'GECTI' : 'KALDI'} · tasma ${tasma ? 'GECTI' : 'KALDI'} → HUKUM ${hukum}\n→ ${CIKTI}`);
   process.exit(hukum === 'GECTI' ? 0 : 2);
 })().catch((e) => { console.error(e); process.exit(1); });

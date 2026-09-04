@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* SURUM DAMGASI — dist/yeni/surum.json (TUR 9, 3 Eyl 2026).
+/* SURUM DAMGASI — dist/surum.json (TUR 9, 3 Eyl 2026).
    Netlify derleme zincirinin SON adimi (netlify.toml build.command).
 
    NEDEN VAR: Netlify GitHub'a derleme sonucunu yazmiyor (check-suite
@@ -57,8 +57,8 @@ const S = {
   tarih: new Date().toISOString(),
   medya,
 };
-const y = path.join(KOK, 'dist', 'yeni', 'surum.json');
-if (!fs.existsSync(path.dirname(y))) { console.error('dist/yeni yok — surum.json yazilamadi'); process.exit(1); }
+const y = path.join(KOK, 'dist', 'surum.json');
+if (!fs.existsSync(path.dirname(y))) { console.error('dist yok — surum.json yazilamadi'); process.exit(1); }
 fs.writeFileSync(y, JSON.stringify(S, null, 1));
 console.log(`surum.json: ${String(S.commit).slice(0, 7)} · ${S.dal} · ${S.baglam} · node ${S.node}` +
   (medya ? ` · medya ${medya.yol}` + (medya.toplam_sn != null ? ` ${medya.toplam_sn} sn` : '') : ' · medya damgasi YOK'));

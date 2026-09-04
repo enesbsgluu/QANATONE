@@ -263,4 +263,4 @@ const panolar = sektorler.map((x: any, i: number) => {
 
 {/* KAYDIRICI TETIGI — ilk dokunus/odak: varlik/pano.js dinamik iner, o
     ana kadar sifir bayt. YORUMSUZ satir ici. */}
-<script is:inline>(function(){var k=document.querySelectorAll('.sse-calc');if(!k.length)return;var y=0,f=function(){if(y)return;y=1;import('/yeni/varlik/pano.js').then(function(m){m.baslat()}).catch(function(){y=0})};k.forEach(function(c){['pointerdown','focusin','touchstart'].forEach(function(t){c.addEventListener(t,f,{once:true,passive:true})})});document.querySelectorAll('input[name=sse]').forEach(function(r){r.addEventListener('change',f,{once:true,passive:true})})})()</script>
+<script is:inline>(function(){var k=document.querySelectorAll('.sse-calc');if(!k.length)return;var y=0,f=function(){if(y)return;y=1;import('/varlik/pano.js').then(function(m){m.baslat()}).catch(function(){y=0})};k.forEach(function(c){['pointerdown','focusin','touchstart'].forEach(function(t){c.addEventListener(t,f,{once:true,passive:true})})});document.querySelectorAll('input[name=sse]').forEach(function(r){r.addEventListener('change',f,{once:true,passive:true})})})()</script>

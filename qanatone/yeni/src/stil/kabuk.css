@@ -35,7 +35,7 @@
    ayni doku bir kez uretilip dosya oldu (img/gren.png, 24,9 KB, 1 gun
    onbellek) — sifir JS, tek karo, GPU tek doku tasir. */
 #noise{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.055;
-  background:url(/yeni/img/gren.png) repeat;background-size:128px 128px}
+  background:url(/img/gren.png) repeat;background-size:128px 128px}
 /* panel anahtarlari (content.json theme.motion) derlemede html sinifi olur */
 html.t-nograin #noise{display:none}
 html.t-nostars #stars{display:none}

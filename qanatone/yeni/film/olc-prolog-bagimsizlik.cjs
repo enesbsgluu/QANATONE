@@ -39,7 +39,7 @@ const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const KOK = path.join(__dirname, '..', '..');
 const YENI = path.join(KOK, 'yeni');
-const DIST = path.join(KOK, 'dist', 'yeni');
+const DIST = path.join(KOK, 'dist');
 const C_YOL = path.join(KOK, 'content.json');
 const CIKTI = path.join(__dirname, 'olc-prolog-bagimsizlik.json');
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';

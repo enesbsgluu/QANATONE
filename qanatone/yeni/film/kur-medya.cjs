@@ -17,7 +17,7 @@
    plugins/onbellek ile bu dizini derlemeler arasi tasir: sicak derlemede
    sifir indirme, sadece ~2 sn sha1). Indirilen her dosya sha1 ile
    dogrulanir; tutmayan dosya silinir, damga YAZILMAZ, denetim kirmizi.
-   Damgaya sure/bayt/hiz yazilir; zincir.cjs bunu dist/yeni/surum.json'a
+   Damgaya sure/bayt/hiz yazilir; zincir.cjs bunu dist/surum.json'a
    gecirir ki CI'nin ne kadar surdugu yayindan okunsun.
 
    MODLAR:

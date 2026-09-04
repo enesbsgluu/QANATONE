@@ -3,7 +3,7 @@
    sürükleme, yarıda kesilen hareket)" ölçütünü temsil eden en küçük
    örnek: sürüklenebilir kart, bırakınca yaylı dönüş, hareket yarıda
    kesilip mevcut hızdan devam eder — saf CSS'in yapamadığı üçlü.
-   Bütçe rakamları /yeni/deneme-react raporunda; B kalemlerinden biri
+   Bütçe rakamları /deneme-react raporunda; B kalemlerinden biri
    React'i hak ederse bu dosya silinir, gerçek ada kendi adıyla gelir. */
 import { motion } from 'motion/react';
 

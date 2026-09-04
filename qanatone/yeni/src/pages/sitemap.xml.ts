@@ -2,7 +2,7 @@
    Eski üreteç kök build.js `sitemap()` (367): urlset + xhtml ns, her
    kayıtta loc/lastmod/priority + tr-en hreflang çifti; öncelikler
    687-710'dan birebir (ana 1.0 · dizinler 0.8 · hizmet 0.7 · bülten
-   0.7 · proje 0.6). Kesmeye kadar /yeni/sitemap.xml'de durur ve HİÇBİR
+   0.7 · proje 0.6). Kesmeye kadar /sitemap.xml'de durur ve HİÇBİR
    robots.txt ona işaret etmez (kök robots eski sitemap'i gösterir) —
    kesmede robots yeni üretece döner, bu dosya kökten sunulur.
 
@@ -14,9 +14,13 @@
    1. EN ana `/en` (eğik çizgisiz) — eski üreteç `/en/` basıyordu;
       yeni sayfanın canonical'ı `/en` (en/index.astro), sitemap sayfa
       gerçeğine uyar, eski biçime değil.
-   2. /hukuki LİSTEDE YOK: canonical'ı kendine (netlify.app/yeni —
-      eski sitede karşılığı olmayan tek sayfa, kopya-içerik kararı);
-      KOK tabanlı olmayan adres bu listeye giremez. Kesmede canonical'ı
+   2. /hukuki LİSTEDE YOK — ve KESMEDE (6 Eyl 2026) gerekçesi değişti:
+      canonical'ı artık `qanatone.com/hukuki` (gerçek adres), ama sayfa
+      sitemap'e girmiyor çünkü kaydı `sitemap: null`. R8 bu ayrımı
+      KAYITTAN okuyor; eskiden canonical'ı netlify.app'e çevirerek
+      kuraldan kaçılıyordu ve o kaçamak tam da kesmede patlayacaktı.
+      Aynısı /404, /tesekkur, /film, /deneme-react için de geçerli.
+      (Tarihçe) Kesmede canonical'ı
       KOK'a dönünce listeye girer (KESME-PLANI.md).
    3. Bülten detaylarının lastmod'u yazının kendi tarihi (eski üreteç
       de öyle); statik sayfalarınki derleme günü (eski `bugun()`

@@ -245,39 +245,14 @@
     100%{transform:scale(1)}}
 }
 
-/* ── TRADESELF AMBLEMİ (Tasarım turu A2) — kaynak kök 3569-3587
-   birebir. Üç katman: dış halka SAAT YÖNÜNÜN TERSİNE 20 sn, iç halka
-   saat yönünde 12 sn, beyin sabit — oran ve yön KARARIN KENDİSİ
-   (kaynağın hesabı: dış ~20 diş, iç 12 diş → T_iç/T_dış=12/20=0,6;
-   EKOK 60 sn'de hizalanırlar). Yalnız transform döner. paused doğar,
-   IO .akoynar verir (kaynağın .mkact.on kapısının karşılığı; kapı
-   .hd-demo'yla AYNI betik). Sınıf eşlemesi: .mkcore→.tsa ·
-   .amDis/.amBeyin/.amIc→.tsa-dis/.tsa-beyin/.tsa-ic.
-   Yerleşim finans gövdesinde GEÇİCİ merkez görsel — kaynağın motor
-   sahnesi (girdi kartları + kablolar + hipotezler) ayrı kalem. */
-.tsa{--akps:paused;position:relative;display:grid;place-items:center;aspect-ratio:1;
-  max-height:100%;max-width:min(100%,320px);margin:26px auto 0;width:100%;
-  opacity:0;transition:opacity .5s var(--e)}
-.tsa.akoynar{--akps:running;opacity:1}
-.tsa i{position:absolute;inset:0;display:block;background:center/contain no-repeat;
-  animation-play-state:var(--akps,paused)}
-/* seçici yapısı da künyenin parçası: kaynak `.mkcore .amDis` (0,2,0)
-   taban `.mkcore i` (0,1,1) shorthand'ını yener — tek sınıfa indirince
-   background-image:none kazandı ve katmanlar hiç çizilmedi (yaşandı,
-   ekran karesi yakaladı). Kaynağın iki-halkalı özgüllüğü korunur. */
-.tsa .tsa-dis{background-image:url(/yeni/img/ts-dis.webp);
-  animation:amCCW 20s linear infinite;animation-play-state:var(--akps,paused)}
-.tsa .tsa-beyin{inset:20%;background-image:url(/yeni/img/ts-beyin.webp)}
-.tsa .tsa-ic{inset:29%;background-image:url(/yeni/img/ts-ic.webp);
-  animation:amCW 12s linear infinite;animation-play-state:var(--akps,paused)}
-@keyframes amCCW{to{transform:rotate(-360deg)}}
-@keyframes amCW{to{transform:rotate(360deg)}}
-/* kaynak 3586: reduced-motion dönüşü keser; amblem yine TAM görünür
-   (opacity kapısı da kaldırılır — içerik sönük kalmasın) */
-@media(prefers-reduced-motion:reduce){
-  .tsa .tsa-dis,.tsa .tsa-ic{animation:none}
-  .tsa{transition:none;opacity:1}
-}
+/* ── TRADESELF AMBLEMİ — KALDIRILDI (6 Eyl 2026, Enes).
+   Finans sayfası aynı amblemi İKİ KEZ basıyordu: MotorSahne içindeki
+   `.mkcore` (anlatının kendisi) ve hemen altında bağımsız `.tsa`.
+   İkisi de aynı üç görseli kullanıyordu (ts-dis/ts-beyin/ts-ic.webp).
+   `.tsa` markup'ı, betik seçicisi, panel anahtarı (tsalt) ve bu CSS
+   bloğu BİRLİKTE düştü — ölü kanca bırakılmaz.
+   `@keyframes amCCW/amCW` de buradaydı; MotorSahne kendi kopyasını
+   taşıyor (MotorSahne.astro 506), o yüzden birlikte düşmeleri güvenli. */
 
 /* -- hareket azaltma: durduran seçici verenin AYNISI (H11);
      son hâller kaynak 4289-4305'ten birebir + trade düzeltmesi

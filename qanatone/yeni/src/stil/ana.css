@@ -5,7 +5,7 @@
    · s*-  sınıflarında hover dışı opacity:0 YOK — giriş hareketi keyframe
      from{}'dan gelir, taban hep opak (H2)
    · cihaz kısıtı yalnız .sus- önekini söndürebilir (H4)
-   · marka fontları /yeni/font/ — üçüncü parti yok (F1/F1b)              */
+   · marka fontları /font/ — üçüncü parti yok (F1/F1b)              */
 
 /* Kabuk kisiti ana sayfada acilir: hero tam ekran bir sahne, 840px'lik
    yazi olcusune sigmaz. Yatay dolgu artik BOLUMUN kendisinde (.icgen /
@@ -94,7 +94,7 @@ body:has(.ana) main{max-width:none;padding:0}
    sayfada dururken içerik iki kez basılıyordu. Kanıt yüzeyi desteye
    devredildi: S4Kanit bileşeni ve .s4-* kuralları kaldırıldı, künye
    numarası (04) destede yaşıyor. Kart görselleri de o turda kendi
-   alanımıza taşındı (/yeni/img/pj/). */
+   alanımıza taşındı (/img/pj/). */
 
 /* ============ S5 · SÜREÇ (hareketsiz) ============ */
 .s5-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}

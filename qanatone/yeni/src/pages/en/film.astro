@@ -1,4 +1,5 @@
 ---
+import { KOK } from '../../icerik';
 /* /en/film — TR film sayfasinin EN esi (TUR 5 v2, 2 Eyl 2026).
    NEDEN DOGDU: anlati metni iki dilli ve talimat kapisi "TR ve EN ayri
    ayri olculur" diyor (EN satirlari uzun, tasma riski) — olcum sayfasiz
@@ -8,9 +9,9 @@
 import Temel from '../../layouts/Temel.astro';
 import Film from '../../parcalar/Film.astro';
 import EskiGiris from '../../parcalar/EskiGiris.astro';
-const canon = 'https://qanatone.netlify.app/yeni/en/film';
+const canon = KOK + "/en/film";
 ---
-<Temel dil="en" perde={false} kabuk={false} baslik="Film skeleton — QANATONE"
+<Temel dil="en" indeks={false} perde={false} kabuk={false} baslik="Film skeleton — QANATONE"
   aciklama="The 39-clip scroll-scrub skeleton of the prologue film; measurement ground for motor, stitching, budget and fling. Not a product page."
   canonical={canon}>
   <h1 class="fl-gizli">Film skeleton</h1>

@@ -43,7 +43,7 @@ const KOK = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || (GENISLIK <= 500 ? 'olc-mobil.json' : 'olc-mobil-masa.json'));
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/* ---- sayfa ciftleri: dist/yeni altindaki her sayfanin kok karsiligi ---- */
+/* ---- sayfa ciftleri: dist altindaki her sayfanin kok karsiligi ---- */
 const gez = (kok, d, out) => {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
@@ -223,7 +223,7 @@ const OLC = `(async (W, HEDEF, boz) => {
      verilir: bir sayfada bile eski agacta gorulduyse, oge eskide VARDIR. */
   const eskiGenel = new Set();
   for (const eskiYol of ciftler) {
-    /* `ciftler` dist/yeni'ye GORE: '/', '/hizmetler/'… — eski ayni yol, yeni '/yeni' onekli */
+    /* `ciftler` dist'ye GORE: '/', '/hizmetler/'… — eski ayni yol, yeni '/yeni' onekli */
     const yol = ('/yeni' + eskiYol).replace(/\/+$/, '/');
     const [E, Y] = [await olc(SUNUCU + eskiYol, false), await olc(SUNUCU + yol, false)];
     /* DOKUNMA HEDEFI HUKMU (anayasa: kaynak dogru):

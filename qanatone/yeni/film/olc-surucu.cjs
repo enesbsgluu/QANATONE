@@ -38,7 +38,7 @@ const fs = require('fs');
 const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, 'olc-surucu.json');
 const CHROME = 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
 const KOKLER = '.sa-kart, .hd-demo, .tsa, .akis3';

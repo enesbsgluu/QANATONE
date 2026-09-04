@@ -1,4 +1,5 @@
 ---
+import { KOK } from '../icerik';
 /* DENEME SAYFASI — React + motion adasının BÜTÇE ÖLÇÜM zemini
    (Enes talebi, 20 Ağu; tasarım turu B kalemleri hazırlığı).
    GEÇİCİ: B kalemlerinden biri React'i hak edip kendi adasıyla
@@ -8,9 +9,9 @@
    noindex zaten kabuk geneli; sitemap/R8 dışında (KOK'suz canonical). */
 import Temel from '../layouts/Temel.astro';
 import DenemeAda from '../parcalar/DenemeAda.tsx';
-const canon = 'https://qanatone.netlify.app/yeni/deneme-react';
+const canon = KOK + "/deneme-react";
 ---
-<Temel dil="tr" baslik="React ada denemesi — QANATONE"
+<Temel dil="tr" indeks={false} baslik="React ada denemesi — QANATONE"
   aciklama="React + motion adasının bütçe ölçümü için geçici deneme sayfası; ürün sayfası değildir."
   canonical={canon}>
   <section class="giris">

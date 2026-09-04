@@ -113,17 +113,20 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     sdHits + kadroStage`. Pazar motoru bu yuzden vuruslardan SONRA. */}
 {d.mfst && <MfstBlok mfst={d.mfst} dil={dil} />}
 {d.market && <MotorSahne market={d.market} dil={dil} />}
-{/* TradeSelf amblemi (A2) — yalnız finans; künye demo-detay.css'te.
-    role="img" + engineLab kaynaktan (8232). Katman sırası kaynak
-    markup'ıyla aynı: dış → beyin → iç.
-    TUR 2 (5 Eyl 2026): erişilebilir ad panele açıldı. Bu bir `role="img"`
-    ve ekran okuyucunun duyduğu TEK metin bu — bugün yalnız "TradeSelf",
-    yani NE olduğunu söylemiyor (kodun kendi künyesi "TradeSelf amblemi"
-    diyor). Varsayılan BİLEREK değiştirilmedi: erişilebilir adın ne olacağı
-    içerik kararı, uydurulmaz; alan artık panelde. */}
-{s.slug === 'finans' && <div class="tsa" role="img" aria-label={M('tsalt', 'TradeSelf', 'TradeSelf')}
-  <i class="tsa-dis"></i><i class="tsa-beyin"></i><i class="tsa-ic"></i>
-</div>}
+{/* TradeSelf amblemi (A2) KALDIRILDI — 6 Eyl 2026, Enes:
+    "TradeSelf anlatısının altında ekstra motor beyin animasyonu var;
+     anlatı kartının içindekinden bahsetmiyorum, onun ALTINDA bir tane
+     daha var. Gereksiz, aynı animasyon iki kere."
+    ÖLÇÜLDÜ, doğru: finans sayfası aynı amblemi İKİ KEZ basıyordu —
+    `MotorSahne` içindeki `.mkcore` (anlatı kartının kendisi, künyesi
+    demo-detay.css'te zaten yazıyor: ".mkcore→.tsa · .amDis/.amBeyin/
+    .amIc→.tsa-dis/.tsa-beyin/.tsa-ic") ve hemen altında bu bağımsız
+    `.tsa` bloğu. İkisi de AYNI üç görseli kullanıyordu
+    (ts-dis/ts-beyin/ts-ic.webp). Kalan `.mkcore`: anlatının içinde,
+    kendi erişilebilir adıyla (engineLab).
+    Birlikte düşenler: `.tsa` CSS bloğu (demo-detay.css), betikteki
+    `.tsa` seçicisi, panel anahtarı `tsalt` ve panel kapısındaki satırı —
+    ölü kanca bırakılmaz. */}
 {d.kadro && <KadroBlok kadro={d.kadro} dil={dil} />}
 {d.deliver && <TeslimatBlok deliver={d.deliver} dil={dil} />}
 {/* DETAY GORSELI (kaynak sdImg 8208-8210): det.img varsa tam genislik;
@@ -388,7 +391,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
      demo yalnız görünürken oynar; durdurma animation-play-state,
      anahtar .hd-demo KÖKÜNDE (--akps), açılışta sınıf yazılmaz —
      paused doğar, IO göründüğünde oynatır. Demosuz beş hizmet
-     sayfasında seçici boş döner, iş yapılmaz. .tsa: TradeSelf
+     sayfasında seçici boş döner, iş yapılmaz.
      amblemi (A2) aynı kapıyı kullanır (kaynağın .mkact.on eşi). */
   /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
      gorunurlukte canli"; 5 Eyl "kaydirmaya baglanir" kurali KALKTI,
@@ -397,10 +400,10 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
      kaynagin #akis.aklive deseni (kok 3757 + 6853-6857). Anahtar
      .hd-demo kokunde: {--akps:paused} / .akoynar{--akps:running}
      (demo-detay.css), sureler kaynak degerleri (8s/5s/5.6s/6s
-     infinite). .tsa (TradeSelf amblemi, dekor) ayni kapiyi paylasir.
+     infinite). (.tsa amblemi 6 Eyl 2026 kaldirildi: ayni amblem MotorSahne icinde zaten vardi.)
      Esik .25; kaydirma dinleyicisi/rAF yok (H12); reduced-motion
      CSS'te animation:none (H11). */
-  const dl = [...document.querySelectorAll('.hd-demo'), ...document.querySelectorAll('.tsa')];
+  const dl = [...document.querySelectorAll('.hd-demo')];
   if (dl.length) {
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => {

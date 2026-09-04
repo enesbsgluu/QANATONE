@@ -1,3 +1,7 @@
+/* Konak TEK KAYNAKTAN gelir (icerik.ts KOK). Bu dosyada sekiz ayri
+   `const KOK` kopyasi vardi; birincil alan adi degisince yedisi eskir,
+   biri degisirdi ve fark ancak Search Console'da gorunurdu. */
+import { KOK, OG_KART } from './icerik';
 /* ANA SAYFA ŞEMASI — kökteki `@graph` üçlüsünün (Organization + WebSite
    + WebPage) göçü. Kaynak: kök index.html `schema()` 11520-11560 ve
    sabitleri 5613-5638; build.js bunu dist/index.html'e statik basıyor.
@@ -22,7 +26,6 @@ const KURUM_KONULARI = ['performans pazarlama', 'SEO', 'GEO', 'Google Ads', 'Met
  * @returns {object} JSON-LD @graph */
 export function anaSema(icerik, sayfa) {
   const st = (icerik && icerik.settings) || {};
-  const KOK = 'https://qanatone.com';
   const sosyal = (icerik.socials || []).map((s) => s && s.url).filter(Boolean);
   const tel = String(st.whatsapp || '').replace(/\D/g, '');
   return {
@@ -68,7 +71,6 @@ export function anaSema(icerik, sayfa) {
    hizmetler dizini/detayıyla tutarlılık, bilinçli süperküme. */
 export function projeDizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   g['@graph'].push({
@@ -87,7 +89,6 @@ export function projeDizinSema(icerik, sayfa) {
 
 export function projeSema(icerik, sayfa, proje) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   g['@graph'].push({
@@ -113,7 +114,6 @@ export function projeSema(icerik, sayfa, proje) {
    postsSorted davranışı), şema sayfayla aynı sırayı anlatmalı. */
 export function bultenDizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   const yazilar = [...(icerik.posts || [])]
@@ -161,7 +161,6 @@ export function sssSema(icerik, sayfa) {
    undefined alanı düşürür — yarım alan basılmaz). */
 export function hizmetSema(icerik, sayfa, hizmet) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   const strip = (v) => String(T(v)).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -199,7 +198,6 @@ export function hizmetSema(icerik, sayfa, hizmet) {
    erisilebilirlik agacinda ve tarayicilar icin anlam kazandi.
    Uydurma basamak yok: ad ve adres kaydin kendi alanlarindan gelir. */
 export function kirintiSema(sayfa, basamaklar) {
-  const KOK = 'https://qanatone.com';
   return {
     '@type': 'BreadcrumbList', '@id': sayfa.url + '#crumb',
     itemListElement: [{ '@type': 'ListItem', position: 1, name: 'QANATONE', item: KOK + '/' }]
@@ -212,7 +210,6 @@ export function kirintiSema(sayfa, basamaklar) {
 
 export function yaziSema(icerik, sayfa, yazi) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   g['@graph'].push({
@@ -222,7 +219,12 @@ export function yaziSema(icerik, sayfa, yazi) {
     inLanguage: dil,
     mainEntityOfPage: { '@id': sayfa.url + '#page' },
     author: { '@id': KOK + '/#org' }, publisher: { '@id': KOK + '/#org' },
-    image: KOK + '/' + String(yazi.image || 'og.png').replace(/^\//, ''),
+    /* 4 EYL 2026: geri dusus `og.png` idi ve o dosya kesmede ciktidan
+       kalkti — alti yazinin hepsi (x2 dil) semada 404 veren bir adres
+       ilan ediyordu (olculdu, dist'te 6 kopya). Ad artik icerik.ts'te
+       TEK KAYNAK ve DILE GORE secilir: sema ile meta etiketi ayni
+       karti gosterir. */
+    image: KOK + (yazi.image ? '/' + String(yazi.image).replace(/^\//, '') : OG_KART[dil === 'en' ? 'en' : 'tr']),
   });
   g['@graph'].push({
     '@type': 'BreadcrumbList', '@id': sayfa.url + '#crumb',
@@ -238,7 +240,6 @@ export function yaziSema(icerik, sayfa, yazi) {
 
 export function dizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
-  const KOK = 'https://qanatone.com';
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
   g['@graph'].push({

@@ -30,7 +30,7 @@ const TARAYICILAR = {
 };
 const TARAYICI = process.env.TARAYICI || 'brave';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-chrome.json');
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 const sayfalar = [];
@@ -38,7 +38,7 @@ const sayfalar = [];
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
     if (e.isDirectory()) { if (!/^(_astro|font|img|varlik|film|deneme-react)$/.test(e.name)) gez(p); }
-    else if (e.name === 'index.html') sayfalar.push('/yeni/' + path.relative(DIST, p).replace(/\\/g, '/').replace(/index\.html$/, ''));
+    else if (e.name === 'index.html') sayfalar.push('/' + path.relative(DIST, p).replace(/\\/g, '/').replace(/index\.html$/, ''));
   }
 })(DIST);
 const secim = process.env.SAYFA ? [process.env.SAYFA] : sayfalar.sort().filter((y) => !process.env.FILTRE || new RegExp(process.env.FILTRE).test(y));

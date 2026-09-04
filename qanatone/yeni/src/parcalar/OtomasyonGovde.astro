@@ -326,7 +326,7 @@ const TELI = [0, 1, 2, 3];
 </div>
 {/* TANECIK TETIGI — sahne kadraja yaklasinca varlik/sizinti.js dinamik iner
     (J1 disi); azaltmada modul tek kare cizer. YORUMSUZ satir ici. */}
-<script is:inline>(function(){var s=document.querySelector('.szstage');if(!s||!('IntersectionObserver'in window))return;var io=new IntersectionObserver(function(es){if(!es.some(function(e){return e.isIntersecting}))return;io.disconnect();import('/yeni/varlik/sizinti.js').then(function(m){m.baslat()}).catch(function(){})},{rootMargin:'300px 0px'});io.observe(s)})()</script>
+<script is:inline>(function(){var s=document.querySelector('.szstage');if(!s||!('IntersectionObserver'in window))return;var io=new IntersectionObserver(function(es){if(!es.some(function(e){return e.isIntersecting}))return;io.disconnect();import('/varlik/sizinti.js').then(function(m){m.baslat()}).catch(function(){})},{rootMargin:'300px 0px'});io.observe(s)})()</script>
 
 {/* ---- HUNİ (ada) — KAYNAĞIN KARTI (TUR 1, 4 Eyl 2026) ----
     Enes'in kararı: hesaplayıcı eskiye döner. Kaynakta bu bölüm kenarlıklı

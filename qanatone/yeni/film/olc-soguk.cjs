@@ -99,7 +99,7 @@ const TARAYICILAR = {
 };
 const TARAYICI = process.env.TARAYICI || 'brave';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-soguk.json');
 const TEKRAR = Number(process.env.TEKRAR || 5);
 /* SINYAL — KAPI A ILE BIREBIR AYNI OLMALI (olc-esik.test.mjs sinar): neyin
@@ -125,15 +125,15 @@ const BOZ = process.env.BOZ === '1' || !!process.env.BOZ_MS;
    o ayirir. Ana sayfa zaten sekizin icinde oldugu icin dokuzuncu sira
    kopyaya degil kontrole verildi. */
 const VARSAYILAN = [
-  '/yeni/',                                  /* ana sayfa TR   · A: 1 kare */
-  '/yeni/en/',                               /* ana sayfa EN   · A: 1 kare */
-  '/yeni/hizmetler/finans/',                 /*                · A: 1 kare */
-  '/yeni/en/hizmetler/finans/',              /*                · A: 1 kare */
-  '/yeni/hizmetler/web-sitesi-araclar/',     /*                · A: 1 kare */
-  '/yeni/en/hizmetler/web-sitesi-araclar/',  /*                · A: 1 kare */
-  '/yeni/otomasyon/',                        /*                · A: 1 kare */
-  '/yeni/en/otomasyon/',                     /*                · A: 1 kare */
-  '/yeni/projeler/',                         /* KONTROL        · A: 0 kare */
+  '/',                                  /* ana sayfa TR   · A: 1 kare */
+  '/en/',                               /* ana sayfa EN   · A: 1 kare */
+  '/hizmetler/finans/',                 /*                · A: 1 kare */
+  '/en/hizmetler/finans/',              /*                · A: 1 kare */
+  '/hizmetler/web-sitesi-araclar/',     /*                · A: 1 kare */
+  '/en/hizmetler/web-sitesi-araclar/',  /*                · A: 1 kare */
+  '/otomasyon/',                        /*                · A: 1 kare */
+  '/en/otomasyon/',                     /*                · A: 1 kare */
+  '/projeler/',                         /* KONTROL        · A: 0 kare */
 ];
 const secim = process.env.SAYFA ? [process.env.SAYFA]
   : (process.env.LISTE ? process.env.LISTE.split(',').map((s) => s.trim()) : VARSAYILAN);
