@@ -43,6 +43,24 @@ html.t-noagent #bit,html.t-noagent #bitsay,html.t-noagent #bittip,
 html.t-noagent #bitback{display:none!important}
 /* kaynak 244-248: dokunmatik ve dar ekranda sus katmani dogmaz (statik garanti) */
 @media(pointer:coarse),(max-width:900px){#stars,#noise{display:none}}
+/* ORB: MOBILDE FILTRE YERINE GRADYAN (4 Eyl 2026 — OLCULDU).
+   `#bg .orb` sabit konumlu, min(900px,120vw) capinda ve `filter:blur(130px)`
+   tasiyordu. Mobilde bu 390 px genislikte 468x468 CSS px = 219.024 px²
+   demek; DPR 3'te ~2.000.000 cihaz pikselinin 130 px'lik cekirdekle
+   bulaniklastirilmasi. Ustelik `position:fixed` oldugu icin kaydirma
+   boyunca yeniden rasterleniyor.
+   Bu, dosyanin kendi H14 doktrinine aykiriydi ("MOBIL BAGLAMDA PAHALI
+   KATMAN YOK: filter/backdrop/will-change") — kural film.css'te yaziliydi
+   ama kabuk katmanina uygulanmamisti. `#stars`/`#noise` ve ajan imleci
+   icin mobil kapisi VARDI, orb icin YOKTU.
+   CARE: ayni yumusak kizil parilti radial-gradient ile uretilir — sonuc
+   gorsel olarak esdeger (kaynak zaten rgba(...,.055) gibi cok soluk bir
+   disk + 130 px blur), maliyet ise filtre yerine duz bir gradyan boyamasi.
+   MASAUSTU DOKUNULMADI: orada blur olculmus bir sorun degil. */
+@media(pointer:coarse),(max-width:900px){
+  #bg .orb{filter:none;
+    background:radial-gradient(circle closest-side,rgba(239,35,60,.075) 0%,rgba(239,35,60,.045) 42%,rgba(239,35,60,0) 78%)}
+}
 @media(prefers-reduced-motion:reduce){#stars{display:none}}
 /* icerik yildizlarin USTUNDE (kaynak 249 `main{position:relative;z-index:2}`) */
 body:has(#stars) main{position:relative;z-index:2}
