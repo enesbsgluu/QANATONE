@@ -583,7 +583,20 @@ const egri = (c: any) => {
   .mkhr b { color: #fff; font-weight: 600; font-size: clamp(10.4px, .88vw, 12.4px); line-height: 1.25; }
 
   /* ═══ SÜRÜCÜ · kaynağın pin 4.4 + scrub'ının birebir CSS yazımı ═══ */
-  @property --mkp { syntax: '<number>'; inherits: false; initial-value: 1; }
+  /* --mkp KALITIMLI OLDU (4 Eyl 2026 — Kapi A'nin tek kirmizisi burasiydi).
+     OLCULDU (olc-soguk-regim, /hizmetler/finans/, 5 kosum medyani):
+       kaydirmali animasyon 149 · AYNI ANDA KOSAN 100
+       STIL YENIDEN HESABI 1211 kez = 3,07 sn   (turun toplam gorev
+       suresi 6,32 sn — yani yarisi stil)
+       yerlesim 334 (0,15 sn) · betik 0,16 sn -> ikisi de onemsiz
+     SEBEP: `inherits: false` oldugu icin ASAGIDAKI 29 SECICININ HER BIRI
+     ayni degeri kendi animasyonuyla uretmek ZORUNDAYDI. Tek bir sayi,
+     29 kez hesaplaniyordu.
+     CARE: ozellik kalitimli olur, animasyon YALNIZ KAPTA kosar, torunlar
+     mirasla okur. Deger ayni, animasyon sayisi 29 -> 1.
+     initial-value 1 KORUNDU: animasyonun disinda kalan agac yine 1 gorur
+     (kalitimla da ust degeri bulamayan koke duser ve 1 alir). */
+  @property --mkp { syntax: '<number>'; inherits: true; initial-value: 1; }
   /* miras seçimi ölçülmüş karar (platform turunun dersi): ilerleme
      değişkeni miras alırsa onu kullanmayan alt ağaç da tazelenir */
   @property --mact { syntax: '<number>'; inherits: false; initial-value: 1; }
@@ -602,9 +615,10 @@ const egri = (c: any) => {
     .mk-kap { view-timeline-name: --mk-kap; view-timeline-axis: block;
       min-height: calc(var(--mkh, 620px) + 440vh); }
     .mk-sabit { position: sticky; top: max(0px, calc((100vh - var(--mkh, 620px)) / 2)); }
-    .mktrack, .mkact, .mkstep, .mkcount span, .mkfr, .mksec, .mksig, .mkit, .mkarrow,
-    .mkmade, .mkmc, .mkcomp, .mkrk, .mkin, .mkcore, .mkhy, .mkdc, .mkjc, .mkch,
-    .mkinf, .mkhand, .mkhr, .mkwire, .mkkara, .mkco, .mkag, .mkdg, .mkbl {
+    /* SURUS TEK YERDE: kap. Eskiden bu liste 29 seciciydi ve her biri
+       kendi `mkp-surus` animasyonunu tasiyordu (gerekce @property'nin
+       yaninda). Artik yalnizca kap surer; torunlar `--mkp`yi MIRASLA okur. */
+    .mk-kap {
       animation: mkp-surus linear both; animation-timeline: --mk-kap;
       animation-range: cover calc(100vh - max(0px, (100vh - var(--mkh, 620px)) / 2))
                        cover calc(540vh - max(0px, (100vh - var(--mkh, 620px)) / 2)); }

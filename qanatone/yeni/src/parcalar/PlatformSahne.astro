@@ -270,7 +270,7 @@ let ki = -1;
   .qtreply b { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #3ddc84; }
 
   /* ═══ SÜRÜCÜ · kaynağın pin 2.7 + scrub'ının birebir CSS yazımı ═══ */
-  @property --qtp { syntax: '<number>'; inherits: false; initial-value: 1; }
+  @property --qtp { syntax: '<number>'; inherits: true; initial-value: 1; }
   @property --qe { syntax: '<number>'; inherits: false; initial-value: 1; }
   @property --a0 { syntax: '<number>'; inherits: true; initial-value: 1; }
   @property --a1 { syntax: '<number>'; inherits: false; initial-value: 1; }
@@ -300,10 +300,13 @@ let ki = -1;
       min-height: calc(var(--qth, 545px) + 270vh); }
     .qt-sabit { position: sticky;
       top: max(0px, calc((100vh - var(--qth, 545px)) / 2)); }
-    /* sürücü ORTAK ATADA değil TÜKETİCİDE (araçlar turunun ölçülmüş
-       dersi: miras alan her eleman kare başına tazeleniyor) */
-    .qttrack, .qtact, .qtstep, .qtsearch, .qtn, .qtchip, .qtrow,
-    .qtsum li, .qtcon i, .qtver, .qtbody, .qtsend, .qtreply {
+    /* SURUCU KABA ALINDI (4 Eyl 2026) — bu satirlar eskiden "surucu ORTAK
+       ATADA degil TUKETICIDE (araclar turunun olculmus dersi: miras alan her
+       eleman kare basina tazeleniyor)" diyordu. O ders BASKA BIR SAHNEDE
+       (AracSahne) olculmustu; burada YENIDEN OLCULDU ve tersi cikti —
+       sayilar commit kunyesinde. Eski hal geri istenirse: property'yi
+       `inherits: false` yapip asagidaki secici listesini geri getirmek yeter. */
+    .qt-kap {
       animation: qtp-surus linear both; animation-timeline: --qt-kap;
       animation-range: cover calc(100vh - max(0px, (100vh - var(--qth, 545px)) / 2))
                        cover calc(370vh - max(0px, (100vh - var(--qth, 545px)) / 2)); }
