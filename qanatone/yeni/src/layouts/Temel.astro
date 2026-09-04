@@ -68,6 +68,10 @@ const htmlSinif = [off(mo.grain) && 't-nograin', off(mo.stars) && 't-nostars', o
 /* footer verisi — kaynak renderWa 7457-7467 (sahte 905000000000 düşüşü TAŞINMADI: numara yoksa bağ basılmaz) */
 const ayar = icerik.settings || {};
 const waNum = String(ayar.whatsapp || '').replace(/\D/g, '');
+/* ARAMA KONSOLU + ADSENSE (6 Eyl 2026) — ikisi de panelden, boşsa basılmaz.
+   `trim()`: panelde yanlışlıkla boşluk kalırsa etiket doğmasın. */
+const gsc = String(ayar.gsc || '').trim();
+const adsense = String(ayar.adsense || '').trim();
 const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
 const on = en ? '/en' : '';
 /* OLCUM (kaynak analytics 10765-10783 birebir): settings.gtm doluysa
@@ -93,6 +97,18 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   {(kesmeOncesi || indeks === false) && <meta name="robots" content="noindex" />}
   <title>{baslik}</title>
   <meta name="description" content={aciklama} />
+  {/* ARAMA KONSOLU DOGRULAMASI (6 Eyl 2026) — panelden, `settings.gsc`.
+      Boşsa HİÇ BASILMAZ: uydurma doğrulama etiketi Search Console'da
+      "sahiplik doğrulanamadı" hatası üretir, yani boş bırakmak yanlış
+      değer yazmaktan iyidir. Değer Enes'in konsoldan aldığı içeriktir
+      (yalnız `content` kısmı, etiketin tamamı değil). */}
+  {gsc && <meta name="google-site-verification" content={gsc} />}
+  {/* ADSENSE (6 Eyl 2026) — panelden, `settings.adsense` (ca-pub-...).
+      Boşsa HİÇ BASILMAZ. Bu etiket sahiplik doğrulamasıdır; reklam
+      birimlerini SAYFAYA KOYMAZ — bir B2B ajans sitesinde reklam
+      göstermek ayrı ve tasarım kararıdır, o karar verilmedi.
+      Yanında `ads.txt` de üretilir (yeni/kabuk-derle.cjs). */}
+  {adsense && <meta name="google-adsense-account" content={adsense} />}
   {/* SIMGE — EKSIK TASINAN KALEM (6 Eyl 2026, prolog bagimsizlik denetimi
       sirasinda bulundu). Eski kok site satir ici SVG simge tanimliyor
       (index.html <link rel="icon" data:image/svg+xml>), yeni kabukta HIC

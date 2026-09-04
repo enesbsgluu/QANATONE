@@ -2779,6 +2779,44 @@ ozetBasildi = true;
      kusur.length === 0, kusur.slice(0, 3).join(' | ') || toplam + ' görsel · ' + dolu + ' metinli · ' + bos + ' dekoratif');
 }
 
+/* ---- S6 · YAYIN DOSYALARI: robots.txt · Content-Signal · ads.txt ----
+   (yayin oncesi kontrol TUR B, 6 Eyl 2026)
+   Bugun /yeni/robots.txt KOK DISINDA oldugu icin tarayicilar okumuyor;
+   kesmede (adim 6) kokun kendisi olacak. O gun yanlis olmasi pahali,
+   o yuzden kural BUGUNDEN tutuyor: dosya var mi, on bir AI botunun
+   hepsi davetli mi, Content-Signal satiri yerinde mi, Sitemap satiri
+   dogru adresi mi gosteriyor, panel/olcum zeminleri disarida mi.
+   ads.txt: panel degeri BOSSA dosya OLMAMALI (bos ya da sahte ads.txt
+   AdSense tarafinda gecersiz sayilir, hic olmamasindan kotudur);
+   DOLUYSA icerigi panel degeriyle tutarli olmali. */
+{
+  const kusur = [];
+  const rp = path.join(KOK, 'robots.txt');
+  if (!fs.existsSync(rp)) kusur.push('robots.txt-yok');
+  else {
+    const r = fs.readFileSync(rp, 'utf8');
+    const botlar = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-User',
+      'Claude-SearchBot', 'PerplexityBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent'];
+    for (const b of botlar) if (!new RegExp('User-agent:\\s*' + b + '\\s*\\n\\s*Allow:\\s*/', 'i').test(r)) kusur.push('bot-davetsiz:' + b);
+    if (!/Content-Signal:\s*search=yes,\s*ai-input=yes,\s*ai-train=no/.test(r)) kusur.push('content-signal-yok-ya-da-farkli');
+    if (!/^Sitemap:\s*https:\/\/qanatone\.com\/sitemap\.xml\s*$/m.test(r)) kusur.push('sitemap-satiri-yok');
+    for (const d of ['/admin.html', '/tesekkur', '/film', '/deneme-react'])
+      if (!r.split('\n').some((sat) => sat.trim() === 'Disallow: ' + d)) kusur.push('disallow-eksik:' + d);
+  }
+  /* ads.txt panel degeriyle tutarli mi */
+  let adsId = '';
+  try { adsId = String((JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8')).settings || {}).adsense || '').trim(); } catch (e) {}
+  const ap = path.join(KOK, 'ads.txt');
+  const adsVar = fs.existsSync(ap);
+  if (!adsId && adsVar) kusur.push('ads.txt-var-ama-panel-bos');
+  if (/^ca-pub-\d{10,20}$/.test(adsId)) {
+    if (!adsVar) kusur.push('ads.txt-yok-ama-panel-dolu');
+    else if (!fs.readFileSync(ap, 'utf8').includes(adsId.replace(/^ca-pub-/, 'pub-'))) kusur.push('ads.txt-panel-degeriyle-uyumsuz');
+  }
+  ol('S6 · robots.txt (11 AI botu + Content-Signal + Sitemap + Disallow) ve ads.txt panelle tutarlı',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || (adsId ? 'ads.txt ' + adsId : 'ads.txt yok (panel boş — doğru)'));
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');
