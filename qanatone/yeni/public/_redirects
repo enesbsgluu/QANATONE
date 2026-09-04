@@ -1,0 +1,41 @@
+# QANATONE — yonlendirmeler (KESME, 6 Eyl 2026)
+# ---------------------------------------------------------------------------
+# Kesmeye kadar bu dosya /yeni/_redirects olarak yayinlanir ve Netlify
+# YALNIZ KOKTEKI _redirects'i okur — yani bugun ETKISIZDIR. Kesmede
+# (astro base '/' + outDir '../dist') kokun kendisi olur.
+# Eski uretecin (build.js) yazdigi 200-yeniden-yazma satirlari BURAYA
+# TASINMADI ve tasinmamali: onlar eski SPA kabugunun rota numarasiydi;
+# yeni kabuk gercek dizinlere basiyor, Netlify onlari kendiliginden sunar.
+# SIRA ONEMLI: Netlify ILK ESLESEN kurali uygular, o yuzden OZEL kurallar
+# genel olanlardan (yildizli) ONCE gelir; splat 404 en SONDA.
+# Bekci: yeni/kesme-url-kapsami.cjs — eski 60 adresin hicbiri olmemeli.
+# ---------------------------------------------------------------------------
+
+# 1 · PANEL KAPISI — admin.html statik DOSYA DEGIL, Basic Auth ardindaki
+# fonksiyondan gelir. 200! ZORLAMALI: ileride dist'e bir admin.html
+# kopyasi sizarsa statik dosya kapiyi gecersiz kilardi; force bunu
+# imkansiz yapar. (Eski taraftan birebir tasindi.)
+/admin.html  /.netlify/functions/panel  200!
+
+# 2 · ESKI ONIZLEME + TEKIL HIZMET ROTASI, TEK SICRAMADA. Bu iki kural
+# asagidaki /yeni/* kuralindan ONCE olmali; yoksa iki 301 zinciri olur.
+/yeni/hizmet/:slug  /hizmetler/:slug  301!
+/yeni/en/hizmet/:slug  /en/hizmetler/:slug  301!
+
+# 3 · ESKI ONIZLEME ADRESLERI — /yeni/* koke. Yer imi, tarayici gecmisi
+# ve disaridan verilmis /yeni/... baglantilari olmesin.
+/yeni/*  /:splat  301!
+
+# 4 · ESKI KABUK ISKELETI — /shell.html bir SAYFA DEGILDI (basliksiz,
+# tekrar iceren bolum parcasi; robots.txt'te de Disallow). Yeni mimaride
+# karsiligi yok; yer imi 404 gormesin diye koke.
+/shell.html  /  301!
+/shell  /  301!
+
+# 5 · TEKIL HIZMET ROTASI (kok tarafta) — cogula.
+/hizmet/:slug  /hizmetler/:slug  301!
+/en/hizmet/:slug  /en/hizmetler/:slug  301!
+
+# 6 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
+# SPLAT KURALI SONDA KALMALI.
+/*  /404.html  404
