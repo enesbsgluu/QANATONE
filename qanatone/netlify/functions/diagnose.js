@@ -655,7 +655,16 @@ function yapiOlc(h, res, finalUrl) {
       if (!/\bwidth\s*=/i.test(nit) || !/\bheight\s*=/i.test(nit)) boyutsuz++;
       if (ESKI_GORSEL.test(kaynak)) eski++;
     }
-    if (kaynak) disKaynak++;
+    /* <source> ISTEK DEGIL SECENEKTIR (4 Eyl 2026 — kendi sitemizde olculdu).
+       `<picture>`/`<video>` icindeki her `<source>` bir ALTERNATIFTIR;
+       tarayici ebeveyn basina EN FAZLA BIRINI indirir. Her birini ayri
+       istek saymak sayiyi sisiriyordu: qanatone.com ana sayfasinda
+       82 img + 91 source + 11 link + 3 script = 187 "istek" cikip KIRMIZI
+       yaniyordu; gercek istek ~96. Rakam iki katina yakin abartiliydi ve
+       ziyaretciye olmayan bir sorun gosteriyordu.
+       `<img>` zaten sayildigi icin her picture bir istek olarak kayda
+       giriyor — yani sayim eksilmiyor, DOGRULUYOR. */
+    if (kaynak && ad !== 'source') disKaynak++;
   }
 
   return {
@@ -731,7 +740,18 @@ function analyse(html, res, bytes, finalUrl) {
   items.push(S('viewport', /name=["']viewport["'][^>]*width=device-width/i.test(head) ? 'ok' : 'fail'));
 
   const imgs = h.match(/<img\b[^>]*>/gi) || [];
-  const noAlt = imgs.filter(t => !/\balt\s*=/i.test(t)).length;
+  /* CIPLAK OZNITELIK DE ALT'TIR (4 Eyl 2026 — kendi sitemizde yakalandi).
+     Eski desen `\balt\s*=` idi ve `<img ... alt width=...>` gibi CIPLAK
+     yazilmis alt'i GORMUYORDU. HTML'de ciplak `alt`, `alt=""` ile
+     esdegerdir: gorsel DEKORATIFTIR, dogru isaretlemedir.
+     BEDELI OLCULDU: qanatone.com ana sayfasinda 82 gorselin 18'i boyle
+     yazilmis (kayan logo seridinin kopyalari; kaynakta alt={''} ve Astro
+     bunu ciplak basiyor). Arac "18 eksik" deyip KIRMIZI yakiyordu;
+     GERCEKTEN alt'siz gorsel SIFIR.
+     Bu yalniz bizi degil, ayni yazimi kullanan HER ziyaretciyi yanlis
+     sucluyordu — bir lead miknatisinda YANLIS KIRMIZI, eksik olcumden
+     daha pahalidir. */
+  const noAlt = imgs.filter(t => !/(?:^|\s)alt(?:\s*=|[\s/>]|$)/i.test(t)).length;
   items.push(S('alt', imgs.length === 0 ? 'warn' : band(noAlt, 0, 2), noAlt));
 
   const wa = /wa\.me\/|api\.whatsapp\.com|whatsapp:\/\//i.test(low);
