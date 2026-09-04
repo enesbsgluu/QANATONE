@@ -32,15 +32,41 @@ export function kur() {
   const hero = cv.closest('section');
   if (!hero) return;
 
+  /* ---- ZAMANDA AYIRMA (4 Eyl 2026, Enes: "klibi etkilemeden dogru
+     zamanda calissin; ada mimarisine bu sebeple gectik") ----
+     ONEMLI AYRIM: ada mimarisi KODU ve BUTCEYI ayirir, ANA IS PARCACIGINI
+     ayirmaz. WebGL baglami + shader derlemesi hangi adada olursa olsun
+     ayni thread'de kosar; olculdu, tek seferlik ~400 ms. Bu yuzden ayrim
+     KODDA degil ZAMANDA yapiliyor.
+     KAPI: film TAMAMEN bitene kadar hicbir sey kurulmaz. Sinyal filmin
+     kendi yazdigi `<html data-film>`: 'bitti' (devir tamamlandi,
+     siteyeGec), 'atlandi', 'hareket-azaltma', 'mobil'. Film KOSARKEN bu
+     oznitelik YOKTUR — yani varligi "film artik ana is parcacigini
+     kullanmiyor" demektir.
+     Onceki kapi `fl-devir-net` idi ve YANLISTI: o sinif devir NETLESIRKEN
+     dusuyor, yani tam el degisimi aninda — kurulumun en pahali oldugu an.
+     Filmi olan sayfada oznitelik gelene kadar MutationObserver bekler
+     (yoklama yok, atesle(n)mezse hicbir sey harcamaz). Filmsiz sayfada
+     kapi zaten aciktir.
+     Ustune 800 ms: `siteyeGec` sokumu 50 ms sonra yapiyor ve devir
+     capraz gecisi bitiyor; kurulum o yerlesme bitince bosta kosar. */
+  const filmli = !!document.querySelector('.fl-yapis, #fl-son');
+  const filmBitti = () => !filmli || !!R.dataset.film;
+  let yakin = false, mo = null;
   const dene = () => {
-    /* prolog ondeyken kurma — devir netlesene kadar bekle. Sinif kontrolu
-       duzen okumaz; kaydirma dinleyicisi yok (doktrin: kaydirmada olcum yok). */
-    if (R.classList.contains('fl-ana') && !R.classList.contains('fl-devir-net')) return setTimeout(dene, 500);
-    if (window.requestIdleCallback) requestIdleCallback(kurulum, { timeout: 4000 });
-    else setTimeout(kurulum, 400);
+    if (!yakin || !filmBitti()) return;
+    if (mo) { mo.disconnect(); mo = null; }
+    setTimeout(() => {
+      if (window.requestIdleCallback) requestIdleCallback(kurulum, { timeout: 4000 });
+      else setTimeout(kurulum, 400);
+    }, 800);
   };
   new IntersectionObserver((es, o) => {
-    if (es[0].isIntersecting) { o.disconnect(); dene(); }
+    if (!es[0].isIntersecting) return;
+    o.disconnect(); yakin = true;
+    if (filmBitti()) return dene();
+    mo = new MutationObserver(dene);
+    mo.observe(R, { attributes: true, attributeFilter: ['data-film'] });
   }, { rootMargin: '300px' }).observe(hero);
 
   function kurulum() {
