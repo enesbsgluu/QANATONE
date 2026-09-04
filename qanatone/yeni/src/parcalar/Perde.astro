@@ -83,9 +83,9 @@ const HARFLER = 'QANATONE'.split('');
   var bitti=0;
   function kaldir(){if(el.parentNode)el.parentNode.removeChild(el);}
   function cik(){if(bitti)return;bitti=1;el.classList.add('out');setTimeout(kaldir,900);}
-  setTimeout(cik,1300);
+  setTimeout(cik,3400);
   ['pointerdown','wheel','touchstart','keydown'].forEach(function(t){
     addEventListener(t,cik,{once:true,passive:true});});
-  setTimeout(kaldir,4000);
+  setTimeout(kaldir,6000);
 })();
 </script>
