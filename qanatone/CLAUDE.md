@@ -180,6 +180,24 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - Panel yayın çıktısında statik dosya olarak DURMAZ: `/admin.html`
   zorlamalı yönlendirmeyle `functions/panel.js`'e düşer, Basic Auth
   aynı `PANEL_PAROLA_HASH`'i ölçer. Tek sır, iki kapı.
+- **ELLE KOŞULAN KOMUT KAPI DEĞİLDİR** (Enes, 4 Eyl 2026). Bir doğrulama
+  aracı ya bir kapıya bağlıdır ya da YOKTUR. Belgede duran araç, hiç koşmayan
+  araçtır. `kur-medya.cjs --uzak-yokla` aylardır vardı ve dosyanın kendi
+  başlığında yazılıydı; hiçbir kapıya, zincire, kontrol listesine bağlı
+  değildi. Sonuç: manifestin gösterdiği GitHub Release'in **hiç
+  oluşturulmadığı** iki hafta görülmedi, kesme push'unda deploy 238/238
+  dosya 404 ile düştü. Çare kural oldu: yoklama artık `uzak-yokla.json`
+  kaydı bırakır, **FM4** o kaydı okur (ağ çağrısı yapmaz) ve manifest
+  değişip yoklama tazelenmezse kırmızı yanar. Yeni bir doğrulama aracı
+  yazıldığında sorulacak tek soru: *bunu hangi kapı çağırıyor?*
+- **KAYNAK SIRASI OLAN HER YERDE UZAK YOLU ZORLAYAN BİR KOL BULUNMALI**
+  (Enes, 4 Eyl 2026). Bir sıra "önce disk, sonra uzak" diyorsa ve yerelde
+  disk HER ZAMAN doluysa, uzak yol hiç sınanmaz — yerel yeşil, CI kırmızı.
+  `kur-medya` tam bunu yaşadı: yerelde "238 yerinde · 0 indirildi" yazıp
+  geçiyordu, çünkü ana ağaç dizini uzak adresten önce geliyordu. Yerelde
+  geçen bir kurulum adımı, uzak yolun çalıştığına dair HİÇBİR ŞEY söylemez.
+  Kaynak sırası tanımlayan her araçta uzağı zorlayan bir kip (`--uzak-yokla`,
+  `MEDYA_URL`, boş dizinle klon sınaması) olmalı ve o kip bir kapıya bağlanmalı.
 
 ## Tuzaklar — hepsi yaşandı
 
