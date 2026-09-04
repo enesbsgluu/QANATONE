@@ -353,7 +353,12 @@ function bit() {
    K1 tavani (12.288 B) 12.277 B ile zaten doluydu. Ayrica kurulum prolog
    surerken kosup ~400 ms'lik donma uretiyordu (A/B ile olculdu).
    Burada YALNIZ TETIK kalir: tuval yoksa parca hic indirilmez. */
-/* TUP ALANI KAPALI (4 Eyl 2026, Enes karari — geri acilabilir tek anahtar).
+/* TUP ALANI ACIK — ama ZAMANDA AYRILMIS (4 Eyl 2026, Enes).
+   Kisa sure kapatilmisti; Enes "klibi etkilemeden dogru zamanda calissin"
+   deyince kapi degistirildi: kurulum artik film TAMAMEN bitene kadar
+   (`<html data-film>` yazilana kadar) beklenir. Gerekce ve olcumler
+   `kabuk/tup.js` basinda. Kapatmak icin: TUP_ACIK = false.
+   ESKI KUNYE (kapaliyken yazilmisti, olcumler gecerli):
    OLCULDU, A/B ile (ayni derleme, tek degisken /js/tubes.min.js):
      tubes ENGELLI : p95  8,5 ms · kacirilan 0 · takilma YOK · en uzun  33,4 ms
      tubes SERBEST : p95 16,7 ms · kacirilan 1 · 1 takilma   · EN UZUN 399,8 ms
@@ -368,7 +373,7 @@ function bit() {
    silmek degil. Dosya ve `tup.js` YERINDE DURUYOR; acmak icin asagidaki
    satirdaki `false` kaldirilir. Acilmadan once maliyeti yeniden olculmeli
    (olcum duzenegi: prolog-kasma A/B). */
-const TUP_ACIK = false;
+const TUP_ACIK = true;
 function tubes() {
   if (!TUP_ACIK || !$('#tubes')) return;
   import('/varlik/tup.js').then((m) => m.kur()).catch(() => {});
