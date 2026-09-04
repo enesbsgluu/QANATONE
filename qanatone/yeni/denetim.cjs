@@ -2355,8 +2355,20 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          yoksa logo yerlesirken kayar. */
 {
   const kusur = [];
+  /* IKILI dosyalar icin ham bayt (webp/avif) — git bunlara dokunmaz. */
   const sha1 = (p) => require('crypto').createHash('sha1')
     .update(fs.readFileSync(p)).digest('hex');
+  /* METIN dosyalari icin SATIR SONU NORMALIZE EDILIR (4 Eyl 2026).
+     `core.autocrlf=true`: Windows calisma agacinda amblem.json CRLF
+     (24.970 B), depoda ve Linux CI'da LF (24.506 B). Ham bayt hash'i bu
+     yuzden PLATFORMA BAGLIYDI ve kunyeye Windows degeri yazilmisti:
+     yerelde 68/0, CI'da `kunye-kaynaga-uymuyor` ile DEPLOY DUSTU.
+     Ayni tuzak bu depoda daha once kur-medya/MEDYA kapisinda yasandi ve
+     orada `\r` ayiklamasiyla cozuldu; R19 ayni muameleyi gormemisti.
+     Uretec tarafi da (amblem-sdf.py) ayni normalizasyonu yapar — iki
+     taraf ayni kurali kullanmazsa hash bir daha ayrisir. */
+  const sha1Metin = (p) => require('crypto').createHash('sha1')
+    .update(Buffer.from(fs.readFileSync(p, 'utf8').replace(/\r/g, ''))).digest('hex');
   const kyol = path.join(__dirname, 'src', 'prolog', 'amblem.json');
   const uyol = path.join(__dirname, 'amblem-sdf.py');
   const kunyeYol = path.join(__dirname, 'src', 'veri', 'logo-kunye.json');
@@ -2372,7 +2384,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      var, yani varligi SART kosulabilir ve hash her yerde tutulur. */
   const kaynakVar = fs.existsSync(kyol);
   if (!kaynakVar) kusur.push('kaynak-yok');
-  else if (K && sha1(kyol) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
+  else if (K && sha1Metin(kyol) !== K.kaynak_sha1) kusur.push('kunye-kaynaga-uymuyor');
 
   if (!fs.existsSync(uyol)) kusur.push('uretec-yok');
   else {

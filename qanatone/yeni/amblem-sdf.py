@@ -86,11 +86,29 @@ UC = (1022.0, 1059.0)      # cizim2.kuyruk yolunun basi = kuyrugun ucu
 
 
 def sha1(yol):
+    """IKILI dosyalar icin ham bayt (webp/avif/png) — git bunlara dokunmaz."""
     h = hashlib.sha1()
     with open(yol, 'rb') as f:
         for blok in iter(lambda: f.read(65536), b''):
             h.update(blok)
     return h.hexdigest()
+
+
+def sha1_metin(yol):
+    """METIN dosyalari icin satir sonu NORMALIZE EDILIR (4 Eyl 2026).
+
+    core.autocrlf=true: Windows calisma agacinda amblem.json CRLF
+    (24.970 B), depoda ve Linux CI'da LF (24.506 B). Ham bayt hash'i bu
+    yuzden PLATFORMA BAGLIYDI; kunyeye Windows degeri yazildi ve yerelde
+    68/0 veren denetim CI'da `kunye-kaynaga-uymuyor` ile DEPLOY'U DUSURDU.
+    denetim.cjs R19 ayni normalizasyonu yapar — iki taraf ayni kurali
+    kullanmazsa hash bir daha ayrisir ve fark yine yalniz CI'da gorunur.
+    """
+    with open(yol, 'rb') as f:
+        ham = f.read()
+    # denetim.cjs ile BIREBIR ayni kural: butun \r'ler SILINIR (\n'e
+    # cevrilmez). Tek basina duran \r'de iki taraf ayrisirdi.
+    return hashlib.sha1(ham.replace(b'\r', b'')).hexdigest()
 
 
 def oku_json(ad):
@@ -312,7 +330,7 @@ def main():
         '_': ('amblem-sdf.py tarafindan yazilir, ELLE DUZENLENMEZ. Cozunurluk '
               'sahne.json r + veri.json oran + dpr_tavan\'dan turetilir; bant birim '
               'cinsinden. Denetim R21 hash\'leri ve turetimi kiyaslar.'),
-        'kaynak': 'amblem.json', 'kaynak_sha1': sha1(os.path.join(PROLOG, 'amblem.json')),
+        'kaynak': 'amblem.json', 'kaynak_sha1': sha1_metin(os.path.join(PROLOG, 'amblem.json')),
         'kaynak_boy': KAYNAK_BOY, 'bant_birim': BANT_BIRIM, 'kutu': kutu,
         'kurulum': 'texel merkezinde nokta ornekleme (map_coordinates order=1), ortalama yok',
         'doyum_esigi_texel': 768,
