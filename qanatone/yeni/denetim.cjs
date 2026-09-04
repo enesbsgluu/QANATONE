@@ -726,7 +726,19 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
           yolKusur.push(dosyaYolu + ' ↔ ' + canonYolu);
       }
     }
-    for (const c of canonN) if (!smN.has(c)) kusur.push('sitemapte-yok:' + c);
+    /* SITEMAP-DISI KAYITLAR (6 Eyl 2026): sayfalar.json'da `sitemap: null`
+       olan yollar sitemap'e GIRMEZ ve girmemeli (noindex donusum ucu,
+       hukuki, 404). Onlarin canonical'i dogru adresi gosterebilsin diye
+       kural burada okur — eskiden canonical'i netlify.app'e cevirerek
+       kaciliyordu ve o kacamak KESMEDE patlayacakti. */
+    const smDisi = new Set();
+    try {
+      const S8 = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+      for (const k of S8.statik) if (k.sitemap === null || k.sitemap === undefined) {
+        for (const d of (k.dil || ['tr'])) smDisi.add(norm('https://qanatone.com' + (d === 'en' ? '/en' : '') + k.yol));
+      }
+    } catch (e) { /* okunamazsa istisna yok: kural sert kalir */ }
+    for (const c of canonN) if (!smN.has(c) && !smDisi.has(c)) kusur.push('sitemapte-yok:' + c);
     for (const l of smN) if (!canonN.has(l)) kusur.push('sayfasi-yok:' + l);
     if (yolKusur.length) kusur.push(`yol≠canonical ${yolKusur.length} sayfa: ` + yolKusur.slice(0, 2).join(', '));
     if (smN.size < 10) kusur.push('sitemap süpheli kisa:' + smN.size);
@@ -2707,6 +2719,66 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 }
 
 ozetBasildi = true;
+/* ---- S4 · BENZERSIZ BASLIK VE ACIKLAMA (YAYIN ONCESI KONTROL, madde 4) ----
+   "Kopya baslik en yaygin sessiz SEO hatasidir" — ve bugune kadar 63 sayfada
+   gercekten benzersiz olup olmadigi HIC olculmedi. Iki sayfa ayni <title>
+   ya da ayni meta description tasiyorsa KIRMIZI.
+   TR ve EN esleri AYRI sayfalardir ve ayri baslik tasimalidir; ayni
+   basligi tasiyorlarsa da kirmizidir (arama motoru ikisini ayirt edemez).
+   404 ve tesekkur DAHIL: noindex olmalari baslik kopyasini mesru kilmaz,
+   ustelik kesmede N1 tersine donunce ikisi de gorunur hale gelebilir. */
+{
+  const kusur = [];
+  const bas = new Map(), ack = new Map();
+  for (const p2 of sayfalar) {
+    const h = oku(p2), r = rel(p2);
+    const t = (h.match(/<title>([\s\S]*?)<\/title>/) || [])[1];
+    const d = (h.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+    if (!t || !t.trim()) { kusur.push(r + ':baslik-yok'); }
+    else { const k = t.trim(); (bas.get(k) || bas.set(k, []).get(k)).push(r); }
+    if (!d || !d.trim()) { kusur.push(r + ':aciklama-yok'); }
+    else { const k = d.trim(); (ack.get(k) || ack.set(k, []).get(k)).push(r); }
+  }
+  for (const [k, v] of bas) if (v.length > 1) kusur.push('kopya-baslik(' + v.length + '):' + v.slice(0, 2).join(',') + ' → ' + k.slice(0, 40));
+  for (const [k, v] of ack) if (v.length > 1) kusur.push('kopya-aciklama(' + v.length + '):' + v.slice(0, 2).join(',') + ' → ' + k.slice(0, 40));
+  ol('S4 · her sayfanın başlığı ve açıklaması BENZERSİZ (' + sayfalar.length + ' sayfa)',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || bas.size + ' başlık · ' + ack.size + ' açıklama');
+}
+
+/* ---- S5 · GORSEL ALT METNI (YAYIN ONCESI KONTROL, madde 5) ----
+   Kendi teshis aracimiz (STETespit) baskalarinin sitesinde alt metin
+   eksigi ariyor; kendi sitemizde HIC olculmemisti.
+   KURAL: her <img> bir 'alt' OZNITELIGI TASIMALI. Bos alt ("") gecerlidir
+   ve DOGRU cevaptir — dekoratif gorselin adi okunmamali. Yasak olan
+   ozniteligin HIC OLMAMASI: ekran okuyucu o zaman dosya adini okur.
+   Ayrica: 'alt' degeri dosya adina benzemesin (uzantili ad = kopyala-yapistir
+   belirtisi) ve 125 karakteri gecmesin (ekran okuyucu keser). */
+{
+  const kusur = [];
+  let toplam = 0, bos = 0, dolu = 0;
+  for (const p2 of sayfalar) {
+    const h = oku(p2), r = rel(p2);
+    for (const m of h.matchAll(/<img\b[^>]*>/g)) {
+      toplam++;
+      const t = m[0];
+      /* CIPLAK `alt` DA GECERLIDIR ve BOS alt demektir. Kucultme alt=""
+         yazimini `alt` haline getiriyor; ilk yazimda desen yalnizca
+         alt="..." ariyordu ve seridin TEKRAR TURLARINA (H9 geregi bos alt
+         + aria-hidden — dogru a11y) 18 YANLIS KIRMIZI verdi. Kural once
+         kendi yanlisini duzeltti, sonra siteye baktı. */
+      const a = t.match(/\salt(?:\s*=\s*"([^"]*)")?[\s/>]/);
+      if (!a) { kusur.push(r + ':alt-yok:' + (t.match(/src="([^"]*)"/) || [, '?'])[1].split('/').pop()); continue; }
+      const deger = a[1] === undefined ? '' : a[1];
+      if (deger === '') { bos++; continue; }
+      dolu++;
+      if (/\.(webp|png|jpe?g|avif|svg)\s*$/i.test(deger)) kusur.push(r + ':alt-dosya-adi:' + deger.slice(0, 30));
+      if (deger.length > 125) kusur.push(r + ':alt-uzun(' + deger.length + '):' + deger.slice(0, 30));
+    }
+  }
+  ol('S5 · her <img> alt taşıyor (dekoratif alt="" geçerli, öznitelik eksikliği değil)',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || toplam + ' görsel · ' + dolu + ' metinli · ' + bos + ' dekoratif');
+}
+
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');

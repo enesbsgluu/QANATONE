@@ -35,6 +35,10 @@ const BOLUM = {
      ADI DEĞİL metnin göründüğü yer — Enes panelde "LeadKutu.astro" değil
      "İletişim formu" arar. */
   'pages/404.astro': 'Sayfa bulunamadı (404)',
+  /* 6 Eyl 2026: teşekkür sayfası. İki dil AYNI anahtarları okur, o yüzden
+     iki dosya tek bölüm etiketi altında toplanır. */
+  'pages/tesekkur.astro': 'Teşekkür sayfası',
+  'pages/en/tesekkur.astro': 'Teşekkür sayfası',
   'pages/hukuki.astro': '/hukuki',
   'parcalar/LeadKutu.astro': 'İletişim formu',
 };
