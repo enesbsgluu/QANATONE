@@ -371,7 +371,19 @@ export function baslat(bolum: HTMLElement): () => void {
   const IZ: Iz = {
     hazir: false, kayit: false, mobil, kodek: KODEK, toplam, pxSn, fps,
     istek: [], sunum: [], ilkKareMs: null,
-    yon: 1, hiz: 0, pencere: PENCERE, onPencere: ON_PENCERE_TABAN, mbit: null, onsar: 0,
+    /* ACILIS ON-PENCERESI 0 (4 Eyl 2026, Enes onayi — OLCUMLE gerekcelendi).
+       `onPencere` YALNIZ ON YUKLEMEYI kapatir (sira(): pencere disina
+       indirme yok). Tutma penceresi `pencere` DEGISMEDI, yavas hat
+       genislemesi de yerinde — yani el degisimi sozlesmesine dokunulmadi.
+       NEDEN: acilista uc klip birden yerlesiyordu. Olculdu (yerel, ilk
+       1,5 sn): 16.203 KB / 54 istek — sahne3 6.152 KB (t=788), sahne2
+       5.170 KB (t=691), sahne1 3.579 KB (t=612); uzun kareler (225/233/283
+       ms) tam bu getirmelerle cakisiyordu ve LoAF onlari "betiksiz"
+       isaretliyordu, yani is cozme/boyamaydi.
+       ILK KLIP HAZIR OLUNCA pencere BOSTA acilir (asagida `pencereyiAc`):
+       boylece ziyaretcinin gordugu ilk saniye tek klibin isini tasir,
+       komsular film zaten akarken iner. */
+    yon: 1, hiz: 0, pencere: PENCERE, onPencere: 0, mbit: null, onsar: 0,
     hedef: () => S[i].n, devir: 0, acilisMs: null, acilisTakasMs: null,
     tamponMs: null, ilkHareketMs: null, tamponYolu: null,
     birakilan: 0,   /* PENCERE TURU (1 Eyl): sayac init edilmemisti — undefined++ = NaN, olcum yuzeyi bozuktu */
@@ -569,6 +581,19 @@ export function baslat(bolum: HTMLElement): () => void {
     return IZ.hiz > SAVURMA_SN
       ? [i, i + y, i - y, i + 2 * y]             /* savurma: iki yon de sinirda hazir olsun */
       : [i, i + y, i + 2 * y, i - y];            /* okuma: gidilen yone derinlemesine */
+  };
+
+  /* Acilis penceresini tabana cikarir — BIR KEZ, bosta. `yavas` genislemesi
+     (asagidaki hiz olcumu) bunun uzerine kendi payini ekler; iki yol
+     birbirini ezmez cunku burasi yalnizca 0 -> taban gecisini yapar. */
+  let pencereAcildi = false;
+  const pencereyiAc = () => {
+    if (pencereAcildi) return;
+    pencereAcildi = true;
+    const ac = () => { if (IZ.onPencere < ON_PENCERE_TABAN) IZ.onPencere = ON_PENCERE_TABAN; sira(); };
+    if (typeof (window as any).requestIdleCallback === 'function')
+      (window as any).requestIdleCallback(ac, { timeout: 2500 });
+    else setTimeout(ac, 300);
   };
 
   const sira = () => {
@@ -807,8 +832,19 @@ export function baslat(bolum: HTMLElement): () => void {
     /* tampon olcumu: gosterilen konum kilitten ilk kez yarim kareden fazla
        ayrildi = filmin ILK HAREKETI. Yavas ag kapisi bunu tamponMs ile
        yan yana koyar; hareket hazirliktan once baslayamaz. */
-    if (IZ.ilkHareketMs === null && tamponT !== null && Math.abs(T - tamponT) > OTUR)
+    if (IZ.ilkHareketMs === null && tamponT !== null && Math.abs(T - tamponT) > OTUR) {
       IZ.ilkHareketMs = Math.round(simdi - yeni);
+      /* ON YUKLEME PENCERESI ILK HAREKETTE ACILIR (4 Eyl 2026). Once
+         "ilk klip hazir olunca" denemistim; yerel makinede klip 50 ms'de
+         indigi icin bosta kancasi hemen atesliyor ve pencere daha acilis
+         boyanirken aciliyordu — olculdu, ilk 1,5 sn yine 16.100 KB.
+         Dogru esik HAZIR OLMA degil AKMAYA BASLAMA: ziyaretci filmi
+         gercekten ilerletince komsu klipler inmeye baslar. O ana kadar
+         ekranda tek klip vardir ve acilisin boyamasiyla yarisan bir
+         indirme yoktur. Pasif ziyaretci icin guvenlik: `pencereyiAc`
+         icindeki bosta cagrisi 2,5 sn timeout tasiyor. */
+      pencereyiAc();
+    }
     /* TUR 5: cumle pencereleri — sinif yalniz GECISLERDE yazilir
        (kare basina DOM yazimi yok; g bayragi onler). */
     for (const z of SOZLER) {
