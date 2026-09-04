@@ -1,0 +1,253 @@
+{
+ "_": "yeni/yayin-envanteri.cjs — yayin hattinin BAGLI OLDUGU her sey tek yerde: backend fonksiyonlari, ortam degiskenleri, dis servisler, panel zinciri, kesme oncesi dolu olmasi gereken alanlar. Ortam degiskeni DEGERLERI depoda durmaz ve durmamali; burada ADLARI listelenir.",
+ "olcum": "2026-09-04T00:41:06.914Z",
+ "fonksiyon": [
+  {
+   "dosya": "diagnose.js",
+   "satir": 913,
+   "ortam_degiskeni": [
+    "KOTA_TUZ"
+   ],
+   "ne_yapar": ""
+  },
+  {
+   "dosya": "panel.js",
+   "satir": 117,
+   "ortam_degiskeni": [
+    "PANEL_PAROLA_HASH"
+   ],
+   "ne_yapar": ""
+  },
+  {
+   "dosya": "submission-created.js",
+   "satir": 101,
+   "ortam_degiskeni": [
+    "WA_TOKEN",
+    "WA_PHONE_ID",
+    "WA_TO",
+    "WA_TEMPLATE",
+    "WA_LANG"
+   ],
+   "ne_yapar": ""
+  },
+  {
+   "dosya": "yayinla.js",
+   "satir": 176,
+   "ortam_degiskeni": [
+    "PANEL_PAROLA_HASH",
+    "GITHUB_TOKEN"
+   ],
+   "ne_yapar": ""
+  }
+ ],
+ "ortam_degiskenleri": [
+  {
+   "ad": "KOTA_TUZ",
+   "kullanan": [
+    "diagnose.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "PANEL_PAROLA_HASH",
+   "kullanan": [
+    "panel.js",
+    "yayinla.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "WA_TOKEN",
+   "kullanan": [
+    "submission-created.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "WA_PHONE_ID",
+   "kullanan": [
+    "submission-created.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "WA_TO",
+   "kullanan": [
+    "submission-created.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "WA_TEMPLATE",
+   "kullanan": [
+    "submission-created.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "WA_LANG",
+   "kullanan": [
+    "submission-created.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  },
+  {
+   "ad": "GITHUB_TOKEN",
+   "kullanan": [
+    "yayinla.js"
+   ],
+   "deger": "Netlify panelinde (depoda YOK)"
+  }
+ ],
+ "dis_servis": [
+  {
+   "ad": "Google Analytics / GTM",
+   "kaynak": "panel · settings.gtm",
+   "deger": "bos",
+   "not": "Bossa hic istek atilmaz. Doldurulunca CEREZ ONAYI gerekebilir (KVKK) — onay bandi yok, karar Enes'te."
+  },
+  {
+   "ad": "Google Search Console",
+   "kaynak": "panel · settings.gsc",
+   "deger": "bos",
+   "not": "HTML etiketi yontemi. Bossa etiket basilmaz. Sitemap bildirimi kesme sonrasi elle."
+  },
+  {
+   "ad": "Google AdSense",
+   "kaynak": "panel · settings.adsense",
+   "deger": "bos",
+   "not": "Sahiplik meta etiketi + ads.txt uretir. Reklam BIRIMI koymaz — o ayri tasarim karari."
+  },
+  {
+   "ad": "WhatsApp Cloud API",
+   "kaynak": "ortam · WA_TOKEN/WA_PHONE_ID/WA_TO/WA_TEMPLATE/WA_LANG",
+   "deger": "Netlify panelinde",
+   "not": "submission-created: form gelince bildirim. Degerler depoda DURMAZ."
+  },
+  {
+   "ad": "GitHub Contents API",
+   "kaynak": "ortam · GITHUB_TOKEN",
+   "deger": "Netlify panelinde",
+   "not": "yayinla.js content.json commit eder. Panelin YAZMA yolu bu."
+  },
+  {
+   "ad": "Netlify Forms",
+   "kaynak": "statik HTML · data-netlify=\"true\"",
+   "deger": "FORM URETIMDE",
+   "not": "Formu DERLEME ANINDAKI statik HTML'den tanir; kesmede HTML degisecegi icin form YENIDEN taninmali (kesme dogrulama listesi madde 5)."
+  },
+  {
+   "ad": "IndexNow (Bing/Yandex)",
+   "kaynak": "eski build.js",
+   "deger": "ESKI TARAFTA VAR",
+   "not": "Kesme adimi 9: yeni tarafa tasinsin mi — Enes'in karari."
+  },
+  {
+   "ad": "MCP uc noktasi",
+   "kaynak": "—",
+   "deger": "YOK (bilincli)",
+   "not": "Ajan hazirligi turunda REDDEDILDI: Content Site kapsaminda degil, ticaret/ajan protokolleri bir ajans sitesinde uygulanmaz. Bileske puan kovalanmiyor."
+  }
+ ],
+ "yayin_hatti_dosyalari": [
+  {
+   "dosya": "netlify.toml",
+   "sart": true,
+   "var": true
+  },
+  {
+   "dosya": "yeni/public/robots.txt",
+   "sart": true,
+   "var": true
+  },
+  {
+   "dosya": "yeni/src/pages/sitemap.xml.ts",
+   "sart": true,
+   "var": true
+  },
+  {
+   "dosya": "yeni/src/pages/bulten/rss.xml.ts",
+   "sart": false,
+   "var": true
+  },
+  {
+   "dosya": "_headers",
+   "sart": true,
+   "var": true
+  },
+  {
+   "dosya": "_redirects",
+   "sart": false,
+   "var": false
+  },
+  {
+   "dosya": "yeni/public/_redirects",
+   "sart": false,
+   "not": "kesme adimi 4te dogar",
+   "var": false
+  },
+  {
+   "dosya": "admin.html",
+   "sart": true,
+   "var": true
+  },
+  {
+   "dosya": "content.json",
+   "sart": true,
+   "var": true
+  }
+ ],
+ "panel_zinciri": [
+  {
+   "adim": "admin.html",
+   "rol": "panel arayuzu; metin haritasi gomulu (metin-harita.cjs uretir)"
+  },
+  {
+   "adim": "netlify/functions/panel.js",
+   "rol": "Basic Auth + admin.html servisi (PANEL_PAROLA_HASH)"
+  },
+  {
+   "adim": "netlify/functions/yayinla.js",
+   "rol": "panelden gelen govdeyi content.json olarak GitHub'a commit eder (GITHUB_TOKEN)"
+  },
+  {
+   "adim": "content.json",
+   "rol": "TEK veri kaynagi; derleme onu okur"
+  },
+  {
+   "adim": "yeni/ derleme",
+   "rol": "astro build + denetim.cjs"
+  }
+ ],
+ "panel_zinciri_kusur": [],
+ "kesme_oncesi_panel_alanlari": [
+  {
+   "alan": "settings.whatsapp",
+   "dolu": true
+  },
+  {
+   "alan": "settings.email",
+   "dolu": false
+  },
+  {
+   "alan": "legal.line",
+   "dolu": true
+  },
+  {
+   "alan": "legal.kvkk",
+   "dolu": true
+  },
+  {
+   "alan": "founder.bio.tr",
+   "dolu": true
+  },
+  {
+   "alan": "socials.0.url",
+   "dolu": true
+  }
+ ],
+ "kesme_oncesi_bos": [
+  "settings.email"
+ ],
+ "kusur": []
+}

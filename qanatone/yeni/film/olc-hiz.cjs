@@ -384,9 +384,23 @@ async function tur(browser, tavan) {
       sayi_hepsi: kosumlar.map((k) => k.takilma.sayi),
       toplam_ms_ortanca: ortanca(kosumlar.map((k) => k.takilma.toplam_ms)),
       toplam_ms_hepsi: kosumlar.map((k) => k.takilma.toplam_ms),
-      /* yeni kapi (3 Eyl): yuzde + tek — sayi yalniz bilgi */
+      /* ORAN KAPIDAN DUSTU — YANLIS BIRIM (6 Eyl 2026; ayni duzeltme Kapi
+         B'de 5 Eyl gecesi Enes'in karariyla yapilmisti, birim denetimi bu
+         araci ayakta kalan TEK yeni ornek olarak buldu).
+         BURADA DAHA AGIR: payda `tur_sn` ve bu arac TAVANLARI kiyasliyor —
+         tavani yukseltmek turu KISALTIYOR (kunyenin kendi cumlesi: "bir
+         tavan turu kisaltiyor"). Aracin kendi sabitlerinden turetildi:
+         ray_px 120.565 / pxSn 450 = 268 sn (1x); tavan 1,5 -> ~179 sn ·
+         2,0 -> 128 sn · 2,5 -> ~107 sn. Aday kumesi boyunca payda 1,67 KAT
+         degisiyor, yani HIZLI ADAY ayni mutlak takilmayla 1,67 kat kotu
+         okunuyordu. Kapi, olcmesi gereken seyi degil PAYDAYI olcuyordu.
+         Enes'in bu aracin basina yazdigi degismez de zaten MUTLAK:
+         "klibin hic takilmadan ilerlemesi".
+         Bloklayici olarak MUTLAK birimliler kaldi: tek takilma (ms) ve
+         kare p95 (ms/tik). Oran YAZILIR, hukum VERMEZ. */
       yuzde_hepsi: kosumlar.map((k) => +(100 * k.takilma.toplam_ms / 1000 / k.tur_sn).toFixed(2)),
-      kapi_yuzde: ortanca(kosumlar.map((k) => 100 * k.takilma.toplam_ms / 1000 / k.tur_sn)) <= TAKILMA_YUZDE_TAVAN ? 'GECER' : 'ASIYOR',
+      yuzde_bilgi: 'BILGI — KAPI DEGIL. Payda tur_sn ve tavan turu kisaltiyor; oran adayi degil paydayi olcer.',
+      eski_yuzde_kapisi: ortanca(kosumlar.map((k) => 100 * k.takilma.toplam_ms / 1000 / k.tur_sn)) <= TAKILMA_YUZDE_TAVAN ? 'GECER' : 'ASIYOR',
       /* MEDYAN kurali (3 Eyl gece): tek kosum baglayici degil */
       en_uzun_hepsi: kosumlar.map((k) => k.takilma.en_uzun_ms),
       kapi_tek: ortanca(kosumlar.map((k) => k.takilma.en_uzun_ms)) <= TAKILMA_TEK_MS ? 'GECER' : 'ASIYOR',
@@ -414,7 +428,7 @@ async function tur(browser, tavan) {
     };
     sonuc.push(r);
     console.log(`  ORTAM: ${r.ortam} · taban [${r.taban.sayi_hepsi.join(',')}]`);
-    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma %[${r.takilma.yuzde_hepsi.join(',')}] (${r.takilma.kapi_yuzde}) · tek en-uzun medyan[${r.takilma.en_uzun_hepsi.join(',')}] (${r.takilma.kapi_tek}) · sayi ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] (bilgi) · borc tepe ${r.borc_tepe_sn} sn`);
+    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma %[${r.takilma.yuzde_hepsi.join(',')}] (bilgi, kapi degil: ${r.takilma.eski_yuzde_kapisi}) · tek en-uzun medyan[${r.takilma.en_uzun_hepsi.join(',')}] (${r.takilma.kapi_tek}) · sayi ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] (bilgi) · borc tepe ${r.borc_tepe_sn} sn`);
     for (const d of r.duraklar) console.log(`    durulan · ${d.ad}: p50 ${d.kare_p50} / p95 ${d.kare_p95} ms · takilma [${d.takilma_hepsi.join(',')}]`);
     console.log(`    geri: p50 ${r.geri.kare_p50} / p95 ${r.geri.kare_p95} ms · takilma [${r.geri.takilma_hepsi.join(',')}] · sardi ${r.geri.geriye_sardi}`);
     console.log(`    bayt: tipik oturum (15 sn) ${r.tipik_oturum_mib} MiB · tam tur ${r.tam_tur_mib} MiB · bellek tepe ${r.bellek_tepe_mib} MiB`);
