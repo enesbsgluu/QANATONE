@@ -4,7 +4,7 @@
 > düzenleme — bir sonraki derlemede üzerine yazılır. Dosya listesi
 > gerçek diskten, damga gerçek kaynaktan, sayfa sayısı gerçek çıktıdan.
 >
-> Üretim tarihi: 2026-09-04 00:19 UTC
+> Üretim tarihi: 2026-09-04 00:46 UTC
 
 ## Yeni sohbete geçerken
 
@@ -1020,7 +1020,7 @@
 | `TUR4-SOKUM-KESIF.md` |  | 7 KB | `e4be086a` |
 | `YONLENDIRME-HARITASI.md` |  | 10 KB | `8b3a256d` |
 | `_headers` |  | 82 KB | `4b5ad7b1` |
-| `admin.html` |  | 87 KB | `edbee3c4` |
+| `admin.html` |  | 87 KB | `d591afc8` |
 | `anasayfa-deste.diff` |  | 5 KB | `6d023165` |
 | `animasyon-pin.diff` |  | 4 KB | `d46b700c` |
 | `birlesik.diff` |  | 17 KB | `5c309081` |
@@ -1113,7 +1113,7 @@
 | `holding/test/omurga.test.js` |  | 6 KB | `53244698` |
 | `icerik-temizlik.diff` |  | 14 KB | `3111ef4a` |
 | `img/` | 37 dosya | 1655 KB |  |
-| `index.html` |  | 773 KB | `0381b8a7` |
+| `index.html` |  | 773 KB | `ababeddf` |
 | `js/` | 4 dosya | 889 KB |  |
 | `kablo-duzeltme.diff` |  | 8 KB | `48bfa677` |
 | `karsilama/_kare/1440-a-giris.png` |  | 324 KB | `b062e191` |
@@ -1207,7 +1207,9 @@
 | `tradeself-amblem.diff` |  | 10 KB | `6674d750` |
 | `yeni/amblem-sdf.py` |  | 21 KB | `fc819785` |
 | `yeni/astro.config.mjs` |  | 5 KB | `79c1be46` |
-| `yeni/denetim.cjs` |  | 151 KB | `1579f5c0` |
+| `yeni/denetim.cjs` |  | 160 KB | `1218316f` |
+| `yeni/derleme-belirlenim.cjs` |  | 4 KB | `8e3b5e0d` |
+| `yeni/derleme-belirlenim.json` |  | 0 KB | `0eba991c` |
 | `yeni/film/.404.cjs` |  | 2 KB | `3b938d14` |
 | `yeni/film/.kodek/p-amf.mp4` |  | 0 KB | `da39a3ee` |
 | `yeni/film/.kodek/ref-1440.mp4` |  | 33793 KB | `c01d021e` |
@@ -2696,7 +2698,7 @@
 | `yeni/film/olc-gec-inp.json` |  | 3 KB | `eb2bd394` |
 | `yeni/film/olc-giris.cjs` |  | 4 KB | `1bf7f86c` |
 | `yeni/film/olc-hap.cjs` |  | 3 KB | `207ff0dd` |
-| `yeni/film/olc-hiz.cjs` |  | 24 KB | `d23dcdcb` |
+| `yeni/film/olc-hiz.cjs` |  | 25 KB | `f4383580` |
 | `yeni/film/olc-hiz.json` |  | 3 KB | `a0a7e89d` |
 | `yeni/film/olc-ilkkare.cjs` |  | 4 KB | `8e759232` |
 | `yeni/film/olc-kamera-hizi.json` |  | 8 KB | `82da07d7` |
@@ -3045,11 +3047,13 @@
 | `yeni/gorsel-kanal.cjs` |  | 9 KB | `36b6483f` |
 | `yeni/gorsel-kompoze.cjs` |  | 11 KB | `16abd0f0` |
 | `yeni/gorsel-uret.cjs` |  | 21 KB | `2b0e75af` |
+| `yeni/ic-bag-denetimi.cjs` |  | 6 KB | `a0b16b60` |
+| `yeni/ic-bag-denetimi.json` |  | 8 KB | `05827a71` |
 | `yeni/kabuk/efekt.js` |  | 20 KB | `87e26687` |
 | `yeni/kabuk/pano.js` |  | 3 KB | `8beb0de4` |
 | `yeni/kabuk/sizinti.js` |  | 5 KB | `0e547d9b` |
 | `yeni/kabuk/tespit-fix.mjs` |  | 5 KB | `0f32de9e` |
-| `yeni/kabuk-derle.cjs` |  | 5 KB | `872e4c14` |
+| `yeni/kabuk-derle.cjs` |  | 7 KB | `01e2bcc0` |
 | `yeni/link-basliklari.cjs` |  | 4 KB | `45be498a` |
 | `yeni/metin-harita.cjs` |  | 8 KB | `fdf4287f` |
 | `yeni/package-lock.json` |  | 240 KB | `b336378b` |
@@ -3183,6 +3187,7 @@
 | `yeni/public/img/ts-beyin.webp` |  | 65 KB | `6d68c7b3` |
 | `yeni/public/img/ts-dis.webp` |  | 106 KB | `765fa0cc` |
 | `yeni/public/img/ts-ic.webp` |  | 22 KB | `2d2fa4d9` |
+| `yeni/public/robots.txt` |  | 2 KB | `b1829db4` |
 | `yeni/public/varlik/film/sahne1-acilis-h265.mp4` |  | 169 KB | `7d2d27f9` |
 | `yeni/public/varlik/film/sahne1-acilis-mobile-h265.mp4` |  | 118 KB | `4b6a116d` |
 | `yeni/public/varlik/film/sahne1-acilis-mobile.mp4` |  | 179 KB | `3feea5a7` |
@@ -3436,7 +3441,7 @@
 | `yeni/src/hesap.mjs` |  | 4 KB | `7bc715e2` |
 | `yeni/src/huni.mjs` |  | 2 KB | `2d8aaec1` |
 | `yeni/src/icerik.ts` |  | 3 KB | `9faf4e68` |
-| `yeni/src/layouts/Temel.astro` |  | 15 KB | `e87bf5e6` |
+| `yeni/src/layouts/Temel.astro` |  | 16 KB | `21fcd02f` |
 | `yeni/src/pages/404.astro` |  | 1 KB | `453ebd1f` |
 | `yeni/src/pages/bulten/[slug].astro` |  | 1 KB | `10fac856` |
 | `yeni/src/pages/bulten/index.astro` |  | 1 KB | `50b37a65` |
@@ -3449,7 +3454,7 @@
 | `yeni/src/pages/en/hizmetler.astro` |  | 1 KB | `d81f3442` |
 | `yeni/src/pages/en/index.astro` |  | 4 KB | `81057622` |
 | `yeni/src/pages/en/otomasyon.astro` |  | 1 KB | `f903cc74` |
-| `yeni/src/pages/en/projeler/[slug].astro` |  | 1 KB | `f565cfb7` |
+| `yeni/src/pages/en/projeler/[slug].astro` |  | 1 KB | `d1999d2a` |
 | `yeni/src/pages/en/projeler/index.astro` |  | 1 KB | `7fdc0aa2` |
 | `yeni/src/pages/en/sss.astro` |  | 1 KB | `1348318d` |
 | `yeni/src/pages/en/surec.astro` |  | 1 KB | `8c4fd9eb` |
@@ -3460,7 +3465,7 @@
 | `yeni/src/pages/hukuki.astro` |  | 1 KB | `8c92f2eb` |
 | `yeni/src/pages/index.astro` |  | 8 KB | `155ffad7` |
 | `yeni/src/pages/otomasyon.astro` |  | 1 KB | `65d3f821` |
-| `yeni/src/pages/projeler/[slug].astro` |  | 1 KB | `efd9ca9a` |
+| `yeni/src/pages/projeler/[slug].astro` |  | 2 KB | `41eb5047` |
 | `yeni/src/pages/projeler/index.astro` |  | 1 KB | `2f7f3cbe` |
 | `yeni/src/pages/sitemap.xml.ts` |  | 3 KB | `54e34b97` |
 | `yeni/src/pages/sss.astro` |  | 1 KB | `b6112ca2` |
@@ -3475,7 +3480,7 @@
 | `yeni/src/parcalar/EskiGiris.astro` |  | 4 KB | `ed439c89` |
 | `yeni/src/parcalar/Film.astro` |  | 48 KB | `a019d611` |
 | `yeni/src/parcalar/HizmetDizin.astro` |  | 14 KB | `518a869f` |
-| `yeni/src/parcalar/HizmetGovde.astro` |  | 22 KB | `e650975e` |
+| `yeni/src/parcalar/HizmetGovde.astro` |  | 23 KB | `518716ae` |
 | `yeni/src/parcalar/HuniSahne.astro` |  | 5 KB | `c7d950a8` |
 | `yeni/src/parcalar/Ikon.astro` |  | 4 KB | `ab1c6954` |
 | `yeni/src/parcalar/KadroBlok.astro` |  | 3 KB | `7d227bc3` |
@@ -3487,7 +3492,7 @@
 | `yeni/src/parcalar/Perde.astro` |  | 5 KB | `e4bc7f00` |
 | `yeni/src/parcalar/PlatformSahne.astro` |  | 29 KB | `fa2421c1` |
 | `yeni/src/parcalar/ProjeDizin.astro` |  | 28 KB | `f9d4c5fe` |
-| `yeni/src/parcalar/ProjeGovde.astro` |  | 10 KB | `006525f0` |
+| `yeni/src/parcalar/ProjeGovde.astro` |  | 10 KB | `3ce46e18` |
 | `yeni/src/parcalar/PrologYuvasi.astro` |  | 0 KB | `b97a426e` |
 | `yeni/src/parcalar/SerpSahne.astro` |  | 10 KB | `db184700` |
 | `yeni/src/parcalar/SohbetSahne.astro` |  | 9 KB | `41c0ab24` |
@@ -3511,7 +3516,7 @@
 | `yeni/src/sahneler/SSZSozler.astro` |  | 6 KB | `af5f6234` |
 | `yeni/src/sahneler/STETespit.astro` |  | 15 KB | `e3da12b8` |
 | `yeni/src/sahneler/STSerit.astro` |  | 2 KB | `00e649e0` |
-| `yeni/src/sema.mjs` |  | 10 KB | `e30e15db` |
+| `yeni/src/sema.mjs` |  | 11 KB | `9226084b` |
 | `yeni/src/stil/aile.css` |  | 1 KB | `7711508d` |
 | `yeni/src/stil/akis.css` |  | 21 KB | `3dc85a91` |
 | `yeni/src/stil/ana.css` |  | 9 KB | `513c9f53` |
@@ -3552,6 +3557,8 @@
 | `yeni/test/huni.test.mjs` |  | 2 KB | `44c34fc7` |
 | `yeni/test/olc-esik.test.mjs` |  | 10 KB | `7ee85a9b` |
 | `yeni/tsconfig.json` |  | 0 KB | `302e8bc4` |
+| `yeni/yayin-envanteri.cjs` |  | 8 KB | `983f047b` |
+| `yeni/yayin-envanteri.json` |  | 5 KB | `3f65d562` |
 | `yeni-denetim-gece.log` |  | 6 KB | `506edfac` |
 | `yeni-denetim-gece2.log` |  | 6 KB | `efd17945` |
 | `yerel-sun.cjs` |  | 4 KB | `bcc6e6fc` |
@@ -3564,7 +3571,7 @@
 | üretilen sayfa | 58 (29 TR + 29 EN) |
 | sitemap URL | 58 |
 | denetim suite | temiz |
-| son derleme | 58 sn (basılan 0, önbellekten 58) |
+| son derleme | 132 sn (basılan 58, önbellekten 0) |
 | dist boyutu | 8.3 MB |
 
 ## Çalıştırma
