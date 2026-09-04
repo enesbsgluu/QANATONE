@@ -1,0 +1,2864 @@
+{
+ "_": "olc-boyama.cjs — acilis boyamasinin muhasebesi. TESHIS, kapi degil.",
+ "sayfa": "/",
+ "tekrar": 2,
+ "sure_ms": 5000,
+ "mobil": true,
+ "cpu": 4,
+ "perde": false,
+ "tarayici": "brave",
+ "kosumlar": [
+  {
+   "kosum": 1,
+   "isaret": {
+    "fp_ms": 483.3,
+    "fcp_ms": 483.3,
+    "lcp_ms": 1091.5,
+    "yuklendi_ms": 1106.4,
+    "dom_ms": 925.8
+   },
+   "ana_mesgul_ms": 4767.8,
+   "asama": {
+    "Chrome_DevToolsHandlerThread": {
+     "RunTask": {
+      "oz_ms": 15.309000000000001,
+      "sure_ms": 15.309000000000001,
+      "say": 379
+     }
+    },
+    "Chrome_IOThread": {
+     "RunTask": {
+      "oz_ms": 9.04599999999995,
+      "sure_ms": 9.04599999999995,
+      "say": 1205
+     }
+    },
+    "tarayici": {
+     "LoadingPredictor::OnNavigationStarted": {
+      "oz_ms": 0.008,
+      "sure_ms": 0.008,
+      "say": 1
+     },
+     "LoadingPredictor::PrepareForPageLoad": {
+      "oz_ms": 0.026,
+      "sure_ms": 0.026,
+      "say": 1
+     },
+     "RunTask": {
+      "oz_ms": 161.0070000000004,
+      "sure_ms": 181.62800000000018,
+      "say": 2807
+     },
+     "PrefetchURLLoaderInterceptor::MaybeCreateLoader": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "PrefetchURLLoaderInterceptor::GetPrefetch": {
+      "oz_ms": 0.038,
+      "sure_ms": 0.038,
+      "say": 1
+     },
+     "PrefetchMatchResolver::FindPrefetch": {
+      "oz_ms": 0.020999999999999998,
+      "sure_ms": 0.020999999999999998,
+      "say": 3
+     },
+     "PrefetchMatchResolver::UnblockForNoCandidates": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "PrefetchURLLoaderInterceptor::OnGetPrefetchComplete": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "SearchPrefetchURLLoaderInterceptor::MaybeCreateLoader": {
+      "oz_ms": 0.203,
+      "sure_ms": 0.632,
+      "say": 1
+     },
+     "ResourceRequest::TrustedParams.copy": {
+      "oz_ms": 0.028,
+      "sure_ms": 0.347,
+      "say": 5
+     },
+     "CookieAccessObserver.copy": {
+      "oz_ms": 0.079,
+      "sure_ms": 0.079,
+      "say": 5
+     },
+     "TrustTokenAccessObserver.copy": {
+      "oz_ms": 0.033,
+      "sure_ms": 0.033,
+      "say": 5
+     },
+     "URLLoaderNetworkServiceObserver.copy": {
+      "oz_ms": 0.054000000000000006,
+      "sure_ms": 0.054000000000000006,
+      "say": 5
+     },
+     "DevToolsObserver.copy": {
+      "oz_ms": 0.048,
+      "sure_ms": 0.048,
+      "say": 5
+     },
+     "DeviceBoundSessionAccessObserver.copy": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.034,
+      "say": 5
+     },
+     "AcceptCHFrameObserver.copy": {
+      "oz_ms": 0.037000000000000005,
+      "sure_ms": 0.037000000000000005,
+      "say": 5
+     },
+     "SharedDictionaryAccessObserver.copy": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.034,
+      "say": 5
+     },
+     "ThrottlingURLLoader::ThrottlingURLLoader": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "ThrottlingURLLoader::Start": {
+      "oz_ms": 0.204,
+      "sure_ms": 0.31,
+      "say": 1
+     },
+     "ThrottlingURLLoader::StartNow": {
+      "oz_ms": 0.031,
+      "sure_ms": 0.031,
+      "say": 1
+     },
+     "UpdateLayer": {
+      "oz_ms": 10.454999999999949,
+      "sure_ms": 10.454999999999949,
+      "say": 927
+     },
+     "Commit": {
+      "oz_ms": 8.322000000000001,
+      "sure_ms": 8.322000000000001,
+      "say": 56
+     },
+     "ThrottlingURLLoader::OnReceiveResponse": {
+      "oz_ms": 0.152,
+      "sure_ms": 0.152,
+      "say": 1
+     },
+     "ThrottlingURLLoader::~ThrottlingURLLoader": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "KeepAliveURLLoaderFactories::BindFactory": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "FetchLaterLoaderFactories::BindFactory": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "MetricsWebContentsObserver::UpdateTiming": {
+      "oz_ms": 0.7690000000000001,
+      "sure_ms": 0.7690000000000001,
+      "say": 11
+     },
+     "MetricsWebContentsObserver::MaybeRestorePageLoadTrackerForBackForwardCache": {
+      "oz_ms": 0.037,
+      "sure_ms": 0.037,
+      "say": 1
+     },
+     "MetricsWebContentsObserver::MaybeActivatePageLoadTracker": {
+      "oz_ms": 0.016,
+      "sure_ms": 0.016,
+      "say": 1
+     }
+    },
+    "CrGpuMain": {
+     "RunTask": {
+      "oz_ms": 665.0629999999979,
+      "sure_ms": 1210.496000000006,
+      "say": 3442
+     },
+     "GPUTask": {
+      "oz_ms": 545.4329999999997,
+      "sure_ms": 545.4329999999997,
+      "say": 374
+     }
+    },
+    "Chrome_ChildIOThread": {
+     "RunTask": {
+      "oz_ms": 9.205999999999978,
+      "sure_ms": 9.205999999999978,
+      "say": 773
+     }
+    },
+    "ana": {
+     "RunTask": {
+      "oz_ms": 1185.1959999999826,
+      "sure_ms": 4767.798000000034,
+      "say": 2808
+     },
+     "DocumentLoader::DocumentLoader": {
+      "oz_ms": 0.067,
+      "sure_ms": 0.067,
+      "say": 3
+     },
+     "DocumentLoader::CommitNavigation": {
+      "oz_ms": 6.779,
+      "sure_ms": 85.87700000000001,
+      "say": 3
+     },
+     "DocumentLoader::InitializeWindow": {
+      "oz_ms": 1.062,
+      "sure_ms": 1.064,
+      "say": 3
+     },
+     "DocumentLoader::RecordUseCountersForCommit": {
+      "oz_ms": 0.014,
+      "sure_ms": 0.014,
+      "say": 3
+     },
+     "DocumentLoader::DidInstallNewDocument": {
+      "oz_ms": 0.39899999999999997,
+      "sure_ms": 0.39899999999999997,
+      "say": 3
+     },
+     "DocumentLoader::DidCommitNavigation": {
+      "oz_ms": 0.41000000000000003,
+      "sure_ms": 1.0079999999999998,
+      "say": 3
+     },
+     "DocumentLoader::StartLoadingResponse": {
+      "oz_ms": 0.194,
+      "sure_ms": 76.613,
+      "say": 3
+     },
+     "DocumentLoader::CreateParserPostCommit": {
+      "oz_ms": 29.823999999999998,
+      "sure_ms": 74.62,
+      "say": 3
+     },
+     "DocumentLoader::FinishedLoading": {
+      "oz_ms": 1.5430000000000001,
+      "sure_ms": 2.207,
+      "say": 3
+     },
+     "ParseHTML": {
+      "oz_ms": 174.67399999999998,
+      "sure_ms": 219.22499999999997,
+      "say": 14
+     },
+     "HTMLDocumentParser::DocumentElementAvailable": {
+      "oz_ms": 0.17200000000000001,
+      "sure_ms": 0.17200000000000001,
+      "say": 3
+     },
+     "EventDispatch": {
+      "oz_ms": 0.7250000000000001,
+      "sure_ms": 0.7250000000000001,
+      "say": 49
+     },
+     "PrePaint": {
+      "oz_ms": 276.34700000000015,
+      "sure_ms": 276.34700000000015,
+      "say": 420
+     },
+     "Paint": {
+      "oz_ms": 16.806000000000004,
+      "sure_ms": 36.64399999999999,
+      "say": 53
+     },
+     "Layerize": {
+      "oz_ms": 408.0679999999999,
+      "sure_ms": 411.1499999999999,
+      "say": 414
+     },
+     "Commit": {
+      "oz_ms": 216.17899999999995,
+      "sure_ms": 723.458,
+      "say": 413
+     },
+     "BackForwardCacheBufferLimitTracker::DidRemoveFrameOrWorkerFromBackForwardCache": {
+      "oz_ms": 0.20700000000000002,
+      "sure_ms": 0.20700000000000002,
+      "say": 8
+     },
+     "PageTimingMetricsSender::SendNow": {
+      "oz_ms": 0.5590000000000002,
+      "sure_ms": 0.5590000000000002,
+      "say": 11
+     },
+     "CommitLoad": {
+      "oz_ms": 0.598,
+      "sure_ms": 0.598,
+      "say": 1
+     },
+     "FunctionCall": {
+      "oz_ms": 115.90199999999999,
+      "sure_ms": 116.50999999999998,
+      "say": 28
+     },
+     "NavigationBodyLoader::StartLoadingBody": {
+      "oz_ms": 0.056,
+      "sure_ms": 39.872,
+      "say": 1
+     },
+     "NavigationBodyLoader::OnReadable": {
+      "oz_ms": 0.187,
+      "sure_ms": 41.172000000000004,
+      "say": 3
+     },
+     "NavigationBodyLoader::ReadFromDataPipe": {
+      "oz_ms": 0.23,
+      "sure_ms": 40.985,
+      "say": 3
+     },
+     "DocumentLoader::BodyDataReceivedImpl": {
+      "oz_ms": 0.9750000000000001,
+      "sure_ms": 40.754999999999995,
+      "say": 3
+     },
+     "DocumentLoader::HandleData": {
+      "oz_ms": 0.01,
+      "sure_ms": 39.78,
+      "say": 3
+     },
+     "DocumentLoader::CommitData": {
+      "oz_ms": 0.012,
+      "sure_ms": 39.769999999999996,
+      "say": 3
+     },
+     "DecodedDataDocumentParser::AppendBytes": {
+      "oz_ms": 10.594,
+      "sure_ms": 40.565999999999995,
+      "say": 4
+     },
+     "HTMLDocumentParser::MaybeFetchQueuedPreloads": {
+      "oz_ms": 21.158,
+      "sure_ms": 29.972,
+      "say": 1
+     },
+     "URLLoader::loadAsynchronously": {
+      "oz_ms": 2.0149999999999997,
+      "sure_ms": 13.360000000000001,
+      "say": 23
+     },
+     "URLLoader::Context::Start": {
+      "oz_ms": 2.2949999999999995,
+      "sure_ms": 11.345000000000002,
+      "say": 23
+     },
+     "ThrottlingURLLoader::ThrottlingURLLoader": {
+      "oz_ms": 0.379,
+      "sure_ms": 0.379,
+      "say": 23
+     },
+     "ThrottlingURLLoader::Start": {
+      "oz_ms": 1.7949999999999993,
+      "sure_ms": 8.671000000000001,
+      "say": 23
+     },
+     "ThrottlingURLLoader::StartNow": {
+      "oz_ms": 6.876,
+      "sure_ms": 6.876,
+      "say": 23
+     },
+     "UpdateLayoutTree": {
+      "oz_ms": 1183.586000000001,
+      "sure_ms": 1188.8500000000006,
+      "say": 417
+     },
+     "Layout": {
+      "oz_ms": 334.76899999999995,
+      "sure_ms": 334.76899999999995,
+      "say": 19
+     },
+     "ThrottlingURLLoader::OnReceiveResponse": {
+      "oz_ms": 3.044,
+      "sure_ms": 28.470999999999993,
+      "say": 22
+     },
+     "MojoURLLoaderClient::OnReceiveResponse": {
+      "oz_ms": 0.23300000000000004,
+      "sure_ms": 25.427000000000007,
+      "say": 22
+     },
+     "ResourceRequestSender::OnReceivedResponse": {
+      "oz_ms": 2.4269999999999996,
+      "sure_ms": 26.680999999999997,
+      "say": 22
+     },
+     "URLLoader::Context::OnReceivedResponse": {
+      "oz_ms": 24.254,
+      "sure_ms": 24.254,
+      "say": 22
+     },
+     "ResourceRequestSender::OnRequestComplete": {
+      "oz_ms": 2.003,
+      "sure_ms": 35.157000000000004,
+      "say": 23
+     },
+     "URLLoader::Context::OnCompletedRequest": {
+      "oz_ms": 29.866000000000003,
+      "sure_ms": 33.154,
+      "say": 23
+     },
+     "URLLoader::Context::Cancel": {
+      "oz_ms": 4.405,
+      "sure_ms": 4.4239999999999995,
+      "say": 23
+     },
+     "ThrottlingURLLoader::~ThrottlingURLLoader": {
+      "oz_ms": 0.019000000000000003,
+      "sure_ms": 0.019000000000000003,
+      "say": 16
+     },
+     "EvaluateScript": {
+      "oz_ms": 24.354000000000003,
+      "sure_ms": 36.36,
+      "say": 12
+     },
+     "v8.compile": {
+      "oz_ms": 11.209,
+      "sure_ms": 11.209,
+      "say": 12
+     },
+     "ParseAuthorStyleSheet": {
+      "oz_ms": 6.265000000000001,
+      "sure_ms": 6.265000000000001,
+      "say": 3
+     },
+     "PaintImage": {
+      "oz_ms": 3.5829999999999997,
+      "sure_ms": 3.5829999999999997,
+      "say": 73
+     },
+     "v8.compileModule": {
+      "oz_ms": 3.0300000000000002,
+      "sure_ms": 3.0300000000000002,
+      "say": 9
+     },
+     "DocumentLoader::BodyLoadingFinished": {
+      "oz_ms": 3.641,
+      "sure_ms": 4.049,
+      "say": 1
+     },
+     "BeginRemoteFontLoad": {
+      "oz_ms": 0.6,
+      "sure_ms": 0.99,
+      "say": 1
+     },
+     "IntersectionObserverController::computeIntersections": {
+      "oz_ms": 581.8049999999996,
+      "sure_ms": 581.8049999999996,
+      "say": 828
+     },
+     "UpdateLayer": {
+      "oz_ms": 28.93900000000182,
+      "sure_ms": 28.93900000000182,
+      "say": 4357
+     },
+     "RemoteFontLoaded": {
+      "oz_ms": 0.009,
+      "sure_ms": 0.009,
+      "say": 1
+     },
+     "HitTest": {
+      "oz_ms": 4.140000000000001,
+      "sure_ms": 4.140000000000001,
+      "say": 10
+     },
+     "LargestImagePaint::NoCandidate": {
+      "oz_ms": 0.161,
+      "sure_ms": 0.161,
+      "say": 1
+     },
+     "v8.evaluateModule": {
+      "oz_ms": 10.687000000000001,
+      "sure_ms": 10.687000000000001,
+      "say": 9
+     },
+     "TimerFire": {
+      "oz_ms": 0.40700000000000003,
+      "sure_ms": 6.261000000000001,
+      "say": 3
+     },
+     "V8.GC_HEAP_ENSURE_SWEEPING_COMPLETED": {
+      "oz_ms": 0.014,
+      "sure_ms": 0.014,
+      "say": 1
+     },
+     "V8.GC_TIME_TO_SAFEPOINT": {
+      "oz_ms": 0.013999999999999999,
+      "sure_ms": 0.013999999999999999,
+      "say": 2
+     },
+     "V8.GC_MC_INCREMENTAL_START": {
+      "oz_ms": 0.396,
+      "sure_ms": 1.11,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL_EXTERNAL_PROLOGUE": {
+      "oz_ms": 0.225,
+      "sure_ms": 0.225,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_EMBEDDER_PROLOGUE": {
+      "oz_ms": 0.258,
+      "sure_ms": 0.258,
+      "say": 2
+     },
+     "V8.GC_MC_MARK_ROOTS": {
+      "oz_ms": 0.7839999999999999,
+      "sure_ms": 0.7849999999999999,
+      "say": 3
+     },
+     "Major concurrent marking started": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL_EXTERNAL_EPILOGUE": {
+      "oz_ms": 0.022,
+      "sure_ms": 0.022,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL": {
+      "oz_ms": 0.7540000000000002,
+      "sure_ms": 8.983999999999996,
+      "say": 26
+     },
+     "V8.GC_MC_INCREMENTAL_EMBEDDER_TRACING": {
+      "oz_ms": 8.225999999999999,
+      "sure_ms": 8.225999999999999,
+      "say": 26
+     },
+     "Major concurrent marking rescheduled": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 3
+     },
+     "V8.GC_HEAP_EXTERNAL_PROLOGUE": {
+      "oz_ms": 0.246,
+      "sure_ms": 0.246,
+      "say": 1
+     },
+     "MajorGC": {
+      "oz_ms": 1.237,
+      "sure_ms": 9.012,
+      "say": 1
+     },
+     "V8.GC_HEAP_PROLOGUE": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MARK_COMPACTOR": {
+      "oz_ms": 1.892,
+      "sure_ms": 7.738,
+      "say": 1
+     },
+     "V8.GC_HEAP_PROLOGUE_SAFEPOINT": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_PROLOGUE": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_MARK": {
+      "oz_ms": 0.21,
+      "sure_ms": 1.017,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FINISH_INCREMENTAL": {
+      "oz_ms": 0.008,
+      "sure_ms": 0.008,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_CLIENT_HEAPS": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_RETAIN_MAPS": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FULL_CLOSURE_PARALLEL": {
+      "oz_ms": 0.029,
+      "sure_ms": 0.204,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_WEAK_CLOSURE_EPHEMERON_MARKING": {
+      "oz_ms": 0.169,
+      "sure_ms": 0.17600000000000002,
+      "say": 3
+     },
+     "V8.GC_MC_MARK_EMBEDDER_TRACING": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 3
+     },
+     "V8.GC_CONSERVATIVE_STACK_SCANNING": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FULL_CLOSURE_SERIAL": {
+      "oz_ms": 0.004,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR": {
+      "oz_ms": 0.025,
+      "sure_ms": 0.653,
+      "say": 1
+     },
+     "ClearStringTableJob started": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 4
+     },
+     "ClearTrivialWeakRefJob started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "ClearTrustedWeakRefJob started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "ClearNonTrivialWeakRefs started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_JOIN_JOB": {
+      "oz_ms": 0.569,
+      "sure_ms": 0.62,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_TRUSTED": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_TRIVIAL": {
+      "oz_ms": 0.029,
+      "sure_ms": 0.029,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_STRING_TABLE": {
+      "oz_ms": 0.019,
+      "sure_ms": 0.019,
+      "say": 2
+     },
+     "V8.GC_MC_SWEEP": {
+      "oz_ms": 0.18000000000000002,
+      "sure_ms": 0.18100000000000002,
+      "say": 3
+     },
+     "V8.GC_MC_EVACUATE": {
+      "oz_ms": 0.164,
+      "sure_ms": 3.1919999999999997,
+      "say": 2
+     },
+     "V8.GC_MC_EVACUATE_PROLOGUE": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_COPY": {
+      "oz_ms": 0.047,
+      "sure_ms": 1.638,
+      "say": 1
+     },
+     "PageEvacuationJob started": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_COPY_PARALLEL": {
+      "oz_ms": 1.42,
+      "sure_ms": 1.589,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS": {
+      "oz_ms": 0.01,
+      "sure_ms": 1.213,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS": {
+      "oz_ms": 0.609,
+      "sure_ms": 0.609,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_CLIENT_HEAPS": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_SLOTS_MAIN": {
+      "oz_ms": 0.174,
+      "sure_ms": 0.375,
+      "say": 1
+     },
+     "PointersUpdatingJob started": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_PARALLEL": {
+      "oz_ms": 0.199,
+      "sure_ms": 0.199,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_WEAK": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_POINTER_TABLES": {
+      "oz_ms": 0.215,
+      "sure_ms": 0.215,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_CLEAN_UP": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_SWEEP_NEW_LO": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_REBALANCE": {
+      "oz_ms": 0.169,
+      "sure_ms": 0.169,
+      "say": 1
+     },
+     "V8.GC_MC_FINISH": {
+      "oz_ms": 0.004,
+      "sure_ms": 0.011,
+      "say": 1
+     },
+     "V8.GC_MC_SWEEP_START_JOBS": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "V8.GC_MC_EPILOGUE": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "V8.GC_HEAP_EMBEDDER_TRACING_EPILOGUE": {
+      "oz_ms": 0.775,
+      "sure_ms": 0.784,
+      "say": 1
+     },
+     "V8.GC_HEAP_EPILOGUE_SAFEPOINT": {
+      "oz_ms": 0.167,
+      "sure_ms": 0.167,
+      "say": 1
+     },
+     "V8.GC_HEAP_EPILOGUE": {
+      "oz_ms": 0.03,
+      "sure_ms": 0.03,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_EPILOGUE": {
+      "oz_ms": 0.231,
+      "sure_ms": 0.231,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_SECOND_PASS_CALLBACKS": {
+      "oz_ms": 0.02,
+      "sure_ms": 0.02,
+      "say": 1
+     },
+     "DocumentLoader::~DocumentLoader": {
+      "oz_ms": 1.7830000000000001,
+      "sure_ms": 1.7830000000000001,
+      "say": 6
+     },
+     "FireIdleCallback": {
+      "oz_ms": 0.655,
+      "sure_ms": 26.661,
+      "say": 3
+     }
+    },
+    "kompozitor": {
+     "RunTask": {
+      "oz_ms": 314.59199999999987,
+      "sure_ms": 314.59199999999987,
+      "say": 4084
+     }
+    },
+    "VizCompositorThread": {
+     "RunTask": {
+      "oz_ms": 445.71999999999855,
+      "sure_ms": 445.71999999999855,
+      "say": 2827
+     }
+    },
+    "PerfettoTrace": {
+     "RunTask": {
+      "oz_ms": 3.052999999999999,
+      "sure_ms": 3.052999999999999,
+      "say": 93
+     }
+    },
+    "GpuVSyncThread": {
+     "RunTask": {
+      "oz_ms": 5001.492000000004,
+      "sure_ms": 5001.492000000004,
+      "say": 601
+     }
+    },
+    "raster iscisi": {
+     "RasterTask": {
+      "oz_ms": 4.559999999999999,
+      "sure_ms": 4.559999999999999,
+      "say": 95
+     },
+     "ImageUploadTask": {
+      "oz_ms": 0.105,
+      "sure_ms": 0.105,
+      "say": 8
+     }
+    },
+    "ThreadPoolServiceThread": {
+     "RunTask": {
+      "oz_ms": 0.375,
+      "sure_ms": 0.375,
+      "say": 14
+     }
+    },
+    "CacheThread_BlockFile": {
+     "RunTask": {
+      "oz_ms": 29.036999999999995,
+      "sure_ms": 29.036999999999995,
+      "say": 180
+     }
+    },
+    "ThreadPoolForegroundWorker": {
+     "v8.parseOnBackground": {
+      "oz_ms": 0.19399999999999998,
+      "sure_ms": 3.2310000000000003,
+      "say": 6
+     },
+     "v8.parseOnBackgroundParsing": {
+      "oz_ms": 3.037,
+      "sure_ms": 3.037,
+      "say": 6
+     },
+     "RasterTask": {
+      "oz_ms": 21.242,
+      "sure_ms": 21.242,
+      "say": 111
+     },
+     "ImageDecodeTask": {
+      "oz_ms": 0.7140000000000001,
+      "sure_ms": 16.591,
+      "say": 3
+     },
+     "Decode LazyPixelRef": {
+      "oz_ms": 3.2720000000000002,
+      "sure_ms": 15.876999999999999,
+      "say": 3
+     },
+     "Decode Image": {
+      "oz_ms": 12.605,
+      "sure_ms": 12.605,
+      "say": 3
+     },
+     "ImageUploadTask": {
+      "oz_ms": 2.117,
+      "sure_ms": 2.117,
+      "say": 3
+     },
+     "V8.GC_MC_BACKGROUND_MARKING": {
+      "oz_ms": 5.554999999999999,
+      "sure_ms": 5.586,
+      "say": 11
+     },
+     "ConcurrentMarking::RunMajor Finished": {
+      "oz_ms": 0.031000000000000007,
+      "sure_ms": 0.031000000000000007,
+      "say": 11
+     },
+     "V8.GC_MC_CLEAR_WEAK_COLLECTIONS": {
+      "oz_ms": 0.016,
+      "sure_ms": 0.016,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_WASM_CODE_POINTER_TABLE": {
+      "oz_ms": 0.026,
+      "sure_ms": 0.026,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_MAPS": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.034,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_LISTS": {
+      "oz_ms": 0.027,
+      "sure_ms": 0.027,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_JS_DISPATCH_TABLE": {
+      "oz_ms": 0.163,
+      "sure_ms": 0.163,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_FLUSHED_JS_FUNCTIONS": {
+      "oz_ms": 0.044,
+      "sure_ms": 0.044,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_EXTERNAL_STRING_TABLE": {
+      "oz_ms": 0.018,
+      "sure_ms": 0.018,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_GLOBAL_HANDLES": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.034,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_JS_WEAK_REFERENCES": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_STRING_TABLE": {
+      "oz_ms": 0.07600000000000001,
+      "sure_ms": 0.07600000000000001,
+      "say": 6
+     },
+     "V8.GC_MC_CLEAR_SWEEP_EXTERNAL_POINTER_TABLE": {
+      "oz_ms": 0.186,
+      "sure_ms": 0.186,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_FLUSHABLE_BYTECODE": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_TRUSTED_POINTER_TABLE": {
+      "oz_ms": 0.074,
+      "sure_ms": 0.074,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_NON_TRIVIAL": {
+      "oz_ms": 0.031,
+      "sure_ms": 0.031,
+      "say": 1
+     },
+     "V8.GC_MC_BACKGROUND_EVACUATE_UPDATE_POINTERS": {
+      "oz_ms": 0.099,
+      "sure_ms": 0.099,
+      "say": 4
+     },
+     "V8.GC_MC_BACKGROUND_SWEEPING": {
+      "oz_ms": 0.489,
+      "sure_ms": 0.506,
+      "say": 5
+     },
+     "Sweeper::ConcurrentMajorSweeper Finished": {
+      "oz_ms": 0.017,
+      "sure_ms": 0.017,
+      "say": 11
+     }
+    },
+    "MemoryInfra": {
+     "RunTask": {
+      "oz_ms": 0.26800000000000007,
+      "sure_ms": 0.26800000000000007,
+      "say": 12
+     }
+    }
+   },
+   "dugumler": [
+    {
+     "nodeId": 6,
+     "ms": 19.601000000000003,
+     "say": 13,
+     "en_buyuk_ms": 6.078,
+     "dugum": "#document"
+    },
+    {
+     "nodeId": 320,
+     "ms": 3.4299999999999997,
+     "say": 3,
+     "en_buyuk_ms": 1.623,
+     "dugum": "div.st-akis"
+    },
+    {
+     "nodeId": 291,
+     "ms": 3.054,
+     "say": 6,
+     "en_buyuk_ms": 1.182,
+     "dugum": "div.sh-ic"
+    },
+    {
+     "nodeId": 318,
+     "ms": 1.643,
+     "say": 1,
+     "en_buyuk_ms": 1.643,
+     "dugum": "div.st-pencere"
+    },
+    {
+     "nodeId": 507,
+     "ms": 0.8109999999999999,
+     "say": 3,
+     "en_buyuk_ms": 0.59,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 18,
+     "ms": 0.774,
+     "say": 1,
+     "en_buyuk_ms": 0.774,
+     "dugum": "div#bg"
+    },
+    {
+     "nodeId": 469,
+     "ms": 0.766,
+     "say": 2,
+     "en_buyuk_ms": 0.588,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 450,
+     "ms": 0.666,
+     "say": 2,
+     "en_buyuk_ms": 0.643,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 451,
+     "ms": 0.637,
+     "say": 1,
+     "en_buyuk_ms": 0.637,
+     "dugum": "a.sp-govde"
+    },
+    {
+     "nodeId": 488,
+     "ms": 0.611,
+     "say": 1,
+     "en_buyuk_ms": 0.611,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 489,
+     "ms": 0.607,
+     "say": 1,
+     "en_buyuk_ms": 0.607,
+     "dugum": "a.sp-govde"
+    },
+    {
+     "nodeId": 36,
+     "ms": 0.582,
+     "say": 1,
+     "en_buyuk_ms": 0.582,
+     "dugum": "nav#nv.nv-bar"
+    },
+    {
+     "nodeId": 470,
+     "ms": 0.582,
+     "say": 1,
+     "en_buyuk_ms": 0.582,
+     "dugum": "a.sp-govde"
+    },
+    {
+     "nodeId": 302,
+     "ms": 0.58,
+     "say": 1,
+     "en_buyuk_ms": 0.58,
+     "dugum": "div.sh-cta"
+    }
+   ],
+   "gecersiz": {
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · HTML": 2,
+    "LayoutInvalidationTracking · Added to layout · #document": 3,
+    "StyleRecalcInvalidationTracking · Zoom · HTML": 1,
+    "LayoutInvalidationTracking · Removed from layout · BODY": 3,
+    "LayoutInvalidationTracking · Removed from layout · HTML": 1,
+    "LayoutInvalidationTracking · Unknown · #document": 3,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · HTML class='t-nostars'": 1,
+    "StyleRecalcInvalidationTracking · Style rule change · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · BODY": 3,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · A class='atla'": 1,
+    "StyleRecalcInvalidationTracking · Affected by :has() · BODY": 59,
+    "StyleRecalcInvalidationTracking · Affected by :has() · HTML class='t-nostars'": 60,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · #text": 37,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='perde' class='sus-perde'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SCRIPT": 7,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='bg'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · CANVAS id='stars'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='noise'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='bit' class='kb-bit'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='bittip' class='kb-tip'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='bitsay' class='kb-say'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · INPUT id='nvAc' class='vh'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · I id='nvS'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV class='nv-fade'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · NAV id='nv' class='nv-bar'": 1,
+    "LayoutInvalidationTracking · Added to layout · NAV id='nv' class='nv-bar'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-logo'": 2,
+    "LayoutInvalidationTracking · Added to layout · I": 41,
+    "LayoutInvalidationTracking · Added to layout · PICTURE": 68,
+    "LayoutInvalidationTracking · Added to layout · #text": 191,
+    "LayoutInvalidationTracking · Added to layout · SOURCE": 40,
+    "LayoutInvalidationTracking · Added to layout · IMG": 36,
+    "LayoutInvalidationTracking · Added to layout · B": 6,
+    "LayoutInvalidationTracking · Added to layout · SPAN": 22,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-fade'": 1,
+    "LayoutInvalidationTracking · Added to layout · I id='nvS'": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT id='nvAc' class='vh'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV id='bg'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='fade'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='orb'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='grid'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='atla'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV class='nv-right'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV class='nv-m'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · MAIN id='icerik'": 1,
+    "ScheduleStyleInvalidationTracking · data-film · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Size changed · IMG": 12,
+    "LayoutInvalidationTracking · Fonts changed · BODY": 1,
+    "LayoutInvalidationTracking · Fonts changed · A class='atla'": 1,
+    "LayoutInvalidationTracking · Fonts changed · #text": 5,
+    "LayoutInvalidationTracking · Fonts changed · DIV id='bg'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='fade'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='orb'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='grid'": 1,
+    "LayoutInvalidationTracking · Fonts changed · DIV class='nv-fade'": 1,
+    "LayoutInvalidationTracking · Fonts changed · NAV id='nv' class='nv-bar'": 1,
+    "LayoutInvalidationTracking · Fonts changed · DIV class='nv-ic'": 1,
+    "LayoutInvalidationTracking · Fonts changed · A class='nv-logo'": 1,
+    "LayoutInvalidationTracking · Fonts changed · I": 1,
+    "LayoutInvalidationTracking · Fonts changed · PICTURE": 2,
+    "LayoutInvalidationTracking · Fonts changed · SOURCE": 1,
+    "LayoutInvalidationTracking · Fonts changed · B": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN": 1,
+    "StyleInvalidatorInvalidationTracking · Element has pending invalidation list · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · MAIN id='icerik'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-m'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mtop'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='nv-mx'": 1,
+    "LayoutInvalidationTracking · Size changed · svg": 17,
+    "LayoutInvalidationTracking · Added to layout · path": 28,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mlinks'": 1,
+    "LayoutInvalidationTracking · Added to layout · A": 19,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mlg'": 1,
+    "LayoutInvalidationTracking · Added to layout · EM": 4,
+    "LayoutInvalidationTracking · Added to layout · A class='on'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mcta'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-mp'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-mw'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-right'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='nv-burger'": 1,
+    "ScheduleStyleInvalidationTracking · disabled · INPUT class='pause'": 40,
+    "StyleInvalidatorInvalidationTracking · Invalidation set invalidates self · INPUT class='pause'": 120,
+    "ScheduleStyleInvalidationTracking · ? · INPUT class='pause'": 80,
+    "ScheduleStyleInvalidationTracking · disabled · INPUT": 80,
+    "StyleInvalidatorInvalidationTracking · Invalidation set invalidates self · INPUT": 240,
+    "ScheduleStyleInvalidationTracking · ? · INPUT": 160,
+    "StyleRecalcInvalidationTracking · Affected by :has() · MAIN id='icerik'": 27,
+    "ScheduleStyleInvalidationTracking · ? · BODY": 29,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='fl-govde' class='fl-govde'": 1,
+    "StyleInvalidatorInvalidationTracking · Element has pending invalidation list · BODY": 5,
+    "StyleInvalidatorInvalidationTracking · Invalidation set matched tagName · MAIN id='icerik'": 5,
+    "StyleRecalcInvalidationTracking · Related style rule · MAIN id='icerik'": 5,
+    "LayoutInvalidationTracking · Added to layout · DIV id='fl-govde' class='fl-govde'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ana'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION class='sh-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-atmo'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a1'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a2'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a3'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a4'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-eller'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-el sus-el-h'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-suzul'": 10,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-el sus-el-r'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-kap'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-ic'": 3,
+    "LayoutInvalidationTracking · Added to layout · H1 class='sh-h1'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sh-l'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='sh-lede'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-cta'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='sh-void'": 3,
+    "LayoutInvalidationTracking · Added to layout · I class='sus-halka'": 3,
+    "LayoutInvalidationTracking · Added to layout · A class='sh-btn'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='sh-meta'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN id='shSaat' class='sh-saat'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='ticker' class='st-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-pencere'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-ray'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-akis'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-tur'": 3,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='st-etiket'": 3,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='st-logo'": 27,
+    "LayoutInvalidationTracking · Size changed · svg class='sus-dalga'": 3,
+    "LayoutInvalidationTracking · Added to layout · SECTION class='sp-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-giris'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='kunye sp-kunye'": 4,
+    "LayoutInvalidationTracking · Added to layout · H2 class='s1-buyuk'": 2,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-sayi'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='s1-alt'": 3,
+    "LayoutInvalidationTracking · Added to layout · DIV id='spDeste' class='sp-deste'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-kart'": 4,
+    "LayoutInvalidationTracking · Added to layout · A class='sp-govde'": 4,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-gorsel'": 12,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-yazi'": 12,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-no'": 16,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-etiket'": 4,
+    "LayoutInvalidationTracking · Added to layout · H3": 5,
+    "LayoutInvalidationTracking · Added to layout · P": 6,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-git'": 8,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-tumu'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='sp-tum'": 2,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sus-el sus-el-r'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sh-ic'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sus-el sus-el-h'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · A class='sp-govde'": 3,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='skKatman' class='sk-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='akis' class='sa-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='sektor' class='sse-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='sektor' class='sse-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='akis' class='sa-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='skKatman' class='sk-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='tespit' class='ste-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='sozler' class='ssz-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='kurucu' class='sku-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='iletisim' class='sil-sahne'": 2,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='kurucu' class='sku-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='sozler' class='ssz-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='tespit' class='ste-sahne'": 2,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · FOOTER": 1,
+    "LayoutInvalidationTracking · Added to layout · FOOTER": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='wrap'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fgrid'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='lead'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='flogo'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fcol'": 2,
+    "LayoutInvalidationTracking · Added to layout · H5": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='watermark'": 1,
+    "LayoutInvalidationTracking · Added to layout · H2 class='vh'": 1,
+    "LayoutInvalidationTracking · Added to layout · CANVAS id='wmk'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fbot'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='r'": 1,
+    "StyleRecalcInvalidationTracking · DisplayLock · SECTION id='tespit' class='ste-sahne'": 1,
+    "LayoutInvalidationTracking · Removed from layout · SECTION id='tespit' class='ste-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-bas'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='kunye'": 5,
+    "LayoutInvalidationTracking · Added to layout · H2 class='s1-buyuk ste-h2'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='ste-lt'": 29,
+    "LayoutInvalidationTracking · Added to layout · BR": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='thin'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-kutu'": 1,
+    "LayoutInvalidationTracking · Added to layout · FORM id='steForm' class='ste-form'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='ste-giris'": 1,
+    "LayoutInvalidationTracking · Added to layout · circle": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT id='steUrl'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV id='placeholder'": 3,
+    "LayoutInvalidationTracking · Added to layout · DIV": 7,
+    "LayoutInvalidationTracking · Added to layout · BUTTON id='steGo' class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='ste-not'": 1,
+    "StyleRecalcInvalidationTracking · DisplayLock · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Removed from layout · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-cagri'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='sil-dugmeler'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='sil-ikincil'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV id='lead' class='sil-kutu'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-yazi'": 2,
+    "LayoutInvalidationTracking · Added to layout · FORM id='silForm' class='sil-form'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='sus-tuzak'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT": 5,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='sil-alan'": 8,
+    "LayoutInvalidationTracking · Added to layout · TEXTAREA": 1,
+    "LayoutInvalidationTracking · Added to layout · BR id='textarea-placeholder-break'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='sil-onay'": 1,
+    "LayoutInvalidationTracking · Added to layout · BUTTON class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · P id='silDurum' class='sil-durum'": 1,
+    "StyleRecalcInvalidationTracking · Animation · SPAN class='sus-suzul'": 808,
+    "StyleRecalcInvalidationTracking · Animation · ::before": 668,
+    "StyleRecalcInvalidationTracking · Animation · ::after": 264,
+    "StyleRecalcInvalidationTracking · Animation · I": 159,
+    "StyleRecalcInvalidationTracking · Animation · DIV class='st-akis'": 404,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · I": 29,
+    "LayoutInvalidationTracking · Removed from layout · #text": 1,
+    "StyleRecalcInvalidationTracking · Animation · IMG": 295,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · svg": 1,
+    "LayoutInvalidationTracking · Added to layout · svg": 1,
+    "LayoutInvalidationTracking · Added to layout · rect": 2,
+    "LayoutInvalidationTracking · Removed from layout · rect": 2,
+    "LayoutInvalidationTracking · Removed from layout · svg": 1,
+    "StyleRecalcInvalidationTracking · Animation · P class='sh-lede'": 96,
+    "StyleRecalcInvalidationTracking · Animation · DIV class='sh-cta'": 98,
+    "StyleRecalcInvalidationTracking · Animation · P class='sh-meta'": 99,
+    "LayoutInvalidationTracking · Style changed · I": 2,
+    "LayoutInvalidationTracking · Style changed · P class='sh-lede'": 1,
+    "LayoutInvalidationTracking · Style changed · DIV class='sh-cta'": 1,
+    "LayoutInvalidationTracking · Style changed · P class='sh-meta'": 1
+   },
+   "stil": {
+    "oge_toplam": 4557,
+    "oge_en_buyuk": 274
+   },
+   "animasyon": {
+    "toplam": 45,
+    "kosan": 39,
+    "kaydirmali": 35,
+    "dagilim": {
+     "ViewTimeline/running": 35,
+     "DocumentTimeline/running": 4,
+     "DocumentTimeline/finished": 6
+    }
+   },
+   "gozcu": [
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:10933 <- at http://127.0.0.1:8790/:23:11033",
+     "secenek": "{}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at L (http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:937) <- at http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:877 <- at u (http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:2162)",
+     "secenek": "{}",
+     "hedef": 84,
+     "cagri": 1,
+     "girdi": 84
+    },
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:49887",
+     "secenek": "{}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:74085",
+     "secenek": "{\"threshold\":0.25}",
+     "hedef": 6,
+     "cagri": 1,
+     "girdi": 6
+    },
+    {
+     "dogum": "at Z (http://127.0.0.1:8790/varlik/kabuk.js:1:3921) <- at Module.it (http://127.0.0.1:8790/varlik/kabuk.js:1:11161) <- at http://127.0.0.1:8790/:84:1478",
+     "secenek": "{\"rootMargin\":\"600px\"}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at Z (http://127.0.0.1:8790/varlik/kabuk.js:1:4048) <- at Module.it (http://127.0.0.1:8790/varlik/kabuk.js:1:11161) <- at http://127.0.0.1:8790/:84:1478",
+     "secenek": "{\"threshold\":0.02}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    }
+   ],
+   "gorsel": {
+    "istek": 10,
+    "bayt": 109730
+   },
+   "loaf": {
+    "say": 7,
+    "toplam_ms": 950.2,
+    "engelleyici_ms": 501.9,
+    "stil_yerlesim_ms": 0,
+    "betik_ms": 86.8,
+    "en_uzun": [
+     {
+      "t_ms": 872.6,
+      "sure_ms": 267.1,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 6.9
+     },
+     {
+      "t_ms": 570.5,
+      "sure_ms": 228.6,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 0
+     },
+     {
+      "t_ms": 190,
+      "sure_ms": 133,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 0
+     },
+     {
+      "t_ms": 1162.8,
+      "sure_ms": 99.2,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 71.2
+     },
+     {
+      "t_ms": 411.1,
+      "sure_ms": 92.9,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 8.7
+     }
+    ]
+   }
+  },
+  {
+   "kosum": 2,
+   "isaret": {
+    "fp_ms": 463.7,
+    "fcp_ms": 463.7,
+    "lcp_ms": 1055.1,
+    "yuklendi_ms": 1070.6,
+    "dom_ms": 933.1
+   },
+   "ana_mesgul_ms": 4774.5,
+   "asama": {
+    "Chrome_DevToolsHandlerThread": {
+     "RunTask": {
+      "oz_ms": 15.832999999999993,
+      "sure_ms": 15.832999999999993,
+      "say": 378
+     }
+    },
+    "Chrome_IOThread": {
+     "RunTask": {
+      "oz_ms": 9.448999999999945,
+      "sure_ms": 9.448999999999945,
+      "say": 1223
+     }
+    },
+    "tarayici": {
+     "LoadingPredictor::OnNavigationStarted": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "LoadingPredictor::PrepareForPageLoad": {
+      "oz_ms": 0.02,
+      "sure_ms": 0.02,
+      "say": 1
+     },
+     "RunTask": {
+      "oz_ms": 176.82700000000054,
+      "sure_ms": 199.15700000000035,
+      "say": 2885
+     },
+     "PrefetchURLLoaderInterceptor::MaybeCreateLoader": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "PrefetchURLLoaderInterceptor::GetPrefetch": {
+      "oz_ms": 0.037,
+      "sure_ms": 0.037,
+      "say": 1
+     },
+     "PrefetchMatchResolver::FindPrefetch": {
+      "oz_ms": 0.016,
+      "sure_ms": 0.016,
+      "say": 3
+     },
+     "PrefetchMatchResolver::UnblockForNoCandidates": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "PrefetchURLLoaderInterceptor::OnGetPrefetchComplete": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "SearchPrefetchURLLoaderInterceptor::MaybeCreateLoader": {
+      "oz_ms": 0.197,
+      "sure_ms": 0.604,
+      "say": 1
+     },
+     "ResourceRequest::TrustedParams.copy": {
+      "oz_ms": 0.027,
+      "sure_ms": 0.33899999999999997,
+      "say": 5
+     },
+     "CookieAccessObserver.copy": {
+      "oz_ms": 0.07500000000000001,
+      "sure_ms": 0.07500000000000001,
+      "say": 5
+     },
+     "TrustTokenAccessObserver.copy": {
+      "oz_ms": 0.04,
+      "sure_ms": 0.04,
+      "say": 5
+     },
+     "URLLoaderNetworkServiceObserver.copy": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.034,
+      "say": 5
+     },
+     "DevToolsObserver.copy": {
+      "oz_ms": 0.043,
+      "sure_ms": 0.043,
+      "say": 5
+     },
+     "DeviceBoundSessionAccessObserver.copy": {
+      "oz_ms": 0.040999999999999995,
+      "sure_ms": 0.040999999999999995,
+      "say": 5
+     },
+     "AcceptCHFrameObserver.copy": {
+      "oz_ms": 0.04000000000000001,
+      "sure_ms": 0.04000000000000001,
+      "say": 5
+     },
+     "SharedDictionaryAccessObserver.copy": {
+      "oz_ms": 0.03899999999999999,
+      "sure_ms": 0.03899999999999999,
+      "say": 5
+     },
+     "ThrottlingURLLoader::ThrottlingURLLoader": {
+      "oz_ms": 0.004,
+      "sure_ms": 0.004,
+      "say": 1
+     },
+     "ThrottlingURLLoader::Start": {
+      "oz_ms": 0.194,
+      "sure_ms": 0.303,
+      "say": 1
+     },
+     "ThrottlingURLLoader::StartNow": {
+      "oz_ms": 0.037,
+      "sure_ms": 0.037,
+      "say": 1
+     },
+     "UpdateLayer": {
+      "oz_ms": 11.367999999999912,
+      "sure_ms": 11.367999999999912,
+      "say": 1005
+     },
+     "Commit": {
+      "oz_ms": 8.886000000000006,
+      "sure_ms": 8.886000000000006,
+      "say": 57
+     },
+     "ThrottlingURLLoader::OnReceiveResponse": {
+      "oz_ms": 0.209,
+      "sure_ms": 0.209,
+      "say": 1
+     },
+     "ThrottlingURLLoader::~ThrottlingURLLoader": {
+      "oz_ms": 0.004,
+      "sure_ms": 0.004,
+      "say": 1
+     },
+     "KeepAliveURLLoaderFactories::BindFactory": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "FetchLaterLoaderFactories::BindFactory": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "MetricsWebContentsObserver::UpdateTiming": {
+      "oz_ms": 0.9510000000000001,
+      "sure_ms": 0.9510000000000001,
+      "say": 10
+     },
+     "MetricsWebContentsObserver::MaybeRestorePageLoadTrackerForBackForwardCache": {
+      "oz_ms": 0.048,
+      "sure_ms": 0.048,
+      "say": 1
+     },
+     "MetricsWebContentsObserver::MaybeActivatePageLoadTracker": {
+      "oz_ms": 0.018,
+      "sure_ms": 0.018,
+      "say": 1
+     }
+    },
+    "CrGpuMain": {
+     "RunTask": {
+      "oz_ms": 683.9699999999995,
+      "sure_ms": 1235.3120000000079,
+      "say": 3469
+     },
+     "GPUTask": {
+      "oz_ms": 551.3419999999993,
+      "sure_ms": 551.3419999999993,
+      "say": 384
+     }
+    },
+    "Chrome_ChildIOThread": {
+     "RunTask": {
+      "oz_ms": 9.978999999999953,
+      "sure_ms": 9.978999999999953,
+      "say": 765
+     }
+    },
+    "ana": {
+     "RunTask": {
+      "oz_ms": 1208.7669999999835,
+      "sure_ms": 4774.509000000028,
+      "say": 2813
+     },
+     "DocumentLoader::DocumentLoader": {
+      "oz_ms": 0.377,
+      "sure_ms": 0.377,
+      "say": 3
+     },
+     "DocumentLoader::CommitNavigation": {
+      "oz_ms": 4.944,
+      "sure_ms": 74.45100000000001,
+      "say": 3
+     },
+     "DocumentLoader::InitializeWindow": {
+      "oz_ms": 1.021,
+      "sure_ms": 1.023,
+      "say": 3
+     },
+     "DocumentLoader::RecordUseCountersForCommit": {
+      "oz_ms": 0.023,
+      "sure_ms": 0.023,
+      "say": 3
+     },
+     "DocumentLoader::DidInstallNewDocument": {
+      "oz_ms": 0.396,
+      "sure_ms": 0.396,
+      "say": 3
+     },
+     "DocumentLoader::DidCommitNavigation": {
+      "oz_ms": 0.034,
+      "sure_ms": 0.227,
+      "say": 3
+     },
+     "DocumentLoader::StartLoadingResponse": {
+      "oz_ms": 0.034,
+      "sure_ms": 67.83800000000001,
+      "say": 3
+     },
+     "DocumentLoader::CreateParserPostCommit": {
+      "oz_ms": 34.833,
+      "sure_ms": 65.96,
+      "say": 3
+     },
+     "DocumentLoader::FinishedLoading": {
+      "oz_ms": 1.883,
+      "sure_ms": 2.887,
+      "say": 3
+     },
+     "ParseHTML": {
+      "oz_ms": 148.22299999999998,
+      "sure_ms": 193.22399999999996,
+      "say": 13
+     },
+     "HTMLDocumentParser::DocumentElementAvailable": {
+      "oz_ms": 0.022,
+      "sure_ms": 0.022,
+      "say": 3
+     },
+     "EventDispatch": {
+      "oz_ms": 2.436999999999999,
+      "sure_ms": 2.436999999999999,
+      "say": 49
+     },
+     "PrePaint": {
+      "oz_ms": 282.9540000000003,
+      "sure_ms": 282.9540000000003,
+      "say": 412
+     },
+     "Paint": {
+      "oz_ms": 18.288999999999998,
+      "sure_ms": 39.73399999999999,
+      "say": 45
+     },
+     "Layerize": {
+      "oz_ms": 432.155,
+      "sure_ms": 436.30400000000003,
+      "say": 405
+     },
+     "Commit": {
+      "oz_ms": 216.90699999999995,
+      "sure_ms": 721.6679999999999,
+      "say": 405
+     },
+     "BackForwardCacheBufferLimitTracker::DidRemoveFrameOrWorkerFromBackForwardCache": {
+      "oz_ms": 0.020000000000000004,
+      "sure_ms": 0.020000000000000004,
+      "say": 7
+     },
+     "PageTimingMetricsSender::SendNow": {
+      "oz_ms": 0.726,
+      "sure_ms": 0.726,
+      "say": 10
+     },
+     "CommitLoad": {
+      "oz_ms": 0.193,
+      "sure_ms": 0.193,
+      "say": 1
+     },
+     "FunctionCall": {
+      "oz_ms": 115.55700000000003,
+      "sure_ms": 116.14000000000004,
+      "say": 28
+     },
+     "NavigationBodyLoader::StartLoadingBody": {
+      "oz_ms": 0.201,
+      "sure_ms": 25.438,
+      "say": 1
+     },
+     "NavigationBodyLoader::OnReadable": {
+      "oz_ms": 0.01,
+      "sure_ms": 25.860999999999997,
+      "say": 3
+     },
+     "NavigationBodyLoader::ReadFromDataPipe": {
+      "oz_ms": 0.154,
+      "sure_ms": 25.851,
+      "say": 3
+     },
+     "DocumentLoader::BodyDataReceivedImpl": {
+      "oz_ms": 0.8939999999999999,
+      "sure_ms": 25.697,
+      "say": 3
+     },
+     "DocumentLoader::HandleData": {
+      "oz_ms": 0.011000000000000001,
+      "sure_ms": 24.803,
+      "say": 3
+     },
+     "DocumentLoader::CommitData": {
+      "oz_ms": 0.010000000000000002,
+      "sure_ms": 24.792,
+      "say": 3
+     },
+     "DecodedDataDocumentParser::AppendBytes": {
+      "oz_ms": 9.450000000000001,
+      "sure_ms": 25.374,
+      "say": 4
+     },
+     "HTMLDocumentParser::MaybeFetchQueuedPreloads": {
+      "oz_ms": 12.171,
+      "sure_ms": 15.924,
+      "say": 1
+     },
+     "URLLoader::loadAsynchronously": {
+      "oz_ms": 0.8020000000000003,
+      "sure_ms": 10.878,
+      "say": 23
+     },
+     "URLLoader::Context::Start": {
+      "oz_ms": 2.496,
+      "sure_ms": 10.076,
+      "say": 23
+     },
+     "ThrottlingURLLoader::ThrottlingURLLoader": {
+      "oz_ms": 0.06300000000000001,
+      "sure_ms": 0.06300000000000001,
+      "say": 23
+     },
+     "ThrottlingURLLoader::Start": {
+      "oz_ms": 2.789,
+      "sure_ms": 7.517,
+      "say": 23
+     },
+     "ThrottlingURLLoader::StartNow": {
+      "oz_ms": 4.727999999999999,
+      "sure_ms": 4.727999999999999,
+      "say": 23
+     },
+     "UpdateLayoutTree": {
+      "oz_ms": 1155.5929999999998,
+      "sure_ms": 1161.749,
+      "say": 409
+     },
+     "Layout": {
+      "oz_ms": 332.23300000000006,
+      "sure_ms": 332.23300000000006,
+      "say": 18
+     },
+     "EvaluateScript": {
+      "oz_ms": 29.654,
+      "sure_ms": 45.270999999999994,
+      "say": 12
+     },
+     "v8.compile": {
+      "oz_ms": 13.552999999999999,
+      "sure_ms": 13.552999999999999,
+      "say": 12
+     },
+     "ThrottlingURLLoader::OnReceiveResponse": {
+      "oz_ms": 3.119,
+      "sure_ms": 33.98,
+      "say": 22
+     },
+     "MojoURLLoaderClient::OnReceiveResponse": {
+      "oz_ms": 0.41100000000000003,
+      "sure_ms": 30.861,
+      "say": 22
+     },
+     "ResourceRequestSender::OnReceivedResponse": {
+      "oz_ms": 3.1100000000000003,
+      "sure_ms": 31.476,
+      "say": 22
+     },
+     "URLLoader::Context::OnReceivedResponse": {
+      "oz_ms": 28.366000000000007,
+      "sure_ms": 28.366000000000007,
+      "say": 22
+     },
+     "ResourceRequestSender::OnRequestComplete": {
+      "oz_ms": 3.607,
+      "sure_ms": 41.124999999999986,
+      "say": 23
+     },
+     "URLLoader::Context::OnCompletedRequest": {
+      "oz_ms": 25.932,
+      "sure_ms": 37.518,
+      "say": 23
+     },
+     "URLLoader::Context::Cancel": {
+      "oz_ms": 5.100999999999999,
+      "sure_ms": 5.119999999999999,
+      "say": 23
+     },
+     "ThrottlingURLLoader::~ThrottlingURLLoader": {
+      "oz_ms": 0.019000000000000003,
+      "sure_ms": 0.019000000000000003,
+      "say": 16
+     },
+     "ParseAuthorStyleSheet": {
+      "oz_ms": 7.492,
+      "sure_ms": 7.492,
+      "say": 3
+     },
+     "BeginRemoteFontLoad": {
+      "oz_ms": 0.607,
+      "sure_ms": 0.828,
+      "say": 1
+     },
+     "IntersectionObserverController::computeIntersections": {
+      "oz_ms": 579.7979999999991,
+      "sure_ms": 579.7979999999991,
+      "say": 813
+     },
+     "PaintImage": {
+      "oz_ms": 3.5949999999999975,
+      "sure_ms": 3.5949999999999975,
+      "say": 72
+     },
+     "UpdateLayer": {
+      "oz_ms": 29.099000000001794,
+      "sure_ms": 29.099000000001794,
+      "say": 4298
+     },
+     "DocumentLoader::BodyLoadingFinished": {
+      "oz_ms": 5.355,
+      "sure_ms": 6.398,
+      "say": 1
+     },
+     "RemoteFontLoaded": {
+      "oz_ms": 0.009,
+      "sure_ms": 0.009,
+      "say": 1
+     },
+     "v8.compileModule": {
+      "oz_ms": 2.0130000000000003,
+      "sure_ms": 2.0130000000000003,
+      "say": 9
+     },
+     "HitTest": {
+      "oz_ms": 4.303,
+      "sure_ms": 4.303,
+      "say": 10
+     },
+     "LargestImagePaint::NoCandidate": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "v8.evaluateModule": {
+      "oz_ms": 9.91,
+      "sure_ms": 9.91,
+      "say": 9
+     },
+     "TimerFire": {
+      "oz_ms": 0.41200000000000003,
+      "sure_ms": 4.684,
+      "say": 3
+     },
+     "V8.GC_HEAP_ENSURE_SWEEPING_COMPLETED": {
+      "oz_ms": 0.181,
+      "sure_ms": 0.181,
+      "say": 1
+     },
+     "V8.GC_TIME_TO_SAFEPOINT": {
+      "oz_ms": 0.009000000000000001,
+      "sure_ms": 0.009000000000000001,
+      "say": 2
+     },
+     "V8.GC_MC_INCREMENTAL_START": {
+      "oz_ms": 0.462,
+      "sure_ms": 2.834,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL_EXTERNAL_PROLOGUE": {
+      "oz_ms": 0.402,
+      "sure_ms": 0.402,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_EMBEDDER_PROLOGUE": {
+      "oz_ms": 1.303,
+      "sure_ms": 1.303,
+      "say": 2
+     },
+     "V8.GC_MC_MARK_ROOTS": {
+      "oz_ms": 0.832,
+      "sure_ms": 0.834,
+      "say": 3
+     },
+     "Major concurrent marking started": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL_EXTERNAL_EPILOGUE": {
+      "oz_ms": 0.058,
+      "sure_ms": 0.058,
+      "say": 1
+     },
+     "V8.GC_MC_INCREMENTAL": {
+      "oz_ms": 1.6509999999999996,
+      "sure_ms": 13.448,
+      "say": 31
+     },
+     "V8.GC_MC_INCREMENTAL_EMBEDDER_TRACING": {
+      "oz_ms": 11.794999999999998,
+      "sure_ms": 11.794999999999998,
+      "say": 31
+     },
+     "Major concurrent marking rescheduled": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.006,
+      "say": 2
+     },
+     "V8.GC_HEAP_EXTERNAL_PROLOGUE": {
+      "oz_ms": 0.205,
+      "sure_ms": 0.205,
+      "say": 1
+     },
+     "MajorGC": {
+      "oz_ms": 0.838,
+      "sure_ms": 9.04,
+      "say": 1
+     },
+     "V8.GC_HEAP_PROLOGUE": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MARK_COMPACTOR": {
+      "oz_ms": 2.016,
+      "sure_ms": 8.011,
+      "say": 1
+     },
+     "V8.GC_HEAP_PROLOGUE_SAFEPOINT": {
+      "oz_ms": 0.185,
+      "sure_ms": 0.185,
+      "say": 1
+     },
+     "V8.GC_MC_PROLOGUE": {
+      "oz_ms": 0.007,
+      "sure_ms": 0.007,
+      "say": 1
+     },
+     "V8.GC_MC_MARK": {
+      "oz_ms": 0.397,
+      "sure_ms": 1.228,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FINISH_INCREMENTAL": {
+      "oz_ms": 0.011,
+      "sure_ms": 0.011,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_CLIENT_HEAPS": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_RETAIN_MAPS": {
+      "oz_ms": 0.2,
+      "sure_ms": 0.2,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FULL_CLOSURE_PARALLEL": {
+      "oz_ms": 0.207,
+      "sure_ms": 0.382,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_WEAK_CLOSURE_EPHEMERON_MARKING": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.17200000000000001,
+      "say": 3
+     },
+     "V8.GC_MC_MARK_EMBEDDER_TRACING": {
+      "oz_ms": 0.166,
+      "sure_ms": 0.166,
+      "say": 3
+     },
+     "V8.GC_CONSERVATIVE_STACK_SCANNING": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_MARK_FULL_CLOSURE_SERIAL": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.006,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR": {
+      "oz_ms": 0.015,
+      "sure_ms": 0.406,
+      "say": 1
+     },
+     "ClearStringTableJob started": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 2
+     },
+     "ClearTrivialWeakRefJob started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "ClearTrustedWeakRefJob started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "ClearNonTrivialWeakRefs started": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_JOIN_JOB": {
+      "oz_ms": 0.024,
+      "sure_ms": 0.386,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_COLLECTIONS": {
+      "oz_ms": 0.187,
+      "sure_ms": 0.187,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_STRING_TABLE": {
+      "oz_ms": 0.17500000000000002,
+      "sure_ms": 0.17500000000000002,
+      "say": 2
+     },
+     "V8.GC_MC_SWEEP": {
+      "oz_ms": 0.178,
+      "sure_ms": 0.179,
+      "say": 3
+     },
+     "V8.GC_MC_EVACUATE": {
+      "oz_ms": 0.006,
+      "sure_ms": 2.956,
+      "say": 2
+     },
+     "V8.GC_MC_EVACUATE_PROLOGUE": {
+      "oz_ms": 0.005,
+      "sure_ms": 0.005,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_COPY": {
+      "oz_ms": 0.217,
+      "sure_ms": 1.915,
+      "say": 1
+     },
+     "PageEvacuationJob started": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_COPY_PARALLEL": {
+      "oz_ms": 1.686,
+      "sure_ms": 1.696,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS": {
+      "oz_ms": 0.173,
+      "sure_ms": 1.011,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS": {
+      "oz_ms": 0.409,
+      "sure_ms": 0.409,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_CLIENT_HEAPS": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_SLOTS_MAIN": {
+      "oz_ms": 0.028,
+      "sure_ms": 0.202,
+      "say": 1
+     },
+     "PointersUpdatingJob started": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_PARALLEL": {
+      "oz_ms": 0.172,
+      "sure_ms": 0.172,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_WEAK": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_UPDATE_POINTERS_POINTER_TABLES": {
+      "oz_ms": 0.222,
+      "sure_ms": 0.222,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_CLEAN_UP": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_EPILOGUE": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_SWEEP_NEW_LO": {
+      "oz_ms": 0.001,
+      "sure_ms": 0.001,
+      "say": 1
+     },
+     "V8.GC_MC_EVACUATE_REBALANCE": {
+      "oz_ms": 0.016,
+      "sure_ms": 0.016,
+      "say": 1
+     },
+     "V8.GC_MC_FINISH": {
+      "oz_ms": 0.006,
+      "sure_ms": 0.016,
+      "say": 1
+     },
+     "V8.GC_MC_SWEEP_START_JOBS": {
+      "oz_ms": 0.01,
+      "sure_ms": 0.01,
+      "say": 1
+     },
+     "V8.GC_MC_EPILOGUE": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES": {
+      "oz_ms": 0.008,
+      "sure_ms": 0.008,
+      "say": 1
+     },
+     "V8.GC_HEAP_EMBEDDER_TRACING_EPILOGUE": {
+      "oz_ms": 1.002,
+      "sure_ms": 1.009,
+      "say": 1
+     },
+     "V8.GC_HEAP_EPILOGUE_SAFEPOINT": {
+      "oz_ms": 0.009,
+      "sure_ms": 0.009,
+      "say": 1
+     },
+     "V8.GC_HEAP_EPILOGUE": {
+      "oz_ms": 0.185,
+      "sure_ms": 0.185,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_EPILOGUE": {
+      "oz_ms": 0.036,
+      "sure_ms": 0.036,
+      "say": 1
+     },
+     "V8.GC_HEAP_EXTERNAL_SECOND_PASS_CALLBACKS": {
+      "oz_ms": 0.196,
+      "sure_ms": 0.196,
+      "say": 1
+     },
+     "FireIdleCallback": {
+      "oz_ms": 1.523,
+      "sure_ms": 28.662,
+      "say": 3
+     },
+     "DocumentLoader::~DocumentLoader": {
+      "oz_ms": 0.17600000000000002,
+      "sure_ms": 0.17600000000000002,
+      "say": 6
+     }
+    },
+    "kompozitor": {
+     "RunTask": {
+      "oz_ms": 369.2279999999947,
+      "sure_ms": 369.2279999999947,
+      "say": 4123
+     }
+    },
+    "VizCompositorThread": {
+     "RunTask": {
+      "oz_ms": 470.0629999999975,
+      "sure_ms": 470.0629999999975,
+      "say": 2830
+     }
+    },
+    "PerfettoTrace": {
+     "RunTask": {
+      "oz_ms": 3.2879999999999985,
+      "sure_ms": 3.2879999999999985,
+      "say": 93
+     }
+    },
+    "GpuVSyncThread": {
+     "RunTask": {
+      "oz_ms": 4998.475,
+      "sure_ms": 4998.475,
+      "say": 601
+     }
+    },
+    "raster iscisi": {
+     "RasterTask": {
+      "oz_ms": 4.813000000000001,
+      "sure_ms": 4.813000000000001,
+      "say": 95
+     },
+     "ImageUploadTask": {
+      "oz_ms": 0.128,
+      "sure_ms": 0.128,
+      "say": 8
+     }
+    },
+    "ThreadPoolServiceThread": {
+     "RunTask": {
+      "oz_ms": 0.374,
+      "sure_ms": 0.374,
+      "say": 15
+     }
+    },
+    "CacheThread_BlockFile": {
+     "RunTask": {
+      "oz_ms": 28.662000000000006,
+      "sure_ms": 28.662000000000006,
+      "say": 180
+     }
+    },
+    "ThreadPoolForegroundWorker": {
+     "v8.parseOnBackground": {
+      "oz_ms": 0.168,
+      "sure_ms": 2.364,
+      "say": 6
+     },
+     "v8.parseOnBackgroundParsing": {
+      "oz_ms": 2.196,
+      "sure_ms": 2.196,
+      "say": 6
+     },
+     "RasterTask": {
+      "oz_ms": 17.208000000000006,
+      "sure_ms": 17.208000000000006,
+      "say": 106
+     },
+     "ImageDecodeTask": {
+      "oz_ms": 0.7490000000000001,
+      "sure_ms": 15.783,
+      "say": 3
+     },
+     "Decode LazyPixelRef": {
+      "oz_ms": 3.024,
+      "sure_ms": 15.033999999999999,
+      "say": 3
+     },
+     "Decode Image": {
+      "oz_ms": 12.010000000000002,
+      "sure_ms": 12.010000000000002,
+      "say": 3
+     },
+     "ImageUploadTask": {
+      "oz_ms": 1.3599999999999999,
+      "sure_ms": 1.3599999999999999,
+      "say": 3
+     },
+     "V8.GC_MC_BACKGROUND_MARKING": {
+      "oz_ms": 5.862999999999999,
+      "sure_ms": 5.906000000000001,
+      "say": 13
+     },
+     "ConcurrentMarking::RunMajor Finished": {
+      "oz_ms": 0.031000000000000007,
+      "sure_ms": 0.031000000000000007,
+      "say": 11
+     },
+     "ConcurrentMarking::RunMajor Preempted": {
+      "oz_ms": 0.012,
+      "sure_ms": 0.012,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_WASM_CODE_POINTER_TABLE": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_MAPS": {
+      "oz_ms": 0.05,
+      "sure_ms": 0.05,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_LISTS": {
+      "oz_ms": 0.016,
+      "sure_ms": 0.016,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_FLUSHED_JS_FUNCTIONS": {
+      "oz_ms": 0.003,
+      "sure_ms": 0.003,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_JS_WEAK_REFERENCES": {
+      "oz_ms": 0.021,
+      "sure_ms": 0.021,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_JS_DISPATCH_TABLE": {
+      "oz_ms": 0.048,
+      "sure_ms": 0.048,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_GLOBAL_HANDLES": {
+      "oz_ms": 0.018,
+      "sure_ms": 0.018,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_FLUSHABLE_BYTECODE": {
+      "oz_ms": 0.002,
+      "sure_ms": 0.002,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_TRUSTED": {
+      "oz_ms": 0.026,
+      "sure_ms": 0.026,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_NON_TRIVIAL": {
+      "oz_ms": 0.021,
+      "sure_ms": 0.021,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_SWEEP_TRUSTED_POINTER_TABLE": {
+      "oz_ms": 0.047,
+      "sure_ms": 0.047,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_WEAK_REFERENCES_TRIVIAL": {
+      "oz_ms": 0.012,
+      "sure_ms": 0.012,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_EXTERNAL_STRING_TABLE": {
+      "oz_ms": 0.013,
+      "sure_ms": 0.013,
+      "say": 1
+     },
+     "V8.GC_MC_CLEAR_STRING_TABLE": {
+      "oz_ms": 0.06599999999999999,
+      "sure_ms": 0.06599999999999999,
+      "say": 6
+     },
+     "V8.GC_MC_CLEAR_SWEEP_EXTERNAL_POINTER_TABLE": {
+      "oz_ms": 0.103,
+      "sure_ms": 0.103,
+      "say": 1
+     },
+     "V8.GC_MC_BACKGROUND_EVACUATE_UPDATE_POINTERS": {
+      "oz_ms": 0.313,
+      "sure_ms": 0.313,
+      "say": 7
+     },
+     "V8.GC_MC_BACKGROUND_SWEEPING": {
+      "oz_ms": 0.5,
+      "sure_ms": 0.524,
+      "say": 5
+     },
+     "Sweeper::ConcurrentMajorSweeper Finished": {
+      "oz_ms": 0.024000000000000014,
+      "sure_ms": 0.024000000000000014,
+      "say": 21
+     }
+    },
+    "MemoryInfra": {
+     "RunTask": {
+      "oz_ms": 0.3490000000000001,
+      "sure_ms": 0.3490000000000001,
+      "say": 12
+     }
+    }
+   },
+   "dugumler": [
+    {
+     "nodeId": 6,
+     "ms": 21.04,
+     "say": 12,
+     "en_buyuk_ms": 8.104,
+     "dugum": "#document"
+    },
+    {
+     "nodeId": 277,
+     "ms": 3.769,
+     "say": 6,
+     "en_buyuk_ms": 1.803,
+     "dugum": "div.sh-ic"
+    },
+    {
+     "nodeId": 306,
+     "ms": 3.051,
+     "say": 3,
+     "en_buyuk_ms": 1.236,
+     "dugum": "div.st-akis"
+    },
+    {
+     "nodeId": 304,
+     "ms": 1.416,
+     "say": 1,
+     "en_buyuk_ms": 1.416,
+     "dugum": "div.st-pencere"
+    },
+    {
+     "nodeId": 493,
+     "ms": 1.203,
+     "say": 2,
+     "en_buyuk_ms": 1.03,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 288,
+     "ms": 0.814,
+     "say": 1,
+     "en_buyuk_ms": 0.814,
+     "dugum": "div.sh-cta"
+    },
+    {
+     "nodeId": 436,
+     "ms": 0.806,
+     "say": 1,
+     "en_buyuk_ms": 0.806,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 437,
+     "ms": 0.801,
+     "say": 1,
+     "en_buyuk_ms": 0.801,
+     "dugum": "a.sp-govde"
+    },
+    {
+     "nodeId": 3,
+     "ms": 0.615,
+     "say": 1,
+     "en_buyuk_ms": 0.615
+    },
+    {
+     "nodeId": 267,
+     "ms": 0.608,
+     "say": 1,
+     "en_buyuk_ms": 0.608,
+     "dugum": "div.sus-el.sus-el-r"
+    },
+    {
+     "nodeId": 455,
+     "ms": 0.605,
+     "say": 1,
+     "en_buyuk_ms": 0.605,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 456,
+     "ms": 0.598,
+     "say": 1,
+     "en_buyuk_ms": 0.598,
+     "dugum": "a.sp-govde"
+    },
+    {
+     "nodeId": 474,
+     "ms": 0.598,
+     "say": 1,
+     "en_buyuk_ms": 0.598,
+     "dugum": "div.sp-kart"
+    },
+    {
+     "nodeId": 268,
+     "ms": 0.593,
+     "say": 1,
+     "en_buyuk_ms": 0.593,
+     "dugum": "span.sus-suzul"
+    }
+   ],
+   "gecersiz": {
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · HTML": 2,
+    "LayoutInvalidationTracking · Added to layout · #document": 3,
+    "StyleRecalcInvalidationTracking · Zoom · HTML": 1,
+    "LayoutInvalidationTracking · Removed from layout · BODY": 1,
+    "LayoutInvalidationTracking · Removed from layout · HTML": 1,
+    "LayoutInvalidationTracking · Unknown · #document": 3,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · HTML class='t-nostars'": 1,
+    "StyleRecalcInvalidationTracking · Style rule change · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · BODY": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='atla'": 1,
+    "LayoutInvalidationTracking · Added to layout · #text": 191,
+    "LayoutInvalidationTracking · Added to layout · DIV id='bg'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='fade'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='orb'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='grid'": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT id='nvAc' class='vh'": 1,
+    "LayoutInvalidationTracking · Added to layout · I id='nvS'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-fade'": 1,
+    "LayoutInvalidationTracking · Added to layout · NAV id='nv' class='nv-bar'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-logo'": 2,
+    "LayoutInvalidationTracking · Added to layout · I": 41,
+    "LayoutInvalidationTracking · Added to layout · PICTURE": 68,
+    "LayoutInvalidationTracking · Added to layout · SOURCE": 40,
+    "LayoutInvalidationTracking · Added to layout · IMG": 36,
+    "LayoutInvalidationTracking · Added to layout · B": 6,
+    "LayoutInvalidationTracking · Added to layout · SPAN": 22,
+    "LayoutInvalidationTracking · Size changed · IMG": 12,
+    "StyleRecalcInvalidationTracking · Affected by :has() · BODY": 59,
+    "StyleRecalcInvalidationTracking · Affected by :has() · HTML class='t-nostars'": 60,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · #text": 22,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV class='nv-right'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV class='nv-m'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SCRIPT": 5,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · MAIN id='icerik'": 1,
+    "ScheduleStyleInvalidationTracking · data-film · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Fonts changed · BODY": 1,
+    "LayoutInvalidationTracking · Fonts changed · A class='atla'": 1,
+    "LayoutInvalidationTracking · Fonts changed · #text": 5,
+    "LayoutInvalidationTracking · Fonts changed · DIV id='bg'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='fade'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='orb'": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN class='grid'": 1,
+    "LayoutInvalidationTracking · Fonts changed · DIV class='nv-fade'": 1,
+    "LayoutInvalidationTracking · Fonts changed · NAV id='nv' class='nv-bar'": 1,
+    "LayoutInvalidationTracking · Fonts changed · DIV class='nv-ic'": 1,
+    "LayoutInvalidationTracking · Fonts changed · A class='nv-logo'": 1,
+    "LayoutInvalidationTracking · Fonts changed · I": 1,
+    "LayoutInvalidationTracking · Fonts changed · PICTURE": 2,
+    "LayoutInvalidationTracking · Fonts changed · SOURCE": 1,
+    "LayoutInvalidationTracking · Fonts changed · B": 1,
+    "LayoutInvalidationTracking · Fonts changed · SPAN": 1,
+    "StyleInvalidatorInvalidationTracking · Element has pending invalidation list · HTML class='t-nostars'": 1,
+    "LayoutInvalidationTracking · Added to layout · MAIN id='icerik'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-m'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mtop'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='nv-mx'": 1,
+    "LayoutInvalidationTracking · Size changed · svg": 17,
+    "LayoutInvalidationTracking · Added to layout · path": 28,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mlinks'": 1,
+    "LayoutInvalidationTracking · Added to layout · A": 19,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mlg'": 1,
+    "LayoutInvalidationTracking · Added to layout · EM": 4,
+    "LayoutInvalidationTracking · Added to layout · A class='on'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-mcta'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-mp'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='nv-mw'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='nv-right'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='nv-burger'": 1,
+    "ScheduleStyleInvalidationTracking · disabled · INPUT class='pause'": 40,
+    "StyleInvalidatorInvalidationTracking · Invalidation set invalidates self · INPUT class='pause'": 120,
+    "ScheduleStyleInvalidationTracking · ? · INPUT class='pause'": 80,
+    "ScheduleStyleInvalidationTracking · disabled · INPUT": 80,
+    "StyleInvalidatorInvalidationTracking · Invalidation set invalidates self · INPUT": 240,
+    "ScheduleStyleInvalidationTracking · ? · INPUT": 160,
+    "StyleRecalcInvalidationTracking · Affected by :has() · MAIN id='icerik'": 37,
+    "ScheduleStyleInvalidationTracking · ? · BODY": 39,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · DIV id='fl-govde' class='fl-govde'": 1,
+    "StyleInvalidatorInvalidationTracking · Element has pending invalidation list · BODY": 4,
+    "StyleInvalidatorInvalidationTracking · Invalidation set matched tagName · MAIN id='icerik'": 4,
+    "StyleRecalcInvalidationTracking · Related style rule · MAIN id='icerik'": 4,
+    "LayoutInvalidationTracking · Added to layout · DIV id='fl-govde' class='fl-govde'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ana'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION class='sh-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-atmo'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a1'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a2'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a3'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-a4'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-eller'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-el sus-el-h'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sus-suzul'": 10,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sus-el sus-el-r'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-kap'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-ic'": 3,
+    "LayoutInvalidationTracking · Added to layout · H1 class='sh-h1'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sh-l'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='sh-lede'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sh-cta'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='sh-void'": 3,
+    "LayoutInvalidationTracking · Added to layout · I class='sus-halka'": 3,
+    "LayoutInvalidationTracking · Added to layout · A class='sh-btn'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='sh-meta'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN id='shSaat' class='sh-saat'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='ticker' class='st-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-pencere'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-ray'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-akis'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='st-tur'": 3,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='st-etiket'": 3,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='st-logo'": 27,
+    "LayoutInvalidationTracking · Size changed · svg class='sus-dalga'": 3,
+    "LayoutInvalidationTracking · Added to layout · SECTION class='sp-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-giris'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='kunye sp-kunye'": 4,
+    "LayoutInvalidationTracking · Added to layout · H2 class='s1-buyuk'": 2,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-sayi'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='s1-alt'": 3,
+    "LayoutInvalidationTracking · Added to layout · DIV id='spDeste' class='sp-deste'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-kart'": 4,
+    "LayoutInvalidationTracking · Added to layout · A class='sp-govde'": 4,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-gorsel'": 12,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-yazi'": 12,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-no'": 16,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-etiket'": 4,
+    "LayoutInvalidationTracking · Added to layout · H3": 5,
+    "LayoutInvalidationTracking · Added to layout · P": 6,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='sp-git'": 8,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sp-tumu'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='sp-tum'": 2,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='skKatman' class='sk-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='akis' class='sa-sahne'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sh-ic'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sus-el sus-el-r'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · DIV class='sus-el sus-el-h'": 1,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · A class='sp-govde'": 3,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='sektor' class='sse-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='tespit' class='ste-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='sozler' class='ssz-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='kurucu' class='sku-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='iletisim' class='sil-sahne'": 2,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='kurucu' class='sku-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='sozler' class='ssz-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='tespit' class='ste-sahne'": 2,
+    "LayoutInvalidationTracking · Added to layout · SECTION id='sektor' class='sse-sahne'": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · FOOTER": 1,
+    "LayoutInvalidationTracking · Added to layout · FOOTER": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='wrap'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fgrid'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='lead'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='flogo'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fcol'": 2,
+    "LayoutInvalidationTracking · Added to layout · H5": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV class='watermark'": 1,
+    "LayoutInvalidationTracking · Added to layout · H2 class='vh'": 1,
+    "LayoutInvalidationTracking · Added to layout · CANVAS id='wmk'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='fbot'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='r'": 1,
+    "StyleRecalcInvalidationTracking · DisplayLock · SECTION id='tespit' class='ste-sahne'": 1,
+    "LayoutInvalidationTracking · Removed from layout · SECTION id='tespit' class='ste-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-bas'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='kunye'": 5,
+    "LayoutInvalidationTracking · Added to layout · H2 class='s1-buyuk ste-h2'": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='ste-lt'": 29,
+    "LayoutInvalidationTracking · Added to layout · BR": 1,
+    "LayoutInvalidationTracking · Added to layout · SPAN class='thin'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='ste-kutu'": 1,
+    "LayoutInvalidationTracking · Added to layout · FORM id='steForm' class='ste-form'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='ste-giris'": 1,
+    "LayoutInvalidationTracking · Added to layout · circle": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT id='steUrl'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV id='placeholder'": 3,
+    "LayoutInvalidationTracking · Added to layout · DIV": 7,
+    "LayoutInvalidationTracking · Added to layout · BUTTON id='steGo' class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · P class='ste-not'": 1,
+    "StyleRecalcInvalidationTracking · DisplayLock · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Removed from layout · SECTION id='iletisim' class='sil-sahne'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-ic'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-cagri'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='sil-dugmeler'": 1,
+    "LayoutInvalidationTracking · Added to layout · A class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · A class='sil-ikincil'": 2,
+    "LayoutInvalidationTracking · Added to layout · DIV id='lead' class='sil-kutu'": 1,
+    "LayoutInvalidationTracking · Added to layout · DIV class='sil-yazi'": 2,
+    "LayoutInvalidationTracking · Added to layout · FORM id='silForm' class='sil-form'": 1,
+    "LayoutInvalidationTracking · Added to layout · P class='sus-tuzak'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL": 1,
+    "LayoutInvalidationTracking · Added to layout · INPUT": 5,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='sil-alan'": 8,
+    "LayoutInvalidationTracking · Added to layout · TEXTAREA": 1,
+    "LayoutInvalidationTracking · Added to layout · BR id='textarea-placeholder-break'": 1,
+    "LayoutInvalidationTracking · Added to layout · LABEL class='sil-onay'": 1,
+    "LayoutInvalidationTracking · Added to layout · BUTTON class='dugme'": 2,
+    "LayoutInvalidationTracking · Added to layout · P id='silDurum' class='sil-durum'": 1,
+    "StyleRecalcInvalidationTracking · Animation · SPAN class='sus-suzul'": 794,
+    "StyleRecalcInvalidationTracking · Animation · ::before": 641,
+    "StyleRecalcInvalidationTracking · Animation · ::after": 244,
+    "StyleRecalcInvalidationTracking · Animation · IMG": 272,
+    "StyleRecalcInvalidationTracking · Animation · I": 161,
+    "StyleRecalcInvalidationTracking · Animation · DIV class='st-akis'": 397,
+    "StyleRecalcInvalidationTracking · ScrollTimeline · I": 29,
+    "LayoutInvalidationTracking · Removed from layout · #text": 1,
+    "StyleRecalcInvalidationTracking · Node was inserted into tree · svg": 1,
+    "LayoutInvalidationTracking · Added to layout · svg": 1,
+    "LayoutInvalidationTracking · Added to layout · rect": 2,
+    "LayoutInvalidationTracking · Removed from layout · rect": 2,
+    "LayoutInvalidationTracking · Removed from layout · svg": 1,
+    "StyleRecalcInvalidationTracking · Animation · P class='sh-lede'": 85,
+    "StyleRecalcInvalidationTracking · Animation · DIV class='sh-cta'": 85,
+    "StyleRecalcInvalidationTracking · Animation · P class='sh-meta'": 82,
+    "LayoutInvalidationTracking · Style changed · I": 2,
+    "LayoutInvalidationTracking · Style changed · P class='sh-lede'": 1,
+    "LayoutInvalidationTracking · Style changed · DIV class='sh-cta'": 1,
+    "LayoutInvalidationTracking · Style changed · P class='sh-meta'": 1
+   },
+   "stil": {
+    "oge_toplam": 4433,
+    "oge_en_buyuk": 277
+   },
+   "animasyon": {
+    "toplam": 45,
+    "kosan": 39,
+    "kaydirmali": 35,
+    "dagilim": {
+     "ViewTimeline/running": 35,
+     "DocumentTimeline/running": 4,
+     "DocumentTimeline/finished": 6
+    }
+   },
+   "gozcu": [
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:10933 <- at http://127.0.0.1:8790/:23:11033",
+     "secenek": "{}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at L (http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:937) <- at http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:877 <- at u (http://127.0.0.1:8790/_astro/page.sJrt8mpm.js:1:2162)",
+     "secenek": "{}",
+     "hedef": 84,
+     "cagri": 1,
+     "girdi": 84
+    },
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:49887",
+     "secenek": "{}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at http://127.0.0.1:8790/:23:74085",
+     "secenek": "{\"threshold\":0.25}",
+     "hedef": 6,
+     "cagri": 1,
+     "girdi": 6
+    },
+    {
+     "dogum": "at Z (http://127.0.0.1:8790/varlik/kabuk.js:1:3921) <- at Module.it (http://127.0.0.1:8790/varlik/kabuk.js:1:11161) <- at http://127.0.0.1:8790/:84:1478",
+     "secenek": "{\"rootMargin\":\"600px\"}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    },
+    {
+     "dogum": "at Z (http://127.0.0.1:8790/varlik/kabuk.js:1:4048) <- at Module.it (http://127.0.0.1:8790/varlik/kabuk.js:1:11161) <- at http://127.0.0.1:8790/:84:1478",
+     "secenek": "{\"threshold\":0.02}",
+     "hedef": 1,
+     "cagri": 1,
+     "girdi": 1
+    }
+   ],
+   "gorsel": {
+    "istek": 10,
+    "bayt": 109730
+   },
+   "loaf": {
+    "say": 6,
+    "toplam_ms": 941.9,
+    "engelleyici_ms": 461.1,
+    "stil_yerlesim_ms": 0,
+    "betik_ms": 86.4,
+    "en_uzun": [
+     {
+      "t_ms": 853.7,
+      "sure_ms": 249.2,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 5.7
+     },
+     {
+      "t_ms": 144.1,
+      "sure_ms": 239.2,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 0
+     },
+     {
+      "t_ms": 559.8,
+      "sure_ms": 203.7,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 0
+     },
+     {
+      "t_ms": 391.3,
+      "sure_ms": 101.7,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 8
+     },
+     {
+      "t_ms": 1145.4,
+      "sure_ms": 90.4,
+      "stil_yerlesim_ms": 0,
+      "betik_ms": 72.7
+     }
+    ]
+   }
+  }
+ ],
+ "medyan_kosum": 2
+}
