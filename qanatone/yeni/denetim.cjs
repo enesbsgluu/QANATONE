@@ -158,6 +158,49 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        || `${gercek.size} sayfa`);
 }
 
+/* G5 · BETIKTEN CAGRILAN VARLIKLAR DA CIKTIDA (4 Eyl 2026 — YASANDI).
+   G2 yalniz MARKUP'a bakar (<img src>, <source srcset>). Betigin kendi
+   icinde yazili varlik yollari kimsenin denetiminde degildi ve kesme bu
+   bosluktan iki kez sizdi:
+     · `/og.png`        — Temel.astro + sema.mjs geri dususu (G3 kapatti)
+     · `/js/tubes.min.js` — hero'nun WebGL tup alani; `efekt.js` bosta
+       DINAMIK ITHAL ediyor ve ithal `.catch(()=>{})` ile YUTULUYOR.
+       Dosya eski KOK SITENIN varligiydi, build.js zincirden cikinca
+       ciktida kalmadi: 775 KB'lik gorsel katman canlida SESSIZCE eksikti,
+       tek izi konsolda bir 404 satiriydi. Yutulan hata, hata degildir —
+       bekcisi olmayan yol da yol degildir.
+   KURAL: dist'e giden her betikte gecen KOK-MUTLAK ve UZANTILI yol
+   ciktida bulunmali. Uzanti sarti bilincli: rota yollari ('/hizmetler')
+   dosya degildir, onlari H16/kesme-supurme tutar. Dinamik kurulan yollar
+   ('/varlik/film/' + ad) tam dize olmadigi icin bu kuralin disinda kalir
+   — kural gorebildigini tutar, goremedigini tuttugunu iddia etmez. */
+{
+  const UZANTI = /\.(js|mjs|css|json|webp|avif|png|jpe?g|gif|svg|ico|mp4|webm|woff2?|txt|xml)$/i;
+  const betikler = [];
+  (function tara(d) {
+    for (const ad of fs.readdirSync(d)) {
+      const p = path.join(d, ad);
+      if (fs.statSync(p).isDirectory()) tara(p);
+      else if (/\.(js|mjs)$/.test(ad)) betikler.push(p);
+    }
+  })(KOK);
+  const kusur = [];
+  let bakilan = 0;
+  for (const p of betikler) {
+    const g = oku(p);
+    const yollar = new Set();
+    for (const m of g.matchAll(/['"`](\/[A-Za-z0-9_\-./]+)['"`]/g))
+      if (UZANTI.test(m[1])) yollar.add(m[1]);
+    for (const y of yollar) {
+      bakilan++;
+      if (!fs.existsSync(path.join(KOK, y.replace(/^\//, ''))))
+        kusur.push(rel(p) + ':' + y);
+    }
+  }
+  ol('G5 · betiklerde yazılı kök-mutlak varlık yolları çıktıda var',
+     kusur.length === 0, kusur.slice(0, 3).join(' ') || betikler.length + ' betik · ' + bakilan + ' yol');
+}
+
 /* G4 · VARLIK ATIFLARI HARFI HARFINE (4 Eyl 2026).
    Windows dosya sistemi HARF DUYARSIZ: `existsSync('/img/Logo.WEBP')`
    gercek ad `img/logo.webp` olsa da TRUE doner. G2 "dosya diskte mi" diye
