@@ -184,7 +184,24 @@ html.fl-nav-kalk .nv-bar { transform: translateY(-115%); }
   position: fixed; inset: 0; z-index: 3;   /* TV panelleri (4) ve film (5) ustunde kalsin */
   visibility: hidden;
   background: #050505;
-  overflow: hidden;
+  /* `hidden` DEGIL `clip` (4 Eyl 2026 — BUYUK SESSIZ KIRILMA).
+     `overflow:hidden` bir ogeyi KAYDIRMA KABI yapar. `view-timeline`
+     ise ozneyi EN YAKIN KAYDIRMA KABINA gore olcer. Bu sarmal butun
+     site govdesini iceriyor, dolayisiyla ICINDEKI HER view() ANIMASYONU
+     sayfaya degil BU KUTUYA baglaniyordu — ve kutu hic kaydirilmadigi
+     icin (scrollHeight == clientHeight) cizelge DONUYORDU.
+     OLCULDU (.sp-deste, proje karti destesi): animasyon bagli ve
+     `playState: running`, ama `currentTime` sayfa boyunca -7,25% ile
+     -8,49% arasinda kaliyor — menzile HIC girmiyor; `fill: both`
+     oldugu icin `from` hali donuyor (scale 1 / opacity 1). Belge bastan
+     sona tarandi: [0,100] araligina giren adim SIFIR, gorulen tek olcek
+     degeri 1.000. Masaustunde de mobilde de ayni.
+     Kural film sokulunce de gecerliydi: `html:not(.fl-js) .fl-govde`
+     yalniz `position`i sifirliyor, overflow'u BIRAKIYORDU — yani
+     animasyonlar donen ziyaretcide de olu kaliyordu.
+     `clip` gorsel olarak ayni kirpmayi yapar ama kaydirma kabi YARATMAZ;
+     boylece view() zaman cizelgeleri yeniden BELGEYE baglanir. */
+  overflow: clip;
 }
 html.fl-hazirla .fl-govde, html.fl-devir .fl-govde { visibility: visible; pointer-events: none; }
 html.fl-devir-net .fl-govde { pointer-events: auto; }
