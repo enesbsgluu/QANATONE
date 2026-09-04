@@ -18,9 +18,16 @@ const duz = (h: unknown) => String(h).replace(/<[^>]+>/g, ' ').replace(/\s+/g, '
 const oz = T(p.text, 'tr');
 const aciklama = kes(oz.length >= 50 ? oz
   : oz + ' ' + duz((p.blocks?.tr || [['', '']])[0][1]), 'tr');
-const sema = projeSema(icerik, { url: canon, ad: basAd(p.name), aciklama, dil: 'tr' }, p);
+/* BASLIK DILE GORE AYRISIR (S4, 6 Eyl 2026). Once yalnizca proje adiydi ve
+   TR ile EN sayfalari BIREBIR AYNI <title>'i tasiyordu (7 cift; olculdu) —
+   arama motoru iki sayfayi ayirt edemez, klasik sessiz kopya baslik hatasi.
+   Ayrim UYDURULMADI: projenin kendi `tag` alani zaten iki dilli
+   ("Otomotiv · Bayi agi" ↔ "Automotive · Dealer network"). Ozel ad
+   cevrilmez, baglami cevrilir. */
+const basAdi = `${p.name} · ${T(p.tag, 'tr')}`;
+const sema = projeSema(icerik, { url: canon, ad: basAd(basAdi), aciklama, dil: 'tr' }, p);
 ---
-<Temel dil="tr" baslik={basAd(p.name)} aciklama={aciklama} canonical={canon}
+<Temel dil="tr" baslik={basAd(basAdi)} aciklama={aciklama} canonical={canon}
   heleftr={canon} helefen={`${KOK}/en/projeler/${p.slug}`}
   sema={sema} genis etiket={T(p.tag, 'tr')}>
   <ProjeGovde p={p} dil="tr" />

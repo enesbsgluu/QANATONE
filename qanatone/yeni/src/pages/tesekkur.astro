@@ -1,0 +1,31 @@
+---
+/* TESEKKUR SAYFASI (YAYIN ONCESI KONTROL, madde 1 — 6 Eyl 2026).
+   Form gonderilince ne oldugu bugune kadar SAYFA ICINDE bir durum
+   satiriydi; ayri bir adres yoktu. Ayri adres iki sebeple gerekli:
+     1. DONUSUMU SAYABILECEGIMIZ TEK YER ORASI — olcum betigi (GTM/GA4)
+        hedefi bir ADRESE baglar, DOM'daki bir metne degil.
+     2. JS kosmayan ziyaretcide native POST'un donecegi bir yer lazim;
+        Netlify Forms formun `action`ina bakar.
+   INDEKSLENMEZ: kesmeden sonra da `indeks={false}` — arama sonucunda
+   gorunmesi anlamsiz, dogrudan girilirse ziyaretciyi yaniltir.
+   Sitemap'e de girmez (sayfalar.json `sitemap: null`).
+   Metinler PANELDEN: tsk* anahtarlari. */
+import Temel from '../layouts/Temel.astro';
+import { KOK, icerik, T, type Dil } from '../icerik';
+const dil: Dil = 'tr';
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, tr: string, en: string): string =>
+  T((s as any)[k], dil) || (dil === 'en' ? en : tr);
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Temel dil="tr" lead={false} indeks={false}
+  baslik={m('tskb', 'Talebin bize ulaştı — QANATONE', 'Your request reached us — QANATONE')}
+  aciklama={m('tska', 'Talebin kaydedildi. En geç bir iş günü içinde döneriz.', 'Your request is recorded. We reply within one business day.')}
+  canonical={`${KOK}/tesekkur`}>
+  <div class="b404">
+    <b class="tsk-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></b>
+    <h1>{m('tskh', 'Talebin bize ulaştı', 'Your request reached us')}</h1>
+    <p class="lede" style="margin:12px auto 24px">{m('tskp', 'En geç bir iş günü içinde döneriz.', 'We reply within one business day.')}</p>
+    <a class="dugme sus-isik" href={`${B}/`}>{m('tskc', 'Ana sayfaya dön', 'Back to home')}</a>
+  </div>
+</Temel>

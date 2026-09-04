@@ -37,7 +37,13 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
     <p>{g('ldp')}</p>
   </div>
 
+  {/* TESEKKUR ADRESI (6 Eyl 2026, yayin oncesi kontrol madde 1).
+      `action`: JS KOSMAYAN yol — Netlify Forms native POST'tan sonra bu
+      adrese dondurur. JS'li yolda ada `location.assign` ile ayni adrese
+      gider. Iki yol da AYNI adrese cikar; olcum betigi donusumu tek bir
+      adrese baglayabilsin diye. Dil ayrimi: EN ziyaretci EN esine gider. */}
   <form class="sil-form" id="silForm" name="lead" method="POST"
+    action={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/`}
     data-netlify="true" netlify-honeypot="company">
     <input type="hidden" name="form-name" value="lead" />
     {/* Honeypot: gerçek kullanıcı görmez, bot doldurur. */}
@@ -88,7 +94,7 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
   </form>
 </div>
 
-<script define:vars={{ waNum: wa }}>
+<script define:vars={{ waNum: wa, tesekkurYol: `${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/` }}>
   /* ADA — yalnız `submit`. Açılışta sıfır iş.
      1) Atıf alanları burada doldurulur: utm_*, tıklama kimlikleri,
         inilen sayfa, yönlendiren.
@@ -129,8 +135,13 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
           body: new URLSearchParams(veri).toString(),
         });
         if (!r.ok) throw new Error(String(r.status));
-        durum.textContent = 'Talebin bize ulaştı — en geç bir iş günü içinde döneriz.';
+        /* TESEKKUR ADRESINE GIT (6 Eyl 2026): donusum bir ADRESE baglanmali,
+           DOM'daki bir metne degil — olcum betigi (GA4/GTM) hedefi oradan
+           okur. `f.reset()` gitmeden once: kullanici geri gelirse form bos.
+           JS kosmayan yolda ayni adrese formun `action`i goturur. */
         f.reset();
+        location.assign(tesekkurYol);
+        return;
       } catch (err) {
         durum.textContent = 'Kayıt sunucuya ulaşmadı. ';
         const a = document.createElement('a');

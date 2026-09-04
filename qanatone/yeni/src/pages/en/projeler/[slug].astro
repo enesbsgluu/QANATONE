@@ -15,9 +15,11 @@ const duz = (h: unknown) => String(h).replace(/<[^>]+>/g, ' ').replace(/\s+/g, '
 const oz = T(p.text, 'en');
 const aciklama = kes(oz.length >= 50 ? oz
   : oz + ' ' + duz((p.blocks?.en || p.blocks?.tr || [['', '']])[0][1]), 'en');
-const sema = projeSema(icerik, { url: canon, ad: basAd(p.name, 'en'), aciklama, dil: 'en' }, p);
+/* BASLIK DILE GORE AYRISIR — gerekce TR esinde yazili (S4, 6 Eyl 2026). */
+const basAdi = `${p.name} · ${T(p.tag, 'en')}`;
+const sema = projeSema(icerik, { url: canon, ad: basAd(basAdi, 'en'), aciklama, dil: 'en' }, p);
 ---
-<Temel dil="en" baslik={basAd(p.name, 'en')} aciklama={aciklama} canonical={canon}
+<Temel dil="en" baslik={basAd(basAdi, 'en')} aciklama={aciklama} canonical={canon}
   heleftr={`${KOK}/projeler/${p.slug}`} helefen={canon}
   sema={sema} genis etiket={T(p.tag, 'en')}>
   <ProjeGovde p={p} dil="en" />

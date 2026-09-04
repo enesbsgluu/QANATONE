@@ -43,10 +43,20 @@ interface Props {
   /* lead formu footer'ın önünde (kaynak: her rotada en sonda, 11742). Sayfa
      formu kendi gövdesinde basıyorsa (SILIletisim: ana, /hizmetler) false. */
   lead?: boolean;
+  /* SAYFA BASINA INDEKS KAPISI (6 Eyl 2026). Bugun N1 geregi HER sayfa
+     noindex; kesme adimi 5'te o kural tersine doner. Ama bazi sayfalar
+     kesmeden SONRA da indekslenmemeli — tesekkur sayfasi gibi: donusum
+     ucu, arama sonucunda gorunmesi anlamsiz ve dogrudan girilirse yaniltir.
+     `indeks={false}` o sayfalari kalici olarak disarida tutar; kesmede
+     asagidaki `kesmeOncesi` yarisi duser, bu yari KALIR. */
+  indeks?: boolean;
 }
 const { dil = 'tr', baslik, aciklama, canonical,
         heleftr, helefen, sema = null, etiket, genis = false,
-        perde = true, kabuk = true, lead = true } = Astro.props;
+        perde = true, kabuk = true, lead = true, indeks = true } = Astro.props;
+/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
+   Tek satirda durmasinin sebebi: kesme gunu aranacak yer belli olsun. */
+const kesmeOncesi = true;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const en = dil === 'en';
 const s = (icerik.strings && icerik.strings[dil]) || {};
@@ -80,7 +90,7 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex" />
+  {(kesmeOncesi || indeks === false) && <meta name="robots" content="noindex" />}
   <title>{baslik}</title>
   <meta name="description" content={aciklama} />
   {/* SIMGE — EKSIK TASINAN KALEM (6 Eyl 2026, prolog bagimsizlik denetimi
