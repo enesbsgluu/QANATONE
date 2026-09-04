@@ -56,7 +56,7 @@ const TARAYICILAR = {
 };
 const TARAYICI = process.env.TARAYICI || 'brave';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-klavye.json');
 const KONTAK = path.join(__dirname, 'kontak-tur9');
 const KABUK = process.env.KABUK !== '0';

@@ -1,6 +1,6 @@
 {
  "_": "yeni/ic-bag-denetimi.cjs — gelen bag / yetim sayfa / ana sayfadan derinlik. H16 KIRIK bag arar, bu betik GELMEYEN bag arar; ikisi ayri sorudur.",
- "olcum": "2026-09-04T00:52:33.958Z",
+ "olcum": "2026-09-04T11:03:43.984Z",
  "sayfa": 65,
  "derinlik_tavani": 3,
  "yetim": [],
@@ -33,7 +33,7 @@
   {
    "yol": "/en/film",
    "gelen": 1,
-   "cikan": 25,
+   "cikan": 27,
    "derinlik": null,
    "istisna": "olcum zemini (EN)"
   },
@@ -304,20 +304,6 @@
    "istisna": null
   },
   {
-   "yol": "/",
-   "gelen": 34,
-   "cikan": 25,
-   "derinlik": 0,
-   "istisna": null
-  },
-  {
-   "yol": "/bulten",
-   "gelen": 34,
-   "cikan": 30,
-   "derinlik": 1,
-   "istisna": null
-  },
-  {
    "yol": "/en",
    "gelen": 34,
    "cikan": 25,
@@ -461,6 +447,20 @@
    "yol": "/surec",
    "gelen": 34,
    "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/",
+   "gelen": 35,
+   "cikan": 25,
+   "derinlik": 0,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten",
+   "gelen": 35,
+   "cikan": 30,
    "derinlik": 1,
    "istisna": null
   },

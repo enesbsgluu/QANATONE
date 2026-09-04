@@ -147,7 +147,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         <p class="ste-uyari" id="steUyari" hidden></p>
         <ul class="ste-izgara" id="steIzgara"></ul>
         {/* DUZELTME LISTESI — iskelet HTML'de, `hidden`; ada secip klonlar. */}
-        <div class="ste-fix" id="steFix" hidden data-wa={WA} data-sozluk={`/yeni/varlik/tespit-fix.${dil}.json`}
+        <div class="ste-fix" id="steFix" hidden data-wa={WA} data-sozluk={`/varlik/tespit-fix.${dil}.json`}
           data-msg={en ? 'Hi, I ran the check for {host} — score {skor}.' : 'Merhaba, {host} için kontrolü yaptım — skor {skor}. Bunları konuşmak istiyorum.'}>
           <p class="ste-fix-bas">{en ? 'Start with these three' : 'Önce şu üçü'}</p>
           <ol class="ste-fix-liste" id="steFixListe"></ol>

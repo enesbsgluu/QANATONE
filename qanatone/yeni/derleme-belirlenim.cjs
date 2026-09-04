@@ -21,7 +21,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
 const KOK = path.join(__dirname, '..');
-const DIST = path.join(KOK, 'dist', 'yeni');
+const DIST = path.join(KOK, 'dist');
 const CIKTI = path.join(__dirname, 'derleme-belirlenim.json');
 
 /* Bilerek her derlemede degisen dosyalar — gerekce zorunlu. */

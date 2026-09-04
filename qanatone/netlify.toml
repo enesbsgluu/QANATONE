@@ -1,8 +1,10 @@
 # QANATONE — Netlify yapilandirmasi
 [build]
-  # Faz 0 (Astro karari): yeni kabuk dist/yeni altina basar, /yeni/* den
-  # yayinlanir. Mevcut site aynen yasar; kok adrese alma Faz 4 un isi.
-  # TUR 9 (3 Eyl 2026) — zincir dort adimdan yediye:
+  # ---- GECMIS · ARTIK GECERLI DEGIL, kayit icin duruyor ----
+  # Faz 0 (Astro karari) IDI: yeni kabuk dist/yeni altina basiyor, /yeni/*
+  # adresinden yayinlaniyor, kok site aynen yasiyordu. Asagidaki TUR 9
+  # (3 Eyl 2026) zinciri dort adimdan yediye cikarmisti; KESME onu da
+  # degistirdi — YURURLUKTEKI zincir bu blogun ALTINDA:
   #   npm ci                        kok bagimliliklar
   #   node build.js                 eski kok site + test/denetim.js (dist/ sifirlanir)
   #   npm --prefix yeni ci          Astro bagimliliklari (esbuild dahil)
@@ -14,7 +16,22 @@
   #   npm --prefix yeni run build   = node kabuk-derle.cjs && astro build (kabuk paketi artik hatta)
   #   node yeni/denetim.cjs         yeni kabuk denetimi; kirmizi -> exit 1 -> deploy dusmez
   #   node yeni/surum-yaz.cjs       dist/yeni/surum.json: commit/dal/baglam/medya sureleri (CI gozlemi)
-  command = "npm ci && node build.js && npm --prefix yeni ci && node yeni/film/kur-medya.cjs && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
+  # KESME · ADIM 2 (6 Eyl 2026). `node build.js` ZINCIRDEN CIKTI: eski kok
+  # site artik uretilmiyor (Enes, 6 Eyl: "Eski site tamamen kalkiyor, arsiv
+  # yok"). Kok bagimliliklari (`npm ci`) de gerekmiyordu — build.js disinda
+  # onlari kullanan adim yok; zincir kisaldi, deploy hizlandi.
+  # Eski sitenin 60 adresi OLMEDI: 59'u yeni kabukta BIREBIR ayni yolda,
+  # /shell yonlendirmeyle koke gidiyor (olcum: yeni/kesme-url-kapsami.cjs).
+  # Zincir:
+  #   npm --prefix yeni ci          Astro bagimliliklari (esbuild dahil)
+  #   node yeni/film/kur-medya.cjs  film medyasi (onbellek -> GitHub Release,
+  #                                 sha1 dogrulanir; temiz klonda FM1 kirmizisi
+  #                                 bu adim olmadan sessizce yesil cikardi)
+  #   npm --prefix yeni run build   = kabuk-derle.cjs && astro build
+  #   node yeni/denetim.cjs         kirmizi -> exit 1 -> DEPLOY DUSMEZ
+  #   node yeni/surum-yaz.cjs       dist/surum.json (CI gozlemi)
+  # GERI ALMA: `git revert` bu commit'i alir; build.js zincire geri doner.
+  command = "npm --prefix yeni ci && node yeni/film/kur-medya.cjs && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
   publish = "dist"
 
 [build.environment]

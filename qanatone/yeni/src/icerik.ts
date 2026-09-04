@@ -16,9 +16,25 @@ export type Dil = 'tr' | 'en';
 export const T = (v: unknown, dil: Dil = 'tr'): string =>
   typeof v === 'string' ? v : (v && ((v as any)[dil] || (v as any).tr)) || '';
 
-/* Kesmeye (Faz 4) kadar canonical'lar CANLI kök karşılığına verilir:
-   içerik oradan yayında, yeni sayfalar noindex — kopya içerik doğmaz. */
-export const KOK = 'https://qanatone.com';
+/* SITENIN TEK KONAK KAYNAGI. Canonical, og:url, sitemap, JSON-LD ve
+   Link basliklari HEPSI buradan turer — baska hicbir yerde konak elle
+   yazilmaz (6 Eyl 2026'da 14 kopya vardi, hepsi buraya baglandi).
+   BIRINCIL: www (Enes karari 6 Eyl). Harici DNS apex icin CNAME
+   tasiyamadigindan apex tek yuk dengeleyici adresine sabitlenir ve CDN
+   yonlendirmesinden yararlanamaz; DNS Natro'da kaldi cunku e-posta
+   kayitlari orada. Bedeli: birincil alan adi bir alt alan adi.
+   Apex 301 ile buraya duser (Netlify tarafinda). */
+export const KOK = 'https://www.qanatone.com';
+
+/* PAYLASIM KARTLARI · TEK KAYNAK (4 Eyl 2026).
+   Iki uretec birden basiyor: `Temel.astro` og:image/twitter:image
+   etiketlerini, `sema.mjs` yazi semasinin `image` alanini. Adlar iki
+   yerde YAZILSAYDI ayrisirlardi — ve bu kez varsayim degil, YASANMIS:
+   eski geri dusus `/og.png` ikisinde de elle yaziliydi, kesmede dosya
+   ciktidan kalkinca meta etiketi de sema da 404 veren bir adresi
+   ilan etmeye basladi ve hicbir kural gormedi.
+   Olculdu: her iki dosya da 1200x630 JPEG (G3 ciktida ACIP dogrular). */
+export const OG_KART = { tr: '/og-tr.jpg', en: '/og-en.jpg' } as const;
 
 /* S1 sözleşmesi için üretici tarafı: description sözcük sınırında
    kesilir (140 hedef; tırnak gibi HTML kaçışları çıktıda şişirir —

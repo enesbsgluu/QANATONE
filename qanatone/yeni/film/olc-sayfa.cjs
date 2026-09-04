@@ -53,7 +53,7 @@ const TARAYICILAR = {
 };
 const TARAYICI = process.env.TARAYICI || 'brave';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
-const DIST = path.join(__dirname, '..', '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', '..', 'dist');
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-sayfa.json');
 const TEKRAR = Number(process.env.TEKRAR || 3);
 const KACIRILAN_KAPI = Number(process.env.KACIRILAN_KAPI || 1);   /* p95'te kacirilan kare */
@@ -105,7 +105,7 @@ const sayfalar = [];
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
     if (e.isDirectory()) { if (!/^(_astro|font|img|varlik|film|deneme-react)$/.test(e.name)) gez(p); }
-    else if (e.name === 'index.html') sayfalar.push('/yeni/' + path.relative(DIST, p).replace(/\\/g, '/').replace(/index\.html$/, ''));
+    else if (e.name === 'index.html') sayfalar.push('/' + path.relative(DIST, p).replace(/\\/g, '/').replace(/index\.html$/, ''));
   }
 })(DIST);
 /* FILTRE=regex: sayfa alt kumesi (10 dakikalik parcalar halinde kosmak icin) · CIKTI=dosya adi */
@@ -131,19 +131,19 @@ const KISMI = secim.length < sayfalar.length;
      · PROLOG: ana sayfa film bolumunu tasiyorsa tavan ana + film
        (12,5 + 11 = 23,5 KB); filmin kendi kapilari ayri (FM1). */
 function jsBayt(yol) {
-  const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/yeni\//, ''), 'index.html');
+  const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/(?:yeni\/)?/, ''), 'index.html');
   const h = fs.readFileSync(f, 'utf8');
   let t = 0;
-  for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) { const d = path.join(DIST, m[1].replace(/^\/yeni\//, '')); if (fs.existsSync(d)) t += fs.statSync(d).size; }
+  for (const m of h.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*>/g)) { const d = path.join(DIST, m[1].replace(/^\/(?:yeni\/)?/, '')); if (fs.existsSync(d)) t += fs.statSync(d).size; }
   for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) if (!/ld\+json/.test(m[1]) && !/getElementById\('silForm'\)/.test(m[2])) t += Buffer.byteLength(m[2]);
   return t;
 }
 /* prologlu ana sayfa: film bolumu ham HTML'de mi */
 const prologlu = (yol) => {
-  const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/yeni\//, ''), 'index.html');
+  const f = path.join(DIST, yol.replace(/\?.*$/, '').replace(/^\/(?:yeni\/)?/, ''), 'index.html');
   return fs.existsSync(f) && /<section class="fl"/.test(fs.readFileSync(f, 'utf8'));
 };
-const tavan = (yol) => (/^\/yeni\/(en\/)?$/.test(yol.replace(/\?.*$/, ''))
+const tavan = (yol) => (/^\/(en\/)?$/.test(yol.replace(/\?.*$/, ''))
   ? TAVAN.ana + (prologlu(yol) ? TAVAN.film : 0)
   : /film/.test(yol) ? TAVAN.film : TAVAN.obur);
 

@@ -1,18 +1,18 @@
 ---
 /* Yeni kabuğun 404'ü. Kesmeye (Faz 4) kadar Netlify'ın 404'ü eski
-   sitede kalır; bu sayfa dist/yeni/404.html olarak hazır bekler.
+   sitede kalır; bu sayfa dist/404.html olarak hazır bekler.
    TUR 2 (5 Eyl 2026): üç metin panele açıldı. Sayfa TR-only (Nav'da
    `essiz`), ama m() yine de EN varsayılanı taşır: panelde strings.en
    dolarsa ve sayfa ileride EN'e açılırsa metin hazır olur. */
 import Temel from '../layouts/Temel.astro';
-import { icerik, T, type Dil } from '../icerik';
-const canon = 'https://qanatone.netlify.app/yeni/404';
+import { KOK, icerik, T, type Dil } from '../icerik';
+const canon = KOK + "/404";
 const dil: Dil = 'tr';
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, tr: string, en: string): string =>
   T((s as any)[k], dil) || (dil === 'en' ? en : tr);
 ---
-<Temel dil="tr" baslik="Sayfa bulunamadı — QANATONE"
+<Temel dil="tr" indeks={false} baslik="Sayfa bulunamadı — QANATONE"
   aciklama="Aradığın sayfa burada değil. Ana sayfadan ya da hizmetlerden devam edebilirsin."
   canonical={canon}>
   <div class="b404">

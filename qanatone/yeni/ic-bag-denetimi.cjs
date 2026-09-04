@@ -25,7 +25,7 @@
    Kullanim: node yeni/ic-bag-denetimi.cjs   ·  TAVAN=3 ile esik degisir */
 const fs = require('fs');
 const path = require('path');
-const DIST = path.join(__dirname, '..', 'dist', 'yeni');
+const DIST = path.join(__dirname, '..', 'dist');
 const CIKTI = path.join(__dirname, 'ic-bag-denetimi.json');
 const DERINLIK_TAVANI = Number(process.env.TAVAN || 3);
 /* Kapsam disi: yetim olmalari DOGRU olan sayfalar (gerekce zorunlu) */
@@ -55,18 +55,22 @@ const yolu = (p) => {
 const kume = new Map();                       /* site yolu -> dosya */
 for (const p of sayfalar) kume.set(yolu(p), p);
 
-/* Bir sayfadan cikan IC baglantilar. Yalnizca /yeni/ onekli ve ayni
-   siteye giden mutlak yollar; disari, mailto, tel, wa.me ve capa (#) elenir.
-   Sorgu ve capa kirpilir — /hizmetler#x ile /hizmetler AYNI sayfadir. */
+/* Bir sayfadan cikan IC baglantilar: ayni siteye giden MUTLAK yollar;
+   disari, mailto, tel, wa.me ve capa (#) elenir. Sorgu ve capa kirpilir —
+   /hizmetler#x ile /hizmetler AYNI sayfadir.
+   KESME (6 Eyl 2026): eskiden burada `if (!u.startsWith('/yeni')) continue;`
+   vardi ve kesmeden sonra HER SAYFAYI YETIM gosterirdi — baglantilar artik
+   `/hizmetler`, `/yeni/hizmetler` degil. Kok onegi kalkinca sart da kalkti;
+   `/yeni` oneki gelirse (eski yer imi) yine de ayiklanir. */
 const cikanlar = (p) => {
   const h = fs.readFileSync(p, 'utf8');
   const out = new Set();
   for (const m of h.matchAll(/<a\b[^>]*\shref="([^"]+)"/g)) {
     let u = m[1];
     if (/^(https?:|mailto:|tel:|#|javascript:)/i.test(u)) continue;
+    if (!u.startsWith('/')) continue;                 /* goreli bag yok, olsaydi da site disi degil */
     u = u.split('#')[0].split('?')[0];
-    if (!u.startsWith('/yeni')) continue;
-    u = u.replace(/^\/yeni/, '') || '/';
+    u = u.replace(/^\/yeni(?=\/|$)/, '') || '/';      /* eski onek gelirse ayikla */
     u = u.replace(/\/$/, '') || '/';
     if (kume.has(u)) out.add(u);
   }

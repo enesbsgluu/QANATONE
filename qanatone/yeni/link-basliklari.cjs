@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* LINK BASLIKLARI (GECE ZINCIRI TUR 6, 2 Eyl 2026).
-   Her uretilmis sayfa (dist kok + dist/yeni, 404 haric) icin HTTP Link
+   Her uretilmis sayfa (dist kok + dist, 404 haric) icin HTTP Link
    basligi: canonical + hreflang alternate'ler — degerler sayfanin KENDI
    <head>'inden okunur (ikinci bir dogruluk kaynagi uydurulmaz). _headers
    dosyasina LINK-BASLIKLARI-BAS ... LINK-BASLIKLARI-SON isaretleri arasina
@@ -8,8 +8,9 @@
    de dogrudan sunar, baslik yalniz tam eslesen yola uygulanir.
    Kullanim: node yeni/link-basliklari.cjs            (once: iki derleme)
              KONTROL=1 node yeni/link-basliklari.cjs  (gomulu blok taze mi? cikis kodu)
-   Not: _headers derlemede dist'e KOPYALANIR (build.js KOPYA); uretimden sonra
-   `cp _headers dist/_headers` ya da kok derleme gerekir. */
+   KESME (6 Eyl 2026): kaynak yeni/public/_headers; Astro public/'i dist'e
+   kendisi tasir, ayrica kopyalayan bir adim YOK. Uretimden sonra yalniz
+   `npm --prefix yeni run build` gerekir. */
 const fs = require('fs');
 const path = require('path');
 const KOK = path.join(__dirname, '..');
@@ -36,7 +37,9 @@ for (const p of sayfalar.sort()) {
   sayfaSayisi++; altSayisi += alt.length;
 }
 const blok = satirlar.join('\n');
-const H = path.join(KOK, '_headers');
+/* KESME (6 Eyl 2026): kaynak _headers kokten yeni/public/_headers'a tasindi —
+   Astro public/'i dist'e kendisi kopyalar, build.js'in kopyalama adimi dustu. */
+const H = path.join(__dirname, 'public', '_headers');
 const hd = fs.readFileSync(H, 'utf8');
 const BAS = '# LINK-BASLIKLARI-BAS', SON = '# LINK-BASLIKLARI-SON';
 const i = hd.indexOf(BAS), j = hd.indexOf(SON);
@@ -44,20 +47,20 @@ if (i < 0 || j < 0) { console.error('_headers isaretleri yok'); process.exit(2);
 const mevcut = hd.slice(i + BAS.length, j).replace(/^\r?\n|\r?\n$/g, '');
 if (process.env.KONTROL) {
   /* ALT KUME kontrolu: Netlify'da kok derleme (ve icindeki eski suite) astro
-     derlemesinden ONCE kosar, o anda dist/yeni yoktur. Kural "mevcut her
+     derlemesinden ONCE kosar, o anda dist yoktur. Kural "mevcut her
      sayfanin girdisi blokta birebir var mi" diye bakar; tam esitlik ancak iki
      dist de varken saglanir (uretim modu her zaman tam yazar).
-     TUR 9 (3 Eyl 2026): LINK_BIREBIR=1 ile TAM ESITLIK sart — dist/yeni
+     TUR 9 (3 Eyl 2026): LINK_BIREBIR=1 ile TAM ESITLIK sart — dist
      varken (yeni/denetim.cjs L1) alt kume yetmez: silinen sayfanin satiri
-     sonsuza kadar kalirdi (MIMARI M2). Eski suite dist/yeni yokken bu
-     kurali artik ERTELER, alt kume dali yalniz dist/yeni varken ve
+     sonsuza kadar kalirdi (MIMARI M2). Eski suite dist yokken bu
+     kurali artik ERTELER, alt kume dali yalniz dist varken ve
      LINK_BIREBIR verilmeden cagrilirsa kalir. */
   const m2 = mevcut.replace(/\r\n/g, '\n');
   const eksik = satirlar.filter((s2) => !m2.includes(s2));
   const birebir = !!process.env.LINK_BIREBIR;
   const taze = birebir ? m2 === blok : eksik.length === 0;
   const not = taze ? (m2 === blok ? 'blok birebir' : 'blok ust kume (dist eksik olabilir)')
-    : (eksik.length === 0 ? 'blok birebir DEGIL: fazla/bayat satir var (dist/yeni varken tam esitlik sart) — node yeni/link-basliklari.cjs'
+    : (eksik.length === 0 ? 'blok birebir DEGIL: fazla/bayat satir var (dist varken tam esitlik sart) — node yeni/link-basliklari.cjs'
       : 'eksik/farkli ' + eksik.length + ' girdi, ilki: ' + eksik[0].split('\n')[0]);
   console.log(`LINK BASLIKLARI ${taze ? 'TAZE' : 'BAYAT'}: ${sayfaSayisi} sayfa · ${satirlar.length} yol · ${altSayisi} alternate · ${not}`);
   process.exit(taze ? 0 : 1);

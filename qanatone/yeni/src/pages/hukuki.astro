@@ -5,8 +5,8 @@
    TUR 2 (5 Eyl 2026): gövde zaten panelden geliyordu, BAŞLIK gelmiyordu;
    aynı sayfanın iki metni iki ayrı yerden yönetiliyordu. Başlık da açıldı. */
 import Temel from '../layouts/Temel.astro';
-import { icerik, T, type Dil } from '../icerik';
-const canon = 'https://qanatone.netlify.app/yeni/hukuki';
+import { KOK, icerik, T, type Dil } from '../icerik';
+const canon = KOK + "/hukuki";
 const dil: Dil = 'tr';
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, tr: string, en: string): string =>

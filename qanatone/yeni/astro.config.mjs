@@ -42,15 +42,37 @@ const kunyeyiSoy = () => ({
 });
 
 /* QANATONE yeni kabuk — Faz 0 (Astro kararı belgesi, 18 Ağu 2026).
-   Mevcut site aynen yaşar; bu proje dist/yeni altına basar ve /yeni/*
+   Mevcut site aynen yaşar; bu proje dist altına basar ve /yeni/*
    adresinden yayına çıkar. Kök adrese alma Faz 4'ün işi.
    Veri kaynağı TEK: kökteki content.json (panelin ürünü) Content
    Collections'a beslenir — iki üreteç doğurmama ilkesi burada da geçerli. */
 export default defineConfig({
-  site: 'https://qanatone.netlify.app',
-  base: '/yeni',
+  /* KESME · ADIM 1 (6 Eyl 2026, Faz 4). Uc satir ve kesmenin KALBI bu:
+       site   netlify.app       -> qanatone.com   (alan adi bagli)
+       base   '/yeni'           -> '/'            (kabuk kok adrese cikti)
+       outDir '../dist'    -> '../dist'      (eski site artik uretilmez)
+     `import.meta.env.BASE_URL` okuyan her yer KENDILIGINDEN duzelir;
+     sabit yazilmis `/yeni/...` yollari adim 3'te elle degisti.
+     DIKKAT: Astro outDir'i derleme basinda TEMIZLER — yani bu satirla
+     birlikte eski sitenin dist ciktisi da silinir. Karar Enes'in
+     (6 Eyl): "Eski site TAMAMEN kalkiyor, arsiv yok."
+     GERI ALMA: `git revert` bu commit'i alir, `node build.js` eski
+     siteyi yeniden uretir. */
+  /* BIRINCIL ALAN ADI: www (Enes karari, 6 Eyl 2026).
+     Gerekce KAYDA GECIYOR, cunku bu bir tercih degil ZORUNLULUK:
+     harici DNS apex icin CNAME tasiyamaz, o yuzden apex TEK bir yuk
+     dengeleyici adresine sabitlenir ve CDN yonlendirmesinden
+     yararlanamaz. DNS Natro tarafinda BIRAKILDI cunku e-posta
+     kayitlari orada duruyor. Bu kararin bedeli: birincil alan adi
+     bir ALT ALAN ADI oluyor. Apex 301 ile wwwye duser (Netlify).
+     Buradaki deger canonical + sitemap + og:url + JSON-LD + Link
+     basliklarinin HEPSINI besler; degistirilirse 65 sayfa yeniden
+     uretilmeli ve LINK BASLIKLARI: 64 sayfa · 128 yol · 174 alternate · _headers 44065 B tekrar kosulmali.
+     Bekci: kesme-supurme.cjs — canonical SUNULAN KONAKLA ayni mi. */
+  site: 'https://www.qanatone.com',
+  base: '/',
   output: 'static',
-  outDir: '../dist/yeni',
+  outDir: '../dist',
 
   /* CSS SATIR ICINE (19 Agu, hero turunda olculdu): Astro'nun 'auto'
      esigi ana sayfanin stilini (16 KB ham) disarida birakiyordu ve

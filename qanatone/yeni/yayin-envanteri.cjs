@@ -56,7 +56,7 @@ const servisler = [
     deger: 'Netlify panelinde', not: 'submission-created: form gelince bildirim. Degerler depoda DURMAZ.' },
   { ad: 'GitHub Contents API', kaynak: 'ortam · GITHUB_TOKEN', deger: 'Netlify panelinde',
     not: 'yayinla.js content.json commit eder. Panelin YAZMA yolu bu.' },
-  { ad: 'Netlify Forms', kaynak: 'statik HTML · data-netlify="true"', deger: varMi('dist/yeni/index.html') && /data-netlify="true"/.test(oku('dist/yeni/index.html')) ? 'FORM URETIMDE' : 'BULUNAMADI',
+  { ad: 'Netlify Forms', kaynak: 'statik HTML · data-netlify="true"', deger: varMi('dist/index.html') && /data-netlify="true"/.test(oku('dist/index.html')) ? 'FORM URETIMDE' : 'BULUNAMADI',
     not: 'Formu DERLEME ANINDAKI statik HTML\'den tanir; kesmede HTML degisecegi icin form YENIDEN taninmali (kesme dogrulama listesi madde 5).' },
   { ad: 'IndexNow (Bing/Yandex)', kaynak: 'eski build.js', deger: /INDEXNOW/i.test(oku('build.js')) ? 'ESKI TARAFTA VAR' : 'yok',
     not: 'Kesme adimi 9: yeni tarafa tasinsin mi — Enes\'in karari.' },
@@ -70,9 +70,11 @@ const hat = [
   { dosya: 'yeni/public/robots.txt', sart: true },
   { dosya: 'yeni/src/pages/sitemap.xml.ts', sart: true },
   { dosya: 'yeni/src/pages/bulten/rss.xml.ts', sart: false },
-  { dosya: '_headers', sart: true },
-  { dosya: '_redirects', sart: false },
-  { dosya: 'yeni/public/_redirects', sart: false, not: 'kesme adimi 4te dogar' },
+  /* KESME (6 Eyl 2026): kok _headers SILINDI, kaynak yeni/public/_headers.
+     Astro public/'i dist'e kendi tasir; arada kopyalayan adim yok. */
+  { dosya: 'yeni/public/_headers', sart: true },
+
+  { dosya: 'yeni/public/_redirects', sart: true, not: 'kesme adimi 4te dogdu — 59 eski adresin tasiyicisi' },
   { dosya: 'admin.html', sart: true },
   { dosya: 'content.json', sart: true },
 ].map((h) => ({ ...h, var: varMi(h.dosya) }));
@@ -87,7 +89,7 @@ const zincir = [
   { adim: 'yeni/ derleme', rol: 'astro build + denetim.cjs' },
 ];
 const zincirKusur = [];
-if (!/\/admin\.html\s+\/\.netlify\/functions\/panel/.test(oku('_redirects') + oku('dist/_redirects')))
+if (!/\/admin\.html\s+\/\.netlify\/functions\/panel/.test(oku('yeni/public/_redirects') + oku('dist/_redirects')))
   zincirKusur.push('_redirects: /admin.html -> panel fonksiyonu yonlendirmesi bulunamadi');
 if (!/included_files\s*=\s*\[\s*"admin\.html"/.test(oku('netlify.toml')))
   zincirKusur.push('netlify.toml: [functions] included_files admin.html yok');

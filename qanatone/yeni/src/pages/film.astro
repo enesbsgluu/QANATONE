@@ -1,5 +1,6 @@
 ---
-/* FILM ISKELETI — /yeni/film (27 Agu 2026).
+import { KOK } from '../icerik';
+/* FILM ISKELETI — /film (27 Agu 2026).
    39 kliplik scroll-scrub adasinin OLCUM ZEMINI; urun sayfasi degil.
    DEVIR-SPESIFIKASYONU'nun tam kurgusu (giris Q sahnesi + film + final
    devri) ana sayfaya oturacak; bu sayfa yalniz motor/dikis/butce/savurma
@@ -9,7 +10,7 @@
 import Temel from '../layouts/Temel.astro';
 import Film from '../parcalar/Film.astro';
 import EskiGiris from '../parcalar/EskiGiris.astro';
-const canon = 'https://qanatone.netlify.app/yeni/film';
+const canon = KOK + "/film";
 ---
 {/* GOVDE = ESKI SITENIN GIRISI (31 Agu 2026, Enes): "Videonun son sahnesi
     eski — yani ilk versiyon — sitenin giris goruntusu. O siteye oturt.
@@ -19,7 +20,7 @@ const canon = 'https://qanatone.netlify.app/yeni/film';
     gomuluyor (kopya degil kaynaga bagli; ayrinti EskiGiris.astro).
     Boot perdesi/oturum bayragi gereksizlesti (perde gomulmedi);
     tubes devir tamamlaninca surucuden baslatilir. */}
-<Temel dil="tr" perde={false} kabuk={false} baslik="Film iskeleti — QANATONE"
+<Temel dil="tr" indeks={false} perde={false} kabuk={false} baslik="Film iskeleti — QANATONE"
   aciklama="Prolog filminin 39 kliplik scroll-scrub iskeleti; motor, dikiş, bütçe ve savurma ölçüm zemini. Ürün sayfası değildir."
   canonical={canon}>
   <h1 class="fl-gizli">Film iskeleti</h1>

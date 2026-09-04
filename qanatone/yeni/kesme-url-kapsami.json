@@ -130,16 +130,115 @@
   "/surec",
   "/tesekkur"
  ],
- "yonlendirme": [],
- "karsiligi_olmayan": [
-  "/shell"
+ "yonlendirme": [
+  {
+   "from": "/admin.html",
+   "to": "/.netlify/functions/panel"
+  },
+  {
+   "from": "/yeni/hizmet/:slug",
+   "to": "/hizmetler/:slug"
+  },
+  {
+   "from": "/yeni/en/hizmet/:slug",
+   "to": "/en/hizmetler/:slug"
+  },
+  {
+   "from": "/yeni/*",
+   "to": "/:splat"
+  },
+  {
+   "from": "/shell.html",
+   "to": "/"
+  },
+  {
+   "from": "/shell",
+   "to": "/"
+  },
+  {
+   "from": "/hizmet/:slug",
+   "to": "/hizmetler/:slug"
+  },
+  {
+   "from": "/en/hizmet/:slug",
+   "to": "/en/hizmetler/:slug"
+  }
  ],
+ "karsiligi_olmayan": [],
  "yeni_eklenen": [
   "/deneme-react",
   "/en/film",
   "/en/tesekkur",
   "/film",
   "/hukuki",
+  "/tesekkur"
+ ],
+ "son_kontrol": "2026-09-04T11:03:44.095Z",
+ "bugunku_sayfa": [
+  "/",
+  "/404",
+  "/bulten",
+  "/bulten/donusum-oranlari-sektor-sektor",
+  "/bulten/google-ads-maliyetleri-2026",
+  "/bulten/saglik-turizmi-hasta-basina-gelir",
+  "/bulten/talebe-bes-dakikada-donmek",
+  "/bulten/yapay-zeka-trafigi-tiklama-degil",
+  "/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu",
+  "/deneme-react",
+  "/en",
+  "/en/bulten",
+  "/en/bulten/donusum-oranlari-sektor-sektor",
+  "/en/bulten/google-ads-maliyetleri-2026",
+  "/en/bulten/saglik-turizmi-hasta-basina-gelir",
+  "/en/bulten/talebe-bes-dakikada-donmek",
+  "/en/bulten/yapay-zeka-trafigi-tiklama-degil",
+  "/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu",
+  "/en/film",
+  "/en/hizmetler",
+  "/en/hizmetler/ai-ajan",
+  "/en/hizmetler/finans",
+  "/en/hizmetler/geo",
+  "/en/hizmetler/google-ads",
+  "/en/hizmetler/meta-ads",
+  "/en/hizmetler/otomasyon",
+  "/en/hizmetler/seo",
+  "/en/hizmetler/web-sitesi-araclar",
+  "/en/hizmetler/web-tasarim",
+  "/en/otomasyon",
+  "/en/projeler",
+  "/en/projeler/bab-ic-mimarlik",
+  "/en/projeler/charles-schwab",
+  "/en/projeler/cmblu-energy",
+  "/en/projeler/kononenko-group",
+  "/en/projeler/mercedes-benz",
+  "/en/projeler/skyclinics",
+  "/en/projeler/terawulf",
+  "/en/sss",
+  "/en/surec",
+  "/en/tesekkur",
+  "/film",
+  "/hizmetler",
+  "/hizmetler/ai-ajan",
+  "/hizmetler/finans",
+  "/hizmetler/geo",
+  "/hizmetler/google-ads",
+  "/hizmetler/meta-ads",
+  "/hizmetler/otomasyon",
+  "/hizmetler/seo",
+  "/hizmetler/web-sitesi-araclar",
+  "/hizmetler/web-tasarim",
+  "/hukuki",
+  "/otomasyon",
+  "/projeler",
+  "/projeler/bab-ic-mimarlik",
+  "/projeler/charles-schwab",
+  "/projeler/cmblu-energy",
+  "/projeler/kononenko-group",
+  "/projeler/mercedes-benz",
+  "/projeler/skyclinics",
+  "/projeler/terawulf",
+  "/sss",
+  "/surec",
   "/tesekkur"
  ]
 }

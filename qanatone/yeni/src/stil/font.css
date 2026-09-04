@@ -19,11 +19,11 @@
    DIKKAT: yorum blogu TEK yerde kapanir; 2026-08-19'da kapanistan sonra
    kalan yorum govdesi ilk @font-face kuralini yutuyordu. */
 
-@font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/yeni/font/uncut-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/yeni/font/uncut-sans-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F, U+20BA}
+@font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/font/uncut-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Uncut Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url(/font/uncut-sans-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F, U+20BA}
 
 /* ---- OLCU ESLENMIS YEDEK (TUR 3, 4 Eyl 2026) — CLS AYKIRI DEGERININ KOKU ----
-   OLCULDU: /yeni/bulten/yapay-zeka-trafigi-tiklama-degil/ SOGUK ONBELLEKTE
+   OLCULDU: /bulten/yapay-zeka-trafigi-tiklama-degil/ SOGUK ONBELLEKTE
    UC KEZ ARKA ARKAYA CLS 0,1588; sicak onbellekte 0; woff2 REDDEDILINCE 0.
    Yani kaymayi doguran sey yazi tipi TAKASI: Uncut ilk boyamadan SONRA
    gelince satirlar yeniden sariliyor, `div.govde` 27 px yukari kayiyor ve
@@ -61,7 +61,7 @@
 @font-face{font-family:'Uncut Yedek Arial';src:local('Arial'),local('Helvetica Neue'),local('Liberation Sans');size-adjust:99.20%;ascent-override:97.28%;descent-override:23.69%;line-gap-override:0%}
 @font-face{font-family:'Uncut Yedek Roboto';src:local('Roboto'),local('Noto Sans');size-adjust:100.44%;ascent-override:96.08%;descent-override:23.40%;line-gap-override:0%}
 
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/yeni/font/playfair-display-500i-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/font/playfair-display-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/font/playfair-display-500-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/font/playfair-display-500i-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/font/playfair-display-500i-tr.woff2) format('woff2');unicode-range:U+011E-011F, U+0130, U+015E-015F}
