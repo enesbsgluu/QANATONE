@@ -1,6 +1,6 @@
 {
  "_": "yeni/yayin-envanteri.cjs — yayin hattinin BAGLI OLDUGU her sey tek yerde: backend fonksiyonlari, ortam degiskenleri, dis servisler, panel zinciri, kesme oncesi dolu olmasi gereken alanlar. Ortam degiskeni DEGERLERI depoda durmaz ve durmamali; burada ADLARI listelenir.",
- "olcum": "2026-09-04T00:41:06.914Z",
+ "olcum": "2026-09-04T00:52:34.038Z",
  "fonksiyon": [
   {
    "dosya": "diagnose.js",
@@ -184,7 +184,7 @@
    "dosya": "yeni/public/_redirects",
    "sart": false,
    "not": "kesme adimi 4te dogar",
-   "var": false
+   "var": true
   },
   {
    "dosya": "admin.html",
