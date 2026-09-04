@@ -321,7 +321,23 @@ const satirla = (m: string): string[] => {
     /* PROLOG ADASI KALKTI (1-2 Eyl gece, Enes): giris sahnesi (PRDag +
        amblemin nav'a yukselmesi) sayfadan sokuldu, ada cagrisi da
        onunla gitti — sayfa direkt video girisiyle baslar. */
-    import('../film/motor').then((m) => {
+    /* MOTOR PERDENIN CIZIMINDEN SONRA (4 Eyl 2026, Enes: "yukleme
+       animasyonu da kasiyor, hic kasmamasi lazim; farkli adalarda
+       olmalari ve birbirinin butcelerini yemiyor olmalari gerekiyor").
+       OLCULDU: ilk 1,5 sn'de sayfa 16.203 KB / 54 istek cekiyor —
+       sahne3.mp4 6.152 KB (t=788), sahne2 5.170 KB (t=691), sahne1
+       3.579 KB (t=612). Uzun kareler t=452/710/1002 (225/233/283 ms) ve
+       LoAF onlari "betiksiz" isaretliyor: JS degil, cozme/boyama. Perde
+       ise izlerini `stroke-dashoffset` ile ciziyor — kompozitore CIKMAZ,
+       ayni ana is parcaciginda boyanir. Iki is ayni yerde yarisiyordu.
+       CARE: perde varken motor CIZIM FAZI BITENE kadar beklet. Perdenin
+       iz cizimi ~1,5 sn'de biter (perde.css: gecikme .16 + i*.06, sure
+       .85); perde artik 3,4 sn'de supuruluyor, yani motora orten ~1,8
+       sn'lik on pisme suresi kaliyor. Perde yoksa (donen ziyaretci,
+       azaltilmis hareket, kapatma anahtari) BEKLEME YOK. */
+    const perdeli = KOKE.classList.contains('prd') && !!document.getElementById('perde');
+    (perdeli ? new Promise((r) => setTimeout(r, 1600)) : Promise.resolve())
+      .then(() => import('../film/motor')).then((m) => {
       const sok = m.baslat(bolum);
       /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
          once zinciri sokeriz, sonra tarayici bagi kendi isler. */
