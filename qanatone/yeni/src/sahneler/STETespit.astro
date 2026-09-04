@@ -175,9 +175,31 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
     const meta = document.getElementById('steMeta') as HTMLElement;
     const uyari = document.getElementById('steUyari') as HTMLElement;
     const izgara = document.getElementById('steIzgara') as HTMLElement;
+    /* DIL TEK KAYNAKTAN: `<html lang>` — Temel.astro sayfa diline gore
+       basiyor. Betige ayri bir bayrak gecirilseydi ikinci bir dil
+       kaynagi dogar ve gun gelip ayrisirdi. */
+    const DIL = document.documentElement.lang === 'en' ? 'en' : 'tr';
 
     /* Kalem adları — kaynaktaki sözlüğün taşınan hâli. */
-    const AD: Record<string, string> = {
+    /* SONUC METINLERI IKI DILDE (4 Eyl 2026, Enes).
+       ONCEDEN: AD/HUKUM/SEBEP dizileri YALNIZCA Turkce yazilmisti ve
+       betik dili hic sormuyordu — /en sayfasinda ziyaretci Ingilizce bir
+       arayuzde Turkce sonuc okuyordu ("Gorsel alt metni", "Talebi
+       kaciriyor." vb.). Sayfanin geri kalani cevriliydi; kirilan yer
+       yalnizca bu betikti.
+       Dil, sunucudan `data-dil` ile gelir (asagida `DIL`), boylece betik
+       kendi kaynagini tek yerden alir ve ikinci bir dil kapisi dogmaz. */
+    const EN = DIL === 'en';
+    const AD: Record<string, string> = EN ? {
+      https: 'HTTPS', title: 'Title', desc: 'Description', h1: 'H1', canonical: 'Canonical',
+      schema: 'Schema', og: 'Share card', lang: 'Language', robots: 'robots.txt',
+      sitemap: 'Sitemap', alt: 'Image alt text', imgdim: 'Image dimensions',
+      imgfmt: 'Image format', fonts: 'Web fonts', inline: 'Inline weight',
+      blocking: 'Render-blocking', compress: 'Compression', cache: 'Caching',
+      reqs: 'Request count', analytics: 'Analytics', contact: 'Contact',
+      local: 'Local signal', viewport: 'Viewport', favicon: 'Favicon',
+      hreflang: 'hreflang', ssl: 'Certificate',
+    } : {
       https: 'HTTPS', title: 'Başlık', desc: 'Açıklama', h1: 'H1', canonical: 'Canonical',
       schema: 'Şema', og: 'Paylaşım kartı', lang: 'Dil', robots: 'robots.txt',
       sitemap: 'Sitemap', alt: 'Görsel alt metni', imgdim: 'Görsel ölçüsü',
@@ -188,7 +210,12 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       hreflang: 'hreflang', ssl: 'Sertifika',
     };
     /* Hüküm eşikleri kaynaktan (12244): 85/70/50/0. */
-    const HUKUM: [number, string, string][] = [
+    const HUKUM: [number, string, string][] = EN ? [
+      [85, 'The system works.', 'The structure is sound. From here it is speed and content.'],
+      [70, 'Good, but there are gaps.', 'The basics are in place; a few items are losing demand.'],
+      [50, 'Half of it is missing.', 'The site is up, but some people find you and some do not.'],
+      [0, 'It is losing demand.', 'As it stands, the person who arrives cannot find or reach you.'],
+    ] : [
       [85, 'Sistem çalışıyor.', 'Yapı sağlam. Buradan sonrası hız ve içerik işi.'],
       [70, 'İyi ama açık var.', 'Temel yerinde; birkaç kalem talebi kaçırıyor.'],
       [50, 'Yarısı eksik.', 'Site duruyor ama seni bulan da bulamayan da var.'],
@@ -208,7 +235,13 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
        ogrenemiyor, arac bozuk saniliyordu. `quota` OLU ANAHTARDI —
        fonksiyon onu hic gondermiyor. Kota: KOTA_HAK = 2 / 24 saat, IP
        basina (netlify/functions/diagnose.js). */
-    const SEBEP: Record<string, string> = {
+    const SEBEP: Record<string, string> = EN ? {
+      blocked: 'This address cannot be scanned (the site blocks automated access).',
+      unreachable: 'Could not reach the site — could you check the address?',
+      timeout: 'The site did not answer in time — try again shortly.',
+      kota: 'You have used your daily scans.',
+      oran: 'Too many attempts — wait a moment and try again.',
+    } : {
       blocked: 'Bu adres taranamıyor (site otomatik erişimi engelliyor).',
       unreachable: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
       timeout: 'Site zamanında yanıt vermedi — birazdan tekrar dene.',
@@ -220,7 +253,9 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
        sokagini kullanilabilir bir bilgiye cevirir. */
     const yenilenme = (ms: number) => {
       const dk = Math.max(1, Math.round((ms - Date.now()) / 60000));
-      return dk >= 60 ? ` ${Math.round(dk / 60)} saat sonra yenilenir.` : ` ${dk} dakika sonra yenilenir.`;
+      const n = dk >= 60 ? Math.round(dk / 60) : dk;
+      if (EN) return dk >= 60 ? ` Renews in ${n} hour${n === 1 ? '' : 's'}.` : ` Renews in ${n} minute${n === 1 ? '' : 's'}.`;
+      return dk >= 60 ? ` ${n} saat sonra yenilenir.` : ` ${n} dakika sonra yenilenir.`;
     };
 
     form.addEventListener('submit', async (e) => {
@@ -228,7 +263,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       if (dugme.disabled) return;
       dugme.disabled = true;
       sonuc.hidden = true;
-      durum.textContent = 'Taranıyor…';
+      durum.textContent = EN ? 'Scanning…' : 'Taranıyor…';
       try {
         const r = await fetch('/.netlify/functions/diagnose', {
           method: 'POST', headers: { 'content-type': 'application/json' },
@@ -236,21 +271,23 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         });
         const j = await r.json();
         if (!j.ok) {
-          durum.textContent = (SEBEP[j.reason] || 'Tarama tamamlanamadı.')
+          durum.textContent = (SEBEP[j.reason] || (EN ? 'The scan could not be completed.' : 'Tarama tamamlanamadı.'))
             + (typeof j.yenilenmeMs === 'number' ? yenilenme(j.yenilenmeMs) : '');
           return;
         }
         durum.textContent = typeof j.kalan === 'number'
-          ? `Bugün ${j.kalan} tarama hakkın kaldı.` : '';
+          ? (EN ? `You have ${j.kalan} scan${j.kalan === 1 ? '' : 's'} left today.` : `Bugün ${j.kalan} tarama hakkın kaldı.`) : '';
         host.textContent = j.finalUrl || j.host;
         const h = HUKUM.find(([n]) => j.score >= n)!;
         hukum.textContent = h[1];
         ozet.textContent = h[2];
-        meta.textContent = `Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}`
+        meta.textContent = (EN ? `Weight ${j.kb} KB · Checks ${(j.items || []).length}` : `Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}`)
           + (j.cdn ? ` · ${j.cdn}` : '');
         uyari.hidden = !j.cfEylul;
         if (j.cfEylul) uyari.textContent =
-          'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
+          EN
+            ? 'robots.txt blocks AI crawlers — even a healthy site will not appear in AI answers.'
+            : 'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
         /* Halka ve sayı: renk eşikleri kaynaktan (70/45). */
         const cevre = Number(yay.getAttribute('stroke-dasharray'));
         yay.style.stroke = j.score >= 70 ? '#22c55e' : j.score >= 45 ? '#f59e0b' : 'var(--red)';
