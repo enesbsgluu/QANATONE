@@ -577,7 +577,16 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
      Ek kazanç: mobilde kare başına sürülen eleman 43 → 18. */
   @media (pointer: coarse), (max-width: 900px) {
     .tlsay, .tldd, .tlsl, .tlok { opacity: 1; transform: none; animation: none; }
-    .tlptr { display: none; }
+    /* FARE MOBİLDE DE GÖRÜNÜR (5 Eyl 2026 — Enes'in kararı, KAYNAKTAN
+       BİLİNÇLİ SAPMA). Kaynak 4375-4380 ve 1122-1128 fareyi ≤900'de ve
+       dokunmatikte söndürüyordu; bu satır o kuralı taşıyordu. Enes
+       "masaüstünde var mobilde yok" diye bildirdi ve açılmasını istedi.
+       ÖLÇÜLDÜ: hedef ölçümü (ada betiği) zaten görüntü alanından
+       BAĞIMSIZ koşuyor — mobilde de `--fx*/--fy*` yazılıyordu, yalnız
+       fare gizliydi. 390 px'de kare alındı: fare fiyat kutusuna
+       masaüstündeki gibi oturuyor. Geri almak için tek satır:
+       `.tlptr { display: none; }`.
+       Hareket-azaltma dalında fare KAPALI KALIYOR (aşağıda). */
   }
 
   /* kaynak mobil çizelgesi: 1122-1128 */
@@ -586,7 +595,7 @@ const ADIM = en ? ['Site survey done', 'Quote approved', 'Production started', '
     .tl-act { min-height: 206px; gap: 8px; }
     .tl-act.tl-site { min-height: 168px; }
     .tlnav span:nth-child(3), .tlnav span:nth-child(4) { display: none; }
-    .tlptr { display: none; }
+    /* fare burada da açık — gerekçe yukarıda (Enes, 5 Eyl 2026) */
   }
   /* kaynak 1129-1132: fare yok, perdeler tamamlanmış doğar */
   @media (prefers-reduced-motion: reduce) {

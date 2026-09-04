@@ -32,7 +32,19 @@
 /* kaynak: .cta (2160) 150/150 + ayri #lead bolumu (2315) 0/90 — burada tek bolum:
    ust 150 (.cta), alt 90 (#lead); .cta alt dolgusu 150 .sil-kutu ust bosluguna gecer.
    (3 Eyl olcumu: bolum boyu 1302 = eski .cta 570 + #lead; paddingBottom 90 dogru) */
-.ana .sil-sahne{padding:clamp(80px,11vw,150px) 0 clamp(50px,7vw,90px)}
+/* ÜST BOŞLUK `.ana` KAPSAMINDAN ÇIKTI (5 Eyl 2026 — Enes'in bildirdiği
+   hata). Kural yalnız ana sayfada geçerliydi; /hizmetler de aynı iletişim
+   sahnesini basıyor ama `.ana` taşımıyor, dolayısıyla üst dolgusu 0 idi.
+   ÖLÇÜLDÜ (390 px): "Başlamaya hazır mısın?" başlığının üstündeki boşluk
+   ana sayfada 80 px, /hizmetler'de 49 px — başlık son hizmet kutusuna
+   yapışıyordu. Kural artık sahnenin kendisine ait; iki sayfa da aynı
+   çizelgeyi kullanır. (Öbür sayfalarda lead formu `.sil-lead` ile basılır,
+   o kural değişmedi: kaynaktaki 0 üst / clamp(50,7vw,90) alt.)
+   ÖZGÜLLÜK NOTU: seçici `.sil-sahne` yazılırsa `.ana section`
+   (0,1,1) onu YENER ve ana sayfada üst boşluk 80 → 66 px'e düşer
+   (ölçüldü). `data-sahne` niteliği seçiciyi (0,2,0) yapar; öznitelik
+   zaten markup'ta duruyor. */
+.sil-sahne[data-sahne='il']{padding:clamp(80px,11vw,150px) 0 clamp(50px,7vw,90px)}
 /* kabuk lead bolumu (Temel.astro): kaynak #lead{padding:0 0 clamp(50px,7vw,90px)} (2315) */
 .sil-lead{padding:0 0 clamp(50px,7vw,90px)}
 
