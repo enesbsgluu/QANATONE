@@ -273,7 +273,12 @@ const egri = (c: any) => {
                 gorsel-uret.cjs · kaynağın QG ızgarası, ana sayfa
                 haritasıyla PAYLAŞILAN dosya) */}
             <picture class="mkkara">
-              <source media="(max-width: 900px)" srcset={`${B}/img/kara-m.webp`} />
+              {/* 800 px'lik mobil varyant KALDIRILDI (5 Eyl 2026): harita
+                  mobilde artık kendi oranında ve zumlu duruyor, görünen
+                  dilim dünyanın %21'i — 800 px'lik dosya o dilimde 169 px
+                  kaynak demekti ve ızgara bulanıklaşıyordu (kare alındı,
+                  yan yana bakıldı). 1600 px'lik dosya aynı dilimde 338
+                  kaynak piksel verir. Bedel: mobilde +15,8 KB görüntü. */}
               <img src={`${B}/img/kara.webp`} width="1600" height="568" alt=""
                 loading="lazy" decoding="async" />
             </picture>
@@ -635,7 +640,15 @@ const egri = (c: any) => {
     75%, 85.5% { transform: translateX(-75%); }
     87.5%, 100% { transform: translateX(-87.5%); }
   }
-  @supports (animation-timeline: view()) { .mktrack { animation-name: mk-serit; } }
+  /* ŞERİT KENDİ SÜRÜŞÜNÜ TAŞIR (5 Eyl 2026 — REGRESYON DÜZELTMESİ,
+     gerekçe PlatformSahne'dekiyle aynı: animasyon uzun-yazımları miras
+     alınmaz, yalnız `animation-name` taşıyan kural ölür). */
+  @supports (animation-timeline: view()) {
+    .mktrack { animation-name: mk-serit; animation-timeline: --mk-kap;
+      animation-fill-mode: both; animation-timing-function: linear;
+      animation-range: cover calc(100vh - max(0px, (100vh - var(--mkh, 620px)) / 2))
+                       cover calc(540vh - max(0px, (100vh - var(--mkh, 620px)) / 2)); }
+  }
 
   /* perde ilerlemeleri: a_i = clamp((e − i/8)/.125) */
   .mkcount span, .mkfr, .mksec { --a: clamp(0, calc(var(--mkp) * 8), 1); }
@@ -900,6 +913,29 @@ const egri = (c: any) => {
     .mkdecs, .mkchs { grid-template-columns: repeat(2, 1fr); }
     .mkfeed .mkfr:nth-child(n+6) { display: none; }
     .mkhud { max-width: 76%; left: 10px; bottom: 10px; }
+
+    /* HARİTA DİKEY İNŞA EDİLİR (5 Eyl 2026 — Enes'in bildirdiği hata).
+       ÖLÇÜLDÜ (390 px): harita kutusu 349x586, yani oran 0,596; dünya
+       ızgarasının kendi oranı 1600/568 = 2,817. Katmanlar
+       `object-fit:fill` + `preserveAspectRatio="none"` ile kutuya
+       geriliyordu, yani harita DİKEYDE 4,73 KAT eziliyordu — yatay bir
+       dünya haritası dikey kutuda duruyordu.
+       ÇARE: katmanlar kendi oranını korur ve kutuyu KAPLAR; görünen
+       pencere, hikâyenin geçtiği boylam kuşağı. Gerilme yok, mektup
+       kutusu (letterbox) da yok — Enes'in ikisini de reddettiği durum.
+       PENCERE HESABI: düğümler dünya genişliğinin %50,85 (Cezayir) ile
+       %65,35'i arasında; ortası %58,1 → `translateX(-58.1%)`. Kutuyu
+       kaplayan katman 586 x 2,817 = 1651 px, görünen dilim 349/1651 =
+       %21,1 = 76° boylam (≈ 9°B..67°D): Cezayir, Türkiye ve Rusya'nın
+       üçü de içeride (ölçüldü: 5/5 düğüm kutu içinde).
+       `.mkbl` DIŞARIDA BIRAKILDI: konuşma balonları yayın ucuna
+       çakılıdır ve zumlanınca 6'nın 4'ü pencere dışına düşüyordu
+       (ölçüldü); kutu ölçeğinde kalınca 6/6 görünür. Balonun coğrafi
+       çakılması bilerek bırakıldı — dekoratif müşteri cümlesi. */
+    .mkmapwrap { overflow: hidden; }
+    .mkkara, .mkco, .mkag, .mkag-yay, .mkag-pak, .mkdg {
+      inset: 0 auto auto 50%; height: 100%; width: auto;
+      aspect-ratio: 1600 / 568; transform: translateX(-58.1%); }
   }
   @media (prefers-reduced-motion: reduce) {
     .mk-kap { min-height: 0; }

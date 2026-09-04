@@ -373,7 +373,10 @@ async function karaIzgarasi() {
     return { svg: svg + '</svg>', H };
   };
   let toplam = 0;
-  for (const [ad, W] of [['kara.webp', 1600], ['kara-m.webp', 800]]) {
+  /* kara-m.webp (800 px) 5 Eyl 2026'da DÜŞTÜ: tek tüketicisi motor
+     sahnesiydi, orada mobil harita artık zumlu duruyor ve 800 px'lik
+     ızgara o dilimde bulanıklaşıyordu. Tek dosya kaldı. */
+  for (const [ad, W] of [['kara.webp', 1600]]) {
     const { svg, H } = ciz(W);
     const hedef = path.join(HEDEF, ad);
     await sharp(Buffer.from(svg)).resize(W, H).webp({ quality: 82, effort: 6, alphaQuality: 90 }).toFile(hedef);

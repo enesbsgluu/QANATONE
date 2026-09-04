@@ -336,8 +336,19 @@ let ki = -1;
     50%, 70.5% { transform: translateX(-50%); }
     75%, 100% { transform: translateX(-75%); }
   }
+  /* ŞERİT KENDİ SÜRÜŞÜNÜ TAŞIR (5 Eyl 2026 — REGRESYON DÜZELTMESİ).
+     4 Eyl'de sürüş `.qt-kap`a alınırken bu kural geride kaldı ve
+     `animation-name` TEK BAŞINA kaldı. Animasyon uzun-yazımları MİRAS
+     ALINMAZ: adı olan ama zaman çizelgesi/menzili/dolgusu olmayan kural
+     `duration:0s · timeline:auto` ile ÖLÜR. Ölçüldü (5 Eyl): şerit
+     `getAnimations()` BOŞ, transform none — dört perdenin tamamı birinci
+     perdede donmuştu, ray ilerlerken gövde hiç değişmiyordu.
+     Kural: bir öğe KENDİ keyframe'ini taşıyorsa sürüşü de kendi taşır. */
   @supports (animation-timeline: view()) {
-    .qttrack { animation-name: qt-serit; }
+    .qttrack { animation-name: qt-serit; animation-timeline: --qt-kap;
+      animation-fill-mode: both; animation-timing-function: linear;
+      animation-range: cover calc(100vh - max(0px, (100vh - var(--qth, 545px)) / 2))
+                       cover calc(370vh - max(0px, (100vh - var(--qth, 545px)) / 2)); }
   }
 
   /* perde ışığı: .34 → 1, geçiş .45s eşleniği ×20 (m = 9/süre) */
@@ -449,7 +460,37 @@ let ki = -1;
     .qtview { height: clamp(320px, 74vw, 400px); }
     .qthead, .qtrow { grid-template-columns: 1.5fr .8fr .9fr; }
     .qthead span:last-child, .qtm.last { display: none; }
-    .qtcon i { flex: 1 1 100%; text-align: center; }
+
+    /* PERDE 3 MOBİL ÖLÇEĞİ (5 Eyl 2026 — Enes'in bildirdiği hata).
+       ÖLÇÜLDÜ (390 px): perdeye ayrılan alan 282 px, kartın istediği
+       414 px → 132 px TAŞIYOR ve `.qtdm` (rol + isim + iletişim çipleri)
+       kartın `overflow:hidden`ı altında KESİLİYORDU. Öteki üç perde
+       sığıyordu: arama 47, alıcılar 27, ilk temas 231.
+       SEBEP: bileşenin bütün ölçüleri `clamp(px, vw, px)` ve mobilde
+       hepsi TABANINA oturuyor — yani tasarım 760 px'in altında hiç
+       küçülmüyor, kutu ise sabit 320 px.
+       ÇARE: kutu BÜYÜTÜLMEDİ (Enes: büyütmek kompozisyonu bozar),
+       perde 3'ün kendi ölçeği `min(vw, px)` ile telefonla birlikte
+       küçülüyor. Üst uçlar tabanla aynı hizada, yani 760 px'e doğru
+       kural kendiliğinden eski değerlere dönüyor.
+       ÖLÇÜLDÜ (taşma, kart): 320/360/390/412/430/600/760 px → hepsi 0.
+       SAPMA (adıyla): kaynağın mobil kuralı `.qtcon i{flex:1 1 100%}`
+       idi, üç çipi alt alta diziyordu (103 px). Çipler artık doğal
+       sarıyor (2 satır, ~54 px) — 49 px'lik farkın yarısı burada.  */
+    .qtch { padding: min(2.4vw, 11px) min(2.7vw, 13px); gap: min(2.1vw, 9px); }
+    .qtav { width: min(6.8vw, 30px); height: min(6.8vw, 30px); border-radius: min(2vw, 9px); }
+    .qtch em { font-size: min(3.05vw, 13px); line-height: 1.22; }
+    .qtch i { font-size: min(2.45vw, 10.5px); }
+    .qtver { padding: min(.8vw, 4px) min(2vw, 9px); font-size: min(2.3vw, 10px); }
+    .qtsum { padding: min(2.4vw, 11px) min(2.7vw, 13px); gap: min(1.1vw, 5px); }
+    .qtsum li { font-size: min(2.7vw, 11.5px); line-height: 1.32; padding-left: min(3.6vw, 16px); }
+    .qtsum li::before { width: min(1.3vw, 6px); height: min(1.3vw, 6px); top: .5em; }
+    .qtdm { padding: min(2.4vw, 11px) min(2.7vw, 13px); }
+    .qtrole { font-size: min(2.2vw, 9.5px); }
+    .qtname { margin: min(.5vw, 2px) 0 min(1.5vw, 7px); font-size: min(3.05vw, 13px); }
+    .qtcon { gap: min(1.3vw, 6px); }
+    .qtcon i { flex: 0 1 auto; text-align: left;
+      padding: min(1vw, 5px) min(2vw, 9px); font-size: min(2.4vw, 10.5px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .qt-kap { min-height: 0; }
