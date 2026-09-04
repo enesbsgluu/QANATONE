@@ -354,6 +354,8 @@ genel:{t:'Genel & İletişim',n:()=>'',f:()=>`
   ${fld('Ölçüm kimliği','settings.gtm',{hint:'GTM-XXXXXXX veya G-XXXXXXXXXX — boşsa hiç istek atılmaz'})}
   <div class="note calm">Ölçüm açtığında KVKK için çerez onayı gerekebilir. Onay bandı kurulmadan
   bu alanı doldurmak riskli.</div>
+  ${fld('Search Console doğrulaması','settings.gsc',{hint:'Google Search Console → HTML etiketi yönteminin YALNIZ content değeri. Boşsa etiket hiç basılmaz.'})}
+  ${fld('AdSense yayıncı kimliği','settings.adsense',{hint:'ca-pub-XXXXXXXXXXXXXXXX — sahiplik doğrulaması + ads.txt üretir. Reklam birimi SAYFAYA KOYMAZ; boşsa ikisi de basılmaz.'})}
   ${fld('Footer şirket satırı','legal.line',{hint:'örn. QANATONE Dijital · İstanbul'})}
   ${fld('KVKK metni','legal.kvkk',{area:1,hint:'boş bırakılabilir'})}`},
 

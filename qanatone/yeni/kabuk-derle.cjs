@@ -88,9 +88,39 @@ function yuvaYaz() {
 module.exports.yuvaYaz = yuvaYaz;
 module.exports.prologAcikMi = prologAcikMi;
 
+/* ---- ads.txt (6 Eyl 2026, yayin oncesi kontrol) ----
+   AdSense sahipligi iki yerden dogrulanir: sayfadaki meta etiketi (Temel)
+   ve KOKTEKI `ads.txt`. Ikincisi STATIK bir dosya olmak zorunda ama
+   iceriginde PANEL DEGERI var, o yuzden burada uretilir — PrologYuvasi
+   ile ayni desen (kaynak content.json, uretim derleme aninda).
+   Deger BOSSA dosya SILINIR: bos ya da sahte bir ads.txt AdSense
+   tarafinda "gecersiz" olarak isaretlenir, hic olmamasindan kotudur. */
+const ADS_YOL = path.join(__dirname, 'public', 'ads.txt');
+function adsYaz() {
+  let id = '';
+  try {
+    const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    id = String((c.settings || {}).adsense || '').trim();
+  } catch (e) { /* okunamazsa bos say */ }
+  const gecerli = /^ca-pub-\d{10,20}$/.test(id);
+  if (!gecerli) {
+    if (fs.existsSync(ADS_YOL)) { fs.unlinkSync(ADS_YOL); return { durum: 'silindi', id }; }
+    return { durum: id ? 'gecersiz-bicim-yazilmadi' : 'yok', id };
+  }
+  const govde = `# QANATONE — AdSense sahiplik kaydi (uretilen dosya: yeni/kabuk-derle.cjs)\n`
+    + `# Kaynak: content.json settings.adsense (panel). Deger silinirse bu dosya da silinir.\n`
+    + `google.com, ${id.replace(/^ca-pub-/, 'pub-')}, DIRECT, f08c47fec0942fa0\n`;
+  const eski = fs.existsSync(ADS_YOL) ? fs.readFileSync(ADS_YOL, 'utf8') : '';
+  if (eski !== govde) fs.writeFileSync(ADS_YOL, govde);
+  return { durum: eski !== govde ? 'yazildi' : 'ayni', id };
+}
+module.exports.adsYaz = adsYaz;
+
 if (require.main === module) {
   const y = yuvaYaz();
   console.log(`PrologYuvasi.astro  prolog ${y.acik ? 'ACIK' : 'KAPALI'}${y.degisti ? ' (yeniden yazildi)' : ''}`);
+  const a = adsYaz();
+  console.log(`ads.txt             ${a.durum}${a.id ? ' (' + a.id + ')' : ''}`);
   fs.mkdirSync(VARLIK, { recursive: true });
   const kaynakBoy = (ad) => { const g = GIRISLER[ad]; return g ? ` (kaynak ${fs.statSync(path.join(KABUK, g)).size} B)` : ''; };
   for (const [ad, buf] of Object.entries(derle())) {

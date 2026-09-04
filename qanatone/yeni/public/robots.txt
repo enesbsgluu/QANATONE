@@ -1,0 +1,66 @@
+# QANATONE
+# ---------------------------------------------------------------------------
+# YENI KABUGUN robots.txt'i (6 Eyl 2026, yayin oncesi kontrol TUR B).
+# Bugun bu dosya /yeni/robots.txt olarak yayinlanir ve tarayicilar KOK
+# DISINDAKI robots.txt'i dikkate almaz — yani bugun etkisizdir, KOK'teki
+# eski uretecin dosyasi gecerlidir. KESMEDE (adim 6) bu dosya kokun
+# kendisi olur; icerik o gun degismesin diye SIMDIDEN eski uretecin
+# ciktisiyla BIREBIR ayni tutuldu (tek fark: /shell.html satiri, cunku
+# shell.html eski sitenin parcasi ve yeni kabukta yok).
+# Bekcisi: yeni/denetim.cjs S6.
+# ---------------------------------------------------------------------------
+User-agent: *
+Allow: /
+# CONTENT SIGNALS — GEO tezimizin kendisi. `ai-input=yes` kritik: yapay
+# zeka cevaplarinda kullanilmayi reddeden bir site GEO satamaz.
+# `ai-train=no` ayri bir sey: cevapta KAYNAK olmak evet, model egitimine
+# govde vermek hayir.
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+# Yonetim paneli: arama sonuclarinda gorunmesin.
+Disallow: /admin.html
+Disallow: /404.html
+# Donusum ucu: dogrudan girilirse ziyaretciyi yaniltir, indekslenmez.
+Disallow: /tesekkur
+Disallow: /en/tesekkur
+# Olcum zeminleri — urun sayfasi degil.
+Disallow: /film
+Disallow: /en/film
+Disallow: /deneme-react
+
+# Yapay zeka tarayicilari ACIKCA DAVET EDILIYOR — GEO stratejisinin
+# parcasi, engelleme degil. Bu botlar JavaScript CALISTIRMIYOR; sayfalar
+# statik basildigi icin icerigi ham HTML'de bulabiliyorlar.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+Sitemap: https://qanatone.com/sitemap.xml
