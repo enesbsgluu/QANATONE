@@ -158,6 +158,58 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        || `${gercek.size} sayfa`);
 }
 
+/* G4 · VARLIK ATIFLARI HARFI HARFINE (4 Eyl 2026).
+   Windows dosya sistemi HARF DUYARSIZ: `existsSync('/img/Logo.WEBP')`
+   gercek ad `img/logo.webp` olsa da TRUE doner. G2 "dosya diskte mi" diye
+   sorar ve bu makinede yanlis yesil verir; Netlify (Linux) ayni atifta
+   404 doner ve hata YALNIZ CANLIDA gorunur — kirilmanin en pahali yeri.
+   Bu kural atfi diskteki GERCEK YAZIMLA harfi harfine kiyaslar.
+   NOT: Linux'ta bu kural fazladan bir sey yakalamaz (orada yanlis harf
+   zaten G2'ye takilir); degeri GELISTIRME MAKINESINDE, hatayi CI'a
+   ulasmadan yakalamakta. Bugun iki deploy "Windows'ta gecer, Linux'ta
+   duser" sinifindan dustu; bu kural o sinifin ucuncu yolunu kapatiyor. */
+{
+  const gercek = new Set();
+  (function tara(d, on) {
+    for (const ad of fs.readdirSync(d)) {
+      const p = path.join(d, ad);
+      if (fs.statSync(p).isDirectory()) tara(p, on + '/' + ad); else gercek.add(on + '/' + ad);
+    }
+  })(KOK, '');
+  const kucuk = new Map();
+  for (const y of gercek) kucuk.set(y.toLowerCase(), y);
+  const DESEN = [
+    /<img[^>]*\bsrc="([^"]+)"/g,
+    /<source[^>]*\bsrcset="([^"]+)"/g,
+    /<link[^>]*\bhref="(\/[^"]+\.(?:css|webp|avif|png|jpg|jpeg|svg|ico|woff2?))"/g,
+    /<script[^>]*\bsrc="(\/[^"]+)"/g,
+    /<video[^>]*\bposter="([^"]+)"/g,
+  ];
+  const kusur = [];
+  let bakilan = 0;
+  for (const p of tumSayfalar) {
+    const h = oku(p), r = rel(p);
+    const yollar = new Set();
+    for (const d of DESEN) for (const m of h.matchAll(d)) {
+      const u = m[1];
+      if (!u) continue;
+      for (const parca of u.split(',')) {
+        const y = parca.trim().split(/\s+/)[0].split(/[?#]/)[0];
+        if (y.startsWith('/')) yollar.add(y);
+      }
+    }
+    for (const y of yollar) {
+      bakilan++;
+      if (gercek.has(y)) continue;
+      const esi = kucuk.get(y.toLowerCase());
+      /* diskte hic yoksa bu G2'nin isi — burada yalniz HARF FARKI raporlanir */
+      if (esi) kusur.push(r + ':' + y + '!=' + esi);
+    }
+  }
+  ol('G4 · varlık atıfları diskteki yazımla harfi harfine (Linux dosya sistemi duyarlı)',
+     kusur.length === 0, kusur.slice(0, 3).join(' ') || bakilan + ' atıf · ' + gercek.size + ' dosya');
+}
+
 /* FM4 · UZAK MEDYA KAYNAGI GERCEKTEN DOLU (4 Eyl 2026 — DEPLOY DUSTUKTEN
    SONRA yazildi, bedeli odenmis kural).
    NE OLDU: manifestin `uzak` alani
