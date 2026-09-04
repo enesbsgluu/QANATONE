@@ -449,10 +449,12 @@ const satirla = (m: string): string[] => {
     /* NAV: prolog sokulunce (1-2 Eyl gece, Enes) koreografi eski
        davranisa dondu — kaydirma baslar baslamaz nav cekilir; devirde
        kalkik kalir (govdenin kendi navi var — cift nav olurdu). */
-    const navBak = () => {
-      const kalk = scrollY > 4;
-      if (kalk !== navKalkti) { navKalkti = kalk; KOKE.classList.toggle('fl-nav-kalk', kalk); }
-    };
+    /* NAV KOREOGRAFISI BURADAN CIKTI (4 Eyl 2026, Enes: "farkli adalarda
+       olmalari ve birbirinin butcelerini yemiyor olmalari gerekiyor").
+       `fl-nav-kalk` sinifinin TEK SAHIBI artik `/varlik/nav.js`.
+       Sebep olculdu: koreografiyi burada genisletmek film sayfasini
+       J1 tavaninin ustune cikardi (11.351 B > 11.264 B). */
+    const navBak = () => {};
     /* TUTUNMA (CSS fl-tutun): scrollY ray sonundaysa yapis sabitlenir —
        savurmada scrollY sonu gecip film geride kalinca yapis kacmasin.
        Scroll dinleyicisinde ESZAMANLI cagrilir (rAF bekleyen surumde
