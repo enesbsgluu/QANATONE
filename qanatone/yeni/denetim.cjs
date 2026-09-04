@@ -1407,16 +1407,37 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        Yanlış yeşilden korunmanın yolu: kuralı belirtiye değil SEBEBE
        bağlamak. */
     {
+      /* KURAL SEBEBE BAĞLANDI (5 Eyl 2026). Eskiden kural `.ana ` ÖNEKİNİ
+         arıyordu; oysa aranan şey önek değil, `.ana section`ı (0,1,1)
+         YENECEK ÖZGÜLLÜK. İkisi aynı şey değil: `.ana .sil-sahne` (0,2,0)
+         geçiyordu ama `.sil-sahne[data-sahne='il']` (0,2,0) — aynı derecede
+         geçerli ve ana sayfa DIŞINDA da çalışan biçim — kırmızı yanıyordu.
+         Gerçek sebep: /hizmetler aynı iletişim sahnesini basıyor ama `.ana`
+         taşımıyor; `.ana` şartı kuralı ana sayfaya HAPSEDİYORDU. Kural artık
+         parçanın özgüllüğünü sayar: en az iki sınıf/öznitelik/sözde-sınıf ya
+         da bir kimlik. `.ana .x` bu ölçütü zaten sağlar — eski yazımlar
+         aynen geçer. */
+      const ozgulluk = (parca) => {
+        /* sözde ÖĞELER (::x) ve :where() b'ye girmez — tarayıcıdaki gibi */
+        const t = parca.replace(/::[a-z-]+(\([^)]*\))?/g, '').replace(/:where\([^)]*\)/g, '');
+        const a = (t.match(/#[A-Za-z_-][\w-]*/g) || []).length;
+        const b = (t.match(/\.[A-Za-z_-][\w-]*/g) || []).length
+                + (t.match(/\[[^\]]+\]/g) || []).length
+                + (t.match(/:[a-z-]+(\([^)]*\))?/g) || []).length;
+        return { a, b };
+      };
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
         if (!/(^|[\s,.>(])s[a-z0-9]*-sahne\b/.test(sec)) continue;
         if (!/(?:^|[^a-z-])padding(?:-(?:top|bottom|block|inline))?\s*:/.test(gov)) continue;
-        /* her virgüllü parça ayrı ayrı nitelenmiş olmalı */
-        for (const parca of sec.split(','))
-          if (/-sahne\b/.test(parca) && !/\.ana\s/.test(parca))
-            kusur.push(parca.trim().slice(0, 40));
+        /* her virgüllü parça AYRI AYRI `.ana section`ı yenmeli */
+        for (const parca of sec.split(',')) {
+          if (!/-sahne\b/.test(parca)) continue;
+          const o = ozgulluk(parca);
+          if (!(o.a > 0 || o.b >= 2)) kusur.push(parca.trim().slice(0, 40));
+        }
       }
-      ol('H10 · göç sahnesi dolgusu `.ana` ile nitelenmiş (özgüllük yenilmiyor)',
+      ol('H10 · göç sahnesi dolgusu `.ana section`ı yenen özgüllükte',
          kusur.length === 0, kusur.slice(0, 3).join(' | '));
     }
 

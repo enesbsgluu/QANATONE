@@ -1212,7 +1212,26 @@ const TELI = [0, 1, 2, 3];
   @media (prefers-reduced-motion: reduce) { .sz-surus { animation: none; } }
   /* kaynak sızıntı mobil çizelgesi (2900-2907 + 2933-2937) */
   @media (max-width: 900px) {
-    .szwrap { height: clamp(300px, calc(100vh - 430px), 480px); }
+    /* KUTU BÜYÜDÜ, HUNİ ESNEK OLDU (5 Eyl 2026 — Enes'in bildirdiği hata:
+       "huninin son kısmındaki alttaki yazı görünmüyor").
+       ÖLÇÜLDÜ (kapanış karesi, `.szstage` scrollHeight − clientHeight):
+         390x844 → 35 px taşma · 390x667 → 97 · 360x640 → 144 · 430x932 → 13
+       yani `.szend` ("Yeni bütçe değil, kaçan müşteri geri geldi.") kutunun
+       `overflow:hidden`ı altında kesiliyordu ve EKRAN KISALDIKÇA KÖTÜLEŞİYORDU.
+       SEBEP İKİ KATLI: (1) kutu `max-height:calc(100vh-44px)` ile sınırlı ama
+       `.szwrap` `flex:0 0 auto` + sabit yükseklikti — küçülemiyordu, dolayısıyla
+       fazlalık hep en alttan taşıyordu; (2) sabit yüksekliğin formülü
+       (`100vh - 430px`) huni dışındaki payı 430 px sanıyordu, gerçek pay
+       genişliğe göre 419-438 px.
+       ÇARE: kutu mobilde KESİN yükseklik alır (biraz da büyür: üst boşluk
+       22→12 px, yükseklik 100vh−44 → 100vh−24, yani +20 px) ve huni artık
+       ESNEK — başlık ile alt şerit kendi boylarını korur, kalan yeri huni
+       alır. Sihirli sabit yok; her ekranda kendiliğinden çözülür.
+       ÖLÇÜLDÜ (yamadan sonra): 390x844 · 390x667 · 360x640 · 430x932 · 412x915
+       → taşma 0, `.szend` kutunun 17 px içinde. */
+    .szstage { top: 12px; height: calc(100vh - 24px); max-height: none; }
+    .szhd, .szfoot { flex: none; }
+    .szwrap { flex: 1 1 auto; height: auto; min-height: 150px; }
     .szside { width: 40%; gap: 18px; padding: 4% 0; }
     .szlt b { font-size: 12px; }
     .szlt i { display: none; }
