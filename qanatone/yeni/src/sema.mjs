@@ -95,6 +95,12 @@ export function projeSema(icerik, sayfa, proje) {
     name: proje.name, url: sayfa.url, description: T(proje.text),
     creator: { '@id': KOK + '/#org' },
   });
+  /* KIRINTI (madde 2): QANATONE → Projeler → <proje adi>. Ad ve adres
+     kaydin kendinden; son basamak adressiz (sayfanin kendisi). */
+  g['@graph'].push(kirintiSema(sayfa, [
+    { ad: dil === 'en' ? 'Projects' : 'Projeler', adres: `${KOK}${dil === 'en' ? '/en' : ''}/projeler` },
+    { ad: proje.name },
+  ]));
   return g;
 }
 
@@ -174,7 +180,34 @@ export function hizmetSema(icerik, sayfa, hizmet) {
         acceptedAnswer: { '@type': 'Answer', text: strip(f.a) },
       })),
     });
+  /* KIRINTI (madde 2): QANATONE → Hizmetler → <hizmet adi>. */
+  g['@graph'].push(kirintiSema(sayfa, [
+    { ad: dil === 'en' ? 'Services' : 'Hizmetler', adres: `${KOK}${dil === 'en' ? '/en' : ''}/hizmetler` },
+    { ad: strip(det.h) || T(hizmet.tag) || sayfa.ad },
+  ]));
   return g;
+}
+
+/* ---- BREADCRUMB URETECI (YAYIN ONCESI KONTROL madde 2, 6 Eyl 2026) ----
+   Envanter: `BreadcrumbList` YALNIZ 12 bulten yazisindaydi (6 yazi x 2 dil);
+   hizmet ve proje detaylari — yani sitenin en derin ve en cok baglanan
+   sayfalari — hic tasimiyordu. Gorsel breadcrumb da yoktu.
+   KARAR: sema HER iki dilde uc basamakli olarak eklenir; GORSEL tarafta
+   YENI BIR SERIT EKLENMEZ — detay sayfalarinda zaten bir "geri bagi"
+   (.pgback) var ve o bagin ISLEVI breadcrumb'in kendisidir. Bag
+   `<nav aria-label="Breadcrumb">` icine alindi: gorunum degismedi,
+   erisilebilirlik agacinda ve tarayicilar icin anlam kazandi.
+   Uydurma basamak yok: ad ve adres kaydin kendi alanlarindan gelir. */
+export function kirintiSema(sayfa, basamaklar) {
+  const KOK = 'https://qanatone.com';
+  return {
+    '@type': 'BreadcrumbList', '@id': sayfa.url + '#crumb',
+    itemListElement: [{ '@type': 'ListItem', position: 1, name: 'QANATONE', item: KOK + '/' }]
+      .concat(basamaklar.map((b, i) => Object.assign(
+        { '@type': 'ListItem', position: i + 2, name: b.ad },
+        b.adres ? { item: b.adres } : {},
+      ))),
+  };
 }
 
 export function yaziSema(icerik, sayfa, yazi) {
