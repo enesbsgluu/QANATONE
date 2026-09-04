@@ -1,0 +1,475 @@
+{
+ "_": "yeni/ic-bag-denetimi.cjs — gelen bag / yetim sayfa / ana sayfadan derinlik. H16 KIRIK bag arar, bu betik GELMEYEN bag arar; ikisi ayri sorudur.",
+ "olcum": "2026-09-04T00:30:49.500Z",
+ "sayfa": 65,
+ "derinlik_tavani": 3,
+ "yetim": [],
+ "ulasilmaz": [],
+ "tavani_asan": [],
+ "en_derin": 2,
+ "istisna": {
+  "/404": "hata sayfasi — hicbir yerden baglanmaz, sunucu dondurur",
+  "/tesekkur": "donusum ucu — yalniz form gonderiminden gelinir",
+  "/en/tesekkur": "donusum ucu (EN)",
+  "/film": "olcum zemini — urun sayfasi degil, siteden baglanmaz",
+  "/en/film": "olcum zemini (EN)",
+  "/deneme-react": "olcum zemini — React adasi denemesi"
+ },
+ "sayfa_tablosu": [
+  {
+   "yol": "/404",
+   "gelen": 0,
+   "cikan": 24,
+   "derinlik": null,
+   "istisna": "hata sayfasi — hicbir yerden baglanmaz, sunucu dondurur"
+  },
+  {
+   "yol": "/deneme-react",
+   "gelen": 0,
+   "cikan": 25,
+   "derinlik": null,
+   "istisna": "olcum zemini — React adasi denemesi"
+  },
+  {
+   "yol": "/en/film",
+   "gelen": 1,
+   "cikan": 25,
+   "derinlik": null,
+   "istisna": "olcum zemini (EN)"
+  },
+  {
+   "yol": "/en/tesekkur",
+   "gelen": 1,
+   "cikan": 25,
+   "derinlik": null,
+   "istisna": "donusum ucu (EN)"
+  },
+  {
+   "yol": "/film",
+   "gelen": 1,
+   "cikan": 25,
+   "derinlik": null,
+   "istisna": "olcum zemini — urun sayfasi degil, siteden baglanmaz"
+  },
+  {
+   "yol": "/tesekkur",
+   "gelen": 1,
+   "cikan": 25,
+   "derinlik": null,
+   "istisna": "donusum ucu — yalniz form gonderiminden gelinir"
+  },
+  {
+   "yol": "/en/hizmetler/finans",
+   "gelen": 3,
+   "cikan": 25,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/finans",
+   "gelen": 3,
+   "cikan": 25,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/donusum-oranlari-sektor-sektor",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/google-ads-maliyetleri-2026",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/saglik-turizmi-hasta-basina-gelir",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/talebe-bes-dakikada-donmek",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/yapay-zeka-trafigi-tiklama-degil",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/donusum-oranlari-sektor-sektor",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/google-ads-maliyetleri-2026",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/saglik-turizmi-hasta-basina-gelir",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/talebe-bes-dakikada-donmek",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/yapay-zeka-trafigi-tiklama-degil",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu",
+   "gelen": 7,
+   "cikan": 30,
+   "derinlik": 2,
+   "istisna": null
+  },
+  {
+   "yol": "/en/bulten",
+   "gelen": 31,
+   "cikan": 30,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler",
+   "gelen": 31,
+   "cikan": 25,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/ai-ajan",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/geo",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/google-ads",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/meta-ads",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/otomasyon",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/seo",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/web-sitesi-araclar",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/hizmetler/web-tasarim",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/otomasyon",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/bab-ic-mimarlik",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/charles-schwab",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/cmblu-energy",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/kononenko-group",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/mercedes-benz",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/skyclinics",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/projeler/terawulf",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/sss",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en/surec",
+   "gelen": 31,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/",
+   "gelen": 34,
+   "cikan": 25,
+   "derinlik": 0,
+   "istisna": null
+  },
+  {
+   "yol": "/bulten",
+   "gelen": 34,
+   "cikan": 30,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/en",
+   "gelen": 34,
+   "cikan": 25,
+   "derinlik": 0,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler",
+   "gelen": 34,
+   "cikan": 25,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/ai-ajan",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/geo",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/google-ads",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/meta-ads",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/otomasyon",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/seo",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/web-sitesi-araclar",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hizmetler/web-tasarim",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/otomasyon",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/bab-ic-mimarlik",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/charles-schwab",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/cmblu-energy",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/kononenko-group",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/mercedes-benz",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/skyclinics",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/projeler/terawulf",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/sss",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/surec",
+   "gelen": 34,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  },
+  {
+   "yol": "/hukuki",
+   "gelen": 64,
+   "cikan": 24,
+   "derinlik": 1,
+   "istisna": null
+  }
+ ]
+}
