@@ -305,5 +305,76 @@ export function uret(dist) {
     .replace(/(^|[^\\])</g, '$1\\<');
   writeFileSync(join(dist, 'llms-full.txt'), tam + '\n', 'utf8');
 
+  /* 4 · agents.md ve 5 · agent-permissions.json — IKISI DE robots.txt'ten
+     TUREYEN belgeler. Politikayi ikinci kez yazmiyoruz: `Content-Signal`
+     ve `Disallow` satirlari robots.txt'te duruyor (bekcisi S6, panelle
+     tutarliligini o tutuyor); burada yalnizca AJANIN OKUYACAGI BICIME
+     ceviriliyor. Ikinci bir politika kaynagi acmak, iki yerde farkli sey
+     yazan bir siteye giden en kisa yoldur.
+     ZAMAN DAMGASI YOK: `derleme-belirlenim` kurali iki derlemeyi bayt
+     bayt karsilastiriyor; tarih koysak her derleme farkli cikardi. */
+  const robots = (() => {
+    try { return readFileSync(join(dist, 'robots.txt'), 'utf8'); } catch (e) { return ''; }
+  })();
+  const sinyal = (robots.match(/^Content-Signal:\s*(.+)$/mi) || [, ''])[1].trim();
+  const kapali = [...robots.matchAll(/^Disallow:\s*(\S+)\s*$/gmi)].map((m) => m[1])
+    .filter((x, i, a2) => x && x !== '/' && a2.indexOf(x) === i).sort();
+  const ajanlar = [...robots.matchAll(/^User-agent:\s*(\S+)\s*$/gmi)].map((m) => m[1])
+    .filter((x) => x !== '*').filter((x, i, a2) => a2.indexOf(x) === i).sort();
+
+  const agents = [
+    '# agents.md — QANATONE',
+    '',
+    ana && ana.aciklama ? '> ' + ana.aciklama : '',
+    '',
+    '## Bu siteyi nasil okursun',
+    '',
+    '- Her sayfanin markdown esi ayni adresin `.md` uzantili halidir:',
+    '  `' + kok + '/hizmetler/seo/` -> `' + kok + '/hizmetler/seo.md`',
+    '- Site haritasi (model icin): `' + kok + '/llms.txt`',
+    '- Butun metin tek dosyada: `' + kok + '/llms-full.txt`',
+    '- Adres listesi (arama icin): `' + kok + '/sitemap.xml`',
+    '',
+    '## Icerik paritesi',
+    '',
+    'Markdown esler HTML CIKTISINDAN turetilir; ajana verilen metin,',
+    'tarayiciya verilenin ta kendisidir. Ajana ozel bir surum yoktur.',
+    '',
+    '## Izin',
+    '',
+    sinyal ? '- Content-Signal: `' + sinyal + '`' : '',
+    '- Arama ve yapay zeka yanitlarinda KAYNAK olarak kullanilabilir.',
+    '- Model egitimi icin govde verilmez (`ai-train=no`).',
+    ajanlar.length ? '- Acikca davet edilen ajanlar: ' + ajanlar.join(', ') : '',
+    '',
+    '## Kapali yollar',
+    '',
+    ...(kapali.length ? kapali.map((y) => '- `' + y + '`') : ['- yok']),
+    '',
+    '## Iletisim',
+    '',
+    '- ' + kok + '/#lead',
+    '',
+  ].filter((s, i, a2) => !(s === '' && a2[i - 1] === ''));
+  writeFileSync(join(dist, 'agents.md'), agents.join('\n').replace(/(^|[^\\])</g, '$1\\<'), 'utf8');
+
+  const izin = {
+    version: '0.1',
+    site: kok,
+    contentSignal: sinyal || null,
+    default: { read: true, quote: true, train: false },
+    disallow: kapali,
+    invitedAgents: ajanlar,
+    resources: {
+      llms: kok + '/llms.txt',
+      llmsFull: kok + '/llms-full.txt',
+      sitemap: kok + '/sitemap.xml',
+      markdown: '<page>.md',
+      agents: kok + '/agents.md',
+    },
+  };
+  writeFileSync(join(dist, '.well-known', 'agent-permissions.json'),
+    JSON.stringify(izin, null, 2) + '\n', 'utf8');
+
   return { sayfa: kayit.length, md: yazilan, llms: yayin.length, kayit };
 }

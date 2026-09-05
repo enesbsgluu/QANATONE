@@ -448,7 +448,37 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     }
   }
 
-  ol('T3 · ajan hatti: markdown esleri + llms.txt + icerik paritesi',
+  /* agents.md ve agent-permissions.json: VAR MI ve ROBOTS.TXT ILE
+     TUTUYOR MU. Ucuncu kaynak acilmasin diye ikisi de robots.txt'ten
+     turetiliyor; kural o bagi tutuyor — Content-Signal satiri ve kapali
+     yollar iki belgede de AYNI olmali. Bu depoda "iki yerde farkli sey
+     yaziyor" hatasi bugun dort kez cikti. */
+  {
+    const rp = path.join(KOK, 'robots.txt');
+    const ap = path.join(KOK, 'agents.md');
+    const ip = path.join(KOK, '.well-known', 'agent-permissions.json');
+    if (!fs.existsSync(ap)) kusur.push('agents.md yok');
+    if (!fs.existsSync(ip)) kusur.push('agent-permissions.json yok');
+    if (fs.existsSync(rp) && fs.existsSync(ap) && fs.existsSync(ip)) {
+      const r = fs.readFileSync(rp, 'utf8');
+      const am = fs.readFileSync(ap, 'utf8');
+      let iz = null;
+      try { iz = JSON.parse(fs.readFileSync(ip, 'utf8')); }
+      catch (e) { kusur.push('agent-permissions.json gecerli JSON degil'); }
+      const sinyal = (r.match(/^Content-Signal:\s*(.+)$/mi) || [, ''])[1].trim();
+      const kapali = [...r.matchAll(/^Disallow:\s*(\S+)\s*$/gmi)].map((m) => m[1])
+        .filter((x, i, a2) => x && x !== '/' && a2.indexOf(x) === i).sort();
+      if (sinyal && !am.includes(sinyal)) kusur.push('agents.md Content-Signal tutmuyor');
+      if (iz) {
+        if (iz.contentSignal !== (sinyal || null)) kusur.push('izin dosyasi Content-Signal tutmuyor');
+        const j1 = JSON.stringify(kapali), j2 = JSON.stringify(iz.disallow || []);
+        if (j1 !== j2) kusur.push('izin dosyasi kapali yollari tutmuyor');
+        if (!iz.resources || !iz.resources.llms) kusur.push('izin dosyasinda llms adresi yok');
+      }
+    }
+  }
+
+  ol('T3 · ajan hatti: markdown esleri + llms.txt + agents.md + izin dosyasi',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 4).join(' ')
        : `${esli} es · ${atlanan} noindex atlandi${llmsNot}`);
