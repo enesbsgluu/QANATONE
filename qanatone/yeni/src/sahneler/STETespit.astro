@@ -320,6 +320,13 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       dugme.disabled = true;
       sonuc.hidden = true;
       durum.textContent = EN ? 'Scanning…' : 'Taranıyor…';
+      /* UC HATA, UC MESAJ (5 Eyl 2026). Eskiden tek `catch` submit
+         govdesinin TAMAMINI sariyordu: ag hatasi da, JSON olmayan yanit da,
+         sonucu EKRANA YAZARKEN cikan bir hata da ayni "Baglanti hatasi"
+         metnini veriyordu — ustelik metin sabit Turkce'ydi (EN sayfada da
+         Turkce cikiyordu) ve gercek hata hicbir yere yazilmiyordu. Uc hal
+         ayrildi; ucuncusu artik konsola da dusuyor ki teshis edilebilsin. */
+      let j: any = null;
       try {
         /* Sozluk ve analiz BIRLIKTE: mesaji yazabilmek icin sozluk
            gerekiyor, ikisini sirayla beklemek gereksiz gecikme olurdu. */
@@ -330,7 +337,21 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           }),
           sozlukAl(),
         ]);
-        const j = await r.json();
+        try { j = await r.json(); }
+        catch (e) {
+          console.error('[tespit] yanit JSON degil · HTTP ' + r.status, e);
+          throw Object.assign(new Error('yanit'), { kod: 'yanit' });
+        }
+      } catch (err: any) {
+        const kod = err && err.kod === 'yanit' ? 'yanit' : 'ag';
+        if (kod === 'ag') console.error('[tespit] istek basarisiz', err);
+        durum.textContent = (SZ && SZ.sebep && SZ.sebep[kod])
+          || (EN ? 'Could not reach the server — try again.' : 'Sunucuya ulaşılamadı — tekrar dener misin?');
+        dugme.disabled = false;
+        return;
+      }
+
+      try {
         if (!j.ok) {
           const m = SZ.durum[j.durum];
           durum.textContent = m
@@ -405,7 +426,13 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         }
         sonuc.hidden = false;
       } catch (err) {
-        durum.textContent = 'Bağlantı hatası — tekrar dener misin?';
+        /* Buraya YALNIZ sonucu ekrana yazarken cikan bir hata duser — ag
+           degil. Gercek hata konsola yazilir: "baglanti hatasi" diye
+           etiketlemek teshisi yillarca yanlis yone gonderirdi. */
+        console.error('[tespit] sonuc yazilamadi', err);
+        durum.textContent = EN
+          ? 'The result could not be displayed. Please try again.'
+          : 'Sonuç görüntülenemedi — tekrar dener misin?';
       } finally {
         dugme.disabled = false;
       }

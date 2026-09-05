@@ -278,19 +278,29 @@ function isPrivate(ip) {
          a >= 224;
 }
 
+/* RET SEBEBI AYRILDI (5 Eyl 2026). Eskiden bu fonksiyon her ret icin
+   `null` donuyordu ve handler hepsini `reason:'blocked'` yapiyordu; arayuz
+   de ona "site otomatik erisimi engelliyor" diyordu. Olculdu: alan adi
+   COZULEMEYEN bir adres de ayni mesaji aliyordu — yani yazim hatasi yapan
+   ziyaretciye "site seni engelliyor" deniyordu. Iki hal ayri:
+     `adres` — adres gecersiz ya da alan adi cozulmedi (ziyaretcinin isi)
+     `blocked` — BIZIM guvenlik reddimiz: ic ag adresi (SSRF korumasi)
+   Donus: { u } ya da { sebep }. Yonlendirme dongusu yalnizca `u`ya bakar,
+   davranisi degismez. */
 async function safeUrl(raw) {
   let u;
   try { u = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw); }
-  catch (e) { return null; }
-  if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
-  if (u.port && !['80', '443', ''].includes(u.port)) return null;
+  catch (e) { return { sebep: 'adres' }; }
+  if (u.protocol !== 'https:' && u.protocol !== 'http:') return { sebep: 'adres' };
+  if (u.port && !['80', '443', ''].includes(u.port)) return { sebep: 'adres' };
   const host = u.hostname.toLowerCase();
-  if (host === 'localhost' || host.endsWith('.local') || host.endsWith('.internal')) return null;
-  try {
-    const addrs = await dns.lookup(host, { all: true });
-    if (!addrs.length || addrs.some(a => isPrivate(a.address))) return null;
-  } catch (e) { return null; }
-  return u;
+  if (host === 'localhost' || host.endsWith('.local') || host.endsWith('.internal')) return { sebep: 'blocked' };
+  let addrs = null;
+  try { addrs = await dns.lookup(host, { all: true }); }
+  catch (e) { return { sebep: 'adres' }; }
+  if (!addrs.length) return { sebep: 'adres' };
+  if (addrs.some(a => isPrivate(a.address))) return { sebep: 'blocked' };
+  return { u };
 }
 
 /* ---------- koşum bütçesi ----------
@@ -351,7 +361,7 @@ async function grab(url, method, butce) {
          aynı kasadan harcıyor, yoksa her istek 3 hop daha alırdı */
       if (butce.hopHarca() > TOPLAM_HOP) { const e = new Error('too many redirects'); e.name = 'BlockedRedirect'; throw e; }
       let sonraki = null;
-      try { sonraki = await safeUrl(new URL(loc, hedef).href); } catch (e) {}
+      try { sonraki = (await safeUrl(new URL(loc, hedef).href)).u || null; } catch (e) {}
       if (!sonraki) { const e = new Error('redirect blocked'); e.name = 'BlockedRedirect'; throw e; }
       hedef = sonraki.href;
       takip++;
@@ -818,8 +828,9 @@ function handlerOlustur(depo) {
   try { raw = String((JSON.parse(event.body || '{}').url) || '').trim(); } catch (e) {}
   if (!raw) return { statusCode: 200, headers: H, body: JSON.stringify({ ok: false, reason: 'unreachable' }) };
 
-  const u = await safeUrl(raw);
-  if (!u) return { statusCode: 200, headers: H, body: JSON.stringify({ ok: false, reason: 'blocked' }) };
+  const coz = await safeUrl(raw);
+  if (!coz.u) return { statusCode: 200, headers: H, body: JSON.stringify({ ok: false, reason: coz.sebep }) };
+  const u = coz.u;
 
   /* tek kasa: ana sayfa + robots.txt + sitemap.xml aynı bütçeden harcar */
   const butce = butceAc();
@@ -952,4 +963,4 @@ exports.TESHIS_ALANI = TESHIS_ALANI;
    her kalemin OLCUT tasidigini AG'A CIKMADAN dogrular. */
 exports.analyse = analyse;
 exports.DURUMLAR = ['saglikli', 'engel', 'bulunamadi', 'sunucu-hatasi', 'reddedildi', 'ulasilamadi'];
-exports.SEBEPLER = ['timeout', 'unreachable', 'blocked', 'kota', 'oran'];
+exports.SEBEPLER = ['timeout', 'unreachable', 'blocked', 'adres', 'kota', 'oran'];
