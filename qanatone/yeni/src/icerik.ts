@@ -26,6 +26,39 @@ export const T = (v: unknown, dil: Dil = 'tr'): string =>
    Apex 301 ile buraya duser (Netlify tarafinda). */
 export const KOK = 'https://www.qanatone.com';
 
+/* IC ADRESLERIN TEK NORMALIZE EDICISI (5 Eyl 2026).
+   SEBEP (olculdu, uydurma degil): Netlify egik cizgili hali KANONIK sayar
+   ve cizgisizi 301 ile oraya yollar. Site cizgisiz yaziyordu; sonuclari:
+     · 64 canli adresin 63'u cizgisizken IKI HOP (301 + 200) — her sayfa
+       gecisi fazladan bir tur atiyordu
+     · HER SAYFA KENDINI PREFETCH EDIYORDU: /hizmetler/ sayfasi
+       <link rel=prefetch href="/hizmetler"> basiyordu; Astro'nun "acik
+       sayfayi atla" korumasi href (/hizmetler) ile location.pathname
+       (/hizmetler/) tutmadigi icin devre disi kaliyordu. Yani tarayicinin
+       prefetch onbelleginde, zaten acik olan sayfaya giden bir YONLENDIRME
+       kaydi birikiyordu.
+     · canonical de cizgisizi gosteriyordu: kanonik adres 301 veriyordu.
+
+   NEDEN FONKSIYON, NEDEN 96 YERE ELLE '/' EKLENMEDI: adreslerin cogu
+   `${B}${on}${r}` gibi DEGISKEN KUYRUKLU; hangi dalin bos oldugunu tek tek
+   analiz etmek gerekirdi ve bos dal `//` uretirdi. Tek kapi hepsini cozer.
+
+   SOZLESME: bos girdi -> '/', kanca/sorgu tasiyan adres DOKUNULMAZ (kanca
+   sayfanin kendi icinde), uzantili son parca DOKUNULMAZ (varlik), mutlak
+   adreste konak ayrilir (`https://x.com` -> `https://x.com/`, konagin
+   `.com`u uzanti sanilmaz). Bekci: denetim H29. */
+export const sl = (u: string): string => {
+  if (!u) return '/';
+  if (/[#?]/.test(u)) return u;
+  const m = u.match(/^([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^/]+)(.*)$/);
+  const kok = m ? m[1] : '';
+  const yol = m ? m[2] : u;
+  if (!yol) return kok + '/';
+  if (yol.endsWith('/')) return kok + yol;
+  if (/\.[a-zA-Z0-9]{2,6}$/.test(yol)) return kok + yol;
+  return kok + yol + '/';
+};
+
 /* PAYLASIM KARTLARI · TEK KAYNAK (4 Eyl 2026).
    Iki uretec birden basiyor: `Temel.astro` og:image/twitter:image
    etiketlerini, `sema.mjs` yazi semasinin `image` alanini. Adlar iki

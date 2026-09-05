@@ -2,7 +2,7 @@
 /* Yazı gövdesi — panelin HTML'i (güvenilir kaynak) derleme anında
    basılır; bölümler [başlık, html] çiftleri. */
 import { getCollection } from 'astro:content';
-import { T, type Dil } from '../icerik';
+import { T, type Dil, sl } from '../icerik';
 interface Props { p: any; dil: Dil }
 const { p, dil } = Astro.props;
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -26,7 +26,7 @@ const ay = dil === 'en'
 const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYear()}`;
 ---
 {/* Geri bagi (kaynak 5168 .pgback -> /bulten) */}
-<a class="pgback" href={`${B}${on}/bulten`}>
+<a class="pgback" href={sl(`${B}${on}/bulten`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
   <span>{dil === 'en' ? 'Newsletter' : 'Bülten'}</span>
@@ -58,7 +58,7 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
       <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Previous' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="nrtrack" id="railTrack">
         {digerleri.map((x: any) => (
-          <a class="nrcard" href={`${B}${on}/bulten/${x.slug}`}>
+          <a class="nrcard" href={sl(`${B}${on}/bulten/${x.slug}`)}>
             <span class="m">{T(x.tag, dil)}</span>
             <h4>{T(x.title, dil)}</h4>
             <span class="d">{kisaTarih(x.date)} · {x.read || 3}{dil === 'en' ? ' min' : ' dk'}</span>

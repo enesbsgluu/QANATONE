@@ -8,7 +8,7 @@
    Sondaki "Konuşalım" düğmesi hizmetler dizinindeki kararla aynı
    bilinçli süperküme: cevapların çoğu başlama kararına çıkıyor,
    sayfa çıkışsız bırakılmaz; ada tek formu ana sayfada tutar. */
-import { icerik, T, type Dil } from '../icerik';
+import { icerik, T, type Dil, sl } from '../icerik';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 /* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
@@ -41,7 +41,7 @@ const sorular = icerik.faq || [];
 
 {/* EN ana sayfa adası kuruldu — eski '/en#iletisim' kaçağı adaya döndü. */}
 <p class="son">
-  <a class="dugme sus-isik" href={`${B}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('ssg01', 'Konuşalım', "Let's talk")}</a>
+  <a class="dugme sus-isik" href={sl(`${B}${dil === 'en' ? '/en' : ''}/#iletisim`)}>{M('ssg01', 'Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>

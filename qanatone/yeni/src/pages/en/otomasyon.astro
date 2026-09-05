@@ -3,16 +3,16 @@
    karakterdi (S1 tabanı altı) — TR'deki kararla aynı içerik. */
 import Temel from '../../layouts/Temel.astro';
 import OtomasyonGovde from '../../parcalar/OtomasyonGovde.astro';
-import { icerik, KOK } from '../../icerik';
+import { icerik, KOK, sl } from '../../icerik';
 import { anaSema } from '../../sema.mjs';
 
-const canon = `${KOK}/en/otomasyon`;
+const canon = sl(`${KOK}/en/otomasyon`);
 const baslik = 'Automation & AI Agents — QANATONE';
 const aciklama = 'The agent system that answers demand: flow logic, the leak map and a funnel with your own numbers.';
 const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/otomasyon`} helefen={canon} sema={sema}
+  heleftr={sl(`${KOK}/otomasyon`)} helefen={canon} sema={sema}
   etiket="Automation" genis>
   <OtomasyonGovde dil="en" />
 </Temel>

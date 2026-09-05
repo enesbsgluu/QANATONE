@@ -21,7 +21,7 @@ import '../stil/kabuk.css';
 import Nav from '../parcalar/Nav.astro';
 import Perde from '../parcalar/Perde.astro';
 import LeadKutu from '../parcalar/LeadKutu.astro';
-import { icerik, T, KOK, OG_KART } from '../icerik';
+import { icerik, T, KOK, OG_KART, sl } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
 
 interface Props {
@@ -243,7 +243,7 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
     <div class="wrap">
       <div class="fgrid">
         <div class="lead">
-          <a class="flogo" href={`${B}${on || '/'}`}>
+          <a class="flogo" href={sl(`${B}${on || '/'}`)}>
             <i><picture>
               <source srcset={`${B}/img/qanatone.avif`} type="image/avif" />
               <img src={`${B}/img/qanatone.webp`} alt="" width="240" height="270" decoding="async" loading="lazy" />
@@ -254,7 +254,7 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
         </div>
         <div class="fcol">
           <h5>{m('fc1', 'Sayfalar', 'Pages')}</h5>
-          {SAYFALAR.map(([r, k, tr, enV]) => <a href={`${B}${on}${r}`}>{m(k, tr, enV)}</a>)}
+          {SAYFALAR.map(([r, k, tr, enV]) => <a href={sl(`${B}${on}${r}`)}>{m(k, tr, enV)}</a>)}
         </div>
         <div class="fcol">
           <h5>{m('fc2', 'İletişim', 'Contact')}</h5>
@@ -272,7 +272,7 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
     <div class="watermark"><h2 class="vh">QANATONE</h2><canvas id="wmk" aria-hidden="true"></canvas></div>
     <div class="wrap">
       <div class="fbot">
-        <span>{T(icerik.legal?.line, dil) || '© QANATONE'} · <a href={B + '/hukuki'}>{en ? 'Legal' : 'Hukuki'}</a></span>
+        <span>{T(icerik.legal?.line, dil) || '© QANATONE'} · <a href={sl(B + '/hukuki')}>{en ? 'Legal' : 'Hukuki'}</a></span>
         <span class="r">
           <span>{m('fb1', 'İstanbul · Dubai', 'Istanbul · Dubai')}</span>
           <span>{m('fb2', 'SEO · GEO · Ads · AI', 'SEO · GEO · Ads · AI')}</span>

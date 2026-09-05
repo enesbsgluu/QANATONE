@@ -63,7 +63,7 @@
    Ölçüler künyeden — üreteç `gorsel-uret.cjs` yazar, bileşen ELLE ölçü
    yazmaz. Künyede olmayan proje görselsiz basılır. */
 import { getCollection } from 'astro:content';
-import { icerik, T, type Dil } from '../icerik';
+import { icerik, T, type Dil, sl } from '../icerik';
 import prjGorsel from '../veri/proje-gorselleri.json';
 const gorselMap = new Map(prjGorsel.map((g: any) => [g.slug, g]));
 interface Props { dil: Dil }
@@ -109,7 +109,7 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
 }).join('');
 ---
 {/* Geri bağlantısı: kaynak 4746 `.pgback`, alt sayfalarda ana sayfaya. */}
-<a class="pgback" href={`${B}${on}/`}>
+<a class="pgback" href={sl(`${B}${on}/`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
   <span>{M('prd01', 'Ana sayfa', 'Home')}</span>
@@ -139,7 +139,7 @@ const suzKural = `.msn-kap .msn{--sut-kap:${tavan(projeler.length)}}`
 <div class="msn">
   {projeler.map((p: any, i: number) => { const g: any = gorselMap.get(p.slug); return (
     <a class="mi" data-k={String(sektorler.indexOf(kat(p)) + 1)}
-      href={`${B}${on}/projeler/${p.slug}`}>
+      href={sl(`${B}${on}/projeler/${p.slug}`)}>
       <span class="mi-t">
         <span class="mv" data-logo={g?.logo ? '' : undefined}>
           {/* İKİ VARYANT AYNI `srcset`e KONMAZ — oranları farklı.

@@ -3,21 +3,21 @@
 import { getCollection } from 'astro:content';
 import Temel from '../../../layouts/Temel.astro';
 import YaziGovde from '../../../parcalar/YaziGovde.astro';
-import { icerik, T, KOK, kes, basAd } from '../../../icerik';
+import { icerik, T, KOK, kes, basAd, sl } from '../../../icerik';
 import { yaziSema } from '../../../sema.mjs';
 
 export async function getStaticPaths() {
   return (await getCollection('yazilar')).map(e => ({ params: { slug: e.id }, props: { p: e.data } }));
 }
 const { p } = Astro.props;
-const canon = `${KOK}/en/bulten/${p.slug}`;
+const canon = sl(`${KOK}/en/bulten/${p.slug}`);
 const baslik = basAd(p.title, 'en');
 const aciklama = kes(p.lede, 'en');
 const sema = yaziSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' }, p);
 ---
 <Temel dil="en" baslik={baslik}
   aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/bulten/${p.slug}`} helefen={canon}
+  heleftr={sl(`${KOK}/bulten/${p.slug}`)} helefen={canon}
   sema={sema} etiket="NEWSLETTER">
   <YaziGovde p={p} dil="en" />
 </Temel>

@@ -55,7 +55,7 @@
       SIRALI bir liste ve sıra numarası görüntünün parçası (`.num`).
       Görünüm aynı (`list-style:none`), ekran okuyucuda sayı kazanılıyor. */
 import { getCollection } from 'astro:content';
-import { icerik, T, type Dil } from '../icerik';
+import { icerik, T, type Dil, sl } from '../icerik';
 /* SOKUM VE TASIMA TURU (4 Eyl): kaynagin /hizmetler sayfasi bento
    altinda ikinci bir demo talep formu tasiyordu (SOKUM-KARAR-LISTESI §2
    "alt demo formu", karar: birebir geri) — ana sayfanin SILIletisim
@@ -86,7 +86,7 @@ const hizmetler = (await getCollection('hizmetler')).map(e => e.data)
 const on = dil === 'en' ? '/en' : '';
 ---
 {/* Geri bağlantısı: kaynak 5006 `.pgback`, ana sayfaya. */}
-<a class="pgback" href={`${B}${on}/`}>
+<a class="pgback" href={sl(`${B}${on}/`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
   <span>{M('hzd01', 'Ana sayfa', 'Home')}</span>
@@ -114,7 +114,7 @@ const on = dil === 'en' ? '/en' : '';
     const b = bicim.get(s.slug) || { size: '', hi: false, icon: 'zap' };
     return (
       <li class={`${b.size} ${b.hi ? 'hi' : ''}`.trim()}>
-        <a class="card" href={`${B}${on}/hizmetler/${s.slug}`}>
+        <a class="card" href={sl(`${B}${on}/hizmetler/${s.slug}`)}>
           <span class="num">{String(i + 1).padStart(2, '0')}</span>
           <span class="ic"><Ikon ad={b.icon} /></span>
           <h2>{T(s.title, dil)}</h2>

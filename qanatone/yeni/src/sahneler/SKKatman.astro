@@ -37,7 +37,7 @@
    IO'lu sürüm 233 B'dı ama açılışta sınıf yazdığı için LCP'yi 158 ms
    itiyordu. Kaydırma dinleyicisi de düzen okuması da hiç yok (H12). */
 import '../stil/katman.css';
-import { icerik, T, suz } from '../icerik';
+import { icerik, T, suz, sl } from '../icerik';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -87,13 +87,13 @@ const cipAd = (c: any): string => (c.k ? duz(c.k) : c.ad);
               <p>{g(k.p)}</p>
               <span class="sk-cipler">
                 {k.cipler.map((c: any) => (c.slug
-                  ? <a class="sk-cip" href={`${B}${on}/hizmetler/${c.slug}`}>{cipAd(c)}</a>
+                  ? <a class="sk-cip" href={sl(`${B}${on}/hizmetler/${c.slug}`)}>{cipAd(c)}</a>
                   : <span class="sk-cip sk-cip-yok">{cipAd(c)}</span>))}
               </span>
             </>
           );
           return k.yol
-            ? <a class="sk-kart" href={`${B}${on}/hizmetler/${k.yol}`}>{govde}</a>
+            ? <a class="sk-kart" href={sl(`${B}${on}/hizmetler/${k.yol}`)}>{govde}</a>
             : <div class="sk-kart">{govde}</div>;
         })}
       </div>

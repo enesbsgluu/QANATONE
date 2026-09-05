@@ -32,7 +32,7 @@ import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../sahneler/SKUKurucu.astro';
 import SILIletisim from '../sahneler/SILIletisim.astro';
 import PrologYuvasi from '../parcalar/PrologYuvasi.astro';
-import { KOK, icerik } from '../icerik';
+import { KOK, icerik, sl } from '../icerik';
 import { anaSema } from '../sema.mjs';
 
 /* ŞEMA PARİTESİ (madde 5, tur kapanışında ölçülüp kapatıldı): eski ana
@@ -41,7 +41,7 @@ import { anaSema } from '../sema.mjs';
    src/sema.mjs'te (kural 107: #org kimliği her sayfada birebir aynı). */
 const BASLIK = 'QANATONE — Talebi yakalayan sistem';
 const ACIKLAMA = 'Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında.';
-const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
+const sema = anaSema(icerik, { url: sl(`${KOK}/`), ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
 
 /* PROLOG ANAHTARI — `theme.motion.prolog` (Enes, 6 Eyl 2026: "panelde tek
    tuşla açıp kapatabileyim; kapalı hâli açık hâliyle aynı yüklenme
@@ -68,7 +68,7 @@ const sema = anaSema(icerik, { url: `${KOK}/`, ad: BASLIK, aciklama: ACIKLAMA, d
 const prologAcik = ((icerik.theme as any)?.motion?.prolog) !== 0;
 ---
 <Temel lead={false} dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
-  canonical={`${KOK}/`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
+  canonical={sl(`${KOK}/`)} heleftr={sl(`${KOK}/`)} helefen={sl(`${KOK}/en`)}>
   {/* ON YUKLEME: yalniz GOVDE fontu. LCP elemani hero'nun lede'si
       (Lighthouse ile olculdu) ve o Nunito ile boyanir. Nunito
       `font-display:optional` — engelleme suresi ~100 ms: bu pencerede

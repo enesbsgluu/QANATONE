@@ -6,16 +6,16 @@
    bultenDizinSema). Bekçisi R4. */
 import Temel from '../../layouts/Temel.astro';
 import BultenDizin from '../../parcalar/BultenDizin.astro';
-import { icerik, KOK } from '../../icerik';
+import { icerik, KOK, sl } from '../../icerik';
 import { bultenDizinSema } from '../../sema.mjs';
 
-const canon = `${KOK}/bulten`;
+const canon = sl(`${KOK}/bulten`);
 const baslik = 'Bülten — QANATONE';
 const aciklama = 'Yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla.';
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={canon} helefen={`${KOK}/en/bulten`} sema={sema}
+  heleftr={canon} helefen={sl(`${KOK}/en/bulten`)} sema={sema}
   etiket="Bülten">
   <BultenDizin dil="tr" />
 </Temel>

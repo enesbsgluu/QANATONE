@@ -42,7 +42,7 @@
    kaynaktan; testi `test/hesap.test.mjs`. */
 import '../stil/sektor.css';
 import Ikon from '../parcalar/Ikon.astro';
-import { icerik, T, suz } from '../icerik';
+import { icerik, T, suz, sl } from '../icerik';
 import { sektorHesap, bicimKisa, bicimTam } from '../hesap.mjs';
 
 interface Props { dil?: 'tr' | 'en' }
@@ -232,7 +232,7 @@ const panolar = sektorler.map((x: any, i: number) => {
                                              kurulumun CALISIR hali
                   Dugmenin sozu "Bu kurulumu calisirken gor" — yani kurulumun
                   kendisini gosteren sayfa, hizmet anlatimi degil. */}
-              <a class="dugme" href={`${B}${on}/otomasyon`}>{m('skcta')}<Ikon ad="arrow" /></a>
+              <a class="dugme" href={sl(`${B}${on}/otomasyon`)}>{m('skcta')}<Ikon ad="arrow" /></a>
               <a class="dugme sse-dugme-g" href="#sektor">{m('skchange')}</a>
             </div>
           </article>

@@ -19,8 +19,8 @@
 
 # 2 · ESKI ONIZLEME + TEKIL HIZMET ROTASI, TEK SICRAMADA. Bu iki kural
 # asagidaki /yeni/* kuralindan ONCE olmali; yoksa iki 301 zinciri olur.
-/yeni/hizmet/:slug  /hizmetler/:slug  301!
-/yeni/en/hizmet/:slug  /en/hizmetler/:slug  301!
+/yeni/hizmet/:slug  /hizmetler/:slug/  301!
+/yeni/en/hizmet/:slug  /en/hizmetler/:slug/  301!
 
 # 3 · ESKI ONIZLEME ADRESLERI — /yeni/* koke. Yer imi, tarayici gecmisi
 # ve disaridan verilmis /yeni/... baglantilari olmesin.
@@ -33,8 +33,8 @@
 /shell  /  301!
 
 # 5 · TEKIL HIZMET ROTASI (kok tarafta) — cogula.
-/hizmet/:slug  /hizmetler/:slug  301!
-/en/hizmet/:slug  /en/hizmetler/:slug  301!
+/hizmet/:slug  /hizmetler/:slug/  301!
+/en/hizmet/:slug  /en/hizmetler/:slug/  301!
 
 # 6 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
 # SPLAT KURALI SONDA KALMALI.
