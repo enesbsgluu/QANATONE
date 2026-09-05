@@ -445,7 +445,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   try {
     const fikstur = '<!doctype html><html lang="tr"><head><title>x</title></head><body><h1>x</h1></body></html>';
     const sahteRes = { status: 200, headers: new Map([['cache-control', 'max-age=60']]) };
-    const kalemler = D.analyse(fikstur, sahteRes, fikstur.length, 'https://ornek.com/');
+    const kalemler = D.analyse(fikstur, sahteRes, fikstur.length, 'https://ornek.com/', 0);
     kalemSayisi = kalemler.length;
     for (const it of kalemler) if (!it.o) kusur.push('olcutsuz:' + it.k);
   } catch (e) { kusur.push('analyse cagrilamadi: ' + e.message); }
@@ -465,17 +465,60 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     return new Set([...fixKaynak.slice(i, fixKaynak.indexOf('\n  },', i)).matchAll(/^\s{4}([\w-]+):/gm)].map((m) => m[1]));
   };
   const fixTr = fixDal('tr'); const fixEn = fixDal('en');
+  /* MUAFIYET KALKTI (5 Eyl 2026): `status` agirlik tablosundan cikti,
+     yerine `redirects` geldi. Artik PUANLANAN HER KALEM duzeltme
+     sozlugunde ve oncelik listesinde olmak zorunda — istisnasiz. */
   for (const k of Object.keys(D.W)) {
-    if (k === 'status') continue;                  /* muafiyet: her zaman ok */
     if (!prio.has(k)) kusur.push('PRIO eksik:' + k);
     if (!fixTr.has(k)) kusur.push('FIX.tr eksik:' + k);
     if (!fixEn.has(k)) kusur.push('FIX.en eksik:' + k);
   }
 
+  /* PUANLAMA DEGISMEZLERI ZINCIRDE (5 Eyl 2026). `olc-tespit-puan.cjs`
+     yedi kolun tamamini olcuyor ama AG'A CIKIYOR, yani deploy zincirinde
+     kosamaz. Cevrimdisi ve kritik olan iki kol buraya tasindi ki her
+     yayinda kossun — yoksa o kapi da `test/denetim.js` gibi yetim kalirdi
+     (bu turun ilk bulgusu tam olarak buydu).
+
+     KOL 1 — HER DURUM ULASILABILIR. `status` kalemi bunu karsilamiyordu:
+     analyse() yalniz 2xx'te kosuyor, kalem de tam 2xx'te ok veriyordu,
+     yani 6 puan hicbir siteyi otekinden AYIRMIYORDU. Ornek sansina bagli
+     bir test bunu yakalayamaz; ulasilabilirlik yakalar. */
+  try {
+    const fk = '<!doctype html><html lang="tr"><head><title>x</title></head><body><h1>x</h1></body></html>';
+    const rs = { status: 200, headers: new Map([['cache-control', 'max-age=60']]) };
+    const hal = [0, 1, 2].map((n) => D.analyse(fk, rs, fk.length, 'https://ornek.com/', n)
+      .find((i) => i.k === 'redirects').state).join('/');
+    if (hal !== 'ok/warn/fail') kusur.push('redirects ulasilamaz hal: ' + hal);
+  } catch (e) { kusur.push('redirects hal olculemedi: ' + e.message); }
+
+  /* KOL 2 — KANONIK HOP TABLOSU. Ham hop sayisi ziyaretcinin YAZDIGINA
+     bagliydi (`qanatone.com` 1 hop · `www.qanatone.com` 0 hop, ayni site);
+     kanonik hoplar bedava sayilarak duzeltildi. Tablo burada kilitli. */
+  {
+    const K = D.kanonikHop;
+    const tablo = [
+      ['http->https', 'http://a.com/', 'https://a.com/', true],
+      ['apex->www', 'https://a.com/', 'https://www.a.com/', true],
+      ['www->apex', 'https://www.a.com/', 'https://a.com/', true],
+      ['egik cizgi', 'https://a.com/x', 'https://a.com/x/', true],
+      ['alan adi', 'https://a.com/', 'https://b.com/', false],
+      ['yol', 'https://a.com/', 'https://a.com/tr/', false],
+      ['sorgu', 'https://a.com/', 'https://a.com/?x=1', false],
+    ];
+    for (const [ad, x, y, bek] of tablo) if (K(x, y) !== bek) kusur.push('kanonikHop:' + ad);
+  }
+
+  /* AGIRLIK TOPLAMI 100 — hicbir kural bunu tutmuyordu. Bir kalem
+     eklenip otekinin agirligi dusurulmezse skor sessizce olcegini
+     kaybeder (95 puanlik site 89 gorunur, kimse fark etmez). */
+  const agirlikToplam = Object.values(D.W).reduce((a, b) => a + b, 0);
+  if (agirlikToplam !== 100) kusur.push('agirlik toplami ' + agirlikToplam + ' (100 olmali)');
+
   ol('T2 · tespit araci sozlesmesi: kalem/durum/sebep sozlukleri iki tarafta ortusuyor',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 6).join(' ')
-       : `${Object.keys(D.W).length} kalem · ${kalemSayisi} olculdu · ${D.DURUMLAR.length} durum · ${D.SEBEPLER.length} sebep · PRIO ${prio.size}`);
+       : `${Object.keys(D.W).length} kalem · agirlik ${agirlikToplam} · ${kalemSayisi} olculdu · ${D.DURUMLAR.length} durum · ${D.SEBEPLER.length} sebep · PRIO ${prio.size}`);
 }
 
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
