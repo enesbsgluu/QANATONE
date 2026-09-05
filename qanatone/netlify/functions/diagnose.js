@@ -18,6 +18,11 @@
 
 const dns = require('dns').promises;
 const crypto = require('crypto');
+/* WEB BOT AUTH — kimliğimizi imzayla kanıtlayan başlıklar. Anahtar
+   tanımlı değilse boş nesne döner, yani imzasız yol ayrı bir dal değil.
+   Gerekçenin tamamı imza-dizini.js'in başında. (panel.js'in yayinla.js'ten
+   dogrula() alması ile aynı desen: fonksiyonlar birbirini ithal eder.) */
+const { imzala } = require('./imza-dizini.js');
 
 /* ---------- KOTA ----------
    Kişi başı 2 analiz / 24 saat. Kota bir ÜRÜN kuralıdır; oran sınırı ayrı
@@ -394,9 +399,13 @@ async function grab(url, method, butce) {
        gider); bu turda gereği yok, sayı yeterli bilgiyi taşıyor. */
     let hedef = url, r = null, takip = 0, fazla = 0;
     for (let hop = 0; ; hop++) {
+      /* İMZA HOP BAŞINA YENİLENİR. İmzalanan bileşenlerden biri
+         `@authority`; yönlendirme başka bir konağa götürdüğünde eski imza
+         o konakta DOĞRULANAMAZ. Tek imzayı zincire yaymak, ikinci hop'ta
+         karşılığı olmayan bir iddia göndermek olurdu. */
       r = await fetch(hedef, {
         method: method || 'GET', redirect: 'manual', signal: ac.signal,
-        headers: { 'user-agent': UA, accept: 'text/html,*/*' }
+        headers: Object.assign({ 'user-agent': UA, accept: 'text/html,*/*' }, imzala(hedef))
       });
       if (r.status < 300 || r.status >= 400) break;
       const loc = r.headers.get('location');

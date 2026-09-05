@@ -657,6 +657,81 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${Object.keys(D.W).length} kalem · agirlik ${agirlikToplam} · ${kalemSayisi} olculdu · ${D.DURUMLAR.length} durum · ${D.SEBEPLER.length} sebep · PRIO ${prio.size}`);
 }
 
+/* T4 · WEB BOT AUTH ADRES ZINCIRI (5 Eyl 2026 — karar kaydinin tek gercek
+   adayi hayata gecti). Tarayicimiz `QanatoneSiteCheck/1.0` artik her
+   istegi imzaliyor; acik anahtar `/.well-known/http-message-signatures-
+   directory` adresinde. Gerekce netlify/functions/imza-dizini.js basinda.
+
+   BU KURAL KRIPTOGRAFIYE BAKMAZ — o is `yeni/test/bot-imza.test.mjs`in
+   (T1 ailesi, ayni zincirde) ve orada imza GERCEKTEN uretilip
+   DOGRULAYICI ROLUNDEN dogrulaniyor. Burasi DOSYALAR ARASI SOZLESMEYI
+   tutuyor, cunku bu deponun defalarca odedigi hata sinifi tam olarak
+   budur: iki dosya ayni seyi soylemesi gerekirken sessizce ayrisir.
+
+   IMZA ZINCIRININ HALKALARI — biri kopunca imza SESSIZCE degersizlesir:
+     a) `Signature-Agent` ne diyorsa dizin ORADA yayinlanmali. Imzadaki
+        adres astro `site` ile ayrismissa dogrulayici anahtari aramaya
+        yanlis konaga gider, bulamaz ve imzayi REDDEDER — imzasiz
+        istekten DAHA KOTU olur (karsiligi olmayan bir iddia).
+     b) Rota `_redirects`te olmali VE splat 404'ten ONCE gelmeli. Netlify
+        ILK ESLESEN kurali uygular; kural 404'un altina duserse dizin
+        yayinda YOK demektir ama kodda VAR gorunur.
+     c) Ayni adreste statik bir dosya BIRIKMEMELI. Force (200!) onu
+        golgelemeyi imkansiz kiliyor, ama dosyanin varligi zaten bir
+        ayrisma belirtisidir — acik anahtarin ikinci bir kopyasi demek.
+     d) Davranis testi YERINDE olmali. T1 klasordeki her *.test.mjs'i
+        kosar; dosya silinirse T1 daha AZ testle yine yesil doner ve
+        kimse fark etmez. Yanlis yesil, yanlis kirmizidan tehlikelidir. */
+{
+  const kusur = [];
+  const IMZA = require(path.join(__dirname, '..', 'netlify', 'functions', 'imza-dizini.js'));
+  const ROTA = '/.well-known/http-message-signatures-directory';
+
+  /* a · KOK_ADRES ile astro `site` ayni mi */
+  let siteAdres = '';
+  {
+    const cfg = fs.readFileSync(path.join(__dirname, 'astro.config.mjs'), 'utf8');
+    /* Yorum satirlari ayiklanir: bu depoda bir kural, yorumun icindeki
+       ornek adresi gercek deger sanip yanlis yesil vermisti. */
+    const kod = cfg.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    const m = kod.match(/\bsite:\s*'([^']+)'/);
+    if (!m) kusur.push('astro site okunamadi');
+    else {
+      siteAdres = m[1];
+      if (siteAdres !== IMZA.KOK_ADRES)
+        kusur.push('KOK_ADRES != astro site (' + IMZA.KOK_ADRES + ' vs ' + siteAdres + ')');
+    }
+  }
+
+  /* b · rota bagli mi ve splat 404'ten once mi */
+  {
+    const ham = fs.readFileSync(path.join(__dirname, 'public', '_redirects'), 'utf8');
+    const satir = ham.split('\n').map((s) => s.trim()).filter((s) => s && !s.startsWith('#'));
+    const iRota = satir.findIndex((s) => s.startsWith(ROTA + ' '));
+    const iSplat = satir.findIndex((s) => s.startsWith('/*'));
+    if (iRota < 0) kusur.push('_redirects: dizin rotasi yok');
+    else {
+      if (!/\/\.netlify\/functions\/imza-dizini\s+200!\s*$/.test(satir[iRota]))
+        kusur.push('_redirects: dizin rotasi fonksiyona 200! ile gitmiyor');
+      if (iSplat >= 0 && iRota > iSplat)
+        kusur.push('_redirects: dizin rotasi splat 404`un ALTINDA — yayinda yok');
+    }
+  }
+
+  /* c · ayni adreste statik kopya birikmemis */
+  if (fs.existsSync(path.join(KOK, '.well-known', 'http-message-signatures-directory')))
+    kusur.push('dist`te statik dizin kopyasi var — acik anahtarin ikinci kaynagi');
+
+  /* d · davranis testi yerinde (T1 ailesi onu kosuyor) */
+  if (!fs.existsSync(path.join(__dirname, 'test', 'bot-imza.test.mjs')))
+    kusur.push('bot-imza.test.mjs YOK — kriptografik kanit kapisiz kaldi');
+
+  ol('T4 · web bot auth adres zinciri: imza adresi = dizin adresi, rota bagli, tek kaynak',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 4).join(' | ')
+       : `${siteAdres} · rota 200! · statik kopya yok · davranis testi T1'de`);
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`
@@ -2356,7 +2431,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          ERR_UNKNOWN_FILE_EXTENSION veriyordu. Kural artik once bunu
          STATIK olarak olcer — hata Netlify'a kadar gitmez. */
       /* Rota turunda test AILE oldu (hesap + huni) — kural klasördeki
-         her *.test.mjs'i tarar ve --test'i klasöre koşar. */
+         her *.test.mjs'i tarar ve --test'i klasöre koşar.
+         5 Eyl 2026: aileye `bot-imza.test.mjs` katıldı (web bot auth
+         imzasının kriptografik kanıtı). Kural adı o gün AILEYI anlatacak
+         biçimde düzeltildi: "sektör para aritmetiği" yazan bir satır,
+         altında yedi dosya koşarken okuyanı yanıltıyordu. Dosya sayısı
+         nota yazılıyor ki bir test dosyası düştüğünde SAYI değişsin —
+         yoksa aile küçülür ve kural yine yeşil döner. T4 ayrıca
+         bot-imza.test.mjs'in varlığını ADIYLA tutuyor. */
       const testKlasoru = path.join(__dirname, 'test');
       const testler = fs.readdirSync(testKlasoru).filter(f => /\.test\.mjs$/.test(f))
         .map(f => path.join(testKlasoru, f));
@@ -2385,10 +2467,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       }
       const ge = (ciktiMetni.match(/pass (\d+)/) || [, '0'])[1];
       const ka = (ciktiMetni.match(/fail (\d+)/) || [, '?'])[1];
-      ol('T1 · sektor para aritmetigi testleri geciyor (+ .ts ithali yok)',
+      ol('T1 · yeni/test ailesi geciyor (aritmetik · huni · film · esik · bot imzasi) + .ts ithali yok',
          gecti && tsIthal.length === 0,
          tsIthal.length ? 'Node 20 .ts acamaz: ' + tsIthal.join(' ')
-                        : `${ge} gecti · ${ka} kaldi`);
+                        : `${testler.length} dosya · ${ge} gecti · ${ka} kaldi`);
     }
 
     /* H20 · SEKTOR PANOSU ICERIGI ham HTML'de tam — KOSULLU.
