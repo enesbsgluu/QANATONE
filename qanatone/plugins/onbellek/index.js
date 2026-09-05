@@ -1,6 +1,13 @@
 /* Artimli derleme onbellegi (Netlify build plugin, utils.cache).
-   .onbellek: kok build.js'in sayfa onbellegi — yoksa her yayinda 58 sayfa
-   bastan render edilir (~100 sn).
+
+   `.onbellek` DUSTU (5 Eyl 2026). Kok `build.js`in sayfa onbellegiydi,
+   ama KESME Adim 2'de (6 Eyl planı, uygulandi) `node build.js` derleme
+   zincirinden cikti — netlify.toml'un YURURLUKTEKI komutunda 0 gecis
+   (olculdu). Yani her derlemede 4,6 MB / 59 dosya, koşmayan bir adim
+   icin geri yuklenip yeniden kaydediliyordu. Tek tuketicisi build.js
+   oldugu icin dusurmek guvenli; build.js ELDE kosulursa sayfalari
+   bastan render eder, bedeli yalniz o manuel kosumdadir.
+
    yeni/public/varlik/film (TUR 9, 3 Eyl 2026): 680 MB film medyasi git
    disi; ilk derlemede kur-medya.cjs uzaktan (GitHub Release) indirir,
    sonraki derlemelerde buradan geri gelir ve kur-medya yalniz sha1
@@ -8,7 +15,7 @@
    indirir; bozuk gelirse sha1 tutmaz, dosya silinir, yeniden indirilir.
    Damga (.medya-kurulum.json) bu dizinde DEGIL — her derlemede yeniden
    yazilir, onbellekten bayat damga gelmez. */
-const DIZINLER = ['.onbellek', 'yeni/public/varlik/film'];
+const DIZINLER = ['yeni/public/varlik/film'];
 module.exports = {
   async onPreBuild({ utils }) {
     for (const d of DIZINLER) {
