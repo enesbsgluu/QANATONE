@@ -127,6 +127,41 @@ const KOL_TANIM = {
   SUZUL: { ad: 'yalniz suzulme (transform) durdu', css: '.sus-suzul{animation:none!important}' },
   ELGIRIS: { ad: 'yalniz gorsel girisi durdu', css: '.sus-el img{animation:none!important}' },
   SUSGPU: { ad: 'hero susleri KOMPOZITORE itildi (animasyon DURUYOR)', css: '.sus-suzul{will-change:transform}' },
+  /* --- 5 Eyl 2026, ikinci tur: "transform NEDEN pahali" sorusu ---
+     SUS kolu animasyonu DURDURUP kazanci olcuyor, ama sebebi adlandirmiyor.
+     transform tek basina bilesik katmanda ucuzdur; pahali olmasi icin bir
+     CARPAN gerek. Iki aday, ikisi de `.sus-suzul`un USTUNDE duruyor ve
+     hicbiri simdiye kadar olculmedi:
+       MASKE  — kap `.sus-eller` mask-image tasiyor. Maskeli agacta donen
+                cocuk her karede maskeyle yeniden birlestirilir.
+       SOZDE  — `.sus-suzul::before/::after` iki buyuk radyal gradyan
+                (inset:-14%); donen katmanin icerigi bu ikisi.
+     IKISI DE TESHIS KOLU: gorunusu degistirirler, cozum onerisi DEGIL.
+     Yerlesimi degistirmezler (ikisi de absolute/boyamalik), yani aracin
+     yukseklik saflik kontrolu temiz kalmali. */
+  MASKE: { ad: 'kabin maskesi kalkti (animasyon KOSUYOR)',
+    css: '.sus-eller{-webkit-mask-image:none!important;mask-image:none!important}' },
+  SOZDE: { ad: 'hale/golge sozde katmanlari kalkti (animasyon KOSUYOR)',
+    css: '.sus-suzul::before,.sus-suzul::after{display:none!important}' },
+  /* --- ADAY KOLLARI (teshis degil, COZUM adaylari) ---
+     SOZDE gosterdi ki pahali olan hareket degil, HAREKET ETTIRILEN ICERIK.
+     Iki aday, ikisi de gradyanlari KORUR:
+       SUSGPU  gorunusu HIC degistirmez (yalniz will-change). Masaustunde
+               olculup "kazanc yok" denmisti — ama masaustunde kollarin
+               HEPSI 1515-1798 arasinda, yani orada zaten ayirt edilemiyor.
+               MOBILDE HIC OLCULMEDI; bosluk burada.
+       AYIR    gradyanlari SALINAN cocuktan STATIK ebeveyne tasir: el
+               salinir, hale durur. Kaynak sadakati acisindan ADI KONMUS
+               SAPMA (gorsel hukum Enes'te) — bu kol o degisikligin
+               birebir CSS taklidi, olcum once yapilsin diye. */
+  AYIR: { ad: 'ADAY: gradyanlar salinan cocuktan STATIK ebeveyne tasindi',
+    css: '.sus-suzul::before,.sus-suzul::after{display:none!important}'
+      + '.sus-suzul{z-index:1}'
+      + ".sus-el::before{content:'';position:absolute;inset:-14%;z-index:0;pointer-events:none;"
+      + 'background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%)}'
+      + ".sus-el::after{content:'';position:absolute;left:6%;right:6%;top:16%;bottom:-6%;"
+      + 'z-index:0;pointer-events:none;'
+      + 'background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%)}' },
   A1: { ad: 'hareket azaltildi (ust sinir)', css: '', hareket: true },
   BOZ: { ad: 'KIRMIZI-ONCE: pahali animasyon', boz: true,
     css: '@keyframes qboz{from{padding-left:0}to{padding-left:9px}}p,li,h2,h3,a,span{animation:qboz .6s linear infinite!important}' },
