@@ -36,6 +36,17 @@
 /hizmet/:slug  /hizmetler/:slug/  301!
 /en/hizmet/:slug  /en/hizmetler/:slug/  301!
 
-# 6 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
+# 6 · WEB BOT AUTH DIZINI — tarayicimizin (QanatoneSiteCheck/1.0) acik
+# anahtari. STATIK DOSYA DEGIL, cunku acik anahtar ozel anahtardan
+# TURETILIR: depoda duran bir kopya, ortam degiskenindeki anahtarla
+# sessizce ayrisabilirdi ve o gun her dogrulayici bizi reddederdi.
+# Anahtar tanimli degilse fonksiyon 404 doner — arkasinda calisan bir sey
+# olmayan kesif dosyasi yayinlanmaz (karar kaydi, yeni/ajan-hatti.mjs).
+# 200! ZORLAMALI: ileride dist'e bir kopya sizarsa statik dosya canli
+# dizini golgeler; force bunu imkansiz yapar (panel kapisiyla ayni gerekce).
+# Gerekcenin tamami: netlify/functions/imza-dizini.js · bekci: denetim T4.
+/.well-known/http-message-signatures-directory  /.netlify/functions/imza-dizini  200!
+
+# 7 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
 # SPLAT KURALI SONDA KALMALI.
 /*  /404.html  404
