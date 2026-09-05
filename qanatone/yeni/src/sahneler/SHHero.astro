@@ -69,7 +69,18 @@ const g = (k: string): string => T(s[k], dil);
     <div class="sh-cta">
       <a class="sh-void" href="#tespit"><i class="sus-halka" aria-hidden="true"></i><span
         >{g('cta1')}</span></a>
-      <a class="sh-btn" href="#cagri">{g('cta2')}</a>
+      {/* HEDEFSIZ KANCA DUZELTMESI (5 Eyl 2026, Enes: "demo iste butonu
+          hem mobilde hem masaustunde yonlendirme yapmiyor"). `#cagri`
+          diye bir id sitede HIC YOKTU (tum .astro taranarak olculdu:
+          6 kancadan tek olusuzu buydu), dugme bu yuzden bostaydi.
+          Kaynagin kendi hedefi: index.html 4551 `href="/#lead"`
+          data-t="cta2" — SPA rotasi oldugu icin bas egik yazilmisti;
+          yeni cok sayfali kabukta hero YALNIZ / ve /en/ sayfasinda
+          basiliyor ve `id="lead"` (LeadKutu, .sil-kutu) ayni sayfada
+          duruyor, o yuzden sayfa ici kanca yeter (tam yeniden yukleme
+          yok). Kancanin nav altina kacmamasi zaten cozulmus:
+          iletisim.css:69 `.sil-kutu{scroll-margin-top:24px}`. */}
+      <a class="sh-btn" href="#lead">{g('cta2')}</a>
     </div>
     <p class="sh-meta">
       <span class="sh-saat" id="shSaat">--:--</span><i></i>
