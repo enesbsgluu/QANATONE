@@ -327,6 +327,48 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      [...kirli, ...yabanciCss].slice(0, 3).map(rel).join(' '));
 }
 
+/* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
+   butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
+   YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`
+   sitede HIC YOKTU; dugme bir turdan beri hicbir sey yapmiyordu ve hicbir
+   kural gormedi. Kaynagin kendi hedefi `/#lead` idi (index.html 4551).
+   OLCUT: her sayfada, o sayfadaki her `href="#x"` icin AYNI SAYFADA
+   `id="x"` bulunmali. Iki tarafta olculur — kanca listesi de kimlik listesi
+   de CIKTIDAN okunur, kaynaktan degil (kaynak taramasi hesaplanan degeri
+   goremez; panelden gelen bir kanca da buraya duser).
+   KAPSAM DISI: `href="#"` (yer tutucu) ve `#:~:` metin parcasi. */
+{
+  /* GOLGE AGACI KAPSAM DISI, AMA SESSIZ DEGIL: `<template shadowrootmode>`
+     icindeki agac kendi kimlik uzayini tasir (filmin `.fl-eski-giris`
+     replikasi eski kok sitenin nav'ini oldugu gibi tasiyor). Oradaki
+     kancalar bu kapida OLCULMEZ ama SAYILIR ve nota yazilir — kapsam
+     daralmasi gorunmeden gecmesin. 5 Eyl 2026'da olculen: /film ve
+     /en/film'de 1'er kanca (`#iletisim`), ikisi de hedefsiz; hukum
+     Enes'te (replikanin sadakati mi, calisan bag mi). */
+  const kusur = [];
+  let kancaSayisi = 0;
+  let golgeKanca = 0;
+  for (const p of sayfalar) {
+    const ham = oku(p);
+    for (const g of ham.match(/<template shadowrootmode[^>]*>[\s\S]*?<\/template>/g) || [])
+      golgeKanca += (g.match(/\shref="#[^"]*"/g) || []).length;
+    const h = ham.replace(/<template shadowrootmode[^>]*>[\s\S]*?<\/template>/g, '');
+    const kimlikler = new Set([...h.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+    for (const m of h.matchAll(/\shref="#([^"]*)"/g)) {
+      const k = m[1];
+      if (!k || k.startsWith(':~:')) continue;      /* yer tutucu / metin parcasi */
+      kancaSayisi++;
+      const coz = decodeURIComponent(k);
+      if (!kimlikler.has(k) && !kimlikler.has(coz)) kusur.push(rel(p) + ':#' + k);
+    }
+  }
+  ol('H28 · sayfa ici kancalarin hedefi AYNI sayfada var (href="#x" -> id="x")',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 5).join(' ')
+       : kancaSayisi + ' kanca · ' + sayfalar.length + ' sayfa · golge agacinda '
+         + golgeKanca + ' kanca kapsam disi');
+}
+
 /* G1 · görsel hattı: her <img> width+height (kayma yok); ilk ekran
    dışındakiler lazy — eager kalan fetchpriority=high taşımalı. */
 {
