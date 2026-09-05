@@ -478,7 +478,36 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     }
   }
 
-  ol('T3 · ajan hatti: markdown esleri + llms.txt + agents.md + izin dosyasi',
+  /* KESIF BAGLARI: indekslenen her sayfanin BASINDA markdown esi ve
+     llms.txt bagi olmali; ayni bag `Link` BASLIGINDA da bulunmali
+     (ajan denetleyicileri "Link response headers" kalemine bakiyor ve
+     HTML indirmeden yalniz baslik okuyan istemciler var). Iki taraf da
+     kanonikten turuyor — kural o formulun iki yerde de tuttugunu tutar. */
+  {
+    let eksik = 0, eksikBaslik = 0;
+    const hd = (() => { try { return fs.readFileSync(path.join(KOK, '_headers'), 'utf8'); } catch (e) { return ''; } })();
+    for (const p of sayfalar) {
+      const h = oku(p);
+      if (/name="robots"[^>]*content="[^"]*noindex/i.test(h)) continue;
+      const kan = (h.match(/<link rel="canonical" href="([^"]+)"/) || [, ''])[1];
+      if (!kan) continue;
+      const md = kan.replace(/\/$/, '') + '.md';
+      if (!h.includes('type="text/markdown" href="' + md + '"')) eksik++;
+      if (!/<link rel="describedby" href="[^"]*llms\.txt"/.test(h)) eksik++;
+      /* SAYIYLA, DOSYA GENELINDE ARAMAYLA DEGIL: her sayfanin _headers'ta
+         IKI yol satiri var (`/x/` ve `/x`). Ilk yazim `includes()` ile
+         butun dosyada ariyordu; bir satirdan silinse oteki hala eslesiyor
+         ve kural yesil kaliyordu — kirmizi-once yakaladi (L1 kirmizi
+         yandi, T3 yanmadi). Artik toplam sayilir. */
+    }
+    if (eksik) kusur.push('kesif bagi eksik:' + eksik);
+    /* her indekslenen sayfa x iki yol bicimi = beklenen md alternate sayisi */
+    const beklenen = esli * 2;
+    const sayilan = (hd.match(/; type="text\/markdown"/g) || []).length;
+    if (hd && sayilan !== beklenen) kusur.push(`Link basliginda md ${sayilan}/${beklenen}`);
+  }
+
+  ol('T3 · ajan hatti: markdown esleri + llms.txt + agents.md + izin + kesif baglari',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 4).join(' ')
        : `${esli} es · ${atlanan} noindex atlandi${llmsNot}`);

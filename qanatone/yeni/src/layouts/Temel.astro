@@ -54,7 +54,12 @@ interface Props {
 const { dil = 'tr', baslik, aciklama, canonical,
         heleftr, helefen, sema = null, etiket, genis = false,
         perde = true, kabuk = true, lead = true, indeks = true } = Astro.props;
-/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
+
+/* Markdown esinin adresi KANONIKTEN turer — sayfa yolu ikinci kez
+   yazilmaz. `/hizmetler/seo/` -> `/hizmetler/seo.md`, kok -> `/index.md`.
+   Uretecin (ajan-hatti.mjs) yazdigi adin AYNISI; bekci T3 ikisini de
+   ayni kapsamda tutuyor. */
+const mdAdres = canonical.replace(/\/$/, '') + '.md';/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
    Tek satirda durmasinin sebebi: kesme gunu aranacak yer belli olsun. */
 const kesmeOncesi = false;   /* KESME YAPILDI 6 Eyl 2026 — kosulsuz noindex DUSTU; sayfa basina indeks={false} KALDI */
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -170,6 +175,18 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
       degil, davranis; kartin sozlesmesi kendi etiketiyle tamamlanir.
       Ayni tam adres — ikinci bir kaynak dogurmuyor. */}
   <meta name="twitter:image" content={ogImg} />
+  {/* AJAN KESIF BAGLARI (5 Eyl 2026). Ajan once bassa bakar; iki bag
+      oradan cikar:
+        · `alternate type="text/markdown"` — bu sayfanin markdown esi.
+          Adres KANONIKTEN turuyor, ikinci bir yol kaynagi yok: `/x/` ->
+          `/x.md`, kok -> `/index.md`. Es yalnizca INDEKSLENEN sayfalar
+          icin uretiliyor (ajan-hatti.mjs ayni kapsami tutuyor), o yuzden
+          bag da `indeks` sartina bagli — olmayan dosyayi ilan etmek
+          "olcmedigin rakami yazma" kuralina girer.
+        · `describedby` — sitenin llms.txt haritasi (llmstxt v2 sarti).
+          Site geneli oldugu icin her sayfada. */}
+  {indeks && <link rel="alternate" type="text/markdown" href={mdAdres} />}
+  <link rel="describedby" href={`${KOK}/llms.txt`} />
   {heleftr && <link rel="alternate" hreflang="tr" href={heleftr} />}
   {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}

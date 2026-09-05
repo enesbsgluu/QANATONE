@@ -30,7 +30,15 @@ for (const p of sayfalar.sort()) {
   const can = (h.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];
   if (!can) continue;
   const alt = [...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => `<${m[2]}>; rel="alternate"; hreflang="${m[1]}"`);
-  const deger = [`<${can}>; rel="canonical"`].concat(alt).join(', ');
+  /* MARKDOWN ESI LINK BASLIGINDA DA (5 Eyl 2026): ajan denetleyicileri
+     "Link response headers" kalemine bakiyor ve HTML'i hic indirmeden
+     yalniz baslik okuyan istemciler var. Adres KANONIKTEN turuyor —
+     sayfanin kendi `<link rel=alternate type=text/markdown>` etiketiyle
+     ayni formul, ikinci kaynak yok. `noindex` sayfada es URETILMIYOR,
+     o yuzden basligina da girmiyor. */
+  const noindex = /name="robots"[^>]*content="[^"]*noindex/i.test(h);
+  const mdBag = noindex ? [] : [`<${can.replace(/\/$/, '')}.md>; rel="alternate"; type="text/markdown"`];
+  const deger = [`<${can}>; rel="canonical"`].concat(alt).concat(mdBag).join(', ');
   const yol = '/' + path.relative(DIST, path.dirname(p)).replace(/\\/g, '/');
   const bicimler = yol === '/' ? ['/', '/index.html'] : [yol + '/', yol];
   for (const b of bicimler) satirlar.push(`${b}\n  Link: ${deger}`);
