@@ -19,6 +19,46 @@
    BELİRLENİMCİ: sıralama sabit, zaman damgası yok. `derleme-belirlenim`
    kuralı iki derlemeyi bayt bayt karşılaştırıyor.
    --------------------------------------------------------------------- */
+/* ======================================================================
+   BILEREK YAPILMAYANLAR — KARAR KAYDI (Enes, 5 Eyl 2026)
+   ======================================================================
+   `isitagentready.com` / `agent-ready.dev` ailesi 22 kalem olcuyor
+   (C1-C22). Asagidakiler UYGULANMADI ve bu bir eksiklik degil, KARAR.
+
+   KURAL: arkasinda CALISAN BIR SEY OLMAYAN hicbir kesif dosyasi
+   yayinlanmaz. Bos bir well-known dosyasi o araclarin puanini yukseltir
+   ama YALANDIR — hem bu deponun "olcmedigin rakami yazma" kuralinin
+   ortasina duser, hem de bir GEO ajansinin musterisine "sunu koy puanin
+   artsin" demesiyle ayni sey olur. Puan urunun kendisi degil, olcusudur.
+
+   YAPILMAYANLAR ve NEDEN:
+     /.well-known/mcp.json          MCP sunucumuz YOK
+     /.well-known/agent-card.json   A2A ajanimiz YOK (disariya acilan yok)
+     /.well-known/ucp               genel API YOK
+     /.well-known/api-catalog       (RFC 9727) genel API YOK
+     /.well-known/oauth-*           (RFC 9728 / 8414) kimlik dogrulama YOK
+     /auth.md                       ayni sebep
+     /.well-known/acp.json          ticaret protokolu YOK, satis ucu yok
+     x402 / MPP / AP2               makine odemesi YOK
+     POST /ask (NLWeb)              arkasinda calisan bir uc YOK
+     DNS-AID                        DNS Natro'da ve e-posta kayitlari orada;
+                                    kayit eklemek Enes'in DNS kararidir,
+                                    kod tarafinda karsiligi yok
+
+   TEK GERCEK ADAY — WEB BOT AUTH (`/.well-known/
+   http-message-signatures-directory`): o uc SITE icin degil BOT icindir.
+   Bizim `QanatoneSiteCheck/1.0` tarayicimizin kim oldugunu imzayla
+   kanitlamasini saglar; taranan siteler bizi UA tahminine bakmadan
+   taniyabilir. Bu, diagnose.js'teki "KIRMIZI CIZGI — DURUST KIMLIK"
+   maddesinin dogal devami: duvari asmaya calismiyoruz, gorunur olmayi
+   seciyoruz. Anahtar yonetimi (uretim, dondurme, imzalama) gerektirdigi
+   icin ayri bir tur; acilirsa BURAYA degil, tarayicinin yanina yazilir.
+
+   YAPILANLAR bu dosyanin geri kalaninda: `.md` esleri · llms.txt ·
+   llms-full.txt · agents.md · agent-permissions.json. Hepsinin arkasinda
+   gercek icerik var; hicbiri beyan degil, TUREV.
+   ====================================================================== */
+
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 

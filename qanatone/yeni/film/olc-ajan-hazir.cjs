@@ -4,6 +4,11 @@
    sitede tek tek yoklar. Hukum vermez, ENVANTER cikarir: hangisi var,
    hangisi yok, hangisi bizim icin anlamli.
 
+   SON SUTUN BIR KARARDIR, tahmin degil: hangi uclarin BILEREK yapilmadigi
+   ve neden, `yeni/ajan-hatti.mjs` basindaki KARAR KAYDI blogunda yazili.
+   Ozet: arkasinda calisan bir sey olmayan kesif dosyasi yayinlanmaz —
+   bos bir well-known puani yukseltir ama YALANDIR.
+
    Kaynak: agent-ready.dev/specs (C1-C22, S1-S15, L1-L10) ve
    isitagentready.com'un bes kategorisi.
 
