@@ -249,5 +249,61 @@ export function uret(dist) {
     yazilan++;
   }
 
-  return { sayfa: kayit.length, md: yazilan, kayit };
+  /* 2 · llms.txt — SITENIN HARITASI, dil modelleri icin.
+     Bicim llmstxt.org: bir H1, bir alinti (ozet), sonra bolum bolum
+     [baslik](adres): aciklama satirlari. Baslik ve aciklama sayfanin
+     KENDI etiketlerinden geliyor (S1/S4 kurallari zaten hepsinin BENZERSIZ
+     oldugunu tutuyor) — yani burada ikinci bir metin kaynagi dogmuyor.
+     IKI ADRESE de yazilir: `/llms.txt` (yerlesik) ve `/.well-known/llms.txt`
+     (llmstxt v2 ve agent-ready C-serisi orayi ariyor). Ayni uretecin ayni
+     ciktisi; iki dosya arasinda sapma imkansiz. */
+  const bolumAdi = (yol) => {
+    const en = yol.startsWith('/en/') || yol === '/en/';
+    const g = yol.replace(/^\/en/, '') || '/';
+    if (g.startsWith('/hizmetler')) return en ? 'Services' : 'Hizmetler';
+    if (g.startsWith('/projeler')) return en ? 'Projects' : 'Projeler';
+    if (g.startsWith('/bulten')) return en ? 'Newsletter' : 'Bülten';
+    return en ? 'Pages' : 'Sayfalar';
+  };
+  const ana = kayit.find((s) => s.yol === '/') || kayit[0];
+  const yayin = kayit.filter((s) => s.indeks);
+  const grup = new Map();
+  for (const s of yayin) {
+    const ad = (s.yol.startsWith('/en/') || s.yol === '/en/' ? 'EN · ' : 'TR · ') + bolumAdi(s.yol);
+    if (!grup.has(ad)) grup.set(ad, []);
+    grup.get(ad).push(s);
+  }
+  /* TR ONCE: alfabetik sirada EN basa geciyordu; sitenin birincil dili
+     Turkce ve llms.txt'i okuyan model listenin BASINDAKINI agirlikli
+     alir. Dil oncelikli, sonra bolum adi. */
+  const sira = [...grup.keys()].sort((x, y) =>
+    (x.startsWith('TR') === y.startsWith('TR')) ? x.localeCompare(y) : (x.startsWith('TR') ? -1 : 1));
+  const llms = ['# QANATONE', ''];
+  if (ana && ana.aciklama) llms.push('> ' + ana.aciklama, '');
+  llms.push('Her sayfanin markdown esi ayni adresin `.md` uzantili halindedir'
+    + ' (ornek: `' + kok + '/hizmetler/seo.md`). Tam metin: `' + kok + '/llms-full.txt`.', '');
+  for (const ad of sira) {
+    llms.push('## ' + ad);
+    for (const s of grup.get(ad).sort((x, y) => x.yol.localeCompare(y.yol))) {
+      const adres = s.kanonik || kok + s.yol;
+      llms.push('- [' + s.baslik.replace(/\]/g, '') + '](' + adres + ')'
+        + (s.aciklama ? ': ' + s.aciklama : ''));
+    }
+    llms.push('');
+  }
+  const llmsMetin = llms.join('\n').replace(/\n{3,}/g, '\n\n');
+  writeFileSync(join(dist, 'llms.txt'), llmsMetin, 'utf8');
+  mkdirSync(join(dist, '.well-known'), { recursive: true });
+  writeFileSync(join(dist, '.well-known', 'llms.txt'), llmsMetin, 'utf8');
+
+  /* 3 · llms-full.txt — butun sayfalarin markdown govdesi tek dosyada.
+     Ayri bir cikarim DEGIL: yukarida uretilen esler birlestiriliyor, yani
+     .md esleriyle ayrisamaz. */
+  const tam = yayin.map((s) => '<!-- ' + (s.kanonik || kok + s.yol) + ' -->\n\n'
+    + '# ' + s.baslik + '\n\n' + (s.aciklama ? '> ' + s.aciklama + '\n\n' : '') + s.govde)
+    .join('\n\n---\n\n')
+    .replace(/(^|[^\\])</g, '$1\\<');
+  writeFileSync(join(dist, 'llms-full.txt'), tam + '\n', 'utf8');
+
+  return { sayfa: kayit.length, md: yazilan, llms: yayin.length, kayit };
 }
