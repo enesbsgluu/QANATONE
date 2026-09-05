@@ -17,7 +17,7 @@
      satır içi "kaydettik" mesajı JS istiyordu, ada JS'i 0 tutuldu.
      JS'siz de çalışır; gönderen Netlify'ın teşekkür sayfasını görür. */
 import { getCollection } from 'astro:content';
-import { icerik, T, type Dil } from '../icerik';
+import { icerik, T, type Dil, sl } from '../icerik';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 /* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
@@ -63,7 +63,7 @@ const tarihYaz = (d: string) => {
 {/* GERI BAGI: kaynakta dizinin ustunde `.pgback` -> "Ana sayfa" (kok bulten
     bolumu, `data-t="back"`); yeni dizinde yoktu. Hizmet ve proje dizinlerinde
     zaten var, bulten atlanmis. */}
-<a class="pgback" href={`${B}${on || '/'}`}>
+<a class="pgback" href={sl(`${B}${on || '/'}`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
   <span>{M('bld01', 'Ana sayfa', 'Home')}</span>
@@ -97,7 +97,7 @@ const tarihYaz = (d: string) => {
     kendisi: auto-fill minmax(320px, 1fr). */}
 <div class="bkgrid">
   {yazilar.map((p: any) => (
-    <a class="bkc" href={`${B}${on}/bulten/${p.slug}`}
+    <a class="bkc" href={sl(`${B}${on}/bulten/${p.slug}`)}
       data-k={sektorler.indexOf(String(p.sector || '')) + 1}>
       <span class="m">
         <b>{T(p.tag, dil)}</b>

@@ -2,16 +2,16 @@
 /* Projeler dizini (EN) — aynı gövde parçası, dil='en'. */
 import Temel from '../../../layouts/Temel.astro';
 import ProjeDizin from '../../../parcalar/ProjeDizin.astro';
-import { icerik, KOK } from '../../../icerik';
+import { icerik, KOK, sl } from '../../../icerik';
 import { projeDizinSema } from '../../../sema.mjs';
 
-const canon = `${KOK}/en/projeler`;
+const canon = sl(`${KOK}/en/projeler`);
 const baslik = 'All projects — QANATONE';
 const aciklama = 'Every system we built, what it solved and the numbers.';
 const sema = projeDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/projeler`} helefen={canon} sema={sema} genis
+  heleftr={sl(`${KOK}/projeler`)} helefen={canon} sema={sema} genis
   etiket="Archive">
   <ProjeDizin dil="en" />
 </Temel>

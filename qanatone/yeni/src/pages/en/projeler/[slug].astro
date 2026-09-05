@@ -3,14 +3,14 @@
 import { getCollection } from 'astro:content';
 import Temel from '../../../layouts/Temel.astro';
 import ProjeGovde from '../../../parcalar/ProjeGovde.astro';
-import { icerik, T, KOK, kes, basAd } from '../../../icerik';
+import { icerik, T, KOK, kes, basAd, sl } from '../../../icerik';
 import { projeSema } from '../../../sema.mjs';
 
 export async function getStaticPaths() {
   return (await getCollection('projeler')).map(e => ({ params: { slug: e.id }, props: { p: e.data } }));
 }
 const { p } = Astro.props;
-const canon = `${KOK}/en/projeler/${p.slug}`;
+const canon = sl(`${KOK}/en/projeler/${p.slug}`);
 const duz = (h: unknown) => String(h).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 const oz = T(p.text, 'en');
 const aciklama = kes(oz.length >= 50 ? oz
@@ -20,7 +20,7 @@ const basAdi = `${p.name} · ${T(p.tag, 'en')}`;
 const sema = projeSema(icerik, { url: canon, ad: basAd(basAdi, 'en'), aciklama, dil: 'en' }, p);
 ---
 <Temel dil="en" baslik={basAd(basAdi, 'en')} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/projeler/${p.slug}`} helefen={canon}
+  heleftr={sl(`${KOK}/projeler/${p.slug}`)} helefen={canon}
   sema={sema} genis etiket={T(p.tag, 'en')}>
   <ProjeGovde p={p} dil="en" />
 </Temel>

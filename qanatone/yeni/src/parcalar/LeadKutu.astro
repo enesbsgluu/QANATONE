@@ -13,7 +13,7 @@
    DEĞERLERİ BOŞ (pişmiş değer bütün ziyaretçilere atfedilir).
    ADA JS'İ yalnız `submit`; JS koşmazsa NATIVE POST ile gider. */
 import '../stil/iletisim.css';
-import { icerik, T, suz } from '../icerik';
+import { icerik, T, suz, sl } from '../icerik';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
@@ -43,7 +43,7 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
       gider. Iki yol da AYNI adrese cikar; olcum betigi donusumu tek bir
       adrese baglayabilsin diye. Dil ayrimi: EN ziyaretci EN esine gider. */}
   <form class="sil-form" id="silForm" name="lead" method="POST"
-    action={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/`}
+    action={sl(`${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/`)}
     data-netlify="true" netlify-honeypot="company">
     <input type="hidden" name="form-name" value="lead" />
     {/* Honeypot: gerçek kullanıcı görmez, bot doldurur. */}
@@ -94,7 +94,7 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
   </form>
 </div>
 
-<script define:vars={{ waNum: wa, tesekkurYol: `${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/` }}>
+<script define:vars={{ waNum: wa, tesekkurYol: sl(`${import.meta.env.BASE_URL.replace(/\/$/, '')}${en ? '/en' : ''}/tesekkur/`) }}>
   /* ADA — yalnız `submit`. Açılışta sıfır iş.
      1) Atıf alanları burada doldurulur: utm_*, tıklama kimlikleri,
         inilen sayfa, yönlendiren.

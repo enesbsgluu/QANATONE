@@ -23,12 +23,12 @@ import SSBSozBandi from '../../sahneler/SSBSozBandi.astro';
 import SKUKurucu from '../../sahneler/SKUKurucu.astro';
 import SILIletisim from '../../sahneler/SILIletisim.astro';
 import PrologYuvasi from '../../parcalar/PrologYuvasi.astro';
-import { KOK, icerik } from '../../icerik';
+import { KOK, icerik, sl } from '../../icerik';
 import { anaSema } from '../../sema.mjs';
 
 const BASLIK = 'QANATONE — The system that catches demand';
 const ACIKLAMA = 'Demand exists; nothing catches it. QANATONE builds the system that does: SEO, GEO, ads and AI automation under one measurement.';
-const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA, dil: 'en' });
+const sema = anaSema(icerik, { url: sl(`${KOK}/en`), ad: BASLIK, aciklama: ACIKLAMA, dil: 'en' });
 
 /* PROLOG ANAHTARI — TR ana sayfayla TEK KAYNAK: aynı `theme.motion.prolog`.
    Gerekçe ve varsayılan orada yazılı (pages/index.astro). İki dil ayrı
@@ -36,7 +36,7 @@ const sema = anaSema(icerik, { url: `${KOK}/en`, ad: BASLIK, aciklama: ACIKLAMA,
 const prologAcik = ((icerik.theme as any)?.motion?.prolog) !== 0;
 ---
 <Temel lead={false} dil="en" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
-  canonical={`${KOK}/en`} heleftr={`${KOK}/`} helefen={`${KOK}/en`}>
+  canonical={sl(`${KOK}/en`)} heleftr={sl(`${KOK}/`)} helefen={sl(`${KOK}/en`)}>
   {/* Ön yükleme TR ana sayfayla aynı — yüzler latin altkümesi,
       dil-bağımsız; gerekçeler orada. */}
   <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin

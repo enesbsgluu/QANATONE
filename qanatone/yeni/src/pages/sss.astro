@@ -7,16 +7,16 @@
    + FAQPage birebir (sssSema). Bekçisi R5. */
 import Temel from '../layouts/Temel.astro';
 import SssGovde from '../parcalar/SssGovde.astro';
-import { icerik, KOK } from '../icerik';
+import { icerik, KOK, sl } from '../icerik';
 import { sssSema } from '../sema.mjs';
 
-const canon = `${KOK}/sss`;
+const canon = sl(`${KOK}/sss`);
 const baslik = 'Sık sorulan sorular — QANATONE';
 const aciklama = `Fiyat, süre, sözleşme hakkında dürüst cevaplar. En çok sorulan ${(icerik.faq || []).length} sorunun net karşılığı.`;
 const sema = sssSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
 ---
 <Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={canon} helefen={`${KOK}/en/sss`} sema={sema}
+  heleftr={canon} helefen={sl(`${KOK}/en/sss`)} sema={sema}
   etiket="SSS">
   <SssGovde dil="tr" />
 </Temel>

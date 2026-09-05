@@ -3,16 +3,16 @@
    (S1 tabanı altı) — TR'deki kararla aynı türetilmiş kuyruk. */
 import Temel from '../../layouts/Temel.astro';
 import SurecGovde from '../../parcalar/SurecGovde.astro';
-import { icerik, KOK } from '../../icerik';
+import { icerik, KOK, sl } from '../../icerik';
 import { anaSema } from '../../sema.mjs';
 
-const canon = `${KOK}/en/surec`;
+const canon = sl(`${KOK}/en/surec`);
 const baslik = 'Process — QANATONE';
 const aciklama = `What we do at each stage. The ${(icerik.steps || []).length} stages of the journey, with the metrics we track in each.`;
 const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/surec`} helefen={canon} sema={sema}
+  heleftr={sl(`${KOK}/surec`)} helefen={canon} sema={sema}
   etiket="Process">
   <SurecGovde dil="en" />
 </Temel>

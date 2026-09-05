@@ -27,7 +27,7 @@
       davranışı birebir — her yayında tazelenir). */
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { KOK } from '../icerik';
+import { KOK, sl } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
 
 export const GET: APIRoute = async () => {
@@ -53,15 +53,21 @@ export const GET: APIRoute = async () => {
         yollar.push({ yol: k.yol.replace('{slug}', e.slug), p: k.sitemap, d: k.lastmod ? e[k.lastmod] : undefined });
   }
 
-  const kayit = (loc: string, y: { yol: string; p: string; d?: string }) =>
-    `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${y.d || bugun}</lastmod>\n` +
-    `    <priority>${y.p}</priority>\n` +
-    `    <xhtml:link rel="alternate" hreflang="tr" href="${KOK}${y.yol || '/'}"/>\n` +
-    `    <xhtml:link rel="alternate" hreflang="en" href="${KOK}/en${y.yol}"/>\n  </url>`;
+  /* ALTERNATE'LER DE sl'DEN GECER (5 Eyl 2026): loc egik cizgili, alternate
+     cizgisiz kalirsa sitemap KENDI ICINDE catisir — hreflang cifti 301
+     veren bir adresi gosterir. Ikisi de ayni uretecten cikar. */
+  const kayit = (loc: string, y: { yol: string; p: string; d?: string }) => {
+    const trAdres = sl(`${KOK}${y.yol}`);
+    const enAdres = sl(`${KOK}/en${y.yol}`);
+    return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${y.d || bugun}</lastmod>\n` +
+      `    <priority>${y.p}</priority>\n` +
+      `    <xhtml:link rel="alternate" hreflang="tr" href="${trAdres}"/>\n` +
+      `    <xhtml:link rel="alternate" hreflang="en" href="${enAdres}"/>\n  </url>`;
+  };
 
   const govde = yollar.flatMap(y => [
-    kayit(`${KOK}${y.yol || '/'}`, y),
-    kayit(`${KOK}/en${y.yol}`, y),
+    kayit(sl(`${KOK}${y.yol || '/'}`), y),
+    kayit(sl(`${KOK}/en${y.yol}`), y),
   ]).join('\n');
 
   return new Response(

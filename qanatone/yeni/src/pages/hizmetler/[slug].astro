@@ -7,21 +7,21 @@
 import { getCollection } from 'astro:content';
 import Temel from '../../layouts/Temel.astro';
 import HizmetGovde from '../../parcalar/HizmetGovde.astro';
-import { icerik, T, KOK, kes, basAd } from '../../icerik';
+import { icerik, T, KOK, kes, basAd, sl } from '../../icerik';
 import { hizmetSema } from '../../sema.mjs';
 
 export async function getStaticPaths() {
   return (await getCollection('hizmetler')).map(e => ({ params: { slug: e.id }, props: { s: e.data } }));
 }
 const { s } = Astro.props;
-const canon = `${KOK}/hizmetler/${s.slug}`;
+const canon = sl(`${KOK}/hizmetler/${s.slug}`);
 const baslik = basAd(s.det.h);
 const aciklama = kes(s.text);
 const sema = hizmetSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' }, s);
 ---
 <Temel dil="tr" baslik={baslik}
   aciklama={aciklama} canonical={canon}
-  heleftr={canon} helefen={`${KOK}/en/hizmetler/${s.slug}`}
+  heleftr={canon} helefen={sl(`${KOK}/en/hizmetler/${s.slug}`)}
   sema={sema} etiket={s.tag} genis>
   <HizmetGovde s={s} dil="tr" />
 </Temel>

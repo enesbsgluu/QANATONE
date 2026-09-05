@@ -3,16 +3,16 @@
    (S1 tabanı altı) — TR'deki kararla aynı türetilmiş kuyruk. */
 import Temel from '../../layouts/Temel.astro';
 import SssGovde from '../../parcalar/SssGovde.astro';
-import { icerik, KOK } from '../../icerik';
+import { icerik, KOK, sl } from '../../icerik';
 import { sssSema } from '../../sema.mjs';
 
-const canon = `${KOK}/en/sss`;
+const canon = sl(`${KOK}/en/sss`);
 const baslik = 'FAQ — QANATONE';
 const aciklama = `Honest answers on pricing and timing. Clear replies to the ${(icerik.faq || []).length} questions we hear most.`;
 const sema = sssSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/sss`} helefen={canon} sema={sema}
+  heleftr={sl(`${KOK}/sss`)} helefen={canon} sema={sema}
   etiket="FAQ">
   <SssGovde dil="en" />
 </Temel>

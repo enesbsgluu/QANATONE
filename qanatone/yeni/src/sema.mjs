@@ -1,7 +1,7 @@
 /* Konak TEK KAYNAKTAN gelir (icerik.ts KOK). Bu dosyada sekiz ayri
    `const KOK` kopyasi vardi; birincil alan adi degisince yedisi eskir,
    biri degisirdi ve fark ancak Search Console'da gorunurdu. */
-import { KOK, OG_KART } from './icerik';
+import { KOK, OG_KART, sl } from './icerik';
 /* ANA SAYFA ŞEMASI — kökteki `@graph` üçlüsünün (Organization + WebSite
    + WebPage) göçü. Kaynak: kök index.html `schema()` 11520-11560 ve
    sabitleri 5613-5638; build.js bunu dist/index.html'e statik basıyor.
@@ -79,7 +79,7 @@ export function projeDizinSema(icerik, sayfa) {
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'CreativeWork', name: p.name, description: T(p.text),
-        url: `${KOK}${dil === 'en' ? '/en' : ''}/projeler/${p.slug}`,
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}/projeler/${p.slug}`),
         creator: { '@id': KOK + '/#org' },
       },
     })),
@@ -99,7 +99,7 @@ export function projeSema(icerik, sayfa, proje) {
   /* KIRINTI (madde 2): QANATONE → Projeler → <proje adi>. Ad ve adres
      kaydin kendinden; son basamak adressiz (sayfanin kendisi). */
   g['@graph'].push(kirintiSema(sayfa, [
-    { ad: dil === 'en' ? 'Projects' : 'Projeler', adres: `${KOK}${dil === 'en' ? '/en' : ''}/projeler` },
+    { ad: dil === 'en' ? 'Projects' : 'Projeler', adres: sl(`${KOK}${dil === 'en' ? '/en' : ''}/projeler`) },
     { ad: proje.name },
   ]));
   return g;
@@ -124,7 +124,7 @@ export function bultenDizinSema(icerik, sayfa) {
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'Article', headline: T(p.title), description: T(p.lede),
-        url: `${KOK}${dil === 'en' ? '/en' : ''}/bulten/${p.slug}`,
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}/bulten/${p.slug}`),
         datePublished: p.date,
         publisher: { '@id': KOK + '/#org' },
       },
@@ -181,7 +181,7 @@ export function hizmetSema(icerik, sayfa, hizmet) {
     });
   /* KIRINTI (madde 2): QANATONE → Hizmetler → <hizmet adi>. */
   g['@graph'].push(kirintiSema(sayfa, [
-    { ad: dil === 'en' ? 'Services' : 'Hizmetler', adres: `${KOK}${dil === 'en' ? '/en' : ''}/hizmetler` },
+    { ad: dil === 'en' ? 'Services' : 'Hizmetler', adres: sl(`${KOK}${dil === 'en' ? '/en' : ''}/hizmetler`) },
     { ad: strip(det.h) || T(hizmet.tag) || sayfa.ad },
   ]));
   return g;
@@ -231,7 +231,7 @@ export function yaziSema(icerik, sayfa, yazi) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'QANATONE', item: KOK + '/' },
       { '@type': 'ListItem', position: 2, name: dil === 'en' ? 'Bulletin' : 'Bülten',
-        item: `${KOK}${dil === 'en' ? '/en' : ''}/bulten` },
+        item: sl(`${KOK}${dil === 'en' ? '/en' : ''}/bulten`) },
       { '@type': 'ListItem', position: 3, name: T(yazi.title) },
     ],
   });
@@ -248,7 +248,7 @@ export function dizinSema(icerik, sayfa) {
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'Service', name: T(s.title), description: T(s.text),
-        url: `${KOK}${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`,
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}/hizmetler/${s.slug}`),
         provider: { '@id': KOK + '/#org' }, areaServed: ['TR', 'AE'],
       },
     })),

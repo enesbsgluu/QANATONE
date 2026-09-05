@@ -11,7 +11,7 @@
    bu sayfada yok, o sayfalar demosuz basılır (plan kararı).
    Proje detayının dersi aynen: demo girişin ALTINDA ki LCP metin
    kalsın; aria-hidden — aynı bilgi sayfanın metninde. */
-import { T, type Dil, icerik } from '../icerik';
+import { T, type Dil, icerik, sl } from '../icerik';
 import { ton } from '../ton';
 import HuniSahne from './HuniSahne.astro';
 import AkisSahne from './AkisSahne.astro';
@@ -62,7 +62,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
     DEGISMEDI, yalniz nav sarmalı ve etiket eklendi. Yeni bir serit
     cizmek tasarim karari olurdu; bu bagin ISLEVI zaten breadcrumb. */}
 <nav aria-label="Breadcrumb">
-<a class="pgback" href={`${B}${on}/hizmetler`}>
+<a class="pgback" href={sl(`${B}${on}/hizmetler`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
   <span>{M('hzg01', 'Tüm hizmetler', 'All services')}</span>
@@ -233,7 +233,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   <h2>{T(d.cta.t, dil)}</h2>
   <p>{T(d.cta.s, dil)}</p>
   <div class="sdbtns">
-    <a class="dugme" href={`${B}${on}/#iletisim`}>{M('hzg13', 'Kısa formu doldur', 'Fill the short form')}
+    <a class="dugme" href={sl(`${B}${on}/#iletisim`)}>{M('hzg13', 'Kısa formu doldur', 'Fill the short form')}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round"
         aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></a>

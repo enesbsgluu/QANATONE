@@ -2,7 +2,7 @@
 /* TESEKKUR SAYFASI · EN — gerekcesi TR esinde yazili (pages/tesekkur.astro).
    Ayni panel anahtarlarini okur; iki dil TEK anahtar kumesi paylasir. */
 import Temel from '../../layouts/Temel.astro';
-import { KOK, icerik, T, type Dil } from '../../icerik';
+import { KOK, icerik, T, type Dil, sl } from '../../icerik';
 const dil: Dil = 'en';
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, tr: string, en: string): string =>
@@ -12,11 +12,11 @@ const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 <Temel dil="en" lead={false} indeks={false}
   baslik={m('tskb', 'Talebin bize ulaştı — QANATONE', 'Your request reached us — QANATONE')}
   aciklama={m('tska', 'Talebin kaydedildi. En geç bir iş günü içinde döneriz.', 'Your request is recorded. We reply within one business day.')}
-  canonical={`${KOK}/en/tesekkur`}>
+  canonical={sl(`${KOK}/en/tesekkur`)}>
   <div class="b404">
     <b class="tsk-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></b>
     <h1>{m('tskh', 'Talebin bize ulaştı', 'Your request reached us')}</h1>
     <p class="lede" style="margin:12px auto 24px">{m('tskp', 'En geç bir iş günü içinde döneriz.', 'We reply within one business day.')}</p>
-    <a class="dugme sus-isik" href={`${B}/en`}>{m('tskc', 'Ana sayfaya dön', 'Back to home')}</a>
+    <a class="dugme sus-isik" href={sl(`${B}/en`)}>{m('tskc', 'Ana sayfaya dön', 'Back to home')}</a>
   </div>
 </Temel>

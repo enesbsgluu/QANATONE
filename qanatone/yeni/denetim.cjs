@@ -327,6 +327,56 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      [...kirli, ...yabanciCss].slice(0, 3).map(rel).join(' '));
 }
 
+/* H29 · IC ADRESLER EGIK CIZGIYLE BITER (5 Eyl 2026 — Enes: "bu mimari
+   bir sorun"). Netlify slashli hali kanonik sayar ve slashsizi 301 ile
+   oraya yollar. Site slashsiz yaziyordu; olculen sonuclar:
+     · 64 adresin 63'u slashsizken IKI HOP (301 + 200) — her sayfa gecisi
+       fazladan bir tur atiyordu
+     · HER SAYFA KENDINI PREFETCH EDIYORDU: /hizmetler/ sayfasi
+       <link rel=prefetch href="/hizmetler"> basiyor, Astro'nun "acik olan
+       sayfayi atla" korumasi href (/hizmetler) ile pathname (/hizmetler/)
+       tutmadigi icin calismiyordu
+     · canonical de slashsizi gosteriyordu, yani kanonik adres 301 veriyordu
+   OLCUT: ciktidaki her IC adres (href/canonical/og:url/hreflang/sitemap)
+   ya egik cizgiyle biter, ya bir dosya uzantisi tasir, ya da kanca/sorgu
+   parcasidir. Kapsam disi: dis adresler, mailto/tel, kanca (#) ile baslayanlar,
+   uzantili varliklar (.css/.js/.woff2/.jpg/.xml/.txt...), ve golge agaci
+   (H28'deki gerekce, replika kendi kimlik/adres uzayini tasir). */
+{
+  const UZANTILI = /\.[a-zA-Z0-9]{2,6}$/;
+  const kusur = [];
+  let icBag = 0;
+  const bak = (dosya, tur, adres) => {
+    const yalin = String(adres).split('#')[0].split('?')[0];
+    if (!yalin.startsWith('/') || yalin.startsWith('//')) return;   /* dis / protokolsuz */
+    if (UZANTILI.test(yalin)) return;                                /* varlik */
+    icBag++;
+    if (!yalin.endsWith('/')) kusur.push(dosya + ' ' + tur + ' ' + yalin);
+  };
+  for (const p of sayfalar) {
+    const h = oku(p).replace(/<template shadowrootmode[^>]*>[\s\S]*?<\/template>/g, '');
+    const d = rel(p);
+    for (const m of h.matchAll(/\shref="([^"]+)"/g)) bak(d, 'href', m[1]);
+    for (const m of h.matchAll(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/g)) bak(d, 'canonical', m[1]);
+    for (const m of h.matchAll(/<meta[^>]+property="og:url"[^>]+content="([^"]+)"/g)) bak(d, 'og:url', m[1]);
+  }
+  /* sitemap ve _headers Link blogu ayni olcute girer (adresler oradan da cikar) */
+  for (const ad of ['sitemap.xml', '_headers']) {
+    const y = path.join(KOK, ad);
+    if (!fs.existsSync(y)) continue;
+    const g = fs.readFileSync(y, 'utf8');
+    for (const m of g.matchAll(/https?:\/\/[^\s<>"'`;]+/g)) {
+      let u; try { u = new URL(m[0]); } catch { continue; }
+      if (!/qanatone/.test(u.hostname)) continue;
+      bak(ad, 'mutlak', u.pathname);
+    }
+  }
+  ol('H29 · ic adresler egik cizgiyle biter (301 hopu ve kendini-prefetch yok)',
+     kusur.length === 0,
+     kusur.length ? kusur.length + ' kusur · ' + [...new Set(kusur.map((k) => k.split(' ').pop()))].slice(0, 6).join(' ')
+                  : icBag + ' ic adres · ' + sayfalar.length + ' sayfa');
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`
@@ -1009,7 +1059,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     else {
       if ((faqDugum.mainEntity || []).length !== c.faq.length)
         kusur.push(`${dil}:mainEntity ${(faqDugum.mainEntity || []).length}/${c.faq.length}`);
-      const beklenenKimlik = `${KONAK}${dil === 'en' ? '/en' : ''}/sss#faq`;
+      /* KIMLIK KANONIKTEN TURER (5 Eyl 2026, egik cizgi turu): kanonik adres
+         artik `/sss/` — kimlik de `/sss/#faq`. Kural adresin SEKLINI degil
+         KAYNAGINI sabitlemeli; yoksa her adres degisiminde iki yerde durur. */
+      const beklenenKimlik = `${KONAK}${dil === 'en' ? '/en' : ''}/sss/#faq`;
       if (faqDugum['@id'] !== beklenenKimlik) kusur.push(dil + ':kimlik(' + faqDugum['@id'] + ')');
     }
   }
@@ -1983,7 +2036,9 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         if (!metin.includes(coz(T4(x.title)).trim())) kusur.push(x.slug + ':ad-yok');
         const c = coz(ilkCumle(T4(x.text))).trim();
         if (c && !metin.includes(c)) kusur.push(x.slug + ':cumle-yok');
-        if (!ham.includes(`/hizmetler/${x.slug}"`)) kusur.push(x.slug + ':baglanti-yok');
+        /* BAG SEKLI DEGISTI (5 Eyl 2026, egik cizgi turu): ic adresler artik
+           egik cizgiyle biter (H29). Eski desen `/hizmetler/seo"` idi. */
+        if (!ham.includes(`/hizmetler/${x.slug}/"`)) kusur.push(x.slug + ':baglanti-yok');
       }
       ol(`H19 · akis seridinde ${hiz.length} hizmetin adi/cumlesi/baglantisi ham HTML'de`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));

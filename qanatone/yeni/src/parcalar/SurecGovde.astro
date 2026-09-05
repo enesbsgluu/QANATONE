@@ -11,7 +11,7 @@
    giydirme turuna (perde SVG izler kararıyla aynı: pathLength="1" +
    scroll-driven CSS). Etiketler KODDA sabit — eski LB haritası da
    koddaydı, panel hiçbir zaman ezemiyordu; davranış değişmedi. */
-import { icerik, T, suz, type Dil } from '../icerik';
+import { icerik, T, suz, type Dil, sl } from '../icerik';
 interface Props { dil: Dil }
 const { dil } = Astro.props;
 /* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
@@ -87,7 +87,7 @@ const ETIKET = dil === 'en'
 </ol>
 
 <p class="son">
-  <a class="dugme sus-isik" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${dil === 'en' ? '/en' : ''}/#iletisim`}>{M('srg02', 'Konuşalım', "Let's talk")}</a>
+  <a class="dugme sus-isik" href={sl(`${import.meta.env.BASE_URL.replace(/\/$/, '')}${dil === 'en' ? '/en' : ''}/#iletisim`)}>{M('srg02', 'Konuşalım', "Let's talk")}</a>
 </p>
 
 <style>

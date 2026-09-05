@@ -4,16 +4,16 @@
    türeyen daha uzun desc bilinçli süperküme. */
 import Temel from '../../layouts/Temel.astro';
 import HizmetDizin from '../../parcalar/HizmetDizin.astro';
-import { icerik, KOK } from '../../icerik';
+import { icerik, KOK, sl } from '../../icerik';
 import { dizinSema } from '../../sema.mjs';
 
-const canon = `${KOK}/en/hizmetler`;
+const canon = sl(`${KOK}/en/hizmetler`);
 const baslik = 'Services — QANATONE';
 const aciklama = 'SEO, GEO, Google & Meta Ads, AI agents, automation, web design and working tools — nine services, each solving one problem.';
 const sema = dizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel lead={false} dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/hizmetler`} helefen={canon} sema={sema}
+  heleftr={sl(`${KOK}/hizmetler`)} helefen={canon} sema={sema}
   etiket="What we do" genis>
   <HizmetDizin dil="en" />
 </Temel>

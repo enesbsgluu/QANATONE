@@ -7,16 +7,16 @@
    Şema eski üçlü @graph birebir (özel blok yoktu). Bekçisi R7. */
 import Temel from '../layouts/Temel.astro';
 import OtomasyonGovde from '../parcalar/OtomasyonGovde.astro';
-import { icerik, KOK } from '../icerik';
+import { icerik, KOK, sl } from '../icerik';
 import { anaSema } from '../sema.mjs';
 
-const canon = `${KOK}/otomasyon`;
+const canon = sl(`${KOK}/otomasyon`);
 const baslik = 'Otomasyon & AI Ajanları — QANATONE';
 const aciklama = 'Talebi karşılayan ajan sistemi: akış mantığı, sızıntı haritası ve kendi rakamınla huni hesabı.';
 const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
 ---
 <Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={canon} helefen={`${KOK}/en/otomasyon`} sema={sema}
+  heleftr={canon} helefen={sl(`${KOK}/en/otomasyon`)} sema={sema}
   etiket="Otomasyon" genis>
   <OtomasyonGovde dil="tr" />
 </Temel>

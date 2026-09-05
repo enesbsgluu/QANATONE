@@ -34,7 +34,7 @@
 import '../stil/akis.css';
 import Ikon from '../parcalar/Ikon.astro';
 import AkisDemo from '../parcalar/AkisDemo.astro';
-import { icerik, T, suz } from '../icerik';
+import { icerik, T, suz, sl } from '../icerik';
 import { ton } from '../ton';
 
 interface Props { dil?: 'tr' | 'en' }
@@ -103,7 +103,7 @@ const demoK = (h: any): string => {
   <div class="sa-ray" tabindex="0" role="group"
     aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
     {kartlar.map((h: any, i: number) => (
-      <a class="sa-kart" href={`${B}${on}/hizmetler/${h.slug}`} style={ton(i)}>
+      <a class="sa-kart" href={sl(`${B}${on}/hizmetler/${h.slug}`)} style={ton(i)}>
         {/* Gorsel alan artik CALISAN mini demo (giydirme); ikon kucijlup
             basligin yanina gecti — kaynagin kendi dili (6898). Demo
             aria-hidden: ayni bilgi kartin yazisinda ve hizmet sayfasinda. */}
@@ -118,7 +118,7 @@ const demoK = (h: any): string => {
         Kök sitenin /hizmetler ızgarası — yeni kabukta henüz o rota yok,
         deste sahnesindeki /projeler kararının aynısı. */}
     {/* Dizin artık adada — rota turu 1. sayfa; H16 bekçiliyor. */}
-    <a class="sa-kart sa-tum" href={`${B}${on}/hizmetler`}>
+    <a class="sa-kart sa-tum" href={sl(`${B}${on}/hizmetler`)}>
       <span class="sa-yazi">
         <h3>{en ? 'All services' : 'Tüm hizmetler'}<Ikon ad="arrow" sinif="sa-ok" /></h3>
         <p>{en ? 'Nine services, one line. See the whole list.'

@@ -5,16 +5,16 @@
    (dizinSema). Bekçisi R1. */
 import Temel from '../layouts/Temel.astro';
 import HizmetDizin from '../parcalar/HizmetDizin.astro';
-import { icerik, KOK } from '../icerik';
+import { icerik, KOK, sl } from '../icerik';
 import { dizinSema } from '../sema.mjs';
 
-const canon = `${KOK}/hizmetler`;
+const canon = sl(`${KOK}/hizmetler`);
 const baslik = 'Hizmetler — QANATONE';
 const aciklama = 'SEO, GEO, Google & Meta Ads, AI ajanları ve otomasyon.';
 const sema = dizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
 ---
 <Temel lead={false} dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={canon} helefen={`${KOK}/en/hizmetler`} sema={sema}
+  heleftr={canon} helefen={sl(`${KOK}/en/hizmetler`)} sema={sema}
   etiket="Ne yapıyoruz" genis>
   <HizmetDizin dil="tr" />
 </Temel>

@@ -2,16 +2,16 @@
 /* Bülten dizini (EN) — aynı gövde parçası, dil='en'. */
 import Temel from '../../../layouts/Temel.astro';
 import BultenDizin from '../../../parcalar/BultenDizin.astro';
-import { icerik, KOK } from '../../../icerik';
+import { icerik, KOK, sl } from '../../../icerik';
 import { bultenDizinSema } from '../../../sema.mjs';
 
-const canon = `${KOK}/en/bulten`;
+const canon = sl(`${KOK}/en/bulten`);
 const baslik = 'Bulletin — QANATONE';
 const aciklama = 'What is changing in AI, search and demand handling — with the sources.';
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
 ---
 <Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
-  heleftr={`${KOK}/bulten`} helefen={canon} sema={sema}
+  heleftr={sl(`${KOK}/bulten`)} helefen={canon} sema={sema}
   etiket="Bulletin">
   <BultenDizin dil="en" />
 </Temel>
