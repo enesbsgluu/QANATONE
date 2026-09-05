@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 
+import { fileURLToPath } from 'node:url';
 import react from '@astrojs/react';
 
 /* PROLOG ANAHTARI BURADA DEGIL — denendi ve OLCUMLE ELENDI (6 Eyl 2026).
@@ -114,7 +115,25 @@ export default defineConfig({
      sayfa basina JS tavaninin icinde; olcusu yeni/denetim.js'te. */
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 
-  integrations: [react()],
+  integrations: [
+    react(),
+    /* AJAN HATTI (5 Eyl 2026) — `.md` esleri, llms.txt, agents.md ve
+       agent-permissions.json derlemenin SONUNDA, CIKTIDAN turetilir.
+       NEDEN ENTEGRASYON, NEDEN ELLE URETEC DEGIL: elle kosan bir uretec
+       (bkz. link-basliklari.cjs) tazeligini ayri bir kuralla tutmak
+       zorunda kaliyor (L1). Kanca derlemenin parcasi oldugu icin o borc
+       hic dogmuyor: derleme neyse cikti odur. */
+    {
+      name: 'qanatone-ajan-hatti',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { uret } = await import('./ajan-hatti.mjs');
+          const o = uret(fileURLToPath(dir));
+          logger.info(`ajan hatti: ${o.md} .md esi · ${o.sayfa} sayfa`);
+        },
+      },
+    },
+  ],
 
   /* 2 Eyl 2026 (R23 sokumu): prolog-ada manualChunks ve isci (worker)
      hatti kalkti — ada betigi ve isci paketi kaynaktan sokuldu, kod

@@ -377,6 +377,49 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
                   : icBag + ' ic adres · ' + sayfalar.length + ' sayfa');
 }
 
+/* T3 · AJAN HATTI: her sayfanin MARKDOWN ESI var ve ICERIK PARITESI
+   saglaniyor (5 Eyl 2026 — Enes: "eksik olan her seyi yapmaliyiz,
+   sitemizin altyapisi en iyi hale gelmeli").
+
+   NEDEN CIKTIDAN TURETILIYOR: iki uretec (biri HTML, biri markdown)
+   yazsaydik ayrisirlardi — bu depoda ayni sinif hata bugun UC KEZ
+   bulundu. Tek renderer var, markdown onun TUREVI. Bunun yan faydasi
+   agent-ready'nin C16 kalemi: "content parity / anti-cloaking" yapi
+   geregi saglanir.
+
+   OLCUT:
+     1. Indekslenen her sayfanin `.md` esi VAR (kardes yol: `/x/` -> `/x.md`).
+     2. Es BOS DEGIL ve ETIKET KALINTISI YOK (cevirici sizdirmis olmasin).
+     3. Es, sayfanin BASLIGINI ve ACIKLAMASINI tasiyor (parite kanit).
+     4. Es kanonik adresi gosteriyor (ajan kaynagi izleyebilsin).
+   KAPSAM DISI: `noindex` sayfalar (tesekkur, film, 404, deneme) — onlar
+   arama ve ajan icin zaten kapali; es uretmek celiski olurdu. */
+{
+  const kusur = [];
+  let esli = 0, atlanan = 0;
+  for (const p of sayfalar) {
+    const h = oku(p);
+    if (/name="robots"[^>]*content="[^"]*noindex/i.test(h)) { atlanan++; continue; }
+    const yol = '/' + rel(p).replace(/\\/g, '/').replace(/index\.html$/, '');
+    const es = path.join(KOK, (yol === '/' ? 'index' : yol.slice(1, -1)) + '.md');
+    if (!fs.existsSync(es)) { kusur.push('es yok:' + yol); continue; }
+    const md = fs.readFileSync(es, 'utf8');
+    esli++;
+    if (md.trim().length < 120) kusur.push('es cok kisa:' + yol);
+    const etiket = md.match(/<\/?[a-z][a-z0-9]*(\s[^>]*)?>/i);
+    if (etiket) kusur.push('etiket kalintisi:' + yol + ':' + etiket[0].slice(0, 20));
+    const bas = (h.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]
+      .replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').trim();
+    if (bas && !md.includes(bas)) kusur.push('baslik tutmuyor:' + yol);
+    const kan = (h.match(/<link[^>]+rel="canonical"[^>]+href="([^"]*)"/i) || [, ''])[1];
+    if (kan && !md.includes(kan)) kusur.push('kanonik yok:' + yol);
+  }
+  ol('T3 · ajan hatti: her indekslenen sayfanin markdown esi + icerik paritesi',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 4).join(' ')
+       : `${esli} es · ${atlanan} noindex atlandi`);
+}
+
 /* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"
    turu). Bu arac YAYIN ZINCIRINDE DENETIMSIZDI: 8 sinamasi `test/denetim.js`
    icindeydi ve o dosya, KESME'de zincirden cikan `build.js`e bagliydi;

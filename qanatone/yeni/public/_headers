@@ -21,6 +21,18 @@
 # kaldır.
 # ---------------------------------------------------------------------------
 
+# AJAN HATTI · MARKDOWN ESLERI (5 Eyl 2026)
+# Her sayfanin yaninda `.md` esi var (`/hizmetler/seo.md`), derlemede
+# CIKTIDAN turetiliyor (yeni/ajan-hatti.mjs). Tur ACIKCA yaziliyor:
+# sunucunun varsayilanina guvenmek "olcmedigin rakami yazma" kuralina
+# girer — ajan `text/markdown` bekliyor, `text/plain` gelirse pazarlik
+# calismaz. Onbellek HTML ile ayni: es, esi oldugu sayfayla birlikte
+# tazelenmeli.
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+  Cache-Control: public,max-age=0,must-revalidate
+
 # Yönetim paneli: indekslenmesin. (Erişim koruması Basic Auth'ta —
 # /admin.html panel fonksiyonuna yönleniyor, bkz. _redirects.)
 /admin.html
