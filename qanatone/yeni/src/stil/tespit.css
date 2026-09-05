@@ -106,6 +106,24 @@
 .ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
   font-size:.74rem;color:var(--tx4)}
 
+/* MOBIL OLCEK (5 Eyl 2026, Enes: "mobil tasarimini da duzgun yap dogru
+   olcekle"). OLCULDU (390x844): sonuc blogu 2.151 px = 2,5 EKRAN, tek
+   basina izgara 1.366 px. Sebep: `minmax(190px,1fr)` 350 px'lik alanda
+   TEK sutuna dusuyor ve 26 kalem alt alta diziliyor (masaustunde 4 sutun,
+   izgara 362 px).
+   Iki sutun + daha sik satir. HICBIR BILGI GIZLENMIYOR: 26 kalemin hepsi
+   duruyor, uzun etiket kirpilmiyor iki satira sariyor (kirpma bilgi
+   kaybidir; burada yer kazanci ondan gelmiyor, sutundan geliyor).
+   Dokunma hedefi korunuyor: satir yuksekligi >= 36 px. */
+@media(max-width:600px){
+  .ste-izgara{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .ste-kalem{padding:8px 10px;gap:7px;font-size:.8rem;align-items:flex-start}
+  .ste-kalem::before{margin-top:5px}
+  .ste-kalem-ac{align-items:flex-start;flex-wrap:wrap;row-gap:2px}
+  .ste-kalem-ac > span{min-width:0;line-height:1.25;overflow-wrap:anywhere}
+  .ste-kalem em{font-size:.7rem}
+}
+
 /* ---- KALEM POPUP'I (5 Eyl 2026) ----------------------------------------
    Satirin tamami degil, icindeki DUGME tiklanir: klavyeyle gezilir ve
    ekran okuyucu "dugme" der. Dugme satirin gorunusunu bozmasin diye
@@ -270,3 +288,16 @@
 .ste-fix-liste b{display:block;font-size:.92rem;margin-bottom:4px;letter-spacing:-.02em}
 .ste-fix-liste span{font-size:.85rem;color:var(--tx3);line-height:1.6;font-weight:300}
 .ste-fix .dugme{margin-top:18px}
+
+/* MOBIL · DUZELTME LISTESI — DOSYA SONUNDA OLMAK ZORUNDA.
+   Ilk yazimda yukaridaki mobil blogun icindeydi ve HIC ETKI ETMEDI:
+   `.ste-fix-liste li` taban kurali dosyada DAHA SONRA geliyor, esit
+   ozgullukte sonraki kural kazaniyor (kare alinip bakildi, degisiklik
+   gorunmedi). Kaskad sirasi ozgullugun yerine gecmez. */
+@media(max-width:600px){
+  .ste-fix-liste li{display:grid;grid-template-columns:24px 1fr;
+    gap:4px 12px;align-items:start}
+  .ste-fix-liste li::before{grid-column:1;grid-row:1}
+  .ste-fix-liste b{grid-column:2;grid-row:1;margin-bottom:0}
+  .ste-fix-liste span{grid-column:2;grid-row:2;line-height:1.5}
+}
