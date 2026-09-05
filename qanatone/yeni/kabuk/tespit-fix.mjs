@@ -79,6 +79,15 @@ export const FIX = {
    Butun goruntu metni artik TEK dosyada, TEK uretecte; ada yalnizca
    DAVRANIS tasiyor. Metinler ada surumunden BIREBIR kopyalandi.
    Bekci: denetim T2 (kalem/durum/sebep sozlukleri iki tarafta). */
+/* TARAMA ADIMLARI — fonksiyonun GERCEK adimlari, sirasiyla. Metin
+   varlikta cunku ada JS'i J1 tavaninda (bkz. GORUNTU SOZLUKLERI). */
+export const TARAMA = {
+  tr: ['Adres çözülüyor', 'Sayfa indiriliyor', 'Yapı okunuyor',
+       'robots.txt ve site haritası', 'Puanlanıyor'],
+  en: ['Resolving the address', 'Downloading the page', 'Reading the structure',
+       'robots.txt and sitemap', 'Scoring'],
+};
+
 export const AD = {
   tr: {
       https: 'HTTPS', redirects: 'Yönlendirme', weight: 'Sayfa ağırlığı', title: 'Başlık',

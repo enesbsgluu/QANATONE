@@ -58,6 +58,11 @@
 .ste-not{margin-top:0;color:var(--tx4);font-size:.8rem;line-height:1.6;font-weight:300}
 .ste-not b{color:var(--tx2);font-weight:500}
 .ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
+/* TARAMA SIRASINDA KIRMIZI DEGIL (5 Eyl 2026): satirin kizil rengi hata
+   ve uyari icin ayrilmis; "Sayfa indiriliyor" kizil yazinca ilerleme hata
+   gibi okunuyordu (kare alinip bakildi). Tarama boyunca sonuk renk, kizil
+   yalniz gercek hata ve kota mesajlarinda kaliyor. */
+.ste-durum.tarama{color:var(--tx3)}
 /* ANAYASA (3 Eyl): kaynakta durum/tarama kutulari bos iken YOK (.dgscan/.dgerr
    display:none, .on ile acilir — 1751/1753); bos satir yer tutuyordu: bolum 29 px
    uzundu (olc-tipografi #tespit .wrap 434 <-> 463). */
@@ -111,6 +116,22 @@
   text-align:left;cursor:pointer}
 .ste-kalem-ac:hover span{color:var(--tx)}
 .ste-kalem-ac:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:6px}
+
+/* TARAMA RAYI — ince bir hat, uzerinde kizil bir dilim soldan saga
+   suzuluyor. TRANSFORM ILE (H5/H14): genislik animasyonu her karede
+   duzen hesabi uretir; `scaleX` kompozitorde kalir, mobilde de ucuz.
+   Sonsuz kosuyor (tarama bitene kadar) — H11 geregi hareket-azaltmada
+   AYNI SECICIDE durduruluyor ve ray sabit bir hat olarak kaliyor. */
+.ste-tarama{margin-top:10px;height:2px;border-radius:2px;overflow:hidden;
+  background:var(--line)}
+.ste-tarama i{display:block;height:100%;width:38%;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  transform:translateX(-100%);animation:ste-tarama-suz 1.15s var(--e) infinite}
+@keyframes ste-tarama-suz{from{transform:translateX(-100%)}to{transform:translateX(365%)}}
+@media(prefers-reduced-motion:reduce){
+  .ste-tarama i{animation:none;transform:none;width:100%;
+    background:linear-gradient(90deg,transparent,var(--red),transparent)}
+}
 
 /* KONUM: TIKLANAN KALEMIN USTUNDE (5 Eyl 2026, Enes: "ekranin sol
    ustunde aciliyor ... direkt tiklanilan yerin ustune acilsin").

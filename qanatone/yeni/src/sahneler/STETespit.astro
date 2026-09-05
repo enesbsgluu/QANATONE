@@ -125,6 +125,13 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           `aria-live` ile ekran okuyucu sonucu duyar. */}
       <p class="ste-durum" id="steDurum" role="status" aria-live="polite"></p>
 
+      {/* TARAMA RAYI (5 Eyl 2026) — adim metni zaten `steDurum`da yasiyor
+          (role=status, aria-live); burada YALNIZ gorsel ray var, o yuzden
+          aria-hidden. Ikinci bir canli bolge acmak ekran okuyucuya ayni
+          seyi iki kez soyletirdi. Iskelet HTML'de dogar, ada yalniz
+          `hidden`i kaldirir — sahnenin kendi kurali. */}
+      <div class="ste-tarama" id="steTarama" hidden aria-hidden="true"><i></i></div>
+
       {/* SONUÇ İSKELETİ — HTML'de doğar, `hidden` ile bekler. JS yalnız
           değer yazar ve `hidden`i kaldırır; yapı kurmaz (Anayasa). */}
       <div class="ste-sonuc" id="steSonuc" hidden>
@@ -200,6 +207,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
     const ozet = document.getElementById('steOzet') as HTMLElement;
     const meta = document.getElementById('steMeta') as HTMLElement;
     const pop = document.getElementById('stePop') as HTMLDialogElement | null;
+    const tarama = document.getElementById('steTarama') as HTMLElement | null;
     const fixKutu = document.getElementById('steFix') as HTMLElement | null;
 
     /* GORUNTU SOZLUKLERI ADADA DEGIL, VARLIKTA (5 Eyl 2026). Kalem adlari,
@@ -353,6 +361,31 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       dugme.disabled = true;
       sonuc.hidden = true;
       durum.textContent = EN ? 'Scanning…' : 'Taranıyor…';
+
+      /* TARAMA GOSTERIMI — sozlesme dosya basinda yazili: asgari 2.600 ms,
+         tavan 8.000 ms, hareket-azaltmada asgari YOK. Adimlar fonksiyonun
+         GERCEK adimlari; sahte is gosterilmiyor. */
+      const ASGARI = 2600, TAVAN = 8000, ADIM_MS = 520;
+      const azalt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const bas = Date.now();
+      if (tarama) tarama.hidden = false;
+      durum.classList.add('tarama');
+      let adimNo = 0;
+      const adimSaat = setInterval(() => {
+        const liste = (SZ && SZ.tarama) || [];
+        if (!liste.length) return;
+        adimNo = Math.min(adimNo + 1, liste.length - 1);
+        durum.textContent = liste[adimNo];
+      }, ADIM_MS);
+      const bitir = async () => {
+        clearInterval(adimSaat);
+        const gecen = Date.now() - bas;
+        const bekle = azalt ? 0 : Math.max(0, Math.min(ASGARI - gecen, TAVAN - gecen));
+        if (bekle) await new Promise((r) => setTimeout(r, bekle));
+        if (tarama) tarama.hidden = true;
+        durum.classList.remove('tarama');
+      };
+
       /* UC HATA, UC MESAJ (5 Eyl 2026). Eskiden tek `catch` submit
          govdesinin TAMAMINI sariyordu: ag hatasi da, JSON olmayan yanit da,
          sonucu EKRANA YAZARKEN cikan bir hata da ayni "Baglanti hatasi"
@@ -376,6 +409,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           throw Object.assign(new Error('yanit'), { kod: 'yanit' });
         }
       } catch (err: any) {
+        await bitir();
         const kod = err && err.kod === 'yanit' ? 'yanit' : 'ag';
         if (kod === 'ag') console.error('[tespit] istek basarisiz', err);
         durum.textContent = (SZ && SZ.sebep && SZ.sebep[kod])
@@ -385,6 +419,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       }
 
       try {
+        await bitir();
         if (!j.ok) {
           const m = SZ.durum[j.durum];
           durum.textContent = m

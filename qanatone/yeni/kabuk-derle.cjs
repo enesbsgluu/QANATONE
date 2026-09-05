@@ -41,7 +41,7 @@ function derle() {
   const m = buildSync({ entryPoints: [path.join(KABUK, 'tespit-fix.mjs')], bundle: true, format: 'cjs', platform: 'node', write: false, logLevel: 'silent' });
   const mod = { exports: {} };
   new Function('module', 'exports', 'require', m.outputFiles[0].text)(mod, mod.exports, require);
-  const { PRIO, FIX, AD, DURUM_AD, DURUM_MESAJ, SEBEP, HUKUM } = mod.exports;
+  const { PRIO, FIX, AD, DURUM_AD, DURUM_MESAJ, SEBEP, HUKUM, TARAMA } = mod.exports;
   /* JSON ARTIK NESNE (5 Eyl 2026): eskiden yalniz duzeltme dizisiydi;
      ada icindeki goruntu sozlukleri de buraya tasinunca (J1 tavani) tek
      dosyada toplandi. `fix` alani eski dizinin ta kendisi. */
@@ -50,7 +50,7 @@ function derle() {
     const dizi = [...PRIO.filter((k) => d[k]).map((k) => [k, ...d[k]]), ['yok', ...d.yok]];
     out[`tespit-fix.${dil}.json`] = Buffer.from(JSON.stringify({
       fix: dizi, ad: AD[dil], durumAd: DURUM_AD[dil],
-      durum: DURUM_MESAJ[dil], sebep: SEBEP[dil], hukum: HUKUM[dil],
+      durum: DURUM_MESAJ[dil], sebep: SEBEP[dil], hukum: HUKUM[dil], tarama: TARAMA[dil],
     }));
   }
   return out;

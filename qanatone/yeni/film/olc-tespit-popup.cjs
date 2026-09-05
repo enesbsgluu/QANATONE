@@ -88,7 +88,9 @@ async function kol(tarayici, ad, yanit, is) {
     document.getElementById('steUrl').value = 'ornek.com';
     document.getElementById('steForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
   });
-  await bekle(1500);
+  /* BEKLEME 1.500 -> 3.600 ms (5 Eyl 2026): tarama gosterimi sonucu
+     ASGARI 2.600 ms tutuyor; eski bekleme sonucu hic goremezdi. */
+  await bekle(3600);
   const c = await is(s);
   /* Hata kollarinda konsola yazmak DOGRU davranis (teshis edilebilsin diye
      bilerek yaziliyor); orada konsol kirmizisi kusur sayilmaz. */
@@ -209,6 +211,43 @@ async function kol(tarayici, ad, yanit, is) {
     const gecti = /beklenmeyen bir yanıt|unexpected response/i.test(m);
     return { gecti, not: `mesaj="${m}"` };
   }));
+
+  /* 7 — SURE SOZLESMESI: yanit ANINDA gelse bile sonuc ASGARI 2.600 ms
+     sonra cikar (adimlar okunabilsin), ve bekleme TAVAN 8.000 ms'i asmaz.
+     Enes: "8 saniye icinde sonuc tablosunu versin." Olcum: submit anindan
+     `#steSonuc` gorunur olana kadar gecen sure. */
+  satir.push(await (async () => {
+    const s = await tarayici.newPage();
+    await s.setViewport(MOBIL ? { width: 390, height: 844, isMobile: true, hasTouch: true }
+      : { width: 1280, height: 900 });
+    await s.setRequestInterception(true);
+    s.on('request', (r) => r.url().includes('/.netlify/functions/diagnose')
+      ? r.respond({ status: 200, contentType: 'application/json', body: JSON.stringify(SAGLIKLI) })
+      : r.continue());
+    await s.goto(ADRES + '/', { waitUntil: 'networkidle2', timeout: 60000 });
+    await s.evaluate(() => { try { sessionStorage.setItem('qanat-prolog-atlandi', '1'); } catch (e) {} });
+    await s.reload({ waitUntil: 'networkidle2' });
+    await bekle(800);
+    const olcum = await s.evaluate(async () => {
+      const sonuc = document.getElementById('steSonuc');
+      const ray = document.getElementById('steTarama');
+      const t0 = performance.now();
+      let rayGorundu = false;
+      document.getElementById('steUrl').value = 'ornek.com';
+      document.getElementById('steForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      for (let i = 0; i < 200; i++) {
+        if (ray && !ray.hidden) rayGorundu = true;
+        if (!sonuc.hidden) break;
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      return { ms: Math.round(performance.now() - t0), rayGorundu, cikti: !sonuc.hidden,
+        adim: document.getElementById('steDurum').textContent };
+    });
+    await s.close();
+    const gecti = olcum.cikti && olcum.rayGorundu && olcum.ms >= 2500 && olcum.ms <= 8000;
+    return { ad: 'sure sozlesmesi (2.6-8 sn)', gecti,
+      not: `sonuc ${olcum.ms} ms · ray gorundu=${olcum.rayGorundu} · son adim="${olcum.adim}"` };
+  })());
 
   await tarayici.close();
   for (const r of satir) console.log(`${r.gecti ? 'GECTI' : 'KALDI'}  ${r.ad.padEnd(30)} ${r.not}`);
