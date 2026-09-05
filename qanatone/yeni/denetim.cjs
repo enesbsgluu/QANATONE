@@ -422,10 +422,36 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const kan = (h.match(/<link[^>]+rel="canonical"[^>]+href="([^"]*)"/i) || [, ''])[1];
     if (kan && !md.includes(kan)) kusur.push('kanonik yok:' + yol);
   }
-  ol('T3 · ajan hatti: her indekslenen sayfanin markdown esi + icerik paritesi',
+  /* llms.txt: VAR MI, HER INDEKSLENEN SAYFAYI SAYIYOR MU, iki adres
+     BIREBIR AYNI MI. Ucuncusu onemli: `/llms.txt` ile
+     `/.well-known/llms.txt` ayni uretecten cikiyor; bayt bayt esit
+     degillerse biri bayat demektir (bu depoda ayni sinif ayrisma
+     `_headers` Link blogunda yasanmisti). */
+  let llmsNot = '';
+  {
+    const y1 = path.join(KOK, 'llms.txt');
+    const y2 = path.join(KOK, '.well-known', 'llms.txt');
+    const y3 = path.join(KOK, 'llms-full.txt');
+    if (!fs.existsSync(y1)) kusur.push('llms.txt yok');
+    else if (!fs.existsSync(y2)) kusur.push('.well-known/llms.txt yok');
+    else if (!fs.existsSync(y3)) kusur.push('llms-full.txt yok');
+    else {
+      const a1 = fs.readFileSync(y1, 'utf8');
+      const a2 = fs.readFileSync(y2, 'utf8');
+      if (a1 !== a2) kusur.push('llms.txt iki adreste FARKLI');
+      const sayilan = (a1.match(/^- \[/gm) || []).length;
+      if (sayilan !== esli) kusur.push(`llms.txt ${sayilan} sayfa sayiyor, es ${esli}`);
+      if (!/^# QANATONE/m.test(a1)) kusur.push('llms.txt basligi yok');
+      const tam = fs.readFileSync(y3, 'utf8');
+      if (tam.length < a1.length) kusur.push('llms-full.txt llms.txt\'ten kisa');
+      llmsNot = ` · llms ${sayilan} kayit · full ${Math.round(tam.length / 1024)} KB`;
+    }
+  }
+
+  ol('T3 · ajan hatti: markdown esleri + llms.txt + icerik paritesi',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 4).join(' ')
-       : `${esli} es · ${atlanan} noindex atlandi`);
+       : `${esli} es · ${atlanan} noindex atlandi${llmsNot}`);
 }
 
 /* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"

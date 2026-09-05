@@ -28,6 +28,16 @@
 # girer — ajan `text/markdown` bekliyor, `text/plain` gelirse pazarlik
 # calismaz. Onbellek HTML ile ayni: es, esi oldugu sayfayla birlikte
 # tazelenmeli.
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+/.well-known/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+
 /*.md
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex
