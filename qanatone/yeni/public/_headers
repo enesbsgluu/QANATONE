@@ -38,6 +38,13 @@
   Content-Type: text/plain; charset=utf-8
   X-Robots-Tag: noindex
 
+/agents.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/.well-known/agent-permissions.json
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+
 /*.md
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex
