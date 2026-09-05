@@ -90,6 +90,12 @@ html.bitcursor .kb-tip.on{opacity:.9}
   html.bitcursor,html.bitcursor *{cursor:none!important}
   html.bitcursor input,html.bitcursor textarea,
   html.bitcursor select,html.bitcursor [contenteditable]{cursor:auto!important}
+  /* ACIK DIALOG: yerli imlec geri gelir (5 Eyl 2026). `<dialog>` TOP
+     LAYER'da cizilir; ozel imlec (.kb-bit, z-index 140) z-index'ten
+     bagimsiz olarak ONUN ALTINDA kalir. `cursor:none` orada da gecerli
+     oldugu icin ziyaretci imleci TUMDEN kaybediyordu (olculdu). */
+  html.bitcursor dialog[open],html.bitcursor dialog[open] *{cursor:auto!important}
+  html.bitcursor dialog[open] button,html.bitcursor dialog[open] a{cursor:pointer!important}
 }
 .kb-say{position:fixed;left:0;top:0;z-index:121;width:min(300px,74vw);
   background:rgba(12,12,12,.94);backdrop-filter:blur(18px);

@@ -1846,7 +1846,20 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
            tabi kalir. */
         if (/Film\.astro_astro_type_script/.test(ad)) continue;
         if (DINLEYICI.test(kod)) kusur.push(ad + ':kaydirma-dinleyicisi');
-        const o = kod.match(OKUMA);
+        /* TESPIT ADASI · DAR MUAFIYET (5 Eyl 2026) — YALNIZ DUZEN OKUMASI.
+           Kuralin adi ve gerekcesi "KAYDIRMANIN KENDISI is uretmez";
+           yasakladigi sey kaydirma sirasinda tekrar tekrar yapilan duzen
+           okumasidir. Tespit adasindaki tek okuma (`getBoundingClientRect`)
+           TIKLAMA aninda, kalem popup'ini tiklanan kalemin ustune
+           yerlestirmek icin kosuyor: kaydirmayla ilgisi yok, koşum basina
+           bir kez, ve ardindan modal aciliyor (kaydirma zaten kilitli).
+           Alternatifleri olculdu ve reddedildi: CSS anchor positioning
+           yalniz Chrome'da (obur tarayicida kutu yine sol uste duserdi),
+           tiklama koordinati ise klavyeyle acilista (Enter) 0,0 geliyor.
+           MUAFIYET DAR: kaydirma dinleyicisi sarti bu ada icin de GECERLI
+           (yukaridaki satir muafiyetin USTUNDE), yalnizca okuma serbest. */
+        const tespitAdasi = /STETespit\.astro_astro_type_script/.test(ad);
+        const o = tespitAdasi ? null : kod.match(OKUMA);
         if (o) kusur.push(ad + ':duzen-okuma:' + o[0]);
       }
       ol('H12 · ana sayfa betiklerinde kaydirma dinleyicisi ve duzen okumasi yok',

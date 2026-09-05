@@ -142,6 +142,53 @@ async function kol(tarayici, ad, yanit, is) {
     return { gecti, not: `mesaj="${m}"` };
   }));
 
+  /* 3b — KONUM: popup TIKLANAN kalemin ustunde (ya da yer yoksa altinda),
+     yatay olarak ona ortali ve kadrajin ICINDE.
+     OLCULEN ESKI HAL: (0,0) — ekranin sol ustu. Sebep: Chrome `<dialog>`u
+     `margin:auto` ile ortalar, sitenin reset'i `margin:0` yaziyor ve
+     ortalama oluyordu. */
+  satir.push(await kol(tarayici, 'popup konumu', SAGLIKLI, async (s) => {
+    const r = await s.evaluate(() => {
+      const btn = document.querySelectorAll('.ste-kalem-ac')[1];
+      const b = btn.getBoundingClientRect();
+      btn.click();
+      const d = document.getElementById('stePop');
+      const p = d.getBoundingClientRect();
+      return { b: { x: b.left, y: b.top, w: b.width, alt: b.bottom },
+        p: { x: p.left, y: p.top, w: p.width, h: p.height },
+        g: { w: innerWidth, h: innerHeight } };
+    });
+    const ustte = r.p.y + r.p.h <= r.b.y + 1;
+    const altta = r.p.y >= r.b.alt - 1;
+    const sapma = Math.abs((r.p.x + r.p.w / 2) - (r.b.x + r.b.w / 2));
+    const icinde = r.p.x >= 0 && r.p.y >= 0
+      && r.p.x + r.p.w <= r.g.w + 1 && r.p.y + r.p.h <= r.g.h + 1;
+    /* dar ekranda yatay ortalama kelepceye takilabilir: kadraj sarti sert,
+       ortalama sarti kelepce payiyla */
+    const gecti = (ustte || altta) && icinde && sapma <= r.g.w / 2;
+    return { gecti, not: `${ustte ? 'USTTE' : altta ? 'ALTTA' : 'HIZASIZ'} · sapma ${Math.round(sapma)}px`
+      + ` · kadrajda ${icinde} · popup(${Math.round(r.p.x)},${Math.round(r.p.y)})` };
+  }));
+
+  /* 3c — IMLEC: acik dialog icinde yerli imlec GERI GELMELI.
+     OLCULEN ESKI HAL: kabuk `html.bitcursor *{cursor:none}` yaziyor ve
+     ozel imleci `div.kb-bit` (z-index 140) ciziyor; `<dialog>` TOP
+     LAYER'da oldugu icin imlec ONUN ALTINDA kaliyordu — ziyaretci
+     imleci tumden kaybediyordu. */
+  satir.push(await kol(tarayici, 'popup imleci', SAGLIKLI, async (s) => {
+    const r = await s.evaluate(() => {
+      document.querySelector('.ste-kalem.fail .ste-kalem-ac').click();
+      const d = document.getElementById('stePop');
+      const kapat = d.querySelector('.ste-pop-kapat button');
+      return { govde: getComputedStyle(document.body).cursor,
+        dialog: getComputedStyle(d).cursor,
+        baslik: getComputedStyle(document.getElementById('stePopAd')).cursor,
+        kapat: getComputedStyle(kapat).cursor };
+    });
+    const gecti = r.dialog !== 'none' && r.baslik !== 'none' && r.kapat === 'pointer';
+    return { gecti, not: `govde=${r.govde} · dialog=${r.dialog} · baslik=${r.baslik} · kapat=${r.kapat}` };
+  }));
+
   /* 4 — ADRES COZULEMEDI (fonksiyonun `adres` sebebi) */
   satir.push(await kol(tarayici, 'adres cozulemedi', { ok: false, reason: 'adres' }, async (s) => {
     const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());

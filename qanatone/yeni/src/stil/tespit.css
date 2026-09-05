@@ -112,9 +112,60 @@
 .ste-kalem-ac:hover span{color:var(--tx)}
 .ste-kalem-ac:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:6px}
 
-.ste-pop{border:1px solid var(--line);border-radius:16px;background:var(--card);
-  color:var(--tx2);padding:clamp(18px,3vw,26px);max-width:min(92vw,420px);width:100%}
-.ste-pop::backdrop{background:rgba(0,0,0,.62)}
+/* KONUM: TIKLANAN KALEMIN USTUNDE (5 Eyl 2026, Enes: "ekranin sol
+   ustunde aciliyor ... direkt tiklanilan yerin ustune acilsin").
+   SEBEP OLCULDU: `<dialog>`u Chrome `margin:auto` ile ortalar; sitenin
+   reset'i `margin:0` yaziyor ve ortalama olüyor — olculen konum (0,0).
+   Cozum ortalamayi geri getirmek DEGIL: konumu JS hesapliyor (kalemin
+   kutusundan), CSS yalniz `inset:auto` ile yolu aciyor. Kadraja sigmazsa
+   ada kalemin ALTINA cevirir (.alt) ve okun yonu de doner. */
+.ste-pop{position:fixed;inset:auto;margin:0;
+  border:1px solid var(--line);border-radius:20px;background:var(--card);
+  color:var(--tx2);padding:clamp(18px,3vw,26px);max-width:min(92vw,420px);width:100%;
+  /* Kadraja sigmayan uzun icerik kutuyu tasirmasin (mobilde kritik). */
+  max-height:min(78vh,520px);overflow:auto;overscroll-behavior:contain}
+/* PREMIUM KENAR — H14 KAPISINDA. Golge ve bulaniklik PAHALI katmandir;
+   denetim onlari mobil baglamda yasakliyor ve hakli: dusuk cihazda her
+   karede yeniden rasterlesirler. Masaustu kapisinda (hover:hover +
+   pointer:fine) aciliyor; mobil duz ama net bir kart goruyor. */
+@media(hover:hover) and (pointer:fine){
+  .ste-pop{box-shadow:0 1px 0 rgba(255,255,255,.06) inset,
+             0 18px 50px -12px rgba(0,0,0,.72),
+             0 4px 14px -6px rgba(0,0,0,.5)}
+  .ste-pop::backdrop{backdrop-filter:blur(3px)}
+}
+.ste-pop::backdrop{background:rgba(0,0,0,.55)}
+/* KALEMI GOSTEREN ISARET — ucgen ok DEGIL, kenar vurgusu.
+   Sebep: kutu `overflow:auto` (uzun icerik icin sart) ve tasan bir ucgen
+   KIRPILIR. Bunun yerine kutunun kalemle bakisan kenarinda, kalemin tam
+   ustune denk gelen kisa bir kizil cizgi var; yeri adanin verdigi
+   `--ok-x` degiskeninden geliyor. Kirpilmaz, ayni bilgiyi tasir. */
+.ste-pop::after{content:'';position:absolute;left:var(--ok-x,50%);bottom:0;
+  width:56px;height:2px;margin-left:-28px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.ste-pop.alt::after{bottom:auto;top:0}
+/* GIRIS: kisa, kalemden dogar gibi. IKI KURAL BURADA:
+   · H5 — giris keyframe'i OPAKLIGA DOKUNMAZ, yalniz transform (opaklik
+     animasyonu ilk karede bos kutu gosterir; kural bunu yasakliyor).
+   · H11 — hareketin AYNI SECICIDE hareket-azaltma karsiligi olmali;
+     `no-preference` sarmali tek basina yetmez, kural acik durdurma arar. */
+.ste-pop[open]{animation:ste-pop-gir .16s var(--e) both}
+@keyframes ste-pop-gir{from{transform:translateY(6px) scale(.985)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){ .ste-pop[open]{animation:none} }
+/* IMLEC (Enes: "imlec onun altinda kaliyor"). SEBEP OLCULDU: kabuk
+   `html.bitcursor *{cursor:none}` yaziyor ve ozel imleci `div.kb-bit`
+   (z-index 140) ciziyor; ama `<dialog>` TOP LAYER'da, z-index'ten
+   bagimsiz olarak ustte — imlec altinda kaliyor ve yerli imlec de kapali
+   oldugu icin ziyaretci imleci tumden kaybediyor. Kabugun KENDI istisna
+   listesi (input/textarea/select) genisletiliyor: acik dialog icinde
+   yerli imlec geri geliyor. Kural kabuk.css'te, sahibinin yaninda. */
+.ste-pop .ste-pop-kapat button,.ste-pop a{cursor:pointer}
+/* Kutunun KENDI odak halkasi yok: `tabindex="-1"` ile yalnizca PROGRAMATIK
+   odak hedefi, klavyeyle gezilen bir denetim degil (kare alinip bakildi —
+   halka kirmizi bir hata cercevesi gibi okunuyordu). Icerideki dugme ve
+   baglar kendi `:focus-visible` halkalarini KORUYOR; klavye erisimi
+   degismedi. */
+.ste-pop:focus,.ste-pop:focus-visible{outline:none}
 .ste-pop-kapat{display:flex;justify-content:flex-end;margin:-6px -6px 2px 0}
 .ste-pop-kapat button{background:none;border:0;padding:6px;line-height:0;
   color:var(--tx4);cursor:pointer}

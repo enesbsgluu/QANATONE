@@ -164,7 +164,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
             esik tablosu KONMADI, sapardi). Dorduncu satir yalniz kalem
             yesil DEGILKEN cikar ve zaten var olan duzeltme sozlugunden
             gelir — yeni metin uydurulmadi. */}
-        <dialog class="ste-pop" id="stePop" aria-labelledby="stePopAd">
+        <dialog class="ste-pop" id="stePop" tabindex="-1" aria-labelledby="stePopAd">
           <form method="dialog" class="ste-pop-kapat">
             <button aria-label={en ? 'Close' : 'Kapat'}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -290,7 +290,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
 
     /* Kalem popup'i. Uc satirin ucu de olculmus veriden gelir; dorduncu
        (neden) yalniz yesil DEGILKEN ve sozlukten. */
-    const popAc = (it: any) => {
+    const popAc = (it: any, kaynak: HTMLElement) => {
       if (!pop) return;
       const yaz = (id: string, v: string) => {
         const el = document.getElementById(id); if (el) el.textContent = v;
@@ -312,6 +312,39 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
       neden.textContent = kayit ? kayit[2]
         : (EN ? 'This item meets the criterion.' : 'Bu kalem ölçütü karşılıyor.');
       pop.showModal();
+      /* ODAK KUTUNUN KENDISINDE (5 Eyl 2026): `showModal()` ilk
+         odaklanabilir ogeyi seciyor, o da kapatma dugmesi — kirmizi odak
+         halkasi kutunun tepesinde HATA gibi okunuyordu (kare alinip
+         bakildi). `tabindex="-1"` + focus() ile odak kutuya gecti: Esc,
+         odak tuzagi ve ekran okuyucu duyurusu aynen duruyor, yalnizca
+         halka gitti. */
+      try { pop.focus(); } catch (e) {}
+      yerlestir(kaynak);
+    };
+
+    /* KONUMLANDIRMA — tiklanan kalemin USTUNE, sigmazsa altina.
+       `showModal()`den SONRA cagrilir: kutunun gercek olcusu ancak acikken
+       okunur. Kadraj disina tasmamasi icin iki eksende de kelepcelenir. */
+    const yerlestir = (kaynak: HTMLElement) => {
+      if (!pop || !kaynak) return;
+      const r = kaynak.getBoundingClientRect();
+      const pw = pop.offsetWidth, ph = pop.offsetHeight;
+      const bosluk = 14, kenar = 10;
+      let x = r.left + r.width / 2 - pw / 2;
+      x = Math.max(kenar, Math.min(x, innerWidth - pw - kenar));
+      const ustteYer = r.top - ph - bosluk >= kenar;
+      /* KELEPCE KOSULSUZ (5 Eyl 2026): ilk yazimda yalniz "altta" dalinda
+         vardi. `getBoundingClientRect().top` kadrajdan BUYUK olabilir
+         (kalem gorunur alanin altindaysa) ve kutu ekranin disina cikiyordu
+         — mobil kapisi yakaladi: popup(24,784), kadraj 390x844. */
+      const yHam = ustteYer ? r.top - ph - bosluk : r.bottom + bosluk;
+      const y = Math.max(kenar, Math.min(yHam, innerHeight - ph - kenar));
+      pop.style.left = Math.round(x) + 'px';
+      pop.style.top = Math.round(y) + 'px';
+      /* okun yatay yeri: kalemin ORTASI, kutunun kendi soluna gore */
+      const okX = Math.max(18, Math.min(pw - 18, r.left + r.width / 2 - x));
+      pop.style.setProperty('--ok-x', Math.round(okX) + 'px');
+      pop.classList.toggle('alt', !ustteYer);
     };
 
     form.addEventListener('submit', async (e) => {
@@ -407,7 +440,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
             v.textContent = String(it.v);
             btn.appendChild(v);
           }
-          btn.addEventListener('click', () => popAc(it));
+          btn.addEventListener('click', () => popAc(it, btn));
           li.appendChild(btn);
           izgara.appendChild(li);
         }
