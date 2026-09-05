@@ -398,9 +398,23 @@ async function grab(url, method, butce) {
   } finally { clearTimeout(t); }
 }
 
-/* ---------- tek bir kontrolün sonucu ---------- */
-const S = (k, state, v) => ({ k, state, v: v === undefined ? '' : String(v) });
+/* ---------- tek bir kontrolün sonucu ----------
+   DÖRDÜNCÜ ALAN `o` = ÖLÇÜT (5 Eyl 2026, Enes: "maddelerin üzerine
+   tıklayınca sebeplerini gerçek bir şekilde özetle belirtsin"). Ziyaretçi
+   bir kalemin neden o renkte olduğunu ancak eşiği görünce anlar; eşik
+   zaten burada duruyor, kalemle BİRLİKTE gönderiliyor.
+   İKİNCİ KEZ YAZILMAZ: `bandS` durumu da ölçütü de AYNI iki sayıdan
+   üretir — arayüze elle bir eşik tablosu koymak sapma üretirdi (bu
+   depoda üretici/tüketici sözlüğü üç kez ayrıştı).
+   DİLDEN BAĞIMSIZ: fonksiyon isteğin dilini bilmiyor (gövde yalnız
+   {url} taşıyor). Ölçüt sayılardan ve HTML belirtecinden ibarettir
+   (`25-65 · 10-80`, `og:title + og:image`); "iyi/uyarı" etiketini arayüz
+   kendi dilinde yazar. */
+const S = (k, state, v, o) => ({ k, state, v: v === undefined ? '' : String(v), o: o || '' });
 const band = (n, okMax, warnMax) => n <= okMax ? 'ok' : n <= warnMax ? 'warn' : 'fail';
+/* Bantlı kalem: durum + değer + ölçüt tek satırdan, tek çift sayıdan. */
+const bandS = (k, n, okMax, warnMax, birim) =>
+  S(k, band(n, okMax, warnMax), n, `≤${okMax} · ≤${warnMax}${birim ? ' ' + birim : ''}`);
 const between = (n, lo, hi) => n >= lo && n <= hi;
 
 /* ---------- CDN TANIMA — ham başlık ASLA yanıta girmez ----------
@@ -685,59 +699,60 @@ function analyse(html, res, bytes, finalUrl) {
   const head = low.slice(0, 60000);
   const items = [];
 
-  items.push(S('https', finalUrl.startsWith('https://') ? 'ok' : 'fail'));
+  items.push(S('https', finalUrl.startsWith('https://') ? 'ok' : 'fail', undefined, 'https://'));
   items.push(S('status', res.status >= 200 && res.status < 300 ? 'ok'
-    : res.status < 400 ? 'warn' : 'fail'));
+    : res.status < 400 ? 'warn' : 'fail', res.status, '2xx'));
 
   const kb = Math.round(bytes / 1024);
-  items.push(S('weight', band(kb, 500, 1500), kb));
+  items.push(bandS('weight', kb, 500, 1500, 'KB'));
 
   /* ---- YAPI KALEMLERİ — `speed`in yerine gelenler ---- */
   const y = yapiOlc(h, res, finalUrl);
   /* satır içi kod ÖNBELLEĞE ALINAMAZ: ikinci sayfaya geçen ziyaretçi
      aynı yükü tekrar indirir. Oran, belge boyutunun yüzdesi. */
-  items.push(S('inline', band(y.satirIciOran, 20, 50), y.satirIciOran));
-  items.push(S('blocking', band(y.engelleyen, 2, 5), y.engelleyen));
+  items.push(bandS('inline', y.satirIciOran, 20, 50, '%'));
+  items.push(bandS('blocking', y.engelleyen, 2, 5));
   /* dış alan adından gelen yazı tipi ek istek + dış bağımlılıktır:
      sayı yeşil bandda olsa bile en iyi ihtimalle uyarı */
   const fontBandi = band(y.yaziTipi, 2, 5);
-  items.push(S('fonts', y.disFont && fontBandi === 'ok' ? 'warn' : fontBandi, y.yaziTipi));
-  items.push(S('imgdim', band(y.boyutsuz, 0, 2), y.boyutsuz));
-  items.push(S('imgfmt', y.gorsel === 0 ? 'ok' : band(y.eskiOran, 20, 60), y.eskiOran));
-  items.push(S('compress', y.sikistirma ? 'ok' : 'fail'));
+  items.push(S('fonts', y.disFont && fontBandi === 'ok' ? 'warn' : fontBandi, y.yaziTipi,
+    y.disFont ? '≤2 · ≤5 + dis alan' : '≤2 · ≤5'));
+  items.push(bandS('imgdim', y.boyutsuz, 0, 2));
+  items.push(S('imgfmt', y.gorsel === 0 ? 'ok' : band(y.eskiOran, 20, 60), y.eskiOran, '≤20 · ≤60 %'));
+  items.push(S('compress', y.sikistirma ? 'ok' : 'fail', undefined, 'content-encoding'));
   /* saniye YALNIZ pozitifken gösteriliyor: `max-age=0, must-revalidate`
      geçerli ve ucuz bir ayardır (304 ile döner), ama yanında "0 sn"
      yazan YEŞİL bir kutu kendi kendisiyle çelişir gibi okunur. Sayı
      bilgi taşımıyorsa yazılmaz. */
   items.push(S('cache', y.onbellek.durum,
-    y.onbellek.saniye > 0 ? y.onbellek.saniye : undefined));
-  items.push(S('reqs', band(y.disKaynak, 30, 60), y.disKaynak));
+    y.onbellek.saniye > 0 ? y.onbellek.saniye : undefined, 'max-age > 0'));
+  items.push(bandS('reqs', y.disKaynak, 30, 60));
 
   const title = (h.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]
     .replace(/\s+/g, ' ').trim();
   items.push(S('title', title ? (between(title.length, 25, 65) ? 'ok'
-    : between(title.length, 10, 80) ? 'warn' : 'fail') : 'fail', title.length));
+    : between(title.length, 10, 80) ? 'warn' : 'fail') : 'fail', title.length, '25-65 · 10-80'));
 
   const desc = (h.match(/<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i) ||
                 h.match(/<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["']/i) ||
                 [, ''])[1].trim();
   items.push(S('desc', desc ? (between(desc.length, 70, 165) ? 'ok'
-    : between(desc.length, 30, 200) ? 'warn' : 'fail') : 'fail', desc.length));
+    : between(desc.length, 30, 200) ? 'warn' : 'fail') : 'fail', desc.length, '70-165 · 30-200'));
 
   const h1 = (h.match(/<h1[\s>]/gi) || []).length;
-  items.push(S('h1', h1 === 1 ? 'ok' : h1 === 2 ? 'warn' : 'fail', h1));
+  items.push(S('h1', h1 === 1 ? 'ok' : h1 === 2 ? 'warn' : 'fail', h1, '1 · 2'));
 
-  items.push(S('canonical', /rel=["']canonical["']/i.test(head) ? 'ok' : 'warn'));
-  items.push(S('lang', /<html[^>]+lang=["'][a-z]{2}/i.test(head) ? 'ok' : 'fail'));
+  items.push(S('canonical', /rel=["']canonical["']/i.test(head) ? 'ok' : 'warn', undefined, 'rel=canonical'));
+  items.push(S('lang', /<html[^>]+lang=["'][a-z]{2}/i.test(head) ? 'ok' : 'fail', undefined, '<html lang>'));
 
   const ld = /type=["']application\/ld\+json["']/i.test(low);
-  items.push(S('schema', ld ? 'ok' : /itemscope|itemtype=/i.test(low) ? 'warn' : 'fail'));
+  items.push(S('schema', ld ? 'ok' : /itemscope|itemtype=/i.test(low) ? 'warn' : 'fail', undefined, 'ld+json · microdata'));
 
   const ogT = /property=["']og:title["']/i.test(head);
   const ogI = /property=["']og:image["']/i.test(head);
-  items.push(S('og', ogT && ogI ? 'ok' : (ogT || ogI) ? 'warn' : 'fail'));
+  items.push(S('og', ogT && ogI ? 'ok' : (ogT || ogI) ? 'warn' : 'fail', undefined, 'og:title + og:image'));
 
-  items.push(S('viewport', /name=["']viewport["'][^>]*width=device-width/i.test(head) ? 'ok' : 'fail'));
+  items.push(S('viewport', /name=["']viewport["'][^>]*width=device-width/i.test(head) ? 'ok' : 'fail', undefined, 'width=device-width'));
 
   const imgs = h.match(/<img\b[^>]*>/gi) || [];
   /* CIPLAK OZNITELIK DE ALT'TIR (4 Eyl 2026 — kendi sitemizde yakalandi).
@@ -752,21 +767,21 @@ function analyse(html, res, bytes, finalUrl) {
      sucluyordu — bir lead miknatisinda YANLIS KIRMIZI, eksik olcumden
      daha pahalidir. */
   const noAlt = imgs.filter(t => !/(?:^|\s)alt(?:\s*=|[\s/>]|$)/i.test(t)).length;
-  items.push(S('alt', imgs.length === 0 ? 'warn' : band(noAlt, 0, 2), noAlt));
+  items.push(S('alt', imgs.length === 0 ? 'warn' : band(noAlt, 0, 2), noAlt, '0 · ≤2'));
 
   const wa = /wa\.me\/|api\.whatsapp\.com|whatsapp:\/\//i.test(low);
   const tel = /href=["']tel:/i.test(low);
   const mail = /href=["']mailto:/i.test(low);
   const form = /<form\b/i.test(low) && /type=["']email["']|name=["'](email|mail|eposta)["']/i.test(low);
   const ways = [wa, tel, mail, form].filter(Boolean).length;
-  items.push(S('contact', ways >= 2 ? 'ok' : ways === 1 ? 'warn' : 'fail', ways));
-  items.push(S('whatsapp', wa ? 'ok' : 'warn'));
+  items.push(S('contact', ways >= 2 ? 'ok' : ways === 1 ? 'warn' : 'fail', ways, '≥2'));
+  items.push(S('whatsapp', wa ? 'ok' : 'warn', undefined, 'wa.me'));
 
   const local = /maps\.google|google\.com\/maps|maps\.app\.goo\.gl|"@type"\s*:\s*"[^"]*LocalBusiness/i.test(low);
-  items.push(S('local', local ? 'ok' : 'warn'));
+  items.push(S('local', local ? 'ok' : 'warn', undefined, 'maps · LocalBusiness'));
 
   const anal = /googletagmanager\.com|google-analytics\.com|gtag\(|plausible\.io|matomo|mc\.yandex|connect\.facebook\.net|clarity\.ms/i.test(low);
-  items.push(S('analytics', anal ? 'ok' : 'fail'));
+  items.push(S('analytics', anal ? 'ok' : 'fail', undefined, 'gtag · plausible · matomo'));
 
   return items;
 }
@@ -868,16 +883,16 @@ function handlerOlustur(depo) {
     const rb = await grab(origin + '/robots.txt', undefined, butce);
     const okR = rb.r.ok && /user-agent/i.test(rb.body);
     robotsBody = rb.body || '';
-    items.push(S('robots', okR ? 'ok' : 'warn'));
-  } catch (e) { items.push(S('robots', 'warn')); }
+    items.push(S('robots', okR ? 'ok' : 'warn', undefined, 'robots.txt'));
+  } catch (e) { items.push(S('robots', 'warn', undefined, 'robots.txt')); }
 
   try {
-    if (/sitemap:/i.test(robotsBody)) items.push(S('sitemap', 'ok'));
+    if (/sitemap:/i.test(robotsBody)) items.push(S('sitemap', 'ok', undefined, 'sitemap.xml'));
     else {
       const sm = await grab(origin + '/sitemap.xml', 'HEAD', butce);
-      items.push(S('sitemap', sm.r.ok ? 'ok' : 'warn'));
+      items.push(S('sitemap', sm.r.ok ? 'ok' : 'warn', undefined, 'sitemap.xml'));
     }
-  } catch (e) { items.push(S('sitemap', 'warn')); }
+  } catch (e) { items.push(S('sitemap', 'warn', undefined, 'sitemap.xml')); }
 
   /* buraya gelindiyse analiz BAŞARILI — hak ancak şimdi yakılıyor */
   await kapi.isle();
@@ -930,3 +945,11 @@ exports.KOTA_PENCERE_MS = KOTA_PENCERE_MS;
    "toplam 100 · yapı payı 8" dengesini tahminle değil, kaynaktan ölçüyor. */
 exports.W = W;
 exports.TESHIS_ALANI = TESHIS_ALANI;
+/* SOZLESME YUZEYI (5 Eyl 2026): arayuzun tanimasi GEREKEN butun degerler.
+   Denetim bunlari STETespit'in sozlukleriyle karsilastirir — `kota`/`quota`
+   ayrismasi (4 Eyl) bir daha sessizce olmasin. */
+/* `analyse` denetim icin disa aciliyor: bekci fikstur HTML'le cagirip
+   her kalemin OLCUT tasidigini AG'A CIKMADAN dogrular. */
+exports.analyse = analyse;
+exports.DURUMLAR = ['saglikli', 'engel', 'bulunamadi', 'sunucu-hatasi', 'reddedildi', 'ulasilamadi'];
+exports.SEBEPLER = ['timeout', 'unreachable', 'blocked', 'kota', 'oran'];

@@ -101,6 +101,42 @@
 .ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
   font-size:.74rem;color:var(--tx4)}
 
+/* ---- KALEM POPUP'I (5 Eyl 2026) ----------------------------------------
+   Satirin tamami degil, icindeki DUGME tiklanir: klavyeyle gezilir ve
+   ekran okuyucu "dugme" der. Dugme satirin gorunusunu bozmasin diye
+   butun kabuk stilini sifirlar ve `li`nin flex cocugu olarak yayilir;
+   durum noktasi (::before) `li`de kaldigi icin hizalama degismez. */
+.ste-kalem-ac{flex:1;display:flex;align-items:center;gap:9px;min-width:0;
+  background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;
+  text-align:left;cursor:pointer}
+.ste-kalem-ac:hover span{color:var(--tx)}
+.ste-kalem-ac:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:6px}
+
+.ste-pop{border:1px solid var(--line);border-radius:16px;background:var(--card);
+  color:var(--tx2);padding:clamp(18px,3vw,26px);max-width:min(92vw,420px);width:100%}
+.ste-pop::backdrop{background:rgba(0,0,0,.62)}
+.ste-pop-kapat{display:flex;justify-content:flex-end;margin:-6px -6px 2px 0}
+.ste-pop-kapat button{background:none;border:0;padding:6px;line-height:0;
+  color:var(--tx4);cursor:pointer}
+.ste-pop-kapat button:hover{color:var(--tx)}
+.ste-pop-kapat button:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:6px}
+.ste-pop-kapat svg{width:18px;height:18px}
+/* rozet: renk TEK yerde — izgaradaki noktayla ayni uc sinif */
+.ste-pop-rozet{display:inline-block;font-family:var(--f-tek);font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;
+  border:1px solid var(--line);color:var(--tx4)}
+.ste-pop-rozet.ok{color:#22c55e;border-color:#22c55e}
+.ste-pop-rozet.warn{color:#f59e0b;border-color:#f59e0b}
+.ste-pop-rozet.fail{color:var(--red);border-color:var(--red)}
+.ste-pop-ad{margin:10px 0 0;font-size:1.12rem;color:var(--tx)}
+.ste-pop-olcum{margin:14px 0 0;display:grid;gap:8px}
+.ste-pop-olcum > div{display:flex;align-items:baseline;gap:12px;
+  border-top:1px solid var(--line);padding-top:8px}
+.ste-pop-olcum dt{flex:none;font-size:.78rem;color:var(--tx4)}
+.ste-pop-olcum dd{margin:0 0 0 auto;font-family:var(--f-tek);font-size:.82rem;
+  color:var(--tx);text-align:right;word-break:break-word}
+.ste-pop-neden{margin:14px 0 0;font-size:.88rem;line-height:1.5}
+
 /* ---- hareket: yalnız halkanın dolması, transform/opacity dışı tek
    istisna `stroke-dashoffset` — SVG'de uzunluk animasyonu düzen
    hesabı üretmez, kompozitte kalır. ---- */

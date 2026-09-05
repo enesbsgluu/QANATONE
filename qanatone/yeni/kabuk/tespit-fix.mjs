@@ -4,7 +4,7 @@
    STETespit adasi gonderimde indirir. Son kayit 'yok': kritik eksik yok. */
 export const PRIO = ['https', 'viewport', 'contact', 'whatsapp', 'schema', 'desc', 'title', 'analytics',
   'inline', 'blocking', 'compress', 'weight', 'imgdim', 'imgfmt', 'cache', 'fonts', 'reqs',
-  'og', 'local', 'h1', 'alt', 'sitemap', 'canonical', 'robots'];
+  'og', 'local', 'h1', 'lang', 'alt', 'sitemap', 'canonical', 'robots'];
 export const FIX = {
   tr: {
     schema: ['Yapay zekâ seni okuyamıyor', 'Sitede yapılandırılmış veri yok. Yeni arama yanıtları bunu okur — olmayınca markan o cevaplarda hiç geçmez.'],
@@ -31,6 +31,11 @@ export const FIX = {
     sitemap: ['Site haritası yok', 'Arama motoru sayfaları tek tek keşfediyor.'],
     robots: ['robots.txt yok', 'Tarayıcılara yön veremiyorsun.'],
     canonical: ['Adres tekrarı riski', 'Aynı sayfa farklı adreslerle açılıyor.'],
+    /* `lang` PUANLANIYORDU AMA SOZLUKTE YOKTU (5 Eyl 2026): W tablosunda
+       3 puan tasiyor ve `fail` olabiliyor, ama PRIO ve FIX listesinde
+       adi gecmedigi icin duzeltme listesine HIC dusemiyordu — dili
+       yazilmamis bir site kaybettigi puani hicbir zaman goremiyordu. */
+    lang: ['Sayfanın dili yazılmamış', 'Tarayıcı ve arama motoru hangi dilde olduğunu tahmin ediyor; çeviri ve okuma yardımı yanlış çalışıyor.'],
     yok: ['Kritik bir eksik çıkmadı.', 'Temel yerinde. Bundan sonraki kazanç tamirde değil, stratejide.'],
   },
   en: {
@@ -58,6 +63,89 @@ export const FIX = {
     sitemap: ['No sitemap', 'Crawlers must discover pages one by one.'],
     robots: ['No robots.txt', 'You cannot guide crawlers.'],
     canonical: ['Duplicate URL risk', 'The same page opens on several URLs.'],
+    lang: ['The page language is not declared', 'Browsers and search engines have to guess it; translation and screen readers work against the wrong language.'],
     yok: ['Nothing critical found.', 'The basics are in place.'],
   },
+};
+
+
+/* ---- GORUNTU SOZLUKLERI (5 Eyl 2026) ----
+   ADADAN BURAYA TASINDI. Sebep olculdu: popup ve duvar mesajlari
+   eklenince ana sayfanin ada JS'i J1 tavanini asti (bos panel halinde
+   13.662 B / tavan 12.800). Duzeltme sozlugu de ayni sebeple HTML'den
+   varlik JSON'una tasinmisti (bkz. dosya basi) — ayni yol tutuldu.
+   Butun goruntu metni artik TEK dosyada, TEK uretecte; ada yalnizca
+   DAVRANIS tasiyor. Metinler ada surumunden BIREBIR kopyalandi.
+   Bekci: denetim T2 (kalem/durum/sebep sozlukleri iki tarafta). */
+export const AD = {
+  tr: {
+      https: 'HTTPS', status: 'HTTP durumu', weight: 'Sayfa ağırlığı', title: 'Başlık',
+      desc: 'Açıklama', h1: 'H1', canonical: 'Canonical',
+      schema: 'Şema', og: 'Paylaşım kartı', lang: 'Dil', robots: 'robots.txt',
+      sitemap: 'Sitemap', alt: 'Görsel alt metni', imgdim: 'Görsel ölçüsü',
+      imgfmt: 'Görsel biçimi', fonts: 'Yazı tipi', inline: 'Satır içi yük',
+      blocking: 'Engelleyici kaynak', compress: 'Sıkıştırma', cache: 'Önbellek',
+      reqs: 'İstek sayısı', analytics: 'Ölçümleme', contact: 'İletişim',
+      whatsapp: 'WhatsApp', local: 'Yerel işaret', viewport: 'Viewport',
+    },
+  en: {
+      https: 'HTTPS', status: 'HTTP status', weight: 'Page weight', title: 'Title',
+      desc: 'Description', h1: 'H1', canonical: 'Canonical',
+      schema: 'Schema', og: 'Share card', lang: 'Language', robots: 'robots.txt',
+      sitemap: 'Sitemap', alt: 'Image alt text', imgdim: 'Image dimensions',
+      imgfmt: 'Image format', fonts: 'Web fonts', inline: 'Inline weight',
+      blocking: 'Render-blocking', compress: 'Compression', cache: 'Caching',
+      reqs: 'Request count', analytics: 'Analytics', contact: 'Contact',
+      whatsapp: 'WhatsApp', local: 'Local signal', viewport: 'Viewport',
+    },
+};
+export const DURUM_AD = {
+  tr: { ok: 'İyi', warn: 'Uyarı', fail: 'Eksik' },
+  en: { ok: 'Good', warn: 'Warning', fail: 'Missing' },
+};
+export const DURUM_MESAJ = {
+  tr: {
+      engel: 'Site otomatik erişimi engelliyor, bu yüzden taranamıyor.',
+      reddedildi: 'Sunucu isteğimizi reddetti. Ortada bir engel sistemi imzası yok — erişim ayarı olabilir.',
+      bulunamadi: 'Bu adreste sayfa yok.',
+      'sunucu-hatasi': 'Sitenin kendi sunucusu hata verdi.',
+      ulasilamadi: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
+    },
+  en: {
+      engel: 'The site blocks automated access, so it cannot be scanned.',
+      reddedildi: 'The server refused our request. There is no block-system signature — it may be an access setting.',
+      bulunamadi: 'There is no page at this address.',
+      'sunucu-hatasi': 'The site\u2019s own server returned an error.',
+      ulasilamadi: 'Could not reach the site \u2014 could you check the address?',
+    },
+};
+export const SEBEP = {
+  tr: {
+      blocked: 'Bu adres taranamıyor (site otomatik erişimi engelliyor).',
+      unreachable: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
+      timeout: 'Site zamanında yanıt vermedi — birazdan tekrar dene.',
+      kota: 'Günlük tarama hakkın doldu.',
+      oran: 'Çok sık denedin — biraz bekleyip tekrar dene.',
+    },
+  en: {
+      blocked: 'This address cannot be scanned (the site blocks automated access).',
+      unreachable: 'Could not reach the site — could you check the address?',
+      timeout: 'The site did not answer in time — try again shortly.',
+      kota: 'You have used your daily scans.',
+      oran: 'Too many attempts — wait a moment and try again.',
+    },
+};
+export const HUKUM = {
+  tr: [
+      [85, 'Sistem çalışıyor.', 'Yapı sağlam. Buradan sonrası hız ve içerik işi.'],
+      [70, 'İyi ama açık var.', 'Temel yerinde; birkaç kalem talebi kaçırıyor.'],
+      [50, 'Yarısı eksik.', 'Site duruyor ama seni bulan da bulamayan da var.'],
+      [0, 'Talebi kaçırıyor.', 'Bu hâliyle gelen kişi seni bulamıyor ya da ulaşamıyor.'],
+    ],
+  en: [
+      [85, 'The system works.', 'The structure is sound. From here it is speed and content.'],
+      [70, 'Good, but there are gaps.', 'The basics are in place; a few items are losing demand.'],
+      [50, 'Half of it is missing.', 'The site is up, but some people find you and some do not.'],
+      [0, 'It is losing demand.', 'As it stands, the person who arrives cannot find or reach you.'],
+    ],
 };
