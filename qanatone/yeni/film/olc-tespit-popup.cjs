@@ -23,19 +23,27 @@ const ADRES = process.env.ADRES || 'http://127.0.0.1:8790';
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /* Fonksiyonun GERCEK bicimi — alanlar diagnose.js'in dondugunun aynisi. */
+const ALTI = [
+  { k: 'schema', state: 'fail', v: '', o: 'ld+json · microdata' },
+  { k: 'alt', state: 'fail', v: '7', o: '0 · ≤2' },
+  { k: 'weight', state: 'warn', v: '640', o: '≤500 · ≤1500 KB' },
+  { k: 'title', state: 'ok', v: '48', o: '25-65 · 10-80' },
+  { k: 'redirects', state: 'ok', v: '0', o: '≤0 · ≤1' },
+  { k: 'whatsapp', state: 'ok', v: '', o: 'wa.me' },
+];
+/* TAM LISTE — olcek ancak GERCEK kalem sayisiyla olculur (26). Alti
+   kalemle mobil izgara kisa gorunur ve kusur gizlenir. */
+const TAM = ['schema', 'alt', 'redirects', 'weight', 'title', 'desc', 'h1', 'canonical', 'lang',
+  'og', 'viewport', 'https', 'contact', 'whatsapp', 'local', 'analytics', 'robots', 'sitemap',
+  'inline', 'blocking', 'fonts', 'imgdim', 'imgfmt', 'compress', 'cache', 'reqs']
+  .map((k, i) => ({ k, state: i < 2 ? 'fail' : i < 4 ? 'warn' : 'ok',
+    v: i % 3 ? String(i * 7) : '', o: '≤1 · ≤2' }));
 const SAGLIKLI = {
   ok: true, host: 'ornek.com', finalUrl: 'https://ornek.com/', score: 71, kb: 640,
   kalan: 1, status: 200, bytes: 655360, redirects: 0, cdn: 'cloudflare',
-  durum: 'saglikli', cfEylul: false,
-  items: [
-    { k: 'schema', state: 'fail', v: '', o: 'ld+json · microdata' },
-    { k: 'alt', state: 'fail', v: '7', o: '0 · ≤2' },
-    { k: 'weight', state: 'warn', v: '640', o: '≤500 · ≤1500 KB' },
-    { k: 'title', state: 'ok', v: '48', o: '25-65 · 10-80' },
-    { k: 'status', state: 'ok', v: '200', o: '2xx' },
-    { k: 'whatsapp', state: 'ok', v: '', o: 'wa.me' },
-  ],
+  durum: 'saglikli', cfEylul: false, items: ALTI,
 };
+const SAGLIKLI_TAM = Object.assign({}, SAGLIKLI, { items: TAM });
 const DUVAR = {
   ok: false, durum: 'engel', saglayici: 'cloudflare', host: 'ornek.com',
   finalUrl: 'https://ornek.com/', status: 403, bytes: 5300, redirects: 0,
@@ -248,6 +256,30 @@ async function kol(tarayici, ad, yanit, is) {
     return { ad: 'sure sozlesmesi (2.6-8 sn)', gecti,
       not: `sonuc ${olcum.ms} ms · ray gorundu=${olcum.rayGorundu} · son adim="${olcum.adim}"` };
   })());
+
+  /* 8 — MOBIL OLCEK (yalniz MOBIL=1 kolunda anlamli).
+     OLCULEN ESKI HAL (390x844, 26 kalem): sonuc blogu 2.151 px = 2,5
+     EKRAN, tek basina izgara 1.366 px, izgara TEK sutun — cunku
+     `minmax(190px,1fr)` 350 px'lik alanda ikinci sutunu kuramiyordu.
+     Iki sutuna alindi: izgara 548 px, sonuc 1.332 px.
+     KAPI: mobilde izgara >= 2 sutun VE sonuc blogu <= 2 ekran. */
+  if (MOBIL) satir.push(await kol(tarayici, 'mobil olcek (26 kalem)', SAGLIKLI_TAM, async (s) => {
+    const r = await s.evaluate(() => {
+      const izg = document.getElementById('steIzgara');
+      const sonuc = document.getElementById('steSonuc').getBoundingClientRect();
+      const kalem = izg.querySelector('.ste-kalem');
+      return { sutun: getComputedStyle(izg).gridTemplateColumns.split(' ').length,
+        izgara: Math.round(izg.getBoundingClientRect().height),
+        sonuc: Math.round(sonuc.height), ekran: innerHeight,
+        kalemSayisi: izg.querySelectorAll('.ste-kalem').length,
+        kalemYuk: kalem ? Math.round(kalem.getBoundingClientRect().height) : 0 };
+    });
+    const ekranAdedi = +(r.sonuc / r.ekran).toFixed(2);
+    /* dokunma hedefi: satir >= 36 px */
+    const gecti = r.sutun >= 2 && ekranAdedi <= 2 && r.kalemSayisi === 26 && r.kalemYuk >= 36;
+    return { gecti, not: `sutun=${r.sutun} · izgara=${r.izgara}px · sonuc=${r.sonuc}px`
+      + ` (${ekranAdedi} ekran) · kalem=${r.kalemSayisi}x${r.kalemYuk}px` };
+  }));
 
   await tarayici.close();
   for (const r of satir) console.log(`${r.gecti ? 'GECTI' : 'KALDI'}  ${r.ad.padEnd(30)} ${r.not}`);
