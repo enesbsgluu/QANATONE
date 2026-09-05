@@ -366,7 +366,16 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         const h = SZ.hukum.find(([n]: any) => j.score >= n) || [0, '', ''];
         hukum.textContent = h[1];
         ozet.textContent = h[2];
+        /* HTTP KODU META SATIRINA GECTI (5 Eyl 2026): `status` kalemi
+           agirlik tablosundan cikinca (her zaman ok'ti, 6 puan hicbir
+           siteyi ayirmiyordu) kod ekrandan da kaybolacakti. Isten anlayan
+           ziyaretci icin gercek bir isarettir; puanlanmadan gosteriliyor.
+           Ham yonlendirme sayisi da burada: puanlanan sey FAZLA hop, ham
+           sayi bilgi olarak duruyor ve ikisi karisimasin diye ayri yazili. */
         meta.textContent = (EN ? `Weight ${j.kb} KB · Checks ${(j.items || []).length}` : `Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}`)
+          + (typeof j.status === 'number' ? ` · HTTP ${j.status}` : '')
+          + (typeof j.redirects === 'number' && j.redirects > 0
+              ? (EN ? ` · ${j.redirects} redirect${j.redirects === 1 ? '' : 's'}` : ` · ${j.redirects} yönlendirme`) : '')
           + (j.cdn ? ` · ${j.cdn}` : '');
         uyari.hidden = !j.cfEylul;
         if (j.cfEylul) uyari.textContent =

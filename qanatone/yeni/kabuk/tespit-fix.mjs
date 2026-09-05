@@ -3,7 +3,7 @@
    public/varlik/tespit-fix.<dil>.json yazar ([anahtar, baslik, aciklama]);
    STETespit adasi gonderimde indirir. Son kayit 'yok': kritik eksik yok. */
 export const PRIO = ['https', 'viewport', 'contact', 'whatsapp', 'schema', 'desc', 'title', 'analytics',
-  'inline', 'blocking', 'compress', 'weight', 'imgdim', 'imgfmt', 'cache', 'fonts', 'reqs',
+  'inline', 'blocking', 'compress', 'weight', 'redirects', 'imgdim', 'imgfmt', 'cache', 'fonts', 'reqs',
   'og', 'local', 'h1', 'lang', 'alt', 'sitemap', 'canonical', 'robots'];
 export const FIX = {
   tr: {
@@ -22,6 +22,7 @@ export const FIX = {
     compress: ['Sıkıştırma kapalı', 'Sunucu metni sıkıştırmadan gönderiyor — en ucuz kazanç burada.'],
     cache: ['Belge önbelleğe alınmıyor', 'Bu sayfanın kendi başlığı saklanmasını engelliyor; her ziyaret sıfırdan iniyor.'],
     reqs: ['Çok fazla dış kaynak', 'Her referans ayrı bir istek; sayfa parça parça açılıyor.'],
+    redirects: ['Giriş adresi zincirleme yönlendiriyor', 'Ziyaretçi sayfayı görmeden önce birkaç kez başka adrese aktarılıyor; her aktarma tam bir gidiş-dönüş.'],
     viewport: ['Mobil ayarı yok', 'Ziyaretçinin çoğu telefondan geliyor.'],
     og: ['Paylaşınca kart boş', 'Link görselsiz görünüyor — güven kaybı.'],
     local: ['Yerel kayıt görünmüyor', '"Yakınımda" aramalarında çıkmazsın.'],
@@ -54,6 +55,7 @@ export const FIX = {
     compress: ['Compression is off', 'The server sends text uncompressed — the cheapest win is here.'],
     cache: ['The document is not cacheable', 'This page’s own header blocks storage; every visit downloads it from scratch.'],
     reqs: ['Too many external resources', 'Each reference is a separate request; the page arrives in pieces.'],
+    redirects: ['The entry URL redirects in a chain', 'Visitors are bounced to another address a few times before the page even starts; each bounce is a full round trip.'],
     viewport: ['No mobile setup', 'Most visitors are on phones.'],
     og: ['Empty share card', 'Your link shows no image.'],
     local: ['No local footprint', 'You miss "near me" searches.'],
@@ -79,7 +81,7 @@ export const FIX = {
    Bekci: denetim T2 (kalem/durum/sebep sozlukleri iki tarafta). */
 export const AD = {
   tr: {
-      https: 'HTTPS', status: 'HTTP durumu', weight: 'Sayfa ağırlığı', title: 'Başlık',
+      https: 'HTTPS', redirects: 'Yönlendirme', weight: 'Sayfa ağırlığı', title: 'Başlık',
       desc: 'Açıklama', h1: 'H1', canonical: 'Canonical',
       schema: 'Şema', og: 'Paylaşım kartı', lang: 'Dil', robots: 'robots.txt',
       sitemap: 'Sitemap', alt: 'Görsel alt metni', imgdim: 'Görsel ölçüsü',
@@ -89,7 +91,7 @@ export const AD = {
       whatsapp: 'WhatsApp', local: 'Yerel işaret', viewport: 'Viewport',
     },
   en: {
-      https: 'HTTPS', status: 'HTTP status', weight: 'Page weight', title: 'Title',
+      https: 'HTTPS', redirects: 'Redirects', weight: 'Page weight', title: 'Title',
       desc: 'Description', h1: 'H1', canonical: 'Canonical',
       schema: 'Schema', og: 'Share card', lang: 'Language', robots: 'robots.txt',
       sitemap: 'Sitemap', alt: 'Image alt text', imgdim: 'Image dimensions',

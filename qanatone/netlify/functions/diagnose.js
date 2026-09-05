@@ -241,9 +241,26 @@ const UA = 'QanatoneSiteCheck/1.0 (+https://qanatone.com)';
    rakamı yazma" kuralına girer. Bütün ağırlıkların kanıta bağlanması
    Faz 3'ün işi; bu tur bozuk aletin yerine çalışan aletleri koyuyor. */
 const W = {
-  https: 8, status: 6, weight: 4, title: 7, desc: 7, h1: 4,
+  https: 8, redirects: 6, weight: 4, title: 7, desc: 7, h1: 4,
   canonical: 4, lang: 3, schema: 10, og: 5, viewport: 8, alt: 4,
   contact: 7, whatsapp: 5, local: 4, analytics: 4, robots: 1, sitemap: 1,
+  /* `status` GITTI, 6 PUAN `redirects`E GECTI (5 Eyl 2026, Enes karari).
+     SEBEP OLCULDU: `analyse()` yalniz durum=saglikli iken cagriliyor,
+     saglikli = 2xx, ve `status` kalemi tam da 2xx'te `ok` veriyordu —
+     yani puanlanan HER sonucta zorunlu olarak yesildi. 6 puan hicbir
+     siteyi otekinden ayirmiyordu; Faz 0'da erken donus konunca kalem
+     gereksizlesmis ama agirligi tabloda kalmisti.
+     `redirects` ZATEN OLCULUYORDU ve hicbir sey yapmiyordu: giris
+     adresinden son adrese kac yonlendirme takip edildigi. Her hop, sayfa
+     baslamadan once tam bir gidis-donus.
+     ILK HOP BAGISLANIR (band 1 · 2), ve bu KEYFI DEGIL: ziyaretcinin
+     yazdigi bicim hopu belirliyor. Olculdu:
+       qanatone.com -> 1 hop · www.qanatone.com -> 0 hop  (AYNI SITE)
+       sahibinden.com 1 · wikipedia.org 1 · github.com 0 · vercel.com 0
+     apex->www evrensel ve mesru; onu kirmizi yakmak araci yalanci yapardi.
+     2 hop uyari, 3+ kirmizi: orada artik sitenin kendi zinciri vardir.
+     SINIR DURUSTCE: yalniz GIRIS adresinin zinciri olculur, sitenin ic
+     baglantilarindaki yonlendirmeler DEGIL (o ek istek ister). */
   /* speed'in 8 puanı — sekize eşit bölündü */
   inline: 1, blocking: 1, fonts: 1, imgdim: 1, imgfmt: 1, compress: 1, cache: 1, reqs: 1
 };
@@ -329,6 +346,33 @@ function butceAc() {
         Content-Length YALAN söyleyebilir ve chunked yanıtta HİÇ bulunmaz.
    İptalden sonra gövde cancel + AbortController abort ile kapatılıyor:
    yük altında sızdıran soket, kaçındığımız tüketimin aynısını üretir. */
+/* KANONIK HOP MU, FAZLA HOP MU? (5 Eyl 2026)
+   OLCULDU, 24 TURK SITESI: puanlanabilen 15 adresin 14'u TAM 1 hop
+   yapiyor, hicbiri 2+ degil. Ham hop sayisini puanlamak iki yoldan da
+   yanlis olurdu:
+     · esik 1'de bagislayinca kalem HERKESTE yesil kalir — az once
+       `status`ta duzeltilen "olu agirlik" hatasinin aynisi;
+     · esik 0'da 15 siteden 14'u sirf apex->www yaptigi icin sari yanar,
+       ki bu evrensel ve mesru bir desen — arac yalanci olur.
+   Ustelik ham sayi ZIYARETCININ YAZDIGINA bagli: `qanatone.com` 1 hop,
+   `www.qanatone.com` 0 hop — AYNI SITE.
+   Cozum: hopu siniflandir. Sunlar KANONIKTIR ve sayilmaz:
+     http -> https · apex <-> www · sondaki egik cizgi
+   Geri kalan (alan adi degisimi, yol degisimi, sorgu degisimi) FAZLA
+   hoptur: sitenin kendi zinciri, sahibinin denetiminde, ve her biri
+   sayfa baslamadan once tam bir gidis-donus.
+   Adres DISARI CIKMAZ — yalniz sayi doner (yanit yuzeyi degismedi). */
+function kanonikHop(oncekiUrl, sonrakiUrl) {
+  try {
+    const a = new URL(oncekiUrl), b = new URL(sonrakiUrl);
+    const konak = (h) => h.replace(/^www\./i, '').toLowerCase();
+    if (konak(a.hostname) !== konak(b.hostname)) return false;
+    if (a.search !== b.search) return false;
+    const yol = (s) => s.replace(/\/+$/, '');
+    return yol(a.pathname) === yol(b.pathname);
+  } catch (e) { return false; }
+}
+
 async function grab(url, method, butce) {
   const ac = new AbortController();
   const sure = Math.max(1, butce.kalanMs());
@@ -348,7 +392,7 @@ async function grab(url, method, butce) {
     /* takip edilen yönlendirme SAYISI — URL listesi DEĞİL. Liste yeni bir
        saldırgan kontrollü dize sink'i açardı (yanıta girip ekrana kadar
        gider); bu turda gereği yok, sayı yeterli bilgiyi taşıyor. */
-    let hedef = url, r = null, takip = 0;
+    let hedef = url, r = null, takip = 0, fazla = 0;
     for (let hop = 0; ; hop++) {
       r = await fetch(hedef, {
         method: method || 'GET', redirect: 'manual', signal: ac.signal,
@@ -363,12 +407,13 @@ async function grab(url, method, butce) {
       let sonraki = null;
       try { sonraki = (await safeUrl(new URL(loc, hedef).href)).u || null; } catch (e) {}
       if (!sonraki) { const e = new Error('redirect blocked'); e.name = 'BlockedRedirect'; throw e; }
+      if (!kanonikHop(hedef, sonraki.href)) fazla++;
       hedef = sonraki.href;
       takip++;
     }
     if (method === 'HEAD') {
       try { if (r.body) await r.body.cancel(); } catch (e) {}
-      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: false, redirects: takip };
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: false, redirects: takip, fazlaHop: fazla };
     }
 
     const kalan = butce.kalanBayt();
@@ -377,7 +422,7 @@ async function grab(url, method, butce) {
     if (Number.isFinite(bildirilen) && bildirilen > kalan) {
       try { if (r.body) await r.body.cancel(); } catch (e) {}
       ac.abort();
-      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: true, redirects: takip };
+      return { r, body: '', bytes: 0, ms: Date.now() - started, finalUrl: hedef, kesildi: true, redirects: takip, fazlaHop: fazla };
     }
 
     /* 2) sayaçla akıt — Content-Length yalan söylemiş ya da hiç yoksa
@@ -404,7 +449,7 @@ async function grab(url, method, butce) {
     }
     butce.baytEkle(okunan);
     const body = Buffer.concat(parcalar).toString('utf8');
-    return { r, body, bytes: okunan, ms: Date.now() - started, finalUrl: hedef, kesildi, redirects: takip };
+    return { r, body, bytes: okunan, ms: Date.now() - started, finalUrl: hedef, kesildi, redirects: takip, fazlaHop: fazla };
   } finally { clearTimeout(t); }
 }
 
@@ -703,15 +748,14 @@ function yapiOlc(h, res, finalUrl) {
   };
 }
 
-function analyse(html, res, bytes, finalUrl) {
+function analyse(html, res, bytes, finalUrl, redirects) {
   const h = html;
   const low = h.toLowerCase();
   const head = low.slice(0, 60000);
   const items = [];
 
   items.push(S('https', finalUrl.startsWith('https://') ? 'ok' : 'fail', undefined, 'https://'));
-  items.push(S('status', res.status >= 200 && res.status < 300 ? 'ok'
-    : res.status < 400 ? 'warn' : 'fail', res.status, '2xx'));
+  items.push(bandS('redirects', Number(redirects) || 0, 0, 1));
 
   const kb = Math.round(bytes / 1024);
   items.push(bandS('weight', kb, 500, 1500, 'KB'));
@@ -885,7 +929,9 @@ function handlerOlustur(depo) {
     };
   }
 
-  const items = analyse(page.body, page.r, page.bytes, finalUrl);
+  /* PUANLANAN: FAZLA hop (kanonik olanlar bedava — bkz. kanonikHop).
+     Ham toplam `redirects` alaninda bilgi olarak duruyor. */
+  const items = analyse(page.body, page.r, page.bytes, finalUrl, page.fazlaHop);
 
   /* robots.txt ve site haritası — bulunamazsa uyarı, hata değil */
   const origin = new URL(finalUrl).origin;
@@ -962,5 +1008,7 @@ exports.TESHIS_ALANI = TESHIS_ALANI;
 /* `analyse` denetim icin disa aciliyor: bekci fikstur HTML'le cagirip
    her kalemin OLCUT tasidigini AG'A CIKMADAN dogrular. */
 exports.analyse = analyse;
+/* siniflandirma tablosu denetimde kilitli (olc-tespit-puan 4b) */
+exports.kanonikHop = kanonikHop;
 exports.DURUMLAR = ['saglikli', 'engel', 'bulunamadi', 'sunucu-hatasi', 'reddedildi', 'ulasilamadi'];
 exports.SEBEPLER = ['timeout', 'unreachable', 'blocked', 'adres', 'kota', 'oran'];
