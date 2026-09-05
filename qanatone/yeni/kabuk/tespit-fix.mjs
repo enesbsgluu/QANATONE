@@ -121,14 +121,20 @@ export const DURUM_MESAJ = {
 };
 export const SEBEP = {
   tr: {
-      blocked: 'Bu adres taranamıyor (site otomatik erişimi engelliyor).',
+      blocked: 'Bu adres güvenlik gereği taranmıyor (iç ağ adresi).',
+      adres: 'Bu adres çözülemedi — yazımını kontrol eder misin?',
+      ag: 'Sunucuya ulaşılamadı — bağlantını kontrol edip tekrar dener misin?',
+      yanit: 'Sunucudan beklenmeyen bir yanıt geldi. Birazdan tekrar dene.',
       unreachable: 'Siteye ulaşılamadı — adresi kontrol eder misin?',
       timeout: 'Site zamanında yanıt vermedi — birazdan tekrar dene.',
       kota: 'Günlük tarama hakkın doldu.',
       oran: 'Çok sık denedin — biraz bekleyip tekrar dene.',
     },
   en: {
-      blocked: 'This address cannot be scanned (the site blocks automated access).',
+      blocked: 'This address is not scanned for security reasons (internal network address).',
+      adres: 'This address could not be resolved — could you check the spelling?',
+      ag: 'Could not reach the server — check your connection and try again.',
+      yanit: 'The server returned an unexpected response. Please try again shortly.',
       unreachable: 'Could not reach the site — could you check the address?',
       timeout: 'The site did not answer in time — try again shortly.',
       kota: 'You have used your daily scans.',

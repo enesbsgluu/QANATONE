@@ -43,14 +43,37 @@ const DUVAR = {
 };
 const BILINMEYEN = { ok: false, durum: 'zart-zurt', host: 'ornek.com', status: 418 };
 
+/* MOBIL KOLU (MOBIL=1): Enes mobilde "Baglanti hatasi" aldi. O mesaj
+   submit govdesinin TAMAMINI saran catch'ten geliyor — yani ag hatasi da,
+   sonucu EKRANA YAZARKEN cikan bir hata da ayni metni veriyor. Mobil
+   kolu ikincisini yakalar: konsol hatasi da toplanir. */
+const MOBIL = !!process.env.MOBIL;
 async function kol(tarayici, ad, yanit, is) {
   const s = await tarayici.newPage();
-  await s.setViewport({ width: 1280, height: 900 });
+  await s.setViewport(MOBIL
+    ? { width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true }
+    : { width: 1280, height: 900 });
+  if (MOBIL) await s.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1');
+  const konsol = [];
+  s.on('pageerror', (e) => konsol.push('pageerror: ' + e.message));
+  s.on('console', (m) => { if (m.type() === 'error') konsol.push('console: ' + m.text().slice(0, 160)); });
+  s.__konsol = konsol;
   await s.setRequestInterception(true);
   s.on('request', (r) => {
     if (r.url().includes('/.netlify/functions/diagnose')) {
-      return r.respond({ status: yanit.ok === false && yanit.durum === undefined ? 429 : 200,
-        contentType: 'application/json', body: JSON.stringify(yanit) });
+      /* UC OZEL KOL — uc ayri hata yolu ayri ayri olculsun:
+         '__ag'    istek hic tamamlanmaz (ag kesik)
+         '__yanit' 502 + HTML govde (JSON degil) — Netlify fonksiyon
+                   zaman asiminda tam olarak boyle doner */
+      if (yanit === '__ag') return r.abort('connectionfailed');
+      if (yanit === '__yanit') return r.respond({ status: 502,
+        contentType: 'text/html', body: '<html><body>Bad gateway</body></html>' });
+      /* DURUM KODU GERCEGIYLE AYNI OLMALI: fonksiyon YALNIZ kota/oran'da
+         429 doner; obur `ok:false` hallerinde (adres, blocked, duvar) 200
+         doner. Ilk yazim hepsine 429 veriyordu ve `adres` kolu Chrome'un
+         konsol kirmizisi yuzunden sahte kaldi. */
+      const kod = (yanit.reason === 'kota' || yanit.reason === 'oran') ? 429 : 200;
+      return r.respond({ status: kod, contentType: 'application/json', body: JSON.stringify(yanit) });
     }
     r.continue();
   });
@@ -67,8 +90,13 @@ async function kol(tarayici, ad, yanit, is) {
   });
   await bekle(1500);
   const c = await is(s);
+  /* Hata kollarinda konsola yazmak DOGRU davranis (teshis edilebilsin diye
+     bilerek yaziliyor); orada konsol kirmizisi kusur sayilmaz. */
+  const beklenen = yanit === '__ag' || yanit === '__yanit';
+  const hata = s.__konsol.length ? ' | KONSOL: ' + s.__konsol.slice(0, 1).join(' ; ').slice(0, 70) : '';
   await s.close();
-  return { ad, ...c };
+  return { ad, ...c, not: (c.not || '') + hata,
+    gecti: c.gecti && (beklenen || !s.__konsol.length) };
 }
 
 (async () => {
@@ -111,6 +139,27 @@ async function kol(tarayici, ad, yanit, is) {
   satir.push(await kol(tarayici, 'KIRMIZI-ONCE (bilinmeyen durum)', BILINMEYEN, async (s) => {
     const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());
     const gecti = /tamamlanamad|could not be completed/i.test(m);
+    return { gecti, not: `mesaj="${m}"` };
+  }));
+
+  /* 4 — ADRES COZULEMEDI (fonksiyonun `adres` sebebi) */
+  satir.push(await kol(tarayici, 'adres cozulemedi', { ok: false, reason: 'adres' }, async (s) => {
+    const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());
+    const gecti = /çözülemedi|could not be resolved/i.test(m) && !/engelliyor|blocks/i.test(m);
+    return { gecti, not: `mesaj="${m}"` };
+  }));
+
+  /* 5 — AG KESIK: "sunucuya ulasilamadi", "sonuc goruntulenemedi" DEGIL */
+  satir.push(await kol(tarayici, 'ag kesik', '__ag', async (s) => {
+    const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());
+    const gecti = /ulaşılamadı|reach the server/i.test(m) && !/görüntülenemedi|displayed/i.test(m);
+    return { gecti, not: `mesaj="${m}"` };
+  }));
+
+  /* 6 — JSON OLMAYAN YANIT (502 + HTML): fonksiyon zaman asiminin sekli */
+  satir.push(await kol(tarayici, '502 HTML yanit', '__yanit', async (s) => {
+    const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());
+    const gecti = /beklenmeyen bir yanıt|unexpected response/i.test(m);
     return { gecti, not: `mesaj="${m}"` };
   }));
 
