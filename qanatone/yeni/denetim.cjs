@@ -377,6 +377,107 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
                   : icBag + ' ic adres · ' + sayfalar.length + ' sayfa');
 }
 
+/* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"
+   turu). Bu arac YAYIN ZINCIRINDE DENETIMSIZDI: 8 sinamasi `test/denetim.js`
+   icindeydi ve o dosya, KESME'de zincirden cikan `build.js`e bagliydi;
+   `yeni/denetim.cjs` ise netlify/functions altina HIC dokunmuyordu (olculdu:
+   0 esleme). Bu kural o boslugu kapatir.
+
+   OLCUT — URETICI ile TUKETICI ayni sozlesmeyi konusmali:
+     1. Fonksiyonun puanladigi her kalemin arayuzde ADI olmali (iki dilde).
+        YASANMIS: `status`/`weight`/`whatsapp` sozlukte yoktu, ekranda ham
+        anahtar yaziyordu; `favicon`/`hreflang`/`ssl` ise OLU anahtardi.
+        Sayilar denk oldugu icin (26=26) sapma gozden kaciyordu.
+     2. Fonksiyonun urettigi her `durum` ve `reason` degerinin arayuzde
+        MESAJI olmali. YASANMIS (4 Eyl): fonksiyon `kota` gonderiyordu,
+        arayuz `quota` ariyordu; en sik iki hata sessizce genel mesaja
+        dusuyordu.
+     3. Her kalem OLCUT (`o`) tasimali — popup "neden bu renk" sorusunu
+        esikle cevapliyor; olcutsuz kalem popup'ta bos satir birakir.
+     4. Puanlanan her kalem duzeltme sozlugunde (FIX) ve oncelik listesinde
+        (PRIO) olmali. YASANMIS: `lang` 3 puan tasiyor ve `fail` olabiliyor
+        ama ikisinde de yoktu — duzeltme listesine hic dusemiyordu.
+        TEK MUAFIYET `status`: `analyse()` yalniz durum=saglikli iken
+        cagriliyor, saglikli = 2xx, yani kalem HER ZAMAN ok; duzeltilecek
+        bir hali yok. Muafiyet burada yazili, kodda sessiz degil. */
+{
+  const D = require(path.join(__dirname, '..', 'netlify', 'functions', 'diagnose.js'));
+  const kusur = [];
+
+  /* SOZLUKLER CIKTIDAN OKUNUR, KAYNAKTAN DEGIL (5 Eyl 2026): metinler
+     adadan `varlik/tespit-fix.<dil>.json`a tasindi (J1 tavani), yani
+     ziyaretcinin GERCEKTEN indirdigi dosya budur. Kaynak taramak burada
+     yanlis olurdu: uretecin yazdigini degil, yazacagini varsayardi. */
+  const soz = {};
+  for (const dil of ['tr', 'en']) {
+    const y = path.join(KOK, 'varlik', `tespit-fix.${dil}.json`);
+    try { soz[dil] = JSON.parse(fs.readFileSync(y, 'utf8')); }
+    catch (e) { kusur.push(`sozluk okunamadi:${dil}`); }
+  }
+  const kume = (dil, alan) => new Set(Object.keys((soz[dil] && soz[dil][alan]) || {}));
+  const AD = soz.tr && soz.en ? { tr: kume('tr', 'ad'), en: kume('en', 'ad') } : null;
+  const DM = soz.tr && soz.en ? { tr: kume('tr', 'durum'), en: kume('en', 'durum') } : null;
+  const SB = soz.tr && soz.en ? { tr: kume('tr', 'sebep'), en: kume('en', 'sebep') } : null;
+  /* rozet ve hukum de bos kalmamali — popup rozetsiz acilirsa kalemin
+     rengi yaziyla teyit edilemez, hukum bos kalirsa skorun altindaki iki
+     satir bosalir. */
+  /* TEK BLOK: bu kontroller ile asagidaki kapsam kontrolleri AYNI kosula
+     bagli. Ayri `if`/`else` yazildiginda kapsam dali ulasilamaz kalmisti
+     (kirmizi-once yakaladi: uc bozuktan yalnizca biri raporlandi). */
+  if (AD && DM && SB) {
+    const puanli = Object.keys(D.W);
+    for (const dil of ['tr', 'en']) {
+      if (kume(dil, 'durumAd').size !== 3) kusur.push(`durumAd.${dil} eksik`);
+      if (!Array.isArray(soz[dil].hukum) || soz[dil].hukum.length !== 4) kusur.push(`hukum.${dil} eksik`);
+      if (!Array.isArray(soz[dil].fix) || !soz[dil].fix.length) kusur.push(`fix.${dil} bos`);
+      for (const k of puanli) if (!AD[dil].has(k)) kusur.push(`AD.${dil} eksik:${k}`);
+      for (const k of AD[dil]) if (!puanli.includes(k)) kusur.push(`AD.${dil} olu:${k}`);
+      for (const d of D.DURUMLAR) {
+        if (d === 'saglikli') continue;            /* saglikli yol mesaj istemez */
+        if (!DM[dil].has(d)) kusur.push(`DURUM_MESAJ.${dil} eksik:${d}`);
+      }
+      for (const s of D.SEBEPLER) if (!SB[dil].has(s)) kusur.push(`SEBEP.${dil} eksik:${s}`);
+    }
+  }
+
+  /* 3 · her kalem olcut tasiyor — fikstur HTML, ag yok */
+  let kalemSayisi = 0;
+  try {
+    const fikstur = '<!doctype html><html lang="tr"><head><title>x</title></head><body><h1>x</h1></body></html>';
+    const sahteRes = { status: 200, headers: new Map([['cache-control', 'max-age=60']]) };
+    const kalemler = D.analyse(fikstur, sahteRes, fikstur.length, 'https://ornek.com/');
+    kalemSayisi = kalemler.length;
+    for (const it of kalemler) if (!it.o) kusur.push('olcutsuz:' + it.k);
+  } catch (e) { kusur.push('analyse cagrilamadi: ' + e.message); }
+  /* robots/sitemap handler'da uretiliyor — kaynaktan bakilir */
+  for (const k of ['robots', 'sitemap']) {
+    const re = new RegExp("S\\('" + k + "'[^)]*undefined,\\s*'");
+    if (!re.test(fs.readFileSync(path.join(__dirname, '..', 'netlify', 'functions', 'diagnose.js'), 'utf8')))
+      kusur.push('olcutsuz(handler):' + k);
+  }
+
+  /* 4 · duzeltme sozlugu + oncelik listesi */
+  const fixKaynak = fs.readFileSync(path.join(__dirname, 'kabuk', 'tespit-fix.mjs'), 'utf8');
+  const prio = new Set(((fixKaynak.match(/export const PRIO = \[([\s\S]*?)\]/) || [, ''])[1]
+    .match(/'([\w-]+)'/g) || []).map((s) => s.replace(/'/g, '')));
+  const fixDal = (dil) => {
+    const i = fixKaynak.indexOf(dil + ': {');
+    return new Set([...fixKaynak.slice(i, fixKaynak.indexOf('\n  },', i)).matchAll(/^\s{4}([\w-]+):/gm)].map((m) => m[1]));
+  };
+  const fixTr = fixDal('tr'); const fixEn = fixDal('en');
+  for (const k of Object.keys(D.W)) {
+    if (k === 'status') continue;                  /* muafiyet: her zaman ok */
+    if (!prio.has(k)) kusur.push('PRIO eksik:' + k);
+    if (!fixTr.has(k)) kusur.push('FIX.tr eksik:' + k);
+    if (!fixEn.has(k)) kusur.push('FIX.en eksik:' + k);
+  }
+
+  ol('T2 · tespit araci sozlesmesi: kalem/durum/sebep sozlukleri iki tarafta ortusuyor',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 6).join(' ')
+       : `${Object.keys(D.W).length} kalem · ${kalemSayisi} olculdu · ${D.DURUMLAR.length} durum · ${D.SEBEPLER.length} sebep · PRIO ${prio.size}`);
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`
