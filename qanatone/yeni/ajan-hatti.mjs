@@ -102,8 +102,17 @@ export function govdeyiCikar(html, kok) {
     })
     .replace(/<[^>]+>/g, ' ');
 
+  /* ENTITY COZUMU ETIKET SOKUMUNDEN SONRA KOSAR ve bu bir tuzak: sayfada
+     METIN olarak duran kacirilmis markup (`&lt;svg ...&gt;`) cozulunce
+     yeniden ETIKETE BENZER. Panel kapisinin BOS icerik kolu yakaladi:
+     ana sayfada `<svg viewBox="0 0 24` sizdi; DOLU halde yoktu, yani
+     yalnizca goz ile bakan biri hic gormezdi.
+     DOGRU DAVRANIS METNI SILMEK DEGIL — o metin sayfada gercekten
+     goruluyor. Markdown'da anlamini korumanin yolu KACIRMAK: `\<` bir
+     `<` olarak render edilir ama etiket sanilmaz. Bekci T3 kacirilmis
+     olani kusur saymiyor (negatif geriye bakis). */
   for (const ham of coz(m).split('\n')) {
-    const s = ham.replace(/[ \t ]+/g, ' ').trim();
+    const s = ham.replace(/[ \t ]+/g, ' ').replace(/</g, '\\<').trim();
     satir.push(s);
   }
   /* Boş satırları teke indir, baştaki/sondaki boşluğu at.
@@ -201,10 +210,17 @@ export function uret(dist) {
        yuzeyi acmak kendi robots kuralimizla celisirdi. Bekci T3 ayni
        kapsami tutuyor — iki taraf ayni sayida (59). */
     if (!s.indeks) continue;
+    /* KACIRMA MARKDOWN'I YAZAN YERDE (5 Eyl 2026). Govde zaten kaciriliyordu
+       ama BASLIK ve ACIKLAMA kacirilmiyordu: `kunye()` entity cozuyor, ve
+       panelin BOS icerik kolunda bir aciklama icinde kacirilmis markup
+       (`&lt;svg ...&gt;`) bulundu — cozulunce .md'ye ETIKET olarak dustu.
+       Dolu halde yoktu; yalnizca panel kapisinin bos kolu yakaladi.
+       Kural: markdown'a giren HER metin ayni kapidan gecer. */
+    const kacir = (s) => String(s || '').replace(/</g, '\<');
     const md = [
-      '# ' + s.baslik,
+      '# ' + kacir(s.baslik),
       '',
-      s.aciklama ? '> ' + s.aciklama : '',
+      s.aciklama ? '> ' + kacir(s.aciklama) : '',
       s.aciklama ? '' : '',
       s.kanonik ? 'Kaynak: ' + s.kanonik : '',
       '',
@@ -222,7 +238,13 @@ export function uret(dist) {
     const kisa = s.yol === '/' ? 'index' : s.yol.slice(1, -1);
     const hedef = join(dist, kisa + '.md');
     mkdirSync(dirname(hedef), { recursive: true });
-    writeFileSync(hedef, md.replace(/\n{3,}/g, '\n\n'), 'utf8');
+    /* SON KAPI — YAZMA ANINDA, ALAN ALAN DEGIL. Kacirma once govdeye,
+       sonra baslik/aciklamaya eklendi ve panel kapisinin BOS kolu iki
+       kezinde de kirmizi kaldi: alan alan kacirmak yarin eklenecek yeni
+       bir alani KAPSAMAZ. Artik dosyaya yazilan dizgenin TAMAMI tek
+       yerden geciyor; zaten kacirilmis olan ikinci kez kacirilmaz. */
+    const guvenli = md.replace(/\n{3,}/g, '\n\n').replace(/(^|[^\\])</g, '$1\\<');
+    writeFileSync(hedef, guvenli, 'utf8');
     s.md = s.yol === '/' ? '/index.md' : s.yol.slice(0, -1) + '.md';
     yazilan++;
   }
