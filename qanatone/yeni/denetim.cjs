@@ -406,8 +406,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const md = fs.readFileSync(es, 'utf8');
     esli++;
     if (md.trim().length < 120) kusur.push('es cok kisa:' + yol);
-    const etiket = md.match(/<\/?[a-z][a-z0-9]*(\s[^>]*)?>/i);
-    if (etiket) kusur.push('etiket kalintisi:' + yol + ':' + etiket[0].slice(0, 20));
+    /* KACIRILMIS `\\<` KUSUR DEGIL: sayfada METIN olarak duran markup
+       markdown'da kacirilarak korunuyor (bkz. ajan-hatti.mjs). */
+    const etiket = md.match(/(?<!\\)<\/?[a-z][a-z0-9]*(\s[^>]*)?>/i);
+    if (etiket) {
+      /* BAGLAM DA BASILIR: "etiket kalintisi:/:<svg" satiri nerede oldugunu
+         soylemiyordu ve panel kapisinin bos kolunda uc tur bosa gitti. */
+      const yer = md.indexOf(etiket[0]);
+      const bag = md.slice(Math.max(0, yer - 70), yer + 40).replace(/\s+/g, ' ');
+      kusur.push('etiket kalintisi:' + yol + ':' + etiket[0].slice(0, 16) + ' |BAGLAM| …' + bag + '…');
+    }
     const bas = (h.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]
       .replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').trim();
     if (bas && !md.includes(bas)) kusur.push('baslik tutmuyor:' + yol);
