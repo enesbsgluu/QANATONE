@@ -484,27 +484,87 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      HTML indirmeden yalniz baslik okuyan istemciler var). Iki taraf da
      kanonikten turuyor — kural o formulun iki yerde de tuttugunu tutar. */
   {
-    let eksik = 0, eksikBaslik = 0;
-    const hd = (() => { try { return fs.readFileSync(path.join(KOK, '_headers'), 'utf8'); } catch (e) { return ''; } })();
+    let eksik = 0, mdKural = 0;
+    const hd = (() => {
+      try { return fs.readFileSync(path.join(KOK, '_headers'), 'utf8').replace(/\r\n/g, '\n'); }
+      catch (e) { return ''; }
+    })();
     for (const p of sayfalar) {
       const h = oku(p);
       if (/name="robots"[^>]*content="[^"]*noindex/i.test(h)) continue;
       const kan = (h.match(/<link rel="canonical" href="([^"]+)"/) || [, ''])[1];
       if (!kan) continue;
-      const md = kan.replace(/\/$/, '') + '.md';
-      if (!h.includes('type="text/markdown" href="' + md + '"')) eksik++;
+
+      /* ILAN EDILEN ADRES SAYFANIN KENDISINDEN OKUNUR, FORMULLE URETILMEZ.
+         6 EYL 2026 — BU KURAL BIR CANLI HATAYI ONAYLIYORDU. Eski hali
+         beklenen adresi `kan.replace(/\/$/,'') + '.md'` ile hesapliyordu,
+         yani URETICININ FORMULUNUN AYNISINI. Uretecin kokte kirilan
+         formulu (`https://www.qanatone.com.md` — sahibi olmadigimiz bir
+         alan adi) kuralda da aynen kirildigi icin ikisi ortusuyor ve
+         kural YESIL kaliyordu. Uretecin formulunu kopyalayan bir kapi,
+         uretecin hatasini yakalayamaz.
+         YENI OLCUT SONUCA BAKAR: sayfa ne ilan ediyorsa O ADRESIN DOSYASI
+         DISKTE VAR MI. Formulden bagimsiz, dolayisiyla formul degisse de
+         gecerli. */
+      const ilan = (h.match(/<link rel="alternate" type="text\/markdown" href="([^"]+)"/) || [, ''])[1];
+      if (!ilan) { eksik++; continue; }
+      let mdYol = '', ayniKonak = false;
+      try {
+        const u = new URL(ilan);
+        ayniKonak = u.origin === new URL(kan).origin;
+        mdYol = u.pathname;
+      } catch (e) {}
+      /* KONAK ONCE, SONRA "DIZIN DEGIL DOSYA" — ikisi de kirmizi-once ile
+         bulundu. Hatali formul `https://www.qanatone.com.md` uretiyordu:
+         `.md` Moldova'nin alan adi uzantisi, yani SAHIBI OLMADIGIMIZ bir
+         konak. `new URL()` onu sorunsuz cozer ve pathname'i `/` verir;
+         sirf dosya varligina bakan ilk yazimim o `/`yi DIZIN olarak bulup
+         yesil kaliyordu (kural kirmiziyi baska koldan yakaladi, yani
+         sasiyla). Tehlikenin ADI konak sapmasidir, once o olculur. */
+      if (!ayniKonak) { kusur.push('ILAN EDILEN md BASKA KONAKTA: ' + ilan); continue; }
+      const mdDosya = mdYol ? path.join(KOK, mdYol.replace(/^\//, '')) : '';
+      if (!mdDosya || !fs.existsSync(mdDosya) || !fs.statSync(mdDosya).isFile()) {
+        kusur.push('ILAN EDILEN md DISKTE YOK: ' + ilan);
+        continue;
+      }
       if (!/<link rel="describedby" href="[^"]*llms\.txt"/.test(h)) eksik++;
-      /* SAYIYLA, DOSYA GENELINDE ARAMAYLA DEGIL: her sayfanin _headers'ta
-         IKI yol satiri var (`/x/` ve `/x`). Ilk yazim `includes()` ile
-         butun dosyada ariyordu; bir satirdan silinse oteki hala eslesiyor
-         ve kural yesil kaliyordu — kirmizi-once yakaladi (L1 kirmizi
-         yandi, T3 yanmadi). Artik toplam sayilir. */
+
+      if (hd) {
+        /* `.md` YOLUNUN KENDI KURALI (6 Eyl 2026'da blok buraya tasindi).
+           Asil kusur buydu: canonical HTML yollarindaydi — oysa HTML onu
+           zaten `<head>`inde tasiyor — ve bagi belgede ifade EDEMEYEN tek
+           yanit turu olan `.md` bos kaliyordu. Ajan `.md`ye dustugunde
+           alintilayacagi insan adresini ogrenemiyordu. */
+        if (!hd.includes('\n' + mdYol + '\n  Link: <' + kan + '>; rel="canonical"')) {
+          kusur.push('md yolunda canonical Link yok: ' + mdYol);
+        } else mdKural++;
+        /* HTML tarafinda markdown alternatifi KALIYOR: bu blogun varlik
+           sebebi HTML'i hic indirmeden yalniz baslik okuyan (HEAD) ajan
+           istemcileriydi. Canonical/hreflang tekrari dustu, bu satir kaldi. */
+        let htmlYol = '';
+        try { htmlYol = new URL(kan).pathname; } catch (e) {}
+        if (!hd.includes('\n' + htmlYol + '\n  Link: <' + ilan + '>; rel="alternate"; type="text/markdown"'))
+          kusur.push('html yolunda md alternatifi yok: ' + htmlYol);
+      }
     }
     if (eksik) kusur.push('kesif bagi eksik:' + eksik);
-    /* her indekslenen sayfa x iki yol bicimi = beklenen md alternate sayisi */
-    const beklenen = esli * 2;
-    const sayilan = (hd.match(/; type="text\/markdown"/g) || []).length;
-    if (hd && sayilan !== beklenen) kusur.push(`Link basliginda md ${sayilan}/${beklenen}`);
+
+    /* OLU KURAL GERI GELMESIN. Cizgisiz yollar (`/x`) 6 Eyl'de CANLIDAN
+       olculdu: 301 doner ve ozel basliklar HIC uygulanmaz — blogun tam
+       yarisi (64 kural, ~29 KB) hicbir yanita dokunmuyordu. Bu kural
+       onlarin geri sizmasini kirmizi yakar. Gecerli bicimler: `/` ·
+       `/index.html` · `/<...>/` · `/<...>.md`. */
+    if (hd) {
+      const i0 = hd.indexOf('# LINK-BASLIKLARI-BAS'), i1 = hd.indexOf('# LINK-BASLIKLARI-SON');
+      if (i0 < 0 || i1 < 0) kusur.push('_headers Link isaretleri yok');
+      else {
+        const olu = hd.slice(i0, i1).split('\n')
+          .filter((s) => s.startsWith('/'))
+          .filter((s) => !(s === '/' || s === '/index.html' || s.endsWith('/') || s.endsWith('.md')));
+        if (olu.length) kusur.push(`OLU yol bicimi geri gelmis (301 verir, baslik uygulanmaz): ${olu.length}x ilki ${olu[0]}`);
+      }
+    }
+    if (hd && mdKural !== esli) kusur.push(`md yol kurali ${mdKural}/${esli}`);
   }
 
   ol('T3 · ajan hatti: markdown esleri + llms.txt + agents.md + izin + kesif baglari',

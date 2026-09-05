@@ -58,8 +58,23 @@ const { dil = 'tr', baslik, aciklama, canonical,
 /* Markdown esinin adresi KANONIKTEN turer — sayfa yolu ikinci kez
    yazilmaz. `/hizmetler/seo/` -> `/hizmetler/seo.md`, kok -> `/index.md`.
    Uretecin (ajan-hatti.mjs) yazdigi adin AYNISI; bekci T3 ikisini de
-   ayni kapsamda tutuyor. */
-const mdAdres = canonical.replace(/\/$/, '') + '.md';/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
+   ayni kapsamda tutuyor.
+
+   KOK DALI 6 EYL 2026'DA EKLENDI — CANLI HATAYDI. Onceki satir
+   `canonical.replace(/\/$/, '') + '.md'` idi ve yukaridaki yorum kok
+   kuralini ZATEN YAZIYORDU; kod onu uygulamiyordu. Ana sayfada sonuc:
+     href="https://www.qanatone.com.md"
+   `.md` Moldova'nin alan adi uzantisi — yani her ajana SAHIBI OLMADIGIMIZ
+   bir alan adi gosteriliyordu (olculdu: o konak hic cozulmuyor). Gercek
+   dosya `/index.md`; uretec (ajan-hatti.mjs:288) kok dalini DOGRU
+   yaziyordu, ilan eden taraf yazmiyordu — bu deponun tekrar eden
+   "uretici ile tuketici ayristi" hatasi, bu kez kokte.
+   NEDEN KIMSE GORMEDI: T3 beklenen adresi AYNI FORMULU KOPYALAYARAK
+   uretiyordu, yani hatayi tekrarlayip onayliyordu. Kural artik formul
+   kopyalamiyor, ILAN EDILEN ADRESIN DOSYASI VAR MI diye bakiyor. */
+const mdAdres = new URL(canonical).pathname === '/'
+  ? canonical + 'index.md'
+  : canonical.replace(/\/$/, '') + '.md';/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
    Tek satirda durmasinin sebebi: kesme gunu aranacak yer belli olsun. */
 const kesmeOncesi = false;   /* KESME YAPILDI 6 Eyl 2026 — kosulsuz noindex DUSTU; sayfa basina indeks={false} KALDI */
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
