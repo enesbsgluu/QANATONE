@@ -137,11 +137,11 @@
   },
   {
    "from": "/yeni/hizmet/:slug",
-   "to": "/hizmetler/:slug"
+   "to": "/hizmetler/:slug/"
   },
   {
    "from": "/yeni/en/hizmet/:slug",
-   "to": "/en/hizmetler/:slug"
+   "to": "/en/hizmetler/:slug/"
   },
   {
    "from": "/yeni/*",
@@ -157,11 +157,11 @@
   },
   {
    "from": "/hizmet/:slug",
-   "to": "/hizmetler/:slug"
+   "to": "/hizmetler/:slug/"
   },
   {
    "from": "/en/hizmet/:slug",
-   "to": "/en/hizmetler/:slug"
+   "to": "/en/hizmetler/:slug/"
   }
  ],
  "karsiligi_olmayan": [],
@@ -173,7 +173,7 @@
   "/hukuki",
   "/tesekkur"
  ],
- "son_kontrol": "2026-09-04T11:03:44.095Z",
+ "son_kontrol": "2026-09-05T13:23:13.008Z",
  "bugunku_sayfa": [
   "/",
   "/404",

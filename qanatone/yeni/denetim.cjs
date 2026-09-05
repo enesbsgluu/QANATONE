@@ -732,6 +732,68 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${siteAdres} · rota 200! · statik kopya yok · davranis testi T1'de`);
 }
 
+/* T5 · PANEL YAYIN UCU ZINCIRDE (5 Eyl 2026 — mimari taramasinin bulgusu).
+   YASANMIS BOSLUK: `netlify/functions/yayinla.js` CANLI bir uctur —
+   `admin.html` ona POST atar ve `panel.js` Basic Auth icin onun `dogrula()`
+   fonksiyonunu ithal eder, yani PANELIN PAROLA KAPISI o dosyadadir. 28
+   sinamasi `test/yayinla.test.js`te duruyordu ve o test YALNIZCA
+   `package.json`daki `test:yayinla` betiginden, ya da eskiden `build.js`in
+   kosturdugu `test/denetim.js` uzerinden calisiyordu. KESME (6 Eyl) build.js'i
+   zincirden cikardi; o gun bu testler de zincirden dustu ve kimse gormedi.
+   Sonuc: canli bir kimlik dogrulama yolunun hicbir kapisi kalmamisti.
+   Bu, `kur-medya --uzak-yokla` ile AYNI hata sinifi ve ayni kuralin
+   ihlali: "ELLE KOSULAN KOMUT KAPI DEGILDIR" (Enes, 4 Eyl 2026).
+
+   IKI ISI VAR:
+     1) testi KOSAR — kirmizi donerse deploy duser.
+     2) YENI YETIM DOGMASINI ENGELLER: `test/` altindaki her `*.test.js`
+        bu kuralin kostugu listede olmali. Bir test dosyasi eklenip kapiya
+        baglanmazsa kural kirmizi yanar; yoksa "test yazdim" denip hic
+        kosmayan bir dosya daha birikirdi.
+
+   `test/denetim.js` BU LISTEDE DEGIL ve bu bilincli: o suite ESKI KOK
+   SITEYI (`index.html`) denetliyordu, KESME'de o site artik uretilmiyor
+   ("Eski site TAMAMEN kalkiyor, arsiv yok" — Enes, 6 Eyl). Yani yetim
+   degil, OLU. Adi `*.test.js` desenine de uymuyor, o yuzden 2. maddeye
+   takilmiyor. Silinmedi cunku 135 kuralin gerekceleri hala okunuyor;
+   ama zincire geri baglanmamali — bugunku ciktiya uymayan kirmizilar verir. */
+{
+  const { execFileSync } = require('child_process');
+  const testKok = path.join(__dirname, '..', 'test');
+  const KOSULAN = ['yayinla.test.js'];         /* T5'in kostugu dosyalar */
+  const kusur = [];
+  let ozet = '';
+
+  /* 2 · yetim avi ONCE: dosya listesi kaynaktan okunur */
+  const varOlan = fs.existsSync(testKok)
+    ? fs.readdirSync(testKok).filter((f) => /\.test\.js$/.test(f)).sort() : [];
+  for (const f of varOlan)
+    if (!KOSULAN.includes(f)) kusur.push('YETIM test (hicbir kapi kosmuyor): test/' + f);
+  for (const f of KOSULAN)
+    if (!varOlan.includes(f)) kusur.push('listede var ama dosya yok: test/' + f);
+
+  /* 1 · kosum */
+  for (const f of KOSULAN) {
+    if (!varOlan.includes(f)) continue;
+    let cikti = '';
+    try {
+      cikti = execFileSync(process.execPath, [path.join(testKok, f)],
+        { encoding: 'utf8', cwd: path.join(__dirname, '..') });
+    } catch (e) { cikti = (e.stdout || '') + (e.stderr || ''); kusur.push(f + ': cikis kodu kirmizi'); }
+    const m = cikti.match(/(\d+)\s*ge[cç]ti\s*·\s*(\d+)\s*kald[iı]/);
+    if (!m) kusur.push(f + ': ozet satiri okunamadi (test bicimi degismis olabilir)');
+    else {
+      if (m[2] !== '0') kusur.push(f + ': ' + m[2] + ' kaldi');
+      ozet = m[1] + ' gecti · ' + m[2] + ' kaldi';
+    }
+  }
+
+  ol('T5 · panel yayin ucu (yayinla.js) testleri ZINCIRDE + yetim test yok',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : `${KOSULAN.length} dosya · ${ozet} · test/ taranmis (${varOlan.length} aday)`);
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`

@@ -170,10 +170,15 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - Fiyat/paket bloğu yok. Gerçek referans kartlarına metrik yazılmaz.
 - Kaynak ile çıktı aynı yerde durmaz: kaynak kökte, çıktı `dist/`,
   önbellek `.onbellek/`. Üreteç bir kez kendi kaynağının üzerine yazdı.
-- `content.json` panelin ürünüdür, KAYNAKTA durmaz — ama derleme onu
-  `dist/`e her zaman basar (sitenin kendi varsayılanından); panel
-  yayınlarsa onun dosyası ezer. Yoksa `/content.json` 404 olur ve
-  panelden yönetilen her ayar sessizce ölür — 2026-08'de üç ay öyle döndü.
+- `content.json` panelin ürünüdür ve **DERLEME ANINDA** okunur (Content
+  Collections + `src/icerik.ts`). ESKİ kabukta çalışma anında `fetch`lenirdi;
+  `dist/`te bulunmaması panelden yönetilen her ayarı sessizce öldürürdü —
+  2026-08'de üç ay öyle döndü. **ASTRO KABUĞUNDA ÖYLE DEĞİL, ölçüldü
+  (5 Eyl 2026):** `dist/` içinde ona atıf yapan 0 dosya var, panel de yalnız
+  `localStorage` + `yayinla` ucunu kullanıyor (tek `fetch`i odur). Yani
+  `dist/content.json` YOKLUĞU ARTIK DOĞRU; oraya bir kopya koymak panelin
+  ürününü sebepsiz yayına çıkarmak olur. Eski uyarıya bakıp "eksik" diye
+  geri eklenmesin diye bu satır böyle duruyor.
 - Forma istemci zaman damgası EKLENMEZ: gönderenin değiştirebildiği alan
   kanıt değil yanlış güven üretir; güvenilir zaman Netlify'ın `created_at`'i.
   Onay/sürüm gibi alanlar tanımlayıcıdır, kanıt değildir.
@@ -289,7 +294,14 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 - `shell.html` statik sayfalara yalnız kendi bölümlerini koyar; yoksa 58
   sayfa aynı 21.000 karakteri taşır (kopya içerik cezası).
 - IndexNow var (Bing/Yandex → dakikalar, GEO'ya da yarar); Google'a anlık
-  indeksleme yolu kimsede yok; `llms.txt`'ye zaman harcanmaz.
+  indeksleme yolu kimsede yok. **`llms.txt` KARARI DÖNDÜ (5 Eyl 2026):**
+  artık üretiliyor — beyan olarak değil, ÇIKTIDAN türev olarak
+  (`yeni/ajan-hatti.mjs`, `astro:build:done`); ikinci üreteç doğmadığı için
+  bakım maliyeti yok. Aynı turun kalıcı kuralı: **arkasında çalışan bir şey
+  olmayan hiçbir keşif dosyası yayınlanmaz** (boş bir well-known dosyası o
+  araçların puanını yükseltir ama yalandır). Yapılmayanlar ve nedenleri
+  `yeni/ajan-hatti.mjs` başındaki KARAR KAYDI'nda; tek gerçek aday olan
+  Web Bot Auth 5 Eyl'de kuruldu (`netlify/functions/imza-dizini.js`).
 
 ## Sırlar
 
