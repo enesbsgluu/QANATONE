@@ -1441,6 +1441,61 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          kusur.length === 0, kusur.slice(0, 3).join(' | '));
     }
 
+    /* H27 · CSS YORUMU ERKEN KAPANMASIN (5 Eyl 2026 — bu tur ISIRDI).
+       AracSahne'ye yazilan bir aciklamanin icinde ozel ozellik adi
+       `--fx` yildiz isaretiyle bitip hemen ardindan egik cizgi geldi;
+       YILDIZ ile EGIK CIZGI yan yana gelince YORUM ORADA KAPANDI, kalan
+       metin CSS govdesi sayildi ve Astro'nun kapsam damgasi
+       (`data-astro-cid-...`) o noktadan sonra BASILAMADI. Sonuc:
+       bilesenin mobil kurallari KAPSAMSIZ ve minify'siz cikti, yani
+       butun sayfalara sizdi — dort sayfada yatay tasma olculdu
+       (1245 px ve 389 px). Kirmizi HICBIR YERDE yanmadi: derleme
+       basarili, denetim yesil; yalniz gercek tarayicida tasma taramasi
+       yakaladi.
+       KURAL SEBEBE BAGLI: yorumun DISINDA bir kapatici dizi gorulurse o
+       BASIBOS bir kapaticidir — yani bir onceki yorum erken kapanmistir.
+       Kapsam: src altindaki .css dosyalari ve .astro style bloklari. */
+    {
+      const kusur = [];
+      const SRC2 = path.join(__dirname, 'src');
+      const AC = '/' + '*', KAP = '*' + '/';
+      const govdeler = [];
+      (function gez(d) {
+        for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+          const p2 = path.join(d, e.name);
+          if (e.isDirectory()) { gez(p2); continue; }
+          const ad = path.relative(SRC2, p2).split(path.sep).join('/');
+          if (e.name.endsWith('.css')) { govdeler.push([ad, fs.readFileSync(p2, 'utf8')]); continue; }
+          if (!e.name.endsWith('.astro')) continue;
+          let k = fs.readFileSync(p2, 'utf8');
+          /* ON MADDE (frontmatter) ATILIR: orada JS yasar ve icinde `<style>`
+             dizesi gecebilir (EskiGiris.astro: hem yorumda hem regex'te).
+             Ilk surum onu CSS sanip YANLIS KIRMIZI verdi. */
+          const f1 = k.indexOf('---');
+          if (f1 === 0) { const f2 = k.indexOf(String.fromCharCode(10) + '---', 3); if (f2 > 0) k = k.slice(f2 + 4); }
+          for (const m of k.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) govdeler.push([ad, m[1]]);
+        }
+      })(SRC2);
+      for (const [ad, g] of govdeler) {
+        let i2 = 0, icinde = false, basibos = 0;
+        while (i2 < g.length) {
+          if (!icinde) {
+            const a = g.indexOf(AC, i2), b = g.indexOf(KAP, i2);
+            if (b !== -1 && (a === -1 || b < a)) { basibos++; i2 = b + 2; continue; }
+            if (a === -1) break;
+            icinde = true; i2 = a + 2;
+          } else {
+            const b = g.indexOf(KAP, i2);
+            if (b === -1) break;
+            icinde = false; i2 = b + 2;
+          }
+        }
+        if (basibos) kusur.push(ad + ' (' + basibos + ' basibos kapatici)');
+      }
+      ol('H27 · CSS yorumu erken kapanmiyor (kapsam damgasi kirilmasin)',
+         kusur.length === 0, kusur.slice(0, 3).join(' | '));
+    }
+
     /* H8 · şerit dikişi: marquee'nin tur SAYISI ile kaydırma BÖLENİ aynı
        sayı olmak zorunda — üç tur varsa kaydırma bir tur, yani -100%/3.
        İkisi ayrı yerde yaşadığı için ayrışabilir ve ayrıştığında hata
