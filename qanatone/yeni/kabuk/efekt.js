@@ -187,6 +187,18 @@ function bit() {
   if (!bit || !say || REDUCE || R.classList.contains('t-noagent')) return;
   if (matchMedia('(pointer:coarse)').matches || innerWidth < 901) return;
   try { localStorage.removeItem('qanat-bit'); } catch (e) {}
+  /* `booted` BURADA bildirilir, ERKEN CIKISTAN ONCE (7 Eyl 2026).
+     YASANMIS HATA: bildirim asagida, bu `return`un ALTINDAYDI. Oturumda
+     imlec kapaliyken sayfa yuklendiginde fonksiyon burada cikiyor, yani
+     `let booted` HIC calismiyordu; showBack()'in tiklama isleyicisi
+     `booted`a erisince TDZ hatasi firlatiyordu:
+       "Cannot access '$' before initialization"  (kucultulmus ad)
+     Sonuc: `sessionStorage.removeItem` (isleyicinin ILK satiri) calisiyor,
+     ondan sonraki hicbir sey calismiyordu — imlec geri gelmiyor, dugme
+     ekranda kaliyordu. Kapatip BASKA SAYFAYA gecince her seferinde oluyordu
+     (ayni sayfada kalinca `booted` zaten true oldugu icin yol farkliydi;
+     belirti bu yuzden "bazen" gorunuyordu). */
+  let booted = false;
   if (sessionStorage.getItem('qanat-bit') === 'off') { showBack(); return; }
   const NO_TOUR = R.dataset.tur === '0', NO_HIDE = R.dataset.imlecGizle === '0';
 
@@ -284,7 +296,6 @@ function bit() {
     type(u.done); buttons([[u.close, closeSay]]);
     setTimeout(closeSay, 2200);
   }
-  let booted = false;
   function dismiss() {
     closeSay(); bit.classList.remove('on');
     R.classList.remove('bitcursor');
