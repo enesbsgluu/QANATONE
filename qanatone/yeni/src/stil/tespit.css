@@ -94,7 +94,7 @@
 
 .ste-izgara{list-style:none;display:grid;gap:8px;margin-top:clamp(14px,2vw,22px);
   grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
-.ste-kalem{display:flex;align-items:center;gap:9px;
+.ste-kalem{position:relative;display:flex;align-items:center;gap:9px;
   border:1px solid var(--line);border-radius:12px;padding:10px 12px;
   font-size:.86rem;color:var(--tx2)}
 /* durum noktası: renk TEK yerde, üç sınıf */
@@ -129,7 +129,20 @@
    Iki sutun + daha sik satir. HICBIR BILGI GIZLENMIYOR: 26 kalemin hepsi
    duruyor, uzun etiket kirpilmiyor iki satira sariyor (kirpma bilgi
    kaybidir; burada yer kazanci ondan gelmiyor, sutundan geliyor).
-   Dokunma hedefi korunuyor: satir yuksekligi >= 36 px. */
+
+   YENIDEN OLCULDU (6 Eyl 2026, 390x844 gercek Chrome, IKINCI EKSEN ACIK):
+   yukaridaki 1.332 px artik dogru degil — ajan ekseni eklendikten sonra
+   sonuc blogu 1.553–1.594 px = 1,84–1,89 EKRAN (ana izgara 547,7 · ajan
+   blogu 308,6 · duzeltme listesi 451; aralik kalemlerin kacinin deger
+   tasidigina gore oynuyor). Kapi hala 2 ekran, pay ~0,12 ekran.
+   Satir yuksekligi 34–36,6 px: degeri olan satir 36,6, iki hucresi de
+   degersiz olan satir 34 (izgara satiri iki kalemi esitler). Eski
+   ">= 36 px" ibaresi ajan izgarasinda yanlisti ve zaten YANLIS SEYI
+   olcuyordu — tiklanan sey satir degil icindeki dugmeydi (16–18,6 px).
+   Ortuyle dokunma hedefi satirin tamamina cikti: 34–36,6 px, WCAG 2.2
+   AA asgarisi olan 24 px'in ustunde. Projenin kendi mobil kapisi 44 px
+   istiyor (olc-mobil.cjs); 44'e cikarmak 26+7 kalemde blogu ~2,08 ekrana
+   tasirdi, yani iki kapi burada CAKISIYOR — karar Enes'te. */
 @media(max-width:600px){
   .ste-izgara{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .ste-kalem{padding:8px 10px;gap:7px;font-size:.8rem;align-items:flex-start}
@@ -151,8 +164,18 @@
 .ste-kalem-ac{flex:1;display:flex;align-items:center;gap:9px;min-width:0;
   background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;
   text-align:left;cursor:pointer}
+/* DOKUNMA HEDEFİ SATIRIN TAMAMI (6 Eyl 2026, ölçüldü). `button` yalnız
+   metni kadar yer kaplıyordu: mobilde 16–18,6 px, yani görünen 34–36,6
+   px'lik satırın yarısı. Kalan yer satırın dolgusu ve durum noktasıydı;
+   oraya dokunuş boşa gidiyordu — kutu tıklanır GÖRÜNÜYOR ama değil.
+   Yayılan örtü düğmeyi satıra genişletir ve DÜZENE DOKUNMAZ: `::after`
+   akıştan çıkar, hiçbir kutu büyümez, blok boyu aynı kalır (ölçüldü).
+   Odak halkası da satıra taşındı; düğmede kalsaydı klavyede tıklanan
+   alanı yanlış gösterirdi. */
+.ste-kalem-ac::after{content:'';position:absolute;inset:0;border-radius:12px}
 .ste-kalem-ac:hover span{color:var(--tx)}
-.ste-kalem-ac:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:6px}
+.ste-kalem:has(.ste-kalem-ac:focus-visible){outline:2px solid var(--red);
+  outline-offset:4px}
 
 /* TARAMA RAYI — ince bir hat, uzerinde kizil bir dilim soldan saga
    suzuluyor. TRANSFORM ILE (H5/H14): genislik animasyonu her karede
