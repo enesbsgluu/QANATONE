@@ -475,9 +475,14 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           EN
             ? 'robots.txt blocks AI crawlers — even a healthy site will not appear in AI answers.'
             : 'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
-        /* Halka ve sayı: renk eşikleri kaynaktan (70/45). */
+        /* Halka ve sayı: renk eşikleri kaynaktan (70/45).
+           TEK EŞİK, İKİ EKSEN: ajan skoru da bu fonksiyondan renk alır.
+           İki yere iki eşik yazsaydım aynı renk iki anlama gelirdi ve
+           biri değişip öteki kalırdı — fonksiyon tarafında `skorla()` ile
+           kaçındığım ayrışmanın aynısı. */
+        const renk = (n: number) => n >= 70 ? '#22c55e' : n >= 45 ? '#f59e0b' : 'var(--red)';
         const cevre = Number(yay.getAttribute('stroke-dasharray'));
-        yay.style.stroke = j.score >= 70 ? '#22c55e' : j.score >= 45 ? '#f59e0b' : 'var(--red)';
+        yay.style.stroke = renk(j.score);
         yay.setAttribute('stroke-dashoffset', (cevre * (1 - j.score / 100)).toFixed(1));
         skor.textContent = String(j.score);
         /* Sıra kaynaktaki gibi: önce kırmızılar, sonra sarılar, sonra yeşiller. */
@@ -520,7 +525,9 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           const gorunsun = !!(aj && aj.olculdu);
           ajanBlok.hidden = !gorunsun;
           if (gorunsun) {
-            (document.getElementById('steAjanSkor') as HTMLElement).textContent = String(aj.skor);
+            const ajanSkor = document.getElementById('steAjanSkor') as HTMLElement;
+            ajanSkor.textContent = String(aj.skor);
+            ajanSkor.style.color = renk(aj.skor);
             izgaraYaz(document.getElementById('steAjanIzgara') as HTMLElement, aj.items || []);
           }
         }

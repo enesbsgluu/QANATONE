@@ -116,7 +116,7 @@
 .ste-ajan-bas{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .ste-ajan-bas h4{font-size:1rem;letter-spacing:-.01em}
 .ste-ajan-bas b{font-family:var(--f-tek);font-size:1.5rem;line-height:1;
-  color:var(--tx1)}
+  color:var(--tx1)}   /* ada rengi ayni esikten yazar (70/45) */
 .ste-ajan-orta{margin-left:auto;font-family:var(--f-tek);font-size:.72rem;
   color:var(--tx4)}
 .ste-ajan-not{margin-top:6px;color:var(--tx2);font-size:.86rem;line-height:1.5}
