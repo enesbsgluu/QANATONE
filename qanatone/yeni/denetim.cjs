@@ -613,10 +613,30 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   if (txt.length === 1 && loc.some((u) => u.endsWith('/' + txt[0]))) {
     kusur.push('anahtar dosyasi sitemap listesinde');
   }
-  ol('T6 · IndexNow dogrulama zinciri: <anahtar>.txt ciktida + icerik anahtarla birebir + adresler sitemap\'ten',
+  /* ERKEN BILDIRIM KAPISI (7 Eyl 2026) — OLCULEN HATA: kanca
+     `astro:build:done`de kosuyor, yani Netlify dist'i HENUZ YAYINA
+     ALMAMISKEN. Ilk IndexNow deploy'unda anahtar dosyasi canlida yoktu,
+     Bing dogrulayamadi ve anahtari KALICI 403'e dusurdu
+     (UserForbiddedToAccessSite). Ayristirma: ayni adrese SAHTE anahtarla
+     istek 202, gercek anahtarla 403 — yani dosya degil ANAHTAR yanmisti.
+     Yanit yalniz derleme kaydinda bir `warn` satiri oldugu icin bunu
+     hicbir yer kirmizi yakmadi; anahtar donduruldu ve kapi kondu.
+     Kural, kapinin sessizce kaldirilmasini engeller. */
+  const kaynak = fs.readFileSync(path.join(__dirname, 'indexnow.mjs'), 'utf8');
+  if (!/anahtarYayindaMi/.test(kaynak)) kusur.push('canli anahtar kapisi yok (erken bildirim anahtari yakar)');
+  else {
+    const govde = kaynak.slice(kaynak.indexOf('export async function bildir'));
+    const kapiYeri = govde.indexOf('anahtarYayindaMi');
+    const postYeri = govde.indexOf('method:');
+    if (kapiYeri < 0 || postYeri < 0 || kapiYeri > postYeri) {
+      kusur.push('canli anahtar kapisi POST\'tan SONRA — once dogrulanmali');
+    }
+  }
+
+  ol('T6 · IndexNow dogrulama zinciri: <anahtar>.txt ciktida + icerik anahtarla birebir + adresler sitemap\'ten + canli anahtar kapisi POST\'tan once',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 3).join(' · ')
-       : `${txt[0] || '?'} · ${loc.length} adres bildirilecek`);
+       : `${txt[0] || '?'} · ${loc.length} adres bildirilecek · kapi yerinde`);
 }
 
 /* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"
