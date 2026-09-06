@@ -205,7 +205,21 @@ html.fl-nav-kalk .nv-bar { transform: translateY(-115%); }
 }
 html.fl-hazirla .fl-govde, html.fl-devir .fl-govde { visibility: visible; pointer-events: none; }
 html.fl-devir-net .fl-govde { pointer-events: auto; }
-html:not(.fl-js) .fl-govde { position: static; visibility: visible; pointer-events: auto; }
+/* ARKA PLAN GERI GELIR (7 Eyl 2026 — Enes: "kirmizi ve cizgili arkaplan
+   yok, sadece siyah kalmis; diger sayfalarda var ana sayfada yok; sadece
+   footer'da o arkaplan var").
+   OLCULDU: `.fl-govde` opak `#050505` tasiyor. Bu, FILM SIRASINDA sart —
+   govde filmin ONUNDE belirir ve altindaki kareyi gizlemesi gerekir. Ama
+   film YOKKEN/GECILDIKTEN sonra ayni opak zemin duruyordu ve `#bg`
+   (fixed, z-index:-1: .grid nokta kafesi + .orb kizil kure + .fade)
+   TAMAMEN ortuluyordu. Ic sayfalarda `.fl-govde` hic olmadigi icin orada
+   arka plan gorunuyordu — Enes'in "diger sayfalarda var" gozlemi tam
+   olarak bu. Footer sarmalin disinda kaldigi icin yalniz orada
+   gorunuyordu.
+   Kural film moduna dokunmaz: `fl-hazirla`/`fl-devir` hallerinde
+   (film ACIKKEN govde gorunur oldugu anlar) zemin opak KALIR. */
+html:not(.fl-js) .fl-govde { position: static; visibility: visible; pointer-events: auto;
+  background: transparent; }
 /* govde icerigi eski sitenin girisi (GOMULU — EskiGiris.astro, shadow) */
 .fl-eski-giris { position: absolute; inset: 0; overflow: hidden; background: #050505; }
 /* film katmani: devir netlesince fade-out (.14s, 120-160 araligi) */

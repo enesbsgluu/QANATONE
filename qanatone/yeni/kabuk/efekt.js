@@ -199,6 +199,12 @@ function bit() {
      (ayni sayfada kalinca `booted` zaten true oldugu icin yol farkliydi;
      belirti bu yuzden "bazen" gorunuyordu). */
   let booted = false;
+  /* KAPALI BAYRAGI (7 Eyl 2026 — Enes: "imleci kapat deyince arkaplanda
+     hala imlec calisiyor, bir yere tiklayinca pop-up cikiyor").
+     `dismiss()` yalniz GORUNURLUGU kaldiriyordu; click/pointermove
+     dinleyicileri kurulu kaldigi icin ozellik arkada calismaya devam
+     ediyordu. Ozellik kapandiysa etkilesim de kapanir. */
+  let kapali = false;
   if (sessionStorage.getItem('qanat-bit') === 'off') { showBack(); return; }
   const NO_TOUR = R.dataset.tur === '0', NO_HIDE = R.dataset.imlecGizle === '0';
 
@@ -297,6 +303,7 @@ function bit() {
     setTimeout(closeSay, 2200);
   }
   function dismiss() {
+    kapali = true;
     closeSay(); bit.classList.remove('on');
     R.classList.remove('bitcursor');
     tip.classList.remove('on');
@@ -312,23 +319,26 @@ function bit() {
       try { sessionStorage.removeItem('qanat-bit'); } catch (e) {}
       if (!booted) { location.reload(); return; }
       b.classList.remove('on'); setTimeout(() => b.remove(), 420);
+      kapali = false;
       bit.classList.add('on');
       if (!NO_HIDE) R.classList.add('bitcursor');
     };
     document.body.appendChild(b); requestAnimationFrame(() => b.classList.add('on'));
   }
   addEventListener('pointermove', (e) => {
-    if (e.pointerType === 'touch') return;
+    if (kapali || e.pointerType === 'touch') return;
     has = true; anchored = false; mx = e.clientX; my = e.clientY;
     tip.classList.add('on');
   }, { passive: true });
   addEventListener('mouseover', (e) => {
+    if (kapali) return;
     const t = e.target && e.target.closest && e.target.closest('a,button,input,summary,label,[role=button],.sc,.dk,.fnode');
     bit.classList.toggle('link', !!t);
   }, { passive: true });
   const HOT = 'a,button,input,textarea,select,label,summary,details,[role=button],' +
               '[tabindex]:not([tabindex="-1"]),canvas,svg,.sc,.dk,.fnode,#bitsay,#bitback';
   addEventListener('click', (e) => {
+    if (kapali) return;                     /* kapaliyken pop-up ACILMAZ */
     const t = e.target;
     if (!t || !t.closest) return;
     if (t.closest('#bitsay,#bitback')) return;
@@ -337,7 +347,7 @@ function bit() {
     if (window.getSelection && String(window.getSelection()).length) return;
     openSay();
   });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeSay(); });
+  addEventListener('keydown', (e) => { if (!kapali && e.key === 'Escape' && open) closeSay(); });
 
   let last = performance.now();
   function loop(now) {

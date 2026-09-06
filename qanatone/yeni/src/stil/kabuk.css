@@ -124,8 +124,14 @@ html.bitcursor .kb-tip.on{opacity:.9}
   font-family:inherit;transition:.24s var(--e)}
 .kb-say .acts button:hover{border-color:var(--red);color:var(--red-soft);background:var(--red-dim)}
 .kb-say .acts button.p{background:var(--red-dolgu);border-color:var(--red-dolgu);color:#fff}
-.kb-say .acts button.q{border-color:transparent;color:var(--tx4);padding-left:4px;padding-right:4px}
-.kb-say .acts button.q:hover{border-color:transparent;background:none;color:var(--tx3)}
+/* "Imleci kapat" TUS GIBI GORUNUR (7 Eyl 2026 — Enes: "pop-up'ta gozuken
+   bir tus gibi degil sadece yazi"). `.q` ucuncul eylem oldugu icin
+   kenarligi seffaflastirilmisti; sonuc, tiklanabilir oldugu okunmayan
+   duz bir yaziydi. Kenarlik geri geldi, ucuncul olusu artik RENKLE
+   anlatiliyor (govde rengi daha sonuk, kenarlik daha ince kontrastta) —
+   yani hiyerarsi korunuyor ama dugme oldugu goruluyor. */
+.kb-say .acts button.q{border-color:rgba(255,255,255,.18);color:var(--tx3)}
+.kb-say .acts button.q:hover{border-color:rgba(239,35,60,.55);background:rgba(239,35,60,.08);color:var(--tx2)}
 /* IMLECI GERI GETIR — dis ceberde SUZULEN kizil isik (Enes, 7 Eyl 2026:
    "dis ceberinide suzulen kirmizi isik yap ve yaricapini daralt").
    Yaricap 38 -> 30 px. Isik ayri bir sozde ogede: conic-gradient bir yay
