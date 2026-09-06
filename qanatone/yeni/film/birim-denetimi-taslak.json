@@ -1133,7 +1133,8 @@
     "agirlastiran": "PAYDA, SINANAN DEGISKENIN TA KENDISI. Arac TAVANLAR=1.5,2,2.25,2.5 adaylarini kiyasliyor ve kunyesinde yazdigi gibi \"bir tavan turu KISALTIYOR\". Aracin kendi sabitlerinden turetilir: ray_px 120.565 / pxSn 450 = 268 sn (1x); tavan 1,5 -> ~179 sn, 2,0 -> 128 sn (olculen tur 113,8), 2,5 -> ~107 sn. Yani aday kumesi boyunca payda 1,67 KAT degisiyor ve HIZLI ADAY, ayni mutlak takilmayla, orantili olarak 1,67 kat kotu okunuyor.",
     "not": "Kapi B den FARKI ve DAHA AGIR olmasinin sebebi bu: orada payda sayfadan sayfaya degisiyordu, burada payda KARARIN KENDISI. Enes bu araci \"hangi tavan\" karari icin kosuyor.",
     "dayanak_ayni_kunyeden": "Enes in aracin basina yazdigi degismez: \"klibin hic takilmadan ilerlemesi\" — mutlak takilma, oran degil.",
-    "onerilen": "kapi_yuzde bilgi satirina dussun; bloklayici olarak zaten var olan MUTLAK kalemler kalsin (kapi_tek = TAKILMA_TEK_MS ve kare p95). KARAR ENES IN — bu turda DEGISTIRILMEDI.",
+    "onerilen": "kapi_yuzde bilgi satirina dussun; bloklayici olarak zaten var olan MUTLAK kalemler kalsin (kapi_tek = TAKILMA_TEK_MS ve kare p95).",
+    "KAPANDI": "6 Eyl 2026, Enes: 'karar sende'. Iki asamada kapandi: (1) 4fe097f oranin KAPI olmasini bitirdi, (2) 6 Eyl artigi da temizledi — TAKILMA_YUZDE_TAVAN sabiti kalkti, eski_yuzde_kapisi'nin GECER/ASIYOR etiketi yerine cıplak `yuzde_ortanca` sayisi yaziliyor, degismezler kunyesinden oran tavani cikti. Uyuyan kapi da kapidir: atesle­mese bile okuyan hukum sanar. Bekcisi yeni/test/olc-esik.test.mjs uc test (kirmizi-once dogrulandi; mesru `tur_sn <= TUR_SINIR_SN` kapisini yanlis kirmiziya dusurmedigi ayrica sinandi).",
     "ek_gozlem": "Mevcut kayitta kapi_tek zaten \"ASIYOR\" durumda (tavan 2). Bu bu gecenin isi degil, ayri acik kalem."
    },
    {

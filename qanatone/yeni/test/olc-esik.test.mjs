@@ -276,3 +276,45 @@ test('duzenegin kendi urettigi yuk (dwm) ayrilir ve ayrica yazilir', () => {
     assert.match(s, /rig_cekirdek:/, `${ad}: ayrilan yuk kayda gecmiyor — ayirmak gizlemek degildir`);
   }
 });
+
+/* ------------------------------------------------------------------ *
+   BIRIM KURALI UCUNCU ARACA DA UYGULANIR (6 Eyl 2026, Enes: "karar sende")
+
+   Bu dosya kurulurken kapsam "iki kapi" (olc-sayfa + olc-soguk) diye
+   yazilmisti. Ama [[kapi-birimi]] kurali kapiya degil HUKUM DILINE bakar:
+   paydasi olculen nesneler arasinda degisen bir sayi hukum veremez.
+   `olc-hiz.cjs` cikis kodu uretmiyor — hukmu INSAN okuyor — ve tam bu
+   yuzden GECER/ASIYOR etiketi orada da bir hukumdur.
+
+   4fe097f oran kapisini dusurdu ama ARTIGI biraktı: `eski_yuzde_kapisi`
+   hala GECER/ASIYOR basiyordu ve `degismezler` kunyesinde oran tavani bir
+   esikmis gibi duruyordu. "Uyuyan yanlis birim" tam olarak budur — kapi
+   ateslemez ama okuyan hukum sanar. Bu blok artigin geri gelmesini kapatir.  * ------------------------------------------------------------------ */
+const H = yorumsuz(oku('film', 'olc-hiz.cjs'));
+
+/* OLCUT: `tur_sn` BOLEN olarak gecen bir satir hukum dili tasiyamaz.
+   `tur_sn <= TUR_SINIR_SN` MESRU bir kapidir — orada tur suresi paydanin
+   degil OLCULEN SEYIN kendisi, birimi saniye. Ayrimi kurmadan "tur_sn
+   gecen her satir" diye bakan ilk surumum bu mesru kapiyi yanlis kirmizi
+   yakti; [[kapi-birimi]] kunyesindeki ders aynen bu: once "bu sayi hukum
+   veriyor mu ve NEYIN uzerinden" sorulur. */
+test('olc-hiz: ORAN hicbir yerde GECER/ASIYOR hukmu uretmez', () => {
+  const satirlar = H.split('\n').filter((s) => /GECER|ASIYOR/.test(s));
+  for (const s of satirlar)
+    assert.ok(!/\/\s*(?:\w+\.)*tur_sn/.test(s),
+      `oran uzerinden hukum dili uretiliyor (payda tur_sn, tavan turu kisaltir): ${s.trim().slice(0, 90)}`);
+});
+
+test('olc-hiz: oran tavani DEGISMEZLER kunyesinde esik gibi durmaz', () => {
+  const blok = H.match(/degismezler:\s*\{[\s\S]*?\},?\n/);
+  assert.ok(blok, 'degismezler blogu bulunamadi');
+  assert.doesNotMatch(blok[0], /yuzde_tavan/,
+    'oran tavani hala "degismez" olarak yaziliyor — kapi degilse tavan da degildir');
+});
+
+test('olc-hiz: bloklayici etiketler SADECE mutlak birim tasir', () => {
+  /* GECER/ASIYOR basan her kalem ms, tik ya da sn cinsinden olmali. */
+  for (const s of H.split('\n').filter((x) => /\?\s*'GECER'/.test(x)))
+    assert.ok(/_MS|_SN|SINIR|TEK_MS|P95/.test(s),
+      `mutlak birime baglanmayan hukum etiketi: ${s.trim().slice(0, 90)}`);
+});

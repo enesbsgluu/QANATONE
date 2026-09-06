@@ -55,7 +55,12 @@ const P95_SINIR_MS = 20;           /* v2 degismez 2 */
    [258,142,150] cikti; 258 tek kosumdaydi, medyan 150 — kural
    metninde medyan yazili olmadigi icin tartisma acildi, yazildi.
    Kosum-basina en uzunlar yayilim icin ciktida durur. */
-const TAKILMA_YUZDE_TAVAN = 3;
+/* TAKILMA_YUZDE_TAVAN KALDIRILDI (6 Eyl 2026, Enes: "karar sende").
+   4fe097f oranin KAPI olmasini bitirdi ama sabiti ve GECER/ASIYOR
+   etiketini birakti: kapi atesle­miyordu, ama okuyan hukum saniyordu ve
+   kunye onu hala "degismez" diye yaziyordu. Uyuyan yanlis birim, uyanik
+   olanindan daha sinsi — kimse sorgulamiyor. Oranin kendisi (yuzde_hepsi)
+   BILGI olarak yaziliyor, tavani yok cunku tavani olan sey kapidir. */
 const TAKILMA_TEK_MS = 250;
 
 /* Durulan nokta: TEK — cekirdek, p95 <= 9,5 ms (2 Eyl 2026, Enes:
@@ -400,7 +405,7 @@ async function tur(browser, tavan) {
          kare p95 (ms/tik). Oran YAZILIR, hukum VERMEZ. */
       yuzde_hepsi: kosumlar.map((k) => +(100 * k.takilma.toplam_ms / 1000 / k.tur_sn).toFixed(2)),
       yuzde_bilgi: 'BILGI — KAPI DEGIL. Payda tur_sn ve tavan turu kisaltiyor; oran adayi degil paydayi olcer.',
-      eski_yuzde_kapisi: ortanca(kosumlar.map((k) => 100 * k.takilma.toplam_ms / 1000 / k.tur_sn)) <= TAKILMA_YUZDE_TAVAN ? 'GECER' : 'ASIYOR',
+      yuzde_ortanca: ortanca(kosumlar.map((k) => 100 * k.takilma.toplam_ms / 1000 / k.tur_sn)),
       /* MEDYAN kurali (3 Eyl gece): tek kosum baglayici degil */
       en_uzun_hepsi: kosumlar.map((k) => k.takilma.en_uzun_ms),
       kapi_tek: ortanca(kosumlar.map((k) => k.takilma.en_uzun_ms)) <= TAKILMA_TEK_MS ? 'GECER' : 'ASIYOR',
@@ -428,7 +433,7 @@ async function tur(browser, tavan) {
     };
     sonuc.push(r);
     console.log(`  ORTAM: ${r.ortam} · taban [${r.taban.sayi_hepsi.join(',')}]`);
-    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma %[${r.takilma.yuzde_hepsi.join(',')}] (bilgi, kapi degil: ${r.takilma.eski_yuzde_kapisi}) · tek en-uzun medyan[${r.takilma.en_uzun_hepsi.join(',')}] (${r.takilma.kapi_tek}) · sayi ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] (bilgi) · borc tepe ${r.borc_tepe_sn} sn`);
+    console.log(`  ORTANCA tur ${r.tur_sn} sn (${r.tur_120_sinirinda}) · p50 ${r.kare_p50} / p95 ${r.kare_p95} ms (${r.p95_20ms}) · takilma %[${r.takilma.yuzde_hepsi.join(',')}] (ortanca ${r.takilma.yuzde_ortanca} — BILGI, kapi degil) · tek en-uzun medyan[${r.takilma.en_uzun_hepsi.join(',')}] (${r.takilma.kapi_tek}) · sayi ${r.takilma.sayi_ortanca} [${r.takilma.sayi_hepsi.join(',')}] (bilgi) · borc tepe ${r.borc_tepe_sn} sn`);
     for (const d of r.duraklar) console.log(`    durulan · ${d.ad}: p50 ${d.kare_p50} / p95 ${d.kare_p95} ms · takilma [${d.takilma_hepsi.join(',')}]`);
     console.log(`    geri: p50 ${r.geri.kare_p50} / p95 ${r.geri.kare_p95} ms · takilma [${r.geri.takilma_hepsi.join(',')}] · sardi ${r.geri.geriye_sardi}`);
     console.log(`    bayt: tipik oturum (15 sn) ${r.tipik_oturum_mib} MiB · tam tur ${r.tam_tur_mib} MiB · bellek tepe ${r.bellek_tepe_mib} MiB`);
@@ -439,7 +444,8 @@ async function tur(browser, tavan) {
     _: 'yeni/film/olc-hiz.cjs — hiz tavani taramasi. GERCEK girdi (Input.synthesizeScrollGesture), sayfa ici scrollTo YOK. Tur cikis sarti FILM KONUMU. Takilma = sunumsuz bosluk > 100 ms, film ilerlerken. Sonumleme sabit (v2 sabiti); yalniz tavan oynadi.',
     olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, hizlandirma,
     sorgu: process.env.SORGU || null,
-    degismezler: { takilma_toplam_yuzde_tavan: TAKILMA_YUZDE_TAVAN, takilma_tek_ms_tavan: TAKILMA_TEK_MS,
+    degismezler: { takilma_tek_ms_tavan: TAKILMA_TEK_MS,
+      takilma_toplam_yuzde: 'bilgi — hukum vermez, TAVANI YOK (6 Eyl; tavani olan sey kapidir)',
       takilma_sayisi: 'bilgi — hukum vermez (Enes, 3 Eyl)',
       kare_p95_ms: P95_SINIR_MS, tur_sn: TUR_SINIR_SN, durulan_p95_ms: DURULAN_P95_MS,
       taban_tavan: Number(process.env.TABAN_TAVAN ?? 1) },
