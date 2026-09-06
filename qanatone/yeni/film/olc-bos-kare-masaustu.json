@@ -1,0 +1,149 @@
+{
+ "_": "BOS TEST — ayni sayfadan iki kare, ideal fark SIFIR. Sifir degilse olculen duzenektir.",
+ "olcum": "2026-09-06T21:08:51.073Z",
+ "gorunum": "masaustu",
+ "tubes_sokuldu": false,
+ "tekrar": 6,
+ "gecerli_kosum": 2,
+ "temiz_kosum": 1,
+ "hukum": "DUZENEK GURULTULU — sadakat farklari supheli",
+ "kosumlar": [
+  {
+   "kosum": 1,
+   "maxfark": 40,
+   "farkli_piksel": 1268,
+   "farkli_oran": 0.0245,
+   "hukumsuz": "DURULMADI",
+   "durgun": false,
+   "durulma_denemesi": 30,
+   "stdev": [
+    55.36,
+    55.36
+   ],
+   "kilitlenen": 82,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    0,
+    0
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 2,
+   "maxfark": 2,
+   "farkli_piksel": 287,
+   "farkli_oran": 0.0055,
+   "hukumsuz": "DURULMADI",
+   "durgun": false,
+   "durulma_denemesi": 30,
+   "stdev": [
+    55.38,
+    55.38
+   ],
+   "kilitlenen": 84,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    0,
+    0
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 3,
+   "maxfark": 40,
+   "farkli_piksel": 614,
+   "farkli_oran": 0.0118,
+   "hukumsuz": "DURULMADI",
+   "durgun": false,
+   "durulma_denemesi": 30,
+   "stdev": [
+    55.91,
+    55.91
+   ],
+   "kilitlenen": 93,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    48,
+    48
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 4,
+   "maxfark": 1,
+   "farkli_piksel": 35,
+   "farkli_oran": 0.0007,
+   "hukumsuz": null,
+   "durgun": true,
+   "durulma_denemesi": 18,
+   "stdev": [
+    56.74,
+    56.74
+   ],
+   "kilitlenen": 83,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    66,
+    66
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 5,
+   "maxfark": 1,
+   "farkli_piksel": 81,
+   "farkli_oran": 0.0016,
+   "hukumsuz": "DURULMADI",
+   "durgun": false,
+   "durulma_denemesi": 30,
+   "stdev": [
+    56.06,
+    56.06
+   ],
+   "kilitlenen": 91,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    55,
+    56
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 6,
+   "maxfark": 0,
+   "farkli_piksel": 0,
+   "farkli_oran": 0,
+   "hukumsuz": null,
+   "durgun": true,
+   "durulma_denemesi": 22,
+   "stdev": [
+    56.85,
+    56.85
+   ],
+   "kilitlenen": 82,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    82,
+    82
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  }
+ ],
+ "raf_cagiranlar": {
+  "p (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:10356) <- ye (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:8070)": 269,
+  "_ (http://127.0.0.1:8790/varlik/kabuk.js:1:10768)": 105,
+  "D (http://127.0.0.1:8790/_astro/Film.astro_astro_type_script_index_0_lang.BS6fcUh6.js:1:7042) <- addEventListener.passive (http://127.0.0.1:8790/_astro/Film.astro_astro_type_script_index_0_lang.BS6fcUh6.js:1:7126)": 81,
+  "o (http://127.0.0.1:8790/_astro/gecis.Be_ieyFZ.js:1:875)": 4,
+  "p (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:10356) <- Be (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:5969)": 3,
+  "D (http://127.0.0.1:8790/_astro/Film.astro_astro_type_script_index_0_lang.BS6fcUh6.js:1:7042) <- http://127.0.0.1:8790/_astro/Film.astro_astro_type_script_index_0_lang.BS6fcUh6.js:1:7226": 1,
+  "p (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:10356) <- Ue (http://127.0.0.1:8790/_astro/motor.BbYCgKcK.js:1:4665)": 1,
+  "Module.O (http://127.0.0.1:8790/_astro/gecis.Be_ieyFZ.js:1:941) <- http://127.0.0.1:8790/_astro/Film.astro_astro_type_script_index_0_lang.BS6fcUh6.js:1:7481": 1,
+  "http://127.0.0.1:8790/varlik/kabuk.js:1:10868": 1
+ }
+}
