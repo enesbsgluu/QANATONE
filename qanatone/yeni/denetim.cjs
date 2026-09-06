@@ -360,8 +360,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     for (const m of h.matchAll(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/g)) bak(d, 'canonical', m[1]);
     for (const m of h.matchAll(/<meta[^>]+property="og:url"[^>]+content="([^"]+)"/g)) bak(d, 'og:url', m[1]);
   }
-  /* sitemap ve _headers Link blogu ayni olcute girer (adresler oradan da cikar) */
-  for (const ad of ['sitemap.xml', '_headers']) {
+  /* sitemap, rss ve _headers Link blogu ayni olcute girer (adresler oradan
+     da cikar). RSS 6 Eyl 2026'da EKLENDI: H29 turunda kapsam disindaydi ve
+     kanal <link>i + 7 item'in link/guid'i egik cizgisiz kaldi — canlida
+     hepsi 301 donuyordu, sitemap'in 58 loc'u 200'ken. Kural kapsami
+     "sayfalar + o turda akla gelen iki dosya" degil, ADRES BASAN HER
+     CIKTI olmali. */
+  for (const ad of ['sitemap.xml', '_headers', path.join('bulten', 'rss.xml')]) {
     const y = path.join(KOK, ad);
     if (!fs.existsSync(y)) continue;
     const g = fs.readFileSync(y, 'utf8');
@@ -1809,7 +1814,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const rss = oku(rssYol);
     const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
     for (const p of (c.posts || []))
-      if (!guidler.includes(`${KONAK}/bulten/${p.slug}`)) kusur.push('rss-eksik:' + p.slug);
+      /* guid EGIK CIZGIYLE biter (6 Eyl 2026, H29 kapsami rss'e genisledi). */
+      if (!guidler.includes(`${KONAK}/bulten/${p.slug}/`)) kusur.push('rss-eksik:' + p.slug);
     if (guidler.length !== (c.posts || []).length) kusur.push(`rss-sayi:${guidler.length}/${(c.posts || []).length}`);
     if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
   }

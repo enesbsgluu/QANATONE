@@ -7,10 +7,21 @@
    content.json'un ham sırasını basıyordu, o sıra kronolojik değil
    (bülten dizini turunda ölçüldü); dizinle aynı karar. Okuyucular
    pubDate'e göre sıralar, alan değerleri birebir. Bekçisi R8'in rss
-   ayağı (yazı seti ↔ item seti). */
+   ayağı (yazı seti ↔ item seti).
+
+   EGIK CIZGI (6 Eyl 2026 — kesme dogrulama listesi madde 3). Adresler
+   `sl()`siz yaziliyordu: kanal `<link>`i ve 7 item'in link/guid'i
+   egik cizgisiz cikiyor, canlida HEPSI 301 donuyordu (sitemap'in 58
+   loc'u 200'ken — olculdu). H29 turu bunu KACIRDI cunku bekcinin
+   kapsami `sayfalar` + sitemap.xml + _headers'ti, rss.xml orada yok;
+   kapsam bu turda genisletildi.
+   KABUL EDILEN YAN ETKI: `<guid>` degeri degisiyor, yani RSS
+   okuyuculari 7 yaziyi bir kez daha "yeni" gosterir. Kesme yeni
+   oldugu icin abone tabani yok denecek kadar az; tutarlilik kazanci
+   kalici, gosterim maliyeti tek seferlik. */
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { KOK, T } from '../../icerik';
+import { KOK, T, sl } from '../../icerik';
 
 export const GET: APIRoute = async () => {
   const yazilar = (await getCollection('yazilar')).map(e => e.data)
@@ -20,13 +31,13 @@ export const GET: APIRoute = async () => {
 
   return new Response(
     '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n' +
-    `  <title>QANATONE Bülten</title>\n  <link>${KOK}/bulten</link>\n` +
+    `  <title>QANATONE Bülten</title>\n  <link>${sl(`${KOK}/bulten`)}</link>\n` +
     '  <description>Yapay zeka, arama ve talep yonetiminde isine dokunan gelismeler.</description>\n' +
     '  <language>tr</language>\n' +
     yazilar.map((p: any) => '  <item>\n' +
       `    <title>${esc(T(p.title, 'tr'))}</title>\n` +
-      `    <link>${KOK}/bulten/${p.slug}</link>\n` +
-      `    <guid>${KOK}/bulten/${p.slug}</guid>\n` +
+      `    <link>${sl(`${KOK}/bulten/${p.slug}`)}</link>\n` +
+      `    <guid>${sl(`${KOK}/bulten/${p.slug}`)}</guid>\n` +
       `    <pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate>\n` +
       `    <description>${esc(T(p.lede, 'tr'))}</description>\n  </item>`).join('\n') +
     '\n</channel></rss>\n',
