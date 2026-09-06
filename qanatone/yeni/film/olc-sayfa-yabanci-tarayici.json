@@ -1,0 +1,342 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-06T12:25:17.814Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "tekrar": 3,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.3,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.9,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "ekran_degisti": false,
+ "yuk_taban": {
+  "yabanci_cekirdek": 1.314,
+  "rig_cekirdek": 0.038,
+  "en_agir": [
+   {
+    "ad": "chrome.exe",
+    "pid": 9928,
+    "cekirdek": 0.512
+   },
+   {
+    "ad": "chrome.exe",
+    "pid": 9456,
+    "cekirdek": 0.211
+   },
+   {
+    "ad": "chrome.exe",
+    "pid": 15580,
+    "cekirdek": 0.203
+   },
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.075
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 7372,
+    "cekirdek": 0.06
+   },
+   {
+    "ad": "MuseHub.exe",
+    "pid": 8484,
+    "cekirdek": 0.053
+   }
+  ],
+  "pencere_sn": 4.15,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yuk_kapi_cekirdek": 99,
+  "cekirdek": 8,
+  "_yuk": "yabanci yuk kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\""
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: KALDI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": false,
+ "boz_kollari": false,
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/hizmetler/geo/",
+   "js_bayt": 3811,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "yuk": {
+      "yabanci_cekirdek": 1.706,
+      "rig_cekirdek": 0.199,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.536
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.194
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 15580,
+        "cekirdek": 0.194
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 9456,
+        "cekirdek": 0.172
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.135
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.1
+       }
+      ],
+      "pencere_sn": 9.97
+     },
+     "sistem_cekirdek": 3.633,
+     "kare": 261,
+     "tur_ms": 3949,
+     "p95_ms": 33.4,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 617,
+     "takilma_tek_max_ms": 133,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "yabanci_cekirdek": 1.469,
+      "rig_cekirdek": 0.217,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.494
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.181
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 15580,
+        "cekirdek": 0.181
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 9456,
+        "cekirdek": 0.151
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.088
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.087
+       }
+      ],
+      "pencere_sn": 9.93
+     },
+     "sistem_cekirdek": 3.121,
+     "kare": 267,
+     "tur_ms": 3757,
+     "p95_ms": 33.3,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 350,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "yabanci_cekirdek": 1.636,
+      "rig_cekirdek": 0.214,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.57
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.222
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 15580,
+        "cekirdek": 0.191
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 9456,
+        "cekirdek": 0.165
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.099
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.074
+       }
+      ],
+      "pencere_sn": 9.92
+     },
+     "sistem_cekirdek": 3.223,
+     "kare": 267,
+     "tur_ms": 3749,
+     "p95_ms": 33.4,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 358,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 33.4,
+   "takilma_oran_medyan": 0.0955,
+   "takilma_tek_max": 133,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kare_p95": 4.024,
+   "kacirilan_kare": 3,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": false,
+   "tik_sapma": false,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "yabanci_cekirdek_medyan": 1.636,
+    "yabanci_cekirdek_kosumlar": [
+     1.706,
+     1.469,
+     1.636
+    ],
+    "rig_cekirdek_medyan": 0.214,
+    "en_agir": [
+     {
+      "ad": "chrome.exe",
+      "pid": 9928,
+      "cekirdek": 0.536
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.194
+     },
+     {
+      "ad": "chrome.exe",
+      "pid": 15580,
+      "cekirdek": 0.194
+     },
+     {
+      "ad": "chrome.exe",
+      "pid": 9456,
+      "cekirdek": 0.172
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4104,
+      "cekirdek": 0.135
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.1
+     }
+    ],
+    "sistem_cekirdek_medyan": 3.223,
+    "cekirdek": 8,
+    "kapi": 99,
+    "_": "yabanci = tarayici agacimiz ve node agacimiz DISINDAKI sureclerin cekirdek karsiligi. sistem_cekirdek ORTALAMADIR ve tek cekirdek yiyen sureci gizler — kiyas icin yazilir, kapi degil."
+   },
+   "bilgi": {
+    "takilma_oran_medyan": 0.0955,
+    "sistem_cekirdek_medyan": 3.223
+   },
+   "kapi": {
+    "kacirilan_kare": false,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [],
+   "gecti": false
+  }
+ ]
+}
