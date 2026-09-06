@@ -573,6 +573,47 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${esli} es · ${atlanan} noindex atlandi${llmsNot}`);
 }
 
+/* T6 · INDEXNOW DOGRULAMA ZINCIRI (6 Eyl 2026 — KESME-PLANI adim 9).
+   IndexNow'un tek dogrulama biciminde uc parca ayni anda dogru olmali,
+   yoksa bildirim SESSIZCE reddedilir ve kimse fark etmez:
+     1. `<anahtar>.txt` ciktida DURACAK — dosya yoksa arama motoru
+        bildirimin sahibini dogrulayamaz ve adresleri atar.
+     2. Dosyanin ICI anahtarin AYNISI olacak — biri degisip oteki kalirsa
+        403 doner; yayindan sonra kimse bakmadigi icin aylarca surer.
+     3. Bildirilecek adres kumesi CIKTIDAKI sitemap ile ayni olacak —
+        ayri liste tutulursa tazeligi ayri bir kuralla korunmak zorunda
+        kalirdi (L1'in ogrettigi borc).
+   Kural CIKTIYA bakar, kaynagi taramaz: `indexnow.mjs` ESM, bu dosya CJS
+   — ithal edip anahtari okumak yerine, arama motorunun BAKACAGI seyin
+   aynisi olculur. Kaynak taramasi zaten yanlis alet olurdu (yorumdaki bir
+   ornek anahtar da desene uyar); dogrulanan sey uretilmis dosyanin
+   kendisi. */
+{
+  const kusur = [];
+  const txt = fs.readdirSync(KOK).filter((d) => /^[0-9a-f]{8,128}\.txt$/i.test(d));
+  if (txt.length !== 1) {
+    kusur.push(`anahtar dosyasi ${txt.length} adet (1 olmali): ${txt.slice(0, 3).join(',') || 'yok'}`);
+  } else {
+    const anahtar = txt[0].replace(/\.txt$/i, '');
+    const ici = fs.readFileSync(path.join(KOK, txt[0]), 'utf8').trim();
+    if (ici !== anahtar) kusur.push(`dosya ici anahtarla ayni degil (${ici.slice(0, 12)}… vs ${anahtar.slice(0, 12)}…)`);
+  }
+  const smPath = path.join(KOK, 'sitemap.xml');
+  const loc = fs.existsSync(smPath)
+    ? [...fs.readFileSync(smPath, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim())
+    : [];
+  if (!loc.length) kusur.push('sitemap.xml adres vermiyor — bildirilecek kume bos');
+  /* Anahtar dosyasi bir SAYFA degil: sitemap'e girmemeli, yoksa arama
+     motoruna icerik diye sunulmus olur. */
+  if (txt.length === 1 && loc.some((u) => u.endsWith('/' + txt[0]))) {
+    kusur.push('anahtar dosyasi sitemap listesinde');
+  }
+  ol('T6 · IndexNow dogrulama zinciri: <anahtar>.txt ciktida + icerik anahtarla birebir + adresler sitemap\'ten',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' · ')
+       : `${txt[0] || '?'} · ${loc.length} adres bildirilecek`);
+}
+
 /* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"
    turu). Bu arac YAYIN ZINCIRINDE DENETIMSIZDI: 8 sinamasi `test/denetim.js`
    icindeydi ve o dosya, KESME'de zincirden cikan `build.js`e bagliydi;

@@ -133,6 +133,19 @@ export default defineConfig({
         },
       },
     },
+    /* INDEXNOW (6 Eyl 2026 — KESME-PLANI adim 9). Ayni gerekce: kanca
+       derlemenin parcasi, adres kumesi CIKTIDAKI sitemap'ten turer.
+       AJAN HATTINDAN SONRA kosar; sirasi onemli degil (sitemap'i ikisi de
+       yalnizca okur) ama bildirim agi bekledigi icin en sona konuldu. */
+    {
+      name: 'qanatone-indexnow',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { bildir } = await import('./indexnow.mjs');
+          await bildir(fileURLToPath(dir), logger);
+        },
+      },
+    },
   ],
 
   /* 2 Eyl 2026 (R23 sokumu): prolog-ada manualChunks ve isci (worker)
