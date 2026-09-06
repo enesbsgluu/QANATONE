@@ -127,7 +127,12 @@ const TARAYICI_KAPI = Number(process.env.TARAYICI_KAPI || 0.15);
    DEGIL: bugun olculen butun temiz kosumlarda claude.exe 0,05-0,17 cekirdek
    yiyordu ve hicbirini bozmadi; olculmemis bir siniri kapiya yazmayiz.
    Tam surec dokumu her sayfada kayda gectigi icin boyle bir sey cikarsa
-   kayittan gorunur. */
+   kayittan gorunur — NITEKIM CIKTI: 6 Eyl'in yuku yazan ilk tam taramasinda
+   `msedgewebview2.exe` 0,083 cekirdekle en agir alti surecin arasindaydi
+   (gomulu Chromium, adiyla tarayici degil). 61 sayfanin 61'i yesil kaldi,
+   yani o bantta bozmuyor. Listeye ALINMADI: olculmemis bir siniri kapiya
+   yazmayiz, ama bu satir bir daha bakildiginda kanitin nerede oldugunu
+   soyler (yeni/film/olc-sayfa.json, `en_agir` alanlari). */
 const YABANCI_TARAYICILAR = new Set(['chrome.exe', 'msedge.exe', 'brave.exe', 'firefox.exe', 'opera.exe', 'vivaldi.exe', 'iexplore.exe', 'thorium.exe', 'yandex.exe']);
 /* KIRMIZI-ONCE, HER YENI KURAL ICIN BIR KOL:
    BOZ_TIK=<ms>   acilis tikini kaydirir       -> tik_sapma + ekran_degisti
@@ -573,7 +578,37 @@ t++;requestAnimationFrame(k);})();
   let dur = null, durSebep = null;
   for (const yol of secim) {
     const k = [];
-    for (let i = 0; i < TEKRAR; i++) k.push(await kosum(browser, yol, tz.tik_ms, yuk, kokler));
+    /* TEK GEZINME HATASI 40 DAKIKALIK TARAMAYI OLDURMEZ (6 Eyl 2026, yasandi:
+       tarama 9. sayfada `Navigation timeout of 60000 ms exceeded` ile dustu ve
+       ONCEKI SEKIZ SAYFANIN OLCUMU DE KAYBOLDU — kayit ancak sonda yaziliyor).
+       Ayni sayfa tek basina sorunsuz olculdu, yani gecici bir takilmaydi.
+       Bir kez YENIDEN DENENIR; yine olmazsa hata KAYDA GECER ve sayfa
+       HUKUMSUZ olur — yutulmaz. `networkidle0`in hic gelmemesi gercek bir
+       belirti de olabilir (sayfa durmadan istek atiyordur); onu "gecti"ye de
+       "kaldi"ya da cevirmeyiz, ADIYLA yaziyoruz. */
+    const kosumHatalari = [];
+    for (let i = 0; i < TEKRAR; i++) {
+      let r = null;
+      for (let deneme = 0; deneme < 2 && !r; deneme++) {
+        try { r = await kosum(browser, yol, tz.tik_ms, yuk, kokler); }
+        catch (e) {
+          kosumHatalari.push({ kosum: i + 1, deneme: deneme + 1, hata: String((e && e.message) || e).split('\n')[0] });
+          if (deneme === 0) await bekle(3000);
+        }
+      }
+      if (r) k.push(r);
+    }
+    if (!k.length) {
+      const oz = {
+        yol, js_bayt: jsBayt(yol), js_tavan: tavan(yol), kosum: [], kosum_hatalari: kosumHatalari,
+        yuk: { olculdu: false, tarayici_cekirdek_enyuksek: null, yabanci_cekirdek_medyan: null, en_agir: [] },
+        hukumsuz: ['kosum_hatasi'], gecti: null,
+      };
+      sonuc.push(oz);
+      console.log(`HUKSZ  ${yol.padEnd(34)} HICBIR KOSUM TAMAMLANAMADI  !! ${kosumHatalari.map((h) => h.hata).join(' · ')}`);
+      if (process.env.DEVAM !== '1') { dur = yol; durSebep = 'kosum_hatasi'; break; }
+      continue;
+    }
     const js = jsBayt(yol), tv = tavan(yol);
     const oz = {
       yol, js_bayt: js, js_tavan: tv, kosum: k,
@@ -651,6 +686,8 @@ t++;requestAnimationFrame(k);})();
           yukun yonu her zaman ayni degil (ayni CPU yuku iki kez zit sonuc
           verdi). Kural, olculmemis bir yonu hukme cevirmez. */
     oz.hukumsuz = [];
+    oz.kosum_hatalari = kosumHatalari;
+    if (kosumHatalari.length) oz.hukumsuz.push('kosum_hatasi');
     if (oz.tik_sapma) oz.hukumsuz.push('tik_sapma');
     if (!oz.yuk.olculdu) oz.hukumsuz.push('yuk_olculemedi');
     else if (oz.yuk.tarayici_cekirdek_enyuksek > TARAYICI_KAPI) oz.hukumsuz.push('yabanci_tarayici');

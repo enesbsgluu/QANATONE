@@ -163,7 +163,12 @@ const TARAYICI_KAPI = Number(process.env.TARAYICI_KAPI || 0.15);
    DEGIL: bugun olculen butun temiz kosumlarda claude.exe 0,05-0,17 cekirdek
    yiyordu ve hicbirini bozmadi; olculmemis bir siniri kapiya yazmayiz.
    Tam surec dokumu her sayfada kayda gectigi icin boyle bir sey cikarsa
-   kayittan gorunur. */
+   kayittan gorunur — NITEKIM CIKTI: 6 Eyl'in yuku yazan ilk tam taramasinda
+   `msedgewebview2.exe` 0,083 cekirdekle en agir alti surecin arasindaydi
+   (gomulu Chromium, adiyla tarayici degil). 61 sayfanin 61'i yesil kaldi,
+   yani o bantta bozmuyor. Listeye ALINMADI: olculmemis bir siniri kapiya
+   yazmayiz, ama bu satir bir daha bakildiginda kanitin nerede oldugunu
+   soyler (yeni/film/olc-sayfa.json, `en_agir` alanlari). */
 const YABANCI_TARAYICILAR = new Set(['chrome.exe', 'msedge.exe', 'brave.exe', 'firefox.exe', 'opera.exe', 'vivaldi.exe', 'iexplore.exe', 'thorium.exe', 'yandex.exe']);
 /* KIRMIZI-ONCE, HER YENI KURAL ICIN BIR KOL:
    BOZ_TIK=<ms>   acilis tikini kaydirir       -> tik_sapma + ekran_degisti
@@ -508,7 +513,32 @@ t++;requestAnimationFrame(k);})();
   const sonuc = [];
   for (const yol of secim) {
     const k = [];
-    for (let i = 0; i < TEKRAR; i++) k.push(await sogukKosum(yol, yuk));
+    /* Gezinme hatasina dayaniklilik — kapi A'daki ile ayni kural ve ayni
+       sebep: bir kosumun dusmesi butun kosumun kaydini yok etmemeli, ama
+       yutulmamali da. Bir kez yeniden dene, olmazsa adiyla yaz ve HUKUMSUZ. */
+    const kosumHatalari = [];
+    for (let i = 0; i < TEKRAR; i++) {
+      let r = null;
+      for (let deneme = 0; deneme < 2 && !r; deneme++) {
+        try { r = await sogukKosum(yol, yuk); }
+        catch (e) {
+          kosumHatalari.push({ kosum: i + 1, deneme: deneme + 1, hata: String((e && e.message) || e).split('\n')[0] });
+          if (deneme === 0) await bekle(3000);
+        }
+      }
+      if (r) k.push(r);
+    }
+    if (!k.length) {
+      const oz = {
+        yol, kosum: [], kosum_hatalari: kosumHatalari,
+        yuk: { olculdu: false, tarayici_cekirdek_enyuksek: null, yabanci_cekirdek_medyan: null, en_agir: [] },
+        hukumsuz: ['kosum_hatasi'], gecti: null, hedefte: false,
+        bilgi: { takilma_toplam_medyan_ms: null, takilma_toplam_kosumlar: [], takilma_sayi_medyan: null, tur_ms_medyan: null, takilma_oran_medyan: 0 },
+      };
+      sonuc.push(oz);
+      console.log(`HUKSZ  ${yol.padEnd(38)} HICBIR KOSUM TAMAMLANAMADI  !! ${kosumHatalari.map((h) => h.hata).join(' · ')}`);
+      continue;
+    }
     const oz = {
       yol, kosum: k,
       p95_medyan: medyan(k.map((x) => x.p95_ms)),
@@ -567,6 +597,8 @@ t++;requestAnimationFrame(k);})();
     /* UC DURUM — A ile ayni aile: HUKUMSUZ, KALDI DEGILDIR (iddia sayfa
        hakkinda degil OLCUM hakkindadir). */
     oz.hukumsuz = [];
+    oz.kosum_hatalari = kosumHatalari;
+    if (kosumHatalari.length) oz.hukumsuz.push('kosum_hatasi');
     if (oz.tik_sapma) oz.hukumsuz.push('tik_sapma');
     if (!oz.yuk.olculdu) oz.hukumsuz.push('yuk_olculemedi');
     else if (oz.yuk.tarayici_cekirdek_enyuksek > TARAYICI_KAPI) oz.hukumsuz.push('yabanci_tarayici');
