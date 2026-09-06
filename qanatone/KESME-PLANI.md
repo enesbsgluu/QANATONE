@@ -289,7 +289,62 @@ kartları EN değerleriyle). Kesmeden bağımsız ilerleyebilir; kesme İÇİN
 şart değil (EN ana zaten TR ile aynı bileşenlerden derleniyor, CSS
 kuralları TR ölçümünde yakalanıyor).
 
-## 4 · Kesme günü doğrulama listesi
+## 4 · Kesme günü doğrulama listesi — KOŞULDU (6 Eyl 2026, 23:20-23:30)
+
+**Sonuç: 5 madde yeşil · 1 madde kırmızı (düzeltildi) · 2 madde Enes'te.**
+Ölçüm canlıda (`https://www.qanatone.com`), depo `39a458f` → `f818ef2`.
+
+| # | madde | sonuç |
+|---|---|---|
+| 1 | `denetim.cjs` | **78/0** · N1 ters yönde (59 indekslenebilir, 6 bilerek kapalı) · dist'te `/yeni/` SIFIR |
+| 2 | 60 eski rota | **60/60 final 200** (58'i 301→200, 2'si doğrudan). 58'i KENDİ karşılığına gidiyor |
+| 3 | sitemap + rss | sitemap **58/58 = 200** · rss **7/7 = 301 KIRMIZI** → düzeltildi (`f818ef2`) |
+| 4 | panel Basic Auth | **401 + `WWW-Authenticate`** · yanlış kimlik de 401. Yayın denemesi **Enes'te** (kimlik bende yok) |
+| 5 | Netlify Forms | **lead 200 · bulletin 200 · kontrol 404** → ikisi de TANINMIŞ |
+| 6 | canlı Lighthouse | ana **97 / LCP 1968 ms** (bandın SINIRINDA) · iç sayfalar **100 / 1295-1435 ms** |
+| 7 | Search Console | **YAPILAMADI** — doğrulama izi yok, ön şart eksik (aşağıda) |
+
+**Madde 2 · yanlış yeşil elendi.** "301→200" tek başına yeterli değil:
+hepsi ana sayfaya düşseydi URL fiilen ölürdü. Hedefler tek tek denetlendi,
+58 rota kendi karşılığına gidiyor. İki bilinçli istisna: `/404` (200
+dönüyor, eğik çizgisiz) ve `/shell` → `/`. Olmayan adres gerçek 404
+döndürüyor — yumuşak 404 yok.
+
+**Madde 3 · tek gerçek kırmızı.** `bulten/rss.xml`'in kanal `<link>`i ve
+7 item'in link/guid'i eğik çizgisizdi, canlıda hepsi 301 dönüyordu.
+Kökeni **kapsam**: H29 turu (5 Eyl) adresleri `sayfalar` + `sitemap.xml`
++ `_headers` içinde arıyordu, `rss.xml` o listede yoktu — kural yeşil
+yanıyordu ama adres basan bir çıktıya hiç bakılmamıştı. Düzeltme üç
+parçalı: üreteç `sl()`den geçiyor, H29 kapsamı `rss.xml`e genişledi
+(kırmızı-önce doğrulandı: eski çıktıda 13 kusur), R8'in rss ayağı eğik
+çizgili guid bekliyor. **`[skip ci]` — canlıya HENÜZ gitmedi.**
+
+**Madde 5 · ölçüm yöntemi.** Canlı çıktıda `data-netlify` YOK, yerel
+`dist`te VAR — tek başına iki şeye birden yorulur (Netlify formu tanıyıp
+niteliği sildi / derleme onu düşürdü). Kırmızı-önce ayırdı: var olmayan
+form adına POST **404**, `lead` ve `bulletin`e POST **200**. Tanınmayan
+form 404 verdiğine göre ikisinin de tanımı yerinde. POST'lar honeypot
+DOLU atıldı — Netlify onları spam'e ayırır, Enes'in kutusuna temiz kayıt
+düşmez.
+
+**Madde 6 · ölçüm künyesi.** Lighthouse 13.4.1, **mobil** form faktör
+(4G kısıtlama + 4× CPU), headless Chrome, sayfa başına 3 koşum medyanı,
+Enes'in makinesinden ev bağlantısıyla. Ana sayfa varyansı yüksek:
+93/97/98 → medyan 97, ve ayrı bir deneme koşumu 92/2222 ms verdi. Yani
+ana sayfa bandı (≥97 / LCP<2 sn) **tutuyor ama sınırında** — 1968 ms,
+tavana 32 ms kala. İç sayfalar puanı tutuyor, LCP'leri planın "~1 sn"
+hedefinin biraz üstünde (1295-1435 ms). CLS medyanı üç sayfada da 0.
+
+**Madde 7 · ön şart eksik, Enes'te.** Google'ın sitemap ping ucu 2023'te
+kalktı (ölçüldü: 404), yani gönderim **elle** Search Console'dan yapılır.
+Ama sitede doğrulama izi yok: `google-site-verification` meta'sı yok,
+alan adında Google TXT kaydı yok (yalnız Natro SPF), Analytics/GTM yok.
+Yani madde tek adım değil **iki adım**: önce mülk doğrulanacak, sonra
+sitemap gönderilecek. Keşif yolu açık — `robots.txt` `Sitemap:` satırını
+taşıyor, IndexNow anahtar dosyası canlıda 200 ve içeriği anahtarla
+birebir.
+
+### Özgün liste (referans)
 
 1. `node yeni/denetim.cjs` yeşil (N1 ters yönde, K1 dahil).
 2. Eski 60 rotanın URL listesi (GOC-ENVANTER + rota raporu) curl ile
