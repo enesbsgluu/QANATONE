@@ -139,10 +139,25 @@
    degersiz olan satir 34 (izgara satiri iki kalemi esitler). Eski
    ">= 36 px" ibaresi ajan izgarasinda yanlisti ve zaten YANLIS SEYI
    olcuyordu — tiklanan sey satir degil icindeki dugmeydi (16–18,6 px).
-   Ortuyle dokunma hedefi satirin tamamina cikti: 34–36,6 px, WCAG 2.2
-   AA asgarisi olan 24 px'in ustunde. Projenin kendi mobil kapisi 44 px
-   istiyor (olc-mobil.cjs); 44'e cikarmak 26+7 kalemde blogu ~2,08 ekrana
-   tasirdi, yani iki kapi burada CAKISIYOR — karar Enes'te. */
+   Ortuyle dokunma hedefi satirin tamamina cikti: 32–36 px, WCAG 2.2 AA
+   asgarisi olan 24 px'in ustunde.
+
+   44 PX'E CIKILMADI — KARAR KAPANDI (Enes, 6 Eyl 2026). Uc kol olculdu:
+     A yayin hali        hedef 32–36 px · blok 1.553 px (1,84 ekran)
+     B min-height:46px   hedef 45 px    · blok 1.715 px (2,03 ekran)
+     C B + izgara arasi 6->4 px         · blok 1.685 px (2,00 ekran)
+   B "<=2 ekran" kapisini 27 px asiyor; C geciyor ama payi 3 px, yani bir
+   etiket sarmasi kapiyi tekrar kirar — cozum sayilmadi.
+   SEBEP: 44'e cikis, ISTEGE BAGLI bir dokunus icin sasma payini ±24
+   px'ten ±29 px'e tasiyor ve bedelini blogun +162 px uzamasiyla (bir
+   ekranin besde biri) HER ziyaretciye odetiyor — kaleme hic dokunmayana
+   da. Asil kusur zaten kapandi: dokunusu yutan olu alan (17 px hedef,
+   34 px'lik tiklanir GORUNEN kutu) kalkti.
+   olc-mobil.cjs'in 44'u burada kapi DEGIL: o kural mutlak degil
+   KARSILASTIRMALI (eskide buyuk olup yenide kuculen kirmizi), bu dugmeler
+   eski agacta yok ve izgara tarama kosmadan bos — o kapi bunlari hic
+   gormuyor. Esik `olc-tespit-popup.cjs`'te 32 px'e cakili, gerileme
+   bekcisi olarak. */
 @media(max-width:600px){
   .ste-izgara{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .ste-kalem{padding:8px 10px;gap:7px;font-size:.8rem;align-items:flex-start}
