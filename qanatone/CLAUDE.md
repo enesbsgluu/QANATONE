@@ -290,6 +290,15 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   değil, aynı GPU/kompozitör hattını paylaşan ikinci tarayıcı.
   **Kapı: yabancı tarayıcı ≤ 0,15 çekirdek** (kuşak ölçüldü: 0,023 temiz ·
   1,077 kirli). Toplam CPU yükü YAZILIR ama kapı değildir.
+- **YÜKÜ YAZAN İLK TAM TARAMA (6 Eyl 2026, 13:36 · `olc-sayfa.json`): 61/61
+  GEÇTİ.** Yabancı tarayıcı tarama boyunca medyan 0,019 · **tepe 0,07**
+  çekirdek (kapı 0,15 — hiç yaklaşmadı); toplam yabancı CPU medyan 0,329;
+  dwm 0,12 (ayrı yazıldı — yabancı sayılsaydı toplam medyan 0,45'e çıkardı,
+  yani naif bir "toplam ≤ 0,5" kapısı sınırda kalırdı). Ekran değişmedi
+  (8,3 → 8,3 ms), `tik_sapma` 0 sayfa, koşum hatası yok. **6 Eyl gecesinin
+  taramasına göre gerileme YOK:** 60 sayfa birebir aynı, 1 sayfa iyileşti
+  (`/en/hizmetler/ai-ajan/` 1 → 0 kare), kötüleşen sıfır; tek takılma tavanı
+  142 → 125 ms, sıfır kare kaçıran sayfa 52 → 53.
 - **Ölçüm hakkındaki şüphe HÜKME çevrilmez — üçüncü durum var: `HUKUM YOK`**
   (çıkış kodu 3; 0 gecti · 2 kaldi). "Kaldı" sayfa hakkında bir iddiadır,
   "hükümsüz" ölçümün kendisi hakkında. Sebepler: yabancı tarayıcı · yük
