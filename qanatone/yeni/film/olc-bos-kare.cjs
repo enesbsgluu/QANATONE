@@ -55,6 +55,13 @@ const GORUNUMLER = { masaustu: [1440, 900, false], mobil: [390, 844, true] };
 
 /* Bos kare esigi: tek renk yuzeyin standart sapmasi ~0'dir. */
 const BOS_STDEV = 1.5;
+/* SESSIZLIK ESIGI — MUTLAK birim (maxfark 0-255 + piksel SAYISI), oran
+   degil ([[kapi-birimi]]). Olculen taban: masaustu 10 kosumda 0/0 piksel;
+   mobil 4 kosumda maxfark 0-1 ve 0-1 piksel (rasterizasyon gurultusu).
+   Tolerans bilerek DAR: gercek sadakat farklari binlerce piksel oluyor,
+   4 piksel hicbirini gizlemez. */
+const SESSIZ_MAXFARK = 1;
+const SESSIZ_PIKSEL = 4;
 /* Durulma: ardisik iki kare bu esigin altinda farkliysa sayfa durdu. */
 const DURGUN_MAX = 0;
 const DURULMA_DENEME = 30;
@@ -70,6 +77,18 @@ const DONDUR = () => {
     window.__rafDonduruldu = true;
     window.requestAnimationFrame = function () { return 0; };
   }
+  /* 1b) KALICI CSS KILIDI — tek seferlik getAnimations() YETMIYOR: dondurma
+         aninda 85 animasyon vardi, 700 ms sonra 131 oldu ve KOSUYORLARDI
+         (sk-gir / sk-cubuk, IntersectionObserver ile dogan giris
+         animasyonlari). IO rAF'a bagli degil, kendi zamanlamasiyla atesler.
+         Bir CSS kurali ise SONRADAN dogani da dogar dogmaz durdurur. */
+  if (!document.getElementById('__dondurmaKurali')) {
+    const st = document.createElement('style');
+    st.id = '__dondurmaKurali';
+    st.textContent = '*,*::before,*::after{animation-play-state:paused !important;'
+      + 'transition:none !important;caret-color:transparent !important}';
+    document.head.appendChild(st);
+  }
   /* 2) WAAPI/CSS */
   let kilit = 0, kalan = 0;
   for (const a of document.getAnimations()) {
@@ -82,6 +101,12 @@ const DONDUR = () => {
   /* 3) MEDYA — getAnimations() <video>'yu GORMEZ. rAF durduktan SONRA
         yazilir, yoksa motor uzerine yazar. */
   for (const v of document.querySelectorAll('video')) { try { v.pause(); } catch (_) {} }
+  /* 4) KAYDIRMA — aracin "scrollY=0'da zaten sabit" varsayimi YANLISTI:
+        sayfa kendiliginde kayiyor ve kosumlar arasi 0-162 arasi oynuyordu.
+        Bos testi bozmuyor (ayni kosumun iki karesi ayni konumda) ama
+        SADAKAT kiyasini bozar: iki derleme farkli konumda yakalanirsa
+        fark listesi anlamsiz olur. */
+  try { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); } catch (_) {}
   document.body.getBoundingClientRect();
   return { kilitlenen: kilit, kilitlenemeyen: kalan, scrollY: window.scrollY,
     video: [...document.querySelectorAll('video')].map((v) => +v.currentTime.toFixed(3)) };
@@ -134,11 +159,17 @@ async function fark(a, b) {
     await p.goto(KOK + '/', { waitUntil: 'networkidle0', timeout: 60000 });
 
     /* PERDE KAPISI — sabit sure DEGIL durum. Perde en az ~2,7 sn suruyor;
-       2500 ms'lik sabit bekleme onu bazen ACIK yakaliyordu. */
+       2500 ms'lik sabit bekleme onu bazen ACIK yakaliyordu. Kapi perdenin
+       GORUNMEZ olmasini bekler; secici tutmazsa hukum HUKUMSUZ olur. */
     let perdeAsimi = false;
     try {
       await p.waitForFunction(() => {
-        const e = document.querySelector('.fl-perde, #boot, .perde');
+        /* GERCEK perde `#perde.sus-perde` (parcalar/Perde.astro). Ilk
+           yazdigim secici (.fl-perde/#boot/.perde) HICBIRINI tutmuyordu:
+           querySelector null donuyor, kapi ANINDA geciyor ve mobilde
+           tamamen SIYAH kare olculuyordu. Kapi bulamadigi seyi beklemis
+           sayilir — yanlis yesilin ders kitabi hali. */
+        const e = document.querySelector('#perde, .sus-perde, .fl-perde, #boot');
         if (!e) return true;
         const st = getComputedStyle(e);
         return st.display === 'none' || st.visibility === 'hidden' || +st.opacity === 0;
@@ -158,6 +189,9 @@ async function fark(a, b) {
     let durgun = false, deneme = 0, ustuste = 0;
     for (; deneme < DURULMA_DENEME; deneme++) {
       await bekle(120);
+      /* Her turda YENIDEN dondur: CSS kurali yeni dogani durdurur ama fazini
+         sifirlamaz; currentTime=0 ancak dogduktan sonra yazilabilir. */
+      await p.evaluate(DONDUR);
       const simdi = await p.screenshot({ clip });
       const f2 = await fark(onceki, simdi);
       onceki = simdi;
@@ -176,6 +210,7 @@ async function fark(a, b) {
     rafKayit = await p.evaluate(() => window.__rafSayac || {});
 
     const hukumsuz = (o1.bos || o2.bos) ? 'BOS KARE' : (!durgun ? 'DURULMADI' : null);
+    if (hukumsuz) fs.writeFileSync(path.join(__dirname, `bos-hukumsuz-${GORUNUM}-k${i + 1}.png`), k1);
     if (f.maxfark > 8 && !hukumsuz) {
       fs.writeFileSync(path.join(__dirname, `bos-kirmizi-k${i + 1}-a.png`), k1);
       fs.writeFileSync(path.join(__dirname, `bos-kirmizi-k${i + 1}-b.png`), k2);
@@ -193,7 +228,7 @@ async function fark(a, b) {
   await b.close();
 
   const gecerli = kosumlar.filter((k) => !k.hukumsuz);
-  const temiz = gecerli.filter((k) => k.maxfark === 0).length;
+  const temiz = gecerli.filter((k) => k.maxfark <= SESSIZ_MAXFARK && k.farkli_piksel <= SESSIZ_PIKSEL).length;
   const raf = Object.entries(rafKayit || {}).sort((a, b2) => b2[1] - a[1]).slice(0, 10);
 
   console.log(`\n=== BOS TEST (${GORUNUM}${KAPA ? ' · #tubes SOKULDU' : ''}) ===`);
@@ -209,6 +244,7 @@ async function fark(a, b) {
   fs.writeFileSync(cikti, JSON.stringify({
     _: 'BOS TEST — ayni sayfadan iki kare, ideal fark SIFIR. Sifir degilse olculen duzenektir.',
     olcum: new Date().toISOString(), gorunum: GORUNUM, tubes_sokuldu: KAPA, tekrar: TEKRAR,
+    esik: { sessiz_maxfark: SESSIZ_MAXFARK, sessiz_piksel: SESSIZ_PIKSEL, bos_stdev: BOS_STDEV },
     gecerli_kosum: gecerli.length, temiz_kosum: temiz, hukum, kosumlar,
     raf_cagiranlar: Object.fromEntries(raf),
   }, null, 1));

@@ -318,3 +318,65 @@ test('olc-hiz: bloklayici etiketler SADECE mutlak birim tasir', () => {
     assert.ok(/_MS|_SN|SINIR|TEK_MS|P95/.test(s),
       `mutlak birime baglanmayan hukum etiketi: ${s.trim().slice(0, 90)}`);
 });
+
+/* ------------------------------------------------------------------ *
+   DONDURMA SIRASI IKI KARE ARACINDA AYNI (7 Eyl 2026)
+
+   `olc-bos-kare.cjs` (bos test) ile `kare-hero-sadakat.cjs` (sadakat
+   kareleri) ayni dondurma sirasini kullanmak ZORUNDA: bos test sadakat
+   aracinin gurultusunu olcuyor. Siralar ayrisirsa bos test BASKA bir
+   duzenegi olcer ve "0 gurultu" raporu sadakat kareleri hakkinda hicbir
+   sey soylemez — olcum aracinin kendisi yanlis yesil uretir.
+
+   Ortak modul BILEREK yok (olc-* araclari tek dosya kopyalanip kosabilsin
+   diye); drift'i bu test kapatir — dosyanin basindaki ayni gerekce.
+
+   Her kalem OLCUMLE geldi, listedeki sirayla:
+   rAF no-op · kalici CSS kurali (sonradan dogan animasyon) · video pause ·
+   scrollTo kilidi · dogru perde secicisi · ardisik durulma sarti.        * ------------------------------------------------------------------ */
+const BOS = yorumsuz(oku('film', 'olc-bos-kare.cjs'));
+const SDK = yorumsuz(oku('film', 'kare-hero-sadakat.cjs'));
+
+test('dondurma: rAF her iki aracta da no-op yapiliyor', () => {
+  for (const [ad, s] of [['bos-kare', BOS], ['sadakat', SDK]])
+    assert.match(s, /requestAnimationFrame\s*=\s*function\s*\(\)\s*\{\s*return 0/,
+      `${ad}: rAF durdurulmuyor — getAnimations() rAF surucusunu GORMEZ (motor.js/kabuk.js/Film.astro olculdu)`);
+});
+
+test('dondurma: KALICI CSS kurali var (sonradan dogan animasyonu da durdurur)', () => {
+  for (const [ad, s] of [['bos-kare', BOS], ['sadakat', SDK]]) {
+    assert.match(s, /__dondurmaKurali/, `${ad}: kalici dondurma kurali yok`);
+    assert.match(s, /animation-play-state:paused !important/,
+      `${ad}: animation-play-state kilidi yok — IntersectionObserver ile DOGAN animasyonlar (sk-gir/sk-cubuk) tek seferlik getAnimations()'a takilmaz`);
+  }
+});
+
+test('dondurma: video pause + kaydirma kilidi her iki aracta', () => {
+  for (const [ad, s] of [['bos-kare', BOS], ['sadakat', SDK]]) {
+    assert.match(s, /querySelectorAll\('video'\)[\s\S]{0,80}\.pause\(\)/,
+      `${ad}: video duraklatilmiyor — getAnimations() <video>'yu gormez`);
+    assert.match(s, /window\.scrollTo\(0,\s*0\)/,
+      `${ad}: kaydirma kilidi yok — sayfa kendiliginden kayiyor (0-162 olculdu)`);
+  }
+});
+
+test('dondurma: perde kapisi GERCEK perdeyi bekliyor (#perde)', () => {
+  for (const [ad, s] of [['bos-kare', BOS], ['sadakat', SDK]])
+    assert.match(s, /querySelector\('#perde[^']*'\)/,
+      `${ad}: perde secicisi #perde'yi tutmuyor — tutmayan secici kapiyi ANINDA gecirir ve mobilde tamamen SIYAH kare olculur`);
+});
+
+test('dondurma: durulma ARDISIK esleme istiyor (tek esleme yetmez)', () => {
+  for (const [ad, s] of [['bos-kare', BOS], ['sadakat', SDK]]) {
+    const m = s.match(/DURGUN_ARDISIK\s*=\s*(\d+)/);
+    assert.ok(m, `${ad}: DURGUN_ARDISIK yok`);
+    assert.ok(Number(m[1]) >= 3,
+      `${ad}: ardisik sabitlik sarti ${m[1]} — yavas boyanan sayfa iki ardisik kareyi ayni gosterip sonra doluyordu`);
+  }
+});
+
+test('sadakat: olculemeyen kare HUKUMSUZ, "fark yok" DEGIL', () => {
+  assert.match(SDK, /hukumsuz/, 'sadakat araci hukumsuzluk kavramini tasimiyor');
+  assert.match(SDK, /BOS KARE/, 'bos kare denetimi yok — siyah kare "ayni" sayilirdi');
+  assert.match(SDK, /process\.exit\(3\)/, 'hukumsuz kosum ayri cikis kodu (3) dondurmuyor');
+});
