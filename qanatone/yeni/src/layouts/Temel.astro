@@ -95,7 +95,21 @@ const adsense = String(ayar.adsense || '').trim();
 const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
 const on = en ? '/en' : '';
 /* OLCUM (kaynak analytics 10765-10783 birebir): settings.gtm doluysa
-   GTM-… ya da G-… yuklenir; boska HICBIR SEY basilmaz (bugun bos). */
+   GTM-… ya da G-… yuklenir; boska HICBIR SEY basilmaz (bugun bos).
+
+   BOS OLMASI KARAR (Enes, 6 Eyl 2026) — eksiklik degil. Uc aday gzip
+   olculdu, canli ana sayfanin tamami 63,7 KB (HTML 25,6 + varlik 38,1):
+     GA4 gtag.js  151,0 KB  -> sayfanin 2,4 KATI
+     Umami          2,3 KB  -> %3,6
+     Plausible      1,3 KB  -> %2
+   GA4/GTM secilseydi sayfayi 120 KB'ye indiren butun turlari tek satirda
+   geri alirdi; ayrica bu dosyanin asagisindaki J1 kaydi zaten olcmustu:
+   gtm DOLDURULUNCA /film tavani asiliyordu (11.774 > 11.264 B).
+   Hafif adaylar (Plausible/Umami) ucretli ya da hesap acmayi gerektirdigi
+   icin SIMDILIK HICBIRI secildi. Bedeli acikca kabul edildi: ziyaretci
+   davranisi olculmuyor ve kendi tespit aracimiz kendi sitemize bu
+   kalemden `fail` yaziyor (4 puan). Fikir degisirse tek yapilacak sey
+   panelden bu alani doldurmak — tesisat hazir. */
 const gtm = String(ayar.gtm || '').trim();
 /* PAYLASIM KARTI (gece zinciri TUR 5, 2 Eyl 2026): yeni site og ve twitter
    etiketi basmiyordu (eski sitede vardi: og:image kok/og.png + summary_large_image).

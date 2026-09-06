@@ -39,6 +39,16 @@ export function anaSema(icerik, sayfa) {
         knowsAbout: (Array.isArray(st.knowsAbout) && st.knowsAbout.length)
           ? st.knowsAbout : KURUM_KONULARI,
         sameAs: sosyal,
+        /* ADRES YOK — KARAR (Enes, 6 Eyl 2026), eksiklik degil. LocalBusiness
+           (ya da `address: PostalAddress`) yayinlanabilir GERCEK bir adres
+           ister; QANATONE'un boyle bir adresi yok, uydurulmuyor. Bunun
+           bedeli olculdu ve kabul edildi: kendi tespit aracimiz kendi
+           sitemize `local: warn` yaziyor (4 puan, olcut "maps ·
+           LocalBusiness") ve yerel arama kazanci alinmiyor. Adres cikarsa
+           iki yol var: burada `address` + tip LocalBusiness'a genisletmek,
+           ya da adresi sayfada yayinlamadan footer'a Google Maps bagi
+           koymak (aracin olcutu ikisini de kabul ediyor). Kapsam
+           `areaServed` ile ulke duzeyinde kaliyor. */
         areaServed: ['TR', 'AE'],
         contactPoint: tel ? [{ '@type': 'ContactPoint', contactType: 'sales',
           telephone: '+' + tel, availableLanguage: ['tr', 'en'] }] : [],
