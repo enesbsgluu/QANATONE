@@ -57,9 +57,18 @@ html.t-noagent #bitback{display:none!important}
    gorsel olarak esdeger (kaynak zaten rgba(...,.055) gibi cok soluk bir
    disk + 130 px blur), maliyet ise filtre yerine duz bir gradyan boyamasi.
    MASAUSTU DOKUNULMADI: orada blur olculmus bir sorun degil. */
+/* MOBILDE ARKA PLAN GORUNMUYORDU (7 Eyl 2026 — Enes: "mobilde de ana
+   sayfada arkaplan yok"). Olculdu: mobilde `#noise` KAPALI (yukaridaki
+   kural) ve `#stars` KAPALI; geriye kizilligi tasiyan tek katman `.orb`
+   kaliyor, o da yukaridaki gradyan yolunda `.075` tepe degeriyle
+   masaustundeki blur'lu diskten belirgin sekilde soluk kaliyordu. Sonuc:
+   telefonda ekran duz siyah okunuyordu.
+   Tepe .075 -> .13, orta durak .045 -> .075, yayilim %78 -> %86.
+   FILTRE YOLU ACILMADI: blur mobilde olculmus bir maliyetti (H14), o
+   karar duruyor — degisen yalnizca gradyanin degerleri. */
 @media(pointer:coarse),(max-width:900px){
   #bg .orb{filter:none;
-    background:radial-gradient(circle closest-side,rgba(239,35,60,.075) 0%,rgba(239,35,60,.045) 42%,rgba(239,35,60,0) 78%)}
+    background:radial-gradient(circle closest-side,rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)}
 }
 @media(prefers-reduced-motion:reduce){#stars{display:none}}
 /* icerik yildizlarin USTUNDE (kaynak 249 `main{position:relative;z-index:2}`) */

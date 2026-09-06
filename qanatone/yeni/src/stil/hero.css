@@ -160,13 +160,24 @@ html.t-notubes .sus-tubes{display:none!important}
    kiyasi bu sayfada ancak o cozulunce anlamli olur.
 
    Gradyan degerleri TEK YERDE; degisen sey yalniz hangi ogenin cizdigi. */
+/* YUMUSATILDI (7 Eyl 2026 — Enes: "giris kismindaki kose hatasi, ya yok
+   et ya yumusat"). Iki katman da TEK duraktan sifira dusuyordu (.2 -> 0
+   %72'de, .55 -> 0 %74'te); tek keskin gecis, kizil zeminde gorunur BANT
+   uretiyordu ve elin cevresinde kosegen bir kenar gibi okunuyordu.
+   Uc degisiklik, hepsi ayni amaca: ARA DURAK eklendi (bandi kiran sey
+   budur), opaklik dusuruldu, yayilim genisletildi.
+   Golge (::after) daha cok yumusatildi cunku kose kenarini o ciziyordu;
+   hale (::before) korunuyor — arka planin kizilligina katkisi Enes'in
+   ISTEDIGI sey, katman silinmedi. */
 .sus-suzul::before,.sus-el::before{content:'';position:absolute;inset:-14%;
   z-index:0;pointer-events:none;
-  background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%);
+  background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.12),
+    rgba(239,35,60,.05) 46%,rgba(239,35,60,0) 86%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 .sus-suzul::after,.sus-el::after{content:'';position:absolute;left:6%;right:6%;
   top:16%;bottom:-6%;z-index:0;pointer-events:none;
-  background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%);
+  background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.2),
+    rgba(0,0,0,.08) 48%,rgba(0,0,0,0) 94%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 /* VARSAYILAN = KAYNAK: tasiyici salanan cocuk, ebeveyndekiler kapali. */
 .sus-el::before,.sus-el::after{content:none}
