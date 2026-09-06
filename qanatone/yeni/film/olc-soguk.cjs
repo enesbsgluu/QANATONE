@@ -88,9 +88,20 @@
              LISTE=a,b,c (varsayilan listeyi degistirir)
    KIRMIZI-ONCE: BOZ=1 (ya da BOZ_MS=<ms>) tabandan SONRA her karede yakma
    dongusu enjekte eder; kacirilan kare gorunur sekilde artmali. Duzenek
-   bozulmus sayfayi ayirt edemiyorsa yesili anlamsizdir. */
+   bozulmus sayfayi ayirt edemiyorsa yesili anlamsizdir.
+
+   MAKINE YUKU VE UCUNCU DURUM (6 Eyl 2026) — KAPI A ILE AYNI AILE.
+   B de yuku hic kaydetmiyordu ve B'nin muaf olmasi icin bir sebep yok:
+   ayni makinede, ayni tarayici ikilisiyle, ayni sinyali olcuyor. Artik her
+   kosumda surec basina cekirdek-saniye olculur; YABANCI BIR TARAYICI
+   calisiyorsa o sayfa HUKUMSUZDUR (kaldi degil — iddia sayfa hakkinda degil
+   OLCUMUN kendisi hakkindadir). Kapinin doz-tepki dayanagi ve neden toplam
+   CPU'nun kapi OLMADIGI: olc-sayfa.cjs'in basindaki kunye.
+   Cikis kodlari: 0 gecti · 2 kaldi · 3 hukum yok. */
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+const { spawn } = require('child_process');
 const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 const TARAYICILAR = {
@@ -117,6 +128,52 @@ const TEK_TAKILMA_MS = 250;     /* BLOKLAYICI — A ile ayni, gozlenen tavan 208
    DUSTU" blogunu okusun: oran tur boyuna bagimli bir turevdir. */
 const ORAN_ESKI_KAPI = 0.08;    /* 5 Eyl sabahi kapiydi — artik yalniz kiyas icin yazilir */
 const BOZ = process.env.BOZ === '1' || !!process.env.BOZ_MS;
+
+/* YUK KAPISI — KAPI TOPLAM CPU DEGIL, YABANCI TARAYICIDIR (6 Eyl 2026,
+   olculdu; ilk yazimda toplam cekirdege kapi konmustu, OLCUM ONU CURUTTU).
+
+   TEK DEGISKENLI DOZ-TEPKI TARAMASI (`olc-yuk-tarama.cjs`, /hizmetler/geo/,
+   TEKRAR=3, ayni agac ve tarayici) — yakici surecler CPU yakar, GPU'ya
+   dokunmaz:
+     yabanci 0,454 cekirdek  → p95  8,5 ms · kacirilan 0
+     yabanci 0,682          → p95  8,5 ms · kacirilan 0
+     yabanci 1,097          → p95 16,5 ms · kacirilan 1   ] AYNI YUK,
+     yabanci 1,097 (2. tur) → p95  8,5 ms · kacirilan 0   ] ZIT SONUC
+     yabanci 1,731          → p95 16,6 ms · kacirilan 1
+     yabanci 2,941          → p95 16,7 ms · kacirilan 1
+   Yani ~3 cekirdege kadar SAF CPU yuku hukmu cevirmiyor; ayni yuk iki kez
+   zit sonuc verdigine gore o bandda surukleyen sey yuk DEGIL. Ayni gun
+   Defender+Nessus makineyi %99'a (7,9/8 cekirdek) cikardiginda da ana sayfa
+   16,7 ms okudu — 6 Eyl'in temiz taramasindaki 16,6 ile ayni.
+
+   BOZAN SEY OLCULDU: yabanci bir TARAYICI. Animasyonlu bir Chrome penceresi
+   acilip ayni sayfa olculdugunde p95 33,4/33,3/33,4 ms = 4,02 tik, kacirilan
+   3 — 6 Eyl'de saatleri yiyen yanlis kirmizinin (33,4 ms · 4,02 tik) RAKAMI
+   BIREBIR. O gunku yuk de iki chrome.exe sureciydi (0,499 + 0,341 = 0,84).
+   Iki bagimsiz olay ayni sayida bulusuyor. Mekanizma CPU kitligi degil:
+   ayni GPU/kompozitor hattini paylasan ikinci bir tarayici.
+   KUSAK: yabanci tarayici 0,03 cekirdekte (arka planda duran bos Chrome —
+   bugunku butun temiz kosumlarda vardi) ZARARSIZ · 0,7-0,9'da OLDURUCU.
+   Kapi ikisinin arasina, her iki yana ~5 kat payla 0,15'e konur.
+   TOPLAM CPU KAPI DEGIL, BILGIDIR — ama YAZILIR: doktrin (CLAUDE.md) onu
+   sart kosuyor ve kirmiziyi kimin urettigini ancak surec dokumu soyler. */
+const TARAYICI_KAPI = Number(process.env.TARAYICI_KAPI || 0.15);
+/* Adla taninan tarayici sinifi. BIZIM tarayicimiz zaten surec agacimizda,
+   yabanci sayilmiyor. Electron uygulamalari (Chromium tasirlar) LISTEDE
+   DEGIL: bugun olculen butun temiz kosumlarda claude.exe 0,05-0,17 cekirdek
+   yiyordu ve hicbirini bozmadi; olculmemis bir siniri kapiya yazmayiz.
+   Tam surec dokumu her sayfada kayda gectigi icin boyle bir sey cikarsa
+   kayittan gorunur. */
+const YABANCI_TARAYICILAR = new Set(['chrome.exe', 'msedge.exe', 'brave.exe', 'firefox.exe', 'opera.exe', 'vivaldi.exe', 'iexplore.exe', 'thorium.exe', 'yandex.exe']);
+/* KIRMIZI-ONCE, HER YENI KURAL ICIN BIR KOL:
+   BOZ_TIK=<ms>   acilis tikini kaydirir       -> tik_sapma + ekran_degisti
+   BOZ_TARAYICI=1 yabanci tarayici acar        -> yabanci_tarayici kapisi
+   BOZ_YUK=<cek.> saf CPU yakar (GPU'ya dokunmaz) -> KAPI DEGIL: bu kolun isi
+                  kapiyi yakmak degil, toplam CPU'nun kapi OLMADIGINI
+                  gosteren egriyi uretmektir (olc-yuk-tarama.cjs onu kullanir) */
+const BOZ_TIK = Number(process.env.BOZ_TIK || 0);
+const BOZ_TARAYICI = process.env.BOZ_TARAYICI === '1';
+
 
 /* KAPSAM — DAR TUTULUYOR (Enes): 59 sayfa degil. Kapi A'nin 4 Eyl tam
    taramasinda BIR KARE kaciran 8 sayfa (iki ana sayfa dahil) + bir KONTROL
@@ -156,6 +213,145 @@ const KAYITCI = `(() => {
   window.__kBitir = () => { __k.on = false; return __k.ara.slice(); };
 })()`;
 
+/* ============================ YUK OLCUMU ============================
+   DOKTRIN (CLAUDE.md): "olc-sayfa kirmizisi MAKINE YUKU yazilmadan da hukum
+   degildir · ortalama CPU yuku tek cekirdek yiyen sureci gizler — yuk
+   bakarken SUREC BASINA CEKIRDEK-SANIYE olc." Kural belgede vardi, ALETTE
+   YOKTU; elle kosulan bir kural kosmayan kuraldir. Artik alet olcer.
+
+   6 EYL 2026'DA UC UCUZ SINYAL DENENDI, UCU DE YUKU GORMEDI:
+   1. Sistem ortalamasi: %13,8 goruntusu altinda iki surec tek cekirdegin
+      %49,9 ve %34,1'ini yiyordu. (Bu kosumda yine de yazilir — ortalamanin
+      neyi gizledigi ancak yan yana konunca okunur.)
+   2. BOS SAYFA (about:blank) rAF kararliligi — 6 Eyl'de OLCULDU ve CURUDU:
+      makine %99 mesgulken (7,9/8 cekirdek: Defender 5,0 + Nessus 2,5)
+      about:blank uc turda da 120,5 Hz, p95 1,01 tik, KACIRILAN 0, suzulen
+      0/194 verdi. Bos sayfanin isi yok; zamanlayici ona dilimini veriyor.
+      Yani `tazeleme` bloğunun temiz olmasi makinenin temiz oldugunu
+      GOSTERMEZ — dedektor diye kullanilamaz.
+   3. Sayfanin kendi TABANI (kaydirmasiz 3 sn) yuku gorur ama SAYFA
+      MALIYETIYLE KARISIR (bosta donen bir suslemesi olan sayfanin tabani da
+      yukselir). Ortam olcusu olamaz; bilgi olarak kalir.
+   Geriye SEBEP tarafi kaldi: surecleri tek tek saymak.
+
+   YABANCI = bizim olcum agacimizin DISINDAKI her surec: ne tarayicinin
+   surec agaci (olctugumuz sey odur), ne bu node sureci ve cocuklari
+   (powershell ornekleyicisi dahil — kendi olcum maliyetimizi yabanci yuk
+   diye yazmak sahte kirmizi olurdu).
+   BIRIM: cekirdek = delta CPU saniyesi / gecen duvar saniyesi. */
+const YUK_UC = '<<YUK>>';
+const YUK_SORGU = "Get-CimInstance -Query 'SELECT ProcessId,ParentProcessId,Name,KernelModeTime,UserModeTime FROM Win32_Process' | ForEach-Object { \"$($_.ProcessId) $($_.ParentProcessId) $($_.KernelModeTime) $($_.UserModeTime) $($_.Name)\" }; Write-Output '" + YUK_UC + "'";
+
+/* KALICI PowerShell: surec acilisi ornek basina 1,2-2,3 sn tutuyordu, ayni
+   sorgu acik bir kabukta 0,3 sn. Ornekler olculen pencerelerin DISINDA
+   (goto oncesi / close sonrasi) alinir. */
+function yukAc() {
+  let ps;
+  try {
+    ps = spawn('powershell', ['-NoProfile', '-NonInteractive', '-Command', '-'], { stdio: ['pipe', 'pipe', 'ignore'] });
+  } catch (e) { return null; }
+  ps.on('error', () => { ps.olu = true; });
+  ps.stdout.setEncoding('utf8');
+  let tampon = '', bekleyen = null;
+  ps.stdout.on('data', (d) => {
+    tampon += d;
+    const i = tampon.indexOf(YUK_UC);
+    if (i >= 0 && bekleyen) { const g = tampon.slice(0, i); tampon = tampon.slice(i + YUK_UC.length); const c = bekleyen; bekleyen = null; c(g); }
+  });
+  return {
+    /* ZAMAN ASIMI SARTTIR: ornekleyici asilirsa tarama sonsuza kadar
+       beklerdi. null doner -> yuk OLCULEMEDI -> hukum yok (doktrin). */
+    ornek: () => new Promise((coz) => {
+      if (ps.olu || ps.exitCode !== null) return coz(null);
+      const z = setTimeout(() => { if (bekleyen) { bekleyen = null; coz(null); } }, 8000);
+      bekleyen = (g) => { clearTimeout(z); coz({ m: yukAyristir(g), an: Date.now() }); };
+      try { ps.stdin.write(YUK_SORGU + '\n'); } catch (e) { clearTimeout(z); bekleyen = null; coz(null); }
+    }),
+    kapat: () => { try { ps.stdin.end(); ps.kill(); } catch (e) {} },
+  };
+}
+
+function yukAyristir(metin) {
+  const m = new Map();
+  for (const s of metin.split('\n')) {
+    const t = s.trim(); if (!t) continue;
+    const p = t.split(' ');
+    if (p.length < 5) continue;
+    const pid = Number(p[0]), ppid = Number(p[1]), k = Number(p[2]), u = Number(p[3]);
+    if (!Number.isFinite(pid) || !Number.isFinite(k) || !Number.isFinite(u)) continue;
+    m.set(pid, { pid, ppid, ad: p.slice(4).join(' '), cpu: (k + u) / 1e7 });   /* 100 ns -> sn */
+  }
+  return m;
+}
+
+/* kokler + butun soylari (tarayici renderer'lari kok surecin cocugudur) */
+function yukSoy(m, kokler) {
+  const ic = new Set(kokler.filter((x) => Number.isFinite(x)));
+  let degisti = true;
+  while (degisti) {
+    degisti = false;
+    for (const p of m.values()) if (!ic.has(p.pid) && ic.has(p.ppid)) { ic.add(p.pid); degisti = true; }
+  }
+  return ic;
+}
+
+/* DUZENEGIN KENDI URETTIGI "YABANCI" SUREC — OLCULEREK AYRILDI (6 Eyl 2026).
+   dwm.exe masaustu kompozitorudur ve bizim surec agacimizin disindadir, ama
+   yaptigi is BIZIM: gorunur pencerede 120 Hz boyayan tarayicinin karelerini
+   birlestiriyor. Uc kosulda olculdu — tarayici kapali 0,007 · tarayici acik
+   bos sayfada <0,027 · tarayici sayfa kaydirirken 0,358 cekirdek. Elli kat
+   fark ve tamami duzenegin isi. Yabanci sayilsaydi kapinin yarisindan
+   fazlasini duzenegin kendisi yer, sessiz bir makine bile sinirda kalirdi.
+   AYRILIR AMA GIZLENMEZ: `rig_cekirdek` olarak ayrica yazilir.
+   Cekirdek (System, pid 4) ayrilmadi — surucu isinin bir kismi bizim ama
+   atfedilemez, ve atfedilemeyen seyi kendi lehimize saymayiz. */
+const RIG_SURECLERI = new Set(['dwm.exe']);
+
+/* iki ornek arasindaki YABANCI yuk. Pencerede olen surec iki ornekte de
+   toplanmaz (son ornekte yok) — bu bilincli: kapanmis bir renderer'in
+   maliyeti yabanci yuk degildir. */
+function yukFark(bas, son, kokler) {
+  if (!bas || !son) return null;
+  const gecen = (son.an - bas.an) / 1000;
+  if (!(gecen > 0)) return null;
+  const bizim = yukSoy(son.m, kokler);
+  const surecler = [];
+  let yabanci = 0, rig = 0, tarayici = 0;
+  for (const [pid, p] of son.m) {
+    if (pid === 0 || bizim.has(pid)) continue;              /* System Idle Process + bizim agac */
+    const o = bas.m.get(pid);
+    const d = o ? p.cpu - o.cpu : p.cpu;                    /* pencerede dogan surec: sifirdan */
+    if (!(d > 0)) continue;
+    const c = d / gecen;
+    if (RIG_SURECLERI.has(p.ad)) { rig += c; continue; }
+    yabanci += c;
+    if (YABANCI_TARAYICILAR.has((p.ad || '').toLowerCase())) tarayici += c;
+    if (c >= 0.01) surecler.push({ ad: p.ad, pid, cekirdek: +c.toFixed(3) });
+  }
+  surecler.sort((a, b) => b.cekirdek - a.cekirdek);
+  return {
+    tarayici_cekirdek: +tarayici.toFixed(3),                /* KAPI budur */
+    yabanci_cekirdek: +yabanci.toFixed(3),                  /* BILGI: toplam */
+    rig_cekirdek: +rig.toFixed(3),
+    en_agir: surecler.slice(0, 6),
+    pencere_sn: +gecen.toFixed(2),
+  };
+}
+
+/* SISTEM ORTALAMASI — bedava (os.cpus deltasi) ve YALAN SOYLER; yabanci
+   yukun yaninda yazilir ki farki okunabilsin. Kapi DEGIL. */
+const cpuKap = () => os.cpus().map((c) => ({ ...c.times }));
+function cpuFark(a, b) {
+  let mesgul = 0, tum = 0;
+  for (let i = 0; i < Math.min(a.length, b.length); i++) {
+    const A = a[i], B = b[i];
+    const ta = A.user + A.nice + A.sys + A.idle + A.irq, tb = B.user + B.nice + B.sys + B.idle + B.irq;
+    mesgul += (tb - ta) - (B.idle - A.idle); tum += tb - ta;
+  }
+  return tum > 0 ? +(mesgul / tum * a.length).toFixed(3) : null;
+}
+
+
 /* ISINMA adim 2-5 + tik olcumu. Kapi A'daki tazelemeOlc ile ayni yontem. */
 async function isinVeOlc(browser) {
   const page = await browser.newPage();
@@ -183,14 +379,23 @@ async function isinVeOlc(browser) {
 }
 
 /* TEK OLCUM = TEK TARAYICI. Taze profil her cagrida yeniden dogar. */
-async function sogukKosum(yol) {
+async function sogukKosum(yol, yuk) {
+  /* YUK PENCERESI olculen pencereyi SARAR. B'de tarayici HER KOSUMDA
+     yeniden dogdugu icin agac kokleri de her kosumda yeniden alinir —
+     A'daki tek kok listesi burada yanlis olurdu. */
+  const yBas = yuk ? await yuk.ornek() : null;
+  const cBas = cpuKap();
   const browser = await pt.launch({
     executablePath: TARAYICILAR[TARAYICI] || TARAYICI, headless: false,
     args: ['--window-size=1460,980', '--disable-backgrounding-occluded-windows', '--disable-renderer-backgrounding', '--disable-background-timer-throttling'],
     defaultViewport: null, protocolTimeout: 600000,
   });
+  const kokler = [process.pid, browser.process() ? browser.process().pid : NaN];
   try {
     const tz = await isinVeOlc(browser);
+    /* BOZ_TIK: bu kosumun boleni bilerek kaydirilir; kosumun kendi tabani
+       degismedigi icin capraz kontrol %20'yi asmali ve sayfa hukumsuz olmali. */
+    if (BOZ_TIK) { tz.boz_tik_oncesi = tz.tik_ms; tz.tik_ms = BOZ_TIK; tz.hz = +(1000 / BOZ_TIK).toFixed(1); }
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
     const cdp = await page.target().createCDPSession();
@@ -252,6 +457,12 @@ async function sogukKosum(yol) {
       takilma_tek_max_ms: tak.length ? Math.round(Math.max(...tak)) : 0,
       taban: { sure_ms: Math.round(tabanAra.reduce((a, b) => a + b, 0)), takilma_sayi: tabanTak.length, p95_ms: p95(tabanAra), tik_p10: p10(tabanAra) },
       scroll_px: y, toplam_px: toplamPx, toplam_px_bas: toplamPxBas, tur_tam: turTam,
+      /* ORNEK TARAYICI DAHA KAPANMADAN alinir: kapandiktan sonra alinsa
+         onun surecleri ornekte hic bulunmaz ve `kokler` bir seyi elemez —
+         calisir gorunur, yanlis bir sey elemez, ama pencere olculen
+         pencereden buyur. */
+      yuk: yukFark(yBas, yuk ? await yuk.ornek() : null, kokler),
+      sistem_cekirdek: cpuFark(cBas, cpuKap()),
     };
   } finally {
     await browser.close();
@@ -262,10 +473,42 @@ async function sogukKosum(yol) {
   console.log(`KAPI B — SOGUK GIRIS · ${TARAYICI} · ${secim.length} sayfa · ${TEKRAR} kosum · HER KOSUM AYRI TARAYICI${BOZ ? '  [BOZ KIRMIZI-ONCE]' : ''}`);
   console.log(`KAPI     : kacirilan kare <= ${KACIRILAN_KAPI} (medyan, BLOKLAYICI) · tek takilma <= ${TEK_TAKILMA_MS} ms (BLOKLAYICI) · tur tam`);
   console.log(`BILGI    : takilma TOPLAM SURESI (ms) ve orani yazilir, HUKUM VERMEZ — oran tur boyuna bagimli turev  [HEDEF kacirilan <= ${KACIRILAN_HEDEF} — kapi degil]`);
+  /* YUK OLCEYICI — ilk sorgu PowerShell acilisini tasir, dongu baslamadan
+     isitilir ki kosum pencerelerine binmesin. */
+  const yuk = yukAc();
+  if (yuk) await yuk.ornek();
+  /* KIRMIZI-ONCE, YABANCI TARAYICI KURALI ICIN — A'daki kolun aynisi.
+     B'nin kurali A'nin KOPYASI oldugu icin kolu da kopyalanir: kopya
+     kural, kopyalanmayan kolla dogrulanmis sayilmaz. */
+  const bozTarayiciYol = path.join(os.tmpdir(), 'qanat-boz-tarayici-b.html');
+  if (BOZ_TARAYICI) {
+    fs.writeFileSync(bozTarayiciYol, `<!doctype html><meta charset="utf-8"><title>QANAT BOZ_TARAYICI</title>
+<style>html,body{margin:0;height:100%;background:#111;overflow:hidden}canvas{position:absolute;inset:0;width:100%;height:100%}</style>
+<canvas id="c"></canvas><script>
+const c=document.getElementById('c'),x=c.getContext('2d');let t=0;
+(function k(){c.width=innerWidth;c.height=innerHeight;
+for(let i=0;i<90;i++){x.fillStyle='hsla('+((t+i*4)%360)+',70%,50%,0.10)';x.beginPath();
+x.arc((Math.sin(t/40+i)*0.5+0.5)*c.width,(Math.cos(t/55+i)*0.5+0.5)*c.height,60+(i%9)*14,0,7);x.fill();}
+t++;requestAnimationFrame(k);})();
+</script>`);
+    const oteki = TARAYICI === 'brave' ? TARAYICILAR.chrome : TARAYICILAR.brave;
+    spawn('cmd', ['/c', 'start', '/b', '', oteki, '--new-window', '--window-size=900,700', '--window-position=20,20',
+      'file:///' + bozTarayiciYol.replace(/\\/g, '/')], { detached: true, stdio: 'ignore' }).unref();
+    await bekle(6000);
+  }
+  const bozTarayiciKapat = () => {
+    if (!BOZ_TARAYICI) return;
+    try {
+      require('child_process').execFileSync('powershell', ['-NoProfile', '-NonInteractive', '-Command',
+        "Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -like '*QANAT BOZ_TARAYICI*' } | ForEach-Object { $null = $_.CloseMainWindow() }"],
+      { stdio: 'ignore', timeout: 30000 });
+    } catch (e) {}
+  };
+  console.log(`YUK      : YABANCI TARAYICI <= ${TARAYICI_KAPI} cekirdek — ASILIRSA O SAYFA HUKUMSUZDUR. Toplam CPU KAPI DEGIL, bilgi.${yuk ? '' : '  !! OLCEYICI ACILAMADI — hicbir sayfa hukum vermeyecek'}`);
   const sonuc = [];
   for (const yol of secim) {
     const k = [];
-    for (let i = 0; i < TEKRAR; i++) k.push(await sogukKosum(yol));
+    for (let i = 0; i < TEKRAR; i++) k.push(await sogukKosum(yol, yuk));
     const oz = {
       yol, kosum: k,
       p95_medyan: medyan(k.map((x) => x.p95_ms)),
@@ -291,15 +534,47 @@ async function sogukKosum(yol) {
     oz.takilma_oran_medyan = oz.bilgi.takilma_oran_medyan;   /* geriye donuk kayit alani */
     oz.eski_oran_kapisi = oz.bilgi.takilma_oran_medyan <= ORAN_ESKI_KAPI;  /* yalniz kiyas */
     oz.tur_tam = k.every((x) => x.tur_tam);
+    /* MAKINE YUKU — A ile AYNI OLCUT. B'nin bundan muaf olmasi icin bir
+       sebep yok: ayni makinede, ayni tarayici ikilisiyle, ayni sinyali
+       olcuyor; yabanci bir tarayici B'yi de ayni sekilde bozar. Kapinin
+       kunyesi ve doz-tepki tablosu olc-sayfa.cjs'in basindadir. */
+    const tCek = k.map((x) => x.yuk && x.yuk.tarayici_cekirdek).filter((x) => typeof x === 'number');
+    const yCek = k.map((x) => x.yuk && x.yuk.yabanci_cekirdek).filter((x) => typeof x === 'number');
+    const enAgirKosum = k.filter((x) => x.yuk).sort((a, b) => b.yuk.yabanci_cekirdek - a.yuk.yabanci_cekirdek)[0];
+    oz.yuk = {
+      olculdu: yCek.length === k.length,
+      tarayici_cekirdek_enyuksek: tCek.length ? +Math.max(...tCek).toFixed(3) : null,
+      tarayici_cekirdek_kosumlar: k.map((x) => (x.yuk ? x.yuk.tarayici_cekirdek : null)),
+      yabanci_cekirdek_medyan: yCek.length ? +medyan(yCek).toFixed(3) : null,
+      yabanci_cekirdek_kosumlar: k.map((x) => (x.yuk ? x.yuk.yabanci_cekirdek : null)),
+      rig_cekirdek_medyan: medyan(k.map((x) => x.yuk && x.yuk.rig_cekirdek).filter((x) => typeof x === 'number')),
+      en_agir: enAgirKosum ? enAgirKosum.yuk.en_agir : [],
+      sistem_cekirdek_medyan: medyan(k.map((x) => x.sistem_cekirdek).filter((x) => x != null)),
+      cekirdek: os.cpus().length, kapi_tarayici: TARAYICI_KAPI,
+      _: 'KAPI tarayici_cekirdek. yabanci_cekirdek TOPLAM ve KAPI DEGIL — olculdu: 2,9 cekirdek saf CPU yuku hukmu cevirmedi.',
+    };
+    /* capraz kontrol: kosumun KENDI tabanindan cikan tik, o kosumun KENDI
+       acilis tikinden %20+ ayriliyorsa bolen supheli. B'de tik her kosumda
+       yeniden olculdugu icin kiyas kosum icindedir. */
+    oz.tik_sapma = k.some((x) => x.taban.tik_p10 != null && x.tazeleme
+      && Math.abs(x.taban.tik_p10 - x.tazeleme.tik_ms) / x.tazeleme.tik_ms > 0.20)
+      ? k.map((x) => (x.taban.tik_p10 == null ? null : +x.taban.tik_p10.toFixed(3))) : false;
     oz.kapi = {
       kacirilan_kare: oz.kacirilan_medyan <= KACIRILAN_KAPI,
       takilma_tek: oz.takilma_tek_max <= TEK_TAKILMA_MS,
       tur_tam: oz.tur_tam,
     };
-    oz.gecti = Object.values(oz.kapi).every(Boolean);
+    /* UC DURUM — A ile ayni aile: HUKUMSUZ, KALDI DEGILDIR (iddia sayfa
+       hakkinda degil OLCUM hakkindadir). */
+    oz.hukumsuz = [];
+    if (oz.tik_sapma) oz.hukumsuz.push('tik_sapma');
+    if (!oz.yuk.olculdu) oz.hukumsuz.push('yuk_olculemedi');
+    else if (oz.yuk.tarayici_cekirdek_enyuksek > TARAYICI_KAPI) oz.hukumsuz.push('yabanci_tarayici');
+    oz.gecti = oz.hukumsuz.length ? null : Object.values(oz.kapi).every(Boolean);
     oz.hedefte = oz.kacirilan_medyan <= KACIRILAN_HEDEF;   /* HEDEF — kapi degil */
     sonuc.push(oz);
-    console.log(`${oz.gecti ? 'GECTI' : 'KALDI'}${oz.gecti && !oz.hedefte ? '*' : ' '} ${yol.padEnd(38)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95_medyan.toFixed(2)} tik · KACIRILAN ${oz.kacirilan_kosumlar.join('/')} → ${oz.kacirilan_medyan}/${KACIRILAN_KAPI} · tek ${oz.takilma_tek_max}/${TEK_TAKILMA_MS} ms · taban ${oz.taban_takilma.join('/')}${oz.gecti ? '' : '  !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',')}`);
+    console.log(`${oz.gecti === null ? 'HUKSZ' : (oz.gecti ? 'GECTI' : 'KALDI')}${oz.gecti && !oz.hedefte ? '*' : ' '} ${yol.padEnd(38)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95_medyan.toFixed(2)} tik · KACIRILAN ${oz.kacirilan_kosumlar.join('/')} → ${oz.kacirilan_medyan}/${KACIRILAN_KAPI} · tek ${oz.takilma_tek_max}/${TEK_TAKILMA_MS} ms · taban ${oz.taban_takilma.join('/')}${oz.gecti === false ? '  !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',') : ''}`);
+    console.log(`       yabanci tarayici ${oz.yuk.tarayici_cekirdek_kosumlar.join('/')} → ${oz.yuk.tarayici_cekirdek_enyuksek}/${TARAYICI_KAPI} cekirdek [KAPI] · toplam yabanci ${oz.yuk.yabanci_cekirdek_medyan} · sistem ort. ${oz.yuk.sistem_cekirdek_medyan} (ikisi de BILGI)${oz.yuk.en_agir.length ? ' · en agir ' + oz.yuk.en_agir.slice(0, 3).map((s) => `${s.ad} ${s.cekirdek}`).join(', ') : ''}${oz.hukumsuz.length ? '  !! HUKUM YOK: ' + oz.hukumsuz.join(',') : ''}`);
     console.log(`       bilgi (kapi degil) takilma toplam ${oz.bilgi.takilma_toplam_kosumlar.join('/')} → ${oz.bilgi.takilma_toplam_medyan_ms} ms · ${oz.bilgi.takilma_sayi_medyan} takilma · tur ${(oz.bilgi.tur_ms_medyan / 1000).toFixed(2)} sn · oran %${(oz.bilgi.takilma_oran_medyan * 100).toFixed(2)}${oz.eski_oran_kapisi ? '' : `  (eski %${ORAN_ESKI_KAPI * 100} kapisini asardi)`}`);
   }
   const dagilim = {};
@@ -314,8 +589,12 @@ async function sogukKosum(yol) {
     _: 'Ustteki MUTLAK sira ziyaretcinin hissettigi siradir; alttaki TUREV siradir. Ikisi ayrisiyorsa oranin paydasi (tur boyu) konusuyordur, sayfa degil.',
   };
   siralama.ayrisiyor = siralama.mutlak_toplam_ms[0] !== siralama.oran[0];
-  const kalanlar = sonuc.filter((s) => !s.gecti).map((s) => s.yol);
-  const ham = kalanlar.length ? `KALDI — ${kalanlar.join(', ')}` : 'GECTI';
+  /* UC DURUM, UC CIKIS KODU — A ile ayni: 0 gecti · 2 kaldi · 3 hukum yok. */
+  const kalanlar = sonuc.filter((s) => s.gecti === false).map((s) => s.yol);
+  const hukumsuzSayfa = sonuc.filter((s) => s.gecti === null);
+  const ham = kalanlar.length ? `KALDI — ${kalanlar.join(', ')}`
+    : hukumsuzSayfa.length ? `HUKUM YOK — ${hukumsuzSayfa.length} sayfa olculemedi (${[...new Set(hukumsuzSayfa.flatMap((s) => s.hukumsuz))].join(',')})`
+      : 'GECTI';
   const hukum = KISMI ? `KISMI (${secim.length}/${VARSAYILAN.length} sayfa) — HUKUM DEGIL · ham: ${ham}` : ham;
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-soguk.cjs — KAPI B SOGUK GIRIS: taze tarayici profili + sabit isinma dizisi + TEK sayfa. Kapi A (olc-sayfa.cjs) TARAMA kosulunu olcer ve gerileme kapisidir; bu ZIYARETCI kosulunu olcer. Iki kapinin rakamlari birbirinin yerine GECMEZ.',
@@ -355,7 +634,22 @@ async function sogukKosum(yol) {
   for (const k of Object.keys(dagilim).sort()) console.log(`  ${k} kare  x${dagilim[k]}`);
   const hedefsiz = sonuc.filter((s) => !s.hedefte).length;
   console.log(`\nHEDEF (kacirilan <= ${KACIRILAN_HEDEF}, KAPI DEGIL): ${sonuc.length - hedefsiz}/${sonuc.length} sayfa hedefte${hedefsiz ? ` · hedefte olmayan: ${sonuc.filter((s) => !s.hedefte).map((s) => s.yol).join(', ')}` : ''}`);
+  bozTarayiciKapat();
+  if (yuk) yuk.kapat();
   console.log(`\nHUKUM: ${hukum}\n→ ${CIKTI}`);
   if (KISMI) console.log(`!! KISMI KOSUM — ${secim.length}/${VARSAYILAN.length} sayfa. Bu cikti hukum degildir. Kapi icin varsayilan dokuz sayfayi koş.`);
-  process.exit(KISMI && !BOZ ? 0 : (sonuc.every((s) => s.gecti) ? 0 : 2));
+  if (hukumsuzSayfa.length) {
+    const agir = new Map();
+    for (const s of hukumsuzSayfa) for (const p of s.yuk.en_agir) agir.set(p.ad, Math.max(agir.get(p.ad) || 0, p.cekirdek));
+    console.log(`!! ${hukumsuzSayfa.length} sayfa HUKUMSUZ (${[...new Set(hukumsuzSayfa.flatMap((s) => s.hukumsuz))].join(',')}) — kaldi DEGIL, yeniden olculmeli.`);
+    if (agir.size) console.log(`   en agir yabanci surecler: ${[...agir].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([a, c]) => `${a} ${c}`).join(' · ')}`);
+  }
+  /* 0 = gecti · 2 = kaldi (gercek kirmizi) · 3 = hukum yok (yeniden olc) —
+     A ile ayni uclu. 3'un 0 OLMAMASI sart: olculememis bir kosumu "gecti"
+     saymak, bu turun kapattigi yanlis yesilin ta kendisidir. */
+  /* KISMI kirmiziyi atfedemez, kapiyi dusurmez — istisna KOLLAR: orada
+     kirmiziyi/hukumsuzlugu biz urettik, atif bizde ve kolun kendisi ancak
+     cikis koduna dusunce kanit olur. */
+  const BOZ_KOL = BOZ || !!BOZ_TIK || BOZ_TARAYICI;
+  process.exit(KISMI && !BOZ_KOL ? 0 : (kalanlar.length ? 2 : hukumsuzSayfa.length ? 3 : 0));
 })().catch((e) => { console.error(e); process.exit(1); });

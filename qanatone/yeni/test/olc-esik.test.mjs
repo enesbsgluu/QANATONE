@@ -173,3 +173,106 @@ test('kismi kosum bekcisi iki kapida da duruyor', () => {
     assert.match(s, /KISMI\s*&&\s*!BOZ/, `${ad}: kismi kosum cikis kodunu dusurmeme kurali yok (BOZ istisnasiyla)`);
   }
 });
+
+/* ==================== MAKINE YUKU VE UCUNCU DURUM ====================
+   6 Eyl 2026. Iki kusur ayni kokten geliyordu: arac OLCUMUN KENDISI
+   hakkindaki suphesini HUKME cevirmeye calisiyordu. Doktrin (CLAUDE.md)
+   "olc-sayfa kirmizisi makine yuku yazilmadan da hukum degildir" diyordu ve
+   kural BELGEDE vardi, ALETTE YOKTU — elle kosulan kural kosmayan kuraldir.
+   Bu bloktaki kurallarin isi, o kurali tekrar belgeye dusurecek bir
+   degisikligi KIRMIZI YAKMAKTIR.
+
+   Kapi degeri OLCULEREK kondu ve ilk hali CURUTULDU: once toplam CPU
+   cekirdegine kapi konmustu, doz-tepki taramasi (olc-yuk-tarama.cjs) 2,9
+   cekirdek saf CPU yukunun hukmu hic kipirdatmadigini, hatta AYNI yukun iki
+   kez ZIT sonuc verdigini gosterdi. Bozan sey yabanci bir TARAYICI cikti:
+   animasyonlu bir Chrome penceresiyle ayni sayfa p95 8,5 -> 33,4 ms
+   (4,02 tik) okudu — 6 Eyl'in saatler yiyen yanlis kirmizisinin rakami
+   birebir. Kusak: 0,023 cekirdek temiz, 1,077 kirli; kapi 0,15. */
+
+test('yuk OLCULUYOR ve KAYDA GECIYOR — iki kapida da (doktrin: yazilmadan hukum yok)', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    assert.match(s, /function yukFark\(/, `${ad}: yuk olcumu yok — CLAUDE.md doktrini alete gecmemis`);
+    assert.match(s, /KernelModeTime/, `${ad}: surec basina CPU okunmuyor (sistem ortalamasi tek cekirdek yiyen sureci gizler)`);
+    const yukBlok = s.match(/oz\.yuk\s*=\s*\{[\s\S]*?\n    \};/);
+    assert.ok(yukBlok, `${ad}: oz.yuk blogu yok — yuk kayda gecmiyor`);
+    assert.match(yukBlok[0], /en_agir:/, `${ad}: en agir surec dokumu dusmus — "kirmizi kimden geldi" ancak o satirdan okunur`);
+    assert.match(yukBlok[0], /yabanci_cekirdek_medyan:/, `${ad}: toplam yabanci yuk yazilmiyor (hukum vermez ama YAZILIR)`);
+  }
+});
+
+test('KAPI yabanci TARAYICI cekirdegi, iki kapida ayni sayi', () => {
+  assert.equal(varsayilan(A, 'TARAYICI_KAPI'), 0.15, 'A yabanci tarayici kapisi degismis — degeri olculdu (0,023 temiz / 1,077 kirli), degistiren once olcsun');
+  assert.equal(varsayilan(B, 'TARAYICI_KAPI'), varsayilan(A, 'TARAYICI_KAPI'),
+    'A ve B yabanci tarayici kapisi ayrismis — yuk MAKINENIN hali, kosulun degil; iki kapida ayni olmali');
+  for (const [ad, s] of [['A', A], ['B', B]])
+    assert.match(s, /YABANCI_TARAYICILAR\s*=\s*new Set\(\[[^\]]*'chrome\.exe'[^\]]*\]\)/, `${ad}: yabanci tarayici sinifi tanimsiz`);
+});
+
+/* TOPLAM CPU KAPI DEGIL — bu kural bir GEVSETME degil, olculmus bir birim
+   duzeltmesidir (ayni aile: B'de takilma orani, kare kapisinda ms/tik).
+   Kapiya toplam yuku geri koyan degisiklik burada yanmali. */
+test('toplam CPU yuku KAPI DEGIL, BILGI — iki kapida da', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    const hukumsuzBlok = s.match(/oz\.hukumsuz\s*=\s*\[\][\s\S]*?oz\.gecti\s*=/);
+    assert.ok(hukumsuzBlok, `${ad}: hukumsuz blogu yok`);
+    assert.doesNotMatch(hukumsuzBlok[0], /yabanci_cekirdek/,
+      `${ad}: toplam CPU yuku hukmu dusuruyor — olculdu ki 2,9 cekirdek saf CPU yuku hukmu cevirmiyor (olc-yuk-tarama.json)`);
+    assert.match(hukumsuzBlok[0], /tarayici_cekirdek_enyuksek/, `${ad}: yabanci tarayici kapisi hukme baglanmamis`);
+  }
+});
+
+/* HUKUMSUZ, KALDI DEGILDIR: "kaldi" sayfa hakkinda bir iddiadir, "hukumsuz"
+   OLCUM hakkindadir. `oz.kapi` bloklayici kalemlerin yeridir ve MUTLAK birim
+   tasir; hukumsuzluk sebepleri oraya girerse ucuncu durum kaybolur. */
+test('hukumsuzluk sebepleri KAPI BLOGUNA girmez — iki kapida da', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    const kapiBlok = s.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/);
+    assert.ok(kapiBlok, `${ad}: kapi blogu bulunamadi`);
+    for (const sebep of ['tarayici', 'yuk', 'tik_sapma', 'hukumsuz'])
+      assert.ok(!kapiBlok[0].includes(sebep), `${ad}: '${sebep}' kapi bloguna girmis — hukumsuzluk KALDI'ya donmus`);
+  }
+});
+
+test('KAPI A\'nin bloklayici kalemleri SADECE MUTLAK birim tasir (B\'deki kuralin aynisi)', () => {
+  const kapiBlok = A.match(/oz\.kapi\s*=\s*\{[\s\S]*?\};/)[0];
+  const kalemler = [...kapiBlok.matchAll(/(\w+):/g)].map((m) => m[1]).filter((a) => a !== 'kapi');
+  assert.deepEqual(kalemler.sort(), ['js', 'kacirilan_kare', 'takilma_tek', 'tur_tam'],
+    `A kapi kalemleri degismis: ${kalemler.join(',')} — kalem eklendiyse birimi mutlak mi, once onu yaz`);
+});
+
+test('gecti UC DURUMLU: hukumsuz varken null (ne gecti ne kaldi)', () => {
+  for (const [ad, s] of [['A', A], ['B', B]])
+    assert.match(s, /oz\.gecti\s*=\s*oz\.hukumsuz\.length\s*\?\s*null\s*:/,
+      `${ad}: gecti hala ikili — hukumsuz kosum "kaldi" ya da "gecti" diye etiketleniyor`);
+});
+
+/* Cikis kodu 0 DONDURMEK olculememis bir taramayi "gecti" saymaktir — bu
+   turun kapattigi yanlis yesil tam odur. */
+test('HUKUM YOK ayri cikis kodu (3) dondurur — 0 da 2 de degil', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    const cikis = s.match(/process\.exit\((?![^)]*\b1\b\s*\))[^;]*hukumsuz[^;]*\)/);
+    assert.ok(cikis, `${ad}: cikis kodu hukumsuzlugu gormuyor`);
+    assert.match(cikis[0], /3/, `${ad}: hukumsuz kosum 3 disinda bir kod donduruyor`);
+  }
+});
+
+/* Her yeni kuralin bir kolu olmali — yanmayan kuralin yesili anlamsizdir. */
+test('yeni kurallarin KIRMIZI-ONCE kollari duruyor', () => {
+  assert.match(A, /BOZ_TIK\s*=\s*Number\(process\.env\.BOZ_TIK/, 'A: tik_sapma kolu yok');
+  assert.match(A, /BOZ_TARAYICI\s*=\s*process\.env\.BOZ_TARAYICI/, 'A: yabanci tarayici kolu yok');
+  /* Yakici surecler agactan CIKMALI: `detached` ppid'yi degistirmez, cocuk
+     bizim agacimizda kalir ve kol SESSIZCE YESIL kalirdi (6 Eyl'de olculdu). */
+  assert.match(A, /'cmd',\s*\['\/c',\s*'start'/, 'A: BOZ kollari cmd /c start ile dogurmuyor — surec agacimizda kalir, kol yanmaz');
+});
+
+/* Duzenegin KENDI urettigi yuk ayrilmali ama GIZLENMEMELI: dwm.exe bizim
+   tarayicimizin karelerini birlestiriyor (tarayici kapali 0,007 -> kaydirirken
+   0,358 cekirdek). Yabanci sayilsaydi kapinin yarisindan fazlasini duzenegin
+   kendisi yerdi. */
+test('duzenegin kendi urettigi yuk (dwm) ayrilir ve ayrica yazilir', () => {
+  for (const [ad, s] of [['A', A], ['B', B]]) {
+    assert.match(s, /RIG_SURECLERI\s*=\s*new Set\(\['dwm\.exe'\]\)/, `${ad}: rig sureci ayrimi yok`);
+    assert.match(s, /rig_cekirdek:/, `${ad}: ayrilan yuk kayda gecmiyor — ayirmak gizlemek degildir`);
+  }
+});

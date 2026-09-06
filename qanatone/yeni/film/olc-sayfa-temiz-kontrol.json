@@ -1,0 +1,353 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-06T12:31:37.266Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "tekrar": 3,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "ekran_degisti": false,
+ "yuk_taban": {
+  "tarayici_cekirdek": 0.072,
+  "yabanci_cekirdek": 0.5,
+  "rig_cekirdek": 0.023,
+  "en_agir": [
+   {
+    "ad": "MsMpEng.exe",
+    "pid": 4104,
+    "cekirdek": 0.072
+   },
+   {
+    "ad": "chrome.exe",
+    "pid": 17000,
+    "cekirdek": 0.069
+   },
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.053
+   },
+   {
+    "ad": "MuseHub.exe",
+    "pid": 8484,
+    "cekirdek": 0.05
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 7372,
+    "cekirdek": 0.042
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 5524,
+    "cekirdek": 0.034
+   }
+  ],
+  "pencere_sn": 4.1,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yabanci_tarayici_kapi_cekirdek": 0.15,
+  "cekirdek": 8,
+  "toplam_cpu_KAPI_DEGIL": true,
+  "_yuk": "YABANCI TARAYICI kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\". Toplam CPU yuku BILGIDIR: ~3 cekirdege kadar saf CPU yuku hukmu cevirmedi (doz-tepki: yeni/film/olc-yuk-tarama.json), 0,8 cekirdek yabanci tarayici cevirdi (p95 8,5 -> 33,4 ms)."
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: GECTI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": false,
+ "boz_kollari": false,
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/hizmetler/geo/",
+   "js_bayt": 3811,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "yuk": {
+      "tarayici_cekirdek": 0.023,
+      "yabanci_cekirdek": 0.428,
+      "rig_cekirdek": 0.128,
+      "en_agir": [
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.095
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.069
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.054
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.043
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 5524,
+        "cekirdek": 0.036
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 15112,
+        "cekirdek": 0.021
+       }
+      ],
+      "pencere_sn": 9.55
+     },
+     "sistem_cekirdek": 1.647,
+     "kare": 401,
+     "tur_ms": 3616,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 100,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "tarayici_cekirdek": 0.003,
+      "yabanci_cekirdek": 0.41,
+      "rig_cekirdek": 0.139,
+      "en_agir": [
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.086
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.063
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.043
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.043
+       },
+       {
+        "ad": "nvcontainer.exe",
+        "pid": 8276,
+        "cekirdek": 0.041
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 5524,
+        "cekirdek": 0.03
+       }
+      ],
+      "pencere_sn": 9.44
+     },
+     "sistem_cekirdek": 1.54,
+     "kare": 399,
+     "tur_ms": 3482,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 2999,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "tarayici_cekirdek": 0.012,
+      "yabanci_cekirdek": 0.478,
+      "rig_cekirdek": 0.122,
+      "en_agir": [
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.124
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.076
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.056
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 15112,
+        "cekirdek": 0.053
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.04
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 5524,
+        "cekirdek": 0.036
+       }
+      ],
+      "pencere_sn": 9.46
+     },
+     "sistem_cekirdek": 1.452,
+     "kare": 414,
+     "tur_ms": 3507,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 8.6,
+   "takilma_oran_medyan": 0,
+   "takilma_tek_max": 100,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kare_p95": 1.036,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.036,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": false,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "tarayici_cekirdek_enyuksek": 0.023,
+    "tarayici_cekirdek_kosumlar": [
+     0.023,
+     0.003,
+     0.012
+    ],
+    "yabanci_cekirdek_medyan": 0.428,
+    "yabanci_cekirdek_kosumlar": [
+     0.428,
+     0.41,
+     0.478
+    ],
+    "rig_cekirdek_medyan": 0.128,
+    "en_agir": [
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.124
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.076
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 8484,
+      "cekirdek": 0.056
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 15112,
+      "cekirdek": 0.053
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4104,
+      "cekirdek": 0.04
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 5524,
+      "cekirdek": 0.036
+     }
+    ],
+    "sistem_cekirdek_medyan": 1.54,
+    "cekirdek": 8,
+    "kapi_tarayici": 0.15,
+    "_": "KAPI tarayici_cekirdek (yabanci tarayici sinifi). yabanci_cekirdek TOPLAM ve KAPI DEGIL: 2,9 cekirdek saf CPU yuku hukmu cevirmedi, 0,8 cekirdek yabanci tarayici cevirdi. sistem_cekirdek ORTALAMADIR ve tek cekirdek yiyen sureci gizler."
+   },
+   "bilgi": {
+    "takilma_oran_medyan": 0,
+    "sistem_cekirdek_medyan": 1.54
+   },
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [],
+   "gecti": true
+  }
+ ]
+}

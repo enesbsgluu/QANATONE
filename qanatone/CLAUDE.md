@@ -275,7 +275,34 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   yüklü 25,0 → boş 16,6-16,8, aynı ağaç; finansın 2 Eyl'deki 25,1'i de
   gerileme değil aynı sayfanın iki tik hâliydi). **Ortalama CPU yükü tek
   çekirdek yiyen süreci gizler** — kare süresi tek-iplik sinyalidir, yük
-  bakarken süreç başına çekirdek-saniye ölç.
+  bakarken süreç başına çekirdek-saniye ölç. **6 Eyl 2026: kural ARTIK
+  ALETTE** — A ve B her koşumda süreç başına çekirdek-saniye ölçüp kayda
+  geçiriyor. "Kural belgede var, alette yok" hâli elle koşulan kuraldı,
+  yani koşmayan kural.
+- **BOZAN ŞEY TOPLAM CPU DEĞİL, YABANCI TARAYICI** (6 Eyl 2026, doz-tepki
+  ölçüldü — `yeni/film/olc-yuk-tarama.cjs`). Yakıcı süreçlerle **2,9 çekirdek**
+  saf CPU yükü aynı sayfanın hükmünü kıpırdatmadı (p95 16,7 ms), hatta *aynı*
+  yük iki koşumda zıt sonuç verdi; Defender+Nessus makineyi **%99'a (7,9/8
+  çekirdek)** çıkardığında bile ana sayfa 16,7 ms okudu. Buna karşılık
+  animasyonlu bir yabancı Chrome penceresi p95'i **8,5 → 33,4 ms (4,02 tik)**
+  taşıdı — 6 Eyl'de saatler yiyen yanlış kırmızının rakamı birebir, ve o gün
+  de yük iki chrome.exe süreciydi (0,84 çekirdek). Mekanizma CPU kıtlığı
+  değil, aynı GPU/kompozitör hattını paylaşan ikinci tarayıcı.
+  **Kapı: yabancı tarayıcı ≤ 0,15 çekirdek** (kuşak ölçüldü: 0,023 temiz ·
+  1,077 kirli). Toplam CPU yükü YAZILIR ama kapı değildir.
+- **Ölçüm hakkındaki şüphe HÜKME çevrilmez — üçüncü durum var: `HUKUM YOK`**
+  (çıkış kodu 3; 0 gecti · 2 kaldi). "Kaldı" sayfa hakkında bir iddiadır,
+  "hükümsüz" ölçümün kendisi hakkında. Sebepler: yabancı tarayıcı · yük
+  ölçülemedi · `tik_sapma` (bölen şüpheli). Aynı aile: kısmi koşum.
+- **Boş sayfa (about:blank) YÜKE KÖRDÜR — ortam dedektörü olarak kullanma**
+  (6 Eyl ölçüldü): makine %99 meşgulken üç turda da 120,5 Hz, kaçırılan 0,
+  süzülen 0/194. `tazeleme` bloğunun temiz olması makinenin temiz olduğunu
+  GÖSTERMEZ. Kapanışta yeniden ölçülmesinin işi başka: ekran hızının koşum
+  ortasında değişip değişmediğini ayırmak — yüke kör olması orada erdemdir.
+- **Düzeneğin kendi ürettiği "yabancı" yük ayrılır ama gizlenmez:** `dwm.exe`
+  bizim tarayıcımızın karelerini birleştiriyor (tarayıcı kapalı 0,007 →
+  kaydırırken 0,358 çekirdek). Yabancı sayılsaydı kapının yarısından
+  fazlasını düzeneğin kendisi yerdi; `rig_cekirdek` olarak ayrıca yazılır.
 - Koşum biçimi hükmü değiştirir, üç örnek: `node --test <dizin>` Windows'ta
   yanlış kırmızı verir (dosya listesi ver) · Git Bash `SAYFA=/yeni/...`
   değerini Windows yoluna çevirir ve URL'yi bozar (env'i PowerShell'den ver)
