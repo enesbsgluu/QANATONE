@@ -97,11 +97,21 @@
 # Kabuk betikleri ~11 KB; her istekte dogrulama (304) neredeyse bedava,
 # bayat kabuk ise sitenin davranisini gunlerce yanlis tutuyor.
 # Medya (mp4/webp) 1 gunde kalir — orada bayatlik zararsiz, bayt agir.
-/varlik/*.js
-  Cache-Control: public, max-age=0, must-revalidate
-
+# SIRA ONEMLI (7 Eyl 2026 — KURAL YAZILIYDI AMA CALISMIYORDU).
+# Netlify `_headers`te birden fazla kural eslesirse hepsi uygulanir ve
+# AYNI BASLIK icin SONRA gelen kazanir. `/varlik/*.js` ONCE, `/varlik/*`
+# SONRA yazilmisti; genel kural ozel olani eziyordu ve kabuk.js canlida
+# `max-age=86400` ile servis ediliyordu (curl ile olculdu).
+# Yani yukaridaki 4 Eyl kaydinin anlattigi hata AYNEN tekrar etti: Enes
+# "imleci kapat hala calismiyor" derken ben canlida "calisiyor" olcuyordum
+# — ben dosyayi TAZE indiriyordum, tarayicisi 24 saatlik ONBELLEKTEN
+# okuyordu. Olcum dogru, olculen surum yanlis.
+# Genel kural once, ozel kural sonra: boylece `.js` icin max-age=0 kazanir.
 /varlik/*
   Cache-Control: public, max-age=86400
+
+/varlik/*.js
+  Cache-Control: public, max-age=0, must-revalidate
 
 # Font ve görsel adları hash'siz: 1 gün, immutable DEĞİL (klip
 # politikasıyla aynı gerekçe).

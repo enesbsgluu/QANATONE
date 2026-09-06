@@ -3918,7 +3918,34 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const kaynakH = path.join(__dirname, 'public', '_headers'), distH = path.join(__dirname, '..', 'dist', '_headers');
   if (!fs.existsSync(distH)) kusur.push('dist/_headers yok');
   else if (fs.readFileSync(kaynakH, 'utf8') !== fs.readFileSync(distH, 'utf8')) kusur.push('dist/_headers ≠ yeni/public/_headers (astro derlemesi bayat)');
-  ol('L1 · _headers Link bloğu dist ile birebir + dist/_headers kaynakla aynı', kusur.length === 0,
+  /* L1b · BETIK ONBELLEK KURALI GENEL KURALDAN SONRA GELMELI (7 Eyl 2026).
+     Netlify `_headers`te birden fazla kural eslesirse AYNI BASLIK icin
+     SONRA gelen kazanir. `/varlik/*.js` (max-age=0) genel `/varlik/*`
+     (max-age=86400) kuralindan ONCE yaziliydi, yani hic gecerli
+     olmuyordu: kabuk.js canlida 24 saat onbellekleniyordu ve ardindan
+     gelen duzeltmeler ziyaretciye ULASMIYORDU. Bu, 4 Eyl'de bir kez
+     yasanip dosyanin kendi yorumuna yazilmis hatanin AYNEN tekrariydi —
+     kural metni dogruydu, SIRASI yanlisti; hicbir sey kirmizi yanmadi.
+     Olcut: iki desen de varsa `.js` olani genel olandan SONRA gelmeli. */
+  {
+     /* IKI YAZIM HATASI, ikisi de kural yaziminin bilinen tuzaklari:
+        1) CRLF — ilk yazimda `'/varlik/*\n'` aradim, dosya CRLF oldugu
+           icin HIC bulunamadi ve kural sessizce yesil kaldi.
+        2) YORUM AYIKLAMA — sonra `indexOf('/varlik/*.js')` kullandim; bu
+           desen YUKARIDAKI ACIKLAMA YORUMUNDA da geciyor, yani kural
+           yorumu okuyup yanlis kirmizi verdi.
+        Ikisi de yalniz SATIR BASINDAKI desen aranarak kapaniyor —
+        `#` ile baslayan yorum satirlari eslesmez. */
+     const h = fs.readFileSync(kaynakH, 'utf8');
+     const yer = (re) => { const m = h.match(re); return m ? m.index : -1; };
+     const genel = yer(/^\/varlik\/\*\s*$/m);
+     const betik = yer(/^\/varlik\/\*\.js\s*$/m);
+     if (genel >= 0 && betik >= 0 && betik < genel) {
+       kusur.push('/varlik/*.js kurali genel /varlik/* kuralindan ONCE — genel olan onu eziyor (betik onbellegi 24 saat kalir)');
+     }
+  }
+
+  ol('L1 · _headers Link bloğu dist ile birebir + dist/_headers kaynakla aynı + betik önbellek kuralı genel kuraldan SONRA', kusur.length === 0,
      kusur.join(' | ') || not.replace(/^LINK BASLIKLARI TAZE: /, '').slice(0, 90));
 }
 

@@ -39,7 +39,13 @@ const OLCEKTE = [
 /* olcek DISI istisnalar: literal aynen durmali (tasinmasi Enes karari) */
 const ISTISNA = [
   ['stil/hero.css', '.sh-void{', '14px 30px', 'kaynak .void 14/30 birebir (sadakat)'],
-  ['stil/kabuk.css', '.kb-say .acts button{', '8px 14px', 'ajan balonu dugmeleri'],
+  /* 8px 14px -> 8px 10px (7 Eyl 2026, Enes: "gerekirse tum tuslari
+     olcekle"). Olculdu: `.acts` kullanilabilir alan 266 px, uc dugmenin
+     toplami 276 px idi -> ucuncu dugme ("Imleci kapat") alt satira
+     dusuyordu. Dar padding'i yalniz `.q`ya vermek yerine UCU BIRDEN
+     olceklendi, cunku Enes'in sikayeti zaten "diger tuslarla ayni
+     boyutta olsun"du. */
+  ['stil/kabuk.css', '.kb-say .acts button{', '8px 10px', 'ajan balonu dugmeleri (7 Eyl: uc tus tek satira sigsin diye olceklendi)'],
   ['stil/deste.css', '.sp-tum{', '13px 26px', 'deste "tum projeler" (kaynak .btn.btn-g)'],
   ['parcalar/HizmetGovde.astro', '.sdbtns .dugme.koyu {', '15px 32px', 'hizmet detayi koyu cagri (.shiny kaynagi)'],
 ];

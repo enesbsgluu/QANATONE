@@ -119,9 +119,20 @@ html.bitcursor .kb-tip.on{opacity:.9}
   box-shadow:0 0 8px var(--red-glow)}
 .kb-say p{font-size:.86rem;line-height:1.6;color:var(--tx);margin-bottom:13px;min-height:2.6em}
 .kb-say .acts{display:flex;gap:7px;flex-wrap:wrap}
-.kb-say .acts button{font-size:.76rem;font-weight:600;padding:8px 14px;border-radius:999px;
+/* UC TUS TEK SATIRDA (7 Eyl 2026 — Enes: "imleci kapat yazisini asagi
+   kaydirmis, guzel durmamis; diger tuslarla ayni boyutta olsun ve
+   tasmasin, gerekirse tum tuslari olcekle").
+   OLCULDU: `.acts` kullanilabilir alan 266 px, uc dugmenin toplami
+   100+63+99 + 2x7 gap = 276 px -> 10 px tasiyor, ucuncu dugme alt satira
+   dusuyordu (`.acts` yuksekligi 33 degil 73 px).
+   `.q`ya ozel dar padding vermek yerine UCU BIRDEN olceklendi (Enes'in
+   izin verdigi yol): boylece uc tus AYNI boyutta kalir — asil sikayet
+   zaten "ayni boyutta olsun"du. padding-x 14 -> 10, font .76 -> .74rem;
+   olculen yeni toplam 266'nin altinda, pay birakiyor (EN metinleri de
+   sigsin). `nowrap`: dugme ICINDE satir kirilmasin. */
+.kb-say .acts button{font-size:.74rem;font-weight:600;padding:8px 10px;border-radius:999px;
   border:1px solid var(--line2);color:var(--tx2);background:none;cursor:pointer;
-  font-family:inherit;transition:.24s var(--e)}
+  font-family:inherit;white-space:nowrap;transition:.24s var(--e)}
 .kb-say .acts button:hover{border-color:var(--red);color:var(--red-soft);background:var(--red-dim)}
 .kb-say .acts button.p{background:var(--red-dolgu);border-color:var(--red-dolgu);color:#fff}
 /* "Imleci kapat" TUS GIBI GORUNUR (7 Eyl 2026 — Enes: "pop-up'ta gozuken
