@@ -153,6 +153,31 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         </div>
         <p class="ste-uyari" id="steUyari" hidden></p>
         <ul class="ste-izgara" id="steIzgara"></ul>
+
+        {/* IKINCI EKSEN — AJAN HAZIRLIGI (6 Eyl 2026, Enes: "mevcut 100'un
+            icine karistirma, ayri ikinci skor"). Iki sayi iki soruya cevap
+            verir: ustteki sayfa ZIYARETCI icin ne kadar iyi kurulmus,
+            buradaki yapay zeka ajanlari bu siteyi KULLANABILIYOR mu. Bir
+            sitenin 95 alip ajanlara tamamen kapali olmasi mumkun.
+            SAHA MEDYANI EKRANDA: kendi sitemiz bu eksende 100 aliyor ve
+            aracin sahibi biziz — tek basina bir skor "iyi mi kotu mu"
+            sorusunu cevaplamaz, kiyas noktasi olmadan reklama benzer.
+            Rakam olculdu (olc-ajan-saha.cjs, 6 Eyl 2026, 55 site / 41'i
+            olculebilir); tarih ve orneklem burada YAZILI durmali. */}
+        <div class="ste-ajan" id="steAjan" hidden>
+          <div class="ste-ajan-bas">
+            <h4>{en ? 'Agent readiness' : 'Ajan hazırlığı'}</h4>
+            <b id="steAjanSkor">0</b>
+            <span class="ste-ajan-orta">{en
+              ? 'median 63 across 41 sites we measured (6 Sep 2026)'
+              : 'ölçtüğümüz 41 sitede medyan 63 (6 Eyl 2026)'}</span>
+          </div>
+          <p class="ste-ajan-not">{en
+            ? 'A separate score: this one does not affect the number above. It asks whether AI agents can reach, read and use your site.'
+            : 'Ayrı bir skor: yukarıdaki sayıyı etkilemez. Yapay zekâ ajanları siteye ulaşabiliyor, okuyabiliyor ve kullanabiliyor mu, onu sorar.'}</p>
+          <ul class="ste-izgara" id="steAjanIzgara"></ul>
+        </div>
+
         {/* DUZELTME LISTESI — iskelet HTML'de, `hidden`; ada secip klonlar. */}
         <div class="ste-fix" id="steFix" hidden data-wa={WA} data-sozluk={`/varlik/tespit-fix.${dil}.json`}
           data-msg={en ? 'Hi, I ran the check for {host} — score {skor}.' : 'Merhaba, {host} için kontrolü yaptım — skor {skor}. Bunları konuşmak istiyorum.'}>
@@ -457,27 +482,47 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         skor.textContent = String(j.score);
         /* Sıra kaynaktaki gibi: önce kırmızılar, sonra sarılar, sonra yeşiller. */
         const sira: Record<string, number> = { fail: 0, warn: 1, ok: 2 };
-        izgara.textContent = '';
-        for (const it of [...(j.items || [])].sort((a: any, b: any) => sira[a.state] - sira[b.state])) {
-          const li = document.createElement('li');
-          li.className = 'ste-kalem ' + it.state;
-          /* SATIRIN KENDISI DEGIL ICINDEKI DUGME tiklanir: klavyeyle
-             gezilebilir ve ekran okuyucu "dugme" der. `li`ye tabindex
-             takmak ikisini de vermezdi. */
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'ste-kalem-ac';
-          const ad = document.createElement('span');
-          ad.textContent = SZ.ad[it.k] || it.k;
-          btn.appendChild(ad);
-          if (it.v !== undefined && it.v !== '') {
-            const v = document.createElement('em');
-            v.textContent = String(it.v);
-            btn.appendChild(v);
+        /* IKI IZGARA, TEK CIZIM. Ajan ekseni ayni kalem bicimini kullaniyor;
+           donguyu kopyalasaydim biri degisip oteki kalirdi ve ada butcesi
+           (J1) de bosuna buyurdu. */
+        const izgaraYaz = (hedef: HTMLElement, kalemler: any[]) => {
+          hedef.textContent = '';
+          for (const it of [...(kalemler || [])].sort((a: any, b: any) => sira[a.state] - sira[b.state])) {
+            const li = document.createElement('li');
+            li.className = 'ste-kalem ' + it.state;
+            /* SATIRIN KENDISI DEGIL ICINDEKI DUGME tiklanir: klavyeyle
+               gezilebilir ve ekran okuyucu "dugme" der. `li`ye tabindex
+               takmak ikisini de vermezdi. */
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'ste-kalem-ac';
+            const ad = document.createElement('span');
+            ad.textContent = SZ.ad[it.k] || it.k;
+            btn.appendChild(ad);
+            if (it.v !== undefined && it.v !== '') {
+              const v = document.createElement('em');
+              v.textContent = String(it.v);
+              btn.appendChild(v);
+            }
+            btn.addEventListener('click', () => popAc(it, btn));
+            li.appendChild(btn);
+            hedef.appendChild(li);
           }
-          btn.addEventListener('click', () => popAc(it, btn));
-          li.appendChild(btn);
-          izgara.appendChild(li);
+        };
+        izgaraYaz(izgara, j.items || []);
+        /* AJAN EKSENI — olculemediyse blok HIC ACILMAZ. Butce yetmediginde
+           fonksiyon `olculdu: false` donuyor; yarim veriden skor gostermek
+           ayni turda olcum kapilarina koydugumuz "HUKUM YOK" kuralinin
+           tersi olurdu. */
+        const ajanBlok = document.getElementById('steAjan') as HTMLElement;
+        const aj = j.ajan;
+        if (ajanBlok) {
+          const gorunsun = !!(aj && aj.olculdu);
+          ajanBlok.hidden = !gorunsun;
+          if (gorunsun) {
+            (document.getElementById('steAjanSkor') as HTMLElement).textContent = String(aj.skor);
+            izgaraYaz(document.getElementById('steAjanIzgara') as HTMLElement, aj.items || []);
+          }
         }
         /* DUZELTME LISTESI: sozluk JSON'u gonderimle iner ([anahtar, baslik,
            aciklama] dizisi PRIO sirasinda; son kayit "yok"); kirmizi/sari
@@ -485,7 +530,12 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
         const fix = document.getElementById('steFix') as HTMLElement;
         if (fix) {
           const sz = SZ.fix;
-          const kotu = new Set((j.items || []).filter((it: any) => it.state !== 'ok').map((it: any) => it.k));
+          /* IKI EKSENIN de kirmizilari aday: ziyaretcinin yapacagi is tek
+             listedir. PRIO sirasi ana eksen kalemlerini one koyuyor, ajan
+             kalemleri sirasinin sonunda — yani ajan kalemi ancak ana eksen
+             temizken ilk uce girer. */
+          const tumKalem = [...(j.items || []), ...((j.ajan && j.ajan.items) || [])];
+          const kotu = new Set(tumKalem.filter((it: any) => it.state !== 'ok').map((it: any) => it.k));
           const aday = sz.filter((k) => kotu.has(k[0])).slice(0, 3);
           const liste = document.getElementById('steFixListe') as HTMLElement;
           liste.textContent = '';

@@ -270,6 +270,84 @@ const W = {
   inline: 1, blocking: 1, fonts: 1, imgdim: 1, imgfmt: 1, compress: 1, cache: 1, reqs: 1
 };
 
+/* ================= İKİNCİ EKSEN: AJAN HAZIRLIĞI =================
+   AYRI SKOR, MEVCUT 100'E KARIŞMAZ (Enes, 5 Eyl 2026). İki sayı iki soruya
+   cevap verir ve birbirinin yerine geçmez:
+     · `score`  — sayfa ZİYARETÇİ için ne kadar iyi kurulmuş
+     · `ajan.skor` — yapay zekâ ajanları bu siteyi KULLANABİLİYOR mu
+   Bir sitenin 95 alıp ajanlara tamamen kapalı olması mümkün; tek sayıya
+   karıştırmak o gerçeği görünmez yapardı.
+
+   AĞIRLIKLAR SAHADAN ÖLÇÜLDÜ, UYDURULMADI (6 Eyl 2026,
+   `yeni/film/olc-ajan-saha.cjs`, 55 site — 24 büyük Türk markası + 24 orta
+   ölçekli Türk sitesi + 8 uluslararası referans; 41'i ölçülebilir 2xx,
+   14'ü (%25) dürüst UA'ya 403 duvarı):
+     robots.txt var            41/41  %100
+     sitemap bildirilmiş       37/41   %90
+     schema (ld+json)          30/41   %73
+     llms.txt içi dolu         22/41   %54
+     Content-Signal            10/41   %24
+     AI botu ENGELLİYOR         8/41   %20
+     md eşi gerçekten iniyor    3/41    %7
+     agents.md içi dolu         2/41    %5
+
+   NE PUANLANMADI VE NEDEN — İKİ TANE, İKİSİ DE ÖLÇÜMLE:
+   1. `robots.txt`in VARLIĞI: 41/41. Ayırt etmeyen kalem ölü ağırlıktır;
+      `status` kalemi tam bu yüzden kaldırılmıştı (5 Eyl). Yokluğu zaten
+      ana eksende puanlanıyor.
+   2. `jssiz` — ham HTML'de görünür metin. Ajanların çoğu JS koşturmaz,
+      yani bu KAĞIT ÜZERİNDE eksenin en önemli kalemi. Ölçüldü: 41 sitenin
+      HİÇBİRİ 2.000 karakterin altında değil (min 2.163 · medyan 12.769).
+      Sıfır ayrım gücü olan bir kalemi puanlamak, ölçmediğim bir farkı
+      yazmak olurdu. BİLGİ olarak taşınıyor (`ajan.bilgi.metin`); bir gün
+      SPA kabuğu olan bir küme ölçülürse kalem puana terfi eder.
+
+   KENDİ ÇIKARIMIZ — AÇIKÇA YAZILIYOR: bu aracı biz yaptık ve `llms.txt`,
+   `agents.md`, markdown eşi, Content-Signal bizde VAR. Eksen bunların
+   ağırlığıyla kurulsaydı araç ölçüm değil reklam olurdu. Bu yüzden ağırlığın
+   %65'i herkesin ölçülebildiği ve sahada gerçekten ayrışan kalemlerde
+   (erişim + schema + sitemap), nadir olanlar (md eşi %7, agents.md %5)
+   toplam 9 puanla üst bantta duruyor. Ağırlık dağılımını değiştirmek
+   Enes'in kararıdır; tablo tek yerde.                                  */
+const WA = {
+  /* ERİŞİM — 35. En ağır kalem, çünkü tek "hayır"ı öteki her şeyi
+     anlamsız kılar: robots.txt bir ajanı kapatıyorsa o ajan için sitenin
+     schema'sı da llms.txt'i de yok hükmündedir. Sahada %20 engelliyor,
+     yani ölü ağırlık değil. Bant ADETTEN: 0 açık · 1-2 uyarı · 3+ kırmızı
+     (ölçülen dağılım uzun kuyruklu — 4 site tek bot, 4 site 4-6 bot). */
+  aierisim: 35,
+  /* ANLAŞILIRLIK — 28. Ajanın sayfayı okuyup ne olduğunu çıkarabilmesi. */
+  schema: 18, sitemap: 10,
+  /* PAZARLIK — 30. Ajana makine okunur bir yol açmak. llms.txt sahada
+     %54 ile artık niş değil (Trendyol, Çiçeksepeti, Migros, Turkcell,
+     Boyner, Koton, Paraşüt'te var); ağırlığı oradan geliyor. */
+  llms: 20, csignal: 10,
+  /* ÜST BANT — 7. Nadir (%7 ve %5) ama gerçek; küçük ağırlık tam da bu. */
+  mdesi: 4, agents: 3,
+};
+
+/* İçi dolu mu — BOŞ BİR DOSYA "VAR" SAYILMAZ. Karar kaydının kuralı
+   (`yeni/ajan-hatti.mjs`): arkasında çalışan bir şey olmayan keşif dosyası
+   yayınlanmaz; boş bir well-known puanı yükseltir ama YALANDIR. Araç o
+   yalanı ödüllendirmemeli, o yüzden her uçta "indi mi" değil "İÇİ DOLU MU"
+   sorulur: makul bir boy VE en az bir bağlantı ya da başlık satırı. */
+function iciDolu(metin) {
+  const t = String(metin || '').trim();
+  if (t.length < 200) return false;
+  /* YUMUŞAK 404 — ÖLÇÜLDÜ VE YANLIŞ YEŞİL ÜRETTİ (6 Eyl 2026).
+     `param.com.tr` HER `.md` yoluna HTTP 200 + `text/html` dönüyor:
+     `/agents.md` de `/rastgele-olmayan-sayfa-xyz.md` de aynı 65.693
+     baytlık ana sayfayı veriyor. `r.ok && uzun` demek yetmiyordu — sahada
+     agents.md'si olmayan bir site "var" görünüyordu. Gövde HTML'e
+     benziyorsa dosya YOK sayılır; asıl kapı içerik türü (aşağıda), bu
+     satır türünü yanlış yazan sunucular için ikinci bekçi. */
+  if (/^\s*(?:<!doctype|<html|<\?xml)/i.test(t) || /<\/html\s*>/i.test(t)) return false;
+  return /\]\(|https?:\/\//.test(t) || /^#/m.test(t);
+}
+
+/* Metin eşi gerçekten metin mi — HTML dönen uç "var" sayılmaz. */
+const metinTuru = (r) => /text\/plain|markdown/i.test(basligiOku(r, 'content-type') || '');
+
 /* YANITIN İKİ BÖLGESİ — sınır kodda açıkça duruyor, tahmine bırakılmadı.
      · PUANLANAN YÜK: ok/host/finalUrl/score/kb/status/bytes/redirects/
        cdn/durum/cfEylul/items. Belirlenimcilik kuralı BUNU karşılaştırır;
@@ -613,6 +691,43 @@ function robotsAiKapali(metin) {
     g.ajanlar.some(a => a === '*' || AI_AJAN.test(a)));
 }
 
+/* HANGİ AI ajanları kapalı — ajan ekseni ADIYLA saymak zorunda, çünkü
+   "kapalı mı" ikili cevabı bandı kuramaz. Sahada ölçülen dağılım uzun
+   kuyruklu: 8 sitenin 4'ü tek bot, 4'ü dört-altı bot kapatıyor (haber
+   siteleri Claude/GPT/Perplexity'yi topluca kapatıyor). Aynı ayrıştırıcı,
+   aynı grup kuralı; `robotsAiKapali` bunun ikili sarmalayıcısıdır ve
+   davranışı DEĞİŞMEDİ (cfEylul uyarısı ona bağlı).                     */
+function robotsAiEngelliler(metin) {
+  if (!metin) return [];
+  const gruplar = [];
+  let su = null;
+  for (const ham of String(metin).split(/\r?\n/)) {
+    const s = ham.replace(/#.*$/, '').trim();
+    if (!s) { su = null; continue; }
+    const i = s.indexOf(':');
+    if (i < 1) continue;
+    const ad = s.slice(0, i).trim().toLowerCase();
+    const deger = s.slice(i + 1).trim();
+    if (ad === 'user-agent') {
+      if (!su || su.kural) { su = { ajanlar: [], kural: false, kapali: false, acik: false }; gruplar.push(su); }
+      su.ajanlar.push(deger.toLowerCase());
+    } else if (su && (ad === 'disallow' || ad === 'allow')) {
+      su.kural = true;
+      if (ad === 'disallow' && deger === '/') su.kapali = true;
+      if (ad === 'allow' && deger === '/') su.acik = true;
+    }
+  }
+  const kapali = new Set();
+  for (const g of gruplar) {
+    if (!g.kapali || g.acik) continue;
+    for (const a of g.ajanlar) {
+      if (a === '*') kapali.add('*');
+      else if (AI_AJAN.test(a)) kapali.add(a);
+    }
+  }
+  return [...kapali].sort();
+}
+
 /* ====================== YAPI ÖLÇÜMÜ (FAZ 1) ======================
    Hepsi elimizdeki TEK fetch'ten okunuyor — ek istek yok.
 
@@ -849,15 +964,108 @@ function analyse(html, res, bytes, finalUrl, redirects) {
   return items;
 }
 
-function score(items) {
+/* ---------- AJAN EKSENİ ----------
+   BÜTÇE ŞARTI: eksen 1-4 ek istek atar (llms.txt · .well-known yedeği ·
+   agents.md · ilan edilmiş md eşi). Koşum bütçesi 9 sn ve ANA analiz
+   önce gelir; kalan süre yetmiyorsa eksen KOŞMAZ ve `olculdu: false`
+   döner. Ölçemediğimiz bir skoru üretmemek, aynı turda ölçüm kapılarına
+   koyduğumuz "HÜKÜM YOK" kuralının ta kendisi — kısmi veriden skor
+   uydurmak yanlış yeşilin en kısa yoludur.
+   `ilan != varlık`: md eşi İLAN EDİLMEDİYSE hiç istenmez (ajan da onu
+   keşfedemezdi), ilan edilip inmiyorsa uyarı — bozuk ilan, yokluktan
+   daha kötü bir sinyaldir çünkü ajan onu izler ve boşa çıkar.          */
+const AJAN_ASGARI_MS = 2500;
+async function ajanEkseni(origin, html, res, robotsBody, sitemapDurumu, butce) {
+  if (butce.kalanMs() < AJAN_ASGARI_MS) return { olculdu: false, sebep: 'butce' };
+  const items = [];
+  const dene = async (yol, yontem) => {
+    if (butce.kalanMs() < 600) return null;
+    try { return await grab(origin + yol, yontem, butce); } catch (e) { return null; }
+  };
+
+  /* 1 · ERİŞİM — robots.txt AI ajanlarını kapatıyor mu (ek istek yok) */
+  const engelli = robotsAiEngelliler(robotsBody);
+  items.push(S('aierisim', band(engelli.length, 0, 2), engelli.length, '0 · ≤2 ajan'));
+
+  /* 2 · ANLAŞILIRLIK — schema ve site haritası (ikisi de elimizde) */
+  const ld = /application\/ld\+json/i.test(html);
+  items.push(S('schema', ld ? 'ok' : /itemscope|itemtype=/i.test(html) ? 'warn' : 'fail',
+    undefined, 'ld+json · microdata'));
+  items.push(S('sitemap', sitemapDurumu, undefined, 'sitemap.xml'));
+
+  /* 3 · PAZARLIK — llms.txt (kök, sonra .well-known yedeği) */
+  let llmsDurum = 'fail';
+  let l = await dene('/llms.txt');
+  if (!(l && l.r.ok)) l = await dene('/.well-known/llms.txt');
+  if (l && l.r.ok && metinTuru(l.r)) llmsDurum = iciDolu(l.body) ? 'ok' : 'warn';
+  items.push(S('llms', llmsDurum, undefined, 'llms.txt'));
+
+  /* 4 · Content-Signal — başlıkta ya da robots.txt satırında (ek istek yok) */
+  const cs = basligiOku(res, 'content-signal') || (/^\s*content-signal\s*:/im.test(robotsBody || '') ? 'robots' : '');
+  items.push(S('csignal', cs ? 'ok' : 'fail', undefined, 'Content-Signal'));
+
+  /* 5 · markdown eşi — ÖNCE İLAN, sonra gerçekten iniyor mu */
+  const linkBaslik = basligiOku(res, 'link') || '';
+  const ilanBaslik = /text\/markdown/i.test(linkBaslik);
+  const ilanHtml = /<link[^>]+rel=["']?alternate["']?[^>]*type=["']?text\/markdown/i.test(html)
+    || /<link[^>]+type=["']?text\/markdown["']?[^>]*rel=["']?alternate/i.test(html);
+  let mdDurum = 'fail';
+  if (ilanBaslik || ilanHtml) {
+    const m = linkBaslik.match(/<([^>]+)>[^,]*text\/markdown/i)
+      || html.match(/<link[^>]+type=["']?text\/markdown["']?[^>]*href=["']([^"']+)["']/i)
+      || html.match(/<link[^>]+href=["']([^"']+)["'][^>]*type=["']?text\/markdown/i);
+    mdDurum = 'warn';
+    if (m) {
+      let hedef = null;
+      try { hedef = new URL(m[1], origin + '/'); } catch (e) { hedef = null; }
+      /* İLAN EDİLEN ADRES BAŞKA BİR KONAĞA GİDİYORSA İZLENMEZ: SSRF kapısı
+         yalnız girdi adresi için koştu, bu dize karşı tarafın kontrolünde. */
+      if (hedef && hedef.origin === origin) {
+        const md = await dene(hedef.pathname + hedef.search);
+        if (md && md.r.ok && /markdown|text\/plain/i.test(basligiOku(md.r, 'content-type') || '')
+          && String(md.body || '').trim().length > 100) mdDurum = 'ok';
+      }
+    }
+  }
+  items.push(S('mdesi', mdDurum, undefined, 'rel=alternate text/markdown'));
+
+  /* 6 · agents.md */
+  const ag = await dene('/agents.md');
+  items.push(S('agents', ag && ag.r.ok && metinTuru(ag.r) ? (iciDolu(ag.body) ? 'ok' : 'warn') : 'fail', undefined, 'agents.md'));
+
+  /* GÖRÜNÜR METİN — BİLGİ, PUANLANMAZ (künyeye bak: 41/41 site 2.000
+     karakterin üstünde çıktı, kalem hiçbir siteyi ötekinden ayırmıyor). */
+  const metin = String(html || '')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().length;
+
+  return {
+    olculdu: true,
+    skor: skorla(items, WA),
+    items,
+    bilgi: {
+      metin,
+      engelli_ajanlar: engelli,
+      _: 'BİLGİ — puanlanmaz. `metin`: ham HTML\'de JS koşmadan görünen karakter; sahada ölçülen 41 sitenin hiçbiri 2.000\'in altında çıkmadığı için puana girmiyor.',
+    },
+  };
+}
+
+/* TEK SKOR FORMÜLÜ, İKİ EKSEN. Ağırlık tablosu parametredir; formül
+   kopyalanmaz. İki eksene iki ayrı toplama yazsaydım biri değişip öteki
+   kalırdı ve hiçbir yer kırmızı yakmazdı — ölçüm kapılarında (kapı A/B)
+   tam bu ayrışmayı `olc-esik.test.mjs` kolluyor, burada ayrışmanın
+   doğabileceği yeri hiç açmıyoruz. */
+function skorla(items, tablo) {
   let got = 0, tot = 0;
   items.forEach(i => {
-    const w = W[i.k]; if (!w) return;
+    const w = tablo[i.k]; if (!w) return;
     tot += w;
     got += i.state === 'ok' ? w : i.state === 'warn' ? w * 0.5 : 0;
   });
   return tot ? Math.round(got / tot * 100) : 0;
 }
+function score(items) { return skorla(items, W); }
 
 /* Handler'ı depo adaptörüyle inşa eder — test sahte depoyla çağırır,
    çalışma zamanı gerçek Blobs deposuyla (yayinla.js ile aynı desen). */
@@ -952,13 +1160,23 @@ function handlerOlustur(depo) {
     items.push(S('robots', okR ? 'ok' : 'warn', undefined, 'robots.txt'));
   } catch (e) { items.push(S('robots', 'warn', undefined, 'robots.txt')); }
 
+  let sitemapDurumu = 'warn';
   try {
-    if (/sitemap:/i.test(robotsBody)) items.push(S('sitemap', 'ok', undefined, 'sitemap.xml'));
+    if (/sitemap:/i.test(robotsBody)) sitemapDurumu = 'ok';
     else {
       const sm = await grab(origin + '/sitemap.xml', 'HEAD', butce);
-      items.push(S('sitemap', sm.r.ok ? 'ok' : 'warn', undefined, 'sitemap.xml'));
+      sitemapDurumu = sm.r.ok ? 'ok' : 'warn';
     }
-  } catch (e) { items.push(S('sitemap', 'warn', undefined, 'sitemap.xml')); }
+  } catch (e) { sitemapDurumu = 'warn'; }
+  items.push(S('sitemap', sitemapDurumu, undefined, 'sitemap.xml'));
+
+  /* İKİNCİ EKSEN — ana eksen tamamlandıktan SONRA, kalan bütçeyle.
+     Sıra bilinçli: ziyaretçinin asıl istediği skor hiçbir koşulda ajan
+     ekseninin ek isteklerine kurban edilmez. Bütçe yetmezse eksen
+     `olculdu: false` döner; skor uydurulmaz. */
+  let ajan = { olculdu: false, sebep: 'hata' };
+  try { ajan = await ajanEkseni(origin, page.body, page.r, robotsBody, sitemapDurumu, butce); }
+  catch (e) { ajan = { olculdu: false, sebep: 'hata' }; }
 
   /* buraya gelindiyse analiz BAŞARILI — hak ancak şimdi yakılıyor */
   await kapi.isle();
@@ -984,6 +1202,10 @@ function handlerOlustur(depo) {
          puanlık bir site bloklanmak üzere olabilir. */
       cfEylul: cdn === 'cloudflare' && robotsAiKapali(robotsBody),
       items,
+      /* İKİNCİ EKSEN — AYRI SAYI, `score`A KARIŞMAZ. Ziyaretçiye iki soru
+         iki cevapla döner; birleştirmek "95 puanlık site ajanlara kapalı"
+         gerçeğini görünmez yapardı (bkz. WA künyesi). */
+      ajan,
       /* ---- TEŞHİS BÖLGESİ — buradan aşağısı puanlanmaz, gösterilmez ve
          belirlenimcilik karşılaştırmasına GİRMEZ. Zamana bağlı gözlemler
          yalnız burada yaşar; ön yüz bu nesneye hiç dokunmuyor. ---- */
@@ -1010,6 +1232,9 @@ exports.KOTA_PENCERE_MS = KOTA_PENCERE_MS;
 /* Faz 1: ağırlık tablosu ve bölge sınırı denetimden okunabilsin — kural
    "toplam 100 · yapı payı 8" dengesini tahminle değil, kaynaktan ölçüyor. */
 exports.W = W;
+exports.WA = WA;                       /* ikinci eksen — T2 sozluk kapsamini ikisinden birden kurar */
+exports.robotsAiEngelliler = robotsAiEngelliler;
+exports.iciDolu = iciDolu;
 exports.TESHIS_ALANI = TESHIS_ALANI;
 /* SOZLESME YUZEYI (5 Eyl 2026): arayuzun tanimasi GEREKEN butun degerler.
    Denetim bunlari STETespit'in sozlukleriyle karsilastirir — `kota`/`quota`

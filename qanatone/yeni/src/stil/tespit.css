@@ -106,6 +106,21 @@
 .ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
   font-size:.74rem;color:var(--tx4)}
 
+/* IKINCI EKSEN — AJAN HAZIRLIGI (6 Eyl 2026).
+   AYRI GORUNMELI ama IKINCIL durmali: ust cizgi ve daha kucuk sayi, ana
+   halkanin yerini almasin. Ziyaretcinin bekledigi sayi hala yukaridaki.
+   Sayi rengi ANA HALKAYLA AYNI ESIKTEN (70/45) gelir — iki yerde iki esik
+   olsaydi ayni renk iki anlama gelirdi. */
+.ste-ajan{margin-top:clamp(18px,2.4vw,28px);padding-top:clamp(14px,2vw,20px);
+  border-top:1px solid var(--line)}
+.ste-ajan-bas{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ste-ajan-bas h4{font-size:1rem;letter-spacing:-.01em}
+.ste-ajan-bas b{font-family:var(--f-tek);font-size:1.5rem;line-height:1;
+  color:var(--tx1)}
+.ste-ajan-orta{margin-left:auto;font-family:var(--f-tek);font-size:.72rem;
+  color:var(--tx4)}
+.ste-ajan-not{margin-top:6px;color:var(--tx2);font-size:.86rem;line-height:1.5}
+
 /* MOBIL OLCEK (5 Eyl 2026, Enes: "mobil tasarimini da duzgun yap dogru
    olcekle"). OLCULDU (390x844): sonuc blogu 2.151 px = 2,5 EKRAN, tek
    basina izgara 1.366 px. Sebep: `minmax(190px,1fr)` 350 px'lik alanda
@@ -122,6 +137,10 @@
   .ste-kalem-ac{align-items:flex-start;flex-wrap:wrap;row-gap:2px}
   .ste-kalem-ac > span{min-width:0;line-height:1.25;overflow-wrap:anywhere}
   .ste-kalem em{font-size:.7rem}
+  /* Ajan blogu mobilde: medyan satiri kendi satirina insin, yoksa baslikla
+     ayni satirda sikisip iki kelimede bir sariyor. */
+  .ste-ajan-orta{margin-left:0;flex-basis:100%}
+  .ste-ajan-bas b{font-size:1.3rem}
 }
 
 /* ---- KALEM POPUP'I (5 Eyl 2026) ----------------------------------------

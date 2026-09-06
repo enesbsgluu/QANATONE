@@ -4,7 +4,12 @@
    STETespit adasi gonderimde indirir. Son kayit 'yok': kritik eksik yok. */
 export const PRIO = ['https', 'viewport', 'contact', 'whatsapp', 'schema', 'desc', 'title', 'analytics',
   'inline', 'blocking', 'compress', 'weight', 'redirects', 'imgdim', 'imgfmt', 'cache', 'fonts', 'reqs',
-  'og', 'local', 'h1', 'lang', 'alt', 'sitemap', 'canonical', 'robots'];
+  'og', 'local', 'h1', 'lang', 'alt', 'sitemap', 'canonical', 'robots',
+  /* AJAN EKSENI kalemleri SIRANIN SONUNDA: duzeltme listesi hala ANA
+     ekseninkini once gosterir, ama ajan ekseni kirmizi verdiginde de
+     ziyaretci ne yapacagini gorebilsin. `aierisim` bu bes icinde en
+     onde, cunku kapaliysa oteki dordu anlamsiz. */
+  'aierisim', 'llms', 'csignal', 'mdesi', 'agents'];
 export const FIX = {
   tr: {
     schema: ['Yapay zekâ seni okuyamıyor', 'Sitede yapılandırılmış veri yok. Yeni arama yanıtları bunu okur — olmayınca markan o cevaplarda hiç geçmez.'],
@@ -37,6 +42,16 @@ export const FIX = {
        adi gecmedigi icin duzeltme listesine HIC dusemiyordu — dili
        yazilmamis bir site kaybettigi puani hicbir zaman goremiyordu. */
     lang: ['Sayfanın dili yazılmamış', 'Tarayıcı ve arama motoru hangi dilde olduğunu tahmin ediyor; çeviri ve okuma yardımı yanlış çalışıyor.'],
+    /* AJAN EKSENI. `aierisim` metni BILINCLI OLARAK SUCLAMIYOR: yapay
+       zekâ tarayıcılarını kapatmak meşru bir yayıncı tercihidir (sahada
+       haber siteleri topluca kapatıyor). Eksen "ajanlar seni kullanabiliyor
+       mu" diye sorduğu için kapalıysa puan düşer — ama bunun bir tercih
+       olabileceği yazılmazsa araç yalan söylemiş olur. */
+    aierisim: ['robots.txt yapay zekâ tarayıcılarını kapatıyor', 'AI yanıtlarında ve ajan aramalarında hiç görünmezsin. Bilinçli bir tercihse sorun yok — değilse robots.txt bunu sana sormadan yapıyor demektir.'],
+    llms: ['llms.txt yok', 'Ajanlar sitenin haritasını tek tek sayfa gezerek çıkarmak zorunda. Ölçtük: taradığımız Türk sitelerinin yarısında artık var.'],
+    csignal: ['Kullanım kuralın yazılı değil', 'İçeriğinin aramada, yanıtta ve eğitimde kullanılıp kullanılamayacağını Content-Signal ile söyleyebilirsin; yoksa karar ajanın.'],
+    mdesi: ['Sayfaların makine okunur eşi yok', 'Ajan HTML’i ayıklamak zorunda; markdown eşi aynı içeriği gürültüsüz verir.'],
+    agents: ['agents.md yok', 'Ajanlara ne yapabileceklerini ve neyi nerede bulacaklarını anlatan dosya. Nadir ama artıyor.'],
     yok: ['Kritik bir eksik çıkmadı.', 'Temel yerinde. Bundan sonraki kazanç tamirde değil, stratejide.'],
   },
   en: {
@@ -66,6 +81,11 @@ export const FIX = {
     robots: ['No robots.txt', 'You cannot guide crawlers.'],
     canonical: ['Duplicate URL risk', 'The same page opens on several URLs.'],
     lang: ['The page language is not declared', 'Browsers and search engines have to guess it; translation and screen readers work against the wrong language.'],
+    aierisim: ['robots.txt blocks AI crawlers', 'You will not appear in AI answers or agent searches at all. Fine if deliberate — if not, robots.txt is doing it without asking you.'],
+    llms: ['No llms.txt', 'Agents have to crawl page by page to map your site. Measured: half of the Turkish sites we scanned now have one.'],
+    csignal: ['Your usage rules are unwritten', 'Content-Signal lets you state whether your content may be used in search, answers and training; without it the agent decides.'],
+    mdesi: ['No machine-readable twin', 'Agents must strip your HTML; a markdown twin hands them the same content without the noise.'],
+    agents: ['No agents.md', 'The file that tells agents what they may do and where to find things. Rare, but growing.'],
     yok: ['Nothing critical found.', 'The basics are in place.'],
   },
 };
@@ -98,6 +118,10 @@ export const AD = {
       blocking: 'Engelleyici kaynak', compress: 'Sıkıştırma', cache: 'Önbellek',
       reqs: 'İstek sayısı', analytics: 'Ölçümleme', contact: 'İletişim',
       whatsapp: 'WhatsApp', local: 'Yerel işaret', viewport: 'Viewport',
+      /* AJAN EKSENI — ikinci skor. `schema` ve `sitemap` bilerek PAYLASILIYOR:
+         ayni olcum, ayni ad; ikinci bir giris acsaydik iki ad ayrisirdi. */
+      aierisim: 'AI erişimi', llms: 'llms.txt', csignal: 'Content-Signal',
+      mdesi: 'Markdown eşi', agents: 'agents.md',
     },
   en: {
       https: 'HTTPS', redirects: 'Redirects', weight: 'Page weight', title: 'Title',
@@ -108,6 +132,8 @@ export const AD = {
       blocking: 'Render-blocking', compress: 'Compression', cache: 'Caching',
       reqs: 'Request count', analytics: 'Analytics', contact: 'Contact',
       whatsapp: 'WhatsApp', local: 'Local signal', viewport: 'Viewport',
+      aierisim: 'AI access', llms: 'llms.txt', csignal: 'Content-Signal',
+      mdesi: 'Markdown twin', agents: 'agents.md',
     },
 };
 export const DURUM_AD = {
