@@ -621,7 +621,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      bagli. Ayri `if`/`else` yazildiginda kapsam dali ulasilamaz kalmisti
      (kirmizi-once yakaladi: uc bozuktan yalnizca biri raporlandi). */
   if (AD && DM && SB) {
-    const puanli = Object.keys(D.W);
+    /* IKI EKSENIN KALEMLERI BIRLIKTE. `schema` ve `sitemap` iki tabloda
+       da var ve bu BILINCLI: ayni olcum, ayni ad, tek sozluk girisi.
+       Iki ayri ad acsaydik ekranda ayni sey iki isimle gorunurdu. */
+    const puanli = [...new Set([...Object.keys(D.W), ...Object.keys(D.WA)])];
     for (const dil of ['tr', 'en']) {
       if (kume(dil, 'durumAd').size !== 3) kusur.push(`durumAd.${dil} eksik`);
       if (!Array.isArray(soz[dil].hukum) || soz[dil].hukum.length !== 4) kusur.push(`hukum.${dil} eksik`);
@@ -664,7 +667,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   /* MUAFIYET KALKTI (5 Eyl 2026): `status` agirlik tablosundan cikti,
      yerine `redirects` geldi. Artik PUANLANAN HER KALEM duzeltme
      sozlugunde ve oncelik listesinde olmak zorunda — istisnasiz. */
-  for (const k of Object.keys(D.W)) {
+  for (const k of [...new Set([...Object.keys(D.W), ...Object.keys(D.WA)])]) {
     if (!prio.has(k)) kusur.push('PRIO eksik:' + k);
     if (!fixTr.has(k)) kusur.push('FIX.tr eksik:' + k);
     if (!fixEn.has(k)) kusur.push('FIX.en eksik:' + k);
@@ -710,6 +713,65 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kaybeder (95 puanlik site 89 gorunur, kimse fark etmez). */
   const agirlikToplam = Object.values(D.W).reduce((a, b) => a + b, 0);
   if (agirlikToplam !== 100) kusur.push('agirlik toplami ' + agirlikToplam + ' (100 olmali)');
+  /* IKINCI EKSEN de kendi 100'unu tutmali — ayri skor, ayni degismez. */
+  const ajanToplam = Object.values(D.WA).reduce((a, b) => a + b, 0);
+  if (ajanToplam !== 100) kusur.push('ajan agirlik toplami ' + ajanToplam + ' (100 olmali)');
+
+  /* IKI EKSEN AYRI KALMALI (Enes, 5 Eyl: "mevcut 100'un icine karistirma").
+     Ana skor YALNIZ `items`ten hesaplanir; ajan kalemleri o diziye
+     karisirsa iki sayi sessizce tek sayiya doner ve ayrimin kendisi
+     kaybolur. Kaynak taranirken YORUMLAR AYIKLANIR — bu dosyanin
+     yorumlarinda tirnakli ornekler geciyor. */
+  {
+    const dk = fs.readFileSync(path.join(__dirname, '..', 'netlify', 'functions', 'diagnose.js'), 'utf8');
+    const yorumsuz = dk.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:])\/\/[^\n]*/g, '$1 ');
+    const govde = (yorumsuz.match(/async function ajanEkseni[\s\S]*?\n\}/) || [''])[0];
+    if (!govde) kusur.push('ajanEkseni bulunamadi');
+    else {
+      const uretilen = [...govde.matchAll(/S\('(\w+)'/g)].map((m) => m[1]);
+      for (const k of Object.keys(D.WA))
+        if (!uretilen.includes(k)) kusur.push('ajan kalemi uretilmiyor:' + k);
+      /* HER KALEM OLCUT TASIMALI — popup'in "Olcut" satiri bos kalmasin. */
+      for (const m of govde.matchAll(/items\.push\(S\((.*?)\)\);/g))
+        if (!/,\s*'[^']+'\s*$/.test(m[1])) kusur.push('ajan olcutsuz:' + (m[1].match(/'(\w+)'/) || [, '?'])[1]);
+    }
+    if (!/\n      ajan,/.test(dk)) kusur.push('ajan ayri alanda donmuyor');
+    if (/items\.push\(\.\.\.ajan/.test(yorumsuz)) kusur.push('ajan kalemleri ana diziye karismis');
+  }
+
+  /* BOS BEYAN ODULLENDIRILMEZ — karar kaydinin kurali kod olmali:
+     "arkasinda calisan bir sey olmayan kesif dosyasi yayinlanmaz; bos bir
+     well-known puani yukseltir ama YALANDIR." Araca cevrilmis hali:
+     dosyanin INMESI degil ICININ DOLU olmasi puanlanir. */
+  {
+    if (D.iciDolu('')) kusur.push('iciDolu bos dosyayi kabul ediyor');
+    if (D.iciDolu('# x')) kusur.push('iciDolu bir satirlik dosyayi kabul ediyor');
+    if (!D.iciDolu('# Baslik\n\n- [a](https://ornek.com/a)\n' + 'x'.repeat(220)))
+      kusur.push('iciDolu dolu dosyayi reddediyor');
+    /* YUMUSAK 404 — OLCULDU, YANLIS YESIL URETTI (6 Eyl 2026):
+       param.com.tr HER `.md` yoluna 200 + text/html doner — `/agents.md`
+       de uydurma bir yol da ayni 65 KB'lik ana sayfayi veriyor. Kodun ilk
+       hali "r.ok && govde uzun" diyordu ve agents.md'si OLMAYAN bir siteyi
+       "var" sayiyordu. Iki bekci: govde HTML'e benzemeyecek (asagida) ve
+       icerik turu metin olacak (kaynak taramasi). */
+    if (D.iciDolu('<!doctype html><html><body>' + 'x'.repeat(300) + ' https://a.com</body></html>'))
+      kusur.push('iciDolu yumusak 404 HTML govdesini kabul ediyor');
+    const dgk = fs.readFileSync(path.join(__dirname, '..', 'netlify', 'functions', 'diagnose.js'), 'utf8');
+    if (!/metinTuru\(l\.r\)/.test(dgk)) kusur.push('metin turu kapisi yok:llms');
+    if (!/metinTuru\(ag\.r\)/.test(dgk)) kusur.push('metin turu kapisi yok:agents');
+  }
+
+  /* AI ENGELI ADIYLA SAYILIYOR — bant ADETTEN kuruluyor, ikili bayrak
+     bandi kuramaz. Uc hal de ulasilabilir olmali (0 / 1-2 / 3+). */
+  {
+    const R = D.robotsAiEngelliler;
+    const yok = R('User-agent: *\nAllow: /\n');
+    const bir = R('User-agent: GPTBot\nDisallow: /\n');
+    const cok = R('User-agent: GPTBot\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n\nUser-agent: PerplexityBot\nDisallow: /\n');
+    if (yok.length !== 0) kusur.push('aiEngel yanlis pozitif:' + yok.join(','));
+    if (bir.length !== 1) kusur.push('aiEngel tek bot sayilmadi:' + bir.length);
+    if (cok.length !== 3) kusur.push('aiEngel coklu sayilmadi:' + cok.length);
+  }
 
   ol('T2 · tespit araci sozlesmesi: kalem/durum/sebep sozlukleri iki tarafta ortusuyor',
      kusur.length === 0,
