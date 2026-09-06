@@ -44,7 +44,7 @@ ister) ama push yalnız Enes'in sözüyle. Geri alma her adımda tek komut.
 | 6 | robots.txt + sitemap | `yeni/public/robots.txt` statik: build.js `robots()` içeriği birebir (11 AI botu Allow + Content-Signal satırı + Disallow admin/404 + Sitemap). `sitemap.xml.ts` zaten var (R8) | eski suite'in robots kuralları yeni suite'e taşınır (2 kural) | `git revert <c6>` |
 | 7 | `_headers` | `/yeni/_astro/*`, `/yeni/varlik/*`, `/yeni/font/*`, `/yeni/img/*`, `/yeni/404.html` desenleri köke; Link bloğu `node yeni/link-basliklari.cjs` ile YENİDEN üretilir (yollar değişti), `_headers` `yeni/public/`e taşınır | `KONTROL=1 node yeni/link-basliklari.cjs` TAZE; curl'de `link:` + `content-signal:` | `git revert <c7>` |
 | 8 | Panel yolu | `netlify.toml` `[functions] included_files=["admin.html"]` ve `yayinla.js`'in yazdığı yol (depo kökü `content.json`) kesmeden etkilenmez; `panel-kapi.cjs` kesme sonrası bir kez koşar | panel-kapi GEÇTİ | adım 4'ün geri alması |
-| 9 | IndexNow | build.js `INDEXNOW_KEY` akışı yeni tarafa: anahtar dosyası `yeni/public/<anahtar>.txt` + deploy sonrası bildirim (Netlify build plugin ya da elle `curl` POST) | bildirim yanıtı 200/202 | anahtar dosyası silinir; bildirim geri alınmaz (zararsız) |
+| 9 | IndexNow | **YAPILDI (6 Eyl 2026, Enes: "IndexNow'dan devam et").** Netlify build plugin değil, Astro derleme kancası (`qanatone-indexnow` → `yeni/indexnow.mjs`); adres kümesi ÇIKTIDAKİ `sitemap.xml`'den türer (58 adres), anahtar dosyası her derlemede yazılır, bildirim yalnız `CONTEXT=production`'da atılır. Bekçi **T6** | denetim T6 GEÇTİ · üretimde bildirim yanıtı 200/202 | kanca kaldırılır; bildirim geri alınmaz (zararsız) |
 | 10 | Eski sitenin akıbeti | KARAR (Enes): tamamen kalkar mı, `/eski/` arşivi mi (arşivse eski build çıktısı alt klasöre, noindex + `_headers` X-Robots-Tag) | robots/H kuralları | `git revert <c10>` |
 | 11 | Deploy + doğrulama | push (Enes'in sözü) → E3 listesi | E3 | `git revert` zinciri ters sırayla + deploy; Search Console'a eski sitemap yeniden gönderilir |
 
@@ -227,10 +227,23 @@ Disallow. `public/robots.txt` (statik) yeterli — dinamik gerektiren şey
 yok. Bekçi: R8 sitemap'i zaten kilitliyor; robots satırı S1 ailesine
 küçük ek (kesme commit'inde).
 
-**2g. IndexNow.** Eski build.js anahtar dosyası + bildirim yapıyordu
-(Bing/Yandex; ChatGPT Bing indeksi — GEO). **Karar (Enes):** yeni
-tarafta taşınır mı (deploy sonrası hook ister — Netlify build plugin
-veya elle) yoksa Search Console + sitemap yeterli mi.
+**2g. IndexNow — KAPANDI (6 Eyl 2026).** Eski build.js anahtar dosyası +
+bildirim yapıyordu (Bing/Yandex; ChatGPT Bing indeksi — GEO). **Enes:
+"IndexNow'dan devam et".** Taşındı: `yeni/indexnow.mjs` + astro derleme
+kancası `qanatone-indexnow`. Üç seçim yazılı:
+1. **Netlify plugin değil derleme kancası** — ajan hattıyla aynı gerekçe:
+   kanca derlemenin parçası olduğu için "çıktı ile üretecin tazeliği"
+   borcu hiç doğmuyor (L1'in dersi).
+2. **Adresler çıktıdan** — `dist/sitemap.xml`'in `<loc>` kümesi (58).
+   Ayrı liste tutulsaydı tazeliği ayrı bir kuralla korunacaktı.
+3. **Anahtar depoda, env yalnız döndürme için** — IndexNow anahtarı gizli
+   değil, doğrulamanın kendisi onu `/<anahtar>.txt`'de herkese açık
+   yayınlamak. Eski akış anahtarı yalnız env'den okuyordu; değişken
+   tanımsızsa **sessizce hiçbir şey yapmıyordu** ve "taşındı" denip
+   yıllarca hiç bildirim gitmeyebilirdi.
+Bekçi **T6**: `<anahtar>.txt` çıktıda · içeriği anahtarla birebir ·
+adresler sitemap'ten · anahtar dosyası sitemap'te DEĞİL. Kırmızı-önce iki
+kolda doğrulandı (içerik bozulunca ve dosya silinince kırmızı yandı).
 
 **2h. Ölçüm ve H bekçileri.** H ailesinin `/yeni/` yol düzeltmeleri
 (2d'nin parçası). H18/H24 tavanları değişmez. Kesme sonrası canlıda
@@ -306,7 +319,10 @@ adresleri yine çalışır.
    (telefonda). Kesmenin tek gerçek kapısı bunlar.
 2. **Adım 0 zamanı:** qanatone.com bağlama — önerim HEMEN (SNI engeli).
 3. **Eski sitenin akıbeti:** tamamen kalkar mı, `/eski/` arşivi mi.
-4. **IndexNow** taşınsın mı (2g).
+4. ~~**IndexNow** taşınsın mı (2g).~~ **KAPANDI (6 Eyl 2026): taşındı.**
+   Anahtar depoda tek kaynakta (`yeni/indexnow.mjs`), env yalnız döndürme
+   için — eski akış anahtarı sadece `INDEXNOW_KEY`'den okuyordu ve değişken
+   tanımsızsa **sessizce hiçbir şey yapmıyordu**.
 5. **NODE_VERSION=20** destek dışı — 22'ye çekmek ayrı ölçülü iş,
    kesmeyle birleştirilebilir (tek deploy riski yerine önce tek başına
    denenmesi daha temiz).
