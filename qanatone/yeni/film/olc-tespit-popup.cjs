@@ -31,19 +31,31 @@ const ALTI = [
   { k: 'redirects', state: 'ok', v: '0', o: '≤0 · ≤1' },
   { k: 'whatsapp', state: 'ok', v: '', o: 'wa.me' },
 ];
-/* TAM LISTE — olcek ancak GERCEK kalem sayisiyla olculur (26). Alti
-   kalemle mobil izgara kisa gorunur ve kusur gizlenir. */
-const TAM = ['schema', 'alt', 'redirects', 'weight', 'title', 'desc', 'h1', 'canonical', 'lang',
-  'og', 'viewport', 'https', 'contact', 'whatsapp', 'local', 'analytics', 'robots', 'sitemap',
-  'inline', 'blocking', 'fonts', 'imgdim', 'imgfmt', 'compress', 'cache', 'reqs']
-  .map((k, i) => ({ k, state: i < 2 ? 'fail' : i < 4 ? 'warn' : 'ok',
-    v: i % 3 ? String(i * 7) : '', o: '≤1 · ≤2' }));
+/* TAM LISTE — olcek ancak GERCEK kalem sayisiyla olculur. Alti kalemle
+   mobil izgara kisa gorunur ve kusur gizlenir.
+
+   ANAHTARLAR KAYNAKTAN TURER (6 Eyl 2026). Elle yazilmis listenin bedeli
+   olculdu: ajan ekseni eklendiginde fikstur guncellenmedi, kol KAPALI bir
+   ikinci skorla olcup 1.267 px'e yesil yakti — oysa basarili taramada
+   ziyaretcinin gordugu blok 1.594 px'ti. Artik iki eksenin anahtarlari da
+   agirlik tablolarindan (diagnose.js W/WA) okunuyor: fonksiyona kalem
+   eklendiginde olcek kolu onu kendiliginden gorur, sapma DOGAMAZ. */
+const TESHIS = require(path.join(__dirname, '..', '..', 'netlify', 'functions', 'diagnose.js'));
+const kalemler = (anahtar, olcut) => anahtar.map((k, i) => ({ k,
+  state: i < 2 ? 'fail' : i < 4 ? 'warn' : 'ok',
+  v: i % 3 ? String(i * 7) : '', o: olcut }));
+const TAM = kalemler(Object.keys(TESHIS.W), '≤1 · ≤2');
 const SAGLIKLI = {
   ok: true, host: 'ornek.com', finalUrl: 'https://ornek.com/', score: 71, kb: 640,
   kalan: 1, status: 200, bytes: 655360, redirects: 0, cdn: 'cloudflare',
   durum: 'saglikli', cfEylul: false, items: ALTI,
 };
-const SAGLIKLI_TAM = Object.assign({}, SAGLIKLI, { items: TAM });
+/* AJAN EKSENI FIKSTURU (6 Eyl 2026). Olcek kolu bunsuz KAPALI bir bloku
+   olcuyordu: `ajan` alani yoksa `steAjan` hic acilmaz. */
+const AJAN = kalemler(Object.keys(TESHIS.WA), '0 · ≤2 ajan');
+const SAGLIKLI_TAM = Object.assign({}, SAGLIKLI, { items: TAM,
+  ajan: { olculdu: true, skor: 48, items: AJAN,
+    bilgi: { metin: 4200, engelli_ajanlar: ['gptbot'] } } });
 const DUVAR = {
   ok: false, durum: 'engel', saglayici: 'cloudflare', host: 'ornek.com',
   finalUrl: 'https://ornek.com/', status: 403, bytes: 5300, redirects: 0,
@@ -199,6 +211,34 @@ async function kol(tarayici, ad, yanit, is) {
     return { gecti, not: `govde=${r.govde} · dialog=${r.dialog} · baslik=${r.baslik} · kapat=${r.kapat}` };
   }));
 
+  /* 3b — ODAK HALKASI SATIRDA (6 Eyl 2026). Dokunma hedefi yayilan bir
+     ortuye (`.ste-kalem-ac::after`) tasindi; tiklanan alan artik SATIR.
+     Odak halkasi dugmede kalsaydi klavyeyle gezen ziyaretciye tiklanan
+     alani yanlis gosterirdi, o yuzden `:has()` ile satira alindi — ve
+     `:has()` sessizce dusebilecek bir secici oldugu icin kapiya bagli.
+     Odak GERCEK KLAVYEDEN gelmeli: programatik `focus()` Chrome'da
+     `:focus-visible` yakmaz, o yuzden Shift+Tab/Tab ile geri gelinir. */
+  satir.push(await kol(tarayici, 'odak halkasi satirda', SAGLIKLI, async (s) => {
+    await s.evaluate(() => document.querySelector('.ste-kalem-ac').focus());
+    await s.keyboard.down('Shift'); await s.keyboard.press('Tab'); await s.keyboard.up('Shift');
+    await s.keyboard.press('Tab');
+    const r = await s.evaluate(() => {
+      const btn = document.querySelector('.ste-kalem-ac');
+      const li = btn.closest('.ste-kalem');
+      const g = getComputedStyle(li);
+      return { odakli: document.activeElement === btn,
+        gorunur: btn.matches(':focus-visible'),
+        bicim: g.outlineStyle, kalinlik: parseFloat(g.outlineWidth) || 0,
+        /* ortu de olculur: kapi ikisini birden tutmali, yoksa halka
+           dogru yerde ama tiklanan alan yine metin kadar olabilir */
+        ortu: getComputedStyle(btn, '::after').position };
+    });
+    const gecti = r.odakli && r.gorunur && r.bicim !== 'none' && r.kalinlik >= 2
+      && r.ortu === 'absolute';
+    return { gecti, not: `odak=${r.odakli} · focus-visible=${r.gorunur}`
+      + ` · satir halkasi ${r.bicim} ${r.kalinlik}px · ortu ${r.ortu}` };
+  }));
+
   /* 4 — ADRES COZULEMEDI (fonksiyonun `adres` sebebi) */
   satir.push(await kol(tarayici, 'adres cozulemedi', { ok: false, reason: 'adres' }, async (s) => {
     const m = await s.evaluate(() => document.getElementById('steDurum').textContent.trim());
@@ -258,27 +298,74 @@ async function kol(tarayici, ad, yanit, is) {
   })());
 
   /* 8 — MOBIL OLCEK (yalniz MOBIL=1 kolunda anlamli).
-     OLCULEN ESKI HAL (390x844, 26 kalem): sonuc blogu 2.151 px = 2,5
+     OLCULEN ILK HAL (390x844, 26 kalem): sonuc blogu 2.151 px = 2,5
      EKRAN, tek basina izgara 1.366 px, izgara TEK sutun — cunku
      `minmax(190px,1fr)` 350 px'lik alanda ikinci sutunu kuramiyordu.
      Iki sutuna alindi: izgara 548 px, sonuc 1.332 px.
-     KAPI: mobilde izgara >= 2 sutun VE sonuc blogu <= 2 ekran. */
-  if (MOBIL) satir.push(await kol(tarayici, 'mobil olcek (26 kalem)', SAGLIKLI_TAM, async (s) => {
+
+     IKI DUZELTME (6 Eyl 2026):
+     a) Fikstur ajan eksenini tasimiyordu, yani kol KAPALI ikinci skorla
+        olcuyordu. Acildi: sonuc 1.593,8 px = 1,89 ekran.
+     b) Dokunma hedefi diye SATIR olculuyordu; tiklanan sey satir degil
+        icindeki `button` (o zaman 16–18,6 px idi, satirin yarisi).
+
+     HEDEF KUTUYLA DEGIL `elementFromPoint` ILE OLCULUR. Dugmenin hit
+     alani artik yayilan bir ortu (`::after`, inset:0) — ortu akistan
+     ciktigi icin dugmenin `getBoundingClientRect()`i hala 16 px gorunur
+     ve KUTUYU olcen bir kapi yamayi hic gormezdi (olculdu: yamadan once
+     de sonra da 16). Bu yuzden her satirin ust kenarindan alt kenarina
+     1 px'lik dikey tarama yapilir ve o noktaya dokunmanin GERCEKTEN
+     kendi dugmesine dustugu piksel sayilir.
+
+     KAPI: iki izgara da >= 2 sutun · kalem sayilari 26 ve 7 · sonuc
+     blogu <= 2 ekran · en kisa dokunma hedefi >= 32 px. Esik olculene
+     cakili (32 px: 34 px'lik satirin ic kutusu, 1 px kenarlik dusuyor):
+     WCAG 2.2 AA asgarisi 24 px, projenin kendi mobil kapisi 44 px — 44
+     blogu 2 ekranin ustune tasirdi, o yuzden esik ikisinin arasinda
+     gerileme bekcisi olarak duruyor. */
+  if (MOBIL) satir.push(await kol(tarayici, `mobil olcek (${TAM.length}+${AJAN.length} kalem)`, SAGLIKLI_TAM, async (s) => {
     const r = await s.evaluate(() => {
-      const izg = document.getElementById('steIzgara');
-      const sonuc = document.getElementById('steSonuc').getBoundingClientRect();
-      const kalem = izg.querySelector('.ste-kalem');
-      return { sutun: getComputedStyle(izg).gridTemplateColumns.split(' ').length,
-        izgara: Math.round(izg.getBoundingClientRect().height),
-        sonuc: Math.round(sonuc.height), ekran: innerHeight,
-        kalemSayisi: izg.querySelectorAll('.ste-kalem').length,
-        kalemYuk: kalem ? Math.round(kalem.getBoundingClientRect().height) : 0 };
+      /* Bir satirin GERCEK dokunma hedefi: satiri kadraja getir, orta
+         dikeyinde 1 px'lik adimlarla in, o noktadaki en ustteki ogenin
+         bu satirin kendi dugmesi (ya da onun icindeki bir sey) oldugu
+         piksel sayisini dondur. Kutu degil dokunus olculur. */
+      const hedefYuk = (li) => {
+        li.scrollIntoView({ block: 'center', behavior: 'instant' });
+        const k = li.getBoundingClientRect();
+        const btn = li.querySelector('.ste-kalem-ac');
+        if (!btn || k.height <= 0) return 0;
+        const x = Math.round(k.left + k.width / 2);
+        let n = 0;
+        for (let y = Math.ceil(k.top); y <= Math.floor(k.bottom); y++) {
+          const el = document.elementFromPoint(x, y);
+          if (el && (el === btn || btn.contains(el))) n++;
+        }
+        return n;
+      };
+      const oku = (id) => {
+        const g = document.getElementById(id);
+        if (!g) return { sutun: 0, yuk: 0, adet: 0, dugme: 0 };
+        const li = [...g.querySelectorAll('.ste-kalem')];
+        const hedef = li.map(hedefYuk);
+        return { sutun: getComputedStyle(g).gridTemplateColumns.split(' ').length,
+          yuk: Math.round(g.getBoundingClientRect().height), adet: li.length,
+          dugme: hedef.length ? Math.min(...hedef) : 0 };
+      };
+      const ajan = document.getElementById('steAjan');
+      /* Blok boyu TARAMADAN ONCE alinir: hedef taramasi sayfayi kaydiriyor,
+         kaydirmaya bagli hicbir sey olcume karismasin. */
+      const blok = { ajanAcik: !!(ajan && !ajan.hidden), ekran: innerHeight,
+        sonuc: Math.round(document.getElementById('steSonuc').getBoundingClientRect().height) };
+      return Object.assign(blok, { ana: oku('steIzgara'), aj: oku('steAjanIzgara') });
     });
     const ekranAdedi = +(r.sonuc / r.ekran).toFixed(2);
-    /* dokunma hedefi: satir >= 36 px */
-    const gecti = r.sutun >= 2 && ekranAdedi <= 2 && r.kalemSayisi === 26 && r.kalemYuk >= 36;
-    return { gecti, not: `sutun=${r.sutun} · izgara=${r.izgara}px · sonuc=${r.sonuc}px`
-      + ` (${ekranAdedi} ekran) · kalem=${r.kalemSayisi}x${r.kalemYuk}px` };
+    const dugme = Math.min(r.ana.dugme, r.aj.dugme);
+    const gecti = r.ajanAcik && ekranAdedi <= 2 && dugme >= 32
+      && r.ana.sutun >= 2 && r.ana.adet === TAM.length
+      && r.aj.sutun >= 2 && r.aj.adet === AJAN.length;
+    return { gecti, not: `sonuc=${r.sonuc}px (${ekranAdedi} ekran) · ana ${r.ana.adet}`
+      + `x${r.ana.sutun}sut ${r.ana.yuk}px · ajan ${r.aj.adet}x${r.aj.sutun}sut ${r.aj.yuk}px`
+      + ` · en kisa dugme=${dugme}px` };
   }));
 
   await tarayici.close();
