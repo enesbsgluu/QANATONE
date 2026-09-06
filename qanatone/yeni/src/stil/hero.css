@@ -111,13 +111,74 @@ html.t-notubes .sus-tubes{display:none!important}
    Eskiden img uzerinde 56px+80px iki drop-shadow vardi; gorsel hem CSS
    salinimi hem paralaksla oynadigi icin filtreli dev katman her karede
    yeniden rasterize oluyordu — giris kasmasinin olculmus kaynagi.     */
-.sus-suzul::before{content:'';position:absolute;inset:-14%;z-index:0;pointer-events:none;
+/* HALE VE GOLGE SALINAN COCUKTAN STATIK EBEVEYNE TASINDI (olculdu 5 Eyl,
+   uygulandi 6 Eyl 2026). Gradyanlar `.sus-suzul` (salanan) yerine
+   `.sus-el` (duran) uzerinde.
+
+   ADI KONMUS SAPMA: kaynakta isik gorselle BIRLIKTE oynuyordu; burada el
+   salanir, hale durur. Gorsel hukum Enes'te (yan yana kare alindi).
+
+   OLCULDU (mobil 390 px, CPU/4, 5 sn, 3 kosum, donusumlu kollar):
+     kol                          ana mesgul    stil     IO  Layerize
+     K   (kontrol)                  4768,7 ms  1106,4  604,6     437,7
+     SUSGPU (will-change:transform) 4787,6      1135,9  608,2     411,9  -> ETKI YOK
+     AYIR   (bu degisiklik)         1925,8       320,0  105,4      73,8  -> -2842,9 ms
+   Yayilimlar AYRIK, yani fark gercek. Ust sinir (butun hero animasyonu
+   DURDURULMUS hal) 1880 ms idi — bu degisiklik kazancin tamamina yakinini
+   animasyonu KORUYARAK aliyor.
+
+   SEBEP (adiyla): pahali olan HAREKET degil, HAREKET ETTIRILEN ICERIK.
+   Iki radyal gradyan (biri inset:-14%) salanan ogenin icindeyken her kare
+   ana ipligi mesgul ediyordu; sayfa dururken bile ~82-100 kare/sn uretilip
+   84 IO hedefi her karede yeniden hesaplaniyordu (IO 604 -> 105 bu yuzden).
+
+   ELENEN ADAYLAR (bir daha denenmesin): kabin `mask-image`i (MASKE kolu:
+   fark -18 ms, yayilimlar ORTUSUYOR) · `will-change:transform` (SUSGPU;
+   masaustunde "kazanc yok" denmisti ama orada butun kollar 1515-1798
+   arasindaydi, yani ayirt edilemiyordu — MOBILDE de olculdu, etki yok).
+
+   CIHAZA GORE TASINIYOR (6 Eyl 2026). Tasiyici mobilde/dokunmatikte DURAN
+   ebeveyn, oburunde kaynaktaki gibi SALINAN cocuk. Iki gerekcesi var,
+   ikisi de olculdu:
+
+   1. FAYDA YALNIZ MOBILDE OLCULU. Yukaridaki tablo CPU/4 mobil koludur.
+      Ayni tarama masaustunde butun kollari 1515-1798 ms arasinda buldu,
+      yani orada bu degisikligin faydasi AYIRT EDILEMIYOR. Faydasi
+      olculmeyen yerde gorunur sapmaya girilmez.
+   2. MASAUSTU ZATEN DEGISMIYOR. Medya sorgusu o kadrajda tutmadigi icin
+      uygulanan CSS kaynaktakiyle ayni; hesaplanan stil iki agacta birebir
+      dogrulandi (content/z-index/background/opacity).
+
+   SADAKAT KARESI — MOBIL: ortalama 0,39/255 · en buyuk 11/255 · degisen
+   piksel %7,1; fark haritasi neredeyse siyah. Duzenek MOBILDE kendini
+   dogruladi (ayni sayfa iki kez: 0/0/%0, iki kosumda da).
+   MASAUSTUNDE PIKSEL HUKMU YOK: o kadrajda duzenek kararsiz — ayni sayfa
+   iki kez cizildiginde gurultu tabani kosumdan kosuma 0 ile 232/255
+   arasinda oynuyor. Kaynagi `#tubes`: three.js rAF ile kosar, sayfanin
+   animasyonlarini donduran `getAnimations()` onu KAPSAMAZ. Kapatinca bile
+   taban sifirlanmadi, yani baska bir rAF kaynagi daha var. Masaustu kare
+   kiyasi bu sayfada ancak o cozulunce anlamli olur.
+
+   Gradyan degerleri TEK YERDE; degisen sey yalniz hangi ogenin cizdigi. */
+.sus-suzul::before,.sus-el::before{content:'';position:absolute;inset:-14%;
+  z-index:0;pointer-events:none;
   background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
-.sus-suzul::after{content:'';position:absolute;left:6%;right:6%;top:16%;bottom:-6%;
-  z-index:0;pointer-events:none;
+.sus-suzul::after,.sus-el::after{content:'';position:absolute;left:6%;right:6%;
+  top:16%;bottom:-6%;z-index:0;pointer-events:none;
   background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
+/* VARSAYILAN = KAYNAK: tasiyici salanan cocuk, ebeveyndekiler kapali. */
+.sus-el::before,.sus-el::after{content:none}
+@media(max-width:900px),(pointer:coarse){
+  /* MOBIL/DOKUNMATIK: tasiyici duran ebeveyn (olculen kazanc burada). */
+  .sus-suzul::before,.sus-suzul::after{content:none}
+  .sus-el::before,.sus-el::after{content:''}
+  /* gradyanlar artik `.sus-suzul`in KARDESI degil ATASININ sozde ogeleri;
+     `::after` DOM sirasinda icerikten SONRA boyanir, yani gorselin ustune
+     cikardi — el katmani one alinir. */
+  .sus-suzul{z-index:1}
+}
 
 /* capraz yerlesim: insan eli ustte-solda, robot altta-sagda; parmak
    uclari ekranin kosegeni boyunca birbirine bakar */
@@ -340,7 +401,12 @@ html.t-notubes .sus-tubes{display:none!important}
   .sus-el-h,.sus-el-r,.sh-ic{animation:none}
   .sus-el-h .sus-suzul,.sus-el-r .sus-suzul{animation:none}
   .sus-el img{animation:none;opacity:.94}
-  .sus-suzul::before,.sus-suzul::after{animation:none;opacity:1}
+  /* SOZDE OGELERIN TASIYICISI CIHAZA GORE DEGISIYOR (.sus-suzul ya da
+     .sus-el) — durduran liste IKISINI DE saymali. H11: animasyon tasinip
+     listesi geride kalirsa reduced-motion sessizce delinir; burada tasiyici
+     kadraja gore degistigi icin tek ad yazmak yarim kapatirdi. */
+  .sus-suzul::before,.sus-suzul::after,
+  .sus-el::before,.sus-el::after{animation:none;opacity:1}
   .sh-l i,.sh-lede,.sh-cta,.sh-meta{animation:none}
   .sus-kaydir{animation:none;opacity:1}
   .sus-kaydir i::after{animation:none} /* .sus-halka reduce kurali temel.css'te */
