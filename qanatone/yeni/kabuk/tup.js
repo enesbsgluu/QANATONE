@@ -32,6 +32,37 @@ export function kur() {
   const hero = cv.closest('section');
   if (!hero) return;
 
+  /* ---- AG ISI KURULUMDAN AYRILDI (7 Eyl 2026, Enes: "tupler gec
+     aciliyor her tarayicida. Bu bir mimari yerlestirme hatasi.") ----
+     4 Eyl'de ADA DOGRU KURULDU ama IKI AYRI MALIYET TEK KAPIYA konuldu:
+       · ana iplik : WebGL baglami + shader derlemesi — olculdu, ~400 ms.
+                     Bunun filmden SONRAYA alinmasi dogruydu, DURUYOR.
+       · ag        : 775 KB (210 KB gzip) kutuphane indirmesi. Ana iplige
+                     dokunmaz, ama o da ayni kapinin arkasinda kaldi.
+     BEDELI OLCULDU (olc-tup-zinciri.cjs, Brave, prologu ATLAMIS
+     ziyaretci — yani EN IYI hal): kabuk.js @1640 ms · tup.js @1646 ms ·
+     tubes.min.js @2630→2654 ms. Prologu atlamayan ziyaretcide ise istek
+     hic cikmiyor: kapi `data-film` ve o oznitelik ancak filmin kapanis
+     dizisi tamamlaninca yaziliyor. Yani prolog boyunca AG BOMBOS duruyor,
+     sonra ziyaretci tam hero'ya bakarken 210 KB iniyor.
+     CARE — YENI MEKANIZMA DEGIL, DOGRU YERLESTIRME: kutuphane prolog
+     sururken `rel=prefetch` ile ISITILIR. Prefetch AG ISIDIR: en dusuk
+     oncelik, ayristirma yok, calistirma yok — yani filmin ana ipligine
+     TEK MILISANIYE eklemez (4 Eyl'in olcumu bu yuzden gecerli kalir).
+     Kurulum kapisi asagida AYNEN DURUYOR; `import()` sirasi gelince
+     onbellekten doner.
+     BURAYA KONDU, YUKARIYA DEGIL: ustteki muhafizlar (dar ekran,
+     dokunmatik, hareket azaltma, t-notubes, tuval yoklugu) zaten
+     gecilmis oluyor — yani isitma SADECE alanin gercekten kurulacagi
+     halde yapilir, mobil veride 210 KB harcanmaz.
+     Basarisizlik zararsiz: prefetch tutmazsa `import()` bugunku yolu
+     izler, hicbir sey bozulmaz.                                       */
+  try {
+    const isit = document.createElement('link');
+    isit.rel = 'prefetch'; isit.as = 'script'; isit.href = '/js/tubes.min.js';
+    document.head.appendChild(isit);
+  } catch (e) {}
+
   /* ---- ZAMANDA AYIRMA (4 Eyl 2026, Enes: "klibi etkilemeden dogru
      zamanda calissin; ada mimarisine bu sebeple gectik") ----
      ONEMLI AYRIM: ada mimarisi KODU ve BUTCEYI ayirir, ANA IS PARCACIGINI

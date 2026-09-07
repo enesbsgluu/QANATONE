@@ -121,6 +121,16 @@
 /img/*
   Cache-Control: public, max-age=86400
 
+# /js/ — kok sitenin hash'siz saticı kitapliklari (tubes.min.js 775 KB).
+# KURAL 7 Eyl 2026'da EKLENDI, sebebi olculdu: tup adasi kutuphaneyi
+# prolog sururken `rel=prefetch` ile isitiyor, kurulum aninda ise
+# `import()` ediyor. Kural yokken dosya `/*` altinda kaliyor ve Netlify
+# varsayilaniyla her istekte yeniden dogrulaniyordu — yani isitma bir tur
+# kazandiriyor ama yine de bir gidis-donus birakiyordu. Font ve gorsel
+# ile AYNI politika: hash'siz oldugu icin 1 gun, `immutable` DEGIL.
+/js/*
+  Cache-Control: public, max-age=86400
+
 /*
   # Content Signals — robots.txt'teki satırın başlık eşi
   Content-Signal: search=yes, ai-input=yes, ai-train=no

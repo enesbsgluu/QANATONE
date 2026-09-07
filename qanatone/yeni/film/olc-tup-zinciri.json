@@ -1,0 +1,115 @@
+{
+ "_": "olc-tup-zinciri.cjs — TESHIS, kapi degil. Damgalar navigationStart tabanli ms.",
+ "olcum": "2026-09-07T15:23:23.516Z",
+ "tarayici": "brave",
+ "sunucu": "http://127.0.0.1:8790/",
+ "tekrar": 3,
+ "medyan": {
+  "fcp": 144,
+  "kabuk_istek": 414.3,
+  "kabuk_inis": 416.7,
+  "tup_istek": 423.2,
+  "tup_inis": 425.3,
+  "kutuphane_istek": 428.4,
+  "kutuphane_inis": 432.7,
+  "data_film": null,
+  "baglam": null,
+  "ilk_kare": null
+ },
+ "kosumlar": [
+  {
+   "fcp": 1236,
+   "kabuk": {
+    "istek": 1389.8,
+    "inis": 1394.1,
+    "bayt": 5247
+   },
+   "tup": {
+    "istek": 1398.9,
+    "inis": 1405.4,
+    "bayt": 1055
+   },
+   "kutuphane": {
+    "istek": 1423.1,
+    "inis": 1445.1,
+    "bayt": 210747
+   },
+   "kuruldu": false,
+   "data_film": null,
+   "data_film_deger": null,
+   "baglam": null,
+   "ilk_kare": null,
+   "ric": [],
+   "ric_bekleyen": 0,
+   "tuval": true,
+   "kanca_kuruldu": true,
+   "data_film_son": null
+  },
+  {
+   "fcp": 144,
+   "kabuk": {
+    "istek": 414.3,
+    "inis": 416.7,
+    "bayt": 5247
+   },
+   "tup": {
+    "istek": 423.2,
+    "inis": 425.3,
+    "bayt": 1055
+   },
+   "kutuphane": {
+    "istek": 428.4,
+    "inis": 432.7,
+    "bayt": 210747
+   },
+   "kuruldu": false,
+   "data_film": null,
+   "data_film_deger": null,
+   "baglam": null,
+   "ilk_kare": null,
+   "ric": [],
+   "ric_bekleyen": 0,
+   "tuval": true,
+   "kanca_kuruldu": true,
+   "data_film_son": null
+  },
+  {
+   "fcp": 116,
+   "kabuk": {
+    "istek": 317.9,
+    "inis": 321,
+    "bayt": 5247
+   },
+   "tup": {
+    "istek": 324.3,
+    "inis": 328.3,
+    "bayt": 1055
+   },
+   "kutuphane": {
+    "istek": 331.9,
+    "inis": 338.8,
+    "bayt": 210747
+   },
+   "kuruldu": false,
+   "data_film": null,
+   "data_film_deger": null,
+   "baglam": null,
+   "ilk_kare": null,
+   "ric": [],
+   "ric_bekleyen": 0,
+   "tuval": true,
+   "kanca_kuruldu": true,
+   "data_film_son": null
+  }
+ ],
+ "halkalar": {
+  "belge → kabuk istegi (bosta bekleme + ayristirma)": 414.3,
+  "kabuk istegi → inisi (ag)": 2.4,
+  "kabuk inisi → tup istegi (baslat+tubes)": 6.5,
+  "tup istegi → inisi (ag)": 2.1,
+  "tup inisi → KUTUPHANE istegi (isitma: prefetch)": 3.1,
+  "tup inisi → data-film (FILMIN BITMESI BEKLENIR)": null,
+  "data-film → WebGL baglami (800 ms + rIC + 775 KB indirme)": null,
+  "baglam → ilk kare (shader derlemesi)": null
+ }
+}
