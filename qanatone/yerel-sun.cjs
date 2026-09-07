@@ -49,7 +49,62 @@ const KURAL = (() => {
 })();
 const basliklar = (u) => { const h = {}; for (const k of KURAL) if (k.re.test(u)) Object.assign(h, k.h); return h; };
 
+/* ---- GERCEK CIHAZ TESHISI (8 Eyl 2026) — YALNIZ YEREL, YAYINA GIRMEZ ----
+   Enes: "mobilde zoom yapinca yine sayfa hata veriyor." Masaustu emulasyonu
+   cokmeyi yeniden uretemedi (12 pinch kademesi, olcek 5'e kadar, sekme sag
+   kaldi) — telefonun bellek tavanini taklit etmiyor. O yuzden olcum GERCEK
+   CIHAZDA yapilir ve deney TEK DEGISKENLI olur:
+     ?tani=1        -> sayfa bugunku haliyle, telemetri acik
+     ?tani=1&bg=0   -> AYNI sayfa, yalniz `#bg` gizli (supheli katman yok)
+   Ayni telefon, ayni tur, iki kol. Birinde cokup otekinde cokmuyorsa
+   mekanizma KANITLANIR; ikisinde de cokuyorsa suphe duser.
+
+   Telemetri her 500 ms'de bir OLCER ve `sendBeacon` ile buraya yollar —
+   yani son paket COKMEDEN HEMEN ONCEKI durumdur: gorsel olcek, bellek,
+   kaydirma konumu, dugum sayisi. Cokme kaydi kaybolmaz.
+   Kayit dosyaya yazilir: yeni/film/_tani-cihaz.jsonl                     */
+const TANI_KAYIT = path.join(__dirname, 'yeni', 'film', '_tani-cihaz.jsonl');
+const TANI_BETIK = `<script>(function(){
+ var q=location.search, kol=/[?&]bg=0/.test(q)?'bg-kapali':'taban';
+ if(kol==='bg-kapali'){var st=document.createElement('style');st.textContent='#bg{display:none!important}';
+   (document.head||document.documentElement).appendChild(st);}
+ var t0=Date.now(), n=0, sonHata=null;
+ addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
+ function paket(sebep){
+  var vv=window.visualViewport||{};
+  var m=(performance&&performance.memory)||{};
+  return {kol:kol,sebep:sebep,n:++n,ms:Date.now()-t0,
+   olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),
+   dpr:devicePixelRatio, en:innerWidth, boy:innerHeight, y:Math.round(scrollY),
+   belge:document.documentElement.scrollHeight,
+   dugum:document.getElementsByTagName('*').length,
+   yigin:m.usedJSHeapSize?Math.round(m.usedJSHeapSize/1048576):null,
+   tavan:m.jsHeapSizeLimit?Math.round(m.jsHeapSizeLimit/1048576):null,
+   ua:navigator.userAgent.slice(0,110), bellek:navigator.deviceMemory||null,
+   hata:sonHata};
+ }
+ function yolla(sebep){try{navigator.sendBeacon('/tani-kayit',JSON.stringify(paket(sebep)))}catch(e){}}
+ yolla('acilis');
+ setInterval(function(){yolla('tik')},500);
+ addEventListener('pagehide',function(){yolla('pagehide')});
+ addEventListener('visibilitychange',function(){if(document.hidden)yolla('gizlendi')});
+ if(window.visualViewport)visualViewport.addEventListener('resize',function(){yolla('olcek')});
+})();</script>`;
+
 http.createServer((req, res) => {
+  /* telemetri ucu — sendBeacon POST'u */
+  if (req.method === 'POST' && req.url.split('?')[0] === '/tani-kayit') {
+    let g = '';
+    req.on('data', (d) => { if (g.length < 8192) g += d; });
+    req.on('end', () => {
+      try {
+        fs.mkdirSync(path.dirname(TANI_KAYIT), { recursive: true });
+        fs.appendFileSync(TANI_KAYIT, JSON.stringify({ t: new Date().toISOString(), veri: JSON.parse(g) }) + '\n');
+      } catch (e) {}
+      res.writeHead(204); res.end();
+    });
+    return;
+  }
   const f = coz(req.url);
   if (!f) { res.writeHead(404, { 'content-type': 'text/plain' }); return res.end('yok: ' + req.url); }
   const ext = path.extname(f).toLowerCase();
@@ -57,9 +112,15 @@ http.createServer((req, res) => {
   const etag = '"' + st.size.toString(16) + '-' + Math.floor(st.mtimeMs).toString(16) + '"';
   const yol = decodeURIComponent(req.url.split('?')[0]);
   const ozel = basliklar(yol);
-  if (req.headers['if-none-match'] === etag) { res.writeHead(304, { etag, ...ozel }); return res.end(); }
-  const buf = fs.readFileSync(f);
-  const h = { 'content-type': TIP[ext] || 'application/octet-stream', 'cache-control': 'public, max-age=0, must-revalidate', etag, ...ozel };
+  if (req.headers['if-none-match'] === etag && !/[?&]tani=1/.test(req.url)) { res.writeHead(304, { etag, ...ozel }); return res.end(); }
+  let buf = fs.readFileSync(f);
+  /* TANI ENJEKSIYONU: yalniz `?tani=1` ile gelen HTML isteklerinde, yalniz
+     bu yerel sunucuda. Etag/uzunluk enjeksiyondan SONRA hesaplanir. */
+  if (ext === '.html' && /[?&]tani=1/.test(req.url)) {
+    const html = buf.toString('utf8');
+    buf = Buffer.from(html.includes('</body>') ? html.replace('</body>', TANI_BETIK + '</body>') : html + TANI_BETIK, 'utf8');
+  }
+  const h = { 'content-type': TIP[ext] || 'application/octet-stream', 'cache-control': 'no-store', etag, ...ozel };
   if (GZIP.has(ext) && /gzip/.test(req.headers['accept-encoding'] || '')) {
     const g = zlib.gzipSync(buf, { level: 6 });
     res.writeHead(200, { ...h, 'content-encoding': 'gzip', 'content-length': g.length });

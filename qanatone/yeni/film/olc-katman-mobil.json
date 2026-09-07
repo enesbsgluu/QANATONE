@@ -1,0 +1,1382 @@
+{
+ "_": "olc-katman.cjs — YAPISAL teshis, kapi degil. Zamanlama olcmez; yabanci tarayici acikken de gecerlidir.",
+ "olcum": "2026-09-07T23:19:33.077Z",
+ "yol": "/",
+ "pencere": "412x915",
+ "tarayici": {
+  "brave": {
+   "surum": "Chrome/152.0.7977.83",
+   "gpu": {
+    "webgl2": "Google Inc. (NVIDIA) | ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 Ti (0x00001F95) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl": "baglam YOK",
+    "canvas2d_hizlandirilmis": true
+   },
+   "katmanlar": [
+    {
+     "sahip": "#document",
+     "en": 496,
+     "boy": 14409,
+     "alan_mp": 7.15,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "html.t-nostars.prd",
+     "en": 496,
+     "boy": 14409,
+     "alan_mp": 7.15,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 1161,
+     "boy": 1161,
+     "alan_mp": 1.35,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "div#bg",
+     "en": 618,
+     "boy": 1144,
+     "alan_mp": 0.71,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "section#skKatman.sk-sahne",
+     "en": 496,
+     "boy": 1290,
+     "alan_mp": 0.64,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 515,
+     "boy": 1144,
+     "alan_mp": 0.59,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Viewport"
+     ]
+    },
+    {
+     "sahip": "#document",
+     "en": 496,
+     "boy": 1144,
+     "alan_mp": 0.57,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sus-eller",
+     "en": 496,
+     "boy": 1144,
+     "alan_mp": 0.57,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sus-eller",
+     "en": 500,
+     "boy": 1148,
+     "alan_mp": 0.57,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sh-ic",
+     "en": 555,
+     "boy": 739,
+     "alan_mp": 0.41,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sh-kap",
+     "en": 496,
+     "boy": 615,
+     "alan_mp": 0.31,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 558,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "div.st-akis",
+     "en": 5253,
+     "boy": 38,
+     "alan_mp": 0.2,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 376,
+     "boy": 328,
+     "alan_mp": 0.12,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 423,
+     "boy": 291,
+     "alan_mp": 0.12,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "span.sus-suzul",
+     "en": 294,
+     "boy": 256,
+     "alan_mp": 0.08,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Trivial3DTransform",
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "img",
+     "en": 294,
+     "boy": 256,
+     "alan_mp": 0.08,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sus-el.sus-el-h",
+     "en": 294,
+     "boy": 255,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sus-el.sus-el-r",
+     "en": 330,
+     "boy": 226,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "span.sus-suzul",
+     "en": 330,
+     "boy": 227,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Trivial3DTransform",
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "img",
+     "en": 330,
+     "boy": 227,
+     "alan_mp": 0.07,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.nv-fade",
+     "en": 496,
+     "boy": 138,
+     "alan_mp": 0.07,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 260,
+     "boy": 231,
+     "alan_mp": 0.06,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 291,
+     "boy": 205,
+     "alan_mp": 0.06,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "a.sh-void",
+     "en": 446,
+     "boy": 69,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "BackdropFilter"
+     ]
+    },
+    {
+     "sahip": "i.sus-halka",
+     "en": 446,
+     "boy": 68,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "i.sus-halka",
+     "en": 452,
+     "boy": 73,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "p.sh-meta",
+     "en": 446,
+     "boy": 70,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.st-pencere",
+     "en": 496,
+     "boy": 37,
+     "alan_mp": 0.02,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.st-pencere",
+     "en": 500,
+     "boy": 42,
+     "alan_mp": 0.02,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 19,
+     "boy": 1144,
+     "alan_mp": 0.02,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "Scrollbar"
+     ]
+    },
+    {
+     "sahip": "span",
+     "en": 211,
+     "boy": 31,
+     "alan_mp": 0.01,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 0,
+     "boy": 0,
+     "alan_mp": 0,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": []
+    },
+    {
+     "sahip": "i",
+     "en": 19,
+     "boy": 14,
+     "alan_mp": 0,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    }
+   ],
+   "katman_olculdu": true,
+   "animasyon_toplam": 49,
+   "animasyon_kosan": 43,
+   "ana_iplikte": 0,
+   "ana_iplik_ornek": [],
+   "kaydirma_cizelgeli": 39,
+   "kosan_ornek": [
+    {
+     "ad": "div.sus-el.sus-el-h",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sus-el.sus-el-r",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sh-ic",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "p.sh-meta",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "zaman_tabanli": [
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "data_film": "atlandi",
+   "html_sinif": "t-nostars prd",
+   "ek_stil_var": false,
+   "bg_gorunur": "block",
+   "body_zemin": "rgb(5, 5, 5)",
+   "dpr": 1.0000000149011612,
+   "en": 412,
+   "boy": 915
+  },
+  "chrome": {
+   "surum": "Chrome/152.0.7977.76",
+   "gpu": {
+    "webgl2": "Google Inc. (Intel) | ANGLE (Intel, Intel(R) UHD Graphics (0x00009BA4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl": "baglam YOK",
+    "canvas2d_hizlandirilmis": true
+   },
+   "katmanlar": [
+    {
+     "sahip": "#document",
+     "en": 496,
+     "boy": 14409,
+     "alan_mp": 7.15,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "html.t-nostars.prd",
+     "en": 496,
+     "boy": 14409,
+     "alan_mp": 7.15,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 1161,
+     "boy": 1161,
+     "alan_mp": 1.35,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "div#bg",
+     "en": 618,
+     "boy": 1144,
+     "alan_mp": 0.71,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "section#skKatman.sk-sahne",
+     "en": 496,
+     "boy": 1290,
+     "alan_mp": 0.64,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 515,
+     "boy": 1144,
+     "alan_mp": 0.59,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Viewport"
+     ]
+    },
+    {
+     "sahip": "#document",
+     "en": 496,
+     "boy": 1144,
+     "alan_mp": 0.57,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sus-eller",
+     "en": 496,
+     "boy": 1144,
+     "alan_mp": 0.57,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sus-eller",
+     "en": 500,
+     "boy": 1148,
+     "alan_mp": 0.57,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.sh-ic",
+     "en": 555,
+     "boy": 739,
+     "alan_mp": 0.41,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sh-kap",
+     "en": 496,
+     "boy": 615,
+     "alan_mp": 0.31,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "a.sp-govde",
+     "en": 446,
+     "boy": 557,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 444,
+     "boy": 555,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sp-kart",
+     "en": 446,
+     "boy": 558,
+     "alan_mp": 0.25,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "div.st-akis",
+     "en": 5253,
+     "boy": 38,
+     "alan_mp": 0.2,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 376,
+     "boy": 328,
+     "alan_mp": 0.12,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "::before",
+     "en": 423,
+     "boy": 291,
+     "alan_mp": 0.12,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "span.sus-suzul",
+     "en": 294,
+     "boy": 256,
+     "alan_mp": 0.08,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Trivial3DTransform",
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "img",
+     "en": 294,
+     "boy": 256,
+     "alan_mp": 0.08,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sus-el.sus-el-h",
+     "en": 294,
+     "boy": 255,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "div.sus-el.sus-el-r",
+     "en": 330,
+     "boy": 226,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "span.sus-suzul",
+     "en": 330,
+     "boy": 227,
+     "alan_mp": 0.07,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "Trivial3DTransform",
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "img",
+     "en": 330,
+     "boy": 227,
+     "alan_mp": 0.07,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.nv-fade",
+     "en": 496,
+     "boy": 138,
+     "alan_mp": 0.07,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 260,
+     "boy": 231,
+     "alan_mp": 0.06,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "::after",
+     "en": 291,
+     "boy": 205,
+     "alan_mp": 0.06,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "a.sh-void",
+     "en": 446,
+     "boy": 69,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "BackdropFilter"
+     ]
+    },
+    {
+     "sahip": "i.sus-halka",
+     "en": 446,
+     "boy": 68,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "i.sus-halka",
+     "en": 452,
+     "boy": 73,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation"
+     ]
+    },
+    {
+     "sahip": "p.sh-meta",
+     "en": 446,
+     "boy": 70,
+     "alan_mp": 0.03,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "ActiveTransformAnimation",
+      "ActiveOpacityAnimation"
+     ]
+    },
+    {
+     "sahip": "div.st-pencere",
+     "en": 496,
+     "boy": 37,
+     "alan_mp": 0.02,
+     "cizer": false,
+     "boyama": 0,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": "div.st-pencere",
+     "en": 500,
+     "boy": 42,
+     "alan_mp": 0.02,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "RootScroller",
+      "OverflowScrolling"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 19,
+     "boy": 1144,
+     "alan_mp": 0.02,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": [
+      "Scrollbar"
+     ]
+    },
+    {
+     "sahip": "span",
+     "en": 211,
+     "boy": 31,
+     "alan_mp": 0.01,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    },
+    {
+     "sahip": null,
+     "en": 0,
+     "boy": 0,
+     "alan_mp": 0,
+     "cizer": true,
+     "boyama": 0,
+     "sebep": []
+    },
+    {
+     "sahip": "i",
+     "en": 19,
+     "boy": 14,
+     "alan_mp": 0,
+     "cizer": true,
+     "boyama": 1,
+     "sebep": [
+      "Overlap"
+     ]
+    }
+   ],
+   "katman_olculdu": true,
+   "animasyon_toplam": 49,
+   "animasyon_kosan": 43,
+   "ana_iplikte": 0,
+   "ana_iplik_ornek": [],
+   "kaydirma_cizelgeli": 39,
+   "kosan_ornek": [
+    {
+     "ad": "div.sus-el.sus-el-h",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sus-el.sus-el-r",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sh-ic",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "p.sh-meta",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "zaman_tabanli": [
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "data_film": "atlandi",
+   "html_sinif": "t-nostars prd",
+   "ek_stil_var": false,
+   "bg_gorunur": "block",
+   "body_zemin": "rgb(5, 5, 5)",
+   "dpr": 1.0000000149011612,
+   "en": 412,
+   "boy": 915
+  }
+ }
+}
