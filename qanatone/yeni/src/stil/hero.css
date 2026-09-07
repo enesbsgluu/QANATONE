@@ -311,10 +311,12 @@ html.t-notubes .sus-tubes{display:none!important}
    kusuru oldugu sanilmisti. Fark karesi bunu curuttu — hale kutunun
    DISINA da tasiyor ve kenarda basamak yok (-8/-7 piksel, gurultu
    duzeyinde). Kusur kirpma degil, halenin KENDISI.
-   O yuzden 46 px cikti, 10 px KALDI: kizil metin koyu kizil zeminde
-   kenarini korusun. */
-.sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic;
-  text-shadow:0 0 10px rgba(255,47,77,.55)}
+   ILK YAMADA 46 px CIKTI, 10 px BIRAKILDI — YANLISTI. Enes "onu da sil"
+   demisti; ben olcup "10 px karede ayirt edilemiyor" diye yarisini
+   biraktim, o da "hala filigran izleri var" dedi. Ders sadakat
+   kuralinin ta kendisi: goz karari BAGLAYICI, olcum onun yerine
+   gecmez. Golge TAMAMEN kalkti; `<b>` yalniz rengiyle ayrisir. */
+.sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic}
 /* sapma 3: perde araligi %114 -> %30, metin ilk kareden boyali */
 @keyframes sh-rise{from{transform:translateY(30%)}}
 

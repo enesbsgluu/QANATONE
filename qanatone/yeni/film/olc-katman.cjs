@@ -40,8 +40,16 @@ const BOY = Number(process.env.BOY || 1080);
 const CIKTI = path.join(__dirname, process.env.CIKTI || 'olc-katman.json');
 
 /* prologu atla: hero'yu olcmek icin film katmaninin kalkmis olmasi gerek;
-   kapiyi ZORLAMAZ, sitenin kendi atlama yolunu kullanir */
-const ATLA = "try{sessionStorage.setItem('qanat-prolog-atlandi','1')}catch(e){}";
+   kapiyi ZORLAMAZ, sitenin kendi atlama yolunu kullanir.
+   PROLOG=1 verilirse ATLANMAZ — film katmaninin kendi kunyesi olculur. */
+const ATLA = process.env.PROLOG === '1' ? '' : "try{sessionStorage.setItem('qanat-prolog-atlandi','1')}catch(e){}";
+/* ZOOM: tarayici `--force-device-scale-factor` ile baslatilir. Gercek
+   Ctrl+'+' ile ayni is: CSS pikseli basina dusen aygit pikseli buyur,
+   kompozit katman alani zoom'un KARESIYLE artar. */
+const ZOOM = Number(process.env.ZOOM || 1);
+/* EKCSS: tek degiskenli ablasyon kolu. Kaynak degistirmeden bir kurali
+   iptal edip katman agacinin nasil degistigini olcmek icin. */
+const EKCSS = process.env.EKCSS || '';
 
 async function gpuDurumu(tarayici) {
   /* chrome://gpu ICERIGI SHADOW DOM'DA — innerText onu delmez, ilk yazimda
@@ -70,12 +78,13 @@ async function gpuDurumu(tarayici) {
 
 async function sayfaYapisi(tarayici) {
   const page = await tarayici.newPage();
-  await page.evaluateOnNewDocument(ATLA);
+  if (ATLA) await page.evaluateOnNewDocument(ATLA);
   const cdp = await page.createCDPSession();
 
   const katmanlar = [];
   cdp.on('LayerTree.layerTreeDidChange', (e) => { katmanlar.length = 0; (e.layers || []).forEach((l) => katmanlar.push(l)); });
 
+  if (EKCSS) await page.evaluateOnNewDocument(`(()=>{const k=()=>{const s=document.createElement('style');s.setAttribute('data-ablasyon','1');s.textContent=${JSON.stringify(EKCSS)};(document.head||document.documentElement).appendChild(s)};if(document.head)k();else document.addEventListener('DOMContentLoaded',k,{once:true});addEventListener('load',()=>{if(!document.querySelector('style[data-ablasyon]'))k()},{once:true})})()`);
   await page.goto(`${SUNUCU}${YOL}`, { waitUntil: 'load', timeout: 45000 });
   /* hero yerlesip animasyonlar dogsun; kaydirma YOK — giris hali olculuyor */
   await new Promise((r) => setTimeout(r, 3500));
@@ -136,8 +145,18 @@ async function sayfaYapisi(tarayici) {
       ana_iplikte: anaIplik.length, ana_iplik_ornek: anaIplik.slice(0, 12),
       kaydirma_cizelgeli: kosan.filter((o) => /Scroll|View/.test(o.zaman_cizelgesi)).length,
       kosan_ornek: kosan.slice(0, 18),
+      /* ZAMAN TABANLI = DURURKEN TIKLAYAN. Kaydirma cizelgeli animasyon
+         kaydirma olmadan ilerlemez, yani giris ekraninda bedeli yoktur;
+         sureklilik maliyetini yalniz bunlar uretir. Ayrim yapilmadan
+         "42 animasyon kosuyor" demek yaniltir. */
+      zaman_tabanli: kosan.filter((o) => !/Scroll|View/.test(o.zaman_cizelgesi)),
       data_film: document.documentElement.dataset.film || null,
       html_sinif: document.documentElement.className,
+      /* RIG DOGRULAMASI: ablasyon kolu gercekten uygulandi mi? Uygulanmadan
+         alinan "fark yok" sonucu bir bulgu DEGIL, sessiz bir rig hatasidir. */
+      ek_stil_var: !!document.querySelector('style[data-ablasyon]'),
+      bg_gorunur: (() => { const e = document.getElementById('bg'); return e ? getComputedStyle(e).display : 'yok'; })(),
+      body_zemin: getComputedStyle(document.body).backgroundColor,
       dpr: devicePixelRatio, en: innerWidth, boy: innerHeight,
     };
   });
@@ -157,14 +176,16 @@ async function sayfaYapisi(tarayici) {
     const exe = TARAYICILAR[ad];
     if (!exe || !fs.existsSync(exe)) { console.log(`${ad}: TARAYICI YOK`); continue; }
     const b = await pt.launch({ executablePath: exe, headless: false,
-      args: ['--no-first-run', '--no-default-browser-check'],
-      defaultViewport: { width: EN, height: BOY } });
+      args: ['--no-first-run', '--no-default-browser-check',
+        ...(ZOOM !== 1 ? [`--force-device-scale-factor=${ZOOM}`] : [])],
+      defaultViewport: ZOOM !== 1 ? null : { width: EN, height: BOY } });
     try {
       const gpu = await gpuDurumu(b);
       const yapi = await sayfaYapisi(b);
       sonuc.tarayici[ad] = { surum: await b.version(), gpu, ...yapi };
       console.log(`\n===== ${ad.toUpperCase()} · ${await b.version()} =====`);
       console.log(`pencere ${yapi.en}x${yapi.boy} dpr ${yapi.dpr} · data-film ${yapi.data_film} · html "${yapi.html_sinif}"`);
+      if (EKCSS) console.log(`ABLASYON: stil ${yapi.ek_stil_var ? 'UYGULANDI' : '!! UYGULANMADI — bu kosum HUKUMSUZ'} · #bg display=${yapi.bg_gorunur} · body zemin=${yapi.body_zemin}`);
       console.log('GPU KIMLIGI:');
       for (const [k, v] of Object.entries(gpu)) console.log(`   ${k}: ${v}`);
       const kat = yapi.katmanlar;
@@ -172,7 +193,8 @@ async function sayfaYapisi(tarayici) {
       console.log(`KATMAN: ${kat.length} adet · toplam ${alan.toFixed(2)} megapiksel${yapi.katman_olculdu ? '' : '  !! OLCULEMEDI (rig), "katman yok" DEGIL'}`);
       kat.sort((a, b2) => b2.alan_mp - a.alan_mp).slice(0, 12)
         .forEach((k) => console.log(`   ${String(k.en).padStart(5)}x${String(k.boy).padEnd(6)} ${String(k.alan_mp).padStart(6)} MP · cizer ${k.cizer ? 'E' : 'h'} · boyama ${k.boyama} · ${String(k.sahip).padEnd(28)} ${k.sebep.join(',').slice(0, 46)}`));
-      console.log(`ANIMASYON: toplam ${yapi.animasyon_toplam} · kosan ${yapi.animasyon_kosan} · ANA IPLIKTE ${yapi.ana_iplikte} · kaydirma cizelgeli ${yapi.kaydirma_cizelgeli}`);
+      console.log(`ANIMASYON: toplam ${yapi.animasyon_toplam} · kosan ${yapi.animasyon_kosan} · ANA IPLIKTE ${yapi.ana_iplikte} · kaydirma cizelgeli ${yapi.kaydirma_cizelgeli} · ZAMAN TABANLI (dururken tiklar) ${(yapi.zaman_tabanli || []).length}`);
+      (yapi.zaman_tabanli || []).forEach((o) => console.log(`   surekli: ${o.ad} [${o.ozellikler.join(',')}]`));
       yapi.ana_iplik_ornek.forEach((o) => console.log(`   ana iplik: ${o.ad} [${o.ozellikler.join(',')}]`));
     } finally { await b.close().catch(() => {}); }
   }

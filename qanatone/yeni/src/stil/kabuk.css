@@ -17,6 +17,32 @@
 /* z-index -1: kaynakta 0 + main z-index:2 idi; burada temel.css body::before
    zemininin kanitli yolu (hero turunun dersi: 0'da icerigin ustune biner). */
 #bg{position:fixed;inset:0;z-index:-1;pointer-events:none}
+/* PROLOG SURERKEN KABUK ZEMINI BASILMAZ (7 Eyl 2026 — Enes: "yakinlastirma
+   yapinca sayfa hata verip kapaniyor").
+   MEKANIZMA, OLCULDU: `position:fixed` bir eleman icerigin ALTINDA
+   (z-index:-1) durunca Chromium butun belge icerigini onun USTUNDE ayri
+   bir kompozit katmana cikarir ("Overlap") ve o katman BELGE BOYU kadar
+   olur. Prolog belgesi 121.000 px; zoom 2'de 243.000 px. Katman agaci
+   (olc-katman.cjs, chrome, prolog acik):
+     bugun            zoom 1  760,6 MP   ·  zoom 2  910,8 MP
+     `#bg` kapaliyken zoom 1  388,0 MP   ·  zoom 2  454,5 MP
+   Yani zeminin varligi TEK BASINA katman belleğini IKIYE KATLIYOR. Zoom
+   alani karesiyle buyuttugu icin tumlesik kartin butcesi orada tukeniyor
+   ve sekme cokuyor.
+   ELENEN ADAYLAR (hepsi olculdu, hicbiri kipirdatmadi): `body` zeminini
+   saydam yapmak 910,8 · `#bg`in z-index'ini 0 yapmak 908,1 · orb'un
+   blur'unu kaldirmak 902,8. Bolen `#bg`in KENDISI, ozelligi degil.
+   NEDEN BEDAVA: prolog sirasinda ekrani filmin kendi tam ekran goruntusu
+   ortuyor — zemin zaten GORUNMUYOR. Yan yana kare ile dogrulandi (K/F
+   kollari, ayni kaydirma noktalari): gorunur fark yok.
+   DEVIRDE GERI GELIR: film bitisinde site filmin icinden gorunur, o anda
+   zemin sart. `fl-hazirla` (Film.astro 494) ve `fl-devir` (580) devir
+   basinda ekleniyor; kural o ikisinde DUSER, yani zemin site gorunmeden
+   once yerine gelir. Film bitince `fl-js` zaten kalkar (siteyeGec).
+   KAPSAM DAR TUTULDU: yalniz `#bg`. `#noise` z-index:60 ile filmin
+   USTUNDE, yani gorunur — ona dokunulmadi; `#stars` da olcumde bir sey
+   kazandirmadi. */
+html.fl-js:not(.fl-hazirla):not(.fl-devir) #bg{display:none}
 #bg .fade{position:absolute;inset:0;background:linear-gradient(180deg,#170406 0%,#050505 46%)}
 #bg .orb{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
   width:min(900px,120vw);height:min(900px,120vw);border-radius:50%;

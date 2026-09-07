@@ -1,6 +1,6 @@
 {
  "_": "olc-katman.cjs — YAPISAL teshis, kapi degil. Zamanlama olcmez; yabanci tarayici acikken de gecerlidir.",
- "olcum": "2026-09-07T16:24:21.528Z",
+ "olcum": "2026-09-07T16:59:31.839Z",
  "yol": "/",
  "pencere": "1920x1080",
  "tarayici": {
@@ -11,585 +11,8 @@
     "webgl": "baglam YOK",
     "canvas2d_hizlandirilmis": true
    },
-   "katmanlar": [
-    {
-     "sahip": "#document",
-     "en": 2381,
-     "boy": 15488,
-     "alan_mp": 36.88,
-     "cizer": true,
-     "boyama": 0,
-     "sebep": [
-      "RootScroller",
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "html.t-nostars.prd.bitcursor",
-     "en": 2381,
-     "boy": 15488,
-     "alan_mp": 36.88,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "main#icerik",
-     "en": 2381,
-     "boy": 14576,
-     "alan_mp": 34.71,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "RootScroller",
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "div#bg",
-     "en": 2381,
-     "boy": 2102,
-     "alan_mp": 5,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "section#skKatman.sk-sahne",
-     "en": 2381,
-     "boy": 1430,
-     "alan_mp": 3.4,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": null,
-     "en": 2400,
-     "boy": 1350,
-     "alan_mp": 3.24,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Viewport"
-     ]
-    },
-    {
-     "sahip": "div.sus-eller",
-     "en": 2385,
-     "boy": 1354,
-     "alan_mp": 3.23,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "RootScroller",
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "#document",
-     "en": 2381,
-     "boy": 1350,
-     "alan_mp": 3.21,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "canvas#tubes.sus-tubes.on",
-     "en": 2381,
-     "boy": 1350,
-     "alan_mp": 3.21,
-     "cizer": true,
-     "boyama": 0,
-     "sebep": [
-      "Canvas"
-     ]
-    },
-    {
-     "sahip": "div.sus-eller",
-     "en": 2381,
-     "boy": 1350,
-     "alan_mp": 3.21,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": []
-    },
-    {
-     "sahip": "div#noise",
-     "en": 2381,
-     "boy": 1350,
-     "alan_mp": 3.21,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "a.sp-govde",
-     "en": 1652,
-     "boy": 803,
-     "alan_mp": 1.33,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "a.sp-govde",
-     "en": 1652,
-     "boy": 803,
-     "alan_mp": 1.33,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "a.sp-govde",
-     "en": 1652,
-     "boy": 803,
-     "alan_mp": 1.33,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.sp-kart",
-     "en": 1651,
-     "boy": 804,
-     "alan_mp": 1.33,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div.sh-ic",
-     "en": 1459,
-     "boy": 833,
-     "alan_mp": 1.22,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.sh-kap",
-     "en": 1600,
-     "boy": 693,
-     "alan_mp": 1.11,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "::before",
-     "en": 1014,
-     "boy": 884,
-     "alan_mp": 0.9,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.sp-kart",
-     "en": 1400,
-     "boy": 552,
-     "alan_mp": 0.77,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div.sp-kart",
-     "en": 1400,
-     "boy": 552,
-     "alan_mp": 0.77,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div.sp-kart",
-     "en": 1400,
-     "boy": 552,
-     "alan_mp": 0.77,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "::before",
-     "en": 1014,
-     "boy": 698,
-     "alan_mp": 0.71,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "::before",
-     "en": 745,
-     "boy": 745,
-     "alan_mp": 0.56,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "div.sus-el.sus-el-h",
-     "en": 792,
-     "boy": 690,
-     "alan_mp": 0.55,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "span.sus-suzul",
-     "en": 792,
-     "boy": 690,
-     "alan_mp": 0.55,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Trivial3DTransform",
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "img",
-     "en": 792,
-     "boy": 691,
-     "alan_mp": 0.55,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.st-akis",
-     "en": 8719,
-     "boy": 54,
-     "alan_mp": 0.47,
-     "cizer": true,
-     "boyama": 2,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "::after",
-     "en": 698,
-     "boy": 622,
-     "alan_mp": 0.43,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.sus-el.sus-el-r",
-     "en": 792,
-     "boy": 544,
-     "alan_mp": 0.43,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "span.sus-suzul",
-     "en": 792,
-     "boy": 544,
-     "alan_mp": 0.43,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Trivial3DTransform",
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "img",
-     "en": 792,
-     "boy": 545,
-     "alan_mp": 0.43,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "::after",
-     "en": 698,
-     "boy": 490,
-     "alan_mp": 0.34,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "div.nv-fade",
-     "en": 2381,
-     "boy": 138,
-     "alan_mp": 0.33,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div.nv-ic",
-     "en": 1581,
-     "boy": 188,
-     "alan_mp": 0.3,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "FixedPosition",
-      "BackdropFilter"
-     ]
-    },
-    {
-     "sahip": "section#ticker.st-sahne",
-     "en": 2381,
-     "boy": 122,
-     "alan_mp": 0.29,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div#bitsay.kb-say",
-     "en": 531,
-     "boy": 287,
-     "alan_mp": 0.15,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "FixedPosition",
-      "BackdropFilter"
-     ]
-    },
-    {
-     "sahip": "div.st-pencere",
-     "en": 2385,
-     "boy": 59,
-     "alan_mp": 0.14,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "RootScroller",
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "div.st-pencere",
-     "en": 2381,
-     "boy": 54,
-     "alan_mp": 0.13,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "RootScroller",
-      "OverflowScrolling"
-     ]
-    },
-    {
-     "sahip": "p.sh-rozet",
-     "en": 581,
-     "boy": 48,
-     "alan_mp": 0.03,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "BackdropFilter"
-     ]
-    },
-    {
-     "sahip": "p.sh-meta",
-     "en": 1175,
-     "boy": 25,
-     "alan_mp": 0.03,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": null,
-     "en": 19,
-     "boy": 1350,
-     "alan_mp": 0.03,
-     "cizer": true,
-     "boyama": 0,
-     "sebep": [
-      "Scrollbar"
-     ]
-    },
-    {
-     "sahip": "a.sh-void",
-     "en": 287,
-     "boy": 68,
-     "alan_mp": 0.02,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "BackdropFilter"
-     ]
-    },
-    {
-     "sahip": "i.sus-halka",
-     "en": 286,
-     "boy": 68,
-     "alan_mp": 0.02,
-     "cizer": true,
-     "boyama": 0,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "i.sus-halka",
-     "en": 292,
-     "boy": 73,
-     "alan_mp": 0.02,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation"
-     ]
-    },
-    {
-     "sahip": "span",
-     "en": 211,
-     "boy": 30,
-     "alan_mp": 0.01,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div.sus-kaydir",
-     "en": 74,
-     "boy": 92,
-     "alan_mp": 0.01,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": null,
-     "en": 0,
-     "boy": 0,
-     "alan_mp": 0,
-     "cizer": true,
-     "boyama": 0,
-     "sebep": []
-    },
-    {
-     "sahip": "::after",
-     "en": 2,
-     "boy": 21,
-     "alan_mp": 0,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "span.kb-ring",
-     "en": 23,
-     "boy": 23,
-     "alan_mp": 0,
-     "cizer": true,
-     "boyama": 1,
-     "sebep": [
-      "ActiveTransformAnimation",
-      "ActiveOpacityAnimation"
-     ]
-    },
-    {
-     "sahip": "span.kb-core",
-     "en": 56,
-     "boy": 56,
-     "alan_mp": 0,
-     "cizer": true,
-     "boyama": 2,
-     "sebep": [
-      "Overlap"
-     ]
-    },
-    {
-     "sahip": "div#bittip.kb-tip",
-     "en": 6,
-     "boy": 6,
-     "alan_mp": 0,
-     "cizer": false,
-     "boyama": 0,
-     "sebep": [
-      "Overlap"
-     ]
-    }
-   ],
-   "katman_olculdu": true,
+   "katmanlar": [],
+   "katman_olculdu": false,
    "animasyon_toplam": 49,
    "animasyon_kosan": 42,
    "ana_iplikte": 0,
@@ -747,8 +170,63 @@
      ]
     }
    ],
+   "zaman_tabanli": [
+    {
+     "ad": "span.kb-ring",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
    "data_film": "atlandi",
    "html_sinif": "t-nostars prd bitcursor",
+   "ek_stil_var": false,
+   "bg_gorunur": "block",
+   "body_zemin": "rgb(5, 5, 5)",
    "dpr": 1.0000000149011612,
    "en": 1920,
    "boy": 1080
