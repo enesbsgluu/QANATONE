@@ -50,9 +50,19 @@
    birakiyordu: 1440x900'de hero 836, metin adasi 62 px yukarida,
    kaydir isareti pencere dibinden 90 px yukarida ve serit ilk ekrana
    giriyordu — "sayfa hareket ediyor" hissinin olculen kaynagi bu. */
+/* DOLGU 150/110 -> 120/92 (7 Eyl 2026, Enes: "hepsi masaustu girisinde
+   gorunur bir sekilde dursun"). OLCULEREK secildi: ada 554,4 px sabit;
+   eski toplam dolgu 260 ile hero'nun DOGAL boyu 814,4 px cikiyordu ve
+   780/768/720 pencerelerinde ekranin altini asiyordu — kaydir gostergesi
+   de o tasan bantta kaliyordu. Yeni toplam 212 ile dogal boy 766,4:
+   yukseklik >= 768 olan her masaustu penceresinde hero ILK EKRANA sigar,
+   `min-height:100svh` devreye girer ve gosterge tam gorunur.
+   YAN ETKI BILEREK ALINDI: hero artik 100svh'yi asmadigi icin serit
+   turundaki "tasma payi" da sifirlanir; serit formulunun sabitleri bu
+   yeni boya gore yeniden olculdu (serit.css). */
 .ana .sh-sahne{position:relative;min-height:100svh;
   display:flex;align-items:center;justify-content:center;
-  padding:150px 0 110px;
+  padding:120px 0 92px;
   overflow:hidden;text-align:center}
 
 /* NEDEN `.ana .sh-sahne` — sade `.sh-sahne` DEGIL (gercek tarayicida
@@ -254,10 +264,28 @@ html.t-notubes .sus-tubes{display:none!important}
    var(--f-baslik)}` (0,1,1) sinif seciciyi (0,1,0) yeniyordu; gercek
    tarayicida h1'in IKI satiri da Uncut Sans olculdu (2 Eyl), Playfair hic
    yururluge girmiyordu. H10 dersinin ayni: ozgulluk, metin degil. */
+/* PEMBE HALE KALKTI (7 Eyl 2026 — Enes: "ana basliktaki YAKALAYAN YOK
+   yazisinin arkasinda dikdortgen bir gradyan var, kirmizi veya seffaf,
+   hem mobilde hem masaustunde onu kaldir").
+   TESHIS (kollar tek tek kapatilarak, mobil 390 + masaustu 1536):
+   dikdortgen bir ARKA PLAN DEGILDI — basligin ikinci text-shadow'u
+   (`0 0 34px rgba(255,198,204,.28)` pembe hale) `.sh-l`in
+   `overflow:hidden` satir kutusunda ANI kesiliyordu. Hale yumusak,
+   KIRPMA keskin: goz bunu "arkada duran dikdortgen gradyan" olarak
+   okuyor. `.sus-a*` atmosferi, `.sh-ic::before` elipsi, `#tubes` ve
+   `.sus-a4` ayri ayri kapatildi, hicbiri kaldirmadi; text-shadow
+   kapatilinca dikdortgen TAMAMEN gitti (yan yana kare).
+   NEDEN HALEYI ALDIK, KUTUYU DEGIL: kutuyu buyutmek (padding/negatif
+   margin ya da overflow-clip-margin) kirpmayi kaldirirdi ama ayni kutu
+   `sh-rise` girisinin MASKESI — hale icin gereken ~38 px pay, %30'luk
+   giris kaymasindan buyuk, yani maske islevini yitirirdi. Ikisi ayni
+   kutuyu paylasamaz; Enes zaten haleyi kaldirmayi istedi.
+   KAYNAKTAN BILINCLI SAPMA. Okunurluk gölgesi (koyu, 22 px) DURUYOR —
+   dikdortgeni o yapmiyor, koyu zeminde kirpma cizgisi gorunmez. */
 .ana .sh-h1{font-family:var(--f-hero);font-weight:500;
   font-size:clamp(2.8rem,7.6vw,5.9rem);line-height:1.06;letter-spacing:-.028em;
   color:#fff;margin-bottom:26px;
-  text-shadow:0 1px 22px rgba(0,0,0,.5),0 0 34px rgba(255,198,204,.28)}
+  text-shadow:0 1px 22px rgba(0,0,0,.5)}
 .sh-l{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
 .sh-l i{display:block;font-style:normal;animation:sh-rise 1.2s var(--e) backwards}
 .sh-l:nth-child(2) i{animation-delay:.12s}
@@ -328,7 +356,14 @@ html.t-notubes .sus-tubes{display:none!important}
 .sh-btn:active{transform:scale(.965);transition-duration:.08s}
 
 /* font-size 12px: 12 piksel tabani (eski.css 4154), 531-534'teki 10px'i ezer */
-.sh-meta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:52px;
+/* COK AZ YUKARI (7 Eyl 2026, Enes: "onlar yerinde sabit kalsin ve cok az
+   yukari cek"): masaustunde meta 52 -> 44 px (8 px), kaydir gostergesi
+   26 -> 30 px (4 px) — Enes'in "kaydiri COK DAHA AZ yukari cek" ayrimi
+   birebir. Ikisi de baslangic degeri; hukum Enes'in gozunde (panelle
+   ince ayar istenirse [[qanatone-kol-serit-bosluk]] turundaki duzenek
+   bes dakikada kurulur). Mobil DEGISMEDI: orada meta zaten 22 px ile
+   yakin duruyor ve kaydir gostergesi hic basilmiyor. */
+.sh-meta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:44px;
   flex-wrap:wrap;font-family:var(--f-tek);font-size:12px;letter-spacing:.22em;
   text-transform:uppercase;color:rgba(255,255,255,.34);
   animation:sh-yukari 1s var(--e) 1s backwards}
@@ -337,7 +372,14 @@ html.t-notubes .sus-tubes{display:none!important}
 .sh-saat{font-variant-numeric:tabular-nums}
 
 /* ---------- kaydir isareti (sus: mobilde hic yok) ---------- */
-.sus-kaydir{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;
+/* ADANIN ALTINDA, DIP DIBE DEGIL (Enes): `top:100%` = `.sh-kap`in alt
+   kenari, `margin-top` de istenen bosluk. Absolute oldugu icin akisi
+   uzatmaz (hero boyu degismez), `.sh-kap` paralaks almadigi icin de
+   sayfayla kaymaz. Bosluk ve cizgi boyu ekran yuksekligine duyarli:
+   kisa pencerede once bosluk, sonra cizgi kisalir — gosterge kirpilmak
+   yerine kucululur. */
+.sus-kaydir{position:absolute;left:50%;top:100%;margin-top:clamp(22px,3.4vh,34px);
+  transform:translateX(-50%);z-index:4;
   display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;
   animation:sh-yukari-sus 1s var(--e) 1.35s forwards;pointer-events:none}
 @keyframes sh-yukari-sus{from{opacity:0;transform:translate(-50%,18px)}
@@ -345,13 +387,21 @@ html.t-notubes .sus-tubes{display:none!important}
 /* font-size 12px: 12 piksel tabani (eski.css 4155), 540'taki 9px'i ezer */
 .sus-kaydir span{font-family:var(--f-tek);font-size:12px;letter-spacing:.26em;
   text-transform:uppercase;color:rgba(255,255,255,.3)}
-.sus-kaydir i{position:relative;width:1px;height:44px;font-style:normal;overflow:hidden;
+.sus-kaydir i{position:relative;width:1px;height:clamp(30px,4.2vh,44px);font-style:normal;overflow:hidden;
   background:linear-gradient(180deg,rgba(239,35,60,.22),rgba(239,35,60,.04))}
 .sus-kaydir i::after{content:'';position:absolute;left:0;right:0;height:16px;
   background:linear-gradient(180deg,transparent,var(--red-soft),transparent);
   animation:sh-akis 2.1s var(--e2) infinite}
 @keyframes sh-akis{0%{transform:translateY(-18px);opacity:0}
   22%{opacity:1}78%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+
+/* COK KISA MASAUSTU PENCERESI: ada 554,4 + dolgu 212 + gosterge ~57 +
+   bosluk 22 toplami 745 px'i asar; bu boyun altinda gosterge ekrana
+   TAM giremez. Enes'in kurali "yarim kalmasin" — o yuzden gizlenir,
+   kirpilmis halde birakilmaz. Mobil zaten ayri kapida (<=900 px). */
+@media(min-width:901px) and (max-height:745px){
+  .sus-kaydir{display:none}
+}
 
 /* ---------- mobil sozlesme (madde 4) ----------
    Blur zaten yok · pin yok · suzulme transform-only oldugu icin kalir ·
@@ -411,12 +461,29 @@ html.t-notubes .sus-tubes{display:none!important}
     animation-range:exit 0% exit 100%}
   .sh-ic{animation:sh-par-ic linear both;animation-timeline:--sh-hero;
     animation-range:exit 0% exit 100%}
+  /* META SATIRI PARALAKSTAN MUAF (7 Eyl 2026 — Enes: "saat · Istanbul
+     Dubai · 7/24 ajan yazilari kaydirdikca asagi iniyor ve seridin icine
+     tasiyor; yerinde sabit kalsin, hareket etmesinler").
+     `.sh-ic` hero cikarken 110 px ASAGI iner (kaynak kunyesi, sapma 6).
+     Adanin EN ALTINDAKI satir meta oldugu icin bu 110 px dogrudan serit
+     turunda YUKARI CEKILEN seridin uzerine biniyordu — iki dogru karar
+     birbirine denk gelince ortaya cikan carpisma.
+     Cozum ters keyframe: AYNI zaman cizelgesi, AYNI aralik, ters isaret
+     -> net 0. DOM'a dokunulmadi, boylece mobildeki `order` deseni
+     (h1 1 · lede 2 · meta 3 · cta 4) ve kaynak sira sozlesmesi durur.
+     OPACITY BILINCLI OLARAK MUAF DEGIL: solma `.sh-ic` uzerinde kalir
+     (cocuk opacity'si ebeveyninkini geri alamaz — kompozit carpimdir);
+     sikayet konumdaydi, solma kaynagin kendi cikis davranisi. */
+  .sh-meta{animation:sh-par-sabit linear both;animation-timeline:--sh-hero;
+    animation-range:exit 0% exit 100%}
 }
 @keyframes sh-par-h{from{transform:none}to{transform:translateY(-15%)}}
 @keyframes sh-par-r{from{transform:none}to{transform:translateY(17%)}}
 /* içerik keyframe'i opacity taşıyor → from açıkça opak (H5 şartı);
    bu bir GİRİŞ değil ÇIKIŞ hareketi, taban her zaman opak doğar */
 @keyframes sh-par-ic{from{transform:none;opacity:1}to{transform:translateY(110px);opacity:.2}}
+/* meta'yi `.sh-ic`in 110 px'ine karsi yerinde tutar (net 0) */
+@keyframes sh-par-sabit{from{transform:none}to{transform:translateY(-110px)}}
 
 @media(prefers-reduced-motion:reduce){
   /* Durdurma seciciSI, hareketi VEREN seciciyle ayni ozgullukte olmali:

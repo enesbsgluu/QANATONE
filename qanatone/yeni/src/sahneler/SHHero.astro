@@ -87,9 +87,20 @@ const g = (k: string): string => T(s[k], dil);
       <span>{g('hm2')}</span><i></i><b>{g('hm3')}</b>
     </p>
   </div>
-  </div>
-
+  {/* KAYDIR GOSTERGESI ADANIN ALTINA TASINDI (7 Eyl 2026 — Enes:
+      "'kaydir' yazisi yarim kalmasin, cok az cekersen siritabilir.
+      Butonlarin altina cek, hepsi masaustu girisinde gorunur bir sekilde
+      dursun, kayma olmasin" + "dip dibe degil, butonlarin altinda guzel
+      bir bosluk birak").
+      ONCE `.sh-sahne`ye gore `bottom:30px` idi, yani HERO'nun alt
+      kenarina yasliydi. Hero kisa pencerelerde 100svh'yi asiyor
+      (olculdu: dogal boy 814,4 px) ve gosterge ekranin ALTINDA kaliyordu:
+      1280x720'de 64 px, 1366x768'de 16 px disarida — "yarim kalma" tam
+      buydu. Simdi `.sh-kap`in (icerik adasinin) altina, kendi bosluguyla
+      konumlanir; absolute oldugu icin hero'yu UZATMAZ ve `.sh-kap`
+      paralaks almadigi icin sayfayla birlikte KAYMAZ. */}
   <div class="sus-kaydir" aria-hidden="true"><span>{g('scr')}</span><i></i></div>
+  </div>
 </section>
 
 {/* TUP YUKLEYICI kabuk/efekt.js'te (tubes()): satir ici hali 1.699 B'ti ve

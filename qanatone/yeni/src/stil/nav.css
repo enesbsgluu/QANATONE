@@ -47,7 +47,19 @@
 
 /* -- çubuk (259-265 birebir) -- */
 .nv-bar{position:fixed;top:0;left:0;right:0;z-index:50;padding:20px var(--gut);
-  transition:padding .4s var(--e)}
+  transition:padding .4s var(--e),transform .38s var(--e)}
+/* NAVIN KENDI HAREKETI (7 Eyl 2026 — Enes: "nav bar sayfa asagi kaydirinca
+   yok olsun, yukari kaydirinca geri ciksin; bu nav'in KENDI hareketi
+   olacak, sayfa sayfa degil, genel davranisi bu").
+   Sinifin sahibi `/varlik/nav.js` (yon nobetcisi); burada yalnizca kilik
+   var. Ust perde de birlikte gider — cubuk kalkip perde kalirsa ekranin
+   ustunde sahipsiz bir gradyan kalirdi.
+   PROLOG ISTISNASI CSS'te DEGIL JS'te: film bolgesinde eski `fl-nav-kalk`
+   davranisi surer (Enes: "prolog suresince gecerli degil, o kisimda zaten
+   kaydirinca yok oluyor"), iki sinif ayni anda yazilmaz. */
+html.nv-gizli .nv-bar{transform:translateY(calc(-100% - 12px))}
+html.nv-gizli .nv-fade{opacity:0}
+.nv-fade{transition:opacity .38s var(--e)}
 .nv-bar.stuck{padding:12px var(--gut)}
 .nv-ic{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;
   gap:20px;padding:11px 12px 11px 20px;border-radius:999px;
@@ -163,11 +175,23 @@
   .nv-logo i img{height:25px}
   .nv-logo b{font-size:.98rem}
 }
-/* kaynak 2610: nav CTA'sı ≤640'ta gizlenir — dar ekranda logo+dil+
-   burger üçlüsüyle sıkışıyordu; çağrı zaten menünün içinde (.nv-mcta).
-   Sadakat denetimi 21 Ağu: yenide taşınmamıştı. */
+/* MOBIL CTA GERI GELDI, OLCEKLENEREK (7 Eyl 2026 — Enes: "mobilde nav
+   barda konusalim butonu yok, onu mobile gore olcekle ve getir").
+   KAYNAKTAN BILINCLI SAPMA: kaynak 2610 CTA'yi <=640'ta tumden GIZLIYOR
+   (dar ekranda logo+dil+burger ucluşuyle sikisiyor diye). Enes'in karari
+   bu satiri gecersiz kildi — cagri artik menunun icinde saklanmiyor,
+   cubukta duruyor. Sikismayi gizleme degil OLCEK cozuyor:
+     <=640  yazi .74rem · yatay dolgu 13px · yukseklik 40px
+     <=430  yazi .71rem · yatay dolgu 11px  (dil bloku zaten <=520'de
+            kalkiyor, acilan yeri CTA aliyor)
+   Yukseklik SABIT 40 px: dokunma hedefi olcumu (olc-mobil, esik 44) burger
+   ve dil dugmeleriyle ayni sinifta olsun diye kutu buyutuldu; hap gorunumu
+   yatay dolguyla korunur. */
 @media(max-width:640px){
-  .nv-cta{display:none}
+  .nv-cta{padding:0 13px;min-height:40px;font-size:.74rem;gap:6px}
+}
+@media(max-width:430px){
+  .nv-cta{padding:0 11px;font-size:.71rem}
 }
 @media(max-width:520px){
   .nv-lang{display:none}
@@ -236,7 +260,7 @@ main:has(.ana){padding-top:0}
 /* -- hareket azaltma: durduran seçici verenin AYNISI (H11);
      menü içeriği tam görünür, geçişler anlık -- */
 @media (prefers-reduced-motion: reduce){
-  .nv-bar,.nv-ic,.nv-dt svg,.nv-dp,.nv-di,.nv-din,.nv-df,.nv-cta,
+  .nv-bar,.nv-fade,.nv-ic,.nv-dt svg,.nv-dp,.nv-di,.nv-din,.nv-df,.nv-cta,
   .nv-burger i,.nv-burger i::before,.nv-burger i::after,
   .nv-lang a,.nv-m,.nv-mlg a,.nv-mcta a{transition:none}
   #nvAc:checked ~ .nv-m .nv-mlinks>a,

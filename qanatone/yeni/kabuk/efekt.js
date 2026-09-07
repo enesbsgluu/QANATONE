@@ -402,8 +402,12 @@ function tubes() {
 
 export function baslat() {
   try { tubes(); } catch (e) {}
-  /* nav koreografisi ayri ada — film markup'i yoksa parca inmez */
-  try { if (document.querySelector('.fl-yapis, #fl-son')) import('/varlik/nav.js').then((m) => m.kur()).catch(() => {}); } catch (e) {}
+  /* nav koreografisi ayri ada. 7 Eyl 2026: film KAPISI KALKTI — cubugun
+     yon davranisi artik "genel davranis" (Enes), yani her sayfada gecerli;
+     prolog istisnasi modulun KENDI icinde yasiyor. Ada ayri kaldigi icin
+     hicbir sayfanin satir ici JS butcesi degismez, yalnizca bir istek
+     eklenir (1 gun onbellekli statik varlik). */
+  try { import('/varlik/nav.js').then((m) => m.kur()).catch(() => {}); } catch (e) {}
   try { stars(); } catch (e) {}
   try { wordmark(); } catch (e) {}
   try { bit(); } catch (e) {}

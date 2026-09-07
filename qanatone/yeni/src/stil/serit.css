@@ -72,14 +72,34 @@
      1245+     : 822px (sabit)
    Yalnız masaüstü: mobilde `.sus-eller` ile hero aynı boyda, boşluk yok
    (ölçüldü: 390x844 ve 430x900'de boşluk 0). */
+
+/* SABITLER YENIDEN OLCULDU (7 Eyl 2026, KAYDIR turu). Hero'nun dolgusu
+   150/110 -> 120/92 ve meta'nin ust boslugu 52 -> 44 px oldugu icin
+   hero'nun DOGAL boyu 55,4 px kisaldi; bu formulun X'i tam o boydur,
+   yani eski sabitler artik seridi olmayan bir bosluk kadar yukari
+   cekiyordu. Yeni egri ayni yontemle (min-height kapatilip 20 px adimla
+   901-1600 taranarak) olculdu:
+     TR  901-1161 : 672,3 -> 720,2   egim 0,1842  -> 506px + 18.42vw
+     TR  1162-1244: 755,5 -> 766,3   egim 0,1800  -> 543px + 18vw
+     TR  1245+    : 766,4 (h1 clamp tavani)      -> 766px
+     EN  901-1041 : 699,7 -> 722,3   egim 0,1614  -> 554px + 16.14vw
+     EN  1042-1161: 726,8 -> 750,7   egim 0,2390  -> 473px + 23.9vw
+     EN  1162+    : TR egrisiyle CAKISIYOR (1181'de 755,5 ↔ 755,6),
+                    o yuzden EN'in ayri kurali orada bitiyor.
+   TR'deki 1161->1181 sicramasi (35,3 px) duruyor: lede bir satir
+   kisaliyor, kirilim yeri degismedi.
+   YAN SONUC: hero artik 766,4 px, yani yuksekligi >= 768 olan her
+   masaustu penceresinde 100svh'yi ASMIYOR — bu formul o pencerelerde
+   zaten 0 verir ve kol ile serit dogal olarak ayni cizgide bulusur.
+   Formul yalnizca <= 745 px gibi cok kisa pencerelerde is gorur. */
 @media(min-width:901px){
-  .ana .st-sahne{margin-top:min(0px,calc(100svh - (561px + 18.46vw)))}
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - (506px + 18.42vw)))}
 }
 @media(min-width:1162px){
-  .ana .st-sahne{margin-top:min(0px,calc(100svh - (585px + 19.08vw)))}
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - (543px + 18vw)))}
 }
 @media(min-width:1245px){
-  .ana .st-sahne{margin-top:min(0px,calc(100svh - 822px))}
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - 766px))}
 }
 /* ÜST DOLGU SIFIR — ASIL BOŞLUK BUYDU (7 Eyl 2026, ikinci ölçüm).
    Yukarıdaki `margin-top` şeridin KUTUSUNU kolun kırpma çizgisine oturttu
@@ -157,10 +177,10 @@
    kolun üstüne biniyordu — ölçüldü, kırmızıydı. Parçalanınca ≤1 px.
    TR tarafında böyle bir kırılma yok, orada tek doğru yetiyor. */
 @media(min-width:901px) and (max-width:1041.98px){
-  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (610px + 16.07vw)))}
+  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (554px + 16.14vw)))}
 }
 @media(min-width:1042px) and (max-width:1161.98px){
-  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (529px + 23.83vw)))}
+  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (473px + 23.9vw)))}
 }
 
 /* kenarlarda erime: şerit ekrana girip çıkarken kesilmiş görünmesin */
