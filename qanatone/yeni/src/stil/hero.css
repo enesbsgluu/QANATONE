@@ -187,7 +187,19 @@ html.t-notubes .sus-tubes{display:none!important}
 /* capraz yerlesim: insan eli ustte-solda, robot altta-sagda; parmak
    uclari ekranin kosegeni boyunca birbirine bakar */
 .sus-el-h{left:-2vw;top:-2vw;width:33vw}
-.sus-el-r{right:-2vw;bottom:-2vw;width:33vw}
+/* KOL KESILMESIN (7 Eyl 2026 — Enes: "robot elin bitisi kesilmis gibi
+   gozukuyor; normalde bitis noktasi kayan seridin baslangic noktasiydi").
+   OLCULDU (1920x1080): kol kutusu 683-1118, gorsel 685-1128; ama hem
+   `.sh-sahne` hem `.sus-eller` `overflow:hidden` ve ikisi de 1080'de
+   bitiyor -> gorselin son ~48 px'i KESILIYORDU. `#ticker` de 1080'de
+   basliyor, yani kesim tam serit sinirindaydi.
+   Arka plan opak siyahken kesim gorunmuyordu (kesilen yer de altindaki
+   de siyahti); `#bg` geri gelip zemin kizillasinca duz kesim cizgisi
+   ortaya cikti. Yani kesim YENI DEGIL, yeni olan GORUNUR olmasi.
+   CARE: taşma kaldirildi (bottom -2vw -> 0). Kol artik tam 1080'de,
+   yani seridin baslangicinda biter; kirpilacak parca kalmaz.
+   `.sus-el-h` (insan eli, ustte) DEGISMEDI — onun tasmasi kirpilmiyor. */
+.sus-el-r{right:-2vw;bottom:0;width:33vw}
 /* donus merkezi omuz tarafinda: kol disaridan salaniyormus gibi */
 .sus-el-h .sus-suzul{transform-origin:0 6%;animation:sh-suzulA 13s ease-in-out infinite}
 .sus-el-r .sus-suzul{transform-origin:100% 94%;animation:sh-suzulB 17.5s ease-in-out -4s infinite}
