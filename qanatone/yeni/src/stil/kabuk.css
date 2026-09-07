@@ -147,7 +147,14 @@ html.bitcursor .kb-tip.on{opacity:.9}
    "dis ceberinide suzulen kirmizi isik yap ve yaricapini daralt").
    Yaricap 38 -> 30 px. Isik ayri bir sozde ogede: conic-gradient bir yay
    cizer ve donerek "suzulur"; kenarlik sabit kalir, yalniz isik doner. */
-.kb-back{position:fixed;right:20px;bottom:20px;z-index:118;width:30px;height:30px;
+/* KONUM (7 Eyl 2026 — Enes: "prologu gec butonuyla cakisiyor, ust uste
+   biniyor; imlec tusunu biraz daha yukari tasi genel konum olarak").
+   OLCULDU: `.fl-kumanda` (Prologu gec) `right:16px; bottom:16px` ve
+   yaklasik 40 px yuksek -> ust kenari 56 px. `.kb-back` ise bottom 20 +
+   30 px = ust kenari 50 px; ikisi ust uste biniyordu.
+   bottom 20 -> 72: alt kenar 72'de baslar, kumandanin ust kenarindan
+   16 px yukarida kalir. Genel konum, yani her sayfada ayni. */
+.kb-back{position:fixed;right:20px;bottom:72px;z-index:118;width:30px;height:30px;
   border-radius:50%;display:grid;place-items:center;cursor:pointer;
   background:rgba(12,12,12,.75);border:1px solid rgba(239,35,60,.3);backdrop-filter:blur(10px);
   opacity:0;transform:translateY(8px);transition:.4s var(--e)}
