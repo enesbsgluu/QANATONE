@@ -23,6 +23,9 @@
    bedeli de gorunur oldu. Ithal `.catch` ile yutulur: dosya yoksa sayfa
    calismaya devam eder, yalnizca tup alani olmaz. */
 const R = document.documentElement;
+/* hero suslemesi tam cozunurlukte cizilmez: sahne %50 opakliktaki yumusak
+   bir isima, fark gorunmez ama piksel bedeli oranin KARESIYLE buyur. */
+const KAPAK = 1.25;
 
 export function kur() {
   const cv = document.querySelector('#tubes');
@@ -103,11 +106,43 @@ export function kur() {
   function kurulum() {
     import('/js/tubes.min.js').then((m) => {
       const F = m.default; if (typeof F !== 'function') return;
-      const d = window.devicePixelRatio || 1; let app = null;
-      try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => Math.min(d, 1.25) }); } catch (e) {}
+      /* ---- COZUNURLUK KAPAGI: DPR OYUNU DEGIL, KUTUPHANENIN KENDI KOLU
+         (8 Eyl 2026) ----
+         ESKI HAL: kurulum boyunca `window.devicePixelRatio` 1,25'e kilitlenip
+         sonra geri veriliyordu. IKI SEY BIRDEN YANLISTI:
+         1) KAPAK HIC CALISMIYORDU. tubes.min.js kendi kurulumunda
+            `r.minPixelRatio = 2, r.maxPixelRatio = 2` yaziyor ve #T()'de
+              let e = window.devicePixelRatio;
+              if (max && e > max) e = max; else if (min && e < min) e = min;
+            `min = 2` oldugu icin dpr 1,25 okunsa bile oran 2'ye YUKSELTILIYOR.
+            Olculdu (8 Eyl): dpr 1,25 iken tampon 2042x1386, etkin oran 2,00.
+            Kaynakta da (kok index.html 9092) ayni kapak vardi — yani yillardir
+            hicbir sey yapmiyordu.
+         2) "Geri verme" satiri dpr'yi kurulum anindaki SABIT degere KALICI
+            olarak donduruyordu (native davranis geri gelmiyordu); sayfanin
+            geri kalani zoom'u hic goremiyordu. `delete` de care degil:
+            `devicePixelRatio` window'un KENDI ozelligi, silinince ad tamamen
+            kayboluyor (ReferenceError, olculdu — kaynagin yorumu da bunu
+            soyluyor).
+         YENI HAL: `window.devicePixelRatio`a HIC DOKUNULMUYOR — dpr oyunu
+         tamamen kalkti, ikinci hata da kokten gitti. Kapak, kutuphanenin
+         kendi kolundan veriliyor: kurulumdan sonra min/max oran KAPAK'a
+         cekilip `three.resize()` cagriliyor.
+         OLCULDU (olc-tup-kontrol.cjs, 8 Eyl, uc kol ayni derlemede):
+           tampon 2,83 MP -> 1,11 MP (-%61)
+           hero kadrajda p95  Chrome/Intel UHD 47,1 -> 42,6 ms
+                              Brave/NVIDIA      11,9 ->  9,1 ms
+         Kazanc gercek ama KUCUK: entegre GPU'da alanin payi 29,7 ms, bunun
+         yalniz %15'i cozunurlukten geliyor — geri kalani sahnenin kendisi.
+         Yani bu satir sorunu COZMEZ, kodun zaten iddia ettigi seyi gercekten
+         yapar. Alanin kaderi ayri bir karar (8.09.2026 raporu). */
+      let app = null;
       try { app = F(cv, { tubes: { colors: ['#ef233c', '#8f0f21', '#ffffff'], lights: { intensity: 180, colors: ['#ef233c', '#ff4d63', '#ffffff', '#5a0d18'] } } }); } catch (e) {}
-      try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => d }); } catch (e) {}
       if (!app) return;
+      try {
+        const t = app.three;
+        if (t && typeof t.resize === 'function') { t.minPixelRatio = KAPAK; t.maxPixelRatio = KAPAK; t.resize(); }
+      } catch (e) {}
       cv.classList.add('on'); window.__tubes = app;
       const act = (on) => {
         try {

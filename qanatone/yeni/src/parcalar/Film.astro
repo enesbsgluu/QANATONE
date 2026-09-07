@@ -535,13 +535,19 @@ const satirla = (m: string): string[] => {
       if (!eski || !cv || tubesApp) return;
       try {
         const ayar = new Function('return ' + (eski as HTMLElement).dataset.tubes)();
-        const gercekDpr = devicePixelRatio || 1;
-        try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => Math.min(gercekDpr, 1.25) }); } catch {}
+        /* COZUNURLUK KAPAGI: `devicePixelRatio` OYUNU DEGIL, kutuphanenin
+           kendi kolu (8 Eyl 2026). Gerekce ve olcum kabuk/tup.js'te: eski
+           kapak tubes'un kendi `minPixelRatio = 2`si yuzunden HIC
+           calismiyordu, ustelik dpr'yi sayfa genelinde kalici donduruyordu.
+           Ayni kalip iki yerde duruyordu, ikisi de ayni sekilde duzeltildi. */
         /* yol degiskende: Vite derlemede cozmeye kalkmasin (kok varligi) */
         const tubesYol = '/js/tubes.min.js';
         import(/* @vite-ignore */ tubesYol).then((m: any) => {
           try { tubesApp = m.default(cv, ayar); if (tubesApp) { cv.classList.add('on'); KAYIT.eskiYuklendiMs = AN(); } } catch {}
-          try { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: () => gercekDpr }); } catch {}
+          try {
+            const t = (tubesApp as any)?.three;
+            if (t && typeof t.resize === 'function') { t.minPixelRatio = 1.25; t.maxPixelRatio = 1.25; t.resize(); }
+          } catch {}
         }).catch(() => {});
       } catch {}
     };

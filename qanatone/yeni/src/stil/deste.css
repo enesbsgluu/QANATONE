@@ -92,10 +92,31 @@
    `backdrop-filter` (Anayasa madde 7). Bunlar cihaz kısıtıyla
    SÖNDÜRÜLMÜYOR — tabanda hiç doğmuyorlar, masaüstü ekliyor (H4). */
 .sp-kart{position:sticky;top:calc(72px + var(--i,0)*10px);margin-bottom:18px}
-.sp-govde{display:grid;grid-template-columns:1fr;overflow:hidden;
+.sp-govde{position:relative;display:grid;grid-template-columns:1fr;overflow:hidden;
   border-radius:clamp(20px,2.4vw,30px);border:1px solid var(--line);
   background:var(--card);transform-origin:top center;
   color:var(--tx);text-decoration:none}
+
+/* GERI CEKILME PERDESI — KARTIN OPAKLIGI DEGIL (8 Eyl 2026).
+   Kaynak `deck()` (kok 11648) sonen karti `card.style.opacity` ile
+   soluklastiriyordu: `ov = 1 - t*.28`. Bu, kartin KENDISINI saydam yapar
+   — ve deste bir STICKY YIGIN oldugu icin kartin arkasinda bir onceki
+   kart durur. Sonuc, Enes'in bildirdigi filigran: "bir onceki projenin
+   aciklamalari soluk olarak beliriyor".
+   OLCULDU (olc-deste-sadakat.cjs, 8 Eyl, ayni mantiksal an, iki agac yan
+   yana): kusur KAYNAKTA DA VAR — zoom 1'de eski agac 0,72/0,72/0,91,
+   yeni agac 0,72/0,72/0,90, ikisinde de sizdiran kart 2. Yani tasima
+   hatasi degil, kaynagin kendi kusuru; SADAKAT SAPMASI olarak duzeltildi
+   (kaynagin GORUNTUSU korunur, mekanizmasi degil).
+   CARE: opaklik kartin uzerinden alinip SAYFA ZEMINI renginde bir perdeye
+   verildi. Kart opak kalir -> arkadaki kart sizmaz; perde `--bg` (#050505)
+   oldugu icin kart TEK BASINAYKEN sonuc birebir ayni piksel:
+     opacity .72 : .72*13 + .28*5 = 10,76
+     perde   .28 : .72*13 + .28*5 = 10,76
+   Perde `pointer-events:none` — `.sp-govde` bir <a>, tiklama yuzeyi
+   degismez. z-index 3: `.sp-yil` (2) ve icerik (1) uzerinde. */
+.sp-govde::after{content:'';position:absolute;inset:0;z-index:3;
+  pointer-events:none;background:var(--bg);opacity:0}
 
 .sp-gorsel{position:relative;min-height:186px;overflow:hidden;background:#0b0b0c}
 /* zemin ayrı katmanda: karta özel iki ton (--g1/--g2 kart üstünde) */
@@ -209,6 +230,15 @@
     animation-timeline:--sp-deste;
     animation-range:exit-crossing calc((var(--i) + 1)/var(--n)*100% - 100vh)
                     exit-crossing calc((var(--i) + 1)/var(--n)*100% - 18vh)}
+  /* perde AYNI cizelge, AYNI aralik — ayri animasyon cunku ayri oge.
+     Ikisi de bilesik ozellik (transform / opacity): kompozitorde kosar,
+     stil yeniden hesabi uretmez. Ozel ozellik (`@property`) uzerinden tek
+     animasyona sikistirilabilirdi ama o her karede ana iplikte stil
+     hesabi tetikler — olculmus tuzak (olc-surucu). */
+  .sp-kart:not(:last-child) .sp-govde::after{animation:sp-perde linear both;
+    animation-timeline:--sp-deste;
+    animation-range:exit-crossing calc((var(--i) + 1)/var(--n)*100% - 100vh)
+                    exit-crossing calc((var(--i) + 1)/var(--n)*100% - 18vh)}
 }
 
 /* 2. BASAMAK — desteklemeyen tarayıcıda IO tabanlı ADIM geçişi.
@@ -216,15 +246,18 @@
    mevcut değerden devam eder, sıfırdan başlamaz. Sınıfı ada betiği
    yazar; betik de yalnız bu koşulda kurulur. */
 @supports not (animation-timeline: view()){
-  .sp-govde{transition:transform .45s var(--e),opacity .45s var(--e)}
-  .sp-kart.sp-gecti .sp-govde{transform:scale(.94);opacity:.72}
+  .sp-govde{transition:transform .45s var(--e)}
+  .sp-govde::after{transition:opacity .45s var(--e)}
+  .sp-kart.sp-gecti .sp-govde{transform:scale(.94)}
+  .sp-kart.sp-gecti .sp-govde::after{opacity:.28}
 }
 
 /* Yedek yolun görünmez ölçüm izi: akışta duran sıfır yükseklikli
    işaret, kartın DÜZEN konumunu taşır (sticky kart taşıyamaz). */
 .sus-iz{display:block;height:0}
 
-@keyframes sp-cek{from{transform:scale(1);opacity:1}to{transform:scale(.94);opacity:.72}}
+@keyframes sp-cek{from{transform:scale(1)}to{transform:scale(.94)}}
+@keyframes sp-perde{from{opacity:0}to{opacity:.28}}
 
 /* ============ HOVER (yalnız gerçek imleçte) ============
    Dokunmatikte :hover TAKILI KALIR — kaynakta bu yüzden ayrı satırlar
@@ -256,8 +289,13 @@
      +1000 px'te kartlar 0,94/0,72 okuyordu. H11 bu turda tüm sahne
      animasyonlarını kapsayacak şekilde genişletildi. */
   .sp-kart:not(:last-child) .sp-govde{animation:none}
-  .sp-govde{transition:none}
+  /* H11 DERSI (perde 8 Eyl'de ayri ogeye tasindi): durdurma listesi
+     hareketi VEREN her seciciyi kapsamak zorunda — perde geride kalirsa
+     hareket azaltmada kartlar sessizce kararmaya devam ederdi. */
+  .sp-kart:not(:last-child) .sp-govde::after{animation:none;opacity:0}
+  .sp-govde,.sp-govde::after{transition:none}
   .sp-kart.sp-gecti .sp-govde{transform:none;opacity:1}
+  .sp-kart.sp-gecti .sp-govde::after{opacity:0}
   .sp-kart:active .sp-govde{transition:none}
   /* deste artik mobilde de pinli: durdurma sozlesmesi de her cihazda */
 }

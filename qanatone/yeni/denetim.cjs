@@ -1997,8 +1997,35 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          Sınır dar tutuldu: content'i boş OLMAYAN sözde-eleman (ör.
          content:'→') hâlâ kuralın içinde. Astro çıktısı tek iki nokta
          basıyor (:before) — ikisi de yakalanır. */
-      const bosSozde = (sec, gov) =>
-        /:{1,2}(before|after)\b/.test(sec) && /content\s*:\s*(''|"")/.test(gov);
+      /* KESKINLESTIRME (8 Eyl 2026, deste perdesi turu — GEVSETME DEGIL):
+         istisna KURAL bazindaydi, yani `content:''`u yazan kuralin
+         KENDISINDE opacity aranıyordu. Ayni sozde ogeyi ikinci bir kurala
+         bolen her yazim (ornek: perdenin hareket-azaltma satiri) yanlis
+         kirmizi veriyordu — oge iceriksiz oldugu halde. Istisna artik OGE
+         bazinda: `content:''` CSS'in HERHANGI bir kuralinda yaziliysa o
+         sozde oge iceriksizdir. Sinir aynen dar: content'i bos OLMAYAN
+         sozde oge (ornek: content:'→') kuralin ICINDE kalir, cunku kumeye
+         hic girmez. Virgullu secicide HER parca muaf olmak zorunda. */
+      const sozdeAnahtar = (parca) => {
+        const m = parca.trim().match(/([.#][\w-]+|\w+)\s*:{1,2}(before|after)\b/);
+        return m ? m[1] + '::' + m[2] : null;
+      };
+      const bosSozdeKume = new Set();
+      for (const { sec, gov } of duzKurallar) {
+        if (!/content\s*:\s*(''|"")/.test(gov)) continue;
+        for (const parca of sec.split(',')) {
+          const a = sozdeAnahtar(parca);
+          if (a) bosSozdeKume.add(a);
+        }
+      }
+      const bosSozde = (sec, gov) => {
+        if (!/:{1,2}(before|after)\b/.test(sec)) return false;
+        if (/content\s*:\s*(''|"")/.test(gov)) return true;
+        return sec.split(',').every((parca) => {
+          const a = sozdeAnahtar(parca);
+          return a !== null && bosSozdeKume.has(a);
+        });
+      };
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
         if (!SAHNE_ONEK.test(sec) || /:hover|:focus/.test(sec)) continue;
@@ -2050,9 +2077,33 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         }
         return false;
       };
+      /* BOS SOZDE-OGE ISTISNASI (8 Eyl 2026, deste perdesi turu):
+         H2'nin ta 19 Agu'dan beri tasidigi istisna H5'te YOKTU. Kural
+         "icerik sonuk dogmasin" diyor; `content:''` tasiyan bir sozde
+         ogenin icerigi yoktur, boyadigi sey zemin/perde/parilti — ve
+         perdenin SIFIRDAN baslamasi, icerigin TAM OPAK dogmasi demektir,
+         tersi degil. Ayni kume H2'de kuruluyor. */
+      const sozdeAnahtar5 = (parca) => {
+        const m = parca.trim().match(/([.#][\w-]+|\w+)\s*:{1,2}(before|after)\b/);
+        return m ? m[1] + '::' + m[2] : null;
+      };
+      const bosSozdeKume5 = new Set();
+      for (const { sec, gov } of duzKurallar) {
+        if (!/content\s*:\s*(''|"")/.test(gov)) continue;
+        for (const parca of sec.split(',')) {
+          const a = sozdeAnahtar5(parca);
+          if (a) bosSozdeKume5.add(a);
+        }
+      }
+      const iceriksizSozde = (sec) => /:{1,2}(before|after)\b/.test(sec)
+        && sec.split(',').every((parca) => {
+          const a = sozdeAnahtar5(parca);
+          return a !== null && bosSozdeKume5.has(a);
+        });
       const kusur = [];
       for (const { sec, gov } of duzKurallar) {
         if (!SAHNE_ONEK.test(sec) || /:hover|:focus/.test(sec)) continue;
+        if (iceriksizSozde(sec)) continue;
         for (const a of gov.matchAll(/animation\s*:\s*([^;]+)/g))
           for (const ad of a[1].split(/\s+/))
             if (kareler[ad] && /opacity\s*:/.test(kareler[ad]) && !opakBaslar(kareler[ad]))
