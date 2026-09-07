@@ -292,8 +292,29 @@ html.t-notubes .sus-tubes{display:none!important}
 /* em ağırlığı kaynak değeri 400 (kök: #hero h1 em italic 400) —
    sadakat denetimi 21 Ağu, 500'e kaymıştı */
 .sh-h1 em{font-style:italic;font-weight:400;color:rgba(255,255,255,.8)}
+/* "YOK." FILIGRANI KALKTI (7 Eyl 2026 — Enes: "basliktaki filigran
+   silinmis, 'yok' kismindaki filigran hala duruyor, onu da sil").
+   Ayni ailenin ikinci uyesi: `.sh-h1`in pembe halesi bu turda zaten
+   kalkmisti, `<b>yok.</b>` kendi KIZIL halesini tasimaya devam ediyordu
+   (`0 0 46px rgba(239,35,60,.8)` — 46 px yaricap, .8 saydamsizlik).
+   OLCULDU, uc kol yan yana (1920x1080, prolog atlanmis, kare kiyasi):
+     K bugun          : iki golge birlikte
+     A dar parilti    : yalniz 10 px
+     B golgesiz       : hic golge yok
+   46 px'lik hale TEK BASINA ~49.000 pikseli boyuyor (23.627 satir
+   kutusunun icinde + 25.336 disinda) — yani harfin cevresine yayilan
+   genis bir kizil ALAN. Enes'in "filigran" dedigi bu. 10 px'lik parilti
+   ise harfe yapisik: kutu kenarinda urettigi basamak SIFIR (A ile B
+   arasinda kenar farki yok) ve karede B'den ayirt edilemiyor.
+   HIPOTEZ CURUDU, KAYDA GECSIN: once bunun `.sh-l`in `overflow:hidden`
+   satir kutusunda KIRPILDIGI, yani `.sh-h1` halesiyle ayni dikdortgen
+   kusuru oldugu sanilmisti. Fark karesi bunu curuttu — hale kutunun
+   DISINA da tasiyor ve kenarda basamak yok (-8/-7 piksel, gurultu
+   duzeyinde). Kusur kirpma degil, halenin KENDISI.
+   O yuzden 46 px cikti, 10 px KALDI: kizil metin koyu kizil zeminde
+   kenarini korusun. */
 .sh-h1 b{font-weight:500;color:#ff2f4d;font-style:italic;
-  text-shadow:0 0 10px rgba(255,47,77,.55),0 0 46px rgba(239,35,60,.8)}
+  text-shadow:0 0 10px rgba(255,47,77,.55)}
 /* sapma 3: perde araligi %114 -> %30, metin ilk kareden boyali */
 @keyframes sh-rise{from{transform:translateY(30%)}}
 
