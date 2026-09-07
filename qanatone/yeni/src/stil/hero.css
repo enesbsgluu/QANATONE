@@ -468,3 +468,24 @@ html.t-notubes .sus-tubes{display:none!important}
   .sus-kaydir{animation:none;opacity:1}
   .sus-kaydir i::after{animation:none} /* .sus-halka reduce kurali temel.css'te */
 }
+
+
+/* KOL SERIDIN ARKASINA GIRER (7 Eyl 2026 — Enes: "robot kolu kayan barin
+   bitimine tam hizala, hatta bir tik arkasina girsin; boylece o aradaki
+   bosluk goruntusu hic olmaz").
+   OLCULDU (1920x1080): kol kutusu zaten 1118'e kadar iniyor ve `#ticker`
+   1080'de basliyor — yani kol seridin 38 px ICINE giriyor. Gorunmuyordu
+   cunku hem `.ana .sh-sahne` hem `.sus-eller` `overflow:hidden` ve ikisi
+   de 1080'de bitiyor; tasan parca kirpiliyordu.
+   CARE iki adim:
+     1. Kirpma `clip` + `overflow-clip-margin` ile YALNIZ bu kadar
+        gevsetilir — `visible` YAPILMADI: `.sus-a2/.sus-a3` atmosfer
+        katmanlari yanlardan tasiyor ve serbest birakilsalar yatay
+        kaydirma dogurabilirdi (olculen deger asagida kayitli).
+     2. Serit kolun USTUNE alinir (`#ticker` z-index), boylece kol onun
+        ARKASINA girer — Enes'in istedigi "bir tik arkasi".
+   Yalniz masaustu: mobilde bu sorun yok (Enes: "zaten ic ice"). */
+@media(min-width:901px){
+  .ana .sh-sahne{overflow:clip;overflow-clip-margin:140px}
+  .sus-eller{overflow:clip;overflow-clip-margin:140px}
+}

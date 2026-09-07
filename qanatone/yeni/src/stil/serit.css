@@ -29,7 +29,16 @@
    ozgullukce sade sinif seciciyi yener ve seridin kendi dolgusu hic
    yururluge girmez (hero'da yasandi, gercek tarayicida yakalandi).
    Bekcisi denetimdeki H10. */
+/* SERIT KOLUN USTUNDE (7 Eyl 2026 — Enes: "robot kolu kayan barin
+   bitimine tam hizala, hatta bir tik arkasina girsin").
+   `.sus-eller` z-index:2 tasiyor; serit ise akista SONRA gelmesine ragmen
+   `static` oldugu icin o yigina giremiyor ve kol seridin USTUNDE
+   kaliyordu. `position:relative` + z-index:3 ile serit one alindi, kol
+   artik onun ARKASINA giriyor. Hero'nun kirpmasi ayrica gevsetildi
+   (hero.css, `overflow-clip-margin`), yoksa kol serit sinirinda
+   kirpiliyordu. */
 .ana .st-sahne{padding:clamp(30px,3.4vw,52px) 0;overflow:hidden;
+  position:relative;z-index:3;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 
 /* kenarlarda erime: şerit ekrana girip çıkarken kesilmiş görünmesin */
