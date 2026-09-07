@@ -218,9 +218,24 @@ html.t-notubes .sus-tubes{display:none!important}
 .sh-ic{position:relative;max-width:940px;margin:0 auto}
 /* metnin altindaki zemin koyulasir: kizil sis yazinin icinden degil
    cevresinden gecer, boylece beyaz beyaz kirmizi kirmizi okunur */
+/* METIN ARKASI KARARTMA — BANDI BU CIZIYORDU (7 Eyl 2026).
+   Enes "giris kisminda kosede fraktal gibi bir katman" dedi. Once el
+   katmanlarini (.sus-suzul ::before/::after) yumusattim; ISE YARAMADI.
+   Ayirma olcumu: iki el katmani da `display:none` iken bant DURUYORDU,
+   `#bg` bile tamamen kapatilinca duruyordu — yani kaynak baskaydi.
+   `elementsFromPoint` de gostermedi cunku SOZDE OGE. Elenerek bulundu:
+   `.sh-ic::before`, metnin arkasina konan koyu elips.
+   Neden bant gorunuyordu: `.56 -> .3 (%54) -> 0 (%78)` uc duraga ragmen
+   son gecis (.3'ten 0'a %24 mesafede) kizil zemin uzerinde gorunur bir
+   kenar biraktiriyordu — koyu elipsin siniri, kosegen bir bant gibi
+   okunuyordu.
+   CARE: tepe hafif dusuruldu, ARA DURAK eklendi ve etek %78 -> %96'ya
+   yayildi; boylece sinir yumusar ama metnin arkasindaki karartma (asil
+   isi: okunurluk) korunur. */
 .sh-ic::before{content:'';position:absolute;left:50%;top:47%;z-index:-1;
   transform:translate(-50%,-50%);width:min(1220px,124%);height:120%;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(3,3,4,.56),rgba(3,3,4,.3) 54%,transparent 78%)}
+  background:radial-gradient(closest-side,rgba(3,3,4,.5),rgba(3,3,4,.34) 42%,
+    rgba(3,3,4,.16) 68%,rgba(3,3,4,.05) 84%,transparent 96%)}
 
 .sh-rozet{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);margin-bottom:34px}
