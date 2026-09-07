@@ -682,6 +682,18 @@ export function baslat(bolum: HTMLElement): () => void {
   let yx = 0, yv = 0, yxOnce = 0, birikim = 0;
   /* durusta akis: son kullanici girdisi ani, kaydirma px birikimi, bizim scrollBy'imizin dogurdugu scroll olayini ayirt etme */
   let sonGirdi = 0, akisPx = 0;
+  /* AKIS ILK GIRDIYI BEKLER (7 Eyl 2026 — Enes: "prolog direkt sayfa
+     acilinca minik minik surekli hareket ediyor... hafif hafif akmaya
+     basliyor KAYDIRMADAN").
+     Sebep: `sonGirdi` 0 basliyordu, yani `simdi - sonGirdi` daha ilk
+     karede AKIS_BEKLE_MS'i asiyor ve akis sayfa acilir acilmaz
+     devreye giriyordu. Olculdu (canli, hic kaydirmadan): scrollY
+     0 -> 25 -> 68 -> 112 -> 156 -> 199 -> 243, yaklasik 36 px/sn.
+     Ozellik KALDIRILMADI — 28 Agu'daki "durusta akis" karari duruyor;
+     yalnizca ziyaretci FILME BIR KEZ DOKUNANA kadar beklemesi saglandi.
+     Boylece acilista sayfa hareketsiz durur, kaydirma birakildiktan
+     sonraki yumusak devam ise aynen korunur. */
+  let girdiOldu = false;
   let hedefOnce = 0, hedefHiz = 0, hedefDurdu = 0;   /* hedef hizi ve kac fizik adimidir durdugu */
   /* hizalama: birakis basina BIR kez. Yalniz gercek kullanici girdisinde
      sifirlanir (girdi()), kendi scrollTo'muzda degil. */
@@ -695,7 +707,7 @@ export function baslat(bolum: HTMLElement): () => void {
 
     /* --- DURUSTA AKIS: kullanici sessizse sayfayi kendimiz kaydiririz (tek kaynak scrollY) --- */
     IZ.akiyor = false;
-    if (IZ.akis > 0 && ilkKareGecti && tamponAcik && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
+    if (IZ.akis > 0 && girdiOldu && ilkKareGecti && tamponAcik && simdi - sonGirdi > AKIS_BEKLE_MS && !document.hidden) {
       const sonPx = ust + yol;                                   /* rayin sonu */
       if (scrollY < sonPx - 1) {
         /* yavas bolgede ayni film-sn daha cok px ister (Is B) */
@@ -909,7 +921,7 @@ export function baslat(bolum: HTMLElement): () => void {
   };
 
   /* kullanici girdisi: akisi durdurur (scroll olayi sayilmaz — bizim scrollBy da scroll dogurur) */
-  const girdi = () => { sonGirdi = performance.now(); akisPx = 0; hizalandi = false; tik(); };
+  const girdi = () => { girdiOldu = true; sonGirdi = performance.now(); akisPx = 0; hizalandi = false; tik(); };
   for (const ad of ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'] as const) addEventListener(ad, girdi, { passive: true });
   olc();
   etkinYap(S[0]);
