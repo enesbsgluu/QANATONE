@@ -15,6 +15,27 @@ const { dil = 'tr' } = Astro.props;
 const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 
+/* HERO 3B TUPLERI — PANEL ANAHTARI (8 Eyl 2026, Enes).
+   Panelde bu tus ZATEN VARDI (admin.html 383: "Hero 3B tupler" ->
+   theme.motion.tubes) ve kaynak onu okuyordu (kok 7270:
+   `if(!off(m.tubes) && m.level!=='off' && window.__tubesInit) __tubesInit()`).
+   Kaynagin kendi yorumu vaadi de yaziyordu: "yalnizca applyTheme() 'tupler'
+   anahtarini acik buldugunda yukleniyor. Kapaliysa tek bayt bile inmiyor."
+   GOCTE BU BAG TASINMAMISTI: tuval kosulsuz basiliyor, `tup.js` de onu
+   gorunce kuruyordu — yani paneldeki tus HICBIR SEY YAPMIYORDU.
+   Bag burada kuruluyor: anahtar kapaliysa tuval HIC BASILMAZ, `tup.js`
+   `if (!cv) return` ile cikar, 775 KB kutuphane (210 KB gzip) inmez,
+   prefetch de olmaz. Prolog anahtariyla ayni aile, ayni desen.
+   NEDEN BURADA, kabuk-derle'de degil: prolog yuvasi URETILEN DOSYA cunku
+   Astro'nun modul grafigi film.css'i sayfaya bagliyordu; tubes.min.js
+   `public/` altinda ve dinamik ithal — grafige hic girmiyor, o yuzden
+   sade kosul yeterli.
+   `level` de kaynaktaki gibi kapida: genel hareket seviyesi 'off' ise
+   sus katmani da yok. */
+const mo: any = (icerik.theme && (icerik.theme as any).motion) || {};
+const kapali = (v: any) => v === 0 || v === false || v === 'off' || v === '0';
+const tuplerAcik = !kapali(mo.tubes) && mo.level !== 'off';
+
 /* Panelden gelen tek HTML parcasi bu satir; suzgec artik icerik.ts'te
    TEK yardimci fonksiyon (Anayasa madde 6). Hero'nun izin kumesi
    degismedi: yalniz <em> ve <b> (suz'un varsayilani). Cikti bayti
@@ -29,8 +50,10 @@ const g = (k: string): string => T(s[k], dil);
   {/* TUPLER (sokum turu, 4 Eyl): kaynak markup 4527, CSS 399-401 — WebGL
       tup alani kok js/tubes.min.js'ten (devir sahnesiyle AYNI kaynak),
       bosta dinamik ithal; yalniz hero ekrandayken calisir (IO play/pause,
-      kaynak 9077-9133). Dar ekran / dokunmatik / azaltma / t-notubes: yok. */}
-  <canvas id="tubes" class="sus-tubes" aria-hidden="true"></canvas>
+      kaynak 9077-9133). Dar ekran / dokunmatik / azaltma / t-notubes: yok.
+      PANEL ANAHTARI (8 Eyl): kapaliysa tuval hic basilmaz — gerekce
+      yukarida, frontmatter'da. */}
+  {tuplerAcik && <canvas id="tubes" class="sus-tubes" aria-hidden="true"></canvas>}
   <div class="sus-eller" aria-hidden="true">
     <div class="sus-el sus-el-h"><span class="sus-suzul">
       <picture>
