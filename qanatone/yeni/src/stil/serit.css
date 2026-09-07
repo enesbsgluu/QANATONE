@@ -29,17 +29,139 @@
    ozgullukce sade sinif seciciyi yener ve seridin kendi dolgusu hic
    yururluge girmez (hero'da yasandi, gercek tarayicida yakalandi).
    Bekcisi denetimdeki H10. */
-/* SERIT KOLUN USTUNDE (7 Eyl 2026 — Enes: "robot kolu kayan barin
-   bitimine tam hizala, hatta bir tik arkasina girsin").
-   `.sus-eller` z-index:2 tasiyor; serit ise akista SONRA gelmesine ragmen
-   `static` oldugu icin o yigina giremiyor ve kol seridin USTUNDE
-   kaliyordu. `position:relative` + z-index:3 ile serit one alindi, kol
-   artik onun ARKASINA giriyor. Hero'nun kirpmasi ayrica gevsetildi
-   (hero.css, `overflow-clip-margin`), yoksa kol serit sinirinda
-   kirpiliyordu. */
 .ana .st-sahne{padding:clamp(30px,3.4vw,52px) 0;overflow:hidden;
-  position:relative;z-index:3;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+/* ŞERİT BOŞLUĞA ÇIKAR (7 Eyl 2026 — Enes: "kayan barı o aradaki boşluğa
+   çıkart, sorun böylece çözülecek").
+
+   BOŞLUĞUN KAYNAĞI ÖLÇÜLDÜ — kol da şerit de yerinde, arada kalan bant
+   hero'nun kendi taşma payı:
+     `.sus-eller` (robot kolun katmanı) `height:100svh` ile İLK EKRANA
+     sabitli, `.sh-sahne` ise `min-height:100svh` + içerik. İçerik uzunsa
+     hero 100svh'yi aşar; kol o aşan payın ÜSTÜNDE, 100svh çizgisinde
+     kırpılır, şerit ise hero'nun ALT kenarında başlar. Aradaki fark
+     doğrudan boşluk olarak görünür:
+       hero doğal yüksekliği (ölçüldü, min-height kapatılarak):
+         901px→727,6 · 1024→747,3 · 1100→762,4 · 1200→814,9 · ≥1280→821,7
+         (≥1280'de h1 clamp'i tavana vurduğu için sabitlenir)
+       boşluk = max(0, doğal − 100svh)
+         1536x780→41,7 · 1366x768→53,7 · 1280x720→101,7 · 1920x1080→0
+   Yani UZUN ekranda boşluk hiç yok (kol zaten şeridin sınırında kesilir),
+   KISA ekranda açılıyor — Enes'in gördüğü durum bu.
+
+   ÇARE: şerit tam o pay kadar yukarı çekilir, üst kenarı kolun kırpıldığı
+   çizgiye oturur. Enes'in tarifi birebir: "bitiş noktası kayan şeridin
+   başlangıç noktasıydı". Kol OYNAMAZ — giriş kadrajı korunur (önceki
+   turda kolu aşağı kaydırmak reddedildi).
+
+   `min(0px, …)` ŞART: boşluk yokken (uzun ekran) değer POZİTİF çıkar ve
+   şeridi aşağı iterdi; min() onu 0'da tutar, yani kural yalnız boşluk
+   varken devreye girer.
+   SABİT TEK PX OLMAZ — ölçüldü: tek sabitle (822px) yazılınca 1024x768'de
+   (doğal 747,3 < 768, yani gerçek boşluk 0) şerit 54 px fazla yukarı
+   çıkıyordu. Doğal yükseklik genişlikle DEĞİŞİYOR, çünkü h1 clamp'i ve
+   lede'nin satır sarması genişliğe bağlı. 20 px adımla tarandı:
+     901→727,6 · 1021→746,9 · 1161→775,6 ‖ 1165→807,1 · 1241→821,6
+     · 1261 ve üstü→821,7 (clamp tavanı)
+   1161→1165 arasında 31,5 px'lik SIÇRAMA var (lede bir satır kısalıyor);
+   kırılım oraya konuldu. Her aralık kendi doğrusuyla yazılır — eğim
+   ölçülen iki uçtan çıkar, `vw` katsayısı da odur:
+     901-1161  : 727,6 + 0,1846·(w-901)  = 561px + 18,46vw
+     1162-1244 : 807,1 + 0,1908·(w-1165) = 585px + 19,08vw
+     1245+     : 822px (sabit)
+   Yalnız masaüstü: mobilde `.sus-eller` ile hero aynı boyda, boşluk yok
+   (ölçüldü: 390x844 ve 430x900'de boşluk 0). */
+@media(min-width:901px){
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - (561px + 18.46vw)))}
+}
+@media(min-width:1162px){
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - (585px + 19.08vw)))}
+}
+@media(min-width:1245px){
+  .ana .st-sahne{margin-top:min(0px,calc(100svh - 822px))}
+}
+/* ÜST DOLGU SIFIR — ASIL BOŞLUK BUYDU (7 Eyl 2026, ikinci ölçüm).
+   Yukarıdaki `margin-top` şeridin KUTUSUNU kolun kırpma çizgisine oturttu
+   (ölçüldü: 0,3 px). Enes yine boşluk gördü — çünkü ölçtüğüm şey yanlıştı:
+   kutu kenarı değil, GÖZE GÖRÜNEN sınır önemli. Gerçek ekran karesinde
+   piksel sayılarak ölçüldü:
+     kolun BOYANAN son satırı 432,8 · şeridin üst çizgisi 433,3  → 0,8 px
+     kolun BOYANAN son satırı 432,8 · LOGOLARIN üst kenarı 490   → 57,1 px
+   Yani kol çizgiye değiyordu ama logolara 57 px vardı; aradaki koyu bant
+   şeridin kendi `padding-top`u (clamp 30-52px). "Kayan bar" göz için
+   logolardır, çizgi değil.
+   ÜÇ HAL YAN YANA ÖLÇÜLDÜ (kol→logo boşluğu):
+     B bugünkü            57,1 px
+     C şeridi dolgu kadar  5,1 px — ELENDİ: kol logoların HİZASINA iniyor
+       ve onları örtüyor. Logolar içeriktir (denetim: "Logolar İÇERİKTİR"),
+       süsün altında kalamaz.
+     D üst dolgu 0         5,1 px — SEÇİLDİ: kol çizgide bitiyor, logolar
+       hemen altında başlıyor, örtüşme yok.
+   Kalan 5,1 px logo kutularının kendi iç payı, kaldırılamaz ve gerekmez.
+   Yalnız masaüstü — mobilde bu boşluk zaten yok, alt dolgu da elleniyor
+   değil (sonraki bölümle arasındaki nefes tasarımın parçası). */
+@media(min-width:901px){
+  .ana .st-sahne{padding:clamp(15px,1.7vw,26px) 0}
+}
+/* DOLGU YARIYA, AMA SIMETRIK (7 Eyl 2026 — Enes: "markaların kaydığı
+   bölgeyi şimdiki düzene göre ortala").
+   Ilk hamlede yalniz `padding-top` sifirlanmisti: kol→logo boslugu
+   57,1 → 5,1 px'e indi ama bant asimetrik kaldi (ustte 0, altta 52,8) ve
+   logolar ust cizgiye yapisti. Dolgu iki tarafta da yariya cekilince
+   logolar bandin ORTASINA oturuyor ve bandin yuksekligi neredeyse
+   degismiyor — olculdu:
+     onceki (0 / 52,8) : bant 96,1 px · logo bandin en ustunde
+     simdiki (26 / 26) : bant 95,3 px · logo ortada · kol→logo ~31 px
+   Bandin UST cizgisi kolun bitis cizgisinde kalir (yukaridaki `margin-top`
+   kurallari), yani kol seride degmeye devam eder. */
+
+/* ŞERİT HERO'NUN ATMOSFERİNİN ÜSTÜNE ALINIR (7 Eyl 2026 — Enes: "şeridin
+   üst kısmının bir bölümü o alanın altına girmiş, şerit genişliği üstten
+   kesilmiş gibi, o bölgede görünmeyen bir gradyan ya da katman var").
+   VARDI. Teşhis: şeridin zemini geçici olarak parlak yeşile boyandı,
+   yeşilin GÖRÜNDÜĞÜ ilk satır sütun sütun okundu; sonra adaylar tek tek
+   kapatıldı (nöbetçi: zemin kırmızıya çevrilince yeşil hiç bulunmuyor —
+   ölçüm düzeneği kendini doğruluyor). Şeridin üst kenarına göre sapma:
+     TEMEL                                   x784'te 33,9 px ÖRTÜLÜ
+     .sus-a1 / .sus-a2 / .sus-a3 kapalı      33,9  (değişmedi)
+     .sus-tubes / .sus-eller / #bg kapalı    33,9  (değişmedi)
+     .sus-a4 kapalı                           0,3  ← SUÇLU
+     şerit z-index:1                          0,3  ← ÇARE
+   `.sus-a4` hero atmosferinin alt siyah gradyanı (`transparent 34%` →
+   `rgba(5,5,5,.6) 78%` → `#050505 100%`), kutusu hero kadar ve alt kenarı
+   tam 389 — ölçülen örtme derinliğiyle birebir. Şerit yukarı çekilince
+   hero'nun İÇİNE giriyor, `.sus-atmo` ise `z-index:0` taşıyor; şerit
+   `static` olduğu için konumlandırılmış atmosfer ondan SONRA boyanıyor ve
+   şeridin üst bandını siyahla kapatıyordu.
+   `z-index:1` SEÇİLDİ, 2 veya 3 DEĞİL: `.sus-eller` (robot kol) z-index:2
+   taşır; şerit 1'de kalınca kol şeridin ÜSTÜNDE kalmaya devam eder —
+   logoların önüne geçen bir kol istemiyoruz ama kolun ucu da şeridin
+   arkasına saklanmasın. `.sus-tubes` de z-index:1'dir; şerit DOM'da ondan
+   sonra geldiği için eşitlikte şerit üstte kalır (ölçüldü).
+   `.sus-a4`'ü silmek YANLIŞ olurdu: o gradyan hero'nun kendi alt geçişi,
+   şeridin sorunu değil — yalnız boyama sırası yanlıştı. */
+@media(min-width:901px){
+  .ana .st-sahne{position:relative;z-index:1}
+}
+/* EN ADASI, YALNIZ 901-1161: İngilizce lede bu genişliklerde bir satır
+   fazla sarıyor ve hero ~27-31 px daha uzun oluyor (ölçüldü: 901→755
+   · 1021→774,3 · 1161→806,1; TR'de aynı yerlerde 727,6 / 746,9 / 775,6).
+   TR doğrusu bırakılınca EN'de 27 px boşluk kalıyordu — ölçümde sarıydı.
+   1181'den itibaren iki dil AYNI değere oturur (810,9 / 815,2 / 821,6),
+   o yüzden üst sınır konuldu: yoksa bu seçici (0,3,1) yukarıdaki
+   `.ana .st-sahne` (0,2,0) kurallarını özgüllükle ezer ve geniş
+   ekranlarda yanlış değeri dayatırdı.
+   İKİ PARÇA, tek doğru değil: EN eğrisi 1041'de kırılıyor (eğim 0,161 →
+   0,238). Tek doğruyla yazıldığında sapma ±4,5 px'e çıkıyor ve şerit
+   kolun üstüne biniyordu — ölçüldü, kırmızıydı. Parçalanınca ≤1 px.
+   TR tarafında böyle bir kırılma yok, orada tek doğru yetiyor. */
+@media(min-width:901px) and (max-width:1041.98px){
+  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (610px + 16.07vw)))}
+}
+@media(min-width:1042px) and (max-width:1161.98px){
+  html[lang="en"] .ana .st-sahne{margin-top:min(0px,calc(100svh - (529px + 23.83vw)))}
+}
 
 /* kenarlarda erime: şerit ekrana girip çıkarken kesilmiş görünmesin */
 .st-pencere{display:flex;align-items:center;overflow:hidden;

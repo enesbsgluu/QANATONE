@@ -81,18 +81,8 @@ html.t-notubes .sus-tubes{display:none!important}
   background:radial-gradient(closest-side,rgba(239,35,60,.30),transparent 84%)}
 .sus-a3{right:-14%;bottom:-20%;width:66vw;height:58vw;
   background:radial-gradient(closest-side,rgba(160,16,36,.36),transparent 86%)}
-/* ALT UCTAKI TAM SIYAH KALKTI (7 Eyl 2026 — Enes: "kayan bar ve robot
-   elin oldugu kisimda gorunmeyen bir gradyan var gibi... arada bir
-   gradyan varsa onu yok et").
-   Bu katman hero'nun alt %22'sini `#050505`e kadar goturuyordu. Arka
-   plan opak siyahken fark edilmiyordu; `#bg` geri gelip zemin
-   kizillasinca kol ile serit arasinda DUZ SIYAH BIR BANT olarak
-   sirittı — Enes'in "asagi kaydirinca gorunen bosluk" dedigi sey bu.
-   Ust duraklar korundu (gecisin kendisi duruyor), yalniz alt uc
-   seffaflastirildi: artik zemin (kizil #bg) sonuna kadar gorunur ve
-   kol seritle kesintisiz bulusur. */
 .sus-a4{inset:0;border-radius:0;
-  background:linear-gradient(180deg,transparent 34%,rgba(5,5,5,.28) 78%,rgba(5,5,5,0) 100%)}
+  background:linear-gradient(180deg,transparent 34%,rgba(5,5,5,.6) 78%,#050505 100%)}
 
 /* ---------- eller ----------
    Uc katman, her katmanin TEK transform sahibi var:
@@ -174,29 +164,12 @@ html.t-notubes .sus-tubes{display:none!important}
    yumusatmistim; OLCUM CURUTTU: ikisi de display:none iken bant duruyordu
    (hatta tum #bg kapaliyken bile). Yani yanlis katmandi ve degisiklik
    goze bir sey katmadi — kaynak degerlere donuldu. */
-/* ALT TASMA KALDIRILDI (7 Eyl 2026 — Enes: "kayan bar ve robot elin
-   oldugu kisimda gorunmeyen bir gradyan var gibi").
-   Kolun kendisini serit sinirinda bitirmek YETMEDI: bu iki katman da
-   kolun kutusundan TASIYOR ve `overflow:hidden` onlari 1080'de kesiyordu,
-   yani kesim cizgisi golgeden geliyordu. Olculdu (1920x1080):
-     ::before  586-1150  (inset:-14% -> altta 62 px tasma)
-     ::after   717-1115  (bottom:-6% -> 35 px tasma) · rgba(0,0,0,.55)
-   Enes'in "gorunmeyen gradyan" dedigi sey `::after`: %55 opakliktaki
-   siyah golge, kolun altini ve serit sinirini karartiyordu.
-   YALNIZ ALT KENAR degisti; ust/yan tasmalar ve gradyan degerleri
-   DEGISMEDI — golgenin isi (kolun altina derinlik) duruyor, yalnizca
-   kirpilan parca kalmiyor.
-   `bottom:0` DEGIL `bottom:14px`: `.sus-suzul` 13-17 sn'lik salinimla
-   donuyor, kutusu kolun alt kenarini ~10 px asabiliyor. Sifir verince
-   olcumde 10 px kirpma kaliyordu; 14 px'lik pay salinimin tepesini de
-   iceri aliyor ve kesim SIFIRA iniyor. */
-.sus-suzul::before,.sus-el::before{content:'';position:absolute;
-  top:-14%;left:-14%;right:-14%;bottom:14px;
+.sus-suzul::before,.sus-el::before{content:'';position:absolute;inset:-14%;
   z-index:0;pointer-events:none;
   background:radial-gradient(58% 58% at 50% 52%,rgba(239,35,60,.2),transparent 72%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 .sus-suzul::after,.sus-el::after{content:'';position:absolute;left:6%;right:6%;
-  top:16%;bottom:14px;z-index:0;pointer-events:none;
+  top:16%;bottom:-6%;z-index:0;pointer-events:none;
   background:radial-gradient(52% 46% at 50% 62%,rgba(0,0,0,.55),transparent 74%);
   opacity:0;animation:sh-hale 1.6s var(--e) .2s forwards}
 /* VARSAYILAN = KAYNAK: tasiyici salanan cocuk, ebeveyndekiler kapali. */
@@ -214,25 +187,20 @@ html.t-notubes .sus-tubes{display:none!important}
 /* capraz yerlesim: insan eli ustte-solda, robot altta-sagda; parmak
    uclari ekranin kosegeni boyunca birbirine bakar */
 .sus-el-h{left:-2vw;top:-2vw;width:33vw}
-/* KOL KESILMESIN (7 Eyl 2026 — Enes: "robot elin bitisi kesilmis gibi
-   gozukuyor; normalde bitis noktasi kayan seridin baslangic noktasiydi").
-   OLCULDU (1920x1080): kol kutusu 683-1118, gorsel 685-1128; ama hem
-   `.sh-sahne` hem `.sus-eller` `overflow:hidden` ve ikisi de 1080'de
-   bitiyor -> gorselin son ~48 px'i KESILIYORDU. `#ticker` de 1080'de
-   basliyor, yani kesim tam serit sinirindaydi.
-   Arka plan opak siyahken kesim gorunmuyordu (kesilen yer de altindaki
-   de siyahti); `#bg` geri gelip zemin kizillasinca duz kesim cizgisi
-   ortaya cikti. Yani kesim YENI DEGIL, yeni olan GORUNUR olmasi.
-   ILK CAREM YANLIS YONDEYDI: kolu yukari cektim (bottom 0). Enes:
-   "acilista gorüntu sirtmiyor, ASAGI KAYDIRINCA aradaki bosluk
-   gozukuyor... en mantiklisi kolu asagi seride dogru kaydirmak ve arada
-   bir gradyan varsa onu yok etmek". Kolu yukari cekmek acilis kadrajini
-   da degistiriyordu. Tasma geri kondu.
-   ASIL BOSLUK `.sus-a4`ten geliyordu (asagida) — kol degil, atmosferin
-   alt ucundaki TAM SIYAH bant. Kesim seridin sinirinda olur ve serit
-   onu orttugu icin gorunmez.
-   `.sus-el-h` (insan eli, ustte) DEGISMEDI. */
-.sus-el-r{right:-2vw;bottom:-2vw;width:33vw}
+.sus-el-r{right:-2.05vw;bottom:0vw;width:33vw}
+/* ROBOT EL SAG USTE CEKILDI (7 Eyl 2026 — Enes: "robot eli biraz sag uste
+   cekmemiz lazim, cok az"). Deger canli ayar paneliyle Enes'in kendi
+   gozuyle secildi: saga 0,05vw · yukari 2vw (bottom -2vw -> 0).
+   YUKARI 2vw KAPININ TAM USTU, tesadufi degil: `.sus-eller` katmani
+   `height:100svh` + `overflow:hidden`, kol o cizgiden 2vw (1536x780'de
+   41,2 px) TASIP kirpiliyordu; bottom:0 kolun alt kenarini tam kirpma
+   cizgisine oturtur. 2vw'yi ASAN her deger kolun alt ucunu cizginin
+   USTUNDE birakir ve serit turunda kapatilan kol-serit boslugunu yeniden
+   acar (olculdu: 0,5vw -> 31,2 px pay · 1vw -> 20,5 · 1,5vw -> 10,1 ·
+   2vw -> 0,7 · fazlasi negatif = bosluk). Kapi vw cinsinden GENELDIR,
+   ekran boyuna bagli degil — tasma zaten `bottom` degerinin kendisi.
+   MOBIL DEGISMEDI (Enes: "sadece masaustunde"); <=900px kurali
+   asagida kendi degerlerini yaziyor. */
 /* donus merkezi omuz tarafinda: kol disaridan salaniyormus gibi */
 .sus-el-h .sus-suzul{transform-origin:0 6%;animation:sh-suzulA 13s ease-in-out infinite}
 .sus-el-r .sus-suzul{transform-origin:100% 94%;animation:sh-suzulB 17.5s ease-in-out -4s infinite}
@@ -467,42 +435,4 @@ html.t-notubes .sus-tubes{display:none!important}
   .sh-l i,.sh-lede,.sh-cta,.sh-meta{animation:none}
   .sus-kaydir{animation:none;opacity:1}
   .sus-kaydir i::after{animation:none} /* .sus-halka reduce kurali temel.css'te */
-}
-
-
-/* KOL SERIDIN ARKASINA GIRER (7 Eyl 2026 — Enes: "robot kolu kayan barin
-   bitimine tam hizala, hatta bir tik arkasina girsin; boylece o aradaki
-   bosluk goruntusu hic olmaz").
-   OLCULDU (1920x1080): kol kutusu zaten 1118'e kadar iniyor ve `#ticker`
-   1080'de basliyor — yani kol seridin 38 px ICINE giriyor. Gorunmuyordu
-   cunku hem `.ana .sh-sahne` hem `.sus-eller` `overflow:hidden` ve ikisi
-   de 1080'de bitiyor; tasan parca kirpiliyordu.
-   CARE iki adim:
-     1. Kirpma `clip` + `overflow-clip-margin` ile YALNIZ bu kadar
-        gevsetilir — `visible` YAPILMADI: `.sus-a2/.sus-a3` atmosfer
-        katmanlari yanlardan tasiyor ve serbest birakilsalar yatay
-        kaydirma dogurabilirdi (olculen deger asagida kayitli).
-     2. Serit kolun USTUNE alinir (`#ticker` z-index), boylece kol onun
-        ARKASINA girer — Enes'in istedigi "bir tik arkasi".
-   Yalniz masaustu: mobilde bu sorun yok (Enes: "zaten ic ice"). */
-@media(min-width:901px){
-  .ana .sh-sahne{overflow:clip;overflow-clip-margin:360px}
-  .sus-eller{overflow:clip;overflow-clip-margin:360px}
-  /* KOL ASAGI, SERIDIN ARKASINA (7 Eyl 2026, olculerek secildi).
-     Kutu sinirini seride degdirmek YETMEDI: gorselin alt ucu inceliyor,
-     kolun KALIN kismi 909'da bitiyordu (satir basina >150 kol pikseli
-     olcutu) ve serit 1080'de basliyor -> arada 171 px'lik incelen/bos
-     bolge kaliyordu. Ustelik zemin orada zaten siyah: `#bg .fade`
-     `rgb(5,5,5)`e %46'da variyor, yani ekranin alt yarisi siyah — bosluk
-     hissini o tamamliyor.
-     Kol asagi alindi. SABIT PX OLMAZ: 250 px 1920x1080’de tam oturdu ama
-     1440x900’de kolu tamamen seridin altina kacirdi (olculdu). Bosluk kol
-     YUKSEKLIGININ sabit bir orani cikti (iki olcekte de %39), kol da vw ile
-     boyutlandigi icin deger vw cinsinden yazildi: -14.5vw.
-     (ilk denemeler: 190 px -> bosluk 171->48; 250 px -> 1920 tamam, 1440 bozuk;
-     kalan 48 px icin 60 px daha eklendi, kol seridin bir tik ICINE girsin): kalin kismi seridin ustune gelir, uc kisim
-     seridin ARKASINA girer (serit z-index:3). Enes bu bedeli kabul etti:
-     "girişte simdi durdugu konumda durmayacak, biraz daha asagi kaymasi
-     gerekecek". Yalniz masaustu; mobilde sorun yoktu. */
-  .sus-el-r{bottom:-14.5vw}
 }
