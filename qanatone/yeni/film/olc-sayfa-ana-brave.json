@@ -1,0 +1,298 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-07T23:08:35.943Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "gpu": {
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 Ti (0x00001F95) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "yazilim": false
+ },
+ "tekrar": 2,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.6,
+  "p10": 8.3,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.8,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "ekran_degisti": false,
+ "yuk_taban": {
+  "tarayici_cekirdek": 0,
+  "yabanci_cekirdek": 0.325,
+  "rig_cekirdek": 0.008,
+  "en_agir": [
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.096
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 10992,
+    "cekirdek": 0.092
+   },
+   {
+    "ad": "MuseHub.exe",
+    "pid": 11084,
+    "cekirdek": 0.05
+   },
+   {
+    "ad": "MsMpEng.exe",
+    "pid": 4344,
+    "cekirdek": 0.019
+   },
+   {
+    "ad": "nessusd.exe",
+    "pid": 5300,
+    "cekirdek": 0.011
+   },
+   {
+    "ad": "nvsphelper64.exe",
+    "pid": 12192,
+    "cekirdek": 0.011
+   }
+  ],
+  "pencere_sn": 4.08,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yabanci_tarayici_kapi_cekirdek": 0.15,
+  "cekirdek": 8,
+  "toplam_cpu_KAPI_DEGIL": true,
+  "_yuk": "YABANCI TARAYICI kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\". Toplam CPU yuku BILGIDIR: ~3 cekirdege kadar saf CPU yuku hukmu cevirmedi (doz-tepki: yeni/film/olc-yuk-tarama.json), 0,8 cekirdek yabanci tarayici cevirdi (p95 8,5 -> 33,4 ms)."
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: GECTI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": false,
+ "boz_kollari": false,
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/",
+   "js_bayt": 21980,
+   "js_tavan": 24064,
+   "kosum": [
+    {
+     "yuk": {
+      "tarayici_cekirdek": 0,
+      "yabanci_cekirdek": 0.41,
+      "rig_cekirdek": 0.229,
+      "en_agir": [
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.11
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 10992,
+        "cekirdek": 0.107
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 11084,
+        "cekirdek": 0.06
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4344,
+        "cekirdek": 0.058
+       },
+       {
+        "ad": "WindowsTerminal.exe",
+        "pid": 13828,
+        "cekirdek": 0.014
+       }
+      ],
+      "pencere_sn": 19.08
+     },
+     "sistem_cekirdek": 2.755,
+     "kare": 1109,
+     "tur_ms": 12005,
+     "p95_ms": 16.8,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 583,
+     "takilma_tek_max_ms": 133,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 9530.400390625,
+     "toplam_px": 9530,
+     "toplam_px_bas": 11307,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "tarayici_cekirdek": 0,
+      "yabanci_cekirdek": 0.444,
+      "rig_cekirdek": 0.243,
+      "en_agir": [
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.117
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 10992,
+        "cekirdek": 0.091
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 11084,
+        "cekirdek": 0.066
+       },
+       {
+        "ad": "PhoneExperienceHost.exe",
+        "pid": 2808,
+        "cekirdek": 0.065
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4344,
+        "cekirdek": 0.03
+       },
+       {
+        "ad": "WindowsTerminal.exe",
+        "pid": 13828,
+        "cekirdek": 0.012
+       }
+      ],
+      "pencere_sn": 31.07
+     },
+     "sistem_cekirdek": 2.936,
+     "kare": 1216,
+     "tur_ms": 11888,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 100,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 9530.400390625,
+     "toplam_px": 9530,
+     "toplam_px_bas": 11307,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.8,
+   "takilma_oran_medyan": 0.0486,
+   "takilma_tek_max": 133,
+   "taban_takilma": [
+    0,
+    0
+   ],
+   "taban_p95": [
+    16.7,
+    8.5
+   ],
+   "kare_p95": 2.024,
+   "kacirilan_kare": 1,
+   "kuanta_sapma": 0.024,
+   "p95_eski_ms_kapisi": true,
+   "taban_p95_medyan": 16.7,
+   "taban_kacirilan_bilgi": 1,
+   "tik_sapma": false,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "tarayici_cekirdek_enyuksek": 0,
+    "tarayici_cekirdek_kosumlar": [
+     0,
+     0
+    ],
+    "yabanci_cekirdek_medyan": 0.444,
+    "yabanci_cekirdek_kosumlar": [
+     0.41,
+     0.444
+    ],
+    "rig_cekirdek_medyan": 0.243,
+    "en_agir": [
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.117
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 10992,
+      "cekirdek": 0.091
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 11084,
+      "cekirdek": 0.066
+     },
+     {
+      "ad": "PhoneExperienceHost.exe",
+      "pid": 2808,
+      "cekirdek": 0.065
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4344,
+      "cekirdek": 0.03
+     },
+     {
+      "ad": "WindowsTerminal.exe",
+      "pid": 13828,
+      "cekirdek": 0.012
+     }
+    ],
+    "sistem_cekirdek_medyan": 2.936,
+    "cekirdek": 8,
+    "kapi_tarayici": 0.15,
+    "_": "KAPI tarayici_cekirdek (yabanci tarayici sinifi). yabanci_cekirdek TOPLAM ve KAPI DEGIL: 2,9 cekirdek saf CPU yuku hukmu cevirmedi, 0,8 cekirdek yabanci tarayici cevirdi. sistem_cekirdek ORTALAMADIR ve tek cekirdek yiyen sureci gizler."
+   },
+   "bilgi": {
+    "takilma_oran_medyan": 0.0486,
+    "sistem_cekirdek_medyan": 2.936
+   },
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [],
+   "kosum_hatalari": [],
+   "gecti": true
+  }
+ ]
+}

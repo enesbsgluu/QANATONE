@@ -492,6 +492,26 @@ async function kosum(browser, yol, tik, yuk, kokler) {
     defaultViewport: null, protocolTimeout: 600000,
   });
   const surum = await browser.version();
+  /* GPU KUNYEYE YAZILIR (8 Eyl 2026, hero tup turu — KAPI DEGIL, KUNYE).
+     Bu makinede Chrome Intel UHD'yi, Brave NVIDIA GTX'i aliyor ve AYNI sayfa
+     birinde kacirilan 4, digerinde 0 veriyor (olculdu: hero tup alani).
+     Kosumun hangi tarayici + hangi ekran karti ile alindigi yazilmazsa
+     "site kasmiyor" hukmu hangi donanim icin verildigi bilinmeden okunur. */
+  const gpu = await (async () => {
+    try {
+      const g = await browser.newPage();
+      await g.goto('about:blank');
+      const d = await g.evaluate(`(() => {
+        const c = document.createElement('canvas');
+        const x = c.getContext('webgl2') || c.getContext('webgl');
+        if (!x) return { renderer: 'WebGL YOK' };
+        const e = x.getExtension('WEBGL_debug_renderer_info');
+        return { renderer: String(e ? x.getParameter(e.UNMASKED_RENDERER_WEBGL) : x.getParameter(x.RENDERER)) };
+      })()`);
+      await g.close();
+      return { ...d, yazilim: /swiftshader|software|llvmpipe|basic render/i.test(d.renderer) };
+    } catch (e) { return { renderer: 'OLCULEMEDI', yazilim: null }; }
+  })();
   const tz = await tazelemeOlc(browser);
   /* BOZ_TIK: acilis tikini bilerek kaydirir. Sayfanin kendi tabanindan cikan
      tik degismedigi icin capraz kontrol %20'yi asar ve HER sayfa hukumsuz
@@ -560,6 +580,7 @@ t++;requestAnimationFrame(k);})();
   const kokler = [process.pid, browser.process() ? browser.process().pid : NaN];
   const yukTaban = await yukTabanOlc(browser, yuk, kokler);
   console.log(`TARAYICI : ${TARAYICI} · ${surum} · ${secim.length} sayfa · ${TEKRAR} kosum · ${os.cpus().length} cekirdek`);
+  console.log(`GPU      : ${gpu.renderer}${gpu.yazilim ? '  !! YAZILIM CIZIMI — hizlandirma kapali' : ''}  (KUNYE, kapi degil)`);
   console.log(`TAZELEME : ${tz.hz} Hz · tik ${tz.tik_ms} ms · ornek ${tz.ornek} (suzulen ${tz.suzulen}) · min ${tz.min} p10 ${tz.p10} p90 ${tz.p90}${tz.kararli ? '' : ' !! KARARSIZ'}${BOZ_TIK ? `  [BOZ_TIK: gercek tik ${tz.boz_tik_oncesi} ms]` : ''}`);
   console.log(`YUK      : YABANCI TARAYICI <= ${TARAYICI_KAPI} cekirdek — ASILIRSA O SAYFA HUKUMSUZDUR (kirmizi de yesil de). Toplam CPU KAPI DEGIL, bilgi.${yuk ? '' : '  !! OLCEYICI ACILAMADI — hicbir sayfa hukum vermeyecek'}${BOZ_YUK ? `  [BOZ_YUK=${BOZ_YUK} egri kolu]` : ''}${BOZ_TARAYICI ? '  [BOZ_TARAYICI KIRMIZI-ONCE]' : ''}`);
   console.log(`YUK TABAN: ${yukTaban ? `${yukTaban.yabanci_cekirdek} yabanci + ${yukTaban.rig_cekirdek} rig (dwm) cekirdek — tarayici acik, bos sayfa, ${yukTaban.pencere_sn} sn · ${yukTaban.en_agir.slice(0, 4).map((s) => `${s.ad} ${s.cekirdek}`).join(', ')}` : 'OLCULEMEDI'}`);
@@ -616,6 +637,14 @@ t++;requestAnimationFrame(k);})();
       takilma_oran_medyan: +medyan(k.map((x) => x.tur_ms ? x.takilma_toplam_ms / x.tur_ms : 0)).toFixed(4),
       takilma_tek_max: Math.max(...k.map((x) => x.takilma_tek_max_ms)),
       taban_takilma: k.map((x) => x.taban.takilma_sayi),
+      /* TABAN P95 — BILGI, KAPI DEGIL (Enes karari, 8 Eyl 2026).
+         Taban = sayfa acildi, ZIYARETCI BAKIYOR, henuz kaydirmadi. Hero tup
+         alaninin agirligi tam bu halde ortaya cikiyor; turda hero hizla
+         geciliyor ve IO tupleri zaten durduruyor. Deger bugune kadar
+         olculuyor ve kayda yaziliyordu ama satirda GORUNMUYORDU — hukme de
+         girmiyor, girmesi ayri bir karar (o gun kapi sertlesir ve entegre
+         GPU'da ana sayfa kirmizi doner). Simdilik GORUNUR olsun yeter. */
+      taban_p95: k.map((x) => x.taban.p95_ms),
     };
     /* TIK CINSINDEN HUKUM. kacirilan kare = round(p95 / tik) - 1: bir kare
        her zaman bir tik surer, kapi USTUNE kac tik bindigini sorar. */
@@ -625,6 +654,10 @@ t++;requestAnimationFrame(k);})();
        gorunurluk — kuantali olmayan bir dagilim baska bir seyin isaretidir) */
     oz.kuanta_sapma = +Math.abs(oz.kare_p95 - Math.round(oz.kare_p95)).toFixed(3);
     oz.p95_eski_ms_kapisi = oz.p95_medyan <= P95_ESKI_MS;      /* KAPI DEGIL: kiyas */
+    /* taban p95'in tik karsiligi — BILGI. Kapi turdan hukum verir. */
+    oz.taban_p95_medyan = medyan(oz.taban_p95.filter((x) => typeof x === 'number'));
+    oz.taban_kacirilan_bilgi = oz.taban_p95_medyan
+      ? Math.max(0, Math.round(oz.taban_p95_medyan / tz.tik_ms) - 1) : null;
     /* CAPRAZ KONTROL — sayfanin kendi tabanindan cikan tik (dinlenmedeki en
        kisa makul aralik) acilis tikinden %20'den fazla ayriliyor mu.
        NE OLCTUGU DURUSTCE: bu bayrak IKI sebebi ayirmaz — ekran hizi
@@ -694,7 +727,7 @@ t++;requestAnimationFrame(k);})();
     oz.gecti = oz.hukumsuz.length ? null : Object.values(oz.kapi).every(Boolean);
     sonuc.push(oz);
     const etiket = oz.gecti === null ? 'HUKSZ' : (oz.gecti ? 'GECTI' : 'KALDI');
-    console.log(`${etiket}  ${yol.padEnd(34)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95.toFixed(2)} tik → KACIRILAN ${oz.kacirilan_kare}/${KACIRILAN_KAPI} · takilma ${k.map((x) => x.takilma_sayi + 'x' + x.takilma_toplam_ms + 'ms').join(' ')} oran ${(oz.takilma_oran_medyan * 100).toFixed(2)}% tek ${oz.takilma_tek_max} ms · taban ${oz.taban_takilma.join('/')} · JS ${js}/${tv}${oz.kuanta_sapma > 0.25 ? ' · kuanta sapma ' + oz.kuanta_sapma : ''}${oz.tik_sapma ? ' · TIK SAPMA taban ' + oz.tik_sapma : ''}${oz.gecti === false ? ' !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',') : ''}`);
+    console.log(`${etiket}  ${yol.padEnd(34)} p95 ${k.map((x) => x.p95_ms).join('/')} → ${oz.p95_medyan} ms = ${oz.kare_p95.toFixed(2)} tik → KACIRILAN ${oz.kacirilan_kare}/${KACIRILAN_KAPI} · takilma ${k.map((x) => x.takilma_sayi + 'x' + x.takilma_toplam_ms + 'ms').join(' ')} oran ${(oz.takilma_oran_medyan * 100).toFixed(2)}% tek ${oz.takilma_tek_max} ms · taban ${oz.taban_takilma.join('/')} tk · TABAN p95 ${oz.taban_p95_medyan} ms → kacirilan ${oz.taban_kacirilan_bilgi} (BILGI) · JS ${js}/${tv}${oz.kuanta_sapma > 0.25 ? ' · kuanta sapma ' + oz.kuanta_sapma : ''}${oz.tik_sapma ? ' · TIK SAPMA taban ' + oz.tik_sapma : ''}${oz.gecti === false ? ' !! ' + Object.entries(oz.kapi).filter(([, v]) => !v).map(([n]) => n).join(',') : ''}`);
     console.log(`       yabanci tarayici ${oz.yuk.tarayici_cekirdek_kosumlar.join('/')} → ${oz.yuk.tarayici_cekirdek_enyuksek}/${TARAYICI_KAPI} cekirdek [KAPI] · toplam yabanci ${oz.yuk.yabanci_cekirdek_medyan} · sistem ort. ${oz.yuk.sistem_cekirdek_medyan} (ikisi de BILGI)${oz.yuk.en_agir.length ? ' · en agir ' + oz.yuk.en_agir.slice(0, 3).map((s) => `${s.ad} ${s.cekirdek}`).join(', ') : ''}${oz.hukumsuz.length ? '  !! HUKUM YOK: ' + oz.hukumsuz.join(',') : ''}`);
     if (oz.gecti !== true && process.env.DEVAM !== '1') { dur = yol; durSebep = oz.hukumsuz.length ? oz.hukumsuz.join(',') : 'kapi'; break; }
   }
@@ -724,7 +757,7 @@ t++;requestAnimationFrame(k);})();
   fs.writeFileSync(CIKTI, JSON.stringify({
     _: 'yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.',
     kapi: 'A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs',
-    olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, tekrar: TEKRAR,
+    olcum: new Date().toISOString(), tarayici: `${TARAYICI} ${surum}`, gpu, tekrar: TEKRAR,
     tazeleme: tz, tazeleme_kapanis: tzSon,
     ekran_degisti: ekranDegisti ? { acilis_tik: tz.tik_ms, kapanis_tik: tzSon.tik_ms, _: 'ekran hizi kosum ortasinda degismis — butun kosumun boleni gecersiz, sayfalar degil KOSUM hukumsuz' } : false,
     yuk_taban: yukTaban ? { ...yukTaban, _: 'tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir.' } : false,
