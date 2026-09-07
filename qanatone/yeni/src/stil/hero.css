@@ -486,6 +486,23 @@ html.t-notubes .sus-tubes{display:none!important}
         ARKASINA girer — Enes'in istedigi "bir tik arkasi".
    Yalniz masaustu: mobilde bu sorun yok (Enes: "zaten ic ice"). */
 @media(min-width:901px){
-  .ana .sh-sahne{overflow:clip;overflow-clip-margin:140px}
-  .sus-eller{overflow:clip;overflow-clip-margin:140px}
+  .ana .sh-sahne{overflow:clip;overflow-clip-margin:360px}
+  .sus-eller{overflow:clip;overflow-clip-margin:360px}
+  /* KOL ASAGI, SERIDIN ARKASINA (7 Eyl 2026, olculerek secildi).
+     Kutu sinirini seride degdirmek YETMEDI: gorselin alt ucu inceliyor,
+     kolun KALIN kismi 909'da bitiyordu (satir basina >150 kol pikseli
+     olcutu) ve serit 1080'de basliyor -> arada 171 px'lik incelen/bos
+     bolge kaliyordu. Ustelik zemin orada zaten siyah: `#bg .fade`
+     `rgb(5,5,5)`e %46'da variyor, yani ekranin alt yarisi siyah — bosluk
+     hissini o tamamliyor.
+     Kol asagi alindi. SABIT PX OLMAZ: 250 px 1920x1080’de tam oturdu ama
+     1440x900’de kolu tamamen seridin altina kacirdi (olculdu). Bosluk kol
+     YUKSEKLIGININ sabit bir orani cikti (iki olcekte de %39), kol da vw ile
+     boyutlandigi icin deger vw cinsinden yazildi: -14.5vw.
+     (ilk denemeler: 190 px -> bosluk 171->48; 250 px -> 1920 tamam, 1440 bozuk;
+     kalan 48 px icin 60 px daha eklendi, kol seridin bir tik ICINE girsin): kalin kismi seridin ustune gelir, uc kisim
+     seridin ARKASINA girer (serit z-index:3). Enes bu bedeli kabul etti:
+     "girişte simdi durdugu konumda durmayacak, biraz daha asagi kaymasi
+     gerekecek". Yalniz masaustu; mobilde sorun yoktu. */
+  .sus-el-r{bottom:-14.5vw}
 }
