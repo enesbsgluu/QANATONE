@@ -65,8 +65,22 @@ const basliklar = (u) => { const h = {}; for (const k of KURAL) if (k.re.test(u)
    Kayit dosyaya yazilir: yeni/film/_tani-cihaz.jsonl                     */
 const TANI_KAYIT = path.join(__dirname, 'yeni', 'film', '_tani-cihaz.jsonl');
 const TANI_BETIK = `<script>(function(){
- var q=location.search, kol=/[?&]bg=0/.test(q)?'bg-kapali':'taban';
- if(kol==='bg-kapali'){var st=document.createElement('style');st.textContent='#bg{display:none!important}';
+ var q=location.search, m=/[?&]kol=([a-z0-9]+)/.exec(q), kol=m?m[1]:(/[?&]bg=0/.test(q)?'bg-kapali':'taban');
+ /* HERO KOLLARI (9 Eyl): 8 Eyl'in bg deneyi HUKUMSUZ cikti — iki kol
+    FARKLI KONUMLARDA zoom'lanmisti (y=1383 vs y=3906), yani degisken bg
+    degil "hero'da mi zoom yapildi" idi. Enes'in kendi gozlemi de bunu
+    soyluyor: "sadece ana sayfanin giris kisminda oluyor". Kollar artik
+    HERO'YA OZGU katmanlari tek tek kaldiriyor; her tur AYNI YERDE
+    (hero, y yaklasik 0) yapilmali — telemetri y yaziyor, sonra dogrulanir. */
+ var KOL={
+  bg:'#bg{display:none!important}',
+  atmo:'.sus-atmo{display:none!important}',
+  eller:'.sus-eller{display:none!important}',
+  halka:'.sus-halka,.sh-ic::before,.sh-ic::after{display:none!important}',
+  durgun:'*,*::before,*::after{animation:none!important;transition:none!important}',
+  cip:'#bg,.sus-atmo,.sus-eller{display:none!important}'
+ };
+ if(KOL[kol]){var st=document.createElement('style');st.textContent=KOL[kol];
    (document.head||document.documentElement).appendChild(st);}
  var t0=Date.now(), n=0, sonHata=null;
  addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
@@ -74,6 +88,7 @@ const TANI_BETIK = `<script>(function(){
   var vv=window.visualViewport||{};
   var m=(performance&&performance.memory)||{};
   return {kol:kol,sebep:sebep,n:++n,ms:Date.now()-t0,
+   heroda:(scrollY < innerHeight*1.2),
    olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),
    dpr:devicePixelRatio, en:innerWidth, boy:innerHeight, y:Math.round(scrollY),
    belge:document.documentElement.scrollHeight,
