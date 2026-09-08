@@ -74,6 +74,22 @@ for (const y of kaynak) {
   eksik.push(y);
 }
 
+/* OLU ANAHTARLAR — PANELE EKLENMEZ (9 Eyl 2026, nobetciyle olculdu).
+   Bunlar content.json'da duruyor ama SITE HIC KULLANMIYOR: her birine
+   nobetci deger konup derlendi, hicbiri dist'te gorunmedi (0 dosya).
+   Panele alan acmak burada YANLIS YESIL uretirdi — Enes yazar, hicbir sey
+   degismez; bu tam olarak denetimin P2 kuralindaki "olu bilesen anahtari"
+   tuzagi. Dogru is ya kullanima baglamak ya content.json'dan temizlemek;
+   ikisi de icerik karari, Enes'te.
+   Kaynak taramasi tek basina yetmez (hesaplanan anahtari goremez) — bu
+   liste NOBETCI ile dogrulanmistir. [[qanatone-anahtar-kullanimi-olculur]] */
+const OLU = new Set(['settings.assistant', 'settings.demoWa',
+  'projects.#.imgk6', 'projects.#.imgk', 'projects.#.imgc']);
+const oluBulunan = eksik.filter((y) => OLU.has(y.replace(/\.\d+/g, '.#')));
+for (let i = eksik.length - 1; i >= 0; i--) {
+  if (OLU.has(eksik[i].replace(/\.\d+/g, '.#'))) eksik.splice(i, 1);
+}
+
 /* eksikleri ust dala gore grupla — tek tek 400 satir yerine okunur ozet */
 const grup = new Map();
 for (const e of eksik) {
@@ -84,6 +100,7 @@ for (const e of eksik) {
 console.log(`content.json yol sayisi (normalize) : ${new Set(kaynak.map((y) => y.replace(/\.\d+/g, '.#'))).size}`);
 console.log(`panelde gecen yol dizesi           : ${panelYollari.size}`);
 console.log(`strings.* (P2 denetiminde, kapsam disi): ${stringsSayisi}`);
+console.log(`OLU anahtar (nobetciyle dogrulandi)   : ${oluBulunan.length}  ${oluBulunan.join(", ")}`);
 console.log(`PANELE BAGLANMAMIS yol             : ${eksik.length}`);
 if (eksik.length) {
   console.log('\nust dala gore (adet · dal):');
