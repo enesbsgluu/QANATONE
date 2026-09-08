@@ -997,6 +997,184 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${KOSULAN.length} dosya · ${ozet} · test/ taranmis (${varOlan.length} aday)`);
 }
 
+/* T7 · AJAN PROTOKOL ZINCIRI — KART = ROTA = SUNUCU (9 Eyl 2026).
+   MCP ve A2A sunuculari kuruldu; `/.well-known/mcp.json` ve
+   `/.well-known/agent-card.json` artik GERCEK bir uca isaret ediyor.
+
+   NEDEN KAPI GEREKIYOR: bu zincir UC AYRI DOSYADA yasiyor (kart, rota,
+   sunucu) ve ucu de sessizce ayrisabilir. Ayrisma HALKA GORUNMEZ olur:
+   kart 200 doner, JSON gecerlidir, tarayici "pass" der — ama uc ya yok
+   ya baska yerdedir. Tam olarak bu depoda ARD'de yasandi: dosya 200,
+   CORS'lu ve gecerli JSON'di, yine de fail'di; sorun erisim degil
+   SOZLESMEYDI. Burada ayni sinifin onune kapi konuyor.
+
+   T4 (web bot auth) ile AYNI DESEN, ayni gerekce: kriptografi/protokol
+   davranisi testte (T1 -> yeni/test/ajan-protokol.test.mjs), burasi
+   DOSYALAR ARASI SOZLESMEYI tutar. */
+{
+  const kusur = [];
+  const fonk = path.join(__dirname, '..', 'netlify', 'functions');
+  const MCP = require(path.join(fonk, 'mcp.js'));
+  const A2A = require(path.join(fonk, 'a2a.js'));
+  const AU = require(path.join(fonk, 'ajan-uc.js'));
+  const KONAK = AU.KOK_ADRES;
+  const say = { kart: 0, rota: 0 };
+
+  /* a · KARTLAR CIKTIDA, GECERLI JSON, ZORUNLU ALANLAR TAM.
+     Zorunlu alan listeleri OLCULDU (kaynak: MCP registry server.schema
+     ve A2A AgentCard v1.0 semasi), tahmin degil. */
+  const kartlar = [
+    ['mcp.json', ['name', 'description', 'version', 'remotes'], (j) => {
+      const r = Array.isArray(j.remotes) ? j.remotes[0] : null;
+      if (!r) return ['remotes bos'];
+      const h = [];
+      if (r.type !== 'streamable-http' && r.type !== 'sse') h.push('remotes[0].type gecersiz: ' + r.type);
+      return h.concat(r.url === KONAK + '/mcp' ? [] : ['remotes[0].url != ' + KONAK + '/mcp (' + r.url + ')']);
+    }],
+    ['agent-card.json',
+      ['name', 'description', 'version', 'capabilities', 'defaultInputModes', 'defaultOutputModes', 'skills',
+        'supportedInterfaces'],
+      (j) => {
+        const h = [];
+        /* v0.3 ve v1.0 alan adlari ayri — IKISI DE yazildi (superkume
+           karari a2a.js basinda). Kapi ikisini birden tutar: biri
+           dusserse kart bir surumde okunamaz hale gelir. */
+        if (j.url !== KONAK + '/a2a') h.push('url != ' + KONAK + '/a2a');
+        const i = Array.isArray(j.supportedInterfaces) ? j.supportedInterfaces[0] : null;
+        if (!i) h.push('supportedInterfaces bos');
+        else {
+          if (i.url !== KONAK + '/a2a') h.push('supportedInterfaces[0].url != ' + KONAK + '/a2a');
+          if (i.protocolBinding !== 'JSONRPC') h.push('protocolBinding != JSONRPC');
+          if (i.protocolVersion !== A2A.PROTOKOL_SURUM)
+            h.push('kart protocolVersion (' + i.protocolVersion + ') != a2a.js (' + A2A.PROTOKOL_SURUM + ')');
+        }
+        if (!Array.isArray(j.skills) || !j.skills.length) h.push('skills bos');
+        else if (j.skills[0].id !== A2A.BECERI_ID)
+          h.push('skills[0].id (' + j.skills[0].id + ') != a2a.js BECERI_ID (' + A2A.BECERI_ID + ')');
+        /* OLMAYAN YETENEK SESSIZCE ATLANMAZ, `false` ile BEYAN EDILIR. */
+        if (j.capabilities && j.capabilities.streaming !== false)
+          h.push('capabilities.streaming false degil — akis sunmuyoruz');
+        if (j.capabilities && j.capabilities.pushNotifications !== false)
+          h.push('capabilities.pushNotifications false degil — geri arama yok');
+        return h;
+      }]
+  ];
+  for (const [ad, zorunlu, ek] of kartlar) {
+    const p = path.join(KOK, '.well-known', ad);
+    if (!fs.existsSync(p)) { kusur.push(ad + ': ciktida YOK'); continue; }
+    let j = null;
+    try { j = JSON.parse(fs.readFileSync(p, 'utf8')); } catch (e) { kusur.push(ad + ': gecersiz JSON'); continue; }
+    const eksik = zorunlu.filter((k) => j[k] === undefined);
+    if (eksik.length) kusur.push(ad + ': zorunlu alan eksik -> ' + eksik.join(','));
+    for (const h of ek(j)) kusur.push(ad + ': ' + h);
+    say.kart++;
+  }
+
+  /* b · ARAC ACIKLAMASI = SKILL.md — TEK KAYNAK.
+     Ajan sunucusu bir sey, yetenek dosyasi baska sey soylerse ajan
+     hangisine inanacagini bilemez; ikisi ayrisirsa kirmizi. */
+  {
+    const sp = path.join(KOK, '.well-known', 'agent-skills', 'site-tespit', 'SKILL.md');
+    if (!fs.existsSync(sp)) kusur.push('SKILL.md ciktida yok');
+    else {
+      const fm = fs.readFileSync(sp, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      const d = fm && fm[1].match(/^description:\s*(.+)$/m);
+      if (!d) kusur.push('SKILL.md frontmatter description okunamadi');
+      else if (d[1].trim() !== AU.ARAC_ACIKLAMA)
+        kusur.push('arac aciklamasi SKILL.md ile AYRISTI');
+
+      /* YETENEK DIZINININ OZETI CANLI DOSYAYLA AYNI OLMALI.
+         `index.json` her yetenegi sha256 ile ilan ediyor; ozet elle
+         yazilmis bir sabit ve SKILL.md degisince SESSIZCE eskiyor —
+         bugun tam bunu yasadi (MCP/A2A cagri yollari eklendi, ozet
+         eski kaldi). Yanlis ozet dosyanin kendisinden KOTUDUR: dogrulayan
+         taraf butunlugu bozulmus sanip yetenegi TAMAMEN reddeder. */
+      const ip = path.join(KOK, '.well-known', 'agent-skills', 'index.json');
+      if (!fs.existsSync(ip)) kusur.push('agent-skills/index.json ciktida yok');
+      else {
+        const idx = JSON.parse(fs.readFileSync(ip, 'utf8'));
+        const kayit = (idx.skills || []).find((s) => s.name === 'site-tespit');
+        const gercek = require('crypto').createHash('sha256').update(fs.readFileSync(sp)).digest('hex');
+        if (!kayit) kusur.push('index.json`da site-tespit kaydi yok');
+        else if (kayit.sha256 !== gercek)
+          kusur.push('index.json sha256 SKILL.md ile ayristi (' + String(kayit.sha256).slice(0, 12)
+            + '… != ' + gercek.slice(0, 12) + '…)');
+      }
+    }
+  }
+
+  /* c · KART ADI = SUNUCU ADI (mcp.json <-> mcp.js serverInfo) */
+  {
+    const p = path.join(KOK, '.well-known', 'mcp.json');
+    if (fs.existsSync(p)) {
+      const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+      if (j.name !== MCP.SUNUCU.name)
+        kusur.push('mcp.json name (' + j.name + ') != mcp.js serverInfo (' + MCP.SUNUCU.name + ')');
+      if (j.version !== MCP.SUNUCU.version)
+        kusur.push('mcp.json version != mcp.js serverInfo version');
+    }
+  }
+
+  /* d · ROTALAR BAGLI, ZORLAMALI VE SPLAT`TAN ONCE.
+     Splat`in altina duserse uc yayinda YOK demektir ama kodda VAR
+     gorunur (T4`te yazili ayni tuzak). */
+  {
+    const ham = fs.readFileSync(path.join(__dirname, 'public', '_redirects'), 'utf8');
+    const satir = ham.split('\n').map((s) => s.trim()).filter((s) => s && !s.startsWith('#'));
+    const iSplat = satir.findIndex((s) => s.startsWith('/*'));
+    for (const [yol, fn] of [['/mcp', 'mcp'], ['/a2a', 'a2a']]) {
+      const i = satir.findIndex((s) => s.startsWith(yol + ' '));
+      if (i < 0) { kusur.push('_redirects: ' + yol + ' rotasi yok'); continue; }
+      if (!new RegExp('\\/\\.netlify\\/functions\\/' + fn + '\\s+200!\\s*$').test(satir[i]))
+        kusur.push('_redirects: ' + yol + ' fonksiyona 200! ile gitmiyor');
+      if (iSplat >= 0 && i > iSplat) kusur.push('_redirects: ' + yol + ' splat 404`un ALTINDA');
+      /* Ayni adreste statik dosya birikmemeli — canli ucu golgeler. */
+      if (fs.existsSync(path.join(KOK, yol.slice(1))))
+        kusur.push('dist`te ' + yol + ' adinda statik dosya var — canli ucu golgeler');
+      say.rota++;
+    }
+  }
+
+  /* e · _headers: kartlar JSON tipiyle ve CORS`lu sunulmali.
+     ARD dersi: dosya erisilebilir olmasi YETMEZ, tipi de dogru olmali. */
+  {
+    const h = fs.readFileSync(path.join(__dirname, 'public', '_headers'), 'utf8');
+    for (const ad of ['/.well-known/mcp.json', '/.well-known/agent-card.json']) {
+      const blok = h.split('\n');
+      const i = blok.findIndex((s) => s.trim() === ad);
+      if (i < 0) { kusur.push('_headers: ' + ad + ' kurali yok'); continue; }
+      const govde = blok.slice(i + 1, i + 5).join('\n');
+      if (!/Content-Type:\s*application\/json/i.test(govde)) kusur.push('_headers: ' + ad + ' JSON tipi yok');
+      if (!/Access-Control-Allow-Origin:\s*\*/i.test(govde)) kusur.push('_headers: ' + ad + ' CORS yok');
+    }
+  }
+
+  /* f · DAVRANIS TESTI YERINDE. Silinirse T1 daha AZ testle yine yesil
+     doner ve kimse fark etmez (T4`teki ayni gerekce). */
+  if (!fs.existsSync(path.join(__dirname, 'test', 'ajan-protokol.test.mjs')))
+    kusur.push('ajan-protokol.test.mjs YOK — protokol kaniti kapisiz kaldi');
+
+  /* g · KARAR KAYDI GUNCEL. `ajan-hatti.mjs` basindaki YAPILMAYANLAR
+     listesi hala "MCP sunucumuz YOK" diyorsa depo kendi kendisiyle
+     celisir: kart yayinda, kayit yok diyor. Bu kural o celiskiyi
+     yakalar — belge kod kadar bakimli tutulur. */
+  {
+    const m = fs.readFileSync(path.join(__dirname, 'ajan-hatti.mjs'), 'utf8');
+    /* SINIR DAR TUTULUYOR: yalniz YAPILMAYANLAR LISTESI okunur, altindaki
+       "LISTEDEN CIKANLAR" gecmis kaydi DEGIL. Ilk yazimda blok `={10,}`e
+       kadar uzuyordu ve kural kendi guncellememi yakaladi — liste temiz,
+       gecmis kaydi ise iki adi ANMAK ZORUNDA. Liste bos satirda biter. */
+    const blok = (m.match(/YAPILMAYANLAR ve NEDEN:[\s\S]*?(?=\r?\n\s*\r?\n|={10,})/) || [''])[0];
+    if (/\/\.well-known\/mcp\.json/.test(blok)) kusur.push('karar kaydi hala "MCP sunucumuz YOK" diyor');
+    if (/agent-card\.json/.test(blok)) kusur.push('karar kaydi hala "A2A ajanimiz YOK" diyor');
+  }
+
+  ol('T7 · ajan protokol zinciri: kart = rota = sunucu (MCP + A2A), arac aciklamasi tek kaynak',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 4).join(' | ')
+       : `${say.kart} kart · ${say.rota} rota 200! · ${KONAK}/mcp + /a2a · SKILL.md ile ayni`);
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`

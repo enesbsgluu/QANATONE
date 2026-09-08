@@ -30,6 +30,14 @@
 const ATLA = /\.(md|txt|xml|json|webp|avif|png|jpg|svg|ico|css|js|mjs|woff2?|mp4|webm|pdf)$/i;
 
 export default async (request: Request, context: { next: () => Promise<Response> }) => {
+  /* PAZARLIK YALNIZ OKUMA ISTEKLERINDE (9 Eyl 2026, MCP/A2A turu).
+     Icerik pazarligi bir TEMSIL secimidir; POST bir EYLEMDIR ve markdown
+     esi diye bir sey yoktur. Bu satir olmadan, `/mcp`ye `Accept:
+     text/markdown` ile POST atan bir ajan — bugun degil ama ileride
+     `/mcp.md` gibi bir sayfa dogarsa — protokol ucu yerine markdown
+     alirdi ve hata HICBIR YERDE kirmizi yakmazdi. Bugun olculdu: es
+     dosya yok, uc saglam donuyor; kapi gelecege karsi kuruluyor. */
+  if (request.method !== 'GET' && request.method !== 'HEAD') return;
   const accept = request.headers.get('accept') || '';
   if (!/(^|,)\s*text\/markdown\b/i.test(accept)) return;   /* HTML varsayilan */
 

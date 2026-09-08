@@ -17,6 +17,11 @@ Verilen adresi çeker ve ölçer. Tahmin yok: her kalem gerçek bir istekten ç�
 
 ## Nasıl çağrılır
 
+Üç yol var, **aynı ölçümü** yaparlar ve **aynı kotayı** harcarlar. Hangisini
+seçeceğin ajanının konuştuğu protokole bağlıdır.
+
+**1 · Doğrudan HTTP**
+
 ```http
 POST https://www.qanatone.com/.netlify/functions/diagnose
 Content-Type: application/json
@@ -24,7 +29,21 @@ Content-Type: application/json
 { "url": "https://example.com" }
 ```
 
-Kimlik doğrulaması gerekmez. Kota IP başınadır; aşılırsa **429** döner.
+**2 · MCP** (Streamable HTTP) — sunucu kartı
+`/.well-known/mcp.json`, uç `https://www.qanatone.com/mcp`.
+Tek araç: `site_tespit`, girdi `{ "url": "…" }`. Yanıt hem metin özeti
+hem `structuredContent` taşır. Ölçüm yapılamazsa JSON-RPC hatası değil,
+`isError: true` taşıyan bir araç sonucu döner — sebep `structuredContent.reason`'dadır.
+
+**3 · A2A** (JSON-RPC) — ajan kartı
+`/.well-known/agent-card.json`, uç `https://www.qanatone.com/a2a`.
+`message/send` ile adres gönderilir; adresi `DataPart` içinde
+`{"url": "…"}` olarak vermek en güvenilir yoldur, metin içinde geçen
+açık adres de okunur. Tamamlanmış bir `Task` döner, eseri metin + veri
+olarak taşır. Akış (`message/stream`) ve geri arama yoktur.
+
+Hiçbirinde kimlik doğrulaması gerekmez. Kota IP başınadır; aşılırsa
+doğrudan HTTP yolunda **429**, MCP ve A2A yollarında `reason: "kota"` döner.
 
 ## Yanıt
 

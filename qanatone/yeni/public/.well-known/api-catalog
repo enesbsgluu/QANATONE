@@ -23,6 +23,40 @@
           "title": "Ajan yüzeyi dizini"
         }
       ]
+    },
+    {
+      "anchor": "https://www.qanatone.com/mcp",
+      "service-desc": [
+        {
+          "href": "https://www.qanatone.com/.well-known/mcp.json",
+          "type": "application/json",
+          "title": "MCP sunucu kartı — Streamable HTTP, tek araç: site_tespit"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.qanatone.com/.well-known/agent-skills/site-tespit/SKILL.md",
+          "type": "text/markdown",
+          "title": "Site Tespit — çağrı biçimi, yanıt alanları ve sınırlar"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.qanatone.com/a2a",
+      "service-desc": [
+        {
+          "href": "https://www.qanatone.com/.well-known/agent-card.json",
+          "type": "application/json",
+          "title": "A2A ajan kartı — JSON-RPC bağlaması"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.qanatone.com/.well-known/agent-skills/site-tespit/SKILL.md",
+          "type": "text/markdown",
+          "title": "Site Tespit — çağrı biçimi, yanıt alanları ve sınırlar"
+        }
+      ]
     }
   ]
 }

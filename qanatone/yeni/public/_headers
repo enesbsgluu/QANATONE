@@ -77,6 +77,21 @@
   Access-Control-Allow-Origin: *
   X-Robots-Tag: noindex
 
+# AJAN PROTOKOL KARTLARI (9 Eyl 2026). Ikisi de GERCEK bir sunucuyu
+# gosterir: mcp.json -> /mcp (MCP Streamable HTTP), agent-card.json ->
+# /a2a (A2A JSON-RPC). Sunucular netlify/functions/{mcp,a2a}.js, ortak
+# cekirdek ajan-uc.js; olcumu `diagnose` yapar ve KOTA ORTAKTIR.
+# CORS ACIK: kayit defterleri ve tarayici ici ajan istemcileri karti
+# tarayicidan okur (ARD/agent-skills kararinin aynisi).
+/.well-known/mcp.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/agent-card.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
 /*.md
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex

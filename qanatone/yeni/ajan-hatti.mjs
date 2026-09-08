@@ -32,18 +32,32 @@
    artsin" demesiyle ayni sey olur. Puan urunun kendisi degil, olcusudur.
 
    YAPILMAYANLAR ve NEDEN:
-     /.well-known/mcp.json          MCP sunucumuz YOK
-     /.well-known/agent-card.json   A2A ajanimiz YOK (disariya acilan yok)
      /.well-known/ucp               genel API YOK
-     /.well-known/api-catalog       (RFC 9727) genel API YOK
      /.well-known/oauth-*           (RFC 9728 / 8414) kimlik dogrulama YOK
      /auth.md                       ayni sebep
      /.well-known/acp.json          ticaret protokolu YOK, satis ucu yok
      x402 / MPP / AP2               makine odemesi YOK
      POST /ask (NLWeb)              arkasinda calisan bir uc YOK
-     DNS-AID                        DNS Natro'da ve e-posta kayitlari orada;
-                                    kayit eklemek Enes'in DNS kararidir,
-                                    kod tarafinda karsiligi yok
+     WebMCP                         standart origin-trial asamasinda ve
+                                    sayfaya JS ekler (J1 tavani); bedeli
+                                    standart oturmadan odenmez
+
+   LISTEDEN CIKANLAR — KURAL DEGISMEDI, GERCEK DEGISTI:
+     8 Eyl 2026 · api-catalog (RFC 9727) + ARD + Agent Skills. Sebep:
+       `diagnose` API'si zaten CANLIYDI; katalog onu duyurdu, uydurmadi.
+     9 Eyl 2026 · /.well-known/mcp.json + /.well-known/agent-card.json.
+       Sebep: MCP ve A2A SUNUCULARI KURULDU
+       (netlify/functions/mcp.js -> /mcp, a2a.js -> /a2a, ortak cekirdek
+       ajan-uc.js). Sira BILINCLI OLARAK ters yuruttu: once sunucu,
+       sonra kart. Tersi tam olarak bu kuralin yasakladigi sey olurdu.
+       Ikisi de `diagnose`u sarar ve ONUN KOTASINI harcar — yeni bir
+       olcum yolu yazilmadi, cunku o kotanin etrafindan dolasan ikinci
+       bir kapi acardi. Kapi: denetim T7 + yeni/test/ajan-protokol.test.mjs.
+     DNS-AID (dnsAid) HALA ACIK ama sebebi DEGISTI: isaret edecegi uc
+       artik VAR (/mcp). Kalan tek engel DNS tarafinda: Natro panelinde
+       SVCB/HTTPS kayit tipi ve DNSSEC YOK (Enes olctu, 9 Eyl) — kayit
+       ancak DNS Cloudflare'a tasinirsa girilebilir. Bu bir DNS kararidir,
+       kod tarafinda yapilacak is kalmadi.
 
    TEK GERCEK ADAY — WEB BOT AUTH (`/.well-known/
    http-message-signatures-directory`): o uc SITE icin degil BOT icindir.

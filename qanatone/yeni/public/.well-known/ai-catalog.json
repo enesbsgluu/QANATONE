@@ -57,6 +57,30 @@
       ]
     },
     {
+      "identifier": "urn:air:qanatone.com:mcp:site-tespit",
+      "displayName": "MCP sunucusu — Site Tespit",
+      "description": "Model Context Protocol sunucusu (Streamable HTTP). Tek araç: site_tespit — verilen adresi gerçek isteklerle ölçer, metin özeti ve yapısal sonuç döndürür. Kimlik gerekmez; kota diagnose API'siyle ORTAKTIR (2 analiz / 24 saat).",
+      "type": "application/json",
+      "url": "https://www.qanatone.com/.well-known/mcp.json",
+      "representativeQueries": [
+        "Bu siteyi MCP aracıyla ölç",
+        "site_tespit aracını çağır",
+        "Bir MCP sunucusuna bağlanıp site analizi yaptır"
+      ]
+    },
+    {
+      "identifier": "urn:air:qanatone.com:a2a:site-tespit",
+      "displayName": "A2A ajanı — Site Tespit",
+      "description": "Agent2Agent ajan kartı ve JSON-RPC ucu. message/send ile adres gönderilir, tamamlanmış bir Task ve içinde metin + veri eseri döner. Akış ve geri arama yok, kartta açıkça false yazılıdır.",
+      "type": "application/json",
+      "url": "https://www.qanatone.com/.well-known/agent-card.json",
+      "representativeQueries": [
+        "Bu siteyi ölçen bir ajana görev gönder",
+        "A2A ile site analizi isteyin",
+        "Ajan kartı nerede"
+      ]
+    },
+    {
       "identifier": "urn:air:qanatone.com:skills:index",
       "displayName": "Ajan yetenek dizini",
       "description": "Sitenin ajanlara sunduğu yeteneklerin dizini; her yetenek için tanım dosyası ve özeti.",

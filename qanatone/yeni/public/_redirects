@@ -47,6 +47,18 @@
 # Gerekcenin tamami: netlify/functions/imza-dizini.js · bekci: denetim T4.
 /.well-known/http-message-signatures-directory  /.netlify/functions/imza-dizini  200!
 
-# 7 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
+# 7 · AJAN PROTOKOL UCLARI (9 Eyl 2026) — MCP ve A2A sunuculari.
+# `/.well-known/mcp.json` ve `/.well-known/agent-card.json` kartlari TAM
+# BU IKI ADRESI gosterir; kart bir uc vaat edip uc olmazsa karar kaydinin
+# yasakladigi hale duseriz ("arkasinda calisan bir sey olmayan kesif
+# dosyasi"). Kisa adres bilincli: kartlara ve baska ajanlarin
+# yapilandirmasina elle yazilan sey `/.netlify/functions/...` degil bu.
+# 200! ZORLAMALI: ileride dist'e ayni adda statik bir dosya sizarsa canli
+# ucu golgeler (panel ve imza dizini kapilariyla ayni gerekce).
+# Bekci: denetim T7 — kart adresi = rota adresi, rota splat'tan ONCE.
+/mcp  /.netlify/functions/mcp  200!
+/a2a  /.netlify/functions/a2a  200!
+
+# 8 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
 # SPLAT KURALI SONDA KALMALI.
 /*  /404.html  404
