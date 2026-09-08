@@ -943,21 +943,34 @@ function merge(b,o){
   return o!==undefined?o:b;
 }
 const frame=$('#frame');let seeded=false;
-frame.addEventListener('load',()=>{
-  if(seeded){setTimeout(push,400);return;}
-  const wait=(t=0)=>new Promise(r=>{const tick=()=>{
-    let ok=false;try{ok=!!frame.contentWindow.__contentReady}catch(e){}
-    if(ok||t>6000)return r();t+=120;setTimeout(tick,120);};tick();});
-  wait().then(()=>{
-    try{DEF=frame.contentWindow.__qanatDefaults();}catch(e){DEF=null;}
-    if(!DEF){$('#ed').innerHTML='<div class="note"><b>Önizlemeye erişilemedi.</b> Paneli sunucu üzerinden aç — yerelde klasörde <span class="mono">python3 -m http.server 8000</span> çalıştırıp <span class="mono">localhost:8000/admin.html</span> adresini kullan. index.html ile admin.html aynı klasörde olmalı.</div>';return;}
-    let saved=null;
-    try{saved=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){}
-    if(!saved){try{saved=JSON.parse(localStorage.getItem(LIVE)||'null')}catch(e){}}
-    C=merge(JSON.parse(JSON.stringify(DEF)),saved||{});
-    seeded=true;buildSide();show('genel');setTimeout(push,300);
-  });
-});
+/* IÇERIK KAYNAGI (9 Eyl 2026): panel varsayilanlari ARTIK ONIZLEME
+   IFRAME'INDEN DEGIL, panel fonksiyonunun veri ucundan geliyor.
+   ESKI YOL VE NEDEN KIRILDI: iframe'e `/index.html` yuklenip o pencerenin
+   varsayilan-icerik fonksiyonu cagriliyordu. O fonksiyon ESKI
+   KOK SITEDE tanimliydi (repodaki 791 KB'lik index.html'de iki kez gecer);
+   Astro gocunde tasinmadi. Yeni site yayina gecince cagri hep null dondu ve
+   panel "Onizlemeye erisilemedi" deyip bos aciliyordu — sorun sunucu ya da
+   `file://` degildi, kancanin yoklugu idi.
+   YENI YOL: `?veri=1` → netlify/functions/panel.js kokteki content.json'u
+   Basic Auth'un ARDINDAN dondurur. Dosya yayina (dist'e) konulmaz.
+   Onizleme iframe'i kalir ama artik VERI KAYNAGI DEGIL: yalnizca siteyi
+   gosterir, panel ondan bagimsiz acilir.                                  */
+async function kur(){
+  if(seeded)return;
+  try{
+    const r=await fetch('?veri=1',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    DEF=await r.json();
+  }catch(e){DEF=null;console.error('panel: icerik alinamadi',e);}
+  if(!DEF){$('#ed').innerHTML='<div class="note"><b>İçerik alınamadı.</b> Panel gövdesi açıldı ama <span class="mono">content.json</span> okunamadı. Paneli <span class="mono">/admin.html</span> adresinden (sunucu üzerinden) aç; dosyayı doğrudan çift tıklayarak açmak çalışmaz. Sorun sürerse Netlify fonksiyon günlüğünde <span class="mono">panel: content.json paketde bulunamadi</span> satırına bak.</div>';return;}
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){}
+  if(!saved){try{saved=JSON.parse(localStorage.getItem(LIVE)||'null')}catch(e){}}
+  C=merge(JSON.parse(JSON.stringify(DEF)),saved||{});
+  seeded=true;buildSide();show('genel');setTimeout(push,300);
+}
+kur();
+frame.addEventListener('load',()=>{ if(seeded)setTimeout(push,400); });
 $('#bExport').onclick=()=>{
   const bl=new Blob([JSON.stringify(C,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='content.json';a.click();

@@ -46,7 +46,7 @@
 # onu Basic Auth kapisinin ardindan okuyup servis ediyor. Yol base
 # directory ye goredir.
 [functions]
-  included_files = ["admin.html"]
+  included_files = ["admin.html", "content.json"]
 
 # YEREL SUNUM (netlify dev, 21 Agu). Astro'nun kendi dev sunucusu DEGIL:
 # burada sunulan sey URETIM CIKTISININ ta kendisi (dist/), yani telefondan

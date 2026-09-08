@@ -46,12 +46,23 @@ const simdi = () => new Date().toISOString();
    değişiyor (Netlify'da /var/task, yerelde depo kökü). Aday listesi
    sırayla denenir — bulunamazsa KAPALI davranılır, asla yarım sayfa
    dönülmez. */
-function panelYolu() {
+function panelYolu() { return dosyaYolu('admin.html'); }
+
+/* VERI UCU (9 Eyl 2026) — panel varsayilan icerigi ARTIK BURADAN aliyor.
+   Eskiden onizleme iframe'ine `/index.html` yuklenip
+   `window.__qanatDefaults()` cagriliyordu; o fonksiyon ESKI kok sitede
+   vardi ve Astro gocunde tasinmadi, yeni site yayina gecince panel
+   "Onizlemeye erisilemedi" deyip aciliyordu. Icerik artik kokteki
+   content.json'dan, Basic Auth'un ARDINDAN servis ediliyor — dosya
+   yayina (dist'e) konulmuyor, yalniz panel gorebiliyor. */
+function icerikYolu() { return dosyaYolu('content.json'); }
+
+function dosyaYolu(ad) {
   const adaylar = [
-    process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, 'admin.html'),
-    path.join(process.cwd(), 'admin.html'),
-    path.join(__dirname, 'admin.html'),
-    path.join(__dirname, '..', '..', 'admin.html')
+    process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, ad),
+    path.join(process.cwd(), ad),
+    path.join(__dirname, ad),
+    path.join(__dirname, '..', '..', ad)
   ].filter(Boolean);
   for (const a of adaylar) {
     try { if (fs.statSync(a).isFile()) return a; } catch (e) {}
@@ -93,6 +104,23 @@ exports.handler = async function handler(event) {
         'content-type': 'text/plain; charset=utf-8'
       }),
       body: 'giris gerekli'
+    };
+  }
+
+  /* `?veri=1` → panel varsayilan icerigi (kokteki content.json). Kapinin
+     ARDINDA: buraya ancak parola dogrulandiktan sonra gelinir. */
+  const q = (event && event.queryStringParameters) || {};
+  if (q.veri === '1') {
+    const iy = icerikYolu();
+    if (!iy) {
+      console.log(simdi(), 'panel: content.json paketde bulunamadi (included_files?)');
+      return { statusCode: 503, headers: H, body: 'icerik yok' };
+    }
+    console.log(simdi(), 'panel: icerik servis edildi');
+    return {
+      statusCode: 200,
+      headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
+      body: fs.readFileSync(iy, 'utf8')
     };
   }
 
