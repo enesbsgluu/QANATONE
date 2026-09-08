@@ -104,8 +104,26 @@ const W = [74, 58, 66, 49];
     background: linear-gradient(90deg, rgba(239, 35, 60, .10), rgba(239, 35, 60, .02));
     position: relative; z-index: 2; }
 
-  /* --- KİLİT: kap sticky DEĞİL (çizelge öznesi), sahne sticky --- */
-  .cl-kap { min-height: calc(100vh + 95vh); }
+  /* --- KİLİT: kap sticky DEĞİL (çizelge öznesi), sahne sticky ---
+     KAP BOYU 195vh DEĞİL, 95vh + SAHNE (9 Eyl 2026 — D4 açık kalemi kapandı).
+     ÖLÇÜLDÜ (1440×900, gerçek kaydırma, 20 px adım): yapışıklık scrollY
+     400 → 1600 (1.200 px) sürüyordu ama sürücü `--clp` 1.260'ta 1'e
+     varıyordu — yani sahne, animasyon bittikten sonra **340 px** boyunca
+     boşuna yapışık kalıyordu. Araç sahnesinde (92ddf8a) aynı sınıf 228 px
+     olarak bulunmuş, künyeye "aynı fazlalık tırmanışta DURUYOR" diye
+     yazılmıştı; sayı şimdi ölçüldü ve kaynağı kapandı.
+
+     BOY TAHMİN EDİLMEDİ, TÜRETİLDİ. Sticky çözülme anı ile animasyonun
+     bitiş anı eşitlenir:
+       yapışıklık biter : kapÜst + H − T − S      (T = sticky top, S = sahne)
+       animasyon biter  : kapÜst + 45vh + S/2     (menzil cover + 145vh + S/2,
+                                                   cover başı kapÜst − 100vh)
+       T = (100vh − S)/2  →  H = 95vh + S
+     Yani kap boyu VIEWPORT'A DEĞİL sahnenin kendi yüksekliğine bağlı;
+     195vh sabiti sahne kısaldıkça daha çok ölü kaydırma bırakıyordu.
+     `--sh` ada tarafında ölçülüp buraya yazılıyor (satır ~188); JS'ten
+     önceki yedek 560px kilidi bir miktar uzatır, zararsız. */
+  .cl-kap { min-height: calc(95vh + var(--sh, 560px)); }
   .clstage { position: sticky; top: calc((100vh - var(--sh, 560px)) / 2); }
 
   /* --- sürücü: kilit süresince 0→1 --- */
