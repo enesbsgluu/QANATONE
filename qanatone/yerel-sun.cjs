@@ -81,7 +81,22 @@ const TANI_ERKEN = `<script>(function(){
     soyluyor: "sadece ana sayfanin giris kisminda oluyor". Kollar artik
     HERO'YA OZGU katmanlari tek tek kaldiriyor; her tur AYNI YERDE
     (hero, y yaklasik 0) yapilmali — telemetri y yaziyor, sonra dogrulanir. */
+ /* ZEMIN AYRIM KOLLARI (9 Eyl, ikinci tur): zemin tasimasi cokmeyi durdurdu
+    ama IKI SEYI BIRDEN kaldirmisti, o yuzden hangisinin suclu oldugu
+    bilinmiyor:
+      A) KATMAN — #bg fixed oldugu icin ustundeki icerik belge boyu ayri
+         kompozit katmana cikiyor (Overlap, 7,35 MP). #bgin ICERIGINDEN
+         bagimsiz, yalniz position:fixed olmasindan.
+      B) BOYAMA — .gridin mask-image'i + .orb gradyani fixed olduklari
+         icin pinch'te her karede olcegin KARESIYLE yeniden rasterleniyor.
+    bgbos ikisini ayirir: #bg yerinde kalir (Overlap SURER) ama ici
+    bosalir (boyama BITER). Cokerse sebep A, cokmezse sebep B.
+    Zemin o turda gorunmez — yalniz teshis kolu, yama degil. */
  var KOL={
+  bgbos:'#bg>*{display:none!important}',
+  grid:'#bg .grid{display:none!important}',
+  gridmask:'#bg .grid{-webkit-mask-image:none!important;mask-image:none!important}',
+  orb:'#bg .orb{display:none!important}',
   bg:'#bg{display:none!important}',
   atmo:'.sus-atmo{display:none!important}',
   eller:'.sus-eller{display:none!important}',
