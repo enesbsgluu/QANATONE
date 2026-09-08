@@ -662,6 +662,12 @@ hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det)
   const P2=(l,q,o)=>`<div class="r2">${fld(l+' (TR)',q+'.tr',o)}${fld(l+' (EN)',q+'.en',o)}</div>`;
   const lines=(l,q,arr)=>`<div class="f"><label>${l}</label>
     <textarea data-lines="${q}">${esc((arr||[]).join('\n'))}</textarea></div>`;
+  /* SAYI DIZISI (9 Eyl 2026): sparkline serileri gibi kisa sayi dizileri
+     satir satir yazilmaz — virgulle ayrilir, tek satirda okunur kalir.
+     `lines`tan ayri bir kanci var cunku donusum farkli: metin degil SAYI
+     yazilmali, yoksa sahne "12" yerine "12" dizesini alir ve grafik cizmez. */
+  const nlines=(l,q,arr)=>`<div class="f"><label>${l}</label>
+    <input data-nlines="${q}" value="${esc((arr||[]).join(', '))}" placeholder="12, 18, 24"></div>`;
 
   let sahne='';
   if(fam==='funnel'){
@@ -681,6 +687,29 @@ hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det)
       <div class="r2">${fld('Başlık (TR)',q+'.t.tr')}${fld('Başlık (EN)',q+'.t.en')}</div>
       ${fld('Açıklama (TR)',q+'.d.tr',{area:1})}
       ${fld('Açıklama (EN)',q+'.d.en',{area:1})}`,it=>(it.t||{}).tr)}`;
+    /* AJAN KADROSU (9 Eyl 2026): `det.kadro` alt agaci PANELDE HIC YOKTU —
+       kapsama olcumu once yalniz `yol`u gosterdi, cunku aracin son-ek
+       kurali otekileri yanlislikla "bagli" saymisti. Nobetci `yol`u
+       uretimde gordu; agacin tamami buraya acildi. */
+    if(det.kadro) sahne+=`
+    <h4 class="sec">Ajan kadrosu</h4>
+    <div class="note calm">Sahne ajanları departman departman gösterir. <b>Klasör</b> alanları
+    sahnedeki dosya yolu etiketidir (sonunda <span class="mono">/</span> ile yaz).</div>
+    ${P2('Bölüm etiketi',p+'.kadro.k')}
+    ${P2('Başlık',p+'.kadro.h',{area:1,hint:'&lt;em&gt;…&lt;/em&gt; içi kızıl vurgulanır'})}
+    ${P2('Açıklama',p+'.kadro.p',{area:1})}
+    ${fld('Kök klasör',p+'.kadro.yol',{hint:'örn. kadro/'})}
+    ${P2('Dokunma ipucu',p+'.kadro.ipucu')}
+    <h4 class="sec">Kadro yöneticisi (kök ajan)</h4>
+    ${fld('Ajan adı',p+'.kadro.kok.n',{hint:'örn. kadro-yoneticisi'})}
+    ${P2('Ne yapar',p+'.kadro.kok.a',{area:1})}
+    <h4 class="sec">Departmanlar</h4>
+    ${list(p+'.kadro.dept','Departman',(it,k,q)=>`
+      ${fld('Klasör',q+'.n',{hint:'örn. karsilama/'})}
+      <div class="r2">${fld('Ad (TR)',q+'.t.tr')}${fld('Ad (EN)',q+'.t.en')}</div>
+      ${fld('Ne yapar (TR)',q+'.a.tr',{area:1})}
+      ${fld('Ne yapar (EN)',q+'.a.en',{area:1})}`,it=>(it.t||{}).tr||it.n)}
+    ${P2('Kapanış notu',p+'.kadro.end',{area:1})}`;
   } else if(det.serp){
     sahne=`<h4 class="sec">Sahne — arama sonucu tırmanışı</h4>
     <div class="note calm">Rakip satırları (“Rakip Firma 1-4”) kodda üretilir; buradan yalnız aranan kelime
@@ -737,6 +766,67 @@ hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det)
     ${fld('Metin (TR)',p+'.trade.mail.body.tr',{area:1,big:1,hint:'paragraf ayırmak için satır atla — alıcının kendi alım geçmişine atıf yapmalı'})}
     ${fld('Metin (EN)',p+'.trade.mail.body.en',{area:1,big:1})}
     ${P2('Yanıt satırı',p+'.trade.mail.reply')}`;
+    /* PAZAR MOTORU TABLOLARI (9 Eyl 2026, Enes: "piyasa verilerini de
+       panelden duzenleyebilmeliyim, tam tablo editoru kur").
+       Bu alanlar `det.market` altinda ve BUGUNE KADAR PANELDE YOKTU —
+       nobetciyle olculdu, hepsi uretimde gorunuyor (yani olu degil, eksik).
+       Sayisal olanlar `nfld`, sayi DIZILERI `nlines` ile yonetiliyor;
+       `idx` bir sparkline serisi, virgulle ayrilir. */
+    if(det.market) sahne+=`
+    <h4 class="sec">Pazar motoru — ticaret zinciri haritası</h4>
+    <div class="note calm">Enlem/boylam sahnedeki noktaların yerini belirler (WGS84, ondalık
+    derece). <b>Kaynak</b> hammaddenin çıktığı ülke, <b>merkez</b> işleyen ülke,
+    <b>hedefler</b> aday pazarlar. Seçili hedef 0'dan sayılır.</div>
+    ${P2('Harita başlığı',p+'.market.mapLab')}
+    <div class="r3">${fld('Kaynak ülke',p+'.market.map.src.n')}${nfld('Kaynak enlem',p+'.market.map.src.lat')}${nfld('Kaynak boylam',p+'.market.map.src.lon')}</div>
+    <div class="r3">${fld('Merkez ülke',p+'.market.map.hub.n')}${nfld('Merkez enlem',p+'.market.map.hub.lat')}${nfld('Merkez boylam',p+'.market.map.hub.lon')}</div>
+    ${list(p+'.market.map.dst','Hedef ülke',(it,k,q)=>`
+      <div class="r3">${fld('Ülke',q+'.n')}${nfld('Enlem',q+'.lat')}${nfld('Boylam',q+'.lon')}</div>`,it=>it.n)}
+    ${nfld('Seçili hedef',p+'.market.map.pick',{hint:'0 = ilk hedef'})}
+
+    <h4 class="sec">Gümrük akışı (feed)</h4>
+    <div class="note calm">Sahnede akan satırlar. <b>Kod</b> alanları ülke kodudur (RU, TR),
+    <b>HS</b> gümrük tarife kodu. Rakamlar örnektir — veri kapsamı iddiası değil.</div>
+    ${list(p+'.market.feed','Akış satırı',(it,k,q)=>`
+      <div class="r3">${fld('Kaynak kodu',q+'.f',{hint:'örn. RU'})}${fld('Hedef kodu',q+'.t',{hint:'örn. TR'})}${fld('HS kodu',q+'.hs')}</div>
+      <div class="r2">${fld('Ürün',q+'.p')}${fld('Hacim',q+'.v')}</div>`,it=>(it.f||'')+'→'+(it.t||'')+' · '+(it.p||''))}
+
+    <h4 class="sec">Sektör ağırlıkları</h4>
+    <div class="note calm"><b>Ağırlık</b> bar genişliğidir (100 tabanlı). <b>Sıcak</b> 1 ise
+    satır vurgulanır, 0 ise normal.</div>
+    ${list(p+'.market.sectors','Sektör',(it,k,q)=>`
+      <div class="r2">${fld('Ad (TR)',q+'.n.tr')}${fld('Ad (EN)',q+'.n.en')}</div>
+      <div class="r3">${nfld('Ağırlık',q+'.w',{hint:'0-100'})}${fld('Etiket',q+'.v',{hint:'örn. %31'})}${nfld('Sıcak',q+'.hot',{hint:'1 = vurgulu'})}</div>`,
+      it=>((it.n||{}).tr||'')+' · '+(it.w??''))}
+
+    <h4 class="sec">Aday pazarlar — harcama eğrisi</h4>
+    <div class="note calm"><b>Eğri</b> sparkline serisidir: sayıları virgülle ayır
+    (örn. <span class="mono">12, 18, 24, 31</span>). <b>Sıra</b> iştah sıralaması,
+    <b>skor</b> ve <b>hacim</b> kart üzerinde görünür.</div>
+    ${P2('Eğri başlığı',p+'.market.curveLab')}
+    ${P2('Sıralama başlığı',p+'.market.rankLab')}
+    ${list(p+'.market.markets','Pazar',(it,k,q)=>`
+      <div class="r2">${fld('Ülke',q+'.n')}${fld('Değişim',q+'.d',{hint:'örn. +%31'})}</div>
+      <div class="r2">${fld('İlk ay (TR)',q+'.a0.tr')}${fld('Son ay (TR)',q+'.a1.tr')}</div>
+      <div class="r2">${fld('İlk ay (EN)',q+'.a0.en')}${fld('Son ay (EN)',q+'.a1.en')}</div>
+      ${nlines('Eğri serisi',q+'.idx',it.idx)}
+      <div class="r3">${nfld('Sıra',q+'.rank')}${nfld('Skor',q+'.score')}${fld('Hacim',q+'.tv')}</div>`,
+      it=>(it.n||'')+' · '+(it.d||''))}
+
+    <h4 class="sec">Risk iştahı bileşenleri</h4>
+    ${P2('Risk başlığı',p+'.market.riskLab')}
+    ${list(p+'.market.risk','Bileşen',(it,k,q)=>`
+      <div class="r2">${fld('Ad (TR)',q+'.n.tr')}${fld('Ad (EN)',q+'.n.en')}</div>
+      <div class="r2">${nfld('Ağırlık',q+'.w',{hint:'0-100'})}${fld('Değer etiketi',q+'.v',{hint:'örn. 0,64'})}</div>`,
+      it=>((it.n||{}).tr||'')+' · '+(it.w??''))}
+
+    <h4 class="sec">Ürün hipotezleri</h4>
+    <div class="note calm"><b>Pay</b> pazar payı etiketi, <b>kazanan</b> 1 ise o satır
+    seçilmiş hipotez olarak vurgulanır.</div>
+    ${list(p+'.market.hyp','Hipotez',(it,k,q)=>`
+      <div class="r2">${fld('Ad (TR)',q+'.n.tr')}${fld('Ad (EN)',q+'.n.en')}</div>
+      <div class="r2">${fld('Pay',q+'.p',{hint:'örn. %21'})}${nfld('Kazanan',q+'.win',{hint:'1 = vurgulu'})}</div>`,
+      it=>((it.n||{}).tr||'')+' · '+(it.p||''))}`;
   } else if(det.story&&det.story.tools){
     sahne=`<h4 class="sec">Sahne — araç perdeleri</h4>
     <div class="note calm"><b>Bu sahne tamamen çizimdir.</b> Dört perde (hero → anında teklif →
@@ -822,6 +912,11 @@ bind(r){
   r.querySelectorAll('[data-svc]').forEach(b=>b.onclick=()=>{curSvc=b.dataset.svc;show(cur);});
   r.querySelectorAll('[data-lines]').forEach(el=>el.oninput=()=>
     set(el.dataset.lines,el.value.split('\n').map(x=>x.trim()).filter(Boolean)));
+  /* SAYI DIZISI: virgul (ya da bosluk) ile ayrilir ve SAYIYA cevrilir.
+     Metin birakilsaydi sahne grafigi cizemezdi. */
+  r.querySelectorAll('[data-nlines]').forEach(el=>el.oninput=()=>
+    set(el.dataset.nlines,el.value.split(/[,\s]+/).map(x=>x.trim())
+      .filter(x=>x!=='').map(Number).filter(x=>!Number.isNaN(x))));
   r.querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>
     set(el.dataset.n,el.value===''?'':+el.value));
   r.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{

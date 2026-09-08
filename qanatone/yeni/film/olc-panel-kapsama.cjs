@@ -42,14 +42,24 @@ const kaynak = [...yollar(icerik)].sort();
    + sablonlu olanlar (`services.${i}.title` → services.#.title) */
 const panelMetin = fs.readFileSync(PANEL, 'utf8');
 const panelYollari = new Set();
-const re = /['"`]([a-zA-Z][a-zA-Z0-9_]*(?:\.(?:\$\{[^}]+\}|[a-zA-Z0-9_]+))+)['"`]/g;
+/* YOL SABLONLA DA BASLAYABILIR (9 Eyl 2026, duzeltme). Ilk yazimda desen
+   yalniz HARFLE baslayan yollari yakaliyordu; oysa panel dizi ogelerini
+   `data-lines="${p}.act.tr"` gibi yaziyor — yol degiskenle basliyor.
+   Sonuc: `sectors.#.act.tr` PANELDE BAGLIYKEN (admin.html:453) "eksik"
+   raporlandi. Ayni tuzak 22 `services.#` alaninda da vardi.
+   Artik `${...}` hem basta hem ortada kabul ediliyor. */
+const re = /['"`]((?:\$\{[^}]+\}|[a-zA-Z][a-zA-Z0-9_]*)(?:\.(?:\$\{[^}]+\}|[a-zA-Z0-9_]+))+)['"`]/g;
 let m;
 while ((m = re.exec(panelMetin))) {
   panelYollari.add(m[1].replace(/\$\{[^}]+\}/g, '#').replace(/\.\d+/g, '.#'));
 }
 /* q+'.frame' gibi birlestirmeler: degisken onekli parcalari da topla */
 const re2 = /\+\s*['"`]\.([a-zA-Z0-9_.]+)['"`]/g;
-while ((m = re2.exec(panelMetin))) panelYollari.add('*.' + m[1]);
+/* `p+'.del.tr'` gibi BIRLESTIRILMIS yollar: onek bir degisken oldugu icin
+   metinde yalniz son parca gorunur. Hem `*.` onekli hem CIPLAK hali eklenir
+   — ciplak hali olmadan `services.#.det.del.tr.#` eslesmiyordu ve alan
+   PANELDE OLMASINA ragmen (admin.html `lines(...)`) eksik raporlaniyordu. */
+while ((m = re2.exec(panelMetin))) { panelYollari.add('*.' + m[1]); panelYollari.add(m[1]); }
 
 const sonEk = (y) => y.split('.').slice(-1)[0];
 const panelSonEkleri = new Set([...panelYollari].map(sonEk));
@@ -66,6 +76,18 @@ for (const y of kaynak) {
   if (y.startsWith('strings.')) continue;
   const nk = y.replace(/\.\d+/g, '.#');
   if (panelYollari.has(nk)) continue;
+  /* DIZI BUTUN OLARAK YONETILIYOR OLABILIR (9 Eyl duzeltmesi).
+     Kaynak ELEMAN yolu verir (`sectors.#.act.tr.#`), panel ise diziyi tek
+     bir cok satirli kutuda yonetir (`data-lines="${p}.act.tr"`). Eleman
+     yolunun `.#` eki atilmis hali panelde varsa alan BAGLIDIR.
+     Ayrica panel yolu sablonla basladigi icin onek dusebilir
+     (`${p}.act.tr` -> `#.act.tr`); o yuzden SON EK esleSmesi de kabul. */
+  const dizisiz = nk.replace(/(\.#)+$/, '');
+  if (dizisiz && dizisiz !== nk) {
+    if (panelYollari.has(dizisiz)) continue;
+    if ([...panelYollari].some((p) => dizisiz === p || dizisiz.endsWith('.' + p) || p.endsWith('.' + dizisiz))) continue;
+  }
+  if ([...panelYollari].some((p) => nk.endsWith('.' + p))) continue;
   /* dizi ogesinin alt alani: son iki parca eslesiyorsa bagli say */
   const son2 = nk.split('.').slice(-2).join('.');
   if ([...panelYollari].some((p) => p.endsWith('.' + son2) || p === son2)) continue;
@@ -83,8 +105,15 @@ for (const y of kaynak) {
    ikisi de icerik karari, Enes'te.
    Kaynak taramasi tek basina yetmez (hesaplanan anahtari goremez) — bu
    liste NOBETCI ile dogrulanmistir. [[qanatone-anahtar-kullanimi-olculur]] */
-const OLU = new Set(['settings.assistant', 'settings.demoWa',
-  'projects.#.imgk6', 'projects.#.imgk', 'projects.#.imgc']);
+const OLU = new Set([
+  /* 1. tur (temizlendi, content.json'dan silindi) */
+  'settings.assistant', 'settings.demoWa',
+  'projects.#.imgk6', 'projects.#.imgk', 'projects.#.imgc',
+  /* 2. tur — nobetciyle olculdu, uretimde 0 dosya. Iceride DURUYORLAR ama
+     hicbir sayfaya girmiyorlar; panele alan acmak yanlis yesil olurdu.
+     Temizlenmeleri ya da kullanima baglanmalari icerik karari (Enes). */
+  'chimg.#', 'partners.#', 'services.#.det.story.tools',
+  'services.#.fam', 'theme.motion.splash']);
 const oluBulunan = eksik.filter((y) => OLU.has(y.replace(/\.\d+/g, '.#')));
 for (let i = eksik.length - 1; i >= 0; i--) {
   if (OLU.has(eksik[i].replace(/\.\d+/g, '.#'))) eksik.splice(i, 1);

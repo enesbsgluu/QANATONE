@@ -1,0 +1,116 @@
+[
+ {
+  "yol": "services.#.det.kadro.yol",
+  "nobetci": "NBTCD0ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.story.tools",
+  "nobetci": "NBTCD1ZQ",
+  "konuldu": true,
+  "tip": "boolean"
+ },
+ {
+  "yol": "services.#.det.market.feed.#.f",
+  "nobetci": "NBTCD2ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.market.feed.#.p",
+  "nobetci": "NBTCD3ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.market.hyp.#.p",
+  "nobetci": "NBTCD4ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.market.hyp.#.win",
+  "nobetci": "700.005",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.dst.#.lat",
+  "nobetci": "700.006",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.dst.#.lon",
+  "nobetci": "700.007",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.hub.lat",
+  "nobetci": "700.008",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.hub.lon",
+  "nobetci": "700.009",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.src.lat",
+  "nobetci": "700.01",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.map.src.lon",
+  "nobetci": "700.011",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.markets.#.idx.#",
+  "nobetci": "700.012",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.markets.#.rank",
+  "nobetci": "700.013",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.markets.#.score",
+  "nobetci": "NBTCD14ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.market.markets.#.tv",
+  "nobetci": "NBTCD15ZQ",
+  "konuldu": true,
+  "tip": "string"
+ },
+ {
+  "yol": "services.#.det.market.risk.#.w",
+  "nobetci": "700.016",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.sectors.#.hot",
+  "nobetci": "700.017",
+  "konuldu": true,
+  "tip": "number"
+ },
+ {
+  "yol": "services.#.det.market.sectors.#.w",
+  "nobetci": "700.018",
+  "konuldu": true,
+  "tip": "number"
+ }
+]
