@@ -121,6 +121,47 @@ canonical'lar o andan itibaren doğru; kesme sadece içeriği değiştirir,
 adresi değil. **DNS yayılımı 24-48 saat sürebilir; kesme gününden önce
 bitmiş olmalı.**
 
+---
+
+## 0b · AÇIK KALEM — DNS'i Cloudflare'a taşımak (9 Eylül 2026)
+
+**Karar: taşınacak. Zamanı Enes'te.**
+
+**Neden çıktı:** `DNS-AID` ajan hazırlığı kalemi bir **SVCB/HTTPS DNS
+kaydı** ister; kayıt ancak **DNSSEC** açıkken güvenilir sayılır. Enes
+Natro panelini ölçtü (9 Eyl): **ikisi de yok.** Yani kalem kod tarafında
+değil, kayıt firmasında kilitli.
+
+**Ön koşulun öbür yarısı bu turda kapandı:** kaydın işaret edeceği uç
+artık **var** — `https://www.qanatone.com/mcp` (MCP) ve `/a2a` (A2A).
+Daha önce "uç yok" diye de bekliyordu; artık tek engel DNS.
+
+**Taşımanın kapsamı — alan adı Natro'da KALIR, yalnız nameserver değişir.**
+Bu, `yeni/src/icerik.ts`teki mevcut kaydın koşulunu da değiştirir: orada
+"DNS Natro'da kaldı çünkü e-posta kayıtları orada" yazılı ve apex bu
+yüzden tek yük dengeleyici adresine sabitlenmiş, CDN yönlendirmesinden
+yararlanamıyor. Cloudflare'a geçiş bunu da açar (apex CNAME flattening).
+
+**Taşınırken TAŞINACAK KAYITLAR — eksiği kesinti demektir:**
+- **MX** (Natro e-posta) — en kritik kalem, önce yazılıp doğrulanmalı
+- **SPF/TXT** (Natro SPF kaydı mevcut; Search Console TXT yoksa gerekmez)
+- **A / CNAME** — apex + `www` → Netlify
+- Varsa DKIM/DMARC
+
+**Sıra (kesinti riskini sıfırlayan):**
+1. Cloudflare'da alan eklenir, mevcut kayıtlar taranıp **teyit edilir**
+   (özellikle MX — tarama bazen eksik çeker).
+2. Kayıtlar Cloudflare'da tamamlanır, **nameserver henüz değiştirilmez**.
+3. Natro'da NS → Cloudflare. Yayılım 24-48 saat.
+4. Cloudflare'da **DNSSEC açılır** (DS kaydı Natro'ya girilir).
+5. **SVCB/HTTPS kaydı** eklenir, `/mcp` ucunu işaret eder.
+6. `node yeni/film/olc-ajan-hazir.cjs` ile `dnsAid` yeşile döndü mü ölçülür.
+
+**Ölçüt:** taşımadan sonra e-posta akışı kesintisiz + `dig HTTPS
+qanatone.com` kayıt döndürüyor + DNSSEC doğrulanıyor.
+
+---
+
 ## 1 · Kesme ön şartları — güncel durum (20 Ağu)
 
 | Şart | Durum |
