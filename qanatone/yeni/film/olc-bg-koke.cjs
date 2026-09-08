@@ -52,6 +52,15 @@ const ORBLAR = {
   e: `radial-gradient(circle calc(min(450px,60vw) + 160px) at 50% 44%,
       rgba(239,35,60,.055) 0%,rgba(239,35,60,.052) 38%,rgba(239,35,60,.0275) 62%,
       rgba(239,35,60,.010) 80%,rgba(239,35,60,0) 100%)`,
+  /* k: KAYNAKTAN BIREBIR. Mobilde orb'un blur'u 4 Eyl'de zaten kaldirilmis ve
+     yerine radial-gradient yazilmis (kabuk.css:94). Yani a/d/e adaylarinin
+     hepsi YANLIS TEMELE oturuyordu: blurlu diski taklit etmeye calisiyorlardi,
+     oysa mobilde blur YOK. Kaynak: `circle closest-side` — kare elemanda
+     yaricap yarim kenar = min(450px,60vw). Duraklar aynen.
+     [[qanatone-animasyon-referans-kunyeden]]: yaklasikla kurulmaz, eski
+     koddan okunur. */
+  k: `radial-gradient(circle min(450px,60vw) at 50% 44%,
+      rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)`,
 };
 /* GRID MASKESI tasinamiyor (background katmanlari carpilamaz). Kaynakta
    maske merkezde tam, %76'da sifir; ortalama gecirgenlik ~%45. `m` kolu

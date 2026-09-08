@@ -122,6 +122,10 @@ const TANI_BETIK = `<script>(function(){
     genislikte). Kiyas ancak iki kosumda bu deger BEKLENEN olursa gecerlidir. */
  var halkaEn=null; try{var hh=document.querySelector('.sh-void .sus-halka')||document.querySelector('.sus-halka');
    if(hh)halkaEn=Math.round(parseFloat(getComputedStyle(hh,'::before').width))||null}catch(e){}
+ /* zemin yamasi etkin mi: mobilde #bg gizli VE body'de kok zemin olmali */
+ var zemin=null; try{var bb=document.getElementById('bg');
+   zemin=(bb?(getComputedStyle(bb).display==='none'?'bg-gizli':'bg-acik'):'bg-yok')
+     +(getComputedStyle(document.body).backgroundImage!=='none'?'+kok':'')}catch(e){}
  addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
  function paket(sebep){
   var vv=window.visualViewport||{};
@@ -130,7 +134,7 @@ const TANI_BETIK = `<script>(function(){
   if(sonOlcek>=4)yuksekMs+=simdi-sonTik;      /* yuksek olcekte gecen sure birikir */
   sonTik=simdi; sonOlcek=vv.scale||1;
   return {kol:kol,sebep:sebep,n:++n,ms:simdi-t0,
-   kolTuttu:kolTuttu, nav:nav, yuklemeNo:yuklemeNo, halkaEn:halkaEn,
+   kolTuttu:kolTuttu, nav:nav, yuklemeNo:yuklemeNo, halkaEn:halkaEn, zemin:zemin,
    acilisOlcek:Number(acilisOlcek.toFixed(2)), yuksekMs:yuksekMs,
    heroda:(scrollY < innerHeight*1.2),
    olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),

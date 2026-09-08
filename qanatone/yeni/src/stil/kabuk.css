@@ -96,6 +96,60 @@ html.t-noagent #bitback{display:none!important}
   #bg .orb{filter:none;
     background:radial-gradient(circle closest-side,rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)}
 }
+
+/* ==== MOBILDE ZEMIN KOKE TASINDI (9 Eyl 2026 — Enes onayi) ====
+   `#bg` (position:fixed, z-index:-1) durdugu surece USTUNDEKI KONUMLANDIRILMIS
+   ne varsa BELGE BOYU bir Overlap katmani devraliyor: 516x14242 = 7,35 MP.
+   Zincir olculdu (olc-katman.cjs, 428x781):
+     taban                  7,35 #document + 7,35 html [Overlap]   23,11 MP
+     body{isolation:isolate}     + 6,67 i#nvS                       22,43 MP
+     izolasyon + nvS yok         + 6,67 main#icerik                 22,43 MP
+     #bg yok                ikinci katman YOK                       15,13 MP
+   Yani `isolation` zinciri KIRMIYOR — sensor gidince siradaki devraliyor.
+   Tek etkili kol `#bg`in kendisi: -7,98 MP, sayfanin %35'i. Pinch zoom'da
+   raster maliyeti olcegin karesiyle buyudugu icin bu dogrudan iOS'un cokme
+   butcesine giriyor.
+
+   KAPSAM MOBIL: cokme mobilde. Masaustunde `.orb` GERCEK `blur(130px)`
+   tasiyor ve bir gradyanla birebir tasinamaz; orada olculmus bir cokme de
+   yok, dokunulmadi.
+
+   `#bg` SILINMEDI, yalniz gizlendi — DOM'da kalmasi SART: temel.css'teki
+   `body:not(:has(#bg))::before` kurali film sayfalari icin ayni isi yapan
+   BASKA bir fixed katman kuruyor; element silinseydi o kural her sayfada
+   devreye girer ve ayni Overlap katmanini geri getirirdi.
+
+   ORB KAYNAKTAN BIREBIR: mobilde blur zaten 4 Eyl'de kaldirilmis ve yerine
+   gradyan yazilmisti (yukaridaki kural). Ilk denemede o gradyan yerine
+   blurlu disk "yaklasik" kurulmustu — fark ortalama 1,93/255, farkli piksel
+   %36,7. Kaynaktaki duraklar aynen alininca 0,30/255 ve %1,8'e dustu.
+   `closest-side` kare elemanda yarim kenardir: min(450px,60vw).
+
+   GORSEL FARK OLCULDU (olc-bg-koke.cjs, uc kaydirma konumu, yan yana kare):
+     y=0     ortalama 0,30/255 · farkli %1,77
+     y=1400  ortalama 0,24/255 · farkli %3,95
+     y=3200  ortalama 0,39/255 · farkli %4,31
+   Kalan tek bilincli sapma: `.grid`in radial maskesi tasinamiyor (background
+   katmanlari carpilamaz), noktalar kenarlarda da suruyor — olcumde farki
+   %1,8'in icinde kaldi.                                                   */
+@media(pointer:coarse),(max-width:900px){
+  #bg{display:none}
+  /* `body:has(#bg)` SART: `#bg`siz sayfalarda (film) temel.css'in
+     `body:not(:has(#bg))::before` kurali zaten bir zemin basiyor; kosulsuz
+     yazilsaydi orada IKI zemin ust uste binerdi. */
+  body:has(#bg){
+    background-image:
+      radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 1.6px),
+      radial-gradient(circle at 1px 1px,rgba(255,120,140,.06) 1.4px,transparent 2.2px),
+      linear-gradient(180deg,rgba(239,35,60,.05),transparent 34%),
+      radial-gradient(circle min(450px,60vw) at 50% 44%,
+        rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%),
+      linear-gradient(180deg,#170406 0%,#050505 46%);
+    background-size:28px 28px,140px 140px,100% 100%,100% 100%,100% 100%;
+    background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat;
+    background-attachment:fixed,fixed,fixed,fixed,fixed;
+  }
+}
 @media(prefers-reduced-motion:reduce){#stars{display:none}}
 /* icerik yildizlarin USTUNDE (kaynak 249 `main{position:relative;z-index:2}`) */
 body:has(#stars) main{position:relative;z-index:2}
