@@ -21,7 +21,19 @@ const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const SUNUCU = process.env.SUNUCU || 'http://127.0.0.1:8790';
 const DIZIN = path.join(__dirname, process.env.DIZIN || '_kare-zemin-reg');
 const SAYFALAR = (process.env.SAYFALAR || '/,/hizmetler/,/projeler/,/iletisim/,/film/,/en/').split(',');
-const GERI = '#bg{display:block!important}body:has(#bg){background-image:none!important}';
+/* GERI = uygulanan yamayi geri alan kol. YAMA DEGISTIGINDE BU DA DEGISMELI —
+   yoksa kol hicbir seyi degistirmez ve arac her sayfada "fark 0" yazar
+   (bir kez oldu: kok zemin yamasi sticky ile degistirildiginde eski kol
+   kalmisti, sonuc sessizce yanlis yesildi).
+   Bugunku yama: mobilde `#bg` sticky + orb 100vw. Geri alan kol onu
+   `position:fixed` ve orb'u 120vw/closest-side yapar. */
+/* KOL, YAMANIN KAPSAMIYLA AYNI @media ICINDE OLMALI. Ilk yazimda kapsamsiz
+   verildi ve MASAUSTUNDE de orb'u degistirdi (orada orijinal orb blur'lu duz
+   renk, gradyan degil) — arac masaustunde 2,02/255 · %39 "fark" yazdi, oysa
+   yama masaustune hic dokunmuyor. Kolun kapsami yamanin kapsami kadardir. */
+const GERI = process.env.GERI_KOL
+  || '@media(pointer:coarse),(max-width:900px){'
+   + '#bg{display:block!important}body:has(#bg){background-image:none!important}}';
 
 (async () => {
   fs.mkdirSync(DIZIN, { recursive: true });

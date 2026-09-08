@@ -77,6 +77,32 @@ const GRID = process.env.GRID === 'm'
    degistirmiyordu (y=1400/3200 farki uc kolda da ondalik basamagina kadar
    ayniydi). Degisken degistigi halde sonuc degismiyorsa olculen sey degisken
    degildir; burada olculen tek sey `#bg`in kaldirilmasiydi.               */
+/* MOD=sticky: `#bg` GERI ACILIR ve `position:fixed` yerine `position:sticky`
+   olur. Kok zemin yolunun iOS'ta duseceginin belirtisi Enes'ten geldi
+   ("baslangiclarda var, altlara kayinca yok"): iOS Safari
+   `background-attachment:fixed` uygulamiyor, gradyan belge boyuna yayiliyor.
+   Chrome'daki olcum bunu goremezdi.
+   Sticky, fixed'in Overlap kompozitini DOGURMUYOR (olculdu: 23,11 -> 16,03 MP,
+   belge boyu ikinci katman yok) ve `.fade`/`.orb`/`.grid` GERCEK ELEMENT
+   olarak kaldigi icin gorsel TAKLIT GEREKTIRMEZ.                          */
+const STICKY = `
+body:has(#bg){background-image:none!important}
+#bg{display:block!important;position:sticky!important;top:0!important;
+  inset:auto!important;height:100vh!important;margin-bottom:-100vh!important;
+  z-index:-1!important}
+/* ORB 120vw -> 100vw: sticky AKISTA oldugu icin icindeki tasma belgeyi
+   genisletiyor (scrollWidth 428 -> 471, nav da 471'e cikiyordu; fixed'de
+   tasma etkisizdi). overflow:hidden tasmayi keser AMA scroll container
+   yaratip Overlap katmanini GERI GETIRIYOR (22,98 MP, olculdu); clip-path
+   ise boyamayi kirpar, scrollWidth'i 471'de birakir. Tek calisan yol tasmayi
+   KAYNAGINDA kesmek. Isima daralmasin diye eleman kuculurken GRADYAN
+   YARICAPI korunuyor: closest-side yerine sabit min(450px,60vw). Gradyan
+   %86'da zaten sifirlaniyor (257x0,86 = 221 px), elemanin yarisi 214 px —
+   kirpilan bant 214-221 arasi, degeri neredeyse sifir. */
+#bg .orb{width:min(900px,100vw)!important;height:min(900px,100vw)!important;
+  background:radial-gradient(circle min(450px,60vw) at 50% 50%,
+    rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)!important}`;
+
 const KOK = `
 body{
   background-color:#050505;
@@ -134,11 +160,14 @@ body{
   }, b64, k, dpr);
 
   const boya = async (mod, y, ad) => {
-    await page.evaluate((mod, KOK) => {
+    await page.evaluate((mod, KOK, STICKY, MOD, GERI) => {
       let st = document.getElementById('olc-bg-stil');
       if (!st) { st = document.createElement('style'); st.id = 'olc-bg-stil'; document.head.appendChild(st); }
-      st.textContent = mod === 'yeni' ? KOK : '';
-    }, mod, KOK);
+      /* taban = YAMASIZ hal (fixed #bg). Dist'te yama zaten uygulandigi icin
+         'eski' kolu once onu geri alir. */
+      st.textContent = mod === 'yeni' ? (MOD === 'sticky' ? STICKY : KOK) : GERI;
+    }, mod, KOK, STICKY, process.env.MOD || 'kok',
+    'body:has(#bg){background-image:none!important}#bg{display:block!important}');
     await page.evaluate((y) => scrollTo(0, y), y);
     await new Promise((r) => setTimeout(r, 700));
     /* SAHNEYI DONDUR (nabiz haric): tam sayfa karesinde 49 animasyon kosuyordu
