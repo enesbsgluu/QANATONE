@@ -435,11 +435,17 @@ gorunum:{t:'Görünüm & Hareket',n:()=>'yeni',f:()=>`
   <h4 class="sec">Söz bandı (ince)</h4>
   ${rng('Geçiş süresi','theme.testi.interval',3,30,1,' sn','kanal kartlarının altındaki ince kırmızı bant')}`},
 
-ortak:{t:'Ortaklar (şerit)',n:()=>(get('partners')||[]).length,f:()=>`
-  <h2>Birlikte çalıştıklarımız</h2><p class="sub">Ana sayfadaki yatay akan şeritte görünen isimler. En az üç isim olmalı.</p>
-  <div class="note"><b>Yayına çıkmadan temizlenmeli.</b> Listedeki Mercedes-Benz, Charles Schwab,
-  Berkshire Hathaway, Vestel ve Arçelik izinsiz marka kullanımı — Reklam Kurulu'nun ceza kestiği kalem.</div>
-  ${list('partners','İsim',(it,i,p)=>fld('Firma adı',p),it=>String(it))}`},
+/* "ORTAKLAR (SERIT)" SEKMESI KALDIRILDI (9 Eyl 2026, olculdu).
+   Sekme "ana sayfadaki yatay akan seritte gorunen isimler" diyordu ve
+   `partners` anahtarini duzenliyordu. OLCUM: serit o anahtari HIC
+   OKUMUYOR — `STSerit.astro` `src/veri/serit-logolari.json`'dan besleniyor
+   (dokuz ARAC logosu: OpenAI, ... — musteri adi degil), o dosyayi da
+   `gorsel-uret.cjs` gorsellerle BIRLIKTE uretiyor. Yani buradan isim
+   degistiren biri sitede hicbir sey degistirmiyordu.
+   Ayni adlar zaten `projects` altinda yasiyor ve orasi CANLI.
+   GREP TUZAGI: "Charles Schwab" dist/index.html'de geciyor — `projects`ten,
+   `partners`tan degil; ayni ad iki yerde. Olcum nobetciyle yapilir.
+   Anahtar content.json'dan da dusuruldu. Bekci: denetim T8. */
 
 sektor:{t:'Endüstriler',n:()=>(get('sectors')||[]).length,f:()=>`
   <h2>Sektör profilleri</h2><p class="sub">Ziyaretçi sektörünü seçince pano, hesap makinesi, iş akışı ve harita bu değerlere göre kurulur.</p>
@@ -512,11 +518,14 @@ kanal:{t:'Kanal kartları',n:()=>6,f:()=>{
   ${fld('Başlık (EN)','strings.en.ch'+n+'t')}
   ${fld('Açıklama (TR)','strings.tr.ch'+n+'d',{area:1})}
   ${fld('Açıklama (EN)','strings.en.ch'+n+'d',{area:1})}
-  ${img('chimg.'+(+n-1),'kartın arka planı · 3:2 · koyu kartta karanlık, kızıl kartta kızıl hâkim görsel kullan · boş bırakılırsa düz zemin kalır')}`).join('')}
-  <div class="note"><b>Kart görselleri.</b> Konusu SAĞ tarafta olan görsel seç: metin sol yarıya
-  biniyor, perde de soldan açılıyor. Kart fareyle üstüne gelince boyu iki katına çıktığı için
-  görsel kırpılır — kenarlarda kritik detay bırakma. Mobilde perde sertleşir ve odak daha sağa
-  kayar, orada açıklama hep açık durur. Görsel <b>content.json içine gömülür</b>, 150 KB altı tut.</div>
+  `).join('')}
+  <div class="note"><b>Kart görselleri panelden değil, üreteçten geliyor.</b> Buradaki görsel
+  yükleme alanı 9 Eyl 2026'da <b>kaldırıldı</b>: alan <span class="mono">chimg</span> anahtarına
+  yazıyordu ama sahne onu hiç okumuyor — kartlar
+  <span class="mono">src/veri/kanal-gorselleri.json</span>'dan besleniyor ve o dosya
+  <b>üç kırılımlı</b> (mobil/tablet/masaüstü) bir set üretir. Tek bir yüklenmiş görsel bu setin
+  yerini tutamazdı; alan duruyordu ama hiçbir şey değiştirmiyordu.
+  Görsel değişecekse yol üreteçtir — söyle, çalıştırayım.</div>
   <div class="note calm">Önizleme sağdaki <span class="mono">index.html</span>'den beslenir —
   panelle aynı klasörde <b>güncel</b> index durmalı; eski sürümde alanlar boş görünür ama
   yazdıkların yine dışa aktarıma girer.</div>`;}},
@@ -1004,7 +1013,7 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
     };
   }}
 };
-const NAV=[['İçerik',['genel','ortak','sektor']],
+const NAV=[['İçerik',['genel','sektor']],
   ['Bölümler',['hizmet','hizmetdet','ajan','surec','kanal','proje','bulten','soz','sss','kurucu']],
   ['Site',['metin','gorunum','yayin']]];
 
