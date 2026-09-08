@@ -1,14 +1,15 @@
 {
   "specVersion": "0.1",
   "host": {
-    "name": "QANATONE",
+    "identifier": "did:web:qanatone.com",
+    "displayName": "QANATONE",
     "domain": "qanatone.com",
     "url": "https://www.qanatone.com/",
     "description": "Talebi yakalayan sistemler kurar: arama görünürlüğü (SEO), yapay zekâ cevaplarında görünürlük (GEO), reklam ve 7/24 çalışan yapay zekâ ajanları."
   },
   "entries": [
     {
-      "id": "urn:air:qanatone.com:api:site-tespit",
+      "identifier": "urn:air:qanatone.com:api:site-tespit",
       "displayName": "Site Tespit API",
       "description": "Bir web sitesini gerçek isteklerle çeker; hız, ağırlık, yönlendirme, robots/sitemap ve ajan hazırlığı kalemlerini ölçüp kalem kalem durum döndürür. Kimlik gerekmez, kota IP başınadır.",
       "type": "application/openapi+json",
@@ -21,7 +22,7 @@
       ]
     },
     {
-      "id": "urn:air:qanatone.com:index:llms",
+      "identifier": "urn:air:qanatone.com:index:llms",
       "displayName": "Ajan yüzeyi dizini (llms.txt)",
       "description": "Sitenin ajanlar için hazırlanmış yüzeylerinin dizini: hangi sayfa ne anlatır, markdown karşılıkları nerededir.",
       "type": "text/plain",
@@ -33,7 +34,7 @@
       ]
     },
     {
-      "id": "urn:air:qanatone.com:policy:agent-permissions",
+      "identifier": "urn:air:qanatone.com:policy:agent-permissions",
       "displayName": "Ajan izinleri",
       "description": "Hangi ajan davranışına izin verildiği, hangisinin reddedildiği: içerik kullanımı, eğitim, oran sınırı.",
       "type": "application/json",
@@ -45,7 +46,7 @@
       ]
     },
     {
-      "id": "urn:air:qanatone.com:doc:agents",
+      "identifier": "urn:air:qanatone.com:doc:agents",
       "displayName": "Ajan kılavuzu (agents.md)",
       "description": "Siteyle çalışan ajanlar için yazılmış kılavuz: yapı, adlandırma, hangi bilgi nerede.",
       "type": "text/markdown",
@@ -56,7 +57,7 @@
       ]
     },
     {
-      "id": "urn:air:qanatone.com:skills:index",
+      "identifier": "urn:air:qanatone.com:skills:index",
       "displayName": "Ajan yetenek dizini",
       "description": "Sitenin ajanlara sunduğu yeteneklerin dizini; her yetenek için tanım dosyası ve özeti.",
       "type": "application/json",
