@@ -187,7 +187,20 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
       aliyordu — sekmede QANATONE isareti yerine tarayicinin varsayilani
       goruluyordu. Kaynagin KENDI satiri birebir tasindi (sadakat kurali);
       satir ici oldugu icin ek istek DOGURMAZ, ~330 B. */}
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050505'/%3E%3Crect x='9' y='9' width='14' height='14' rx='3' fill='%23ef233c' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
+  {/* 9 EYL 2026 — SIMGE ARTIK MARKANIN KENDISI. Yukaridaki satir ici SVG
+      eski kok siteden birebir tasinmisti ama QANATONE LOGOSU DEGILDI: koyu
+      kare + 45 derece donmus kizil kare, jenerik bir isaret. Enes: "sekmede
+      baska logo gozukuyor; sitenin her yerde gorunecek logosu bu olacak."
+      Simgeler `yeni/film/uret-simge.cjs` ile URETILIR (elde tasinmaz),
+      girdi R19 zincirinin de kaynagi olan seffaf 3B render:
+      `gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png`. Uretec opak kutuyu
+      goruntuden olcup icerigi kareye ortalar — logo karenin ortasinda
+      degil (884x996 @179,109), duz olceklense sola kacik ve kucuk cikardi.
+      SATIR ICI YERINE DOSYA: satir ici veri URI'si ek istek dogurmuyordu
+      ama 32 px PNG base64 olarak ~2,6 KB ve HER SAYFADA tekrar ederdi;
+      dosya olarak tek istek edilip onbellege giriyor. */}
+  <link rel="icon" type="image/png" sizes="32x32" href={`${B}/img/simge-32.png`} />
+  <link rel="apple-touch-icon" sizes="180x180" href={`${B}/img/simge-180.png`} />
   <link rel="canonical" href={canonical} />
   <meta property="og:type" content="website" />
   <meta property="og:title" content={baslik} />
