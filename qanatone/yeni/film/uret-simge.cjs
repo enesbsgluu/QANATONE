@@ -5,7 +5,7 @@
    tasinan satir ici SVG jenerik bir isaretti (koyu kare + 45 derece donmus
    kizil kare). Enes: "sitenin her yerde gorunecek logosu bu olacak."
 
-   GIRDI: gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png — 3B kabartmali
+   GIRDI: gorsel-kaynak/prolog/QANAT_LOGO-3b-seffaf.png (Enes, 9 Eyl ikinci render: nehir beyaz, ust bosluk seffaf) — 3B kabartmali
    render'in SEFFAF hali (1254x1254, RGBA, opak beyaz %0). Ayni dosya R19
    zincirinin de girdisi.
 
@@ -20,7 +20,7 @@ const pt = require(process.env.PUPPETEER_CORE
   || path.join(process.env.USERPROFILE || process.env.HOME, '.local', 'lib', 'film-olc', 'node_modules', 'puppeteer-core'));
 
 const KOK = path.join(__dirname, '..', '..');
-const GIRDI = path.join(KOK, 'gorsel-kaynak', 'prolog', 'QANAT_LOGO-seffaf-2.png');
+const GIRDI = path.join(KOK, 'gorsel-kaynak', 'prolog', 'QANAT_LOGO-3b-seffaf.png');
 const CIKTI = path.join(KOK, 'yeni', 'public', 'img');
 const OLCULER = [
   ['simge-32.png', 32],

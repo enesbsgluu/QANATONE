@@ -55,18 +55,24 @@
     293
    ],
    "medyan_L_sonra": 80.2,
-   "opak_beyaz_piksel": 12100,
+   "opak_beyaz_piksel": 4497,
    "cikti": {
     "webp": {
-     "bayt": 11084,
-     "sha1": "7df9a493f2aaa2185e38681ddcf49292da67d80e"
+     "bayt": 8710,
+     "sha1": "f72091c8eea7e118e9143048b95ad8eeefdfa30d"
     },
     "avif": {
-     "bayt": 6611,
-     "sha1": "6373c34082a69210f60a3689af1edba50cd08710"
+     "bayt": 5196,
+     "sha1": "94ecc777f83ec944afaa374e3e990113954ffdd4"
     }
    },
-   "beyaz_disari_piksel": 0
+   "beyaz_disari_piksel": 0,
+   "kaynak": "gorsel-kaynak/prolog/QANAT_LOGO.png",
+   "kaynak_sha1": "f4e0c820df0cc51bb9c9fcbc5cf0105344896e58",
+   "uretec": "yeni/film/uret-nav-logo.cjs",
+   "golgeleme": "3B render malzemesi (Enes, 9 Eyl) — duz --red dolgu DEGIL",
+   "govde_medyan_L": 39.9,
+   "seffaf_piksel": 25780
   }
  },
  "_hal": "IKI HAL (Enes, 24 Agu): `beyaz` = qanatone.webp/avif, ic disk + nehir beyaz, marka logosu, STATIK nav (tum sayfalar; Temel.astro tek bilesen). `delik` = qanatone-delik, ic alanlar oyuk - prologda amblemin son karesiyle ayni geometri, OLCUM varligi (devir sicramasi kizil maskeyle). Ikisi de amblem.json'dan; eski raster yok."
