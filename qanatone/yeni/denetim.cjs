@@ -33,13 +33,27 @@ if (!fs.existsSync(KOK)) {
   process.exit(1);
 }
 
-/* sayfaları topla */
+/* ARAMA MOTORU DOGRULAMA DOSYALARI SAYFA DEGILDIR (9 Eyl 2026).
+   Google Search Console'un "HTML dosyasi" yontemi kokte `google<hash>.html`
+   adinda TEK SATIRLIK DUZ METIN ister ("google-site-verification: ..."),
+   icerigi ve adi Google tarafindan dayatilir — baslik, canonical, footer,
+   kabuk tetigi eklenemez, sitemap'e de girmez.
+   Uretim sayfasi kurallari bunlara uygulaninca 7 KIRMIZI uretti (sayfa
+   kumesi, T3, S1, G3, R8, K1, S4) — dosyanin kusuru degil, kuralin YANLIS
+   YERE uygulanmasi. Ayni gerekce PROTOTIP muafiyetinde de yazili.
+   MUAFIYET SESSIZ DEGIL: asagida adiyla BASILIR. Kapsam dar: yalniz kok
+   dizin, yalniz bu iki ad kalibi. */
+const DOGRULAMA = /^(google[0-9a-f]{12,}|yandex_[0-9a-f]{8,})\.html$/;
 const tumSayfalar = [];
+const dogrulamaDosyalari = [];
 (function tara(d) {
   for (const f of fs.readdirSync(d)) {
     const p = path.join(d, f);
     if (fs.statSync(p).isDirectory()) tara(p);
-    else if (f.endsWith('.html')) tumSayfalar.push(p);
+    else if (f.endsWith('.html')) {
+      if (d === KOK && DOGRULAMA.test(f)) dogrulamaDosyalari.push(p);
+      else tumSayfalar.push(p);
+    }
   }
 })(KOK);
 const oku = p => fs.readFileSync(p, 'utf8');
@@ -132,7 +146,8 @@ const sayfalar = tumSayfalar.filter((p) => !PROTOTIP.test(rel(p)));
 const prototipler = tumSayfalar.filter((p) => PROTOTIP.test(rel(p)));
 
 console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
-  (prototipler.length ? ` (+ ${prototipler.length} prototip, ürün kuralları dışında: ${prototipler.map(rel).join(', ')})` : '') + `\n`);
+  (prototipler.length ? ` (+ ${prototipler.length} prototip, ürün kuralları dışında: ${prototipler.map(rel).join(', ')})` : '') +
+  (dogrulamaDosyalari.length ? ` (+ ${dogrulamaDosyalari.length} arama motoru doğrulama dosyası, sayfa sayılmaz: ${dogrulamaDosyalari.map(rel).join(', ')})` : '') + `\n`);
 
 /* SAYFA KUMESI (TUR 9, 3 Eyl 2026) — onceden SAYI kiyaslaniyordu
    (koleksiyon x2 + "19" sihirli sabit): bir sayfa eklenip biri silinirse
