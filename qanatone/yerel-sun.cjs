@@ -92,7 +92,18 @@ const TANI_ERKEN = `<script>(function(){
     bgbos ikisini ayirir: #bg yerinde kalir (Overlap SURER) ama ici
     bosalir (boyama BITER). Cokerse sebep A, cokmezse sebep B.
     Zemin o turda gorunmez — yalniz teshis kolu, yama degil. */
+ /* GPU KATMANI KOLLARI (9 Eyl, ucuncu tur) — GORSEL DEGISIKLIK SIFIR.
+    gridmask coktu, yani suclu maske degil. bgbos (ici bos) cokmedi. Ikisi
+    birlikte sunu soyluyor: sorun #bg'nin ICERIGININ NE OLDUGU degil, fixed
+    oldugu icin pinch'te HER KAREDE YENIDEN RASTERLENMESI. Cozum icerigi
+    kirpmak degil, zemini kendi GPU katmanina sabitlemek: olcekleme o zaman
+    yeniden raster yerine GPU'da yapilir.
+    Bu kollar zemini AYNEN birakir, yalniz kompozit ipucu ekler. */
  var KOL={
+  bgwc:'#bg{will-change:transform!important}',
+  bg3d:'#bg{transform:translateZ(0)!important}',
+  bgcocuk:'#bg>*{will-change:transform!important}',
+  bgfade:'#bg .fade{display:none!important}',
   bgbos:'#bg>*{display:none!important}',
   grid:'#bg .grid{display:none!important}',
   gridmask:'#bg .grid{-webkit-mask-image:none!important;mask-image:none!important}',
