@@ -90,7 +90,17 @@ const ayar = icerik.settings || {};
 const waNum = String(ayar.whatsapp || '').replace(/\D/g, '');
 /* ARAMA KONSOLU + ADSENSE (6 Eyl 2026) — ikisi de panelden, boşsa basılmaz.
    `trim()`: panelde yanlışlıkla boşluk kalırsa etiket doğmasın. */
-const gsc = String(ayar.gsc || '').trim();
+/* ARAMA KONSOLU DOGRULAMASI — YAPISTIRMA DAYANIKLI (9 Eyl 2026).
+   Panel alani YALNIZ `content` degerini istiyor ama Google'in ekraninda
+   ETIKETIN TAMAMI duruyor ve dogal olan onu kopyalamak. Oyle olunca deger
+   etiketin ICINE gomuluyordu ve canliya ic ice gecmis bir etiket cikti:
+     <meta name="google-site-verification" content="<meta name=&#34;...
+   Google da "meta etiketiniz dogru bicimlendirilmemis" deyip dogrulamayi
+   REDDETTI (yasandi). Artik iki bicim de kabul: tam etiket yapistirilirsa
+   `content` ayiklanir, duz deger verilirse oldugu gibi kullanilir. */
+const gscHam = String(ayar.gsc || '').trim();
+const gscEsl = gscHam.match(/content\s*=\s*["']([^"']+)["']/i);
+const gsc = (gscEsl ? gscEsl[1] : gscHam).trim();
 const adsense = String(ayar.adsense || '').trim();
 const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
 const on = en ? '/en' : '';
