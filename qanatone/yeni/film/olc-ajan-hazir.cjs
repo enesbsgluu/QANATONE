@@ -24,7 +24,11 @@ const UCLAR = [
   ['sitemap.xml', '/sitemap.xml', 'GET', /xml/, 'VAR OLMALI'],
   ['llms.txt (kok)', '/llms.txt', 'GET', /text\/plain|markdown/, 'ANLAMLI'],
   ['llms.txt (.well-known)', '/.well-known/llms.txt', 'GET', /text\/plain|markdown/, 'ANLAMLI'],
-  ['llms-full.txt', '/.well-known/llms-full.txt', 'GET', /text\/plain|markdown/, 'ANLAMLI'],
+  /* YANLIS KIRMIZI DUZELTMESI (9 Eyl 2026): bu satir `/.well-known/`
+     altini yokluyordu ve her koşumda YOK diyordu. Dosya KOKTE yaziliyor
+     (`ajan-hatti.mjs` satir 360) ve canlida 200 + 189.664 bayt donuyor —
+     olculdu. Aracin kendi yolu yanlisti, dosya degil. */
+  ['llms-full.txt', '/llms-full.txt', 'GET', /text\/plain|markdown/, 'ANLAMLI'],
   ['MCP server card', '/.well-known/mcp.json', 'GET', /json/, 'VAR — /mcp'],
   ['A2A agent card', '/.well-known/agent-card.json', 'GET', /json/, 'VAR — /a2a'],
   ['agent-permissions', '/.well-known/agent-permissions.json', 'GET', /json/, 'ANLAMLI'],
