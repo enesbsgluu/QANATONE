@@ -530,13 +530,19 @@ kanal:{t:'Kanal kartları',n:()=>6,f:()=>{
   panelle aynı klasörde <b>güncel</b> index durmalı; eski sürümde alanlar boş görünür ama
   yazdıkların yine dışa aktarıma girer.</div>`;}},
 
-ajan:{t:'AI Ajanları',n:()=>(get('agents')||[]).length,f:()=>`
-  <h2>AI Ajanları</h2><p class="sub">Otomasyon sayfasındaki ajan kartları. Merkez diyagramın uyduları sabittir.</p>
-  ${list('agents','Ajan',(it,i,p)=>`
-    <div class="r2">${fld('İkon',p+'.icon')}${fld('Boyut',p+'.size',{hint:'b2 / boş'})}</div>
-    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
-    ${fld('Açıklama (TR)',p+'.text.tr',{area:1})}
-    ${fld('Açıklama (EN)',p+'.text.en',{area:1})}`,it=>(it.title&&it.title.tr)||'')}`},
+/* "AI AJANLARI" SEKMESI KALDIRILDI (9 Eyl 2026, olculdu).
+   Sekme `agents` koleksiyonunu (alti kayit) duzenliyor ve "Otomasyon
+   sayfasindaki ajan kartlari" diyordu. OLCUM: `yeni/src` altinda
+   `icerik.agents` okuyan HICBIR bilesen yok. /otomasyon sayfasi goce
+   yeniden yazildi ve o kart izgarasi yeni kabuga TASINMADI; sayfadaki
+   ajan metinleri `strings` (s8e/s8h/s8p) uzerinden geliyor.
+   Yani buradan duzenlenen alti kayit hicbir yere gitmiyordu —
+   `partners` ve `chimg` ile ayni sinif.
+
+   VERI SILINMEDI: `content.json` icindeki `agents` dizisi Enes'in yazdigi
+   icerik; bolum tasarim turunda geri gelirse metinler yerinde duracak.
+   Silinen sey ISE YARAMAYAN EDITOR.
+   Bekci: denetim T8 — panel sekmesi olan her koleksiyon sitede okunmali. */
 
 surec:{t:'Süreç',n:()=>(get('steps')||[]).length,f:()=>`
   <h2>Süreç aşamaları</h2><p class="sub">Süreç sayfasındaki kartlar. Üstteki çizilen hat sabittir.</p>
@@ -622,7 +628,7 @@ bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
 
 soz:{t:'Müşteri sözleri',n:()=>(get('testimonials')||[]).length,f:()=>`
   <h2>Müşteri sözleri</h2><p class="sub">Kanal kartlarının altındaki <b>ince kırmızı bantta</b> sırayla döner. Hiç kayıt yoksa bant kendini gizler. Geçiş süresi <b>Görünüm & Hareket</b> sekmesinde.</p>
-  <div class="note"><b>Bant şu an KAPALI.</b> Sitedeki üç söz uydurmaydı; gerçek müşteri cümlesi girilmeden yayında görünmesin diye kapatıldı. Sözleri gerçekleriyle değiştirdikten sonra aşağıdaki anahtarla aç.</div>
+  <div class="note">${get('theme.testi.on')?'<b>Bant AÇIK</b> — kayıtlar ana sayfada yayında.':'<b>Bant şu an KAPALI</b> — aşağıdaki kayıtlar hiçbir sayfada görünmüyor.'} ${get('theme.testi.on')?'':'Sitedeki üç söz uydurmaydı; gerçek müşteri cümlesi girilmeden yayında görünmesin diye kapatıldı. Sözleri gerçekleriyle değiştirdikten sonra aşağıdaki anahtarla aç.'}</div>
   <div class="sws">${sw('Bandı sitede göster','theme.testi.on')}</div>
   <div class="note calm"><b>En ikna edici biçim:</b> tek cümlelik somut bir an. "Çok memnun kaldık" değil,
   "ilk kez tanımadığım biri sitemizden bulup aradı" gibi.</div>
@@ -1014,7 +1020,7 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
   }}
 };
 const NAV=[['İçerik',['genel','sektor']],
-  ['Bölümler',['hizmet','hizmetdet','ajan','surec','kanal','proje','bulten','soz','sss','kurucu']],
+  ['Bölümler',['hizmet','hizmetdet','surec','kanal','proje','bulten','soz','sss','kurucu']],
   ['Site',['metin','gorunum','yayin']]];
 
 /* ================= ÇEKİRDEK ================= */
