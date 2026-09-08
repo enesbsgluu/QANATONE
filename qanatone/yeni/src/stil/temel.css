@@ -229,8 +229,21 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   mask-composite:exclude;
   filter:drop-shadow(0 0 var(--halka-glow) rgba(239,35,60,.7));transition:filter .34s var(--e)}
+/* 9 Eyl 2026 — %260 -> %145. Donen konik gradyanin ebeveyni kaplamasi icin
+   gereken cap ebeveynin KOSEGENI kadardir. Kare bir ebeveynde kosegen kenarin
+   %141'i; yani %145, genisligi yuksekliginden KUCUK OLMAYAN (yatay veya kare)
+   her ebeveyn icin yeterlidir. DIKEY bir ebeveynde yetmez — `.sus-halka` iki
+   yerde kullaniliyor ve ikisi de yatay: `a.sh-void` (olculdu: 388x54, gereken
+   cap %101) ve `a.fl-gec` (prolog "gec" bagi). Dikey bir kapsule takilirsa bu
+   deger o kullanim icin ayrica verilmelidir. %260 bunun iki bucuk katiydi ve
+   sozde ogeyi hero'da 1009x1009'a sisiriyordu: SUREKLI DONDUGU icin 1,02
+   MP'lik kalici kompozit katman — hero'daki en buyuk animasyonlu yuzey, ve
+   pinch zoom'da maliyet olcegin karesiyle buyuyor. Simdi 563x563 (0,32 MP),
+   alanin %69'u gitti.
+   GORSEL ESDEGERLIK OLCULDU (olc-halka-esdeger.cjs, dort donus fazinda yan
+   yana kare): en buyuk fark 9/255, farkli piksel %0,02, bos test 0/255. */
 .sus-halka::before{content:'';position:absolute;left:50%;top:50%;
-  width:260%;aspect-ratio:1;transform:translate(-50%,-50%);
+  width:145%;aspect-ratio:1;transform:translate(-50%,-50%);
   background:conic-gradient(from 0deg,
     transparent 0 calc(100% - var(--halka-kuyruk)),
     rgba(239,35,60,.30) calc(100% - var(--halka-kuyruk)*.72),
