@@ -133,6 +133,48 @@ export default defineConfig({
         },
       },
     },
+    /* LINK BASLIKLARI ARTIK ZINCIRDE (9 Eyl 2026 — MIMARI ONARIM).
+       ONCEDEN ELLE KOSUYORDU ve bedeli OLCULDU: content.json'a panelden
+       TEK BIR PROJE eklenince derleme yesil, ama denetim UC KURALDAN
+       IKISINI kirmiziya cevirdi —
+         L1  "_headers Link blogu BAYAT: eksik/farkli 4 girdi"
+         T3  "html yolunda md alternatifi yok: /projeler/<yeni>/"
+       Yani Enes panelden proje/yazi/hizmet EKLEDIGI anda deploy DUSUYORDU;
+       ekleme yayina cikmiyordu bile. Silme de ayni: silinen sayfanin
+       Link satiri _headers'ta kaliyor ve olu adresi ilan etmeye devam
+       ediyordu.
+
+       COZUM DEPONUN KENDI KARARIYDI, yeni bir sey degil: ajan hattinin
+       basindaki not zaten "elle kosan bir uretec (bkz. link-basliklari.cjs)
+       tazeligini ayri bir kuralla tutmak zorunda kaliyor (L1); kanca
+       derlemenin parcasi oldugu icin o borc hic dogmuyor" diyor. Uretec
+       simdi o kancaya alindi ve borc kapandi.
+
+       SIRA SART: AJAN HATTINDAN SONRA. Uretec her sayfanin `.md` esini
+       DISKTE arar (`varMi`); ajan hatti onlari bu kancada uretiyor, once
+       kosarsa hicbir es bulunmaz ve uretec 3 ile cikar.
+
+       IKI YERE YAZILIR: kaynak `public/_headers` (uretecin kendi isi) ve
+       `dist/_headers`. Ikincisi sart cunku Astro public/'i dist'e
+       derlemenin BASINDA kopyalar — kanca calistiginda kopya coktan
+       alinmis olur; yalniz kaynagi guncellemek dist'i BAYAT birakirdi
+       (ve L1 tam olarak bunu kirmiziya cevirirdi). */
+    {
+      name: 'qanatone-link-basliklari',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { execFileSync } = await import('node:child_process');
+          const { copyFileSync } = await import('node:fs');
+          const { join, dirname } = await import('node:path');
+          const kok = dirname(fileURLToPath(import.meta.url));
+          const cikti = execFileSync(process.execPath,
+            [join(kok, 'link-basliklari.cjs')], { encoding: 'utf8', cwd: kok });
+          copyFileSync(join(kok, 'public', '_headers'),
+            join(fileURLToPath(dir), '_headers'));
+          logger.info(cikti.trim().split(String.fromCharCode(10)).pop());
+        },
+      },
+    },
     /* INDEXNOW (6 Eyl 2026 — KESME-PLANI adim 9). Ayni gerekce: kanca
        derlemenin parcasi, adres kumesi CIKTIDAKI sitemap'ten turer.
        AJAN HATTINDAN SONRA kosar; sirasi onemli degil (sitemap'i ikisi de

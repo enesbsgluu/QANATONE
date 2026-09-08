@@ -1224,6 +1224,44 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       || /data-p="chimg/.test(panelKod))
     kusur.push('panelde chimg alani geri gelmis');
 
+  /* a2 · GENEL KURAL (Enes, 9 Eyl 2026): "panelde her seyi
+     duzenleyebilmeliyiz fakat duzenledigimiz her sey yayina gitmeli."
+     Tek tek anahtar saymak yerine INVARYANTI kur: panelde KOLEKSIYON
+     SEKMESI olan her dizi, sitede OKUNUYOR olmali. Okunmayan bir
+     koleksiyonun editoru, kullaniciya is yaptigini sandiran bos bir
+     kapidir — bu turda `agents` tam olarak oyleydi (alti kayit,
+     hicbir bilesen `icerik.agents` okumuyor; /otomasyon goce yeniden
+     yazilirken o kart izgarasi tasinmamis).
+
+     "OKUNUYOR" IKI BICIMDE SAYILIR, cunku iki hat var: dogrudan
+     `icerik.<ad>` erisimi ve Astro koleksiyonu (`content.config.ts`
+     icinde tanimli olanlar sayfa uretir). Ikisi de yoksa kirmizi. */
+  {
+    const src = path.join(__dirname, 'src');
+    const govde = [];
+    const gez = (d) => {
+      for (const ad of fs.readdirSync(d)) {
+        const t = path.join(d, ad);
+        if (fs.statSync(t).isDirectory()) gez(t);
+        else if (/\.(astro|ts|mjs|tsx)$/.test(ad)) govde.push(fs.readFileSync(t, 'utf8'));
+      }
+    };
+    gez(src);
+    /* Yorumlar ayiklanir: bir koleksiyonun adi YORUMDA gecmesi onu
+       okunmus yapmaz (T4'te yazili tuzagin aynisi). */
+    const kod = govde.map((k) => k.replace(/\/\*[\s\S]*?\*\//g, '')).join('\n');
+    /* Panelde koleksiyon sekmesi olanlar: `list('<ad>'` cagrisi bir
+       ekle/sil/sirala editoru demektir. */
+    const panelKoleksiyon = [...new Set(
+      [...panelKod.matchAll(/\blist\(\s*'([a-z][a-zA-Z0-9]*)'/g)].map((m) => m[1]))];
+    const okunmayan = panelKoleksiyon.filter((ad) =>
+      !new RegExp('icerik\\.' + ad + '\\b').test(kod)
+      && !new RegExp("getCollection\\(\\s*'" + ad + "'").test(kod)
+      && !new RegExp("'" + ad + "'\\s*:").test(kod));
+    for (const ad of okunmayan)
+      kusur.push('panelde `' + ad + '` editoru VAR ama site onu OKUMUYOR (bos kapi)');
+  }
+
   /* b · CANLI SALTERLER OKUNMAYA DEVAM ETMELI.
      Kaynak taramasi burada DOGRU arac: aradigimiz sey degerin ciktida
      gorunmesi degil, KODUN O ALANI OKUMASI. */
@@ -1264,7 +1302,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   ol('T8 · panel alani bosa calisamaz: atil alan yok, canli salterler okunuyor, sekme butunlugu',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 4).join(' | ')
-       : `3 atil anahtar dusuk · 2 salter kilitli · ${pIds.length} sekme NAV ile birebir`);
+       : `3 atil anahtar dusuk · 2 salter kilitli · ${pIds.length} sekme NAV ile birebir`
+         + ' · panel koleksiyonlarinin hepsi sitede okunuyor');
 }
 
 /* T9 · OLCUM ETIKETI KAPSAMI KAPIDA (9 Eyl 2026).
@@ -2875,9 +2914,29 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          korunur, yalniz yeri kaynaktaki gibi. */
       const DESTE_PROJE = 4;
       const beklenen = fotograflilar.slice(0, Math.min(DESTE_PROJE, kunye.length));
-      /* kunye sirasi content.json onekiyle ayni mi — TAM listeye bakar
-         (ana sayfa destesi artik dortle kesiliyor, kunye alti tasiyor) */
-      const onek = kunye.every((k, i) => fotograflilar[i] && fotograflilar[i].slug === k.slug);
+      /* KUNYE-ICERIK HIZASI (9 Eyl 2026'da YENIDEN YAZILDI — silme kolu).
+         ESKI HALI: `kunye.every((k,i) => fotograflilar[i].slug === k.slug)`.
+         Bu, kunyeyi content.json'un BIREBIR oneki olmaya zorluyordu ve
+         OLCULDU ki panelden BIR PROJE SILMEK kurali kirmiziya ceviriyordu:
+         kunye silinen isi hala tasiyor, hizalama kayiyor, deploy DUSUYOR.
+         Silme mesru bir icerik duzenlemesidir; "uretec kosmadi" degildir.
+
+         KURAL GEVSEMEDI, IKI AYRI SORUYA BOLUNDU:
+         (a) SIRA — kunyenin HALA VAR OLAN kayitlari, fotografli islerin
+             sirasiyla ayni mi? Silinen isin artik kaydi HESABA KATILMAZ
+             (zararsizdir: ona isaret eden sayfa kalmadi, gorsel dosyasi
+             diskte oylece durur).
+         (b) KAPSAM — ana sayfa destesine giren her fotografli isin
+             kunyede kaydi VAR mi? Asil yakalanmasi gereken hata budur:
+             yeni bir fotografli is eklenip `gorsel-uret.cjs` kosulmazsa
+             deste o karti gorselsiz basar. Eski kural bunu KACIRIYORDU —
+             kunye kisa kaldiginda `every` daha az kayit gezip yesil
+             donuyordu. Yani bu degisiklik kurali gevsetmiyor, kacirdigi
+             yeri KAPATIYOR. */
+      const kunyeSlug = new Set(kunye.map((k) => k.slug));
+      const kunyeCanli = kunye.filter((k) => fotograflilar.some((f) => f.slug === k.slug));
+      const onek = kunyeCanli.every((k, i) => fotograflilar[i] && fotograflilar[i].slug === k.slug);
+      const kunyesiz = fotograflilar.slice(0, DESTE_PROJE).filter((f) => !kunyeSlug.has(f.slug));
       const bolum1 = h.slice(h.indexOf('class="sp-sahne"'));
       const deste = bolum1.slice(0, bolum1.indexOf('</section>'));
       /* Karsilastirma COZULMUS metinle: hangi kacis bicimi kullanildigi
@@ -2891,7 +2950,10 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const T2 = (v) => (typeof v === 'string' ? v : (v && (v.tr || v.en)) || '');
       const kusur = [];
       if (!onek || kunye.length === 0)
-        kusur.push('kunye != content.json onek (gorsel-uret.cjs kosmadi?)');
+        kusur.push('kunye SIRASI content.json ile ayristi (gorsel-uret.cjs kosmadi?)');
+      if (kunyesiz.length)
+        kusur.push('destedeki ' + kunyesiz.length + ' isin kunyede gorseli YOK ('
+          + kunyesiz.map((f) => f.slug).join(',') + ') — gorsel-uret.cjs kosmali');
       const metin = coz(deste);
       for (const x of beklenen)
         for (const [ad, deger] of [['ad', x.name], ['yil', String(x.year)],
