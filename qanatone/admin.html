@@ -180,8 +180,22 @@ let C=null, DEF=null, cur='genel', pvT=null, curSvc='';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const get=p=>p.split('.').reduce((o,k)=>o?.[k],C);
+/* CIFT DILLI ALAN ETIKETI (9 Eyl 2026).
+   Sitede `T(v,dil)` ile okunan alanlar hem DUZ METIN hem {tr,en} olabilir.
+   Panelde bunlari dogrudan esc()'e vermek "[object Object]" basiyordu —
+   `services` icinde dokuz hizmetin BESI oyle gorunuyordu (olculdu, hizmet
+   secici cipleri dahil). Okuma tarafinin tek yeri burasi.               */
+const etk=v=>(v&&typeof v==='object')?(v.tr||v.en||''):(v==null?'':String(v));
 function set(p,v){const k=p.split('.');let o=C;
-  for(let i=0;i<k.length-1;i++){if(o[k[i]]==null)o[k[i]]=isNaN(+k[i+1])?{}:[];o=o[k[i]];}
+  for(let i=0;i<k.length-1;i++){
+    /* Yol bir DUZ METNIN icinden geciyorsa (ornek: tag "SEO" iken
+       tag.en yazilmak isteniyor) eski deger SESSIZCE kaybolurdu:
+       primitive'e ozellik yazmak JS'te no-op'tur, panel "yazdim" der,
+       hicbir sey degismezdi. Metni {tr:<metin>} olarak yukseltiyoruz —
+       kayipsiz ve yalniz tr/en icin, cunku genel yukseltme baska bir
+       alanda yanlis varsayim olurdu. */
+    if(typeof o[k[i]]==='string'&&(k[i+1]==='tr'||k[i+1]==='en'))o[k[i]]={tr:o[k[i]]};
+    if(o[k[i]]==null)o[k[i]]=isNaN(+k[i+1])?{}:[];o=o[k[i]];}
   o[k.at(-1)]=v;touch();}
 function touch(){
   $('#state').textContent='kaydedilmemiş';$('#state').classList.add('dirty');
@@ -203,7 +217,11 @@ function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',
    seçicisi gibi okunur), name yol'un kendisi kalıyor; formda değiliz,
    name hiçbir yere gönderilmiyor, yalnız kimlik.                        */
 function fld(label,path,o={}){
-  const v=get(path)??'';
+  /* `o.v`: yolun kendisi bos ama GORUNMESI gereken bir deger varsa
+     (ornek: `tag` duz metin "SEO" iken alan `tag.tr`e bagli). Yer tutucu
+     kullanmak yanlis olurdu — yer tutucu "bos, varsayilan su" demektir;
+     buradaki deger BOS DEGIL, yalnizca baska bicimde duruyor. */
+  const v=get(path)??(o.v??'');
   const id='f-'+String(path).replace(/\W+/g,'-');
   const at=` id="${id}" name="${esc(path)}" data-p="${path}"`;
   const ph=o.ph?` placeholder="${esc(o.ph)}"`:'';
@@ -466,11 +484,12 @@ hizmet:{t:'Hizmetler',n:()=>(get('services')||[]).length,f:()=>`
   <b>Vurgu</b> alanına 1 yazarsan kart tamamen kırmızı olur (sayfada bir tane önerilir).<br>
   <b>İkonlar:</b> ${ICONS}</div>
   ${list('services','Hizmet',(it,i,p)=>`
-    <div class="r3">${fld('Etiket',p+'.tag')}${fld('İkon',p+'.icon')}${fld('Boyut',p+'.size',{hint:'b2 / b2x2'})}</div>
+    <div class="r2">${fld('Etiket (TR)',p+'.tag.tr',{v:etk(it.tag)})}${fld('Etiket (EN)',p+'.tag.en')}</div>
+    <div class="r2">${fld('İkon',p+'.icon')}${fld('Boyut',p+'.size',{hint:'b2 / b2x2'})}</div>
     <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
     ${fld('Açıklama (TR)',p+'.text.tr',{area:1})}
     ${fld('Açıklama (EN)',p+'.text.en',{area:1})}
-    ${fld('Vurgu kartı',p+'.hi',{hint:'1 = kırmızı'})}`,it=>it.tag)}`},
+    ${fld('Vurgu kartı',p+'.hi',{hint:'1 = kırmızı'})}`,it=>etk(it.tag))}`},
 
 kanal:{t:'Kanal kartları',n:()=>6,f:()=>{
   const K=[['1','Sol üst — büyük, desenli'],['2','Sol alt — kızıl'],
@@ -653,7 +672,7 @@ metin:{t:'Sabit metinler',n:()=>Object.keys(METIN_HARITA).length,f:()=>{
 hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det).length,f:()=>{
   const A=get('services')||[];
   const D=A.map((s,j)=>({s,j})).filter(o=>o.s&&o.s.det);
-  const noDet=A.filter(s=>s&&s.slug&&!s.det).map(s=>s.tag||s.slug);
+  const noDet=A.filter(s=>s&&s.slug&&!s.det).map(s=>etk(s.tag)||s.slug);
   if(!D.length)return `<h2>Hizmet detayları</h2>
     <div class="note"><b>Detay sayfası olan hizmet yok.</b> Hizmet kartları ancak <span class="mono">det</span>
     verisi olduğunda tıklanabilir hale gelir.</div>`;
@@ -854,8 +873,8 @@ hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det)
   return `<h2>Hizmet detayları</h2>
   <p class="sub">Her hizmetin kendi sayfası: sahne → 3 vuruş cümlesi → 6'lı kart ızgarası → çağrı.
   Üstten hizmet seç, altındaki her şey o hizmete aittir.</p>
-  <div class="pks">${D.map(o=>`<button class="pk${o.s.slug===s.slug?' on':''}" data-svc="${esc(o.s.slug)}">${esc(o.s.tag||o.s.slug)}</button>`).join('')}</div>
-  <div class="note calm">Düzenlenen: <b>${esc(s.tag||s.slug)}</b> ·
+  <div class="pks">${D.map(o=>`<button class="pk${o.s.slug===s.slug?' on':''}" data-svc="${esc(o.s.slug)}">${esc(etk(o.s.tag)||o.s.slug)}</button>`).join('')}</div>
+  <div class="note calm">Düzenlenen: <b>${esc(etk(s.tag)||s.slug)}</b> ·
   adres <span class="mono">/hizmetler/${esc(s.slug)}</span> · şablon ailesi <span class="mono">${esc(fam||'—')}</span>.
   ${noDet.length?`<br><b>${esc(noDet.join(', '))}</b> için detay sayfası yok — kartı bilinçli olarak tıklanamaz bırakıldı.`:''}</div>
 
