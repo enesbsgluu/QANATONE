@@ -97,99 +97,12 @@ html.t-noagent #bitback{display:none!important}
     background:radial-gradient(circle closest-side,rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)}
 }
 
-/* ==== MOBILDE ZEMIN KOKE TASINDI (9 Eyl 2026 — Enes onayi) ====
-   `#bg` (position:fixed, z-index:-1) durdugu surece USTUNDEKI KONUMLANDIRILMIS
-   ne varsa BELGE BOYU bir Overlap katmani devraliyor: 516x14242 = 7,35 MP.
-   Zincir olculdu (olc-katman.cjs, 428x781):
-     taban                  7,35 #document + 7,35 html [Overlap]   23,11 MP
-     body{isolation:isolate}     + 6,67 i#nvS                       22,43 MP
-     izolasyon + nvS yok         + 6,67 main#icerik                 22,43 MP
-     #bg yok                ikinci katman YOK                       15,13 MP
-   Yani `isolation` zinciri KIRMIYOR — sensor gidince siradaki devraliyor.
-   Tek etkili kol `#bg`in kendisi: -7,98 MP, sayfanin %35'i. Pinch zoom'da
-   raster maliyeti olcegin karesiyle buyudugu icin bu dogrudan iOS'un cokme
-   butcesine giriyor.
-
-   KAPSAM MOBIL: cokme mobilde. Masaustunde `.orb` GERCEK `blur(130px)`
-   tasiyor ve bir gradyanla birebir tasinamaz; orada olculmus bir cokme de
-   yok, dokunulmadi.
-
-   `#bg` SILINMEDI, yalniz gizlendi — DOM'da kalmasi SART: temel.css'teki
-   `body:not(:has(#bg))::before` kurali film sayfalari icin ayni isi yapan
-   BASKA bir fixed katman kuruyor; element silinseydi o kural her sayfada
-   devreye girer ve ayni Overlap katmanini geri getirirdi.
-
-   ORB KAYNAKTAN BIREBIR: mobilde blur zaten 4 Eyl'de kaldirilmis ve yerine
-   gradyan yazilmisti (yukaridaki kural). Ilk denemede o gradyan yerine
-   blurlu disk "yaklasik" kurulmustu — fark ortalama 1,93/255, farkli piksel
-   %36,7. Kaynaktaki duraklar aynen alininca 0,30/255 ve %1,8'e dustu.
-   `closest-side` kare elemanda yarim kenardir: min(450px,60vw).
-
-   KOK ZEMIN YOLU DENENDI VE DUSTU (ayni gun, gercek cihazda). `#bg` gizlenip
-   uc katman `body`nin `background-image`ina tasinmisti; Chrome'da olcum
-   temizdi (fark ort 0,30/255) ama ENES'IN TELEFONUNDA zemin asagi kayinca
-   KAYBOLDU: "kizil arkaplan silinmis, baslangiclarda var altlara kayinca
-   yok". Sebep: iOS Safari `background-attachment:fixed` uygulamiyor, gradyan
-   belge boyuna yayiliyor. Masaustu Chrome'daki emulasyon bunu goremez.
-
-   CARE: `#bg` GERCEK ELEMENT olarak KALIR, yalniz `position:fixed` yerine
-   `position:sticky` olur. Olculdu — sticky, fixed'in Overlap kompozitini
-   DOGURMUYOR:
-     #bg fixed (yamasiz)      43 katman · 23,11 MP · belge boyu IKI katman
-     #bg sticky               43 katman · 15,27 MP · belge boyu TEK katman
-   Ustelik `.fade`/`.orb`/`.grid` yerinde kaldigi icin GORSEL TAKLIT YOK.
-
-   ORB 120vw -> 100vw: sticky AKISTA oldugu icin icindeki tasma belgeyi
-   genisletiyor (scrollWidth 428 -> 471, nav da 471'e cikiyordu; fixed'de
-   tasma etkisizdi). overflow:hidden tasmayi keser AMA scroll container
-   yaratip Overlap katmanini GERI GETIRIYOR (22,98 MP, olculdu); clip-path
-   ise yalniz boyamayi kirpar, scrollWidth 471'de kalir. Tek calisan yol
-   tasmayi KAYNAGINDA kesmek. Isima daralmasin diye eleman kuculurken
-   GRADYAN YARICAPI korunur: `closest-side` yerine sabit min(450px,60vw).
-   Gradyan %86'da zaten sifirlaniyor (257x0,86 = 221 px), elemanin yarisi
-   214 px — kirpilan bant 214-221 arasi, degeri neredeyse sifir.
-
-   `inset:auto` SART: sticky'de `left`/`right` yatay YAPISMA ESIGIDIR, offset
-   degil. `left:0;right:0` yazilinca kompozit davranisi degisiyor ve Overlap
-   geri geliyordu (olculdu: 22,98 MP).
-
-   GORSEL FARK OLCULDU (olc-bg-koke.cjs MOD=sticky, yan yana kare):
-     y=0     ortalama 0,47/255 · farkli %1,10  (bos test %1,10 — gurultu)
-     y=3200 / y=6000 farki icerigin birkac piksel kaymasindan; karelerde
-     kizil zemin HER EKRANDA duruyor.
-
-   STICKY YOLU DA DENENDI VE DUSTU. EKCSS ablasyonunda 15,27 MP / tek belge
-   boyu katman veriyordu, ama DERLEMEDE olculunce 23,14 MP / iki katman cikti
-   (uc kosum, birebir ayni). Sebep olcum tuzagi: ablasyon sirasinda `#bg`
-   dist'te `display:none` idi ve enjekte edilen stil onu GERI ACIYORDU;
-   sonradan kurulan katman agaci bastan kurulanla ayni cikmiyor.
-   KALICI DERS: katman kazanci EKCSS ablasyonuyla degil, DERLENMIS CIKTIDA
-   dogrulanir.
-
-   IOS'UN `background-attachment:fixed` EKSIGI TARAYICIDAN BAGIMSIZ COZULDU:
-   `background-size` yuksekligi 100vh ve `background-repeat` dikeyde `repeat-y`.
-   Destekleyen tarayicida katman zaten viewport'a sabit (tekrar hic gorunmez);
-   desteklemeyen iOS'ta desen belge boyuna yayilmak yerine HER EKRAN BOYUNDA
-   yeniden basliyor — yani kizil zemin asagida da duruyor. Enes'in bildirdigi
-   "baslangiclarda var, altlara kayinca yok" belirtisinin karsiligi budur. */
-@media(pointer:coarse),(max-width:900px){
-  #bg{display:none}
-  /* `body:has(#bg)` SART: `#bg`siz sayfalarda (film) temel.css'in
-     `body:not(:has(#bg))::before` kurali zaten bir zemin basiyor; kosulsuz
-     yazilsaydi orada IKI zemin ust uste binerdi. */
-  body:has(#bg){
-    background-image:
-      radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 1.6px),
-      radial-gradient(circle at 1px 1px,rgba(255,120,140,.06) 1.4px,transparent 2.2px),
-      linear-gradient(180deg,rgba(239,35,60,.05),transparent 34%),
-      radial-gradient(circle min(450px,60vw) at 50% 44%,
-        rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%),
-      linear-gradient(180deg,#170406 0%,#050505 46%);
-    background-size:28px 28px,140px 140px,100% 100vh,100% 100vh,100% 100vh;
-    background-repeat:repeat,repeat,repeat-y,repeat-y,repeat-y;
-    background-attachment:fixed,fixed,fixed,fixed,fixed;
-  }
-}
+/* NOT (9 Eyl 2026): mobilde `#bg` gizlenip zemin `body`nin background'ina
+   tasindi — cokme butcesinden -%35 katman aliyordu (23,11 -> 15,13 MP) ama
+   ZEMINI BOZUYORDU: iOS `background-attachment:fixed` uygulamadigi icin desen
+   ya belge boyuna yayildi ya da `repeat-y` ile bant bant tekrarladi. Enes
+   geri aldirdi. `#bg` yeniden dokunulmamis haliyle duruyor; olcumler ve
+   dusen sticky denemesi git gecmisinde (7e6626c ve oncesi). */
 @media(prefers-reduced-motion:reduce){#stars{display:none}}
 /* icerik yildizlarin USTUNDE (kaynak 249 `main{position:relative;z-index:2}`) */
 body:has(#stars) main{position:relative;z-index:2}
