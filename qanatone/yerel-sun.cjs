@@ -64,8 +64,17 @@ const basliklar = (u) => { const h = {}; for (const k of KURAL) if (k.re.test(u)
    kaydirma konumu, dugum sayisi. Cokme kaydi kaybolmaz.
    Kayit dosyaya yazilir: yeni/film/_tani-cihaz.jsonl                     */
 const TANI_KAYIT = path.join(__dirname, 'yeni', 'film', '_tani-cihaz.jsonl');
-const TANI_BETIK = `<script>(function(){
- var q=location.search, m=/[?&]kol=([a-z0-9]+)/.exec(q), kol=m?m[1]:(/[?&]bg=0/.test(q)?'bg-kapali':'taban');
+/* ERKEN PARCA — `<head>`'in EN BASINA girer, prolog ve hero kurulmadan once.
+   9 Eyl: kol CSS'i onceden `</body>` sonunda uygulaniyordu, yani her kol
+   sayfayi ONCE tam haliyle kurup SONRA katmani kaldiriyordu; ustelik prolog
+   filmi her kolda ayri suruyordu. Ikisi de kollari birbirinden farkli
+   BASLANGIC durumuna sokar — 8 Eyl'de tam bu yuzden (konum esitsizligi)
+   yanlis kok sebep ilan edildi. Kol CSS'i + prolog atlama artik en basta.
+   `&prolog=1` ile prolog bilerek acilabilir.                              */
+const TANI_ERKEN = `<script>(function(){
+ var q=location.search, m=/[?&]kol=([a-z0-9]+)/.exec(q);
+ var kol=m?m[1]:(/[?&]bg=0/.test(q)?'bg-kapali':'taban');
+ window.__taniKol=kol;
  /* HERO KOLLARI (9 Eyl): 8 Eyl'in bg deneyi HUKUMSUZ cikti — iki kol
     FARKLI KONUMLARDA zoom'lanmisti (y=1383 vs y=3906), yani degisken bg
     degil "hero'da mi zoom yapildi" idi. Enes'in kendi gozlemi de bunu
@@ -80,14 +89,22 @@ const TANI_BETIK = `<script>(function(){
   durgun:'*,*::before,*::after{animation:none!important;transition:none!important}',
   cip:'#bg,.sus-atmo,.sus-eller{display:none!important}'
  };
- if(KOL[kol]){var st=document.createElement('style');st.textContent=KOL[kol];
-   (document.head||document.documentElement).appendChild(st);}
+ if(KOL[kol]){var st=document.createElement('style');st.setAttribute('data-tani-kol',kol);
+   st.textContent=KOL[kol];(document.head||document.documentElement).appendChild(st);}
+ /* prolog atlanir: kollar ayni baslangic durumundan zoom'lansin */
+ if(!/[?&]prolog=1/.test(q)){try{sessionStorage.setItem('qanat-prolog-atlandi','1')}catch(e){}}
+})();</script>`;
+
+const TANI_BETIK = `<script>(function(){
+ var kol=window.__taniKol||'taban';
+ var kolTuttu=!!document.querySelector('style[data-tani-kol]')||kol==='taban';
  var t0=Date.now(), n=0, sonHata=null;
  addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
  function paket(sebep){
   var vv=window.visualViewport||{};
   var m=(performance&&performance.memory)||{};
   return {kol:kol,sebep:sebep,n:++n,ms:Date.now()-t0,
+   kolTuttu:kolTuttu,
    heroda:(scrollY < innerHeight*1.2),
    olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),
    dpr:devicePixelRatio, en:innerWidth, boy:innerHeight, y:Math.round(scrollY),
@@ -132,8 +149,20 @@ http.createServer((req, res) => {
   /* TANI ENJEKSIYONU: yalniz `?tani=1` ile gelen HTML isteklerinde, yalniz
      bu yerel sunucuda. Etag/uzunluk enjeksiyondan SONRA hesaplanir. */
   if (ext === '.html' && /[?&]tani=1/.test(req.url)) {
-    const html = buf.toString('utf8');
-    buf = Buffer.from(html.includes('</body>') ? html.replace('</body>', TANI_BETIK + '</body>') : html + TANI_BETIK, 'utf8');
+    let html = buf.toString('utf8');
+    /* ERKEN parca `<head>`'in en basina, GEC parca `</body>` oncesine.
+       Erken parca yerlesemezse kosum hukumsuzdur — telemetri `kolTuttu`
+       yazar, kor karsilastirma yapilmaz. */
+    html = html.includes('<head>') ? html.replace('<head>', '<head>' + TANI_ERKEN)
+                                   : TANI_ERKEN + html;
+    /* `&sessiz=1`: kol CSS'i uygulanir ama TELEMETRI YOLLANMAZ. Headless on
+       eleme kosumlarim gercek cihaz kaydini (_tani-cihaz.jsonl) kirletmesin —
+       o dosyada yalniz Enes'in telefonundan gelen paketler dursun. */
+    if (!/[?&]sessiz=1/.test(req.url)) {
+      html = html.includes('</body>') ? html.replace('</body>', TANI_BETIK + '</body>')
+                                      : html + TANI_BETIK;
+    }
+    buf = Buffer.from(html, 'utf8');
   }
   const h = { 'content-type': TIP[ext] || 'application/octet-stream', 'cache-control': 'no-store', etag, ...ozel };
   if (GZIP.has(ext) && /gzip/.test(req.headers['accept-encoding'] || '')) {
