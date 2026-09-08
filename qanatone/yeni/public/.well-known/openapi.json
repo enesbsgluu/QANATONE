@@ -1,0 +1,99 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "QANATONE Site Tespit API",
+    "summary": "Bir web sitesinin teknik ve ajan hazırlığını ölçer.",
+    "description": "Verilen adresi çeker, ana sayfa + robots.txt + sitemap.xml üzerinden ölçüm yapar ve kalem kalem durum döndürür. Ölçüm gerçek isteklerle yapılır; sonuçlar tahmin değildir. Kota uygulanır: aynı istemci sınırlı sayıda analiz çalıştırabilir (aşıldığında 429).",
+    "version": "1.0.0",
+    "contact": { "name": "QANATONE", "url": "https://www.qanatone.com/iletisim/" },
+    "license": { "name": "Kullanım koşulları", "url": "https://www.qanatone.com/hukuki/" }
+  },
+  "servers": [{ "url": "https://www.qanatone.com", "description": "Üretim" }],
+  "paths": {
+    "/.netlify/functions/diagnose": {
+      "post": {
+        "operationId": "siteTespit",
+        "summary": "Bir siteyi analiz et",
+        "description": "Adresi çeker ve ölçüm kalemlerini döndürür. Kimlik doğrulaması gerekmez; kota IP başınadır.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["url"],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Analiz edilecek sitenin adresi.",
+                    "examples": ["https://example.com"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analiz tamamlandı ya da adres okunamadı (ok alanına bakılır).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/TespitSonucu" },
+                    { "$ref": "#/components/schemas/TespitHatasi" }
+                  ]
+                }
+              }
+            }
+          },
+          "405": { "description": "Yalnız POST kabul edilir." },
+          "429": { "description": "Kota aşıldı." }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TespitSonucu": {
+        "type": "object",
+        "required": ["ok", "host", "score", "items"],
+        "properties": {
+          "ok": { "const": true },
+          "host": { "type": "string", "description": "Çözümlenen alan adı." },
+          "finalUrl": { "type": "string", "format": "uri", "description": "Yönlendirmelerden sonraki adres." },
+          "score": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Toplam puan." },
+          "status": { "type": "integer", "description": "HTTP durum kodu." },
+          "bytes": { "type": "integer", "description": "Ana sayfanın bayt boyu." },
+          "redirects": { "type": "integer" },
+          "cdn": { "type": "string", "description": "Tespit edilen CDN (boş olabilir)." },
+          "durum": { "type": "string", "description": "Özet durum etiketi." },
+          "kalan": { "type": "integer", "description": "Bu istemci için kalan analiz hakkı." },
+          "items": {
+            "type": "array",
+            "description": "Ölçüm kalemleri.",
+            "items": {
+              "type": "object",
+              "required": ["k", "state"],
+              "properties": {
+                "k": { "type": "string", "description": "Kalem anahtarı (örn. https, weight)." },
+                "state": { "type": "string", "enum": ["ok", "warn", "fail"], "description": "Kalemin sonucu." },
+                "v": { "type": "string", "description": "Ölçülen değer." },
+                "o": { "type": "string", "description": "Ölçüt / eşik." }
+              }
+            }
+          }
+        }
+      },
+      "TespitHatasi": {
+        "type": "object",
+        "required": ["ok", "reason"],
+        "properties": {
+          "ok": { "const": false },
+          "reason": { "type": "string", "description": "Adres okunamadı ya da kota doldu." }
+        }
+      }
+    }
+  }
+}

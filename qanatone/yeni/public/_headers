@@ -45,6 +45,38 @@
   Content-Type: application/json; charset=utf-8
   X-Robots-Tag: noindex
 
+# AJAN KESIF YUZEYLERI (9 Eyl 2026). Ucu de GERCEK bir uca isaret eder:
+# katalog ve ARD `diagnose` API'sini duyurur, yetenek dizini onun SKILL.md
+# dosyasini. Arkasinda uc olmayan kayit YAZILMADI (OAuth/MCP/A2A kalemleri
+# bilerek disarida — bkz. tur notu).
+# `api-catalog` UZANTISIZ ve RFC 9727 `application/linkset+json` ister;
+# tip buradan verilmezse Netlify onu `application/octet-stream` sunar ve
+# tarayici kalemi gecmez.
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/openapi.json
+  Content-Type: application/openapi+json
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+# ARD olcutu CORS'u ACIKCA sart kosuyor: kayit defterleri tarayicidan okur.
+/.well-known/ai-catalog.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+# SIRA ONEMLI — `_headers`ta SONRA gelen kural kazanir (kayitli tuzak:
+# genel kural bir keresinde .js kuralini ezmisti). Genel `agent-skills/*`
+# ONCE, `index.json` SONRA: yoksa dizin dosyasi `text/markdown` sunulurdu.
+/.well-known/agent-skills/*
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/agent-skills/index.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
 /*.md
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex

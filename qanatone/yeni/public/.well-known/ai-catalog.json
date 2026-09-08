@@ -1,0 +1,70 @@
+{
+  "specVersion": "0.1",
+  "host": {
+    "name": "QANATONE",
+    "domain": "qanatone.com",
+    "url": "https://www.qanatone.com/",
+    "description": "Talebi yakalayan sistemler kurar: arama görünürlüğü (SEO), yapay zekâ cevaplarında görünürlük (GEO), reklam ve 7/24 çalışan yapay zekâ ajanları."
+  },
+  "entries": [
+    {
+      "id": "urn:air:qanatone.com:api:site-tespit",
+      "displayName": "Site Tespit API",
+      "description": "Bir web sitesini gerçek isteklerle çeker; hız, ağırlık, yönlendirme, robots/sitemap ve ajan hazırlığı kalemlerini ölçüp kalem kalem durum döndürür. Kimlik gerekmez, kota IP başınadır.",
+      "type": "application/openapi+json",
+      "url": "https://www.qanatone.com/.well-known/openapi.json",
+      "representativeQueries": [
+        "Bu sitenin teknik sağlığını ölç",
+        "Sayfa ağırlığı ve yönlendirme sayısı nedir",
+        "Site yapay zekâ ajanlarına hazır mı",
+        "robots.txt ve sitemap doğru kurulmuş mu"
+      ]
+    },
+    {
+      "id": "urn:air:qanatone.com:index:llms",
+      "displayName": "Ajan yüzeyi dizini (llms.txt)",
+      "description": "Sitenin ajanlar için hazırlanmış yüzeylerinin dizini: hangi sayfa ne anlatır, markdown karşılıkları nerededir.",
+      "type": "text/plain",
+      "url": "https://www.qanatone.com/llms.txt",
+      "representativeQueries": [
+        "QANATONE hangi hizmetleri veriyor",
+        "Sitenin ajanlar için özeti nerede",
+        "Sayfaların markdown sürümü var mı"
+      ]
+    },
+    {
+      "id": "urn:air:qanatone.com:policy:agent-permissions",
+      "displayName": "Ajan izinleri",
+      "description": "Hangi ajan davranışına izin verildiği, hangisinin reddedildiği: içerik kullanımı, eğitim, oran sınırı.",
+      "type": "application/json",
+      "url": "https://www.qanatone.com/.well-known/agent-permissions.json",
+      "representativeQueries": [
+        "Bu siteyi taramama izin var mı",
+        "İçerik model eğitiminde kullanılabilir mi",
+        "Ajanlar için oran sınırı nedir"
+      ]
+    },
+    {
+      "id": "urn:air:qanatone.com:doc:agents",
+      "displayName": "Ajan kılavuzu (agents.md)",
+      "description": "Siteyle çalışan ajanlar için yazılmış kılavuz: yapı, adlandırma, hangi bilgi nerede.",
+      "type": "text/markdown",
+      "url": "https://www.qanatone.com/agents.md",
+      "representativeQueries": [
+        "Bu siteyle nasıl çalışmalıyım",
+        "Sayfa yapısı ve adlandırma kuralları neler"
+      ]
+    },
+    {
+      "id": "urn:air:qanatone.com:skills:index",
+      "displayName": "Ajan yetenek dizini",
+      "description": "Sitenin ajanlara sunduğu yeteneklerin dizini; her yetenek için tanım dosyası ve özeti.",
+      "type": "application/json",
+      "url": "https://www.qanatone.com/.well-known/agent-skills/index.json",
+      "representativeQueries": [
+        "Bu sitenin ajan yetenekleri neler",
+        "Hangi işi otomatik yaptırabilirim"
+      ]
+    }
+  ]
+}

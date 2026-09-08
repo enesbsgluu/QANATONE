@@ -1,0 +1,28 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.qanatone.com/.netlify/functions/diagnose",
+      "service-desc": [
+        {
+          "href": "https://www.qanatone.com/.well-known/openapi.json",
+          "type": "application/openapi+json",
+          "title": "QANATONE Site Tespit API — OpenAPI 3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://www.qanatone.com/hizmetler/",
+          "type": "text/html",
+          "title": "Hizmetler — aracın ne yaptığı"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://www.qanatone.com/llms.txt",
+          "type": "text/plain",
+          "title": "Ajan yüzeyi dizini"
+        }
+      ]
+    }
+  ]
+}
