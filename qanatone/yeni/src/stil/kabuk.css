@@ -97,6 +97,38 @@ html.t-noagent #bitback{display:none!important}
     background:radial-gradient(circle closest-side,rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)}
 }
 
+/* ZOOM COKMESI — KOK SEBEP VE CARE (9 Eyl 2026, gercek cihazda olculdu).
+   BELIRTI: iPhone/Safari'de sayfanin GIRIS kismindayken parmakla
+   yakinlastirinca sekme cokuyor.
+
+   TESHIS, iki kolla ayrildi (her ikisi de ayni telefonda, temiz Safari,
+   1. sirada — sira etkisi olculmustu, kollar pes pese denenmez):
+     `#bg>*{display:none}`  ici bos, katman yerinde   -> COKMEDI
+     `#bg .grid{mask:none}` maske yok, icerik dolu    -> COKTU
+   Yani suclu ne maske ne de belirli bir alt katman. `#bg` `position:fixed`
+   oldugu icin pinch'te HER KAREDE YENIDEN RASTERLENIYOR; ici bosken
+   rasterlenecek bir sey olmadigi icin o kol dayandi. Maliyet olcegin
+   KARESIYLE buyudugu icin tumlesik GPU butcesi tukeniyor.
+
+   CARE: zemini kendi GPU katmanina sabitlemek. Katmana alinmis yuzey
+   pinch'te yeniden BOYANMAZ, GPU'da olceklenir. Gercek cihazda dogrulandi:
+   `will-change:transform` kolunda 74,5 sn / 327 paket kesintisiz, yuksek
+   olcekte toplam ~20 sn (taban ayni kosulda 4,9-6,6 sn'de cokuyordu).
+
+   GORSEL DEGISIKLIK YOK — silinen, tasinan, degeri degistirilen hicbir sey
+   yok; yalniz kompozit ipucu. Daha once denenen ve DUSEN yollar (hepsi
+   zemini bozuyordu, git gecmisinde: 7e6626c ve oncesi): zemini `body`nin
+   background'ina tasimak (iOS `background-attachment:fixed` uygulamiyor),
+   `repeat-y` ile bant tekrari, `#bg` sticky (derlemede kazanc vermedi).
+
+   H14 NOTU: "mobil baglamda pahali katman yok (filter/backdrop/will-change)"
+   kurali ANIMASYONLU katmanlarin surekli yeniden boyanmasi icindir. Burada
+   amac tam tersi: STATIK bir yuzeyi bir kez boyayip sabitlemek. Kapsam tek
+   eleman ve yalniz mobil. */
+@media(pointer:coarse),(max-width:900px){
+  #bg{will-change:transform}
+}
+
 /* NOT (9 Eyl 2026): mobilde `#bg` gizlenip zemin `body`nin background'ina
    tasindi — cokme butcesinden -%35 katman aliyordu (23,11 -> 15,13 MP) ama
    ZEMINI BOZUYORDU: iOS `background-attachment:fixed` uygulamadigi icin desen
