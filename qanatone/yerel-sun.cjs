@@ -99,12 +99,32 @@ const TANI_BETIK = `<script>(function(){
  var kol=window.__taniKol||'taban';
  var kolTuttu=!!document.querySelector('style[data-tani-kol]')||kol==='taban';
  var t0=Date.now(), n=0, sonHata=null;
+ /* COKME IMZASI (9 Eyl): "paket akisi kesildi" tek basina cokme kaniti DEGIL —
+    sekme kapanmasi da oyle gorunuyor. Uc alan bunu ayirir:
+      nav        navigation tipi; cokme sonrasi Safari'nin geri getirmesi
+                 'reload'/'back_forward' olur, Enes'in actigi link 'navigate'
+      yuklemeNo  ayni kolda kacinci yukleme — sessionStorage cokmede KORUNUR,
+                 yani ayni kolda 2 gorunuyorsa arada bir yeniden yukleme oldu
+      acilisOlcek acilista olcek zaten >1 ise onceki oturum cokmus demektir
+                 (Safari zoom'u korur) — bu imzayla tur7'nin coktugu anlasildi
+    Ayrica yuksekMs: olcek>=4'te gecirilen KUMULATIF sure. Tur ancak bu sure
+    tabanin coktugu sureyi (6,6 sn) belirgin asarsa hukum verir; 9 sn'de
+    "cokmedi" demek marj icinde kalir.                                       */
+ var nav=''; try{var e=performance.getEntriesByType('navigation')[0]; nav=e?e.type:''}catch(e){}
+ var yuklemeNo=1; try{var a='qanat-tani-'+kol; yuklemeNo=(+sessionStorage.getItem(a)||0)+1;
+   sessionStorage.setItem(a,String(yuklemeNo))}catch(e){}
+ var acilisOlcek=(window.visualViewport&&visualViewport.scale)||1;
+ var yuksekMs=0, sonTik=Date.now(), sonOlcek=acilisOlcek;
  addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
  function paket(sebep){
   var vv=window.visualViewport||{};
   var m=(performance&&performance.memory)||{};
-  return {kol:kol,sebep:sebep,n:++n,ms:Date.now()-t0,
-   kolTuttu:kolTuttu,
+  var simdi=Date.now();
+  if(sonOlcek>=4)yuksekMs+=simdi-sonTik;      /* yuksek olcekte gecen sure birikir */
+  sonTik=simdi; sonOlcek=vv.scale||1;
+  return {kol:kol,sebep:sebep,n:++n,ms:simdi-t0,
+   kolTuttu:kolTuttu, nav:nav, yuklemeNo:yuklemeNo,
+   acilisOlcek:Number(acilisOlcek.toFixed(2)), yuksekMs:yuksekMs,
    heroda:(scrollY < innerHeight*1.2),
    olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),
    dpr:devicePixelRatio, en:innerWidth, boy:innerHeight, y:Math.round(scrollY),
