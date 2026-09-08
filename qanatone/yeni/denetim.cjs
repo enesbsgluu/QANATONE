@@ -1175,6 +1175,148 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${say.kart} kart · ${say.rota} rota 200! · ${KONAK}/mcp + /a2a · SKILL.md ile ayni`);
 }
 
+/* T8 · PANEL ALANI BOSA CALISAMAZ (9 Eyl 2026).
+   BULGU: panelde "Ortaklar (serit)" diye bir sekme vardi, `partners`
+   anahtarini duzenliyordu ve "ana sayfadaki yatay akan seritte gorunen
+   isimler" diyordu. Serit o anahtari HIC OKUMUYOR — `STSerit.astro`
+   `veri/serit-logolari.json`'dan besleniyor. Ayni sey `chimg`te: kanal
+   kartlarinda gorsel yukleme alani vardi, sahne `veri/kanal-gorselleri.json`
+   kullaniyor; `chimg` degerleri diskte OLMAYAN dosyalari gosteriyordu.
+   Panelde duzenlenebilen ama hicbir seyi degistirmeyen alan, YANLIS YESILIN
+   en pahali turudur: kullanici isini yaptigini sanir.
+
+   IKINCI YARI DAHA ONEMLI — YANLIS TEMIZLIK DE ENGELLENIYOR.
+   Ayni turda `services[].fam` ve `det.story.tools` de "olu anahtar" diye
+   isaretlenmisti. OLCUM BUNU CURUTTU: ikisi de CANLI, ama ikisi de
+   ANAHTAR-DEGER olarak ciktida GORUNMEZ — cunku ikisi de SALTER.
+   `fam` hangi sahnenin cizilecegini secer (SAAkis), `det.story` hangi
+   sahne bileseninin baglanacagini (HizmetGovde). Bir nobetci "degeri
+   ciktida ariyorsa" salteri asla bulamaz ve "olu" der. Bu kural o iki
+   okumayi KILITLER: birini silen bir temizlik turu kirmizi doner.
+
+   YONTEM NOTU: grep bu ailede yanlis yesil verir — "Charles Schwab"
+   dist/index.html'de geciyor ama `projects`ten, `partners`tan degil.
+   Ayni ad iki yerde. */
+{
+  const kusur = [];
+  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const panel = fs.readFileSync(path.join(__dirname, '..', 'admin.html'), 'utf8');
+  /* Yorumlar ayiklanir: bu depoda bir kural, yorumun icindeki ornegi
+     gercek deger sanip yanlis yesil vermisti (T4'te yazili). */
+  const panelKod = panel.replace(/\/\*[\s\S]*?\*\//g, '');
+
+  /* a · DUSURULEN ANAHTARLAR GERI GELMEMELI (ne veride, ne panelde) */
+  const DUSEN = [
+    ['partners', () => icerik.partners !== undefined],
+    ['chimg', () => icerik.chimg !== undefined],
+    ['theme.motion.splash', () => icerik.theme && icerik.theme.motion
+      && icerik.theme.motion.splash !== undefined]
+  ];
+  for (const [ad, varMi] of DUSEN)
+    if (varMi()) kusur.push('content.json`da ' + ad + ' geri gelmis (atil anahtar)');
+  if (/\bortak\s*:\s*\{\s*t\s*:/.test(panelKod)) kusur.push('panelde `ortak` sekmesi geri gelmis');
+  /* ALANIN KENDISI aranir, kelime degil. Ilk yazimda duz `/chimg/`
+     yazmistim ve kural KENDI aciklama notumu yakaladi (not, alanin neden
+     kaldirildigini anlatmak icin o adi ANMAK ZORUNDA — T7'de ayni tuzaga
+     dusulmustu: "anmak" ile "kullanmak" ayri seyler). Aranan sey bir
+     yazma yoludur: `img('chimg…` / `fld('…','chimg…`. */
+  if (/(?:img|fld|P2)\(\s*(?:'[^']*'\s*,\s*)?'chimg/.test(panelKod)
+      || /data-p="chimg/.test(panelKod))
+    kusur.push('panelde chimg alani geri gelmis');
+
+  /* b · CANLI SALTERLER OKUNMAYA DEVAM ETMELI.
+     Kaynak taramasi burada DOGRU arac: aradigimiz sey degerin ciktida
+     gorunmesi degil, KODUN O ALANI OKUMASI. */
+  const oku = (dosya) => fs.readFileSync(path.join(__dirname, 'src', dosya), 'utf8');
+  const SALTER = [
+    ['services[].fam', 'sahneler/SAAkis.astro', /\.fam\s*===/],
+    ['det.story', 'parcalar/HizmetGovde.astro', /story\?\.(tools|sites|live)/]
+  ];
+  for (const [ad, dosya, kalip] of SALTER) {
+    let k = '';
+    try { k = oku(dosya); } catch (e) { kusur.push(ad + ': ' + dosya + ' okunamadi'); continue; }
+    if (!kalip.test(k.replace(/\/\*[\s\S]*?\*\//g, '')))
+      kusur.push(ad + ' ARTIK OKUNMUYOR (' + dosya + ') — salter olu sanilip silinmis olabilir');
+  }
+  /* Verinin kendisi de yerinde mi: salter okunuyor ama deger yoksa sahne
+     sessizce cizilmez. */
+  const famsiz = (icerik.services || []).filter((s) => s && s.slug && !s.fam).map((s) => s.slug);
+  if (famsiz.length) kusur.push('fam`i olmayan hizmet: ' + famsiz.slice(0, 3).join(','));
+
+  /* c · PANEL SEKME BUTUNLUGU — NAV'daki her kimlik P'de olmali ve
+     tersi. Kendi duzenlememi de tutar: sekmeyi P'den silip NAV'da
+     birakmak paneli acilista kirardi. */
+  let navIds = [], pIds = [];
+  {
+    const m = panelKod.match(/const NAV\s*=\s*\[([\s\S]*?)\]\];/);
+    if (!m) kusur.push('admin.html: NAV okunamadi');
+    else navIds = [...m[1].matchAll(/'([a-z]+)'/g)].map((x) => x[1])
+      .filter((x) => !['İçerik', 'Bölümler', 'Site'].includes(x));
+    pIds = [...panelKod.matchAll(/^([a-z]+)\s*:\s*\{\s*t\s*:\s*'/gm)].map((x) => x[1]);
+    const grup = ['İçerik', 'Bölümler', 'Site'];
+    navIds = navIds.filter((x) => !grup.includes(x));
+    for (const id of navIds)
+      if (!pIds.includes(id)) kusur.push('NAV`da olan sekme P`de yok: ' + id);
+    for (const id of pIds)
+      if (!navIds.includes(id)) kusur.push('P`de olan sekme NAV`da yok (erisilemez): ' + id);
+  }
+
+  ol('T8 · panel alani bosa calisamaz: atil alan yok, canli salterler okunuyor, sekme butunlugu',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 4).join(' | ')
+       : `3 atil anahtar dusuk · 2 salter kilitli · ${pIds.length} sekme NAV ile birebir`);
+}
+
+/* T9 · OLCUM ETIKETI KAPSAMI KAPIDA (9 Eyl 2026).
+   NEDEN YAZILDI: "66 sayfanin 63'unde olcum var, ucu eksik" bir RAPORDA
+   "kapsamin yan etkisi, bilincli karar degil" diye gecti — YANLISTI.
+   Karar 4 Eyl'de verilmis ve `layouts/Temel.astro` icinde OLCUMLE birlikte
+   yazilmis: panelden `settings.gtm` dolunca /film J1 tavani asiliyordu
+   (11.774 > 11.264 B, 510 B fazla) ve tavan BILEREK gevsetilmedi, cunku
+   `/film` ziyaretci hedefi degil — noindex, sitemap'te yok, hicbir
+   sayfadan baglanmiyor, `kabuk={false}` ile kendi tam ekran OLCUM yuzeyi.
+   Oraya ucuncu taraf etiketi basmak kendi olcum kosumlarimizi Enes'in
+   analitigine yazardi.
+
+   DERS: yorumda yazili bir karar, KAPIYA BAGLI DEGILSE bir sonraki turda
+   "unutulmus eksik" diye rapora giriyor ve biri onu "duzeltmeye"
+   kalkiyor. Bu kural karari iki yonlu tutar — kabuk sayfalarinda etiket
+   OLMALI, film yuzeyinde OLMAMALI. */
+{
+  const kusur = [];
+  const ETIKET = /googletagmanager\.com/;
+  const oku = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
+
+  /* Panel `settings.gtm`i bos birakmis olabilir — o zaman HICBIR sayfada
+     etiket olmaz ve kural konusuz kalir. Once zemini olc, sonra hukum ver. */
+  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const gtm = String((icerik.settings && icerik.settings.gtm) || '').trim();
+
+  const FILM = [path.join(KOK, 'film', 'index.html'), path.join(KOK, 'en', 'film', 'index.html')];
+  const KABUK = [path.join(KOK, 'index.html'), path.join(KOK, 'hizmetler', 'index.html')];
+
+  for (const p of FILM) {
+    const h = oku(p);
+    if (h === null) { kusur.push('film yuzeyi yok: ' + path.relative(KOK, p)); continue; }
+    if (ETIKET.test(h)) kusur.push(path.relative(KOK, p) + ': olcum etiketi BASILMIS — '
+      + 'kendi olcum kosumlarimiz analitige yazilir');
+  }
+  if (gtm) {
+    for (const p of KABUK) {
+      const h = oku(p);
+      if (h === null) { kusur.push('kabuk sayfasi yok: ' + path.relative(KOK, p)); continue; }
+      if (!ETIKET.test(h)) kusur.push(path.relative(KOK, p) + ': olcum etiketi YOK — '
+        + 'panel dolu ama kabuk sayfasi etiketsiz');
+    }
+  }
+
+  ol('T9 · olcum etiketi: kabuk sayfalarinda VAR, film olcum yuzeyinde YOK (bilincli, olculdu)',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : (gtm ? 'panel dolu · 2 kabuk sayfasi etiketli · 2 film yuzeyi temiz'
+              : 'panel `settings.gtm` bos — etiket hicbir yerde yok, film yuzeyi yine temiz'));
+}
+
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
    butonu hem mobilde hem masaustunde yonlendirme yapmiyor, buton bosta").
    YASANMIS: hero'nun ikinci dugmesi `href="#cagri"` tasiyordu ve `id="cagri"`
