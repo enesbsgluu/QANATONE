@@ -115,6 +115,13 @@ const TANI_BETIK = `<script>(function(){
    sessionStorage.setItem(a,String(yuklemeNo))}catch(e){}
  var acilisOlcek=(window.visualViewport&&visualViewport.scale)||1;
  var yuksekMs=0, sonTik=Date.now(), sonOlcek=acilisOlcek;
+ /* SURUM PARMAK IZI (9 Eyl): telefonun GERCEKTEN olculen surumu calistirdigi
+    pakette gorunsun. "Olcum dogru, olculen surum yanlis" tuzagina iki kez
+    dusuldu; halka yamasi sonrasi ayni riski tasiyor. halkaEn = .sus-halka
+    ::before'un computed genisligi: 1009 = YAMASIZ, 563 = yamali (428 px
+    genislikte). Kiyas ancak iki kosumda bu deger BEKLENEN olursa gecerlidir. */
+ var halkaEn=null; try{var hh=document.querySelector('.sh-void .sus-halka')||document.querySelector('.sus-halka');
+   if(hh)halkaEn=Math.round(parseFloat(getComputedStyle(hh,'::before').width))||null}catch(e){}
  addEventListener('error',function(e){sonHata=String(e.message||e.type).slice(0,120)},true);
  function paket(sebep){
   var vv=window.visualViewport||{};
@@ -123,7 +130,7 @@ const TANI_BETIK = `<script>(function(){
   if(sonOlcek>=4)yuksekMs+=simdi-sonTik;      /* yuksek olcekte gecen sure birikir */
   sonTik=simdi; sonOlcek=vv.scale||1;
   return {kol:kol,sebep:sebep,n:++n,ms:simdi-t0,
-   kolTuttu:kolTuttu, nav:nav, yuklemeNo:yuklemeNo,
+   kolTuttu:kolTuttu, nav:nav, yuklemeNo:yuklemeNo, halkaEn:halkaEn,
    acilisOlcek:Number(acilisOlcek.toFixed(2)), yuksekMs:yuksekMs,
    heroda:(scrollY < innerHeight*1.2),
    olcek:vv.scale||null, vvEn:Math.round(vv.width||0), vvBoy:Math.round(vv.height||0),
