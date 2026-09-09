@@ -22,7 +22,7 @@ const konu = String(k);
 const ad = konuAdi(konu, 'tr');
 const canon = sl(`${KOK}/haber/konu/${konu}`);
 const baslik = `${ad} — Haberler — QANATONE`;
-const aciklama = `${ad} başlığında sektörden aktardıklarımız — kaynağıyla.`;
+const aciklama = `${ad} başlığında sektörden aktardıklarımız.`;
 const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('haberler', { sayfa: 1, konu: konu });
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article' }, semaDilim, semaBas);
 ---

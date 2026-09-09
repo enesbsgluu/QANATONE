@@ -17,7 +17,7 @@ const { n } = Astro.params;
 const sayfa = Number(n);
 const canon = sl(`${KOK}/en/bulten/sayfa/${sayfa}`);
 const baslik = `Bulletin — Page ${sayfa} — QANATONE`;
-const aciklama = `What is changing in AI, search and demand handling — with the sources. Page ${sayfa}.`;
+const aciklama = `What is changing in AI, search and demand handling. Page ${sayfa}.`;
 const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('yazilar', { sayfa: sayfa, konu: '' });
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU }, semaDilim, semaBas);
 ---

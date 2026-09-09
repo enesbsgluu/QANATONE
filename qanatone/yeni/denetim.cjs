@@ -1092,7 +1092,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      olarak yazdirmiyor; donusturucu bozulursa kayip SESSIZ olur (bolum
      yarim gorunur, kaydedilince gercek icerik silinir). Test gercek
      yazilari tarar, fikstur kullanmaz. */
-  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js'];
+  /* 10 Eyl 2026: `kaynak-alani.test.js` eklendi. Kaynak alani Enes'in
+     kuralindan sonra NORMALDE BOS duruyor (kaynak yazmiyoruz; alan
+     yalniz cok onemli politik konular icin). Bos duran bir alanin
+     bozuldugu FARK EDILMEZ — gun gelip gercekten kaynak yazilmasi
+     gerektiginde ogrenilir, ki en pahali an odur. Test paneli jsdom'da
+     ACIP uc bolumun kaynak alanina gercekten yaziyor ve panelin kendi
+     `kayitFarki()` govdesini sorguluyor. */
+  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js', 'kaynak-alani.test.js'];
   const kusur = [];
   let ozet = '';
 

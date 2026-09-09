@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 
 const canon = sl(`${KOK}/haber`);
 const baslik = 'Haberler — QANATONE';
-const aciklama = 'Yapay zekâ, arama ve dijital pazarlama tarafında gündem — kaynağıyla.';
+const aciklama = 'Yapay zekâ, arama ve dijital pazarlama tarafında gündem.';
 const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('haberler', { sayfa: 1, konu: '' });
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article' }, semaDilim, semaBas);
 ---
