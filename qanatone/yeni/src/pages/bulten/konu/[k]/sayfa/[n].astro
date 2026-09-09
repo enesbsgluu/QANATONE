@@ -19,7 +19,14 @@ const sayfa = Number(n);
 const ad = konuAdi(konu, 'tr');
 const canon = sl(`${KOK}/bulten/konu/${konu}/sayfa/${sayfa}`);
 const baslik = `${ad} — Sayfa ${sayfa} — Bülten — QANATONE`;
-const aciklama = `${ad} başlığında yazdıklarımız — sayfa ${sayfa}.`;
+/* 9 Eyl 2026 · 1.000 yazılık ölçekte ölçüldü: bu satır 1. sayfanın
+   açıklamasını KISALTIYORDU (`${ad} başlığında yazdıklarımız — sayfa N.`)
+   ve dört konu etiketinin dördü de S1'in 50 karakterlik tabanına
+   dayanıyordu — "Sektör verisi"nde 49 çıkıp kırmızı yandı. Kusur ancak
+   bir konunun 13. yazısında doğduğu için 6 yazılık bugünkü sitede
+   görünmüyordu. Kural: sayfa N açıklaması 1. sayfanınkinin AYNISI +
+   sayfa numarası (öteki bölümlerin hepsi zaten böyle yapıyor). */
+const aciklama = `${ad} başlığında yazdıklarımız: yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla. Sayfa ${sayfa}.`;
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU });
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
