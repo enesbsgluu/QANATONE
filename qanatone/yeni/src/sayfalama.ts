@@ -191,3 +191,30 @@ export async function sektorDilim(k: string, sayfa: number) {
   const no = Math.min(Math.max(1, sayfa), toplam);
   return { hepsi, toplam, no, bas: (no - 1) * boy, gorunen: hepsi.slice((no - 1) * boy, no * boy) };
 }
+
+/* ---- DILIM TEK KAYNAKTAN (Kademe 2, 9 Eyl 2026) ---------------------
+   Kartlar ve ItemList AYNI listeden turemek ZORUNDA. Onceden sema
+   (`sema.mjs`) listeyi content.json'dan KENDI cikariyordu, kartlari ise
+   `BolumDizin` Astro koleksiyonundan aliyordu — iki ayri yol, ayni
+   dosyayi okuduklari icin ortusuyorlardi. Yazilar dosyaya ayrilinca
+   sema bir anda BOSALDI: ItemList 0, kart 6 (T11 ve T14 yakaladi).
+   Bu fonksiyon iki yolu tek yola indirir; rota dilimi bir kere alir,
+   hem semaya hem bilesene verir. T14'un 5. olcutu — "ItemList = kart =
+   dilim" — artik yalniz kapiyla degil YAPIYLA tutuluyor.
+   Siralama, konu suzgeci ve sayfa kelepcesi BolumDizin'deki davranisin
+   AYNISI: tarihe gore yeni->eski, `topic` esitligi, sayfa 1..toplam. */
+export async function bolumDilimi(
+  bolum: string,
+  secim: { sayfa?: number; konu?: string } = {},
+): Promise<{ arsiv: any[]; tum: any[]; yazilar: any[]; bas: number; sayfa: number; toplamSayfa: number }> {
+  const K = bolumKaydi(bolum);
+  const boy: number = (K && K.sayfa_boyu) || SAYFA_BOYU;
+  const konu = secim.konu || '';
+  const arsiv = (await getCollection(bolum as any)).map((e: any) => e.data)
+    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
+  const tum = konu ? arsiv.filter((p: any) => String(p.topic || '') === konu) : arsiv;
+  const toplamSayfa = Math.max(1, Math.ceil(tum.length / boy));
+  const sayfa = Math.min(Math.max(1, secim.sayfa || 1), toplamSayfa);
+  const bas = (sayfa - 1) * boy;
+  return { arsiv, tum, yazilar: tum.slice(bas, bas + boy), bas, sayfa, toplamSayfa };
+}

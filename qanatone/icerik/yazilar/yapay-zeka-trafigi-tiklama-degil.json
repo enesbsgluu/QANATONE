@@ -1,0 +1,72 @@
+{
+  "slug": "yapay-zeka-trafigi-tiklama-degil",
+  "date": "2026-08-02",
+  "read": 5,
+  "topic": "arama",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Veri · Arama & yapay zekâ",
+    "en": "Data · Search & AI"
+  },
+  "title": {
+    "tr": "Yapay zekâ sitene tıklama göndermiyor — ama seni okuyor",
+    "en": "AI is not sending you clicks — but it is reading you"
+  },
+  "lede": {
+    "tr": "Tüm yapay zekâ sohbet botlarının web trafiğindeki payı hâlâ %1'in altında. Buna bakıp \"boş iş\" demek, olan biteni tamamen ters okumak demek. Asıl rakam tarama oranlarında.",
+    "en": "Every AI chatbot combined still sends under 1% of web traffic. Reading that as \"not worth it\" gets the story exactly backwards."
+  },
+  "body": {
+    "tr": [
+      [
+        "Tıklama tarafı gerçekten küçük",
+        "<p>Cloudflare Radar'ın Temmuz 2026 ölçümüne göre arama kaynaklı yönlendirmelerin <b>%88,08'i</b> hâlâ Google'dan geliyor. Bütün yapay zekâ botları toplamı ise <b>%1'in altında</b>. SE Ranking'in çalışması yapay zekâ platformlarını tüm web trafiğinin <b>%0,32'si</b> olarak ölçüyor.</p><p>Yani bugün sitene gelen ziyaretçinin neredeyse tamamı hâlâ klasik aramadan geliyor. Bu tabloya bakıp \"yapay zekâ görünürlüğü erken bir heves\" demek mümkün. Ama eksik olan bir sütun var.</p>"
+      ],
+      [
+        "Tarama tarafı devasa",
+        "<p>Aynı Cloudflare verisinde çok daha çarpıcı bir oran duruyor: yapay zekâ şirketlerinin <b>kaç sayfa taradığı</b> başına <b>kaç ziyaretçi gönderdiği</b>.</p><div class=\"nfig\"><b>1.917 : 1</b><span>Temmuz 2026'da Anthropic'in taradığı sayfa başına geri gönderdiği ziyaretçi — bir yıl önce 38.744'e 1'di</span></div><p>OpenAI tarafında oran 857:1 civarında. Google'da ise 5:1. Yani yapay zekâ sistemleri, sana ziyaretçi göndermekten çok daha fazla <b>seni okuyor</b>. Okuduğu şeyi cevaplarında kullanıyor, kaynak gösterip göstermemesi ayrı bir mesele.</p><p>Buradaki asıl kayıp tıklama değil: cevabın içinde adının geçmemesi. Müşteri soruyu soruyor, cevabı alıyor, karar veriyor — ve sen o cevabın içinde yoksan sürecin dışındasın.</p>"
+      ],
+      [
+        "Rakamlar birbirini tutmuyor, bu normal",
+        "<p>Bu alanda yayımlanan raporlar arasında ciddi fark var. ChatGPT'nin yapay zekâ yönlendirmelerindeki payı için farklı çalışmalar <b>%62,6</b>, <b>%79,8</b>, <b>%87,4</b> ve <b>%92,4</b> diyor. Hepsi aynı ay için.</p><p>Sebep basit: kimi çalışma marka sitelerinden GA4 verisi topluyor, kimi trafik ölçüm servisi kullanıyor, kimi ağ seviyesinde ölçüyor; örneklem sektörleri de farklı. Tek bir rakama sarılmak yerine yönü okumak lazım — ve yön net: SE Ranking'e göre yapay zekâ kaynaklı trafik 2024'ten 2026'ya <b>16 kat</b> arttı.</p>"
+      ],
+      [
+        "Senin işin için ne demek",
+        "<p>Yapay zekâ görünürlüğüne bugün ayıracağın emek, bugünkü tıklama için değil. İki şey için: makinenin sayfanı okuyabilmesi ve okuduğunda seni doğru anlaması.</p><p>Pratikte bu, sayfada yapılandırılmış veri olması, fiyat-kapsam-süreç gibi soruların metinde açıkça cevaplanması ve içeriğin JavaScript arkasında saklanmaması demek. Yapay zekâ tarayıcılarının çoğu JavaScript çalıştırmıyor; sayfan ancak sonradan doluyorsa onlar için boş.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The click side really is small",
+        "<p>Cloudflare Radar's July 2026 measurement puts Google at <b>88.08%</b> of search referrals. Every AI bot combined sits <b>under 1%</b>. SE Ranking measures AI platforms at <b>0.32%</b> of all web traffic.</p>"
+      ],
+      [
+        "The crawl side is enormous",
+        "<p>The same data holds a sharper ratio: pages crawled per human visit referred back. Anthropic sat at <b>1,917:1</b> in July 2026, down from 38,744:1 a year earlier. OpenAI is around 857:1. Google is 5:1.</p><div class=\"nfig\"><b>1,917 : 1</b><span>pages crawled per visitor referred back, Anthropic, July 2026</span></div><p>The loss is not the click. It is not being named inside the answer.</p>"
+      ],
+      [
+        "The numbers disagree, and that is normal",
+        "<p>Studies put ChatGPT's share of AI referrals at 62.6%, 79.8%, 87.4% and 92.4% — for the same month. Different panels, different measurement layers, different verticals. Read the direction, not the decimal: AI-driven traffic grew 16x from 2024 to 2026.</p>"
+      ],
+      [
+        "What it means for you",
+        "<p>Work on AI visibility is not for today's clicks. It is so the machine can read your page and understand it correctly. In practice: structured data, plain answers to price and scope questions, and content that is not hidden behind JavaScript — most AI crawlers do not run it.</p>"
+      ]
+    ]
+  },
+  "sources": [
+    {
+      "n": "Cloudflare Radar üzerinden arama pazar payı ve tarama oranları, Temmuz 2026",
+      "u": "https://technologychecker.io/blog/search-engine-market-share"
+    },
+    {
+      "n": "SE Ranking — yapay zekâ trafiği araştırması, 2026",
+      "u": "https://seranking.com/blog/ai-traffic-research-study/"
+    },
+    {
+      "n": "Goodie — 2026 AI Search Traffic Report",
+      "u": "https://higoodie.com/blog/ai-search-traffic-report-2026/"
+    }
+  ]
+}

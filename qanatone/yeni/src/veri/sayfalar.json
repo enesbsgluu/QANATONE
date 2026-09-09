@@ -229,7 +229,9 @@
    },
    "form": true,
    "tr_ad": "Bülten",
-   "en_ad": "Newsletter"
+   "en_ad": "Newsletter",
+   "depo": "dosya",
+   "klasor": "icerik/yazilar"
   },
   {
    "ad": "nedir",
@@ -250,7 +252,9 @@
    "tr_giris": "Konunun ne olduğunu ve nasıl işlediğini, örnekle ve kaynağıyla. Tanım yazıları eskimez — bülten haber, burası açıklama.",
    "form": false,
    "tr_ad": "Nedir",
-   "en_ad": "Explainers"
+   "en_ad": "Explainers",
+   "depo": "dosya",
+   "klasor": "icerik/nedir"
   },
   {
    "ad": "haberler",
@@ -274,7 +278,9 @@
    "tr_giris": "Yapay zekâ, arama ve dijital pazarlama tarafında gündemi kaynağıyla aktarıyoruz.",
    "form": false,
    "tr_ad": "Haberler",
-   "en_ad": "News"
+   "en_ad": "News",
+   "depo": "dosya",
+   "klasor": "icerik/haber"
   }
  ],
  "_kosullu": "KOSULLU BOLUM (9 Eyl 2026). `kosullu: \"<kaynak>\"` tasiyan statik kayit, content.json'daki o kaynak BOS oldugu surece YOK sayilir: sayfa uretilmez, menuye ve alt bilgiye girmez, sitemap'e yazilmaz, denetimin sayfa kumesi de onu beklemez. SEBEP: /nedir ve /haber mimarisi bugun kuruluyor ama icerigi panelden gelecek; bos bir bolum sayfasini yayinlamak Google'a ince icerik sunmak ve menuye bos bir kapi koymak olurdu. Ilk yazi panelden eklendigi an bolum kendiliginde acilir - ayrica kod degisikligi GEREKMEZ. Bekci: T12.",
@@ -291,5 +297,6 @@
    "nedir",
    "haberler"
   ]
- }
+ },
+ "_depo": "DOSYA BASINA KAYIT (Kademe 2, 9 Eyl 2026). `depo:\"dosya\"` tasiyan koleksiyon content.json'da DEGIL `klasor` altinda dosya basina bir JSON olarak durur; content.json o diziyi HIC tasimaz (iki kaynak olmasin). Sebep olculdu: taslak localStorage 1.447 yazida, yayinla POST govdesi 1.651 yazida duvara carpiyordu - ikisi de butunu bir kerede tasimaktan. hizmetler/projeler AYRILMAZ: sayilari sabit (9 ve 7), olcekle buyumuyorlar. Goc betigi: yeni/icerik-ayir.cjs (ayir|geri|durum). Bekci: T15."
 }

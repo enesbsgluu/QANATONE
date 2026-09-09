@@ -30,7 +30,7 @@ import { getCollection } from 'astro:content';
 import { icerik, T, type Dil, sl } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
 import { konuAdi, konulariCikar } from '../konular';
-import { getCollection as kolAl } from 'astro:content';
+import { bolumDilimi } from '../sayfalama';
 interface Props { dil: Dil; bolum?: string; sayfa?: number; konu?: string }
 const { dil, bolum = 'yazilar', sayfa = 1, konu = '' } = Astro.props;
 /* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
@@ -44,15 +44,15 @@ const M = (k: string, tr: string, en: string) =>
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
-/* KOLEKSİYON BÖLÜMDEN GELİR. `getCollection` derleme anında çalışır ve
-   adı değişken olabilir; sıralama her bölümde aynı (tarihe göre
-   yeni→eski) — "nedir" evergreen olsa da listede en yeni tanım önde. */
-const arsiv = (await kolAl(bolum as any)).map((e: any) => e.data)
-  .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
-/* KONU ARSIVI: `konu` verildiyse sayfalama O KONUNUN listesi uzerinde
-   calisir — dizinin tum davranisi (dilim, gezinme, sema) ayni kodu
-   kullanir, ikinci bir bilesen yok. */
-const tumYazilar = konu ? arsiv.filter((p: any) => String(p.topic || '') === konu) : arsiv;
+/* DILIM TEK FONKSIYONDAN (Kademe 2, 9 Eyl 2026). Siralama, konu
+   suzgeci ve sayfa kelepcesi BURADA DEGIL `sayfalama.ts`teki
+   `bolumDilimi`de duruyor; rota da semayi ondan besliyor. Onceden bu
+   uc adim burada, sema tarafinda ise ayri bir govdede yaziliydi —
+   iki uygulama ayni sonucu vermek ZORUNDAYDI ve verdikleri surece
+   ayrisma gorunmuyordu. Tek fonksiyon olunca "ItemList = kart = dilim"
+   kapiyla degil yapiyla tutuluyor. */
+const { arsiv, tum: tumYazilar, yazilar, sayfa: buSayfa, toplamSayfa } =
+  await bolumDilimi(bolum, { sayfa, konu });
 const on = dil === 'en' ? '/en' : '';
 
 /* SAYFALAMA (Enes, 9 Eyl 2026: 12 yazi/sayfa).
@@ -62,14 +62,11 @@ const on = dil === 'en' ? '/en' : '';
    kayardi — "olcum dogru, olculen surum yanlis" vakasinin tam kalibi.
    1. sayfa `/bulten` KALIR (kanonik adres degismedi). */
 const KOL: any = (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === bolum);
-const SAYFA_BOYU: number = KOL.sayfa_boyu;
 const DIZIN: string = KOL.dizin;                    /* /bulten · /nedir · /haber */
 const MTN = KOL.metin || {};                        /* künye/başlık/giriş anahtarları */
 const FORM = KOL.form !== false;                    /* abone formu (varsayılan açık) */
 const CIPLER = !!KOL.arsiv_alan;                    /* konu çipleri yalnız arşivi olan bölümde */
-const toplamSayfa = Math.max(1, Math.ceil(tumYazilar.length / SAYFA_BOYU));
-const buSayfa = Math.min(Math.max(1, sayfa), toplamSayfa);
-const yazilar = tumYazilar.slice((buSayfa - 1) * SAYFA_BOYU, buSayfa * SAYFA_BOYU);
+
 const konuKok = konu ? `${DIZIN}/konu/${konu}` : DIZIN;
 const sayfaYolu = (n: number) => sl(`${B}${on}` + konuKok + (n <= 1 ? '' : `/sayfa/${n}`));
 

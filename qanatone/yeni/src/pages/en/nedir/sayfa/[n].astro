@@ -6,7 +6,7 @@ import Temel from '../../../../layouts/Temel.astro';
 import BolumDizin from '../../../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../../../icerik';
 import { bultenDizinSema } from '../../../../sema.mjs';
-import { bolumSayfaYollari, SAYFA_BOYU } from '../../../../sayfalama';
+import { bolumSayfaYollari, SAYFA_BOYU, bolumDilimi } from '../../../../sayfalama';
 
 export async function getStaticPaths() {
   return await bolumSayfaYollari('nedir');
@@ -17,7 +17,8 @@ const sayfa = Number(n);
 const canon = sl(`${KOK}/en/nedir/sayfa/${sayfa}`);
 const baslik = `Explainers — Page ${sayfa} — QANATONE`;
 const aciklama = `What the topics are and how they work — with examples and sources. Page ${sayfa}.`;
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm', kaynak: 'explainers' });
+const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('nedir', { sayfa: sayfa, konu: '' });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm' }, semaDilim, semaBas);
 ---
 <Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={sl(`${KOK}/nedir/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/nedir/sayfa/${sayfa}`)} sema={sema}

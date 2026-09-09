@@ -14,7 +14,7 @@ import Temel from '../../../layouts/Temel.astro';
 import BolumDizin from '../../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../../icerik';
 import { bultenDizinSema } from '../../../sema.mjs';
-import { bolumDizinYolu, SAYFA_BOYU } from '../../../sayfalama';
+import { bolumDizinYolu, SAYFA_BOYU, bolumDilimi } from '../../../sayfalama';
 
 export async function getStaticPaths() {
   return await bolumDizinYolu('nedir');
@@ -23,7 +23,8 @@ export async function getStaticPaths() {
 const canon = sl(`${KOK}/en/nedir`);
 const baslik = 'Explainers — QANATONE';
 const aciklama = 'What the topics are and how they work — with examples and sources.';
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm', kaynak: 'explainers' });
+const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('nedir', { sayfa: 1, konu: '' });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm' }, semaDilim, semaBas);
 ---
 <Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={sl(`${KOK}/nedir`)} helefen={sl(`${KOK}/en/nedir`)} sema={sema}

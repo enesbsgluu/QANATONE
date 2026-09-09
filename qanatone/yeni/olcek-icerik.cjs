@@ -3,8 +3,14 @@
    Raporu: ICERIK-MIMARISI-OLCUM.md (9 Eyl 2026).
 
    NE YAPAR
-     content.json'daki `posts` dizisini N adede sisirir, gercek derlemeyi
-     kosturur, ciktilari olcer. Sablon GERCEK bir gonderidir; yalniz
+     Yazi kayitlarini N adede sisirir, gercek derlemeyi kosturur,
+     ciktilari olcer. KADEME 2'DEN SONRA (9 Eyl 2026) kayitlar
+     content.json'da DEGIL `icerik/yazilar/<slug>.json` dosyalarinda —
+     duzenek de oraya yazar. Eski govde content.json'daki `posts`
+     dizisini sisiriyordu; o dizi artik YOK ve duzenek dokunmadan
+     birakilsaydi `sis 1000` sessizce HICBIR SEY yapmayacak, olcum
+     "1.000 yazi" diye 6 yaziyi olcecekti — yanlis yesilin en pahali
+     turu. Yedek de dosyalari kapsar. Sablon GERCEK bir gonderidir; yalniz
      slug/date/title degisir, bayt buyuklugu korunur — kucuk sahte kayit
      egriyi yalanci duzlestirmesin diye.
 
@@ -31,6 +37,20 @@ const path = require('path');
 const KOK = path.join(__dirname, '..');
 const HEDEF = path.join(KOK, 'content.json');
 const YEDEK = path.join(KOK, '.onbellek', 'content.json.olcek-yedek');
+/* KADEME 2: yazilar dosyada. Klasor ve alan adi sozlesmeden okunur —
+   ikinci bir yerde sabitlemek sapmanin en sik kaynagi. */
+const KOLEKSIYON = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
+  .koleksiyon.find(k => k.ad === 'yazilar');
+const YAZI_DIZIN = path.join(KOK, KOLEKSIYON.klasor);
+const YEDEK_DIZIN = path.join(KOK, '.onbellek', 'yazilar-olcek-yedek');
+const yaziOku = d => fs.existsSync(d)
+  ? fs.readdirSync(d).filter(a => a.endsWith('.json')).map(a => JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')))
+  : [];
+const yaziSil = d => { for (const a of fs.readdirSync(d)) if (a.endsWith('.json')) fs.unlinkSync(path.join(d, a)); };
+const yaziYaz = (d, kayitlar) => {
+  fs.mkdirSync(d, { recursive: true });
+  for (const k of kayitlar) fs.writeFileSync(path.join(d, k.slug + '.json'), JSON.stringify(k, null, 2) + '\n');
+};
 const DIST = path.join(KOK, 'dist');
 
 const oku = p => fs.readFileSync(p, 'utf8');
@@ -49,22 +69,25 @@ function hazirla() {
   if (fs.existsSync(YEDEK)) { console.log('yedek zaten var:', YEDEK); return; }
   fs.mkdirSync(path.dirname(YEDEK), { recursive: true });
   fs.copyFileSync(HEDEF, YEDEK);
-  console.log('yedek alindi:', YEDEK, boyut(YEDEK), 'B');
+  yaziYaz(YEDEK_DIZIN, yaziOku(YAZI_DIZIN));
+  console.log('yedek alindi:', YEDEK, boyut(YEDEK), 'B ·', yaziOku(YEDEK_DIZIN).length, 'yazi dosyasi');
 }
 
 function geri() {
   if (!fs.existsSync(YEDEK)) { console.error('YEDEK YOK — geri yuklenemez'); process.exit(1); }
   fs.copyFileSync(YEDEK, HEDEF);
-  const n = JSON.parse(oku(HEDEF)).posts.length;
-  console.log('content.json iade edildi ·', boyut(HEDEF), 'B · posts =', n);
+  fs.mkdirSync(YAZI_DIZIN, { recursive: true });
+  yaziSil(YAZI_DIZIN);
+  yaziYaz(YAZI_DIZIN, yaziOku(YEDEK_DIZIN));
+  console.log('iade edildi · content.json', boyut(HEDEF), 'B ·', yaziOku(YAZI_DIZIN).length, 'yazi dosyasi');
   console.log('SIMDI: npm --prefix yeni run build && node yeni/denetim.cjs');
 }
 
 function sis(N) {
   if (!fs.existsSync(YEDEK)) { console.error('once: node yeni/olcek-icerik.cjs hazirla'); process.exit(1); }
   if (!Number.isFinite(N) || N < 1) { console.error('N gerekli'); process.exit(1); }
-  const j = JSON.parse(oku(YEDEK));
-  const kaynak = j.posts;
+  const kaynak = yaziOku(YEDEK_DIZIN);
+  if (!kaynak.length) { console.error('YEDEK DIZINDE YAZI YOK — once hazirla'); process.exit(1); }
   const yeni = [];
   for (let i = 0; i < N; i++) {
     const t = JSON.parse(JSON.stringify(kaynak[i % kaynak.length]));
@@ -76,16 +99,17 @@ function sis(N) {
     }
     yeni.push(t);
   }
-  j.posts = yeni;
-  fs.writeFileSync(HEDEF, JSON.stringify(j, null, 2));
-  console.log('posts =', N, '· content.json =', boyut(HEDEF), 'B');
+  fs.mkdirSync(YAZI_DIZIN, { recursive: true });
+  yaziSil(YAZI_DIZIN);
+  yaziYaz(YAZI_DIZIN, yeni);
+  console.log('yazi dosyasi =', yaziOku(YAZI_DIZIN).length, '· content.json =', boyut(HEDEF), 'B');
 }
 
 function olc() {
   const sm = path.join(DIST, 'sitemap.xml');
   const loc = fs.existsSync(sm) ? (oku(sm).match(/<loc>/g) || []).length : 0;
   const s = {
-    posts: JSON.parse(oku(HEDEF)).posts.length,
+    posts: yaziOku(YAZI_DIZIN).length,
     contentJson: boyut(HEDEF),
     html: say(DIST, '.html'),
     md: say(DIST, '.md'),

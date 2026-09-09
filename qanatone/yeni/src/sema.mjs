@@ -133,23 +133,23 @@ export function projeSema(icerik, sayfa, proje) {
    `position` MUTLAK kalir (2. sayfa 13'ten baslar): sira arsivdeki sira,
    sayfa icindeki sira degil — sayfali listelerde dogru olan bu.
    `sayfa.sayfaNo` verilmezse 1 sayilir (eski cagri bicimi kirilmaz). */
-export function bultenDizinSema(icerik, sayfa) {
+/* KAYITLAR DISARIDAN (Kademe 2, 9 Eyl 2026) — ONCEDEN KENDI CIKARIYORDU.
+   Eski govde `icerik[sayfa.kaynak || 'posts']` okuyordu; yani sayfanin
+   KARTLARI Astro koleksiyonundan, ItemList'i content.json'dan geliyordu.
+   Ikisi ayni dosyayi okudugu surece ortusuyordu ve kusur gorunmuyordu.
+   Yazilar dosya basina kayda ayrilinca (icerik/yazilar/<slug>.json)
+   `icerik.posts` yok oldu ve sema SESSIZCE BOSALDI: kart 6, ItemList 0.
+   T11 ve T14 yakaladi — ama dogru cozum kapiyi beslemek degil ikinci
+   kaynagi KALDIRMAKTI. Artik dilim `sayfalama.ts`teki `bolumDilimi`den
+   bir kere hesaplanip hem semaya hem bilesene veriliyor; kardesi
+   `sektorDizinSema` bunu bastan beri boyle yapiyordu.
+   `bas` MUTLAK konum icin: 2. sayfanin ilk ogesi 13'tur. */
+export function bultenDizinSema(icerik, sayfa, kayitlar, bas) {
   const g = anaSema(icerik, sayfa);
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
-  /* KONU ARSIVINDE LISTE ONCE SUZULUR (9 Eyl 2026). Suzulmezse konu
-     sayfasinin ItemList'i butun bulteni ilan eder — sayfalamada
-     duzeltilen kusurun aynisi, bu kez konu ekseninde. Bileşendeki
-     suzme ile AYNI olcut: `String(p.topic || '') === konu`. */
-  /* KAYNAK BOLUMDEN (9 Eyl 2026): bulten `posts`, nedir `explainers`,
-     haber `news`. Verilmezse `posts` — eski cagri bicimi kirilmaz. */
-  const tum = [...(icerik[sayfa.kaynak || 'posts'] || [])]
-    .filter((p) => !sayfa.konu || String(p.topic || '') === sayfa.konu)
-    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
-  const boy = sayfa.sayfaBoyu || tum.length || 1;
-  const no = Math.max(1, sayfa.sayfaNo || 1);
-  const bas = (no - 1) * boy;
-  const yazilar = tum.slice(bas, bas + boy);
+  const yazilar = kayitlar || [];
+  bas = bas || 0;
   g['@graph'].push({
     '@type': 'ItemList', '@id': sayfa.url + '#list',
     itemListElement: yazilar.map((p, i) => ({

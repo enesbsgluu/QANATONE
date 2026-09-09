@@ -10,7 +10,7 @@ import Temel from '../../../layouts/Temel.astro';
 import BolumDizin from '../../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../../icerik';
 import { bultenDizinSema } from '../../../sema.mjs';
-import { bolumKonuYollari, SAYFA_BOYU } from '../../../sayfalama';
+import { bolumKonuYollari, SAYFA_BOYU, bolumDilimi } from '../../../sayfalama';
 import { konuAdi } from '../../../konular';
 
 export async function getStaticPaths() {
@@ -23,7 +23,8 @@ const ad = konuAdi(konu, 'tr');
 const canon = sl(`${KOK}/haber/konu/${konu}`);
 const baslik = `${ad} — Haberler — QANATONE`;
 const aciklama = `${ad} başlığında sektörden aktardıklarımız — kaynağıyla.`;
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article', kaynak: 'news' });
+const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('haberler', { sayfa: 1, konu: konu });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article' }, semaDilim, semaBas);
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={sl(`${KOK}/haber/konu/${konu}`)} helefen={sl(`${KOK}/en/haber/konu/${konu}`)} sema={sema}

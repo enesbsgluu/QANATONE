@@ -28,6 +28,35 @@ const ol = (ad, ok, not) => {
   ok ? gecti++ : kaldi++;
 };
 
+/* ---- KADEME 2: BUYUYEN KOLEKSIYONLAR DOSYADA (9 Eyl 2026) -----------
+   `posts` / `explainers` / `news` artik content.json'da DEGIL, dosya
+   basina bir kayitta: `icerik/<klasor>/<slug>.json` (karar
+   `src/veri/sayfalar.json` -> `depo: "dosya"`). Sebep olculdu: taslak
+   localStorage 1.447 yazida, `yayinla` POST govdesi 1.651 yazida
+   duvara carpiyordu.
+   KURALLAR ICIN TEK OKUMA NOKTASI: `icerikTam()` content.json'i okur ve
+   dosya koleksiyonlarini GERI EKLER — yani kurallar eskisi gibi
+   `c.posts` uzerinden olcmeye devam eder, ama sayinin kaynagi artik
+   dosyalardir. Bu birlestirme YALNIZ denetimde ve derlemede yapilir;
+   panelin ve yayinin bir daha butunu tasimamasi isin ta kendisi.
+   AYRISMA RISKI: kayitlar diskten tarihe gore yeni->eski siralanir,
+   `bolumDilimi` ve `BolumDizin` ile AYNI olcut — sira ayrisirsa
+   ItemList/kart kiyaslari yanlis kirmizi verir. */
+const SAYFALAR_VERI = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+function dosyaKayitlari(klasor) {
+  const d = path.join(__dirname, '..', klasor);
+  if (!fs.existsSync(d)) return [];
+  return fs.readdirSync(d).filter(a => a.endsWith('.json'))
+    .map(a => JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')))
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+function icerikTam() {
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  for (const K of SAYFALAR_VERI.koleksiyon)
+    if (K.depo === 'dosya') c[K.kaynak] = dosyaKayitlari(K.klasor);
+  return c;
+}
+
 if (!fs.existsSync(KOK)) {
   console.log('dist yok — önce astro build.');
   process.exit(1);
@@ -157,7 +186,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    olmayan "eksik", dist'te olup listede olmayan "fazla". Kirmizi-once:
    3 Eyl, /film kaydi gecici cikarilinca 2 fazla; sahte kayit eklenince 1 eksik. */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
   const beklenen = new Set();
   /* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan statik kayit
@@ -1295,7 +1324,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    Ayni ad iki yerde. */
 {
   const kusur = [];
-  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const icerik = icerikTam();
   const panel = fs.readFileSync(path.join(__dirname, '..', 'admin.html'), 'utf8');
   /* Yorumlar ayiklanir: bu depoda bir kural, yorumun icindeki ornegi
      gercek deger sanip yanlis yesil vermisti (T4'te yazili). */
@@ -1438,7 +1467,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 
   /* Panel `settings.gtm`i bos birakmis olabilir — o zaman HICBIR sayfada
      etiket olmaz ve kural konusuz kalir. Once zemini olc, sonra hukum ver. */
-  const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const icerik = icerikTam();
   const gtm = String((icerik.settings && icerik.settings.gtm) || '').trim();
 
   const FILM = [path.join(KOK, 'film', 'index.html'), path.join(KOK, 'en', 'film', 'index.html')];
@@ -1524,7 +1553,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   }
 
   if (TAVAN !== null && !kusur.length) {
-    const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    const icerik = icerikTam();
     const adet = Array.isArray(icerik.posts) ? icerik.posts.length : 0;
     const beklenen = Math.min(TAVAN, Math.max(0, adet - 1));
 
@@ -1592,7 +1621,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const kusur = [];
   const oku2 = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const K = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
     .koleksiyon.find((k) => k.ad === 'yazilar');
 
@@ -1696,7 +1725,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const kusur = [];
   const oku2 = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
   const ana = oku2(path.join(KOK, 'index.html')) || '';
   const sm = oku2(path.join(KOK, 'sitemap.xml')) || '';
@@ -1825,7 +1854,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    gorunecegi icin yalniz kucuk harf/rakam/tire tasimali. */
 {
   const kusur = [];
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
   const tablo = Array.isArray(c.topics) ? c.topics : [];
   const etiket = new Map();
@@ -1895,7 +1924,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    (4) Arsivdeki her kart gercekten o sektorun icerigi olmali. */
 {
   const kusur = [];
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
   const SA = S.sektor_arsivi;
 
@@ -1991,6 +2020,63 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
              : 'hicbir icerik sektore baglanmamis — arsiv uretilmedi (dogru)'));
   }
   if (!SA) ol('T14 · sektor bagi', false, kusur.join(' | '));
+}
+
+/* T15 - DOSYA BASINA KAYIT (Kademe 2, 9 Eyl 2026).
+   Buyuyen koleksiyonlar (`depo: "dosya"`) content.json'dan cikip
+   `icerik/<klasor>/<slug>.json` dosyalarina ayrildi. Sebep olculdu:
+   taslak localStorage 1.447 yazida, `yayinla` POST govdesi 1.651
+   yazida duvara carpiyordu; ikisi de butunu her seferinde butun olarak
+   tasimaktan doguyordu.
+
+   NEYI TUTAR (dordu de sessiz bozulma yollari):
+   a) IKI KAYNAK OLMAZ - ayrilmis koleksiyonun dizisi content.json'a
+      GERI GELMEMELI. Gelirse hangisinin gecerli oldugu ilk celiskiye
+      kadar gorunmez; panel eski diziyi yayinlayip dosyalari sessizce
+      gecersiz kilabilir.
+   b) DOSYA ADI = ICERIDEKI SLUG. Astro `glob` loader'i `id`yi DOSYA
+      ADINDAN uretir, sayfa yolu ondan cikar; sema ve panel ise kaydin
+      icindeki `slug` alanini okur. Ikisi ayrisirsa sayfa bir adreste,
+      kanonik/sema baska adreste olur.
+   c) KLASOR VAR (bos olsa da). git bos dizin tasimaz; temiz klonda
+      `base` bulunamazsa derleme duser. Bos bolumlerde `.gitkeep`
+      duruyor - varligi kural.
+   d) URETILEN SAYFA = DOSYA SAYISI. Koleksiyondaki her kayit dizinde
+      (ya da bolum kapaliysa hicbiri) - dosya eklendi ama sayfa
+      cikmadiysa loader'i kimse gormemis demektir. */
+{
+  const kusur = [];
+  const cHam = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const dosyaKol = SAYFALAR_VERI.koleksiyon.filter(K => K.depo === 'dosya');
+  const ozet = [];
+  for (const K of dosyaKol) {
+    /* a - iki kaynak olmaz */
+    if (cHam[K.kaynak] !== undefined)
+      kusur.push('content.json`da `' + K.kaynak + '` dizisi geri gelmis (ayrilmis koleksiyon)');
+    /* c - klasor var */
+    const d = path.join(__dirname, '..', K.klasor);
+    if (!fs.existsSync(d)) { kusur.push(K.klasor + ' klasoru yok (temiz klonda derleme duser)'); continue; }
+    const adlar = fs.readdirSync(d).filter(a => a.endsWith('.json'));
+    if (!adlar.length && !fs.existsSync(path.join(d, '.gitkeep')))
+      kusur.push(K.klasor + ' bos ve .gitkeep yok (git bos dizin tasimaz)');
+    /* b - dosya adi = slug */
+    for (const a of adlar) {
+      const kayit = JSON.parse(fs.readFileSync(path.join(d, a), 'utf8'));
+      const beklenen = a.replace(/\.json$/, '');
+      if (String(kayit.slug || '') !== beklenen)
+        kusur.push(K.klasor + '/' + a + ': dosya adi != slug (`' + kayit.slug + '`)');
+    }
+    /* d - uretilen sayfa = dosya sayisi (TR tarafi; EN esi H26'da) */
+    const dizinYolu = String(K.dizin || '').replace(/^\//, '');
+    const uretilen = adlar.filter(a => fs.existsSync(
+      path.join(KOK, dizinYolu, a.replace(/\.json$/, ''), 'index.html'))).length;
+    if (uretilen !== adlar.length)
+      kusur.push(K.klasor + ': ' + adlar.length + ' dosya ama ' + uretilen + ' sayfa uretilmis');
+    ozet.push(K.ad + '(' + adlar.length + ')');
+  }
+  ol('T15 \u00b7 dosya basina kayit: content.json`da dizi yok \u00b7 dosya adi = slug \u00b7 klasor var \u00b7 sayfa = dosya',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ') : ozet.join(' \u00b7 '));
 }
 
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
@@ -2342,7 +2428,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    kanitlandi: kural yazildiginda uretimde DURAN kusuru (12 bulten sayfasi)
    gercekten yakti. */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const panelOg = String(((c.settings || {}).og) || '').trim();
   const panelli = panelOg !== '';
   const KART = { tr: '/og-tr.jpg', en: '/og-en.jpg' };
@@ -2520,7 +2606,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    dizin gorur ve bu SESSIZ bir kayiptir (madde 1 + madde 5).
    Karsilastirma cozulmus metinle yapilir — bot da boyle gorur. */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, '')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2545,7 +2631,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 /* R2 · PROJELER DIZINI BUTUNLUGU: R1'in projeler esi — 7 isin adi,
    anlatimi, rakamlari (res) ve detay baglantisi dizinde (TR ve EN). */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2579,7 +2665,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    ham HTML'de tasimali. Eski tarafta bunlar JS'le doguyordu ve bot HIC
    gormuyordu; yenide derlemede basiliyor — bir alan sessizce dusmesin. */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2618,7 +2704,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    website dahil) STATIK HTML'de dogmali — Netlify Forms formu derleme
    anindaki HTML'den tanir (S-IL dersi), JS'le eklenen form kayda girmez. */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2674,7 +2760,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    sayisina esit, kimlik sayfanin KENDI adresindeki #faq (TR/EN kimlik
    cakismasi duzeltmesi geri gelmesin). */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2714,7 +2800,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    HTML'de tasimali; musteri yolu cizgisinin BES etiketi de artik statik
    dogmali (eski tarafta cizgi+etiket JS'le kuruluyordu, bot gormuyordu). */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2750,7 +2836,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    de bilesen varsayilanda kalirsa bu SESSIZ bir bayatlamadir. TR'de ayni
    kontrol yapilamaz (anahtarlar strings.tr'de yok, kaynak markup). */
 {
-  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const c = icerikTam();
   const coz = (t) => String(t).replace(/<[^>]+>/g, ' ')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -2864,7 +2950,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const rssYol = path.join(KOK, 'bulten', 'rss.xml');
   if (!fs.existsSync(rssYol)) kusur.push('rss.xml yok');
   else {
-    const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    const c = icerikTam();
     const rss = oku(rssYol);
     const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
     /* RSS TAVANI 50 (Enes, 9 Eyl 2026). BU KURAL ONCEDEN "item seti =
@@ -3573,7 +3659,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        panelden proje eklenip `gorsel-uret.cjs` kosmadiysa sessizce eski
        liste yayina cikmaz. */
     if (/class="sp-sahne"/.test(h)) {
-      const c2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c2 = icerikTam();
       const kunye = JSON.parse(fs.readFileSync(
         path.join(__dirname, 'src', 'veri', 'deste-gorselleri.json'), 'utf8'));
       /* Kunye, content.json'un fotografli isler dizisinin BASTAN
@@ -3680,7 +3766,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        (madde 1 + madde 5). Karsilastirma cozulmus metinle yapilir:
        etiketler atilir, varliklar cozulur — bot da boyle gorur. */
     if (/class="sk-sahne"/.test(h)) {
-      const c3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c3 = icerikTam();
       const str = (c3.strings && c3.strings.tr) || {};
       const ANAHTAR = ['kt0','kt1','kt2','kt3','kt4','kt5','kt6','kt7','kt8','kt9',
                        'kta','ktb','kth','kti','ktc','ktd','kte','ktj','ktm','ktf','ktg'];
@@ -3757,7 +3843,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        olmali. Kart sayisi da content.json'dan turetilir; panelden hizmet
        sirasi degisirse serit sessizce eskimez. */
     if (/class="sa-sahne"/.test(h)) {
-      const c4 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c4 = icerikTam();
       const AKIS_KART = 5;
       const hiz = (c4.services || []).slice(0, AKIS_KART);
       const coz = (t) => String(t).replace(/<[^>]+>/g, '')
@@ -3855,7 +3941,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        BASLIGI, TIPIK TALEBI ve ILK 30 GUN maddeleri ham HTML'de olmali,
        ayrica sektor sayisi content.json ile ortusmeli. */
     if (/class="sse-sahne"/.test(h)) {
-      const c5 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c5 = icerikTam();
       const sek = c5.sectors || [];
       const coz = (t) => String(t).replace(/<[^>]+>/g, '')
         .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
@@ -3936,7 +4022,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        Boylece "acilinca calisiyor mu" da olculur, kural tek yone
        calisan bir yasak olmaz. */
     {
-      const c6 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c6 = icerikTam();
       /* TUR 5 (2 Eyl 2026): bayragin gercek yuvasi panelin yazdigi theme.testi
          (admin.html sw 'theme.testi.on'); settings.testi yalniz yedek. Kural
          settings'i okurken bayrak acilinca yanlis kirmizi verdi (panel-kapi). */
@@ -4007,7 +4093,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        Iki yon: liste doluysa sema ayni siralamayla ayni adresleri tasir;
        bossa `sameAs: []` (uydurma adres girmez, alan da silinmez). */
     {
-      const c7 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c7 = icerikTam();
       const beklenen = (c7.socials || []).map(x => x && x.url).filter(Boolean);
       let org7 = null;
       for (const m of h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
@@ -4201,7 +4287,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      Okunamazsa numara VAR sayilir: kural gevsemesin. */
   const WA_VAR = (() => {
     try {
-      const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+      const c = icerikTam();
       return !!String((c.settings || {}).whatsapp || '').replace(/[^0-9]/g, '');
     } catch (e) { return true; }
   })();
@@ -5159,7 +5245,7 @@ ozetBasildi = true;
   }
   /* ads.txt panel degeriyle tutarli mi */
   let adsId = '';
-  try { adsId = String((JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8')).settings || {}).adsense || '').trim(); } catch (e) {}
+  try { adsId = String((icerikTam().settings || {}).adsense || '').trim(); } catch (e) {}
   const ap = path.join(KOK, 'ads.txt');
   const adsVar = fs.existsSync(ap);
   if (!adsId && adsVar) kusur.push('ads.txt-var-ama-panel-bos');

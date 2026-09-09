@@ -6,7 +6,7 @@ import Temel from '../../../../../layouts/Temel.astro';
 import BolumDizin from '../../../../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../../../../icerik';
 import { bultenDizinSema } from '../../../../../sema.mjs';
-import { konuSayfaYollari, SAYFA_BOYU } from '../../../../../sayfalama';
+import { konuSayfaYollari, SAYFA_BOYU, bolumDilimi } from '../../../../../sayfalama';
 import { konuAdi } from '../../../../../konular';
 
 export async function getStaticPaths() {
@@ -27,7 +27,8 @@ const baslik = `${ad} — Sayfa ${sayfa} — Bülten — QANATONE`;
    görünmüyordu. Kural: sayfa N açıklaması 1. sayfanınkinin AYNISI +
    sayfa numarası (öteki bölümlerin hepsi zaten böyle yapıyor). */
 const aciklama = `${ad} başlığında yazdıklarımız: yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla. Sayfa ${sayfa}.`;
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU });
+const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('yazilar', { sayfa: sayfa, konu: konu });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU }, semaDilim, semaBas);
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={canon} helefen={sl(`${KOK}/en/bulten/konu/${konu}/sayfa/${sayfa}`)} sema={sema}

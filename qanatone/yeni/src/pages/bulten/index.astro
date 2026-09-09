@@ -8,12 +8,13 @@ import Temel from '../../layouts/Temel.astro';
 import BolumDizin from '../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../icerik';
 import { bultenDizinSema } from '../../sema.mjs';
-import { SAYFA_BOYU } from '../../sayfalama';
+import { SAYFA_BOYU, bolumDilimi } from '../../sayfalama';
 
 const canon = sl(`${KOK}/bulten`);
 const baslik = 'Bülten — QANATONE';
 const aciklama = 'Yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla.';
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU });
+const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('yazilar', { sayfa: 1, konu: '' });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU }, semaDilim, semaBas);
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={canon} helefen={sl(`${KOK}/en/bulten`)} sema={sema}

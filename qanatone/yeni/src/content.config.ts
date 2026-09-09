@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 
 /* content.json panelin ürünüdür ve TEK kaynaktır: buradaki koleksiyon
    onu okur, kopyalamaz. Faz 0'da şema BİLEREK yok: alan sözleşmesi
@@ -12,10 +12,23 @@ const hizmetler = defineCollection({
   })
 });
 
+/* KADEME 2 (9 Eyl 2026): BUYUYEN koleksiyonlar content.json'dan CIKTI,
+   dosya basina bir kayda ayrildi — `icerik/<klasor>/<slug>.json`.
+   NEDEN: duvarlar olculdu; taslak localStorage 1.447 yazida, `yayinla`
+   POST govdesi 1.651 yazida cakiliyordu, ikisi de "butunu her seferinde
+   butun olarak tasimak"tan. Panel artik DIZIN yukluyor (239 B/yazi) ve
+   yayin yalniz DEGISEN dosyayi commit ediyor.
+   `glob` dosya adini `id` yapar — dosya adi slug'dir, `params.slug`
+   oradan gelir; kayit icindeki `slug` alani da duruyor (panel ve sema
+   onu okuyor), ikisi T15'te esitlik olarak olculur.
+   BOS KLASOR: `nedir` ve `haber` bugun bos; glob 0 kayit doner ve
+   `kosullu` bayragi bolumu dort yuzeyde birden kapali tutar. Klasorde
+   `.gitkeep` var cunku git bos dizin tasimaz — temiz klonda base
+   bulunamazsa derleme duser.
+   HIZMETLER ve PROJELER AYRILMADI: sayilari sabit (9 ve 7), olcekle
+   buyumuyorlar; panelde de butun olarak duzenleniyorlar. */
 const yazilar = defineCollection({
-  loader: file('../content.json', {
-    parser: t => JSON.parse(t).posts.map((p: any) => ({ id: p.slug, ...p }))
-  })
+  loader: glob({ pattern: '*.json', base: '../icerik/yazilar' })
 });
 
 const projeler = defineCollection({
@@ -37,15 +50,11 @@ const projeler = defineCollection({
    menuyu ve sitemap kaydini icerik gelene kadar bekletir; bos bir
    /nedir sayfasini Google'a sunmak ince icerik olurdu. */
 const nedir = defineCollection({
-  loader: file('../content.json', {
-    parser: t => (JSON.parse(t).explainers || []).map((x: any) => ({ id: x.slug, ...x }))
-  })
+  loader: glob({ pattern: '*.json', base: '../icerik/nedir' })
 });
 
 const haberler = defineCollection({
-  loader: file('../content.json', {
-    parser: t => (JSON.parse(t).news || []).map((x: any) => ({ id: x.slug, ...x }))
-  })
+  loader: glob({ pattern: '*.json', base: '../icerik/haber' })
 });
 
 export const collections = { hizmetler, yazilar, projeler, nedir, haberler };
