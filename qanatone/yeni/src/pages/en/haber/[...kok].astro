@@ -1,0 +1,32 @@
+---
+/* NEWS DİZİNİ (EN) — `/en/haber`
+
+   NEDEN `[...kok]` VE `index.astro` DEĞİL: bu bölüm KOŞULLU. İçerik
+   panelden gelecek ve `content.json`daki kaynağı boşken bölüm SİTEDE
+   OLMAMALI — boş bir dizin sayfasını Google'a sunmak ince içerik,
+   menüye koymak da hiçbir şey vermeyen bir kapıdır. `index.astro`
+   koşulsuz üretilir; rest parametreli rota `getStaticPaths` boş dizi
+   dönünce hiç sayfa basmaz. İlk yazı eklendiği an bölüm kendiliğinden
+   açılır — kod değişikliği GEREKMEZ.
+   Aynı koşul menüde (Nav.astro), alt bilgide (Temel.astro), sitemap'te
+   ve denetimin sayfa kümesinde `kosullu` alanından okunur. Bekçi: T12. */
+import Temel from '../../../layouts/Temel.astro';
+import BolumDizin from '../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../icerik';
+import { bultenDizinSema } from '../../../sema.mjs';
+import { bolumDizinYolu, SAYFA_BOYU } from '../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumDizinYolu('haberler');
+}
+
+const canon = sl(`${KOK}/en/haber`);
+const baslik = 'News — QANATONE';
+const aciklama = 'What is happening in AI, search and digital marketing — with the sources.';
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article', kaynak: 'news' });
+---
+<Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/haber`)} helefen={sl(`${KOK}/en/haber`)} sema={sema}
+  etiket="News">
+  <BolumDizin dil="en" bolum="haberler" />
+</Temel>

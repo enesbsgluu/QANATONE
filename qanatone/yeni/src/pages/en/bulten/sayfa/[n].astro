@@ -1,0 +1,27 @@
+---
+/* Bülten dizini · 2. ve sonraki sayfalar (EN) — TR eşinin aynısı,
+   dil='en'. Rota adı `sayfa` EN tarafında da Türkçe: EN rotaları zaten
+   `/en/bulten`, `/en/hizmetler`, `/en/projeler` — yol adları çevrilmiyor,
+   yalnız içerik çevriliyor. Gerekçe ve kapı notları TR eşinde. */
+import Temel from '../../../../layouts/Temel.astro';
+import BolumDizin from '../../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../../icerik';
+import { bultenDizinSema } from '../../../../sema.mjs';
+import { sayfaYollari, SAYFA_BOYU } from '../../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await sayfaYollari();
+}
+
+const { n } = Astro.params;
+const sayfa = Number(n);
+const canon = sl(`${KOK}/en/bulten/sayfa/${sayfa}`);
+const baslik = `Bulletin — Page ${sayfa} — QANATONE`;
+const aciklama = `What is changing in AI, search and demand handling — with the sources. Page ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU });
+---
+<Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/bulten/sayfa/${sayfa}`)} helefen={canon} sema={sema}
+  etiket="Bulletin">
+  <BolumDizin dil="en" sayfa={sayfa} />
+</Temel>

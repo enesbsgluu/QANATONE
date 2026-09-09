@@ -3,18 +3,43 @@
    basılır; bölümler [başlık, html] çiftleri. */
 import { getCollection } from 'astro:content';
 import { T, type Dil, sl } from '../icerik';
-interface Props { p: any; dil: Dil }
-const { p, dil } = Astro.props;
+import sayfalarVeri from '../veri/sayfalar.json';
+interface Props { p: any; dil: Dil; bolum?: string }
+/* BÖLÜM PROPU (9 Eyl 2026): aynı gövde bülten · nedir · haber için.
+   Yol ve geri bağı `veri/sayfalar.json`daki koleksiyon kaydından gelir;
+   şerit de o bölümün kendi koleksiyonundan doğar — bir bölümün yazısı
+   başka bölümün şeridinde görünmez. */
+const { p, dil, bolum = 'yazilar' } = Astro.props;
+const KOL: any = (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === bolum);
+const DIZIN: string = KOL.dizin;
+const DIZIN_AD: string = dil === 'en' ? (KOL.en_ad || 'Newsletter') : (KOL.tr_ad || 'Bülten');
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const on = dil === 'en' ? '/en' : '';
 /* "DIGER YAZILAR" SERIDI (sokum turu, 4 Eyl) — kaynak #bdRail 5175-5183 +
    buildRail 7265-7288: siradaki yazidan baslayip basa dolanan serit, ok
    dugmeleri, disabled senkronu. Kartlar DERLEMEDE (bot okur); dugme/senkron
-   kucuk ada. Sira kaynaktaki gibi tarihe gore yeni->eski. */
-const tum = (await getCollection('yazilar')).map((e) => e.data)
+   kucuk ada. Sira kaynaktaki gibi tarihe gore yeni->eski.
+
+   TAVAN 8 KART (Enes, 9 Eyl 2026) — ONCEDEN TAVANSIZDI (`tum.length - 1`),
+   yani her yazi digerlerinin HEPSINI basiyordu. Olculdu (200 gonderiyle
+   gercek derleme, ICERIK-MIMARISI-OLCUM.md BULGU 1):
+     · gonderi HTML'inin %67'si serit  -> 331,7 B / listelenen yazi
+     · gonderi .md esinin %94'u serit  -> 190,8 B / listelenen yazi
+   Urun N×N idi: 10.000 gonderide tek yazinin HTML'i 3,3 MB, llms-full.txt
+   38,2 GB. `denetim.cjs` suresini de bu suruyordu (sayfa basina 22,7 ms ->
+   68,7 ms), cunku denetim sayfa SAYISINI degil sayfa BAYTINI tariyor.
+   Tavan seritin ANLAMINI degistirmez: sira yine "siradaki yazidan baslayip
+   basa dolanan", yalniz ilk TAVAN tanesi alinir — yani her yazi kendinden
+   sonraki 8 yaziyi gosterir, arsivin tamamini degil. Yazi sayisi 9'un
+   altindayken davranis eskisiyle BIREBIR ayni (tavan hic devreye girmez),
+   o yuzden bugunku 6 gonderilik sitede gorsel fark YOKTUR. */
+const TAVAN = 8;
+const tum = (await getCollection(bolum as any)).map((e: any) => e.data)
   .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
 const ben = Math.max(0, tum.findIndex((x: any) => x.slug === p.slug));
-const digerleri = tum.length > 1 ? Array.from({ length: tum.length - 1 }, (_, k) => tum[(ben + 1 + k) % tum.length]) : [];
+const digerleri = tum.length > 1
+  ? Array.from({ length: Math.min(TAVAN, tum.length - 1) }, (_, k) => tum[(ben + 1 + k) % tum.length])
+  : [];
 const kisaTarih = (d: string) => { const t = new Date(d + 'T00:00:00'); const ay = dil === 'en'
   ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   : ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return `${t.getDate()} ${ay[t.getMonth()]} ${t.getFullYear()}`; };
@@ -26,10 +51,10 @@ const ay = dil === 'en'
 const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYear()}`;
 ---
 {/* Geri bagi (kaynak 5168 .pgback -> /bulten) */}
-<a class="pgback" href={sl(`${B}${on}/bulten`)}>
+<a class="pgback" href={sl(`${B}${on}${DIZIN}`)}>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
     stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-  <span>{dil === 'en' ? 'Newsletter' : 'Bülten'}</span>
+  <span>{DIZIN_AD}</span>
 </a>
 <article>
   <h1>{T(p.title, dil)}</h1>
@@ -58,7 +83,7 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
       <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Previous' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="nrtrack" id="railTrack">
         {digerleri.map((x: any) => (
-          <a class="nrcard" href={sl(`${B}${on}/bulten/${x.slug}`)}>
+          <a class="nrcard" href={sl(`${B}${on}${DIZIN}/${x.slug}`)}>
             <span class="m">{T(x.tag, dil)}</span>
             <h4>{T(x.title, dil)}</h4>
             <span class="d">{kisaTarih(x.date)} · {x.read || 3}{dil === 'en' ? ' min' : ' dk'}</span>

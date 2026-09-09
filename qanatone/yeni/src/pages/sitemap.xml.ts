@@ -35,6 +35,8 @@ export const GET: APIRoute = async () => {
     hizmetler: (await getCollection('hizmetler')).map(e => e.data),
     projeler: (await getCollection('projeler')).map(e => e.data),
     yazilar: (await getCollection('yazilar')).map(e => e.data),
+    nedir: (await getCollection('nedir')).map(e => e.data),
+    haberler: (await getCollection('haberler')).map(e => e.data),
   };
   const bugun = new Date().toISOString().slice(0, 10);
 
@@ -45,12 +47,71 @@ export const GET: APIRoute = async () => {
      (canonical KOK dışı: hukuki, film, deneme-react, 404) girmez. */
   const S = sayfalarVeri as any;
   const yollar: { yol: string; p: string; d?: string }[] = [];
+  /* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan bolum sitemap'e
+     GIRMEZ. Bos bir /nedir sayfasini Google'a bildirmek ince icerik
+     sunmaktir; ilk yazi eklendigi an kayit kendiliginden acilir. */
+  const bosKaynak = (ad: string) => {
+    const k = S.koleksiyon.find((x: any) => x.kaynak === ad);
+    return !k || (kol[k.ad] || []).length === 0;
+  };
   for (const s of S.statik) {
     if (!s.sitemap) continue;
+    if (s.kosullu && bosKaynak(s.kosullu)) continue;
     yollar.push({ yol: s.yol, p: s.sitemap });
-    for (const k of S.koleksiyon.filter((k: any) => k.dizin === s.yol))
+    for (const k of S.koleksiyon.filter((k: any) => k.dizin === s.yol)) {
+      /* SAYFALI DIZIN SAYFALARI (9 Eyl 2026) — koleksiyon detaylarindan
+         ONCE, cunku sitemap sirasi rota sirasini izler: /bulten ->
+         /bulten/sayfa/2..N -> /bulten/<slug>. 1. sayfa YOK: o zaten
+         `s.yol` olarak yukarida basildi (`/bulten`), tekrari kopya olurdu.
+         `sayfa_sitemap` onceligi detaylardan DUSUK (0.4 < 0.7): dizin
+         sayfasi bir gecis yuzeyi, hedef sayfa degil. */
+      if (k.sayfa_boyu && k.sayfa_yolu) {
+        const toplam = Math.max(1, Math.ceil((kol[k.ad] || []).length / k.sayfa_boyu));
+        for (let n = 2; n <= toplam; n++)
+          yollar.push({ yol: k.sayfa_yolu.replace('{n}', String(n)), p: k.sayfa_sitemap || k.sitemap });
+      }
+      /* KONU ARSIVLERI (9 Eyl 2026) — `/bulten/konu/<k>` ve sayfalari.
+         Anahtarlar VERIDEN dogar (`posts[].topic`), elle liste yok:
+         panelden yeni konu gelirse arsivi ve sitemap kaydi kendiliginden
+         olusur. Oncelik dizin sayfalariyla ayni. */
+      if (k.arsiv_alan && k.arsiv_yolu) {
+        const say: Record<string, number> = {};
+        for (const e of kol[k.ad] || []) {
+          const a = String((e as any)[k.arsiv_alan] || '');
+          if (a) say[a] = (say[a] || 0) + 1;
+        }
+        for (const [a, adet] of Object.entries(say)) {
+          yollar.push({ yol: k.arsiv_yolu.replace('{k}', a), p: k.sayfa_sitemap || k.sitemap });
+          if (k.sayfa_boyu) {
+            const t = Math.max(1, Math.ceil(adet / k.sayfa_boyu));
+            for (let n = 2; n <= t; n++)
+              yollar.push({ yol: k.arsiv_yolu.replace('{k}', a) + `/sayfa/${n}`, p: k.sayfa_sitemap || k.sitemap });
+          }
+        }
+      }
       for (const e of kol[k.ad] || [])
         yollar.push({ yol: k.yol.replace('{slug}', e.slug), p: k.sitemap, d: k.lastmod ? e[k.lastmod] : undefined });
+    }
+  }
+
+  /* SEKTOR ARSIVI (9 Eyl 2026) — BOLUM USTU kesit, `sektor_arsivi`
+     kaydindan. Statik/koleksiyon dongusunun DISINDA cunku bir bolume
+     ait degil; uc bolumun icerigini birden topluyor. Yalniz ICERIGI
+     OLAN sektor girer. */
+  if (S.sektor_arsivi) {
+    const SA = S.sektor_arsivi;
+    const say: Record<string, number> = {};
+    for (const b of SA.bolumler)
+      for (const e of kol[b] || []) {
+        const k = String((e as any)[SA.alan] || '');
+        if (k) say[k] = (say[k] || 0) + 1;
+      }
+    for (const [k, adet] of Object.entries(say)) {
+      yollar.push({ yol: SA.yol.replace('{k}', k), p: SA.sitemap });
+      const t = Math.max(1, Math.ceil(adet / SA.sayfa_boyu));
+      for (let n = 2; n <= t; n++)
+        yollar.push({ yol: SA.sayfa_yolu.replace('{k}', k).replace('{n}', String(n)), p: SA.sitemap });
+    }
   }
 
   /* ALTERNATE'LER DE sl'DEN GECER (5 Eyl 2026): loc egik cizgili, alternate

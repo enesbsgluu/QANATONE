@@ -5,17 +5,18 @@
    birebir. Şema eski üçlü @graph + ItemList (bilinçli süperküme,
    bultenDizinSema). Bekçisi R4. */
 import Temel from '../../layouts/Temel.astro';
-import BultenDizin from '../../parcalar/BultenDizin.astro';
+import BolumDizin from '../../parcalar/BolumDizin.astro';
 import { icerik, KOK, sl } from '../../icerik';
 import { bultenDizinSema } from '../../sema.mjs';
+import { SAYFA_BOYU } from '../../sayfalama';
 
 const canon = sl(`${KOK}/bulten`);
 const baslik = 'Bülten — QANATONE';
 const aciklama = 'Yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla.';
-const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU });
 ---
 <Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={canon} helefen={sl(`${KOK}/en/bulten`)} sema={sema}
   etiket="Bülten">
-  <BultenDizin dil="tr" />
+  <BolumDizin dil="tr" />
 </Temel>

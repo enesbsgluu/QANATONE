@@ -4583,7 +4583,8 @@
       "slug": "talebe-bes-dakikada-donmek",
       "date": "2026-08-04",
       "read": 4,
-      "sector": "talep",
+      "topic": "talep",
+      "sector": "",
       "image": "",
       "tag": {
         "tr": "Veri · Talep yönetimi",
@@ -4646,7 +4647,8 @@
       "slug": "google-ads-maliyetleri-2026",
       "date": "2026-07-28",
       "read": 3,
-      "sector": "reklam",
+      "topic": "reklam",
+      "sector": "",
       "image": "",
       "tag": {
         "tr": "Veri · Reklam",
@@ -4705,7 +4707,8 @@
       "slug": "donusum-oranlari-sektor-sektor",
       "date": "2026-07-19",
       "read": 3,
-      "sector": "reklam",
+      "topic": "reklam",
+      "sector": "",
       "image": "",
       "tag": {
         "tr": "Veri · Dönüşüm",
@@ -4764,7 +4767,8 @@
       "slug": "yapay-zeka-trafigi-tiklama-degil",
       "date": "2026-08-02",
       "read": 5,
-      "sector": "arama",
+      "topic": "arama",
+      "sector": "",
       "image": "",
       "tag": {
         "tr": "Veri · Arama & yapay zekâ",
@@ -4835,7 +4839,8 @@
       "slug": "yapay-zekadan-gelen-ziyaretci-donusuyor-mu",
       "date": "2026-07-25",
       "read": 4,
-      "sector": "arama",
+      "topic": "arama",
+      "sector": "",
       "image": "",
       "tag": {
         "tr": "Veri · Arama & yapay zekâ",
@@ -4894,7 +4899,8 @@
       "slug": "saglik-turizmi-hasta-basina-gelir",
       "date": "2026-07-12",
       "read": 4,
-      "sector": "sektor",
+      "topic": "sektor",
+      "sector": "saglik",
       "image": "",
       "tag": {
         "tr": "Sektör · Sağlık turizmi",
@@ -5457,5 +5463,29 @@
       "fb1": "İstanbul · Dubai",
       "fb2": "SEO · GEO · Ads · AI"
     }
-  }
+  },
+  "explainers": [],
+  "news": [],
+  "topics": [
+    {
+      "k": "talep",
+      "tr": "Talep yönetimi",
+      "en": "Lead handling"
+    },
+    {
+      "k": "reklam",
+      "tr": "Reklam & bütçe",
+      "en": "Ads & budget"
+    },
+    {
+      "k": "arama",
+      "tr": "Arama & yapay zekâ",
+      "en": "Search & AI"
+    },
+    {
+      "k": "sektor",
+      "tr": "Sektör verisi",
+      "en": "Sector data"
+    }
+  ]
 }

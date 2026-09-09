@@ -1,0 +1,318 @@
+---
+/* BÖLÜM DİZİNİ — bülten · nedir · haber, TEK gövde (9 Eyl 2026).
+
+   ÖNCEDEN `BultenDizin.astro` idi ve yalnız bülteni biliyordu. Enes 9
+   Eyl'de iki bölüm daha istedi ("nedir" ve "genel haberler"); üçünü üç
+   kopya bileşenle yazmak, sonradan fark edilen sapmanın en sık kaynağı
+   olurdu — biri düzelir, öbür ikisi eskir. Bölüm farkları artık VERİ:
+   `veri/sayfalar.json`daki koleksiyon kaydı künye/başlık/giriş metin
+   anahtarlarını, abone formunun ve konu çiplerinin açık olup
+   olmadığını taşır. Gövde tek.
+
+   Bülten dizini — TR ve EN aynı parça (rota turu). Sıra TARİHE
+   göre yeni→eski (eski postsSorted davranışı) — content.json sırası
+   DEĞİL: bülten kronolojik bir akış, dizin sırası panele değil takvime
+   bağlı. Metinler eski sayfanın data-t düzeniyle aynı düşüşü izler:
+   strings[dil][anahtar] doluysa panelinki, boşsa buradaki varsayılan.
+   TR varsayılanları eski markup'ın kendisi — strings.tr'de bu anahtarlar
+   YOK, TR'nin kaynağı hep markup'tı (ölçüldü); EN karşılıkları
+   strings.en'de yaşıyor ve panel ezebilir.
+   9 EYL 2026: çipler SÜZGEÇ olmaktan çıkıp KONU ARŞİVİ bağı oldu
+   (`/bulten/konu/<k>`); etiket haritası `src/konular.ts`e taşındı.
+   Eski hâl saf CSS süzgeçti ve yalnız basılı kartlar üzerinde
+   çalışıyordu — sayfalamayla birlikte sayaç yalan söyleyecekti.
+   Taşınmayan (bilinçli, rapora yazıldı):
+   – abone formunun betiği: form STATİK HTML + native POST (Netlify
+     "bulletin" formunu derleme anındaki HTML'den tanır — S-IL dersi);
+     satır içi "kaydettik" mesajı JS istiyordu, ada JS'i 0 tutuldu.
+     JS'siz de çalışır; gönderen Netlify'ın teşekkür sayfasını görür. */
+import { getCollection } from 'astro:content';
+import { icerik, T, type Dil, sl } from '../icerik';
+import sayfalarVeri from '../veri/sayfalar.json';
+import { konuAdi, konulariCikar } from '../konular';
+import { getCollection as kolAl } from 'astro:content';
+interface Props { dil: Dil; bolum?: string; sayfa?: number; konu?: string }
+const { dil, bolum = 'yazilar', sayfa = 1, konu = '' } = Astro.props;
+/* PANELE ACILDI (TUR 4, 4 Eyl 2026). Bu bilesenin sabit iki dilli
+   metinleri artik PANELDEN ezilebilir: cagrinin ilk argumani ANAHTAR,
+   sonraki ikisi TR ve EN varsayilani.
+   Panelde `strings.<dil>.<anahtar>` doluysa o kazanir, bossa buradaki
+   varsayilan. Anahtarlar bu dosyaya OZGU ve SABIT — yeniden
+   numaralandirilmaz, yeni metin siradaki numarayi alir. */
+const M = (k: string, tr: string, en: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (dil === 'en' ? en : tr);
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
+/* KOLEKSİYON BÖLÜMDEN GELİR. `getCollection` derleme anında çalışır ve
+   adı değişken olabilir; sıralama her bölümde aynı (tarihe göre
+   yeni→eski) — "nedir" evergreen olsa da listede en yeni tanım önde. */
+const arsiv = (await kolAl(bolum as any)).map((e: any) => e.data)
+  .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
+/* KONU ARSIVI: `konu` verildiyse sayfalama O KONUNUN listesi uzerinde
+   calisir — dizinin tum davranisi (dilim, gezinme, sema) ayni kodu
+   kullanir, ikinci bir bilesen yok. */
+const tumYazilar = konu ? arsiv.filter((p: any) => String(p.topic || '') === konu) : arsiv;
+const on = dil === 'en' ? '/en' : '';
+
+/* SAYFALAMA (Enes, 9 Eyl 2026: 12 yazi/sayfa).
+   SAYI BURADAN OKUNUR, BURADA YAZMAZ: `veri/sayfalar.json` sitenin tek
+   URL sozlesmesi ve denetim.cjs de ayni dosyadan okuyor. Iki yerde
+   dursaydi sayfa kumesi kurali (dist = sozlesme, IKI YONLU) sessizce
+   kayardi — "olcum dogru, olculen surum yanlis" vakasinin tam kalibi.
+   1. sayfa `/bulten` KALIR (kanonik adres degismedi). */
+const KOL: any = (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === bolum);
+const SAYFA_BOYU: number = KOL.sayfa_boyu;
+const DIZIN: string = KOL.dizin;                    /* /bulten · /nedir · /haber */
+const MTN = KOL.metin || {};                        /* künye/başlık/giriş anahtarları */
+const FORM = KOL.form !== false;                    /* abone formu (varsayılan açık) */
+const CIPLER = !!KOL.arsiv_alan;                    /* konu çipleri yalnız arşivi olan bölümde */
+const toplamSayfa = Math.max(1, Math.ceil(tumYazilar.length / SAYFA_BOYU));
+const buSayfa = Math.min(Math.max(1, sayfa), toplamSayfa);
+const yazilar = tumYazilar.slice((buSayfa - 1) * SAYFA_BOYU, buSayfa * SAYFA_BOYU);
+const konuKok = konu ? `${DIZIN}/konu/${konu}` : DIZIN;
+const sayfaYolu = (n: number) => sl(`${B}${on}` + konuKok + (n <= 1 ? '' : `/sayfa/${n}`));
+
+/* GEZINME PENCERESI ON BLOKTA HESAPLANIR, SABLONDA DEGIL.
+   Ilk yazimda satir ici bir IIFE icindeydi ve derleme COKTU: Astro
+   derleyicisi sablondaki `n < toplam` ifadesindeki `<` isaretini JSX
+   etiketi acilisi sanip "longhand Fragment" hatasi verdi. Sablonda
+   karsilastirma operatoru bulundurmamak bu dosyanin kurali.
+   PENCERE NEDEN: yalniz ileri/geri olsaydi 40. sayfa ana sayfadan 40
+   tiklama derinliginde kalirdi (ic-bag-denetimi BFS ile olcuyor, tavan
+   3). Ilk ve son HER ZAMAN, buSayfa cevresinde +-2; atlanan araliga
+   bag degil nokta konur. */
+const pencere = new Set<number>([1, toplamSayfa, buSayfa]);
+for (let d = 1; d <= 2; d++) {
+  const geri = buSayfa - d;
+  const ileri = buSayfa + d;
+  if (geri >= 1) pencere.add(geri);
+  if (ileri <= toplamSayfa) pencere.add(ileri);
+}
+const pencereListe = [...pencere].sort((a, b) => a - b);
+const sayfaParcalari: (number | null)[] = [];
+pencereListe.forEach((n, i) => {
+  if (i > 0 && n - pencereListe[i - 1] > 1) sayfaParcalari.push(null);
+  sayfaParcalari.push(n);
+});
+const oncekiVar = buSayfa > 1;
+const sonrakiVar = buSayfa < toplamSayfa;
+const cokSayfa = toplamSayfa > 1;
+/* CIPLER ARTIK SUZGEC DEGIL, BAG (9 Eyl 2026 — Enes: "sektorler
+   arsivlerini yap"). Eski hal saf CSS suzgecti (radyo + `:has()`) ve
+   yalniz BASILI kartlar uzerinde calisiyordu; sayfalama gelince "340
+   yazi" yazip 12 karttan 3'unu gosterecekti. Cip artik kendi arsivine
+   gidiyor: sayac da liste de arsiv geneli, yani DURUST — ve her konu
+   kendi taranabilir adresini kazandi (SEO yuzeyi).
+   Sayaclar `arsiv`den (tum yazilar), dilimden DEGIL. */
+const konular: string[] = CIPLER ? konulariCikar(arsiv) : [];
+const sektorAd = (k: string) => konuAdi(k, dil);
+const sayim = (k: string) => arsiv.filter((p: any) => String(p.topic || '') === k).length;
+const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
+/* Tarih ELDEKİ listeyle basılır, toLocaleDateString ile değil: yerel
+   Node 24 ↔ Netlify Node 20 ICU farkı çıktıyı sessizce değiştirebilir;
+   YaziGovde da aynı sebepten kendi listesini taşıyor. Biçim eski
+   dizinin uzun ayı (tr-TR/en-GB: "4 Ağustos 2026" / "4 August 2026"). */
+const AY = dil === 'en'
+  ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+  : ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const tarihYaz = (d: string) => {
+  const t = new Date(d + 'T00:00:00');
+  return `${t.getDate()} ${AY[t.getMonth()]} ${t.getFullYear()}`;
+};
+---
+{/* GERI BAGI: kaynakta dizinin ustunde `.pgback` -> "Ana sayfa" (kok bulten
+    bolumu, `data-t="back"`); yeni dizinde yoktu. Hizmet ve proje dizinlerinde
+    zaten var, bulten atlanmis. */}
+<a class="pgback" href={sl(`${B}${on || '/'}`)}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('bld01', 'Ana sayfa', 'Home')}</span>
+</a>
+
+<section class="giris">
+  {/* ANAYASA (3/4 Eyl 2026): kaynakta baslik ustunde `.mono` kunyesi var
+      (kok bulten bolumu: `<span class="mono" data-t="bke">Bülten</span>`);
+      yeni dizinde hic basilmiyordu. */}
+  <p class="kunye">{m(MTN.kunye || 'bke', KOL.tr_kunye || 'Bülten')}</p>
+  {/* Sayac gosterilen KUMEYI soyler: dizinde tum arsiv, konu arsivinde
+      o konunun yazi sayisi. Sayfa dilimi DEGIL — baslik "kac yazi var"
+      sorusunun cevabi, "bu sayfada kac tane" degil. */}
+  <h1>{m(MTN.baslik || 'bkh', KOL.tr_baslik || 'Veriyle konuşuyoruz.')}
+    <span class="say">({tumYazilar.length})</span></h1>
+  <p class="lede">{m(MTN.giris || 'bkp', KOL.tr_giris || 'Yapay zekâ, arama ve talep yönetimi tarafında işine dokunan gelişmeleri kaynağıyla birlikte yazıyoruz. Görüş değil rakam; her yazının sonunda "bu senin işin için ne demek" var.')}</p>
+</section>
+
+{/* CIPLER SAYFA YERELI (9 Eyl 2026 — sayfalamayla birlikte).
+    Suzme saf CSS: radyo + `:has()`, yalniz BASILI kartlar uzerinde
+    calisir. Sayaclar arsiv geneli kalsaydi cip "Talep yonetimi 340"
+    yazip 12 karttan 3'unu gosterirdi — olcmedigin rakami yazma
+    kuralinin tam ihlali. Sayaclar bu yuzden `yazilar` (sayfa dilimi)
+    uzerinden. Bugun tek sayfa oldugu icin gorunur fark YOK.
+    ASIL COZUM SEKTOR ARSIV ROTALARI (/bulten/sektor/<k>) ve o ayri bir
+    kalem — rapora yazildi, Enes'in karari. */}
+{konular.length > 0 && <nav class="bkf" aria-label={dil === 'en' ? 'Topics' : 'Konular'}>
+  <a class:list={['bkchip', { on: !konu }]} href={sl(`${B}${on}${DIZIN}`)}
+    aria-current={konu ? undefined : 'page'}>{M('bld02', 'Tümü', 'All')}<em>{arsiv.length}</em></a>
+  {konular.map((k) => (
+    <a class:list={['bkchip', { on: k === konu }]} href={sl(`${B}${on}${DIZIN}/konu/${k}`)}
+      aria-current={k === konu ? 'page' : undefined}>{sektorAd(k)}<em>{sayim(k)}</em></a>
+  ))}
+</nav>}
+{/* KART = BAGIN KENDISI (ANAYASA, 3/4 Eyl 2026). Kaynakta her yazi karti
+    tek bir `<a class="bkc" href="/bulten/<slug>">` idi: meta satiri (`.m`),
+    Playfair basligi (`h3`), ozet ve alttaki "Oku →" (`.go`). Yeni dizin
+    kartı tiklanabilir DEGILDI — govde `<article>`, tek bag 25x23 px'lik
+    "Oku" idi (mobil denetimde olculdu). Davranis kurali: ayni etkilesim
+    ayni sonucu verir; kartin her yeri yazıya gider. Izgara da kaynagin
+    kendisi: auto-fill minmax(320px, 1fr). */}
+<div class="bkgrid">
+  {yazilar.map((p: any) => (
+    <a class="bkc" href={sl(`${B}${on}${DIZIN}/${p.slug}`)}>
+      <span class="m">
+        <b>{T(p.tag, dil)}</b>
+        <i></i><span><time datetime={p.date}>{tarihYaz(p.date)}</time></span>
+        {p.read && <><i></i><span>{p.read}{M('bld03', ' dk okuma', ' min read')}</span></>}
+      </span>
+      <h3>{T(p.title, dil)}</h3>
+      <p>{T(p.lede, dil)}</p>
+      <span class="go">{M('bld04', 'Oku', 'Read')}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ok} />
+      </span>
+    </a>
+  ))}
+</div>
+
+{/* SAYFALAMA GEZINMESI — NUMARALI, sadece ileri/geri DEGIL.
+    SEBEP OLCULU: ic-bag-denetimi ana sayfadan BFS ile tiklama derinligi
+    olcuyor (tavan 3, bugun en derin 2). Yalniz "ileri" olsaydi 40. sayfa
+    40 tiklama derinliginde kalirdi — hem tarayici hem okuyucu icin
+    ulasilmaz. Numarali pencere her sayfayi dizinden 2 tiklamaya indirir.
+    Ilk/son HER ZAMAN basilir, aradaki pencere buSayfa cevresinde kayar;
+    atlanan araliga tek nokta konur (bag degil, cunku hedefi yok). */}
+{cokSayfa && <nav class="bksf" aria-label={dil === 'en' ? 'Pagination' : 'Sayfalama'}>
+  {oncekiVar && <a class="bksf-ok" href={sayfaYolu(buSayfa - 1)} rel="prev">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    <span>{M('bld05', 'Önceki', 'Previous')}</span></a>}
+  <ol>
+    {sayfaParcalari.map((n) => n === null
+      ? <li class="bksf-bosluk" aria-hidden="true">…</li>
+      : <li>{n === buSayfa
+          ? <span class="bksf-su" aria-current="page">{n}</span>
+          : <a href={sayfaYolu(n)}>{n}</a>}</li>)}
+  </ol>
+  {sonrakiVar && <a class="bksf-ok" href={sayfaYolu(buSayfa + 1)} rel="next">
+    <span>{M('bld06', 'Sonraki', 'Next')}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>}
+</nav>}
+
+{/* ABONE FORMU YALNIZ FORMLU BÖLÜMDE. Netlify formu derleme anındaki
+    HTML'den tanır; aynı `name="bulletin"` formunu üç bölümde birden
+    basmak aynı kayda üç kapı açardı. Bülten dışı bölümlerde kapalı. */}
+{FORM && <div class="abone">
+  <h3>{m('bks1', 'Yeni yazı çıkınca haberin olsun')}</h3>
+  <p>{m('bks2', 'Ayda birkaç yazı. Spam yok, satış maili yok, tek tıkla çıkabilirsin.')}</p>
+  <form name="bulletin" method="POST" data-netlify="true" netlify-honeypot="website">
+    <input type="hidden" name="form-name" value="bulletin" />
+    {/* Honeypot: gerçek kullanıcı görmez, bot doldurur (kaynaktakiyle
+        aynı alan adı — kayıtlar aynı "bulletin" formuna düşer). */}
+    <p class="sus-tuzak"><label>{m('hpSite', 'Web sitesi')}
+      <input name="website" tabindex="-1" autocomplete="off" /></label></p>
+    <input type="email" name="email" required maxlength="120" autocomplete="email"
+      placeholder={m('phMail', 'e-posta adresin')} aria-label={m('phMail', 'e-posta adresin')} />
+    <button class="dugme sus-isik" type="submit">{m('bks3', 'Abone ol')}</button>
+  </form>
+</div>}
+
+<style>
+  /* KONU CIPLERI — artik radyo degil BAG (9 Eyl 2026). Gorunum eskisiyle
+     ayni: yuvarlak, --line2 cerceve, secili halde kizil. Secili hal
+     `.on` sinifiyla geliyor (input:checked yerine), erisilebilirlik
+     `aria-current="page"` ile. Sinif adi `.bkchip`: eski `.bkc` KART
+     sinifiydi ve cip de ayni adi tasiyordu — ikisi ayni stil kumesinde
+     carpisiyordu, ayristirildi. */
+  .bkf { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: clamp(22px, 3vw, 36px); }
+  .bkchip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+    border-radius: 999px; border: 1px solid var(--line2); color: var(--tx2);
+    font-size: .84rem; text-decoration: none; }
+  .bkchip em { font-style: normal; font-family: var(--f-tek); font-size: .7rem; color: var(--tx4); }
+  .bkchip.on { background: rgba(239,35,60,.12); border-color: rgba(239,35,60,.5); color: #fff; }
+  .bkchip.on em { color: var(--red-soft); }
+  .bkchip:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  @media (hover: hover) and (pointer: fine) {
+    .bkchip { transition: border-color .3s var(--e), color .3s var(--e); }
+    .bkchip:hover { border-color: rgba(239,35,60,.42); color: #fff; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bkchip { transition: none; } }
+
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  /* geri bagi — obur dizinlerdeki kunyenin aynisi (YaziGovde 89-91) */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  /* IZGARA + KART: kaynak `.bkgrid` (2191-2192) ve `.bkc` (2193-2211) birebir.
+     ANAYASA ISTISNA 1: "Uncut Sans her alan; tek istisna ana sayfa hero
+     basligi". Kaynagin Playfair kart basligi bu yuzden --f-baslik tokenine
+     baglanir — arsiv kartinin (.mi h3) yaptiginin aynisi; olculer (400,
+     clamp, satir araligi) kaynaktan kalir. Mono satirlar --f-tek. */
+  .bkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: clamp(14px, 1.6vw, 20px); }
+  .bkc { display: flex; flex-direction: column; gap: 11px; border: 1px solid var(--line);
+    border-radius: var(--r, 18px); padding: clamp(20px, 2.4vw, 28px); color: inherit;
+    text-decoration: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.006)); }
+  .bkc .m { display: flex; align-items: center; gap: 10px; font-family: var(--f-tek);
+    font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
+  .bkc .m b { color: var(--red-soft); font-weight: 500; }
+  .bkc .m i { width: 3px; height: 3px; border-radius: 50%; background: var(--tx4); font-style: normal; }
+  .bkc h3 { font-family: var(--f-baslik); font-weight: 400;
+    font-size: clamp(1.14rem, 1.7vw, 1.38rem); line-height: 1.24; letter-spacing: -.01em; }
+  .bkc p { font-size: .88rem; line-height: 1.68; color: var(--tx3); font-weight: 300; }
+  .bkc .go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--f-tek); font-size: 9.5px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--tx3); }
+  .bkc .go svg { width: 13px; height: 13px; }
+  /* hover yalniz gercek imlecte (dokunmatikte :hover takilir) */
+  @media (hover: hover) and (pointer: fine) {
+    .bkc { transition: border-color .34s var(--e), transform .34s var(--e), box-shadow .34s var(--e); }
+    .bkc:hover { border-color: rgba(239,35,60,.42); transform: translateY(-3px);
+      box-shadow: 0 26px 60px -34px var(--red-glow); }
+    .bkc .go, .bkc .go svg { transition: color .3s var(--e), transform .3s var(--e); }
+    .bkc:hover .go { color: var(--red-soft); }
+    .bkc:hover .go svg { transform: translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bkc, .bkc .go, .bkc .go svg { transition: none; }
+  }
+  /* SAYFALAMA — dizin kartlarinin cip diliyle ayni (yuvarlak, --line2,
+     kizil secili hal). Ada JS'i 0: hepsi duz bag. */
+  .bksf { display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    gap: 10px; margin-top: clamp(26px, 3vw, 40px); }
+  .bksf ol { display: flex; align-items: center; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .bksf a, .bksf-su { display: inline-flex; align-items: center; justify-content: center;
+    min-width: 38px; min-height: 38px; padding: 0 10px; border-radius: 999px;
+    font-family: var(--f-tek); font-size: .8rem; text-decoration: none; }
+  .bksf ol a { border: 1px solid var(--line2); color: var(--tx2); }
+  .bksf-su { border: 1px solid rgba(239,35,60,.5); background: rgba(239,35,60,.12); color: #fff; }
+  .bksf-ok { gap: 8px; border: 1px solid var(--line2); color: var(--tx2); }
+  .bksf-ok svg { width: 14px; height: 14px; }
+  .bksf-bosluk { color: var(--tx4); padding: 0 2px; }
+  @media (hover: hover) and (pointer: fine) {
+    .bksf a { transition: border-color .3s var(--e), color .3s var(--e); }
+    .bksf a:hover { border-color: rgba(239,35,60,.42); color: #fff; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bksf a { transition: none; } }
+
+  .abone { border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 34px; }
+  .abone h3 { font-size: 1rem; margin: 0 0 4px; }
+  .abone > p { color: var(--tx2); font-size: .9rem; margin: 0 0 12px; }
+  .abone form { display: flex; flex-wrap: wrap; gap: 10px; }
+  .abone input[type="email"] { flex: 1 1 220px; min-width: 0; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; background: transparent;
+    color: inherit; font: inherit; }
+  .sus-tuzak { position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden; }
+</style>

@@ -1,0 +1,29 @@
+---
+/* KONU ARSIVI · 2. VE SONRAKI SAYFALAR (TR) — `/bulten/konu/<k>/sayfa/<n>`.
+   Gerekce ve kapi notlari `../[k].astro` icinde. 1. sayfa BURADA
+   URETILMEZ: o `/bulten/konu/<k>`. Kanonik kendine. */
+import Temel from '../../../../../layouts/Temel.astro';
+import BolumDizin from '../../../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../../../icerik';
+import { bultenDizinSema } from '../../../../../sema.mjs';
+import { konuSayfaYollari, SAYFA_BOYU } from '../../../../../sayfalama';
+import { konuAdi } from '../../../../../konular';
+
+export async function getStaticPaths() {
+  return await konuSayfaYollari();
+}
+
+const { k, n } = Astro.params;
+const konu = String(k);
+const sayfa = Number(n);
+const ad = konuAdi(konu, 'tr');
+const canon = sl(`${KOK}/bulten/konu/${konu}/sayfa/${sayfa}`);
+const baslik = `${ad} — Sayfa ${sayfa} — Bülten — QANATONE`;
+const aciklama = `${ad} başlığında yazdıklarımız — sayfa ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={sl(`${KOK}/en/bulten/konu/${konu}/sayfa/${sayfa}`)} sema={sema}
+  etiket="Bülten">
+  <BolumDizin dil="tr" konu={konu} sayfa={sayfa} />
+</Temel>

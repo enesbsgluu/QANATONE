@@ -23,9 +23,20 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { KOK, T, sl } from '../../icerik';
 
+/* RSS TAVANI 50 (Enes, 9 Eyl 2026). ONCEDEN TAVANSIZDI: 200 yazida 200
+   item / 111 KB, 10.000'de 5,5 MB — ve besleme HER istekte butun olarak
+   iniyor. 50, haber sitesi pratigi; dosya ~28 KB'da sabitlenir.
+   BESLEME = SON N, ARSIV DEGIL: gecmisi tasiyan yuzey sitemap ve sayfali
+   dizin (/bulten/sayfa/N), RSS degil.
+   KAPI NOTU: R8 kurali "rss item seti = posts seti" diyordu; tavanla
+   birlikte kural "= EN YENI min(50, posts)" olarak guncellendi. Ikisi
+   birlikte degismeseydi 51. yazida deploy duserdi. */
+export const RSS_TAVAN = 50;
+
 export const GET: APIRoute = async () => {
   const yazilar = (await getCollection('yazilar')).map(e => e.data)
-    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)));
+    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)))
+    .slice(0, RSS_TAVAN);
   const esc = (s: unknown) => String(s == null ? '' : s).replace(/&/g, '&amp;')
     .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

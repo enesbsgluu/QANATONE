@@ -1,0 +1,32 @@
+---
+/* HABER KONU ARŞİVİ (en) — `/en/haber/konu/<k>`
+
+   Bültendeki `/bulten/konu/<k>` deseninin aynısı, bölüm `haberler`.
+   Gövde yine `BolumDizin`: sayfalama, gezinme, şema, çipler tek koddan.
+   Anahtarlar VERİDEN doğar (`news[].topic`), elle liste yok — panelden
+   yeni konu gelince arşivi, sitemap kaydı ve denetimin beklentisi
+   kendiliğinden oluşur. Kanonik kendine. Bekçi: T12. */
+import Temel from '../../../../layouts/Temel.astro';
+import BolumDizin from '../../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../../icerik';
+import { bultenDizinSema } from '../../../../sema.mjs';
+import { bolumKonuYollari, SAYFA_BOYU } from '../../../../sayfalama';
+import { konuAdi } from '../../../../konular';
+
+export async function getStaticPaths() {
+  return await bolumKonuYollari('haberler');
+}
+
+const { k } = Astro.params;
+const konu = String(k);
+const ad = konuAdi(konu, 'en');
+const canon = sl(`${KOK}/en/haber/konu/${konu}`);
+const baslik = `${ad} — News — QANATONE`;
+const aciklama = `${ad} coverage from the sector — with the sources.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', konu, sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article', kaynak: 'news' });
+---
+<Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/haber/konu/${konu}`)} helefen={sl(`${KOK}/en/haber/konu/${konu}`)} sema={sema}
+  etiket="News">
+  <BolumDizin dil="en" bolum="haberler" konu={konu} />
+</Temel>

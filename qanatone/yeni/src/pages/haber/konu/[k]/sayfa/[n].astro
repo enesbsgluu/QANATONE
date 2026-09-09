@@ -1,0 +1,28 @@
+---
+/* Haber konu arşivi · 2. ve sonraki sayfalar (tr). 1. sayfa
+   `/haber/konu/<k>`; `/sayfa/1` bilinçli YOK. Gerekçe `../[k].astro`. */
+import Temel from '../../../../../layouts/Temel.astro';
+import BolumDizin from '../../../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../../../icerik';
+import { bultenDizinSema } from '../../../../../sema.mjs';
+import { bolumKonuSayfaYollari, SAYFA_BOYU } from '../../../../../sayfalama';
+import { konuAdi } from '../../../../../konular';
+
+export async function getStaticPaths() {
+  return await bolumKonuSayfaYollari('haberler');
+}
+
+const { k, n } = Astro.params;
+const konu = String(k);
+const sayfa = Number(n);
+const ad = konuAdi(konu, 'tr');
+const canon = sl(`${KOK}/haber/konu/${konu}/sayfa/${sayfa}`);
+const baslik = `${ad} — Sayfa ${sayfa} — Haberler — QANATONE`;
+const aciklama = `${ad} başlığında sektörden aktardıklarımız — kaynağıyla. Sayfa ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article', kaynak: 'news' });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/haber/konu/${konu}/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/haber/konu/${konu}/sayfa/${sayfa}`)} sema={sema}
+  etiket="Haberler">
+  <BolumDizin dil="tr" bolum="haberler" konu={konu} sayfa={sayfa} />
+</Temel>

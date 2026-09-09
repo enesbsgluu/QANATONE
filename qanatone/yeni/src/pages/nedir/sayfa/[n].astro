@@ -1,0 +1,26 @@
+---
+/* Nedir dizini · 2. ve sonraki sayfalar (TR). 1. sayfa
+   `/nedir`; `/sayfa/1` bilinçli YOK (kopya içerik). Kanonik
+   kendine. Gerekçe: `../[...kok].astro`. */
+import Temel from '../../../layouts/Temel.astro';
+import BolumDizin from '../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../icerik';
+import { bultenDizinSema } from '../../../sema.mjs';
+import { bolumSayfaYollari, SAYFA_BOYU } from '../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumSayfaYollari('nedir');
+}
+
+const { n } = Astro.params;
+const sayfa = Number(n);
+const canon = sl(`${KOK}/nedir/sayfa/${sayfa}`);
+const baslik = `Nedir — Sayfa ${sayfa} — QANATONE`;
+const aciklama = `Konuların ne olduğunu ve nasıl işlediğini örnekle ve kaynağıyla anlatıyoruz. Sayfa ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm', kaynak: 'explainers' });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/nedir/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/nedir/sayfa/${sayfa}`)} sema={sema}
+  etiket="Nedir">
+  <BolumDizin dil="tr" bolum="nedir" sayfa={sayfa} />
+</Temel>

@@ -1,0 +1,45 @@
+---
+/* BULTEN DIZINI · 2. VE SONRAKI SAYFALAR (TR) — Enes, 9 Eyl 2026:
+   12 yazi/sayfa.
+
+   NEDEN `/bulten/sayfa/2` VE `/bulten/2` DEGIL: kardes rota
+   `bulten/[slug].astro` her `/bulten/<sey>` yolunu yakaliyor. `/bulten/2`
+   bicimi, "2" adli bir yazi slug'i geldigi anda rotayi belirsiz birakirdi
+   (Astro statik rotayi one alir ama sozlesme okunaksiz olurdu). Ayri bir
+   dizin segmenti catismayi TAMAMEN kaldirir.
+
+   1. SAYFA BURADA URETILMEZ: o `/bulten` (index.astro) ve adresi
+   DEGISMEDI. `/bulten/sayfa/1` bilincli olarak YOK — ayni listeyi iki
+   adresten sunmak kopya icerik olurdu.
+
+   CANONICAL KENDINE: 2. sayfanin kanonigi 2. sayfadir, `/bulten` degil.
+   Sayfayi 1'e kanoniklemek Google'a "bu sayfayi indeksleme" demektir;
+   o zaman 2+ sayfalardaki yazilara giden BAGLAR da taranmaz ve arsivin
+   kuyrugu kesilir. rel=prev/next gezinmede basiliyor.
+
+   BASLIK BENZERSIZ (S4 KAPISI): her sayfa " — Sayfa N" tasir. Kapi
+   "her sayfanin basligi ve aciklamasi BENZERSIZ" diyor; sayfalar ayni
+   basligi tasisaydi 2. sayfadan itibaren hepsi kirmizi yanardi.
+   Bekci: T11. */
+import Temel from '../../../layouts/Temel.astro';
+import BolumDizin from '../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../icerik';
+import { bultenDizinSema } from '../../../sema.mjs';
+import { sayfaYollari, SAYFA_BOYU } from '../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await sayfaYollari();
+}
+
+const { n } = Astro.params;
+const sayfa = Number(n);
+const canon = sl(`${KOK}/bulten/sayfa/${sayfa}`);
+const baslik = `Bülten — Sayfa ${sayfa} — QANATONE`;
+const aciklama = `Yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla. Sayfa ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={sl(`${KOK}/en/bulten/sayfa/${sayfa}`)} sema={sema}
+  etiket="Bülten">
+  <BolumDizin dil="tr" sayfa={sayfa} />
+</Temel>

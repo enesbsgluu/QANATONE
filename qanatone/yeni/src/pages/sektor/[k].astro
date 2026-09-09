@@ -1,0 +1,48 @@
+---
+/* SEKTÖR ARŞİVİ (TR) — `/sektor/<k>` · Enes, 9 Eyl 2026:
+   "hangi yazı hangi sektörde… o sektöre yerleşmeli, böylece içeriğin ne
+   içeriği olduğu bilinir".
+
+   BÖLÜM ÜSTÜ KESİT: bülten, nedir ve haber içeriği bir arada. Konu
+   arşivi (`/bulten/konu/<k>`) bir bölümün İÇİNDE süzer; sektör arşivi
+   bölümleri AŞAR. `/sektor/` adı bu iş için bilinçli boş tutulmuştu —
+   çip arşivleri `/bulten/konu/` altına konurken alınan karar.
+
+   Yalnız İÇERİĞİ OLAN sektörün sayfası üretilir: boş bir sektör
+   sayfası Google'a ince içerik sunmak olurdu. Kanonik kendine.
+   Bekçi: T14. */
+import Temel from '../../layouts/Temel.astro';
+import SektorDizin from '../../parcalar/SektorDizin.astro';
+import { icerik, T, KOK, sl } from '../../icerik';
+import { sektorYollari, sektorDilim } from '../../sayfalama';
+import { sektorDizinSema } from '../../sema.mjs';
+
+export async function getStaticPaths() {
+  return await sektorYollari();
+}
+
+const { k } = Astro.params;
+const anahtar = String(k);
+const kayit = (icerik.sectors || []).find((s) => String(s.k) === anahtar) || {};
+const ad = T(kayit.n, 'tr') || anahtar;
+const canon = sl(`${KOK}/sektor/${anahtar}`);
+const baslik = `${ad} — Sektör — QANATONE`;
+/* ACIKLAMA SEKTOR ADINDAN KURULUR, `sectors[].d`den DEGIL.
+   ILK YAZIMDA `d` KULLANILMISTI VE YANLISTI: o alan bir sektor tanimi
+   degil, ana sayfa sahnesindeki SANCI CUMLESI ("Gece gelen mesaj sabaha
+   kaliyor"). Ciktida "Gece gelen mesaj sabaha kaliyor Saglik turizmi
+   sektorunde yazdiklarimiz…" gibi bir cumle olusuyordu. Ders: bir alani
+   kullanmadan once NE TUTTUGUNA bak, adina degil.
+   Kurulan cumle S1 menziline (50-165) kendi basina oturuyor. */
+const aciklama = `${ad} sektöründe yazdıklarımız — bülten, nedir ve haber bir arada. Rakamla, kaynağıyla.`;
+/* Dilim TEK KAYNAKTAN (`sektorDilim`) — sayfanin kartlariyla AYNI
+   liste. Iki yerde ayri hesaplansaydi sema, sayfada OLMAYAN bir
+   icerigi ilan edebilirdi. */
+const dilim = await sektorDilim(anahtar, 1);
+const sema = sektorDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' }, dilim.gorunen, dilim.bas);
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/sektor/${anahtar}`)} helefen={sl(`${KOK}/en/sektor/${anahtar}`)} sema={sema}
+  etiket="Sektör">
+  <SektorDizin dil="tr" k={anahtar} />
+</Temel>

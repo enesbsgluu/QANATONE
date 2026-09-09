@@ -120,6 +120,37 @@
    "parca": "parcalar/SssGovde.astro"
   },
   {
+   "yol": "/nedir",
+   "anahtar": "nav9",
+   "tr": "Nedir",
+   "en": "Explainers",
+   "dil": [
+    "tr",
+    "en"
+   ],
+   "mobil": 8,
+   "footer": 7,
+   "sitemap": "0.8",
+   "kosullu": "explainers",
+   "_": "TANIM/ACIKLAMA bolumu (Enes, 9 Eyl 2026): 'konularin ne oldugunu ve nasil calistiklarini acikladigimiz yazilar'. EVERGREEN - bultenin tarihli akisina ve RSS'ine karismaz. GEO tarafinin en guclu yuzeyi: tanim iceriGi dil modelleri tarafindan alintilanir.",
+   "_anahtar": "ANAHTAR CAKISMASI (9 Eyl 2026, yakalandi): once `nav7` verilmisti ama o anahtar ZATEN KULLANIMDA - Nav.astro:110 menudeki 'Studyo' acilir basligi onu tasiyor. Iki yuzey ayni panel anahtarini paylassaydi Enes 'Nedir' etiketini duzeltirken menudeki 'Studyo' yazisini degistirirdi (ya da tersi) ve belirti ancak sayfaya bakinca gorunurdu. Serbest sirali anahtar: nav9. Yeni bolum eklerken metin-harita.cjs ciktisindaki nav* listesine BAKILMALI - sayfalar.json tek basina bos anahtari bilmiyor."
+  },
+  {
+   "yol": "/haber",
+   "anahtar": "nav8",
+   "tr": "Haberler",
+   "en": "News",
+   "dil": [
+    "tr",
+    "en"
+   ],
+   "mobil": 9,
+   "footer": 8,
+   "sitemap": "0.8",
+   "kosullu": "news",
+   "_": "GENEL HABER bolumu (Enes, 9 Eyl 2026). Kronolojik; bulten QANATONE'un kendi veri analizi, bu bolum sektorun genel haberleri. Ayri RSS besleme /haber/rss.xml."
+  },
+  {
    "yol": "/tesekkur",
    "tr": "Teşekkürler",
    "en": "Thank you",
@@ -184,7 +215,81 @@
    "dizin": "/bulten",
    "yol": "/bulten/{slug}",
    "sitemap": "0.7",
-   "lastmod": "date"
+   "lastmod": "date",
+   "sayfa_boyu": 12,
+   "sayfa_yolu": "/bulten/sayfa/{n}",
+   "sayfa_sitemap": "0.4",
+   "arsiv_alan": "topic",
+   "arsiv_yolu": "/bulten/konu/{k}",
+   "_sayfalama": "SAYFALAMA (Enes, 9 Eyl 2026: 12 yazi/sayfa). Dizin ONCEDEN TAVANSIZDI: 200 yazida tek sayfa 336 KB, 10.000'de ~16 MB (ICERIK-MIMARISI-OLCUM.md BULGU 4). `sayfa_boyu` BURADA duruyor cunku bu dosya sitenin TEK URL sozlesmesi ve hem Astro (.ts import) hem denetim.cjs (CJS, .ts ithal EDEMEZ - yerel/yayin Node dersi) ayni sayidan okumak zorunda; iki yerde durursa sayfa kumesi kurali sessizce kayar. YOL SECIMI: 1. sayfa `/bulten` (kanonik, degismedi - eski adres korunur), 2+ `/bulten/sayfa/2`. `/bulten/2` DEGIL: o yol `[slug].astro` ile catisirdi ve '2' adli bir yazi slug'i rotayi belirsizlestirirdi. `sayfa` adi EN tarafinda da ayni (`/en/bulten/sayfa/2`) - EN rotalari zaten Turkce adlari tasiyor (/en/bulten, /en/hizmetler). Bekci: T11.",
+   "metin": {
+    "kunye": "bke",
+    "baslik": "bkh",
+    "giris": "bkp"
+   },
+   "form": true,
+   "tr_ad": "Bülten",
+   "en_ad": "Newsletter"
+  },
+  {
+   "ad": "nedir",
+   "kaynak": "explainers",
+   "dizin": "/nedir",
+   "yol": "/nedir/{slug}",
+   "sitemap": "0.7",
+   "sayfa_boyu": 12,
+   "sayfa_yolu": "/nedir/sayfa/{n}",
+   "sayfa_sitemap": "0.4",
+   "metin": {
+    "kunye": "ndz1",
+    "baslik": "ndz2",
+    "giris": "ndz3"
+   },
+   "tr_kunye": "Nedir",
+   "tr_baslik": "Nasıl çalıştığını anlatıyoruz.",
+   "tr_giris": "Konunun ne olduğunu ve nasıl işlediğini, örnekle ve kaynağıyla. Tanım yazıları eskimez — bülten haber, burası açıklama.",
+   "form": false,
+   "tr_ad": "Nedir",
+   "en_ad": "Explainers"
+  },
+  {
+   "ad": "haberler",
+   "kaynak": "news",
+   "dizin": "/haber",
+   "yol": "/haber/{slug}",
+   "sitemap": "0.7",
+   "lastmod": "date",
+   "sayfa_boyu": 12,
+   "sayfa_yolu": "/haber/sayfa/{n}",
+   "sayfa_sitemap": "0.4",
+   "arsiv_alan": "topic",
+   "arsiv_yolu": "/haber/konu/{k}",
+   "metin": {
+    "kunye": "hbz1",
+    "baslik": "hbz2",
+    "giris": "hbz3"
+   },
+   "tr_kunye": "Haberler",
+   "tr_baslik": "Sektörde ne oluyor?",
+   "tr_giris": "Yapay zekâ, arama ve dijital pazarlama tarafında gündemi kaynağıyla aktarıyoruz.",
+   "form": false,
+   "tr_ad": "Haberler",
+   "en_ad": "News"
   }
- ]
+ ],
+ "_kosullu": "KOSULLU BOLUM (9 Eyl 2026). `kosullu: \"<kaynak>\"` tasiyan statik kayit, content.json'daki o kaynak BOS oldugu surece YOK sayilir: sayfa uretilmez, menuye ve alt bilgiye girmez, sitemap'e yazilmaz, denetimin sayfa kumesi de onu beklemez. SEBEP: /nedir ve /haber mimarisi bugun kuruluyor ama icerigi panelden gelecek; bos bir bolum sayfasini yayinlamak Google'a ince icerik sunmak ve menuye bos bir kapi koymak olurdu. Ilk yazi panelden eklendigi an bolum kendiliginde acilir - ayrica kod degisikligi GEREKMEZ. Bekci: T12.",
+ "_sektor_arsivi": "SEKTOR ARSIVI (Enes, 9 Eyl 2026: 'hangi yazi hangi sektorde; yaziyi girerken panelden sektor secilmeli ve o sektore yerlesmeli'). BOLUM USTU tek merkez: /sektor/<k> bir sektorun TUM icerigini toplar - bulten, nedir, haber ayrimi yapmadan. Sebep Enes'in cumlesi: 'icerigin ne icerigi oldugu bilinir'. Bu bir BOLUM degil KESIT; o yuzden `koleksiyon` degil kendi kaydinda duruyor. Alan `sector` (9 Eyl'de bosaldi, once konuyu tutuyordu); kaynak `content.json.sectors`. Anahtarlar VERIDEN dogar: yalniz ICERIGI OLAN sektorun arsivi uretilir - bos sektor sayfasi ince icerik olurdu. Bekci: T14.",
+ "sektor_arsivi": {
+  "alan": "sector",
+  "kaynak_liste": "sectors",
+  "yol": "/sektor/{k}",
+  "sayfa_yolu": "/sektor/{k}/sayfa/{n}",
+  "sayfa_boyu": 12,
+  "sitemap": "0.6",
+  "bolumler": [
+   "yazilar",
+   "nedir",
+   "haberler"
+  ]
+ }
 }

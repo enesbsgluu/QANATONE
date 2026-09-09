@@ -160,9 +160,71 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
   const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
   const beklenen = new Set();
-  for (const s of S.statik) for (const d of s.dil) beklenen.add(((d === 'en' ? '/en' : '') + (s.yol || '')) || '/');
+  /* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan statik kayit
+     BEKLENMEZ — sayfa uretilmiyor, "eksik" sayilmamali. Icerik gelince
+     hem sayfa hem bu beklenti kendiliginden acilir. */
+  const bosKaynak = (ad) => !ad || !Array.isArray(c[ad]) || c[ad].length === 0;
+  for (const s of S.statik) {
+    if (s.kosullu && bosKaynak(s.kosullu)) continue;
+    for (const d of s.dil) beklenen.add(((d === 'en' ? '/en' : '') + (s.yol || '')) || '/');
+  }
   for (const k of S.koleksiyon) for (const e of (c[k.kaynak] || [])) for (const d of ['tr', 'en'])
     beklenen.add((d === 'en' ? '/en' : '') + k.yol.replace('{slug}', e.slug));
+  /* SAYFALI DIZIN SAYFALARI (9 Eyl 2026). Bu kural IKI YONLU: dist'te
+     olup listede olmayan "FAZLA" sayilir. Sayfalama eklendiginde
+     /bulten/sayfa/2 dist'te belirir; burasi ogrenmeseydi kural KIRMIZI
+     yanar ve DEPLOY DUSERDI — kod dogru yazilmis olmasina ragmen.
+     Sayi `sayfalar.json`daki `sayfa_boyu`dan okunur, burada YAZMAZ:
+     tek kaynak orasi, iki yerde durursa sessizce kayar.
+     1. sayfa uretilmez (`n` 2'den baslar) — o `dizin`in kendisi. */
+  for (const k of S.koleksiyon) {
+    if (!k.sayfa_boyu || !k.sayfa_yolu) continue;
+    const toplam = Math.max(1, Math.ceil((c[k.kaynak] || []).length / k.sayfa_boyu));
+    for (let n = 2; n <= toplam; n++) for (const d of ['tr', 'en'])
+      beklenen.add((d === 'en' ? '/en' : '') + k.sayfa_yolu.replace('{n}', String(n)));
+  }
+  /* KONU ARSIVLERI (9 Eyl 2026) — `/bulten/konu/<k>` + kendi sayfalari.
+     Anahtarlar VERIDEN dogar (`arsiv_alan`), elle liste yok: panelden
+     yeni konu gelince arsiv kendiliginden olusur ve bu kural da onu
+     kendiliginden bekler. Elle liste tutulsaydi panel yeni konu
+     ekledigi gun deploy duserdi. */
+  for (const k of S.koleksiyon) {
+    if (!k.arsiv_alan || !k.arsiv_yolu) continue;
+    const say = {};
+    for (const e of (c[k.kaynak] || [])) {
+      const a = String(e[k.arsiv_alan] || '');
+      if (a) say[a] = (say[a] || 0) + 1;
+    }
+    for (const [a, adet] of Object.entries(say)) for (const d of ['tr', 'en']) {
+      const kok = (d === 'en' ? '/en' : '') + k.arsiv_yolu.replace('{k}', a);
+      beklenen.add(kok);
+      if (k.sayfa_boyu) {
+        const t = Math.max(1, Math.ceil(adet / k.sayfa_boyu));
+        for (let n = 2; n <= t; n++) beklenen.add(kok + '/sayfa/' + n);
+      }
+    }
+  }
+  /* SEKTOR ARSIVI (9 Eyl 2026) — bolum ustu kesit. Kural IKI YONLU
+     oldugu icin, sozlesme ogrenmeseydi `/sektor/saglik` "FAZLA" sayilir
+     ve DEPLOY DUSERDI (nitekim once oyle oldu, kural yakaladi). */
+  if (S.sektor_arsivi) {
+    const SA = S.sektor_arsivi;
+    const say = {};
+    for (const b of SA.bolumler) {
+      const kol = S.koleksiyon.find((x) => x.ad === b);
+      for (const e of (kol && c[kol.kaynak]) || []) {
+        const k = String(e[SA.alan] || '');
+        if (k) say[k] = (say[k] || 0) + 1;
+      }
+    }
+    for (const [k, adet] of Object.entries(say)) for (const d of ['tr', 'en']) {
+      const kok = (d === 'en' ? '/en' : '') + SA.yol.replace('{k}', k);
+      beklenen.add(kok);
+      const t = Math.max(1, Math.ceil(adet / SA.sayfa_boyu));
+      for (let n = 2; n <= t; n++) beklenen.add(kok + '/sayfa/' + n);
+    }
+  }
+
   const gercek = new Set(sayfalar.map((p) =>
     ('/' + rel(p).replace(/\/?index\.html$/, '').replace(/\.html$/, '')).replace(/\/$/, '') || '/'));
   const eksik = [...beklenen].filter((x) => !gercek.has(x));
@@ -648,10 +710,44 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     }
   }
 
-  ol('T6 · IndexNow dogrulama zinciri: <anahtar>.txt ciktida + icerik anahtarla birebir + adresler sitemap\'ten + canli anahtar kapisi POST\'tan once',
+  /* YALNIZ DEGISENI BILDIR — KAPIDA (9 Eyl 2026).
+     ONCEDEN her deploy'da TUM adresler bildiriliyordu: hic degismemis
+     sayfalari "degisti" diye haber vermek hem anlamsiz hem IndexNow'in
+     istek basi 10.000 sinirina carpacakti. Olcut sitemap `lastmod`
+     OLAMAZ (statik sayfalar her gun "degisti", yazilar duzeltilse bile
+     "degismedi") — bu yuzden SAYFANIN KENDI BAYTININ ozeti.
+     DAYANAK OLCULDU: ayni icerikten iki derleme, 74 sayfanin 74'unde
+     birebir ayni ozet. Derleme kararli olmasaydi tasarim calismazdi.
+     Bu blok uc seyi tutar: durum dosyasi CIKTIDA ve sitemap'i TAM
+     kapsiyor · POST govdesi tum listeyi degil FARKI yolluyor · istek
+     tavani dilimlemesi duruyor. */
+  {
+    const dYol = path.join(KOK, 'indexnow-durum.json');
+    if (!fs.existsSync(dYol)) {
+      kusur.push('indexnow-durum.json ciktida YOK — fark alinamaz, her deploy hepsini bildirir');
+    } else {
+      let d = null;
+      try { d = JSON.parse(fs.readFileSync(dYol, 'utf8')); } catch (e) { kusur.push('durum dosyasi cozulemedi'); }
+      if (d) {
+        const oz = d.ozetler || {};
+        const eksik = loc.filter((u) => !(u in oz));
+        if (eksik.length) kusur.push(`durum dosyasi ${eksik.length} adresi kapsamiyor (${eksik[0]})`);
+        /* Durum dosyasi bir SAYFA degil — sitemap'e girmemeli. */
+        if (loc.some((u) => u.endsWith('/indexnow-durum.json'))) kusur.push('durum dosyasi sitemap listesinde');
+      }
+    }
+    const kaynak = fs.readFileSync(path.join(__dirname, 'indexnow.mjs'), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, ' ');
+    if (/urlList:\s*urls\b/.test(kaynak))
+      kusur.push('POST govdesi hala TUM adresleri yolluyor (urlList: urls) — fark devre disi');
+    if (!/\bfark\s*\(/.test(kaynak)) kusur.push('fark() cagrisi yok — degisen kumesi hesaplanmiyor');
+    if (!/ISTEK_TAVANI/.test(kaynak)) kusur.push('istek tavani dilimlemesi yok (10.000 siniri)');
+  }
+
+  ol('T6 · IndexNow zinciri: <anahtar>.txt ciktida + icerik birebir + adresler sitemap\'ten + canli anahtar kapisi POST\'tan once + YALNIZ DEGISEN bildirilir',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 3).join(' · ')
-       : `${txt[0] || '?'} · ${loc.length} adres bildirilecek · kapi yerinde`);
+       : `${txt[0] || '?'} · ${loc.length} adres kapsandi · fark + tavan yerinde`);
 }
 
 /* T2 · TESPIT ARACI SOZLESMESI (5 Eyl 2026 — "sitemi ucretsiz kontrol et"
@@ -1254,10 +1350,24 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        ekle/sil/sirala editoru demektir. */
     const panelKoleksiyon = [...new Set(
       [...panelKod.matchAll(/\blist\(\s*'([a-z][a-zA-Z0-9]*)'/g)].map((m) => m[1]))];
+    /* UCUNCU BICIM: SOZLESMEYE BAGLI OLMAK (9 Eyl 2026).
+       `veri/sayfalar.json`daki bir koleksiyon kaydinin `kaynak` alani o
+       anahtari gosteriyorsa, anahtar rotalara BAGLIDIR — dizin, detay,
+       sayfalama ve sitemap hepsi o kayittan turuyor.
+       NEDEN EKLENDI: bolum mekanizmasi tek gövdeye toplaninca erisim
+       `icerik.posts` olmaktan cikip `icerik[sayfa.kaynak]` /
+       `getCollection(bolum)` oldu — yani DEGISKEN. Duz metin arayan
+       kural, hala calisan `posts`u "okunmuyor" ilan etti. Kuralin
+       OLCUTU dogruydu, TESPITI fazla duzdu: bir anahtarin okundugunu
+       kanitlamanin uc yolu var ve sozlesmeye baglilik en gucusu —
+       cunku sayfa kumesi kurali onu ayrica iki yonlu dogruluyor. */
+    const SZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+    const sozlesmeKaynak = new Set((SZ.koleksiyon || []).map((k) => k.kaynak).filter(Boolean));
     const okunmayan = panelKoleksiyon.filter((ad) =>
       !new RegExp('icerik\\.' + ad + '\\b').test(kod)
       && !new RegExp("getCollection\\(\\s*'" + ad + "'").test(kod)
-      && !new RegExp("'" + ad + "'\\s*:").test(kod));
+      && !new RegExp("'" + ad + "'\\s*:").test(kod)
+      && !sozlesmeKaynak.has(ad));
     for (const ad of okunmayan)
       kusur.push('panelde `' + ad + '` editoru VAR ama site onu OKUMUYOR (bos kapi)');
   }
@@ -1354,6 +1464,533 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length ? kusur.slice(0, 3).join(' | ')
        : (gtm ? 'panel dolu · 2 kabuk sayfasi etiketli · 2 film yuzeyi temiz'
               : 'panel `settings.gtm` bos — etiket hicbir yerde yok, film yuzeyi yine temiz'));
+}
+
+/* T10 · "DIGER YAZILAR" SERIDI TAVANLI (9 Eyl 2026 — Enes: "seridi
+   duzelt tavani 8 kart yap").
+   NEDEN YAZILDI: serit ONCEDEN TAVANSIZDI (`tum.length - 1`) ve bu, 10 ->
+   10.000 olcum turunun BULDUGU TEK GERCEK MIMARI KIRILMAYDI (rapor:
+   ICERIK-MIMARISI-OLCUM.md BULGU 1). Olculdu, 200 gonderiyle gercek
+   derleme: gonderi HTML'inin %67'si, .md esinin %94'u seritti; urun N×N.
+   10.000 gonderide tek yazinin HTML'i 3,3 MB, llms-full.txt 38,2 GB
+   olacakti. Tavan sonrasi ayni olcum: HTML 98.949 -> 35.617 B, .md
+   40.233 -> 3.826 B, llms-full 16,08 -> 1,79 MB.
+
+   NEDEN KAPI SART: tavan TEK BIR `Math.min` cagrisi. Onu silen ya da
+   `TAVAN`i buyuten bir duzenleme bugun HICBIR belirti vermez — site 6
+   gonderilik oldugu icin cikti bayt-birebir ayni kalir (tavan 9'un
+   altinda hic devreye girmez). Kirilma ancak arsiv buyudukten AYLAR
+   SONRA, hem de sessizce geri gelir. Tam da "olculmeyen sey geri doner"
+   vakasi.
+
+   IKI TARAFTA OLCULUR (ders: [[qanatone-denetim-kural-yazimi]] — kural
+   kaynagi tararken YORUMLARI AYIKLAMALI ve MARKUP'a bakmali):
+     1) KAYNAK: YaziGovde.astro'da tavan gercekten UYGULANIYOR mu.
+        Yorumlar once silinir — bu dosyanin yorum blogunda "TAVAN 8 KART"
+        yaziyor ve ham metinde arama yapan bir kural yorumu KOD sanardi.
+     2) CIKTI: her gonderi sayfasinda BASILI kart sayisi. Beklenen deger
+        `min(TAVAN, gonderi - 1)` — esitlik araniyor, "<= 8" degil:
+        yalniz ust sinir aransa BOS ya da KOPUK bir serit de gecerdi
+        (nobetci degeri olcer, salteri gormez). Bugun 6 gonderi var, yani
+        beklenen 5; tavan devreye girmiyor ve kural yine de anlamli. */
+{
+  const kusur = [];
+  const KARAR_TAVAN = 8;   // Enes, 9 Eyl 2026: "tavani 8 kart yap"
+  const oku = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
+
+  const kaynakYolu = path.join(__dirname, 'src', 'parcalar', 'YaziGovde.astro');
+  const ham = oku(kaynakYolu);
+  let TAVAN = null;
+  if (ham === null) {
+    kusur.push('kaynak okunamadi: src/parcalar/YaziGovde.astro');
+  } else {
+    /* Yorumlar (blok + satir) silinir; kalan KOD'dur. */
+    const kod = ham.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
+    const bildirim = kod.match(/const\s+TAVAN\s*=\s*(\d+)/);
+    const uygulama = /Math\.min\s*\(\s*TAVAN\s*,/.test(kod);
+    if (!bildirim) kusur.push('kodda `const TAVAN = <sayi>` yok (yorum sayilmaz)');
+    else TAVAN = parseInt(bildirim[1], 10);
+    if (!uygulama) kusur.push('tavan UYGULANMIYOR: serit uzunlugunda `Math.min(TAVAN, …)` yok');
+    /* DEGER DE KAPIDA. Yalniz tutarlilik olculseydi (kaynak = cikti)
+       TAVAN'i 30'a cikaran bir duzenleme SESSIZCE gecerdi: cikti da 30
+       kart basar, iki taraf tutar, kural yesil yanar — ve kirilma geri
+       gelir. Sayi Enes'in verdigi KARAR (9 Eyl 2026), turev degil; bu
+       yuzden burada sabit duruyor. Tavani degistirmek isteyen bu satiri
+       da degistirmek zorunda — yani karar gorunur ve kasitli olur. */
+    if (TAVAN !== null && TAVAN !== KARAR_TAVAN) {
+      kusur.push('TAVAN = ' + TAVAN + ', Enes\'in karari ' + KARAR_TAVAN
+        + ' (9 Eyl 2026) — degisiklik bilincliyse bu kuraldaki KARAR_TAVAN da guncellenmeli');
+    }
+  }
+
+  if (TAVAN !== null && !kusur.length) {
+    const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+    const adet = Array.isArray(icerik.posts) ? icerik.posts.length : 0;
+    const beklenen = Math.min(TAVAN, Math.max(0, adet - 1));
+
+    /* Serit yalniz `digerleri.length > 0` iken basiliyor — tek gonderili
+       sitede kart aranmaz, kural konusuz kalir. */
+    const sayfalar = [];
+    for (const on of ['bulten', path.join('en', 'bulten')]) {
+      const d = path.join(KOK, on);
+      let girdiler;
+      try { girdiler = fs.readdirSync(d, { withFileTypes: true }); } catch (e) { continue; }
+      for (const e of girdiler) {
+        if (!e.isDirectory()) continue;
+        const p = path.join(d, e.name, 'index.html');
+        if (fs.existsSync(p)) sayfalar.push(p);
+      }
+    }
+    if (!sayfalar.length) kusur.push('ciktida hic gonderi sayfasi bulunamadi (' + KOK + '/bulten)');
+
+    for (const p of sayfalar) {
+      const h = oku(p);
+      if (h === null) { kusur.push('okunamadi: ' + path.relative(KOK, p)); continue; }
+      const kart = (h.match(/class="nrcard"/g) || []).length;
+      if (kart !== beklenen) {
+        /* Teshis kart sayisini BEKLENENLE kiyaslar, tavanla degil: 8
+           kart beklenirken 8 basilmasi dogru, 5 beklenirken 8 basilmasi
+           BAYAT CIKTI'dir (icerik degisti, derleme yapilmadi) — ikisi de
+           "tavan asildi" degil ve ayri sebepler. */
+        const neden = kart > TAVAN ? 'TAVAN ASILMIS'
+          : kart > beklenen ? 'fazla kart — bayat dist? (icerik degisti, derleme yapilmadi)'
+          : 'serit eksik/kopuk';
+        kusur.push(path.relative(KOK, p) + ': ' + kart + ' kart, beklenen ' + beklenen + ' — ' + neden);
+      }
+    }
+
+    ol('T10 · "diger yazilar" seridi tavanli: kaynakta Math.min(TAVAN) + her gonderi sayfasinda min(TAVAN, gonderi-1) kart',
+       kusur.length === 0,
+       kusur.length ? kusur.slice(0, 3).join(' | ')
+         : 'TAVAN ' + TAVAN + ' · ' + adet + ' gonderi · beklenen ' + beklenen
+           + ' kart · ' + sayfalar.length + ' sayfa birebir'
+           + (adet - 1 > TAVAN ? ' (tavan devrede)' : ' (tavan henuz devrede degil)'));
+  } else {
+    ol('T10 · "diger yazilar" seridi tavanli: kaynakta Math.min(TAVAN) + her gonderi sayfasinda min(TAVAN, gonderi-1) kart',
+       false, kusur.slice(0, 3).join(' | '));
+  }
+}
+
+/* T11 · SAYFALI DIZIN SOZLESMESI (9 Eyl 2026 — Enes: 12 yazi/sayfa).
+   Sayfa kumesi kurali sayfalarin VARLIGINI iki yonlu tutuyor; bu kural
+   onun goremedigi UC seyi tutar.
+
+   1) `/bulten/sayfa/1` OLMAMALI. Ayni listeyi iki adresten sunmak kopya
+      icerik; 1. sayfa `/bulten`tir.
+   2) ItemList SAYFANIN KENDI DILIMI OLMALI. Bu, turun EN PAHALI
+      bulgusuydu: sema TUM arsivi her sayfaya basiyordu — 200 yazida
+      ItemList 96.950 B, dizin sayfasinin %72'si, 17 sayfada 1,65 MB
+      tekrar. Serit kusurunun (BULGU 1) sema tarafindaki ikizi, ayni
+      O(N×N). Duzeltildi (46.502 B) ve BURASI onu geri gelmekten alikoyar:
+      ItemList oge sayisi = o sayfadaki KART sayisi = beklenen dilim.
+      Uc sayi birden tutmali, ikisi degil.
+   3) Sayfali sayfa KENDINE kanonik olmali. 1'e kanoniklemek Google'a
+      "beni indeksleme" demek olurdu; o zaman 2+ sayfalardaki yazilara
+      giden baglar da taranmaz, arsivin kuyrugu kesilir.
+   Ayrica gezinme NUMARALI mi (yalniz ileri/geri degil): numarasiz
+   sayfalamada 40. sayfa ana sayfadan 40 tiklama derinliginde kalir. */
+{
+  const kusur = [];
+  const oku2 = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const K = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
+    .koleksiyon.find((k) => k.ad === 'yazilar');
+
+  if (!K || !K.sayfa_boyu || !K.sayfa_yolu) {
+    kusur.push('sayfalar.json`da yazilar icin sayfa_boyu/sayfa_yolu yok — sayfalama sozlesmesi kayip');
+  } else {
+    const adet = (c.posts || []).length;
+    const boy = K.sayfa_boyu;
+    const toplam = Math.max(1, Math.ceil(adet / boy));
+
+    for (const on of ['', '/en']) {
+      const kokDizin = path.join(KOK, on.replace(/^\//, ''), 'bulten');
+      /* 1 · /sayfa/1 olmamali */
+      if (fs.existsSync(path.join(kokDizin, 'sayfa', '1', 'index.html')))
+        kusur.push((on || '/tr') + ': /bulten/sayfa/1 URETILMIS — kopya icerik');
+
+      for (let n = 1; n <= toplam; n++) {
+        const p = n === 1 ? path.join(kokDizin, 'index.html')
+                          : path.join(kokDizin, 'sayfa', String(n), 'index.html');
+        const h = oku2(p);
+        if (h === null) { kusur.push((on || '/tr') + ':sayfa' + n + ' okunamadi'); continue; }
+
+        /* 2 · ItemList = kart = beklenen dilim */
+        const beklenenDilim = Math.min(boy, adet - (n - 1) * boy);
+        const kart = (h.match(/class="bkc" href/g) || []).length;
+        const ldM = h.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
+        let oge = null;
+        if (ldM) {
+          try {
+            const g = JSON.parse(ldM[1]);
+            const il = ((g['@graph'] || [g]).find((x) => x['@type'] === 'ItemList'));
+            oge = il && Array.isArray(il.itemListElement) ? il.itemListElement.length : null;
+          } catch (e) { /* asagida null olarak yakalanir */ }
+        }
+        if (oge === null) kusur.push((on || '/tr') + ':sayfa' + n + ': ItemList okunamadi');
+        else if (oge !== beklenenDilim || kart !== beklenenDilim)
+          kusur.push((on || '/tr') + ':sayfa' + n + ': kart ' + kart + ' · ItemList ' + oge
+            + ' · beklenen ' + beklenenDilim + (oge > beklenenDilim ? ' — SEMA TUM ARSIVI BASIYOR' : ''));
+
+        /* 3 · kendine kanonik */
+        const can = (h.match(/<link rel="canonical" href="([^"]+)"/) || [])[1] || '';
+        const bekCan = n === 1 ? on + '/bulten' : on + K.sayfa_yolu.replace('{n}', String(n));
+        if (can.replace(/\/$/, '').replace(/^https?:\/\/[^/]+/, '') !== bekCan.replace(/\/$/, ''))
+          kusur.push((on || '/tr') + ':sayfa' + n + ': canonical ' + can + ' (beklenen …' + bekCan + ')');
+
+        /* 4 · gezinme numarali mi (yalniz cok sayfaliyken anlamli) */
+        if (toplam > 1) {
+          const nav = (h.match(/<nav class="bksf"[\s\S]*?<\/nav>/) || [])[0] || '';
+          if (!nav) kusur.push((on || '/tr') + ':sayfa' + n + ': sayfalama gezinmesi YOK');
+          else {
+            /* ETIKETI CIPLAK ARAMA: Astro her ogeye `data-astro-cid-…`
+               kapsam ozniteligi basar, yani ciktida `<ol>` degil
+               `<ol data-astro-cid-xg7gohwu>` durur. Ilk yazimda `<ol>`
+               aranmisti ve kural KENDI YESIL VAKASINDA kirmizi yandi —
+               ozellik dogruydu, bekci yanlisti. (Yorum ayiklama dersinin
+               kardesi: kaynagi da ciktiyi da OLDUGU GIBI okumak gerekir.)
+               Olcut ayrica NIYETI olcuyor: numarali gezinmenin tanimi
+               "iki ya da daha fazla sayfa NUMARASI bag/gecerli oge
+               olarak basili" — sadece <ol> varligi degil. */
+            const numara = (nav.match(/>\s*\d+\s*</g) || []).length;
+            if (!/<ol[\s>]/.test(nav) || numara < 2)
+              kusur.push((on || '/tr') + ':sayfa' + n + ': gezinme numarasiz ('
+                + numara + ' numara) — derinlik tavani riski');
+          }
+        }
+      }
+    }
+  }
+
+  ol('T11 · sayfali dizin: /sayfa/1 yok + ItemList = kart = sayfa dilimi + kendine kanonik + numarali gezinme',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : (K && K.sayfa_boyu
+           ? `${(c.posts || []).length} yazi · ${K.sayfa_boyu}/sayfa · ${Math.max(1, Math.ceil((c.posts || []).length / K.sayfa_boyu))} sayfa x 2 dil`
+           : '-'));
+}
+
+/* T12 · BOLUM SOZLESMESI (9 Eyl 2026 — Enes: "nedir basligi da kur" +
+   "genel haberlerin oldugu bir bolum olacak").
+
+   UC BOLUM TEK GOVDEDEN uretiliyor (`BolumDizin` + `YaziGovde`), farklar
+   `veri/sayfalar.json`da veri olarak duruyor. Bu kural o sozlesmenin
+   ciktida gercekten tutuldugunu olcer.
+
+   1) KOSULLU BOLUM IKI YONLU. `kosullu: "<kaynak>"` tasiyan bolum,
+      kaynagi BOSKEN sitede HIC olmamali (sayfa · menu · alt bilgi ·
+      sitemap), DOLUYKEN dordunde de olmali. Bu dort yuzey dort ayri
+      dosyada suzuluyor (Nav.astro · Temel.astro · sitemap.xml.ts ·
+      sayfa kumesi kurali); birinde unutulmasi SESSIZDIR — menude bos
+      bir kapi ya da Google'a bildirilmis bos bir sayfa, kimse fark
+      etmeden aylarca durur. En pahali hal: bolum bos, sitemap dolu.
+
+   2) BOLUMLER BIRBIRINE SIZMAZ. Her bolumun dizini yalniz KENDI
+      koleksiyonunu basmali ve besleme (rss.xml) YALNIZ bulteni
+      tasimali — "nedir" evergreen tanim icerigi, haber degil; besleyip
+      aboneye haber diye gondermek icerigin turunu yanlis bildirmektir.
+
+   3) SEMA TIPI BOLUME GORE. `/nedir` yazilari `DefinedTerm`, bulten ve
+      haber `Article`. Bu, GEO tarafinin besledigi sinyal: tanim
+      icerigini "bu bir kavram aciklamasi" diye bildirmek. */
+{
+  const kusur = [];
+  const oku2 = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+  const ana = oku2(path.join(KOK, 'index.html')) || '';
+  const sm = oku2(path.join(KOK, 'sitemap.xml')) || '';
+
+  /* 1 · KOSULLU BOLUM — dort yuzey, iki yon */
+  for (const s of S.statik) {
+    if (!s.kosullu) continue;
+    const dolu = Array.isArray(c[s.kosullu]) && c[s.kosullu].length > 0;
+    const sayfaVar = fs.existsSync(path.join(KOK, s.yol.replace(/^\//, ''), 'index.html'));
+    const menuVar = new RegExp('href="' + s.yol + '/?"').test(ana);
+    const smVar = new RegExp('<loc>[^<]*' + s.yol + '/?</loc>').test(sm);
+    const bekle = (ad, gercek) => {
+      if (gercek !== dolu) kusur.push(s.yol + ': kaynak ' + (dolu ? 'DOLU' : 'BOS')
+        + ' ama ' + ad + ' ' + (gercek ? 'VAR' : 'YOK'));
+    };
+    bekle('sayfa', sayfaVar);
+    bekle('menu/alt bilgi', menuVar);
+    bekle('sitemap', smVar);
+  }
+
+  /* 2 · BOLUMLER SIZMAZ — KART IZGARASI yalniz kendi koleksiyonunu basar.
+     OLCUT DAR TUTULUYOR: ilk yazimda "sayfada baska bolumun adresi
+     geciyor mu" diye bakiyordu ve KENDI YANLIS KIRMIZISINI verdi —
+     /hizmetler ile /projeler birbirine bag veriyor, ama bu SIZINTI
+     degil GEZINME. Sizinti, o bolumun KART IZGARASINDA baska bolumun
+     kaydinin gorunmesidir; olculen sey `class="bkc" href` baglari.
+     Kural yalniz ortak govdeyi (`BolumDizin`, yani `sayfa_boyu` tasiyan
+     bolumler) kapsar — hizmetler/projeler baska bilesenler. */
+  for (const k of S.koleksiyon) {
+    if (!k.dizin || !k.kaynak || !k.sayfa_boyu) continue;
+    const kayitlar = Array.isArray(c[k.kaynak]) ? c[k.kaynak] : [];
+    if (!kayitlar.length) continue;
+    const p = path.join(KOK, k.dizin.replace(/^\//, ''), 'index.html');
+    const h = oku2(p);
+    if (h === null) { kusur.push(k.dizin + ': dizin sayfasi yok (kaynak dolu)'); continue; }
+    const kartYollari = [...h.matchAll(/class="bkc" href="([^"]+)"/g)].map((m) => m[1]);
+    const yabanci = kartYollari.filter((y) => !y.replace(/^\/en/, '').startsWith(k.dizin + '/'));
+    if (yabanci.length) kusur.push(k.dizin + ': izgarada yabanci kart — ' + yabanci.slice(0, 2).join(', '));
+  }
+
+  /* 2b · BESLEME YALNIZ BULTEN */
+  const rss = oku2(path.join(KOK, 'bulten', 'rss.xml'));
+  if (rss) {
+    for (const k of S.koleksiyon) {
+      if (k.ad === 'yazilar' || !k.dizin) continue;
+      if (rss.includes(k.dizin + '/')) kusur.push('rss: ' + k.dizin + ' icerigi beslemeye girmis');
+    }
+  }
+
+  /* 3 · SEMA TIPI — bolumun ItemList item tipi sozlesmedekiyle ayni */
+  const TIP = { nedir: 'DefinedTerm', yazilar: 'Article', haberler: 'Article' };
+  for (const k of S.koleksiyon) {
+    if (!TIP[k.ad] || !Array.isArray(c[k.kaynak]) || !c[k.kaynak].length) continue;
+    const h = oku2(path.join(KOK, k.dizin.replace(/^\//, ''), 'index.html'));
+    if (!h) continue;
+    const m = h.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
+    if (!m) { kusur.push(k.dizin + ': JSON-LD yok'); continue; }
+    let tip = null;
+    try {
+      const g = JSON.parse(m[1]);
+      const il = (g['@graph'] || [g]).find((x) => x['@type'] === 'ItemList');
+      tip = il && il.itemListElement[0] && il.itemListElement[0].item['@type'];
+    } catch (e) { /* asagida null */ }
+    if (tip !== TIP[k.ad]) kusur.push(k.dizin + ': ItemList tipi ' + tip + ', beklenen ' + TIP[k.ad]);
+  }
+
+  /* 4 · PANEL ANAHTARI CAKISMAZ (9 Eyl 2026 — yakalandi, ates etti).
+     Her statik kaydin `anahtar`i panel metin haritasinda KENDI etiketine
+     cozulmeli. BULUNAN VAKA: /nedir'e `nav7` verilmisti, ama o anahtar
+     zaten Nav.astro:110'daki "Studyo" acilir basligindaydi. Harita
+     sessizce uzerine yaziyor — Enes "Nedir" etiketini duzeltirken
+     menudeki "Studyo" yazisini degistirirdi ve belirti ancak siteye
+     bakinca cikardi. `sayfalar.json` tek basina hangi anahtarin bos
+     oldugunu BILMIYOR; kesisimi yalniz bu kural gorur. */
+  {
+    const panel = fs.readFileSync(path.join(__dirname, '..', 'admin.html'), 'utf8');
+    const m = panel.match(/METIN_HARITA=(\{[\s\S]*?\});/);
+    if (!m) kusur.push('admin.html icinde METIN_HARITA bulunamadi');
+    else {
+      let harita = null;
+      try { harita = JSON.parse(m[1]); } catch (e) { kusur.push('METIN_HARITA cozulemedi'); }
+      if (harita) {
+        const gorulen = new Map();
+        for (const s of S.statik) {
+          if (!s.anahtar) continue;
+          if (gorulen.has(s.anahtar))
+            kusur.push('anahtar `' + s.anahtar + '` iki statik kayitta: ' + gorulen.get(s.anahtar) + ' ve ' + s.yol);
+          gorulen.set(s.anahtar, s.yol);
+          const h = harita[s.anahtar];
+          if (h && h.tr && s.tr && h.tr !== s.tr)
+            kusur.push('anahtar `' + s.anahtar + '` CAKISIYOR: ' + s.yol + ' "' + s.tr
+              + '" ama panelde "' + h.tr + '" (' + h.b + ')');
+        }
+      }
+    }
+  }
+
+  const kosullular = S.statik.filter((s) => s.kosullu);
+  ol('T12 · bolum sozlesmesi: kosullu bolum dort yuzeyde tutarli + bolumler sizmaz + sema tipi bolume gore + panel anahtari cakismaz',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : kosullular.map((s) => s.yol + (Array.isArray(c[s.kosullu]) && c[s.kosullu].length
+           ? ' DOLU(' + c[s.kosullu].length + ')' : ' bos')).join(' · ')
+         + ' · ' + S.koleksiyon.length + ' koleksiyon');
+}
+
+/* T13 · KULLANILAN HER KONUNUN ETIKETI VAR (9 Eyl 2026).
+
+   NEDEN YAZILDI — BU KUSURU BEN ACTIM. Konu arsivlerini kurarken
+   (`/bulten/konu/<k>`) etiket haritasini KODDA biraktim; oysa arsiv
+   sayfasinin BASLIGI o etiketten turuyor. Panelden etiketi olmayan bir
+   konu anahtari gelseydi baslik ham anahtar olurdu — "talep — Bülten —
+   QANATONE" yerine sayfada gercekten "talep" yazardi ve bunu hicbir sey
+   soylemezdi. Etiketler `content.json.topics`e tasindi; bu kural
+   tasimanin GERI ALINAMAZ olmasini saglar.
+
+   IKI YONLU OLCUM:
+   (a) Yazilarin kullandigi HER konu anahtarinin tabloda karsiligi olmali.
+       Yoksa arsiv basligi ham anahtar olur — VE bu, panelden bir konuyu
+       SILMENIN de belirtisidir (yazilar o konuda kalmis olur).
+   (b) Uretilen arsiv sayfasinin <h1>/<title>'i ham anahtar OLMAMALI.
+       (a) kaynagi, (b) ciktiyi olcer; ikisi ayri hattir — birinde dogru
+       gorunup obununde kayan bir vaka bu depoda daha once oldu.
+
+   TABLONUN KENDI SAGLIGI da burada: anahtar tekrar etmemeli ve adreste
+   gorunecegi icin yalniz kucuk harf/rakam/tire tasimali. */
+{
+  const kusur = [];
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+  const tablo = Array.isArray(c.topics) ? c.topics : [];
+  const etiket = new Map();
+
+  /* Tablonun kendi sagligi */
+  for (const t of tablo) {
+    const k = t && String(t.k || '');
+    if (!k) { kusur.push('konu tablosunda anahtarsiz kayit'); continue; }
+    if (etiket.has(k)) kusur.push('konu anahtari tekrar ediyor: ' + k);
+    if (!/^[a-z0-9-]+$/.test(k)) kusur.push('konu anahtari adreste kullanilamaz: ' + k);
+    if (!String(t.tr || '').trim()) kusur.push('konu `' + k + '` TR etiketi bos');
+    etiket.set(k, String(t.tr || ''));
+  }
+
+  /* (a) KAYNAK — arsiv alani olan her koleksiyonda kullanilan anahtarlar */
+  for (const kol of S.koleksiyon) {
+    if (!kol.arsiv_alan || !Array.isArray(c[kol.kaynak])) continue;
+    const kullanilan = new Set(c[kol.kaynak]
+      .map((x) => String((x || {})[kol.arsiv_alan] || '')).filter(Boolean));
+    for (const k of kullanilan)
+      if (!etiket.has(k))
+        kusur.push(kol.kaynak + ' `' + k + '` konusunu kullaniyor ama tabloda YOK'
+          + ' — arsiv basligi ham anahtar olur');
+  }
+
+  /* (b) CIKTI — uretilmis arsiv sayfalarinin basligi ham anahtar olmasin */
+  for (const kol of S.koleksiyon) {
+    if (!kol.arsiv_yolu || !Array.isArray(c[kol.kaynak])) continue;
+    const kullanilan = [...new Set(c[kol.kaynak]
+      .map((x) => String((x || {})[kol.arsiv_alan] || '')).filter(Boolean))];
+    for (const k of kullanilan) {
+      const p = path.join(KOK, kol.arsiv_yolu.replace('{k}', k).replace(/^\//, ''), 'index.html');
+      const h = (() => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } })();
+      if (h === null) { kusur.push('arsiv sayfasi yok: ' + kol.arsiv_yolu.replace('{k}', k)); continue; }
+      const t = (h.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+      /* Ham anahtar basligi: baslik dogrudan anahtarla basliyorsa. */
+      if (t.trim().toLowerCase().startsWith(k.toLowerCase() + ' —'))
+        kusur.push(kol.arsiv_yolu.replace('{k}', k) + ': baslik HAM ANAHTAR ("' + t.slice(0, 40) + '")');
+    }
+  }
+
+  ol('T13 · konu tablosu: kullanilan her anahtarin etiketi var (kaynak + cikti) · anahtar tekil ve adreste gecerli',
+     kusur.length === 0,
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : tablo.length + ' konu · ' + [...etiket.keys()].join(', '));
+}
+
+/* T14 · SEKTOR BAGI (9 Eyl 2026 — Enes: "hangi yazi hangi sektorde;
+   yaziyi girerken panelden sektor secilmeli ve o sektore yerlesmeli,
+   boylece icerigin ne icerigi oldugu bilinir").
+
+   `/sektor/<k>` BOLUM USTU bir kesittir: bulten, nedir ve haber
+   icerigini birlikte toplar. Kural dort seyi tutar.
+
+   (1) GOC TAMAMLANDI MI — EN KRITIGI. `sector` alani 9 Eyl'e kadar
+       KONUYU tutuyordu (talep/reklam/arama/sektor); gercek sektor bagi
+       gelince degerler `topic`e tasindi ve `sector` bosaldi. Iki kume
+       AYRIK oldugu icin (olculdu: kesisim bos) yarim kalmis bir goc
+       MAKINEYLE gorulebilir: `sector` alaninda bir KONU anahtari
+       duruyorsa o kayit tasinmamistir. Bu, elle duzenlenmis bir
+       content.json'da ya da bayat bir panel taslaginda ortaya cikar —
+       ve belirtisi, yazinin YANLIS ARSIVE dusmesidir.
+   (2) Kullanilan her sektor anahtari `sectors` tablosunda olmali;
+       yoksa arsiv basligi ham anahtar olur (T13'un sektor ikizi).
+   (3) Icerigi OLAN her sektorun arsivi uretilmis, icerigi OLMAYANIN
+       arsivi URETILMEMIS olmali — bos sektor sayfasi ince icerik.
+   (4) Arsivdeki her kart gercekten o sektorun icerigi olmali. */
+{
+  const kusur = [];
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const S = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'));
+  const SA = S.sektor_arsivi;
+
+  if (!SA) {
+    kusur.push('sayfalar.json`da `sektor_arsivi` kaydi yok');
+  } else {
+    const sektorler = new Set((c.sectors || []).map((s) => String(s.k || '')).filter(Boolean));
+    const konular = new Set((c.topics || []).map((t) => String(t.k || '')).filter(Boolean));
+    const kaynaklar = SA.bolumler
+      .map((b) => (S.koleksiyon.find((x) => x.ad === b) || {}).kaynak)
+      .filter(Boolean);
+
+    /* (1) GOC + (2) tablo karsiligi */
+    const say = {};
+    for (const kaynak of kaynaklar) {
+      for (const e of (c[kaynak] || [])) {
+        const v = String((e || {})[SA.alan] || '');
+        if (!v) continue;
+        if (konular.has(v) && !sektorler.has(v)) {
+          kusur.push(kaynak + '/' + e.slug + ': `sector` alaninda KONU anahtari ("' + v
+            + '") — goc yarim kalmis, yazi yanlis arsive duser');
+          continue;
+        }
+        if (!sektorler.has(v))
+          kusur.push(kaynak + '/' + e.slug + ': `' + v + '` sektoru `sectors` tablosunda YOK');
+        say[v] = (say[v] || 0) + 1;
+      }
+    }
+
+    /* (3) uretim iki yonlu + (4) kart sahipligi */
+    const varMi = (k) => fs.existsSync(path.join(KOK, SA.yol.replace('{k}', k).replace(/^\//, ''), 'index.html'));
+    for (const k of sektorler) {
+      const dolu = (say[k] || 0) > 0;
+      if (dolu !== varMi(k))
+        kusur.push('/sektor/' + k + ': icerik ' + (dolu ? 'VAR' : 'YOK')
+          + ' ama arsiv sayfasi ' + (varMi(k) ? 'URETILMIS' : 'URETILMEMIS'));
+    }
+    for (const [k, adet] of Object.entries(say)) {
+      if (!varMi(k)) continue;
+      /* Sayfa 1'deki kartlarin slug'lari o sektorun icerigi mi */
+      const h = fs.readFileSync(path.join(KOK, SA.yol.replace('{k}', k).replace(/^\//, ''), 'index.html'), 'utf8');
+      const sluglar = [...h.matchAll(/<a class="bkc" href="[^"]*\/([^"/]+)\/"/g)].map((m) => m[1]);
+      const sahip = new Set();
+      for (const kaynak of kaynaklar)
+        for (const e of (c[kaynak] || []))
+          if (String((e || {})[SA.alan] || '') === k) sahip.add(e.slug);
+      const yabanci = sluglar.filter((s) => !sahip.has(s));
+      if (yabanci.length)
+        kusur.push('/sektor/' + k + ': yabanci kart — ' + yabanci.slice(0, 2).join(', '));
+      /* Sayfa sayisi sozlesmeyle ayni mi */
+      const t = Math.max(1, Math.ceil(adet / SA.sayfa_boyu));
+      for (let n = 2; n <= t; n++) {
+        const p = path.join(KOK, SA.sayfa_yolu.replace('{k}', k).replace('{n}', String(n)).replace(/^\//, ''), 'index.html');
+        if (!fs.existsSync(p)) kusur.push('/sektor/' + k + '/sayfa/' + n + ' uretilmemis');
+      }
+    }
+
+    /* (5) LISTE SAYFASI LISTE SEMASI TASIMALI (9 Eyl 2026 — bulundu).
+       Ilk surumde sektor arsivi yalniz `anaSema` tasiyordu: bulten
+       dizininde ve konu arsivinde ItemList VARKEN sektorde YOKTU. Bir
+       liste sayfasinin ne listeledigini semada soylememesi, tam da
+       GEO tarafinin okudugu sinyali eksik birakmak demek — ve hicbir
+       kapi bunu goremiyordu (T12'nin sema olcutu yalniz `koleksiyon`
+       kayitlarini kapsiyor, sektor arsivi bir KESIT).
+       UC SAYI BIRDEN: ItemList oge sayisi = sayfadaki KART sayisi =
+       beklenen dilim. Ikisi tutup ucuncusu kaymasin. */
+    for (const k of Object.keys(say)) {
+      if (!varMi(k)) continue;
+      const p = path.join(KOK, SA.yol.replace('{k}', k).replace(/^\//, ''), 'index.html');
+      const h = fs.readFileSync(p, 'utf8');
+      const kart = (h.match(/class="bkc" href/g) || []).length;
+      const beklenen = Math.min(SA.sayfa_boyu, say[k]);
+      const m = h.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
+      let oge = null;
+      if (m) {
+        try {
+          const g = JSON.parse(m[1]);
+          const il = (g['@graph'] || [g]).find((x) => x['@type'] === 'ItemList');
+          oge = il && Array.isArray(il.itemListElement) ? il.itemListElement.length : null;
+        } catch (e) { /* asagida null */ }
+      }
+      if (oge === null)
+        kusur.push('/sektor/' + k + ': ItemList YOK — liste sayfasi liste semasi tasimiyor');
+      else if (oge !== beklenen || kart !== beklenen)
+        kusur.push('/sektor/' + k + ': kart ' + kart + ' · ItemList ' + oge + ' · beklenen ' + beklenen);
+    }
+
+    ol('T14 · sektor bagi: goc tamam · anahtar `sectors`ta · arsiv iki yonlu · kartlar o sektorun · ItemList = kart = dilim',
+       kusur.length === 0,
+       kusur.length ? kusur.slice(0, 3).join(' | ')
+         : (Object.keys(say).length
+             ? Object.entries(say).map(([k, n]) => k + '(' + n + ')').join(' · ')
+             : 'hicbir icerik sektore baglanmamis — arsiv uretilmedi (dogru)'));
+  }
+  if (!SA) ol('T14 · sektor bagi', false, kusur.join(' | '));
 }
 
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
@@ -1987,22 +2624,45 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
   const D = (v, dil) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  /* SAYFALAMAYLA GUNCELLENDI (9 Eyl 2026). Kural ONCEDEN "her yazi
+     `bulten/index.html`de" diyordu; 12 yazi/sayfa gelince 13. yazidan
+     itibaren KIRMIZI yanardi — uretec dogru, kural bayat. Yeni olcut
+     DAHA SIKI: yazi yalnizca "bir yerde" degil, AIT OLDUGU sayfada
+     aranir. Sayfa numarasi ureteciyle AYNI formulden (tarihe gore
+     yeni->eski, `sayfa_boyu`luk dilim) turer; uretec kayarsa kural
+     yakalar. Sayi `sayfalar.json`dan okunur, burada yazmaz. */
+  const SK = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
+    .koleksiyon.find((k) => k.ad === 'yazilar');
+  const BOY = SK.sayfa_boyu || Infinity;
+  const sirali = (c.posts || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const sayfaDosyasi = (dil, n) => path.join(KOK, dil === 'en' ? 'en/bulten' : 'bulten',
+    n <= 1 ? 'index.html' : path.join('sayfa', String(n), 'index.html'));
+
   const kusur = [];
+  const toplamSayfa = Math.max(1, Math.ceil(sirali.length / BOY));
   for (const dil of ['tr', 'en']) {
-    const p = path.join(KOK, dil === 'en' ? 'en/bulten' : 'bulten', 'index.html');
-    if (!fs.existsSync(p)) { kusur.push(dil + ':sayfa yok'); continue; }
-    const ham = oku(p), duz = coz(ham);
-    for (const y of c.posts) {
-      if (!duz.includes(coz(D(y.title, dil)))) kusur.push(`${dil}:${y.slug}:ad`);
-      if (!duz.includes(coz(D(y.lede, dil)))) kusur.push(`${dil}:${y.slug}:lede`);
-      if (!ham.includes(`datetime="${y.date}"`)) kusur.push(`${dil}:${y.slug}:tarih`);
-      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
-        kusur.push(`${dil}:${y.slug}:bağlantı`);
+    /* Once TUM sayfalar var mi + form her sayfada statik mi */
+    for (let n = 1; n <= toplamSayfa; n++) {
+      const p = sayfaDosyasi(dil, n);
+      if (!fs.existsSync(p)) { kusur.push(`${dil}:sayfa${n} yok`); continue; }
+      const ham = oku(p);
+      if (!/<form[^>]*name="bulletin"[^>]*method="POST"/i.test(ham) ||
+          !ham.includes('name="form-name" value="bulletin"') ||
+          !ham.includes('name="website"'))
+        kusur.push(`${dil}:sayfa${n}:abone formu statik değil`);
     }
-    if (!/<form[^>]*name="bulletin"[^>]*method="POST"/i.test(ham) ||
-        !ham.includes('name="form-name" value="bulletin"') ||
-        !ham.includes('name="website"'))
-      kusur.push(dil + ':abone formu statik değil');
+    /* Sonra her yazi KENDI sayfasinda mi */
+    sirali.forEach((y, i) => {
+      const n = Math.floor(i / BOY) + 1;
+      const p = sayfaDosyasi(dil, n);
+      if (!fs.existsSync(p)) return;              /* yukarida zaten kusur */
+      const ham = oku(p), duz = coz(ham);
+      if (!duz.includes(coz(D(y.title, dil)))) kusur.push(`${dil}:${y.slug}:ad(s${n})`);
+      if (!duz.includes(coz(D(y.lede, dil)))) kusur.push(`${dil}:${y.slug}:lede(s${n})`);
+      if (!ham.includes(`datetime="${y.date}"`)) kusur.push(`${dil}:${y.slug}:tarih(s${n})`);
+      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
+        kusur.push(`${dil}:${y.slug}:bağlantı(s${n})`);
+    });
   }
   ol('R4 · bülten dizini: her yazı ad+lede+tarih+bağlantı ham HTML\'de + statik abone formu',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
@@ -2207,13 +2867,28 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     const c = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
     const rss = oku(rssYol);
     const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
-    for (const p of (c.posts || []))
+    /* RSS TAVANI 50 (Enes, 9 Eyl 2026). BU KURAL ONCEDEN "item seti =
+       posts seti" diyordu; tavanla birlikte olcut "= EN YENI min(50, N)"
+       oldu. Ikisi AYNI ANDA degismeseydi 51. yazi eklendigi gun deploy
+       duserdi — ureteci degistirip kapiyi unutmak, bu depoda daha once
+       ates etmis bir kusur. Tavan sayisi uretecten (rss.xml.ts kaynagi)
+       OKUNUR, burada tekrar YAZILMAZ: iki yerde duran sayi kayar. */
+    const rssKaynak = fs.readFileSync(path.join(__dirname, 'src', 'pages', 'bulten', 'rss.xml.ts'), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, ' ');
+    const tavanM = rssKaynak.match(/RSS_TAVAN\s*=\s*(\d+)/);
+    if (!tavanM) kusur.push('rss.xml.ts icinde RSS_TAVAN bulunamadi (yorum sayilmaz)');
+    const TAVAN = tavanM ? parseInt(tavanM[1], 10) : 0;
+    /* Beklenen kume: tarihe gore yeni->eski ilk TAVAN yazi — ureteciyle
+       AYNI siralama, yoksa "hangi 50" sorusunda ayrisirlar. */
+    const beklenenPosts = (c.posts || []).slice()
+      .sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, TAVAN);
+    for (const p of beklenenPosts)
       /* guid EGIK CIZGIYLE biter (6 Eyl 2026, H29 kapsami rss'e genisledi). */
       if (!guidler.includes(`${KONAK}/bulten/${p.slug}/`)) kusur.push('rss-eksik:' + p.slug);
-    if (guidler.length !== (c.posts || []).length) kusur.push(`rss-sayi:${guidler.length}/${(c.posts || []).length}`);
+    if (guidler.length !== beklenenPosts.length) kusur.push(`rss-sayi:${guidler.length}/${beklenenPosts.length}`);
     if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
   }
-  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + rss item seti = posts',
+  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + rss item seti = en yeni min(RSS_TAVAN, posts)',
      kusur.length === 0, kusur.slice(0, 3).join(' | '));
 }
 

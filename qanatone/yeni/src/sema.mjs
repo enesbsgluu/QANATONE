@@ -122,19 +122,82 @@ export function projeSema(icerik, sayfa, proje) {
    Article şemasıyla aynı (headline/description/datePublished/publisher).
    Sıra tarihe göre yeni→eski: dizin sayfası da böyle basıyor (eski
    postsSorted davranışı), şema sayfayla aynı sırayı anlatmalı. */
+/* ItemList SAYFANIN KENDI DILIMI (9 Eyl 2026 — sayfalamayla).
+   ONCEDEN TUM ARSIVI BASIYORDU ve iki ayri kusurdu:
+   1) OLCU: 200 yazida ItemList 96.950 B, dizin sayfasinin %72'si. Her
+      sayfali dizinde AYNI 97 KB tekrarlaniyordu (17 sayfa = 1,65 MB) —
+      serit kusurunun (BULGU 1) sema tarafindaki ikizi, ayni O(N×N).
+   2) DOGRULUK: 3. sayfanin ItemList'i 3. sayfada NE VARSA onu anlatmali.
+      Butun arsivi her sayfada ilan etmek, sayfanin icerigini yanlis
+      bildirmektir — sayfalamanin SEO'daki tum anlamini bozar.
+   `position` MUTLAK kalir (2. sayfa 13'ten baslar): sira arsivdeki sira,
+   sayfa icindeki sira degil — sayfali listelerde dogru olan bu.
+   `sayfa.sayfaNo` verilmezse 1 sayilir (eski cagri bicimi kirilmaz). */
 export function bultenDizinSema(icerik, sayfa) {
   const g = anaSema(icerik, sayfa);
   const dil = sayfa.dil || 'tr';
   const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
-  const yazilar = [...(icerik.posts || [])]
+  /* KONU ARSIVINDE LISTE ONCE SUZULUR (9 Eyl 2026). Suzulmezse konu
+     sayfasinin ItemList'i butun bulteni ilan eder — sayfalamada
+     duzeltilen kusurun aynisi, bu kez konu ekseninde. Bileşendeki
+     suzme ile AYNI olcut: `String(p.topic || '') === konu`. */
+  /* KAYNAK BOLUMDEN (9 Eyl 2026): bulten `posts`, nedir `explainers`,
+     haber `news`. Verilmezse `posts` — eski cagri bicimi kirilmaz. */
+  const tum = [...(icerik[sayfa.kaynak || 'posts'] || [])]
+    .filter((p) => !sayfa.konu || String(p.topic || '') === sayfa.konu)
     .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const boy = sayfa.sayfaBoyu || tum.length || 1;
+  const no = Math.max(1, sayfa.sayfaNo || 1);
+  const bas = (no - 1) * boy;
+  const yazilar = tum.slice(bas, bas + boy);
   g['@graph'].push({
     '@type': 'ItemList', '@id': sayfa.url + '#list',
     itemListElement: yazilar.map((p, i) => ({
-      '@type': 'ListItem', position: i + 1,
+      '@type': 'ListItem', position: bas + i + 1,
       item: {
-        '@type': 'Article', headline: T(p.title), description: T(p.lede),
-        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}/bulten/${p.slug}`),
+        /* TIP BOLUME GORE: nedir yazilari TANIM icerigidir, haber degil.
+           `DefinedTerm` ayni sayfayi arama motoruna ve dil modellerine
+           "bu bir kavram aciklamasi" diye bildirir — GEO tarafinin
+           tam olarak besledigi sinyal. Bulten ve haber `Article`. */
+        '@type': sayfa.tip || 'Article',
+        headline: T(p.title), description: T(p.lede),
+        /* DIZIN YOLU BOLUMDEN: `/bulten` sabiti burada duruyordu ve
+           nedir/haber yazilarini bultenin altina gosterirdi — sema ile
+           gercek adresin ayrismasi, sessiz ve pahali bir kusur. */
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}${sayfa.dizin || '/bulten'}/${p.slug}`),
+        datePublished: p.date,
+        publisher: { '@id': KOK + '/#org' },
+      },
+    })),
+  });
+  return g;
+}
+
+/* SEKTOR ARSIVI SEMASI (9 Eyl 2026).
+   NEDEN AYRI: bulten/konu arsivleri TEK koleksiyondan besleniyor ve
+   `bultenDizinSema` icerigi `icerik[kaynak]`tan kendisi cikariyor.
+   Sektor arsivi BOLUM USTU — uc koleksiyonun karisimi — ve karisim
+   yalnizca sayfayi kuran tarafta biliniyor; bu yuzden kayitlar
+   DISARIDAN veriliyor (`sektorDilim` ciktisi, sayfanin kartlariyla
+   AYNI liste).
+   BULUNDU VE DUZELTILDI: ilk surumde sektor sayfasi yalniz `anaSema`
+   tasiyordu, yani bir LISTE sayfasi LISTE semasi olmadan yayinlaniyordu
+   — bulten dizininde ve konu arsivinde ItemList varken sektorde YOKTU.
+   Hicbir kapi bunu goremiyordu; T14'e olcut eklendi.
+   `position` MUTLAK (2. sayfa 13'ten baslar). Item tipi BOLUME gore:
+   nedir yazilari DefinedTerm, bulten ve haber Article. */
+export function sektorDizinSema(icerik, sayfa, kayitlar, bas) {
+  const g = anaSema(icerik, sayfa);
+  const dil = sayfa.dil || 'tr';
+  const T = (v) => typeof v === 'string' ? v : (v && (v[dil] || v.tr)) || '';
+  g['@graph'].push({
+    '@type': 'ItemList', '@id': sayfa.url + '#list',
+    itemListElement: (kayitlar || []).map((p, i) => ({
+      '@type': 'ListItem', position: (bas || 0) + i + 1,
+      item: {
+        '@type': p._bolum === 'nedir' ? 'DefinedTerm' : 'Article',
+        headline: T(p.title), description: T(p.lede),
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}${p._dizin}/${p.slug}`),
         datePublished: p.date,
         publisher: { '@id': KOK + '/#org' },
       },

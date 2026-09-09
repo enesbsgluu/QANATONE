@@ -1,0 +1,46 @@
+---
+/* KONU ARSIVI (TR) — `/bulten/konu/<k>` · Enes, 9 Eyl 2026:
+   "sektorler arsivlerini yap".
+
+   NEDEN `konu` VE `sektor` DEGIL: sitede "sektor" IKI ayri seyi
+   anlatiyordu — `content.json.sectors` hizmet verilen ALTI SEKTOR,
+   `posts[].topic` ise yazinin KONUSU. Ikincisinden arsiv kurunca
+   `/bulten/sektor/sektor/` gibi bir yol dogacakti (konulardan biri
+   "Sektör verisi"). Veri alani `sector` KALDI, yalniz URL ve arayuz
+   dili durustlestirildi; alti gercek sektorun arsivi icin `/sektor/`
+   adi bos birakildi. Ayrinti: src/konular.ts.
+
+   GOVDE AYNI BILESEN: `BolumDizin` `konu` propuyla cagriliyor —
+   sayfalama, gezinme, sema, abone formu hepsi tek koddan. Ikinci bir
+   dizin bileseni YOK; kopya bilesen, sonradan fark edilen sapmanin
+   en sik kaynagi.
+
+   `getStaticPaths` FONKSIYON BICIMINDE olmali; ok fonksiyonu
+   (`export const … = async () => …`) Astro'da params baglamiyor ve
+   hata rotayi gostermeyen bir mesajla ("Cannot destructure property")
+   dusuyor. Bir derleme turu buna gitti.
+   Bekci: T12. */
+import Temel from '../../../layouts/Temel.astro';
+import BolumDizin from '../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../icerik';
+import { bultenDizinSema } from '../../../sema.mjs';
+import { konuYollari, SAYFA_BOYU } from '../../../sayfalama';
+import { konuAdi } from '../../../konular';
+
+export async function getStaticPaths() {
+  return await konuYollari();
+}
+
+const { k } = Astro.params;
+const konu = String(k);
+const ad = konuAdi(konu, 'tr');
+const canon = sl(`${KOK}/bulten/konu/${konu}`);
+const baslik = `${ad} — Bülten — QANATONE`;
+const aciklama = `${ad} başlığında yazdıklarımız: yapay zekâ, arama ve talep yönetiminde işine dokunan gelişmeler — kaynağıyla.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', konu, sayfaNo: 1, sayfaBoyu: SAYFA_BOYU });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={sl(`${KOK}/en/bulten/konu/${konu}`)} sema={sema}
+  etiket="Bülten">
+  <BolumDizin dil="tr" konu={konu} />
+</Temel>

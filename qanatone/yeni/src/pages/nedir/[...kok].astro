@@ -1,0 +1,32 @@
+---
+/* NEDIR DİZİNİ (TR) — `/nedir`
+
+   NEDEN `[...kok]` VE `index.astro` DEĞİL: bu bölüm KOŞULLU. İçerik
+   panelden gelecek ve `content.json`daki kaynağı boşken bölüm SİTEDE
+   OLMAMALI — boş bir dizin sayfasını Google'a sunmak ince içerik,
+   menüye koymak da hiçbir şey vermeyen bir kapıdır. `index.astro`
+   koşulsuz üretilir; rest parametreli rota `getStaticPaths` boş dizi
+   dönünce hiç sayfa basmaz. İlk yazı eklendiği an bölüm kendiliğinden
+   açılır — kod değişikliği GEREKMEZ.
+   Aynı koşul menüde (Nav.astro), alt bilgide (Temel.astro), sitemap'te
+   ve denetimin sayfa kümesinde `kosullu` alanından okunur. Bekçi: T12. */
+import Temel from '../../layouts/Temel.astro';
+import BolumDizin from '../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../icerik';
+import { bultenDizinSema } from '../../sema.mjs';
+import { bolumDizinYolu, SAYFA_BOYU } from '../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumDizinYolu('nedir');
+}
+
+const canon = sl(`${KOK}/nedir`);
+const baslik = 'Nedir — QANATONE';
+const aciklama = 'Konuların ne olduğunu ve nasıl işlediğini örnekle ve kaynağıyla anlatıyoruz.';
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm', kaynak: 'explainers' });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/nedir`)} helefen={sl(`${KOK}/en/nedir`)} sema={sema}
+  etiket="Nedir">
+  <BolumDizin dil="tr" bolum="nedir" />
+</Temel>

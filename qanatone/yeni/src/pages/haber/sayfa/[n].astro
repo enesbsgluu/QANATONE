@@ -1,0 +1,26 @@
+---
+/* Haberler dizini · 2. ve sonraki sayfalar (TR). 1. sayfa
+   `/haber`; `/sayfa/1` bilinçli YOK (kopya içerik). Kanonik
+   kendine. Gerekçe: `../[...kok].astro`. */
+import Temel from '../../../layouts/Temel.astro';
+import BolumDizin from '../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../icerik';
+import { bultenDizinSema } from '../../../sema.mjs';
+import { bolumSayfaYollari, SAYFA_BOYU } from '../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumSayfaYollari('haberler');
+}
+
+const { n } = Astro.params;
+const sayfa = Number(n);
+const canon = sl(`${KOK}/haber/sayfa/${sayfa}`);
+const baslik = `Haberler — Sayfa ${sayfa} — QANATONE`;
+const aciklama = `Yapay zekâ, arama ve dijital pazarlama tarafında gündem — kaynağıyla. Sayfa ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/haber', tip: 'Article', kaynak: 'news' });
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/haber/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/haber/sayfa/${sayfa}`)} sema={sema}
+  etiket="Haberler">
+  <BolumDizin dil="tr" bolum="haberler" sayfa={sayfa} />
+</Temel>

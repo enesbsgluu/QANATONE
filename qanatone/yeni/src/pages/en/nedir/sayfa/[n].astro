@@ -1,0 +1,26 @@
+---
+/* Explainers dizini · 2. ve sonraki sayfalar (EN). 1. sayfa
+   `/en/nedir`; `/sayfa/1` bilinçli YOK (kopya içerik). Kanonik
+   kendine. Gerekçe: `../[...kok].astro`. */
+import Temel from '../../../../layouts/Temel.astro';
+import BolumDizin from '../../../../parcalar/BolumDizin.astro';
+import { icerik, KOK, sl } from '../../../../icerik';
+import { bultenDizinSema } from '../../../../sema.mjs';
+import { bolumSayfaYollari, SAYFA_BOYU } from '../../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumSayfaYollari('nedir');
+}
+
+const { n } = Astro.params;
+const sayfa = Number(n);
+const canon = sl(`${KOK}/en/nedir/sayfa/${sayfa}`);
+const baslik = `Explainers — Page ${sayfa} — QANATONE`;
+const aciklama = `What the topics are and how they work — with examples and sources. Page ${sayfa}.`;
+const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm', kaynak: 'explainers' });
+---
+<Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/nedir/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/nedir/sayfa/${sayfa}`)} sema={sema}
+  etiket="Explainers">
+  <BolumDizin dil="en" bolum="nedir" sayfa={sayfa} />
+</Temel>

@@ -1,0 +1,29 @@
+---
+/* Sektör arşivi · 2. ve sonraki sayfalar (EN). 1. sayfa
+   `/en/sektor/<k>`; `/sayfa/1` bilinçli YOK. Gerekçe `../[k].astro`. */
+import Temel from '../../../../../layouts/Temel.astro';
+import SektorDizin from '../../../../../parcalar/SektorDizin.astro';
+import { icerik, T, KOK, sl } from '../../../../../icerik';
+import { sektorSayfaYollari, sektorDilim } from '../../../../../sayfalama';
+import { sektorDizinSema } from '../../../../../sema.mjs';
+
+export async function getStaticPaths() {
+  return await sektorSayfaYollari();
+}
+
+const { k, n } = Astro.params;
+const anahtar = String(k);
+const sayfa = Number(n);
+const kayit = (icerik.sectors || []).find((s) => String(s.k) === anahtar) || {};
+const ad = T(kayit.n, 'en') || anahtar;
+const canon = sl(`${KOK}/en/sektor/${anahtar}/sayfa/${sayfa}`);
+const baslik = `${ad} — Page ${sayfa} — Sector — QANATONE`;
+const aciklama = `${ad} sector coverage — bulletin, explainers and news together. Page ${sayfa}.`;
+const dilim = await sektorDilim(anahtar, sayfa);
+const sema = sektorDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' }, dilim.gorunen, dilim.bas);
+---
+<Temel genis dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/sektor/${anahtar}/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/sektor/${anahtar}/sayfa/${sayfa}`)} sema={sema}
+  etiket="Sector">
+  <SektorDizin dil="en" k={anahtar} sayfa={sayfa} />
+</Temel>

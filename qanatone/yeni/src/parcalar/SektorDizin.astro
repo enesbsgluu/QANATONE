@@ -1,0 +1,162 @@
+---
+/* SEKTÖR ARŞİVİ GÖVDESİ (Enes, 9 Eyl 2026) — `/sektor/<k>`.
+
+   BÖLÜM DİZİNİNDEN NEDEN AYRI BİR GÖVDE: `BolumDizin` TEK bir
+   koleksiyonu listeler; burada üç bölümün içeriği YAN YANA duruyor ve
+   her kartın hangi bölümden geldiğini söylemesi gerekiyor (bülten mi,
+   nedir mi, haber mi). Kartın künyesine bölüm rozeti giriyor — aynı
+   bileşeni zorlamak, ikisini de bulanıklaştırırdı.
+
+   ORTAK OLAN NE: kart görünümü, ızgara, sayfalama gezinmesi ve sayfa
+   boyu `BolumDizin` ile AYNI kaynaktan (`sayfalar.json`) geliyor; stil
+   sınıfları da aynı (`.bkgrid`, `.bkc`, `.bksf`) — iki ayrı görünüm
+   doğmasın diye.
+
+   Şablonda karşılaştırma operatörü YOK: Astro derleyicisi `<`
+   işaretini JSX etiketi sanıyor (bu turda bir derleme buna gitti). */
+import { icerik, T, type Dil, sl } from '../icerik';
+import { sektorDilim, SEKTOR } from '../sayfalama';
+import sayfalarVeri from '../veri/sayfalar.json';
+interface Props { dil: Dil; k: string; sayfa?: number }
+const { dil, k, sayfa = 1 } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const on = dil === 'en' ? '/en' : '';
+
+/* Dilim `sektorDilim`den — rotanin JSON-LD icin kullandigi AYNI kaynak.
+   Iki yerde ayri hesaplansaydi sema ile kartlar ayrisirdi. */
+const { hepsi, toplam: toplamSayfa, no: buSayfa, gorunen } = await sektorDilim(k, sayfa);
+
+/* Sektörün adı `content.json.sectors`ten — panelin ürünü. */
+const kayit = (icerik.sectors || []).find((s: any) => String(s.k) === k) || {};
+const sektorAd = T(kayit.n, dil) || k;
+const sektorTanim = T(kayit.d, dil) || '';
+
+/* Bölüm rozeti: kartın hangi bölümden geldiği. Adlar sözleşmeden. */
+const bolumAdi = (b: string) => {
+  const kol = (sayfalarVeri as any).koleksiyon.find((x: any) => x.ad === b) || {};
+  return dil === 'en' ? (kol.en_ad || b) : (kol.tr_ad || b);
+};
+
+const sayfaYolu = (n: number) =>
+  sl(`${B}${on}` + (n <= 1 ? SEKTOR.yol.replace('{k}', k) : SEKTOR.sayfa_yolu.replace('{k}', k).replace('{n}', String(n))));
+
+/* Gezinme penceresi — BolumDizin ile aynı kural (ilk/son her zaman,
+   buSayfa çevresinde ±2), böylece derinlik tavanı korunur. */
+const pencere = new Set<number>([1, toplamSayfa, buSayfa]);
+for (let d = 1; d <= 2; d++) {
+  const geri = buSayfa - d, ileri = buSayfa + d;
+  if (geri >= 1) pencere.add(geri);
+  if (ileri <= toplamSayfa) pencere.add(ileri);
+}
+const pencereListe = [...pencere].sort((a, b) => a - b);
+const sayfaParcalari: (number | null)[] = [];
+pencereListe.forEach((n, i) => {
+  if (i > 0 && n - pencereListe[i - 1] > 1) sayfaParcalari.push(null);
+  sayfaParcalari.push(n);
+});
+const oncekiVar = buSayfa > 1;
+const sonrakiVar = buSayfa < toplamSayfa;
+const cokSayfa = toplamSayfa > 1;
+
+const AY = dil === 'en'
+  ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+  : ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const tarihYaz = (d: string) => {
+  const t = new Date(d + 'T00:00:00');
+  return `${t.getDate()} ${AY[t.getMonth()]} ${t.getFullYear()}`;
+};
+const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
+---
+<a class="pgback" href={sl(`${B}${on || '/'}`)}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{dil === 'en' ? 'Home' : 'Ana sayfa'}</span>
+</a>
+
+<section class="giris">
+  <p class="kunye">{dil === 'en' ? 'Sector' : 'Sektör'}</p>
+  <h1>{sektorAd} <span class="say">({hepsi.length})</span></h1>
+  {sektorTanim && <p class="lede">{sektorTanim}</p>}
+</section>
+
+<div class="bkgrid">
+  {gorunen.map((p: any) => (
+    <a class="bkc" href={sl(`${B}${on}${p._dizin}/${p.slug}`)}>
+      <span class="m">
+        <b>{bolumAdi(p._bolum)}</b>
+        <i></i><span><time datetime={p.date}>{tarihYaz(p.date)}</time></span>
+        {p.read && <><i></i><span>{p.read}{dil === 'en' ? ' min read' : ' dk okuma'}</span></>}
+      </span>
+      <h3>{T(p.title, dil)}</h3>
+      <p>{T(p.lede, dil)}</p>
+      <span class="go">{dil === 'en' ? 'Read' : 'Oku'}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ok} />
+      </span>
+    </a>
+  ))}
+</div>
+
+{cokSayfa && <nav class="bksf" aria-label={dil === 'en' ? 'Pagination' : 'Sayfalama'}>
+  {oncekiVar && <a class="bksf-ok" href={sayfaYolu(buSayfa - 1)} rel="prev">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    <span>{dil === 'en' ? 'Previous' : 'Önceki'}</span></a>}
+  <ol>
+    {sayfaParcalari.map((n) => n === null
+      ? <li class="bksf-bosluk" aria-hidden="true">…</li>
+      : <li>{n === buSayfa
+          ? <span class="bksf-su" aria-current="page">{n}</span>
+          : <a href={sayfaYolu(n)}>{n}</a>}</li>)}
+  </ol>
+  {sonrakiVar && <a class="bksf-ok" href={sayfaYolu(buSayfa + 1)} rel="next">
+    <span>{dil === 'en' ? 'Next' : 'Sonraki'}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>}
+</nav>}
+
+<style>
+  .bkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: clamp(14px, 1.6vw, 20px); }
+  .bkc { display: flex; flex-direction: column; gap: 11px; border: 1px solid var(--line);
+    border-radius: var(--r, 18px); padding: clamp(20px, 2.4vw, 28px); color: inherit;
+    text-decoration: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.006)); }
+  .bkc .m { display: flex; align-items: center; gap: 10px; font-family: var(--f-tek);
+    font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
+  .bkc .m b { color: var(--red-soft); font-weight: 500; }
+  .bkc .m i { width: 3px; height: 3px; border-radius: 50%; background: var(--tx4); font-style: normal; }
+  .bkc h3 { font-family: var(--f-baslik); font-weight: 400;
+    font-size: clamp(1.14rem, 1.7vw, 1.38rem); line-height: 1.24; letter-spacing: -.01em; }
+  .bkc p { font-size: .88rem; line-height: 1.68; color: var(--tx3); font-weight: 300; }
+  .bkc .go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--f-tek); font-size: 9.5px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--tx3); }
+  .bkc .go svg { width: 13px; height: 13px; }
+  @media (hover: hover) and (pointer: fine) {
+    .bkc { transition: border-color .34s var(--e), transform .34s var(--e), box-shadow .34s var(--e); }
+    .bkc:hover { border-color: rgba(239,35,60,.42); transform: translateY(-3px);
+      box-shadow: 0 26px 60px -34px var(--red-glow); }
+    .bkc .go, .bkc .go svg { transition: color .3s var(--e), transform .3s var(--e); }
+    .bkc:hover .go { color: var(--red-soft); }
+    .bkc:hover .go svg { transform: translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .bkc, .bkc .go, .bkc .go svg { transition: none; } }
+
+  .say { color: var(--tx3); font-weight: 400; font-size: .7em; }
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+
+  .bksf { display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    gap: 10px; margin-top: clamp(26px, 3vw, 40px); }
+  .bksf ol { display: flex; align-items: center; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .bksf a, .bksf-su { display: inline-flex; align-items: center; justify-content: center;
+    min-width: 38px; min-height: 38px; padding: 0 10px; border-radius: 999px;
+    font-family: var(--f-tek); font-size: .8rem; text-decoration: none; }
+  .bksf ol a { border: 1px solid var(--line2); color: var(--tx2); }
+  .bksf-su { border: 1px solid rgba(239,35,60,.5); background: rgba(239,35,60,.12); color: #fff; }
+  .bksf-ok { gap: 8px; border: 1px solid var(--line2); color: var(--tx2); }
+  .bksf-ok svg { width: 14px; height: 14px; }
+  .bksf-bosluk { color: var(--tx4); padding: 0 2px; }
+</style>

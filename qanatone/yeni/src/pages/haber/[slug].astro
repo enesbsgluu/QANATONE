@@ -1,0 +1,26 @@
+---
+/* Haberler yazısı (TR) — `/haber/<slug>`.
+   Gövde bültenle AYNI bileşen (`YaziGovde`), `bolum` propuyla: geri
+   bağı, kart yolları ve "diğer yazılar" şeridi o bölümün kendi
+   koleksiyonundan doğar. Şerit tavanı 8 (T10). */
+import Temel from '../../layouts/Temel.astro';
+import YaziGovde from '../../parcalar/YaziGovde.astro';
+import { icerik, T, KOK, sl } from '../../icerik';
+import { yaziSema } from '../../sema.mjs';
+import { bolumYaziYollari } from '../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumYaziYollari('haberler');
+}
+
+const { p } = Astro.props;
+const canon = sl(`${KOK}/haber/${p.slug}`);
+const baslik = `${T(p.title, 'tr')} — QANATONE`;
+const aciklama = T(p.lede, 'tr');
+const sema = yaziSema(icerik, p, { url: canon, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/haber/${p.slug}`)} helefen={sl(`${KOK}/en/haber/${p.slug}`)} sema={sema}
+  etiket="Haberler">
+  <YaziGovde p={p} dil="tr" bolum="haberler" />
+</Temel>
