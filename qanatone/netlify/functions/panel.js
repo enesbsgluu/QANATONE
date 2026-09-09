@@ -94,7 +94,9 @@ function dosyaKoleksiyonlari() {
    denetimin kiyasi ayni sirayi gormeli. */
 function kayitlariOku(klasor) {
   const d = dizinYolu(klasor);
-  if (!d) return [];
+  /* KLASOR YOK = "bos koleksiyon" DEGIL, "pakete girmemis" olabilir.
+     Ayrimi cagiran yapiyor: null doner, uc hepsi null ise 503 verir. */
+  if (!d) return null;
   return fs.readdirSync(d).filter(a => a.endsWith('.json'))
     .map(a => { try { return JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')); } catch (e) { return null; } })
     .filter(Boolean)
@@ -173,9 +175,25 @@ exports.handler = async function handler(event) {
   if (q.kayitlar === '1') {
     const koleksiyon = dosyaKoleksiyonlari();
     const kayitlar = {};
-    let toplam = 0;
-    for (const K of koleksiyon) { kayitlar[K.ad] = kayitlariOku(K.klasor); toplam += kayitlar[K.ad].length; }
-    console.log(simdi(), 'panel: kayitlar servis edildi ·', toplam);
+    let toplam = 0, bulunan = 0;
+    for (const K of koleksiyon) {
+      const dizi = kayitlariOku(K.klasor);
+      if (dizi === null) { kayitlar[K.ad] = []; continue; }
+      bulunan++; kayitlar[K.ad] = dizi; toplam += dizi.length;
+    }
+    /* HICBIR KLASOR COZULMEDIYSE paketleme eksiktir (`included_files`).
+       Bos dizi donmek TEHLIKELI olurdu: panel "hic yazi yok" gosterir,
+       Enes bir sey ekleyip yayinlar ve gercekte var olan yazilar
+       panelde gorunmedigi icin sessizce geride kalir. Bos bir
+       koleksiyon (nedir/haber) ise NORMAL — o yuzden olcut "hicbiri
+       cozulmedi", "biri bos" degil. `.gitkeep` bazi glob'larda
+       eslesmedigi icin bos klasor pakete hic girmeyebilir; bu olcut o
+       durumu yanlis kirmizi saymaz. */
+    if (koleksiyon.length && bulunan === 0) {
+      console.log(simdi(), 'panel: kayit klasorleri paketde bulunamadi (included_files?)');
+      return { statusCode: 503, headers: H, body: 'kayitlar yok' };
+    }
+    console.log(simdi(), 'panel: kayitlar servis edildi ·', toplam, '·', bulunan + '/' + koleksiyon.length, 'klasor');
     return {
       statusCode: 200,
       headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
