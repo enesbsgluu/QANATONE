@@ -206,9 +206,15 @@ function handlerOlustur(adaptor) {
     /* KADEME 2: govdede content.json'un YANINDA degisen kayit dosyalari
        ve silinenler gelir. Ikisi de istege bagli — yalniz `content`
        gonderen eski bir panel surumu de calisir. */
+    /* SON SATIR SONU: panel eskiden `content.json`u satir sonsuz
+       yaziyordu, depodaki hali ve `icerik-ayir.cjs` ise satir sonuyla —
+       her panel yayini icerik degismese bile TEK SATIRLIK sahte bir diff
+       uretiyordu (9 Eyl 2026'da `eed7ba4` tam olarak buydu: bos bir
+       yayin, tek fark dosya sonu). Iki taraf da artik satir sonuyla
+       yaziyor; kayit dosyalari da oyle. */
     const dosyalar = [{
       yol: DOSYA_YOLU,
-      icerik: JSON.stringify(govde.content, null, 2)
+      icerik: JSON.stringify(govde.content, null, 2) + '\n'
     }];
     const kayitlar = Array.isArray(govde.kayitlar) ? govde.kayitlar : [];
     const silinen = Array.isArray(govde.silinen) ? govde.silinen : [];
