@@ -28,6 +28,8 @@
 'use strict';
 
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
 const REPO = 'enesbsgluu/QANATONE';
 const BRANCH = 'main';
@@ -81,33 +83,86 @@ function dogrula(parola, hashSatiri) {
   return crypto.timingSafeEqual(uretilen, beklenen);
 }
 
-/* GitHub Contents API adaptörü — gerçek ağ çağrısı yalnız burada. */
-async function githubCommit({ token, repo, branch, yol, icerik, mesaj }) {
-  const api = 'https://api.github.com/repos/' + repo + '/contents/' + yol;
+/* GitHub adaptörü — gerçek ağ çağrısı yalnız burada.
+
+   KADEME 2 (9 Eyl 2026): ARTIK COK DOSYA, TEK COMMIT.
+   Onceden Contents API ile TEK dosya yaziliyordu (`content.json`) ve
+   panel her yayinda BUTUN icerigi gonderiyordu. Yazilar dosya basina
+   kayda ayrilinca bir yayin birden cok dosyaya dokunabiliyor: degisen
+   yazilar + silinenler + (degistiyse) content.json. Contents API'de her
+   dosya AYRI commit demek — yarim uygulanmis bir yayin (bir dosya gitti,
+   oteki gitmedi) siteyi tutarsiz birakirdi. Git Data API tek agac ve tek
+   commit uretir: ya hepsi ya hicbiri.
+
+   Adimlar: ref -> commit -> agac(base_tree) -> yeni commit -> ref guncelle.
+   Silme, agac girdisinde `sha: null` ile bildirilir.
+   `mode: '100644'` duz dosya; blob'lar utf-8 gonderiliyor (base64
+   sarmalamaya gerek yok, API `encoding` alanini kabul ediyor). */
+async function githubCommit({ token, repo, branch, dosyalar, mesaj }) {
+  const api = 'https://api.github.com/repos/' + repo;
   const baslik = {
     Authorization: 'Bearer ' + token,
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'qanatone-panel'
+    'User-Agent': 'qanatone-panel',
+    'Content-Type': 'application/json'
   };
-  const mevcut = await fetch(api + '?ref=' + branch, { headers: baslik });
-  let sha;
-  if (mevcut.status === 200) sha = (await mevcut.json()).sha;
-  else if (mevcut.status !== 404) throw new Error('github okuma basarisiz: ' + mevcut.status);
-
-  const govde = {
-    message: mesaj,
-    content: Buffer.from(icerik, 'utf8').toString('base64'),
-    branch
+  const cagir = async (yol, secenek) => {
+    const r = await fetch(api + yol, Object.assign({ headers: baslik }, secenek || {}));
+    if (!r.ok) throw new Error('github ' + yol + ' -> ' + r.status);
+    return r.json();
   };
-  if (sha) govde.sha = sha;
 
-  const r = await fetch(api, {
-    method: 'PUT',
-    headers: Object.assign({ 'Content-Type': 'application/json' }, baslik),
-    body: JSON.stringify(govde)
+  const ref = await cagir('/git/ref/heads/' + branch);
+  const commitSha = ref.object.sha;
+  const commit = await cagir('/git/commits/' + commitSha);
+
+  const agac = [];
+  for (const d of dosyalar) {
+    if (d.icerik === null) { agac.push({ path: d.yol, mode: '100644', type: 'blob', sha: null }); continue; }
+    const blob = await cagir('/git/blobs', {
+      method: 'POST',
+      body: JSON.stringify({ content: d.icerik, encoding: 'utf-8' })
+    });
+    agac.push({ path: d.yol, mode: '100644', type: 'blob', sha: blob.sha });
+  }
+
+  const yeniAgac = await cagir('/git/trees', {
+    method: 'POST',
+    body: JSON.stringify({ base_tree: commit.tree.sha, tree: agac })
   });
-  if (!r.ok) throw new Error('github yazma basarisiz: ' + r.status);
-  return r.json();
+  const yeniCommit = await cagir('/git/commits', {
+    method: 'POST',
+    body: JSON.stringify({ message: mesaj, tree: yeniAgac.sha, parents: [commitSha] })
+  });
+  await cagir('/git/refs/heads/' + branch, {
+    method: 'PATCH',
+    body: JSON.stringify({ sha: yeniCommit.sha })
+  });
+  return { commit: yeniCommit.sha, dosya: dosyalar.length };
+}
+
+/* YOL GUVENLIGI — `klasor` ve `slug` ISTEMCIDEN gelir.
+   Kapi paroladan geciyor diye serbest birakilamaz: hatali bir panel
+   surumu ya da ele gecmis bir oturum depoda BASKA bir dosyayi
+   ezebilirdi (`../../netlify.toml` gibi). Iki kat suzgec:
+     · klasor SOZLESMEDE tanimli olmali (`sayfalar.json` -> depo:"dosya")
+     · slug yalniz kucuk harf, rakam ve tire
+   Sozlesme fonksiyon paketinden okunur; okunamazsa kayit yazma KAPALI
+   (varsayilan kapali, varsayilan acik degil). */
+const SLUG_BICIMI = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+function izinliKlasorler() {
+  const adaylar = [
+    process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, 'yeni', 'src', 'veri', 'sayfalar.json'),
+    path.join(process.cwd(), 'yeni', 'src', 'veri', 'sayfalar.json'),
+    path.join(__dirname, '..', '..', 'yeni', 'src', 'veri', 'sayfalar.json')
+  ].filter(Boolean);
+  for (const a of adaylar) {
+    try {
+      return JSON.parse(fs.readFileSync(a, 'utf8')).koleksiyon
+        .filter(k => k.depo === 'dosya').map(k => k.klasor);
+    } catch (e) {}
+  }
+  return null;
 }
 
 /* Handler'ı bir adaptörle inşa eder — testler sahte adaptörle çağırır,
@@ -148,22 +203,53 @@ function handlerOlustur(adaptor) {
       return { statusCode: 400, body: JSON.stringify({ ok: false, reason: 'icerik eksik' }) };
     }
 
+    /* KADEME 2: govdede content.json'un YANINDA degisen kayit dosyalari
+       ve silinenler gelir. Ikisi de istege bagli — yalniz `content`
+       gonderen eski bir panel surumu de calisir. */
+    const dosyalar = [{
+      yol: DOSYA_YOLU,
+      icerik: JSON.stringify(govde.content, null, 2)
+    }];
+    const kayitlar = Array.isArray(govde.kayitlar) ? govde.kayitlar : [];
+    const silinen = Array.isArray(govde.silinen) ? govde.silinen : [];
+    if (kayitlar.length || silinen.length) {
+      const izinli = izinliKlasorler();
+      if (!izinli) {
+        console.log(simdi(), 'yayinla: sozlesme okunamadi, kayit yazma kapali');
+        return { statusCode: 503, body: JSON.stringify({ ok: false, reason: 'kapali' }) };
+      }
+      for (const k of kayitlar.concat(silinen)) {
+        if (!k || !izinli.includes(String(k.klasor)) || !SLUG_BICIMI.test(String(k.slug || ''))) {
+          console.log(simdi(), 'yayinla: gecersiz kayit yolu reddedildi');
+          return { statusCode: 400, body: JSON.stringify({ ok: false, reason: 'gecersiz kayit yolu' }) };
+        }
+      }
+      for (const k of kayitlar)
+        dosyalar.push({
+          yol: TEMEL_DIZIN + '/' + k.klasor + '/' + k.slug + '.json',
+          icerik: JSON.stringify(k.kayit, null, 2) + '\n'
+        });
+      for (const k of silinen)
+        dosyalar.push({ yol: TEMEL_DIZIN + '/' + k.klasor + '/' + k.slug + '.json', icerik: null });
+    }
+
     try {
       await adaptor({
         token: process.env.GITHUB_TOKEN,
         repo: REPO,
         branch: BRANCH,
-        yol: DOSYA_YOLU,
-        icerik: JSON.stringify(govde.content, null, 2),
-        mesaj: 'panel: content.json güncellendi'
+        dosyalar,
+        mesaj: dosyalar.length === 1
+          ? 'panel: content.json güncellendi'
+          : 'panel: ' + dosyalar.length + ' dosya güncellendi'
       });
     } catch (e) {
       console.log(simdi(), 'yayinla: commit basarisiz');
       return { statusCode: 502, body: JSON.stringify({ ok: false, reason: 'commit basarisiz' }) };
     }
 
-    console.log(simdi(), 'yayinla: kabul edildi, commit atildi');
-    return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+    console.log(simdi(), 'yayinla: kabul edildi, commit atildi ·', dosyalar.length, 'dosya');
+    return { statusCode: 200, body: JSON.stringify({ ok: true, dosya: dosyalar.length }) };
   };
 }
 

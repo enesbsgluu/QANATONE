@@ -177,6 +177,50 @@ h4.sec:first-of-type{border-top:0;padding-top:0}
 <script>
 const DRAFT='qanat-admin-draft', LIVE='qanat-content';
 let C=null, DEF=null, cur='genel', pvT=null, curSvc='';
+/* ---- KADEME 2 (9 Eyl 2026): BUYUYEN KOLEKSIYONLAR DOSYADA -------------
+   `posts`/`explainers`/`news` artik content.json'da degil
+   `icerik/<klasor>/<slug>.json` dosyalarinda. PANELIN EKRANI DEGISMEDI:
+   `C` yine hepsini tasiyor, butun editorler oldugu gibi calisiyor.
+   DEGISEN, panelin NE TASIDIGI degil NE GONDERDIGI:
+     · taslak  = content.json + YALNIZ DEGISEN kayitlar
+     · yayin   = content.json + YALNIZ DEGISEN kayitlar
+   NEDEN BOYLE: `localStorage` kotasi ANAHTAR BASINA DEGIL KOKEN BASINA
+   (5.242.086 karakter, Enes'in tarayicisinda olculdu). Taslagi parcalara
+   bolmek tavani YUKSELTMEZ; tavani kaldiran sey taslagin butunu tutmayi
+   BIRAKMASIDIR. Olculen duvarlar: taslak 1.447 yazi, yayin govdesi
+   (6 MiB) 1.651 yazi.
+   TEMEL = sunucudan gelen hal; degisen kayit ona karsi JSON kiyasiyla
+   bulunur. Indeks/olay takibi yerine kiyas: siralama dugmeleri, silme ve
+   slug degistirme gibi yollarda takip sessizce yaniliyordu.            */
+let DOSYA_KOL=[];        /* [{ad,kaynak,klasor}] — sozlesme SUNUCUDAN gelir */
+let TEMEL={};            /* {kaynak: {slug: kayit}} — yayindaki hal */
+const dosyaAnahtar=()=>DOSYA_KOL.map(k=>k.kaynak);
+/* content.json'a ait olan kisim: dosya koleksiyonlari HARIC. */
+function icerikKismi(o){
+  const c={};
+  for(const k of Object.keys(o||{})) if(!dosyaAnahtar().includes(k)) c[k]=o[k];
+  return c;
+}
+/* TEMEL'e gore degisen ve silinen kayitlar. Tek yerde hesaplanir; hem
+   taslak hem yayin ayni sonucu kullanir — ikisi ayrisirsa "taslakta var,
+   yayinda yok" gibi sessiz bir kayip dogar. */
+function kayitFarki(){
+  const degisen=[], silinen=[];
+  for(const K of DOSYA_KOL){
+    const simdi=(C&&C[K.kaynak])||[], temel=TEMEL[K.kaynak]||{};
+    const gorulen=new Set();
+    for(const kayit of simdi){
+      const slug=String((kayit&&kayit.slug)||'');
+      if(!slug) continue;
+      gorulen.add(slug);
+      if(JSON.stringify(temel[slug])!==JSON.stringify(kayit))
+        degisen.push({kaynak:K.kaynak,klasor:K.klasor,slug,kayit});
+    }
+    for(const slug of Object.keys(temel))
+      if(!gorulen.has(slug)) silinen.push({kaynak:K.kaynak,klasor:K.klasor,slug});
+  }
+  return {degisen,silinen};
+}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const get=p=>p.split('.').reduce((o,k)=>o?.[k],C);
@@ -201,8 +245,19 @@ function touch(){
   $('#state').textContent='kaydedilmemiş';$('#state').classList.add('dirty');
   clearTimeout(pvT);
   pvT=setTimeout(()=>{
-    try{localStorage.setItem(DRAFT,JSON.stringify(C))}catch(e){}
-    push();$('#state').textContent='taslak kaydedildi';$('#state').classList.remove('dirty');
+    /* TASLAK ARTIK BUTUN DEGIL: content.json + yalniz degisen kayitlar.
+       Kota asilirsa panel eskiden hatayi `catch(e){}` ile YUTUYORDU ve
+       taslak sessizce kaydedilmemeye basliyordu — artik durum satirinda
+       goruluyor, cunku sessiz veri kaybi en pahali kusur. */
+    const f=kayitFarki();
+    const taslak={icerik:icerikKismi(C),degisen:f.degisen,silinen:f.silinen.map(x=>({kaynak:x.kaynak,slug:x.slug}))};
+    let yazildi=true;
+    try{localStorage.setItem(DRAFT,JSON.stringify(taslak))}catch(e){yazildi=false;}
+    push();
+    $('#state').textContent=yazildi
+      ? 'taslak kaydedildi'+(f.degisen.length?' · '+f.degisen.length+' kayıt değişti':'')
+      : 'TASLAK KAYDEDİLEMEDİ (tarayıcı belleği dolu) — yayınla ya da dışa aktar';
+    $('#state').classList.toggle('dirty',!yazildi);
   },340);
 }
 function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',content:C},'*')}catch(e){}}
@@ -322,7 +377,11 @@ const BLANK={
  steps:{n:'06',t:{tr:'',en:''},p:{tr:'',en:''},m:[]},
  projects:{name:'Yeni proje',year:'2026',slug:'',image:'',tag:{tr:'',en:''},text:{tr:'',en:''},
    res:[],meta:{role:{tr:'',en:''},dur:{tr:'',en:''},ch:{tr:'',en:''}},blocks:{tr:[],en:[]}},
- posts:{slug:'yeni-yazi',date:new Date().toISOString().slice(0,10),read:3,sector:'talep',image:'',
+/* 9 Eyl 2026: `sector:'talep'` YANLISTI — `talep` bir KONU anahtari,
+    `sector` alani ise 9 Eyl'de gercek sektore verildi. Panelden acilan
+    her yeni yazi sektor alanina konu anahtari yaziyordu; T14 derlemede
+    yakalardi ama kusur panelde doguyordu. */
+ posts:{slug:'yeni-yazi',date:new Date().toISOString().slice(0,10),read:3,topic:'talep',sector:'',image:'',
    tag:{tr:'Veri · ',en:'Data · '},title:{tr:'',en:''},lede:{tr:'',en:''},
    body:{tr:[],en:[]},sources:[]},
  testimonials:{name:'',role:{tr:'',en:''},image:'',q:{tr:'',en:''}},
@@ -1102,10 +1161,26 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
       if(!parola){du.textContent='parola gerekli';return;}
       by.disabled=true;du.textContent='gönderiliyor…';
       try{
+        /* YAYIN GOVDESI ARTIK BUTUN DEGIL (Kademe 2): content.json +
+           yalniz degisen/silinen kayit dosyalari. Olculmustu: butun
+           govde 6 MiB fonksiyon sinirina 1.651 yazida carpiyordu ve tek
+           harf degisse bile 10.000 yazilik dosyanin TAMAMI yeniden
+           yaziliyordu. */
+        const f=kayitFarki();
         const res=await fetch('/.netlify/functions/yayinla',{method:'POST',
-          headers:{'content-type':'application/json'},body:JSON.stringify({parola,content:C})});
+          headers:{'content-type':'application/json'},
+          body:JSON.stringify({parola,content:icerikKismi(C),
+            kayitlar:f.degisen.map(x=>({klasor:x.klasor,slug:x.slug,kayit:x.kayit})),
+            silinen:f.silinen.map(x=>({klasor:x.klasor,slug:x.slug}))})});
         const j=await res.json().catch(()=>({}));
-        if(res.ok&&j.ok)du.textContent='yayınlandı — GitHub\'a commit edildi';
+        if(res.ok&&j.ok){
+          /* TEMEL TAZELENIR: yayindaki hal artik bu. Yapilmazsa ikinci
+             yayin ayni dosyalari bir daha gonderir ve "degisen" sayisi
+             hic sifirlanmaz — kullanici neyin bekledigini goremez. */
+          for(const K of DOSYA_KOL)
+            TEMEL[K.kaynak]=Object.fromEntries(((C&&C[K.kaynak])||[]).map(x=>[String(x.slug||''),JSON.parse(JSON.stringify(x))]));
+          du.textContent='yayınlandı — '+(j.dosya!=null?j.dosya+' dosya ':'')+'GitHub\'a commit edildi';
+        }
         else if(res.status===401)du.textContent='parola reddedildi';
         else if(res.status===503)du.textContent='fonksiyon kapalı (sunucu tarafı kurulmamış)';
         else du.textContent='başarısız (kod '+res.status+')';
@@ -1185,12 +1260,49 @@ async function kur(){
     const r=await fetch('?veri=1',{cache:'no-store'});
     if(!r.ok)throw new Error('HTTP '+r.status);
     DEF=await r.json();
+    /* KAYITLAR AYRI UCTAN (Kademe 2). Sozlesme de buradan gelir —
+       hangi koleksiyonun dosyada durdugu panelde SABIT YAZILMAZ,
+       `veri/sayfalar.json` tek karar yeri (iki yerde durursa biri
+       degisince oteki sessizce kayar). */
+    const rk=await fetch('?kayitlar=1',{cache:'no-store'});
+    if(!rk.ok)throw new Error('kayitlar HTTP '+rk.status);
+    const K=await rk.json();
+    DOSYA_KOL=K.koleksiyon||[];
+    TEMEL={};
+    for(const kol of DOSYA_KOL){
+      const dizi=(K.kayitlar&&K.kayitlar[kol.ad])||[];
+      DEF[kol.kaynak]=dizi;
+      TEMEL[kol.kaynak]=Object.fromEntries(dizi.map(x=>[String(x.slug||''),x]));
+    }
   }catch(e){DEF=null;console.error('panel: icerik alinamadi',e);}
   if(!DEF){$('#ed').innerHTML='<div class="note"><b>İçerik alınamadı.</b> Panel gövdesi açıldı ama <span class="mono">content.json</span> okunamadı. Paneli <span class="mono">/admin.html</span> adresinden (sunucu üzerinden) aç; dosyayı doğrudan çift tıklayarak açmak çalışmaz. Sorun sürerse Netlify fonksiyon günlüğünde <span class="mono">panel: content.json paketde bulunamadi</span> satırına bak.</div>';return;}
   let saved=null;
   try{saved=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){}
   if(!saved){try{saved=JSON.parse(localStorage.getItem(LIVE)||'null')}catch(e){}}
-  C=merge(JSON.parse(JSON.stringify(DEF)),saved||{});
+  C=JSON.parse(JSON.stringify(DEF));
+  if(saved){
+    /* YENI BICIM {icerik,degisen,silinen} · ESKI BICIM duz content.json.
+       Eski bicim taniniyor cunku tarayicida duran taslak goc anindan
+       kalmis olabilir; tanimazsak Enes'in kaydedilmemis isi sessizce
+       ucar. Eski taslakta koleksiyon dizileri de vardi — `merge` onlari
+       BUTUN OLARAK eziyor, bu yuzden dosya koleksiyonlari ayiklanip
+       ayni yoldan (slug ile) uygulanir. */
+    const yeniBicim=saved && typeof saved==='object' && ('icerik' in saved || 'degisen' in saved);
+    const govde=yeniBicim?(saved.icerik||{}):icerikKismi(saved);
+    C=merge(C,govde);
+    const degisen=yeniBicim?(saved.degisen||[])
+      :DOSYA_KOL.flatMap(k=>((saved[k.kaynak]||[]).map(kayit=>({kaynak:k.kaynak,slug:String(kayit.slug||''),kayit}))));
+    for(const d of degisen){
+      const dizi=C[d.kaynak]=C[d.kaynak]||[];
+      const i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
+      if(i>=0)dizi[i]=d.kayit; else dizi.push(d.kayit);
+    }
+    for(const d of (yeniBicim?(saved.silinen||[]):[])){
+      const dizi=C[d.kaynak]||[];
+      const i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
+      if(i>=0)dizi.splice(i,1);
+    }
+  }
   seeded=true;buildSide();show('genel');setTimeout(push,300);
 }
 kur();

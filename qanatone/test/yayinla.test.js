@@ -91,9 +91,12 @@ const olay = (govde, method) => ({
     if (cagrilar.length === 1) {
       const c = cagrilar[0];
       ol('commit: repo doğru', c.repo === 'enesbsgluu/QANATONE', c.repo);
-      ol('commit: yol DOSYA_YOLU ile eşleşiyor (tek doğruluk kaynağı)', c.yol === DOSYA_YOLU, c.yol);
+      /* KADEME 2: adaptör artık DOSYA LİSTESİ alıyor (çok dosya, tek
+         commit). Yalnız content.json değiştiyse liste tek elemanlı. */
+      ol('commit: tek dosya (yalnız content.json değişti)', c.dosyalar.length === 1, String(c.dosyalar.length));
+      ol('commit: yol DOSYA_YOLU ile eşleşiyor (tek doğruluk kaynağı)', c.dosyalar[0].yol === DOSYA_YOLU, c.dosyalar[0].yol);
       ol('commit: içerik gövdedeki content.json ile eşleşiyor',
-         JSON.parse(c.icerik).settings.whatsapp === '905000000000', c.icerik.slice(0, 40));
+         JSON.parse(c.dosyalar[0].icerik).settings.whatsapp === '905000000000', c.dosyalar[0].icerik.slice(0, 40));
       ol('commit: token adaptöre iletiliyor (env\'den)', c.token === process.env.GITHUB_TOKEN, '');
     }
     ol('doğru parola: log satırlarında parola/token geçmiyor',
@@ -155,6 +158,54 @@ const olay = (govde, method) => ({
     const r = await handler(olay({ parola: DOGRU_PAROLA }));
     ol('içerik eksikken 400 dönüyor', r.statusCode === 400, String(r.statusCode));
     ol('içerik eksikken commit çağrılmadı', cagrilar.length === 0, String(cagrilar.length));
+  }
+
+  /* ---- 8) KADEME 2: değişen kayıt dosyaları tek commit'te ---- */
+  {
+    process.env.PANEL_PAROLA_HASH = HASH;
+    process.env.GITHUB_TOKEN = 'sahte-test-jetonu-3-aga-cikmiyor-gercek-degil-333';
+    const { adaptor, cagrilar } = sahteAdaptorKur();
+    const handler = handlerOlustur(adaptor);
+    const r = await handler(olay({
+      parola: DOGRU_PAROLA,
+      content: { settings: {} },
+      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'yeni-yazi', kayit: { slug: 'yeni-yazi', date: '2026-09-09' } }],
+      silinen: [{ klasor: 'icerik/yazilar', slug: 'eski-yazi' }]
+    }));
+    ol('kayıt + silme: 200', r.statusCode === 200, String(r.statusCode));
+    ol('kayıt + silme: TEK commit çağrısı', cagrilar.length === 1, String(cagrilar.length));
+    const d = cagrilar.length === 1 ? cagrilar[0].dosyalar : [];
+    ol('kayıt + silme: üç dosya (content + 1 yazı + 1 silme)', d.length === 3, String(d.length));
+    const yeniYazi = d.find(x => /yeni-yazi\.json$/.test(x.yol));
+    ol('kayıt yolu temel dizinden türüyor',
+       !!yeniYazi && yeniYazi.yol === 'qanatone/icerik/yazilar/yeni-yazi.json', yeniYazi && yeniYazi.yol);
+    const silme = d.find(x => /eski-yazi\.json$/.test(x.yol));
+    ol('silme, içerik null ile bildiriliyor', !!silme && silme.icerik === null, '');
+  }
+
+  /* ---- 9) YOL GÜVENLİĞİ: klasör ve slug istemciden gelir ----
+     Kapı paroladan geçiyor diye serbest bırakılamaz; hatalı bir panel
+     sürümü ya da ele geçmiş bir oturum depoda başka dosyayı ezebilirdi. */
+  {
+    process.env.PANEL_PAROLA_HASH = HASH;
+    process.env.GITHUB_TOKEN = 'sahte-test-jetonu-4-aga-cikmiyor-gercek-degil-444';
+    const kotu = [
+      ['sözleşmede olmayan klasör', { klasor: 'netlify/functions', slug: 'panel' }],
+      ['üst dizine çıkan klasör', { klasor: '../..', slug: 'netlify' }],
+      ['yol ayracı taşıyan slug', { klasor: 'icerik/yazilar', slug: '../../netlify.toml' }],
+      ['boş slug', { klasor: 'icerik/yazilar', slug: '' }],
+      ['büyük harfli slug', { klasor: 'icerik/yazilar', slug: 'Buyuk-Harf' }]
+    ];
+    for (const [ad, k] of kotu) {
+      const { adaptor, cagrilar } = sahteAdaptorKur();
+      const handler = handlerOlustur(adaptor);
+      const r = await handler(olay({
+        parola: DOGRU_PAROLA, content: { settings: {} },
+        kayitlar: [{ klasor: k.klasor, slug: k.slug, kayit: {} }]
+      }));
+      ol('reddediliyor: ' + ad, r.statusCode === 400 && cagrilar.length === 0,
+         r.statusCode + '/' + cagrilar.length);
+    }
   }
 
   delete process.env.PANEL_PAROLA_HASH;

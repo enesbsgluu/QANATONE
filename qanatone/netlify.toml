@@ -46,7 +46,15 @@
 # onu Basic Auth kapisinin ardindan okuyup servis ediyor. Yol base
 # directory ye goredir.
 [functions]
-  included_files = ["admin.html", "content.json"]
+  # KADEME 2 (9 Eyl 2026): buyuyen koleksiyonlar content.json'dan cikip
+  # `icerik/<klasor>/<slug>.json` dosyalarina ayrildi. Panel onlari
+  # `?kayitlar=1` ucundan okuyor, `yayinla.js` de yazacagi yolu
+  # `sayfalar.json`daki sozlesmeden dogruluyor (istemciden gelen klasor/slug
+  # serbest birakilamaz) — ucu de pakete girmek zorunda.
+  # OLCEK NOTU: 10.000 yazi ~37 MB kaynak dosya demek; Netlify fonksiyon
+  # paketi sinirina (belgelenmis, olculmedi) yaklasilirsa panel kayitlari
+  # paketten degil GitHub API'den okumali. Bugun 6 dosya.
+  included_files = ["admin.html", "content.json", "icerik/**", "yeni/src/veri/sayfalar.json"]
 
 # YEREL SUNUM (netlify dev, 21 Agu). Astro'nun kendi dev sunucusu DEGIL:
 # burada sunulan sey URETIM CIKTISININ ta kendisi (dist/), yani telefondan

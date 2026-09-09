@@ -57,6 +57,50 @@ function panelYolu() { return dosyaYolu('admin.html'); }
    yayina (dist'e) konulmuyor, yalniz panel gorebiliyor. */
 function icerikYolu() { return dosyaYolu('content.json'); }
 
+/* ---- KADEME 2 (9 Eyl 2026): DOSYA BASINA KAYIT ----------------------
+   `posts`/`explainers`/`news` content.json'da degil
+   `icerik/<klasor>/<slug>.json` dosyalarinda. Panel bunlari `?kayitlar=1`
+   ucundan alir; SOZLESME de ayni yanitla gelir (hangi koleksiyon dosyada,
+   klasoru ne) — panelde SABIT YAZILMAZ, tek karar yeri
+   `yeni/src/veri/sayfalar.json`. Iki yerde dursaydi biri degisince oteki
+   sessizce kayardi.
+   Dosyalar fonksiyon paketine `netlify.toml` -> `included_files` ile
+   giriyor; `dizinYolu` LAMBDA_TASK_ROOT dahil ayni aday listesini
+   kullanir cunku paket ici yol yerel yoldan farklidir. */
+function dizinYolu(ad) {
+  const adaylar = [
+    process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, ad),
+    path.join(process.cwd(), ad),
+    path.join(__dirname, ad),
+    path.join(__dirname, '..', '..', ad)
+  ].filter(Boolean);
+  for (const a of adaylar) {
+    try { if (fs.statSync(a).isDirectory()) return a; } catch (e) {}
+  }
+  return null;
+}
+
+function dosyaKoleksiyonlari() {
+  const sy = dosyaYolu(path.join('yeni', 'src', 'veri', 'sayfalar.json'));
+  if (!sy) return [];
+  try {
+    return JSON.parse(fs.readFileSync(sy, 'utf8')).koleksiyon
+      .filter(k => k.depo === 'dosya')
+      .map(k => ({ ad: k.ad, kaynak: k.kaynak, klasor: k.klasor }));
+  } catch (e) { return []; }
+}
+
+/* Kayitlar tarihe gore yeni->eski: panelin listesi, sitenin dizini ve
+   denetimin kiyasi ayni sirayi gormeli. */
+function kayitlariOku(klasor) {
+  const d = dizinYolu(klasor);
+  if (!d) return [];
+  return fs.readdirSync(d).filter(a => a.endsWith('.json'))
+    .map(a => { try { return JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')); } catch (e) { return null; } })
+    .filter(Boolean)
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+
 function dosyaYolu(ad) {
   const adaylar = [
     process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, ad),
@@ -121,6 +165,21 @@ exports.handler = async function handler(event) {
       statusCode: 200,
       headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
       body: fs.readFileSync(iy, 'utf8')
+    };
+  }
+
+  /* `?kayitlar=1` → dosya koleksiyonlari + sozlesme. Ayni kapinin
+     ardinda; content.json'dan AYRI cunku buyuyen kisim burasi. */
+  if (q.kayitlar === '1') {
+    const koleksiyon = dosyaKoleksiyonlari();
+    const kayitlar = {};
+    let toplam = 0;
+    for (const K of koleksiyon) { kayitlar[K.ad] = kayitlariOku(K.klasor); toplam += kayitlar[K.ad].length; }
+    console.log(simdi(), 'panel: kayitlar servis edildi ·', toplam);
+    return {
+      statusCode: 200,
+      headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
+      body: JSON.stringify({ koleksiyon, kayitlar })
     };
   }
 
