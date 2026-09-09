@@ -98,6 +98,99 @@
 .sil-form .dugme{justify-self:start;margin-top:4px} /* kaynak .ldf>button (2309) */
 .sil-form .dugme svg{width:16px;height:16px}
 .sil-durum{min-height:1.2em;color:var(--red-soft);font-size:.88rem}
+
+/* ============================================================
+   B5 · FORM DURUM KATMANI (9 Eyl 2026) — SIFIR YENI JS
+   ------------------------------------------------------------
+   Form zaten calisiyordu; eksik olan sey GERI BILDIRIMDI. Dort
+   soruya cevap veriyor, dordu de saf CSS:
+     "doldurdum mu?"   :not(:placeholder-shown)
+     "dogru mu?"       :user-invalid / :user-valid
+     "gonderebilir miyim?"  form:has(:invalid) -> dugme
+     "ne yazmaliyim?"  ipucu METINDE durur, gorunurlugu acilir
+
+   NEDEN `:user-invalid`, `:invalid` DEGIL: `:invalid` sayfa acilir
+   acilmaz bos zorunlu alanlarin HEPSINI kirmiziya boyar — ziyaretci
+   daha tek harf yazmadan hata gormus olur. `:user-invalid` yalniz
+   kullanici o alanla ETKILESTIKTEN sonra ateslenir. Fark, formun
+   "yardim eden" ile "azarlayan" hali arasindaki fark.
+
+   HAREKET: yalniz transition (transform+opacity). @keyframes YOK,
+   dolayisiyla H1 onek defterine yeni kayit gerekmiyor; yine de
+   azaltilmis hareket AYNI OZGULLUKTE kapatiliyor (H11).
+   GOLGE: yalniz masaustu kapisinda (H14 madde 7).
+   ============================================================ */
+
+/* --- alan: dolu / odakli / hatali --- */
+.sil-alan{position:relative}
+.sil-alan input,.sil-alan textarea{
+  transition:border-color .26s var(--e),box-shadow .26s var(--e),
+             background-color .26s var(--e),transform .18s var(--e)}
+/* DOLU: kenarlik canlanir, ust etiket soluklugunu birakir. */
+.sil-alan input:not(:placeholder-shown),
+.sil-alan textarea:not(:placeholder-shown){
+  background:rgba(0,0,0,.62);border-color:var(--line)}
+.sil-alan:has(input:not(:placeholder-shown))>span,
+.sil-alan:has(textarea:not(:placeholder-shown))>span{color:var(--tx3)}
+/* ODAK: etiket PARLAK NOTRE doner, kizila DEGIL.
+   Ilk yazimda odak da kizildi ve yan yana kare bunu yakaladi: odaktaki
+   telefon alani ile hatali e-posta alani AYNI GORUNUYORDU. Iki ayri
+   durumun tek renge dusmesi, rengin tasidigi bilgiyi sifirlar.
+   Artik: odak = parlak notr etiket + kizil odak halkasi (tarayici
+   sozlesmesi), hata = kizil etiket + kizil kenarlik + kizil ipucu. */
+.sil-alan:has(input:focus-visible)>span,
+.sil-alan:has(textarea:focus-visible)>span{color:var(--tx)}
+.sil-alan:has(input:user-invalid)>span,
+.sil-alan:has(textarea:user-invalid)>span{color:var(--red-soft)}
+
+/* --- ipucu: HEP GORUNUR, yalniz ROL degistirir ---
+   ILK YAZIMDA `opacity:0` ile gizlenip `:user-invalid`de aciliyordu ve
+   DENETIM H2 BUNU KIRMIZIYA CEVIRDI: "icerik gorunur dogar". Kural hakli
+   cikti, tasarim degisti — kural gevsetilmedi, muafiyet de yazilmadi.
+   Ustelik boylesi DAHA IYI: yardim metnini hatadan SONRA gostermek gec
+   kalmis bir uyaridir; once gosterilirse hata hic dogmaz. Hata halinde
+   metin ayni kalir, yalniz sessiz griden kizila doner. */
+.sil-ipucu{display:block;margin-top:7px;
+  color:var(--tx4);font-size:.78rem;line-height:1.45;
+  transition:color .22s var(--e)}
+.sil-alan:has(input:user-invalid) .sil-ipucu,
+.sil-alan:has(textarea:user-invalid) .sil-ipucu{color:var(--red-soft)}
+.sil-alan input:user-invalid,.sil-alan textarea:user-invalid{
+  border-color:var(--red);background:rgba(239,35,60,.05)}
+
+/* --- gecerli alan: sessiz onay, kizil disi bir isaret degil, kizilin
+       kendisi (palet tek renk; yesil eklemek kimligi bozardi) --- */
+.sil-alan:has(input:user-valid:not(:placeholder-shown))>span::after,
+.sil-alan:has(textarea:user-valid:not(:placeholder-shown))>span::after{
+  content:'✓';margin-left:7px;color:var(--red);letter-spacing:0}
+/* `:not(:placeholder-shown)` SART: mesaj alani ZORUNLU DEGIL, dolayisiyla
+   BOS haliyle de `:user-valid` olur ve icinden Tab ile gecen ziyaretci
+   BOS bir alanda onay isareti gorurdu. Isaret "gecerli" degil "DOLU ve
+   gecerli" demeli — yan yana kare bunu yakaladi. */
+
+/* --- KVKK onayi: ayri ipucu YOK (etiketin kendisi zaten aciklama);
+       onaylanmamissa etiket kizila doner, o yeter. --- */
+.sil-onay:has(input:user-invalid)>span{color:var(--red-soft)}
+
+/* --- DUGME FORMUN DURUMUNU GOSTERIR ---
+   Devre disi BIRAKILMAZ: `disabled` bir dugme ekran okuyucuya "burada
+   yapacak bir sey yok" der ve odagi da alamaz. Gorsel olarak beklemede
+   durur, tiklanir; tiklaninca tarayicinin kendi dogrulama balonu
+   eksik alani gosterir — yardim eden davranis budur. */
+.sil-form:has(:invalid) .dugme{opacity:.62}
+.sil-form:not(:has(:invalid)) .dugme{opacity:1}
+
+/* --- mesaj alani kendi buyur (JS'siz) --- */
+.sil-alan textarea{field-sizing:content;max-height:14em}
+
+@media(min-width:901px){
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{transform:translateY(-1px)}
+  .sil-form:not(:has(:invalid)) .dugme{box-shadow:0 0 0 3px rgba(239,35,60,.14)}
+}
+@media(prefers-reduced-motion:reduce){
+  .sil-alan input,.sil-alan textarea,.sil-ipucu{transition:none}
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{transform:none}
+}
 .sil-durum a{color:var(--tx);text-decoration:underline}
 
 /* Honeypot: gerçek kullanıcı görmez, klavye sırasına girmez, bot doldurur. */

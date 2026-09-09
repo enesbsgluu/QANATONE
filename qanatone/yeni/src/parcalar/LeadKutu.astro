@@ -50,10 +50,20 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
     <p class="sus-tuzak"><label>{g('hpSirket')}
       <input name="company" tabindex="-1" autocomplete="off" /></label></p>
 
+    {/* B5 (9 Eyl 2026) — DURUM KATMANI, SIFIR YENI JS.
+        `placeholder=" "` SUS DEGIL, SECICI SARTI: `:placeholder-shown`
+        ancak yer tutucu VARSA eslesir; tek boslukla alan gorsel olarak
+        bos kalir ama "dolu mu" sorusu CSS'ten sorulabilir hale gelir.
+        Ipuclari `m()` ile yaziliyor — panelde yuvasi acilir (Enes'in
+        kurali: duzenlenebilen her sey yayina gider, yayindaki her sey
+        duzenlenebilir). Ipucu METINDE durur, JS kosmasa da oradadir;
+        yalniz GORUNURLUGU `:user-invalid` ile acilir. */}
     <label class="sil-alan"><span>{g('ld1')}</span>
-      <input type="text" name="name" required maxlength="80" autocomplete="name" /></label>
+      <input type="text" name="name" required maxlength="80" autocomplete="name" placeholder=" " />
+      <small class="sil-ipucu">{m('ldeAd', 'Kime döneceğimizi bilelim.', 'So we know who to reply to.')}</small></label>
     <label class="sil-alan"><span>{g('ld2')}</span>
-      <input type="email" name="email" required maxlength="120" autocomplete="email" /></label>
+      <input type="email" name="email" required maxlength="120" autocomplete="email" placeholder=" " />
+      <small class="sil-ipucu">{m('ldeMail', 'Teklifi ve keşif notunu buraya göndeririz.', 'We send the proposal and discovery notes here.')}</small></label>
     <label class="sil-alan"><span>{g('ld3')}</span>
       {/* TELEFON IPUCU PANELE ACILDI (TUR 2). Komsu mesaj alaninin ipucu
           `en ? ... : ...` ile cevriliyordu, bu SABITTI: EN ziyaretci
@@ -61,7 +71,8 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
           ayni birakildi — Ingilizce ipucunun ne olacagi icerik karari,
           uydurulmaz; alan artik panelde, deger Enes'in. */}
       <input type="tel" name="phone" required maxlength="24" autocomplete="tel"
-        placeholder={m('ldtel', '+90 5xx xxx xx xx', '+90 5xx xxx xx xx')} /></label>
+        placeholder={m('ldtel', '+90 5xx xxx xx xx', '+90 5xx xxx xx xx')} />
+      <small class="sil-ipucu">{m('ldeTel', 'Çoğu iş tek konuşmada netleşiyor.', 'Most projects get clear in a single call.')}</small></label>
     <label class="sil-alan"><span>{g('ld6')}</span>
       <textarea name="message" maxlength="600" rows="3"
         placeholder={en ? 'e.g. site + WhatsApp agent for health tourism'
