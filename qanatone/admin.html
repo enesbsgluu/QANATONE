@@ -151,6 +151,20 @@ h4.sec:first-of-type{border-top:0;padding-top:0}
 #fw.mob{padding:18px}
 #fw.mob #frame{width:392px;border:1px solid var(--line2);border-radius:20px}
 @media(max-width:1180px){#lay{grid-template-columns:200px 1fr}#pv{display:none}}
+/* GOVDE EDITORU (9 Eyl 2026 — Enes: "ben kod yazim diliyle yazmak
+   istemiyorum"). Bolum ve blok kartlari; yazi alani contenteditable
+   cunku KALIN secip dugmeye basarak veriliyor, isaretle degil. */
+.gv{border:1px solid var(--line);border-radius:11px;padding:11px;margin:9px 0;background:var(--card2)}
+.gv>.gh{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.gv>.gh input{flex:1}
+.bl{border:1px solid var(--line2);border-radius:9px;padding:9px;margin:7px 0}
+.bl>.bh{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.bl>.bh .et{font:600 11px/1 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;opacity:.6;flex:1}
+.yz{min-height:52px;padding:11px 13px;border:1px solid var(--line);border-radius:11px;
+    background:var(--card);color:var(--tx);font:inherit;font-size:.87rem;line-height:1.6;outline:0}
+.yz:focus{border-color:var(--red)}
+.yz b{font-weight:700}
+.gvekle{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 </style>
 </head>
 <body>
@@ -261,6 +275,120 @@ function touch(){
   },340);
 }
 function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',content:C},'*')}catch(e){}}
+
+/* ============ GOVDE: BLOK <-> HTML (9 Eyl 2026) ==================
+   Enes: "yazi alanlarinda baslik kisimlari hep kod seklinde yazilmis,
+   ben kod yazim diliyle yazmak istemiyorum." Onceden govde TEK satirda
+   `Baslik :: <p>metin</p>` olarak yaziliyordu; paragraf, liste ve veri
+   vurgusu ELLE HTML idi.
+   Artik bolum = baslik alani + blok kartlari. HTML YALNIZ burada
+   uretiliyor ve YALNIZ burada okunuyor.
+
+   BLOK BICIMLERI
+     {t:'p',     ic}                  paragraf (satir ici: b, em, br)
+     {t:'liste', ogeler[]}            madde listesi
+     {t:'vurgu', sayi, aciklama}      veri vurgusu (.nfig)
+     {t:'ham',   html}                TANINMAYAN — oldugu gibi korunur
+
+   NEDEN `ham` VAR: tanimadigi bir sey gorunce donusturucu SESSIZCE
+   ATMAZ, blogu oldugu gibi tutar ve panelde ham alan olarak gosterir.
+   Sessiz kayip, kod yazdirmaktan daha pahalidir.
+   OLCULDU (9 Eyl 2026): bugunku 80 bolumun 80'i BIREBIR gidip donuyor,
+   hicbiri `ham`a dusmuyor — 100 paragraf, 2 liste, 8 vurgu. Bicim
+   icerikten cikarildi, tahminle secilmedi. Bekci: test/blok-metin.test.js
+   ayni gidis-donusu her kosumda tekrar olcer. */
+/*BLOK-METIN-BAS*/
+function satirIciGecerli(ic){
+  return !/[<>]/.test(String(ic).replace(/<\/?(?:b|em)>|<br\s*\/?>/g,''));
+}
+function htmlToBloklar(html){
+  const h=String(html||'').trim(); if(!h)return [];
+  const bloklar=[]; let i=0;
+  while(i<h.length){
+    const kalan=h.slice(i);
+    const p=/^<p>([\s\S]*?)<\/p>/.exec(kalan);
+    if(p){ if(!satirIciGecerli(p[1]))return [{t:'ham',html:h}];
+      bloklar.push({t:'p',ic:p[1]}); i+=p[0].length; continue; }
+    const ul=/^<ul>([\s\S]*?)<\/ul>/.exec(kalan);
+    if(ul){
+      const ogeler=[]; const re=/<li>([\s\S]*?)<\/li>/g; let m;
+      while((m=re.exec(ul[1])))ogeler.push(m[1]);
+      if(ul[1].replace(/<li>[\s\S]*?<\/li>/g,'').trim())return [{t:'ham',html:h}];
+      if(!ogeler.every(satirIciGecerli))return [{t:'ham',html:h}];
+      bloklar.push({t:'liste',ogeler}); i+=ul[0].length; continue; }
+    const nf=/^<div class="nfig"><b>([\s\S]*?)<\/b><span>([\s\S]*?)<\/span><\/div>/.exec(kalan);
+    if(nf){ if(!satirIciGecerli(nf[1])||!satirIciGecerli(nf[2]))return [{t:'ham',html:h}];
+      bloklar.push({t:'vurgu',sayi:nf[1],aciklama:nf[2]}); i+=nf[0].length; continue; }
+    const bosluk=/^\s+/.exec(kalan);
+    if(bosluk){ i+=bosluk[0].length; continue; }
+    return [{t:'ham',html:h}];
+  }
+  return bloklar;
+}
+function bloklarToHtml(bloklar){
+  return (bloklar||[]).map(b=>{
+    if(b.t==='p')return '<p>'+b.ic+'</p>';
+    if(b.t==='liste')return '<ul>'+b.ogeler.map(o=>'<li>'+o+'</li>').join('')+'</ul>';
+    if(b.t==='vurgu')return '<div class="nfig"><b>'+b.sayi+'</b><span>'+b.aciklama+'</span></div>';
+    if(b.t==='ham')return b.html;
+    return '';
+  }).join('');
+}
+/* Contenteditable'dan SATIR ICI HTML: yalniz b/em/br gecer, gerisi
+   metne iner. Tarayicilar yapistirmada span/style/div uretir; bunlari
+   kabul etseydik icerik yavas yavas cop toplardi. */
+function satirIciOku(kok){
+  let cikti='';
+  const gez=(dugum)=>{
+    for(const c of dugum.childNodes){
+      if(c.nodeType===3){ cikti+=esc(c.nodeValue); continue; }
+      if(c.nodeType!==1) continue;
+      const ad=c.tagName.toLowerCase();
+      if(ad==='br'){ cikti+='<br>'; continue; }
+      if(ad==='b'||ad==='strong'){ cikti+='<b>'; gez(c); cikti+='</b>'; continue; }
+      if(ad==='em'||ad==='i'){ cikti+='<em>'; gez(c); cikti+='</em>'; continue; }
+      gez(c);                       /* tanimayan etiket: yalniz metni */
+    }
+  };
+  gez(kok);
+  return cikti.replace(/\s+$/,'');
+}
+/*BLOK-METIN-SON*/
+
+/* Bolum listesi alani. `dizi` = [[baslik, html], ...] */
+function govdeAlani(etiket,path,dizi){
+  const D=Array.isArray(dizi)?dizi:[];
+  const bolumler=D.map((b,bi)=>{
+    const bloklar=htmlToBloklar(b[1]||'');
+    const kartlar=bloklar.map((bl,ki)=>{
+      const bas=`<div class="bh"><span class="et">${bl.t==='p'?'paragraf':bl.t==='liste'?'liste':bl.t==='vurgu'?'vurgu':'ham kod'}</span>`+
+        `<button class="ib" data-bmv="${path}|${bi}|${ki}|-1">↑</button>`+
+        `<button class="ib" data-bmv="${path}|${bi}|${ki}|1">↓</button>`+
+        `<button class="ib del" data-bdel="${path}|${bi}|${ki}">✕</button></div>`;
+      if(bl.t==='p')
+        return `<div class="bl">${bas}<div class="gvekle" style="margin:0 0 6px"><button class="ib" data-kalin="1">Kalın</button></div>`+
+          `<div class="yz" contenteditable="true" data-bic="${path}|${bi}|${ki}">${bl.ic}</div></div>`;
+      if(bl.t==='liste')
+        return `<div class="bl">${bas}<div class="f"><label>Maddeler <i>— her satır bir madde</i></label>`+
+          `<textarea data-bliste="${path}|${bi}|${ki}">${esc(bl.ogeler.join('\n'))}</textarea></div></div>`;
+      if(bl.t==='vurgu')
+        return `<div class="bl">${bas}<div class="r2">`+
+          `<div class="f"><label>Sayı</label><input value="${esc(bl.sayi)}" data-bvs="${path}|${bi}|${ki}"></div>`+
+          `<div class="f"><label>Açıklama</label><input value="${esc(bl.aciklama)}" data-bva="${path}|${bi}|${ki}"></div></div></div>`;
+      return `<div class="bl">${bas}<div class="note">Bu blok tanınmayan bir biçimde; olduğu gibi korunuyor.</div>`+
+        `<div class="f"><textarea class="big" data-bham="${path}|${bi}|${ki}">${esc(bl.html)}</textarea></div></div>`;
+    }).join('');
+    return `<div class="gv"><div class="gh"><input value="${esc(b[0]||'')}" data-gbas="${path}|${bi}" placeholder="Bölüm başlığı">`+
+      `<button class="ib" data-gmv="${path}|${bi}|-1">↑</button>`+
+      `<button class="ib" data-gmv="${path}|${bi}|1">↓</button>`+
+      `<button class="ib del" data-gdel="${path}|${bi}">✕</button></div>${kartlar}`+
+      `<div class="gvekle"><button class="add" data-bekle="${path}|${bi}|p">+ Paragraf</button>`+
+      `<button class="add" data-bekle="${path}|${bi}|liste">+ Liste</button>`+
+      `<button class="add" data-bekle="${path}|${bi}|vurgu">+ Vurgu</button></div></div>`;
+  }).join('');
+  return `<div class="f"><label>${etiket}</label>${bolumler}`+
+    `<button class="add" data-gekle="${path}">+ Bölüm ekle</button></div>`;
+}
 
 /* ================= ALAN YARDIMCILARI ================= */
 /* TUTAMAK — `data-p` tek başına yetmiyordu. Kutu her zaman basılıyordu ama
@@ -383,6 +511,24 @@ const BLANK={
     yakalardi ama kusur panelde doguyordu. */
  posts:{slug:'yeni-yazi',date:new Date().toISOString().slice(0,10),read:3,topic:'talep',sector:'',image:'',
    tag:{tr:'Veri · ',en:'Data · '},title:{tr:'',en:''},lede:{tr:'',en:''},
+   body:{tr:[],en:[]},sources:[]},
+ /* NEDIR ve HABER kayitlari (9 Eyl 2026 — EKLEME KUSURU).
+    Bu iki anahtar BLANK'te YOKTU; `blankFor` bulamayinca bos DIZE
+    donuyordu ve "+ Yazi ekle" diziye bir metin itiyordu. Yani iki
+    bolum de PANELDEN ACILAMIYORDU — ikisi de kosullu oldugu icin
+    sitede hic gorunmuyor, kusur da bu yuzden fark edilmiyordu.
+    Alan sozlesmesi `posts` ile AYNI (bilerek: dizin bileseni, govde
+    ve sema tek koddan calisiyor).
+    KAYNAK BOS BASLAR — Enes'in kurali (9 Eyl): haberlerde kaynak
+    belirtilmez, haberi kendi tarzimizla ozgunlestiriyoruz; alan
+    panelde YALNIZ cok onemli politik konular icin duruyor. Gorunum
+    zaten kosullu (`YaziGovde.astro`: `sources?.length > 0`), yani
+    bos birakilan kaynak sitede hicbir iz birakmaz. */
+ news:{slug:'yeni-haber',date:new Date().toISOString().slice(0,10),read:3,topic:'',sector:'',image:'',
+   tag:{tr:'Haber · ',en:'News · '},title:{tr:'',en:''},lede:{tr:'',en:''},
+   body:{tr:[],en:[]},sources:[]},
+ explainers:{slug:'yeni-tanim',date:new Date().toISOString().slice(0,10),read:3,sector:'',image:'',
+   tag:{tr:'Nedir · ',en:'Explainer · '},title:{tr:'',en:''},lede:{tr:'',en:''},
    body:{tr:[],en:[]},sources:[]},
  testimonials:{name:'',role:{tr:'',en:''},image:'',q:{tr:'',en:''}},
  faq:{q:{tr:'',en:''},a:{tr:'',en:''}},
@@ -651,20 +797,14 @@ proje:{t:'Projeler',n:()=>(get('projects')||[]).length,f:()=>`
     <div class="f"><textarea data-res="${p}.res">${esc((it.res||[]).map(r=>r.v+' :: '+((r.l||{}).tr||'')+' :: '+((r.l||{}).en||'')).join('\n'))}</textarea></div>
     <h4 class="sec">Detay bölümleri</h4>
     <p class="hint" style="margin-bottom:8px">Her satır: <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span></p>
-    <div class="f"><label>Bölümler (TR)</label>
-      <textarea class="big" data-blocks="${p}.blocks.tr">${esc(((it.blocks||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
-    <div class="f"><label>Bölümler (EN)</label>
-      <textarea class="big" data-blocks="${p}.blocks.en">${esc(((it.blocks||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>`,
+    ${govdeAlani('Bölümler (TR)',p+'.blocks.tr',(it.blocks||{}).tr)}
+    ${govdeAlani('Bölümler (EN)',p+'.blocks.en',(it.blocks||{}).en)}`,
     it=>it.name)}`,
   bind(r){
     r.querySelectorAll('[data-res]').forEach(el=>el.oninput=()=>
       set(el.dataset.res,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
         const q=l.split('::').map(x=>x.trim());
         return {v:q[0]||'',l:{tr:q[1]||'',en:q[2]||q[1]||''}};})));
-    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
-      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
   }},
 
 konu:{t:'Konular',n:()=>(get('topics')||[]).length,f:()=>`
@@ -678,9 +818,9 @@ konu:{t:'Konular',n:()=>(get('topics')||[]).length,f:()=>`
 bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
   <h2>Bülten yazıları</h2><p class="sub"><span class="mono">/bulten</span> listesi ve her yazı <span class="mono">/bulten/adres</span> sayfası. Kategori filtresi <b>Konu</b> alanından çıkar.</p>
   <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde biçimi:</b> her satır <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span>.
-  Veri vurgusu için: <span class="mono">&lt;div class="nfig"&gt;&lt;b&gt;%39&lt;/b&gt;&lt;span&gt;açıklama&lt;/span&gt;&lt;/div&gt;</span>.
-  Madde listesi için <span class="mono">&lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;</span>.<br>
+  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
+  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
+  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.<br>
   <b>Kaynaklar:</b> her satır <span class="mono">Kaynak adı :: https://adres</span> — adres boş bırakılabilir.</div>
   ${list('posts','Yazı',(it,i,p)=>`
     <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
@@ -692,18 +832,12 @@ bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
     ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
     <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
     <h4 class="sec">Gövde</h4>
-    <div class="f"><label>Bölümler (TR)</label>
-      <textarea class="big" data-blocks="${p}.body.tr">${esc(((it.body||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
-    <div class="f"><label>Bölümler (EN)</label>
-      <textarea class="big" data-blocks="${p}.body.en">${esc(((it.body||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
+    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
     <h4 class="sec">Kaynaklar</h4>
     <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
     it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
   bind(r){
-    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
-      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
     r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
       set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
         const i=l.indexOf('::');
@@ -713,9 +847,9 @@ bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
 nedirb:{t:'Nedir yazıları',n:()=>(get('explainers')||[]).length,f:()=>`
   <h2>Nedir yazıları</h2><p class="sub">Konunun <b>ne olduğunu ve nasıl çalıştığını</b> anlatan yazılar. <span class="mono">/nedir</span> listesi ve her yazı <span class="mono">/nedir/adres</span> sayfası. Bu yazılar <b>eskimez</b>: bültenin tarih akışına ve beslemesine karışmaz. <b>İlk yazıyı ekleyene kadar bölüm sitede görünmez</b> — menüde ve sitemap'te de yoktur.</p>
   <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde biçimi:</b> her satır <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span>.
-  Veri vurgusu için: <span class="mono">&lt;div class="nfig"&gt;&lt;b&gt;%39&lt;/b&gt;&lt;span&gt;açıklama&lt;/span&gt;&lt;/div&gt;</span>.
-  Madde listesi için <span class="mono">&lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;</span>.<br>
+  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
+  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
+  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.<br>
   <b>Kaynaklar:</b> her satır <span class="mono">Kaynak adı :: https://adres</span> — adres boş bırakılabilir.</div>
   ${list('explainers','Yazı',(it,i,p)=>`
     <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
@@ -727,18 +861,12 @@ nedirb:{t:'Nedir yazıları',n:()=>(get('explainers')||[]).length,f:()=>`
     ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
     <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
     <h4 class="sec">Gövde</h4>
-    <div class="f"><label>Bölümler (TR)</label>
-      <textarea class="big" data-blocks="${p}.body.tr">${esc(((it.body||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
-    <div class="f"><label>Bölümler (EN)</label>
-      <textarea class="big" data-blocks="${p}.body.en">${esc(((it.body||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
+    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
     <h4 class="sec">Kaynaklar</h4>
     <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
     it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
   bind(r){
-    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
-      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
     r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
       set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
         const i=l.indexOf('::');
@@ -748,10 +876,13 @@ nedirb:{t:'Nedir yazıları',n:()=>(get('explainers')||[]).length,f:()=>`
 haberb:{t:'Haberler',n:()=>(get('news')||[]).length,f:()=>`
   <h2>Haberler</h2><p class="sub">Sektörün <b>genel haberleri</b>. <span class="mono">/haber</span> listesi ve her haber <span class="mono">/haber/adres</span> sayfası. Konu filtresi <b>Konu</b> alanından çıkar ve her konunun kendi arşivi olur (<span class="mono">/haber/konu/…</span>). <b>İlk haberi ekleyene kadar bölüm sitede görünmez.</b></p>
   <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde biçimi:</b> her satır <span class="mono">Başlık :: &lt;p&gt;metin&lt;/p&gt;</span>.
-  Veri vurgusu için: <span class="mono">&lt;div class="nfig"&gt;&lt;b&gt;%39&lt;/b&gt;&lt;span&gt;açıklama&lt;/span&gt;&lt;/div&gt;</span>.
-  Madde listesi için <span class="mono">&lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;</span>.<br>
+  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
+  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
+  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.<br>
   <b>Kaynaklar:</b> her satır <span class="mono">Kaynak adı :: https://adres</span> — adres boş bırakılabilir.</div>
+  <div class="note"><b>Haberde kaynak kuralı:</b> haberleri kendi tarzımızla özgünleştiriyoruz,
+  <b>kaynak yazmıyoruz</b>. Alan yalnız <b>çok önemli politik konular</b> için duruyor.
+  Boş bıraktığında sayfada kaynak bölümü hiç görünmez — başlığı da çıkmaz.</div>
   ${list('news','Yazı',(it,i,p)=>`
     <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
     <div class="r2">${opt('Konu',p+'.topic',BKCATS())}${opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}</div>
@@ -762,18 +893,12 @@ haberb:{t:'Haberler',n:()=>(get('news')||[]).length,f:()=>`
     ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
     <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
     <h4 class="sec">Gövde</h4>
-    <div class="f"><label>Bölümler (TR)</label>
-      <textarea class="big" data-blocks="${p}.body.tr">${esc(((it.body||{}).tr||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
-    <div class="f"><label>Bölümler (EN)</label>
-      <textarea class="big" data-blocks="${p}.body.en">${esc(((it.body||{}).en||[]).map(b=>b[0]+' :: '+b[1]).join('\n'))}</textarea></div>
+    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
+    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
     <h4 class="sec">Kaynaklar</h4>
     <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
     it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
   bind(r){
-    r.querySelectorAll('[data-blocks]').forEach(el=>el.oninput=()=>
-      set(el.dataset.blocks,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?[l,'']:[l.slice(0,i).trim(),l.slice(i+2).trim()];})));
     r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
       set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
         const i=l.indexOf('::');
@@ -1193,6 +1318,100 @@ const NAV=[['İçerik',['genel','sektor']],
   ['Bölümler',['hizmet','hizmetdet','surec','kanal','proje','konu','bulten','nedirb','haberb','soz','sss','kurucu']],
   ['Site',['metin','gorunum','yayin']]];
 
+/* GOVDE EDITORU BAGLAMALARI (9 Eyl 2026).
+   Yazarken YENIDEN CIZILMEZ (imlec kaybolurdu): metin girdileri yalniz
+   `set` cagirir, `set` -> `touch` -> taslak + onizleme. Yeniden cizim
+   SADECE yapi degisince (ekle/sil/tasi) olur — bugunku `list()`
+   davranisinin aynisi. */
+function govdeYaz(path,D){ set(path,D.map(x=>[x[0],x[1]])); }
+function govdeOku(path){ const d=get(path); return Array.isArray(d)?d.map(x=>[x[0]||'',x[1]||'']):[]; }
+function blokYaz(path,bi,bloklar){
+  const D=govdeOku(path);
+  if(!D[bi])return;
+  D[bi][1]=bloklarToHtml(bloklar);
+  govdeYaz(path,D);
+}
+function blokOku(path,bi){ const D=govdeOku(path); return htmlToBloklar((D[bi]||['',''])[1]); }
+
+function bindGovde(ed){
+  const coz=v=>{const a=v.split('|');return {path:a[0],bi:+a[1],ki:+a[2],ek:a[3]};};
+
+  /* bolum basligi */
+  ed.querySelectorAll('[data-gbas]').forEach(el=>el.oninput=()=>{
+    const {path,bi}=coz(el.dataset.gbas); const D=govdeOku(path);
+    if(D[bi]){D[bi][0]=el.value; govdeYaz(path,D);} });
+
+  /* paragraf — contenteditable; yalniz b/em/br disari cikar */
+  ed.querySelectorAll('[data-bic]').forEach(el=>{
+    el.oninput=()=>{ const {path,bi,ki}=coz(el.dataset.bic);
+      const bl=blokOku(path,bi); if(!bl[ki])return;
+      bl[ki]={t:'p',ic:satirIciOku(el)}; blokYaz(path,bi,bl); };
+    /* YAPISTIRMA DUZ METNE INER: tarayici span/style/div yapistirir,
+       kabul edilseydi icerik yavas yavas cop toplardi. */
+    el.onpaste=(e)=>{ e.preventDefault();
+      const t=(e.clipboardData||window.clipboardData).getData('text/plain');
+      document.execCommand('insertText',false,t); };
+  });
+
+  /* KALIN: secimi sarar. Isaret yok, dugme var — istenen buydu. */
+  ed.querySelectorAll('[data-kalin]').forEach(b=>b.onmousedown=(e)=>{
+    e.preventDefault();
+    const yz=b.closest('.bl').querySelector('.yz'); if(!yz)return;
+    yz.focus(); document.execCommand('bold',false,null);
+    yz.dispatchEvent(new Event('input'));
+  });
+
+  /* liste */
+  ed.querySelectorAll('[data-bliste]').forEach(el=>el.oninput=()=>{
+    const {path,bi,ki}=coz(el.dataset.bliste);
+    const bl=blokOku(path,bi); if(!bl[ki])return;
+    bl[ki]={t:'liste',ogeler:el.value.split('\n').map(x=>x.trim()).filter(Boolean)};
+    blokYaz(path,bi,bl); });
+
+  /* vurgu */
+  const vurgu=(el,alan,anahtar)=>el.oninput=()=>{
+    const {path,bi,ki}=coz(el.dataset[alan]);
+    const bl=blokOku(path,bi); if(!bl[ki]||bl[ki].t!=='vurgu')return;
+    bl[ki][anahtar]=el.value; blokYaz(path,bi,bl); };
+  ed.querySelectorAll('[data-bvs]').forEach(el=>vurgu(el,'bvs','sayi'));
+  ed.querySelectorAll('[data-bva]').forEach(el=>vurgu(el,'bva','aciklama'));
+
+  /* ham blok — tanimayan bicim oldugu gibi duruyor */
+  ed.querySelectorAll('[data-bham]').forEach(el=>el.oninput=()=>{
+    const {path,bi,ki}=coz(el.dataset.bham);
+    const bl=blokOku(path,bi); if(!bl[ki])return;
+    bl[ki]={t:'ham',html:el.value}; blokYaz(path,bi,bl); });
+
+  /* YAPI DEGISIKLIKLERI — bunlar yeniden cizer */
+  const yenile=()=>{ touch(); show(cur); };
+  ed.querySelectorAll('[data-bekle]').forEach(b=>b.onclick=()=>{
+    const {path,bi,ek}=coz(b.dataset.bekle);
+    const bl=blokOku(path,bi);
+    bl.push(ek==='p'?{t:'p',ic:''}:ek==='liste'?{t:'liste',ogeler:['']}
+      :{t:'vurgu',sayi:'',aciklama:''});
+    blokYaz(path,bi,bl); yenile(); });
+  ed.querySelectorAll('[data-bdel]').forEach(b=>b.onclick=()=>{
+    const {path,bi,ki}=coz(b.dataset.bdel);
+    const bl=blokOku(path,bi); bl.splice(ki,1); blokYaz(path,bi,bl); yenile(); });
+  ed.querySelectorAll('[data-bmv]').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.bmv.split('|'); const path=a[0],bi=+a[1],ki=+a[2],yon=+a[3];
+    const bl=blokOku(path,bi); const j=ki+yon;
+    if(j<0||j>=bl.length)return;
+    [bl[ki],bl[j]]=[bl[j],bl[ki]]; blokYaz(path,bi,bl); yenile(); });
+  ed.querySelectorAll('[data-gekle]').forEach(b=>b.onclick=()=>{
+    const path=b.dataset.gekle; const D=govdeOku(path);
+    D.push(['','<p></p>']); govdeYaz(path,D); yenile(); });
+  ed.querySelectorAll('[data-gdel]').forEach(b=>b.onclick=()=>{
+    const {path,bi}=coz(b.dataset.gdel);
+    if(!confirm('Bu bölüm silinecek. Emin misin?'))return;
+    const D=govdeOku(path); D.splice(bi,1); govdeYaz(path,D); yenile(); });
+  ed.querySelectorAll('[data-gmv]').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.gmv.split('|'); const path=a[0],bi=+a[1],yon=+a[2];
+    const D=govdeOku(path); const j=bi+yon;
+    if(j<0||j>=D.length)return;
+    [D[bi],D[j]]=[D[j],D[bi]]; govdeYaz(path,D); yenile(); });
+}
+
 /* ================= ÇEKİRDEK ================= */
 function show(k){
   cur=k;
@@ -1223,6 +1442,7 @@ function show(k){
     const p=b.dataset.add;
     if(!get(p))set(p,[]);
     get(p).push(JSON.parse(JSON.stringify(blankFor(p))));touch();show(cur);buildSide();});
+  bindGovde(ed);
   if(P[k].bind)P[k].bind(ed);
   ed.scrollTop=0;
 }

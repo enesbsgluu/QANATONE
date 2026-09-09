@@ -1088,7 +1088,11 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
 {
   const { execFileSync } = require('child_process');
   const testKok = path.join(__dirname, '..', 'test');
-  const KOSULAN = ['yayinla.test.js'];         /* T5'in kostugu dosyalar */
+  /* 9 Eyl 2026:  eklendi. Panel govdeyi artik HTML
+     olarak yazdirmiyor; donusturucu bozulursa kayip SESSIZ olur (bolum
+     yarim gorunur, kaydedilince gercek icerik silinir). Test gercek
+     yazilari tarar, fikstur kullanmaz. */
+  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js'];
   const kusur = [];
   let ozet = '';
 
@@ -1116,7 +1120,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     }
   }
 
-  ol('T5 · panel yayin ucu (yayinla.js) testleri ZINCIRDE + yetim test yok',
+  ol('T5 · panel testleri (yayin ucu + govde donusturucu) ZINCIRDE + yetim test yok',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 3).join(' | ')
        : `${KOSULAN.length} dosya · ${ozet} · test/ taranmis (${varOlan.length} aday)`);
