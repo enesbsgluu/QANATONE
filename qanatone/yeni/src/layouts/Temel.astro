@@ -250,6 +250,12 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   {heleftr && <link rel="alternate" hreflang="tr" href={heleftr} />}
   {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
   {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
+  {/* BESLEME KESFI (11 Eyl 2026, H3): okuyucular ve tarayicilar beslemeyi
+      sayfanin basindan bulur — onceden hicbir sayfada rss+xml bagi yoktu.
+      KOSULLU: kaynagi bos bolumun beslemesi duyurulmaz (nav/footer/sitemap
+      ile ayni `doluKaynaklar` suzgeci). Bekci R8 (d). */}
+  {DOLU.has('posts') && <link rel="alternate" type="application/rss+xml" title="QANATONE Bülten" href={`${KOK}/bulten/rss.xml`} />}
+  {DOLU.has('news') && <link rel="alternate" type="application/rss+xml" title="QANATONE Haberler" href={`${KOK}/haber/rss.xml`} />}
   {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
   {/* GOVDE FONTU ON YUKLEME — HER SAYFA (TUR 3, 4 Eyl 2026).
       Ana sayfada zaten vardi ve gerekcesi index.astro'da yazili ("swap ile

@@ -471,8 +471,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kanal <link>i + 7 item'in link/guid'i egik cizgisiz kaldi — canlida
      hepsi 301 donuyordu, sitemap'in 58 loc'u 200'ken. Kural kapsami
      "sayfalar + o turda akla gelen iki dosya" degil, ADRES BASAN HER
-     CIKTI olmali. */
-  for (const ad of ['sitemap.xml', '_headers', path.join('bulten', 'rss.xml')]) {
+     CIKTI olmali. Haber beslemesi (11 Eyl 2026, H3) dogdugu turda girdi. */
+  for (const ad of ['sitemap.xml', '_headers', path.join('bulten', 'rss.xml'), path.join('haber', 'rss.xml')]) {
     const y = path.join(KOK, ad);
     if (!fs.existsSync(y)) continue;
     const g = fs.readFileSync(y, 'utf8');
@@ -1790,12 +1790,18 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (yabanci.length) kusur.push(k.dizin + ': izgarada yabanci kart — ' + yabanci.slice(0, 2).join(', '));
   }
 
-  /* 2b · BESLEME YALNIZ BULTEN */
-  const rss = oku2(path.join(KOK, 'bulten', 'rss.xml'));
-  if (rss) {
+  /* 2b · HER BESLEME YALNIZ KENDI BOLUMU (11 Eyl 2026, haber beslemesi
+     H3). Once "besleme yalniz bulten" idi — tek besleme varken dogru.
+     Iki besleme olunca olcut ikisine de ayni: besleme kendi koleksiyonu
+     DISINDAKI hicbir bolumun adresini tasimaz (haber bultene, bulten
+     habere, nedir ikisine de girmez). Besleme yoksa burada atlanir;
+     yoklugunu R8 yakar. */
+  for (const [dosya, sahip] of [[path.join('bulten', 'rss.xml'), 'yazilar'], [path.join('haber', 'rss.xml'), 'haberler']]) {
+    const rss = oku2(path.join(KOK, dosya));
+    if (!rss) continue;
     for (const k of S.koleksiyon) {
-      if (k.ad === 'yazilar' || !k.dizin) continue;
-      if (rss.includes(k.dizin + '/')) kusur.push('rss: ' + k.dizin + ' icerigi beslemeye girmis');
+      if (k.ad === sahip || !k.dizin) continue;
+      if (rss.includes(k.dizin + '/')) kusur.push(dosya.replace(/\\/g, '/') + ': ' + k.dizin + ' icerigi beslemeye girmis');
     }
   }
 
@@ -3018,34 +3024,62 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
     if (yolKusur.length) kusur.push(`yol≠canonical ${yolKusur.length} sayfa: ` + yolKusur.slice(0, 2).join(', '));
     if (smN.size < 10) kusur.push('sitemap süpheli kisa:' + smN.size);
   }
-  const rssYol = path.join(KOK, 'bulten', 'rss.xml');
-  if (!fs.existsSync(rssYol)) kusur.push('rss.xml yok');
-  else {
+  /* (b) BESLEMELER — bulten + haber (11 Eyl 2026, haber beslemesi H3).
+     Iki besleme AYNI olcute girer; kaynak/dizin sayfalar.json'dan `ad`
+     ile okunur (sitenin tek URL sozlesmesi).
+     RSS TAVANI 50 (Enes, 9 Eyl 2026). BU KURAL ONCEDEN "item seti =
+     posts seti" diyordu; tavanla birlikte olcut "= EN YENI min(50, N)"
+     oldu. Ikisi AYNI ANDA degismeseydi 51. yazi eklendigi gun deploy
+     duserdi — ureteci degistirip kapiyi unutmak, bu depoda daha once
+     ates etmis bir kusur. Tavan sayisi uretecten (bulten/rss.xml.ts
+     kaynagi) OKUNUR, burada tekrar YAZILMAZ: iki yerde duran sayi kayar.
+     Haber ureteci de ayni sayiyi oradan ITHAL eder.
+     ESIT TARIHTE SIRA SLUG'LA KIRILIR (11 Eyl 2026): haberler ayni gunde
+     birden cok yayinlaniyor. Tavan sinirinda ayni tarihli iki kayit
+     varsa "hangi 50" sorusunu kaynagin DOSYA SIRASI cevapliyordu —
+     uretec glob sirasini, bu kural readdirSync sirasini goruyordu
+     (Linux'ta garantisiz). Iki taraf da (tarih azalan, slug artan).
+     SIRA da kiyaslanir: kume esit ama sira farkliysa okuyucu yanlis
+     "en yeni"yi gosterir.
+     (d) KESIF BAGI: kaynagi dolu her besleme HER sayfanin basinda
+     `rel="alternate" type="application/rss+xml"` ile duyurulur; kaynak
+     bossa bag YOK (kosullu bolum: bos bolumun beslemesi duyurulmaz). */
+  {
     const c = icerikTam();
-    const rss = oku(rssYol);
-    const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
-    /* RSS TAVANI 50 (Enes, 9 Eyl 2026). BU KURAL ONCEDEN "item seti =
-       posts seti" diyordu; tavanla birlikte olcut "= EN YENI min(50, N)"
-       oldu. Ikisi AYNI ANDA degismeseydi 51. yazi eklendigi gun deploy
-       duserdi — ureteci degistirip kapiyi unutmak, bu depoda daha once
-       ates etmis bir kusur. Tavan sayisi uretecten (rss.xml.ts kaynagi)
-       OKUNUR, burada tekrar YAZILMAZ: iki yerde duran sayi kayar. */
     const rssKaynak = fs.readFileSync(path.join(__dirname, 'src', 'pages', 'bulten', 'rss.xml.ts'), 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, ' ');
     const tavanM = rssKaynak.match(/RSS_TAVAN\s*=\s*(\d+)/);
     if (!tavanM) kusur.push('rss.xml.ts icinde RSS_TAVAN bulunamadi (yorum sayilmaz)');
     const TAVAN = tavanM ? parseInt(tavanM[1], 10) : 0;
-    /* Beklenen kume: tarihe gore yeni->eski ilk TAVAN yazi — ureteciyle
-       AYNI siralama, yoksa "hangi 50" sorusunda ayrisirlar. */
-    const beklenenPosts = (c.posts || []).slice()
-      .sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, TAVAN);
-    for (const p of beklenenPosts)
-      /* guid EGIK CIZGIYLE biter (6 Eyl 2026, H29 kapsami rss'e genisledi). */
-      if (!guidler.includes(`${KONAK}/bulten/${p.slug}/`)) kusur.push('rss-eksik:' + p.slug);
-    if (guidler.length !== beklenenPosts.length) kusur.push(`rss-sayi:${guidler.length}/${beklenenPosts.length}`);
-    if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push('rss-pubDate eksik');
+    const KOL8 = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8')).koleksiyon;
+    const kaynakMetni = sayfalar.map((p) => oku(p));
+    for (const ad of ['yazilar', 'haberler']) {
+      const K = KOL8.find((k) => k.ad === ad);
+      if (!K) { kusur.push('sayfalar.json koleksiyonu yok: ' + ad); continue; }
+      const etiket = K.dizin.slice(1) + '/rss.xml';
+      const kayitlar = Array.isArray(c[K.kaynak]) ? c[K.kaynak] : [];
+      const beklenen = kayitlar.slice()
+        .sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(a.slug).localeCompare(String(b.slug)))
+        .slice(0, TAVAN).map((p) => `${KONAK}${K.dizin}/${p.slug}/`);
+      const rssYol = path.join(KOK, K.dizin.slice(1), 'rss.xml');
+      if (!fs.existsSync(rssYol)) kusur.push(etiket + ' yok');
+      else {
+        const rss = oku(rssYol);
+        /* guid EGIK CIZGIYLE biter (6 Eyl 2026, H29 kapsami rss'e genisledi). */
+        const guidler = [...rss.matchAll(/<guid>([^<]+)<\/guid>/g)].map(m => m[1]);
+        for (const g of beklenen) if (!guidler.includes(g)) kusur.push(etiket + '-eksik:' + g.split('/').slice(-2, -1)[0]);
+        if (guidler.length !== beklenen.length) kusur.push(`${etiket}-sayi:${guidler.length}/${beklenen.length}`);
+        else if (guidler.join('|') !== beklenen.join('|')) kusur.push(etiket + '-sira');
+        if ((rss.match(/<pubDate>/g) || []).length !== guidler.length) kusur.push(etiket + '-pubDate eksik');
+      }
+      const bagHref = `${KONAK}${K.dizin}/rss.xml`;
+      const bagDeseni = new RegExp('<link rel="alternate" type="application/rss\\+xml"[^>]*href="' + bagHref.replace(/[.*+?^$()|[\]\\{}]/g, '\\$&') + '"');
+      const bagli = kaynakMetni.filter((h) => bagDeseni.test(h)).length;
+      const bekBag = kayitlar.length ? sayfalar.length : 0;
+      if (bagli !== bekBag) kusur.push(`${etiket}-kesif-bagi:${bagli}/${bekBag} sayfa`);
+    }
   }
-  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + rss item seti = en yeni min(RSS_TAVAN, posts)',
+  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + bulten/haber beslemesi = en yeni min(RSS_TAVAN) (sirali) + kesif bagi her sayfada',
      kusur.length === 0, kusur.slice(0, 3).join(' | '));
 }
 

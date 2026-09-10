@@ -34,8 +34,11 @@ import { KOK, T, sl } from '../../icerik';
 export const RSS_TAVAN = 50;
 
 export const GET: APIRoute = async () => {
+  /* ESIT TARIHTE SLUG ARTAN (11 Eyl 2026): tavan sinirinda ayni tarihli
+     iki kayit varsa "hangi 50"yi dosya sirasi seciyordu; R8 ayni anahtarla
+     (tarih azalan, slug artan) kiyaslar ve sirayi da sinar. */
   const yazilar = (await getCollection('yazilar')).map(e => e.data)
-    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)))
+    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)) || String(a.slug).localeCompare(String(b.slug)))
     .slice(0, RSS_TAVAN);
   const esc = (s: unknown) => String(s == null ? '' : s).replace(/&/g, '&amp;')
     .replace(/</g, '&lt;').replace(/>/g, '&gt;');
