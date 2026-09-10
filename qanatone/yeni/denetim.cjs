@@ -2128,9 +2128,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    Ham bayt platforma bagliydi — autocrlf'li Windows cekimi ~1,6 KB
    fazla okur, fonksiyon paketine giden ise git'teki LF hali. CLAUDE.md
    "metin dosyasinin ham bayti platforma bagli" tuzaginin bayt esi.
-   SIRADAKI KALDIRAC: METIN_HARITA'da "Eski site" bolumu 148 anahtar,
-   ~6 KB — panelin kendi notuna gore yeni site onlari okumuyor. Uretec
-   (metin-harita.cjs) karari Enes'te.
+   "ESKI SITE" ANAHTARLARI KALDIRAC DEGIL (ayni gun olculdu — once
+   yanlis yazilmisti): 148 anahtarin 79'u yeni/src'de tirnak icinde
+   geciyor (ust sinir; `lede` gibi alan adi da eslesir), s9e/s9h/che/
+   chh/chp/bke/bkh/bkp kesin canli. Haritanin "Eski site" etiketi YANLIS:
+   metin-harita.cjs yalniz m()/M() cagrisini taniyor, g('anahtar') ve
+   sayfalar.json `metin` kullanimini gormuyor. Silmek canli metinleri
+   panelden koparirdi.
    YUKSELTME (10 Eyl 2026, ayni gun): 128 → 135 KB. Dosya 135.239 B.
    Gerekce iki Enes istegi: (1) TASLAK TABANI — canli panelde "6 kayit
    degisti"; bayat taslak sessizce uygulaniyordu, artik her degisiklik
