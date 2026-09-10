@@ -54,6 +54,8 @@ const enYol = essiz ? sl(`${B}/en`) : sl(`${B}/en${cip === '/' ? '' : cip}`);
 /* .here: kaynak kuralı (11718) — yalnız düz bağlantılar işaret alır */
 const anaMi = cip === '/';
 const bultenMi = cip.startsWith('/bulten');
+const haberMi = cip.startsWith('/haber');
+const haber = SAYFA.find((s) => s.yol === '/haber');
 
 const hizmetler = (icerik.services || []).slice(0, 8);
 const projeler = icerik.projects || [];
@@ -109,6 +111,11 @@ const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
         </div>
       </div>
       <a href={sl(`${B}${on}/bulten`)} class:list={[bultenMi && 'here']}>{m('nav6', 'Bülten', 'Newsletter')}</a>
+      {/* HABERLER (Enes, 10 Eyl 2026: "bültende hiçbir haber göremiyorum").
+          Bölüm açıldı ama bağlantı yalnız mobil menüde ve alt bilgideydi —
+          masaüstünden gelen bulamıyordu. Kayıt `SAYFA`dan okunur: bölüm boşsa
+          (koşullu) bağlantı da yok, etiket panel anahtarından (`nav8`). */}
+      {haber && <a href={sl(`${B}${on}${haber.yol}`)} class:list={[haberMi && 'here']}>{m(haber.anahtar, haber.tr, haber.en)}</a>}
       <div class="nv-dd">
         <button class="nv-dt" type="button">{m('nav7', 'Stüdyo', 'Studio')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
