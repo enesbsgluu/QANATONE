@@ -246,7 +246,11 @@ const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
      aciklama = '... — kaynagiyla.'`), yani Google'da gorunen cumlede.
      Bolum giris metnini duzeltip meta'yi birakmak, yalani en gorunur
      yerde birakmak olurdu. */
-  const VAAT = /kayna[ğg][ıi]yla|with the source/i;
+  /* 10 Eyl 2026: kalip genisledi. "with the source" yalniz BIR kalibi
+     yakaliyordu; /en/sektor ("With numbers and sources."), /en/nedir
+     ("with examples and sources") meta aciklamalari gecip gidiyordu —
+     /en/sektor/saglik canlidaydi. Vaadin EN esi "... and sources". */
+  const VAAT = /kayna[ğg][ıi]yla|kaynaklar[ıi]yla|with the source|\band sources\b/i;
   const suclu = [];
   const gez = (d) => {
     for (const ad of fs.readdirSync(d)) {

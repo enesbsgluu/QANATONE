@@ -1,0 +1,43 @@
+{
+  "slug": "kimi-k3-acik-agirlik",
+  "date": "2026-07-26",
+  "read": 1,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "Kimi K3'ün 2,8 trilyon parametrelik ağırlıkları açıldı",
+    "en": "Moonshot AI opens the weights of 2.8T-parameter Kimi K3"
+  },
+  "lede": {
+    "tr": "Kimi K3 ağırlıkları açılan en büyük model. Lisansı, yılda 20 milyon doları aşan çıkarım sağlayıcılarından yüzde 30'a kadar gelir payı istiyor.",
+    "en": "Kimi K3 is the largest open-weights model released so far. Its license asks inference providers earning over $20 million a year for up to 30% revenue share."
+  },
+  "body": {
+    "tr": [
+      [
+        "Model",
+        "<p>Moonshot AI Kimi K3'ü 16 Temmuz'da yayınladı ve ağırlıkları 27 Temmuz'a kadar açacağını söyledi; ağırlıklar bir gün erken, 26 Temmuz'da yayımlandı. Model uzmanlar karışımı mimaride: 2,8 trilyon parametrenin 104 milyarı etkin. Bağlam penceresi 1.048.576 token, görsel ve video girdisini de işliyor. Swarm adlı özellik derin araştırma için yüzlerce alt ajanı birlikte çalıştırıyor.</p>"
+      ],
+      [
+        "Lisans",
+        "<p>Ağırlıklar indirilebiliyor, kendi sunucunda çalıştırılabiliyor ve uyarlanabiliyor. Ancak özel lisans, yıllık geliri 20 milyon doları aşan çıkarım sağlayıcılarından yüzde 30'a kadar gelir payı istiyor. Yani açık ağırlık, her ölçekte serbest kullanım anlamına gelmiyor.</p><p>Kimi K3'ün performansı Çin'de sektörün önüne geçti ve OpenAI ile Anthropic'in öncü modelleriyle yarışır düzeyde değerlendirildi. Alibaba'nın 2,4 trilyon parametreli Qwen3.8-Max'ı ağustos başında onu izledi.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The model",
+        "<p>Moonshot AI released Kimi K3 on July 16 and published the weights on July 26, a day early. It is a mixture-of-experts model with 2.8 trillion parameters, 104 billion active, a 1,048,576-token context window and image and video input. A Swarm feature runs hundreds of sub-agents for deep research.</p>"
+      ],
+      [
+        "The license",
+        "<p>The weights can be downloaded, self-hosted and adapted, but the custom license requires up to 30% revenue share from inference providers earning more than $20 million a year.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

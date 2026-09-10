@@ -78,6 +78,20 @@ export async function konuSayfaYollari() {
    bos bolum hic sayfa uretmez. `kosullu` bayragiyla birlikte bolum,
    ilk yazi panelden eklenene kadar sitede YOKTUR: menude, sitemap'te,
    sayfa kumesinde. Kod degisikligi gerekmeden acilir. */
+/* KOSULLU BOLUM DOLULUGU — TEK FONKSIYON (10 Eyl 2026).
+   Nav ve Temel eskiden `icerik[s.kosullu]` sayiyordu. Kademe 2'de dosyaya
+   tasinan koleksiyonlar (yazilar · nedir · haber) content.json'da artik
+   YOK: ilk haberler gelince /haber sayfasi ve sitemap kaydi uretildi ama
+   menu ve alt bilgi bolumu BOS saydi (T12 yakaladi). Sitemap zaten
+   koleksiyondan sayiyordu. Sayim artik koleksiyondan; donen kume
+   sozlesmedeki `kaynak` adlaridir (`kosullu` alaninin tuttugu ad). */
+export async function doluKaynaklar(): Promise<Set<string>> {
+  const dolu = new Set<string>();
+  for (const k of (sayfalarVeri as any).koleksiyon)
+    if ((await getCollection(k.ad as any)).length > 0) dolu.add(k.kaynak);
+  return dolu;
+}
+
 export function bolumKaydi(ad: string): any {
   return (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === ad);
 }

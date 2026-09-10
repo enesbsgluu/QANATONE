@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 
 const canon = sl(`${KOK}/en/nedir`);
 const baslik = 'Explainers — QANATONE';
-const aciklama = 'What the topics are and how they work — with examples and sources.';
+const aciklama = 'What the topics are and how they work — with examples.';
 const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('nedir', { sayfa: 1, konu: '' });
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: 1, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm' }, semaDilim, semaBas);
 ---

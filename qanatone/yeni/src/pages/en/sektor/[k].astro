@@ -29,7 +29,7 @@ const canon = sl(`${KOK}/en/sektor/${anahtar}`);
 const baslik = `${ad} — Sector — QANATONE`;
 /* Composed from the sector name — NOT `sectors[].d`, which holds the
    homepage pain-point line, not a description. See the TR twin. */
-const aciklama = `${ad} sector coverage — bulletin, explainers and news together. With numbers and sources.`;
+const aciklama = `${ad} sector coverage — bulletin, explainers and news together. With numbers.`;
 const dilim = await sektorDilim(anahtar, 1);
 const sema = sektorDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' }, dilim.gorunen, dilim.bas);
 ---

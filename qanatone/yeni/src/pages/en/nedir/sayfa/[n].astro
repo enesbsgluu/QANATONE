@@ -16,7 +16,7 @@ const { n } = Astro.params;
 const sayfa = Number(n);
 const canon = sl(`${KOK}/en/nedir/sayfa/${sayfa}`);
 const baslik = `Explainers — Page ${sayfa} — QANATONE`;
-const aciklama = `What the topics are and how they work — with examples and sources. Page ${sayfa}.`;
+const aciklama = `What the topics are and how they work — with examples. Page ${sayfa}.`;
 const { yazilar: semaDilim, bas: semaBas } = await bolumDilimi('nedir', { sayfa: sayfa, konu: '' });
 const sema = bultenDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', sayfaNo: sayfa, sayfaBoyu: SAYFA_BOYU, dizin: '/nedir', tip: 'DefinedTerm' }, semaDilim, semaBas);
 ---

@@ -1,0 +1,43 @@
+{
+  "slug": "revolut-research-pragma",
+  "date": "2026-08-25",
+  "read": 1,
+  "topic": "odeme",
+  "sector": "finans",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Ödeme",
+    "en": "News · Payments"
+  },
+  "title": {
+    "tr": "Revolut kendi temel modeli PRAGMA için araştırma birimi kurdu",
+    "en": "Revolut builds a research unit around its own model, PRAGMA"
+  },
+  "lede": {
+    "tr": "Revolut 25 Ağustos'ta Revolut Research'ü duyurdu. PRAGMA sahtekârlık yakalama oranını bankanın kendi modellerine göre yüzde 64,7 artırdı.",
+    "en": "Revolut announced Revolut Research on August 25. PRAGMA improved fraud recall by 64.7% over its own specialist models."
+  },
+  "body": {
+    "tr": [
+      [
+        "PRAGMA nedir",
+        "<p>Revolut Research, 80 milyondan fazla bireysel müşterisi olan Revolut'un yapay zekâ departmanı içinde kurulan ve PRAGMA'yı geliştiren birim. PRAGMA, NVIDIA ile birlikte geliştirilen, enkoder tipi transformer modellerden oluşan bir aile. 100'den fazla ülkedeki yaklaşık 26 milyon kullanıcıdan gelen yaklaşık 24 milyar bankacılık olayı üzerinde ön eğitimden geçirildi. Gerçek zamanlı risk değerlendirmesi, platform operasyonları ve kişiye göre ürün önerileri bu modelden besleniyor.</p>"
+      ],
+      [
+        "Sonuçlar",
+        "<ul><li>Sahtekârlık tespitinde yakalama oranı yüzde 64,7 arttı</li><li>Kredi puanlamada kesinlik-duyarlılık performansı yüzde 130 arttı</li><li>Ürün önerilerinin isabeti yüzde 40 arttı</li></ul><p>Karşılaştırma, Revolut'un geçmiş verisi üzerinde kendi uzman modelleriyle yapıldı. Rakip bankalar sahtekârlık, müşteri hizmeti ve kredi için ayrı modeller kurarken Revolut tek bir modelin müşteri yolculuğunun tamamından öğrenmesini seçti.</p><p>Bizce çoğu finans kurumu için daha gerçekçi yol hazır modelleri kendi verisiyle beslemek. Kendi temel modelini eğitmek 24 milyar olaylık bir veri birikimi gerektiriyor.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What PRAGMA is",
+        "<p>Revolut, which has more than 80 million retail customers, set up Revolut Research inside its AI department to build PRAGMA, a family of encoder-style transformer models developed with NVIDIA. It was pre-trained on about 24 billion banking events from roughly 26 million users in more than 100 countries, and powers risk assessment, platform operations and product recommendations.</p>"
+      ],
+      [
+        "Results",
+        "<p>Against Revolut's own specialist models on historical data, PRAGMA improved fraud recall by 64.7%, credit-scoring precision-recall by 130% and recommendation relevance by 40%.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

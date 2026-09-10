@@ -17,11 +17,14 @@ import { icerik, T, type Dil, sl } from '../icerik';
 /* TUR 9 (3 Eyl 2026): sayfa listesi TEK KAYNAK — dil esi, Studyo sozlugu ve
    mobil menu sirasi veri/sayfalar.json'dan (onceden uc ayri elle liste). */
 import sayfalarVeri from '../veri/sayfalar.json';
+import { doluKaynaklar } from '../sayfalama';
 /* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan bolum MENUDE de yok.
    Bos bir kapi, tiklayana hicbir sey vermeyen bir menu girisidir.
-   Sayimi `icerik`ten okunur (menu derleme aninda kurulur). */
+   10 Eyl 2026: sayim KOLEKSIYONDAN (`doluKaynaklar`) — dosyaya tasinan
+   bolumler content.json'da yok, `icerik`ten sayinca /haber hic acilmiyordu. */
+const DOLU = await doluKaynaklar();
 const SAYFA: any[] = ((sayfalarVeri as any).statik as any[])
-  .filter((s) => !s.kosullu || ((icerik as any)[s.kosullu] || []).length > 0);
+  .filter((s) => !s.kosullu || DOLU.has(s.kosullu));
 
 interface Props { dil?: Dil }
 const { dil = 'tr' } = Astro.props;

@@ -1,0 +1,43 @@
+{
+  "slug": "coinbase-x402-ajan-odemeleri",
+  "date": "2026-08-27",
+  "read": 1,
+  "topic": "odeme",
+  "sector": "finans",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Ödeme",
+    "en": "News · Payments"
+  },
+  "title": {
+    "tr": "Coinbase x402: ajanlar 30 günde 14 milyon ödeme yaptı",
+    "en": "Coinbase x402: AI agents made 14 million payments in 30 days"
+  },
+  "lede": {
+    "tr": "Ödemelerin neredeyse tamamı USDC ile yapıldı. Ağustos sonunda protokoldeki toplam ajan işlemi 205 milyonu, hacim 53 milyon doları geçti.",
+    "en": "Nearly all of them were in USDC. By late August the protocol had passed 205 million agent transactions and $53 million in volume."
+  },
+  "body": {
+    "tr": [
+      [
+        "Rakamlar",
+        "<p>x402, ajanların bir servisi kullanırken istek başına ödeme yapabildiği bir protokol. Ağustosta yayımlanan verilere göre ajanlar 30 günde 14 milyon transfer yaptı; bunun 7,3 milyonu Base, 5,6 milyonu Polygon ağında gerçekleşti. Transferlerin neredeyse tamamında USDC kullanıldı.</p><div class=\"nfig\"><b>205 milyon</b><span>ağustos sonu itibarıyla x402 üzerinden yapılan toplam ajan işlemi, toplam hacim 53 milyon $</span></div><p>İki rakam yan yana konunca ortalama işlemin 30 sentin altında kaldığı görülüyor. Bu tutar, ödemelerin çoğunun ürün alışverişinden çok istek başına ödenen küçük ücretler olduğunu düşündürüyor.</p>"
+      ],
+      [
+        "Ağustosta eklenenler",
+        "<p>Coinbase temmuzda işletmelerin Coinbase Business üzerinden ajanlardan doğrudan USDC kabul etmesinin yolunu açmıştı. 17 Ağustos'tan beri Massive, borsa verisini x402 ile istek başına satıyor; ajan veriyi insan onayı beklemeden, ihtiyaç duydukça tek tek alabiliyor. 27 Ağustos'ta Coinbase, ajanların kripto hesaplarını yönetmesine, önceden onaylanmış işlemleri yapmasına ve x402 ile otomatik USDC ödemesine imkân veren araçlarını anlattı.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The numbers",
+        "<p>Agents made 14 million transfers over x402 in 30 days: 7.3 million on Base and 5.6 million on Polygon, almost all in USDC. By late August the protocol had handled more than 205 million agent transactions worth $53 million in total, an average of under 30 cents.</p>"
+      ],
+      [
+        "What August added",
+        "<p>Since August 17, Massive sells stock market data to agents per request over x402. On August 27 Coinbase outlined tools that let agents manage crypto accounts, execute approved transactions and pay in USDC automatically.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

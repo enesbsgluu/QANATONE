@@ -23,6 +23,7 @@ import Perde from '../parcalar/Perde.astro';
 import LeadKutu from '../parcalar/LeadKutu.astro';
 import { icerik, T, KOK, OG_KART, sl } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
+import { doluKaynaklar } from '../sayfalama';
 
 interface Props {
   dil?: 'tr' | 'en';
@@ -170,8 +171,10 @@ const GTM_KOD = gtm ? `(function(){var id=${JSON.stringify(gtm)};window.dataLaye
    yok. Nav ve sitemap ayni suzgeci uyguluyor; ucu birden ayni
    sozlesme alanindan (`kosullu`) okuyor ki biri unutulup bos bir kapi
    acikta kalmasin. */
+/* 10 Eyl 2026: sayim koleksiyondan (Nav ile ayni `doluKaynaklar`). */
+const DOLU = await doluKaynaklar();
 const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).statik
-  .filter((s: any) => !s.kosullu || ((icerik as any)[s.kosullu] || []).length > 0)
+  .filter((s: any) => !s.kosullu || DOLU.has(s.kosullu))
   .filter((s: any) => s.footer != null)
   .sort((a: any, b: any) => a.footer - b.footer)
   .map((s: any) => [s.yol, s.anahtar, s.tr, s.en]);
