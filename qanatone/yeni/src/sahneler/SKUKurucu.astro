@@ -19,13 +19,29 @@
 import '../stil/kurucu.css';
 import { icerik, T, suz } from '../icerik';
 import gorsel from '../veri/kurucu-gorsel.json';
+import ekipGorsel from '../veri/ekip-gorsel.json';
 
 interface Props { dil?: 'tr' | 'en' }
 const { dil = 'tr' } = Astro.props;
 const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
-/* Kaynaktaki kural: `founder` tek kişi ama liste olarak işleniyor. */
-const kisiler = [icerik.founder].filter((p: any) => p && p.name);
+/* Kaynaktaki kural: `founder` tek kişi ama liste olarak işleniyor —
+   kaynağın sınıfı `.kteam`, yani bu bölüm kaynakta da bir EKİP listesiydi.
+   EKİP (Enes, 10 Eyl 2026): `content.json team` [{name, role, photo}].
+   Açıklama yok, "isim ve unvan yeterli": gövdede yalnız fotoğraf.
+   Fotoğraf `gorsel-uret.cjs ekip` üretir (kaynak kök img/ekip/, çıktı
+   /img/ekip/<ad>.webp + veri/ekip-gorsel.json ölçüleri); ölçüsü olmayan
+   üyenin fotoğrafı basılmaz — kırık görsel yerine boşluk. */
+const foto = (p: any) => {
+  const ad = String(p.photo || '').split('/').pop()!.replace(/\.[a-z]+$/i, '');
+  const o = (ekipGorsel as Record<string, { w: number; h: number }>)[ad];
+  return o ? { src: '/img/ekip/' + ad + '.webp', w: o.w, h: o.h } : null;
+};
+const kisiler = [
+  ...[icerik.founder].filter((p: any) => p && p.name)
+    .map((p: any) => ({ ...p, _foto: p.photo ? { src: '/img/founder.webp', w: gorsel.w, h: gorsel.h } : null })),
+  ...(icerik.team || []).filter((p: any) => p && p.name).map((p: any) => ({ ...p, _foto: foto(p) }))
+];
 const iki = (n: number) => String(n).padStart(2, '0');
 ---
 <section class="sku-sahne" id="kurucu" data-sahne="ku">
@@ -45,9 +61,9 @@ const iki = (n: number) => String(n).padStart(2, '0');
             <span class="sus-tog" aria-hidden="true"><i></i><i></i></span>
           </summary>
           <div class="sku-govde">
-            {k.photo && (
+            {k._foto && (
               <span class="sku-foto">
-                <img src="/img/founder.webp" width={gorsel.w} height={gorsel.h}
+                <img src={k._foto.src} width={k._foto.w} height={k._foto.h}
                   alt={k.name} loading="lazy" decoding="async" />
               </span>
             )}

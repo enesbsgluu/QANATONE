@@ -332,6 +332,88 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
      P2.say.kayitlar === 0 && P2.say.kayit === 1 && f5.degisen.length === 0 && f5.silinen.length === 0,
      JSON.stringify(P2.say) + ' · fark ' + f5.degisen.length + '/' + f5.silinen.length);
   ol('taslakla acilis · konsol hatasi yok', P2.hatalar.length === 0, P2.hatalar.slice(0, 2).join(' | ') || '0');
+  ol('taslakla acilis · catisma yok', P2.ev('CATISMA.length') === 0, P2.ev('CATISMA.length') + '');
+
+  /* ---- D · TASLAK TABANI (Enes, 10 Eyl 2026: canli panel "6 kayit degisti") ----
+     Enes'in tarayicisinda kaynak kuralindan ONCE kalma taslak vardi; panel
+     onu sessizce uyguluyordu (silinen kaynaklar + eski `strings.en.bkp`
+     vaadi geri geliyordu). Bu bolum o taslagin SEKLINI kurar (yeni bicim,
+     izsiz, bayat kayit + bayat metin) ve panelin artik onu uygulamadigini,
+     catisma olarak sundugunu, secimin taslakta kaldigini olcer. */
+  const icerikSimdi = JSON.parse(fs.readFileSync(path.join(GECICI, 'content.json'), 'utf8'));
+  const bkpSunucu = JSON.stringify(((icerikSimdi.strings || {}).en || {}).bkp);
+  const bayatIcerik = JSON.parse(JSON.stringify(icerikSimdi));
+  bayatIcerik.strings = bayatIcerik.strings || {};
+  bayatIcerik.strings.en = Object.assign({}, bayatIcerik.strings.en, { bkp: 'ESKI VAAT — with the source next to it' });
+  const bayatKayit = [11, 12, 13].map((i) => {
+    const k = JSON.parse(dosyadan(sluglar[i]));
+    k.sources = [{ n: 'Eski kaynak', u: 'https://eski.example/x' }];
+    return { kaynak: 'posts', klasor: yazilar.klasor, slug: sluglar[i], kayit: k };
+  });
+  const P3 = await panelAc(JSON.stringify({ icerik: bayatIcerik, degisen: bayatKayit, silinen: [] }));
+  const f6 = P3.win.kayitFarki();
+  const icFark = P3.ev('farkYollari(icerikKismi(C),icerikKismi(DEF)).length');
+  ol('D1 · izsiz bayat taslak SESSIZCE UYGULANMIYOR (3 kayit + 1 metin catisma)',
+     P3.ev('CATISMA.length') === 4 && f6.degisen.length === 0 && icFark === 0
+       && P3.ev('cur') === 'taslak' && P3.doc.querySelectorAll('#ed [data-cz]').length === 8,
+     P3.ev('CATISMA.length') + ' catisma · fark ' + f6.degisen.length + ' kayit / ' + icFark + ' alan · acilan sekme ' + P3.ev('cur'));
+
+  P3.win.show('bulten');
+  const ed3 = P3.doc.querySelector('#ed');
+  ed3.querySelector('[data-ac="posts|0"]').click();
+  for (let k = 0; k < 300 && !ed3.querySelector('.kg'); k++) await bekle(10);
+  const slug0 = P3.ev('C.posts[0].slug');
+  const b3 = ed3.querySelector('[data-p="posts.0.title.tr"]');
+  b3.value += ' D';
+  b3.dispatchEvent(new P3.win.Event('input', { bubbles: true }));
+  P3.win.set('settings.email', 'olcek@ornek.test');
+  await bekle(450);
+  const durum3 = P3.doc.querySelector('#state').textContent;
+  ol('D1 · Enes`in belirtisi: bir kayit duzenlenince "1 kayit", icerik ve catisma ayri',
+     /· 1 kayıt · 1 alan değişti · 4 çakışma/.test(durum3), durum3);
+  const t3 = P3.win.localStorage.getItem('qanat-admin-draft');
+  const t3j = JSON.parse(t3);
+  ol('D5 · taslak surum 3: her degisiklik sunucu izini tasiyor, catisma `bekleyen`de kaliyor',
+     t3j.surum === 3 && (t3j.bekleyen || []).length === 4 && t3j.degisen.length === 1 && t3j.icerik.length === 1
+       && !!t3j.degisen[0].h && !!t3j.icerik[0].h && !t3.includes('"' + ISARET + '"'),
+     'degisen ' + t3j.degisen.length + ' · icerik ' + (t3j.icerik || []).length + ' · bekleyen ' + (t3j.bekleyen || []).length + ' · ' + Buffer.byteLength(t3) + ' B');
+
+  P3.win.show('taslak');
+  P3.doc.querySelector('[data-czt="s"]').click();
+  await bekle(450);
+  const t4j = JSON.parse(P3.win.localStorage.getItem('qanat-admin-draft'));
+  ol('D1 · "hepsinde sunucudakini tut": catisma 0, bayat degerler yayin govdesinde YOK',
+     P3.ev('CATISMA.length') === 0 && (t4j.bekleyen || []).length === 0
+       && P3.win.kayitFarki().degisen.length === 1
+       && P3.ev('JSON.stringify(((C.strings||{}).en||{}).bkp)') === bkpSunucu,
+     'catisma ' + P3.ev('CATISMA.length') + ' · bekleyen ' + (t4j.bekleyen || []).length + ' · degisen ' + P3.win.kayitFarki().degisen.length);
+  ol('D · konsol hatasi yok', P3.hatalar.length === 0, P3.hatalar.slice(0, 2).join(' | ') || '0');
+
+  /* Cozulmemis catisma yeniden acilista da duruyor; tabani saglam iki
+     degisiklik (kayit + metin) sessizce uygulaniyor. */
+  const P5 = await panelAc(t3);
+  ol('D5 · cozulmeyen catisma yeniden acilista GERI geliyor, tabani saglam olan sessizce uygulaniyor',
+     P5.ev('CATISMA.length') === 4 && P5.ev('C.settings.email') === 'olcek@ornek.test'
+       && P5.win.kayitFarki().degisen.length === 1,
+     P5.ev('CATISMA.length') + ' catisma · email ' + P5.ev('C.settings.email') + ' · degisen ' + P5.win.kayitFarki().degisen.length);
+
+  /* Sunucu, taslaktaki kaydi SONRADAN degistirir: taban artik tutmuyor. */
+  const y0 = path.join(GECICI, yazilar.klasor, slug0 + '.json');
+  const k0 = JSON.parse(fs.readFileSync(y0, 'utf8'));
+  k0.lede = Object.assign({}, k0.lede, { tr: 'Sunucuda sonradan degisti' });
+  fs.writeFileSync(y0, JSON.stringify(k0, null, 2) + '\n');
+  const P4 = await panelAc(JSON.stringify(t4j));
+  ol('D3 · tabani bayatlayan kayit catismaya dusuyor, tabani saglam metin SESSIZCE uygulaniyor',
+     P4.ev('CATISMA.length') === 1 && P4.ev('CATISMA[0].slug') === slug0
+       && P4.ev('C.settings.email') === 'olcek@ornek.test' && P4.win.kayitFarki().degisen.length === 0,
+     P4.ev('CATISMA.length') + ' catisma (' + P4.ev('(CATISMA[0]||{}).slug') + ') · email ' + P4.ev('C.settings.email'));
+  P4.win.show('taslak');
+  P4.doc.querySelector('[data-cz="0|t"]').click();
+  const f7 = P4.win.kayitFarki();
+  ol('D4 · "taslagi uygula" secilince kayit yayina gidecek listeye giriyor',
+     P4.ev('CATISMA.length') === 0 && f7.degisen.length === 1 && f7.degisen[0].slug === slug0
+       && / D$/.test(f7.degisen[0].kayit.title.tr),
+     'catisma ' + P4.ev('CATISMA.length') + ' · degisen ' + f7.degisen.length);
 
   bitir();
 })().catch((e) => { ol('kapi calisti', false, String((e && e.stack) || e).slice(0, 240)); bitir(); });

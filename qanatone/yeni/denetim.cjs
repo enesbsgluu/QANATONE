@@ -2130,10 +2130,15 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    "metin dosyasinin ham bayti platforma bagli" tuzaginin bayt esi.
    SIRADAKI KALDIRAC: METIN_HARITA'da "Eski site" bolumu 148 anahtar,
    ~6 KB — panelin kendi notuna gore yeni site onlari okumuyor. Uretec
-   (metin-harita.cjs) karari Enes'te. */
+   (metin-harita.cjs) karari Enes'te.
+   YUKSELTME (10 Eyl 2026, ayni gun): 128 → 135 KB. Dosya 135.239 B.
+   Gerekce iki Enes istegi: (1) TASLAK TABANI — canli panelde "6 kayit
+   degisti"; bayat taslak sessizce uygulaniyordu, artik her degisiklik
+   sunucu izini tasiyor ve catisma "Taslak" sekmesinde soruluyor (~5,5 KB);
+   (2) ekip listesi Kurucu sekmesinde (~0,8 KB). Pay 3.001 B. */
 {
   const yol = path.join(__dirname, '..', 'admin.html');
-  const TAVAN = 128 * 1024;
+  const TAVAN = 135 * 1024;
   const bayt = fs.existsSync(yol)
     ? Buffer.byteLength(fs.readFileSync(yol, 'utf8').replace(/\r/g, '')) : -1;
   ol('T16 · admin.html bayt bütçesi ≤ ' + (TAVAN / 1024) + ' KB (LF)',

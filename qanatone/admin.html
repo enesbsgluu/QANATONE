@@ -226,6 +226,60 @@ const ozetMi=o=>!!(o&&o[OZET]);
 const kopya=o=>JSON.parse(JSON.stringify(o));
 const ACIK=new WeakSet();  /* acik kayitlar; slug yazilirken degistigi icin NESNEYLE tutulur */
 const KATLI={};            /* yol -> alan cizici (son list() cagrisindan) */
+/* ---- TASLAK TABANI (10 Eyl 2026 — Enes: canli panel "6 kayit degisti") ----
+   OLCULEN: Enes'in tarayicisinda kaynak kuralindan (b07541b) ONCE kalma bir
+   taslak vardi (164.193 kr). Panel onu her acilista SESSIZCE uyguluyordu:
+   alti yazinin silinen kaynaklari ve `strings.en.bkp`nin eski "with the
+   source" vaadi geri geliyordu; Yayinla deseydi kural geri alinirdi, durum
+   satiri da icerik farkini hic gostermiyordu. Kok: taslak degisikligi
+   tutuyor, NEYE KARSI yapildigini tutmuyordu.
+   Artik her degisiklik yapildigi anki SUNUCU HALININ izini tasir (surum 3).
+   Acilista sunucu o izle ayniysa sessizce uygulanir; degilse — ya da taslak
+   izsiz eski bicimse — UYGULANMAZ, "Taslak" sekmesinde iki deger yan yana
+   durur, secim Enes'te. Cozulmeyen catisma taslakta `bekleyen` olarak kalir.
+   Diziler butun sayilir (merge de onlari butun eziyor). Bekci:
+   test/panel-olcek.test.js D bolumu. */
+let CATISMA=[];
+const iz=v=>{const s=JSON.stringify(v)??'u';let a=0xdeadbeef,b=0x41c6ce57;
+  for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677);}
+  a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);
+  b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);
+  return (4294967296*(2097151&b)+(a>>>0)).toString(36);};   /* cyrb53 */
+const duzMu=v=>v&&typeof v==='object'&&!Array.isArray(v);
+function farkYollari(a,b,y=[],o=[]){
+  if(duzMu(a)&&duzMu(b)){for(const k of new Set([...Object.keys(a),...Object.keys(b)]))farkYollari(a[k],b[k],y.concat(k),o);}
+  else if(JSON.stringify(a)!==JSON.stringify(b))o.push(y);
+  return o;
+}
+const yolAl=(o,y)=>y.reduce((x,k)=>x==null?undefined:x[k],o);
+function yolYaz(o,y,v){let x=o;for(const k of y.slice(0,-1)){if(!duzMu(x[k]))x[k]={};x=x[k];}x[y[y.length-1]]=v;}
+function kayitKoy(kaynak,kayit){
+  const dizi=C[kaynak]=C[kaynak]||[], s=String(kayit.slug||''), i=dizi.findIndex(x=>String(x.slug||'')===s);
+  if(i>=0)dizi[i]=kopya(kayit); else dizi.push(kopya(kayit));
+}
+/* Taslagi C'ye uygular, uygulanamayanlari (catisma) dondurur. Izsiz girdi:
+   eski bicim (surum yok) ya da onceki acilistan cozulmeden kalan catisma. */
+async function taslakUygula(t){
+  const cat=[], v3=t.surum===3, yeni=v3||'icerik' in t||'degisen' in t;
+  const esit=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  const ic=v3?(t.icerik||[]).concat((t.bekleyen||[]).filter(b=>b.tur==='icerik'))
+    :(g=>farkYollari(g,icerikKismi(DEF)).map(y=>({y,d:yolAl(g,y)})))(yeni?(t.icerik||{}):icerikKismi(t));
+  for(const e of ic){const s=yolAl(DEF,e.y);
+    if(e.d===undefined||esit(s,e.d))continue;
+    if(e.h!=null&&e.h===iz(s))yolYaz(C,e.y,kopya(e.d)); else cat.push({tur:'icerik',y:e.y,d:e.d});}
+  const ky=(yeni?(t.degisen||[]):DOSYA_KOL.flatMap(k=>(t[k.kaynak]||[]).map(kayit=>({kaynak:k.kaynak,slug:String(kayit.slug||''),kayit}))))
+    .concat(v3?(t.bekleyen||[]).filter(b=>b.tur==='kayit').map(b=>({kaynak:b.kaynak,slug:b.slug,kayit:b.d})):[])
+    .filter(x=>TEMEL[x.kaynak]&&x.kayit);
+  /* Sunucu hali yalniz taslaktaki kayitlar icin getirilir (istek sayisi = taslak). */
+  await Promise.all(ky.filter(x=>x.slug in TEMEL[x.kaynak]).map(x=>temelGetir(x.kaynak,x.slug).catch(()=>{})));
+  for(const x of ky){const var_=x.slug in TEMEL[x.kaynak], s=var_?TEMEL[x.kaynak][x.slug]:null;
+    if(s!=null&&esit(s,x.kayit))continue;
+    if(v3&&'h' in x&&(var_?(s!=null&&x.h===iz(s)):x.h===null))kayitKoy(x.kaynak,x.kayit);
+    else cat.push({tur:'kayit',kaynak:x.kaynak,slug:x.slug,d:x.kayit});}
+  for(const d of (yeni?(t.silinen||[]):[])){const dizi=C[d.kaynak]||[], i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
+    if(i>=0)dizi.splice(i,1);}
+  return cat;
+}
 /* content.json'a ait olan kisim: dosya koleksiyonlari HARIC. */
 function icerikKismi(o){
   const c={};
@@ -281,13 +335,24 @@ function touch(){
        Kota asilirsa panel eskiden hatayi `catch(e){}` ile YUTUYORDU ve
        taslak sessizce kaydedilmemeye basliyordu — artik durum satirinda
        goruluyor, cunku sessiz veri kaybi en pahali kusur. */
-    const f=kayitFarki();
-    const taslak={icerik:icerikKismi(C),degisen:f.degisen,silinen:f.silinen.map(x=>({kaynak:x.kaynak,slug:x.slug}))};
+    const f=kayitFarki(), ic=farkYollari(icerikKismi(C),icerikKismi(DEF));
+    const T=k=>TEMEL[k]||{};
+    /* SURUM 3 (TASLAK TABANI): her degisiklik yapildigi anki sunucu halinin
+       izini tasir. h:null = sunucuda yok (yeni kayit) · '?' = sunucu hali
+       bilinmiyor; acilista ikisi de izle kiyaslanir, tutmazsa catisma. */
+    const taslak={surum:3,zaman:new Date().toISOString(),
+      icerik:ic.map(y=>({y,h:iz(yolAl(DEF,y)),d:yolAl(C,y)})),
+      degisen:f.degisen.map(x=>({kaynak:x.kaynak,klasor:x.klasor,slug:x.slug,
+        h:x.slug in T(x.kaynak)?(T(x.kaynak)[x.slug]==null?'?':iz(T(x.kaynak)[x.slug])):null,kayit:x.kayit})),
+      silinen:f.silinen.map(x=>({kaynak:x.kaynak,slug:x.slug})),bekleyen:CATISMA};
     let yazildi=true;
     try{localStorage.setItem(DRAFT,JSON.stringify(taslak))}catch(e){yazildi=false;}
     push();
+    /* Icerik farki da sayilir: eskiden yalniz kayit sayiliyordu ve bayat
+       bir taslagin geri aldigi metin durum satirinda HIC gorunmuyordu. */
+    const n=[f.degisen.length&&f.degisen.length+' kayıt',ic.length&&ic.length+' alan'].filter(Boolean).join(' · ');
     $('#state').textContent=yazildi
-      ? 'taslak kaydedildi'+(f.degisen.length?' · '+f.degisen.length+' kayıt değişti':'')
+      ? 'taslak kaydedildi'+(n?' · '+n+' değişti':'')+(CATISMA.length?' · '+CATISMA.length+' çakışma bekliyor':'')
       : 'TASLAK KAYDEDİLEMEDİ (tarayıcı belleği dolu) — yayınla ya da dışa aktar';
     $('#state').classList.toggle('dirty',!yazildi);
   },340);
@@ -560,6 +625,7 @@ const BLANK={
  testimonials:{name:'',role:{tr:'',en:''},image:'',q:{tr:'',en:''}},
  faq:{q:{tr:'',en:''},a:{tr:'',en:''}},
  'founder.links':{label:'',url:''},
+ team:{name:'',role:{tr:'',en:''},photo:''},
  socials:{label:'',url:''},
  'det.faq':{q:{tr:'',en:''},a:{tr:'',en:''}},
  'det.trade.steps':{tr:'',en:''},
@@ -946,6 +1012,12 @@ kurucu:{t:'Kurucu & Sosyal',n:()=>'',f:()=>`
   ${fld('Bio (EN)','founder.bio.en',{area:1,big:1})}
   <h4 class="sec">Bağlantılar</h4>
   ${list('founder.links','Bağlantı',(it,i,p)=>`<div class="r2">${fld('Etiket',p+'.label')}${fld('URL',p+'.url')}</div>`,it=>it.label)}
+  <h4 class="sec">Ekip</h4>
+  <div class="note calm">Kurucunun altında aynı listede sıralanır; açıklama yok, <b>isim ve unvan</b> görünür.
+  Fotoğraf panelden yüklenmez, üreteçten gelir: kaynağı <span class="mono">img/ekip/&lt;ad&gt;.jpg</span>.
+  Yeni üyenin fotoğrafı için söyle, üreteci çalıştırayım; fotoğrafı üretilmemiş üye fotoğrafsız görünür.</div>
+  ${list('team','Üye',(it,i,p)=>`<div class="r2">${fld('İsim',p+'.name')}${fld('Fotoğraf',p+'.photo',{hint:'img/ekip/ad.webp'})}</div>
+    <div class="r2">${fld('Unvan (TR)',p+'.role.tr')}${fld('Unvan (EN)',p+'.role.en')}</div>`,it=>it.name)}
   <h4 class="sec">Footer sosyal medya</h4>
   <p class="hint" style="margin-bottom:10px">Buraya eklediğin adresler Organization şemasındaki <span class="mono">sameAs</span> alanını da besler.</p>
   ${list('socials','Link',(it,i,p)=>`<div class="r2">${fld('Etiket',p+'.label')}${fld('URL',p+'.url')}</div>`,it=>it.label)}`},
@@ -1328,6 +1400,9 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
              kayit "degisen" olarak geri gelir, sonraki yayin onu yeniden
              yaratirdi. */
           DEF=JSON.parse(JSON.stringify(anlik));
+          /* Taslak yayindaki hale karsi yeniden yazilir: eski taslak
+             tarayicida kalirsa izleri artik gecmisin sunucusunu gosterir. */
+          touch();
           du.textContent='yayınlandı — '+(j.dosya!=null?j.dosya+' dosya ':'')+'GitHub\'a commit edildi';
         }
         else if(res.status===401)du.textContent='parola reddedildi';
@@ -1336,11 +1411,40 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
       }catch(e){du.textContent='ağ hatası, tekrar dene';}
       finally{pf.value='';by.disabled=false;}
     };
+  }},
+
+/* TASLAK — sessizce uygulanmayan degisiklikler (TASLAK TABANI). Catisma
+   yokken de gorunur: "taslak sunucuyla uyumlu" demek, bayat bir taslagin
+   fark edilmeden durmasindan iyidir. */
+taslak:{t:'Taslak',n:()=>CATISMA.length||'',f:()=>{
+  const kis=v=>{v=v===undefined?'—':typeof v==='string'?v:JSON.stringify(v);return esc(v.length>160?v.slice(0,160)+'…':v);};
+  if(!CATISMA.length)return `<h2>Taslak</h2><p class="sub">Tarayıcıdaki taslak sunucuyla uyumlu — bekleyen çakışma yok.</p>`;
+  const satir=(c,i)=>{let ad,al;
+    if(c.tur==='icerik'){ad='İçerik · '+c.y.join('.');al=[['değer',c.d,yolAl(DEF,c.y)]];}
+    else{const s=(TEMEL[c.kaynak]||{})[c.slug];ad=c.kaynak+' · '+c.slug+(s==null?' · sunucuda yok':'');
+      al=s==null?[['kayıt',(c.d.title||{}).tr||c.slug,undefined]]
+        :Object.keys(Object.assign({},s,c.d)).filter(k=>JSON.stringify(s[k])!==JSON.stringify(c.d[k])).map(k=>[k,c.d[k],s[k]]);}
+    return `<div class="item"><div class="ih"><span class="mono">${esc(ad)}</span></div>
+      ${al.map(([k,d,s])=>`<p class="hint" style="margin-bottom:8px"><b>${esc(k)}</b> — taslakta: ${kis(d)}<br>sunucuda: ${kis(s)}</p>`).join('')}
+      <div class="gvekle"><button class="tb" data-cz="${i}|s">Sunucudakini tut</button><button class="tb" data-cz="${i}|t">Taslağı uygula</button></div></div>`;};
+  return `<h2>Taslak çakışması</h2><p class="sub">Tarayıcıda kaydedilmemiş bir taslak var ama içindeki bu değişiklikler yapıldıktan sonra <b>sunucuda aynı yerler değişmiş</b> — ya da taslak, neye karşı yapıldığını tutmayan eski biçimde. Panel bunları <b>uygulamadı</b>; ekranda şu an sunucudaki hâl duruyor.</p>
+  <div class="note">Taslağı uygulayıp yayınlarsan sunucudaki yeni hâl eskisiyle değişir. Emin değilsen sunucudakini tut.</div>
+  <div class="gvekle" style="margin-bottom:14px"><button class="tb p" data-czt="s">Hepsinde sunucudakini tut</button><button class="tb" data-czt="t">Hepsinde taslağı uygula</button></div>
+  ${CATISMA.map(satir).join('')}`;},
+  bind(r){
+    const coz=(i,y)=>{const c=CATISMA[i];if(!c)return;
+      if(y==='t'){if(c.tur==='icerik')yolYaz(C,c.y,kopya(c.d));else kayitKoy(c.kaynak,c.d);}
+      CATISMA.splice(i,1);};
+    const bitti=()=>{touch();buildSide();show(cur);};
+    r.querySelectorAll('[data-cz]').forEach(b=>b.onclick=()=>{const[i,y]=b.dataset.cz.split('|');coz(+i,y);bitti();});
+    r.querySelectorAll('[data-czt]').forEach(b=>b.onclick=()=>{const y=b.dataset.czt;
+      if(y==='t'&&!confirm('Taslaktaki değerler sunucudakilerin üstüne yazılacak. Emin misin?'))return;
+      while(CATISMA.length)coz(0,y);bitti();});
   }}
 };
 const NAV=[['İçerik',['genel','sektor']],
   ['Bölümler',['hizmet','hizmetdet','surec','kanal','proje','konu','bulten','nedirb','haberb','soz','sss','kurucu']],
-  ['Site',['metin','gorunum','yayin']]];
+  ['Site',['metin','gorunum','yayin','taslak']]];
 
 /* GOVDE EDITORU BAGLAMALARI (9 Eyl 2026).
    Yazarken YENIDEN CIZILMEZ (imlec kaybolurdu): metin girdileri yalniz
@@ -1590,37 +1694,13 @@ async function kur(){
   try{saved=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){}
   if(!saved){try{saved=JSON.parse(localStorage.getItem(LIVE)||'null')}catch(e){}}
   C=JSON.parse(JSON.stringify(DEF));
-  if(saved){
-    /* YENI BICIM {icerik,degisen,silinen} · ESKI BICIM duz content.json.
-       Eski bicim taniniyor cunku tarayicida duran taslak goc anindan
-       kalmis olabilir; tanimazsak Enes'in kaydedilmemis isi sessizce
-       ucar. Eski taslakta koleksiyon dizileri de vardi — `merge` onlari
-       BUTUN OLARAK eziyor, bu yuzden dosya koleksiyonlari ayiklanip
-       ayni yoldan (slug ile) uygulanir. */
-    const yeniBicim=saved && typeof saved==='object' && ('icerik' in saved || 'degisen' in saved);
-    const govde=yeniBicim?(saved.icerik||{}):icerikKismi(saved);
-    C=merge(C,govde);
-    const degisen=yeniBicim?(saved.degisen||[])
-      :DOSYA_KOL.flatMap(k=>((saved[k.kaynak]||[]).map(kayit=>({kaynak:k.kaynak,slug:String(kayit.slug||''),kayit}))));
-    for(const d of degisen){
-      const dizi=C[d.kaynak]=C[d.kaynak]||[];
-      const i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
-      if(i>=0)dizi[i]=d.kayit; else dizi.push(d.kayit);
-    }
-    for(const d of (yeniBicim?(saved.silinen||[]):[])){
-      const dizi=C[d.kaynak]||[];
-      const i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
-      if(i>=0)dizi.splice(i,1);
-    }
-    /* Taslaktaki kayitlarin SUNUCU HALI getirilir (B7). Taslak yayindan
-       sonra tarayicida kaliyor; TEMEL bos kalsaydi yayinlanmis kayit
-       ertesi acilista "degisti" gorunur, ikinci yayin onu bir daha
-       gonderirdi. Istek sayisi taslaktaki kayit kadar. Getirilemeyen
-       kayit "degisti" sayilir — guvenli yan. */
-    await Promise.all(degisen.filter(d=>TEMEL[d.kaynak]&&d.slug in TEMEL[d.kaynak])
-      .map(d=>temelGetir(d.kaynak,d.slug).catch(()=>{})));
-  }
-  seeded=true;buildSide();show('genel');setTimeout(push,300);
+  /* TASLAK TABANI: taslak artik koru korune uygulanmiyor. Izi tutan
+     degisiklik uygulanir; tutmayan — ya da izsiz eski bicim — CATISMA olur
+     ve "Taslak" sekmesinde sorulur. Eski bicimler (duz content.json ·
+     {icerik,degisen,silinen}) hala taniniyor: tanimasak kaydedilmemis is
+     sessizce ucardi; tanidigimiz icin artik sessizce GERI de gelmiyor. */
+  CATISMA=saved&&typeof saved==='object'?await taslakUygula(saved):[];
+  seeded=true;buildSide();show(CATISMA.length?'taslak':'genel');setTimeout(push,300);
 }
 kur();
 frame.addEventListener('load',()=>{ if(seeded)setTimeout(push,400); });
@@ -1643,13 +1723,13 @@ $('#fImport').onchange=e=>{
        aktarilan her kayit "degisti" sayilir, yayin hepsini yeniden yazar. */
     try{if(DOSYA_KOL.some(k=>Array.isArray(j[k.kaynak])))await tumunuYukle();}
     catch(x){console.error('panel: ice aktarma',x);$('#state').textContent='içe aktarılamadı — kayıtlar alınamadı';return;}
-    try{C=merge(JSON.parse(JSON.stringify(DEF)),j);touch();buildSide();show(cur);}
+    try{C=merge(JSON.parse(JSON.stringify(DEF)),j);CATISMA=[];touch();buildSide();show(cur);}
     catch(x){alert('JSON okunamadı')}};
   r.readAsText(f);
 };
 $('#bReset').onclick=()=>{
   if(!confirm('Tüm değişiklikler silinip varsayılana dönülecek. Emin misin?'))return;
-  localStorage.removeItem(DRAFT);C=JSON.parse(JSON.stringify(DEF));touch();buildSide();show(cur);
+  localStorage.removeItem(DRAFT);C=JSON.parse(JSON.stringify(DEF));CATISMA=[];touch();buildSide();show(cur);
 };
 $('#bReload').onclick=()=>{frame.src='/index.html?r='+Date.now()};
 document.querySelectorAll('.dev button').forEach(b=>b.onclick=()=>{

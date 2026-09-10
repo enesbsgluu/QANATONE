@@ -386,7 +386,36 @@ async function karaIzgarasi() {
   console.log('  = kara ızgarası: ' + kb(toplam));
 }
 
-(async () => {
+/* --- S-KU ekip fotograflari (Enes, 10 Eyl 2026) ------------------------
+   Kaynak kok img/ekip/<ad>.{jpg,jpeg,png,webp}. Kutu kurucuyla ayni
+   (.sku-foto 4:5, masaustunde en fazla 300 px, mobilde ~372 px), yani
+   ayni tek 640 px varyant yetiyor. Olculer veri/ekip-gorsel.json'a
+   yazilir; bilesen olcusu olmayan uyenin fotografini basmaz.
+   Tek basina: node gorsel-uret.cjs ekip (oteki gorseller yeniden
+   uretilmez — ilgisiz bayt farki dogmasin). */
+async function ekip() {
+  const dizin = path.join(KAYNAK, 'ekip');
+  const hedef = path.join(HEDEF, 'ekip');
+  const kunye = path.join(__dirname, 'src', 'veri', 'ekip-gorsel.json');
+  const olcu = {};
+  if (fs.existsSync(dizin)) {
+    fs.mkdirSync(hedef, { recursive: true });
+    for (const a of fs.readdirSync(dizin).filter((x) => /\.(jpe?g|png|webp)$/i.test(x)).sort()) {
+      const ad = a.replace(/\.[a-z]+$/i, '');
+      const giris = path.join(dizin, a), cikis = path.join(hedef, ad + '.webp');
+      const m = await sharp(giris).metadata();
+      const o = await sharp(giris).rotate().resize({ width: KURUCU_GEN, withoutEnlargement: true })
+        .webp({ quality: 80, effort: 6 }).toFile(cikis);
+      olcu[ad] = { w: o.width, h: o.height };
+      console.log(`  + ekip/${ad}  ${m.width}x${m.height} -> ${o.width}x${o.height}` +
+                  `  ${kb(fs.statSync(giris).size)} -> ${kb(fs.statSync(cikis).size)}`);
+    }
+  }
+  fs.writeFileSync(kunye, JSON.stringify(olcu, null, 2) + String.fromCharCode(10));
+}
+
+if (process.argv[2] === 'ekip') ekip().catch((e) => { console.error(e); process.exit(1); });
+else (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama
        nesil kaybi demek, kazanci yok. */
@@ -410,6 +439,7 @@ async function karaIzgarasi() {
   await logolar();
   await kartlar();
   await kurucu();
+  await ekip();
   await projeGorselleri();
   await karaIzgarasi();
 })();
