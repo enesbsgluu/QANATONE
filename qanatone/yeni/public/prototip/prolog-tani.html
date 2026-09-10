@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Prolog tanısı · QANATONE</title>
+<!-- PROLOG TANI SAYFASI (11 Eyl 2026) — URUN SAYFASI DEGIL, OLCUM DUZENEGI.
+     Belirti: Enes'in arkadasi siradan bilgisayarinda ana sayfayi acti, prolog
+     HIC gorunmedi. Prologu kapatan karar TEK yerde verilir: Film.astro'nun
+     erken satir ici betigi `<html data-film>`'e dalin adini yazar
+     (atlandi / hareket-azaltma / mobil; motor inmezse motor-inmedi).
+     Bu sayfa o karari TAKLIT ETMEZ: ana sayfanin KENDISINI ayni kaynakta,
+     pencereyle ayni boyda bir iframe'de acar ve kapinin verdigi karari
+     oradan okur. Yani ziyaretcinin tarayicisinda gercek kapi kosar.
+     Siteden baglanti yok (P1), arama motoruna kapali (noindex).
+     Duzenek: yeni/film/olc-prolog-tani.cjs (her dalin hukmunu sinar). -->
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #050505; color: #f2f2f2;
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #sahne { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+  #kutu { position: fixed; left: 16px; right: 16px; top: 16px; z-index: 10; max-width: 640px; margin: 0 auto;
+    background: rgba(12, 12, 12, .96); border: 1px solid #333; border-left: 4px solid #ef233c; border-radius: 10px;
+    padding: 18px 20px; box-shadow: 0 12px 40px rgba(0, 0, 0, .6); max-height: calc(100% - 32px); overflow: auto; }
+  #kutu[data-durum="bekliyor"] { border-left-color: #888; }
+  #kutu[data-durum="acik"] { border-left-color: #2ecc71; }
+  h1 { font-size: 19px; margin: 0 0 6px; }
+  p { margin: 6px 0; color: #d6d6d6; }
+  .yap { background: #1b1b1b; border-radius: 6px; padding: 10px 12px; margin: 10px 0; color: #fff; }
+  pre { font: 12px/1.45 ui-monospace, Consolas, monospace; background: #111; color: #bbb; padding: 10px; border-radius: 6px;
+    white-space: pre-wrap; word-break: break-word; margin: 10px 0 0; }
+  .dugmeler { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  button { font: inherit; font-size: 14px; background: #ef233c; color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+  button.ikincil { background: #2a2a2a; }
+  #kutu.kucuk .govde { display: none; }
+</style>
+</head>
+<body>
+<iframe id="sahne" src="/" title="QANATONE ana sayfa"></iframe>
+<div id="kutu" data-durum="bekliyor" role="status" aria-live="polite">
+  <h1 id="baslik">Ölçülüyor…</h1>
+  <div class="govde">
+    <p id="aciklama">Ana sayfa bu pencerede açılıyor; prologun açılıp açılmadığını tarayıcının kendisinden okuyorum. En çok 12 saniye sürer.</p>
+    <div id="yap" class="yap" hidden></div>
+    <pre id="veri" hidden></pre>
+  </div>
+  <div class="dugmeler">
+    <button id="kopyala" hidden>Sonucu kopyala</button>
+    <button id="gizle" class="ikincil">Kutuyu küçült</button>
+  </div>
+</div>
+<script>
+(function () {
+  var sahne = document.getElementById('sahne');
+  var kutu = document.getElementById('kutu');
+  var $ = function (id) { return document.getElementById(id); };
+  document.getElementById('gizle').onclick = function () {
+    var k = kutu.classList.toggle('kucuk');
+    this.textContent = k ? 'Kutuyu aç' : 'Kutuyu küçült';
+  };
+
+  function ortam(W) {
+    var mm = function (q) { try { return W.matchMedia(q).matches; } catch (e) { return null; } };
+    var ua = navigator.userAgent;
+    var tar = (ua.match(/Edg\/[\d.]+/) || ua.match(/OPR\/[\d.]+/) || ua.match(/Firefox\/[\d.]+/) || ua.match(/Chrome\/[\d.]+/) || ua.match(/Version\/[\d.]+.*Safari/) || [ua.slice(0, 60)])[0];
+    var os = (ua.match(/Windows NT [\d.]+|Mac OS X [\d_]+|Android [\d.]+|CrOS|Linux/) || ['?'])[0];
+    return {
+      tarayici: tar, sistem: os,
+      pencere: W.innerWidth + 'x' + W.innerHeight, ekran: screen.width + 'x' + screen.height,
+      dpr: +(W.devicePixelRatio || 1).toFixed(2),
+      hareketAzalt: mm('(prefers-reduced-motion: reduce)'),
+      kabaIsaretci: mm('(pointer: coarse)'), herhangiKaba: mm('(any-pointer: coarse)'),
+      dar900: mm('(max-width: 900px)'), dokunmaNoktasi: navigator.maxTouchPoints || 0,
+      bellekGB: navigator.deviceMemory || null, cekirdek: navigator.hardwareConcurrency || null
+    };
+  }
+
+  /* hukum: kod (duzenek okur) + baslik + aciklama + yapilacak */
+  function hukumVer(d, o) {
+    if (d.film === 'hareket-azaltma') return {
+      kod: 'hareket-azaltma',
+      baslik: 'Sebep: Windows\'ta animasyonlar kapalı',
+      aciklama: 'Tarayıcın bu bilgisayarda "hareketi azalt" tercihini bildiriyor. Site bu tercihe saygı gösterip prologu hiç başlatmıyor. Windows\'ta animasyon efektleri kapatılmışsa ya da performans ayarı "En iyi performans için ayarla" seçiliyse tarayıcı bunu böyle okur.',
+      yap: 'Windows 11: Ayarlar › Erişilebilirlik › Görsel efektler › <b>Animasyon efektleri: Açık</b>.<br>Windows 10: Ayarlar › Erişim Kolaylığı › Ekran › <b>Windows\'ta animasyonları göster: Açık</b>.<br>Ya da: Denetim Masası › Sistem › Gelişmiş sistem ayarları › Performans › Ayarlar › <b>"Pencerelerin içindeki denetimleri ve öğeleri canlandır"</b> işaretli olsun. Sonra tarayıcıyı kapatıp aç ve sayfayı yenile.'
+    };
+    if (d.film === 'mobil' && o.kabaIsaretci) return {
+      kod: 'mobil-dokunmatik',
+      baslik: 'Sebep: tarayıcı bu cihazı dokunmatik sayıyor',
+      aciklama: 'Tarayıcı birincil işaretçiyi "kaba" (dokunmatik) bildiriyor. Site bunu telefon sayıyor ve prologu kapatıyor. Dokunmatik ekranlı dizüstülerde, 2\'si 1 arada cihazlarda ve tablet kipinde olur.',
+      yap: 'Bu bir ayar hatası değil, sitenin kapısı; düzeltme bizde. Bu sonucu gönder yeter.'
+    };
+    if (d.film === 'mobil') return {
+      kod: 'mobil-dar',
+      baslik: 'Sebep: pencere dar (' + o.pencere.split('x')[0] + ' piksel)',
+      aciklama: 'Site 900 pikselden dar pencereleri telefon sayıyor ve prologu kapatıyor. Karar sayfa açılırken bir kez veriliyor; sonradan pencereyi büyütmek prologu geri getirmez.',
+      yap: 'Pencereyi tam ekran yap, yakınlaştırmayı sıfırla (<b>Ctrl + 0</b>) ve sayfayı yenile (<b>F5</b>).'
+    };
+    if (d.film === 'atlandi') return {
+      kod: 'atlandi',
+      baslik: 'Prolog bu sekmede daha önce geçilmiş',
+      aciklama: 'Bu sekmede prolog izlenmiş ya da "Prologu geç"e basılmış; aynı sekmede tekrar gösterilmiyor.',
+      yap: 'Siteyi yeni bir sekmede aç.'
+    };
+    if (d.film === 'motor-inmedi') return {
+      kod: 'motor-inmedi',
+      baslik: 'Sebep: film betiği yüklenemedi',
+      aciklama: 'Prolog kurulacaktı ama onu oynatan betik inmedi. Eski bir tarayıcı sürümü ya da bir eklenti/güvenlik yazılımı engelliyor olabilir.',
+      yap: 'Bu sonucu gönder; tarayıcı sürümü aşağıda yazıyor.'
+    };
+    if (d.flJs && d.ilkKare !== null) return {
+      kod: 'acik',
+      baslik: 'Prolog bu tarayıcıda şu an açılıyor',
+      aciklama: 'Kapı açık ve video kare sunuyor (ilk kare ' + d.ilkKare + ' ms). İlk ziyaretteki fark büyük olasılıkla pencerenin o an dar olması ya da aynı sekmede prologun daha önce geçilmiş olmasıydı.',
+      yap: 'Siteyi yeni sekmede, tam ekran pencerede açınca prolog görünmeli.'
+    };
+    if (d.flJs && d.s1 === 'hata') return {
+      kod: 'video-inmedi',
+      baslik: 'Sebep: video dosyaları inmedi',
+      aciklama: 'Prolog kuruldu ama ilk sahnenin videosu indirilemedi; ekranda yalnız donuk bir kare kalır. Güvenlik yazılımı, reklam engelleyici ya da ağ filtresi .mp4 dosyalarını kesiyor olabilir.',
+      yap: 'Bu sonucu gönder; mümkünse reklam engelleyiciyi bu sitede kapatıp yenile.'
+    };
+    if (d.flJs) return {
+      kod: 'kare-yok',
+      baslik: 'Prolog kuruldu ama görüntü gelmedi',
+      aciklama: '12 saniyede tek video karesi sunulmadı (sahne 1: ' + d.s1 + '). Bağlantı çok yavaş olabilir ya da video çözücü çalışmıyor.',
+      yap: 'Bu sonucu gönder.'
+    };
+    return {
+      kod: 'bilinmiyor', baslik: 'Karar okunamadı',
+      aciklama: 'Ana sayfa açıldı ama prolog kapısı hiçbir iz bırakmadı.', yap: 'Bu sonucu gönder.'
+    };
+  }
+
+  function yaz(h, d, o) {
+    kutu.dataset.durum = h.kod === 'acik' ? 'acik' : 'sonuc';
+    document.body.dataset.hukum = h.kod;
+    $('baslik').textContent = h.baslik;
+    $('aciklama').textContent = h.aciklama;
+    $('yap').innerHTML = h.yap; $('yap').hidden = false;
+    var rapor = { hukum: h.kod, karar: d.film || (d.flJs ? 'film-kuruldu' : 'yok'), ilkKareMs: d.ilkKare, sahne1: d.s1, ortam: o, zaman: new Date().toISOString() };
+    var metin = JSON.stringify(rapor, null, 1);
+    $('veri').textContent = metin; $('veri').hidden = false;
+    window.__tani = rapor;
+    var k = $('kopyala'); k.hidden = false;
+    k.onclick = function () {
+      var bitti = function () { k.textContent = 'Kopyalandı'; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(metin).then(bitti, function () { secKopyala(metin); bitti(); });
+      else { secKopyala(metin); bitti(); }
+    };
+  }
+  function secKopyala(t) {
+    var a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select();
+    try { document.execCommand('copy'); } catch (e) {} a.remove();
+  }
+
+  var t0 = Date.now();
+  function yokla() {
+    var W, D;
+    try { W = sahne.contentWindow; D = W.document.documentElement; } catch (e) {
+      return yaz({ kod: 'erisim-yok', baslik: 'Sayfa okunamadı', aciklama: 'Ana sayfaya iframe içinden erişilemedi: ' + e.message, yap: 'Bu sonucu gönder.' }, {}, ortam(window));
+    }
+    var f = W.__fl;
+    var s1 = null; try { s1 = f ? f.sahne()[0].durum : null; } catch (e) {}
+    var d = { film: D.dataset.film || null, flJs: D.classList.contains('fl-js'), ilkKare: f ? f.ilkKareMs : null, s1: s1 };
+    /* kesin hukum anlari: kapi bir dal yazdi · ilk kare sunuldu · video indirmesi hata verdi · sure doldu */
+    var bitti = (d.film && d.film !== 'bitti') || d.ilkKare !== null || d.s1 === 'hata' || Date.now() - t0 > 12000;
+    if (!bitti) return setTimeout(yokla, 250);
+    yaz(hukumVer(d, ortam(W)), d, ortam(W));
+  }
+  sahne.addEventListener('load', function () { setTimeout(yokla, 300); });
+})();
+</script>
+</body>
+</html>
