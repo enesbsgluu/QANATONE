@@ -1079,12 +1079,18 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
         baglanmazsa kural kirmizi yanar; yoksa "test yazdim" denip hic
         kosmayan bir dosya daha birikirdi.
 
-   `test/denetim.js` BU LISTEDE DEGIL ve bu bilincli: o suite ESKI KOK
-   SITEYI (`index.html`) denetliyordu, KESME'de o site artik uretilmiyor
-   ("Eski site TAMAMEN kalkiyor, arsiv yok" — Enes, 6 Eyl). Yani yetim
-   degil, OLU. Adi `*.test.js` desenine de uymuyor, o yuzden 2. maddeye
-   takilmiyor. Silinmedi cunku 135 kuralin gerekceleri hala okunuyor;
-   ama zincire geri baglanmamali — bugunku ciktiya uymayan kirmizilar verir. */
+   `test/denetim.js` 10 EYL 2026'DA SILINDI (Enes: "silinsin. Su anda bir
+   uca dokunmuyorsa eski ve yeni siteler gereksiz. Sadece www.qanatone.com
+   var."). O suite ESKI KOK SITEYI (`index.html`) denetliyordu; KESME'de
+   (6 Eyl) o site uretilmeyi birakinca zincirden dustu ve 103 gecti / 23
+   kaldi ile KALICI KIRMIZI durur oldu — ne kapiydi ne de bugunku ciktiyi
+   olcuyordu. Tasidigi tek gercek bilgi 135 kuralin gerekceleriydi; onlar
+   git gecmisinde duruyor.
+   SILMEDEN ONCE 23 kirmizinin hepsi tek tek okundu ve canli zincirde
+   KARSILIGI OLMAYAN iki kural ayrilip buraya tasindi: T16 (admin.html
+   bayt butcesi) ve L2 (`_headers` guvenlik basliklari). Geri kalan 21
+   kirmizi ya artik uretilmeyen ciktiyi ariyordu (dist/otomasyon,
+   shell.html, kok _headers) ya da yeni kabukta zaten olculuyordu. */
 {
   const { execFileSync } = require('child_process');
   const testKok = path.join(__dirname, '..', 'test');
@@ -2088,6 +2094,33 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   ol('T15 \u00b7 dosya basina kayit: content.json`da dizi yok \u00b7 dosya adi = slug \u00b7 klasor var \u00b7 sayfa = dosya',
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 3).join(' | ') : ozet.join(' \u00b7 '));
+}
+
+/* ---- T16 · PANEL BAYT BUTCESI (10 Eyl 2026) ----
+   KURAL YENI DEGIL, TASINDI. `admin.html butcesi <= 96 KB` kok
+   test/denetim.js'te yasiyordu; o suite bugun silindi (olu: eski kok
+   siteyi denetliyordu, site 6 Eyl'de kalkti, zincirde degildi).
+   Silmeden once suite'in 23 kirmizisi tek tek okundu ve canli zincirde
+   KARSILIGI OLMAYAN iki kural ayrildi: bu ve L2. Otekiler ya eski
+   ciktiyi ariyordu (dist/otomasyon, shell.html, kok _headers) ya da
+   yeni kabukta zaten olculen seyi.
+   ESKI KAPI ZATEN GECERSIZDI: 96 KB siniri `fea518c`te de asilmisti
+   (98.700 B) ve Kademe 2'den sonra dosya 124.355 B. Kirmizi dogan kapi
+   kimseyi durdurmaz; bu yuzden BUGUNKU GERCEGE MANDAL takiyoruz —
+   buyumesi kirmizi, kuculmesi serbest.
+   NEDEN butce: panel ziyaretciye gitmiyor ama FONKSIYON PAKETINE giriyor
+   ve her acilista bastan iniyor. Satir ici gomulerin sessizce buyudugu
+   tek yer burasi (METIN_HARITA, blok kartlari, sekme govdeleri).
+   TUR 2 NOTU: B6/B7 (kaydi acilinca getir/ciz) bu dosyayi kucultecek —
+   o tur kapaninca tavan yeniden olculup DUSURULMELI, yoksa mandal
+   bosalir. */
+{
+  const yol = path.join(__dirname, '..', 'admin.html');
+  const TAVAN = 132 * 1024;
+  const bayt = fs.existsSync(yol) ? fs.statSync(yol).size : -1;
+  ol('T16 · admin.html bayt bütçesi ≤ ' + (TAVAN / 1024) + ' KB',
+     bayt >= 0 && bayt <= TAVAN,
+     bayt < 0 ? 'admin.html YOK' : bayt + ' B / ' + TAVAN + ' B');
 }
 
 /* H28 · SAYFA ICI KANCA HEDEFSIZ OLAMAZ (5 Eyl 2026 — Enes: "demo iste
@@ -5169,7 +5202,56 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.join(' | ') || not.replace(/^LINK BASLIKLARI TAZE: /, '').slice(0, 90));
 }
 
-ozetBasildi = true;
+/* ---- L2 · GUVENLIK BASLIKLARI (10 Eyl 2026) ----
+   KURAL YENI DEGIL, TASINDI — T16 ile ayni sebepten. Bu bes baslik
+   CIKTIDA VARDI ama onlari tutan tek bekci kok test/denetim.js'teydi ve
+   o suite bugun silindi. Yani kural, silinmeden ONCE de "sessizce
+   korlesen" durumdaydi: suite zincirde olmadigi icin biri satiri
+   silseydi hicbir yerde kirmizi yanmazdi. (Ayni tuzak Kademe 3
+   sondajinda 13 kuralda olculmustu — kural yesil kalir, kume kuculur.)
+   S6 ILE KARISTIRILMAMALI: S6 Content-Signal'i robots.txt ve agents.md
+   tarafinda olcer; burasi `_headers` `/*` blogu, BASKA YUZEY.
+   DIST TARAFI: L1 zaten `dist/_headers === yeni/public/_headers` diyor,
+   o yuzden burada kaynagi olcmek yeter — ikisi ayrisirsa L1 yanar.
+   OLCUT DEGERIYLE BIRLIKTE: baslik var ama degeri degistirilmisse de
+   kirmizi. Yalniz adin varligina bakmak, `SAMEORIGIN` -> `ALLOWALL`
+   turu bir degisikligi gorunmez kilardi.
+   YORUM AYIKLAMA: blok icindeki `#` satirlari atlanir — L1'de yasanmis
+   tuzak (kural kendi aciklama yorumunu okuyup yanlis hukum vermisti). */
+{
+  const kusur = [];
+  const h = fs.readFileSync(path.join(__dirname, 'public', '_headers'), 'utf8').replace(/\r\n/g, '\n');
+  const satirlar = h.split('\n');
+  const bas = satirlar.findIndex((s) => s.trim() === '/*');
+  const blok = [];
+  if (bas < 0) kusur.push('_headers: /* blogu yok');
+  else {
+    for (let i = bas + 1; i < satirlar.length; i++) {
+      const s = satirlar[i];
+      if (!s.trim()) continue;
+      if (!/^\s/.test(s)) break;           /* girintisiz satir = yeni yol blogu basladi */
+      if (s.trim().startsWith('#')) continue;
+      blok.push(s.trim());
+    }
+  }
+  const BEKLENEN = [
+    ['Content-Signal', 'search=yes, ai-input=yes, ai-train=no'],
+    ['X-Frame-Options', 'SAMEORIGIN'],
+    ['X-Content-Type-Options', 'nosniff'],
+    ['Referrer-Policy', 'strict-origin-when-cross-origin'],
+    ['Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=()'],
+  ];
+  for (const [ad, deger] of BEKLENEN) {
+    const sat = blok.find((s) => s.toLowerCase().startsWith(ad.toLowerCase() + ':'));
+    if (!sat) { kusur.push(ad + '-YOK'); continue; }
+    const v = sat.slice(sat.indexOf(':') + 1).trim();
+    if (v !== deger) kusur.push(ad + '-degeri-degisti(' + v.slice(0, 40) + ')');
+  }
+  ol('L2 · _headers /* bloğunda güvenlik başlıkları (5 başlık, değerleriyle)',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || blok.length + ' başlık okundu');
+}
+
+
 /* ---- S4 · BENZERSIZ BASLIK VE ACIKLAMA (YAYIN ONCESI KONTROL, madde 4) ----
    "Kopya baslik en yaygin sessiz SEO hatasidir" — ve bugune kadar 63 sayfada
    gercekten benzersiz olup olmadigi HIC olculmedi. Iki sayfa ayni <title>
@@ -5268,6 +5350,7 @@ ozetBasildi = true;
      kusur.length === 0, kusur.slice(0, 3).join(' | ') || (adsId ? 'ads.txt ' + adsId : 'ads.txt yok (panel boş — doğru)'));
 }
 
+ozetBasildi = true;
 console.log(`\n  ${gecti} geçti · ${kaldi} kaldı`);
 if (kaldi > 0) { console.log('  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.'); process.exit(1); }
 console.log('  yeni kabuk temiz.\n');

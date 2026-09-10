@@ -136,18 +136,6 @@
    "to": "/.netlify/functions/panel"
   },
   {
-   "from": "/yeni/hizmet/:slug",
-   "to": "/hizmetler/:slug/"
-  },
-  {
-   "from": "/yeni/en/hizmet/:slug",
-   "to": "/en/hizmetler/:slug/"
-  },
-  {
-   "from": "/yeni/*",
-   "to": "/:splat"
-  },
-  {
    "from": "/shell.html",
    "to": "/"
   },
@@ -162,6 +150,18 @@
   {
    "from": "/en/hizmet/:slug",
    "to": "/en/hizmetler/:slug/"
+  },
+  {
+   "from": "/.well-known/http-message-signatures-directory",
+   "to": "/.netlify/functions/imza-dizini"
+  },
+  {
+   "from": "/mcp",
+   "to": "/.netlify/functions/mcp"
+  },
+  {
+   "from": "/a2a",
+   "to": "/.netlify/functions/a2a"
   }
  ],
  "karsiligi_olmayan": [],
@@ -173,13 +173,17 @@
   "/hukuki",
   "/tesekkur"
  ],
- "son_kontrol": "2026-09-05T13:23:13.008Z",
+ "son_kontrol": "2026-09-10T00:12:24.284Z",
  "bugunku_sayfa": [
   "/",
   "/404",
   "/bulten",
   "/bulten/donusum-oranlari-sektor-sektor",
   "/bulten/google-ads-maliyetleri-2026",
+  "/bulten/konu/arama",
+  "/bulten/konu/reklam",
+  "/bulten/konu/sektor",
+  "/bulten/konu/talep",
   "/bulten/saglik-turizmi-hasta-basina-gelir",
   "/bulten/talebe-bes-dakikada-donmek",
   "/bulten/yapay-zeka-trafigi-tiklama-degil",
@@ -189,6 +193,10 @@
   "/en/bulten",
   "/en/bulten/donusum-oranlari-sektor-sektor",
   "/en/bulten/google-ads-maliyetleri-2026",
+  "/en/bulten/konu/arama",
+  "/en/bulten/konu/reklam",
+  "/en/bulten/konu/sektor",
+  "/en/bulten/konu/talep",
   "/en/bulten/saglik-turizmi-hasta-basina-gelir",
   "/en/bulten/talebe-bes-dakikada-donmek",
   "/en/bulten/yapay-zeka-trafigi-tiklama-degil",
@@ -213,10 +221,12 @@
   "/en/projeler/mercedes-benz",
   "/en/projeler/skyclinics",
   "/en/projeler/terawulf",
+  "/en/sektor/saglik",
   "/en/sss",
   "/en/surec",
   "/en/tesekkur",
   "/film",
+  "/google1b49b70763eafd1b",
   "/hizmetler",
   "/hizmetler/ai-ajan",
   "/hizmetler/finans",
@@ -237,6 +247,7 @@
   "/projeler/mercedes-benz",
   "/projeler/skyclinics",
   "/projeler/terawulf",
+  "/sektor/saglik",
   "/sss",
   "/surec",
   "/tesekkur"

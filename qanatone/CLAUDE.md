@@ -37,8 +37,11 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   kuralıyla uygula (çapa kısa ve benzersiz — uzun çapa komşu değişiklikte
   sessizce düşer, üç kez yaşandı).
 - Her değişiklikten sonra sözdizimi + davranış doğrulaması; iş ancak
-  `node build.js` **sıfır kalan** ile bittiğinde biter.
-- **Her düzeltme `test/denetim.js`'te kalıcı bir kurala dönüşür.** Kural
+  `node yeni/denetim.cjs` **sıfır kalan** ile bittiğinde biter.
+  (10 Eyl 2026: eskiden burada `node build.js` yazıyordu. O betik eski kök
+  siteyi üretiyordu, 6 Eyl'de zincirden çıktı ve **çalıştırılırsa `dist`i
+  siler** — ölçüt artık yalnız yeni kabuk denetimidir.)
+- **Her düzeltme `yeni/denetim.cjs`'te kalıcı bir kurala dönüşür.** Kural
   yazarken ham metin regex'i değil DOM üzerinden ölç — `<script>` içindeki
   şablon elementmiş gibi eşleşir, yanlış yeşil verir. Yanlış yeşil, yanlış
   kırmızıdan tehlikelidir.

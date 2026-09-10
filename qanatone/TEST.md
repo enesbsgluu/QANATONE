@@ -7,17 +7,28 @@ sorunuydu.** Her turda ayrı bir betik yazılıp çalıştırılıp atılıyordu
 her tur farklı bir boyuta bakılıyor, bakılan boyut temiz çıkıyor,
 bakılmayan sessizce bozuluyordu.
 
-`test/denetim.js` o bakışı kalıcı hâle getiriyor. Bugüne kadar bulunan
+`yeni/denetim.cjs` o bakışı kalıcı hâle getiriyor. Bugüne kadar bulunan
 her hata sınıfı burada bir kural. Yeni bir sınıf çıkarsa buraya **bir kez**
 eklenir, sonsuza kadar bekçilik eder.
+
+> **10 Eylül 2026 — `test/denetim.js` silindi.** Bu belge onu anlatıyordu.
+> O suite **eski kök siteyi** denetliyordu; kesmede (6 Eyl) o site
+> üretilmeyi bırakınca zincirden düştü ve kalıcı kırmızı (103/23) durur
+> oldu. Silinmeden önce 23 kırmızısının hepsi okundu; canlı zincirde
+> karşılığı olmayan iki kural `yeni/denetim.cjs`'e taşındı: **T16**
+> (`admin.html` bayt bütçesi) ve **L2** (`_headers` güvenlik başlıkları).
+> Kök `test/` klasöründe kalan üç dosya canlıdır ve **T5** onları zincirde
+> koşar: `yayinla.test.js` · `blok-metin.test.js` · `kaynak-alani.test.js`.
 
 ## Nasıl çalıştırılır
 
 ```
-npm test                 # tek başına
-node build.js            # derlemenin sonunda kendiliğinden koşar
-DENETIM_ATLA=1 node build.js   # atla (ne atladığını bilerek)
+npm test                 # = node yeni/denetim.cjs (canlı kapı)
+node yeni/denetim.cjs    # aynısı, doğrudan
 ```
+
+Yayın zinciri `netlify.toml`'da: derleme → `yeni/denetim.cjs` → kırmızı
+varsa **deploy düşer**.
 
 **Kural kalırsa derleme HATA ile biter — bozuk çıktı yayına gitmez.**
 
