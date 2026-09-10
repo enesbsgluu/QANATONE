@@ -80,6 +80,23 @@ const mdAdres = new URL(canonical).pathname === '/'
 const kesmeOncesi = false;   /* KESME YAPILDI 6 Eyl 2026 — kosulsuz noindex DUSTU; sayfa basina indeks={false} KALDI */
 const B = import.meta.env.BASE_URL.replace(/\/$/, '');
 const en = dil === 'en';
+/* HAREKET ACMA DUGMESI · BAS BETIGI (11 Eyl 2026, Enes karari).
+   Windows'ta animasyonlari kapali ziyaretcide Chrome prefers-reduced-motion
+   bildiriyor ve site butun hareketi kapatiyordu (prolog dahil). Tercihe
+   VARSAYILAN olarak uyulur; "Animasyonlari ac" dugmesine basan ziyaretcide
+   `localStorage['qanat-hareket']='1'` yazilir ve sayfa yenilenir. Bu betik:
+     1. bayrak varsa `<html class="hareket-ac">` — ILK BOYAMADAN ONCE (head'in
+        basinda, CSS'ten once): CSS durduruculari bayraga bagli
+        (hareket-ac.mjs), yani tek kare bile donuk gorunmez;
+     2. `matchMedia`'yi bayraga uydurur: `(prefers-reduced-motion:reduce)`
+        sorusu HER ZAMAN yanlis cevaplanir. BILEREK MERKEZI: prolog kapisi,
+        Perde, kabuk betikleri (efekt/nav/tup/sizinti), ProjeDizin, STETespit
+        — 10 yer ayni soruyu soruyor; hepsini tek tek degistirmek J1 tavanina
+        yakin paketlere bayt eklerdi ve yeni yazilan her soru unutulurdu.
+        Sorgunun geri kalani (virgul listesi) aynen kalir.
+     3. dugme tiklamasini dinler (bayragi acar/kapatir, yeniler).
+   Bekci HA1 (her sayfada var mi). String.raw: regex ters bolulerini korur. */
+const HAREKET_JS = String.raw`(function(){var H=document.documentElement,K='qanat-hareket';try{if(localStorage.getItem(K)==='1'){H.classList.add('hareket-ac');var M=window.matchMedia.bind(window),R=/\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/gi;window.matchMedia=function(q){return M(String(q).replace(R,'(prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference)'))}}}catch(e){}document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#hareket-dugme');if(!b)return;try{if(H.classList.contains('hareket-ac'))localStorage.removeItem(K);else localStorage.setItem(K,'1')}catch(x){}location.reload()})})()`;
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, tr: string, enV: string): string => T((s as any)[k], dil) || (en ? enV : tr);
 /* panel anahtarları — kaynak applyTheme 7257-7276: off(x) = x === 0 */
@@ -183,6 +200,8 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {/* HAREKET ACMA · bas betigi: CSS'ten ONCE (gerekce frontmatter HAREKET_JS) */}
+  <script is:inline set:html={HAREKET_JS} />
   {(kesmeOncesi || indeks === false) && <meta name="robots" content="noindex" />}
   <title>{baslik}</title>
   <meta name="description" content={aciklama} />
@@ -316,6 +335,10 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
   <main id="icerik" tabindex="-1" class={genis ? 'genis' : undefined}>
     <slot />
   </main>
+  {/* HAREKET ACMA DUGMESI (11 Eyl 2026): yalniz hareket azaltma tercihi olan
+      ziyaretcide gorunur (temel.css); tiklama bas betiginde (HAREKET_JS).
+      Iki etiketten hangisinin gorundugu `html.hareket-ac` ile secilir. */}
+  <button type="button" id="hareket-dugme" class="hareket-dugme"><i aria-hidden="true"></i><span class="ha-ac">{en ? 'Turn on animations' : 'Animasyonları aç'}</span><span class="ha-kapat">{en ? 'Turn off animations' : 'Animasyonları kapat'}</span></button>
   {/* FOOTER — kaynak 5478-5512 birebir: üç sütun (tanıtım / Sayfalar /
       İletişim) + QANATONE bit damgası + alt satır. Sosyal (#footSocial)
       kaynakta da boştu (settings.social yok). /hukuki bağı yeni sayfanın

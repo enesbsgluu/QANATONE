@@ -264,6 +264,22 @@ details p{margin-top:10px;color:var(--tx2);font-size:.93rem}
   .dugme.sus-isik::before{animation:none}
   .sus-halka::before{animation:none}
 }
+/* HAREKET ACMA DUGMESI (11 Eyl 2026, Enes karari). Yalniz hareket azaltma
+   tercihi olan ziyaretcide gorunur: asagidaki azaltma kurali derlemede
+   bayraga baglanir (hareket-ac.mjs), bayrak acikken de `html.hareket-ac`
+   kurali tutar — iki halde de gorunur, geri kapatilabilsin. Sol alt: sag
+   altta .kb-back var. 44 px dokunma hedefi. Tiklama Temel.astro bas betiginde. */
+.hareket-dugme{display:none;position:fixed;left:16px;bottom:16px;z-index:119;align-items:center;gap:9px;
+  min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:rgba(13,13,13,.94);
+  color:#fff;font-family:inherit;font-size:13px;font-weight:500;line-height:1;cursor:pointer}
+.hareket-dugme i{width:7px;height:7px;border-radius:50%;background:var(--red);flex:none}
+.hareket-dugme:hover{border-color:var(--red)}
+.hareket-dugme:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.hareket-dugme .ha-kapat{display:none}
+html.hareket-ac .hareket-dugme{display:inline-flex}
+html.hareket-ac .hareket-dugme .ha-ac{display:none}
+html.hareket-ac .hareket-dugme .ha-kapat{display:inline}
+@media (prefers-reduced-motion:reduce){.hareket-dugme{display:inline-flex}}
 /* FOOTER STILI kabuk.css'te (4 Eyl sokum turu: uc sutun + bit damgasi + alt satir) */
 
 /* yazı gövdesi (panel HTML'i) */

@@ -193,5 +193,12 @@ export default defineConfig({
   /* 2 Eyl 2026 (R23 sokumu): prolog-ada manualChunks ve isci (worker)
      hatti kalkti — ada betigi ve isci paketi kaynaktan sokuldu, kod
      tabaninda worker kalmadi. */
-  vite: { plugins: [kunyeyiSoy()] }
+  /* HAREKET ACMA DUGMESI (11 Eyl 2026): hareket azaltma bloklarindaki her
+     secici `hareket-ac` bayragina baglanir — gerekce ve kurallar
+     hareket-ac.mjs'te; bekci denetim HA1. Astro bilesen stilleri de bu
+     hattan gecer (Vite CSS/PostCSS). */
+  vite: {
+    plugins: [kunyeyiSoy()],
+    css: { postcss: { plugins: [(await import('./hareket-ac.mjs')).default()] } },
+  }
 });

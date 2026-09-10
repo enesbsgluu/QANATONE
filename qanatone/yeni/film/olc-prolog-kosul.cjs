@@ -22,6 +22,8 @@ const KOLLAR = [
   { ad: 'laptop-1366', vp: { width: 1366, height: 768 } },
   { ad: 'laptop-1536@125', vp: { width: 1536, height: 864, deviceScaleFactor: 1.25 } },
   { ad: 'hareket-azaltma', vp: { width: 1920, height: 1080 }, azalt: true },
+  /* 11 Eyl: "Animasyonlari ac" dugmesine basilmis hal — prolog GELMELI */
+  { ad: 'azalt+dugme', vp: { width: 1920, height: 1080 }, azalt: true, ac: true },
   { ad: 'dokunmatik-laptop', vp: { width: 1920, height: 1080, hasTouch: true } },
   { ad: 'yarim-pencere@125', vp: { width: 768, height: 864, deviceScaleFactor: 1.25 } },
   { ad: 'zoom175-1366', vp: { width: 780, height: 439, deviceScaleFactor: 1.75 } },
@@ -41,6 +43,7 @@ const KOLLAR = [
     const p = await ctx.newPage();
     await p.setViewport(k.vp);
     if (k.azalt) await p.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    if (k.ac) await p.evaluateOnNewDocument(() => { try { localStorage.setItem('qanat-hareket', '1'); } catch (e) {} });
     const uyari = [];
     p.on('console', (m) => { const t = m.text(); if (/\[(film|prolog)\]/.test(t)) uyari.push(t.slice(0, 120)); });
     if (k.engel) {

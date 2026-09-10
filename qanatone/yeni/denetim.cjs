@@ -2305,8 +2305,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   const TAVAN = 10 * 1024;
   const TAVAN_ANA = 12.5 * 1024;
   const TAVAN_FILM = 11 * 1024;
+  /* HAREKET ACMA BAS BETIGI (11 Eyl 2026) — lead betiginin EMSALIYLE ayri
+     sayilir, kendi tavaniyla. Gerekce: her sayfada bulunmasi SART (bayrak
+     ilk boyamadan once konmali; J1 disina tasinmasi mumkun degil) ve
+     sayfa tavanlarinda pay yoktu — /en/otomasyon 7 B, film 230 B. Butun
+     tavanlari 631 B gevsetmek yerine TEK kalem, TEK tavan. Olculen 631 B. */
+  const TAVAN_HAREKET = 768;
   const kusur = [];
-  let enBuyuk = 0, anaToplam = 0, leadSon = 0;
+  let enBuyuk = 0, anaToplam = 0, leadSon = 0, hareketSon = 0;
   for (const p of sayfalar) {
     let toplam = 0;
     const h = oku(p);
@@ -2319,9 +2325,16 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        'form her rotada en sonda'): gonderim betigi (LeadKutu.astro, satir ici) kabuk
        kalemi — sayfa tavanindan DUSULUR, ayrica raporlanir. Kaynakta da her rotada
        ayni betik kosuyordu; form JS'siz de calisir (native POST). Olculen ~1,1 KB. */
-    let leadJs = 0;
+    let leadJs = 0, hareketJs = 0;
     for (const m of h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g))
-      if (!/application\/ld\+json/.test(m[1])) { const b = Buffer.byteLength(m[2]); if (/getElementById\('silForm'\)/.test(m[2])) leadJs += b; else toplam += b; }
+      if (!/application\/ld\+json/.test(m[1])) {
+        const b = Buffer.byteLength(m[2]);
+        if (/getElementById\('silForm'\)/.test(m[2])) leadJs += b;
+        else if (/qanat-hareket/.test(m[2])) hareketJs += b;
+        else toplam += b;
+      }
+    if (hareketJs > TAVAN_HAREKET) kusur.push(rel(p) + ':hareket-betigi:' + hareketJs + 'B');
+    if (hareketJs) hareketSon = hareketJs;
     const anaMi = /^(index|en[\\/]index)[.]html$/.test(rel(p));
     const filmMi = /^(film|en[\\/]film)[\\/]index[.]html$/.test(rel(p));
     /* PROLOG ANA SAYFADA (3 Eyl 2026, ANAYASA istisna 4): ana sayfa film
@@ -2336,7 +2349,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
   }
   ol(`J1 · JS: ana sayfa ≤ ${TAVAN_ANA} B (+film ${TAVAN_FILM} B prologluysa) · film ≤ ${TAVAN_FILM} B · öbür sayfalar ≤ ${TAVAN} B`,
      kusur.length === 0,
-     kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B · lead betiği ${leadSon} B (kabuk, tavan dışı)`);
+     kusur.slice(0, 3).join(' ') || `ana ${anaToplam} B · öbürlerinin en büyüğü ${enBuyuk} B · lead betiği ${leadSon} B (kabuk, tavan dışı) · hareket betiği ${hareketSon}/${TAVAN_HAREKET} B (kabuk, ayrı tavan)`);
 }
 
 /* F1c · font kapsamı: sayfalarda GEÇEN her kod noktasının bir
@@ -3083,6 +3096,74 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.length === 0, kusur.slice(0, 3).join(' | '));
 }
 
+/* HA1 · HAREKET ACMA DUGMESI (11 Eyl 2026). Belirti: Windows'ta
+   animasyonlari kapali ziyaretci (Chrome -> prefers-reduced-motion) sitede
+   HICBIR hareket goremiyordu, prolog dahil (olculdu: /, /hizmetler, /seo
+   0/0). Karar (Enes): tercihe varsayilan olarak uyulur + "Animasyonlari
+   ac" dugmesi. Uc parca, uc sart:
+     1. CSS: hareket azaltma blogundaki HER secici `hareket-ac` bayragina
+        bagli (hareket-ac.mjs donusumu). Bagsiz tek secici = dugmeye basan
+        ziyaretcide o parca yine donuk. `no-preference` blogu 0 olmali
+        (donusum onu kapsamiyor). Satir ici <style> da taranir.
+     2. Bas betigi her sayfanin <head>'inde: bayragi ilk boyamadan once
+        koyar ve matchMedia'yi bayraga uydurur (JS'teki 10 azaltma sorusu
+        tek yerden izler).
+     3. Dugme her sayfada.
+   KIRMIZI-ONCE: donusumsuz eski dist'e karsi uc sart da kaldi. */
+{
+  const kusur = [];
+  let korunan = 0, tercihsiz = 0;
+  const korunmayan = [];
+  const tara = (css, yer) => {
+    tercihsiz += (css.match(/prefers-reduced-motion\s*:\s*no-preference/g) || []).length;
+    for (const m of css.matchAll(/@media([^{]*prefers-reduced-motion\s*:\s*reduce[^{]*)\{((?:[^{}]*\{[^}]*\})*)\}/g))
+      for (const r of m[2].matchAll(/([^{}]+)\{([^}]*)\}/g))
+        for (const s of r[1].split(',')) {
+          if (/^\s*(from|to|[\d.]+%)\s*$/.test(s)) continue;
+          /* BICIM DE SINANIR (11 Eyl 2026): ilk surum yalniz "bayrak geciyor
+             mu" diye bakiyordu ve Astro'nun `[data-astro-cid-x]:where(html:
+             not(.hareket-ac))` diye BOZDUGU oneki gecerli saydi — bilesen
+             durdurucularinin hicbiri eslesmiyordu. Gecerli iki bicim:
+             ozne soneki `:where(:not(.hareket-ac *))` ya da kok ogede
+             `html|:root:where(:not(.hareket-ac))`. */
+          const bicimli = /:where\(:not\(\.hareket-ac \*\)\)/.test(s)
+            || /(^|[\s>+~])(html|:root):where\(:not\(\.hareket-ac\)\)/.test(s.trim());
+          if (bicimli) korunan++;
+          else korunmayan.push(yer + (s.includes('hareket-ac') ? ' BOZUK ' : ' ') + s.trim().slice(0, 50));
+        }
+  };
+  const astroDizin = path.join(KOK, '_astro');
+  if (fs.existsSync(astroDizin))
+    for (const f of fs.readdirSync(astroDizin)) if (f.endsWith('.css')) tara(oku(path.join(astroDizin, f)), '_astro/' + f);
+  const basEksik = [], dugmeEksik = [];
+  let golgeMuaf = 0;
+  for (const p of sayfalar) {
+    const h = oku(p);
+    const GOLGE = /<template shadowrootmode[\s\S]*?<\/template>/g;
+    for (const st of h.replace(GOLGE, '').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) tara(st[1], rel(p));
+    /* GOLGE AGACI: icindeki secici disaridaki <html> sinifini GOREMEZ —
+       onek eklenseydi durdurucu hic eslesmez, hareket azaltma BOZULURDU.
+       Muafiyet DAR ve ADLI: yalniz /film olcum zemini (eski giris gomusu,
+       noindex). Baska sayfada golge icinde azaltma kurali cikarsa taranir
+       ve bayraksizsa KIRMIZI. */
+    const golge = (h.match(GOLGE) || []).join('');
+    if (golge) {
+      if (/^(en[\\/])?film[\\/]index[.]html$/.test(rel(p))) golgeMuaf++;
+      else for (const st of golge.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) tara(st[1], rel(p) + ' (golge)');
+    }
+    const bas = h.split('</head>')[0] || '';
+    if (!/qanat-hareket/.test(bas) || !/window\.matchMedia\s*=/.test(bas)) basEksik.push(rel(p));
+    if (!/id="hareket-dugme"/.test(h)) dugmeEksik.push(rel(p));
+  }
+  if (korunmayan.length) kusur.push(`bayraksiz durdurucu ${korunmayan.length}: ` + [...new Set(korunmayan)].slice(0, 2).join(' | '));
+  if (!korunan) kusur.push('bayrakli durdurucu 0 (donusum hic calismadi)');
+  if (tercihsiz) kusur.push(`no-preference blogu ${tercihsiz}`);
+  if (basEksik.length) kusur.push(`bas betigi eksik ${basEksik.length} sayfa (${basEksik[0]})`);
+  if (dugmeEksik.length) kusur.push(`dugme eksik ${dugmeEksik.length} sayfa (${dugmeEksik[0]})`);
+  ol('HA1 · hareket azaltma: her durdurucu hareket-ac bayragina bagli + bas betigi + dugme her sayfada',
+     kusur.length === 0, kusur.join(' · ') || `${korunan} bayrakli secici · ${sayfalar.length} sayfa · golge agaci muaf ${golgeMuaf} (/film olcum zemini)`);
+}
+
 /* H24 · EN ANA BEKCI ESLERI (kesme hazirligi, Faz 4). Rota kapanisinin
    kaydi: H ailesi yalniz TR anayi olcer, EN ana BEKCISIZDI (gzip 28 KB
    bandinda — tavana yakin, sessiz bayatlama riski). TAM genisletme
@@ -3247,7 +3328,13 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
          sozde oge (ornek: content:'→') kuralin ICINDE kalir, cunku kumeye
          hic girmez. Virgullu secicide HER parca muaf olmak zorunda. */
       const sozdeAnahtar = (parca) => {
-        const m = parca.trim().match(/([.#][\w-]+|\w+)\s*:{1,2}(before|after)\b/);
+        /* HAREKET-AC SONEKI SOYULUR (11 Eyl 2026): derleme (hareket-ac.mjs)
+           bayragi sinif ile sozde ogenin ARASINA yazar —
+           `.sp-govde:where(:not(.hareket-ac *)):after`; soyulmazsa anahtar
+           cikmaz ve iceriksiz sozde oge istisnasi sessizce duser (olculdu:
+           .sp-govde:after, canlida muaf, yeni derlemede kirmizi). */
+        const m = parca.trim().replace(/:where\(:not\(\.hareket-ac \*\)\)/g, '')
+          .match(/([.#][\w-]+|\w+)\s*:{1,2}(before|after)\b/);
         return m ? m[1] + '::' + m[2] : null;
       };
       const bosSozdeKume = new Set();
@@ -3516,7 +3603,12 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        NOT: derleyici `::before` -> `:before` yazabiliyor, iki taraf da
        normalleştirilerek karşılaştırılır. */
     {
-      const norm = s => s.trim().replace(/::/g, ':').replace(/\s+/g, ' ');
+      /* HAREKET-AC ONEKI SOYULUR (11 Eyl 2026): derleme (hareket-ac.mjs)
+         her durdurucuyu `:where(html:not(.hareket-ac))` ile bayraga bagliyor;
+         `:where` ozgulluge sifir katar, yani "AYNI secici" olcutu onek
+         soyulunca aynen gecerli. Bayragin kendisini HA1 sinar. */
+      const norm = s => s.trim().replace(/:where\(:not\(\.hareket-ac \*\)\)/g, '')
+        .replace(/:where\(:not\(\.hareket-ac\)\)/g, '').replace(/::/g, ':').replace(/\s+/g, ' ');
       const duran = new Set();
       for (const m of css.matchAll(/@media[^{]*prefers-reduced-motion[^{]*\{((?:[^{}]*\{[^}]*\})*)\}/g))
         for (const r of m[1].matchAll(/([^{}]+)\{([^}]*)\}/g))
