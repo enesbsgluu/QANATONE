@@ -34,7 +34,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { dogrula } = require('./yayinla.js');
+const { dogrula, SLUG_BICIMI } = require('./yayinla.js');
 
 const ALAN = 'Basic realm="QANATONE panel", charset="UTF-8"';
 const SABIT_GECIKME_MS = 300;
@@ -101,6 +101,29 @@ function kayitlariOku(klasor) {
     .map(a => { try { return JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')); } catch (e) { return null; } })
     .filter(Boolean)
     .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+
+/* Butun dosya koleksiyonlarini gezer. HICBIR klasor cozulmezse
+   `bulunan` 0 kalir ve cagiran 503 verir (asagidaki gerekce). */
+function koleksiyonlariOku(donustur) {
+  const koleksiyon = dosyaKoleksiyonlari();
+  const cikti = {};
+  let toplam = 0, bulunan = 0;
+  for (const K of koleksiyon) {
+    const dizi = kayitlariOku(K.klasor);
+    if (dizi === null) { cikti[K.ad] = []; continue; }
+    bulunan++; cikti[K.ad] = donustur ? dizi.map(donustur) : dizi; toplam += dizi.length;
+  }
+  return { koleksiyon, cikti, toplam, bulunan };
+}
+
+/* DIZIN OZETI (Tur 2 · B7, 10 Eyl 2026). Panel acilista TUM kayitlari
+   cekiyordu: 10.000 yazida 35,6 MiB, her acilista. Liste icin gereken
+   yalniz bu uc alan — adres, siralama tarihi, baslik. Govde kayit
+   ACILINCA `?kayit=` ile gelir. Panel liste etiketini ve site haritasi
+   sayacini bunlardan cizer; alan eklemek acilis yukunu buyutur. */
+function ozetle(k) {
+  return { slug: k.slug, date: k.date, title: { tr: (k.title && k.title.tr) || '' } };
 }
 
 function dosyaYolu(ad) {
@@ -170,17 +193,36 @@ exports.handler = async function handler(event) {
     };
   }
 
-  /* `?kayitlar=1` → dosya koleksiyonlari + sozlesme. Ayni kapinin
-     ardinda; content.json'dan AYRI cunku buyuyen kisim burasi. */
-  if (q.kayitlar === '1') {
-    const koleksiyon = dosyaKoleksiyonlari();
-    const kayitlar = {};
-    let toplam = 0, bulunan = 0;
-    for (const K of koleksiyon) {
-      const dizi = kayitlariOku(K.klasor);
-      if (dizi === null) { kayitlar[K.ad] = []; continue; }
-      bulunan++; kayitlar[K.ad] = dizi; toplam += dizi.length;
+  /* `?kayit=<slug>&kol=<ad>` → TEK kayit (Tur 2 · B7). Panel bir kaydi
+     ACINCA buraya gelir. slug ve kol istemciden gelir: kol sozlesmede
+     olmali, slug yayinla.js ile AYNI kalipta — `../content` gibi bir
+     deger klasorun disina cikamaz. Govde dosyanin kendisi (ayristirilip
+     yeniden yazilmaz), yani panelin TEMEL'i diskteki halle birebir. */
+  if (q.kayit !== undefined) {
+    const K = dosyaKoleksiyonlari().find(k => k.ad === q.kol);
+    const slug = String(q.kayit || '');
+    if (!K || !SLUG_BICIMI.test(slug)) {
+      console.log(simdi(), 'panel: gecersiz kayit istegi reddedildi');
+      return { statusCode: 400, headers: H, body: 'gecersiz kayit' };
     }
+    const d = dizinYolu(K.klasor);
+    const y = d && path.join(d, slug + '.json');
+    if (!y || !fs.existsSync(y)) return { statusCode: 404, headers: H, body: 'kayit yok' };
+    return {
+      statusCode: 200,
+      headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
+      body: fs.readFileSync(y, 'utf8')
+    };
+  }
+
+  /* `?dizin=1` → panelin ACILIS ucu (Tur 2 · B7): sozlesme + kayit
+     basina yalniz ozet. `?kayitlar=1` → butun kayitlar; panel onu
+     artik yalniz kullanici butunu istediginde cagirir (disa/ice aktar).
+     Ikisi de ayni kapinin ardinda; content.json'dan AYRI cunku buyuyen
+     kisim burasi. */
+  if (q.dizin === '1' || q.kayitlar === '1') {
+    const dizinMi = q.dizin === '1';
+    const { koleksiyon, cikti, toplam, bulunan } = koleksiyonlariOku(dizinMi ? ozetle : null);
     /* HICBIR KLASOR COZULMEDIYSE paketleme eksiktir (`included_files`).
        Bos dizi donmek TEHLIKELI olurdu: panel "hic yazi yok" gosterir,
        Enes bir sey ekleyip yayinlar ve gercekte var olan yazilar
@@ -193,11 +235,11 @@ exports.handler = async function handler(event) {
       console.log(simdi(), 'panel: kayit klasorleri paketde bulunamadi (included_files?)');
       return { statusCode: 503, headers: H, body: 'kayitlar yok' };
     }
-    console.log(simdi(), 'panel: kayitlar servis edildi ·', toplam, '·', bulunan + '/' + koleksiyon.length, 'klasor');
+    console.log(simdi(), 'panel: ' + (dizinMi ? 'dizin' : 'kayitlar') + ' servis edildi ·', toplam, '·', bulunan + '/' + koleksiyon.length, 'klasor');
     return {
       statusCode: 200,
       headers: Object.assign({}, H, { 'content-type': 'application/json; charset=utf-8' }),
-      body: JSON.stringify({ koleksiyon, kayitlar })
+      body: JSON.stringify(dizinMi ? { koleksiyon, dizin: cikti } : { koleksiyon, kayitlar: cikti })
     };
   }
 
@@ -219,3 +261,4 @@ exports.handler = async function handler(event) {
 
 exports.parolaCoz = parolaCoz;     /* test: biçim çözümünü izole ölçmek için */
 exports.panelYolu = panelYolu;
+exports.ozetle = ozetle;           /* test: dizin ozetinin bicimi tek yerde */

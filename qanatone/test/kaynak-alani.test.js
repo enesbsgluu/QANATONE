@@ -43,6 +43,9 @@ const icerik = JSON.parse(fs.readFileSync(path.join(KOK, 'content.json'), 'utf8'
 const sozlesme = JSON.parse(fs.readFileSync(
   path.join(KOK, 'yeni', 'src', 'veri', 'sayfalar.json'), 'utf8'));
 
+/* Dizin ozeti panel.js'in KENDI fonksiyonundan (asagidaki fetch taklidi). */
+const { ozetle } = require(path.join(KOK, 'netlify', 'functions', 'panel.js'));
+
 /* Dosyada duran koleksiyonlar — sozlesmeden, panelde oldugu gibi. */
 const DOSYA_KOL = (sozlesme.koleksiyon || [])
   .filter((k) => k.depo === 'dosya')
@@ -104,7 +107,19 @@ const dom = new JSDOM(panelHtml, {
        icerigi doner — kapi depodaki halle kosar. */
     win.fetch = async (u) => {
       const s = String(u);
-      if (s.includes('kayitlar=1'))
+      const q = new URL(s, 'https://www.qanatone.com/admin.html').searchParams;
+      /* Tur 2 · B7: acilis `?dizin=1` (ozet), kayit acilinca `?kayit=`.
+         Ozet panel.js'in KENDI fonksiyonuyla uretilir — test ikinci bir
+         ozet bicimi tutsaydi panel uretimde bozulurken kapi yesil kalirdi. */
+      if (q.get('dizin') === '1')
+        return { ok: true, json: async () => ({ koleksiyon: DOSYA_KOL,
+          dizin: Object.fromEntries(Object.entries(kayitlar).map(([ad, d]) => [ad, d.map(ozetle)])) }) };
+      if (q.has('kayit')) {
+        const k = (kayitlar[q.get('kol')] || []).find((x) => x.slug === q.get('kayit'));
+        return k ? { ok: true, json: async () => JSON.parse(JSON.stringify(k)) }
+          : { ok: false, status: 404, json: async () => ({}) };
+      }
+      if (q.get('kayitlar') === '1')
         return { ok: true, json: async () => ({ koleksiyon: DOSYA_KOL, kayitlar }) };
       if (s.includes('veri=1'))
         return { ok: true, json: async () => JSON.parse(JSON.stringify(icerik)) };
@@ -141,6 +156,13 @@ const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
     let hata = null;
     try { win.show(sekme); } catch (e) { hata = e; }
     if (hata) { ol(sekme + ' · sekme açıldı', false, String(hata.message).slice(0, 70)); continue; }
+
+    /* B6 (Tur 2): kayitlar KAPALI cizilir, alan ancak kayit acilinca
+       var. Hepsi acilir — acma yolu (ozet → ?kayit= → yerinde cizim)
+       boylece bu kapidan da gecer. */
+    const acici = () => [...doc.querySelectorAll('#ed [data-ac]')];
+    for (const b of acici()) b.click();
+    for (let i = 0; i < 300 && doc.querySelectorAll('#ed .kg').length < acici().length; i++) await bekle(10);
 
     const alanlar = [...doc.querySelectorAll('textarea[data-src]')];
     const kayitSayisi = (kayitlar[kolAd] || []).length;

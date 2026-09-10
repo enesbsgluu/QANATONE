@@ -1105,7 +1105,14 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      gerektiginde ogrenilir, ki en pahali an odur. Test paneli jsdom'da
      ACIP uc bolumun kaynak alanina gercekten yaziyor ve panelin kendi
      `kayitFarki()` govdesini sorguluyor. */
-  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js', 'kaynak-alani.test.js'];
+  /* 10 Eyl 2026 (Tur 2 · B6/B7): `panel-olcek.test.js` eklendi. Panel
+     acilista artik DIZIN aliyor, kaydi acilinca getirip ciziyor.
+     Acilmamis kayit panelde govdesiz bir OZET; ozet bir dosyanin yerine
+     yazilirsa yazi sessizce silinir. Test gercek panel.js + yayinla.js
+     handler'larini gecici bir koke karsi kosar ve ozetin hicbir yoldan
+     (tasima, silme, yayin, varsayilana don, disa aktarma, taslak)
+     yayina sizmadigini olcer. */
+  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js', 'kaynak-alani.test.js', 'panel-olcek.test.js'];
   const kusur = [];
   let ozet = '';
 
@@ -2111,14 +2118,25 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
    NEDEN butce: panel ziyaretciye gitmiyor ama FONKSIYON PAKETINE giriyor
    ve her acilista bastan iniyor. Satir ici gomulerin sessizce buyudugu
    tek yer burasi (METIN_HARITA, blok kartlari, sekme govdeleri).
-   TUR 2 NOTU: B6/B7 (kaydi acilinca getir/ciz) bu dosyayi kucultecek —
-   o tur kapaninca tavan yeniden olculup DUSURULMELI, yoksa mandal
-   bosalir. */
+   TUR 2 (10 Eyl 2026) OLCULDU — VARSAYIM TUTMADI: B6/B7 panelin
+   CALISMA ANI yukunu kuculttu (acilis istegi, sekme HTML'i), kaynak
+   dosyayi degil; kod ekledi. Uc yazi editoru tek cizicide birlesti,
+   net 124.355 → 128.334 B. Tavan yeni gercege indirildi: 132 → 128 KB
+   (2.738 B pay ≈ 40 yeni sabit metin, harita ortalamasi 69 B/anahtar;
+   asan tavani GEREKCEYLE yukseltir).
+   AYNI TURDA BIRIM DUZELDI: sayim satir sonu normalize (\r ayiklanir).
+   Ham bayt platforma bagliydi — autocrlf'li Windows cekimi ~1,6 KB
+   fazla okur, fonksiyon paketine giden ise git'teki LF hali. CLAUDE.md
+   "metin dosyasinin ham bayti platforma bagli" tuzaginin bayt esi.
+   SIRADAKI KALDIRAC: METIN_HARITA'da "Eski site" bolumu 148 anahtar,
+   ~6 KB — panelin kendi notuna gore yeni site onlari okumuyor. Uretec
+   (metin-harita.cjs) karari Enes'te. */
 {
   const yol = path.join(__dirname, '..', 'admin.html');
-  const TAVAN = 132 * 1024;
-  const bayt = fs.existsSync(yol) ? fs.statSync(yol).size : -1;
-  ol('T16 · admin.html bayt bütçesi ≤ ' + (TAVAN / 1024) + ' KB',
+  const TAVAN = 128 * 1024;
+  const bayt = fs.existsSync(yol)
+    ? Buffer.byteLength(fs.readFileSync(yol, 'utf8').replace(/\r/g, '')) : -1;
+  ol('T16 · admin.html bayt bütçesi ≤ ' + (TAVAN / 1024) + ' KB (LF)',
      bayt >= 0 && bayt <= TAVAN,
      bayt < 0 ? 'admin.html YOK' : bayt + ' B / ' + TAVAN + ' B');
 }

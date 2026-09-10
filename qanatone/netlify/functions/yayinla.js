@@ -150,6 +150,12 @@ async function githubCommit({ token, repo, branch, dosyalar, mesaj }) {
    Sozlesme fonksiyon paketinden okunur; okunamazsa kayit yazma KAPALI
    (varsayilan kapali, varsayilan acik degil). */
 const SLUG_BICIMI = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/* OZET ISARETI (Tur 2 · B7, 10 Eyl 2026). Panel buyuyen koleksiyonlari
+   acilista DIZINDEN yukler; henuz acilmamis kayit panelde yalniz
+   slug/tarih/baslik tasiyan bir OZET olarak durur ve bu isareti tasir.
+   Ozet bir kayit dosyasinin yerine yazilirsa yazinin govdesi SESSIZCE
+   silinir. Panel ozeti gondermez (kayitFarki atlar); bu ikinci kilit. */
+const OZET_ISARETI = '_ozet';
 function izinliKlasorler() {
   const adaylar = [
     process.env.LAMBDA_TASK_ROOT && path.join(process.env.LAMBDA_TASK_ROOT, 'yeni', 'src', 'veri', 'sayfalar.json'),
@@ -230,6 +236,12 @@ function handlerOlustur(adaptor) {
           return { statusCode: 400, body: JSON.stringify({ ok: false, reason: 'gecersiz kayit yolu' }) };
         }
       }
+      for (const k of kayitlar) {
+        if (k.kayit && typeof k.kayit === 'object' && k.kayit[OZET_ISARETI]) {
+          console.log(simdi(), 'yayinla: ozet kayit reddedildi (govdesi yok)');
+          return { statusCode: 400, body: JSON.stringify({ ok: false, reason: 'ozet kayit yazilamaz' }) };
+        }
+      }
       for (const k of kayitlar)
         dosyalar.push({
           yol: TEMEL_DIZIN + '/' + k.klasor + '/' + k.slug + '.json',
@@ -265,3 +277,5 @@ exports.dogrula = dogrula;                 // test: parola doğrulamasını izol
 exports.githubCommit = githubCommit;
 exports.REPO = REPO;
 exports.DOSYA_YOLU = DOSYA_YOLU;
+exports.SLUG_BICIMI = SLUG_BICIMI;         // panel.js `?kayit=` ayni kurali kullanir
+exports.OZET_ISARETI = OZET_ISARETI;       // test: panelin isaretiyle ayni mi

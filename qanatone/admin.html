@@ -79,6 +79,7 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--red)}
   padding:16px;margin-bottom:13px}
 .ih{display:flex;align-items:center;gap:9px;margin-bottom:12px}
 .ih .mono{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ih .ac{text-align:left}.ih .ac:hover{color:var(--tx)}
 .ib{width:28px;height:28px;border-radius:9px;border:1px solid var(--line);
   background:var(--card2);color:var(--tx3);font-size:.78rem;display:grid;place-items:center;
   transition:.2s;flex:none}
@@ -209,6 +210,22 @@ let C=null, DEF=null, cur='genel', pvT=null, curSvc='';
 let DOSYA_KOL=[];        /* [{ad,kaynak,klasor}] — sozlesme SUNUCUDAN gelir */
 let TEMEL={};            /* {kaynak: {slug: kayit}} — yayindaki hal */
 const dosyaAnahtar=()=>DOSYA_KOL.map(k=>k.kaynak);
+/* ---- TUR 2 · B6/B7 (10 Eyl 2026): ACILISTA DIZIN, KAYIT ACILINCA ----
+   Olculen: panel acilista TUM kayitlari cekiyordu (10.000 yazida
+   35,6 MiB) ve `list()` her kaydin TUM alanlarini pesin basiyordu
+   (1.000 kayitta 14,5 MB HTML). Ikisi ayni ilkenin iki yarisi: buyuyen
+   koleksiyonda kayit ACILINCA getirilir, ACILINCA cizilir.
+   OZET: `?dizin=1`den gelen kayit yalniz slug/tarih/baslik tasir ve
+   `_ozet` isaretiyle durur. Ozet DUZENLENEMEZ, YAYINA GITMEZ — bir
+   dosyanin yerine yazilsaydi yazinin govdesi sessizce silinirdi. Uc
+   kilit: kayitFarki ozeti atlar · TEMEL'e ozet yazilmaz · yayinla.js
+   isaretli kaydi reddeder. Bekci: test/panel-olcek.test.js.
+   TEMEL degeri null = "sunucuda var, henuz getirilmedi".               */
+const OZET='_ozet';
+const ozetMi=o=>!!(o&&o[OZET]);
+const kopya=o=>JSON.parse(JSON.stringify(o));
+const ACIK=new WeakSet();  /* acik kayitlar; slug yazilirken degistigi icin NESNEYLE tutulur */
+const KATLI={};            /* yol -> alan cizici (son list() cagrisindan) */
 /* content.json'a ait olan kisim: dosya koleksiyonlari HARIC. */
 function icerikKismi(o){
   const c={};
@@ -227,6 +244,7 @@ function kayitFarki(){
       const slug=String((kayit&&kayit.slug)||'');
       if(!slug) continue;
       gorulen.add(slug);
+      if(ozetMi(kayit)) continue;       /* acilmamis: ne degisti ne silindi */
       if(JSON.stringify(temel[slug])!==JSON.stringify(kayit))
         degisen.push({kaynak:K.kaynak,klasor:K.klasor,slug,kayit});
     }
@@ -484,12 +502,21 @@ function buildSitemap(){
 }
 function list(path,title,fields,label){
   const arr=get(path)||[];
-  return arr.map((it,i)=>`<div class="item">
-    <div class="ih"><span class="mono">${title} ${String(i+1).padStart(2,'0')}${label?' · '+esc(label(it)):''}</span>
+  /* B6: buyuyen koleksiyon (sozlesmede `depo:"dosya"`) KAPALI cizilir,
+     alanlar kayit acilinca basilir (kaydiAc). Sabit sayili listeler
+     eskisi gibi acik — onlar olcekle buyumuyor. */
+  const katli=dosyaAnahtar().includes(path);
+  if(katli)KATLI[path]=fields;
+  return (katli&&arr.length?`<p class="hint" style="margin-bottom:10px">${arr.length} kayıt · düzenlemek için başlığına tıkla</p>`:'')
+    +arr.map((it,i)=>{
+    const ad=`${title} ${String(i+1).padStart(2,'0')}${label?' · '+esc(label(it)):''}`;
+    const acik=katli&&ACIK.has(it);
+    return `<div class="item">
+    <div class="ih">${katli?`<button class="mono ac" type="button" data-ac="${path}|${i}" aria-expanded="${acik}">${acik?'▾':'▸'} ${ad}</button>`:`<span class="mono">${ad}</span>`}
       <button class="ib" data-mv="${path}|${i}|-1">↑</button>
       <button class="ib" data-mv="${path}|${i}|1">↓</button>
       <button class="ib del" data-del="${path}|${i}">✕</button></div>
-    ${fields(it,i,path+'.'+i)}</div>`).join('')
+    ${!katli?fields(it,i,path+'.'+i):acik?`<div class="kg">${fields(it,i,path+'.'+i)}</div>`:''}</div>`;}).join('')
     +`<button class="add" data-add="${path}">+ ${title} ekle</button>`;
 }
 const BLANK={
@@ -587,6 +614,43 @@ const KAYNAK_NOTU=`
   Boş bıraktığında sayfada kaynak bölümü hiç görünmez — başlığı da çıkmaz.<br>
   Yazman gerekirse her satır <span class="mono">Kaynak adı :: https://adres</span> —
   adres boş bırakılabilir.</div>`;
+/* YAZI EDITORU — uc bolum (bulten · nedir · haberler) TEK alan
+   cizicisinden (Tur 2 · B6, 10 Eyl 2026). Uc kopyaydi; alanlari AYNI
+   olmasi gereken uc sekme ayri ayri duzenleniyordu — KAYNAK_NOTU'nun
+   uyarisi (uc kopya = sonradan fark edilen sapma) kodun kendisi icin de
+   gecerli. `list('<ad>'` cagrisi sekmede KALIR: T8 panel koleksiyonunu
+   o cagridan taniyor. Fark yalniz iki: konu secimi (nedir'de yok) ve
+   etiket ipucu. */
+const YAZI_NOTU=`
+  <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
+  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
+  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
+  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.</div>
+  ${KAYNAK_NOTU}`;
+function yaziAlanlari(konulu,ipucu){
+  return (it,i,p)=>`
+    <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
+    ${konulu?`<div class="r2">${opt('Konu',p+'.topic',BKCATS())}${opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}</div>`
+      :opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}
+    ${fld('Etiket (TR)',p+'.tag.tr',{hint:ipucu})}
+    ${fld('Etiket (EN)',p+'.tag.en')}
+    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
+    ${fld('Giriş cümlesi (TR)',p+'.lede.tr',{area:1})}
+    ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
+    <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
+    <h4 class="sec">Gövde</h4>
+    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
+    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
+    <h4 class="sec">Kaynaklar</h4>
+    <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`;
+}
+const yaziEtiketi=it=>(it.title&&it.title.tr||it.slug||'').slice(0,40);
+function kaynakBagla(r){
+  r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
+    set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
+      const i=l.indexOf('::');
+      return i<0?{n:l,u:''}:{n:l.slice(0,i).trim(),u:l.slice(i+2).trim()};})));
+}
 const P={
 genel:{t:'Genel & İletişim',n:()=>'',f:()=>`
   <h2>Genel & İletişim</h2><p class="sub">WhatsApp numarası sitedeki bütün butonları besler: hero, alt çağrı, footer, teşhis aracı ve demo formu.</p>
@@ -835,90 +899,21 @@ konu:{t:'Konular',n:()=>(get('topics')||[]).length,f:()=>`
     it=>(it.tr||it.k||'').slice(0,40))}`},
 bulten:{t:'Bülten',n:()=>(get('posts')||[]).length,f:()=>`
   <h2>Bülten yazıları</h2><p class="sub"><span class="mono">/bulten</span> listesi ve her yazı <span class="mono">/bulten/adres</span> sayfası. Kategori filtresi <b>Konu</b> alanından çıkar.</p>
-  <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
-  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
-  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.</div>
-  ${KAYNAK_NOTU}
-  ${list('posts','Yazı',(it,i,p)=>`
-    <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
-    <div class="r2">${opt('Konu',p+'.topic',BKCATS())}${opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}</div>
-    ${fld('Etiket (TR)',p+'.tag.tr',{hint:'Veri · Talep yönetimi'})}
-    ${fld('Etiket (EN)',p+'.tag.en')}
-    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
-    ${fld('Giriş cümlesi (TR)',p+'.lede.tr',{area:1})}
-    ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
-    <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
-    <h4 class="sec">Gövde</h4>
-    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
-    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
-    <h4 class="sec">Kaynaklar</h4>
-    <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
-    it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
-  bind(r){
-    r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
-      set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?{n:l,u:''}:{n:l.slice(0,i).trim(),u:l.slice(i+2).trim()};})));
-  }},
+  ${YAZI_NOTU}
+  ${list('posts','Yazı',yaziAlanlari(1,'Veri · Talep yönetimi'),yaziEtiketi)}`,
+  bind:kaynakBagla},
 
 nedirb:{t:'Nedir yazıları',n:()=>(get('explainers')||[]).length,f:()=>`
   <h2>Nedir yazıları</h2><p class="sub">Konunun <b>ne olduğunu ve nasıl çalıştığını</b> anlatan yazılar. <span class="mono">/nedir</span> listesi ve her yazı <span class="mono">/nedir/adres</span> sayfası. Bu yazılar <b>eskimez</b>: bültenin tarih akışına ve beslemesine karışmaz. <b>İlk yazıyı ekleyene kadar bölüm sitede görünmez</b> — menüde ve sitemap'te de yoktur.</p>
-  <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
-  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
-  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.</div>
-  ${KAYNAK_NOTU}
-  ${list('explainers','Yazı',(it,i,p)=>`
-    <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
-    ${opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}
-    ${fld('Etiket (TR)',p+'.tag.tr',{hint:'Tanım · Arama'})}
-    ${fld('Etiket (EN)',p+'.tag.en')}
-    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
-    ${fld('Giriş cümlesi (TR)',p+'.lede.tr',{area:1})}
-    ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
-    <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
-    <h4 class="sec">Gövde</h4>
-    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
-    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
-    <h4 class="sec">Kaynaklar</h4>
-    <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
-    it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
-  bind(r){
-    r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
-      set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?{n:l,u:''}:{n:l.slice(0,i).trim(),u:l.slice(i+2).trim()};})));
-  }},
+  ${YAZI_NOTU}
+  ${list('explainers','Yazı',yaziAlanlari(0,'Tanım · Arama'),yaziEtiketi)}`,
+  bind:kaynakBagla},
 
 haberb:{t:'Haberler',n:()=>(get('news')||[]).length,f:()=>`
   <h2>Haberler</h2><p class="sub">Sektörün <b>genel haberleri</b>. <span class="mono">/haber</span> listesi ve her haber <span class="mono">/haber/adres</span> sayfası. Konu filtresi <b>Konu</b> alanından çıkar ve her konunun kendi arşivi olur (<span class="mono">/haber/konu/…</span>). <b>İlk haberi ekleyene kadar bölüm sitede görünmez.</b></p>
-  <div class="note calm"><b>Yayınla dedikten sonra site kendini yeniden derler.</b> Ayrıca bir komut çalıştırman gerekmez — yazı, <span class="mono">.md</span> eşi, sitemap ve besleme aynı derlemede üretilir.</div>
-  <div class="note calm"><b>Gövde:</b> her bölümün bir <b>başlığı</b> ve altında <b>blokları</b> var —
-  <b>Paragraf</b>, <b>Liste</b> ve <b>Vurgu</b> (büyük sayı + açıklama). Kod yazman gerekmez;
-  kalın için metni seç ve <b>Kalın</b>'a bas. Blokları ok tuşlarıyla sıralayabilirsin.</div>
-  ${KAYNAK_NOTU}
-  ${list('news','Yazı',(it,i,p)=>`
-    <div class="r3">${fld('Adres',p+'.slug',{hint:'kucuk-harf-tire'})}${fld('Tarih',p+'.date',{type:'date'})}${fld('Okuma (dk)',p+'.read',{type:'number'})}</div>
-    <div class="r2">${opt('Konu',p+'.topic',BKCATS())}${opt('Sektör',p+'.sector',SEKTORLER(),'hangi sektörün içeriği — boş bırakılabilir')}</div>
-    ${fld('Etiket (TR)',p+'.tag.tr',{hint:'Veri · Talep yönetimi'})}
-    ${fld('Etiket (EN)',p+'.tag.en')}
-    <div class="r2">${fld('Başlık (TR)',p+'.title.tr')}${fld('Başlık (EN)',p+'.title.en')}</div>
-    ${fld('Giriş cümlesi (TR)',p+'.lede.tr',{area:1})}
-    ${fld('Giriş cümlesi (EN)',p+'.lede.en',{area:1})}
-    <div class="f"><label>Kapak görseli <i>— boşsa og.png kullanılır</i></label>${img(p+'.image')}</div>
-    <h4 class="sec">Gövde</h4>
-    ${govdeAlani('Bölümler (TR)',p+'.body.tr',(it.body||{}).tr)}
-    ${govdeAlani('Bölümler (EN)',p+'.body.en',(it.body||{}).en)}
-    <h4 class="sec">Kaynaklar</h4>
-    <div class="f"><textarea data-src="${p}.sources">${esc((it.sources||[]).map(x=>x.n+' :: '+(x.u||'')).join('\n'))}</textarea></div>`,
-    it=>(it.title&&it.title.tr||it.slug||'').slice(0,40))}`,
-  bind(r){
-    r.querySelectorAll('[data-src]').forEach(el=>el.oninput=()=>
-      set(el.dataset.src,el.value.split('\n').map(s=>s.trim()).filter(Boolean).map(l=>{
-        const i=l.indexOf('::');
-        return i<0?{n:l,u:''}:{n:l.slice(0,i).trim(),u:l.slice(i+2).trim()};})));
-  }},
+  ${YAZI_NOTU}
+  ${list('news','Yazı',yaziAlanlari(1,'Veri · Talep yönetimi'),yaziEtiketi)}`,
+  bind:kaynakBagla},
 
 soz:{t:'Müşteri sözleri',n:()=>(get('testimonials')||[]).length,f:()=>`
   <h2>Müşteri sözleri</h2><p class="sub">Kanal kartlarının altındaki <b>ince kırmızı bantta</b> sırayla döner. Hiç kayıt yoksa bant kendini gizler. Geçiş süresi <b>Görünüm & Hareket</b> sekmesinde.</p>
@@ -1307,6 +1302,10 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
            harf degisse bile 10.000 yazilik dosyanin TAMAMI yeniden
            yaziliyordu. */
         const f=kayitFarki();
+        /* GONDERILEN HAL ANINDA DONDURULUR: yayin surerken yazilan metin
+           gonderilmedi; TEMEL/varsayilan canli `C`den kurulsaydi o metin
+           "yayinda" sayilir, sonraki yayin onu hic gondermezdi. */
+        const anlik=JSON.parse(JSON.stringify(C));
         const res=await fetch('/.netlify/functions/yayinla',{method:'POST',
           headers:{'content-type':'application/json'},
           body:JSON.stringify({parola,content:icerikKismi(C),
@@ -1317,8 +1316,18 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
           /* TEMEL TAZELENIR: yayindaki hal artik bu. Yapilmazsa ikinci
              yayin ayni dosyalari bir daha gonderir ve "degisen" sayisi
              hic sifirlanmaz — kullanici neyin bekledigini goremez. */
-          for(const K of DOSYA_KOL)
-            TEMEL[K.kaynak]=Object.fromEntries(((C&&C[K.kaynak])||[]).map(x=>[String(x.slug||''),JSON.parse(JSON.stringify(x))]));
+          for(const K of DOSYA_KOL){
+            const T=TEMEL[K.kaynak]||{};
+            /* OZET TEMEL'E YAZILMAZ (B7): yazilsaydi o kayit sonraki
+               acilista sunucudan getirilmez, ozet tam kayit sanilirdi. */
+            TEMEL[K.kaynak]=Object.fromEntries((anlik[K.kaynak]||[]).map(x=>{const s=String(x.slug||'');
+              return [s,ozetMi(x)?(T[s]??null):x];}));
+          }
+          /* VARSAYILAN DA TAZELENIR: "Varsayilana don" yayindaki hale
+             donmeli. Eskiden acilistaki hale donuyordu — yayinda silinen
+             kayit "degisen" olarak geri gelir, sonraki yayin onu yeniden
+             yaratirdi. */
+          DEF=JSON.parse(JSON.stringify(anlik));
           du.textContent='yayınlandı — '+(j.dosya!=null?j.dosya+' dosya ':'')+'GitHub\'a commit edildi';
         }
         else if(res.status===401)du.textContent='parola reddedildi';
@@ -1433,6 +1442,12 @@ function show(k){
   document.querySelectorAll('#side [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===k));
   const ed=$('#ed');
   ed.innerHTML=P[k].f();
+  bagla(ed);
+  ed.scrollTop=0;
+}
+/* Alan baglamalari — sekmenin tamamina (show) ya da yeni acilan tek
+   karta (kaydiAc). Atamayla baglanir; iki kez baglamak zararsiz. */
+function bagla(ed){
   ed.querySelectorAll('[data-p]').forEach(el=>el.oninput=()=>set(el.dataset.p,el.value));
   ed.querySelectorAll('[data-p]').forEach(el=>{if(el.tagName==='SELECT')el.onchange=()=>set(el.dataset.p,el.value);});
   ed.querySelectorAll('[data-rng]').forEach(el=>{
@@ -1456,10 +1471,69 @@ function show(k){
   ed.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
     const p=b.dataset.add;
     if(!get(p))set(p,[]);
-    get(p).push(JSON.parse(JSON.stringify(blankFor(p))));touch();show(cur);buildSide();});
+    get(p).push(JSON.parse(JSON.stringify(blankFor(p))));
+    if(dosyaAnahtar().includes(p))ACIK.add(get(p).at(-1));   /* yeni kayit acik gelir */
+    touch();show(cur);buildSide();});
+  ed.querySelectorAll('[data-ac]').forEach(b=>b.onclick=()=>kaydiAc(b));
   bindGovde(ed);
-  if(P[k].bind)P[k].bind(ed);
-  ed.scrollTop=0;
+  if(P[cur].bind)P[cur].bind(ed);
+}
+/* Kaydi ac/kapat (B6). Ozetse once getirilir (B7). Cizim YALNIZ o
+   kartta olur: sekme yeniden cizilmez, kaydirma yeri kaybolmaz. */
+async function kaydiAc(b){
+  const [p,i]=b.dataset.ac.split('|'), kart=b.closest('.item');
+  let it=(get(p)||[])[+i]; if(!it||!kart)return;
+  const ok=v=>{b.setAttribute('aria-expanded',v);b.textContent=b.textContent.replace(v?'▸':'▾',v?'▾':'▸');};
+  if(ACIK.has(it)){ACIK.delete(it);kart.querySelector('.kg')?.remove();ok(false);return;}
+  if(ozetMi(it)){
+    b.disabled=true;
+    try{it=await kaydiGetir(p,it);}
+    catch(e){console.error('panel: kayit alinamadi',e);$('#state').textContent='kayıt alınamadı — tekrar dene';}
+    b.disabled=false;
+    if(!it||ozetMi(it))return;      /* hata ya da beklerken silindi */
+  }
+  ACIK.add(it);
+  /* Beklerken sekme yeniden cizildiyse (siralama, silme, sekme degisimi)
+     kart bayattir: sekme bulundugu yerde yeniden cizilir. */
+  if(!kart.isConnected){const ed=$('#ed'),y=ed.scrollTop;show(cur);ed.scrollTop=y;return;}
+  kart.insertAdjacentHTML('beforeend',`<div class="kg">${KATLI[p](it,+i,p+'.'+i)}</div>`);
+  ok(true);
+  bagla(kart.querySelector('.kg'));
+}
+/* Ozeti tam kayda cevirir; tam kayit dizide OZETIN YERINE konur. Ozet
+   dizide artik yoksa (beklerken silindi) null. */
+async function kaydiGetir(kaynak,ozet){
+  const tam=await temelGetir(kaynak,String(ozet.slug||''));
+  const dizi=C[kaynak]||[], k=dizi.indexOf(ozet);
+  return k<0?null:(dizi[k]=kopya(tam));
+}
+/* Kaydin SUNUCU HALI (TEMEL): once bellek, yoksa `?kayit=`. */
+async function temelGetir(kaynak,slug){
+  const T=TEMEL[kaynak]||(TEMEL[kaynak]={});
+  if(T[slug]==null){
+    const K=DOSYA_KOL.find(k=>k.kaynak===kaynak);
+    const r=await fetch('?kayit='+encodeURIComponent(slug)+'&kol='+encodeURIComponent(K.ad),{cache:'no-store'});
+    if(!r.ok)throw new Error('kayit HTTP '+r.status);
+    T[slug]=await r.json();
+  }
+  return T[slug];
+}
+/* BUTUN KAYITLAR — yalniz kullanici butunu istediginde (disa/ice
+   aktar); acilis bunu artik yapmiyor. Disa aktarilan dosya eskisi gibi
+   TAM kalmali: ozet tasisaydi geri yuklenince yazilarin govdesi
+   kaybolurdu. Sunucuda bulunamayan ozet kalirsa aktarma DURUR. */
+async function tumunuYukle(){
+  const r=await fetch('?kayitlar=1',{cache:'no-store'});
+  if(!r.ok)throw new Error('kayitlar HTTP '+r.status);
+  const K=await r.json();
+  for(const kol of DOSYA_KOL){
+    const T=TEMEL[kol.kaynak]||(TEMEL[kol.kaynak]={});
+    for(const x of ((K.kayitlar&&K.kayitlar[kol.ad])||[])){const s=String(x.slug||'');if(T[s]==null)T[s]=x;}
+    const dizi=C[kol.kaynak]||[];
+    for(let i=0;i<dizi.length;i++)if(ozetMi(dizi[i])&&T[dizi[i].slug])dizi[i]=kopya(T[dizi[i].slug]);
+    const kalan=dizi.filter(ozetMi).length;
+    if(kalan)throw new Error(kol.ad+': '+kalan+' kayit sunucuda yok');
+  }
 }
 function buildSide(){
   $('#side').innerHTML=NAV.map(([g,ids])=>`<div class="g">${g}</div>`+
@@ -1495,19 +1569,20 @@ async function kur(){
     const r=await fetch('?veri=1',{cache:'no-store'});
     if(!r.ok)throw new Error('HTTP '+r.status);
     DEF=await r.json();
-    /* KAYITLAR AYRI UCTAN (Kademe 2). Sozlesme de buradan gelir —
-       hangi koleksiyonun dosyada durdugu panelde SABIT YAZILMAZ,
+    /* KAYITLAR AYRI UCTAN (Kademe 2) — ARTIK DIZIN (Tur 2 · B7): acilista
+       yalniz ozet gelir, kayit acilinca `?kayit=`. Sozlesme de buradan
+       gelir — hangi koleksiyonun dosyada durdugu panelde SABIT YAZILMAZ,
        `veri/sayfalar.json` tek karar yeri (iki yerde durursa biri
        degisince oteki sessizce kayar). */
-    const rk=await fetch('?kayitlar=1',{cache:'no-store'});
-    if(!rk.ok)throw new Error('kayitlar HTTP '+rk.status);
+    const rk=await fetch('?dizin=1',{cache:'no-store'});
+    if(!rk.ok)throw new Error('dizin HTTP '+rk.status);
     const K=await rk.json();
     DOSYA_KOL=K.koleksiyon||[];
     TEMEL={};
     for(const kol of DOSYA_KOL){
-      const dizi=(K.kayitlar&&K.kayitlar[kol.ad])||[];
-      DEF[kol.kaynak]=dizi;
-      TEMEL[kol.kaynak]=Object.fromEntries(dizi.map(x=>[String(x.slug||''),x]));
+      const dizi=(K.dizin&&K.dizin[kol.ad])||[];
+      DEF[kol.kaynak]=dizi.map(x=>Object.assign({},x,{[OZET]:1}));
+      TEMEL[kol.kaynak]=Object.fromEntries(dizi.map(x=>[String(x.slug||''),null]));
     }
   }catch(e){DEF=null;console.error('panel: icerik alinamadi',e);}
   if(!DEF){$('#ed').innerHTML='<div class="note"><b>İçerik alınamadı.</b> Panel gövdesi açıldı ama <span class="mono">content.json</span> okunamadı. Paneli <span class="mono">/admin.html</span> adresinden (sunucu üzerinden) aç; dosyayı doğrudan çift tıklayarak açmak çalışmaz. Sorun sürerse Netlify fonksiyon günlüğünde <span class="mono">panel: content.json paketde bulunamadi</span> satırına bak.</div>';return;}
@@ -1537,12 +1612,22 @@ async function kur(){
       const i=dizi.findIndex(x=>String(x.slug||'')===d.slug);
       if(i>=0)dizi.splice(i,1);
     }
+    /* Taslaktaki kayitlarin SUNUCU HALI getirilir (B7). Taslak yayindan
+       sonra tarayicida kaliyor; TEMEL bos kalsaydi yayinlanmis kayit
+       ertesi acilista "degisti" gorunur, ikinci yayin onu bir daha
+       gonderirdi. Istek sayisi taslaktaki kayit kadar. Getirilemeyen
+       kayit "degisti" sayilir — guvenli yan. */
+    await Promise.all(degisen.filter(d=>TEMEL[d.kaynak]&&d.slug in TEMEL[d.kaynak])
+      .map(d=>temelGetir(d.kaynak,d.slug).catch(()=>{})));
   }
   seeded=true;buildSide();show('genel');setTimeout(push,300);
 }
 kur();
 frame.addEventListener('load',()=>{ if(seeded)setTimeout(push,400); });
-$('#bExport').onclick=()=>{
+$('#bExport').onclick=async()=>{
+  /* Disa aktarma eskisi gibi TAM: acilmamis kayitlar once getirilir. */
+  try{await tumunuYukle();}
+  catch(e){console.error('panel: disa aktarma',e);$('#state').textContent='indirilemedi — kayıtlar alınamadı';return;}
   const bl=new Blob([JSON.stringify(C,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='content.json';a.click();
   URL.revokeObjectURL(a.href);
@@ -1552,7 +1637,13 @@ $('#bImport').onclick=()=>$('#fImport').click();
 $('#fImport').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{C=merge(JSON.parse(JSON.stringify(DEF)),JSON.parse(r.result));touch();buildSide();show(cur);}
+  r.onload=async()=>{
+    let j;try{j=JSON.parse(r.result)}catch(x){alert('JSON okunamadı');return;}
+    /* Dosya buyuyen koleksiyon tasiyorsa TEMEL tam olmali: yoksa ice
+       aktarilan her kayit "degisti" sayilir, yayin hepsini yeniden yazar. */
+    try{if(DOSYA_KOL.some(k=>Array.isArray(j[k.kaynak])))await tumunuYukle();}
+    catch(x){console.error('panel: ice aktarma',x);$('#state').textContent='içe aktarılamadı — kayıtlar alınamadı';return;}
+    try{C=merge(JSON.parse(JSON.stringify(DEF)),j);touch();buildSide();show(cur);}
     catch(x){alert('JSON okunamadı')}};
   r.readAsText(f);
 };
