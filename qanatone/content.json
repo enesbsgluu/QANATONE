@@ -4251,55 +4251,55 @@
       }
     },
     {
-      "name": "TeraWulf",
-      "year": "2026",
-      "slug": "terawulf",
-      "image": "img/pj-terawulf.webp",
+      "name": "CMBlu Energy",
+      "year": "2025",
+      "slug": "cmblu-energy",
+      "image": "img/pj-cmblu-energy.webp",
       "tag": {
-        "tr": "Enerji · Otomasyon",
-        "en": "Energy · Automation"
+        "tr": "Enerji · Web tasarım",
+        "en": "Energy · Web design"
       },
       "text": {
-        "tr": "Gelen iş ortaklığı ve yatırımcı taleplerini sınıflandırıp doğru ekibe düşüren otomasyon.",
-        "en": "An automation that classifies incoming partnership and investor inquiries and routes them to the right team."
+        "tr": "Büyük ölçekli enerji depolama teknolojisini şebeke operatörüne ve yatırımcıya anlaşılır kılan kurumsal site.",
+        "en": "A corporate site that makes large-scale energy storage legible to grid operators and investors."
       },
       "meta": {
         "role": {
-          "tr": "Otomasyon",
-          "en": "Automation"
+          "tr": "Web tasarım",
+          "en": "Web design"
         },
         "ch": {
-          "tr": "Site, form, e-posta",
-          "en": "Site, forms, email"
+          "tr": "Kurumsal site",
+          "en": "Corporate site"
         }
       },
       "blocks": {
         "tr": [
           [
             "Sorun",
-            "<p>Farklı nitelikte talepler — yatırımcı, iş ortağı, basın — aynı kutuya düşüyor, doğru kişiye geç ulaşıyordu.</p>"
+            "<p>Derin bir mühendislik hikâyesi vardı ama teknik dil, karar vericiye ulaşmadan yoruyordu.</p>"
           ],
           [
             "Yaklaşım",
-            "<p>Gelen her talebi niyetine göre sınıflandırıp ilgili ekibe yönlendiren bir otomasyon hattı kurduk.</p>"
+            "<p>Teknolojiyi katman katman açan bir anlatı kurduk: önce sorun, sonra çözümün ilkesi, en sonda derinlik. Her katman kendi ziyaretçisine konuşuyor.</p>"
           ],
           [
             "Sonuç",
-            "<p>Talep artık beklemede çürümüyor; her mesaj ilk elden doğru masaya düşüyor.</p>"
+            "<p>Site hem mühendisin hem yatırımcının aynı sayfada ilerleyebildiği bir zemin oldu.</p>"
           ]
         ],
         "en": [
           [
             "The problem",
-            "<p>Investor, partner and press enquiries shared one inbox.</p>"
+            "<p>A deep engineering story buried in technical language.</p>"
           ],
           [
             "The approach",
-            "<p>A clear site plus intent-based routing.</p>"
+            "<p>A layered narrative: problem, principle, depth.</p>"
           ],
           [
             "The result",
-            "<p>Every message lands on the right desk first.</p>"
+            "<p>Engineers and investors move through the same page.</p>"
           ]
         ]
       }
