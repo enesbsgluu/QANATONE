@@ -1,0 +1,62 @@
+{
+  "slug": "buyuk-dil-modelleri-nedir",
+  "date": "2026-02-10",
+  "read": 6,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Temel Kavram · LLM",
+    "en": "Core Concept · LLM"
+  },
+  "title": {
+    "tr": "Büyük dil modelleri (LLM) nedir, nasıl çalışır?",
+    "en": "What are large language models (LLMs) and how do they work?"
+  },
+  "lede": {
+    "tr": "LLM'ler, milyarlarca parametreye sahip, internet ölçeğindeki metin verisiyle eğitilmiş olasılıksal dil modelleridir. Kelime tahmini oyunu oynuyorlar — ama bu oyunun Ölçeği onlara akılsız yetenekler kazandırır.",
+    "en": "LLMs are probabilistic language models with billions of parameters, trained on internet-scale text. They play a next-word prediction game — but at Scale, this game yields uncanny capabilities."
+  },
+  "body": {
+    "tr": [
+      [
+        "Ne işe yarar?",
+        "<p>Bir LLM, verilen bir metin parçasına (prompt) en olası devamı üretir. Bu basit görünebilir; ancak yeterince büyük model ve veriyle, kod yazma, çeviri, özetleme, рассуждение, hatta araç kullanma gibi karmaşık görevlerde insan seviyesine yakın performans gösterirler.</p>"
+      ],
+      [
+        "Mimari: Transformer",
+        "<p>Transformer (Vaswani et al., 2017), dizi modellemesinde RNN/LSTM'lerin sıralı işleme darboğazını kırdı. <strong>Self-attention</strong> mekanizması, her token'ın bağlamdaki diğer her token ile ilişkisini paralelleştirerek hesaplar. Bu sayede binlerce GPU'da ölçeklenebilir eğitim mümkün oldu.</p>"
+      ],
+      [
+        "Eğitim aşamaları",
+        "<p><strong>Ön-eğitim (Pre-training):</strong> Trilyon tokenlık ham metinde maske olmayan dil modellemesi — dilin istatistiksel yapısını, dünya bilgisini ve рассуждение kalıplarını öğrenir. Maliyet: milyonlarca GPU-saat.</p><p><strong>İnce ayar (Fine-tuning) / RLHF:</strong> İnsan geri bildirimli pekiştirmeli öğrenme ile model, talimat takibi, güvenlik ve faydalılık için hizalanır. Bu aşama modelin \"kişiliğini\" ve güvenliğini belirler.</p>"
+      ],
+      [
+        "Sınırlar ve riskler",
+        "<p>LLM'ler <strong>bilgi depoları değil, rasyonel tahmin motorlarıdır</strong>. Halüsinasyon (yapma bilgi), eğitim verisindeki önyargılar, güncel olmama ve maliyet sorunları vardır. RAG (Retrieval-Augmented Generation) ve araç kullanımı bu sınırları kısmen aşar.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What do they do?",
+        "<p>An LLM produces the most probable continuation for a given text (prompt). Simple on paper; but at sufficient scale, this yields near-human performance on coding, translation, summarization, reasoning, and even tool use.</p>"
+      ],
+      [
+        "Architecture: Transformer",
+        "<p>The Transformer (Vaswani et al., 2017) broke the sequential bottleneck of RNNs/LSTMs. <strong>Self-attention</strong> lets every token attend to every other token in parallel, enabling training across thousands of GPUs.</p>"
+      ],
+      [
+        "Training stages",
+        "<p><strong>Pre-training:</strong> Masked language modeling on trillions of tokens — learns statistical structure of language, world knowledge, reasoning patterns. Cost: millions of GPU-hours.</p><p><strong>Fine-tuning / RLHF:</strong> Reinforcement learning from human feedback aligns the model for instruction following, safety, helpfulness. This stage defines the model's \"personality\" and guardrails.</p>"
+      ],
+      [
+        "Limits and risks",
+        "<p>LLMs are <strong>reasoning engines, not knowledge bases</strong>. Hallucination, training-data bias, staleness, and cost are real. RAG and tool use partially mitigate these.</p>"
+      ]
+    ]
+  },
+  "sources": [
+    "https://arxiv.org/abs/1706.03762",
+    "https://openai.com/research/gpt-4"
+  ]
+}

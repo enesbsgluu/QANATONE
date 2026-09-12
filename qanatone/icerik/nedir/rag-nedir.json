@@ -1,0 +1,62 @@
+{
+  "slug": "rag-nedir",
+  "date": "2026-03-05",
+  "read": 4,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Mimari · RAG",
+    "en": "Architecture · RAG"
+  },
+  "title": {
+    "tr": "RAG (Retrieval-Augmented Generation) nedir, neden gereklidir?",
+    "en": "What is RAG (Retrieval-Augmented Generation) and why is it needed?"
+  },
+  "lede": {
+    "tr": "RAG, LLM'lerin bilgi kesiti ve halüsinasyon sorununu çözmek için, modelin cevap vermeden önce ilgili belgeleri bir vektör veritabanından çekip bağlama enjekte etmesidir. Model \"ezberden\" değil, \"elindeki belgeden\" cevap verir.",
+    "en": "RAG solves LLMs' knowledge cutoff and hallucination by retrieving relevant documents from a vector database and injecting them into context before generation. The model answers from \"the document at hand,\" not from memory."
+  },
+  "body": {
+    "tr": [
+      [
+        "Sorun: LLM'ler neden yanlış cevap verir?",
+        "<p>LLM'lerin bilgi, eğitim verisindeki istatistiksel örüntülerde saklıdır. Eğitim sonrası dünya değişirse (yeni ürünler, yasalar, fiyatlar) model bunu bilmez. Ayrıca olasılıksal doğaları, meşru görünen ama yanlış metin üretebilir (halüsinasyon). Kurumsal veriler (içerik, kontratlar, kod) eğitimde yoktur.</p>"
+      ],
+      [
+        "RAG nasıl çalışır?",
+        "<p><strong>1. İndeksleme (offline):</strong> Belgeler parçalara (chunk) bölünür, her parça embedding modeliyle vektöre dönüştürülür, vektör veritabanına (Pinecone, Weaviate, Qdrant, pgvector) kaydedilir.</p><p><strong>2. Sorgu anında (online):</strong> Kullanıcı sorusu embedding'e dönüştürülür, vektör veritabanında en yakın k parçası (top-k) aranır, bulunan parçalar prompt'a eklenir.</p><p><strong>3. Üretim:</strong> LLM, ek bağlamla cevap üretir. Kaynak gösterimi (citation) eklenebilir.</p>"
+      ],
+      [
+        "Ne zaman kullanmalı?",
+        "<ul><li>Özel/kurumsal veriyle cevap vermeliyseniz (içerik, HR, hukuk, kod).</li><li>Güncel bilgi gerekiyorsa (haber, fiyat, stok).</li><li>Kaynak gösterimi / denetlenebilirlik zorunluysa.</li></ul><p>Basit bilgi sorgulamalarında (ör. \"Paris başkenti neresidir?\") RAG gereksizdir — model zaten bilir.</p>"
+      ],
+      [
+        "Pratik ipuçları",
+        "<p>Chunk boyutu ve overlap kritik: çok küçük → bağlam kaybı, çok büyük → gürültü ve token maliyeti. Hybrid search (vektör + BM25) sıklıkla pure vector'ı geçer. Reranker (cross-encoder) top-k'yı yeniden sıralayıp recall artırır. Değerlendirme için: retrieval recall@k, generation faithfulness, answer relevance metrişleri izlenir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The problem: why do LLMs get it wrong?",
+        "<p>LLM knowledge is frozen in training-time statistical patterns. Post-training world changes (new products, laws, prices) are invisible. Their probabilistic nature also produces plausible but false text (hallucination). Proprietary data (docs, contracts, code) was never in training.</p>"
+      ],
+      [
+        "How RAG works",
+        "<p><strong>1. Indexing (offline):</strong> Documents split into chunks, each embedded via an embedding model, stored in a vector DB (Pinecone, Weaviate, Qdrant, pgvector).</p><p><strong>2. Query time (online):</strong> User question embedded, top-k nearest chunks retrieved from vector DB, injected into prompt.</p><p><strong>3. Generation:</strong> LLM answers with augmented context. Citations can be added.</p>"
+      ],
+      [
+        "When to use it",
+        "<ul><li>You must answer from proprietary data (internal docs, HR, legal, code).</li><li>Current information is required (news, prices, inventory).</li><li>Citation / auditability is mandatory.</li></ul><p>RAG is overkill for general knowledge queries (e.g., \"capital of France?\") — the model already knows.</p>"
+      ],
+      [
+        "Practical tips",
+        "<p>Chunk size and overlap are critical: too small → context loss, too large → noise and token cost. Hybrid search (vector + BM25) often beats pure vector. A reranker (cross-encoder) re-orders top-k to boost recall. Track: retrieval recall@k, generation faithfulness, answer relevance.</p>"
+      ]
+    ]
+  },
+  "sources": [
+    "https://arxiv.org/abs/2005.11401",
+    "https://www.pinecone.io/learn/retrieval-augmented-generation/"
+  ]
+}

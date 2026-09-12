@@ -1,0 +1,54 @@
+{
+  "slug": "yapay-zeka-nedir",
+  "date": "2026-01-15",
+  "read": 5,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Temel Kavram · Yapay Zeka",
+    "en": "Core Concept · AI"
+  },
+  "title": {
+    "tr": "Yapay zeka nedir, nasıl çalışır?",
+    "en": "What is artificial intelligence and how does it work?"
+  },
+  "lede": {
+    "tr": "Yapay zeka, makinelerin insan zekasını taklit ederek öğrenme, рассуждение ve problem çözme yeteneği kazandırmasıdır. Sihir değil, istatistik ve büyük veridir.",
+    "en": "Artificial intelligence gives machines the ability to mimic human intelligence — learning, reasoning, and problem solving. It's not magic; it's statistics and big data."
+  },
+  "body": {
+    "tr": [
+      [
+        "Temel tanım",
+        "<p>Yapay zeka (AI), bilgisayar sistemlerinin insan zekası gerektiren görevleri — görme, duyma, konuşma, karar verme, çeviri — yerine getirebilmesini sağlayan bilim dalıdır. Modern AI'nin büyük çoğunluğu \"makine öğrenmesi\" (ML) üzerine kuruludur: veriden örüntü öğrenip, yeni veride tahmin yapar.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<p>Üç ana paradigması vardır:</p><ul><li><strong>Denetimli öğrenme:</strong> Etiketlenmiş verilerle model eğitilir (ör. spam filtresi).</li><li><strong>Denetimsiz öğrenme:</strong> Etiketsiz veride gizli yapılar bulunur (ör. müşteri segmentasyonu).</li><li><strong>Pekiştirmeli öğrenme:</strong> Ajans ortamda ödül/ceza ile optimum davranış öğrenir (ör. oyun botları, robotik).</li></ul><p>Derin öğrenme (deep learning), çok katmanlı sinir ağlarıyla karmaşık örüntüleri modeller; günümüz LLM'leri (büyük dil modelleri) bu paradigmanın ölçeklenmiş halidir.</p>"
+      ],
+      [
+        "Neden şimdi patladı?",
+        "<p>Üç faktör birleşti: (1) GPU/TPU ile hesaplama gücü ucuzladı, (2) İnternet çağında trilyon tokenlık metin/kod veri birikti, (3) Transformer mimarisi (2017) dizi modellemeyi devrimleştirdi. Bu üçlünün kesişimi 2022 sonrası ChatGPT patlamasını yarattı.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Core definition",
+        "<p>Artificial intelligence (AI) is the field enabling computer systems to perform tasks requiring human intelligence — vision, speech, decision-making, translation. Most modern AI is built on machine learning (ML): learning patterns from data to predict on new data.</p>"
+      ],
+      [
+        "How it works",
+        "<p>Three main paradigms:</p><ul><li><strong>Supervised learning:</strong> Models trained on labeled data (e.g., spam filter).</li><li><strong>Unsupervised learning:</strong> Hidden structures found in unlabeled data (e.g., customer segmentation).</li><li><strong>Reinforcement learning:</strong> Agent learns optimal behavior via reward/punishment in an environment (e.g., game bots, robotics).</li></ul><p>Deep learning uses multi-layer neural networks to model complex patterns; today's LLMs are the scaled-up incarnation of this paradigm.</p>"
+      ],
+      [
+        "Why the explosion now?",
+        "<p>Three factors converged: (1) GPU/TPU made compute cheap, (2) internet-era accumulation of trillions of text/code tokens, (3) Transformer architecture (2017) revolutionized sequence modeling. Their intersection sparked the post-2022 ChatGPT moment.</p>"
+      ]
+    ]
+  },
+  "sources": [
+    "https://arxiv.org/abs/1706.03762",
+    "https://www.firstpagesage.com/seo/conversion-rates-by-industry"
+  ]
+}
