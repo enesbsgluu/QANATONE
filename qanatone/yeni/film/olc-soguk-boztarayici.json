@@ -1,0 +1,221 @@
+{
+ "_": "yeni/film/olc-soguk.cjs — KAPI B SOGUK GIRIS: taze tarayici profili + sabit isinma dizisi + TEK sayfa. Kapi A (olc-sayfa.cjs) TARAMA kosulunu olcer ve gerileme kapisidir; bu ZIYARETCI kosulunu olcer. Iki kapinin rakamlari birbirinin yerine GECMEZ.",
+ "kapi": "B — SOGUK GIRIS (ziyaretci kapisi)",
+ "isinma_dizisi": [
+  "her olcum icin AYRI TARAYICI (taze gecici profil)",
+  "about:blank acilir",
+  "tazeleme olculur (200 rAF araligi, ilk 5 atilir)",
+  "1500 ms bosta beklenir",
+  "about:blank kapatilir",
+  "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
+  "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
+ ],
+ "olcum": "2026-09-06T12:40:28.341Z",
+ "tarayici": "brave",
+ "tekrar": 1,
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 2,
+  "tek_takilma_ms": 250,
+  "_": "BLOKLAYICI OLAN HEPSI BU (+ tur tamligi). Ikisi de MUTLAK birim: tik ve ms. Enes, 5 Eyl — B'nin ilk 27 soguk kosumunun dagilimindan turetildi. A'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu."
+ },
+ "bilgi_kalemleri": {
+  "takilma_toplam_ms": "MUTLAK — ziyaretcinin hissettigi. Kapi degil.",
+  "takilma_orani": "TUREV — tur boyuna bagimli. Kapi degil.",
+  "oran_eski_kapi": 0.08,
+  "_": "Enes, 5 Eyl 2026 gecesi — ORAN KAPIDAN DUSTU. Gerekce: kisa turda oran ornekleme hatasidir. 5 Eyl olcumu ters siralama gosterdi: /yeni/projeler/ 308 ms toplam takilmayla 3,37 sn turda %9,13 (KALIYORDU), /yeni/ 667 ms toplam takilmayla 12,0 sn turda %5,63 (GECIYORDU). Ziyaretcinin daha cok takildigi sayfa geciyordu. Bu bir gevsetme degil yanlis birimin duzeltilmesi — ayni hata kare kapisinda ms/tik olarak yapilmisti."
+ },
+ "hedef": {
+  "kacirilan_kare": 1,
+  "_": "HEDEF — KAPI DEGIL. Kayda gecer, hukmu etkilemez."
+ },
+ "sinyal": {
+  "takilma_esik_ms": 50,
+  "_": "Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar"
+ },
+ "hukum": "KISMI (1/9 sayfa) — HUKUM DEGIL · ham: HUKUM YOK — 1 sayfa olculemedi (yabanci_tarayici)",
+ "kismi": {
+  "olculen": 1,
+  "tum": 9,
+  "_": "kismi kosum HUKUM DEGIL: B'nin hukmu varsayilan dokuz sayfanin tamami kosuldugunda kurulur"
+ },
+ "hedefte_olmayan": [
+  "/hizmetler/geo/"
+ ],
+ "dagilim": {
+  "3": 1
+ },
+ "siralama": {
+  "mutlak_toplam_ms": [
+   "/hizmetler/geo/"
+  ],
+  "oran": [
+   "/hizmetler/geo/"
+  ],
+  "_": "Ustteki MUTLAK sira ziyaretcinin hissettigi siradir; alttaki TUREV siradir. Ikisi ayrisiyorsa oranin paydasi (tur boyu) konusuyordur, sayfa degil.",
+  "ayrisiyor": false
+ },
+ "sayfa": [
+  {
+   "yol": "/hizmetler/geo/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.3,
+      "p90": 8.4,
+      "kararli": true
+     },
+     "kare": 297,
+     "tur_ms": 3916,
+     "p95_ms": 33.2,
+     "medyan_ms": 8.4,
+     "kare_p95": 4,
+     "kacirilan_kare": 3,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 516,
+     "takilma_tek_max_ms": 175,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true,
+     "yuk": {
+      "tarayici_cekirdek": 0.952,
+      "yabanci_cekirdek": 1.99,
+      "rig_cekirdek": 0.257,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.601
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 8088,
+        "cekirdek": 0.33
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.285
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.16
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.14
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.099
+       }
+      ],
+      "pencere_sn": 15.42
+     },
+     "sistem_cekirdek": 3.914
+    }
+   ],
+   "p95_medyan": 33.2,
+   "kacirilan_medyan": 3,
+   "kacirilan_kosumlar": [
+    3
+   ],
+   "kacirilan_en_yuksek": 3,
+   "kare_p95_medyan": 4,
+   "takilma_tek_max": 175,
+   "taban_takilma": [
+    0
+   ],
+   "tik_kosumlar": [
+    8.3
+   ],
+   "bilgi": {
+    "takilma_toplam_medyan_ms": 516,
+    "takilma_toplam_kosumlar": [
+     516
+    ],
+    "takilma_sayi_medyan": 6,
+    "tur_ms_medyan": 3916,
+    "takilma_oran_medyan": 0.1318,
+    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
+   },
+   "takilma_oran_medyan": 0.1318,
+   "eski_oran_kapisi": false,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "tarayici_cekirdek_enyuksek": 0.952,
+    "tarayici_cekirdek_kosumlar": [
+     0.952
+    ],
+    "yabanci_cekirdek_medyan": 1.99,
+    "yabanci_cekirdek_kosumlar": [
+     1.99
+    ],
+    "rig_cekirdek_medyan": 0.257,
+    "en_agir": [
+     {
+      "ad": "chrome.exe",
+      "pid": 9928,
+      "cekirdek": 0.601
+     },
+     {
+      "ad": "chrome.exe",
+      "pid": 8088,
+      "cekirdek": 0.33
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.285
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.16
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4104,
+      "cekirdek": 0.14
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 8484,
+      "cekirdek": 0.099
+     }
+    ],
+    "sistem_cekirdek_medyan": 3.914,
+    "cekirdek": 8,
+    "kapi_tarayici": 0.15,
+    "_": "KAPI tarayici_cekirdek. yabanci_cekirdek TOPLAM ve KAPI DEGIL — olculdu: 2,9 cekirdek saf CPU yuku hukmu cevirmedi."
+   },
+   "tik_sapma": false,
+   "kapi": {
+    "kacirilan_kare": false,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [
+    "yabanci_tarayici"
+   ],
+   "gecti": null,
+   "hedefte": false
+  }
+ ]
+}

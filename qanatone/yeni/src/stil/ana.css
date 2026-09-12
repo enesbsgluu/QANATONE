@@ -1,0 +1,159 @@
+/* QANATONE ana sayfa (Faz 2) — sahne stilleri.
+   SÖZLEŞMELER (yeni/denetim.cjs H ailesi bunları ölçer):
+   · animation/transition YALNIZ s1- s2- s3- önekli seçicilerde ve
+     :hover/:focus geri bildiriminde (H1)
+   · s*-  sınıflarında hover dışı opacity:0 YOK — giriş hareketi keyframe
+     from{}'dan gelir, taban hep opak (H2)
+   · cihaz kısıtı yalnız .sus- önekini söndürebilir (H4)
+   · marka fontları /font/ — üçüncü parti yok (F1/F1b)              */
+
+/* Kabuk kisiti ana sayfada acilir: hero tam ekran bir sahne, 840px'lik
+   yazi olcusune sigmaz. Yatay dolgu artik BOLUMUN kendisinde (.icgen /
+   .sh-ic) — main'de kalsaydi tam genislikli sahne yine kirpilirdi. */
+body:has(.ana) main{max-width:none;padding:0}
+.ana{font-family:var(--f-govde)}
+/* SADAKAT TURU (3 Eyl 2026, Enes: "eski düzen, yeni mimari"). Ortak ölçek
+   eski kaynaktan (kök index.html): h2 700 (kaynak h1-h5 700; buradaki 500
+   giydirme sapmasıydı — T12), bölüm dolgusu `section{padding:clamp(66px,
+   8.6vw,122px) 0}` (kaynak 337), etiket `.shead .mono` (kaynak 181, 339-340),
+   h2 `.shead h2` (341), lede `.shead p` (344). Ölçüm: olc-tipografi.cjs,
+   yan yana kare kontak-tur9/sadakat-bolum-*. Hero h1 dokunulmaz (Anayasa 3). */
+.ana h1,.ana h2{font-family:var(--f-baslik)}
+.ana h1{font-weight:500}
+.ana h2{font-weight:700}
+.ana .tek{font-family:var(--f-tek)}
+.ana section{margin-bottom:0;padding:clamp(66px,8.6vw,122px) 0}
+.ana .icgen{max-width:840px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+
+/* etiket satırı — her sahnenin künyesi */
+/* etiket satırı — kaynak `.shead .mono` birebir (181 + 339-340): 11px mono,
+   .22em, gri (--tx3), önünde 26px kızıl çizgi. Anlatı sayacı ("02") ve
+   kızıl nokta kaynakta YOKTU — sadakat turunda kalktı (anlatı sahneleri de). */
+/* .kunye kurali temel.css'e TASINDI (3 Eyl 2026, anayasa): lead formu artik her
+   sayfada (LeadKutu) ve kunye orada da basiliyor; ana.css yalniz ana sayfada
+   yukleniyordu — hizmet detayinda "Demo talebi" duz metin kalmisti (hz-geo-60). */
+
+/* ============ S1 · AÇILIŞ — DEVREDİLDİ ============
+   Faz 2'nin "iddia" sahnesi ile göçün S-H hero'su aynı sözü söylüyordu
+   ("Talep var. / Yakalayan yok.") ve iki h1 doğuruyordu. Anayasa madde 3
+   hero'yu dokunulmaz saydığı için açılış hero'ya devredildi: S1Acilis
+   bileşeni ve .s1-sahne/.s1-giris kuralları kaldırıldı.
+   .s1-buyuk / .s1-alt KALIYOR — S2-S7 başlık ve alt metinleri bu iki
+   sınıfı kullanıyor (ölçüldü, 11 kullanım). */
+/* kaynak `.shead h1,.shead h2` (341-343) ve `.shead p` (344-345) birebir */
+.s1-buyuk{font-size:clamp(2.3rem,5.6vw,4.15rem);line-height:1.04;letter-spacing:-.045em;margin-bottom:18px}
+.s1-buyuk em{font-style:normal;color:var(--red)}
+.s1-buyuk .thin{font-weight:300;color:var(--tx3)}
+.s1-alt{color:var(--tx2);font-size:clamp(1.02rem,1.5vw,1.18rem);font-weight:400;max-width:62ch;line-height:1.7}
+
+/* ============ S2 · KAYIP ============ */
+.s2-yol{position:relative;padding-left:34px;display:flex;flex-direction:column;gap:34px}
+.s2-yol::before{content:'';position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:var(--line)}
+.s2-cizgi{position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--red),var(--red-soft));transform-origin:top}
+.s2-durak{position:relative}
+.s2-durak::before{content:'';position:absolute;left:-30px;top:6px;width:10px;height:10px;
+  border-radius:50%;background:var(--bg);border:2px solid var(--tx3)}
+.s2-durak.kirmizi::before{border-color:var(--red);background:var(--red-dim,rgba(239,35,60,.15))}
+.s2-durak b{display:block;font-size:1.05rem;margin-bottom:4px}
+.s2-durak p{color:var(--tx2);font-size:.94rem;max-width:52ch}
+.s2-durak .tek{font-size:.66rem;letter-spacing:.18em;color:var(--tx3);display:block;margin-bottom:6px}
+.s2-son b{color:var(--red-soft)}
+/* kaydırma-güdümlü dolum: destekleyen tarayıcıda çizgi kaydırmayla dolar;
+   desteklemeyende çizgi tam durur — içerik iki hâlde de eksiksiz (süs). */
+.s2-cizgi{transform:scaleY(1)}
+@supports (animation-timeline: view()){
+  .s2-cizgi{transform:scaleY(0);animation:s2dolum linear both;
+    animation-timeline:view();animation-range:entry 15% exit 85%}
+}
+@keyframes s2dolum{to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.s2-cizgi{animation:none;transform:scaleY(1)}}
+
+/* ============ S3 · MEKANİZMA ============ */
+.s3-dizi{display:flex;flex-direction:column;gap:12px;counter-reset:s3}
+.s3-adim{position:relative;display:flex;gap:16px;align-items:flex-start;
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--card);
+  overflow:hidden}
+.s3-adim::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--red);transform-origin:top;transform:scaleY(1)}
+.s3-adim b{display:block;margin-bottom:3px}
+.s3-adim p{color:var(--tx2);font-size:.92rem}
+.s3-adim .tek{color:var(--red-soft);font-size:.72rem;letter-spacing:.14em;padding-top:4px}
+/* aydınlanma: ray kaydırmayla çizilir; metin HEP tam opak (H2) */
+@supports (animation-timeline: view()){
+  .s3-adim::before{transform:scaleY(0);animation:s3ray linear both;
+    animation-timeline:view();animation-range:entry 25% entry 85%}
+}
+@keyframes s3ray{to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.s3-adim::before{animation:none;transform:scaleY(1)}}
+
+/* ============ S4 · KANIT — DEVREDİLDİ ============
+   Faz 2'nin "kanıt" sahnesi ile göçün S-P destesi aynı işi yapıyordu
+   (aynı altı proje kartı, aynı content.json alanları) ve ikisi birden
+   sayfada dururken içerik iki kez basılıyordu. Kanıt yüzeyi desteye
+   devredildi: S4Kanit bileşeni ve .s4-* kuralları kaldırıldı, künye
+   numarası (04) destede yaşıyor. Kart görselleri de o turda kendi
+   alanımıza taşındı (/img/pj/). */
+
+/* ============ S5 · SÜREÇ (hareketsiz) ============ */
+.s5-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.s5-adim{border:1px solid var(--line);border-radius:14px;padding:18px}
+.s5-adim .tek{color:var(--red-soft);font-size:.8rem;display:block;margin-bottom:8px}
+.s5-adim b{display:block;margin-bottom:6px}
+.s5-adim p{color:var(--tx2);font-size:.9rem}
+.s5-soz{margin-top:22px;border:1px solid rgba(239,35,60,.4);border-radius:14px;
+  padding:16px 18px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.s5-soz b{color:var(--red-soft);white-space:nowrap}
+.s5-soz span{color:var(--tx2);font-size:.92rem}
+
+/* ============ S6 · SEKTÖR (hareketsiz) ============ */
+.s6-dizi{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.s6-kart{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+.s6-kart b{display:block;margin-bottom:6px}
+.s6-kart p{color:var(--tx2);font-size:.9rem}
+
+/* ============ S7 · ARAÇ — DEVREDİLDİ ============
+   Faz 2'nin teşhis aracı ile göçün S-TE tespit sahnesi AYNI aracı
+   gösteriyordu (aynı diagnose fonksiyonu, aynı iş). Araç S-TE'ye
+   devredildi: S7Arac bileşeni ve .s7-* kuralları kaldırıldı, künye
+   numarası (07) S-TE'de yaşıyor. */
+
+/* ============ S8 · ÇAĞRI — DEVREDİLDİ ============
+   Faz 2'nin kapanış çağrısı ile göçün S-IL sahnesi aynı işi yapıyordu.
+   S-IL yerini aldı ve yanına lead formunu getirdi; .s8-* kuralları
+   kaldırıldı, künye numarası (08) S-IL'de yaşıyor. */
+
+/* etkileşim geri bildirimi — H1'in bilinçli istisnası (bileşen kimliği) */
+/* kaynak `.btn-p:hover` (318) birebir: -2px kalkış + kızıl parıltı */
+.ana .dugme{transition:.3s var(--e)}
+.ana .dugme:hover{transform:translateY(-2px);box-shadow:0 12px 40px -10px var(--red-glow)}
+
+@media(max-width:640px){
+  .s2-yol{gap:26px}
+}
+
+
+/* ============ ANA SAYFA AĞIRLIK TURU (21 Ağu) ============
+   BELİRTİ: ana sayfa LH mobil TBT 145-423 ms bandında sallanıyordu,
+   puan 88-97. Ölçüm sebebi gösterdi: betık değerlendirme yalnız 70 ms,
+   buna karşılık *Style & Layout* 1.770 ms, *Rendering* 945 ms.
+   Yani yük JS değil, sayfanın kendi ölçeği: 1.603 eleman, 15 sahne,
+   14.432 px belge — ilk boyamada hepsi biçimleniyor ve yerleşiyor.
+
+   KALDIRAÇ: kadraj dışındaki bölümün biçimlenmesi/yerleşimi/boyaması
+   ATLANIR (`content-visibility: auto`). Motor sahnesinde ölçülmüş
+   kaldıraçtı (kare ortancası 18,4 → 9,1 ms); burada hedef ilk boyama.
+   `contain-intrinsic-size: auto 900px` — `auto` son gerçek boyu hatırlar,
+   900 px yalnız ilk tahmindir; kaydırma çubuğu ve CLS ölçüldü.
+
+   ÜÇ BÖLÜM DIŞARIDA:
+   · `.sh-sahne` (hero) — LCP orası (ölçüldü: LCP öğesi `p.sh-lede`);
+     kadrajda zaten, atlamak kazanç vermez, risk verir.
+   · `.st-sahne` (şerit) — hemen altında, ilk ekrana giriyor.
+   · `.sp-sahne` (deste) — İÇİNDE STICKY KART VAR. `content-visibility`
+     boyama kapsaması (paint containment) getirir; yapışkan kartın
+     kutusundan taşan görselleri kırpar. Kapsamın yan etkisi ölçülmeden
+     girilmez (madde: ölçmediğin rakamı söyleme). */
+.ana > section:not(.sh-sahne):not(.st-sahne):not(.sp-sahne){
+  content-visibility:auto;contain-intrinsic-size:auto 900px}

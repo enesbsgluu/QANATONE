@@ -1,0 +1,268 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-06T12:12:46.191Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "tekrar": 1,
+ "tazeleme": {
+  "tik_ms": 12.5,
+  "hz": 80,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true,
+  "boz_tik_oncesi": 8.3
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "ekran_degisti": {
+  "acilis_tik": 12.5,
+  "kapanis_tik": 8.3,
+  "_": "ekran hizi kosum ortasinda degismis — butun kosumun boleni gecersiz, sayfalar degil KOSUM hukumsuz"
+ },
+ "yuk_taban": {
+  "yabanci_cekirdek": 0.856,
+  "rig_cekirdek": 0.008,
+  "en_agir": [
+   {
+    "ad": "RuntimeBroker.exe",
+    "pid": 3324,
+    "cekirdek": 0.327
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 7372,
+    "cekirdek": 0.152
+   },
+   {
+    "ad": "backgroundTaskHost.exe",
+    "pid": 3312,
+    "cekirdek": 0.118
+   },
+   {
+    "ad": "svchost.exe",
+    "pid": 1436,
+    "cekirdek": 0.046
+   },
+   {
+    "ad": "MsMpEng.exe",
+    "pid": 4104,
+    "cekirdek": 0.034
+   },
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.03
+   }
+  ],
+  "pencere_sn": 4.11,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 25,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 4,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yuk_kapi_cekirdek": 0.5,
+  "cekirdek": 8,
+  "_yuk": "yabanci yuk kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\""
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: HUKUM YOK — 1 sayfa olculemedi (tik_sapma,yuk_kirli,ekran_degisti)",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": {
+  "sayi": 1,
+  "sayfalar": [
+   {
+    "yol": "/hizmetler/geo/",
+    "sebep": [
+     "tik_sapma",
+     "yuk_kirli",
+     "ekran_degisti"
+    ],
+    "yabanci_cekirdek": 0.542,
+    "en_agir": [
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.111
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.103
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 8484,
+      "cekirdek": 0.047
+     }
+    ]
+   }
+  ],
+  "_": "HUKUMSUZ != KALDI: iddia sayfa hakkinda degil OLCUM hakkindadir. Sebep giderilip yeniden olculur."
+ },
+ "boz_kollari": {
+  "boz_tik": 12.5,
+  "boz_yuk": false,
+  "_": "KIRMIZI-ONCE: bu kayit hukum degil, hukumsuzluk kurallarinin yanabildiginin kanitidir"
+ },
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/hizmetler/geo/",
+   "js_bayt": 3811,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "yuk": {
+      "yabanci_cekirdek": 0.542,
+      "rig_cekirdek": 0.163,
+      "en_agir": [
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.111
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.103
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.047
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 5524,
+        "cekirdek": 0.039
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.038
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 15112,
+        "cekirdek": 0.028
+       }
+      ],
+      "pencere_sn": 9.57
+     },
+     "sistem_cekirdek": 1.792,
+     "kare": 400,
+     "tur_ms": 3615,
+     "p95_ms": 8.6,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 1,
+     "takilma_toplam_ms": 116,
+     "takilma_tek_max_ms": 116,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 8.6,
+   "takilma_oran_medyan": 0.0321,
+   "takilma_tek_max": 116,
+   "taban_takilma": [
+    0
+   ],
+   "kare_p95": 0.688,
+   "kacirilan_kare": 0,
+   "kuanta_sapma": 0.312,
+   "p95_eski_ms_kapisi": true,
+   "tik_sapma": 8.2,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "yabanci_cekirdek_medyan": 0.542,
+    "yabanci_cekirdek_kosumlar": [
+     0.542
+    ],
+    "rig_cekirdek_medyan": 0.163,
+    "en_agir": [
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.111
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.103
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 8484,
+      "cekirdek": 0.047
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 5524,
+      "cekirdek": 0.039
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4104,
+      "cekirdek": 0.038
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 15112,
+      "cekirdek": 0.028
+     }
+    ],
+    "sistem_cekirdek_medyan": 1.792,
+    "cekirdek": 8,
+    "kapi": 0.5,
+    "_": "yabanci = tarayici agacimiz ve node agacimiz DISINDAKI sureclerin cekirdek karsiligi. sistem_cekirdek ORTALAMADIR ve tek cekirdek yiyen sureci gizler — kiyas icin yazilir, kapi degil."
+   },
+   "bilgi": {
+    "takilma_oran_medyan": 0.0321,
+    "sistem_cekirdek_medyan": 1.792
+   },
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [
+    "tik_sapma",
+    "yuk_kirli",
+    "ekran_degisti"
+   ],
+   "gecti": null
+  }
+ ]
+}

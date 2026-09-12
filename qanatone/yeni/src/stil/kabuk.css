@@ -1,0 +1,284 @@
+/* ============================================================
+   KABUK — SOKUM VE TASIMA TURU (4 Eyl 2026, Enes karari)
+   Eski sitenin tum sayfalarda ortak katmanlari BIREBIR geri geldi:
+   yildiz tuvali (#stars) · grain (#noise) · ajan imleci (#bit/#bittip/
+   #bitsay/#bitback) · uc sutunlu footer + bit damgasi (#wmk) + alt satir.
+   Kaynak: kok index.html — CSS 228-232 (stars/noise), 1454-1514 (bit),
+   2325-2347 (footer/watermark/fbot). Fontlar token (Uncut Sans),
+   Manrope/JetBrains adlari tasinmadi (Anayasa madde 4).
+   Hareket dili: rAF dongusu olan uc katman (yildiz, bit damgasi, imlec)
+   kabuk.js'te — dinamik ithal, bosta, hareket azaltmada inmez.
+   ============================================================ */
+
+/* ---- sabit arka plan katmani: kaynak 212-227 BIREBIR (sadakat(D), 3 Eyl 2026)
+   .fade ust kizil gecis · .orb blur'lu kizil kure · .grid nokta kafesi +
+   kizil isik banyosu. Sokum turunda atlanmisti; her bolumun ustundeki
+   kizil hale bu katmandan geliyor. Tek statik boya, JS yok. ---- */
+/* z-index -1: kaynakta 0 + main z-index:2 idi; burada temel.css body::before
+   zemininin kanitli yolu (hero turunun dersi: 0'da icerigin ustune biner). */
+#bg{position:fixed;inset:0;z-index:-1;pointer-events:none}
+/* PROLOG SURERKEN KABUK ZEMINI BASILMAZ (7 Eyl 2026 — Enes: "yakinlastirma
+   yapinca sayfa hata verip kapaniyor").
+   MEKANIZMA, OLCULDU: `position:fixed` bir eleman icerigin ALTINDA
+   (z-index:-1) durunca Chromium butun belge icerigini onun USTUNDE ayri
+   bir kompozit katmana cikarir ("Overlap") ve o katman BELGE BOYU kadar
+   olur. Prolog belgesi 121.000 px; zoom 2'de 243.000 px. Katman agaci
+   (olc-katman.cjs, chrome, prolog acik):
+     bugun            zoom 1  760,6 MP   ·  zoom 2  910,8 MP
+     `#bg` kapaliyken zoom 1  388,0 MP   ·  zoom 2  454,5 MP
+   Yani zeminin varligi TEK BASINA katman belleğini IKIYE KATLIYOR. Zoom
+   alani karesiyle buyuttugu icin tumlesik kartin butcesi orada tukeniyor
+   ve sekme cokuyor.
+   ELENEN ADAYLAR (hepsi olculdu, hicbiri kipirdatmadi): `body` zeminini
+   saydam yapmak 910,8 · `#bg`in z-index'ini 0 yapmak 908,1 · orb'un
+   blur'unu kaldirmak 902,8. Bolen `#bg`in KENDISI, ozelligi degil.
+   NEDEN BEDAVA: prolog sirasinda ekrani filmin kendi tam ekran goruntusu
+   ortuyor — zemin zaten GORUNMUYOR. Yan yana kare ile dogrulandi (K/F
+   kollari, ayni kaydirma noktalari): gorunur fark yok.
+   DEVIRDE GERI GELIR: film bitisinde site filmin icinden gorunur, o anda
+   zemin sart. `fl-hazirla` (Film.astro 494) ve `fl-devir` (580) devir
+   basinda ekleniyor; kural o ikisinde DUSER, yani zemin site gorunmeden
+   once yerine gelir. Film bitince `fl-js` zaten kalkar (siteyeGec).
+   KAPSAM DAR TUTULDU: yalniz `#bg`. `#noise` z-index:60 ile filmin
+   USTUNDE, yani gorunur — ona dokunulmadi; `#stars` da olcumde bir sey
+   kazandirmadi. */
+html.fl-js:not(.fl-hazirla):not(.fl-devir) #bg{display:none}
+#bg .fade{position:absolute;inset:0;background:linear-gradient(180deg,#170406 0%,#050505 46%)}
+#bg .orb{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
+  width:min(900px,120vw);height:min(900px,120vw);border-radius:50%;
+  background:rgba(239,35,60,.055);filter:blur(130px)}
+#bg .grid{position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 1.6px),
+    radial-gradient(circle at 1px 1px,rgba(255,120,140,.06) 1.4px,transparent 2.2px),
+    linear-gradient(180deg,rgba(239,35,60,.05),transparent 34%);
+  background-size:28px 28px,140px 140px,100% 100%;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%);
+  mask-image:radial-gradient(120% 90% at 50% 30%,#000 26%,transparent 76%)}
+/* ---- yildiz tuvali + grain (kaynak 228-232, 244-248) ---- */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55}
+/* grain: kaynak 128 px tuvali calisma aninda uretip data URL basiyordu;
+   ayni doku bir kez uretilip dosya oldu (img/gren.png, 24,9 KB, 1 gun
+   onbellek) — sifir JS, tek karo, GPU tek doku tasir. */
+#noise{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.055;
+  background:url(/img/gren.png) repeat;background-size:128px 128px}
+/* panel anahtarlari (content.json theme.motion) derlemede html sinifi olur */
+html.t-nograin #noise{display:none}
+html.t-nostars #stars{display:none}
+html.t-noagent #bit,html.t-noagent #bitsay,html.t-noagent #bittip,
+html.t-noagent #bitback{display:none!important}
+/* kaynak 244-248: dokunmatik ve dar ekranda sus katmani dogmaz (statik garanti) */
+@media(pointer:coarse),(max-width:900px){#stars,#noise{display:none}}
+/* ORB: MOBILDE FILTRE YERINE GRADYAN (4 Eyl 2026 — OLCULDU).
+   `#bg .orb` sabit konumlu, min(900px,120vw) capinda ve `filter:blur(130px)`
+   tasiyordu. Mobilde bu 390 px genislikte 468x468 CSS px = 219.024 px²
+   demek; DPR 3'te ~2.000.000 cihaz pikselinin 130 px'lik cekirdekle
+   bulaniklastirilmasi. Ustelik `position:fixed` oldugu icin kaydirma
+   boyunca yeniden rasterleniyor.
+   Bu, dosyanin kendi H14 doktrinine aykiriydi ("MOBIL BAGLAMDA PAHALI
+   KATMAN YOK: filter/backdrop/will-change") — kural film.css'te yaziliydi
+   ama kabuk katmanina uygulanmamisti. `#stars`/`#noise` ve ajan imleci
+   icin mobil kapisi VARDI, orb icin YOKTU.
+   CARE: ayni yumusak kizil parilti radial-gradient ile uretilir — sonuc
+   gorsel olarak esdeger (kaynak zaten rgba(...,.055) gibi cok soluk bir
+   disk + 130 px blur), maliyet ise filtre yerine duz bir gradyan boyamasi.
+   MASAUSTU DOKUNULMADI: orada blur olculmus bir sorun degil. */
+/* MOBILDE ARKA PLAN GORUNMUYORDU (7 Eyl 2026 — Enes: "mobilde de ana
+   sayfada arkaplan yok"). Olculdu: mobilde `#noise` KAPALI (yukaridaki
+   kural) ve `#stars` KAPALI; geriye kizilligi tasiyan tek katman `.orb`
+   kaliyor, o da yukaridaki gradyan yolunda `.075` tepe degeriyle
+   masaustundeki blur'lu diskten belirgin sekilde soluk kaliyordu. Sonuc:
+   telefonda ekran duz siyah okunuyordu.
+   Tepe .075 -> .13, orta durak .045 -> .075, yayilim %78 -> %86.
+   FILTRE YOLU ACILMADI: blur mobilde olculmus bir maliyetti (H14), o
+   karar duruyor — degisen yalnizca gradyanin degerleri. */
+@media(pointer:coarse),(max-width:900px){
+  #bg .orb{filter:none;
+    background:radial-gradient(circle closest-side,rgba(239,35,60,.13) 0%,rgba(239,35,60,.075) 42%,rgba(239,35,60,0) 86%)}
+}
+
+/* ZOOM COKMESI — KOK SEBEP VE CARE (9 Eyl 2026, gercek cihazda olculdu).
+   BELIRTI: iPhone/Safari'de sayfanin GIRIS kismindayken parmakla
+   yakinlastirinca sekme cokuyor.
+
+   TESHIS, iki kolla ayrildi (her ikisi de ayni telefonda, temiz Safari,
+   1. sirada — sira etkisi olculmustu, kollar pes pese denenmez):
+     `#bg>*{display:none}`  ici bos, katman yerinde   -> COKMEDI
+     `#bg .grid{mask:none}` maske yok, icerik dolu    -> COKTU
+   Yani suclu ne maske ne de belirli bir alt katman. `#bg` `position:fixed`
+   oldugu icin pinch'te HER KAREDE YENIDEN RASTERLENIYOR; ici bosken
+   rasterlenecek bir sey olmadigi icin o kol dayandi. Maliyet olcegin
+   KARESIYLE buyudugu icin tumlesik GPU butcesi tukeniyor.
+
+   CARE: zemini kendi GPU katmanina sabitlemek. Katmana alinmis yuzey
+   pinch'te yeniden BOYANMAZ, GPU'da olceklenir. Gercek cihazda dogrulandi:
+   `will-change:transform` kolunda 74,5 sn / 327 paket kesintisiz, yuksek
+   olcekte toplam ~20 sn (taban ayni kosulda 4,9-6,6 sn'de cokuyordu).
+
+   GORSEL DEGISIKLIK YOK — silinen, tasinan, degeri degistirilen hicbir sey
+   yok; yalniz kompozit ipucu. Daha once denenen ve DUSEN yollar (hepsi
+   zemini bozuyordu, git gecmisinde: 7e6626c ve oncesi): zemini `body`nin
+   background'ina tasimak (iOS `background-attachment:fixed` uygulamiyor),
+   `repeat-y` ile bant tekrari, `#bg` sticky (derlemede kazanc vermedi).
+
+   H14 NOTU: "mobil baglamda pahali katman yok (filter/backdrop/will-change)"
+   kurali ANIMASYONLU katmanlarin surekli yeniden boyanmasi icindir. Burada
+   amac tam tersi: STATIK bir yuzeyi bir kez boyayip sabitlemek. Kapsam tek
+   eleman ve yalniz mobil. */
+@media(pointer:coarse),(max-width:900px){
+  #bg{will-change:transform}
+}
+
+/* NOT (9 Eyl 2026): mobilde `#bg` gizlenip zemin `body`nin background'ina
+   tasindi — cokme butcesinden -%35 katman aliyordu (23,11 -> 15,13 MP) ama
+   ZEMINI BOZUYORDU: iOS `background-attachment:fixed` uygulamadigi icin desen
+   ya belge boyuna yayildi ya da `repeat-y` ile bant bant tekrarladi. Enes
+   geri aldirdi. `#bg` yeniden dokunulmamis haliyle duruyor; olcumler ve
+   dusen sticky denemesi git gecmisinde (7e6626c ve oncesi). */
+@media(prefers-reduced-motion:reduce){#stars{display:none}}
+/* icerik yildizlarin USTUNDE (kaynak 249 `main{position:relative;z-index:2}`) */
+body:has(#stars) main{position:relative;z-index:2}
+
+/* ---- QANATONE AJANI (imlec) — kaynak 1454-1514 birebir ----
+   Seciciler `kb-` onekli sinif (H1 hareket sozlugu: kabuk katmani);
+   kimlikler (#bit #bittip #bitsay #bitback) JS tutamagi olarak durur. */
+/* TUR 4 (2 Eyl 2026): kb-bit/kb-tip will-change KALKTI — kalici will-change
+   sizintisi 0 kapisi; 10 px imlecin karede yeniden boyanmasi olculebilir maliyet
+   degil (ana/finans p95 sonra olculdu, TASIMA-TURU-KAPANIS.md). */
+.kb-bit{position:fixed;left:0;top:0;z-index:140;width:10px;height:10px;margin:-5px 0 0 -5px;
+  pointer-events:none;opacity:0;transition:opacity .6s var(--e)}
+.kb-bit.on{opacity:1}
+.kb-bit .kb-core{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#ff8b98,var(--red) 62%,#8d0f20);
+  box-shadow:0 0 10px 2px rgba(239,35,60,.55);transition:transform .3s var(--e)}
+.kb-bit .kb-ring{position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(239,35,60,.4);
+  animation:bitr 2.6s ease-in-out infinite}
+@keyframes bitr{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.35);opacity:.15}}
+.kb-bit.link .kb-core{transform:scale(1.55)}
+.kb-bit.open .kb-core{transform:scale(1.3)}
+.kb-tip{position:fixed;left:0;top:0;z-index:141;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;
+  border-radius:50%;background:var(--red-soft);pointer-events:none;opacity:0;
+  transition:opacity .4s var(--e)}
+html.bitcursor .kb-tip.on{opacity:.9}
+@media(hover:hover) and (pointer:fine){
+  html.bitcursor,html.bitcursor *{cursor:none!important}
+  html.bitcursor input,html.bitcursor textarea,
+  html.bitcursor select,html.bitcursor [contenteditable]{cursor:auto!important}
+  /* ACIK DIALOG: yerli imlec geri gelir (5 Eyl 2026). `<dialog>` TOP
+     LAYER'da cizilir; ozel imlec (.kb-bit, z-index 140) z-index'ten
+     bagimsiz olarak ONUN ALTINDA kalir. `cursor:none` orada da gecerli
+     oldugu icin ziyaretci imleci TUMDEN kaybediyordu (olculdu). */
+  html.bitcursor dialog[open],html.bitcursor dialog[open] *{cursor:auto!important}
+  html.bitcursor dialog[open] button,html.bitcursor dialog[open] a{cursor:pointer!important}
+}
+.kb-say{position:fixed;left:0;top:0;z-index:121;width:min(300px,74vw);
+  background:rgba(12,12,12,.94);backdrop-filter:blur(18px);
+  border:1px solid rgba(239,35,60,.28);border-radius:16px;padding:15px 16px;
+  box-shadow:0 26px 60px -28px #000;opacity:0;transform:translateY(8px) scale(.96);
+  transform-origin:top left;pointer-events:none;transition:.34s var(--e)}
+.kb-say.on{opacity:1;transform:none;pointer-events:auto}
+.kb-say .who{font-family:var(--f-tek);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--red-soft);margin-bottom:9px;display:flex;
+  align-items:center;gap:8px}
+.kb-say .who i{width:6px;height:6px;border-radius:50%;background:var(--red);font-style:normal;
+  box-shadow:0 0 8px var(--red-glow)}
+.kb-say p{font-size:.86rem;line-height:1.6;color:var(--tx);margin-bottom:13px;min-height:2.6em}
+.kb-say .acts{display:flex;gap:7px;flex-wrap:wrap}
+/* UC TUS TEK SATIRDA (7 Eyl 2026 — Enes: "imleci kapat yazisini asagi
+   kaydirmis, guzel durmamis; diger tuslarla ayni boyutta olsun ve
+   tasmasin, gerekirse tum tuslari olcekle").
+   OLCULDU: `.acts` kullanilabilir alan 266 px, uc dugmenin toplami
+   100+63+99 + 2x7 gap = 276 px -> 10 px tasiyor, ucuncu dugme alt satira
+   dusuyordu (`.acts` yuksekligi 33 degil 73 px).
+   `.q`ya ozel dar padding vermek yerine UCU BIRDEN olceklendi (Enes'in
+   izin verdigi yol): boylece uc tus AYNI boyutta kalir — asil sikayet
+   zaten "ayni boyutta olsun"du. padding-x 14 -> 10, font .76 -> .74rem;
+   olculen yeni toplam 266'nin altinda, pay birakiyor (EN metinleri de
+   sigsin). `nowrap`: dugme ICINDE satir kirilmasin. */
+.kb-say .acts button{font-size:.74rem;font-weight:600;padding:8px 10px;border-radius:999px;
+  border:1px solid var(--line2);color:var(--tx2);background:none;cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:.24s var(--e)}
+.kb-say .acts button:hover{border-color:var(--red);color:var(--red-soft);background:var(--red-dim)}
+.kb-say .acts button.p{background:var(--red-dolgu);border-color:var(--red-dolgu);color:#fff}
+/* "Imleci kapat" TUS GIBI GORUNUR (7 Eyl 2026 — Enes: "pop-up'ta gozuken
+   bir tus gibi degil sadece yazi"). `.q` ucuncul eylem oldugu icin
+   kenarligi seffaflastirilmisti; sonuc, tiklanabilir oldugu okunmayan
+   duz bir yaziydi. Kenarlik geri geldi, ucuncul olusu artik RENKLE
+   anlatiliyor (govde rengi daha sonuk, kenarlik daha ince kontrastta) —
+   yani hiyerarsi korunuyor ama dugme oldugu goruluyor. */
+.kb-say .acts button.q{border-color:rgba(255,255,255,.18);color:var(--tx3)}
+.kb-say .acts button.q:hover{border-color:rgba(239,35,60,.55);background:rgba(239,35,60,.08);color:var(--tx2)}
+/* IMLECI GERI GETIR — dis ceberde SUZULEN kizil isik (Enes, 7 Eyl 2026:
+   "dis ceberinide suzulen kirmizi isik yap ve yaricapini daralt").
+   Yaricap 38 -> 30 px. Isik ayri bir sozde ogede: conic-gradient bir yay
+   cizer ve donerek "suzulur"; kenarlik sabit kalir, yalniz isik doner. */
+/* KONUM (7 Eyl 2026 — Enes: "prologu gec butonuyla cakisiyor, ust uste
+   biniyor; imlec tusunu biraz daha yukari tasi genel konum olarak").
+   OLCULDU: `.fl-kumanda` (Prologu gec) `right:16px; bottom:16px` ve
+   yaklasik 40 px yuksek -> ust kenari 56 px. `.kb-back` ise bottom 20 +
+   30 px = ust kenari 50 px; ikisi ust uste biniyordu.
+   bottom 20 -> 72: alt kenar 72'de baslar, kumandanin ust kenarindan
+   16 px yukarida kalir. Genel konum, yani her sayfada ayni. */
+.kb-back{position:fixed;right:20px;bottom:72px;z-index:118;width:30px;height:30px;
+  border-radius:50%;display:grid;place-items:center;cursor:pointer;
+  background:rgba(12,12,12,.75);border:1px solid rgba(239,35,60,.3);backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(8px);transition:.4s var(--e)}
+/* KONIK DEGIL — RADYAL PARILTI. Ilk yazimim `conic-gradient(from 0deg,`
+   kullaniyordu ve `film-halka` bekcisi hakli olarak kirmizi yandi: konik
+   halkanin kaynak agacinda TEK uygulamasi var (temel.css), ikincisi
+   sessiz drift uretir. Ayni his kopya dogurmadan kuruluyor: cember
+   uzerinde tek bir kizil parilti donuyor. */
+.kb-back::before{content:'';position:absolute;inset:-2px;border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 0,rgba(239,35,60,.9),rgba(239,35,60,0) 42%);
+  animation:kb-suzul 3.2s linear infinite}
+@keyframes kb-suzul{to{transform:rotate(1turn)}}
+.kb-back.on{opacity:.6;transform:none}
+.kb-back:hover{opacity:1;border-color:var(--red)}
+.kb-back span{width:8px;height:8px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 10px var(--red-glow)}
+@media(max-width:900px),(pointer:coarse){#bit,#bitsay,#bittip,#bitback{display:none!important}}
+/* HAREKET AZALT: donen isik da durur. Sozde ogeye tasinan animasyonun
+   durduran listeye EKLENMEMESI daha once yasandi (H11) — bu yuzden
+   `.kb-back::before` buraya kuruluysa listede de olmali. */
+@media(prefers-reduced-motion:reduce){.kb-bit .kb-ring,.kb-back::before{animation:none}}
+
+/* ---- FOOTER (kaynak 2325-2347 + 273) — uc sutun, bit damgasi, alt satir ---- */
+footer{border-top:1px solid var(--line);padding:clamp(50px,6vw,80px) 0 30px;position:relative;
+  overflow:hidden;z-index:2}
+footer .wrap{max-width:1280px;margin:0 auto;padding:0 var(--gut)}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:clamp(24px,4vw,56px);
+  margin-bottom:clamp(40px,6vw,72px)}
+.fgrid .lead p{font-size:.92rem;color:var(--tx3);line-height:1.7;max-width:34ch;
+  margin-top:18px;font-weight:300}
+/* logo: nav'in .nv-logo kunyesiyle ayni dil (kaynak footer .logo i img 33px) */
+.flogo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.flogo i{display:block;font-style:normal;line-height:0}
+.flogo i img{height:33px;width:auto;display:block}
+.flogo b{font-family:var(--f-govde);font-size:1.06rem;font-weight:700;letter-spacing:-.04em;color:var(--red-soft)}
+.flogo b span{color:var(--tx);font-weight:700}
+/* ANAYASA (3 Eyl): kaynak .fcol{gap:11px} (1335, global sinif kurali) footer
+   sutununa da uygulanir; gap:0 sapmaydi (olcum: sutun 306 <-> 238 px). */
+.fcol{display:flex;flex-direction:column;gap:11px}
+.fcol h5{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--red);margin-bottom:18px;font-weight:500}
+.fcol a{display:block;font-size:.9rem;color:var(--tx3);margin-bottom:11px;
+  text-align:left;text-decoration:none}
+.fcol a:hover{color:var(--tx)}
+.watermark{text-align:center;padding:clamp(6px,1.4vw,14px) 0 clamp(18px,2.8vw,32px);
+  pointer-events:none;user-select:none;overflow:hidden}
+.watermark canvas{display:inline-block;max-width:100%;height:auto;vertical-align:top}
+.fbot{border-top:1px solid var(--line);padding-top:24px;display:flex;
+  justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  font-family:var(--f-tek);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--tx4)}
+.fbot a{color:inherit;text-decoration:none}
+.fbot a:hover{color:var(--tx3)}
+.fbot .r{display:flex;gap:22px;flex-wrap:wrap}   /* kaynak 2187: 22px */
+/* KAYNAGIN "12 PIKSEL TABANI" BLOGU (4185-4206, blogun sonda durmasi kasitli:
+   ayni ozgullukte son kural kazanir): .fcol h5 ve .fbot 10/9,5 px yazilip
+   12 px'e kaldirilir; harf araligi em'le buyur (2,4 / 1,92 px). Olcum:
+   olc-tipografi footer, 3 Eyl. Nav mobil dil dugmesi (#mmenu .mlg button)
+   ayni blokta — nav.css'te ele alinir. */
+.fcol h5,.fbot{font-size:12px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr;gap:32px}}

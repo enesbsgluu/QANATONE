@@ -1,0 +1,136 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-06T13:04:25.935Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "tekrar": 1,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 7.9,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.5,
+  "kararli": true
+ },
+ "ekran_degisti": false,
+ "yuk_taban": {
+  "tarayici_cekirdek": 0.004,
+  "yabanci_cekirdek": 0.393,
+  "rig_cekirdek": 0.046,
+  "en_agir": [
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.103
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 7372,
+    "cekirdek": 0.072
+   },
+   {
+    "ad": "MuseHub.exe",
+    "pid": 8484,
+    "cekirdek": 0.061
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 15112,
+    "cekirdek": 0.053
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 5524,
+    "cekirdek": 0.05
+   },
+   {
+    "ad": "WindowsTerminal.exe",
+    "pid": 15016,
+    "cekirdek": 0.019
+   }
+  ],
+  "pencere_sn": 4.1,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yabanci_tarayici_kapi_cekirdek": 0.15,
+  "cekirdek": 8,
+  "toplam_cpu_KAPI_DEGIL": true,
+  "_yuk": "YABANCI TARAYICI kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\". Toplam CPU yuku BILGIDIR: ~3 cekirdege kadar saf CPU yuku hukmu cevirmedi (doz-tepki: yeni/film/olc-yuk-tarama.json), 0,8 cekirdek yabanci tarayici cevirdi (p95 8,5 -> 33,4 ms)."
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: HUKUM YOK — 1 sayfa olculemedi (kosum_hatasi)",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": {
+  "sayi": 1,
+  "sayfalar": [
+   {
+    "yol": "/sss/",
+    "sebep": [
+     "kosum_hatasi"
+    ],
+    "tarayici_cekirdek": null,
+    "yabanci_cekirdek": null,
+    "en_agir": []
+   }
+  ],
+  "_": "HUKUMSUZ != KALDI: iddia sayfa hakkinda degil OLCUM hakkindadir. Sebep giderilip yeniden olculur."
+ },
+ "boz_kollari": false,
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/sss/",
+   "js_bayt": 3513,
+   "js_tavan": 10240,
+   "kosum": [],
+   "kosum_hatalari": [
+    {
+     "kosum": 1,
+     "deneme": 1,
+     "hata": "net::ERR_UNSAFE_PORT at http://127.0.0.1:9/sss/"
+    },
+    {
+     "kosum": 1,
+     "deneme": 2,
+     "hata": "net::ERR_UNSAFE_PORT at http://127.0.0.1:9/sss/"
+    }
+   ],
+   "yuk": {
+    "olculdu": false,
+    "tarayici_cekirdek_enyuksek": null,
+    "yabanci_cekirdek_medyan": null,
+    "en_agir": []
+   },
+   "hukumsuz": [
+    "kosum_hatasi"
+   ],
+   "gecti": null
+  }
+ ]
+}

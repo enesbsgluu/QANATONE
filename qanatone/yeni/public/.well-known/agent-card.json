@@ -1,0 +1,43 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "QANATONE Site Tespit",
+  "description": "Verilen web sitesini gerçek isteklerle ölçer ve teknik sağlık + ajan hazırlığı sonucunu kalem kalem döndürür. Ölçüm ana sayfa + robots.txt + sitemap.xml üzerindendir; tüm siteyi taramaz.",
+  "version": "1.0.0",
+  "url": "https://www.qanatone.com/a2a",
+  "preferredTransport": "JSONRPC",
+  "supportedInterfaces": [
+    {
+      "url": "https://www.qanatone.com/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "0.3.0"
+    }
+  ],
+  "provider": {
+    "organization": "QANATONE",
+    "url": "https://www.qanatone.com/"
+  },
+  "documentationUrl": "https://www.qanatone.com/.well-known/agent-skills/site-tespit/SKILL.md",
+  "iconUrl": "https://www.qanatone.com/img/simge-192.png",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["text/plain", "application/json"],
+  "skills": [
+    {
+      "id": "site-tespit",
+      "name": "Site tespiti",
+      "description": "Bir web sitesinin teknik sağlığını ve ajan hazırlığını gerçek isteklerle ölçer; kalem kalem durum ve 0-100 puan döndürür. Kimlik gerekmez, kota IP başınadır (2 analiz / 24 saat). Puan bir sıralama iddiası değil, kalemlerin özetidir.",
+      "tags": ["seo", "teknik-analiz", "ajan-hazirligi", "performans", "web"],
+      "examples": [
+        "https://example.com adresini ölç",
+        "Bu sitenin yapay zekâ ajanlarına hazır olup olmadığına bak: https://example.com",
+        "{\"url\": \"https://example.com\"}"
+      ],
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["text/plain", "application/json"]
+    }
+  ]
+}

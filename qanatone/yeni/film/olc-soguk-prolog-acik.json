@@ -1,0 +1,480 @@
+{
+ "_": "yeni/film/olc-soguk.cjs — KAPI B SOGUK GIRIS: taze tarayici profili + sabit isinma dizisi + TEK sayfa. Kapi A (olc-sayfa.cjs) TARAMA kosulunu olcer ve gerileme kapisidir; bu ZIYARETCI kosulunu olcer. Iki kapinin rakamlari birbirinin yerine GECMEZ.",
+ "kapi": "B — SOGUK GIRIS (ziyaretci kapisi)",
+ "isinma_dizisi": [
+  "her olcum icin AYRI TARAYICI (taze gecici profil)",
+  "about:blank acilir",
+  "tazeleme olculur (200 rAF araligi, ilk 5 atilir)",
+  "1500 ms bosta beklenir",
+  "about:blank kapatilir",
+  "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
+  "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
+ ],
+ "olcum": "2026-09-03T22:03:10.764Z",
+ "tarayici": "brave",
+ "tekrar": 5,
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 2,
+  "tek_takilma_ms": 250,
+  "_": "BLOKLAYICI OLAN HEPSI BU (+ tur tamligi). Ikisi de MUTLAK birim: tik ve ms. Enes, 5 Eyl — B'nin ilk 27 soguk kosumunun dagilimindan turetildi. A'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu."
+ },
+ "bilgi_kalemleri": {
+  "takilma_toplam_ms": "MUTLAK — ziyaretcinin hissettigi. Kapi degil.",
+  "takilma_orani": "TUREV — tur boyuna bagimli. Kapi degil.",
+  "oran_eski_kapi": 0.08,
+  "_": "Enes, 5 Eyl 2026 gecesi — ORAN KAPIDAN DUSTU. Gerekce: kisa turda oran ornekleme hatasidir. 5 Eyl olcumu ters siralama gosterdi: /yeni/projeler/ 308 ms toplam takilmayla 3,37 sn turda %9,13 (KALIYORDU), /yeni/ 667 ms toplam takilmayla 12,0 sn turda %5,63 (GECIYORDU). Ziyaretcinin daha cok takildigi sayfa geciyordu. Bu bir gevsetme degil yanlis birimin duzeltilmesi — ayni hata kare kapisinda ms/tik olarak yapilmisti."
+ },
+ "hedef": {
+  "kacirilan_kare": 1,
+  "_": "HEDEF — KAPI DEGIL. Kayda gecer, hukmu etkilemez."
+ },
+ "sinyal": {
+  "takilma_esik_ms": 50,
+  "_": "Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar"
+ },
+ "hukum": "KISMI (2/9 sayfa) — HUKUM DEGIL · ham: GECTI",
+ "kismi": {
+  "olculen": 2,
+  "tum": 9,
+  "_": "kismi kosum HUKUM DEGIL: B'nin hukmu varsayilan dokuz sayfanin tamami kosuldugunda kurulur"
+ },
+ "hedefte_olmayan": [],
+ "dagilim": {
+  "1": 2
+ },
+ "siralama": {
+  "mutlak_toplam_ms": [
+   "/yeni/",
+   "/yeni/en/"
+  ],
+  "oran": [
+   "/yeni/",
+   "/yeni/en/"
+  ],
+  "_": "Ustteki MUTLAK sira ziyaretcinin hissettigi siradir; alttaki TUREV siradir. Ikisi ayrisiyorsa oranin paydasi (tur boyu) konusuyordur, sayfa degil.",
+  "ayrisiyor": false
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.2,
+      "p90": 8.4,
+      "kararli": true
+     },
+     "kare": 1190,
+     "tur_ms": 11863,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 9,
+     "takilma_toplam_ms": 658,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3024,
+      "takilma_sayi": 0,
+      "p95_ms": 24.9,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.4,
+      "kararli": true
+     },
+     "kare": 1173,
+     "tur_ms": 11863,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 500,
+     "takilma_tek_max_ms": 142,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 7.8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1173,
+     "tur_ms": 11871,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 533,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 7.9,
+      "p10": 8.2,
+      "p90": 8.4,
+      "kararli": true
+     },
+     "kare": 1210,
+     "tur_ms": 11838,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 567,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1201,
+     "tur_ms": 11913,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 467,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9580,
+     "toplam_px": 9580,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.7,
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "kacirilan_en_yuksek": 1,
+   "kare_p95_medyan": 2.012,
+   "takilma_tek_max": 142,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tik_kosumlar": [
+    8.3,
+    8.3,
+    8.3,
+    8.3,
+    8.3
+   ],
+   "bilgi": {
+    "takilma_toplam_medyan_ms": 533,
+    "takilma_toplam_kosumlar": [
+     658,
+     500,
+     533,
+     567,
+     467
+    ],
+    "takilma_sayi_medyan": 7,
+    "tur_ms_medyan": 11863,
+    "takilma_oran_medyan": 0.0449,
+    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
+   },
+   "takilma_oran_medyan": 0.0449,
+   "eski_oran_kapisi": true,
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "gecti": true,
+   "hedefte": true
+  },
+  {
+   "yol": "/yeni/en/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1203,
+     "tur_ms": 11896,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 458,
+     "takilma_tek_max_ms": 100,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1201,
+     "tur_ms": 11855,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 5,
+     "takilma_toplam_ms": 400,
+     "takilma_tek_max_ms": 117,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8.1,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1205,
+     "tur_ms": 11880,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 6,
+     "takilma_toplam_ms": 500,
+     "takilma_tek_max_ms": 108,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1194,
+     "tur_ms": 11871,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 633,
+     "takilma_tek_max_ms": 125,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 16.7,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    },
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 1202,
+     "tur_ms": 11880,
+     "p95_ms": 16.7,
+     "medyan_ms": 8.3,
+     "kare_p95": 2.012,
+     "kacirilan_kare": 1,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 600,
+     "takilma_tek_max_ms": 142,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 0,
+      "p95_ms": 16.8,
+      "tik_p10": 8.3
+     },
+     "scroll_px": 9566.400390625,
+     "toplam_px": 9566,
+     "toplam_px_bas": 11356,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 16.7,
+   "kacirilan_medyan": 1,
+   "kacirilan_kosumlar": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "kacirilan_en_yuksek": 1,
+   "kare_p95_medyan": 2.012,
+   "takilma_tek_max": 142,
+   "taban_takilma": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tik_kosumlar": [
+    8.3,
+    8.3,
+    8.3,
+    8.3,
+    8.3
+   ],
+   "bilgi": {
+    "takilma_toplam_medyan_ms": 500,
+    "takilma_toplam_kosumlar": [
+     458,
+     400,
+     500,
+     633,
+     600
+    ],
+    "takilma_sayi_medyan": 6,
+    "tur_ms_medyan": 11880,
+    "takilma_oran_medyan": 0.0421,
+    "_": "BILGI SATIRI — KAPI DEGIL. Oran tur boyuna bagimli turevdir, mutlak toplam ziyaretcinin hissettigidir."
+   },
+   "takilma_oran_medyan": 0.0421,
+   "eski_oran_kapisi": true,
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "gecti": true,
+   "hedefte": true
+  }
+ ]
+}

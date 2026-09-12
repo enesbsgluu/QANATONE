@@ -1,0 +1,360 @@
+/* ============================================================
+   S-TE · TESPİT (ücretsiz teşhis aracı)
+   Kaynak: kök index.html · markup 4945-4980 · CSS `.dg*` 4290-4380 ·
+   sonuç üreteci 12240.
+
+   Adlandırma: .ste-* içerik · .sus-* süs.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) `ltdrop` HARF GİRİŞİ TAŞINMADI. Kaynakta başlık harf harf düşüyordu
+      (`#tespit .rv.in h2 .lt i`, keyframe `ltdrop`). İskelet turunda
+      başlık sayfanın kendi başlık dilini kullanıyor; harf animasyonu
+      giydirme turunun kalemi. Envanterdeki karşılığı: "S-TE · ltdrop —
+      CSS girişi", yani taşınacak ama süs olarak.
+   2) TARAMA ANİMASYONU (`.dgscan`, ışık süpürmesi) taşınmadı; yerine
+      `aria-live` taşıyan bir durum satırı var. Ekran okuyucu için de
+      daha iyi: eskiden tarama görsel bir çubuktu, şimdi metin.
+   3) ÖNERİ LİSTESİ (`.dgfix` — en kötü üç kalem + WhatsApp çağrısı)
+      taşınmadı. Kaynakta her kalem için iki cümlelik bir sözlük var
+      (`D.f`, i18n'li); onu taşımak sahnenin metin yükünü ikiye katlar.
+      Bayt eşiği dersi (H18) yüzünden iskelet turuna girmedi — kalemler
+      ve durumları zaten görünüyor, hangi kalemin kırmızı olduğu belli.
+   4) Skor sayacı (0'dan skora sayan rAF animasyonu) taşınmadı: sayı
+      doğrudan yazılıyor. Halkanın dolması CSS geçişiyle duruyor.
+   5) Kalem sözlüğü (AD) bileşenin içinde, content.json'da karşılığı yok
+      — şeritteki araç listesiyle aynı durum, panelin işi değil.
+   ============================================================ */
+
+/* SADAKAT (3 Eyl 2026): kabin kaynak `.wrap` (1280, gut), baslik `.shead`
+   (920 / clamp(40,5vw,66)), h2/lede ana.css ortak olcekten (.s1-buyuk /
+   .s1-alt). Kaynakta form KUTUSUZ: `.dgform` acik satir (4726-4732). */
+.ste-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.ste-bas{max-width:920px;margin-bottom:clamp(40px,5vw,66px)}
+.ste-bas h2{margin-bottom:18px}
+.ste-bas h2 .thin{font-weight:300;color:var(--tx3)}
+.ste-bas p{margin-top:0}
+
+/* kaynak `.dg{max-width:860px}` (1712) — kutu degil, genislik siniri */
+.ste-kutu{padding:0;max-width:860px}
+
+/* ---- form (kaynak .dgform/.dgin 1713-1721 birebir) ---- */
+.ste-form{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:14px}
+.ste-giris{flex:1 1 260px;display:flex;align-items:center;gap:13px;
+  border:1px solid var(--line2);border-radius:999px;
+  padding:4px 6px 4px 20px;background:rgba(255,255,255,.035);transition:.3s var(--e)}
+.ste-giris svg{flex:none;width:17px;height:17px;color:var(--tx4)}
+.ste-giris input{flex:1;background:none;border:0;color:var(--tx);
+  font:inherit;font-size:1rem;padding:14px 0;min-width:0}
+.ste-giris input::placeholder{color:var(--tx4)}
+.ste-giris input:focus{outline:none}
+/* TUR 9 E6 (3 Eyl 2026): odak halkasi KAPSAYICIDA — input'un kendi halkasi
+   hap kutunun icinde kalirdi; kenarlik rengi tek basina olcumde gorunmedi
+   (olc-klavye: halkasiz 1). Kuresel :focus-visible ile ayni dil. */
+.ste-giris:focus-within{border-color:var(--red);outline:2px solid var(--red-soft);outline-offset:3px}
+/* kaynagin 4px odak piriltisi (1717) yalniz masaustunde — H14 mobil golge yasagi */
+@media(min-width:901px){.ste-giris:focus-within{box-shadow:0 0 0 4px rgba(239,35,60,.1)}}
+.ste-form .dugme{flex:none}
+/* kaynak .dgnote (1722-1723) */
+.ste-not{margin-top:0;color:var(--tx4);font-size:.8rem;line-height:1.6;font-weight:300}
+.ste-not b{color:var(--tx2);font-weight:500}
+.ste-durum{margin-top:12px;color:var(--red-soft);font-size:.88rem;min-height:1.2em}
+/* TARAMA SIRASINDA KIRMIZI DEGIL (5 Eyl 2026): satirin kizil rengi hata
+   ve uyari icin ayrilmis; "Sayfa indiriliyor" kizil yazinca ilerleme hata
+   gibi okunuyordu (kare alinip bakildi). Tarama boyunca sonuk renk, kizil
+   yalniz gercek hata ve kota mesajlarinda kaliyor. */
+.ste-durum.tarama{color:var(--tx3)}
+/* ANAYASA (3 Eyl): kaynakta durum/tarama kutulari bos iken YOK (.dgscan/.dgerr
+   display:none, .on ile acilir — 1751/1753); bos satir yer tutuyordu: bolum 29 px
+   uzundu (olc-tipografi #tespit .wrap 434 <-> 463). */
+.ste-durum:empty{display:none}
+
+/* ---- sonuç ---- */
+.ste-sonuc{margin-top:clamp(16px,2vw,24px);border-top:1px solid var(--line);
+  padding-top:clamp(16px,2vw,24px)}
+.ste-ust{display:flex;gap:clamp(16px,2.4vw,28px);align-items:center;flex-wrap:wrap}
+.ste-halka{position:relative;flex:none;width:104px;height:104px}
+.ste-halka svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ste-halka circle{fill:none;stroke-width:7;stroke-linecap:round}
+.ste-halka-zemin{stroke:rgba(255,255,255,.08)}
+.ste-halka-yay{stroke:var(--red)}
+.ste-halka b{position:absolute;inset:0;display:grid;place-items:center;
+  font-size:1.7rem;letter-spacing:-.03em}
+.ste-kunye{flex:1 1 240px;min-width:0}
+.ste-host{display:block;font-family:var(--f-tek);font-size:.76rem;
+  letter-spacing:.1em;color:var(--tx4);margin-bottom:6px;
+  overflow-wrap:anywhere}
+.ste-kunye h3{font-size:clamp(1.06rem,1.8vw,1.4rem);letter-spacing:-.02em;
+  margin-bottom:6px}
+.ste-kunye p{color:var(--tx2);font-size:.92rem;line-height:1.55}
+.ste-meta{margin-top:8px;font-family:var(--f-tek);font-size:.76rem;
+  color:var(--tx4)}
+.ste-uyari{margin-top:14px;border:1px solid rgba(239,35,60,.34);
+  border-radius:12px;padding:12px 14px;color:var(--tx2);font-size:.86rem;
+  line-height:1.5;background:rgba(239,35,60,.06)}
+
+.ste-izgara{list-style:none;display:grid;gap:8px;margin-top:clamp(14px,2vw,22px);
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.ste-kalem{position:relative;display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  font-size:.86rem;color:var(--tx2)}
+/* durum noktası: renk TEK yerde, üç sınıf */
+.ste-kalem::before{content:'';flex:none;width:8px;height:8px;border-radius:50%;
+  background:var(--tx4)}
+.ste-kalem.ok::before{background:#22c55e}
+.ste-kalem.warn::before{background:#f59e0b}
+.ste-kalem.fail::before{background:var(--red)}
+.ste-kalem em{margin-left:auto;font-style:normal;font-family:var(--f-tek);
+  font-size:.74rem;color:var(--tx4)}
+
+/* IKINCI EKSEN — AJAN HAZIRLIGI (6 Eyl 2026).
+   AYRI GORUNMELI ama IKINCIL durmali: ust cizgi ve daha kucuk sayi, ana
+   halkanin yerini almasin. Ziyaretcinin bekledigi sayi hala yukaridaki.
+   Sayi rengi ANA HALKAYLA AYNI ESIKTEN (70/45) gelir — iki yerde iki esik
+   olsaydi ayni renk iki anlama gelirdi. */
+.ste-ajan{margin-top:clamp(18px,2.4vw,28px);padding-top:clamp(14px,2vw,20px);
+  border-top:1px solid var(--line)}
+.ste-ajan-bas{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ste-ajan-bas h4{font-size:1rem;letter-spacing:-.01em}
+.ste-ajan-bas b{font-family:var(--f-tek);font-size:1.5rem;line-height:1;
+  color:var(--tx1)}   /* ada rengi ayni esikten yazar (70/45) */
+.ste-ajan-orta{margin-left:auto;font-family:var(--f-tek);font-size:.72rem;
+  color:var(--tx4)}
+.ste-ajan-not{margin-top:6px;color:var(--tx2);font-size:.86rem;line-height:1.5}
+
+/* MOBIL OLCEK (5 Eyl 2026, Enes: "mobil tasarimini da duzgun yap dogru
+   olcekle"). OLCULDU (390x844): sonuc blogu 2.151 px = 2,5 EKRAN, tek
+   basina izgara 1.366 px. Sebep: `minmax(190px,1fr)` 350 px'lik alanda
+   TEK sutuna dusuyor ve 26 kalem alt alta diziliyor (masaustunde 4 sutun,
+   izgara 362 px).
+   Iki sutun + daha sik satir. HICBIR BILGI GIZLENMIYOR: 26 kalemin hepsi
+   duruyor, uzun etiket kirpilmiyor iki satira sariyor (kirpma bilgi
+   kaybidir; burada yer kazanci ondan gelmiyor, sutundan geliyor).
+
+   YENIDEN OLCULDU (6 Eyl 2026, 390x844 gercek Chrome, IKINCI EKSEN ACIK):
+   yukaridaki 1.332 px artik dogru degil — ajan ekseni eklendikten sonra
+   sonuc blogu 1.553–1.594 px = 1,84–1,89 EKRAN (ana izgara 547,7 · ajan
+   blogu 308,6 · duzeltme listesi 451; aralik kalemlerin kacinin deger
+   tasidigina gore oynuyor). Kapi hala 2 ekran, pay ~0,12 ekran.
+   Satir yuksekligi 34–36,6 px: degeri olan satir 36,6, iki hucresi de
+   degersiz olan satir 34 (izgara satiri iki kalemi esitler). Eski
+   ">= 36 px" ibaresi ajan izgarasinda yanlisti ve zaten YANLIS SEYI
+   olcuyordu — tiklanan sey satir degil icindeki dugmeydi (16–18,6 px).
+   Ortuyle dokunma hedefi satirin tamamina cikti: 32–36 px, WCAG 2.2 AA
+   asgarisi olan 24 px'in ustunde.
+
+   44 PX'E CIKILMADI — KARAR KAPANDI (Enes, 6 Eyl 2026). Uc kol olculdu:
+     A yayin hali        hedef 32–36 px · blok 1.553 px (1,84 ekran)
+     B min-height:46px   hedef 45 px    · blok 1.715 px (2,03 ekran)
+     C B + izgara arasi 6->4 px         · blok 1.685 px (2,00 ekran)
+   B "<=2 ekran" kapisini 27 px asiyor; C geciyor ama payi 3 px, yani bir
+   etiket sarmasi kapiyi tekrar kirar — cozum sayilmadi.
+   SEBEP: 44'e cikis, ISTEGE BAGLI bir dokunus icin sasma payini ±24
+   px'ten ±29 px'e tasiyor ve bedelini blogun +162 px uzamasiyla (bir
+   ekranin besde biri) HER ziyaretciye odetiyor — kaleme hic dokunmayana
+   da. Asil kusur zaten kapandi: dokunusu yutan olu alan (17 px hedef,
+   34 px'lik tiklanir GORUNEN kutu) kalkti.
+   olc-mobil.cjs'in 44'u burada kapi DEGIL: o kural mutlak degil
+   KARSILASTIRMALI (eskide buyuk olup yenide kuculen kirmizi), bu dugmeler
+   eski agacta yok ve izgara tarama kosmadan bos — o kapi bunlari hic
+   gormuyor. Esik `olc-tespit-popup.cjs`'te 32 px'e cakili, gerileme
+   bekcisi olarak. */
+@media(max-width:600px){
+  .ste-izgara{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .ste-kalem{padding:8px 10px;gap:7px;font-size:.8rem;align-items:flex-start}
+  .ste-kalem::before{margin-top:5px}
+  .ste-kalem-ac{align-items:flex-start;flex-wrap:wrap;row-gap:2px}
+  .ste-kalem-ac > span{min-width:0;line-height:1.25;overflow-wrap:anywhere}
+  .ste-kalem em{font-size:.7rem}
+  /* Ajan blogu mobilde: medyan satiri kendi satirina insin, yoksa baslikla
+     ayni satirda sikisip iki kelimede bir sariyor. */
+  .ste-ajan-orta{margin-left:0;flex-basis:100%}
+  .ste-ajan-bas b{font-size:1.3rem}
+}
+
+/* ---- KALEM POPUP'I (5 Eyl 2026) ----------------------------------------
+   Satirin tamami degil, icindeki DUGME tiklanir: klavyeyle gezilir ve
+   ekran okuyucu "dugme" der. Dugme satirin gorunusunu bozmasin diye
+   butun kabuk stilini sifirlar ve `li`nin flex cocugu olarak yayilir;
+   durum noktasi (::before) `li`de kaldigi icin hizalama degismez. */
+.ste-kalem-ac{flex:1;display:flex;align-items:center;gap:9px;min-width:0;
+  background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;
+  text-align:left;cursor:pointer}
+/* DOKUNMA HEDEFİ SATIRIN TAMAMI (6 Eyl 2026, ölçüldü). `button` yalnız
+   metni kadar yer kaplıyordu: mobilde 16–18,6 px, yani görünen 34–36,6
+   px'lik satırın yarısı. Kalan yer satırın dolgusu ve durum noktasıydı;
+   oraya dokunuş boşa gidiyordu — kutu tıklanır GÖRÜNÜYOR ama değil.
+   Yayılan örtü düğmeyi satıra genişletir ve DÜZENE DOKUNMAZ: `::after`
+   akıştan çıkar, hiçbir kutu büyümez, blok boyu aynı kalır (ölçüldü).
+   Odak halkası da satıra taşındı; düğmede kalsaydı klavyede tıklanan
+   alanı yanlış gösterirdi. */
+.ste-kalem-ac::after{content:'';position:absolute;inset:0;border-radius:12px}
+.ste-kalem-ac:hover span{color:var(--tx)}
+.ste-kalem:has(.ste-kalem-ac:focus-visible){outline:2px solid var(--red);
+  outline-offset:4px}
+
+/* TARAMA RAYI — ince bir hat, uzerinde kizil bir dilim soldan saga
+   suzuluyor. TRANSFORM ILE (H5/H14): genislik animasyonu her karede
+   duzen hesabi uretir; `scaleX` kompozitorde kalir, mobilde de ucuz.
+   Sonsuz kosuyor (tarama bitene kadar) — H11 geregi hareket-azaltmada
+   AYNI SECICIDE durduruluyor ve ray sabit bir hat olarak kaliyor. */
+.ste-tarama{margin-top:10px;height:2px;border-radius:2px;overflow:hidden;
+  background:var(--line)}
+.ste-tarama i{display:block;height:100%;width:38%;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  transform:translateX(-100%);animation:ste-tarama-suz 1.15s var(--e) infinite}
+@keyframes ste-tarama-suz{from{transform:translateX(-100%)}to{transform:translateX(365%)}}
+@media(prefers-reduced-motion:reduce){
+  .ste-tarama i{animation:none;transform:none;width:100%;
+    background:linear-gradient(90deg,transparent,var(--red),transparent)}
+}
+
+/* KONUM: TIKLANAN KALEMIN USTUNDE (5 Eyl 2026, Enes: "ekranin sol
+   ustunde aciliyor ... direkt tiklanilan yerin ustune acilsin").
+   SEBEP OLCULDU: `<dialog>`u Chrome `margin:auto` ile ortalar; sitenin
+   reset'i `margin:0` yaziyor ve ortalama olüyor — olculen konum (0,0).
+   Cozum ortalamayi geri getirmek DEGIL: konumu JS hesapliyor (kalemin
+   kutusundan), CSS yalniz `inset:auto` ile yolu aciyor. Kadraja sigmazsa
+   ada kalemin ALTINA cevirir (.alt) ve okun yonu de doner. */
+.ste-pop{position:fixed;inset:auto;margin:0;
+  border:1px solid var(--line);border-radius:20px;background:var(--card);
+  color:var(--tx2);padding:clamp(18px,3vw,26px);max-width:min(92vw,420px);width:100%;
+  /* Kadraja sigmayan uzun icerik kutuyu tasirmasin (mobilde kritik). */
+  max-height:min(78vh,520px);overflow:auto;overscroll-behavior:contain}
+/* PREMIUM KENAR — H14 KAPISINDA. Golge ve bulaniklik PAHALI katmandir;
+   denetim onlari mobil baglamda yasakliyor ve hakli: dusuk cihazda her
+   karede yeniden rasterlesirler. Masaustu kapisinda (hover:hover +
+   pointer:fine) aciliyor; mobil duz ama net bir kart goruyor. */
+@media(hover:hover) and (pointer:fine){
+  .ste-pop{box-shadow:0 1px 0 rgba(255,255,255,.06) inset,
+             0 18px 50px -12px rgba(0,0,0,.72),
+             0 4px 14px -6px rgba(0,0,0,.5)}
+  .ste-pop::backdrop{backdrop-filter:blur(3px)}
+}
+.ste-pop::backdrop{background:rgba(0,0,0,.55)}
+/* KALEMI GOSTEREN ISARET — ucgen ok DEGIL, kenar vurgusu.
+   Sebep: kutu `overflow:auto` (uzun icerik icin sart) ve tasan bir ucgen
+   KIRPILIR. Bunun yerine kutunun kalemle bakisan kenarinda, kalemin tam
+   ustune denk gelen kisa bir kizil cizgi var; yeri adanin verdigi
+   `--ok-x` degiskeninden geliyor. Kirpilmaz, ayni bilgiyi tasir. */
+.ste-pop::after{content:'';position:absolute;left:var(--ok-x,50%);bottom:0;
+  width:56px;height:2px;margin-left:-28px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.ste-pop.alt::after{bottom:auto;top:0}
+/* GIRIS: kisa, kalemden dogar gibi. IKI KURAL BURADA:
+   · H5 — giris keyframe'i OPAKLIGA DOKUNMAZ, yalniz transform (opaklik
+     animasyonu ilk karede bos kutu gosterir; kural bunu yasakliyor).
+   · H11 — hareketin AYNI SECICIDE hareket-azaltma karsiligi olmali;
+     `no-preference` sarmali tek basina yetmez, kural acik durdurma arar. */
+.ste-pop[open]{animation:ste-pop-gir .16s var(--e) both}
+@keyframes ste-pop-gir{from{transform:translateY(6px) scale(.985)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){ .ste-pop[open]{animation:none} }
+/* IMLEC (Enes: "imlec onun altinda kaliyor"). SEBEP OLCULDU: kabuk
+   `html.bitcursor *{cursor:none}` yaziyor ve ozel imleci `div.kb-bit`
+   (z-index 140) ciziyor; ama `<dialog>` TOP LAYER'da, z-index'ten
+   bagimsiz olarak ustte — imlec altinda kaliyor ve yerli imlec de kapali
+   oldugu icin ziyaretci imleci tumden kaybediyor. Kabugun KENDI istisna
+   listesi (input/textarea/select) genisletiliyor: acik dialog icinde
+   yerli imlec geri geliyor. Kural kabuk.css'te, sahibinin yaninda. */
+.ste-pop .ste-pop-kapat button,.ste-pop a{cursor:pointer}
+/* Kutunun KENDI odak halkasi yok: `tabindex="-1"` ile yalnizca PROGRAMATIK
+   odak hedefi, klavyeyle gezilen bir denetim degil (kare alinip bakildi —
+   halka kirmizi bir hata cercevesi gibi okunuyordu). Icerideki dugme ve
+   baglar kendi `:focus-visible` halkalarini KORUYOR; klavye erisimi
+   degismedi. */
+.ste-pop:focus,.ste-pop:focus-visible{outline:none}
+.ste-pop-kapat{display:flex;justify-content:flex-end;margin:-6px -6px 2px 0}
+.ste-pop-kapat button{background:none;border:0;padding:6px;line-height:0;
+  color:var(--tx4);cursor:pointer}
+.ste-pop-kapat button:hover{color:var(--tx)}
+.ste-pop-kapat button:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:6px}
+.ste-pop-kapat svg{width:18px;height:18px}
+/* rozet: renk TEK yerde — izgaradaki noktayla ayni uc sinif */
+.ste-pop-rozet{display:inline-block;font-family:var(--f-tek);font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;
+  border:1px solid var(--line);color:var(--tx4)}
+.ste-pop-rozet.ok{color:#22c55e;border-color:#22c55e}
+.ste-pop-rozet.warn{color:#f59e0b;border-color:#f59e0b}
+.ste-pop-rozet.fail{color:var(--red);border-color:var(--red)}
+.ste-pop-ad{margin:10px 0 0;font-size:1.12rem;color:var(--tx)}
+.ste-pop-olcum{margin:14px 0 0;display:grid;gap:8px}
+.ste-pop-olcum > div{display:flex;align-items:baseline;gap:12px;
+  border-top:1px solid var(--line);padding-top:8px}
+.ste-pop-olcum dt{flex:none;font-size:.78rem;color:var(--tx4)}
+.ste-pop-olcum dd{margin:0 0 0 auto;font-family:var(--f-tek);font-size:.82rem;
+  color:var(--tx);text-align:right;word-break:break-word}
+.ste-pop-neden{margin:14px 0 0;font-size:.88rem;line-height:1.5}
+
+/* ---- hareket: yalnız halkanın dolması, transform/opacity dışı tek
+   istisna `stroke-dashoffset` — SVG'de uzunluk animasyonu düzen
+   hesabı üretmez, kompozitte kalır. ---- */
+.ste-halka-yay{transition:stroke-dashoffset .9s var(--e),stroke .3s var(--e)}
+
+@media (hover:hover) and (pointer:fine){
+  .ste-kalem{transition:border-color .3s var(--e)}
+  .ste-kalem:hover{border-color:var(--line2)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .ste-halka-yay{transition:none}
+  .ste-kalem{transition:none}
+}
+
+/* ============ B3 · HARF HARF DİKEY KAYMA ============
+   Kaynak: kök index.html 4314-4324 (`#tespit h2 .lt i`, `ltdrop`).
+   Kaynak değerleri: harf `translateY(-112%)` + `opacity:0`, süre .62 sn,
+   gecikme .08 + k·.028 sn, eğri var(--e), tetik `.rv.in` (IO).
+
+   ÜÇ SAPMA, ÜÇÜ DE ADIYLA:
+   1) OPAKLIK YOK. Madde 5 / H2: içerik görünür doğar; giriş yalnız
+      transform + kabın overflow'u. Kliple aynı etki, taban opak.
+   2) SÜRÜCÜ KAYDIRMA. Kaynak IO ile bir kez tetikliyordu; kabuğun
+      sahne dili kaydırma güdümlü ve ADA JS'İ YOK (S-K katmanının
+      kuralı). Zaman gecikmesi menzil kaymasına çevrildi.
+   3) ADIM HARF SAYISINA BÖLÜNÜR: kaskad TR'de 29, EN'de 38 harfte de
+      aynı aralığa sığar (kaynakta sabit adım uzun başlıkta taşıyordu). */
+.ste-h2 .ste-lt{display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding-bottom:.06em;margin-bottom:-.06em}
+.ste-h2 .ste-lt i{display:inline-block;font-style:normal}
+@supports (animation-timeline: view()){
+  .ste-bas{view-timeline-name:--ste-bas;view-timeline-axis:block}
+  .ste-h2 .ste-lt i{animation:ste-harf linear both;animation-timeline:--ste-bas;
+    /* MENZİL YyH CİNSİNDEN, YÜZDE DEĞİL: `entry` fazının boyu ELEMANIN
+       KENDİ YÜKSEKLİĞİ kadardır — başlık ~120 px, yani yüzdeyle yazılan
+       kaskad 120 pikselde bitiyordu (ölçüldü: üç örnekte de harfler
+       birlikte düşüyordu). Pencere artık mutlak: harf başına --adim vh,
+       her harf 26vh boyunca süzülür. */
+    animation-range:entry calc(var(--k,0) * var(--adim,.83) * 1vh)
+                    entry calc(var(--k,0) * var(--adim,.83) * 1vh + 26vh)}
+}
+@keyframes ste-harf{from{transform:translateY(-112%)}}
+@media (prefers-reduced-motion:reduce){
+  .ste-h2 .ste-lt i{animation:none}
+}
+
+/* ---- DUZELTME LISTESI (sokum turu, 4 Eyl) — kaynak .dgfix/.dgfh/.dgfl 1795-1804 birebir, aile token ---- */
+.ste-fix{margin-top:clamp(14px,2vw,22px);border:1px solid rgba(239,35,60,.34);border-radius:16px;
+  background:linear-gradient(140deg,rgba(239,35,60,.1),rgba(255,255,255,.02));padding:22px 24px}
+.ste-fix-bas{font-family:var(--f-tek);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--red);margin:0 0 16px}
+.ste-fix-liste{list-style:none;margin:0;padding:0;counter-reset:n}
+.ste-fix-liste li{display:flex;gap:15px;padding:12px 0;border-bottom:1px dashed var(--line);counter-increment:n}
+.ste-fix-liste li:last-child{border-bottom:0}
+.ste-fix-liste li::before{content:counter(n);width:24px;height:24px;border-radius:8px;flex-shrink:0;
+  display:grid;place-items:center;background:var(--red-dolgu);color:#fff;font-family:var(--f-tek);font-size:10px}
+.ste-fix-liste li[data-k="yok"]::before{content:'✓'}
+.ste-fix-liste b{display:block;font-size:.92rem;margin-bottom:4px;letter-spacing:-.02em}
+.ste-fix-liste span{font-size:.85rem;color:var(--tx3);line-height:1.6;font-weight:300}
+.ste-fix .dugme{margin-top:18px}
+
+/* MOBIL · DUZELTME LISTESI — DOSYA SONUNDA OLMAK ZORUNDA.
+   Ilk yazimda yukaridaki mobil blogun icindeydi ve HIC ETKI ETMEDI:
+   `.ste-fix-liste li` taban kurali dosyada DAHA SONRA geliyor, esit
+   ozgullukte sonraki kural kazaniyor (kare alinip bakildi, degisiklik
+   gorunmedi). Kaskad sirasi ozgullugun yerine gecmez. */
+@media(max-width:600px){
+  .ste-fix-liste li{display:grid;grid-template-columns:24px 1fr;
+    gap:4px 12px;align-items:start}
+  .ste-fix-liste li::before{grid-column:1;grid-row:1}
+  .ste-fix-liste b{grid-column:2;grid-row:1;margin-bottom:0}
+  .ste-fix-liste span{grid-column:2;grid-row:2;line-height:1.5}
+}

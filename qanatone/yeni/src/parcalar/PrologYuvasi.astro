@@ -1,0 +1,9 @@
+---
+/* URETILEN DOSYA — yeni/kabuk-derle.cjs yazar, ELLE DUZENLEME.
+   Kaynak: content.json theme.motion.prolog (panelin anahtari).
+   Prolog ACIK: Film ithal edilir. */
+import Film from './Film.astro';
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+---
+<Film dil={dil} sayfa="ana" />

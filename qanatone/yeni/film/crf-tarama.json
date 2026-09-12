@@ -1,0 +1,130 @@
+{
+ "_": "yeni/film/crf-tarama.cjs — butce secenegi A olculdu. tahmini_hat_mib OLCEKLI TAHMINDIR (5 klip orneklemi), olculen_5klip_mib gercek.",
+ "olcum": "2026-08-27T10:17:30.269Z",
+ "ornek_klipler": [
+  34,
+  27,
+  16,
+  13,
+  22
+ ],
+ "ornek_temsil": {
+  "masaustu_yuzde": 16.4,
+  "mobil_yuzde": 16.1
+ },
+ "referans": "mevcut hat (masaustu CRF20/GOP8/native · mobil CRF23/GOP4/720)",
+ "aday": [
+  {
+   "ad": "mevcut-masaustu",
+   "hat": "masaustu",
+   "crf": 20,
+   "gop": 8,
+   "olcek": "native",
+   "olculen_5klip_mib": 32.8,
+   "tahmini_hat_mib": 200.8,
+   "kapi_mib": 32,
+   "kapiya_gore": 6.28,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "crf24-native",
+   "hat": "masaustu",
+   "crf": 24,
+   "gop": 8,
+   "olcek": "native",
+   "olculen_5klip_mib": 19.6,
+   "tahmini_hat_mib": 119.6,
+   "kapi_mib": 32,
+   "kapiya_gore": 3.74,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "crf28-native",
+   "hat": "masaustu",
+   "crf": 28,
+   "gop": 8,
+   "olcek": "native",
+   "olculen_5klip_mib": 12,
+   "tahmini_hat_mib": 73.1,
+   "kapi_mib": 32,
+   "kapiya_gore": 2.29,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "crf28-960",
+   "hat": "masaustu",
+   "crf": 28,
+   "gop": 8,
+   "olcek": 960,
+   "olculen_5klip_mib": 12,
+   "tahmini_hat_mib": 73.1,
+   "kapi_mib": 32,
+   "kapiya_gore": 2.29,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "crf32-960-gop12",
+   "hat": "masaustu",
+   "crf": 32,
+   "gop": 12,
+   "olcek": 960,
+   "olculen_5klip_mib": 6.7,
+   "tahmini_hat_mib": 41,
+   "kapi_mib": 32,
+   "kapiya_gore": 1.28,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "mevcut-mobil",
+   "hat": "mobil",
+   "crf": 23,
+   "gop": 4,
+   "olcek": 720,
+   "olculen_5klip_mib": 26.4,
+   "tahmini_hat_mib": 163.8,
+   "kapi_mib": 16,
+   "kapiya_gore": 10.24,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "mobil-crf28-540",
+   "hat": "mobil",
+   "crf": 28,
+   "gop": 4,
+   "olcek": 540,
+   "olculen_5klip_mib": 10.2,
+   "tahmini_hat_mib": 63.5,
+   "kapi_mib": 16,
+   "kapiya_gore": 3.97,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  },
+  {
+   "ad": "mobil-crf32-480-gop8",
+   "hat": "mobil",
+   "crf": 32,
+   "gop": 8,
+   "olcek": 480,
+   "olculen_5klip_mib": 4.1,
+   "tahmini_hat_mib": 25.2,
+   "kapi_mib": 16,
+   "kapiya_gore": 1.57,
+   "gecer_mi": false,
+   "psnr_vs_mevcut": null,
+   "ssim_vs_mevcut": null
+  }
+ ]
+}

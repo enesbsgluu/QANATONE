@@ -1,0 +1,209 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T23:51:10.312Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 5.62,
+   "farkliPiksel": 72822,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 9068 px, tum farkin %12)",
+   "md5": {
+    "once": "1c35308e8ada7dbc18fe9b166b70b28e",
+    "sonra": "5c730b864b4fd8fe436e0ddc0558eda8"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-finans-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-finans-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-finans-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 20,
+   "farkYuzde": 2.93,
+   "farkliPiksel": 38037,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 1/8 sutun 7/8 (x 1080-1260, y 0-113; hucrede 3069 px, tum farkin %8)",
+   "md5": {
+    "once": "27c6160ca139afbef4fb6dea672018b1",
+    "sonra": "e989d0cfb7259512296d0473fcd1f03b"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 2322,
+     "sonra": 2342
+    },
+    "gercek": {
+     "once": 2322,
+     "sonra": 2342
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-finans-once-20.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-finans-sonra-20.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-finans-yanyana-20.png"
+   }
+  },
+  {
+   "konum": 40,
+   "farkYuzde": 5.16,
+   "farkliPiksel": 66923,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 5/8 sutun 7/8 (x 1080-1260, y 450-563; hucrede 6333 px, tum farkin %9)",
+   "md5": {
+    "once": "26605ff178d997d2aa3ec8475a359356",
+    "sonra": "246da5b07df2b591f857594c692d2171"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 4644,
+     "sonra": 4685
+    },
+    "gercek": {
+     "once": 4644,
+     "sonra": 4685
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-finans-once-40.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-finans-sonra-40.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-finans-yanyana-40.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/hizmetler/finans/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 13,
+   "sonsuzSifirlanan": 13,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 12509,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "1c35308e8ada7dbc18fe9b166b70b28e",
+    "png": "yeni/film/kontak-tur9/hz2-finans-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 13
+   },
+   {
+    "konum": 20,
+    "hedef": 2322,
+    "gercek": 2322,
+    "sapma": 0,
+    "md5": "27c6160ca139afbef4fb6dea672018b1",
+    "png": "yeni/film/kontak-tur9/hz2-finans-once-20.png",
+    "raf": "raf",
+    "animasyonSonradan": 12
+   },
+   {
+    "konum": 40,
+    "hedef": 4644,
+    "gercek": 4644,
+    "sapma": 0,
+    "md5": "26605ff178d997d2aa3ec8475a359356",
+    "png": "yeni/film/kontak-tur9/hz2-finans-once-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 12
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/hizmetler/finans/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 14,
+   "sonsuzSifirlanan": 14,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 12612,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "5c730b864b4fd8fe436e0ddc0558eda8",
+    "png": "yeni/film/kontak-tur9/hz2-finans-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 14
+   },
+   {
+    "konum": 20,
+    "hedef": 2342,
+    "gercek": 2342,
+    "sapma": 0,
+    "md5": "e989d0cfb7259512296d0473fcd1f03b",
+    "png": "yeni/film/kontak-tur9/hz2-finans-sonra-20.png",
+    "raf": "raf",
+    "animasyonSonradan": 14
+   },
+   {
+    "konum": 40,
+    "hedef": 4685,
+    "gercek": 4685,
+    "sapma": 0,
+    "md5": "246da5b07df2b591f857594c692d2171",
+    "png": "yeni/film/kontak-tur9/hz2-finans-sonra-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 14
+   }
+  ]
+ }
+}

@@ -1,0 +1,90 @@
+diff --git a/qanatone/index.html b/qanatone/index.html
+index 68c80d7..b7ce97a 100644
+--- a/qanatone/index.html
++++ b/qanatone/index.html
+@@ -7582,16 +7582,31 @@ function deliverStage(d,L,tx){
+       const y = ((kr.top + kr.height / 2) - mr.top) / mr.height * 100;
+       yollar[i].setAttribute('d',
+         'M0,50 C46,50 54,' + y.toFixed(1) + ' 100,' + y.toFixed(1));
+-      /* 2026-08 TELLER HAVADA KESİLİYORDU: CSS'te stroke-dasharray:200
+-         sabiti vardı ve vector-effect:non-scaling-stroke yüzünden bu 200
+-         EKRAN PİKSELİ demek. 200'den uzun teller (en üstteki ve en
+-         alttaki) yalnız ilk 200 piksel boyunca çiziliyor, gerisi hiç
+-         görünmüyordu. Merkez hizalaması dış telleri daha da uzattığı için
+-         belirginleşti. Sabit varsayım yerine ölçüm: her telin kendi
+-         uzunluğu. +4 pay, yuvarlama hatası ucu kırpmasın diye.        */
+-      if (yollar[i].getTotalLength) {
++      /* 2026-08 İKİNCİ DÜZELTME — BİRİM UYUŞMAZLIĞI (zoom belirtisi):
++         İlk düzeltme getTotalLength() kullanıyordu; o değer VIEWBOX
++         BİRİMİ (0-100'lük kutuda ~114) döndürür. Oysa non-scaling-stroke
++         yüzünden stroke-dasharray EKRAN PİKSELİ cinsinden yorumlanır.
++         İki birim yalnız belli bir zoom'da tesadüfen örtüşür — Enes'in
++         gördüğü tam buydu: bir zoom'da uç değmiyor, yakınlaştırınca
++         orta kesiliyor. Doğrusu: yolu viewBox'ta örnekleyip her noktayı
++         .tpmid'in GERÇEK ekran boyutuyla ölçekleyerek ekran-uzayı
++         uzunluğunu toplamak. Zoom/resize telKisitli'yi tetikleyip
++         yeniden ölçtürür. +6 pay: örnekleme eğriyi kirişlerle izlediği
++         için hafif KISA ölçer, pay ucu garantiye alır.               */
++      if (yollar[i].getTotalLength && yollar[i].getPointAtLength) {
+         try {
+-          const uz = Math.ceil(yollar[i].getTotalLength()) + 4;
++          const p = yollar[i];
++          const Lvb = p.getTotalLength();          /* viewBox birimi */
++          const ADIM = 24;
++          let uzPx = 0, once = null;
++          for (let j = 0; j <= ADIM; j++) {
++            const n = p.getPointAtLength(Lvb * j / ADIM);
++            const sx = n.x / 100 * mr.width;       /* ekran pikseli   */
++            const sy = n.y / 100 * mr.height;
++            if (once) uzPx += Math.hypot(sx - once.x, sy - once.y);
++            once = { x: sx, y: sy };
++          }
++          const uz = Math.ceil(uzPx) + 6;
+           yollar[i].style.strokeDasharray = uz;
+           yollar[i].style.strokeDashoffset =
+             box.classList.contains('in') ? 0 : uz;
+diff --git a/qanatone/test/denetim.js b/qanatone/test/denetim.js
+index e5ee699..d003c79 100644
+--- a/qanatone/test/denetim.js
++++ b/qanatone/test/denetim.js
+@@ -462,24 +462,27 @@ function ciktiDenetimi() {
+        hizalaVar && merkezOlcumu && kurulumda,
+        `hizala=${hizalaVar} merkez=${merkezOlcumu} kurulumTuru=${kurulumda}`);
+   }
+-  /* 82 · tel uzunluğu ölçülür, sabit varsayılmaz (2026-08):
+-     .tpwires path'te vector-effect:non-scaling-stroke var, yani
+-     stroke-dasharray EKRAN PİKSELİ. Sabit 200 vardı ve 200'den uzun
+-     teller (en üst/en alttaki) yarıda kesiliyordu. Üç şart: JS gerçek
+-     uzunluğu ölçüyor · CSS yedeği ≥600 · .in kuralı satır içi değeri
+-     yenecek önceliğe sahip (yoksa teller HİÇ açılmaz — bu ters yönde
+-     bir tuzak, önceliği düşüren biri sessiz kırılma yaratır). */
++  /* 82 · tel uzunluğu EKRAN uzayında ölçülür (2026-08, iki aşamada):
++     non-scaling-stroke yüzünden stroke-dasharray EKRAN PİKSELİ.
++     1. hata: sabit 200 → uzun teller kesildi. 2. hata: getTotalLength()
++     doğrudan yazıldı — o değer VIEWBOX BİRİMİ, ekran pikseli değil;
++     yalnız belli bir zoom'da tesadüfen tutuyor (Enes'in zoom belirtisi).
++     Şartlar: getPointAtLength örneklemesi + mr.width/height ölçekleme
++     var · viewBox birimi DOĞRUDAN dasharray'e yazılmıyor · CSS yedeği
++     ≥600 · .in kuralı !important (yoksa teller hiç açılmaz). */
+   {
+     const kaynakD = fs.readFileSync(SRC, 'utf8');
+     const iTH = kaynakD.indexOf('const telHizala');
+-    const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 2200) : '';
+-    const olcum = bolge.indexOf('getTotalLength()') > -1
+-               && bolge.indexOf('strokeDasharray') > -1;
++    const bolge = iTH > -1 ? kaynakD.slice(iTH, iTH + 3400) : '';
++    const ornekleme = bolge.indexOf('getPointAtLength(') > -1
++                   && bolge.indexOf('mr.width') > -1
++                   && bolge.indexOf('strokeDasharray') > -1;
++    const dogrudanDegil = !/Math\.ceil\(yollar\[i\]\.getTotalLength\(\)\)/.test(bolge);
+     const yedek = ((kaynakD.match(/\.tpwires path\{[^}]*stroke-dasharray:(\d+)/) || [, '0'])[1] * 1) >= 600;
+     const oncelik = /\.tpbox\.in \.tpwires path\{stroke-dashoffset:0 !important\}/.test(kaynakD);
+-    ol('klasör telleri: uzunluk ölçülür, sabit varsayılmaz',
+-       olcum && yedek && oncelik,
+-       `olcum=${olcum} yedek=${yedek} oncelik=${oncelik}`);
++    ol('klasör telleri: uzunluk EKRAN uzayında ölçülür',
++       ornekleme && dogrudanDegil && yedek && oncelik,
++       `ornekleme=${ornekleme} viewBoxDogrudanDegil=${dogrudanDegil} yedek=${yedek} oncelik=${oncelik}`);
+   }
+   const sayfalar = [];
+   (function tara(d) {

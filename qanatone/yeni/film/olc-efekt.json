@@ -1,0 +1,300 @@
+{
+ "_": "yeni/film/olc-efekt.cjs — EFEKT A (tv) + EFEKT B (isinlanma) kapilari; kirmizi kontrol ONCE kosulur.",
+ "olcum": "2026-09-01T21:22:05.256Z",
+ "tarayici": "chrome",
+ "headless": true,
+ "tekrar": 3,
+ "kirmizi_A": {
+  "sure_ms": 741,
+  "yakalandi": true
+ },
+ "kirmizi_B": {
+  "dusen": 3,
+  "yakalandi": true
+ },
+ "A": {
+  "tekrar": [
+   {
+    "yol": "tv",
+    "sure_ms": 668,
+    "fazlar": {
+     "cokus": 180,
+     "parlama": 123,
+     "acilis": 365
+    },
+    "dusen": 6,
+    "dusen_faz": {
+     "cokus": 2,
+     "parlama": 2,
+     "acilis": 2,
+     "zamanlar_ms": [
+      0,
+      102,
+      180,
+      218,
+      303,
+      374
+     ]
+    },
+    "zoom_dusen": 12,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 466,
+    "fazlar": {
+     "cokus": 131,
+     "parlama": 84,
+     "acilis": 250
+    },
+    "dusen": 4,
+    "dusen_faz": {
+     "cokus": 2,
+     "parlama": 1,
+     "acilis": 1,
+     "zamanlar_ms": [
+      0,
+      58,
+      147,
+      216
+     ]
+    },
+    "zoom_dusen": 12,
+    "devirDurum": "tam"
+   },
+   {
+    "yol": "tv",
+    "sure_ms": 450,
+    "fazlar": {
+     "cokus": 131,
+     "parlama": 99,
+     "acilis": 220
+    },
+    "dusen": 4,
+    "dusen_faz": {
+     "cokus": 2,
+     "parlama": 1,
+     "acilis": 1,
+     "zamanlar_ms": [
+      0,
+      64,
+      131,
+      230
+     ]
+    },
+    "zoom_dusen": 13,
+    "devirDurum": "tam"
+   }
+  ],
+  "medyan_sure": 466,
+  "medyan_dusen": 4,
+  "taban": {
+   "dusen": 2,
+   "sure_ms": 2999,
+   "hiz_sn": 0.67
+  },
+  "beklenen_taban_duseni": 1,
+  "gecti": false
+ },
+ "A_azalt": {
+  "yol": "sade",
+  "tvBos": true,
+  "tam": true,
+  "gecti": true
+ },
+ "B": {
+  "noktalar": {
+   "bas": {
+    "yol": "isinlanma",
+    "sure_ms": 457,
+    "tepe_ms": 259,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [
+     {
+      "d": 341.5,
+      "tBas": 633
+     }
+    ],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": "t-nostars"
+    }
+   },
+   "orta": {
+    "yol": "isinlanma",
+    "sure_ms": 447,
+    "tepe_ms": 256,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [
+     {
+      "d": 424.8,
+      "tBas": 716
+     }
+    ],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": "t-nostars"
+    }
+   },
+   "son": {
+    "yol": "isinlanma",
+    "sure_ms": 444,
+    "tepe_ms": 253,
+    "toplanma_dusen": 0,
+    "sonus_dusen": 0,
+    "takas_gap_ms": 17,
+    "buyuk_aralar": [
+     {
+      "d": 133.1,
+      "tBas": 416
+     },
+     {
+      "d": 33.5,
+      "tBas": 450
+     }
+    ],
+    "iz": {
+     "film": "atlandi",
+     "flGizli": true,
+     "govdeAkista": "static",
+     "scrollY": 0,
+     "kalanSinif": "t-nostars"
+    }
+   }
+  },
+  "ayni_calisti": true,
+  "gecti": true
+ },
+ "B_azalt": {
+  "yol": "sade",
+  "sure_ms": 289,
+  "film": "atlandi",
+  "gecti": true
+ },
+ "halka_azalt": {
+  "anim": "none",
+  "gecGorunur": true,
+  "gecti": true
+ },
+ "halka_filmsonu_bilgi": {
+  "dusen": 0,
+  "taban": 0,
+  "not": "iframe (eski sayfa) yuklu — idle JS yuku; ana olcum ortada"
+ },
+ "halka": {
+  "tekrar": [
+   {
+    "dusen": 0,
+    "taban": 0,
+    "anim": "fl-halka-don",
+    "sure": "3.6s"
+   },
+   {
+    "dusen": 0,
+    "taban": 0,
+    "anim": "fl-halka-don",
+    "sure": "3.6s"
+   },
+   {
+    "dusen": 0,
+    "taban": 0,
+    "anim": "fl-halka-don",
+    "sure": "3.6s"
+   }
+  ],
+  "medyan_dusen": 0,
+  "medyan_taban": 0,
+  "gecti": true
+ },
+ "ibare": {
+  "noktalar": {
+   "bas": {
+    "ekranda": true,
+    "altOrta": true,
+    "okAnim": "fl-ok-kay",
+    "okSure": "3.6s",
+    "metin": "KAYDIR",
+    "hiza_px": 11,
+    "yazi": {
+     "ibare": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     },
+     "gec": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     }
+    }
+   },
+   "orta": {
+    "ekranda": true,
+    "altOrta": true,
+    "okAnim": "fl-ok-kay",
+    "okSure": "3.6s",
+    "metin": "KAYDIR",
+    "hiza_px": 11,
+    "yazi": {
+     "ibare": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     },
+     "gec": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     }
+    }
+   },
+   "son": {
+    "ekranda": true,
+    "altOrta": true,
+    "okAnim": "fl-ok-kay",
+    "okSure": "3.6s",
+    "metin": "KAYDIR",
+    "hiza_px": 11,
+    "yazi": {
+     "ibare": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     },
+     "gec": {
+      "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "punto": "14px"
+     }
+    }
+   }
+  },
+  "sonme": {
+   "sonme_ms": 156,
+   "opaklik": "0"
+  },
+  "hiza_px": 11,
+  "yazi": {
+   "ibare": {
+    "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "punto": "14px"
+   },
+   "gec": {
+    "aile": "\"Uncut Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "punto": "14px"
+   }
+  },
+  "gecti": true
+ },
+ "ibare_azalt": {
+  "okAnim": "none",
+  "gorunur": true,
+  "metin": "KAYDIR",
+  "gecti": true
+ },
+ "hukum": "KALDI"
+}

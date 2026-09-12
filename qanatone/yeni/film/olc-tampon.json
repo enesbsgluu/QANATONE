@@ -1,0 +1,271 @@
+{
+ "_": "yeni/film/olc-tampon.cjs v2 — tampon: sahne1 tam + sahne2 kismi + 6 sn sinir. KAPILAR: hareket hazirliktan once baslamaz (motor izi + bagimsiz ornekleyici) · tampon <= sinir+tolerans her agda · dolu hatta sinir devreye girmez · atla/teleport deler. Takilma sayilari RAPOR (Enes bilerek kabul etti).",
+ "olcum": "2026-09-01T13:39:02.988Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "hizlandirma": "gpu_compositing=enabled · rasterization=enabled · video_decode=enabled · webgl=enabled",
+ "senaryo": "sabirsiz ziyaretci (yukleme sirasinda surekli kaydirma) + atla kontrolu",
+ "tekrar": 3,
+ "sinir_ms": 6000,
+ "pencere_ms": 10000,
+ "hukum": "GECTI",
+ "sonuc": [
+  {
+   "ag": "dolu-hat",
+   "kosum": [
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 950,
+     "ilk_hareket_ms": 950,
+     "yol": "bekledi",
+     "bosluk_ms": 0,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 14,
+     "hareket_ani_takilma": {
+      "sayi": 8,
+      "toplam_ms": 1199,
+      "en_uzun_ms": 158,
+      "sunum_ornek": 238
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 520,
+     "ilk_hareket_ms": 520,
+     "yol": "bekledi",
+     "bosluk_ms": 0,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 20,
+     "hareket_ani_takilma": {
+      "sayi": 14,
+      "toplam_ms": 1775,
+      "en_uzun_ms": 183,
+      "sunum_ornek": 252
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "dolu-hat",
+     "tampon_ms": 408,
+     "ilk_hareket_ms": 408,
+     "yol": "bekledi",
+     "bosluk_ms": 0,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 16,
+     "hareket_ani_takilma": {
+      "sayi": 12,
+      "toplam_ms": 1624,
+      "en_uzun_ms": 183,
+      "sunum_ornek": 226
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "hazir",
+      "hazir"
+     ],
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 520,
+   "ilk_hareket_ms_ortanca": 520,
+   "takilma_ortanca": 12,
+   "takilma_toplam_ms_ortanca": 1624,
+   "yol_hepsi": [
+    "bekledi",
+    "bekledi",
+    "bekledi"
+   ],
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI",
+   "kapi_sinir": "GECTI",
+   "kapi_dolu_hatta_sinirsiz": "GECTI"
+  },
+  {
+   "ag": "4g",
+   "kosum": [
+    {
+     "ag": "4g",
+     "tampon_ms": 6004,
+     "ilk_hareket_ms": 6020,
+     "yol": "sure-siniri",
+     "bosluk_ms": 16,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 603,
+     "hareket_ani_takilma": {
+      "sayi": 11,
+      "toplam_ms": 1690,
+      "en_uzun_ms": 275,
+      "sunum_ornek": 213
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "iniyor",
+      "yok"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "4g",
+     "tampon_ms": 6001,
+     "ilk_hareket_ms": 6011,
+     "yol": "sure-siniri",
+     "bosluk_ms": 10,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 628,
+     "hareket_ani_takilma": {
+      "sayi": 12,
+      "toplam_ms": 1408,
+      "en_uzun_ms": 158,
+      "sunum_ornek": 264
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "iniyor",
+      "yok"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "4g",
+     "tampon_ms": 6007,
+     "ilk_hareket_ms": 6019,
+     "yol": "sure-siniri",
+     "bosluk_ms": 12,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 586,
+     "hareket_ani_takilma": {
+      "sayi": 12,
+      "toplam_ms": 1602,
+      "en_uzun_ms": 208,
+      "sunum_ornek": 251
+     },
+     "ilk3_sahne": [
+      "hazir",
+      "iniyor",
+      "yok"
+     ],
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 6004,
+   "ilk_hareket_ms_ortanca": 6019,
+   "takilma_ortanca": 12,
+   "takilma_toplam_ms_ortanca": 1602,
+   "yol_hepsi": [
+    "sure-siniri",
+    "sure-siniri",
+    "sure-siniri"
+   ],
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI",
+   "kapi_sinir": "GECTI"
+  },
+  {
+   "ag": "yavas-4g",
+   "kosum": [
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 6006,
+     "ilk_hareket_ms": 6023,
+     "yol": "sure-siniri",
+     "bosluk_ms": 17,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 645,
+     "hareket_ani_takilma": {
+      "sayi": 1,
+      "toplam_ms": 158,
+      "en_uzun_ms": 158,
+      "sunum_ornek": 17,
+      "not": "sunum kit — klip inmemis olabilir, 0 koru sayilmasin"
+     },
+     "ilk3_sahne": [
+      "iniyor",
+      "yok",
+      "yok"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 6001,
+     "ilk_hareket_ms": 6013,
+     "yol": "sure-siniri",
+     "bosluk_ms": 12,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 629,
+     "hareket_ani_takilma": {
+      "sayi": 0,
+      "toplam_ms": 0,
+      "en_uzun_ms": 0,
+      "sunum_ornek": 2,
+      "not": "sunum kit — klip inmemis olabilir, 0 koru sayilmasin"
+     },
+     "ilk3_sahne": [
+      "yok",
+      "yok",
+      "yok"
+     ],
+     "zaman_asimi": false
+    },
+    {
+     "ag": "yavas-4g",
+     "tampon_ms": 6006,
+     "ilk_hareket_ms": 6013,
+     "yol": "sure-siniri",
+     "bosluk_ms": 7,
+     "hareket_hazirliktan_once": false,
+     "bagimsiz_kacak_ornek": 0,
+     "kapali_ornek_sayisi": 650,
+     "hareket_ani_takilma": {
+      "sayi": 1,
+      "toplam_ms": 200,
+      "en_uzun_ms": 200,
+      "sunum_ornek": 11,
+      "not": "sunum kit — klip inmemis olabilir, 0 koru sayilmasin"
+     },
+     "ilk3_sahne": [
+      "iniyor",
+      "yok",
+      "yok"
+     ],
+     "zaman_asimi": false
+    }
+   ],
+   "tampon_ms_ortanca": 6006,
+   "ilk_hareket_ms_ortanca": 6013,
+   "takilma_ortanca": 1,
+   "takilma_toplam_ms_ortanca": 158,
+   "yol_hepsi": [
+    "sure-siniri",
+    "sure-siniri",
+    "sure-siniri"
+   ],
+   "kapi_hareket_once": "GECTI",
+   "kapi_bagimsiz_kacak": "GECTI",
+   "kapi_sinir": "GECTI"
+  }
+ ],
+ "atla_kontrol": {
+  "yol": "atla",
+  "hareket_ms": 60,
+  "gecti": true
+ }
+}

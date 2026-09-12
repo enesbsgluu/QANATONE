@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zincir — durak başına ayrı dosya, sırayla</title>
+<style>
+  html,body{margin:0;background:#000;color:#eee;font:13px system-ui}
+  #sahne{position:fixed;inset:0;overflow:hidden;z-index:1}
+  #sahne video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+  #sahne video.etkin{display:block}
+  #boslu{position:relative;z-index:0}
+  #hud{position:fixed;left:8px;top:8px;z-index:3;background:#0009;padding:4px 6px;font:11px ui-monospace;white-space:pre}
+</style></head><body>
+<div id="sahne"></div><div id="boslu"></div><div id="hud"></div>
+<script>
+/* DURAK BASINA AYRI DOSYA — biri oynarken sonraki iniyor.
+   Sorulan soru: on yukleme yavas hatta YETISIYOR MU? */
+const Q = new URLSearchParams(location.search);
+const KUME    = Q.get('kume')   || 'mobil';      // mobil | masaustu
+const ADET    = +(Q.get('adet') || 10);
+const ONDEN   = +(Q.get('onden')|| 1);           // kac durak onden inecek
+const TUT     = +(Q.get('tut')  || 2);           // gerideki kac durak bellekte kalsin
+const SN      = +(Q.get('sn')   || 5);           // durak suresi
+const FPS     = 24, PX_PER_SN = 300;
+
+const sahne = document.getElementById('sahne'), hud = document.getElementById('hud');
+const TOPLAM_SN = ADET * SN;
+document.getElementById('boslu').style.height = (TOPLAM_SN*PX_PER_SN + innerHeight) + 'px';
+
+performance.setResourceTimingBufferSize(4000);
+const OL = window.OL = {
+  kume:KUME, adet:ADET, onden:ONDEN, hazir:false, kayitAcik:false,
+  raf:[], istek:[], sunum:[], takilma:[], durakIz:[], varis:[], birakilan:0, uyari:[]
+};
+const kaydet = (d,k) => { if (OL.kayitAcik) d.push(k); };
+
+const duraklar = Array.from({length:ADET}, (_,i) => ({ i, el:null, durum:'yok', tIstek:null, tHazir:null }));
+
+function yolu(i){ return `malzeme/zincir/${KUME}/d${i}.mp4`; }
+
+function yukle(i){
+  const d = duraklar[i];
+  if (!d || d.durum !== 'yok') return;
+  d.durum = 'iniyor'; d.tIstek = performance.now();
+  const v = document.createElement('video');
+  v.src = yolu(i); v.muted = true; v.playsInline = true; v.preload = 'auto';
+  v.setAttribute('disableremoteplayback','');
+  v.addEventListener('error', () => { d.durum = 'hata'; OL.uyari.push('durak '+i+' hata'); });
+  // "hazir" = TAM TAMPON. Sarma ancak o zaman kopmadan calisir.
+  const bak = setInterval(() => {
+    if (!v.duration) return;
+    let k = 0; for (let j=0;j<v.buffered.length;j++) k += v.buffered.end(j)-v.buffered.start(j);
+    if (k >= v.duration - 0.15){
+      d.durum = 'hazir'; d.tHazir = performance.now();
+      OL.durakIz.push({ i, istek:Math.round(d.tIstek), hazir:Math.round(d.tHazir), sure:Math.round(d.tHazir-d.tIstek) });
+      clearInterval(bak);
+    }
+  }, 50);
+  if ('requestVideoFrameCallback' in v){
+    const f = (now, md) => { kaydet(OL.sunum, { t:now, durak:i, kare:Math.round(md.mediaTime*FPS) }); v.requestVideoFrameCallback(f); };
+    v.requestVideoFrameCallback(f);
+  }
+  sahne.appendChild(v);
+  d.el = v;
+}
+
+function birak(i){
+  const d = duraklar[i];
+  if (!d || !d.el) return;
+  d.el.removeAttribute('src'); d.el.load(); d.el.remove();
+  d.el = null; d.durum = 'yok'; d.tIstek = null; d.tHazir = null;
+  OL.birakilan++;
+}
+
+let etkin = null;
+function etkinYap(v){ if (etkin===v) return; if (etkin) etkin.classList.remove('etkin'); etkin=v; if (v) v.classList.add('etkin'); }
+
+let takilmaBas = null, takilmaDurak = -1, sonDurak = -1;
+function dongu(ts){
+  kaydet(OL.raf, ts);
+  const t = scrollY / PX_PER_SN;
+  const i = Math.max(0, Math.min(ADET-1, Math.floor(t / SN)));
+  const yerel = Math.max(0, Math.min(SN, t - i*SN));
+
+  // on yukleme: bulundugumuz durak + ONDEN kadar ilerisi
+  for (let k = i; k <= Math.min(ADET-1, i+ONDEN); k++) yukle(k);
+  // geride kalanlari birak (bellek siniri)
+  for (let k = 0; k < i-TUT; k++) if (duraklar[k].el) birak(k);
+
+  const d = duraklar[i];
+  if (d.el) etkinYap(d.el);
+
+  // TAKILMA: durakta duruyoruz ama tam tampon yok
+  const takili = !d.el || d.durum !== 'hazir';
+  if (takili && takilmaBas === null){ takilmaBas = ts; takilmaDurak = i; }
+  if (!takili && takilmaBas !== null){
+    kaydet(OL.takilma, { bas_durak:takilmaDurak, bit_durak:i, ms:Math.round(ts-takilmaBas) });
+    takilmaBas = null;
+  }
+  // VARIS: her durağa girerken hazır mıydı — asıl olcut bu
+  if (i !== sonDurak){ kaydet(OL.varis, { durak:i, hazirdi: !takili }); sonDurak = i; }
+
+  if (d.el && d.durum === 'hazir'){
+    const istenen = Math.min(SN*FPS-1, Math.round(yerel*FPS));
+    kaydet(OL.istek, { t:ts, durak:i, kare:istenen });
+    const hedef = istenen/FPS + 1/(2*FPS);
+    if (Math.abs(d.el.currentTime - hedef) > 1/(2*FPS)) d.el.currentTime = hedef;
+  }
+  hud.textContent = `${KUME} onden:${ONDEN}\ndurak ${i}/${ADET-1} ${d.durum}  t=${t.toFixed(1)}/${TOPLAM_SN}\ntakilma ${OL.takilma.length}`;
+  requestAnimationFrame(dongu);
+}
+
+(async () => {
+  yukle(0);
+  for (let k=1; k<=ONDEN; k++) yukle(k);
+  const t0 = performance.now();
+  await new Promise(r => { const b = setInterval(() => { if (duraklar[0].durum === 'hazir' || performance.now()-t0 > 120000){ clearInterval(b); r(); } }, 50); });
+  OL.ilkDurakHazirMs = Math.round(performance.now()-t0);
+  OL.hazir = true;
+  requestAnimationFrame(dongu);
+})();
+
+window.SUPUR = (ms, geri) => new Promise(res => {
+  const H = document.documentElement.scrollHeight - innerHeight;
+  const t0 = performance.now(); let sapma = 0, adim = 0;
+  const ad = () => {
+    const u = Math.min(1, (performance.now()-t0)/ms);
+    const y = Math.round((geri ? 1-u : u) * H);
+    scrollTo(0, y); adim++;
+    if (Math.abs(scrollY - y) > 1.5) sapma++;
+    if (u < 1) requestAnimationFrame(ad); else res({ sapma, adim, H, sonY:scrollY });
+  };
+  requestAnimationFrame(ad);
+});
+window.SIFIRLA = () => { OL.raf=[]; OL.istek=[]; OL.sunum=[]; OL.takilma=[]; OL.varis=[]; OL.kayitAcik=true; };
+window.DUR = () => { OL.kayitAcik=false;
+  if (takilmaBas !== null){ OL.takilma.push({ bas_durak:takilmaDurak, bit_durak:sonDurak, ms:Math.round(performance.now()-takilmaBas), acik:true }); takilmaBas=null; }
+  return OL.takilma.length; };
+</script>
+</body></html>

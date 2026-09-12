@@ -1,0 +1,24 @@
+---
+/* 9 hizmet sayfası (EN) — aynı gövde parçası, dil='en'. Şema rota turu
+   kapanışında @graph'a çevrildi (hizmetSema, TR sayfayla aynı sebep). */
+import { getCollection } from 'astro:content';
+import Temel from '../../../layouts/Temel.astro';
+import HizmetGovde from '../../../parcalar/HizmetGovde.astro';
+import { icerik, T, KOK, kes, basAd, sl } from '../../../icerik';
+import { hizmetSema } from '../../../sema.mjs';
+
+export async function getStaticPaths() {
+  return (await getCollection('hizmetler')).map(e => ({ params: { slug: e.id }, props: { s: e.data } }));
+}
+const { s } = Astro.props;
+const canon = sl(`${KOK}/en/hizmetler/${s.slug}`);
+const baslik = basAd(s.det.h, 'en');
+const aciklama = kes(s.text, 'en');
+const sema = hizmetSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' }, s);
+---
+<Temel dil="en" baslik={baslik}
+  aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/hizmetler/${s.slug}`)} helefen={canon}
+  sema={sema} etiket={s.tag} genis>
+  <HizmetGovde s={s} dil="en" />
+</Temel>

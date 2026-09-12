@@ -1,0 +1,59 @@
+/* KESME HAZIRLIĞI (Faz 4) — bülten RSS üreteci.
+   Eski üreteç kök build.js `rss()` (408): rss 2.0, kanal başlığı/
+   açıklaması/dili ve item alanları (title/link/guid/pubDate 09:00Z/
+   description) BİREBİR. TR-only — eski üreteç de tekti.
+
+   Bilinçli sapma: item sırası TARİHE göre yeni→eski — eski üreteç
+   content.json'un ham sırasını basıyordu, o sıra kronolojik değil
+   (bülten dizini turunda ölçüldü); dizinle aynı karar. Okuyucular
+   pubDate'e göre sıralar, alan değerleri birebir. Bekçisi R8'in rss
+   ayağı (yazı seti ↔ item seti).
+
+   EGIK CIZGI (6 Eyl 2026 — kesme dogrulama listesi madde 3). Adresler
+   `sl()`siz yaziliyordu: kanal `<link>`i ve 7 item'in link/guid'i
+   egik cizgisiz cikiyor, canlida HEPSI 301 donuyordu (sitemap'in 58
+   loc'u 200'ken — olculdu). H29 turu bunu KACIRDI cunku bekcinin
+   kapsami `sayfalar` + sitemap.xml + _headers'ti, rss.xml orada yok;
+   kapsam bu turda genisletildi.
+   KABUL EDILEN YAN ETKI: `<guid>` degeri degisiyor, yani RSS
+   okuyuculari 7 yaziyi bir kez daha "yeni" gosterir. Kesme yeni
+   oldugu icin abone tabani yok denecek kadar az; tutarlilik kazanci
+   kalici, gosterim maliyeti tek seferlik. */
+import type { APIRoute } from 'astro';
+import { getCollection } from 'astro:content';
+import { KOK, T, sl } from '../../icerik';
+
+/* RSS TAVANI 50 (Enes, 9 Eyl 2026). ONCEDEN TAVANSIZDI: 200 yazida 200
+   item / 111 KB, 10.000'de 5,5 MB — ve besleme HER istekte butun olarak
+   iniyor. 50, haber sitesi pratigi; dosya ~28 KB'da sabitlenir.
+   BESLEME = SON N, ARSIV DEGIL: gecmisi tasiyan yuzey sitemap ve sayfali
+   dizin (/bulten/sayfa/N), RSS degil.
+   KAPI NOTU: R8 kurali "rss item seti = posts seti" diyordu; tavanla
+   birlikte kural "= EN YENI min(50, posts)" olarak guncellendi. Ikisi
+   birlikte degismeseydi 51. yazida deploy duserdi. */
+export const RSS_TAVAN = 50;
+
+export const GET: APIRoute = async () => {
+  /* ESIT TARIHTE SLUG ARTAN (11 Eyl 2026): tavan sinirinda ayni tarihli
+     iki kayit varsa "hangi 50"yi dosya sirasi seciyordu; R8 ayni anahtarla
+     (tarih azalan, slug artan) kiyaslar ve sirayi da sinar. */
+  const yazilar = (await getCollection('yazilar')).map(e => e.data)
+    .sort((a: any, b: any) => String(b.date).localeCompare(String(a.date)) || String(a.slug).localeCompare(String(b.slug)))
+    .slice(0, RSS_TAVAN);
+  const esc = (s: unknown) => String(s == null ? '' : s).replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  return new Response(
+    '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n' +
+    `  <title>QANATONE Bülten</title>\n  <link>${sl(`${KOK}/bulten`)}</link>\n` +
+    '  <description>Yapay zeka, arama ve talep yonetiminde isine dokunan gelismeler.</description>\n' +
+    '  <language>tr</language>\n' +
+    yazilar.map((p: any) => '  <item>\n' +
+      `    <title>${esc(T(p.title, 'tr'))}</title>\n` +
+      `    <link>${sl(`${KOK}/bulten/${p.slug}`)}</link>\n` +
+      `    <guid>${sl(`${KOK}/bulten/${p.slug}`)}</guid>\n` +
+      `    <pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate>\n` +
+      `    <description>${esc(T(p.lede, 'tr'))}</description>\n  </item>`).join('\n') +
+    '\n</channel></rss>\n',
+    { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });
+};

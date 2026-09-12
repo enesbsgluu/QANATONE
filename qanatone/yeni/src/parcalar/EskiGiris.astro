@@ -1,0 +1,99 @@
+---
+/* ESKI GIRIS GOMUMU (GECE TUR 2 — birlesme, 1-2 Eyl 2026)
+   Devirin hedefi artik iframe DEGIL: eski sitenin nav + hero bolumu bu
+   parcayla filmin govdesine gomulur. KOPYA DEGIL, KAYNAGA BAGLI: kok
+   index.html DERLEMEDE okunur, <style> blogu + <nav id=nav> + <section
+   id=hero> + tubes kurulum ayari regex'le cekilir — eski site degisirse
+   bu gomum de degisir; cekim bozulursa DERLEME KIRMIZI.
+
+   IZOLASYON: Declarative Shadow DOM. Eski CSS (150 KB, global kurallar)
+   /yeni kabugunun stiline CARPMASIN diye shadow root'a gomulur; JS'siz
+   calisir (tarayici DSD'yi ayristirma aninda kurar). Shadow'da :root ve
+   html/body seciciler eslesmez — :host'a cevrilir (degiskenler + zemin
+   tipografisi tasinir). Yollar koke mutlaklanir (sayfa /film/,
+   goreli img/ kirilirdi — pencere turu /varlik dersi gibi yol tuzagi).
+
+   TEMBELLIK KORUNUR: hands gorselleri fetchpriority=high geliyordu —
+   film sayfasinin LCP'sine carpardi; lazy + low'a cevrilir. Govde
+   fl-hazirla'ya kadar visibility:hidden: gizli tembel gorsel istek
+   atmaz (prolog dersi), goruntuler ancak hazirlikta iner.
+
+   TUBES: kurulum AYARI kokten cekilip data-tubes'a basilir (Astro attr
+   escape'i guvenli); baslatma filmin surucusunde, devir TAMAMLANINCA
+   (efekt penceresine binmesin — t-mo-soft dersinin karsiligi). Saat
+   (#clock) statik 00:00 kalir, heroCta dugmesi JS'siz olu — bilinen
+   eksikler, gorsel hukum sabaha. */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/* KOK'U ISARETTEN BUL, SAYARAK DEGIL (10 Eyl 2026, Kademe 3 sondaji).
+   Burada `new URL('../../../index.html', import.meta.url)` yaziyordu ve
+   o uc nokta Astro'nun IC derleme dizininin derinligine bagliydi:
+   statikte parca `dist/chunks/astro/` altina dusuyor ve uc yukari kok
+   oluyor. Adaptor eklenince parca `.netlify/build/chunks/astro/` altina
+   dustu, ayni uc nokta baska bir yere cikti ve derleme ENOENT ile
+   coktu — hem de bu sayfanin hibritle hicbir ilgisi yokken. Sayi degil
+   ISARET aranir: kokte hem `index.html` hem `content.json` durur. */
+const kokBul = () => {
+  let d = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 12; i++) {
+    if (fs.existsSync(path.join(d, 'index.html')) && fs.existsSync(path.join(d, 'content.json'))) return d;
+    const ust = path.dirname(d);
+    if (ust === d) break;
+    d = ust;
+  }
+  throw new Error('EskiGiris: kök bulunamadı (index.html + content.json işareti)');
+};
+
+const ham = fs.readFileSync(path.join(kokBul(), 'index.html'), 'utf8');
+const stilM = /<style>([\s\S]*?)<\/style>/.exec(ham);
+const navM = /<nav id="nav">[\s\S]*?<\/nav>/.exec(ham);
+const heroM = /<section id="hero">[\s\S]*?<\/section>/.exec(ham);
+const tubesM = /app=F\(cv,(\{[\s\S]*?\})\);/.exec(ham);
+if (!stilM || !navM || !heroM || !tubesM)
+  throw new Error('EskiGiris: kök index.html bölümleri çekilemedi (style/nav/hero/tubes) — kaynak değişti mi?');
+
+const yolDuzelt = (h: string) => h
+  .replace(/(src|srcset)="img\//g, '$1="/img/')
+  .replace(/(href)="(?!https?:|\/|#)/g, '$1="/');
+const markup = yolDuzelt(navM[0] + heroM[0])
+  .replace(/ fetchpriority="high"/g, ' fetchpriority="low"')
+  /* G1: gomudeki HER gorsel tembel isaretli olsun (gizli govdede istek
+     atmaz; hazirlikta iner) — kaynakta isaretsiz olanlar dahil */
+  .replace(/<img (?![^>]*loading=)/g, '<img loading="lazy" ')
+  .replace(/ loading="lazy" loading="lazy"/g, ' loading="lazy"');
+const stil = stilM[1]
+  /* YORUMLAR SOYULUR (4 Eyl): kaynagin yorumlari GSAP/Lenis/Manrope
+     anlatiyor — kapi "ciktida 0 eslesme" yorumu da sayar; ustelik gomuye
+     bayt tasiyorlar (kunye kaynakta kalir, ciktiya girmez ilkesi). */
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/url\((['"]?)img\//g, 'url($1/img/')
+  /* TUR 4 (2 Eyl 2026): eski sitenin kalici will-change'leri (#boot.out, .hand,
+     .hfloat, .mktrack, .qttrack) gomuye tasinmaz — gomude eski JS calismaz,
+     bu katmanlar statiktir; kalici will-change sizintisi 0 kapisi. */
+  .replace(/will-change:[^;}]+;?/g, '')
+  .replace(/:root\b/g, ':host')
+  .replace(/\bhtml,body\b/g, ':host')
+  .replace(/(^|\})\s*body\b/g, '$1 :host')
+  .replace(/(^|\})\s*html\b/g, '$1 :host')
+  /* kapi: uretilen sayfada 'iframe' 0 eslesme — gomulen stilde vitrin
+     bolumunun OLU kurali (.stlvw iframe) kaliyordu; iframe secicili
+     kurallar dusurulur (hero hicbirini kullanmiyor). */
+  .replace(/[^{}]*iframe[^{}]*\{[^}]*\}/g, '')
+  /* SOKUM VE TASIMA TURU (4 Eyl): tipografi Uncut Sans — gomulen eski
+     stildeki CDN aileleri (Manrope/Inter/JetBrains) gomude zaten
+     yuklenmiyordu (CDN bagi gomulmez, sisteme dusuyordu); kabugun
+     ailesine baglanir. Playfair hero basligi olduğu gibi kalir. */
+  .replace(/'?(Manrope|Inter|JetBrains Mono)'?\s*,\s*((system-ui|ui-monospace)\s*,\s*)?(sans-serif|monospace)/g, "'Uncut Sans',system-ui,sans-serif")
+  .replace(/font-family:\s*'?(Manrope|Inter|JetBrains Mono)'?(?=[;}])/g, "font-family:'Uncut Sans',system-ui,sans-serif")
+  /* kapi: gsap/lenis 0 eslesme — gomulen stilde Lenis'in kaydirma
+     sinif kurallari (html.lenis*) kaliyordu; motor yok, kural olu. */
+  .replace(/[^{}]*\.lenis[^{}]*\{[^}]*\}/g, '');
+---
+<div class="fl-eski-giris" id="fl-eski" data-tubes={tubesM[1]}>
+  <template shadowrootmode="open">
+    <style is:inline set:html={stil}></style>
+    <Fragment set:html={markup} />
+  </template>
+</div>

@@ -1,0 +1,1884 @@
+{
+ "_": "yeni/film/olc-soguk-regim.cjs — TESHIS, KAPI DEGIL. Ayni sayfanin ayni gun iki farkli rejimde okunmasinin sebebini adlandirmak icin: animasyon kosuyor mu, gorsel tur icinde iniyor mu, motorun hangi asamasi yiyor.",
+ "olcum": "2026-09-04T18:50:18.251Z",
+ "tarayici": "brave",
+ "sayfa": "/hizmetler/finans/",
+ "kol": "K",
+ "tekrar": 5,
+ "ozet": {
+  "kare_saniye_medyan": 109.5,
+  "p95_medyan": 16.6,
+  "kacirilan_medyan": 1,
+  "takilma_toplam_medyan": 133,
+  "kaydirmali_anim_medyan": 23,
+  "kaydirmali_kosan_medyan": 2,
+  "gorsel_tur_icinde_medyan": 0,
+  "layout_medyan": 567,
+  "layout_sn_medyan": 0.1606,
+  "stil_medyan": 1520,
+  "stil_sn_medyan": 3.1944,
+  "betik_sn_medyan": 0.1714,
+  "gorev_sn_medyan": 5.9504
+ },
+ "kosum": [
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1499,
+   "tur_ms": 13829,
+   "p95_ms": 16.6,
+   "medyan_ms": 8.3,
+   "kare_saniye": 108.4,
+   "kacirilan_kare": 1,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 92,
+   "takilma_tek_max_ms": 92,
+   "takilmalar": [
+    {
+     "ms": 91.6,
+     "y": 9975
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 38,
+    "kosan": 9,
+    "kaydirmali": 23,
+    "kaydirmali_kosan": 2,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1200,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1800,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 2400,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 3000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 3600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 5400,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 8400,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11358,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  div.sdsec.qt-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.sdsec.mk-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 40,
+    "kosan_en_yuksek": 9,
+    "kaydirmali_en_yuksek": 23,
+    "kaydirmali_kosan_en_yuksek": 2
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     187.7,
+     279.8,
+     288.7,
+     290.7,
+     292.9
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 540,
+    "RecalcStyleCount": 1501,
+    "LayoutDuration": 0.1543,
+    "RecalcStyleDuration": 3.1776,
+    "ScriptDuration": 0.1673,
+    "TaskDuration": 5.9504,
+    "JSHeapUsedSize": 355668
+   },
+   "taban": {
+    "sure_ms": 3007,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11357.599609375,
+   "toplam_px": 11358,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1520,
+   "tur_ms": 13887,
+   "p95_ms": 16.6,
+   "medyan_ms": 8.3,
+   "kare_saniye": 109.5,
+   "kacirilan_kare": 1,
+   "takilma_sayi": 2,
+   "takilma_toplam_ms": 133,
+   "takilma_tek_max_ms": 83,
+   "takilmalar": [
+    {
+     "ms": 50.1,
+     "y": 4876
+    },
+    {
+     "ms": 83.3,
+     "y": 9967
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 36,
+    "kosan": 7,
+    "kaydirmali": 23,
+    "kaydirmali_kosan": 2,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1200,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1800,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 2400,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 3000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 3600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 5400,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 8400,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11358,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  div.sdsec.qt-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.sdsec.mk-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 40,
+    "kosan_en_yuksek": 9,
+    "kaydirmali_en_yuksek": 23,
+    "kaydirmali_kosan_en_yuksek": 2
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     202.2,
+     290.9,
+     317.7,
+     319.9,
+     321.8
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 568,
+    "RecalcStyleCount": 1523,
+    "LayoutDuration": 0.1593,
+    "RecalcStyleDuration": 3.1944,
+    "ScriptDuration": 0.1714,
+    "TaskDuration": 6.0527,
+    "JSHeapUsedSize": 383504
+   },
+   "taban": {
+    "sure_ms": 3007,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11357.599609375,
+   "toplam_px": 11358,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1532,
+   "tur_ms": 13821,
+   "p95_ms": 16.6,
+   "medyan_ms": 8.3,
+   "kare_saniye": 110.8,
+   "kacirilan_kare": 1,
+   "takilma_sayi": 1,
+   "takilma_toplam_ms": 92,
+   "takilma_tek_max_ms": 92,
+   "takilmalar": [
+    {
+     "ms": 91.6,
+     "y": 9972
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 38,
+    "kosan": 9,
+    "kaydirmali": 23,
+    "kaydirmali_kosan": 2,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1200,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1800,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 2400,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 3000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 3600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 5400,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 8400,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 40,
+     "kosan": 9,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11358,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  div.sdsec.qt-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.sdsec.mk-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 40,
+    "kosan_en_yuksek": 9,
+    "kaydirmali_en_yuksek": 23,
+    "kaydirmali_kosan_en_yuksek": 2
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     524.1,
+     617.7,
+     626.3,
+     628.7,
+     631.2
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 583,
+    "RecalcStyleCount": 1534,
+    "LayoutDuration": 0.1606,
+    "RecalcStyleDuration": 3.1714,
+    "ScriptDuration": 0.1751,
+    "TaskDuration": 6.016,
+    "JSHeapUsedSize": 869392
+   },
+   "taban": {
+    "sure_ms": 3007,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11357.599609375,
+   "toplam_px": 11358,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1421,
+   "tur_ms": 13921,
+   "p95_ms": 16.7,
+   "medyan_ms": 8.3,
+   "kare_saniye": 102.1,
+   "kacirilan_kare": 1,
+   "takilma_sayi": 2,
+   "takilma_toplam_ms": 142,
+   "takilma_tek_max_ms": 83,
+   "takilmalar": [
+    {
+     "ms": 58.3,
+     "y": 387
+    },
+    {
+     "ms": 83.4,
+     "y": 9971
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 37,
+    "kosan": 8,
+    "kaydirmali": 23,
+    "kaydirmali_kosan": 2,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1200,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1800,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 2400,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 3000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 3600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 5400,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 8400,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11358,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  div.sdsec.qt-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.sdsec.mk-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 36,
+    "kosan_en_yuksek": 7,
+    "kaydirmali_en_yuksek": 23,
+    "kaydirmali_kosan_en_yuksek": 2
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     188.4,
+     285.9,
+     317.6,
+     317.1,
+     323.6
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 480,
+    "RecalcStyleCount": 1423,
+    "LayoutDuration": 0.1726,
+    "RecalcStyleDuration": 3.3958,
+    "ScriptDuration": 0.1536,
+    "TaskDuration": 5.9237,
+    "JSHeapUsedSize": 827784
+   },
+   "taban": {
+    "sure_ms": 3016,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11357.599609375,
+   "toplam_px": 11358,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1518,
+   "tur_ms": 13846,
+   "p95_ms": 16.6,
+   "medyan_ms": 8.3,
+   "kare_saniye": 109.6,
+   "kacirilan_kare": 1,
+   "takilma_sayi": 2,
+   "takilma_toplam_ms": 158,
+   "takilma_tek_max_ms": 108,
+   "takilmalar": [
+    {
+     "ms": 50.1,
+     "y": 8291
+    },
+    {
+     "ms": 108.3,
+     "y": 9952
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 38,
+    "kosan": 9,
+    "kaydirmali": 23,
+    "kaydirmali_kosan": 2,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "paused",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1200,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 1800,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 2400,
+     "toplam": 36,
+     "kosan": 7,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 2
+    },
+    {
+     "y": 3000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 3600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 4800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 5400,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6000,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 6600,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7200,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 7800,
+     "toplam": 36,
+     "kosan": 6,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 1
+    },
+    {
+     "y": 8400,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11358,
+     "toplam": 36,
+     "kosan": 5,
+     "kaydirmali": 23,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  div.sdsec.qt-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.sdsec.mk-kap": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 36,
+    "kosan_en_yuksek": 7,
+    "kaydirmali_en_yuksek": 23,
+    "kaydirmali_kosan_en_yuksek": 2
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     181.1,
+     272.3,
+     279,
+     280.6,
+     282.9
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 5,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 0,
+   "motor": {
+    "LayoutCount": 567,
+    "RecalcStyleCount": 1520,
+    "LayoutDuration": 0.1712,
+    "RecalcStyleDuration": 3.2056,
+    "ScriptDuration": 0.1788,
+    "TaskDuration": 5.8396,
+    "JSHeapUsedSize": 834120
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11357.599609375,
+   "toplam_px": 11358,
+   "tur_tam": true
+  }
+ ]
+}

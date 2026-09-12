@@ -1,0 +1,683 @@
+{
+ "_": "yeni/film/taban.cjs — dikis PSNR'i klip ici kare-basi degisim tabanina gore olculdu. Mutlak PSNR esigi yanlis kirmizi uretiyor.",
+ "olcum": "2026-08-27T16:23:40.807Z",
+ "esik": {
+  "surekli": "delta >= -1 dB",
+  "hafif": "-1 > delta >= -4 dB",
+  "sicrama": "delta < -4 dB"
+ },
+ "ozet": {
+  "surekli": 17,
+  "hafif_sapma": 13,
+  "gercek_sicrama": 8,
+  "gercek_sicrama_dikisler": [
+   "3→4",
+   "4→5",
+   "15→16",
+   "28→29",
+   "29→30",
+   "30→31",
+   "37→38",
+   "38→39"
+  ]
+ },
+ "klip_taban": [
+  {
+   "klip": 1,
+   "cift": [
+    27.28,
+    27.72,
+    28.01
+   ],
+   "taban": 27.72
+  },
+  {
+   "klip": 2,
+   "cift": [
+    18.04,
+    18.04,
+    18.09
+   ],
+   "taban": 18.04
+  },
+  {
+   "klip": 3,
+   "cift": [
+    24.35,
+    24.45,
+    24.94
+   ],
+   "taban": 24.45
+  },
+  {
+   "klip": 4,
+   "cift": [
+    34.61,
+    51.04,
+    49.6
+   ],
+   "taban": 49.6
+  },
+  {
+   "klip": 5,
+   "cift": [
+    26.9,
+    26.94,
+    27.08
+   ],
+   "taban": 26.94
+  },
+  {
+   "klip": 6,
+   "cift": [
+    24.48,
+    24.43,
+    24.49
+   ],
+   "taban": 24.48
+  },
+  {
+   "klip": 7,
+   "cift": [
+    29.07,
+    29.03,
+    28.49
+   ],
+   "taban": 29.03
+  },
+  {
+   "klip": 8,
+   "cift": [
+    22.25,
+    22.12,
+    22.13
+   ],
+   "taban": 22.13
+  },
+  {
+   "klip": 9,
+   "cift": [
+    14.26,
+    13.63,
+    13.71
+   ],
+   "taban": 13.71
+  },
+  {
+   "klip": 10,
+   "cift": [
+    22.11,
+    22.32,
+    22.24
+   ],
+   "taban": 22.24
+  },
+  {
+   "klip": 11,
+   "cift": [
+    22.94,
+    22.75,
+    22.5
+   ],
+   "taban": 22.75
+  },
+  {
+   "klip": 12,
+   "cift": [
+    28.72,
+    27.99,
+    26.37
+   ],
+   "taban": 27.99
+  },
+  {
+   "klip": 13,
+   "cift": [
+    17.45,
+    17.77,
+    18.06
+   ],
+   "taban": 17.77
+  },
+  {
+   "klip": 14,
+   "cift": [
+    22.44,
+    22.79,
+    22.87
+   ],
+   "taban": 22.79
+  },
+  {
+   "klip": 15,
+   "cift": [
+    21.41,
+    21.3,
+    21.08
+   ],
+   "taban": 21.3
+  },
+  {
+   "klip": 16,
+   "cift": [
+    29.59,
+    30.57,
+    30.65
+   ],
+   "taban": 30.57
+  },
+  {
+   "klip": 17,
+   "cift": [
+    26.5,
+    26.35,
+    25.45
+   ],
+   "taban": 26.35
+  },
+  {
+   "klip": 18,
+   "cift": [
+    16.29,
+    15.82,
+    15.43
+   ],
+   "taban": 15.82
+  },
+  {
+   "klip": 19,
+   "cift": [
+    20,
+    20.24,
+    20.62
+   ],
+   "taban": 20.24
+  },
+  {
+   "klip": 20,
+   "cift": [
+    24.71,
+    24.44,
+    24.63
+   ],
+   "taban": 24.63
+  },
+  {
+   "klip": 21,
+   "cift": [
+    26.4,
+    26.17,
+    25.99
+   ],
+   "taban": 26.17
+  },
+  {
+   "klip": 22,
+   "cift": [
+    25.15,
+    25.21,
+    24.98
+   ],
+   "taban": 25.15
+  },
+  {
+   "klip": 23,
+   "cift": [
+    30.25,
+    30.01,
+    30.09
+   ],
+   "taban": 30.09
+  },
+  {
+   "klip": 24,
+   "cift": [
+    26.17,
+    26.08,
+    25.99
+   ],
+   "taban": 26.08
+  },
+  {
+   "klip": 25,
+   "cift": [
+    20.02,
+    20.05,
+    20.05
+   ],
+   "taban": 20.05
+  },
+  {
+   "klip": 26,
+   "cift": [
+    22.47,
+    23.77,
+    24.1
+   ],
+   "taban": 23.77
+  },
+  {
+   "klip": 27,
+   "cift": [
+    18.65,
+    18.63,
+    18.62
+   ],
+   "taban": 18.63
+  },
+  {
+   "klip": 28,
+   "cift": [
+    18.3,
+    18.41,
+    18.44
+   ],
+   "taban": 18.41
+  },
+  {
+   "klip": 29,
+   "cift": [
+    26.49,
+    26.26,
+    25.37
+   ],
+   "taban": 26.26
+  },
+  {
+   "klip": 30,
+   "cift": [
+    32.77,
+    33.23,
+    32.97
+   ],
+   "taban": 32.97
+  },
+  {
+   "klip": 31,
+   "cift": [
+    35.84,
+    57.41,
+    51.21
+   ],
+   "taban": 51.21
+  },
+  {
+   "klip": 32,
+   "cift": [
+    21.25,
+    21.31,
+    21.24
+   ],
+   "taban": 21.25
+  },
+  {
+   "klip": 33,
+   "cift": [
+    28.6,
+    26.86,
+    27.9
+   ],
+   "taban": 27.9
+  },
+  {
+   "klip": 34,
+   "cift": [
+    18.16,
+    18.06,
+    18.13
+   ],
+   "taban": 18.13
+  },
+  {
+   "klip": 35,
+   "cift": [
+    17.96,
+    17.87,
+    17.69
+   ],
+   "taban": 17.87
+  },
+  {
+   "klip": 36,
+   "cift": [
+    16.46,
+    17.5,
+    17.28
+   ],
+   "taban": 17.28
+  },
+  {
+   "klip": 37,
+   "cift": [
+    18.18,
+    17.42,
+    17.58
+   ],
+   "taban": 17.58
+  },
+  {
+   "klip": 38,
+   "cift": [
+    26.83,
+    26.81,
+    26.63
+   ],
+   "taban": 26.81
+  },
+  {
+   "klip": 39,
+   "cift": [
+    33.99,
+    35.74,
+    34.52
+   ],
+   "taban": 34.52
+  }
+ ],
+ "dikis": [
+  {
+   "dikis": "1→2",
+   "psnr": 25.48,
+   "taban": 22.88,
+   "delta": 2.6,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "2→3",
+   "psnr": 17.9,
+   "taban": 21.24,
+   "delta": -3.34,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "3→4",
+   "psnr": 23.66,
+   "taban": 37.02,
+   "delta": -13.36,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "4→5",
+   "psnr": 26.05,
+   "taban": 38.27,
+   "delta": -12.22,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "5→6",
+   "psnr": 27.06,
+   "taban": 25.71,
+   "delta": 1.35,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "6→7",
+   "psnr": 24.01,
+   "taban": 26.76,
+   "delta": -2.75,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "7→8",
+   "psnr": 27.79,
+   "taban": 25.58,
+   "delta": 2.21,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "8→9",
+   "psnr": 21.55,
+   "taban": 17.92,
+   "delta": 3.63,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "9→10",
+   "psnr": 15.2,
+   "taban": 17.98,
+   "delta": -2.78,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "10→11",
+   "psnr": 22.2,
+   "taban": 22.49,
+   "delta": -0.29,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "11→12",
+   "psnr": 22.15,
+   "taban": 25.37,
+   "delta": -3.22,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "12→13",
+   "psnr": 28.5,
+   "taban": 22.88,
+   "delta": 5.62,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "13→14",
+   "psnr": 17.48,
+   "taban": 20.28,
+   "delta": -2.8,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "14→15",
+   "psnr": 22.08,
+   "taban": 22.05,
+   "delta": 0.03,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "15→16",
+   "psnr": 21.39,
+   "taban": 25.94,
+   "delta": -4.55,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "16→17",
+   "psnr": 25.74,
+   "taban": 28.46,
+   "delta": -2.72,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "17→18",
+   "psnr": 26.61,
+   "taban": 21.09,
+   "delta": 5.52,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "18→19",
+   "psnr": 16.25,
+   "taban": 18.03,
+   "delta": -1.78,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "19→20",
+   "psnr": 19.86,
+   "taban": 22.43,
+   "delta": -2.57,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "20→21",
+   "psnr": 24.49,
+   "taban": 25.4,
+   "delta": -0.91,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "21→22",
+   "psnr": 26.27,
+   "taban": 25.66,
+   "delta": 0.61,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "22→23",
+   "psnr": 24.86,
+   "taban": 27.62,
+   "delta": -2.76,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "23→24",
+   "psnr": 28.74,
+   "taban": 28.09,
+   "delta": 0.65,
+   "eski_sinif": "yakin",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "24→25",
+   "psnr": 25.58,
+   "taban": 23.06,
+   "delta": 2.52,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "25→26",
+   "psnr": 19.45,
+   "taban": 21.91,
+   "delta": -2.46,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "26→27",
+   "psnr": 23.9,
+   "taban": 21.2,
+   "delta": 2.7,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "27→28",
+   "psnr": 18.8,
+   "taban": 18.52,
+   "delta": 0.28,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "28→29",
+   "psnr": 18.29,
+   "taban": 22.34,
+   "delta": -4.05,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "29→30",
+   "psnr": 25.35,
+   "taban": 29.62,
+   "delta": -4.27,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "30→31",
+   "psnr": 30.87,
+   "taban": 42.09,
+   "delta": -11.22,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "31→32",
+   "psnr": 32.61,
+   "taban": 36.23,
+   "delta": -3.62,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "32→33",
+   "psnr": 20.99,
+   "taban": 24.57,
+   "delta": -3.58,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "33→34",
+   "psnr": 19.92,
+   "taban": 23.02,
+   "delta": -3.1,
+   "eski_sinif": "SICRAMA",
+   "hukum": "hafif-sapma"
+  },
+  {
+   "dikis": "34→35",
+   "psnr": 18.11,
+   "taban": 18,
+   "delta": 0.11,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "35→36",
+   "psnr": 17.64,
+   "taban": 17.58,
+   "delta": 0.06,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "36→37",
+   "psnr": 16.75,
+   "taban": 17.43,
+   "delta": -0.68,
+   "eski_sinif": "SICRAMA",
+   "hukum": "SUREKLI"
+  },
+  {
+   "dikis": "37→38",
+   "psnr": 18.1,
+   "taban": 22.2,
+   "delta": -4.1,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  },
+  {
+   "dikis": "38→39",
+   "psnr": 26.61,
+   "taban": 30.66,
+   "delta": -4.05,
+   "eski_sinif": "SICRAMA",
+   "hukum": "GERCEK-SICRAMA"
+  }
+ ]
+}

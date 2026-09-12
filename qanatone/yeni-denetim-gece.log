@@ -1,0 +1,68 @@
+
+QANATONE yeni kabuk denetimi — 62 sayfa (+ 1 prototip, ürün kuralları dışında: prototip/giris/index.html)
+
+  ok  sayfa sayısı content.json ile örtüşüyor  62/62
+  ok  F1 · üçüncü parti font/CSS sunucusu yok
+  !!  G1 · her <img> ölçülü + lazy/öncelik işaretli  film/index.html:eager-isaretsiz
+  ok  V1 · istemci veri çekme sıfır (fetch yalnız submit eyleminde yaşar)
+  ok  J1 · JS: ana sayfa ≤ 12800 B · öbür sayfalar ≤ 10240 B  ana 10051 B · öbürlerinin en büyüğü 10196 B
+  ok  F1c · sayfadaki her karakterin alt kümede karşılığı var  89 menzil
+  ok  S1 · title/desc menzilde + canonical + hreflang çifti + şema
+  ok  N1 · göç bekçisi: her sayfa noindex (Faz 4'te tersine döner)
+  ok  P1 · prototip muafiyetinin bedeli: üretilen sayfalardan bağlanmıyor + sitemap dışında    [1 prototip muaf]
+  ok  R1 · hizmetler dizini: her hizmet ad+metin+bağlantı ile ham HTML'de
+  ok  R2 · projeler dizini: her iş ad+metin+rakam+bağlantı ile ham HTML'de
+  ok  R3 · proje detayları: blok+rakam+künye alanları ham HTML'de (7×2 sayfa)
+  ok  R4 · bülten dizini: her yazı ad+lede+tarih+bağlantı ham HTML'de + statik abone formu
+  ok  R5 · sss: her soru+cevap ham HTML'de + FAQPage şeması tam ve kimliği kendi adresinde
+  ok  R6 · süreç: her adım n+ad+anlatım+ölçüm kalemleri + 5 yolculuk etiketi ham HTML'de
+  ok  R7 · otomasyon: akış+gün+sızıntı+huni ham HTML'de, EN metinleri strings.en'den güncel
+  ok  R8 · sitemap loc seti = canonical seti + rss item seti = posts
+  ok  H24 · EN ana: üretilmiş + tek h1 + gzip HTML <= 40960 B  36007 B
+  ok  H0 · ana sayfa üretilmiş (/yeni/)
+  ok  H1 · hareket bütçesi: hareket yalnız sahne/süs öneki + etkileşim
+  ok  H2 · içerik görünür doğar (sahne sınıfında opacity:0/hidden yok)
+  ok  H5 · içerik giriş keyframe'i opaklığa dokunmaz (yalnız transform)
+  ok  H6 · hero elleri mobil kaynaklı + ilk ekran ≤ 307200 B  mobil ilk ekran 27816 B
+  ok  H7 · ana sayfada tek h1  1 adet
+  ok  H10 · göç sahnesi dolgusu `.ana` ile nitelenmiş (özgüllük yenilmiyor)
+  ok  H8 · şerit dikişi: tur sayısı = kaydırma böleni  tur 3 · bölen 3
+  ok  H11 · her sahne hareketinin AYNI seçicide reduced-motion karşılığı var  48 durdurma
+  ok  H9 · şerit alt metinleri tekrarlanmıyor (tekrar turları gizli)  9 ad
+  ok  H12 · ana sayfa betiklerinde kaydirma dinleyicisi ve duzen okumasi yok  8 betik
+  !!  G2 · gorseller kendi alanimizdan (/yeni/) + dosyalar diskte  film/index.html:yabanci:/img/qanatone.webp film/index.html:yabanci:/img/hand-human.webp film/index.html:yabanci:/img/hand-robot.webp
+  ok  H13 · deste kartlari lazy + mobil kaynak <= 744 px  6 kart
+  ok  H14 · mobil baglamda pahali katman yok (filter/backdrop/will-change/golge)  445 sahne kurali tarandi
+  ok  H15 · deste icerigi ham HTML'de tam (6 is x ad/yil/etiket/anlatim)
+  ok  H16 · ic baglantilarin hepsi uretilmis bir sayfaya gidiyor  2596 baglanti
+  ok  H17 · katman icerigi ham HTML'de tam (21 anahtar)
+  ok  H18 · ana sayfa gzip HTML <= 40960 B  36552 B (esik dersi: ~14,6 KB'ta bir RTT, ~29 KB'ta bir RTT daha)
+  ok  H19 · akis seridinde 5 hizmetin adi/cumlesi/baglantisi ham HTML'de
+  ok  T1 · sektor para aritmetigi testleri geciyor (+ .ts ithali yok)  15 gecti · 0 kaldi
+  ok  H20 · sektor panosu ham HTML'de tam (6 sektor)
+  ok  H21 · tespit araci: form + sonuc iskeleti statik, iskele sizintisi yok
+  ok  H22 · soz bandi kapisi (bayrak KAPALI)  3 soz · 0 sayfada bant
+  ok  S2 · ana sayfa semasi: Organization+WebSite+WebPage + #org govdesi  3 tur
+  ok  H23 · perde sozlesmesi (bekletmez · iptal edilir · oturumda bir kez · guvenlikli)
+  ok  H3 · ana sayfa toplam JS ≤ 51200 B  ölçülen 10051 B
+  ok  H4 · süs/kimlik ayrı: cihaz kısıtı yalnız .sus- söndürür
+  ok  F1b · marka fontları kendi alandan + dosyalar diskte  8 yüz
+  ok  R9 · token sadakati: kabuk :root kaynagin :root'uyla ayni  17 token
+  ok  R10 · /hizmetler: dokuz bento karti + kunye + tek vurgulu kart
+  ok  R11 · hizmet detayi: geri bagi + kunye + alti genisleyen kart + iki dugme
+  ok  R12 · prolog sozlesmesi: 7 tembel katman · cumle HTML'de · h1 govdede
+  ok  R14 · prolog A: taban genislik + butce + doku tavani + 3B parcasi ayri  masaustu 589/1229 KB · doku 96 MB · yardimci 1.41/2 MB · mobil 408/450 KB · doku 36 MB · yardimci 0.66/1 MB · gl 4.8/6 KB · isci 19.5/22 KB · metal 10.2/12 KB
+  ok  R13 · kesme adayi dort bolum isaretli ve HALA yerinde  4 bolum
+  ok  R15 - yedek yola dusus sessiz degil: on dal adlandirilmis (9 dusus + ilk-kare izi) + DOM izi  10 dal
+  ok  R16 - yedek yolun surucusu view-timeline'a bagli degil  CSS blogu + JS surucu
+  ok  R17 - takip: ilerleme kare ritminde + durus bildiriliyor + iscide ongoru  uc sart da yerinde
+  ok  R18 - durak 2: maskesiz cizim + bes aralik + ekran kilidi (kesim damgali) + iki sartli birlesme  amblem 18.8/24 KB · maskesiz · birlesme d_uc<=8px · merkez sapmasi %0.0 · gok deligi payi 125px (ikisi de kapi degil)
+  ok  R21 - amblem SDF: derleme aninda + cozunurluk turetilmis + uc/yarik olculmus  masaustu 1216x1216 43.5 KB · uc +0.71 px · yarik 13.84 birim · butce 633/1229 KB · mobil 832x832 25.1 KB · uc +0.00 px · yarik 13.48 birim · butce 433/450 KB
+  ok  R22 - olcum araligi evreleri kapsar + kunye damgasi taze  kapsam 0.00/0.08/0.28/0.44/0.46/0.52/0.54 · damga taze (2 kayit blogu)
+  ok  R19 - nav logosu: uretilmis varlik + kizil paletten + iki hal (delik/beyaz ic)  258x293 · webp 10.8 KB · avif 6.5 KB · medyan L 80.2->80.2 · opak beyaz 0 · kaynak hash tuttu
+  ok  R20 - zaman surucusu: kendi donen dongu + gorunurluk/arka plan/azaltma kapilari  dinlenmede canli (%2,68 piksel/3,6 sn) · oynat true/false/true · arkada 101->9,8 ms/sn
+  ok  FM1 · film iskeleti: 39 sahne kanonla + video src'siz + poster zinciri encode'dan + motor ayrı + CSP blob + dikiş ölçülü + KAPI (4G ilk kare<1,5sn · sınır 4/4 · bellek tavanı)    [4G ilk kare 1269 ms · sınır hazırlığı tam · bellek tepe 33.4 MiB · motor 9.3/10 KB · dikiş mutlak esit/yakin/sicrama 0/1/37 · tabana göre sürekli/hafif/GERÇEK-SIÇRAMA 17/13/8 (3→4,4→5,15→16,28→29,29→30,30→31,37→38,38→39) · yerel ölçüt (min taban) encode/ham SIÇRAMA 0/0 · disk masaüstü 238.3 MiB · mobil 138.3 MiB (kapı değil, rapor)]
+  ok  FM2 · prologu geç: klavyeyle erişilir + sticky kumandada + atlanınca zincir söküm + oturumda bir kez
+
+  60 geçti · 2 kaldı
+  YENİ KABUK DENETİMİ KALDI — yayın çıkmamalı.

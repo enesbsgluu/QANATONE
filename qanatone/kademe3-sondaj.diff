@@ -1,0 +1,92 @@
+--- a/yeni/astro.config.mjs
++++ b/yeni/astro.config.mjs
+@@ -2,6 +2,7 @@
+ 
+ import { fileURLToPath } from 'node:url';
+ import react from '@astrojs/react';
++import netlify from '@astrojs/netlify';
+ 
+ /* PROLOG ANAHTARI BURADA DEGIL — denendi ve OLCUMLE ELENDI (6 Eyl 2026).
+    `vite.define` ile `import.meta.env.PROLOG_ACIK` sabiti gomulup sayfada
+@@ -75,6 +76,11 @@
+   output: 'static',
+   outDir: '../dist',
+ 
++  /* KADEME 3 SONDAJI (10 Eyl 2026) — GECICI. Adaptor varken `output`
++     'static' KALIR: yalniz `export const prerender = false` yazan rota
++     istek aninda uretilir, geri kalan her sey bugunku gibi statiktir. */
++  adapter: netlify(),
++
+   /* CSS SATIR ICINE (19 Agu, hero turunda olculdu): Astro'nun 'auto'
+      esigi ana sayfanin stilini (16 KB ham) disarida birakiyordu ve
+      Lighthouse engelleyici zinciri FCP/LCP'ye 1.200 ms yaziyordu —
+--- a/yeni/src/pages/bulten/[slug].astro
++++ b/yeni/src/pages/bulten/[slug].astro
+@@ -9,10 +9,20 @@
+ import { icerik, T, KOK, kes, basAd, sl } from '../../icerik';
+ import { yaziSema } from '../../sema.mjs';
+ 
+-export async function getStaticPaths() {
+-  return (await getCollection('yazilar')).map(e => ({ params: { slug: e.id }, props: { p: e.data } }));
+-}
+-const { p } = Astro.props;
++/* KADEME 3 SONDAJI (10 Eyl 2026) — GEÇİCİ. Bu tek rota istek anında
++   üretiliyor; ölçülen üç şey: derleme süresi, çıktının statik hâliyle
++   bayt-birebirliği, denetimde kaç kuralın körleştiği. */
++export const prerender = false;
++
++const tum = await getCollection('yazilar');
++const e = tum.find(x => x.id === Astro.params.slug);
++/* 404 REWRITE ILE VERILEMIYOR (10 Eyl 2026 ölçüldü): `Astro.rewrite('/404')`
++   istek anındaki bir rotadan ÖN-ÜRETİLMİŞ bir rotaya gidince SSR
++   bildirisinde o rotanın modülü sayfa işlevi değil — `TypeError:
++   module.page is not a function`, yanıt 500. Boş gövdeli 404 dönülür;
++   adaptörün `notFoundContent`i (ssr.mjs'e gömülü 404 HTML'i) devreye girer. */
++if (!e) return new Response(null, { status: 404 });
++const p = e.data;
+ const canon = sl(`${KOK}/bulten/${p.slug}`);
+ const baslik = basAd(p.title);
+ const aciklama = kes(p.lede);
+--- a/yeni/package.json
++++ b/yeni/package.json
+@@ -7,6 +7,7 @@
+     "build": "node kabuk-derle.cjs && astro build"
+   },
+   "dependencies": {
++    "@astrojs/netlify": "^6.6.5",
+     "@astrojs/react": "^6.0.4",
+     "@types/react": "^19.2.18",
+     "@types/react-dom": "^19.2.4",
+--- a/yeni/src/parcalar/EskiGiris.astro
++++ b/yeni/src/parcalar/EskiGiris.astro
+@@ -24,8 +24,29 @@
+    (#clock) statik 00:00 kalir, heroCta dugmesi JS'siz olu — bilinen
+    eksikler, gorsel hukum sabaha. */
+ import fs from 'node:fs';
++import path from 'node:path';
++import { fileURLToPath } from 'node:url';
+ 
+-const ham = fs.readFileSync(new URL('../../../index.html', import.meta.url), 'utf8');
++/* KOK'U ISARETTEN BUL, SAYARAK DEGIL (10 Eyl 2026, Kademe 3 sondaji).
++   Burada `new URL('../../../index.html', import.meta.url)` yaziyordu ve
++   o uc nokta Astro'nun IC derleme dizininin derinligine bagliydi:
++   statikte parca `dist/chunks/astro/` altina dusuyor ve uc yukari kok
++   oluyor. Adaptor eklenince parca `.netlify/build/chunks/astro/` altina
++   dustu, ayni uc nokta baska bir yere cikti ve derleme ENOENT ile
++   coktu — hem de bu sayfanin hibritle hicbir ilgisi yokken. Sayi degil
++   ISARET aranir: kokte hem `index.html` hem `content.json` durur. */
++const kokBul = () => {
++  let d = path.dirname(fileURLToPath(import.meta.url));
++  for (let i = 0; i < 12; i++) {
++    if (fs.existsSync(path.join(d, 'index.html')) && fs.existsSync(path.join(d, 'content.json'))) return d;
++    const ust = path.dirname(d);
++    if (ust === d) break;
++    d = ust;
++  }
++  throw new Error('EskiGiris: kök bulunamadı (index.html + content.json işareti)');
++};
++
++const ham = fs.readFileSync(path.join(kokBul(), 'index.html'), 'utf8');
+ const stilM = /<style>([\s\S]*?)<\/style>/.exec(ham);
+ const navM = /<nav id="nav">[\s\S]*?<\/nav>/.exec(ham);
+ const heroM = /<section id="hero">[\s\S]*?<\/section>/.exec(ham);

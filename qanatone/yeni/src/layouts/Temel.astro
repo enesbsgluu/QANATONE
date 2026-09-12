@@ -1,0 +1,396 @@
+---
+/* Ortak kabuk. Baş sözleşmesi: title/description/canonical/hreflang/şema
+   mevcut sitedekiyle eşdeğer; kesmeye kadar noindex (N1) ve canonical
+   canlı kök karşılığına (kopya içerik doğmaz).
+
+   SÖKÜM VE TAŞIMA TURU (4 Eyl 2026, Enes kararı) — eski sitenin ORTAK
+   KABUĞU birebir geri geldi: perde (58 sayfanın hepsinde; film hariç),
+   yıldız tuvali, grain, ajan imleci, üç sütunlu footer + bit damgası +
+   alt satır. Markup kaynak kök index.html 4621-4629 (katmanlar) ve
+   5478-5512 (footer). Hareket dili YENİ: rAF katmanları kabuk/efekt.js
+   (dinamik ithal, boşta), GSAP/Lenis yok. Panel anahtarları
+   (content.json theme.motion) derlemede <html> sınıfı/verisi olur —
+   eskide applyTheme çalışma anında basıyordu (7257-7276).
+   `kabuk={false}`: film sayfası — kendi tam ekran sahnesi, kabuk
+   katmanları (yıldız/grain/imleç) ve perde orada doğmaz (prolog kapanış
+   tabloları kabuksuz ölçüldü; footer kalır). */
+import '../stil/aile.css';
+import '../stil/font.css';
+import '../stil/temel.css';
+import '../stil/kabuk.css';
+import Nav from '../parcalar/Nav.astro';
+import Perde from '../parcalar/Perde.astro';
+import LeadKutu from '../parcalar/LeadKutu.astro';
+import { icerik, T, KOK, OG_KART, sl } from '../icerik';
+import sayfalarVeri from '../veri/sayfalar.json';
+import { doluKaynaklar } from '../sayfalama';
+
+interface Props {
+  dil?: 'tr' | 'en';
+  baslik: string;
+  aciklama: string;
+  canonical: string;          /* canlı kök karşılığı */
+  heleftr?: string; helefen?: string;  /* hreflang çifti (canlı kök) */
+  sema?: object | null;
+  etiket?: string;            /* başlıktaki rozet (ör. GEO) */
+  /* `genis`: gövde sütununu kaynağın `.wrap` ölçüsüne açar (max 1280 +
+     clamp(20,4vw,40) oluk = 1440'ta 1200 px içerik). Sadakat turu, 22 Ağu:
+     /projeler arşivinin sütun sayısı KABIN genişliğinden türüyor (kaynak
+     11056 `host.clientWidth`), 800 px'lik varsayılan gövdede o hesap
+     kaynaktakinin yarısına düşüyordu. Opt-in — başka sayfa etkilenmez. */
+  genis?: boolean;
+  perde?: boolean;            /* karşılama perdesi (varsayılan var) */
+  kabuk?: boolean;            /* yıldız/grain/imleç katmanları (varsayılan var) */
+  /* lead formu footer'ın önünde (kaynak: her rotada en sonda, 11742). Sayfa
+     formu kendi gövdesinde basıyorsa (SILIletisim: ana, /hizmetler) false. */
+  lead?: boolean;
+  /* SAYFA BASINA INDEKS KAPISI (6 Eyl 2026). Bugun N1 geregi HER sayfa
+     noindex; kesme adimi 5'te o kural tersine doner. Ama bazi sayfalar
+     kesmeden SONRA da indekslenmemeli — tesekkur sayfasi gibi: donusum
+     ucu, arama sonucunda gorunmesi anlamsiz ve dogrudan girilirse yaniltir.
+     `indeks={false}` o sayfalari kalici olarak disarida tutar; kesmede
+     asagidaki `kesmeOncesi` yarisi duser, bu yari KALIR. */
+  indeks?: boolean;
+}
+const { dil = 'tr', baslik, aciklama, canonical,
+        heleftr, helefen, sema = null, etiket, genis = false,
+        perde = true, kabuk = true, lead = true, indeks = true } = Astro.props;
+
+/* Markdown esinin adresi KANONIKTEN turer — sayfa yolu ikinci kez
+   yazilmaz. `/hizmetler/seo/` -> `/hizmetler/seo.md`, kok -> `/index.md`.
+   Uretecin (ajan-hatti.mjs) yazdigi adin AYNISI; bekci T3 ikisini de
+   ayni kapsamda tutuyor.
+
+   KOK DALI 6 EYL 2026'DA EKLENDI — CANLI HATAYDI. Onceki satir
+   `canonical.replace(/\/$/, '') + '.md'` idi ve yukaridaki yorum kok
+   kuralini ZATEN YAZIYORDU; kod onu uygulamiyordu. Ana sayfada sonuc:
+     href="https://www.qanatone.com.md"
+   `.md` Moldova'nin alan adi uzantisi — yani her ajana SAHIBI OLMADIGIMIZ
+   bir alan adi gosteriliyordu (olculdu: o konak hic cozulmuyor). Gercek
+   dosya `/index.md`; uretec (ajan-hatti.mjs:288) kok dalini DOGRU
+   yaziyordu, ilan eden taraf yazmiyordu — bu deponun tekrar eden
+   "uretici ile tuketici ayristi" hatasi, bu kez kokte.
+   NEDEN KIMSE GORMEDI: T3 beklenen adresi AYNI FORMULU KOPYALAYARAK
+   uretiyordu, yani hatayi tekrarlayip onayliyordu. Kural artik formul
+   kopyalamiyor, ILAN EDILEN ADRESIN DOSYASI VAR MI diye bakiyor. */
+const mdAdres = new URL(canonical).pathname === '/'
+  ? canonical + 'index.md'
+  : canonical.replace(/\/$/, '') + '.md';/* KESME ANAHTARI — adim 5'te `false` olur ve N1 ters yone cevrilir.
+   Tek satirda durmasinin sebebi: kesme gunu aranacak yer belli olsun. */
+const kesmeOncesi = false;   /* KESME YAPILDI 6 Eyl 2026 — kosulsuz noindex DUSTU; sayfa basina indeks={false} KALDI */
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const en = dil === 'en';
+/* HAREKET ACMA DUGMESI · BAS BETIGI (11 Eyl 2026, Enes karari).
+   Windows'ta animasyonlari kapali ziyaretcide Chrome prefers-reduced-motion
+   bildiriyor ve site butun hareketi kapatiyordu (prolog dahil). Tercihe
+   VARSAYILAN olarak uyulur; "Animasyonlari ac" dugmesine basan ziyaretcide
+   `localStorage['qanat-hareket']='1'` yazilir ve sayfa yenilenir. Bu betik:
+     1. bayrak varsa `<html class="hareket-ac">` — ILK BOYAMADAN ONCE (head'in
+        basinda, CSS'ten once): CSS durduruculari bayraga bagli
+        (hareket-ac.mjs), yani tek kare bile donuk gorunmez;
+     2. `matchMedia`'yi bayraga uydurur: `(prefers-reduced-motion:reduce)`
+        sorusu HER ZAMAN yanlis cevaplanir. BILEREK MERKEZI: prolog kapisi,
+        Perde, kabuk betikleri (efekt/nav/tup/sizinti), ProjeDizin, STETespit
+        — 10 yer ayni soruyu soruyor; hepsini tek tek degistirmek J1 tavanina
+        yakin paketlere bayt eklerdi ve yeni yazilan her soru unutulurdu.
+        Sorgunun geri kalani (virgul listesi) aynen kalir.
+     3. dugme tiklamasini dinler (bayragi acar/kapatir, yeniler).
+   Bekci HA1 (her sayfada var mi). String.raw: regex ters bolulerini korur. */
+const HAREKET_JS = String.raw`(function(){var H=document.documentElement,K='qanat-hareket';try{if(localStorage.getItem(K)==='1'){H.classList.add('hareket-ac');var M=window.matchMedia.bind(window),R=/\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/gi;window.matchMedia=function(q){return M(String(q).replace(R,'(prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference)'))}}}catch(e){}document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#hareket-dugme');if(!b)return;try{if(H.classList.contains('hareket-ac'))localStorage.removeItem(K);else localStorage.setItem(K,'1')}catch(x){}location.reload()})})()`;
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, tr: string, enV: string): string => T((s as any)[k], dil) || (en ? enV : tr);
+/* panel anahtarları — kaynak applyTheme 7257-7276: off(x) = x === 0 */
+const mo = (icerik.theme && icerik.theme.motion) || {};
+const off = (v: unknown) => v === 0 || v === '0' || v === false;
+const htmlSinif = [off(mo.grain) && 't-nograin', off(mo.stars) && 't-nostars', off(mo.cursor) && 't-noagent'].filter(Boolean).join(' ') || undefined;
+/* footer verisi — kaynak renderWa 7457-7467 (sahte 905000000000 düşüşü TAŞINMADI: numara yoksa bağ basılmaz) */
+const ayar = icerik.settings || {};
+const waNum = String(ayar.whatsapp || '').replace(/\D/g, '');
+/* ARAMA KONSOLU + ADSENSE (6 Eyl 2026) — ikisi de panelden, boşsa basılmaz.
+   `trim()`: panelde yanlışlıkla boşluk kalırsa etiket doğmasın. */
+/* ARAMA KONSOLU DOGRULAMASI — YAPISTIRMA DAYANIKLI (9 Eyl 2026).
+   Panel alani YALNIZ `content` degerini istiyor ama Google'in ekraninda
+   ETIKETIN TAMAMI duruyor ve dogal olan onu kopyalamak. Oyle olunca deger
+   etiketin ICINE gomuluyordu ve canliya ic ice gecmis bir etiket cikti:
+     <meta name="google-site-verification" content="<meta name=&#34;...
+   Google da "meta etiketiniz dogru bicimlendirilmemis" deyip dogrulamayi
+   REDDETTI (yasandi). Artik iki bicim de kabul: tam etiket yapistirilirsa
+   `content` ayiklanir, duz deger verilirse oldugu gibi kullanilir. */
+const gscHam = String(ayar.gsc || '').trim();
+const gscEsl = gscHam.match(/content\s*=\s*["']([^"']+)["']/i);
+const gsc = (gscEsl ? gscEsl[1] : gscHam).trim();
+const adsense = String(ayar.adsense || '').trim();
+const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(ayar.waMessage || 'Merhaba')}` : '';
+const on = en ? '/en' : '';
+/* OLCUM (kaynak analytics 10765-10783 birebir): settings.gtm doluysa
+   GTM-… ya da G-… yuklenir; boska HICBIR SEY basilmaz (bugun bos).
+
+   BOS OLMASI KARAR (Enes, 6 Eyl 2026) — eksiklik degil. Uc aday gzip
+   olculdu, canli ana sayfanin tamami 63,7 KB (HTML 25,6 + varlik 38,1):
+     GA4 gtag.js  151,0 KB  -> sayfanin 2,4 KATI
+     Umami          2,3 KB  -> %3,6
+     Plausible      1,3 KB  -> %2
+   GA4/GTM secilseydi sayfayi 120 KB'ye indiren butun turlari tek satirda
+   geri alirdi; ayrica bu dosyanin asagisindaki J1 kaydi zaten olcmustu:
+   gtm DOLDURULUNCA /film tavani asiliyordu (11.774 > 11.264 B).
+   Hafif adaylar (Plausible/Umami) ucretli ya da hesap acmayi gerektirdigi
+   icin SIMDILIK HICBIRI secildi. Bedeli acikca kabul edildi: ziyaretci
+   davranisi olculmuyor ve kendi tespit aracimiz kendi sitemize bu
+   kalemden `fail` yaziyor (4 puan). Fikir degisirse tek yapilacak sey
+   panelden bu alani doldurmak — tesisat hazir. */
+const gtm = String(ayar.gtm || '').trim();
+/* PAYLASIM KARTI (gece zinciri TUR 5, 2 Eyl 2026): yeni site og ve twitter
+   etiketi basmiyordu (eski sitede vardi: og:image kok/og.png + summary_large_image).
+   settings.og doluysa o (tam adres), bossa canli kok og.png (1200x614 —
+   olcusu Enes'in kararinda, F1 notu). Baslik/aciklama S1 ile ayni kaynak.
+
+   4 EYL 2026 · KESME — GERI DUSUS OLU BAGLANTIYA ISARET EDIYORDU.
+   `/og.png` eski KOK SITENIN dosyasiydi (`qanatone/og.png`) ve dist'e
+   `node build.js` kopyaliyordu. ADIM 2'de build.js zincirden cikinca
+   (eski site artik uretilmiyor) o dosya cikti agacinda KALMADI: bugunku
+   geri dusus 63 sayfada 404 veren bir adres basiyordu. Olculdu: dosya
+   1200x614 — Facebook/LinkedIn'in istedigi 1,91:1'e (1200x630) de
+   uymuyordu, yani tasinmaya da degmezdi.
+   YERINE: dile gore iki KART, `yeni/public/` altinda, cikti agacinda.
+     og-tr.jpg · og-en.jpg — ikisi de 1200x630 JPEG (olculdu, G3 tutuyor)
+   Dile gore ayrisma anlamli cunku kartlarin uzerinde METIN var; TR kart
+   Ingilizce paylasimda yanlis dili gosterirdi.
+
+   PANEL USTUNDUR, IKI DILDE BIRDEN: `settings.og` doluysa dil ayrimi
+   YAPILMAZ — panele tek kart konur ve her iki dil onu kullanir. Bu
+   bilincli: panel alani tek, dil basina alan yok; iki kart isteyen
+   kaynagi degistirir. Bos alan sayfayi BOZMAZ (davranis korunuyor).
+
+   TAM ADRES ZORUNLU: og:image goreli yol kabul etmez (kazicilar ham
+   HTML'i cogu zaman sayfa baglaminda cozmez). Panel goreli bir sey
+   yazarsa KOK'e baglanir — aksi halde bir icerik girisi hatasi G3'u
+   kirmiziya dondurup DEPLOY DUSURURDU; oysa bedeli yalnizca onizleme
+   gorseli. Bicim burada garantilenir, VARLIK degil. */
+const ogPanel = String(ayar.og || '').trim();
+const ogImg = ogPanel
+  ? (/^https?:\/\//i.test(ogPanel) ? ogPanel : KOK + '/' + ogPanel.replace(/^\/+/, ''))
+  : KOK + OG_KART[en ? 'en' : 'tr'];
+/* OLCU YALNIZ KENDI DOSYAMIZ ICIN BASILIR. og:image:width/height bir
+   IDDIADIR; panelden gelen gorselin olcusunu BILMIYORUZ ve 1200x630
+   yazmak yalan olurdu (kazici on-kutuyu yanlis kurar, kart kirpilir).
+   Panel doluysa olcu etiketleri hic basilmaz — eksik etiket, yanlis
+   etiketten iyidir. */
+const ogOlcu = ogPanel ? null : { g: 1200, y: 630 };
+/* TIP UZANTIDAN TURETILIR — sabit 'image/jpeg' yazmak, panel PNG
+   koydugu anda yalan soyleyen bir etiket birakirdi. Turetilemezse
+   (uzantisiz adres) etiket BASILMAZ. */
+const ogTip = (ogImg.match(/\.(jpe?g|png|webp|gif)(?:[?#]|$)/i) || [])[1];
+const ogMime = ogTip ? 'image/' + ogTip.toLowerCase().replace('jpg', 'jpeg') : null;
+const GTM_KOD = gtm ? `(function(){var id=${JSON.stringify(gtm)};window.dataLayer=window.dataLayer||[];var add=function(s){var sc=document.createElement('script');sc.async=true;sc.src=s;document.head.appendChild(sc)};if(/^GTM-/i.test(id)){window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});add('https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(id))}else{add('https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id));window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',id)}})()` : '';
+/* TUR 9 (3 Eyl 2026): footer sayfa listesi TEK KAYNAKTAN (veri/sayfalar.json,
+   `footer` sirasi) — onceden burada, Nav'da ve sitemap'te uc ayri kopya. */
+/* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan bolum ALT BILGIDE de
+   yok. Nav ve sitemap ayni suzgeci uyguluyor; ucu birden ayni
+   sozlesme alanindan (`kosullu`) okuyor ki biri unutulup bos bir kapi
+   acikta kalmasin. */
+/* 10 Eyl 2026: sayim koleksiyondan (Nav ile ayni `doluKaynaklar`). */
+const DOLU = await doluKaynaklar();
+const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).statik
+  .filter((s: any) => !s.kosullu || DOLU.has(s.kosullu))
+  .filter((s: any) => s.footer != null)
+  .sort((a: any, b: any) => a.footer - b.footer)
+  .map((s: any) => [s.yol, s.anahtar, s.tr, s.en]);
+---
+<html lang={dil} class={htmlSinif} data-imlec-gizle={off(mo.hideCursor) ? '0' : undefined} data-tur={off(mo.tour) ? '0' : undefined}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {/* HAREKET ACMA · bas betigi: CSS'ten ONCE (gerekce frontmatter HAREKET_JS) */}
+  <script is:inline set:html={HAREKET_JS} />
+  {(kesmeOncesi || indeks === false) && <meta name="robots" content="noindex" />}
+  <title>{baslik}</title>
+  <meta name="description" content={aciklama} />
+  {/* ARAMA KONSOLU DOGRULAMASI (6 Eyl 2026) — panelden, `settings.gsc`.
+      Boşsa HİÇ BASILMAZ: uydurma doğrulama etiketi Search Console'da
+      "sahiplik doğrulanamadı" hatası üretir, yani boş bırakmak yanlış
+      değer yazmaktan iyidir. Değer Enes'in konsoldan aldığı içeriktir
+      (yalnız `content` kısmı, etiketin tamamı değil). */}
+  {gsc && <meta name="google-site-verification" content={gsc} />}
+  {/* ADSENSE (6 Eyl 2026) — panelden, `settings.adsense` (ca-pub-...).
+      Boşsa HİÇ BASILMAZ. Bu etiket sahiplik doğrulamasıdır; reklam
+      birimlerini SAYFAYA KOYMAZ — bir B2B ajans sitesinde reklam
+      göstermek ayrı ve tasarım kararıdır, o karar verilmedi.
+      Yanında `ads.txt` de üretilir (yeni/kabuk-derle.cjs). */}
+  {adsense && <meta name="google-adsense-account" content={adsense} />}
+  {/* SIMGE — EKSIK TASINAN KALEM (6 Eyl 2026, prolog bagimsizlik denetimi
+      sirasinda bulundu). Eski kok site satir ici SVG simge tanimliyor
+      (index.html <link rel="icon" data:image/svg+xml>), yeni kabukta HIC
+      YOKTU: 63 sayfanin hepsinde tarayici /favicon.ico ariyor ve 404
+      aliyordu — sekmede QANATONE isareti yerine tarayicinin varsayilani
+      goruluyordu. Kaynagin KENDI satiri birebir tasindi (sadakat kurali);
+      satir ici oldugu icin ek istek DOGURMAZ, ~330 B. */}
+  {/* 9 EYL 2026 — SIMGE ARTIK MARKANIN KENDISI. Yukaridaki satir ici SVG
+      eski kok siteden birebir tasinmisti ama QANATONE LOGOSU DEGILDI: koyu
+      kare + 45 derece donmus kizil kare, jenerik bir isaret. Enes: "sekmede
+      baska logo gozukuyor; sitenin her yerde gorunecek logosu bu olacak."
+      Simgeler `yeni/film/uret-simge.cjs` ile URETILIR (elde tasinmaz),
+      girdi R19 zincirinin de kaynagi olan seffaf 3B render:
+      `gorsel-kaynak/prolog/QANAT_LOGO-seffaf-2.png`. Uretec opak kutuyu
+      goruntuden olcup icerigi kareye ortalar — logo karenin ortasinda
+      degil (884x996 @179,109), duz olceklense sola kacik ve kucuk cikardi.
+      SATIR ICI YERINE DOSYA: satir ici veri URI'si ek istek dogurmuyordu
+      ama 32 px PNG base64 olarak ~2,6 KB ve HER SAYFADA tekrar ederdi;
+      dosya olarak tek istek edilip onbellege giriyor. */}
+  <link rel="icon" type="image/png" sizes="32x32" href={`${B}/img/simge-32.png`} />
+  <link rel="apple-touch-icon" sizes="180x180" href={`${B}/img/simge-180.png`} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={baslik} />
+  <meta property="og:description" content={aciklama} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImg} />
+  {ogOlcu && <meta property="og:image:width" content={String(ogOlcu.g)} />}
+  {ogOlcu && <meta property="og:image:height" content={String(ogOlcu.y)} />}
+  {ogMime && <meta property="og:image:type" content={ogMime} />}
+  <meta property="og:locale" content={en ? 'en_US' : 'tr_TR'} />
+  <meta name="twitter:card" content="summary_large_image" />
+  {/* twitter:image EKSIKTI (4 Eyl 2026): `summary_large_image` kartinin
+      gorseli yoktu. X cogu zaman og:image'a duser ama bu bir GARANTI
+      degil, davranis; kartin sozlesmesi kendi etiketiyle tamamlanir.
+      Ayni tam adres — ikinci bir kaynak dogurmuyor. */}
+  <meta name="twitter:image" content={ogImg} />
+  {/* AJAN KESIF BAGLARI (5 Eyl 2026). Ajan once bassa bakar; iki bag
+      oradan cikar:
+        · `alternate type="text/markdown"` — bu sayfanin markdown esi.
+          Adres KANONIKTEN turuyor, ikinci bir yol kaynagi yok: `/x/` ->
+          `/x.md`, kok -> `/index.md`. Es yalnizca INDEKSLENEN sayfalar
+          icin uretiliyor (ajan-hatti.mjs ayni kapsami tutuyor), o yuzden
+          bag da `indeks` sartina bagli — olmayan dosyayi ilan etmek
+          "olcmedigin rakami yazma" kuralina girer.
+        · `describedby` — sitenin llms.txt haritasi (llmstxt v2 sarti).
+          Site geneli oldugu icin her sayfada. */}
+  {indeks && <link rel="alternate" type="text/markdown" href={mdAdres} />}
+  <link rel="describedby" href={`${KOK}/llms.txt`} />
+  {heleftr && <link rel="alternate" hreflang="tr" href={heleftr} />}
+  {helefen && <link rel="alternate" hreflang="en" href={helefen} />}
+  {heleftr && <link rel="alternate" hreflang="x-default" href={heleftr} />}
+  {/* BESLEME KESFI (11 Eyl 2026, H3): okuyucular ve tarayicilar beslemeyi
+      sayfanin basindan bulur — onceden hicbir sayfada rss+xml bagi yoktu.
+      KOSULLU: kaynagi bos bolumun beslemesi duyurulmaz (nav/footer/sitemap
+      ile ayni `doluKaynaklar` suzgeci). Bekci R8 (d). */}
+  {DOLU.has('posts') && <link rel="alternate" type="application/rss+xml" title="QANATONE Bülten" href={`${KOK}/bulten/rss.xml`} />}
+  {DOLU.has('news') && <link rel="alternate" type="application/rss+xml" title="QANATONE Haberler" href={`${KOK}/haber/rss.xml`} />}
+  {sema && <script type="application/ld+json" set:html={JSON.stringify(sema)} />}
+  {/* GOVDE FONTU ON YUKLEME — HER SAYFA (TUR 3, 4 Eyl 2026).
+      Ana sayfada zaten vardi ve gerekcesi index.astro'da yazili ("swap ile
+      gelen her yuz ilk boyadan SONRA gelirse metni yeniden dizer"); obur
+      58 sayfada YOKTU ve CLS aykiri degerinin kosulu tam buydu — soguk
+      onbellekte Uncut ilk boyadan sonra geliyor, satirlar yeniden sariliyor.
+      OLCULDU (/bulten/yapay-zeka-trafigi-tiklama-degil/, Chrome, uc
+      kosum): sicak onbellek 0 · soguk onbellek 0,1588. `swap` karari
+      degismiyor (Anayasa madde 4); on yukleme takasi ilk boyadan ONCE
+      bitirir. TR altkumesi (1,7 KB) on YUKLENMEZ — ana sayfanin kendi
+      notundaki gerekce: gec gelirse yalniz bes glif etkilenir.
+      KONUM OLCULDU (TUR 5, ayni gece): bu baglanti head'in BASINA, <title>
+      hemen altina konunca ana sayfanin kare kapisi COKTU — p95 24,9 -> 58,3 ms,
+      takilma orani %1,84 -> %24,47 (uc kosum, ayni makine, ayni yuk; kirmizi
+      once/sonra ile iki kez dogrulandi). Erken on yukleme kritik yolla
+      yarisiyor. Bagalanti bu yuzden head'in SONUNDA, tam da ana sayfanin
+      onceden kullandigi yerde duruyor — CLS kazanci aynen korunuyor
+      (soguk onbellek 0, yavas 4G 0,0407). */}
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href={`${B}/font/uncut-sans-latin.woff2`} />
+  <slot name="bas" />
+  {/* OLCUM BETIGI YALNIZ KABUK SAYFALARINDA (TUR 4, 4 Eyl 2026 — PANEL KAPISI).
+      Panelden `settings.gtm` DOLDURULUNCA /film sayfasinin J1 tavani asiliyordu
+      (11.774 > 11.264 B; olculdu, 510 B fazla). TAVAN GEVSETILMEDI: `/film`
+      ziyaretci hedefi DEGIL — noindex, sitemap'te yok, hicbir sayfadan
+      baglanmiyor, kabuk={false} ile kendi tam ekran olcum yuzeyi. Oraya ucuncu
+      taraf olcum etiketi basmak zaten YANLIS olurdu: kendi olcum kosumlarimizi
+      Enes'in analitigine yazardi. Etiket kabuk sayfalarinda (63 sayfa) basilir. */}
+  {kabuk && GTM_KOD && <script is:inline set:html={GTM_KOD} />}
+</head>
+<body>
+  {/* TUR 9 E1 (3 Eyl 2026): atlama bağlantısı — ilk Tab durağı. Ölçüldü:
+      klavye kullanıcısı ana sayfada içeriğe 31. durakta varıyordu (WCAG
+      2.4.1). Ekran dışı durur, odaklanınca görünür (temel.css .atla). */}
+  <a class="atla" href="#icerik">{m('atla', 'İçeriğe geç', 'Skip to content')}</a>
+  {perde && <Perde />}
+  {/* KAYNAK 4621-4629: yıldız tuvali · grain · ajan imleci katmanları.
+      Hepsi aria-hidden dekor; balon (#bitsay) diyalog. Tuvaller JS'siz
+      boş durur (CSS gizler: dar ekran/dokunmatik/azaltma). */}
+  {/* SADAKAT(D) 3 Eyl 2026: kaynak 4458-4460 `#bg` — sabit arka plan
+      katmani (ust kizil gecis .fade + orb + nokta kafesi .grid). Sokum
+      turunda stars/noise tasinmis, #bg atlanmisti; yan yana karede her
+      bolumun ustundeki kizil hale bundan eksikti (kontak-tur9/sadakat-d). */}
+  {kabuk && <div id="bg" aria-hidden="true"><span class="fade"></span><span class="orb"></span><span class="grid"></span></div>}
+  {kabuk && <canvas id="stars" aria-hidden="true"></canvas>}
+  {kabuk && <div id="noise" aria-hidden="true"></div>}
+  {kabuk && <div id="bit" class="kb-bit" aria-hidden="true"><span class="kb-ring"></span><span class="kb-core"></span></div>}
+  {kabuk && <div id="bittip" class="kb-tip" aria-hidden="true"></div>}
+  {kabuk && <div id="bitsay" class="kb-say" role="dialog" aria-label={m('bitw', 'QANATONE ajanı', 'QANATONE agent')} aria-live="polite">
+    <div class="who"><i></i><span>{m('bitw', 'QANATONE ajanı', 'QANATONE agent')}</span></div>
+    <p id="bitmsg"></p><div class="acts" id="bitacts"></div>
+  </div>}
+  {/* Tasarım turu A1: Faz 1'in minimal .ust kabuğu yerini gerçek
+      NAV'a bıraktı (Enes hükmü: "menü bile yok, logo bile yok"). */}
+  <Nav dil={dil} />
+  {/* id + tabindex=-1: atlama bağlantısı hedefi; odak main'e düşer, sonraki
+      Tab içerikten sürer (Chrome/Safari çapaya atlayınca odağı taşımıyor). */}
+  <main id="icerik" tabindex="-1" class={genis ? 'genis' : undefined}>
+    <slot />
+  </main>
+  {/* HAREKET ACMA DUGMESI (11 Eyl 2026): yalniz hareket azaltma tercihi olan
+      ziyaretcide gorunur (temel.css); tiklama bas betiginde (HAREKET_JS).
+      Iki etiketten hangisinin gorundugu `html.hareket-ac` ile secilir. */}
+  <button type="button" id="hareket-dugme" class="hareket-dugme"><i aria-hidden="true"></i><span class="ha-ac">{en ? 'Turn on animations' : 'Animasyonları aç'}</span><span class="ha-kapat">{en ? 'Turn off animations' : 'Animasyonları kapat'}</span></button>
+  {/* FOOTER — kaynak 5478-5512 birebir: üç sütun (tanıtım / Sayfalar /
+      İletişim) + QANATONE bit damgası + alt satır. Sosyal (#footSocial)
+      kaynakta da boştu (settings.social yok). /hukuki bağı yeni sayfanın
+      (öksüz kalmasın); "ana site" göç iskelesi bağı KALKTI. */}
+  {/* LEAD FORMU — kaynak #lead her rotada en sonda (0 üst / clamp(50,7vw,90) alt) */}
+  {kabuk && lead && <section class="sil-lead" aria-label={en ? 'Request a demo' : 'Demo talebi'}><div class="sil-ic"><LeadKutu dil={dil} /></div></section>}
+  <footer>
+    <div class="wrap">
+      <div class="fgrid">
+        <div class="lead">
+          <a class="flogo" href={sl(`${B}${on || '/'}`)}>
+            <i><picture>
+              <source srcset={`${B}/img/qanatone.avif`} type="image/avif" />
+              <img src={`${B}/img/qanatone.webp`} alt="" width="240" height="270" decoding="async" loading="lazy" />
+            </picture></i>
+            <b>QANAT<span>ONE</span></b>
+          </a>
+          <p>{m('foot1', 'Talebi yakalayan sistemler kuruyoruz: arama görünürlüğü, reklam ve 7/24 çalışan yapay zekâ ajanları.', 'We build systems that catch demand: search visibility, ads and AI agents working 24/7.')}</p>
+        </div>
+        <div class="fcol">
+          <h5>{m('fc1', 'Sayfalar', 'Pages')}</h5>
+          {SAYFALAR.map(([r, k, tr, enV]) => <a href={sl(`${B}${on}${r}`)}>{m(k, tr, enV)}</a>)}
+        </div>
+        <div class="fcol">
+          <h5>{m('fc2', 'İletişim', 'Contact')}</h5>
+          {waUrl && <a href={waUrl} target="_blank" rel="noopener">WhatsApp</a>}
+          {ayar.email && <a href={`mailto:${ayar.email}`}>{m('fmail', 'E-posta', 'Email')}</a>}
+          {/* ANAYASA (3 Eyl): kaynak #footSocial (7152-7155) C.socials'tan
+              basar — varsayilan Instagram (6374), sema H25'in sameAs kaynagi.
+              "Kaynakta bostu" notu yanlisti; yan yana kare: eski WhatsApp +
+              Instagram, yeni yalniz WhatsApp (kontak-tur9/sadakat-e-kabuk-100). */}
+          {(icerik.socials || []).filter((s: any) => s && s.url).map((s: any) =>
+            <a href={s.url} target="_blank" rel="noopener">{s.label || s.url}</a>)}
+        </div>
+      </div>
+    </div>
+    <div class="watermark"><h2 class="vh">QANATONE</h2><canvas id="wmk" aria-hidden="true"></canvas></div>
+    <div class="wrap">
+      <div class="fbot">
+        <span>{T(icerik.legal?.line, dil) || '© QANATONE'} · <a href={sl(B + '/hukuki')}>{en ? 'Legal' : 'Hukuki'}</a></span>
+        <span class="r">
+          <span>{m('fb1', 'İstanbul · Dubai', 'Istanbul · Dubai')}</span>
+          <span>{m('fb2', 'SEO · GEO · Ads · AI', 'SEO · GEO · Ads · AI')}</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+  {/* KABUK TETİĞİ: rAF katmanları (yıldız, bit damgası, imleç) boşta
+      dinamik ithal — J1 dışı (film motoru deseni), kendi tavanı K1.
+      Hareket azaltmada damga statik kare çizer, öbürleri hiç kurulmaz
+      (modül içinde de kapılı). `?kabuk=0` ÖLÇÜM KOLU: kabuksuz taban
+      (olc-sayfa yan yana kıyası). YORUMSUZ satır içi: her bayt çıktıya gider. */}
+  {kabuk && <script is:inline>(function(){if(location.search.indexOf('kabuk=0')>-1)return;var f=function(){import('/varlik/kabuk.js').then(function(m){m.baslat()}).catch(function(){})};'requestIdleCallback'in window?requestIdleCallback(f,{timeout:2500}):setTimeout(f,600)})()</script>}
+</body>
+</html>

@@ -1,0 +1,248 @@
+{
+ "_": "olc-tup-kontrol.cjs — hero tup alani genel kontrol. A: bugunku · B: t-notubes ablasyonu · C: piksel orani dusurulmus. Kapi birimi TIK.",
+ "olcum": "2026-09-07T22:35:30.000Z",
+ "tarayici": "chrome",
+ "adres": "http://127.0.0.1:8790/",
+ "oran_denemesi": 1.25,
+ "tazeleme": {
+  "tik": 8.3,
+  "hz": 120.5,
+  "ornek": 195,
+  "suzulen": 0
+ },
+ "kol_a": {
+  "kol": "A",
+  "durum": {
+   "notubes_sinifi": false,
+   "film_durumu": "atlandi",
+   "tuval_var": true,
+   "tuval_on": true,
+   "kuruldu": true,
+   "pause_var": false,
+   "setPaused_var": false,
+   "dispose_var": true,
+   "piksel_orani": 2,
+   "min_oran": 2,
+   "max_oran": 2,
+   "tampon_en": 2042,
+   "tampon_boy": 1386,
+   "css_en": 1021,
+   "css_boy": 693,
+   "dpr": 1.25,
+   "baglam_kayip": null,
+   "gorunum": "1036x647"
+  },
+  "oran_sonuc": null,
+  "tampon_mp": 2.83,
+  "etkin_dpr": 2,
+  "uzak": {
+   "y": 1664,
+   "tuval_ekranda": false,
+   "gorunurluk": "hidden"
+  },
+  "zincir": [
+   {
+    "url": "kabuk.js",
+    "durum": 200,
+    "t": 1788820467474,
+    "ms": 750
+   },
+   {
+    "url": "tup.js",
+    "durum": 200,
+    "t": 1788820467480,
+    "ms": 756
+   },
+   {
+    "url": "tubes.min.js",
+    "durum": 200,
+    "t": 1788820467500,
+    "ms": 776
+   },
+   {
+    "url": "tubes.min.js",
+    "durum": 304,
+    "t": 1788820468333,
+    "ms": 1609
+   }
+  ],
+  "kadrajda": {
+   "p50": 39.5,
+   "p95": 52.89999999990687,
+   "max": 105.6999999997206,
+   "n": 175,
+   "kacirilan": 5
+  },
+  "kadraj_disi": {
+   "p50": 8.300000000279397,
+   "p95": 8.600000000093132,
+   "max": 8.799999999813735,
+   "n": 175,
+   "kacirilan": 0
+  }
+ },
+ "kol_b": {
+  "kol": "B",
+  "durum": {
+   "notubes_sinifi": true,
+   "film_durumu": "atlandi",
+   "tuval_var": true,
+   "tuval_on": false,
+   "kuruldu": false,
+   "pause_var": false,
+   "setPaused_var": false,
+   "dispose_var": false,
+   "piksel_orani": null,
+   "min_oran": null,
+   "max_oran": null,
+   "tampon_en": 300,
+   "tampon_boy": 150,
+   "css_en": 0,
+   "css_boy": 0,
+   "dpr": 1.25,
+   "baglam_kayip": false,
+   "gorunum": "1036x647"
+  },
+  "oran_sonuc": null,
+  "tampon_mp": 0.04,
+  "etkin_dpr": null,
+  "uzak": {
+   "y": 1664,
+   "tuval_ekranda": false,
+   "gorunurluk": "visible"
+  },
+  "zincir": [
+   {
+    "url": "kabuk.js",
+    "durum": 304,
+    "t": 1788820482903,
+    "ms": 316
+   },
+   {
+    "url": "tup.js",
+    "durum": 304,
+    "t": 1788820482910,
+    "ms": 323
+   }
+  ],
+  "kadrajda": {
+   "p50": 13.899999999906868,
+   "p95": 18.300000000279397,
+   "max": 21.100000000093132,
+   "n": 175,
+   "kacirilan": 1
+  },
+  "kadraj_disi": {
+   "p50": 8.300000000279397,
+   "p95": 8.600000000093132,
+   "max": 8.700000000186265,
+   "n": 175,
+   "kacirilan": 0
+  }
+ },
+ "kol_c": {
+  "kol": "C",
+  "durum": {
+   "notubes_sinifi": false,
+   "film_durumu": "atlandi",
+   "tuval_var": true,
+   "tuval_on": true,
+   "kuruldu": true,
+   "pause_var": false,
+   "setPaused_var": false,
+   "dispose_var": true,
+   "piksel_orani": 1.25,
+   "tampon_en": 1276,
+   "tampon_boy": 866,
+   "css_en": 1021,
+   "css_boy": 693,
+   "dpr": 1.25,
+   "baglam_kayip": null,
+   "gorunum": "1036x647"
+  },
+  "oran_sonuc": {
+   "once": "2042x1386",
+   "sonra": "1276x866",
+   "pr": 1.25
+  },
+  "tampon_mp": 1.11,
+  "etkin_dpr": 1.25,
+  "uzak": {
+   "y": 1664,
+   "tuval_ekranda": false,
+   "gorunurluk": "hidden"
+  },
+  "zincir": [
+   {
+    "url": "kabuk.js",
+    "durum": 304,
+    "t": 1788820498870,
+    "ms": 284
+   },
+   {
+    "url": "tup.js",
+    "durum": 304,
+    "t": 1788820498876,
+    "ms": 290
+   },
+   {
+    "url": "tubes.min.js",
+    "durum": 304,
+    "t": 1788820498879,
+    "ms": 293
+   },
+   {
+    "url": "tubes.min.js",
+    "durum": 304,
+    "t": 1788820499746,
+    "ms": 1160
+   }
+  ],
+  "kadrajda": {
+   "p50": 25.799999999813735,
+   "p95": 42.39999999944121,
+   "max": 48.10000000009313,
+   "n": 175,
+   "kacirilan": 4
+  },
+  "kadraj_disi": {
+   "p50": 8.300000000745058,
+   "p95": 8.599999999627471,
+   "max": 9.099999999627471,
+   "n": 175,
+   "kacirilan": 0
+  }
+ },
+ "kapilar": [
+  {
+   "hal": "mobil (412x915, coarse)",
+   "kuruldu": false,
+   "tuval": true,
+   "coarse": true,
+   "azalt": false,
+   "en": 412,
+   "film": "atlandi",
+   "kutuphane_indi": false
+  },
+  {
+   "hal": "dar ekran (860 px, ince imlec)",
+   "kuruldu": false,
+   "tuval": true,
+   "coarse": false,
+   "azalt": false,
+   "en": 860,
+   "film": "atlandi",
+   "kutuphane_indi": false
+  },
+  {
+   "hal": "hareket azaltma",
+   "kuruldu": false,
+   "tuval": true,
+   "coarse": false,
+   "azalt": true,
+   "en": 1036,
+   "film": "atlandi",
+   "kutuphane_indi": false
+  }
+ ]
+}

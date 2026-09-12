@@ -1,0 +1,81 @@
+# QANATONE — Netlify yapilandirmasi
+[build]
+  # ---- GECMIS · ARTIK GECERLI DEGIL, kayit icin duruyor ----
+  # Faz 0 (Astro karari) IDI: yeni kabuk dist/yeni altina basiyor, /yeni/*
+  # adresinden yayinlaniyor, kok site aynen yasiyordu. Asagidaki TUR 9
+  # (3 Eyl 2026) zinciri dort adimdan yediye cikarmisti; KESME onu da
+  # degistirdi — YURURLUKTEKI zincir bu blogun ALTINDA:
+  #   npm ci                        kok bagimliliklar
+  #   node build.js                 eski kok site + test/denetim.js (dist/ sifirlanir)
+  #   npm --prefix yeni ci          Astro bagimliliklari (esbuild dahil)
+  #   node yeni/film/kur-medya.cjs  film medyasi: onbellek (plugins/onbellek) -> yoksa
+  #                                 manifest.uzak'tan (GitHub Release) indirir, sha1 dogrular, damga yazar.
+  #                                 ONCEDEN YOKTU: temiz klonda damga yok -> FM1 kirmizi, ustune
+  #                                 FM1'in modul-seviyesi return'u exit(1)'i atliyordu -> deploy
+  #                                 medyasiz YESIL cikacakti (3 Eyl olculdu: exit 0).
+  #   npm --prefix yeni run build   = node kabuk-derle.cjs && astro build (kabuk paketi artik hatta)
+  #   node yeni/denetim.cjs         yeni kabuk denetimi; kirmizi -> exit 1 -> deploy dusmez
+  #   node yeni/surum-yaz.cjs       dist/yeni/surum.json: commit/dal/baglam/medya sureleri (CI gozlemi)
+  # KESME · ADIM 2 (6 Eyl 2026). `node build.js` ZINCIRDEN CIKTI: eski kok
+  # site artik uretilmiyor (Enes, 6 Eyl: "Eski site tamamen kalkiyor, arsiv
+  # yok"). Kok bagimliliklari (`npm ci`) de gerekmiyordu — build.js disinda
+  # onlari kullanan adim yok; zincir kisaldi, deploy hizlandi.
+  # Eski sitenin 60 adresi OLMEDI: 59'u yeni kabukta BIREBIR ayni yolda,
+  # /shell yonlendirmeyle koke gidiyor (olcum: yeni/kesme-url-kapsami.cjs).
+  # Zincir:
+  #   npm --prefix yeni ci          Astro bagimliliklari (esbuild dahil)
+  #   node yeni/film/kur-medya.cjs  film medyasi (onbellek -> GitHub Release,
+  #                                 sha1 dogrulanir; temiz klonda FM1 kirmizisi
+  #                                 bu adim olmadan sessizce yesil cikardi)
+  #   npm --prefix yeni run build   = kabuk-derle.cjs && astro build
+  #   node yeni/denetim.cjs         kirmizi -> exit 1 -> DEPLOY DUSMEZ
+  #   node yeni/surum-yaz.cjs       dist/surum.json (CI gozlemi)
+  # GERI ALMA: `git revert` bu commit'i alir; build.js zincire geri doner.
+  command = "npm --prefix yeni ci && node yeni/film/kur-medya.cjs && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
+  publish = "dist"
+
+[build.environment]
+  # 23 Agu: 20 -> 22. Netlify eklentisi Node 22 istiyor; site 20'de
+  # kaliyordu. Yerel gelistirme 24'te (nvm yok, surum yerelde
+  # sabitlenmiyor) - yani yerel ile yayin arasinda hala bir basamak
+  # fark var, ama yon dogru: 20 artik eklentinin altinda kaliyordu.
+  NODE_VERSION = "22"
+
+# Panel govdesi fonksiyon paketine bu satirla giriyor: admin.html artik
+# dist e kopyalanmiyor (anonim 200 veriyordu), netlify/functions/panel.js
+# onu Basic Auth kapisinin ardindan okuyup servis ediyor. Yol base
+# directory ye goredir.
+[functions]
+  # KADEME 2 (9 Eyl 2026): buyuyen koleksiyonlar content.json'dan cikip
+  # `icerik/<klasor>/<slug>.json` dosyalarina ayrildi. Panel onlari
+  # `?kayitlar=1` ucundan okuyor, `yayinla.js` de yazacagi yolu
+  # `sayfalar.json`daki sozlesmeden dogruluyor (istemciden gelen klasor/slug
+  # serbest birakilamaz) — ucu de pakete girmek zorunda.
+  # OLCEK NOTU: 10.000 yazi ~37 MB kaynak dosya demek; Netlify fonksiyon
+  # paketi sinirina (belgelenmis, olculmedi) yaklasilirsa panel kayitlari
+  # paketten degil GitHub API'den okumali. Bugun 6 dosya.
+  included_files = ["admin.html", "content.json", "icerik/**", "yeni/src/veri/sayfalar.json"]
+
+# YEREL SUNUM (netlify dev, 21 Agu). Astro'nun kendi dev sunucusu DEGIL:
+# burada sunulan sey URETIM CIKTISININ ta kendisi (dist/), yani telefondan
+# bakilan hal yayina gidecek hal. Kok site ve /yeni/* ayni adreste, panel
+# ve fonksiyonlar da calisir (netlify/functions, _redirects dist icinde).
+# ONCE DERLE:  node build.js  &&  npm --prefix yeni run build
+# SONRA:       netlify dev
+# Astro tarafinda hizli donguye ihtiyac varsa o ayri bir sey:
+#   npm --prefix yeni run dev -- --host   (adres /yeni/ onekiyle acilir)
+# Statik sunum yerel-sun.cjs'e devredildi: netlify-cli 27.1.2'nin kendi
+# statik sunucusu bu makinede ALT DIZIN isteklerine 403 donuyor (kok
+# dosyalar 200; gerekce yerel-sun.cjs basinda). netlify dev VEKIL olarak
+# kaliyor — _redirects, _headers ve netlify/functions gercek gibi calisir.
+[dev]
+  command = "node yerel-sun.cjs"
+  targetPort = 8790
+  framework = "#custom"
+  publish = "dist"
+  port = 8888
+
+# Artimli derleme icin onbellek: .onbellek klasoru derlemeler arasinda
+# tasinir. Olmazsa her yayinda 58 sayfa bastan render edilir (~100 sn).
+[[plugins]]
+  package = "/plugins/onbellek"

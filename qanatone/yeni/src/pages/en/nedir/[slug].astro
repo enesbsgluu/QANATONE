@@ -1,0 +1,26 @@
+---
+/* Explainers yazısı (EN) — `/en/nedir/<slug>`.
+   Gövde bültenle AYNI bileşen (`YaziGovde`), `bolum` propuyla: geri
+   bağı, kart yolları ve "diğer yazılar" şeridi o bölümün kendi
+   koleksiyonundan doğar. Şerit tavanı 8 (T10). */
+import Temel from '../../../layouts/Temel.astro';
+import YaziGovde from '../../../parcalar/YaziGovde.astro';
+import { icerik, T, KOK, sl } from '../../../icerik';
+import { yaziSema } from '../../../sema.mjs';
+import { bolumYaziYollari } from '../../../sayfalama';
+
+export async function getStaticPaths() {
+  return await bolumYaziYollari('nedir');
+}
+
+const { p } = Astro.props;
+const canon = sl(`${KOK}/en/nedir/${p.slug}`);
+const baslik = `${T(p.title, 'en')} — QANATONE`;
+const aciklama = T(p.lede, 'en');
+const sema = yaziSema(icerik, p, { url: canon, dil: 'en' });
+---
+<Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/nedir/${p.slug}`)} helefen={sl(`${KOK}/en/nedir/${p.slug}`)} sema={sema}
+  etiket="Explainers">
+  <YaziGovde p={p} dil="en" bolum="nedir" />
+</Temel>

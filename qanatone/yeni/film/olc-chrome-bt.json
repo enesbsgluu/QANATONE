@@ -1,0 +1,129 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T03:16:59.311Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1524,
+  "lcpEl": "h1",
+  "cls": 0.2325,
+  "clsKaynak": [
+   {
+    "t": 2632,
+    "v": 0.2325,
+    "el": "article",
+    "kaynak": [
+     {
+      "el": "article",
+      "once": [
+       312,
+       164,
+       800,
+       736
+      ],
+      "sonra": [
+       312,
+       884,
+       800,
+       16
+      ]
+     },
+     {
+      "el": "a.pgback",
+      "once": [
+       312,
+       119,
+       61,
+       22
+      ],
+      "sonra": [
+       312,
+       839,
+       61,
+       22
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars bitcursor"
+   }
+  ],
+  "inp": 24,
+  "inpHedef": "body pointerup",
+  "etkilesim": 7,
+  "loaf": 6,
+  "loafToplam": 1485,
+  "loafEnUzun": 690,
+  "loafKaynak": [
+   {
+    "t": 362,
+    "sure": 690,
+    "engel": 55,
+    "betik": 690,
+    "stilDuzen": 0,
+    "render": 0,
+    "kaynak": []
+   },
+   {
+    "t": 1075,
+    "sure": 446,
+    "engel": 0,
+    "betik": 444,
+    "stilDuzen": 0,
+    "render": 2,
+    "kaynak": []
+   },
+   {
+    "t": 2508,
+    "sure": 124,
+    "engel": 74,
+    "betik": 121,
+    "stilDuzen": 3,
+    "render": 3,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 120
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 304,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 205,
+   "loafEnUzun": 205,
+   "loafKaynak": [
+    {
+     "t": 20,
+     "sure": 205,
+     "engel": 80,
+     "betik": 205,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

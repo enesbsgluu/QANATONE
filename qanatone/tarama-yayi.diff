@@ -1,0 +1,68 @@
+diff --git a/qanatone/index.html b/qanatone/index.html
+index 459c334..838aff6 100644
+--- a/qanatone/index.html
++++ b/qanatone/index.html
+@@ -322,6 +322,36 @@ footer .logo i img{height:33px}
+ .btn-g:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
+ .btn-sm{padding:10px 18px;font-size:.82rem}
+ 
++/* ============ TARAMA YAYI — "Sitemi ücretsiz kontrol et" (2026-08) ============
++   Enes'in isteği + kararı: buton çerçevesinde dönen kırmızı ışık,
++   biçimi "taramalı" — sürekli parlayan halka değil, birkaç saniyede
++   bir turlayan KUYRUKLU kıvılcım. Teknik: ::after inset:-2px, konik
++   gradyanın yalnız son ~%22'si dolu (kuyruk), maske xor'u ile 2px'lik
++   çerçeve bandına kırpılır, @property'li --taraA açısı döner. Döngünün
++   son ~%38'i karanlık: "aralıklı" hissi buradan. Kayıtlı özellik
++   desteklemeyen eski tarayıcıda açı animasyonu çalışmaz, yay statik
++   soluk kalır — buton bozulmaz. REDUCE'da tamamen kapalı.            */
++@property --taraA{syntax:'<angle>';initial-value:0deg;inherits:false}
++.btn[data-t="cta1"]{position:relative;isolation:isolate}
++.btn[data-t="cta1"]::after{content:'';position:absolute;inset:-2.5px;z-index:-1;
++  border-radius:999px;padding:2.5px;pointer-events:none;
++  background:conic-gradient(from var(--taraA),
++    transparent 0 76%,
++    rgba(239,35,60,.14) 82%,
++    rgba(239,35,60,.85) 93%,
++    #ff96a6 99.2%,
++    transparent 100%);
++  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
++  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
++  mask-composite:exclude;
++  animation:btnTara 3.6s linear infinite}
++@keyframes btnTara{
++  0%{--taraA:0deg;opacity:1}
++  58%{--taraA:360deg;opacity:1}
++  63%{--taraA:360deg;opacity:0}
++  100%{--taraA:360deg;opacity:0}}
++@media(prefers-reduced-motion:reduce){.btn[data-t="cta1"]::after{animation:none;opacity:0}}
++
+ /* dönen kenarlıklı CTA */
+ @property --ga{syntax:"<angle>";initial-value:0deg;inherits:false}
+ .shiny{position:relative;isolation:isolate;border-radius:999px;padding:15px 32px;
+diff --git a/qanatone/test/denetim.js b/qanatone/test/denetim.js
+index c421d12..ea889fd 100644
+--- a/qanatone/test/denetim.js
++++ b/qanatone/test/denetim.js
+@@ -516,6 +516,22 @@ function ciktiDenetimi() {
+        ritimYok && varsayilanDuruyor && eagerVar,
+        `ritimYok=${ritimYok} varsayilan=${varsayilanDuruyor} eager=${eagerVar}`);
+   }
++  /* 85 · tarama yayı (2026-08, Enes'in kararı "taramalı"): cta1
++     butonlarının çerçevesinde aralıklı kuyruklu ışık turu. Dört şart:
++     keyframe var · konik kuyruk var · döngüde karanlık evre var
++     (opacity:0 karesi — "aralıklı"nın kendisi) · REDUCE'da kapalı. */
++  {
++    const kaynakI = fs.readFileSync(SRC, 'utf8');
++    const iK = kaynakI.indexOf('@keyframes btnTara');
++    const kf = iK > -1 ? kaynakI.slice(iK, kaynakI.indexOf('}}', iK) + 2) : '';
++    const keyframeVar = iK > -1;
++    const kuyruk = /cta1[^{]*::after\{[^}]*conic-gradient\(from var\(--taraA\)/s.test(kaynakI);
++    const aralikli = kf.indexOf('opacity:0') > -1;
++    const reduceKapali = /prefers-reduced-motion:reduce[^}]*\{\.btn\[data-t="cta1"\]::after\{animation:none/.test(kaynakI);
++    ol('tarama yayı (keyframe + kuyruk + aralıklı + REDUCE kapalı)',
++       keyframeVar && kuyruk && aralikli && reduceKapali,
++       `keyframe=${keyframeVar} kuyruk=${kuyruk} aralikli=${aralikli} reduce=${reduceKapali}`);
++  }
+   const sayfalar = [];
+   (function tara(d) {
+     for (const f of fs.readdirSync(d)) {

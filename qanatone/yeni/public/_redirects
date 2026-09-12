@@ -1,0 +1,71 @@
+# QANATONE — yonlendirmeler (KESME, 6 Eyl 2026)
+# ---------------------------------------------------------------------------
+# Kesmeye kadar bu dosya /yeni/_redirects olarak yayinlanir ve Netlify
+# YALNIZ KOKTEKI _redirects'i okur — yani bugun ETKISIZDIR. Kesmede
+# (astro base '/' + outDir '../dist') kokun kendisi olur.
+# Eski uretecin (build.js) yazdigi 200-yeniden-yazma satirlari BURAYA
+# TASINMADI ve tasinmamali: onlar eski SPA kabugunun rota numarasiydi;
+# yeni kabuk gercek dizinlere basiyor, Netlify onlari kendiliginden sunar.
+# SIRA ONEMLI: Netlify ILK ESLESEN kurali uygular, o yuzden OZEL kurallar
+# genel olanlardan (yildizli) ONCE gelir; splat 404 en SONDA.
+# Bekci: yeni/kesme-url-kapsami.cjs — eski 60 adresin hicbiri olmemeli.
+# ---------------------------------------------------------------------------
+
+# 1 · PANEL KAPISI — admin.html statik DOSYA DEGIL, Basic Auth ardindaki
+# fonksiyondan gelir. 200! ZORLAMALI: ileride dist'e bir admin.html
+# kopyasi sizarsa statik dosya kapiyi gecersiz kilardi; force bunu
+# imkansiz yapar. (Eski taraftan birebir tasindi.)
+/admin.html  /.netlify/functions/panel  200!
+
+# 2-3 · ESKI ONIZLEME ADRESLERI (/yeni/*) — KALDIRILDI (10 Eyl 2026).
+# Enes: "artik /yeni ve /eski yok, sadece qanatone.com ve
+# www.qanatone.com adresleri gecerli; digerlerini sil ve aktif adreslerle
+# baglantisi olmadiklarini dogrula."
+# KALDIRMADAN ONCE OLCULDU (notun ikinci yarisi):
+#   a) kesme-url-kapsami.json'daki 60 eski adresin HICBIRI /yeni ile
+#      baslamiyor -> anayasa bekcisi bu kaldirmadan etkilenmiyor,
+#   b) dist ciktisinda /yeni'ye giden bag: 0 (html taramasi),
+#   c) sitemap'te /yeni: 0,
+#   d) hicbir kural dosyasi bu kurallari beklemiyor (yalniz
+#      kabuk-derle.cjs'te tarihsel bir YORUM gecisi var).
+# BEDELI ACIKCA KABUL EDILDI: disaridan verilmis /yeni/... baglantilari
+# ve eski yer imleri artik koke 301 gitmiyor, splat kuralina dusup 404
+# goruyor. /eski hicbir zaman kural degildi (olcum: 404).
+# GERI ALMA: bu commit'in revert'i uc satiri geri getirir.
+
+# 4 · ESKI KABUK ISKELETI — /shell.html bir SAYFA DEGILDI (basliksiz,
+# tekrar iceren bolum parcasi; robots.txt'te de Disallow). Yeni mimaride
+# karsiligi yok; yer imi 404 gormesin diye koke.
+/shell.html  /  301!
+/shell  /  301!
+
+# 5 · TEKIL HIZMET ROTASI (kok tarafta) — cogula.
+/hizmet/:slug  /hizmetler/:slug/  301!
+/en/hizmet/:slug  /en/hizmetler/:slug/  301!
+
+# 6 · WEB BOT AUTH DIZINI — tarayicimizin (QanatoneSiteCheck/1.0) acik
+# anahtari. STATIK DOSYA DEGIL, cunku acik anahtar ozel anahtardan
+# TURETILIR: depoda duran bir kopya, ortam degiskenindeki anahtarla
+# sessizce ayrisabilirdi ve o gun her dogrulayici bizi reddederdi.
+# Anahtar tanimli degilse fonksiyon 404 doner — arkasinda calisan bir sey
+# olmayan kesif dosyasi yayinlanmaz (karar kaydi, yeni/ajan-hatti.mjs).
+# 200! ZORLAMALI: ileride dist'e bir kopya sizarsa statik dosya canli
+# dizini golgeler; force bunu imkansiz yapar (panel kapisiyla ayni gerekce).
+# Gerekcenin tamami: netlify/functions/imza-dizini.js · bekci: denetim T4.
+/.well-known/http-message-signatures-directory  /.netlify/functions/imza-dizini  200!
+
+# 7 · AJAN PROTOKOL UCLARI (9 Eyl 2026) — MCP ve A2A sunuculari.
+# `/.well-known/mcp.json` ve `/.well-known/agent-card.json` kartlari TAM
+# BU IKI ADRESI gosterir; kart bir uc vaat edip uc olmazsa karar kaydinin
+# yasakladigi hale duseriz ("arkasinda calisan bir sey olmayan kesif
+# dosyasi"). Kisa adres bilincli: kartlara ve baska ajanlarin
+# yapilandirmasina elle yazilan sey `/.netlify/functions/...` degil bu.
+# 200! ZORLAMALI: ileride dist'e ayni adda statik bir dosya sizarsa canli
+# ucu golgeler (panel ve imza dizini kapilariyla ayni gerekce).
+# Bekci: denetim T7 — kart adresi = rota adresi, rota splat'tan ONCE.
+/mcp  /.netlify/functions/mcp  200!
+/a2a  /.netlify/functions/a2a  200!
+
+# 8 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
+# SPLAT KURALI SONDA KALMALI.
+/*  /404.html  404

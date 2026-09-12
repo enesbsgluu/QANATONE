@@ -1,0 +1,575 @@
+---
+/* S-TE · TESPİT (ücretsiz teşhis aracı) — göçün yedinci sahnesi.
+   Kaynak: kök index.html · markup 4945-4980 · sonuç üreteci `render()`
+   12240 · kota/hata yolu 12220 · CSS `.dg*` 4290-4380.
+   Sapmalar ve gerekçeler stil/tespit.css başında.
+
+   Anayasa: "form ve sonuç iskeleti statik HTML, etkileşim JS'i
+   client:visible. Bu bizim canlı demomuz: ada bütçesi cömert olabilir
+   ama YALNIZ kendi sahnesinde."
+
+   Faz 2'nin S7Arac sahnesinin yerini alır: aynı aracı iki kez göstermek
+   içeriği ikilerdi. Künye numarası (07) burada yaşıyor.
+
+   İÇERİK: başlık/alt metin/düğme/not content.json `strings`ten
+   (dge · dgh · dgp · dgbtn · dgnote) — eski tarafta da öyleydi, parite
+   korundu. Sonuç iskeleti (halka, künye, ızgara) HTML'de doğar; JS
+   yalnız DEĞER yazar, yapı kurmaz.
+
+   ADA JS'İ: tek submit dinleyicisi. `fetch` KULLANICI EYLEMİYLE koşar —
+   V1'in adıyla yazılmış istisnası. Açılışta hiçbir iş yapmaz: sınıf
+   yazmaz, düzen okumaz (S-K turunun 158 ms'lik dersi). */
+import '../stil/tespit.css';
+import { icerik, T, suz } from '../icerik';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+const en = dil === 'en';
+/* Halkanın çevresi: r=43 → 2πr. JS aynı sayıyı yeniden hesaplamasın diye
+   burada bir kez yazılır ve stroke-dasharray olarak basılır. */
+const CEVRE = (2 * Math.PI * 43).toFixed(1);
+/* DUZELTME LISTESI (sokum turu, 4 Eyl) — kaynak render() 11406-11416:
+   kirmizi/sari kalemler PRIO sirasinda ilk uc. Sozluk (kaynak L.tr.f /
+   L.en.f, PRIO) kabuk/tespit-fix.mjs'te; kabuk-derle varlik/
+   tespit-fix.<dil>.json yazar, ada GONDERIMDE indirir (olculdu: HTML
+   <template> hali gzip'e 1,3 KB ekliyor ve H18'i asiyordu). */
+const WA = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
+
+/* KAYNAK VERİSİNDE BOZULMA — `strings.tr.dgh` 2.825 BAYT (31 karakterlik
+   cümle için). İçinde eski sitenin harf-harf düşme iskelesi var ve İKİ
+   KEZ İÇ İÇE: `<span class="lt"><i style="--k: 0;"><span class="lt">
+   <i style="--k: 0;">Ö</i></span></i></span>` — yani eski istemci kendi
+   DOM'unu content.json'a geri yazmış. EN karşılığı temiz (69 bayt).
+   Bozulma TEK anahtarda (tarandı); onarımı panelin işi, rapora yazıldı.
+   Burada iskele AYIKLANIR: `lt` span'ları ve `--k` taşıyan `<i>`ler
+   atılır, tasarımın kendi etiketleri (`<br>`, `span.thin`) KALIR.
+   Yığın tutulur çünkü `</span>` iki farklı açılışı kapatabiliyor. */
+const iskeleAyikla = (m: string): string => {
+  const yigin: string[] = [];
+  return String(m ?? '').replace(/<[^>]+>/g, (etiket) => {
+    if (/^<span class="lt">$/.test(etiket)) { yigin.push('lt'); return ''; }
+    if (/^<span class="thin">$/.test(etiket)) { yigin.push('thin'); return etiket; }
+    if (/^<\/span>$/.test(etiket)) return yigin.pop() === 'thin' ? etiket : '';
+    if (/^<i style="--k/.test(etiket) || /^<\/i>$/.test(etiket)) return '';
+    return etiket;
+  });
+};
+/* ============ B3 · HARF HARF DİKEY KAYMA (giydirme turu) ============
+   Görev belgesi B3: "vertical text clip slide-down animation letter by
+   letter". Kaynakta zaten vardı (`#tespit h2 .lt i` + `ltdrop`, kök
+   4314-4324) ve iskelet turunda giydirmeye ertelenmişti — bu adanın
+   sapma listesinin 1. maddesi. Şimdi geliyor.
+
+   HARFLER DERLEMEDE BÖLÜNÜR, İÇERİKTEN DEĞİL: `strings.tr.dgh` eski
+   istemcinin kendi DOM'unu geri yazdığı için bozuk (2.825 bayt, iç içe
+   iki iskele). Bileşen o iskeleyi zaten ayıklıyordu; harfleri şimdi
+   TEMİZ metinden kendisi üretiyor. Panel metni düzeldiğinde de çalışır.
+
+   ERİŞİLEBİLİRLİK (görev belgesinin şartı): başlık tam metni
+   `aria-label` ile taşır, parçalanmış gövde `aria-hidden`.
+
+   H2/H5: harf OPAKLIĞA DOKUNMAZ. Kaynak `opacity:0`la başlıyordu; burada
+   yalnız `transform` ve kapın `overflow:hidden`i — taban her zaman opak,
+   destekleyemeyen tarayıcıda başlık yerinde ve tam. */
+const harfle = (m: string): { html: string; n: number; duz: string } => {
+  let k = 0, duz = '';
+  const html = String(m ?? '').replace(/(<[^>]+>)|([^<]+)/g, (_t, etiket, metin) => {
+    /* <br> düz metinde BOŞLUK sayılır; öteki etiketler geçer */
+    if (etiket) { if (/^<br\s*\/?>/i.test(etiket)) duz += ' '; return etiket; }
+    /* TEK GEÇİŞ: zincirlenmiş ikinci replace üretilmiş HTML'in üzerinde
+       koşuyor ve öznitelik boşluklarını düz metne karıştırıyordu
+       (aria-label "Öncekonuşmayalım." çıkıyordu — ölçüm yakaladı). */
+    return [...String(metin)].map((ch) => {
+      duz += ch;
+      return /\s/u.test(ch) ? ch
+        : `<span class="ste-lt"><i style="--k:${k++}">${ch}</i></span>`;
+    }).join('');
+  });
+  return { html, n: Math.max(1, k), duz: duz.replace(/\s+/g, ' ').trim() };
+};
+
+---
+<section class="ste-sahne" data-sahne="te" id="tespit" data-anlati>
+  <div class="ste-ic">
+    <div class="ste-bas">
+      <p class="kunye">{g('dge')}</p>
+      {(() => {
+        const H = harfle(suz(iskeleAyikla(g('dgh')), ['em', 'b', 'br', 'span.thin']));
+        /* adım: kaskadın toplam boyu 24vh; harf başına pay harf sayısına
+           bölünür — TR 29, EN 38 harfte de aynı pencereye sığar (kaynakta
+           sabit .028 sn'ydi ve uzun başlıkta taşıyordu) */
+        return <h2 class="s1-buyuk ste-h2" aria-label={H.duz}
+          style={`--adim:${(24 / H.n).toFixed(3)}`}>
+          <span aria-hidden="true" set:html={H.html} />
+        </h2>;
+      })()}
+      <p class="s1-alt">{g('dgp')}</p>
+    </div>
+
+    <div class="ste-kutu">
+      <form class="ste-form" id="steForm">
+        <label class="ste-giris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+            stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg>
+          <input id="steUrl" name="url" type="text" inputmode="url" autocomplete="url"
+            spellcheck="false" required placeholder={en ? 'yoursite.com' : 'siteniz.com'}
+            aria-label={en ? 'Site address' : 'Site adresi'} />
+        </label>
+        <button class="dugme" type="submit" id="steGo">{g('dgbtn')}</button>
+      </form>
+      <p class="ste-not" set:html={suz(g('dgnote'), ['em', 'b'])} />
+
+      {/* Durum satırı: tarama, hata ve kota mesajları burada yaşar.
+          `aria-live` ile ekran okuyucu sonucu duyar. */}
+      <p class="ste-durum" id="steDurum" role="status" aria-live="polite"></p>
+
+      {/* TARAMA RAYI (5 Eyl 2026) — adim metni zaten `steDurum`da yasiyor
+          (role=status, aria-live); burada YALNIZ gorsel ray var, o yuzden
+          aria-hidden. Ikinci bir canli bolge acmak ekran okuyucuya ayni
+          seyi iki kez soyletirdi. Iskelet HTML'de dogar, ada yalniz
+          `hidden`i kaldirir — sahnenin kendi kurali. */}
+      <div class="ste-tarama" id="steTarama" hidden aria-hidden="true"><i></i></div>
+
+      {/* SONUÇ İSKELETİ — HTML'de doğar, `hidden` ile bekler. JS yalnız
+          değer yazar ve `hidden`i kaldırır; yapı kurmaz (Anayasa). */}
+      <div class="ste-sonuc" id="steSonuc" hidden>
+        <div class="ste-ust">
+          <div class="ste-halka">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="ste-halka-zemin" cx="50" cy="50" r="43" />
+              <circle class="ste-halka-yay" id="steYay" cx="50" cy="50" r="43"
+                stroke-dasharray={CEVRE} stroke-dashoffset={CEVRE} />
+            </svg>
+            <b id="steSkor">0</b>
+          </div>
+          <div class="ste-kunye">
+            <span class="ste-host" id="steHost"></span>
+            <h3 id="steHuküm"></h3>
+            <p id="steOzet"></p>
+            <p class="ste-meta" id="steMeta"></p>
+          </div>
+        </div>
+        <p class="ste-uyari" id="steUyari" hidden></p>
+        <ul class="ste-izgara" id="steIzgara"></ul>
+
+        {/* IKINCI EKSEN — AJAN HAZIRLIGI (6 Eyl 2026, Enes: "mevcut 100'un
+            icine karistirma, ayri ikinci skor"). Iki sayi iki soruya cevap
+            verir: ustteki sayfa ZIYARETCI icin ne kadar iyi kurulmus,
+            buradaki yapay zeka ajanlari bu siteyi KULLANABILIYOR mu. Bir
+            sitenin 95 alip ajanlara tamamen kapali olmasi mumkun.
+            SAHA MEDYANI EKRANDA: kendi sitemiz bu eksende 100 aliyor ve
+            aracin sahibi biziz — tek basina bir skor "iyi mi kotu mu"
+            sorusunu cevaplamaz, kiyas noktasi olmadan reklama benzer.
+            Rakam olculdu (olc-ajan-saha.cjs, 6 Eyl 2026, 55 site / 41'i
+            olculebilir); tarih ve orneklem burada YAZILI durmali. */}
+        <div class="ste-ajan" id="steAjan" hidden>
+          <div class="ste-ajan-bas">
+            <h4>{en ? 'Agent readiness' : 'Ajan hazırlığı'}</h4>
+            <b id="steAjanSkor">0</b>
+            <span class="ste-ajan-orta">{en
+              ? 'median 63 across 41 sites we measured (6 Sep 2026)'
+              : 'ölçtüğümüz 41 sitede medyan 63 (6 Eyl 2026)'}</span>
+          </div>
+          <p class="ste-ajan-not">{en
+            ? 'A separate score: this one does not affect the number above. It asks whether AI agents can reach, read and use your site.'
+            : 'Ayrı bir skor: yukarıdaki sayıyı etkilemez. Yapay zekâ ajanları siteye ulaşabiliyor, okuyabiliyor ve kullanabiliyor mu, onu sorar.'}</p>
+          <ul class="ste-izgara" id="steAjanIzgara"></ul>
+        </div>
+
+        {/* DUZELTME LISTESI — iskelet HTML'de, `hidden`; ada secip klonlar. */}
+        <div class="ste-fix" id="steFix" hidden data-wa={WA} data-sozluk={`/varlik/tespit-fix.${dil}.json`}
+          data-msg={en ? 'Hi, I ran the check for {host} — score {skor}.' : 'Merhaba, {host} için kontrolü yaptım — skor {skor}. Bunları konuşmak istiyorum.'}>
+          <p class="ste-fix-bas">{en ? 'Start with these three' : 'Önce şu üçü'}</p>
+          <ol class="ste-fix-liste" id="steFixListe"></ol>
+          <a class="dugme" id="steFixCta" target="_blank" rel="noopener" hidden>{en ? 'Have us fix these three' : 'Bu üçünü biz düzeltelim'}</a>
+        </div>
+
+        {/* KALEM POPUP'I (5 Eyl 2026, Enes: "maddelerin uzerine tiklayinca
+            pop up olarak acilip sebeplerini gercek bir sekilde cok detay
+            vermeden ozetle belirtsin").
+            ISKELET BURADA DOGAR, JS yalniz DEGER yazar — sahnenin kendi
+            kurali. Ucu de OLCULMUS: rozet kalemin durumu, "Olculen"
+            fonksiyonun dondugu deger, "Olcut" esigin KENDISI (fonksiyon
+            kalemle birlikte `o` alaninda gonderiyor; arayuze ikinci bir
+            esik tablosu KONMADI, sapardi). Dorduncu satir yalniz kalem
+            yesil DEGILKEN cikar ve zaten var olan duzeltme sozlugunden
+            gelir — yeni metin uydurulmadi. */}
+        <dialog class="ste-pop" id="stePop" tabindex="-1" aria-labelledby="stePopAd">
+          <form method="dialog" class="ste-pop-kapat">
+            <button aria-label={en ? 'Close' : 'Kapat'}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </form>
+          <p class="ste-pop-rozet" id="stePopRozet"></p>
+          <h4 class="ste-pop-ad" id="stePopAd"></h4>
+          <dl class="ste-pop-olcum">
+            <div id="stePopDegerSatir"><dt>{en ? 'Measured' : 'Ölçülen'}</dt><dd id="stePopDeger"></dd></div>
+            <div id="stePopOlcutSatir"><dt>{en ? 'Criterion' : 'Ölçüt'}</dt><dd id="stePopOlcut"></dd></div>
+          </dl>
+          <p class="ste-pop-neden" id="stePopNeden"></p>
+        </dialog>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* ADA — yalnız bu sahnenin işi. Açılışta SIFIR iş: tek dinleyici
+     bağlanır, o kadar. `fetch` submit içinde (V1 istisnası). */
+  const form = document.getElementById('steForm') as HTMLFormElement | null;
+  if (form) {
+    const url = document.getElementById('steUrl') as HTMLInputElement;
+    const dugme = document.getElementById('steGo') as HTMLButtonElement;
+    const durum = document.getElementById('steDurum') as HTMLElement;
+    const sonuc = document.getElementById('steSonuc') as HTMLElement;
+    const yay = document.getElementById('steYay') as unknown as SVGCircleElement;
+    const skor = document.getElementById('steSkor') as HTMLElement;
+    const host = document.getElementById('steHost') as HTMLElement;
+    const hukum = document.getElementById('steHuküm') as HTMLElement;
+    const ozet = document.getElementById('steOzet') as HTMLElement;
+    const meta = document.getElementById('steMeta') as HTMLElement;
+    const pop = document.getElementById('stePop') as HTMLDialogElement | null;
+    const tarama = document.getElementById('steTarama') as HTMLElement | null;
+    const fixKutu = document.getElementById('steFix') as HTMLElement | null;
+
+    /* GORUNTU SOZLUKLERI ADADA DEGIL, VARLIKTA (5 Eyl 2026). Kalem adlari,
+       rozet, hukum esikleri, duvar ve aktarim mesajlari `kabuk/tespit-fix.mjs`
+       tek kaynagindan uretiliyor ve gonderimde `varlik/tespit-fix.<dil>.json`
+       ile iniyor. SEBEP OLCULDU: popup + duvar mesajlari ada icindeyken ana
+       sayfanin JS'i J1 tavanini asti (bos panel halinde 13.662 B / 12.800).
+       Duzeltme sozlugu de ayni sebeple tasinmisti; ayni yol.
+       ISTEK KULLANICI EYLEMIYLE: acilista inmez, gonderimde iner ve bir kez.
+       INEMEZSE bos sozlukle devam edilir — arayuz o zaman kendi genel
+       metinlerine duser, hicbir yerde cokme olmaz. */
+    let SZ: any = null;
+    const sozlukAl = async () => {
+      if (SZ) return SZ;
+      try { SZ = await (await fetch(fixKutu!.dataset.sozluk!)).json(); }
+      catch (e) { SZ = { fix: [], ad: {}, durumAd: {}, durum: {}, sebep: {}, hukum: [] }; }
+      return SZ;
+    };
+    const uyari = document.getElementById('steUyari') as HTMLElement;
+    const izgara = document.getElementById('steIzgara') as HTMLElement;
+    /* DIL TEK KAYNAKTAN: `<html lang>` — Temel.astro sayfa diline gore
+       basiyor. Betige ayri bir bayrak gecirilseydi ikinci bir dil
+       kaynagi dogar ve gun gelip ayrisirdi. */
+    const DIL = document.documentElement.lang === 'en' ? 'en' : 'tr';
+
+    /* Kalem adları — kaynaktaki sözlüğün taşınan hâli. */
+    /* SONUC METINLERI IKI DILDE (4 Eyl 2026, Enes).
+       ONCEDEN: AD/HUKUM/SEBEP dizileri YALNIZCA Turkce yazilmisti ve
+       betik dili hic sormuyordu — /en sayfasinda ziyaretci Ingilizce bir
+       arayuzde Turkce sonuc okuyordu ("Gorsel alt metni", "Talebi
+       kaciriyor." vb.). Sayfanin geri kalani cevriliydi; kirilan yer
+       yalnizca bu betikti.
+       Dil, sunucudan `data-dil` ile gelir (asagida `DIL`), boylece betik
+       kendi kaynagini tek yerden alir ve ikinci bir dil kapisi dogmaz. */
+    const EN = DIL === 'en';
+    /* SOZLUK IKI TARAFTA OLCULDU (5 Eyl 2026). Sayilar denk oldugu icin
+       (26 uretilen = 26 agirlik = 26 sozluk) sapma gozden kaciyordu:
+         sozlukte KARSILIGI YOKTU : status, weight, whatsapp
+                                    -> ekranda ham anahtar yaziyordu
+         sozlukte OLU ANAHTAR     : favicon, hreflang, ssl
+                                    -> fonksiyon bunlari hic uretmiyor
+       Uc eksik eklendi, uc olu dusuruldu. Bekci: denetim T2.
+       DURUM ETIKETI: kalemin renginin adi — popup'ta rozet olarak cikar. */
+    /* Hüküm eşikleri kaynaktan (12244): 85/70/50/0. */
+    /* SEBEP SOZLUGU FONKSIYONUN DILIYLE HIZALANDI (4 Eyl 2026 — Enes:
+       "sitemi ucretsiz kontrol et kisminda hic sonuc vermiyor, 0").
+       BULGU: arac calisiyordu; kirilan sey MESAJDI. Canli olcum (mobil VE
+       masaustu, ikisi de ayni):
+         HTTP 429 · {"ok":false,"reason":"kota","kalan":0,"yenilenmeMs":...}
+       Ekranda ise "Tarama tamamlanamadi." yaziyordu — cunku bu sozluk
+       `quota` anahtarini ariyordu, fonksiyon `kota` gonderiyor.
+       Sozluk fonksiyonun URETTIGI bes kodun yalnizca IKISINI taniyordu:
+         blocked ✓ · unreachable ✓ · timeout ✗ · kota ✗ · oran ✗
+       Yani en sik iki durum (gunluk hak dolmasi ve hiz siniri) sessizce
+       genel hataya dusuyordu; ziyaretci neden sonuc alamadigini
+       ogrenemiyor, arac bozuk saniliyordu. `quota` OLU ANAHTARDI —
+       fonksiyon onu hic gondermiyor. Kota: KOTA_HAK = 2 / 24 saat, IP
+       basina (netlify/functions/diagnose.js). */
+    /* DUVAR YOLU EKRANA TASINDI (5 Eyl 2026, Enes karari). Fonksiyon
+       saglikli OLMAYAN adres icin zengin bir teshis uretiyor
+       (durum · saglayici · status · cdn) ama `reason` GONDERMIYOR; arayuz
+       yalnizca `reason`a baktigi icin hepsi cope gidiyor ve ziyaretci
+       genel "Tarama tamamlanamadi." mesajini goruyordu. Olculdu (404
+       hedefi): ekrana hic cikmayan alanlar durum, saglayici, host,
+       finalUrl, status, bytes, redirects, cdn, cfEylul.
+       Mesaj artik ONCE `durum`dan, sonra `reason`dan cozuluyor. Taksonomi
+       fonksiyonun kendi listesinden (diagnose.DURUMLAR) — bekci T2 iki
+       tarafi karsilastirir. */
+    /* Olculen gercekler mesajin ARDINA eklenir: HTTP kodu ve varsa
+       saglayici. Uydurma yok — ikisi de fonksiyonun olctugu degerler. */
+    const durumEki = (j: any) => {
+      const p: string[] = [];
+      if (typeof j.status === 'number' && j.status > 0) p.push('HTTP ' + j.status);
+      if (j.saglayici) p.push(j.saglayici);
+      else if (j.cdn && j.cdn !== 'bilinmiyor') p.push(j.cdn);
+      return p.length ? ' (' + p.join(' · ') + ')' : '';
+    };
+
+    /* Fonksiyon `yenilenmeMs` gonderiyordu ve arayuz onu ATIYORDU. Hakkin
+       ne zaman yenilendigini soylemek, "tarama tamamlanamadi" cikmaz
+       sokagini kullanilabilir bir bilgiye cevirir. */
+    const yenilenme = (ms: number) => {
+      const dk = Math.max(1, Math.round((ms - Date.now()) / 60000));
+      const n = dk >= 60 ? Math.round(dk / 60) : dk;
+      if (EN) return dk >= 60 ? ` Renews in ${n} hour${n === 1 ? '' : 's'}.` : ` Renews in ${n} minute${n === 1 ? '' : 's'}.`;
+      return dk >= 60 ? ` ${n} saat sonra yenilenir.` : ` ${n} dakika sonra yenilenir.`;
+    };
+
+    /* Kalem popup'i. Uc satirin ucu de olculmus veriden gelir; dorduncu
+       (neden) yalniz yesil DEGILKEN ve sozlukten. */
+    const popAc = (it: any, kaynak: HTMLElement) => {
+      if (!pop) return;
+      const yaz = (id: string, v: string) => {
+        const el = document.getElementById(id); if (el) el.textContent = v;
+      };
+      const goster = (id: string, acik: boolean) => {
+        const el = document.getElementById(id); if (el) el.hidden = !acik;
+      };
+      const rozet = document.getElementById('stePopRozet') as HTMLElement;
+      rozet.textContent = (SZ && SZ.durumAd[it.state]) || it.state;
+      rozet.className = 'ste-pop-rozet ' + it.state;
+      yaz('stePopAd', (SZ && SZ.ad[it.k]) || it.k);
+      const deger = it.v !== undefined && it.v !== '' ? String(it.v) : '';
+      goster('stePopDegerSatir', !!deger);
+      yaz('stePopDeger', deger);
+      goster('stePopOlcutSatir', !!it.o);
+      yaz('stePopOlcut', it.o || '');
+      const neden = document.getElementById('stePopNeden') as HTMLElement;
+      const kayit = it.state !== 'ok' && SZ ? SZ.fix.find((k: any) => k[0] === it.k) : null;
+      neden.textContent = kayit ? kayit[2]
+        : (EN ? 'This item meets the criterion.' : 'Bu kalem ölçütü karşılıyor.');
+      pop.showModal();
+      /* ODAK KUTUNUN KENDISINDE (5 Eyl 2026): `showModal()` ilk
+         odaklanabilir ogeyi seciyor, o da kapatma dugmesi — kirmizi odak
+         halkasi kutunun tepesinde HATA gibi okunuyordu (kare alinip
+         bakildi). `tabindex="-1"` + focus() ile odak kutuya gecti: Esc,
+         odak tuzagi ve ekran okuyucu duyurusu aynen duruyor, yalnizca
+         halka gitti. */
+      try { pop.focus(); } catch (e) {}
+      yerlestir(kaynak);
+    };
+
+    /* KONUMLANDIRMA — tiklanan kalemin USTUNE, sigmazsa altina.
+       `showModal()`den SONRA cagrilir: kutunun gercek olcusu ancak acikken
+       okunur. Kadraj disina tasmamasi icin iki eksende de kelepcelenir. */
+    const yerlestir = (kaynak: HTMLElement) => {
+      if (!pop || !kaynak) return;
+      const r = kaynak.getBoundingClientRect();
+      const pw = pop.offsetWidth, ph = pop.offsetHeight;
+      const bosluk = 14, kenar = 10;
+      let x = r.left + r.width / 2 - pw / 2;
+      x = Math.max(kenar, Math.min(x, innerWidth - pw - kenar));
+      const ustteYer = r.top - ph - bosluk >= kenar;
+      /* KELEPCE KOSULSUZ (5 Eyl 2026): ilk yazimda yalniz "altta" dalinda
+         vardi. `getBoundingClientRect().top` kadrajdan BUYUK olabilir
+         (kalem gorunur alanin altindaysa) ve kutu ekranin disina cikiyordu
+         — mobil kapisi yakaladi: popup(24,784), kadraj 390x844. */
+      const yHam = ustteYer ? r.top - ph - bosluk : r.bottom + bosluk;
+      const y = Math.max(kenar, Math.min(yHam, innerHeight - ph - kenar));
+      pop.style.left = Math.round(x) + 'px';
+      pop.style.top = Math.round(y) + 'px';
+      /* okun yatay yeri: kalemin ORTASI, kutunun kendi soluna gore */
+      const okX = Math.max(18, Math.min(pw - 18, r.left + r.width / 2 - x));
+      pop.style.setProperty('--ok-x', Math.round(okX) + 'px');
+      pop.classList.toggle('alt', !ustteYer);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (dugme.disabled) return;
+      dugme.disabled = true;
+      sonuc.hidden = true;
+      durum.textContent = EN ? 'Scanning…' : 'Taranıyor…';
+
+      /* TARAMA GOSTERIMI — sozlesme dosya basinda yazili: asgari 2.600 ms,
+         tavan 8.000 ms, hareket-azaltmada asgari YOK. Adimlar fonksiyonun
+         GERCEK adimlari; sahte is gosterilmiyor. */
+      const ASGARI = 2600, TAVAN = 8000, ADIM_MS = 520;
+      const azalt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const bas = Date.now();
+      if (tarama) tarama.hidden = false;
+      durum.classList.add('tarama');
+      let adimNo = 0;
+      const adimSaat = setInterval(() => {
+        const liste = (SZ && SZ.tarama) || [];
+        if (!liste.length) return;
+        adimNo = Math.min(adimNo + 1, liste.length - 1);
+        durum.textContent = liste[adimNo];
+      }, ADIM_MS);
+      const bitir = async () => {
+        clearInterval(adimSaat);
+        const gecen = Date.now() - bas;
+        const bekle = azalt ? 0 : Math.max(0, Math.min(ASGARI - gecen, TAVAN - gecen));
+        if (bekle) await new Promise((r) => setTimeout(r, bekle));
+        if (tarama) tarama.hidden = true;
+        durum.classList.remove('tarama');
+      };
+
+      /* UC HATA, UC MESAJ (5 Eyl 2026). Eskiden tek `catch` submit
+         govdesinin TAMAMINI sariyordu: ag hatasi da, JSON olmayan yanit da,
+         sonucu EKRANA YAZARKEN cikan bir hata da ayni "Baglanti hatasi"
+         metnini veriyordu — ustelik metin sabit Turkce'ydi (EN sayfada da
+         Turkce cikiyordu) ve gercek hata hicbir yere yazilmiyordu. Uc hal
+         ayrildi; ucuncusu artik konsola da dusuyor ki teshis edilebilsin. */
+      let j: any = null;
+      try {
+        /* Sozluk ve analiz BIRLIKTE: mesaji yazabilmek icin sozluk
+           gerekiyor, ikisini sirayla beklemek gereksiz gecikme olurdu. */
+        const [r] = await Promise.all([
+          fetch('/.netlify/functions/diagnose', {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ url: url.value }),
+          }),
+          sozlukAl(),
+        ]);
+        try { j = await r.json(); }
+        catch (e) {
+          console.error('[tespit] yanit JSON degil · HTTP ' + r.status, e);
+          throw Object.assign(new Error('yanit'), { kod: 'yanit' });
+        }
+      } catch (err: any) {
+        await bitir();
+        const kod = err && err.kod === 'yanit' ? 'yanit' : 'ag';
+        if (kod === 'ag') console.error('[tespit] istek basarisiz', err);
+        durum.textContent = (SZ && SZ.sebep && SZ.sebep[kod])
+          || (EN ? 'Could not reach the server — try again.' : 'Sunucuya ulaşılamadı — tekrar dener misin?');
+        dugme.disabled = false;
+        return;
+      }
+
+      try {
+        await bitir();
+        if (!j.ok) {
+          const m = SZ.durum[j.durum];
+          durum.textContent = m
+            ? m + durumEki(j)
+            : (SZ.sebep[j.reason] || (EN ? 'The scan could not be completed.' : 'Tarama tamamlanamadı.'))
+              + (typeof j.yenilenmeMs === 'number' ? yenilenme(j.yenilenmeMs) : '');
+          return;
+        }
+        durum.textContent = typeof j.kalan === 'number'
+          ? (EN ? `You have ${j.kalan} scan${j.kalan === 1 ? '' : 's'} left today.` : `Bugün ${j.kalan} tarama hakkın kaldı.`) : '';
+        host.textContent = j.finalUrl || j.host;
+        const h = SZ.hukum.find(([n]: any) => j.score >= n) || [0, '', ''];
+        hukum.textContent = h[1];
+        ozet.textContent = h[2];
+        /* HTTP KODU META SATIRINA GECTI (5 Eyl 2026): `status` kalemi
+           agirlik tablosundan cikinca (her zaman ok'ti, 6 puan hicbir
+           siteyi ayirmiyordu) kod ekrandan da kaybolacakti. Isten anlayan
+           ziyaretci icin gercek bir isarettir; puanlanmadan gosteriliyor.
+           Ham yonlendirme sayisi da burada: puanlanan sey FAZLA hop, ham
+           sayi bilgi olarak duruyor ve ikisi karisimasin diye ayri yazili. */
+        meta.textContent = (EN ? `Weight ${j.kb} KB · Checks ${(j.items || []).length}` : `Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}`)
+          + (typeof j.status === 'number' ? ` · HTTP ${j.status}` : '')
+          + (typeof j.redirects === 'number' && j.redirects > 0
+              ? (EN ? ` · ${j.redirects} redirect${j.redirects === 1 ? '' : 's'}` : ` · ${j.redirects} yönlendirme`) : '')
+          + (j.cdn ? ` · ${j.cdn}` : '');
+        uyari.hidden = !j.cfEylul;
+        if (j.cfEylul) uyari.textContent =
+          EN
+            ? 'robots.txt blocks AI crawlers — even a healthy site will not appear in AI answers.'
+            : 'robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.';
+        /* Halka ve sayı: renk eşikleri kaynaktan (70/45).
+           TEK EŞİK, İKİ EKSEN: ajan skoru da bu fonksiyondan renk alır.
+           İki yere iki eşik yazsaydım aynı renk iki anlama gelirdi ve
+           biri değişip öteki kalırdı — fonksiyon tarafında `skorla()` ile
+           kaçındığım ayrışmanın aynısı. */
+        const renk = (n: number) => n >= 70 ? '#22c55e' : n >= 45 ? '#f59e0b' : 'var(--red)';
+        const cevre = Number(yay.getAttribute('stroke-dasharray'));
+        yay.style.stroke = renk(j.score);
+        yay.setAttribute('stroke-dashoffset', (cevre * (1 - j.score / 100)).toFixed(1));
+        skor.textContent = String(j.score);
+        /* Sıra kaynaktaki gibi: önce kırmızılar, sonra sarılar, sonra yeşiller. */
+        const sira: Record<string, number> = { fail: 0, warn: 1, ok: 2 };
+        /* IKI IZGARA, TEK CIZIM. Ajan ekseni ayni kalem bicimini kullaniyor;
+           donguyu kopyalasaydim biri degisip oteki kalirdi ve ada butcesi
+           (J1) de bosuna buyurdu. */
+        const izgaraYaz = (hedef: HTMLElement, kalemler: any[]) => {
+          hedef.textContent = '';
+          for (const it of [...(kalemler || [])].sort((a: any, b: any) => sira[a.state] - sira[b.state])) {
+            const li = document.createElement('li');
+            li.className = 'ste-kalem ' + it.state;
+            /* SATIRIN KENDISI DEGIL ICINDEKI DUGME tiklanir: klavyeyle
+               gezilebilir ve ekran okuyucu "dugme" der. `li`ye tabindex
+               takmak ikisini de vermezdi. */
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'ste-kalem-ac';
+            const ad = document.createElement('span');
+            ad.textContent = SZ.ad[it.k] || it.k;
+            btn.appendChild(ad);
+            if (it.v !== undefined && it.v !== '') {
+              const v = document.createElement('em');
+              v.textContent = String(it.v);
+              btn.appendChild(v);
+            }
+            btn.addEventListener('click', () => popAc(it, btn));
+            li.appendChild(btn);
+            hedef.appendChild(li);
+          }
+        };
+        izgaraYaz(izgara, j.items || []);
+        /* AJAN EKSENI — olculemediyse blok HIC ACILMAZ. Butce yetmediginde
+           fonksiyon `olculdu: false` donuyor; yarim veriden skor gostermek
+           ayni turda olcum kapilarina koydugumuz "HUKUM YOK" kuralinin
+           tersi olurdu. */
+        const ajanBlok = document.getElementById('steAjan') as HTMLElement;
+        const aj = j.ajan;
+        if (ajanBlok) {
+          const gorunsun = !!(aj && aj.olculdu);
+          ajanBlok.hidden = !gorunsun;
+          if (gorunsun) {
+            const ajanSkor = document.getElementById('steAjanSkor') as HTMLElement;
+            ajanSkor.textContent = String(aj.skor);
+            ajanSkor.style.color = renk(aj.skor);
+            izgaraYaz(document.getElementById('steAjanIzgara') as HTMLElement, aj.items || []);
+          }
+        }
+        /* DUZELTME LISTESI: sozluk JSON'u gonderimle iner ([anahtar, baslik,
+           aciklama] dizisi PRIO sirasinda; son kayit "yok"); kirmizi/sari
+           kalemlerden ilk uc, yoksa "yok" satiri; CTA WhatsApp (kaynak 11413). */
+        const fix = document.getElementById('steFix') as HTMLElement;
+        if (fix) {
+          const sz = SZ.fix;
+          /* IKI EKSENIN de kirmizilari aday: ziyaretcinin yapacagi is tek
+             listedir. PRIO sirasi ana eksen kalemlerini one koyuyor, ajan
+             kalemleri sirasinin sonunda — yani ajan kalemi ancak ana eksen
+             temizken ilk uce girer. */
+          const tumKalem = [...(j.items || []), ...((j.ajan && j.ajan.items) || [])];
+          const kotu = new Set(tumKalem.filter((it: any) => it.state !== 'ok').map((it: any) => it.k));
+          const aday = sz.filter((k) => kotu.has(k[0])).slice(0, 3);
+          const liste = document.getElementById('steFixListe') as HTMLElement;
+          liste.textContent = '';
+          for (const [k, b, a] of (aday.length ? aday : sz.filter((k) => k[0] === 'yok'))) {
+            const li = document.createElement('li'); li.dataset.k = k;
+            const bb = document.createElement('b'); bb.textContent = b;
+            const sp = document.createElement('span'); sp.textContent = a;
+            li.append(bb, sp); liste.appendChild(li);
+          }
+          const cta = document.getElementById('steFixCta') as HTMLAnchorElement;
+          const wa = fix.dataset.wa;
+          cta.hidden = !(aday.length && wa);
+          if (wa) cta.href = `https://wa.me/${wa}?text=${encodeURIComponent((fix.dataset.msg || '').replace('{host}', j.host || j.finalUrl || '').replace('{skor}', String(j.score)))}`;
+          fix.hidden = false;
+        }
+        sonuc.hidden = false;
+      } catch (err) {
+        /* Buraya YALNIZ sonucu ekrana yazarken cikan bir hata duser — ag
+           degil. Gercek hata konsola yazilir: "baglanti hatasi" diye
+           etiketlemek teshisi yillarca yanlis yone gonderirdi. */
+        console.error('[tespit] sonuc yazilamadi', err);
+        durum.textContent = EN
+          ? 'The result could not be displayed. Please try again.'
+          : 'Sonuç görüntülenemedi — tekrar dener misin?';
+      } finally {
+        dugme.disabled = false;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,73 @@
+{
+ "_": "yeni/film/kare-dizisi.cjs — kare dizisi (image sequence) agirligi, 1440p.",
+ "olcum": "2026-08-27T15:03:28.412Z",
+ "cozunurluk": "2560x1440",
+ "kalite": "WebP q=82 · AVIF CRF 32 (cpu-used 8, still-picture)",
+ "toplam_kare_film": 6159,
+ "toplam_sn_film": 256.638,
+ "grup": [
+  {
+   "ad": "ilk 8 sn (sahne1)",
+   "klipler": [
+    1
+   ],
+   "sn": 8.042,
+   "kare": 193,
+   "bicim": {
+    "webp": {
+     "toplam_bayt": 14595250,
+     "toplam_mib": 13.92,
+     "kare_basi_kb": 73.9,
+     "encode_ms": 45470
+    },
+    "avif": {
+     "toplam_bayt": 4524238,
+     "toplam_mib": 4.31,
+     "kare_basi_kb": 22.9,
+     "encode_ms": 119720
+    }
+   }
+  },
+  {
+   "ad": "son 10 sn (sahne38+39)",
+   "klipler": [
+    38,
+    39
+   ],
+   "sn": 10.084,
+   "kare": 242,
+   "bicim": {
+    "webp": {
+     "toplam_bayt": 26586908,
+     "toplam_mib": 25.36,
+     "kare_basi_kb": 107.3,
+     "encode_ms": 59756
+    },
+    "avif": {
+     "toplam_bayt": 8800830,
+     "toplam_mib": 8.39,
+     "kare_basi_kb": 35.5,
+     "encode_ms": 250072
+    }
+   }
+  }
+ ],
+ "tam_film_tahmini": {
+  "webp": {
+   "kare_basi_kb": 92.5,
+   "tahmini_bayt": 583082554,
+   "tahmini_mib": 556,
+   "tahmini_gib": 0.54,
+   "ornek_kare": 435,
+   "ornek_yuzde": 7.1
+  },
+  "avif": {
+   "kare_basi_kb": 29.9,
+   "tahmini_bayt": 188664583,
+   "tahmini_mib": 180,
+   "tahmini_gib": 0.18,
+   "ornek_kare": 435,
+   "ornek_yuzde": 7.1
+  }
+ }
+}

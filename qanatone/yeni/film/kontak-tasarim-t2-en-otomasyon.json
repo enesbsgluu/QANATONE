@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:30:02.651Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 18.73,
+   "farkliPiksel": 242700,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 7/8 sutun 4/8 (x 540-720, y 675-788; hucrede 17014 px, tum farkin %7)",
+   "md5": {
+    "once": "1dd40aa0792e801fa024d7281a5fbed8",
+    "sonra": "006930d3a34afaed0ab548bbbebd2a75"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-otomasyon-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-otomasyon-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-otomasyon-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 50,
+   "farkYuzde": 3.86,
+   "farkliPiksel": 50002,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 1/8 sutun 4/8 (x 540-720, y 0-113; hucrede 4254 px, tum farkin %9)",
+   "md5": {
+    "once": "5b043c475540ae64ea29561f342d6c90",
+    "sonra": "e59f08a3c92e5f8fd1eca91a59d3e93b"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 2631,
+     "sonra": 3159
+    },
+    "gercek": {
+     "once": 2631,
+     "sonra": 3159
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-otomasyon-once-50.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-otomasyon-sonra-50.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-otomasyon-yanyana-50.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/en/otomasyon/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 2,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 6161,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "1dd40aa0792e801fa024d7281a5fbed8",
+    "png": "yeni/film/kontak-tur9/t2-en-otomasyon-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": 50,
+    "hedef": 2631,
+    "gercek": 2631,
+    "sapma": 0,
+    "md5": "5b043c475540ae64ea29561f342d6c90",
+    "png": "yeni/film/kontak-tur9/t2-en-otomasyon-once-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/en/otomasyon/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 21,
+   "sonsuzSifirlanan": 20,
+   "sonluBitirilen": 1,
+   "video": 0
+  },
+  "scrollHeight": 7218,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "006930d3a34afaed0ab548bbbebd2a75",
+    "png": "yeni/film/kontak-tur9/t2-en-otomasyon-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 21
+   },
+   {
+    "konum": 50,
+    "hedef": 3159,
+    "gercek": 3159,
+    "sapma": 0,
+    "md5": "e59f08a3c92e5f8fd1eca91a59d3e93b",
+    "png": "yeni/film/kontak-tur9/t2-en-otomasyon-sonra-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 21
+   }
+  ]
+ }
+}

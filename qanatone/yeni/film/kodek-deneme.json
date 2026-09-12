@@ -1,0 +1,57 @@
+{
+ "_": "yeni/film/kodek-deneme.cjs — TEK KLIP (sahne20). Tam hat encode edilmedi.",
+ "olcum": "2026-08-27T14:50:51.548Z",
+ "klip": {
+  "n": 20,
+  "sure": 5.042,
+  "kare": 121,
+  "kaynak": "3840x2160 hevc"
+ },
+ "cozunurluk": "2560x1440",
+ "not_svtav1": "libsvtav1 bu derlemede yok; donanim AV1 (nvenc/qsv/amf) da acilmadi. AV1 libaom cpu-used=8 ile uretildi — encode suresi UST SINIR.",
+ "referans": "kaynagin 1440p hali, x264 CRF 8",
+ "aday": [
+  {
+   "ad": "h264",
+   "etiket": "H.264 1440p (mevcut hat)",
+   "mime": "video/mp4; codecs=\"avc1.640028\"",
+   "dosya": "kodek/sahne20-h264.mp4",
+   "bayt": 4598829,
+   "mib": 4.39,
+   "kbps": 7297,
+   "encode_ms": 9746,
+   "encode_kat": 1.9,
+   "psnr": 45.214492,
+   "ssim": 0.988926,
+   "h264_orani": 1
+  },
+  {
+   "ad": "h265",
+   "etiket": "H.265/HEVC 1440p",
+   "mime": "video/mp4; codecs=\"hvc1.1.6.L120.90\"",
+   "dosya": "kodek/sahne20-h265.mp4",
+   "bayt": 3214648,
+   "mib": 3.07,
+   "kbps": 5101,
+   "encode_ms": 14702,
+   "encode_kat": 2.9,
+   "psnr": 46.2185,
+   "ssim": 0.990099,
+   "h264_orani": 0.699
+  },
+  {
+   "ad": "av1",
+   "etiket": "AV1 1440p (libaom, cpu-used 8)",
+   "mime": "video/mp4; codecs=\"av01.0.08M.08\"",
+   "dosya": "kodek/sahne20-av1.mp4",
+   "bayt": 2790586,
+   "mib": 2.66,
+   "kbps": 4428,
+   "encode_ms": 77727,
+   "encode_kat": 15.4,
+   "psnr": 46.316018,
+   "ssim": 0.990734,
+   "h264_orani": 0.607
+  }
+ ]
+}

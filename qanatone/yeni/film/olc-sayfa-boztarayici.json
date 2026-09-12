@@ -1,0 +1,329 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: p95te KACIRILAN KARE<=1 (TIK cinsinden, tik her kosumda olculur) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "kapi": "A — TAM TARAMA (gerileme kapisi; 59 sayfa tek tarayicida). Ziyaretci olcumu KAPI B: yeni/film/olc-soguk.cjs",
+ "olcum": "2026-09-06T12:30:40.640Z",
+ "tarayici": "brave Chrome/152.0.7977.83",
+ "tekrar": 2,
+ "tazeleme": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 0,
+  "min": 8,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "tazeleme_kapanis": {
+  "tik_ms": 8.3,
+  "hz": 120.5,
+  "ornek": 194,
+  "suzulen": 1,
+  "min": 8.1,
+  "p10": 8.2,
+  "p90": 8.4,
+  "kararli": true
+ },
+ "ekran_degisti": false,
+ "yuk_taban": {
+  "tarayici_cekirdek": 0.988,
+  "yabanci_cekirdek": 1.721,
+  "rig_cekirdek": 0.329,
+  "en_agir": [
+   {
+    "ad": "chrome.exe",
+    "pid": 9928,
+    "cekirdek": 0.625
+   },
+   {
+    "ad": "chrome.exe",
+    "pid": 15660,
+    "cekirdek": 0.314
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 7372,
+    "cekirdek": 0.146
+   },
+   {
+    "ad": "MuseHub.exe",
+    "pid": 8484,
+    "cekirdek": 0.108
+   },
+   {
+    "ad": "System",
+    "pid": 4,
+    "cekirdek": 0.09
+   },
+   {
+    "ad": "claude.exe",
+    "pid": 5524,
+    "cekirdek": 0.064
+   }
+  ],
+  "pencere_sn": 4.18,
+  "_": "tarayici acik + bos sayfa + kaydirma yok. Duzenegin KENDI urettigi yabanci yuk (dwm.exe kompozitoru, cekirdek) buradadir; sayfa kosumlarindaki yuk bunun UZERINE binendir."
+ },
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 1,
+  "p95_esdeger_ms": 16.6,
+  "takilma_esik_ms": 50,
+  "takilma_esik_tik": 6.02,
+  "tek_takilma_ms": 250,
+  "toplam_oran_BILGI": 0.03,
+  "p95_eski_ms": 20,
+  "_": "p95_eski_ms KAPI DEGIL — 4 Eyl oncesi ms esigi, kiyas icin yazilir",
+  "yabanci_tarayici_kapi_cekirdek": 0.15,
+  "cekirdek": 8,
+  "toplam_cpu_KAPI_DEGIL": true,
+  "_yuk": "YABANCI TARAYICI kapiyi asarsa sayfa HUKUMSUZDUR (kirmizi de yesil de) — KALDI degil, \"yeniden olc\". Toplam CPU yuku BILGIDIR: ~3 cekirdege kadar saf CPU yuku hukmu cevirmedi (doz-tepki: yeni/film/olc-yuk-tarama.json), 0,8 cekirdek yabanci tarayici cevirdi (p95 8,5 -> 33,4 ms)."
+ },
+ "hukum": "KISMI (1/61 sayfa) — HUKUM DEGIL · ham: HUKUM YOK — 1 sayfa olculemedi (yabanci_tarayici)",
+ "kismi": {
+  "olculen": 1,
+  "tum": 61,
+  "_": "kismi kosum HUKUM DEGIL: tarayici isinmasi sayfa basina bir tik oynatabiliyor (kunyeye bak)"
+ },
+ "hukumsuz": {
+  "sayi": 1,
+  "sayfalar": [
+   {
+    "yol": "/hizmetler/geo/",
+    "sebep": [
+     "yabanci_tarayici"
+    ],
+    "tarayici_cekirdek": 1.077,
+    "yabanci_cekirdek": 2.037,
+    "en_agir": [
+     {
+      "ad": "chrome.exe",
+      "pid": 9928,
+      "cekirdek": 0.661
+     },
+     {
+      "ad": "chrome.exe",
+      "pid": 15660,
+      "cekirdek": 0.384
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.202
+     }
+    ]
+   }
+  ],
+  "_": "HUKUMSUZ != KALDI: iddia sayfa hakkinda degil OLCUM hakkindadir. Sebep giderilip yeniden olculur."
+ },
+ "boz_kollari": {
+  "boz_tik": false,
+  "boz_yuk": false,
+  "boz_tarayici": true,
+  "_": "KIRMIZI-ONCE: bu kayit hukum degil, kurallarin yanabildiginin kanitidir (BOZ_YUK bir istisna: o kol kapiyi yakmaz, toplam CPU'nun kapi OLMADIGINI gosteren egriyi uretir)"
+ },
+ "durulan": null,
+ "durulan_sebep": null,
+ "sayfa": [
+  {
+   "yol": "/hizmetler/geo/",
+   "js_bayt": 3811,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "yuk": {
+      "tarayici_cekirdek": 1.077,
+      "yabanci_cekirdek": 1.963,
+      "rig_cekirdek": 0.503,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.674
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 15660,
+        "cekirdek": 0.393
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.219
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.144
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.108
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.099
+       }
+      ],
+      "pencere_sn": 9.43
+     },
+     "sistem_cekirdek": 4.529,
+     "kare": 339,
+     "tur_ms": 3832,
+     "p95_ms": 25,
+     "medyan_ms": 8.3,
+     "takilma_sayi": 4,
+     "takilma_toplam_ms": 350,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 3016,
+      "takilma_sayi": 1,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    },
+    {
+     "yuk": {
+      "tarayici_cekirdek": 1.053,
+      "yabanci_cekirdek": 2.037,
+      "rig_cekirdek": 0.489,
+      "en_agir": [
+       {
+        "ad": "chrome.exe",
+        "pid": 9928,
+        "cekirdek": 0.661
+       },
+       {
+        "ad": "chrome.exe",
+        "pid": 15660,
+        "cekirdek": 0.384
+       },
+       {
+        "ad": "System",
+        "pid": 4,
+        "cekirdek": 0.202
+       },
+       {
+        "ad": "claude.exe",
+        "pid": 7372,
+        "cekirdek": 0.115
+       },
+       {
+        "ad": "MsMpEng.exe",
+        "pid": 4104,
+        "cekirdek": 0.105
+       },
+       {
+        "ad": "MuseHub.exe",
+        "pid": 8484,
+        "cekirdek": 0.099
+       }
+      ],
+      "pencere_sn": 9.81
+     },
+     "sistem_cekirdek": 4.28,
+     "kare": 352,
+     "tur_ms": 3616,
+     "p95_ms": 17.1,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 0,
+     "takilma_toplam_ms": 0,
+     "takilma_tek_max_ms": 0,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2648.800048828125,
+     "toplam_px": 2649,
+     "toplam_px_bas": 2628,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 25,
+   "takilma_oran_medyan": 0.0913,
+   "takilma_tek_max": 150,
+   "taban_takilma": [
+    1,
+    0
+   ],
+   "kare_p95": 3.012,
+   "kacirilan_kare": 2,
+   "kuanta_sapma": 0.012,
+   "p95_eski_ms_kapisi": false,
+   "tik_sapma": false,
+   "tur_tam": true,
+   "yuk": {
+    "olculdu": true,
+    "tarayici_cekirdek_enyuksek": 1.077,
+    "tarayici_cekirdek_kosumlar": [
+     1.077,
+     1.053
+    ],
+    "yabanci_cekirdek_medyan": 2.037,
+    "yabanci_cekirdek_kosumlar": [
+     1.963,
+     2.037
+    ],
+    "rig_cekirdek_medyan": 0.503,
+    "en_agir": [
+     {
+      "ad": "chrome.exe",
+      "pid": 9928,
+      "cekirdek": 0.661
+     },
+     {
+      "ad": "chrome.exe",
+      "pid": 15660,
+      "cekirdek": 0.384
+     },
+     {
+      "ad": "System",
+      "pid": 4,
+      "cekirdek": 0.202
+     },
+     {
+      "ad": "claude.exe",
+      "pid": 7372,
+      "cekirdek": 0.115
+     },
+     {
+      "ad": "MsMpEng.exe",
+      "pid": 4104,
+      "cekirdek": 0.105
+     },
+     {
+      "ad": "MuseHub.exe",
+      "pid": 8484,
+      "cekirdek": 0.099
+     }
+    ],
+    "sistem_cekirdek_medyan": 4.529,
+    "cekirdek": 8,
+    "kapi_tarayici": 0.15,
+    "_": "KAPI tarayici_cekirdek (yabanci tarayici sinifi). yabanci_cekirdek TOPLAM ve KAPI DEGIL: 2,9 cekirdek saf CPU yuku hukmu cevirmedi, 0,8 cekirdek yabanci tarayici cevirdi. sistem_cekirdek ORTALAMADIR ve tek cekirdek yiyen sureci gizler."
+   },
+   "bilgi": {
+    "takilma_oran_medyan": 0.0913,
+    "sistem_cekirdek_medyan": 4.529
+   },
+   "kapi": {
+    "kacirilan_kare": false,
+    "takilma_tek": true,
+    "js": true,
+    "tur_tam": true
+   },
+   "hukumsuz": [
+    "yabanci_tarayici"
+   ],
+   "gecti": null
+  }
+ ]
+}

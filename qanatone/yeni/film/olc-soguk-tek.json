@@ -1,0 +1,103 @@
+{
+ "_": "yeni/film/olc-soguk.cjs — KAPI B SOGUK GIRIS: taze tarayici profili + sabit isinma dizisi + TEK sayfa. Kapi A (olc-sayfa.cjs) TARAMA kosulunu olcer ve gerileme kapisidir; bu ZIYARETCI kosulunu olcer. Iki kapinin rakamlari birbirinin yerine GECMEZ.",
+ "kapi": "B — SOGUK GIRIS (ziyaretci kapisi)",
+ "isinma_dizisi": [
+  "her olcum icin AYRI TARAYICI (taze gecici profil)",
+  "about:blank acilir",
+  "tazeleme olculur (200 rAF araligi, ilk 5 atilir)",
+  "1500 ms bosta beklenir",
+  "about:blank kapatilir",
+  "olculecek sayfa acilir — SITE SAYFASI ISINMAYA GIRMEZ",
+  "1200 ms + fare hareketi + taban 3 sn + tur (900 px/s gercek girdi)"
+ ],
+ "olcum": "2026-09-03T17:13:33.232Z",
+ "tarayici": "brave",
+ "tekrar": 1,
+ "boz": false,
+ "esik": {
+  "kacirilan_kare": 2,
+  "toplam_oran": 0.08,
+  "tek_takilma_ms": 250,
+  "_": "Enes, 5 Eyl — B'nin ilk 27 soguk kosumunun dagilimindan turetildi. A'nin esikleriyle ayni olmamasi TASARIM: A tarama, B ziyaretci kosulu."
+ },
+ "hedef": {
+  "kacirilan_kare": 1,
+  "_": "HEDEF — KAPI DEGIL. Kayda gecer, hukmu etkilemez."
+ },
+ "sinyal": {
+  "takilma_esik_ms": 50,
+  "_": "Neyin takilma sayildigi kapi A ile BIREBIR ayni olmali — olc-esik.test.mjs sinar"
+ },
+ "hukum": "KISMI (1/9 sayfa) — HUKUM DEGIL · ham: GECTI",
+ "kismi": {
+  "olculen": 1,
+  "tum": 9,
+  "_": "kismi kosum HUKUM DEGIL: B'nin hukmu varsayilan dokuz sayfanin tamami kosuldugunda kurulur"
+ },
+ "hedefte_olmayan": [],
+ "dagilim": {
+  "0": 1
+ },
+ "sayfa": [
+  {
+   "yol": "/yeni/projeler/",
+   "kosum": [
+    {
+     "tazeleme": {
+      "tik_ms": 8.3,
+      "hz": 120.5,
+      "ornek": 194,
+      "suzulen": 0,
+      "min": 8,
+      "p10": 8.2,
+      "p90": 8.5,
+      "kararli": true
+     },
+     "kare": 369,
+     "tur_ms": 3341,
+     "p95_ms": 8.5,
+     "medyan_ms": 8.3,
+     "kare_p95": 1.024,
+     "kacirilan_kare": 0,
+     "takilma_sayi": 2,
+     "takilma_toplam_ms": 216,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5,
+      "tik_p10": 8.2
+     },
+     "scroll_px": 2472.800048828125,
+     "toplam_px": 2473,
+     "toplam_px_bas": 2451,
+     "tur_tam": true
+    }
+   ],
+   "p95_medyan": 8.5,
+   "kacirilan_medyan": 0,
+   "kacirilan_kosumlar": [
+    0
+   ],
+   "kacirilan_en_yuksek": 0,
+   "kare_p95_medyan": 1.024,
+   "takilma_oran_medyan": 0.0647,
+   "takilma_tek_max": 150,
+   "taban_takilma": [
+    0
+   ],
+   "tik_kosumlar": [
+    8.3
+   ],
+   "tur_tam": true,
+   "kapi": {
+    "kacirilan_kare": true,
+    "takilma_oran": true,
+    "takilma_tek": true,
+    "tur_tam": true
+   },
+   "gecti": true,
+   "hedefte": true
+  }
+ ]
+}

@@ -1,0 +1,86 @@
+{
+ "_": "yeni/film/olc-sayfa.cjs — EK KAPI butun sayfalar: kare p95<=20 (3 kosum medyani) · takilma toplam<=%3 + tek<=250 ms · taban damgali · JS butcesi. Film/deneme-react haric.",
+ "olcum": "2026-09-01T20:56:54.061Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "tekrar": 3,
+ "esik": {
+  "p95_ms": 20,
+  "takilma_esik_ms": 50,
+  "tek_takilma_ms": 250,
+  "toplam_oran": 0.03
+ },
+ "hukum": "KALDI",
+ "durulan": null,
+ "sayfa": [
+  {
+   "yol": "/yeni/hizmet/finans/?kabuk=0",
+   "js_bayt": 6958,
+   "js_tavan": 10240,
+   "kosum": [
+    {
+     "kare": 1117,
+     "tur_ms": 14062,
+     "p95_ms": 25.1,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 7,
+     "takilma_toplam_ms": 558,
+     "takilma_tek_max_ms": 150,
+     "taban": {
+      "sure_ms": 3008,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11279.2001953125,
+     "toplam_px": 11279
+    },
+    {
+     "kare": 1092,
+     "tur_ms": 14129,
+     "p95_ms": 33.3,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 9,
+     "takilma_toplam_ms": 582,
+     "takilma_tek_max_ms": 75,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11279.2001953125,
+     "toplam_px": 11279
+    },
+    {
+     "kare": 1109,
+     "tur_ms": 14079,
+     "p95_ms": 25.1,
+     "medyan_ms": 8.4,
+     "takilma_sayi": 8,
+     "takilma_toplam_ms": 499,
+     "takilma_tek_max_ms": 75,
+     "taban": {
+      "sure_ms": 3007,
+      "takilma_sayi": 0,
+      "p95_ms": 8.5
+     },
+     "scroll_px": 11279.2001953125,
+     "toplam_px": 11279
+    }
+   ],
+   "p95_medyan": 25.1,
+   "takilma_oran_medyan": 0.0397,
+   "takilma_tek_max": 150,
+   "taban_takilma": [
+    0,
+    0,
+    0
+   ],
+   "kapi": {
+    "p95": false,
+    "takilma_oran": false,
+    "takilma_tek": true,
+    "js": true
+   },
+   "gecti": false
+  }
+ ]
+}

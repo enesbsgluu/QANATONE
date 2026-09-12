@@ -1,0 +1,153 @@
+---
+/* S-P · DESTE (projeler) — göçün üçüncü sahnesi, turun ilk AĞIR kalemi.
+   Kaynak: kök index.html · markup 4728-4742 · CSS 1182-1313 ·
+   renderProjects 7231 · deck() 12488.
+   Mekanizma, sapmalar ve ölçülmüş gerekçeler stil/deste.css başında.
+
+   İÇERİK NEREDEN: content.json'un `projects` dizisi (panelin ürünü) —
+   ad, yıl, etiket ve anlatım derlemede HTML'e pişer (madde 1). Eski
+   tarafta bu kartları `renderProjects` basıyordu, yani bot destede HİÇ
+   iş görmüyordu; sitenin tek kanıt yüzeyi JS'in arkasındaydı.
+
+   ÖLÇÜLER kunye dosyasından: `src/veri/deste-gorselleri.json` — onu
+   `gorsel-uret.cjs` görsellerle BİRLİKTE üretir, elle yazılmaz. Hangi
+   işin destede olduğu da orada (fotoğrafı olan ilk altı iş); denetimdeki
+   H15 künyeyi content.json ile karşılaştırır, panel değişip üreteç
+   koşmazsa kırmızı döner.
+
+   Ada JS'i: yalnız YEDEK YOL (aşağıda) — destekleyen tarayıcıda 0 iş. */
+import '../stil/deste.css';
+import { icerik, T, sl } from '../icerik';
+import kunye from '../veri/deste-gorselleri.json';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR proje sayfalarina bagliyordu (H26). */
+const on = dil === 'en' ? '/en' : '';
+
+const tum = icerik.projects || [];
+const bul = (s: string) => tum.find((p: any) => p.slug === s);
+/* ANA SAYFA DESTESI DORT KART (kaynak `const DESTE_PROJE=4`, kok 6975;
+   `renderProjects` 6996: `TUM.slice(0, DESTE_PROJE)`). Yeni deste kunyedeki
+   HER karti basiyordu (alti) ve ray 972 px uzuyordu — kart boyu (442), marj
+   (44) ve sticky ust (96) iki agacta ZATEN birebirdi, fark yalniz SAYIYDI:
+   iki fazla kart x (442 + 44) = 972. Olcum: eski kap 1900 px / 4 oge, yeni
+   2872 px / 6 oge (3/4 Eyl, ray-olc). Tam arsiv /projeler'de duruyor. */
+const DESTE_PROJE = 4;
+const kartlar = kunye
+  .map((k: { slug: string; w: number; h: number; mw: number; mh: number }) =>
+    ({ ...k, p: bul(k.slug) }))
+  .filter((k: any) => k.p)
+  .slice(0, DESTE_PROJE);
+
+/* Karta özel iki ton — kaynak `HUE` dizisi (index.html 6889) ve
+   `hueVars` (6890). Renkler kartın kimliği: aynı sırada aynı ton. */
+const HUE: number[][] = [[350, 10], [14, 332], [326, 356], [28, 2], [300, 338], [358, 20]];
+const ton = (i: number) => {
+  const h = HUE[i % HUE.length];
+  return `--i:${i};--g1:hsl(${h[0]} 88% 58% / .26);--g2:hsl(${h[1]} 84% 56% / .15)`;
+};
+const iki = (n: number) => String(n).padStart(2, '0');
+const en = dil === 'en';
+/* panel metinleri (kaynak data-t anahtarlari): bos donerse cagri yerindeki
+   kaynak varsayilani kullanilir */
+const sz = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T((sz as any)[k], dil);
+---
+{/* SADAKAT DENETİMİ (21 Ağu): bu sahnenin kaynak eşi VAR (kök #prjDeck)
+    ve kaynak künyesi sayı değil 26px KIZIL ÇİZGİ + mono metindi
+    (kök 366-367: .shead .mono::before). Anlatı sayacı ("04") kaynakta
+    olmayan ekleme sayıldı → data-anlati düştü (sayaç DOM'dan aktığı
+    için sonraki numaralar kendiliğinden oturur), çizgi künyeden geldi. */}
+<section class="sp-sahne" data-sahne="p">
+  <div class="sp-ic">
+    <div class="sp-giris">
+      {/* METIN TEK KAYNAKTAN (ANAYASA, 3/4 Eyl 2026): kaynak bu uc satiri
+          content.json anahtarlarindan basiyor (kok 4573-4575: data-t pje/pjh/
+          pjp). Burada TR+EN elle yazilmisti ve EN'e kaynakta OLMAYAN bir cumle
+          eklenmisti ("Each one unblocks something different." — yan yana kare
+          t2-en-a-s2). Artik panelin metni kazanir; yedek deger kaynagin kendi
+          varsayilani. */}
+      <p class="kunye sp-kunye">{g('pje') || (en ? 'Selected work' : 'Seçilmiş işler')}</p>
+      <h2 class="s1-buyuk">{g('pjh') || (en ? 'Projects.' : 'Projeler.')}<span
+        class="sp-sayi">({tum.length})</span></h2>
+      <p class="s1-alt">{g('pjp') || (en
+        ? 'The systems we built and what came out of them.'
+        : 'Kurduğumuz sistemler, çıkan sonuçlar. Her biri farklı bir tıkanmayı çözüyor.')}</p>
+    </div>
+
+    <div class="sp-deste" id="spDeste" style={`--n:${kartlar.length}`}>
+      {kartlar.map((k: any, i: number) => (
+        <div class="sp-kart" style={ton(i)}>
+          {/* Detaylar artık adada — rota turu 2. sayfa; H16 bekçiliyor. */}
+          <a class="sp-govde" href={sl(`${B}${on}/projeler/${k.slug}`)} data-astro-prefetch="false">
+            <span class="sp-gorsel" data-pj={k.slug}>
+              <picture>
+                <source media="(max-width:900px)" type="image/webp"
+                  srcset={`/img/pj/${k.slug}-m.webp`} width={k.mw} height={k.mh} />
+                <img src={`/img/pj/${k.slug}.webp`} width={k.w} height={k.h}
+                  loading="lazy" decoding="async"
+                  alt={`${k.p.name} — ${T(k.p.tag, dil)}`} />
+              </picture>
+              <span class="sp-yil">{k.p.year}</span>
+            </span>
+            <span class="sp-yazi">
+              <span class="sp-no">{iki(i + 1)} / {iki(tum.length)}</span>
+              <span class="sp-etiket">{T(k.p.tag, dil)}</span>
+              <h3>{k.p.name}</h3>
+              <p>{T(k.p.text, dil)}</p>
+              <span class="sp-git">{en ? 'View project' : 'Projeyi gör'}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></span>
+            </span>
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <div class="sp-tumu">
+      <a class="sp-tum" href={sl(`${B}${on}/projeler`)} data-astro-prefetch="false">{en ? 'All projects' : 'Tüm projeler'}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+        ><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* ARAÇ MERDİVENİNİN 2. BASAMAĞI — yalnız `animation-timeline`
+     desteklemeyen tarayıcıda kurulur; destekleyen tarayıcıda bu betik
+     TEK SATIR bile iş yapmaz. Cihaz kapısı YOK: pin ve kart geçişi
+     artık her cihazda yaşıyor (Enes kararı, 19 Ağu), yedek yol da öyle.
+
+     Neden IO: kaydırma dinleyicisi kurmak sahne talimatının açık
+     yasağı ("kart geçişi kaydırma dinleyicisinde düzen okumamalı").
+     IO geri çağrısı düzen okumaz, tarayıcı kesişimi kendi hesaplar.
+
+     Neden ayrı işaret elemanı: sticky kart YAPIŞTIĞI için kendi düzen
+     konumunu taşımaz — sıfır yükseklikli `.sus-iz` akışta durur ve bir
+     sonraki kartın gerçek konumunu işaretler. `rootMargin` üstten
+     9999 px açar, alttan %82 kısar: işaret ekranın üst %18'ine girince
+     bir önceki kart küçülür, yukarı kaydırınca kendiliğinden geri
+     döner (eski formülün t=1 eşiğinin aynısı). */
+  const deste = document.getElementById('spDeste');
+  if (deste && !CSS.supports('animation-timeline', 'view()')) {
+    const kartlar = Array.from(deste.querySelectorAll('.sp-kart'));
+    const izler = kartlar.slice(1).map((k) => {
+      const iz = document.createElement('i');
+      iz.className = 'sus-iz';
+      iz.setAttribute('aria-hidden', 'true');
+      k.before(iz);
+      return iz;
+    });
+    const goz = new IntersectionObserver((girisler) => {
+      for (const g of girisler) {
+        const k = kartlar[izler.indexOf(g.target as HTMLElement)];
+        if (k) k.classList.toggle('sp-gecti', g.isIntersecting);
+      }
+    }, { rootMargin: '9999px 0px -82% 0px' });
+    izler.forEach((iz) => goz.observe(iz));
+  }
+</script>

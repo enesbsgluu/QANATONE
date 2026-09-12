@@ -1,0 +1,72 @@
+---
+/* EN ANA SAYFA — TR ana sayfanın aynı sahne dizisi, dil='en'.
+   Kuruluş gerekçesi: rota kapanış envanterindeki son kaçak sınıfı
+   (13× '/en#iletisim' + 1× '/en#lead') bu sayfaya bağlanıyordu; ada
+   kurulunca hepsi ${B}/en'e döndü. Sahne anlatıları (S2/S3/S5) TR
+   metnin sadık çevirisi — kendi dosyalarında iki dil yan yana.
+   Perde dil-bağımsız (QANATONE harfleri) ve eski /en'de de vardı.
+   Baş sözleşmesi TR ana sayfanın EN karşılığı; eski PAGES.home EN desc
+   25 karakterdi (S1 tabanı altı), TR'deki tam cümlenin çevirisi
+   kullanıldı. NOT: H ailesi bekçileri (H1-H23, gzip/JS tavanları)
+   yalnız TR ana sayfayı ölçer — EN'e genişletilmesi ayrı iş, raporda. */
+import '../../stil/ana.css';
+import Temel from '../../layouts/Temel.astro';
+import SHHero from '../../sahneler/SHHero.astro';
+import STSerit from '../../sahneler/STSerit.astro';
+import SPDeste from '../../sahneler/SPDeste.astro';
+import SKKatman from '../../sahneler/SKKatman.astro';
+import SAAkis from '../../sahneler/SAAkis.astro';
+import SSESektor from '../../sahneler/SSESektor.astro';
+import STETespit from '../../sahneler/STETespit.astro';
+import SSZSozler from '../../sahneler/SSZSozler.astro';
+import SSBSozBandi from '../../sahneler/SSBSozBandi.astro';
+import SKUKurucu from '../../sahneler/SKUKurucu.astro';
+import SILIletisim from '../../sahneler/SILIletisim.astro';
+import PrologYuvasi from '../../parcalar/PrologYuvasi.astro';
+import { KOK, icerik, sl } from '../../icerik';
+import { anaSema } from '../../sema.mjs';
+
+const BASLIK = 'QANATONE — The system that catches demand';
+const ACIKLAMA = 'Demand exists; nothing catches it. QANATONE builds the system that does: SEO, GEO, ads and AI automation under one measurement.';
+const sema = anaSema(icerik, { url: sl(`${KOK}/en`), ad: BASLIK, aciklama: ACIKLAMA, dil: 'en' });
+
+/* PROLOG ANAHTARI — TR ana sayfayla TEK KAYNAK: aynı `theme.motion.prolog`.
+   Gerekçe ve varsayılan orada yazılı (pages/index.astro). İki dil ayrı
+   anahtar taşımaz: Enes "tek tuş" istedi. */
+const prologAcik = ((icerik.theme as any)?.motion?.prolog) !== 0;
+---
+<Temel lead={false} dil="en" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
+  canonical={sl(`${KOK}/en`)} heleftr={sl(`${KOK}/`)} helefen={sl(`${KOK}/en`)}>
+  {/* Ön yükleme TR ana sayfayla aynı — yüzler latin altkümesi,
+      dil-bağımsız; gerekçeler orada. */}
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/font/uncut-sans-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/font/playfair-display-500-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/font/playfair-display-500i-latin.woff2" />
+  {/* PERDE artik KABUKTA (Temel.astro, 4 Eyl sokum turu): eski sitede 58
+      sayfanin hepsindeydi; film sayfasi haric her sayfada. */}
+  {/* PROLOG (3 Eyl 2026, ANAYASA istisna 4 — 'Yeni, eskide yoktu'): film ana
+      sayfanin ONUNDE; govde .fl-govde sarmalinda (film.css: JS + hareket
+      acikken sabit katman, devir bitince static). Atlama / oturumda bir kez /
+      hareket azaltma: Film.astro + film.css. Bot ve JS'siz yol govdeyi gorur. */}
+  <PrologYuvasi dil="en" />
+  {/* Sarmalın kancaları da anahtara bağlı — gerekçe TR ana sayfada yazılı. */}
+  <div class:list={[prologAcik && 'fl-govde']} id={prologAcik ? 'fl-govde' : undefined}>
+  <div class="ana">
+    {/* SADAKAT (3 Eyl 2026, Enes): eski kok site birebir — sira TR ile ayni. */}
+    <SHHero dil="en" />
+    <STSerit dil="en" />
+    <SPDeste dil="en" />
+    <SKKatman dil="en" />
+    <SAAkis dil="en" />
+    <SSESektor dil="en" />
+    <STETespit dil="en" />
+    <SSZSozler dil="en" />
+    <SSBSozBandi dil="en" />
+    <SKUKurucu dil="en" />
+    <SILIletisim dil="en" />
+  </div>
+  </div>
+</Temel>

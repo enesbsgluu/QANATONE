@@ -1,0 +1,81 @@
+{
+ "_": "BOS TEST — ayni sayfadan iki kare, ideal fark SIFIR. Sifir degilse olculen duzenektir.",
+ "olcum": "2026-09-06T21:48:34.342Z",
+ "gorunum": "mobil",
+ "tubes_sokuldu": false,
+ "tekrar": 3,
+ "esik": {
+  "sessiz_maxfark": 1,
+  "sessiz_piksel": 4,
+  "bos_stdev": 1.5
+ },
+ "gecerli_kosum": 3,
+ "temiz_kosum": 3,
+ "hukum": "DUZENEK SESSIZ (bos test 0)",
+ "kosumlar": [
+  {
+   "kosum": 1,
+   "maxfark": 0,
+   "farkli_piksel": 0,
+   "farkli_oran": 0,
+   "hukumsuz": null,
+   "durgun": true,
+   "durulma_denemesi": 4,
+   "stdev": [
+    40.94,
+    40.94
+   ],
+   "kilitlenen": 45,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    0,
+    0
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 2,
+   "maxfark": 0,
+   "farkli_piksel": 0,
+   "farkli_oran": 0,
+   "hukumsuz": null,
+   "durgun": true,
+   "durulma_denemesi": 4,
+   "stdev": [
+    40.94,
+    40.94
+   ],
+   "kilitlenen": 45,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    0,
+    0
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  },
+  {
+   "kosum": 3,
+   "maxfark": 0,
+   "farkli_piksel": 0,
+   "farkli_oran": 0,
+   "hukumsuz": null,
+   "durgun": true,
+   "durulma_denemesi": 4,
+   "stdev": [
+    40.94,
+    40.94
+   ],
+   "kilitlenen": 45,
+   "kilitlenemeyen": 0,
+   "scrollY": [
+    0,
+    0
+   ],
+   "video_kaydi": false,
+   "perde_zaman_asimi": false
+  }
+ ],
+ "raf_cagiranlar": {}
+}

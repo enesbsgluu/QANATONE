@@ -1,0 +1,62 @@
+---
+/* S-IL · İLETİŞİM / ÇAĞRI + LEAD FORMU — göçün on birinci sahnesi.
+   Kaynak: kök index.html · CTA markup 5347-5359 · lead formu 5415-5474 ·
+   gönderim `leadForm()` 11346.
+   Anayasa: "S-KU kurucu · S-IL iletisim/CTA · lead formu: statik + tek
+   seferlik reveal. FORM HONEYPOT VE NETLIFY FORMS DAVRANIŞI AYNEN."
+
+   Faz 2'nin S8Cagri sahnesinin yerini alır (aynı iş: sayfanın kapanış
+   çağrısı); künye numarası 08 burada yaşıyor.
+
+   FORMUN KENDİSİ STATİK HTML — bu şart, süs değil: Netlify Forms formu
+   DERLEME ANINDAKİ statik HTML'den tanır. Çalışma anında JS ile eklenen
+   bir alan kayda hiç girmez. Bu yüzden atıf alanları (utm_*, gclid…)
+   burada duruyor ve DEĞERLERİ BOŞ: çıktıya pişmiş bir değer bütün
+   ziyaretçilere atfedilir, kayıt topluca yalan söyler (kaynağın kendi
+   dersi, yorumu aynen taşındı).
+
+   ADA JS'İ: yalnız `submit`. Açılışta sıfır iş — atıf alanları da
+   gönderim anında dolduruluyor (değerler `location`/`referrer`'dan her
+   an okunabiliyor; açılışta doldurmak için sebep yok). JS koşmazsa form
+   NATIVE POST ile Netlify'a gider: talep yine kaydedilir, yalnız atıf
+   boş kalır ve kullanıcı Netlify'ın kendi teşekkür sayfasını görür. */
+import '../stil/iletisim.css';
+import { icerik, T, suz } from '../icerik';
+import LeadKutu from '../parcalar/LeadKutu.astro';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+/* content.json'da üç anahtarın içine düğmenin SVG'si yazılmış (eski
+   istemcinin geri yazması; `dgh`, `wa`, `ld5`, `prjall`). Metin olarak
+   basılacakları için etiketler ayıklanır — ikon bileşenin kendi
+   markup'ından gelir. Onarım panelin işi, rapora yazıldı. */
+const yalinMetin = (k: string): string => g(k).replace(/<[^>]*>/g, '').trim();
+const en = dil === 'en';
+const wa = String((icerik.settings || {}).whatsapp || '').replace(/\D/g, '');
+const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
+---
+<section class="sil-sahne" data-sahne="il" id="iletisim" data-anlati>
+  <div class="sil-ic">
+    <div class="sil-cagri">
+      {/* SADAKAT (3 Eyl): kaynak CTA'da (5125) etiket yok — kaldirildi */}
+      <h2 class="s1-buyuk" set:html={suz(g('ctah'), ['em', 'b'])} />
+      <p class="s1-alt">{g('ctap')}</p>
+      <p class="sil-dugmeler">
+        <a class="dugme" href={`https://wa.me/${wa}`} target="_blank" rel="noopener">
+          {yalinMetin('wa')}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ok} />
+        </a>
+        <a class="sil-ikincil" href="#lead">{g('ctasmall')}</a>
+      </p>
+    </div>
+
+    {/* LEAD FORMU: ortak parca (LeadKutu.astro) — kaynakta form her rotada
+        en sonda; obur sayfalarda Temel.astro basar (3 Eyl 2026). */}
+    <LeadKutu dil={dil} />
+  </div>
+</section>
+
+

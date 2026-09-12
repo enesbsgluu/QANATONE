@@ -1,0 +1,43 @@
+{
+  "slug": "claude-opus-5",
+  "date": "2026-07-24",
+  "read": 1,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "Claude Opus 5 çıktı: 1 milyon token bağlam, fiyat aynı",
+    "en": "Claude Opus 5 launches with 1M tokens of context, same price"
+  },
+  "lede": {
+    "tr": "Anthropic 24 Temmuz'da Opus 5'i yayınladı. Ajan işleri, kodlama ve profesyonel görevler için geliştirilen modelin fiyatı değişmedi.",
+    "en": "Anthropic released Opus 5 on July 24, aimed at agent work, coding and professional tasks, at $5 and $25 per million tokens."
+  },
+  "body": {
+    "tr": [
+      [
+        "Model",
+        "<p>Opus 5'in bağlam penceresi hem varsayılan hem en fazla 1 milyon token; tek cevapta 128 bin token'a kadar çıktı üretebiliyor. Bilgi sınırı Mayıs 2026. Claude uygulamasında, Claude Code'da, Claude API'de, Amazon Bedrock'ta, Google Cloud Vertex AI'da ve Microsoft Foundry'de kullanılabiliyor.</p>"
+      ],
+      [
+        "Fiyat",
+        "<div class=\"nfig\"><b>5 $ / 25 $</b><span>Opus 5'in milyon token başına girdi ve çıktı fiyatı</span></div><p>Opus sınıfının fiyatı değişmedi. Hızlı mod fiyatı iki katına, 10 ve 50 dolara çıkarıyor ve yaklaşık 2,5 kat daha hızlı çalışıyor. Beş hafta sonra gelen Fable 5.1, Anthropic'in yayımladığı her kategoride Opus 5'in önüne geçti; onun fiyatı milyon token başına 10 ve 50 dolar.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The model",
+        "<p>Opus 5 has a 1 million token context window as both default and maximum, up to 128,000 output tokens and a May 2026 knowledge cutoff. It is available in Claude, Claude Code, the Claude API, Amazon Bedrock, Google Cloud Vertex AI and Microsoft Foundry.</p>"
+      ],
+      [
+        "Price",
+        "<p>Pricing stays at $5 per million input tokens and $25 per million output tokens. Fast mode doubles that to $10 and $50 and runs about 2.5 times faster.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

@@ -1,0 +1,43 @@
+{
+  "slug": "ant-falcon-kur-tahmini-bankalar",
+  "date": "2026-08-20",
+  "read": 1,
+  "topic": "odeme",
+  "sector": "finans",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Ödeme",
+    "en": "News · Payments"
+  },
+  "title": {
+    "tr": "Büyük bankalar döviz tahmininde Ant'ın yapay zekâsına geçti",
+    "en": "Citi, HSBC, Barclays adopt Ant's AI model for FX forecasts"
+  },
+  "lede": {
+    "tr": "Falcon TST 2.0 sınır ötesi ödemelerde nakit akışını ve kur riskini tahmin ediyor. Ant yüzde 90'ın üzerinde isabet iddia ediyor.",
+    "en": "Falcon TST 2.0 forecasts cash flow and FX exposure in cross-border payments. Ant claims over 90% accuracy."
+  },
+  "body": {
+    "tr": [
+      [
+        "Hangi bankalar",
+        "<p>Ant International, Falcon Time-Series Transformer Model 2.0'ı 20 Ağustos'ta tanıttı. Modeli kullanan altı büyük banka arasında Citi, HSBC, Deutsche Bank, Standard Chartered ve Barclays var. Bankalar modeli kendi sistemlerine bağladı: Barclays BARX NetFX platformuna, Citi Fixed FX Rates ürününe, Standard Chartered ise Singapur Para Otoritesi'nin PathFin.ai programı altında SCALE FX sistemine. Deutsche Bank modeli döviz operasyonlarında kullanıyor.</p>"
+      ],
+      [
+        "Genel modelden farkı",
+        "<p>Ant'a göre genel amaçlı büyük modeller finans sektöründe henüz \"evrensel bir atılım\" yapamadı. Falcon ise finansal senaryolara özel bir zaman serisi modeli. Şirketin açıkladığı rakamlar nakit akışı ve kur riski tahminlerinde yüzde 90'ın üzerinde isabet, bankaların kur korunma ve dağıtım maliyetlerinde yüzde 60'tan fazla düşüş.</p><p>Bu rakamlar şirketin kendi ölçümü. Beş büyük bankanın aynı modeli kendi ürünlerine bağlaması ise bize, finansta dar bir işe odaklanan modellerin üretime daha hızlı girdiğini düşündürüyor.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Which banks",
+        "<p>Ant International launched Falcon TST 2.0 on August 20 with six large banks including Citi, HSBC, Deutsche Bank, Standard Chartered and Barclays. Barclays runs it in BARX NetFX, Citi pairs it with Fixed FX Rates and Standard Chartered uses it with SCALE FX under the Monetary Authority of Singapore's PathFin.ai program.</p>"
+      ],
+      [
+        "Claims",
+        "<p>Ant reports over 90% accuracy in cash flow and FX exposure forecasts and says banks can cut hedging and allocation costs by more than 60%. These are the company's own figures.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

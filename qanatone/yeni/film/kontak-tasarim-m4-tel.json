@@ -1,0 +1,105 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T13:24:47.112Z",
+ "tarayici": "brave Chrome/152.0.7977.64",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 390,
+ "yukseklik": 844,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes"
+ ],
+ "ozKontrol": "atlandi (tek konum — en az iki konum ver)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 0,
+   "farkliPiksel": 0,
+   "toplamPiksel": 329160,
+   "bolge": "fark yok",
+   "md5": {
+    "once": "23b73df48824486f9fb56896adeb2c3e",
+    "sonra": "23b73df48824486f9fb56896adeb2c3e"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/m4-tel-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/m4-tel-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/m4-tel-yanyana-0.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8791/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 87,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 81,
+   "video": 0
+  },
+  "scrollHeight": 16176,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "23b73df48824486f9fb56896adeb2c3e",
+    "png": "yeni/film/kontak-tur9/m4-tel-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 86,
+   "sonsuzSifirlanan": 6,
+   "sonluBitirilen": 80,
+   "video": 0
+  },
+  "scrollHeight": 16176,
+  "dugmeSayisi": 16,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "23b73df48824486f9fb56896adeb2c3e",
+    "png": "yeni/film/kontak-tur9/m4-tel-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 82
+   }
+  ]
+ }
+}

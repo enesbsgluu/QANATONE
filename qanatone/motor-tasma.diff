@@ -1,0 +1,50 @@
+diff --git a/qanatone/index.html b/qanatone/index.html
+index b182521..a17e9bd 100644
+--- a/qanatone/index.html
++++ b/qanatone/index.html
+@@ -3503,7 +3503,17 @@ a.ktcard:hover{background:#131317}
+ @media(max-width:860px){
+   .mkrail{width:100%;margin-left:0;gap:5px}
+   .mkstep span{display:none}
+-  .mkview{height:clamp(360px,86vw,460px)}
++  /* 2026-08 MOTOR TAŞMASI: mobilde .mkeng tek sütuna düşüyor (girdi
++     kartları + çekirdek + hipotezler alt alta) ama sahne yüksekliği
++     sabitti (86vw ≈ 335px → 360'a kırpılıyordu) ve .mkact overflow:hidden
++     olduğu için hipotez satırları alttan KESİLİYORDU. Enes'in kararı:
++     sahne uzasın. Üst sınır ekran yüksekliğine bağlı — .mkstage'in
++     max-height:calc(100vh - 60px) tavanını aşıp yeniden kırpmasın diye
++     masaüstündeki formülün aynısı (100vh - 210px) kullanılıyor.
++     Ölçüm notu: bu kapta yerleşim ölçülemedi (tarayıcı indirilemiyor),
++     yükseklik içerik yığınından hesaplanarak seçildi — küçük ekranlarda
++     (SE boyu) 100vh sınırı devreye girer ve taşma dönebilir.          */
++  .mkview{height:clamp(380px,min(150vw,calc(100vh - 210px)),620px)}
+   .mksplit,.mksplit2,.mkeng,.mkjump{grid-template-columns:1fr}
+   .mkeng .mkcore{max-height:110px}
+   .mkcurves{grid-template-columns:1fr;gap:7px}
+diff --git a/qanatone/test/denetim.js b/qanatone/test/denetim.js
+index 6f2094f..5af641d 100644
+--- a/qanatone/test/denetim.js
++++ b/qanatone/test/denetim.js
+@@ -431,6 +431,22 @@ function ciktiDenetimi() {
+        iT > -1 && kaydirma && boyut && kisit,
+        `scroll=${kaydirma} resize=${boyut} rAF=${kisit}`);
+   }
++  /* 80 · mobil pazar sahnesi yüksekliği (2026-08, motor taşması):
++     .mkeng mobilde tek sütuna düşüyor, .mkact overflow:hidden — sahne
++     yüksekliği sabit ve kısa olursa hipotez satırları alttan kesiliyor.
++     İki şart: üst sınır ≥600px VE ekran yüksekliğine bağlı bir tavan
++     (100vh) — yoksa .mkstage'in max-height'ı devreye girip yeniden
++     kırpar. Sabit küçük bir clamp geri konursa kural düşer. */
++  {
++    const kaynakV = fs.readFileSync(SRC, 'utf8');
++    const iV = kaynakV.indexOf('.mkview{height:clamp(', kaynakV.indexOf('@media(max-width:860px){\n  .mkrail'));
++    const satir = iV > -1 ? kaynakV.slice(iV, kaynakV.indexOf('}', iV) + 1) : '';
++    const ekranaBagli = satir.indexOf('100vh') > -1;
++    const ustSinir = (satir.match(/,(\d+)px\)\}$/) || [, '0'])[1] * 1 >= 600;
++    ol('mobil pazar sahnesi yüksekliği (ekrana bağlı + üst sınır ≥600px)',
++       iV > -1 && ekranaBagli && ustSinir,
++       `${satir || 'kural bulunamadı'} · vh=${ekranaBagli} ust=${ustSinir}`);
++  }
+   const sayfalar = [];
+   (function tara(d) {
+     for (const f of fs.readdirSync(d)) {

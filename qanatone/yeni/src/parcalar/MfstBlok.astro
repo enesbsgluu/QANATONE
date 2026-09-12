@@ -1,0 +1,30 @@
+---
+/* TRADESELF MANIFESTOSU (sokum ve tasima turu, 4 Eyl 2026) — kaynak
+   `tradeMfst` 7636-7651 BIREBIR markup (mfhd/mfsteps/mfgain/mfend);
+   yalniz finans (det.mfst). Hareket: ust cizgi ve kazanc satirlari
+   kaydirmayla acilir (blok.css, view() scrub) — kaynagin .in gecisi yerine. */
+import '../stil/blok.css';
+import { T, suz } from '../icerik';
+interface Props { mfst: any; dil?: 'tr' | 'en' }
+const { mfst: m, dil = 'tr' } = Astro.props;
+const tx = (v: unknown) => T(v, dil);
+---
+<div class="mfst">
+  <div class="mfhd">
+    <span class="mfk"><i></i>{tx(m.k)}</span>
+    <h3 set:html={suz(tx(m.h), ['em', 'br'])} />
+    <p>{tx(m.p)}</p>
+  </div>
+  <div class="mfsteps">
+    {(m.steps || []).map((s: any, i: number) => (
+      <div class="mfstep"><i class="sus-mfcizgi" aria-hidden="true"></i>
+        <span class="mfsn"><b>0{i + 1}</b><span>{tx(s.t)}</span></span>
+        <p>{tx(s.d)}</p>
+      </div>
+    ))}
+  </div>
+  <div class="mfgain">
+    {(m.gain || []).map((g: any) => <span class="sus-mfg"><b>{tx(g.t)}</b><i>{tx(g.d)}</i></span>)}
+  </div>
+  <div class="mfend"><p set:html={suz(tx(m.end), ['em', 'br'])} /></div>
+</div>

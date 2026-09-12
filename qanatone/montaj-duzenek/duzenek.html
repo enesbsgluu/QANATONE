@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Duzenek — kaydirmaya bagli oynatma</title>
+<style>
+  html,body{margin:0;background:#000;color:#eee;font:13px system-ui}
+  #sahne{position:fixed;inset:0;overflow:hidden;z-index:1}
+  #sahne video,#sahne canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+  #sahne .etkin{display:block}
+  #palet{position:absolute;inset:0;display:none;pointer-events:none;
+         backdrop-filter:grayscale(1) contrast(1.06) brightness(0.98);
+         -webkit-backdrop-filter:grayscale(1) contrast(1.06) brightness(0.98);
+         mask-size:100% 100%;-webkit-mask-size:100% 100%}
+  #palet.acik{display:block}
+  #boslu{position:relative;z-index:0}
+  #hud{position:fixed;left:8px;top:8px;z-index:3;background:#0009;padding:4px 6px;font:11px ui-monospace;white-space:pre}
+</style></head><body>
+
+<div id="sahne">
+  <canvas id="cnv"></canvas>
+  <canvas id="c3b"></canvas>
+  <div id="palet"></div>
+</div>
+<div id="boslu"></div>
+<div id="hud"></div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * ZAMAN CIZELGESI — iskelet uc turu tasir:
+ *   video     : klip zinciri
+ *   sahne3b   : gercek zamanli 3B durak (cekirdek) — video DURUR, sahne devralir
+ *   ekranlar  : palet katmaninin KAPSAMAYACAGI alanlar (terminal ekranlari)
+ * ------------------------------------------------------------------ */
+const CIZELGE = [
+  { tur:'video',   klip:'k1', sn:5, fps:24, ekranlar:[] },
+  { tur:'sahne3b', ad:'cekirdek', sn:3, aci:{yatay:40, dikey:25} },
+  { tur:'video',   klip:'k2', sn:8, fps:24, ekranlar:[[0.08,0.30,0.26,0.30],[0.62,0.24,0.30,0.36]] },
+];
+const PX_PER_SN = 300;
+
+const Q = new URLSearchParams(location.search);
+const MOD   = Q.get('mod')   || 'video';        // video | kare
+const VSET  = Q.get('vset')  || 'g6_1080p';
+const KSET  = Q.get('kset')  || 'webp75-1280';
+const PALET = Q.get('palet') === 'evet';
+const SAR   = Q.get('sar')   || 'hemen';        // hemen: her rAF sar | bekle: onceki oturana kadar sarma
+const PETKI = Q.get('petki') || 'gri';   // gri | ters — 'ters' yalnizca KANIT icin
+const PENCERE = +(Q.get('pencere') || 48);      // kare modu: cozme penceresi
+
+const sahne = document.getElementById('sahne');
+const cnv = document.getElementById('cnv'), ctx = cnv.getContext('2d', { alpha:false });
+const c3b = document.getElementById('c3b'), x3b = c3b.getContext('2d');
+const palet = document.getElementById('palet'), hud = document.getElementById('hud');
+
+const TOPLAM_SN = CIZELGE.reduce((a,s)=>a+s.sn,0);
+document.getElementById('boslu').style.height = (TOPLAM_SN*PX_PER_SN + innerHeight) + 'px';
+
+/* ---- olcum defteri ---- */
+performance.setResourceTimingBufferSize(4000);
+const OL = window.OL = {
+  mod:MOD, vset:VSET, kset:KSET, palet:PALET, toplamSn:TOPLAM_SN,
+  hazir:false, hazirMs:0, bayt:0, kayitAcik:false,
+  raf:[], istek:[], sunum:[], ciz:[], uyari:[],
+  cozBekleme:0, cozIsabetsiz:0
+};
+function kaydet(dizi, kayit){ if (OL.kayitAcik) dizi.push(kayit); }
+
+/* ---- palet maskesi: belirli alanlari KAPSAMAZ ---- */
+function maskeUri(dikdortgenler){
+  // ALFA maskesi: opak siyah dikdortgen DELIK ACMAZ. Delik evenodd ile acilir.
+  const dis = 'M0 0H100V100H0Z';
+  const delik = dikdortgenler.map(([x,y,w,h]) => {
+    const X=(x*100).toFixed(2), Y=(y*100).toFixed(2), X2=((x+w)*100).toFixed(2), Y2=((y+h)*100).toFixed(2);
+    return `M${X} ${Y}H${X2}V${Y2}H${X}Z`;
+  }).join('');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="#fff" fill-rule="evenodd" d="${dis}${delik}"/></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+let maskeSon = '';
+function paletKur(seg){
+  if (!PALET) return;
+  const e = seg.ekranlar || [];
+  const anahtar = JSON.stringify(e);
+  if (anahtar === maskeSon) return;
+  maskeSon = anahtar;
+  const u = e.length ? maskeUri(e) : 'none';
+  palet.style.maskImage = u; palet.style.webkitMaskImage = u;
+}
+if (PALET && MOD === 'video'){ palet.classList.add('acik');
+  if (PETKI==='ters'){ palet.style.backdropFilter='invert(1)'; palet.style.webkitBackdropFilter='invert(1)'; } }
+
+/* ---- video adaylari: her klip icin ayri eleman, hepsi onceden yuklu ---- */
+const videolar = {};
+if (MOD === 'video'){
+  for (const s of CIZELGE) if (s.tur === 'video'){
+    const v = document.createElement('video');
+    v.src = `malzeme/video/${s.klip}_${VSET}.mp4`;
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.setAttribute('disableremoteplayback','');
+    sahne.insertBefore(v, palet);
+    videolar[s.klip] = v;
+  }
+}
+
+/* ---- kare dizisi adayi ---- */
+const KLIP_KARE = {}; CIZELGE.forEach(s => { if (s.tur==='video') KLIP_KARE[s.klip] = s.sn*s.fps; });
+const UZANTI = { 'webp75-1920':'webp','webp75-1280':'webp','webp60-1280':'webp','jpeg72-1920':'jpg','avif45-1280':'avif' }[KSET] || 'webp';
+const resimler = {};      // klip -> [Image]
+const cozulmus = {};      // klip -> Set(indis)
+
+function kareYol(klip,i){ return `malzeme/dizi/${KSET}/${klip}/k${String(i).padStart(4,'0')}.${UZANTI}`; }
+
+async function diziHazirla(){
+  const t0 = performance.now();
+  const isler = [];
+  for (const klip in KLIP_KARE){
+    resimler[klip] = []; cozulmus[klip] = new Set();
+    for (let i=0;i<KLIP_KARE[klip];i++){
+      const im = new Image(); im.decoding = 'async'; im.src = kareYol(klip,i);
+      resimler[klip].push(im);
+      isler.push(new Promise(r => { im.onload = r; im.onerror = () => { OL.uyari.push('kare yuk: '+kareYol(klip,i)); r(); }; }));
+    }
+  }
+  await Promise.all(isler);
+  // ilk pencereyi coz
+  const ilk = CIZELGE.find(s=>s.tur==='video').klip;
+  await Promise.all(resimler[ilk].slice(0,PENCERE).map((im,i)=>im.decode().then(()=>cozulmus[ilk].add(i)).catch(()=>{})));
+  OL.hazirMs = performance.now()-t0;
+  OL.bayt = performance.getEntriesByType('resource')
+    .filter(e => e.name.includes('/dizi/'))
+    .reduce((a,e)=>a+(e.encodedBodySize||0),0);
+}
+
+function cozAhead(klip, i, yon){
+  const n = KLIP_KARE[klip], set = cozulmus[klip];
+  for (let d=0; d<PENCERE; d++){
+    const j = i + (yon>=0 ? d : -d);
+    if (j<0 || j>=n || set.has(j)) continue;
+    const im = resimler[klip][j];
+    im.decode().then(()=>set.add(j)).catch(()=>{});
+    break;
+  }
+}
+
+/* ---- 3B durak: sinirli aci, serbest gezinme yok ---- */
+const s3b = { yatay:0, dikey:0, dolly:0, surukle:false, ax:0, ay:0 };
+addEventListener('pointerdown', e => { if (c3b.classList.contains('etkin')){ s3b.surukle=true; s3b.ax=e.clientX; s3b.ay=e.clientY; } });
+addEventListener('pointerup', () => s3b.surukle=false);
+addEventListener('pointermove', e => {
+  if (!s3b.surukle) return;
+  const seg = CIZELGE.find(s=>s.tur==='sahne3b');
+  const ly = seg.aci.yatay/2, ld = seg.aci.dikey/2;                 // yatay ~40° => ±20°
+  s3b.yatay = Math.max(-ly, Math.min(ly, s3b.yatay + (e.clientX-s3b.ax)*0.25));
+  s3b.dikey = Math.max(-ld, Math.min(ld, s3b.dikey + (e.clientY-s3b.ay)*0.25));
+  s3b.ax=e.clientX; s3b.ay=e.clientY;
+});
+const KOSE = (()=>{ const t=(1+Math.sqrt(5))/2, v=[]; for(const s1 of [-1,1]) for(const s2 of [-1,1]){ v.push([0,s1,s2*t],[s1,s2*t,0],[s2*t,0,s1]); } return v; })();
+function ciz3b(u){
+  const w=c3b.width, h=c3b.height, R=Math.min(w,h)*0.28*(1+0.25*u);
+  x3b.fillStyle='#07090c'; x3b.fillRect(0,0,w,h);
+  const a=s3b.yatay*Math.PI/180 + u*0.6, b=s3b.dikey*Math.PI/180;
+  const p = KOSE.map(([x,y,z])=>{
+    let X=x*Math.cos(a)-z*Math.sin(a), Z=x*Math.sin(a)+z*Math.cos(a);
+    let Y=y*Math.cos(b)-Z*Math.sin(b); Z=y*Math.sin(b)+Z*Math.cos(b);
+    const k=1/(1+Z*0.12);
+    return [w/2+X*R*k, h/2+Y*R*k, Z];
+  });
+  x3b.lineWidth=1.2;
+  for(let i=0;i<p.length;i++) for(let j=i+1;j<p.length;j++){
+    const d=Math.hypot(p[i][0]-p[j][0],p[i][1]-p[j][1]);
+    if (d < R*1.15){ x3b.strokeStyle = `rgba(200,16,46,${0.25+0.4*(1-d/(R*1.15))})`; x3b.beginPath(); x3b.moveTo(p[i][0],p[i][1]); x3b.lineTo(p[j][0],p[j][1]); x3b.stroke(); }
+  }
+}
+
+/* ---- surucu ---- */
+function olcek(){
+  const dpr = Math.min(devicePixelRatio||1, 2);
+  for (const c of [cnv,c3b]){ c.width = Math.round(innerWidth*dpr); c.height = Math.round(innerHeight*dpr); }
+}
+olcek(); addEventListener('resize', olcek);
+
+function konum(){
+  const y = scrollY;
+  let t = y / PX_PER_SN;
+  let acc = 0;
+  for (const s of CIZELGE){
+    if (t < acc + s.sn || s === CIZELGE[CIZELGE.length-1])
+      return { seg:s, yerel: Math.max(0, Math.min(s.sn, t-acc)), genel:t };
+    acc += s.sn;
+  }
+}
+
+let sonYon = 1, sonT = 0, etkinEleman = null;
+function etkinYap(el){ if (etkinEleman===el) return; if (etkinEleman) etkinEleman.classList.remove('etkin'); etkinEleman=el; if (el) el.classList.add('etkin'); }
+
+function kap(seg, yerel){
+  const t0 = performance.now();
+  const istenen = Math.min(seg.sn*seg.fps-1, Math.round(yerel*seg.fps));
+  kaydet(OL.istek, { t:t0, klip:seg.klip, kare:istenen });
+  if (MOD === 'video'){
+    const v = videolar[seg.klip];
+    etkinYap(v);
+    const hedef = istenen/seg.fps + 1/(2*seg.fps);
+    if (SAR === 'bekle' && v.seeking) OL.cozBekleme++;
+    else if (Math.abs(v.currentTime - hedef) > 1/(2*seg.fps)) v.currentTime = hedef;
+  } else {
+    etkinYap(cnv);
+    const set = cozulmus[seg.klip];
+    let g = istenen;
+    if (!set.has(g)){                                   // cozulmemis: en yakin cozulmusu goster
+      OL.cozIsabetsiz++;
+      let bulundu = -1;
+      for (let d=1; d<=PENCERE; d++){ if (set.has(g-d)){ bulundu=g-d; break; } if (set.has(g+d)){ bulundu=g+d; break; } }
+      g = bulundu >= 0 ? bulundu : istenen;
+    }
+    const im = resimler[seg.klip][g];
+    if (im && im.complete){
+      // video object-fit:cover ile ayni cerceve — yoksa kare dizisi hem bozuk cizer hem fazla is yapar
+      const cw=cnv.width, ch=cnv.height, iw=im.naturalWidth||1, ih=im.naturalHeight||1;
+      const k = Math.max(cw/iw, ch/ih), dw = iw*k, dh = ih*k, dx = (cw-dw)/2, dy = (ch-dh)/2;
+      ctx.save();
+      if (PALET) ctx.filter = (PETKI==='ters' ? 'invert(1)' : 'grayscale(1) contrast(1.06)');
+      ctx.drawImage(im, dx, dy, dw, dh);
+      ctx.restore();
+      if (PALET) for (const [x,y,w,h] of (seg.ekranlar||[])){   // palet DISI alanlar: dogal renk
+        const X=x*cw, Y=y*ch, W=w*cw, H=h*ch;
+        ctx.drawImage(im, (X-dx)/k, (Y-dy)/k, W/k, H/k, X, Y, W, H);
+      }
+      kaydet(OL.sunum, { t:performance.now(), klip:seg.klip, kare:g });
+    }
+    cozAhead(seg.klip, istenen, sonYon);
+  }
+  kaydet(OL.ciz, performance.now()-t0);
+}
+
+function dongu(ts){
+  kaydet(OL.raf, ts);
+  const k = konum();
+  const yon = k.genel >= sonT ? 1 : -1; sonYon = yon; sonT = k.genel;
+  if (k.seg.tur === 'sahne3b'){
+    etkinYap(c3b);
+    const t0 = performance.now();
+    ciz3b(k.yerel/k.seg.sn);
+    kaydet(OL.ciz, performance.now()-t0);
+    if (PALET) paletKur(k.seg);
+  } else {
+    if (PALET) paletKur(k.seg);
+    kap(k.seg, k.yerel);
+  }
+  hud.textContent = `${MOD} ${MOD==='video'?VSET:KSET} palet:${PALET?'evet':'yok'}\n${k.seg.tur} ${k.seg.klip||k.seg.ad} t=${k.genel.toFixed(2)}/${TOPLAM_SN}`;
+  requestAnimationFrame(dongu);
+}
+
+/* ---- video sunum izi: gercekten BOYANAN kare ---- */
+function rvfcBagla(){
+  for (const klip in videolar){
+    const v = videolar[klip], fps = CIZELGE.find(s=>s.klip===klip).fps;
+    if (!('requestVideoFrameCallback' in v)) { OL.uyari.push('rvfc yok'); continue; }
+    const f = (now, md) => { kaydet(OL.sunum, { t:now, klip, kare:Math.round(md.mediaTime*fps) }); v.requestVideoFrameCallback(f); };
+    v.requestVideoFrameCallback(f);
+  }
+}
+
+(async () => {
+  const t0 = performance.now();
+  if (MOD === 'video'){
+    await Promise.all(Object.values(videolar).map(v => new Promise(r => {
+      if (v.readyState >= 4) return r();
+      v.addEventListener('canplaythrough', r, { once:true });
+      v.addEventListener('error', () => { OL.uyari.push('video hata '+v.src); r(); }, { once:true });
+      setTimeout(r, 20000);
+    })));
+    OL.hazirMs = performance.now()-t0;
+    OL.bayt = performance.getEntriesByType('resource').filter(e=>e.name.endsWith('.mp4')).reduce((a,e)=>a+(e.encodedBodySize||0),0);
+    rvfcBagla();
+  } else {
+    await diziHazirla();
+  }
+  OL.hazir = true;
+  requestAnimationFrame(dongu);
+})();
+
+/* ---- denetimli supurme: kendini dogrular (scrollTo bosa gitti mi) ---- */
+window.SUPUR = (ms, geri) => new Promise(res => {
+  const H = document.documentElement.scrollHeight - innerHeight;
+  const t0 = performance.now(); let sapma = 0, adim = 0;
+  const ad = () => {
+    const u = Math.min(1, (performance.now()-t0)/ms);
+    const y = Math.round((geri ? 1-u : u) * H);
+    scrollTo(0, y); adim++;
+    if (Math.abs(scrollY - y) > 1.5) sapma++;
+    if (u < 1) requestAnimationFrame(ad); else res({ sapma, adim, H, sonY:scrollY });
+  };
+  requestAnimationFrame(ad);
+});
+window.SIFIRLA = () => { OL.raf=[]; OL.istek=[]; OL.sunum=[]; OL.ciz=[]; OL.cozIsabetsiz=0; OL.kayitAcik=true; };
+window.DUR = () => { OL.kayitAcik=false; return { raf:OL.raf.length, istek:OL.istek.length, sunum:OL.sunum.length }; };
+</script>
+</body></html>

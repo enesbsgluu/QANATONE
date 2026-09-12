@@ -1,0 +1,235 @@
+{
+ "_": "olc-katman.cjs — YAPISAL teshis, kapi degil. Zamanlama olcmez; yabanci tarayici acikken de gecerlidir.",
+ "olcum": "2026-09-07T16:59:31.839Z",
+ "yol": "/",
+ "pencere": "1920x1080",
+ "tarayici": {
+  "chrome": {
+   "surum": "Chrome/152.0.7977.76",
+   "gpu": {
+    "webgl2": "Google Inc. (Intel) | ANGLE (Intel, Intel(R) UHD Graphics (0x00009BA4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl": "baglam YOK",
+    "canvas2d_hizlandirilmis": true
+   },
+   "katmanlar": [],
+   "katman_olculdu": false,
+   "animasyon_toplam": 49,
+   "animasyon_kosan": 42,
+   "ana_iplikte": 0,
+   "ana_iplik_ornek": [],
+   "kaydirma_cizelgeli": 36,
+   "kosan_ornek": [
+    {
+     "ad": "span.kb-ring",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "div.sus-el.sus-el-h",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sus-el.sus-el-r",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "div.sh-ic",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "p.sh-meta",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "a.sp-govde",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "ViewTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "zaman_tabanli": [
+    {
+     "ad": "span.kb-ring",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "span.sus-suzul",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i.sus-halka",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    },
+    {
+     "ad": "i",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform",
+      "opacity"
+     ]
+    },
+    {
+     "ad": "div.st-akis",
+     "durum": "running",
+     "zaman_cizelgesi": "DocumentTimeline",
+     "ozellikler": [
+      "transform"
+     ]
+    }
+   ],
+   "data_film": "atlandi",
+   "html_sinif": "t-nostars prd bitcursor",
+   "ek_stil_var": false,
+   "bg_gorunur": "block",
+   "body_zemin": "rgb(5, 5, 5)",
+   "dpr": 1.0000000149011612,
+   "en": 1920,
+   "boy": 1080
+  }
+ }
+}

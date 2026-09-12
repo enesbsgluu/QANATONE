@@ -1,0 +1,481 @@
+/* ============================================================
+   FILM · SCROLL-SCRUB ADASI — ISKELET STILI (27 Agu 2026)
+
+   RAY: `--fl-sn` (ffprobe toplami) x `--fl-pxsn` (sahneler.ts PX_SN)
+   piksel + bir ekran; sahne yapisik dururken ray tuketilir. Olcu ELLE
+   yazili degil, iki degisken bilesenden gelir.
+
+   IKI YOL:
+     `.fl-js` (motor indi)  -> yapisik tam ekran kare; sahneler ust uste;
+                               yalniz .fl-etkin boyanir, .fl-komsu yerlesik
+                               ama gorunmez (kod cozucu ayakta, el degisimi
+                               seek beklemez); digerleri display:none —
+                               gizli tembel <img> istek atmaz.
+     motor yok / azaltma    -> ray cokup duz sutun olur, 39 poster okunur,
+                               <video> hic yerlesmez (src'si de yok).
+
+   MOBIL BAGLAMDA PAHALI KATMAN YOK (H14): filter/backdrop/will-change/
+   golge yazilmadi. Video zaten kendi kompozit katmani.
+   ============================================================ */
+
+/* sayfa govdesi: film tam genislik; Temel'in 840 px sutunu burada kalkar */
+main:has(> .fl) { max-width: none; padding: 0; }
+
+.fl { position: relative; background: #050505; }
+
+.fl-ray {
+  position: relative;
+  height: calc(var(--fl-sn) * var(--fl-pxsn) * 1px + 100vh);
+  height: calc(var(--fl-sn) * var(--fl-pxsn) * 1px + 100svh);
+}
+.fl-yapis {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #050505;
+}
+
+/* ---- NEFES KALDIRILDI (30 Agu 2026, Enes karari) ----
+   28 Agu'da eklenmisti: `.fl-js .fl-yapis`e 7 s'lik `fl-nefes` (%1 olcek +
+   2-3 px kayma) ve onu besleyen `will-change: transform`.
+   NEDEN KALKTI: gerekce mimari — bu bir video kare dizisi; duran karede
+   akiskanlik aranmaz, sahte canlilik yerine SABIT KARE tercih edildi.
+   Olculdu (TUR 9, yeni/film/olc-titreme4.cjs): motor tamamen dururken
+   (?akis=0 — scrollY sabit, gosterilenT sabit, sunulan video karesi 0)
+   ekran 20 yakalamanin 17-19'unda degisiyordu; nefes kapatilinca 1/20.
+   Yani ekranda gorulen surekli titremenin TEK kaynagi bu animasyondu;
+   video katmanini gizlemek titremeyi kaldirmiyordu.
+   `will-change: transform` de birlikte kalkti: tek isi bu animasyonun
+   katmanini onceden ayirmakti, animasyon gidince kalici bir katman
+   zorlamasindan baska bir sey yapmiyor — dosya basindaki H14 kurali
+   ("MOBIL BAGLAMDA PAHALI KATMAN YOK: filter/backdrop/will-change")
+   zaten bunu yasakliyor.
+   `prefers-reduced-motion` istisnasi da gereksizlesti: kapatilacak
+   animasyon kalmadi (JS'siz/hareket-azaltma yolu zaten motoru indirmiyor). */
+
+/* ---- JS YOLU ---- */
+.fl-js .fl-sahne { position: absolute; inset: 0; display: none; }
+.fl-js .fl-sahne.fl-etkin { display: block; }
+.fl-js .fl-sahne.fl-komsu { display: block; visibility: hidden; }
+/* CIFT VIDEO (28 Agu gece): sinira 0,5 s kala yondeki komsu `fl-onsar` ile BOYANIR,
+   etkinin altinda (z 0 < 1). Devir katman sirasi degisimi; visibility gecisi yok. */
+.fl-js .fl-sahne.fl-onsar { display: block; visibility: visible; z-index: 0; }
+.fl-js .fl-sahne.fl-etkin { z-index: 1; }
+.fl-js .fl-poster,
+.fl-js .fl-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* video posterin USTUNDE: kendi posterini (motor yazar) ya da karesini
+   boyar; <img> yalniz motor gelene kadar ve JS'siz yolda gorunur. */
+.fl-js .fl-video { z-index: 1; }
+
+/* ACILIS KOPYASI: tam klip inip ayni kareye sarilana kadar en ustte durur.
+   Takas tek sinif degisimidir (motor `fl-acilis-bitti` yazar) — iki video da
+   ayni kareyi, ayni kalitede gosterdigi icin gecis GORUNMEZ. */
+.fl-js .fl-acilis { z-index: 2; }
+.fl-js .fl-sahne.fl-acilis-bitti .fl-acilis { display: none; }
+
+/* ---- ATLA dugmesi (28 Agu): hiz tavani gerisinde kalinca gorunur ---- */
+/* ---- KUMANDA (31 Agu 2026) ----
+   KONUM DUZELTMESI: iki dugme de eskiden `.fl-ray` icinde
+   `position:absolute; bottom:16px` idi. `.fl-ray` 115.487 px yuksek
+   oldugu icin bu "ekranin dibi" degil RAYIN DIBI demekti — dugme filmin
+   tamami boyunca ekran disindaydi ve ancak film bitince goruluyordu.
+   Kumanda artik sticky `.fl-yapis` icinde; o kutu ekranin kendisi. */
+/* 4 Eyl 2026: kisa sure buyutulup vurgulanmisti (karar "B"); Enes ESKI
+   HALINE DONDURDU. Gerekce ortadan kalkti — nav artik acilista gorunuyor,
+   yani bu kumanda tek cikis yolu degil. */
+.fl-kumanda {
+  position: absolute; right: 16px; bottom: 16px; z-index: 5;
+  display: flex; gap: 8px; align-items: center;
+}
+.fl-gec {
+  font: 600 15px/1 var(--f-govde); letter-spacing: -.01em;
+  color: #fff; background: var(--red-dolgu, #ef233c); border: 0;
+  border-radius: 999px; padding: 12px 20px; cursor: pointer;
+  text-decoration: none; white-space: nowrap;
+}
+.fl-gec:hover { background: #d90429; }
+/* KLAVYE: ikisi de odaklanabilir (a[href] ve button); odak HALKASI
+   gorunur olmali - kumanda koyu zeminde durdugu icin varsayilan halka
+   yetersiz kaliyordu. */
+.fl-gec:focus-visible {
+  outline: 2px solid #ef233c; outline-offset: 3px; border-color: #ef233c;
+}
+
+/* ---- DONEN CIZGI: PROLOGU GEC (Enes, 31 Agu gece) ----
+   KAYNAK: eski site `.void .ring` (index.html ~502-557) — "kenarda
+   dolasan kirmizi isik". TUR 9 T2 (3 Eyl 2026): govde temel.css
+   `.sus-halka`ya TASINDI (tek uygulama; hero ile ayni kopyaydi). Film
+   markup'i `sus-halka duz` kullanir: `.duz` = parilti YOK (bilincli sapma:
+   kaynagin KENDI lowfx kipi de ayni gerekceyle filter'i kaldiriyor — pahali
+   olan parilti, her karede yeniden boyama; video scrub + H14 filter yasagi
+   + dusen kare 0 kapisi) + will-change katmani (GECE TUR 1 olcumu: maskeli
+   parentin donen cocugu katmana ayrilmayinca 1,5 sn'de 1-2 kez 25 ms+
+   bosluk). Sayilar (2px · 3.6s · %56 · duraklar) temel.css'te tek yerde,
+   bekci film-halka.test.mjs kaynakla kiyaslar. */
+.fl-gec { position: relative; }
+.fl-gec span { position: relative; z-index: 1; }
+/* YATAY TASMA (3 Eyl 2026, performans turu — olculdu): halkanin ::before'u
+   %260 kare; dugme sag kenarda oldugu icin kare belgeyi 84 px tasiriyordu
+   (JS'siz/ilk yerlesimde scrollWidth 1524, klasik kaydirma cubugu belirip
+   fl-js gelince kayboluyor -> sabit #bg 7 px oynuyor, olc-chrome CLS 0,54).
+   Maske zaten kare disini boyamiyor; overflow:hidden yalniz kaydirma
+   tasmasini keser, gorunum ayni. */
+.fl-gec .sus-halka { overflow: hidden; }
+/* motorsuz yolda PROLOGU GEC bagi kalir — JS'siz de calisir, #fl-son'a gider */
+html:not(.fl-js) .fl-kumanda { position: sticky; top: 12px; bottom: auto; justify-content: flex-end; }
+
+/* ray sonu capasi: "prologu gec" baginin hedefi */
+.fl-son { position: absolute; bottom: 0; left: 0; width: 1px; height: 1px; }
+
+/* ATLANMIS (oturumda bir kez): film katmani hic kurulmaz — sifir video,
+   sifir poster, sifir kare. `<html data-film="atlandi">` betikten yazilir. */
+html[data-film="atlandi"] .fl { display: none; }
+
+/* ---- MOTORSUZ YOL (hareket azaltma / JS yok): duz sutun ---- */
+html:not(.fl-js) .fl-ray { height: auto; }
+html:not(.fl-js) .fl-yapis { position: static; height: auto; overflow: visible; }
+html:not(.fl-js) .fl-sahne { position: relative; }
+html:not(.fl-js) .fl-poster { display: block; width: 100%; height: auto; }
+html:not(.fl-js) .fl-video { display: none; }
+/* GPU KATMAN KIRPMASI (3 Eyl daraltma; gerekce motor.ts izle()):
+   video kare sunan sahnede poster gizli — cift tam-ekran doku kalkti.
+   birak() sinifi kaldirir, pencere disina cikan sahnede poster geri. */
+.fl-js .fl-sahne.fl-canli .fl-poster { visibility: hidden; }
+
+/* ============================================================
+   NAV KOREOGRAFISI + DEVIR (31 Agu 2026, PROLOG-KAPANIS-v2)
+   ============================================================ */
+
+/* NAV YUKARI CEKILIR: film boyunca ekranda YER KAPLAMAZ. Kaldirma
+   `transform` ile — `display:none` olsaydi geri inerken yeniden yerlesim
+   olurdu ve "ayni karede iner" sarti kompozitorde degil duzen adiminda
+   kalirdi. Nav `position:fixed` oldugu icin transform yeter. */
+html.fl-nav-kalk .nv-bar { transform: translateY(-115%); }
+.nv-bar { transition: transform .55s cubic-bezier(.16, 1, .3, 1), padding .4s var(--e); }
+@media (prefers-reduced-motion: reduce) {
+  .nv-bar { transition: none; }
+}
+
+/* GOVDE v3 (31 Agu 2026, Enes): SAYFA HIC OLCEKLENMEZ — kapi "devir
+   aninda sayfa olcegi tam 1,0". transform-origin/will-change KALKTI, JS
+   govdeye transform yazmiyor. Devir baslayana kadar govde gorunmez ve
+   YER KAPLAMAZ (akista dursaydi ray uzar, kaydirma haritasi kayardi).
+
+   KATMAN DUZENI (uc yanlis surum olculdu, olc-devir dusenler kaydi):
+     (a) govde USTTE opacity 0 -> fade karesinde 44-70 ms ilk boyama
+         (tarayici ~saydam katmani hic boyamiyor);
+     (b) govde USTTE opacity .0001 + canli iframe -> olcek animasyonuyla
+         cakisti: devirin hizli fazinda 15-20 dusen kare;
+     (c) devirde iframe visibility:hidden -> raster onbellegi atildi,
+         fade karesinde 40 ms geri boyama.
+   Simdi govde hazirliktan itibaren TAM OPAK ve BOYALI, ama filmin
+   ALTINDA (yapis z 5 > govde z 3; film tam ekran opak ortuyor). Capraz
+   gecis FILM KATMANININ fade-out'u: gorsel sonuc ayni — "gercek sayfa
+   videonun ustunde netlesir" hissi korunur — ama boyama sicramasi
+   imkansiz, sayfa coktan boyali. */
+.fl-govde {
+  position: fixed; inset: 0; z-index: 3;   /* TV panelleri (4) ve film (5) ustunde kalsin */
+  visibility: hidden;
+  background: #050505;
+  /* `hidden` DEGIL `clip` (4 Eyl 2026 — BUYUK SESSIZ KIRILMA).
+     `overflow:hidden` bir ogeyi KAYDIRMA KABI yapar. `view-timeline`
+     ise ozneyi EN YAKIN KAYDIRMA KABINA gore olcer. Bu sarmal butun
+     site govdesini iceriyor, dolayisiyla ICINDEKI HER view() ANIMASYONU
+     sayfaya degil BU KUTUYA baglaniyordu — ve kutu hic kaydirilmadigi
+     icin (scrollHeight == clientHeight) cizelge DONUYORDU.
+     OLCULDU (.sp-deste, proje karti destesi): animasyon bagli ve
+     `playState: running`, ama `currentTime` sayfa boyunca -7,25% ile
+     -8,49% arasinda kaliyor — menzile HIC girmiyor; `fill: both`
+     oldugu icin `from` hali donuyor (scale 1 / opacity 1). Belge bastan
+     sona tarandi: [0,100] araligina giren adim SIFIR, gorulen tek olcek
+     degeri 1.000. Masaustunde de mobilde de ayni.
+     Kural film sokulunce de gecerliydi: `html:not(.fl-js) .fl-govde`
+     yalniz `position`i sifirliyor, overflow'u BIRAKIYORDU — yani
+     animasyonlar donen ziyaretcide de olu kaliyordu.
+     `clip` gorsel olarak ayni kirpmayi yapar ama kaydirma kabi YARATMAZ;
+     boylece view() zaman cizelgeleri yeniden BELGEYE baglanir. */
+  overflow: clip;
+}
+html.fl-hazirla .fl-govde, html.fl-devir .fl-govde { visibility: visible; pointer-events: none; }
+html.fl-devir-net .fl-govde { pointer-events: auto; }
+/* ARKA PLAN GERI GELIR (7 Eyl 2026 — Enes: "kirmizi ve cizgili arkaplan
+   yok, sadece siyah kalmis; diger sayfalarda var ana sayfada yok; sadece
+   footer'da o arkaplan var").
+   OLCULDU: `.fl-govde` opak `#050505` tasiyor. Bu, FILM SIRASINDA sart —
+   govde filmin ONUNDE belirir ve altindaki kareyi gizlemesi gerekir. Ama
+   film YOKKEN/GECILDIKTEN sonra ayni opak zemin duruyordu ve `#bg`
+   (fixed, z-index:-1: .grid nokta kafesi + .orb kizil kure + .fade)
+   TAMAMEN ortuluyordu. Ic sayfalarda `.fl-govde` hic olmadigi icin orada
+   arka plan gorunuyordu — Enes'in "diger sayfalarda var" gozlemi tam
+   olarak bu. Footer sarmalin disinda kaldigi icin yalniz orada
+   gorunuyordu.
+   Kural film moduna dokunmaz: `fl-hazirla`/`fl-devir` hallerinde
+   (film ACIKKEN govde gorunur oldugu anlar) zemin opak KALIR. */
+html:not(.fl-js) .fl-govde { position: static; visibility: visible; pointer-events: auto;
+  background: transparent; }
+/* govde icerigi eski sitenin girisi (GOMULU — EskiGiris.astro, shadow) */
+.fl-eski-giris { position: absolute; inset: 0; overflow: hidden; background: #050505; }
+/* film katmani: devir netlesince fade-out (.14s, 120-160 araligi) */
+html.fl-js .fl-yapis { z-index: 5; transition: opacity .14s ease; }
+html.fl-devir-net .fl-yapis { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { html.fl-js .fl-yapis { transition: none; } }
+/* yapisa ILK transform yazilan karede katman rasterlesiyordu (48-96 ms,
+   olculdu) ve olcek animasyonu boyunca HER karede yeniden rasterlaniyordu
+   (devir basinda 17-18 dusen kare, taban 0 iken — yani maliyet animasyonun
+   kendisi). will-change: tarayici katmani BIR kez rasterlar, animasyonda
+   GPU'da esnetir (zoom sirasinda hafif yumusaklik kabul — video zaten
+   buyutuluyor). H14 yasagi KALICI katman zorlamasi icindi; bu gecici:
+   yalniz ray sonu yaklasiminda takilir, uzaklasinca kalkar. */
+html.fl-hazirla .fl-yapis { will-change: transform; }
+
+/* TUTUNMA: scrollY ray sonuna varinca yapis yapisiktan SABITE gecer —
+   yapisik kutu ray icindeki her scrollY'de zaten ekranin kendisi, gecis
+   ayni konuma duser (gorunmez). Iki isi var: (1) devirde yakinlasan
+   video ekranda kalir; (2) savurmada scrollY ray sonunu GECIP film hiz
+   tavaniyla geride kalirsa yapis yukari kayip kacmaz (v3'te govde artik
+   erken gorunmedigi icin bu kacis maskesiz kalirdi). fl-devir'den AYRI
+   sinif: tutunma scroll'a, devir filmin sonuna bagli. */
+html.fl-tutun .fl-yapis { position: fixed; top: 0; left: 0; right: 0; }
+/* kumanda + ipucu yakinlasan videoyla birlikte buyumesin: devirde soner */
+html.fl-devir .fl-kumanda, html.fl-devir .fl-ipucu { opacity: 0; pointer-events: none; transition: opacity .12s; }
+/* devir tamamlaninca film katmani kalkar: artik gercek sayfadayiz */
+html[data-devir="tam"] .fl-yapis { visibility: hidden; }
+
+/* ---- EFEKT A · TV ACMA (Enes, 31 Agu aksam; ?gecis=patlama KALKTI) ----
+   Video son karesine oturunca goruntu dikeyde parlak KIZIL CIZGIYE coker
+   (cokus JS'te: yapis scale(sx, sy->0), tek yazici kurali), cizgi kisa
+   bir an parlar, paneller dikeyde acilip siteyi gosterir. 130+50+130 =
+   ~310 ms. Cizgi rengi filmin kizil paleti (#ef233c / #ff4d63).
+   KATMAN: paneller z 4 (coken filmin ALTINDA kalan alani orter, site
+   z 3'te altta), cizgi z 6 (coken goruntunun USTUNDE parlar), film z 5.
+   Hareket azaltmada bu katmanlar hic kullanilmaz (surucu sade yolda). */
+.fl-tv { display: none; position: fixed; inset: 0; z-index: 4; pointer-events: none; }
+/* DARALTMA TURU DENEY KAYDI (3 Eyl gece): ilk hipotez "ilk raster"di,
+   fl-hazirla isitmasi denendi ve TERS TEPTI — hazirla efekt sonrasi da
+   acik kaldigi icin paneller sahnede kaliyor, sinif temizliginde
+   transform geri-donusu olcume/ekrana siziyordu (acilis 207-262 ms ->
+   2.524-3.156 ms) VE @0 duseni YERINDE kaldi. Geri alindi. Ikinci
+   hipotez asagida (kok recalc) — dusenler sinif-ekleme anlarinda ve
+   siniflar html KOKUNE basiliyor: her ekleme tum sayfada stil yeniden
+   hesabi (39 sahnelik DOM). */
+/* IKINCI HIPOTEZ UYGULAMASI: tv siniflari KOKTEN INDI — 'tvg/tvp/tva'
+   dogrudan .fl-tv ve .fl-tv-cizgi elementlerine basilir (Film.astro
+   tvSinif). Kok sinifiyla her ekleme TUM belgede secici eslesmesini
+   yeniden kosturuyordu; elementte yalniz iki kucuk alt agac. */
+.fl-tv.tvg { display: block; }
+.fl-tv-ust, .fl-tv-alt { position: absolute; left: 0; right: 0; height: calc(50% + 1px); background: #050505; transition: transform .13s cubic-bezier(.2, .7, .3, 1); }
+.fl-tv-ust { top: 0; }
+.fl-tv-alt { bottom: 0; }
+.fl-tv.tva .fl-tv-ust { transform: translateY(-102%); }
+.fl-tv.tva .fl-tv-alt { transform: translateY(102%); }
+/* cizgi HEP yerlesik (opacity 0 boyanmaz): display flip ile gelseydi
+   opacity gecisi atlanir, cizgi cokusle belirmek yerine ANIDEN yanardi */
+.fl-tv-cizgi {
+  position: fixed; left: 0; right: 0; top: 50%; height: 26px; margin-top: -13px;
+  z-index: 6; pointer-events: none; opacity: 0; transition: opacity .12s linear;
+  background: linear-gradient(to bottom, transparent, rgba(239, 35, 60, .35) 30%, #ff4d63 45%, #fff 50%, #ff4d63 55%, rgba(239, 35, 60, .35) 70%, transparent);
+}
+.fl-tv-cizgi.tvg { opacity: 1; }
+.fl-tv-cizgi.tvp { animation: fl-tv-parla .1s ease-out both; }
+@keyframes fl-tv-parla { 0% { transform: scaleY(1); } 60% { transform: scaleY(1.9); } 100% { transform: scaleY(1.2); } }
+.fl-tv-cizgi.tva { opacity: 0; transition: opacity .13s linear; }
+
+/* "KAYDIRMAYA DEVAM": ekranin altinda, kumandanin ustunde. */
+/* IBARE (Enes, 1 Eyl netlestirme): DUGME DEGIL — cerceve/zemin/kose yok,
+   duz metin. Film BOYUNCA alt ortada, bastan vardir; yalniz devirde
+   soner (html.fl-devir kurali yukarida, sonme ani transitionend'den).
+   HIZA: gec dugmesiyle AYNI SATIRDA DEGIL, bir tik ALTINDA — dikey
+   merkez farki olculup px olarak RAPORLANIR (olc-efekt IBARE bolumu).
+   Buton merkezi alttan ~34 px (16 + 36/2); ibare merkezi 16+7 = 23 px
+   -> hedef fark ~11 px altta. YAZI AILESI VE PUNTO gec ile AYNI
+   (system-ui, 14px) — computed'dan yan yana dogrulanir. */
+.fl-ipucu {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+  z-index: 5; margin: 0; padding: 0;
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 14px/1 var(--f-govde); letter-spacing: .02em;
+  color: #fff;
+}
+/* OK + METIN BIRLIKTE NABIZ (Enes, 1 Eyl ucuncu duzeltme: nokta kalkti,
+   OK geri geldi — SADECE KIRMIZI; metin de okla BERABER yanip soner).
+   Ritim onceki karardan: halkanin tur suresi 3,6 s (bekci film-halka.test
+   kaynakla esitligi denetler); renk .void .ring paleti (#ef233c/#ff4d63).
+   Animasyon IC ogelerde (span + svg), kapsayicida DEGIL: .fl-ipucu'nun
+   opacity'si devir sonmesinin gecisi — animasyon onu ezerdi. Iki ic oge
+   ayni parse'ta yaratilir, animasyonlar ayni kareden baslar: senkron.
+   CSS'te, JS kare dongusu yok; azaltmada durur, ikisi de gorunur kalir. */
+.fl-ipucu span { animation: fl-nabiz 3.6s ease-in-out infinite; }
+/* OK (Enes, 4. duzeltme): nabza ek YUKARIDAN ASAGI akis — ayni 3,6 s
+   ritim, tepe metnin tepesiyle ayni anda (%45-50); uclarda opacity 0,
+   sarma zipla(ma)si gorunmez. */
+.fl-ipucu svg { width: .72em; height: .42em; display: block; color: #ef233c; animation: fl-ok-kay 3.6s ease-in-out infinite; }
+@keyframes fl-nabiz {
+  0%, 100% { opacity: .25; }
+  50% { opacity: 1; }
+}
+@keyframes fl-ok-kay {
+  0% { opacity: 0; transform: translateY(-.35em); }
+  45% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(.4em); }
+}
+@media (prefers-reduced-motion: reduce) { .fl-ipucu span, .fl-ipucu svg { animation: none; opacity: .85; } }
+
+/* ============================================================
+   ALTYAZI TEMASI (4 Eyl 2026) — metin katmani yeniden kuruldu
+   ============================================================
+   Onceki (TUR 5 / IS A, 2-3 Eyl): alt bant, tek olcek, yalniz
+   sonumlenerek belirme; perde kunyesi sol ustte ayri surekli katman.
+   Okunuyordu ama karakteri yoktu. Onaylanan tema (Enes; referans
+   altyazi-son.html) filmin misafiri ama kendi dili var. YAPI BAGLAYICI:
+     1. perde kunyesi 11,5 px · .16em · 600 · #ff4d63 · alttan .35em
+        yukselerek belirir — artik BLOGUN PARCASI, onunla gelir/gider
+     2. kizil cizgi 1 px · min(38%, 260px) · iki uca sonen gradyan ·
+        MERKEZDEN iki yana acilir (scaleX 0→1, origin center) — cunku
+        kompozisyon ortalanmis; soldan acilsa tek asimetrik oge kalirdi
+     3. satirlar: her satir kendi overflow:hidden maskesinde,
+        translateY(110%)→0, cubic-bezier(.22,1,.36,1); ikinci satir
+        90 ms gecikmeli — okuma sirasi uretir. SATIR SATIR, kelime
+        kelime DEGIL: kelime basina oge + bulaniklik BILEREK elendi
+        (GPU tabani zaten dusen kare uretiyor)
+     4. alt perde %32, asagi koyulasan gradyan, tabanda rgba(3,4,6,.90)
+        — acik kadrajlarda da (uzaydan dunya, gokyuzu) tasimali; koyu
+        kadrajda zaten gorunmuyor
+   Metin agirligi 500, Uncut Sans. Text-shadow KALKTI: okunurlugu perde
+   tasir, golge kaynak yapida yok (sadakat: ekleme yasagi).
+   Gorunurluk MOTORDAN: `.fl-soz-gor` konteynere; parcalar CSS'le
+   sirayla gelir. Cikis ayni yoldan geri, kisa (.3s); konteyner
+   visibility'si cikis bitene kadar (.4s) tutulur. Katman z=3.
+   Devirde yapis zaten sonuyor (fl-devir-net), blok onunla gider.
+   KOMPOZIT: maske (overflow) + transform gecisi + perde opacity gecisi
+   gecici katman acar — olc-soz dusen kiyasi TABAN DAMGALI olcer. */
+.fl-sozler { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.fl-perde {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
+  background: linear-gradient(to bottom, rgba(3, 4, 6, 0), rgba(3, 4, 6, .90));
+  opacity: 0; transition: opacity .45s ease;
+}
+/* blok sahnedeyken perde opak; kaynak satiri (.fl-kaynak) perdeyi acmaz */
+.fl-sozler:has(.fl-soz-gor:not(.fl-kaynak)) .fl-perde { opacity: 1; }
+.fl-soz {
+  position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%);
+  width: min(78vw, 640px); margin: 0; text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  font-family: 'Uncut Sans', system-ui, sans-serif;
+  font-weight: 500; font-size: clamp(20px, 3vw, 36px);
+  line-height: 1.18; letter-spacing: -0.005em; color: #fff;
+  visibility: hidden; transition: visibility 0s .4s;
+}
+.fl-soz.fl-soz-gor { visibility: visible; transition: visibility 0s; }
+/* 1 · perde kunyesi */
+.fl-kunye {
+  display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .16em;
+  line-height: 1; color: #ff4d63;
+  opacity: 0; transform: translateY(.35em);
+  transition: opacity .25s ease-in, transform .25s ease-in;
+}
+.fl-soz-gor .fl-kunye {
+  opacity: 1; transform: none;
+  transition: opacity .45s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+/* 2 · kizil cizgi — merkezden acilir */
+.fl-cizgi {
+  display: block; width: min(38%, 260px); height: 1px; margin: 10px 0 12px;
+  background: linear-gradient(90deg, rgba(255, 77, 99, 0), #ff4d63 50%, rgba(255, 77, 99, 0));
+  transform: scaleX(0); transform-origin: center;
+  transition: transform .25s ease-in;
+}
+.fl-soz-gor .fl-cizgi { transform: scaleX(1); transition: transform .7s cubic-bezier(.22, 1, .36, 1) .05s; }
+/* 3 · satirlar — her biri kendi maskesinde. Dikey .05em pay: inen
+   harfler (g, y, c) maskede kirpilmasin; margin ayni payi geri alir,
+   satir araligi degismez. */
+.fl-satir { display: block; max-width: 100%; overflow: hidden; padding: .05em .12em; margin: -.05em 0; }
+.fl-satir > span { display: block; transform: translateY(110%); transition: transform .3s ease-in; }
+.fl-soz-gor .fl-satir > span { transform: none; transition: transform .6s cubic-bezier(.22, 1, .36, 1); }
+.fl-soz-gor .fl-satir + .fl-satir > span { transition-delay: 90ms; }
+.fl-soz-gor .fl-satir + .fl-satir + .fl-satir > span { transition-delay: 180ms; }
+/* HAREKET AZALTMA (motor acikken kip degisirse; motorsuz yol asagida):
+   maske, cizgi ve kunye hareketi DURUR — metin ve perde gorunur kalir. */
+@media (prefers-reduced-motion: reduce) {
+  .fl-soz, .fl-perde, .fl-kunye, .fl-cizgi, .fl-satir > span,
+  .fl-soz-gor .fl-kunye, .fl-soz-gor .fl-cizgi, .fl-soz-gor .fl-satir > span { transition: none; }
+}
+/* ?boz=soz — olcum duzeneginin KIRMIZI KONTROLU (Film.astro): gecikme 0,
+   cizgi orijini sol, maske acik. Urun yolunda sinif hic yazilmaz. */
+.fl-boz-soz .fl-soz-gor .fl-satir + .fl-satir > span { transition-delay: 0s; }
+.fl-boz-soz .fl-cizgi { transform-origin: left; }
+.fl-boz-soz .fl-satir { overflow: visible; }
+/* RAKAM KAYNAGI (uydurma rakam yasagi): sol alt, kucuk; ibare (alt
+   orta) ve gec dugmesi (sag alt) ile kesismez. Son perdeyle gorunur —
+   blok yapisinin DISINDA, duz metin. */
+.fl-soz.fl-kaynak {
+  display: block; left: 24px; bottom: 16px; width: auto; max-width: 46vw;
+  transform: translateY(6px); text-align: left;
+  font-weight: 300; font-size: 11px; letter-spacing: .04em;
+  line-height: 1.3; color: rgba(255, 255, 255, .5);
+  opacity: 0; transition: opacity .4s ease, transform .4s ease, visibility 0s .4s;
+}
+.fl-soz.fl-kaynak.fl-soz-gor { opacity: 1; transform: none; transition: opacity .4s ease, transform .4s ease, visibility 0s; }
+
+/* MOTORSUZ YOL (azaltma / JS yok): bloklar duz sutunun basinda ONSOZ
+   olarak okunur — hicbir sart altinda kaybolmazlar. Kunye kucuk baslik,
+   satirlar cumle olarak akar, cizgi ve perde dekor: yok. */
+html:not(.fl-js) .fl-sozler { position: static; pointer-events: auto; padding: 10vh 8vw 6vh; }
+html:not(.fl-js) .fl-perde, html:not(.fl-js) .fl-cizgi { display: none; }
+html:not(.fl-js) .fl-soz {
+  position: static; display: block; width: auto; transform: none; visibility: visible;
+  margin: 0 0 1.2em; text-align: left; font-size: clamp(22px, 3.4vw, 40px);
+}
+html:not(.fl-js) .fl-kunye { opacity: 1; transform: none; margin-bottom: .4em; }
+html:not(.fl-js) .fl-satir { display: inline; padding: 0; margin: 0; overflow: visible; }
+html:not(.fl-js) .fl-satir > span { display: inline; transform: none; }
+html:not(.fl-js) .fl-satir + .fl-satir::before { content: ' '; }
+html:not(.fl-js) .fl-soz.fl-kaynak { opacity: 1; font-size: 12px; }
+
+/* ============ ANA SAYFA PROLOGU (3 Eyl 2026, ANAYASA istisna 4) ============
+   Film ana sayfanin onunde (Film sayfa='ana'); govde .fl-govde sarmalinda.
+   · kabuk navi (Nav.astro .nv-bar/.nv-fade, z 50) film boyunca gizli — site
+     filmin ustunde netlesirken (fl-devir-net) beraber belirir; /film'de
+     govdenin kendi navi vardi, burada kabugun navi ayni isi gorur.
+   · devir tamamlaninca betik siteyeGec: data-film="bitti" -> film katmani
+     yok, .fl-govde static (html:not(.fl-js) kurali), sayfa 0'dan akar.
+   · hareket azaltma: ana sayfada 39 posterlik sutun gosterilmez, dogrudan
+     site (film sayfasinda poster sutunu KALIR — olcum zemini). Karar Enes'te. */
+/* 4 EYL 2026 (Enes) — NAV ARTIK BASTA GORUNUR.
+   Eski kural `html.fl-ana:not(.fl-devir-net) .nv-bar{visibility:hidden}`
+   idi: nav TUM prolog boyunca gizliydi ve ancak devir netlesince
+   beliriyordu. Gerekce: "kisi bir siteye geldigini anlamayabilir" —
+   acilista gezinme yoksa sayfa site gibi okunmuyor.
+   ISTENEN KOREOGRAFI ZATEN KURULUYDU, onunde yalnizca bu kural duruyordu:
+   `Film.astro` navBak() -> `kalk = scrollY > 4` -> `fl-nav-kalk` sinifi;
+   asagidaki 169. satir da onu translateY(-115%) ile yukari cekiyor,
+   .55s'lik gecisle. Yani kaydirma baslayinca nav cekilir, ziyaretci basa
+   donunce (scrollY <= 4) kendiliginden geri iner.
+   BU YUZDEN YENI BIR ADA/BETIK EKLENMEDI: davranis icin tek satirlik CSS
+   kaldirmasi yetti, sifir JS, sifir kasma riski. Devirde nav yerinde
+   kalir (bir alttaki `fl-devir-net` kurali).
+   `/film` sayfasi ETKILENMEZ: kural `fl-ana` (ana sayfa) kapsamindaydi;
+   orada govdenin kendi navi var, cift nav dogmaz. */
+/* site netlesirken nav da yerinde (fl-nav-kalk film boyunca yukari cekmisti;
+   /film'de 'devirde kalkik kalir' — orada govdenin kendi navi vardi) */
+html.fl-ana.fl-devir-net .nv-bar { transform: none; }
+/* FILM ONDEYKEN GOVDE DEMOLARI DURUR (3/4 Eyl 2026, olc-surucu bulgusu):
+   govde `.fl-govde` icinde sabit ve gorunmez duruyor ama IntersectionObserver
+   gorunurluge degil KESISIME bakar — demolar filmin arkasinda donmeye devam
+   ediyordu, yani sayfanin en agir aninda bos is. Surucu anahtari (--akps)
+   film katmani kalkana kadar duraklatilir; devir netlesince (fl-devir-net)
+   kural dusier ve demolar kendi kapilariyla (IO .akoynar) devam eder. */
+html.fl-ana:not(.fl-devir-net) .akoynar { --akps: paused; }
+html[data-film="bitti"] .fl { display: none; }
+html[data-film="hareket-azaltma"] .fl[data-sayfa="ana"] { display: none; }
+/* MOBIL ANA SAYFA: prolog basilmaz (Enes, gece zinciri 3/4 Eyl). Kural CSS'te
+   de durur ki betik gec kalsa bile film katmani bir kare gorunmesin; erken
+   karar betigi `data-film="mobil"` yazar. /film olcum zemini etkilenmez. */
+html[data-film="mobil"] .fl[data-sayfa="ana"] { display: none; }
+@media (max-width: 900px), (pointer: coarse) { .fl[data-sayfa="ana"] { display: none; } }

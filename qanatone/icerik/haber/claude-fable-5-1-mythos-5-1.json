@@ -1,0 +1,43 @@
+{
+  "slug": "claude-fable-5-1-mythos-5-1",
+  "date": "2026-09-01",
+  "read": 1,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "Claude Fable 5.1 çıktı; Mythos 5.1 yalnız seçilmiş kurumlara",
+    "en": "Claude Fable 5.1 launches; Mythos 5.1 stays restricted"
+  },
+  "lede": {
+    "tr": "Anthropic 1 Eylül'de Fable 5.1 ve Mythos 5.1'i duyurdu. İkisi aynı model; aralarındaki fark güvenlik önlemleri ve erişim.",
+    "en": "Anthropic announced Fable 5.1 and Mythos 5.1 on September 1. They are the same model with different safeguards and access."
+  },
+  "body": {
+    "tr": [
+      [
+        "İki isim, bir model",
+        "<p>Fable 5.1, Anthropic'in üretim ortamı güvenlik önlemleriyle genel kullanıma açılan sürüm. Claude API'nin yanında AWS, Google Cloud ve Microsoft Azure üzerinden de kullanılabiliyor. Mythos 5.1 ise kısıtlı erişim programlarındaki, incelemeden geçmiş siber güvenlik ve yaşam bilimleri kurumlarına açık. Şimdilik bu kurumlar ABD'de; Anthropic erişimi genişletmek için ABD hükümetiyle çalıştığını söylüyor.</p>"
+      ],
+      [
+        "Performans ve fiyat",
+        "<p>Anthropic'in yayımladığı ölçümlere göre Fable 5.1, ajan olarak yürütülen bilimsel araştırma görevlerinde Fable 5'in puanını iki katından fazlasına, iş akışı görevlerinde yaklaşık iki katına çıkarıyor. Düşük ve orta çaba ayarında Fable 5'le benzer ya da daha iyi sonuç veriyor, fark yüksek çaba ayarlarında açılıyor.</p><div class=\"nfig\"><b>10 $ / 50 $</b><span>Fable 5.1'in milyon token başına girdi ve çıktı fiyatı, Fable 5 ile aynı</span></div><p>Önbellekten okunan token'ların fiyatı ise yüzde 75 düştü. Uzun ve tekrar eden bağlamla çalışan ajanlarda bu indirim liste fiyatından daha çok hissedilebilir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Two names, one model",
+        "<p>Fable 5.1 is generally available with Anthropic's production safeguards, on the Claude API, AWS, Google Cloud and Microsoft Azure. Mythos 5.1 is limited to vetted cybersecurity and life-sciences organisations in restricted-access programs, currently in the US; Anthropic says it is working with the US government to expand access.</p>"
+      ],
+      [
+        "Performance and price",
+        "<p>On Anthropic's published evaluations, Fable 5.1 more than doubles Fable 5 on agentic scientific research and nearly doubles it on business workflows. Pricing stays at $10 per million input tokens and $50 per million output tokens, while cache reads are 75% cheaper.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

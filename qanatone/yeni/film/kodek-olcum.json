@@ -1,0 +1,64 @@
+{
+ "_": "yeni/film/kodek-olc.cjs — TEK KLIP decode maliyeti, gercek Chrome, 3 tekrar medyani. Butce 16,7 ms (60 Hz).",
+ "olcum": "2026-08-27T14:52:15.521Z",
+ "klip": {
+  "n": 20,
+  "sure": 5.042,
+  "kare": 121,
+  "kaynak": "3840x2160 hevc"
+ },
+ "savurma": "5.042 sn film / 1.5 sn (3,3x)",
+ "aday": [
+  {
+   "ad": "h264",
+   "etiket": "H.264 1440p (mevcut hat)",
+   "mib": 4.39,
+   "mime": "video/mp4; codecs=\"avc1.640028\"",
+   "destek": "probably",
+   "desteklenmiyor": false,
+   "hata": null,
+   "ilk_kare_ms": 126,
+   "atlama_yuzde": 74.8,
+   "max_bosluk_kare": 16,
+   "kare_p50": 8.3,
+   "kare_p95": 8.7,
+   "kare_max": 73.2,
+   "butce_asan_yuzde": 1.7,
+   "tekrar": 3
+  },
+  {
+   "ad": "h265",
+   "etiket": "H.265/HEVC 1440p",
+   "mib": 3.07,
+   "mime": "video/mp4; codecs=\"hvc1.1.6.L120.90\"",
+   "destek": "probably",
+   "desteklenmiyor": false,
+   "hata": null,
+   "ilk_kare_ms": 80,
+   "atlama_yuzde": 83.9,
+   "max_bosluk_kare": 16,
+   "kare_p50": 8.3,
+   "kare_p95": 8.7,
+   "kare_max": 26.2,
+   "butce_asan_yuzde": 1.1,
+   "tekrar": 3
+  },
+  {
+   "ad": "av1",
+   "etiket": "AV1 1440p (libaom, cpu-used 8)",
+   "mib": 2.66,
+   "mime": "video/mp4; codecs=\"av01.0.08M.08\"",
+   "destek": "probably",
+   "desteklenmiyor": false,
+   "hata": null,
+   "ilk_kare_ms": 104,
+   "atlama_yuzde": 99.2,
+   "max_bosluk_kare": 0,
+   "kare_p50": 8.3,
+   "kare_p95": 9,
+   "kare_max": 12.3,
+   "butce_asan_yuzde": 0,
+   "tekrar": 3
+  }
+ ]
+}

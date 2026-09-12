@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T09:37:57.423Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": "s1",
+   "farkYuzde": 5.6,
+   "farkliPiksel": 72637,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 7/8 sutun 5/8 (x 720-900, y 675-788; hucrede 8924 px, tum farkin %12)",
+   "md5": {
+    "once": "0b42e6ceb62e341ba31974c493c1c877",
+    "sonra": "e57376c7213574d998545faa1197fa57"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 3544,
+     "sonra": 4958
+    },
+    "gercek": {
+     "once": 3544,
+     "sonra": 4958
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t1-oto-kart-once-s1.png",
+    "sonra": "yeni/film/kontak-tur9/t1-oto-kart-sonra-s1.png",
+    "yanyana": "yeni/film/kontak-tur9/t1-oto-kart-yanyana-s1.png"
+   }
+  },
+  {
+   "konum": "s2",
+   "farkYuzde": 8.9,
+   "farkliPiksel": 115391,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 4/8 sutun 2/8 (x 180-360, y 338-450; hucrede 12132 px, tum farkin %11)",
+   "md5": {
+    "once": "9dbe2b8a49f26b7d1182dc6e172d0f76",
+    "sonra": "dcd938231dc2c52731de936e7caf99e6"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 4093,
+     "sonra": 5508
+    },
+    "gercek": {
+     "once": 4093,
+     "sonra": 5508
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t1-oto-kart-once-s2.png",
+    "sonra": "yeni/film/kontak-tur9/t1-oto-kart-sonra-s2.png",
+    "yanyana": "yeni/film/kontak-tur9/t1-oto-kart-yanyana-s2.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/otomasyon",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 2,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 5971,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 3544,
+    "gercek": 3544,
+    "sapma": 0,
+    "md5": "0b42e6ceb62e341ba31974c493c1c877",
+    "png": "yeni/film/kontak-tur9/t1-oto-kart-once-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": "s2",
+    "hedef": 4093,
+    "gercek": 4093,
+    "sapma": 0,
+    "md5": "9dbe2b8a49f26b7d1182dc6e172d0f76",
+    "png": "yeni/film/kontak-tur9/t1-oto-kart-once-s2.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/otomasyon",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 21,
+   "sonsuzSifirlanan": 20,
+   "sonluBitirilen": 1,
+   "video": 0
+  },
+  "scrollHeight": 7358,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": "s1",
+    "hedef": 4958,
+    "gercek": 4958,
+    "sapma": 0,
+    "md5": "e57376c7213574d998545faa1197fa57",
+    "png": "yeni/film/kontak-tur9/t1-oto-kart-sonra-s1.png",
+    "raf": "raf",
+    "animasyonSonradan": 21
+   },
+   {
+    "konum": "s2",
+    "hedef": 5508,
+    "gercek": 5508,
+    "sapma": 0,
+    "md5": "dcd938231dc2c52731de936e7caf99e6",
+    "png": "yeni/film/kontak-tur9/t1-oto-kart-sonra-s2.png",
+    "raf": "raf",
+    "animasyonSonradan": 21
+   }
+  ]
+ }
+}

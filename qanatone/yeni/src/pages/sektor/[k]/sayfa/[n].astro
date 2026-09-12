@@ -1,0 +1,32 @@
+---
+/* Sektör arşivi · 2. ve sonraki sayfalar (TR). 1. sayfa
+   `/sektor/<k>`; `/sayfa/1` bilinçli YOK. Gerekçe `../[k].astro`. */
+import Temel from '../../../../layouts/Temel.astro';
+import SektorDizin from '../../../../parcalar/SektorDizin.astro';
+import { icerik, T, KOK, sl } from '../../../../icerik';
+import { sektorSayfaYollari, sektorDilim } from '../../../../sayfalama';
+import { sektorDizinSema } from '../../../../sema.mjs';
+
+export async function getStaticPaths() {
+  return await sektorSayfaYollari();
+}
+
+const { k, n } = Astro.params;
+const anahtar = String(k);
+const sayfa = Number(n);
+const kayit = (icerik.sectors || []).find((s) => String(s.k) === anahtar) || {};
+const ad = T(kayit.n, 'tr') || anahtar;
+const canon = sl(`${KOK}/sektor/${anahtar}/sayfa/${sayfa}`);
+const baslik = `${ad} — Sayfa ${sayfa} — Sektör — QANATONE`;
+const aciklama = `${ad} sektöründe yazdıklarımız — bülten, nedir ve haber bir arada. Sayfa ${sayfa}.`;
+/* Dilim TEK KAYNAKTAN (`sektorDilim`) — sayfanin kartlariyla AYNI
+   liste. Iki yerde ayri hesaplansaydi sema, sayfada OLMAYAN bir
+   icerigi ilan edebilirdi. */
+const dilim = await sektorDilim(anahtar, sayfa);
+const sema = sektorDizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' }, dilim.gorunen, dilim.bas);
+---
+<Temel genis dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/sektor/${anahtar}/sayfa/${sayfa}`)} helefen={sl(`${KOK}/en/sektor/${anahtar}/sayfa/${sayfa}`)} sema={sema}
+  etiket="Sektör">
+  <SektorDizin dil="tr" k={anahtar} sayfa={sayfa} />
+</Temel>

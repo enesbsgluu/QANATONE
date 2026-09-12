@@ -1,0 +1,275 @@
+{
+ "_": "yeni/panel-envanter.cjs — kaynak taramasi: hangi metin panelden geliyor, hangisi sabit. HUKUM DEGIL envanter. Istisnalar SILINMEZ, gerekcesiyle ayri sayilir.",
+ "olcum": "2026-09-03T20:08:12.951Z",
+ "toplam": {
+  "panelli": 232,
+  "sabit_metin": 0,
+  "sabit_nitelik": 0,
+  "gerekceli_istisna": 15,
+  "teknik_meta": 3
+ },
+ "dosya": {
+  "layouts/Temel.astro": {
+   "panelli": 9,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "QANAT",
+    "ONE",
+    "QANATONE"
+   ],
+   "istisna_neden": [
+    "marka kelimesi — alt bilgi logosu, Nav ile ayni gerekce (<b>QANAT<span>ONE</span></b>)",
+    "marka kelimesinin ikinci parcasi — alt bilgi logosu",
+    "filigranin gorunmez basligi (<h2 class=\"vh\">) — ekran okuyucuya sayfanin KIMLIGINI verir, cevrilecek kopya degil"
+   ],
+   "teknik_meta": [
+    "viewport=\"width=device-width, initial-scale=1\"",
+    "robots=\"noindex\"",
+    "twitter:card=\"summary_large_image\""
+   ]
+  },
+  "pages/404.astro": {
+   "panelli": 3,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "pages/deneme-react.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "React ada denemesi",
+    "Bu sayfa ürün değil, ölçüm zemini: aşağıdaki kart React + motion adasıdır — sürükle, bırak, yarıda kes. Bütçe rakamları commit raporunda; ada",
+    "client:visible",
+    "ile yalnız bu sayfada yaşar."
+   ],
+   "istisna_neden": "olcum zemini — sayfa kendi icinde \"urun degil, olcum zemini: asagidaki kart React + motion adasidir\" diyor; dist e giriyor ama noindex ve sitemap disinda (kesme kalemi)"
+  },
+  "pages/en/film.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "Film skeleton"
+   ],
+   "istisna_neden": "olcum zemini — film.astro nun EN esi, ayni kunye"
+  },
+  "pages/film.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "Film iskeleti"
+   ],
+   "istisna_neden": "olcum zemini — kunye: \"39 kliplik scroll-scrub adasinin OLCUM ZEMINI; urun sayfasi degil\""
+  },
+  "pages/hukuki.astro": {
+   "panelli": 1,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/AracSahne.astro": {
+   "panelli": 20,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/BultenDizin.astro": {
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/CanliSahne.astro": {
+   "panelli": 7,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/HizmetDizin.astro": {
+   "panelli": 6,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/HizmetGovde.astro": {
+   "panelli": 15,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/LeadKutu.astro": {
+   "panelli": 1,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "betik_metni": {
+    "yuva": [
+     "Gönderiliyor…",
+     "Talebin bize ulaştı — en geç bir iş günü içinde döneriz.",
+     "Kayıt sunucuya ulaşmadı.",
+     "WhatsApp'tan gönder"
+    ],
+    "turkce": []
+   }
+  },
+  "parcalar/MotorSahne.astro": {
+   "panelli": 2,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/Nav.astro": {
+   "panelli": 9,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "QANAT",
+    "ONE",
+    "QANAT",
+    "ONE"
+   ],
+   "istisna_neden": [
+    "marka kelimesi — logo tipografik olarak QANAT + ONE diye bolunmus (<b>QANAT<span>ONE</span></b>), metin degil GORSEL kimlik; panele acilirsa bir yazim hatasi site kimligini bozar",
+    "marka kelimesinin ikinci parcasi — yukaridakiyle ayni gerekce"
+   ]
+  },
+  "parcalar/OtomasyonGovde.astro": {
+   "panelli": 99,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/PlatformSahne.astro": {
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/ProjeDizin.astro": {
+   "panelli": 6,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/ProjeGovde.astro": {
+   "panelli": 6,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/SssGovde.astro": {
+   "panelli": 3,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/SurecGovde.astro": {
+   "panelli": 5,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "parcalar/TeslimatBlok.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "istisna_metin": [
+    "pazar-raporu/",
+    "pazar-raporu/"
+   ],
+   "istisna_neden": [
+    "yol gorunumlu gorsel motif (.tppath / <b>), okunacak kopya degil; slug oldugu icin iki dilde de ayni"
+   ]
+  },
+  "sahneler/S2Kayip.astro": {
+   "panelli": 1,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "sahneler/SSESektor.astro": {
+   "panelli": 13,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": []
+  },
+  "sahneler/STETespit.astro": {
+   "panelli": 0,
+   "sabit_metin": 0,
+   "sabit_nitelik": 0,
+   "ornek": [],
+   "ornek_nitelik": [],
+   "betik_metni": {
+    "yuva": [
+     "Taranıyor…",
+     "Ağırlık ${j.kb} KB · Kontrol ${(j.items || []).length}",
+     "robots.txt yapay zekâ tarayıcılarına kapalı — site sağlıklı olsa bile AI yanıtlarında görünmezsin.",
+     "Bağlantı hatası — tekrar dener misin?"
+    ],
+    "turkce": [
+     "steHuküm",
+     "Başlık",
+     "Açıklama",
+     "Şema",
+     "Paylaşım kartı",
+     "Görsel alt metni",
+     "Görsel ölçüsü",
+     "Görsel biçimi",
+     "Yazı tipi",
+     "Satır içi yük",
+     "Sıkıştırma",
+     "Önbellek",
+     "İstek sayısı",
+     "Ölçümleme",
+     "İletişim",
+     "Yerel işaret",
+     "Sistem çalışıyor.",
+     "Yapı sağlam. Buradan sonrası hız ve içerik işi.",
+     "İyi ama açık var.",
+     "Temel yerinde; birkaç kalem talebi kaçırıyor.",
+     "Yarısı eksik.",
+     "Talebi kaçırıyor.",
+     "Bu hâliyle gelen kişi seni bulamıyor ya da ulaşamıyor.",
+     "Bu adres taranamıyor (site otomatik erişimi engelliyor).",
+     "Siteye ulaşılamadı — adresi kontrol eder misin?",
+     "Günlük tarama hakkı doldu. Yarın yine dene.",
+     "Tarama tamamlanamadı.",
+     "Bugün ${j.kalan} tarama hakkın kaldı."
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,1423 @@
+{
+ "_": "yeni/film/olc-soguk-regim.cjs — TESHIS, KAPI DEGIL. Ayni sayfanin ayni gun iki farkli rejimde okunmasinin sebebini adlandirmak icin: animasyon kosuyor mu, gorsel tur icinde iniyor mu, motorun hangi asamasi yiyor.",
+ "olcum": "2026-09-03T19:02:48.607Z",
+ "tarayici": "brave",
+ "sayfa": "/yeni/hizmetler/finans/",
+ "kol": "K",
+ "tekrar": 2,
+ "ozet": {
+  "kare_saniye_medyan": 82.9,
+  "p95_medyan": 25,
+  "kacirilan_medyan": 2,
+  "takilma_toplam_medyan": 599,
+  "kaydirmali_anim_medyan": 149,
+  "kaydirmali_kosan_medyan": 100,
+  "gorsel_tur_icinde_medyan": 1,
+  "layout_medyan": 324,
+  "layout_sn_medyan": 0.1607,
+  "stil_medyan": 1240,
+  "stil_sn_medyan": 3.2474,
+  "betik_sn_medyan": 0.2233,
+  "gorev_sn_medyan": 6.9708
+ },
+ "kosum": [
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1207,
+   "tur_ms": 14554,
+   "p95_ms": 25,
+   "medyan_ms": 8.4,
+   "kare_saniye": 82.9,
+   "kacirilan_kare": 2,
+   "takilma_sayi": 6,
+   "takilma_toplam_ms": 599,
+   "takilma_tek_max_ms": 233,
+   "takilmalar": [
+    {
+     "ms": 58.2,
+     "y": 994
+    },
+    {
+     "ms": 233.1,
+     "y": 5628
+    },
+    {
+     "ms": 58.4,
+     "y": 6115
+    },
+    {
+     "ms": 58.3,
+     "y": 6823
+    },
+    {
+     "ms": 58.1,
+     "y": 7064
+    },
+    {
+     "ms": 133.2,
+     "y": 10466
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 92,
+    "kosan": 61,
+    "kaydirmali": 76,
+    "kaydirmali_kosan": 55,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 1200,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 1800,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 2400,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 3000,
+     "toplam": 91,
+     "kosan": 32,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 27
+    },
+    {
+     "y": 3600,
+     "toplam": 91,
+     "kosan": 32,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 27
+    },
+    {
+     "y": 4200,
+     "toplam": 120,
+     "kosan": 61,
+     "kaydirmali": 105,
+     "kaydirmali_kosan": 56
+    },
+    {
+     "y": 4800,
+     "toplam": 127,
+     "kosan": 68,
+     "kaydirmali": 112,
+     "kaydirmali_kosan": 63
+    },
+    {
+     "y": 5400,
+     "toplam": 127,
+     "kosan": 68,
+     "kaydirmali": 112,
+     "kaydirmali_kosan": 63
+    },
+    {
+     "y": 6000,
+     "toplam": 133,
+     "kosan": 74,
+     "kaydirmali": 118,
+     "kaydirmali_kosan": 69
+    },
+    {
+     "y": 6600,
+     "toplam": 139,
+     "kosan": 88,
+     "kaydirmali": 124,
+     "kaydirmali_kosan": 75
+    },
+    {
+     "y": 7200,
+     "toplam": 235,
+     "kosan": 105,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 100
+    },
+    {
+     "y": 7800,
+     "toplam": 236,
+     "kosan": 177,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 100
+    },
+    {
+     "y": 8400,
+     "toplam": 237,
+     "kosan": 80,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 236,
+     "kosan": 79,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 237,
+     "kosan": 78,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11400,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11703,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  span.qtstep": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qt-serit  <-  div.qttrack": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  section.qtact": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtsearch": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  span.qtchip": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  em.qtn": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtrow.aim": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtrow": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  span.qtver": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  li.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  i.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  p.qtbody": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtsend": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtreply": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkstep": {
+     "toplam": 8,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-serit  <-  div.mktrack": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  section.mkact": {
+     "toplam": 7,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkfr": {
+     "toplam": 8,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mksec.hot": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mksec": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mksig": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkit": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkarrow": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkmade": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkmc": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkcomp": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkrk": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  svg.mkwire": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkin": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkcore": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhy": {
+     "toplam": 2,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhy.win": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkdc": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkjc.ask": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkjc.got": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkch": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkinf": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkhand": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  section.mkact.mkmapact.mkgor": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  picture.mkkara": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkco": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-0  <-  g.mkagg.yg0": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-1  <-  g.mkagg.yg1": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-2  <-  g.mkagg.yg2": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-3  <-  g.mkagg.yg3": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-4  <-  g.mkagg.yg4": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-5  <-  g.mkagg.yg5": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-6  <-  g.mkagg.yg6": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-7  <-  g.mkagg.yg7": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-0  <-  g.mkagg.pg0": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-1  <-  g.mkagg.pg1": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-2  <-  g.mkagg.pg2": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-3  <-  g.mkagg.pg3": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-4  <-  g.mkagg.pg4": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-5  <-  g.mkagg.pg5": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-6  <-  g.mkagg.pg6": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-7  <-  g.mkagg.pg7": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  svg.mkag": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkdg": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkbl": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhr": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 237,
+    "kosan_en_yuksek": 177,
+    "kaydirmali_en_yuksek": 149,
+    "kaydirmali_kosan_en_yuksek": 100
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     180.5,
+     193.7,
+     196.6,
+     199.2,
+     324.7
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 6,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": true,
+      "gen": 1600,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 1,
+   "motor": {
+    "LayoutCount": 324,
+    "RecalcStyleCount": 1237,
+    "LayoutDuration": 0.1512,
+    "RecalcStyleDuration": 3.1623,
+    "ScriptDuration": 0.2233,
+    "TaskDuration": 6.9565,
+    "JSHeapUsedSize": 779324
+   },
+   "taban": {
+    "sure_ms": 3016,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11703.2001953125,
+   "toplam_px": 11703,
+   "tur_tam": true
+  },
+  {
+   "tazeleme": {
+    "tik_ms": 8.3,
+    "hz": 120.5,
+    "ornek": 194,
+    "suzulen": 0,
+    "p10": 8.2
+   },
+   "gpu": {
+    "hizlandirma": {
+     "2d_canvas": "enabled",
+     "direct_rendering_display_compositor": "disabled_off_ok",
+     "gpu_compositing": "enabled",
+     "multiple_raster_threads": "enabled_on",
+     "opengl": "enabled_on",
+     "rasterization": "enabled",
+     "raw_draw": "disabled_off_ok",
+     "skia_graphite": "disabled_off",
+     "trees_in_viz": "disabled_off",
+     "video_decode": "enabled",
+     "video_encode": "enabled",
+     "webgl": "enabled",
+     "webgpu": "enabled",
+     "webnn": "disabled_off"
+    },
+    "surucu": [
+     "4318 NVIDIA GeForce GTX 1650 Ti 32.0.15.9649",
+     "32902 Intel(R) UHD Graphics 27.20.100.9365",
+     "5140 Microsoft Basic Render Driver 10.0.26100.8972"
+    ]
+   },
+   "hareket_azalt": false,
+   "kare": 1211,
+   "tur_ms": 14604,
+   "p95_ms": 25,
+   "medyan_ms": 8.4,
+   "kare_saniye": 82.9,
+   "kacirilan_kare": 2,
+   "takilma_sayi": 6,
+   "takilma_toplam_ms": 558,
+   "takilma_tek_max_ms": 200,
+   "takilmalar": [
+    {
+     "ms": 74.9,
+     "y": 4548
+    },
+    {
+     "ms": 66.7,
+     "y": 5400
+    },
+    {
+     "ms": 199.9,
+     "y": 5608
+    },
+    {
+     "ms": 58.3,
+     "y": 6115
+    },
+    {
+     "ms": 58.2,
+     "y": 7256
+    },
+    {
+     "ms": 100,
+     "y": 10431
+    }
+   ],
+   "animasyon_once": {
+    "toplam": 92,
+    "kosan": 61,
+    "kaydirmali": 76,
+    "kaydirmali_kosan": 55,
+    "durumlar": [
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "running",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "finished",
+     "running",
+     "running"
+    ]
+   },
+   "animasyon_tur": [
+    {
+     "y": 600,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 1200,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 1800,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 2400,
+     "toplam": 91,
+     "kosan": 60,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 55
+    },
+    {
+     "y": 3000,
+     "toplam": 91,
+     "kosan": 32,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 27
+    },
+    {
+     "y": 3600,
+     "toplam": 91,
+     "kosan": 32,
+     "kaydirmali": 76,
+     "kaydirmali_kosan": 27
+    },
+    {
+     "y": 4200,
+     "toplam": 120,
+     "kosan": 61,
+     "kaydirmali": 105,
+     "kaydirmali_kosan": 56
+    },
+    {
+     "y": 4800,
+     "toplam": 127,
+     "kosan": 68,
+     "kaydirmali": 112,
+     "kaydirmali_kosan": 63
+    },
+    {
+     "y": 5400,
+     "toplam": 127,
+     "kosan": 68,
+     "kaydirmali": 112,
+     "kaydirmali_kosan": 63
+    },
+    {
+     "y": 6000,
+     "toplam": 133,
+     "kosan": 74,
+     "kaydirmali": 118,
+     "kaydirmali_kosan": 69
+    },
+    {
+     "y": 6600,
+     "toplam": 139,
+     "kosan": 88,
+     "kaydirmali": 124,
+     "kaydirmali_kosan": 75
+    },
+    {
+     "y": 7200,
+     "toplam": 235,
+     "kosan": 105,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 100
+    },
+    {
+     "y": 7800,
+     "toplam": 236,
+     "kosan": 177,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 100
+    },
+    {
+     "y": 8400,
+     "toplam": 237,
+     "kosan": 80,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9000,
+     "toplam": 236,
+     "kosan": 79,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 9600,
+     "toplam": 237,
+     "kosan": 78,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10200,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 10800,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11400,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    },
+    {
+     "y": 11703,
+     "toplam": 236,
+     "kosan": 77,
+     "kaydirmali": 149,
+     "kaydirmali_kosan": 0
+    }
+   ],
+   "animasyon_dokumu": {
+    "qtp-surus  <-  span.qtstep": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qt-serit  <-  div.qttrack": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  section.qtact": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtsearch": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  span.qtchip": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  em.qtn": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtrow.aim": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtrow": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  span.qtver": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  li.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  i.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  p.qtbody": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtsend": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "qtp-surus  <-  div.qtreply": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-cizgi  <-  i.sus-mfcizgi": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  span.sus-mfg": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkstep": {
+     "toplam": 8,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-serit  <-  div.mktrack": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  section.mkact": {
+     "toplam": 7,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkfr": {
+     "toplam": 8,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mksec.hot": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mksec": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mksig": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkit": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkarrow": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkmade": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkmc": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkcomp": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkrk": {
+     "toplam": 3,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  svg.mkwire": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkin": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkcore": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhy": {
+     "toplam": 2,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhy.win": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkdc": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkjc.ask": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkjc.got": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkch": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkinf": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkhand": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  section.mkact.mkmapact.mkgor": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  picture.mkkara": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkco": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-0  <-  g.mkagg.yg0": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-1  <-  g.mkagg.yg1": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-2  <-  g.mkagg.yg2": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-3  <-  g.mkagg.yg3": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-4  <-  g.mkagg.yg4": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-5  <-  g.mkagg.yg5": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-6  <-  g.mkagg.yg6": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-yay-7  <-  g.mkagg.yg7": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-0  <-  g.mkagg.pg0": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-1  <-  g.mkagg.pg1": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-2  <-  g.mkagg.pg2": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-3  <-  g.mkagg.pg3": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-4  <-  g.mkagg.pg4": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-5  <-  g.mkagg.pg5": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-6  <-  g.mkagg.pg6": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mk-pak-7  <-  g.mkagg.pg7": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  svg.mkag": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkdg": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  div.mkbl": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "mkp-surus  <-  span.mkhr": {
+     "toplam": 4,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-git  <-  span.sus-tppx": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpleft": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-tel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpmid": {
+     "toplam": 1,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-netles  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    },
+    "blok-gel  <-  div.sus-tpcard": {
+     "toplam": 5,
+     "kosan": 0,
+     "zaman_cizelgesi": "ViewTimeline"
+    }
+   },
+   "animasyon_tur_ozet": {
+    "toplam_en_yuksek": 237,
+    "kosan_en_yuksek": 177,
+    "kaydirmali_en_yuksek": 149,
+    "kaydirmali_kosan_en_yuksek": 100
+   },
+   "gorsel_once": {
+    "istek": 5,
+    "istek_ms": [
+     185.4,
+     204.4,
+     204.1,
+     207.7,
+     293.1
+    ],
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": false,
+      "gen": 0,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_sonra": {
+    "istek": 6,
+    "img": [
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": false,
+      "gen": 258,
+      "lazy": "lazy"
+     },
+     {
+      "src": "kara.webp",
+      "tam": true,
+      "gen": 1600,
+      "lazy": "lazy"
+     },
+     {
+      "src": "qanatone.avif",
+      "tam": true,
+      "gen": 258,
+      "lazy": "lazy"
+     }
+    ]
+   },
+   "gorsel_tur_icinde_inen": 1,
+   "motor": {
+    "LayoutCount": 315,
+    "RecalcStyleCount": 1240,
+    "LayoutDuration": 0.1607,
+    "RecalcStyleDuration": 3.2474,
+    "ScriptDuration": 0.1987,
+    "TaskDuration": 6.9708,
+    "JSHeapUsedSize": 252740
+   },
+   "taban": {
+    "sure_ms": 3008,
+    "takilma_sayi": 0,
+    "p95_ms": 8.5
+   },
+   "scroll_px": 11703.2001953125,
+   "toplam_px": 11703,
+   "tur_tam": true
+  }
+ ]
+}

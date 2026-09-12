@@ -1,0 +1,1378 @@
+---
+/* Otomasyon gövdesi — TR ve EN aynı parça (rota turunun son ve en ağır
+   sayfası). Beş blok: akış mantığı · doğru model · bir gün · sızıntı ·
+   huni. Metin düşüşü data-t düzeninin aynısı: strings[dil][k] doluysa
+   panelinki, boşsa varsayılan (93 anahtarın TÜMÜ strings.en'de var,
+   hiçbiri strings.tr'de yok — TR kaynağı markup, ölçüldü).
+
+   AKIŞ STATİK DOĞUYOR: eski #flow tamamen JS'le kuruluyordu (IN/OUT/
+   STEPS haritaları kodda; teller getBoundingClientRect'le çizilip rAF
+   paketleriyle canlandırılıyordu) — bot kanal/adım/aksiyon adlarının
+   HİÇBİRİNİ görmüyordu. Üç kolonun içeriği artık derlemede basılıyor;
+   tel+paket animasyonu giydirme turuna. "Canlı iş akışı" şeridi,
+   "N talep işlendi" sayacı ve "Kaydırdıkça akış çalışır" satırı
+   TAŞINMADI: statik sayfada sahte canlılık iddiası olur (perdenin
+   sahte-dolum kararıyla aynı ilke). Sektör bağlama da taşınmadı —
+   eski sayfa doğrudan açılınca zaten 'genel' basıyordu; statik hâl o
+   varsayılanın aynısı (giriş google/seo/meta/site, çıkış esnaf seti).
+
+   SIZINTI SAHNESİ: metnin tamamı (kanallar, 4 sızıntı kartı, aşamalar,
+   maliyet çubukları) statik; canvas partikülleri ve çubuk dolum
+   animasyonu giydirmeye. Çubuklar animasyonun SON hâliyle basılır
+   (Önce %100 · Sonra %46 — eski render()'ın vardığı değerler).
+
+   HUNİ = SAYFANIN ADASI (S-TE deseni): iskelet ve varsayılan rakamlar
+   DERLEMEDE basılır (src/huni.mjs — testli, T1), JS yalnız kaydırıcı
+   dinler ve değer yazar; açılışta sıfır iş. JS kapalıyken sayfa
+   varsayılan rakamlarla anlamlı durur. */
+import { icerik, T, suz, type Dil, sl } from '../icerik';
+import { DEG, huni, fmt } from '../huni.mjs';
+import Ikon from './Ikon.astro';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const M = (tr: string, en: string) => dil === 'en' ? en : tr;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const s = (icerik.strings && icerik.strings[dil]) || {};
+const m = (k: string, varsayilan: string): string => T(s[k], dil) || varsayilan;
+
+/* Akış içerik setleri — kaynaktan (flowKur IN/OUT/STEPS), 'genel'
+   varsayılanı: giriş google/seo/meta/site, çıkış 'esnaf' seti. Kodda
+   sabittiler, panel zaten ezemiyordu; davranış değişmedi. */
+/* Üçüncü eleman İKON anahtarı — kaynak IN/OUT haritalarından birebir
+   (10498-10516: google→target, seo→seo, meta→camera, site→site;
+   esnaf çıkışı calendar/clipboard/handoff/trend; trend kaynakta
+   chart'a düşer — 10524). */
+const GELEN = dil === 'en'
+  ? [['Google Ads', 'search', 'target'], ['Organic search', 'SEO', 'seo'], ['Instagram DM', 'Meta', 'camera'], ['Web form', 'site', 'site']]
+  : [['Google Ads', 'arama', 'target'], ['Organik arama', 'SEO', 'seo'], ['Instagram DM', 'Meta', 'camera'], ['Web formu', 'site', 'site']];
+const ADIMLAR = dil === 'en'
+  ? [['Enquiry read', '0.3s'], ['Intent extracted', '0.6s'], ['Matched to pricing', '0.9s'], ['Reply sent', '1.2s'], ['CRM + reminder', '1.4s']]
+  : [['Talep okundu', '0,3 sn'], ['Niyet çıkarıldı', '0,6 sn'], ['Fiyat/kapsam eşleşti', '0,9 sn'], ['Yanıt gönderildi', '1,2 sn'], ['CRM + hatırlatma', '1,4 sn']];
+const CIKAN = dil === 'en'
+  ? [['Booked', 'calendar', 'calendar'], ['Price range', 'instant', 'clipboard'], ['Handover', 'special', 'handoff'], ['Filtered', 'out of area', 'chart']]
+  : [['Randevu yazıldı', 'takvim', 'calendar'], ['Fiyat aralığı', 'anında', 'clipboard'], ['Sana devir', 'özel iş', 'handoff'], ['Elendi', 'bölge dışı', 'chart']];
+
+/* Bir gün zaman çizelgesi: saatler markup sabitiydi (data-t YOK). */
+const GUN: [string, string, string][] = [
+  ['02:41', m('gn3', 'Sen uyurken talep geldi.'), m('gn4', "WhatsApp'tan yazdı. Ajan okudu, niyeti çıkardı, fiyat aralığını verdi ve takvimden uygun saati önerdi. On bir saniye sürdü.")],
+  ['07:00', m('gn5', 'Sabah özeti hazır.'), m('gn6', 'Gece ne oldu, bugün kim seni bekliyor, hangi iş kimde bekliyor. Tek ekran, üç dakika.')],
+  ['09:00', m('gn7', 'Sessizleşenlere takip gitti.'), m('gn8', 'Teklif gönderildi ama dönmedi diye kenarda duran altı kişiye, sen hiçbir şey yapmadan hatırlatma çıktı.')],
+  ['13:30', m('gn9', 'Randevuya gelmeyene mesaj düştü.'), m('gna', 'İptal değil, yeniden planlama. Boşa çıkan saat aynı gün başkasına açıldı.')],
+  ['17:00', m('gnb', 'Hangi kanal kaç iş getirdi, görünüyor.'), m('gnc', 'Tahmin değil, rakam. Bir sonraki ayın bütçesi buna bakarak dağıtılıyor.')],
+  [m('gnd', 'Sonrası'), m('gne', 'Geriye yalnız senin yapabileceğin iş kaldı.'), m('gnf', 'Görüşmeye girmek, işi kurgulamak, fiyatı savunmak. Ötekilerin hepsi zaten oldu.')],
+];
+
+/* Sızıntı kartları: sorun (b) + belirti (i) + çözüm (fix). */
+const SIZINTI = [
+  [m('sz7', 'Teklif sonrası kayboldu'), m('szm', 'gönderildi, sonra sessizlik'), m('szq', 'otomatik takip dizisi')],
+  [m('sz8', 'Randevuya gelmedi'), m('szn', 'gün geldi, kimse aramadı'), m('szr', 'kendiliğinden hatırlatma')],
+  [m('sz9', 'Takip edilmedi'), m('szo', 'sırada kaldı, kimse dönmedi'), m('szs', 'tek hatta toplandı')],
+  [m('sza', 'Cevapsız kaldı'), m('szp', 'gece yazdı, sabah unutuldu'), m('szt', 'ajan saniyede yanıtlar')],
+];
+const KANALLAR = [m('szh', 'Google Ads'), m('szi', 'Organik arama'), m('szj', 'Meta'),
+  m('szk', 'WhatsApp'), m('szl', 'Web formu')];
+const ASAMALAR = [m('sz4', 'Keşif'), m('sz5', 'Değerlendirme'), m('sz6', 'Karar')];
+
+/* Huni varsayılanları — kaynağın markup değerleri; rakamlar DERLEMEDE
+   aynı modülle hesaplanır, ada açılışta hiçbir şey yeniden yazmaz. */
+const V0 = 60, YUZDE = [18, 22, 30, 15], IDX5 = 13;
+const { kademe, kacan } = huni(V0, YUZDE);
+const hsEtiket = [m('hs9', 'gelen'), m('hs5', 'Cevapsız kalan'), m('hs6', 'Takip edilmeyen'),
+  m('hs7', 'Teklif sonrası sessizleşen'), m('hsa', 'konuşmaya kalan')];
+/* Doğru model kartının üç adımı ve dört kazancı — kaynağın .mfsteps /
+   .mfgain içeriği (kök 4829-4846), numaralar markup sabitiydi. */
+const MFADIM: [string, string, string][] = [
+  ['01', m('mf3', 'Niş'), m('mf4', 'İşini sektör rasyolarıyla ve elimizdeki veri setiyle inceleriz. Hangi kalem para kazandırıyor, hangisi sızdırıyor — önce bunu görürüz.')],
+  ['02', m('mf5', 'Satış'), m('mf6', 'Rakamlarını ölçer, tekrar tekrar yaşadığın ve para kaybettiren problemi buluruz. Sonra onu net bir teklife çeviririz.')],
+  ['03', m('mf7', 'Otomasyon'), m('mf8', 'En sona kalır, çünkü otomasyon bir ürün değil — çözümü teslim etme biçimimiz. Sıra bozulursa araç alırsın, sonuç almazsın.')],
+];
+const MFKAZANC: [string, string][] = [
+  [m('mf9', 'Teklif sonrası kaybolan müşteri'), m('mfa', 'yeniden takibe alınır')],
+  [m('mfb', 'Randevuya gelmeyen kişi'), m('mfc', 'kendiliğinden hatırlatılır')],
+  [m('mfd', 'Dağınık satış süreci'), m('mfe', 'tek hatta toplanır')],
+  [m('mff', 'Tekrar eden iş'), m('mfg', 'sisteme döner ve ölçeklenir')],
+];
+const KAYDIRICI = [
+  { id: 1, ad: m('hs5', 'Cevapsız kalan'), deger: YUZDE[0] },
+  { id: 2, ad: m('hs6', 'Takip edilmeyen'), deger: YUZDE[1] },
+  { id: 3, ad: m('hs7', 'Teklif sonrası sessizleşen'), deger: YUZDE[2] },
+  { id: 4, ad: m('hs8', 'Randevuya gelmeyen'), deger: YUZDE[3] },
+];
+
+/* TELLER (sadakat kuralı, 21 Ağu) — iki öğeyi birleştiren çizim GÖZ
+   KARARI ÇİZİLMEZ. Eski göz kararı yelpaze (TELY sabitleri) söküldü;
+   uçlar artık kaynağın wire() künyesiyle ÖLÇÜLÜR (kök 10553-10600):
+   masaüstü düğüm sağ-orta → kart sol kenarı .42h (giriş) / kart sağ
+   .58h → düğüm sol-orta (çıkış), kontrol x'i orta nokta; mobil uç
+   y'ler şerit kenarları, x dağılımı kaynak formülü sp=min(34,w·.08),
+   birleşme kart merkezi + fjoin düğüm daireleri (kaynak yalnız mobilde
+   basıyordu). Ölçüm rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready
+   (klasör telleri deseni). SSR'de d BOŞ: kaynakta teller JS ürünüydü,
+   JS'siz ziyaretçi kaynaktaki gibi telsiz görür. İz (pathLength=1 +
+   dasharray akan parça) kaynak paketlerinin eşleniği. */
+const TELI = [0, 1, 2, 3];
+---
+<section class="giris" id="ajan">
+  <p class="ust-etiket">{m('s8e', 'Yapay zekâ ajanları')}</p>
+  <h1 set:html={suz(m('s8h', 'Hazır bot değil.<br><span class="thin">Senin işini öğrenen ajan.</span>'), ['br', 'span.thin'])} />
+  <p class="lede">{m('s8p', 'Her kanal tek bir merkeze bağlanır. Ajan gelen talebi karşılar, eler, yönlendirir — sonuç elinde hazır olarak durur.')}</p>
+</section>
+
+{/* ---- AKIŞ MANTIĞI (içerik statik; teller süs) ----
+     A3-D1 (sürücü düzeltmesi): kaynağın reveal(p) scrub'ı geri geldi —
+     eşikler kökün 10632-10639 formülleri BİREBİR: giriş .06+i·.07,
+     beyin .34, çıkış .50+i·.08, teller .12+i·.07 / .52+i·.08.
+     3 EYL 2026 (Enes, CLAUDE.md "görünürlükte canlı"): sürücü artık
+     view() DEĞİL — .akis3 kadraja girince (IO .akoynar) --fyt zamanla
+     bir kez açılır, döngüler (teller/dalga/nabız) sonsuz döner, çıkınca
+     durur. Ayrıntı stil bloğundaki SURUCU KURALI yorumları. */}
+<div class="akis3">
+  {/* Düğüm yapısı kaynak .fnode birebiri (build 10538-10539): ikon
+      kutusu .ni + metin .nt + durum noktası .nd. Kaynakta tik YOK —
+      önceki fark listesi .fln'i (başka bileşen, 701) akış sanmıştı;
+      gerçek düğüm .fnode 1336. --hi: hot dalgası fazı (tick 10622:
+      1.5 adım/sn; çıkış +2 faz). */}
+  <div class="akol">
+    <p class="akbas">{m('flc1', 'Gelen')}</p>
+    {GELEN.map(([ad, alt, ikn], i) => <p class="adugum" style={`--fe:${(0.06 + i * 0.07).toFixed(2)};--hi:${i}`}>
+      <span class="ni"><Ikon ad={ikn} /></span>
+      <span class="nt"><b>{ad}</b><span>{alt}</span></span><span class="nd" /></p>)}
+  </div>
+  <svg class="sus-tel sol" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
+  </svg>
+  <svg class="sus-tel-m sol" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.12 + i * 0.07).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
+  </svg>
+  {/* Beyin kaynak .fbrain birebiri: .bh (bi ikon kutusu + bt metin +
+      fbadge "Aktif" — rozet kaynakta YALNIZ MOBİL, 1384/1410; noktası
+      kaynakta ping2 TANIMSIZ keyframe'e bağlıydı → gerçek davranış
+      SABİT nokta, öyle basıldı). Adım satırları .fstep: tik dairesi +
+      ad + süre; tik ✓ font karakteri değil kaynağın kendi IC.check
+      SVG'si (F1c). --fi: adım dalga fazı (tick 10626: 2.2 adım/sn). */}
+  <div class="akol beyin">
+    <p class="akbas">{m('flc2', 'Ajan')}</p>
+    <div class="ajan-kart" style="--fe:.34">
+      <p class="ajan-ad"><span class="bi"><Ikon ad="bot" /></span>
+        <span class="bt"><b>{m('flb', 'QANATONE Ajanı')}</b>
+        <span>{m('flbs', 'Sınıflandır · Ele · Yönlendir')}</span></span>
+        <span class="fbadge">{m('flon', 'Aktif')}<i /></span></p>
+      <ol>
+        {ADIMLAR.map(([ad, sure], i) => <li style={`--fi:${i}`}>
+          <i class="fsi"><Ikon ad="check" /></i>
+          <span>{ad}</span><em>{sure}</em></li>)}
+      </ol>
+    </div>
+  </div>
+  <svg class="sus-tel sag" viewBox="0 0 100 400" preserveAspectRatio="none" aria-hidden="true">
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
+  </svg>
+  <svg class="sus-tel-m sag" viewBox="0 0 400 72" preserveAspectRatio="none" aria-hidden="true">
+    {TELI.map(() => <path class="tel" d="" />)}
+    {TELI.map(i => <path class="tel-yak" d="" style={`--fe:${(0.52 + i * 0.08).toFixed(2)}`} />)}
+    {TELI.map(i => <path class={`tel-iz iz${i}`} d="" pathLength="1" />)}
+  </svg>
+  <div class="akol">
+    <p class="akbas">{m('flc3', 'Çıkan')}</p>
+    {CIKAN.map(([ad, alt, ikn], i) => <p class="adugum" style={`--fe:${(0.5 + i * 0.08).toFixed(2)};--hi:${i + 2}`}>
+      <span class="ni"><Ikon ad={ikn} /></span>
+      <span class="nt"><b>{ad}</b><span>{alt}</span></span><span class="nd" /></p>)}
+  </div>
+</div>
+
+{/* ---- DOĞRU MODEL ---- */}
+{/* ---- DOĞRU MODEL — KAYNAĞIN MANİFESTO KARTI (TUR 1 eki, 4 Eyl 2026) ----
+    Kaynakta bu blok `.mfst` kartı (kök 4823-4851 markup, 2559-2620 stil):
+    kenarlıklı + gradyanlı kap, başlık kartın içinde (.mfhd), üç adım
+    ÜÇ SÜTUN (.mfsteps, aralarında dikey çizgi, her adımın üstünde soldan
+    dolan kızıl çizgi), dört kazanç DÖRT SÜTUN kızıl kare madde imiyle
+    (.mfgain/.mfg), kapanış cümlesi ve düğme AYNI SATIRDA (.mfend).
+    Yenide düz `.blok` idi: kart yok, çizgi yok, kare mad yok, düğme
+    ortalanmış alt satırda. Hiçbir istisnaya dayanmıyordu.
+    Stil bu parçaya YEREL yazıldı (blok.css'teki `.mfst` finans detayının
+    kendi sürümü; onu ithal etmek bu sayfaya kd- ve tp- bloklarını da
+    yükleyecekti). Aile tokenleri anayasa istisna 1.
+    Sürücü: kaynağın IO `.in` geçişi yerine view() scrub — blok.css'in
+    aynı blok için verdiği kararla bir. */}
+<div class="mfst">
+  <div class="mfhd">
+    <span class="mfk"><i /><span>{m('mf0', 'Doğru model')}</span></span>
+    <h2 set:html={suz(m('mf1', 'Yapay zekâ satmıyoruz.<br><em>Geri kazandığın süreci satıyoruz.</em>'), ['br', 'em'])} />
+    <p>{m('mf2', 'Teknolojinin kendisi ham hâliyle para ödenecek bir şey değil. Kazanç, teklif sonrası kaybolan müşterinin yeniden takip edilmesinden, randevuya gelmeyenin hatırlatılmasından, dağınık satışın tek hatta toplanmasından ve tekrar eden işin sisteme dönmesinden çıkar. Biz önce şirketini inceler, sonra doğru yatırımı doğru alana yönlendiririz.')}</p>
+  </div>
+  <div class="mfsteps">
+    {MFADIM.map(([n, ad, metin]) => (
+      <div class="mfstep"><i class="sus-mfcizgi" aria-hidden="true" />
+        <span class="mfsn"><b>{n}</b><span>{ad}</span></span>
+        <p>{metin}</p>
+      </div>
+    ))}
+  </div>
+  <div class="mfgain">
+    {MFKAZANC.map(([bas, alt]) => <span class="sus-mfg"><b>{bas}</b><i>{alt}</i></span>)}
+  </div>
+  <div class="mfend">
+    <p set:html={suz(m('mfh', 'Ürettiğimiz aracı değil, <em>işletmende oluşan sonucu</em> satıyoruz.'), ['em'])} />
+    {/* EN ana sayfa adası kuruldu — eski '/en#iletisim' kaçağı adaya döndü. */}
+    <a class="dugme sus-isik" href={sl(`${B}${dil === 'en' ? '/en' : ''}/#iletisim`)}>{m('mfi', 'Şirketini birlikte inceleyelim')}</a>
+  </div>
+</div>
+
+{/* ---- BİR GÜN — KAYNAĞIN RAY ÇİZELGESİ (TUR 1 eki, 4 Eyl 2026) ----
+    Kaynak `.gnsec` (kök 4852-4884 markup, 2848-2900 stil): başlık 58ch'te
+    durur, satırlar SOLDA DİKEY RAY üstünde durur — ray kızıl gradyanla
+    yukarıdan aşağı dolar, her satırın hizasında halka bir nokta vardır ve
+    saat rayın SOLUNDA sabit sütunda yazar; son satır dolu nokta + kızıl
+    başlık. Yenide düz liste + üst çizgi vardı; ray, nokta ve saat sütunu
+    hiç taşınmamıştı. Sürücü kaynağın IO `.in` zincirli gecikmesi yerine
+    view() scrub (blok.css kararıyla bir); azaltmada ve desteklemeyen
+    tarayıcıda açık doğar. */}
+<div class="gnsec">
+  <div class="gnhd">
+    <span class="gnk"><i /><span>{m('gn0', 'Kurulumdan otuz gün sonra')}</span></span>
+    <h2>{m('gn1', 'Bir gün böyle geçiyor.')}</h2>
+    <p>{m('gn2', 'Özellik saymayacağız. Sistem kurulduktan sonraki sıradan bir salı gününü anlatacağız — saat saat.')}</p>
+  </div>
+  <div class="gnline">
+    <span class="gnrail"><i class="sus-gnrail" /></span>
+    {GUN.map(([saat, bas, metin], i) => (
+      <div class={`gnrow sus-gnrow${i === GUN.length - 1 ? ' last' : ''}`}>
+        <span class="gnt">{saat}</span>
+        <div class="gnc"><b>{bas}</b><p>{metin}</p></div>
+      </div>
+    ))}
+  </div>
+</div>
+
+{/* ---- SIZINTI ----
+     A3-D2 (sürücü düzeltmesi): kaynağın szDraw(p) scrub'ı geri geldi —
+     DOM eşikleri kökün 10785-10795 formülleri BİREBİR (0-tabanlı):
+     çip .02+.02i · aşama .12+.045i · kart .24+.05k · mühür .52+.055k ·
+     çubuklar (p−.28)/.15 ve (p−.66)/.24. Sürücü anonim view() --szt.
+     KAYNAĞIN PIN'İ (kilitli sahne, +=2.2vh) BU ADIMDA ALINMADI —
+     bilinçli: yeni bölüm dikey uzun, 100vh sticky penceresine sığmıyor;
+     kilit ancak bölüm kompaktlaşmasıyla (tasarım kararı, Enes) gelir.
+     Sürücü sınıfı yine de düzeldi: otomatik değil, kaydırma. */}
+{/* SIZINTI — KAYNAK KOMPOZİSYONUNA TAM DÖNÜŞ (21 Ağu, D2b):
+    kutu sahne .szstage (2804) → başlık şeridi .szhd + çipler + .szwrap
+    (HUNİ SVG'si ortada, kartlar YANLARDA absolute, aşamalar dikey
+    ortada, "kalan müşteri" altta, beat rozeti merkezde) + .szfoot
+    (çubuklar + aşağı ok + kapanış). Huni geometrisi kaynak canvas
+    formüllerinden (LY/LW 10681, bağ hedefleri .30/.70, phyllotaxis
+    10777-10779) — koordinatları ADA ölçüp basar (göz kararı yasak),
+    SSR'de boş: kaynakta da canvas'ı JS çiziyordu, JS'siz ziyaretçi
+    hunisiz görür; kartlar/çipler/çubuklar İÇERİK olarak SSR'de tam.
+    Tanecik rAF'ı TAŞINMADI (rota kararı — değişmedi).
+    PIN hâlâ YOK (D2c açık, Enes kararı): kaynak max-height'i
+    (100vh-44px) pin kilidi içindi, pin'siz alınsa içeriği keserdi —
+    bilinçli alınmadı. Sürücü view() scrub aynı. */}
+{/* SOKUM VE TASIMA TURU (4 Eyl): PIN GERI GELDI (kaynak ST pin +=2.2vh,
+    11603-11611) — CSS sticky: .sz-ray kilit rayi (320vh), sahne icinde
+    yapisik; surucu rayin ADLI view cizelgesi (contain 0-100 = kilitli
+    pencere). Mobilde de sticky (Anayasa'nin "mobilde pin yok" maddesi GSAP
+    pinlerini kapsar, CSS yapisik serbest — denetim H notu). Tanecik
+    rAF'i da geri geldi: varlik/sizinti.js, IO dogus tetigiyle iner. */}
+<div class="sz-ray">
+<div class="blok szstage sz-surus">
+  <div class="szhd">
+    <div>
+      <p class="szk"><i />{m('sz0', 'Kanıt')}</p>
+      <h2 set:html={suz(m('sz1', 'Bütçeni artırmıyoruz.<br><em>Sızıntıyı kapatıyoruz.</em>'), ['br', 'em'])} />
+    </div>
+    <div class="szbudget"><b>{m('sz2', 'Aynı bütçe')}</b><i>{m('sz3', 'değişmeyen giriş')}</i></div>
+  </div>
+  <p class="szchans">{KANALLAR.map((k, i) => <span class="cip" style={`--se:${(0.02 + i * 0.02).toFixed(2)}`}>{k}</span>)}</p>
+  <div class="szwrap" id="szWrap">
+    <svg class="sus-huni" aria-hidden="true"></svg>
+    <canvas class="sus-sizinti" id="szCv" aria-hidden="true"></canvas>
+    <div class="szside left">
+      {[0, 2].map(k => { const [sorun, belirti, cozum] = SIZINTI[k]; return (
+        <span class="szleak" style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
+          <span class="szlt"><b>{sorun}</b><i>{belirti}</i></span>
+          <span class="szfix"><s /><span>{cozum}</span></span></span>); })}
+    </div>
+    <div class="szside right">
+      {[1, 3].map(k => { const [sorun, belirti, cozum] = SIZINTI[k]; return (
+        <span class="szleak" style={`--se:${(0.24 + k * 0.05).toFixed(2)};--sm:${(0.52 + k * 0.055).toFixed(3)}`}>
+          <span class="szlt"><b>{sorun}</b><i>{belirti}</i></span>
+          <span class="szfix"><s /><span>{cozum}</span></span></span>); })}
+    </div>
+    <div class="szstages">
+      {ASAMALAR.map((a, i) => <span class="szst"
+        style={`--se:${(0.12 + i * 0.045).toFixed(3)};--w:${[92, 58, 30][i]}%`}>
+        <b>{a}</b><span class="szsb"><i /></span></span>)}
+    </div>
+    <span class="szout">{m('szb', 'kalan müşteri')}</span>
+    <span class="szbeat">{m('szu', 'Bütçe aynı. Sorun burada.')}</span>
+  </div>
+  <div class="szfoot">
+    <div class="szbars">
+      <span class="szcap">{m('szc', 'Müşteri başına maliyet')}</span>
+      <p class="cubuk"><i>{m('szd', 'Önce')}</i><span class="bar once" /></p>
+      <p class="cubuk"><i>{m('sze', 'Sonra')}</i><span class="bar sonra" /></p>
+      <span class="szarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+        ><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg>{m('szf', 'aynı bütçe, daha çok müşteri')}</span>
+    </div>
+    <p class="szend" set:html={suz(m('szg', 'Yeni bütçe değil, <em>kaçan müşteri</em> geri geldi.'), ['em'])} />
+  </div>
+</div>
+</div>
+{/* TANECIK TETIGI — sahne kadraja yaklasinca varlik/sizinti.js dinamik iner
+    (J1 disi); azaltmada modul tek kare cizer. YORUMSUZ satir ici. */}
+<script is:inline>(function(){var s=document.querySelector('.szstage');if(!s||!('IntersectionObserver'in window))return;var io=new IntersectionObserver(function(es){if(!es.some(function(e){return e.isIntersecting}))return;io.disconnect();import('/varlik/sizinti.js').then(function(m){m.baslat()}).catch(function(){})},{rootMargin:'300px 0px'});io.observe(s)})()</script>
+
+{/* ---- HUNİ (ada) — KAYNAĞIN KARTI (TUR 1, 4 Eyl 2026) ----
+    Enes'in kararı: hesaplayıcı eskiye döner. Kaynakta bu bölüm kenarlıklı
+    ve gradyanlı TEK KART (.hsbox); künye + başlık + lede kartın İÇİNDE
+    (.hshd, altında ayırıcı çizgi), gövde iki sütun (.hsgrid, gap 0, sütun
+    arası dikey çizgi) ve sonuçtaki ₺ rakamı BÜYÜK ve kızıl (.hsbig b,
+    clamp(2.4rem,5.4vw,4.2rem)). Yeni hâl tam genişlik satırlara açılmış ve
+    ₺ rakamı 1,3rem satır içine düşmüştü — hiçbir istisnaya dayanmıyordu.
+    Kaynak: kök index.html 4951-5010 (markup) · 2915-2995 (stil).
+    Sınıf adları kaynağınkiler; ID'ler adanın hn* şeması olarak KALIR
+    (ada betiği ve T1 testi onları okuyor). Yazı ailesi: kaynağın .hshd h3
+    ve .hsbig b'si Manrope idi — anayasa istisna 1 gereği aile devralınır
+    (Uncut Sans), ölçüler kaynaktan. Başlık etiketi h2 kalır: kaynakta h3
+    idi ama kendi <section>'ının h2'si altındaydı; buradaki kardeşleri h2,
+    seviye atlatmak erişilebilirlik gerilemesi olurdu. */}
+<div class="hssec" id="huni">
+  <div class="hsbox">
+    <div class="hshd">
+      <span class="hsk"><i /><span>{m('hs0', 'Senin rakamınla')}</span></span>
+      <h2 set:html={suz(m('hs1', 'Peki <em>senin</em> huninden ne akıyor?'), ['em'])} />
+      <p>{m('hs2', 'Kaydırıcıları kendi işine göre çek. Aşağıdaki sayı bizim iddiamız değil — senin girdiğin rakamların aritmetiği.')}</p>
+    </div>
+    <div class="hsgrid">
+      <div class="hsinputs">
+        <label class="hsrow vol">
+          <span class="hslab"><b>{m('hs3', 'Ayda gelen talep')}</b><em id="hnV0">{fmt(V0, dil)}</em></span>
+          <input type="range" id="hnR0" min="5" max="400" step="5" value={V0}
+            aria-label={m('hs3', 'Ayda gelen talep')} />
+        </label>
+        <span class="hssep">{m('hs4', 'Bunların kaçı yolda kalıyor?')}</span>
+        {KAYDIRICI.map((k) => (
+          <label class="hsrow">
+            <span class="hslab"><b>{k.ad}</b><em id={`hnV${k.id}`}>{k.deger}</em></span>
+            <input type="range" id={`hnR${k.id}`} min="0" max="60" step="1" value={k.deger}
+              aria-label={k.ad} />
+          </label>
+        ))}
+        <span class="hssep">{m('hsf', 'Bir işin sana ortalama değeri')}</span>
+        <label class="hsrow val">
+          <span class="hslab"><b>{m('hsg', 'Ortalama iş değeri')}</b><em id="hnV5">₺{fmt(DEG[IDX5], dil)}</em></span>
+          <input type="range" id="hnR5" min="0" max="28" step="1" value={IDX5}
+            aria-label={m('hsg', 'Ortalama iş değeri')} />
+        </label>
+      </div>
+      <div class="hsout">
+        <ol class="hsflow" id="hnAkis">
+          {kademe.map((v, i) => (
+            <li class={i === kademe.length - 1 ? 'hsstep last' : 'hsstep'}>
+              <i>{hsEtiket[i]}</i><b>{fmt(v, dil)}</b>
+              <span class="hsbar"><u style={`width:${Math.max(2, v / V0 * 100)}%`} /></span>
+            </li>
+          ))}
+        </ol>
+        <div class="hsres">
+          <div class="hssm"><span>{m('hsb', 'Ayda elinden kaçan')}</span><b id="hnKacan">{fmt(kacan, dil)}</b></div>
+          <div class="hssm"><span>{m('hsc', 'Yılda')}</span><b id="hnYil">{fmt(kacan * 12, dil)}</b></div>
+        </div>
+        <div class="hsres hspara">
+          <div class="hsbig"><span>{m('hsh', 'Ciro olarak, ayda')}</span><b id="hnPara">₺{fmt(kacan * DEG[IDX5], dil)}</b></div>
+          <div class="hssm"><span>{m('hsi', 'yılda')}</span><b id="hnParaY">₺{fmt(kacan * DEG[IDX5] * 12, dil)}</b></div>
+        </div>
+        <p class="hsnote">{m('hsd', 'Bu bizim vaadimiz değil, senin rakamın. Ne kadarının kapanabileceğine keşifte birlikte bakarız.')}</p>
+        <a class="dugme sus-isik" href={sl(`${B}${dil === 'en' ? '/en' : ''}/#lead`)}>{m('hse', 'Rakamlarımı konuşalım')}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* TEL HİZALAMA ADASI — sadakat kuralı (21 Ağu): iki öğeyi birleştiren
+     çizim göz kararı çizilmez. Uçlar kaynağın wire() künyesiyle ölçülür
+     (kök 10553-10600): masaüstü düğüm kenar-ortası ↔ kart .42h/.58h,
+     kontrol x orta nokta; mobil x dağılımı cx±(i-(n-1)/2)·sp,
+     sp=min(34px, genişlik·.08), uçlarda +3px pay, fjoin düğümleri
+     yalnız mobil (kaynak da öyleydi). Ölçüm rAF DIŞINDA: kurulum +
+     resize 180ms (kaynak rt eşleniği) + fonts.ready — klasör telleri
+     deseni. SSR'de d boş: kaynakta teller JS ürünüydü, JS'siz ziyaretçi
+     kaynaktaki gibi telsiz görür. */
+  const akis = document.querySelector('.akis3') as HTMLElement | null;
+  const kartEl = akis?.querySelector('.ajan-kart') as HTMLElement | null;
+  if (akis && kartEl) {
+    const kollar = akis.querySelectorAll('.akol:not(.beyin)');
+    const NS = 'http://www.w3.org/2000/svg';
+    const yaz = (svg: SVGSVGElement, dler: string[]) =>
+      svg.querySelectorAll('path').forEach((p, i) => p.setAttribute('d', dler[i % dler.length] || ''));
+    /* YERLESIM KUTUSU (4 Eyl 2026) — gBCR DEGIL offsetParent zinciri.
+       gBCR DONUSUMLU kutuyu verir; `.ajan-kart` beliriste
+       `transform:scale(.9 -> 1)` tasiyor (bu dosyanin kendi CSS'i), yani
+       blok kadraj disindayken kartin gBCR'i %10 kucuk ve uclar oraya
+       cizilir. Sonuc: ilk cizim yanlis, sonra hicbir sey duzeltmez —
+       cunku YERLESIM degismedigi icin ResizeObserver da atesle(n)mez
+       (olculdu: akis3'e gore svg/kart/dugum kutulari iki anda birebir
+       ayni). offsetLeft/offsetTop ZINCIRI donusumu gormez; olcum boylece
+       hem zamandan hem donusumden bagimsiz olur. MotorSahne'nin kablo
+       hattindaki ders, ayni sebeple. */
+    const belge = (el: HTMLElement) => {
+      let x = 0, y = 0, n: any = el;
+      while (n) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    };
+    const kutu = (el: HTMLElement, ar: DOMRect, ab: { x: number, y: number }) => {
+      const b = belge(el);
+      const left = ar.left + (b.x - ab.x), top = ar.top + (b.y - ab.y);
+      return { left, top, width: b.w, height: b.h, right: left + b.w, bottom: top + b.h };
+    };
+    const ciz = () => {
+      const ar = akis.getBoundingClientRect();
+      const ab = belge(akis);
+      const kr = kutu(kartEl, ar, ab);
+      if (!kr.width) return;
+      akis.querySelectorAll<SVGSVGElement>('svg.sus-tel').forEach(svg => {
+        const sr = svg.getBoundingClientRect();
+        if (!sr.width || !sr.height) return;
+        const sol = svg.classList.contains('sol');
+        const Y = (v: number) => (v - sr.top) / sr.height * 400;
+        /* X DE OLCULUYOR (4 Eyl 2026 — Enes: "akiskan cizgilerin baslangic
+           ve bitis noktalari bloklara baglanmiyor").
+           ONCEKI HAL: Y olculuyordu ama X SVG KUTUSUNUN KENDI KENARLARIYDI
+           (`M0,...` ve `...100,ky`). Kenar, dugumun sag kenari ya da kartin
+           sol kenari degil; aradaki fark dogrudan BOSLUK olarak goruluyordu.
+           OLCULDU (1440 px, 8 telin hepsinde ayni): bas dugumden 11,7 px,
+           uc kartin kenarindan 6,0 px eksik — gurultu degil sistematik kayma.
+           Artik uclar gercek kenarlardan aliniyor; svg overflow:visible
+           oldugu icin 0..100 disina tasan degerler de cizilir. */
+        const X = (v: number) => (v - sr.left) / sr.width * 100;
+        const ky = Y(kr.top + kr.height * (sol ? .42 : .58));
+        /* sol kol kartin SOL kenarina girer, sag kol SAG kenarindan cikar */
+        const kx = X(sol ? kr.left : kr.right);
+        yaz(svg, [...kollar[sol ? 0 : 1].querySelectorAll<HTMLElement>('.adugum')].map(n => {
+          const q = kutu(n, ar, ab);
+          const ny = Y(q.top + q.height / 2);
+          const nx = X(sol ? q.right : q.left);
+          const mx = ((nx + kx) / 2).toFixed(1);
+          return sol
+            ? `M${nx.toFixed(1)},${ny.toFixed(1)} C${mx},${ny.toFixed(1)} ${mx},${ky.toFixed(1)} ${kx.toFixed(1)},${ky.toFixed(1)}`
+            : `M${kx.toFixed(1)},${ky.toFixed(1)} C${mx},${ky.toFixed(1)} ${mx},${ny.toFixed(1)} ${nx.toFixed(1)},${ny.toFixed(1)}`;
+        }));
+      });
+      akis.querySelectorAll<SVGSVGElement>('svg.sus-tel-m').forEach(svg => {
+        const sr = svg.getBoundingClientRect();
+        if (!sr.width || !sr.height) return;
+        const sol = svg.classList.contains('sol');
+        const kol = kollar[sol ? 0 : 1] as HTMLElement;
+        const kolR = kutu(kol, ar, ab);
+        const dugum = kol.querySelectorAll('.adugum').length || 1;
+        const X = 400 / sr.width, Yv = 72 / sr.height;
+        const sp = Math.min(34, sr.width * .08) * X;
+        const kx = ((kr.left + kr.width / 2 - sr.left) * X).toFixed(1);
+        /* UCLAR BLOGUN KENDISINE BAGLANIR, SUTUN KUTUSUNA DEGIL
+           (4 Eyl 2026 — Enes: "gelen kisminin son basamagi olan web formu
+           blogundan cikan 4 kablo kolu o bloga dokunmuyor; ajan blogundan
+           cikan kol da randevu yazildi bloguna temas etmiyor").
+           ONCEKI IKI DENEME NEDEN YETMEDI:
+             1. kaynagin +3/-3 payi uclari kutudan UZAGA itiyordu -> pay
+                iceri cevrildi, ama hala YANLIS KUTUYA baglaniyordu;
+             2. capa `.akol` KUTUSUYDU — o kutu baslik ("Gelen"/"Cikan") ve
+                dolguyu da kapsiyor, yani son blogun ALTINDA olu bir serit
+                birakiyor. Tel o serit kadar uzakta bitiyordu.
+           OLCULDU (390x844, duzeltmeden once): sol kolun ucu son bloktan
+           9,6 px, sag kolun ucu ilk bloktan 27,6 px uzaktaydi — Enes'in
+           gordugu bosluk tam bu.
+           DOGRU CAPA: sol kol GELEN sutununun SON `.adugum`unun alt kenari,
+           sag kol CIKAN sutununun ILK `.adugum`unun ust kenari. Pay 1 px
+           ICERI (kenar yumusatmasindan kilcal bosluk kalmasin).
+           Blok yoksa sutun kutusuna duser — kural gorebildigini tutar. */
+        const dugumler = [...kol.querySelectorAll<HTMLElement>('.adugum')];
+        const uc = dugumler.length
+          ? kutu(sol ? dugumler[dugumler.length - 1] : dugumler[0], ar, ab)
+          : kolR;
+        const yKol = ((sol ? uc.bottom - 1 : uc.top + 1) - sr.top) * Yv;
+        const yKrt = ((sol ? kr.top + 1 : kr.bottom - 1) - sr.top) * Yv;
+        const m = ((yKol + yKrt) / 2).toFixed(1);
+        const xler = [...Array(dugum)].map((_, i) => (200 + (i - (dugum - 1) / 2) * sp).toFixed(1));
+        yaz(svg, xler.map(x => sol
+          ? `M${x},${yKol.toFixed(1)} C${x},${m} ${kx},${m} ${kx},${yKrt.toFixed(1)}`
+          : `M${kx},${yKrt.toFixed(1)} C${kx},${m} ${x},${m} ${x},${yKol.toFixed(1)}`));
+        svg.querySelectorAll('.fjoin').forEach(c => c.remove());
+        const dj = (cx: string, cy: number, r: number) => {
+          const c = document.createElementNS(NS, 'circle');
+          c.setAttribute('class', 'fjoin');
+          c.setAttribute('cx', cx); c.setAttribute('cy', cy.toFixed(1));
+          c.setAttribute('r', (r * X).toFixed(1));
+          svg.appendChild(c);
+        };
+        /* kaynak (10570-10581): giriş uçları r2.6 + birleşme r3.2;
+           çıkışta yalnız kart çıkış düğümü r3.2 */
+        if (sol) { xler.forEach(x => dj(x, yKol, 2.6)); dj(kx, yKrt, 3.2); }
+        else dj(kx, yKrt, 3.2);
+      });
+    };
+    let rt: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
+    document.fonts?.ready?.then(ciz);
+    ciz();
+    /* YENIDEN CIZIM TETIGI EKSIKTI (4 Eyl 2026 — Enes: "baslangic ve bitis
+       noktalari bloklara baglanmiyor").
+       OLCULDU: sayfa yuklendigi gibi her telin basi dugumun sag kenarindan
+       dx -6,6 px / dy +10 px kayikti — sekiz telde de AYNI, yani gurultu
+       degil sistematik. Ayni sayfada `ciz()` bir kez daha kosturulunca
+       sapma TAM 0,0'a dustu. Yani hata olcumun YONTEMINDE degil ZAMANINDA:
+       kurulum anindaki kutular sonradan degisiyor (blok kadraja girerken
+       yerlesim oturuyor) ve eski tetikler — kurulum + resize + fonts.ready —
+       bunu hic gormuyordu; KAYDIRMA RESIZE DOGURMAZ.
+       CARE kaydirmada olcum DEGIL (doktrin: kaydirmada olcum yok):
+       ResizeObserver kutunun kendisi degistiginde bir kez yeniden cizer —
+       MotorSahne'nin kablo hattindaki desenin aynisi. */
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(ciz, 60); });
+      ro.observe(akis);
+      if (kartEl) ro.observe(kartEl);
+      akis.querySelectorAll('.akol').forEach((k) => ro.observe(k));
+    }
+    /* ...ve YUKLEME BITINCE bir kez daha. ResizeObserver tek basina YETMEDI,
+       sebebi olculdu: kutular kurulumdan sonra DEGISMIYOR (akis3'e gore
+       svg/kart/dugum kutulari iki anda birebir ayni cikti), yani RO'nun
+       ateslemesi icin bir sebep yok. Ilk `ciz()` yerlesim son halini
+       almadan kosuyor ve sonuc bir daha duzeltilmiyordu; `fonts.ready` de
+       yetmedi (ikonlar/alt kaynaklar sonra yerlesiyor). `load` + iki kare
+       bekleme, kaydirmadan bagimsiz ve tek seferlik bir duzeltme noktasi. */
+    addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(ciz)));
+  }
+</script>
+
+<script>
+  /* HUNİ ADASI (D2b) — kaynak canvas sahnesinin SVG eşleniği.
+     Geometri kaynak formüllerinden BİREBİR (göz kararı yasak):
+       katlar LY=[.10,.34,.58,.80] · LW=[.60,.44,.28,.15]  (kök 10681)
+       duvar dolgusu k%2 ? .016 : .028 · kenar rgba(255,255,255,.13)
+         (10704-10711)
+       bağ çizgisi: kavşak t=(k+1)/4 → hedef x = W·.30 / W·.70,
+         kesikli [3,4] (10716-10730)
+       çıkan küme: phyllotaxis a=i·2.39996, r=√(i/n)·min(W,H)·.11,
+         x=W/2+cos·r·1.6, y=LY[3]·H+H·.11+sin·r·.6, i%3 kızıl
+         (10776-10782); adet 6+34 → 40 nokta, her biri kendi eşiğinde
+         (--ti) açılır: kaynağın "küme büyür" davranışının eşleniği.
+     ÖLÇÜM rAF DIŞINDA: kurulum + resize(180ms) + fonts.ready. Kaynak
+     tanecikleri (rAF) TAŞINMADI — rota kararı; hareket scrub'dan.
+     SSR'de SVG boş: kaynakta da canvas'ı JS çiziyordu. */
+  const kap = document.getElementById('szWrap');
+  const hsvg = kap?.querySelector('.sus-huni') as SVGSVGElement | null;
+  if (kap && hsvg) {
+    const LY = [.10, .34, .58, .80], LW = [.60, .44, .28, .15];
+    const NS = 'http://www.w3.org/2000/svg';
+    const kat = (t: number) => Math.min(2, Math.floor(t * 3));
+    const genis = (t: number) => { const k = kat(t), u = t * 3 - k; return LW[k] + (LW[k + 1] - LW[k]) * u; };
+    const yKon = (t: number) => { const k = kat(t), u = t * 3 - k; return LY[k] + (LY[k + 1] - LY[k]) * u; };
+    const el = (ad: string, oz: Record<string, string>) => {
+      const e = document.createElementNS(NS, ad);
+      for (const k in oz) e.setAttribute(k, oz[k]);
+      return e;
+    };
+    const ciz = () => {
+      const r = kap.getBoundingClientRect();
+      const W = Math.round(r.width), H = Math.round(r.height);
+      if (!W || !H) return;
+      hsvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      const g = el('g', { class: 'hgov' });
+      /* huni duvarları (üç kat) */
+      for (let k = 0; k < 3; k++) {
+        const y1 = LY[k] * H, y2 = LY[k + 1] * H, w1 = LW[k] * W / 2, w2 = LW[k + 1] * W / 2;
+        g.appendChild(el('path', {
+          class: 'duvar', fill: k % 2 ? 'rgba(255,255,255,.016)' : 'rgba(255,255,255,.028)',
+          d: `M${W / 2 - w1},${y1} L${W / 2 + w1},${y1} L${W / 2 + w2},${y2} L${W / 2 - w2},${y2} Z`,
+        }));
+        g.appendChild(el('path', { class: 'duvar-kenar', d: `M${W / 2 - w1},${y1} L${W / 2 - w2},${y2}` }));
+        g.appendChild(el('path', { class: 'duvar-kenar', d: `M${W / 2 + w1},${y1} L${W / 2 + w2},${y2}` }));
+      }
+      /* kavşak bağları — kart k ile aynı --sm mührü */
+      for (let k = 0; k < 4; k++) {
+        const t = Math.min(.999, (k + 1) / 4);
+        const y = yKon(t) * H, w = genis(t) * W / 2;
+        const sol = k % 2 === 0, x = W / 2 + (sol ? -w : w);
+        const hedef = sol ? Math.max(10, W * .30) : Math.min(W - 10, W * .70);
+        const sm = (.52 + k * .055).toFixed(3);
+        g.appendChild(el('path', {
+          class: 'bag', d: `M${x},${y} L${hedef},${y}`,
+          style: `--sm:${sm};--bk:${k};transform-origin:${x}px ${y}px`,
+        }));
+        g.appendChild(el('circle', { class: 'knokta', cx: String(x), cy: String(y), r: '3.2' }));
+        g.appendChild(el('circle', { class: 'kglow', cx: String(x), cy: String(y), r: '5', style: `--sm:${sm}` }));
+      }
+      /* çıkan müşteri kümesi (phyllotaxis, kaynak 10776-10782) */
+      const kume = el('g', { class: 'kume' });
+      const ADET = 40, cy = LY[3] * H + H * .11;
+      for (let i = 0; i < ADET; i++) {
+        const a = i * 2.39996, rr = Math.sqrt(i / ADET) * Math.min(W, H) * .11;
+        kume.appendChild(el('circle', {
+          cx: (W / 2 + Math.cos(a) * rr * 1.6).toFixed(1),
+          cy: (cy + Math.sin(a) * rr * .6).toFixed(1), r: '2.2',
+          fill: i % 3 === 0 ? 'rgba(255,90,110,.92)' : 'rgba(255,255,255,.62)',
+          style: `--ti:${Math.max(0, (i - 6) / 34).toFixed(3)};--ta:${i % 3 === 0 ? .92 : .62}`,
+        }));
+      }
+      g.appendChild(kume);
+      hsvg.replaceChildren(g);
+    };
+    let rt: ReturnType<typeof setTimeout>;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(ciz, 180); });
+    document.fonts?.ready?.then(ciz);
+    ciz();
+  }
+</script>
+
+<script>
+  /* ADA — yalnız huninin işi. Açılışta SIFIR yeniden yazım: iskelet ve
+     varsayılan rakamlar derlemede aynı modülle basıldı; burada yalnız
+     kaydırıcı dinlenir. JS koşmazsa sayfa varsayılanlarla anlamlı. */
+  import { DEG, huni, fmt } from '../huni.mjs';
+  const al = (id: string) => document.getElementById(id);
+  const R = [0, 1, 2, 3, 4, 5].map(i => al('hnR' + i) as HTMLInputElement | null);
+  if (R.every(Boolean)) {
+    const dil = document.documentElement.lang === 'en' ? 'en' : 'tr';
+    const akis = [...(al('hnAkis')?.children || [])] as HTMLElement[];
+    const yaz = () => {
+      const T = +R[0]!.value;
+      const p = [1, 2, 3, 4].map(i => +R[i]!.value);
+      const dg = DEG[+R[5]!.value] || 0;
+      al('hnV0')!.textContent = fmt(T, dil);
+      p.forEach((y, i) => al('hnV' + (i + 1))!.textContent = String(y));
+      al('hnV5')!.textContent = '₺' + fmt(dg, dil);
+      const { kademe, kacan } = huni(T, p);
+      akis.forEach((li, i) => {
+        const b = li.querySelector('b'), u = li.querySelector('u');
+        if (b) b.textContent = fmt(kademe[i], dil);
+        if (u) (u as HTMLElement).style.width = (T ? Math.max(2, kademe[i] / T * 100) : 0) + '%';
+      });
+      al('hnKacan')!.textContent = fmt(kacan, dil);
+      al('hnYil')!.textContent = fmt(kacan * 12, dil);
+      al('hnPara')!.textContent = '₺' + fmt(kacan * dg, dil);
+      al('hnParaY')!.textContent = '₺' + fmt(kacan * dg * 12, dil);
+    };
+    R.forEach(r => r!.addEventListener('input', yaz));
+  }
+</script>
+
+<style>
+  /* GOVDE KABI (TUR 1, 4 Eyl 2026): sayfa `genis` oldu — kaynakta bu rota
+     `.wrap` icinde (max 1280 + --gut, 1440 govdede 1200 px), yenide 840 px
+     okuma sutunundaydi ve hesaplayici karti 1200 yerine 800 px basiyordu
+     (olculdu: .hsbox 1200 <-> 800). Sayfa basligi kaynagin `.shead`i gibi
+     920 px'te durur (kok index.html 365), HizmetDizin/ProjeDizin ile ayni. */
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .ust-etiket { color: var(--tx3); font-family:var(--f-tek);
+    font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .blok { margin-top: 46px; }
+  /* TUR 4 (2 Eyl 2026) — ELENEN HIPOTEZ: `.blok:not(.szstage)
+     { content-visibility: auto }` denendi, ilk kare 131 -> 132 ms (kazanc
+     yok), geri alindi. Gerekce HizmetGovde.astro'da. */
+  .kicker { color: var(--red-soft); font-family:var(--f-tek);
+    font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .blok h2 { font-size: 1.35rem; margin: 0 0 10px; }
+  .aciklama { color: var(--tx2); font-size: .95rem; max-width: 60ch; }
+
+  .akis3 { display: grid; grid-template-columns: 1fr 44px 1.3fr 44px 1fr; gap: 6px;
+    margin-top: 26px; }
+  /* AKIŞ AÇILIŞI (A3-D1 eşikleri korunur) — kaynak reveal(p) eşikleri
+     (10632-10639, markup'ta --fe olarak BİREBİR basılı); hâller --fyt
+     eşiğinden türer (SurecGovde --yt deseninin eşi). TABAN =
+     TAMAMLANMIŞ (--fyt initial 1): desteksiz tarayıcı ve reduced-motion
+     tam hâli görür — kaynak REDUCE'da reveal(1) çağırıyordu, birebir.
+     (A3-D1'in ST scrub .5 / cover 5%→60% view() sürücüsü 3 Eyl'de
+     kalktı — aşağıdaki SURUCU KURALI.) */
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"): akis demosu KAYDIRDIKCA ILERLEMEZ. Yukaridaki
+     view() scrub (cover 5%→60%) SOKULDU; --fyt artik ZAMAN tabanli tek
+     seferlik acilis (2.4 s, both) — .akis3 kadraja girince (.akoynar,
+     IO esik .25) oynar, cikinca --akps ile durur, tamamlaninca son
+     karede kalir. Pencere ×20 → ×5: 0,2p × 2,4 s = 0,48 s ≈ kaynagin
+     .45 s sinif gecisi (10632-10639 + .45s transition). Sure kaynakta
+     yok (ST scrub'di) — 2,4 s bilincli secim, hukum Enes'te. TABAN =
+     TAMAMLANMIS (initial 1) korunur: reduced-motion animation:none. */
+  @property --fyt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  .akis3 { animation: fyt-giris 2.4s linear both;
+    animation-play-state: var(--akps, paused); }
+  @keyframes fyt-giris { from { --fyt: 0; } to { --fyt: 1; } }
+  .adugum, .ajan-kart, .tel-yak {
+    --fp: clamp(0, (var(--fyt, 1) - var(--fe, 0)) * 5, 1); }
+  /* düğüm: kaynak .fnode kapalı hâli (1336-1339): opacity 0 +
+     translateY(10px) scale(.96) → on'da 1/none. (D1'in ".fln .55→1"
+     künyesi YANLIŞ bileşendendi — .fln 701 başka sahnenin düğümü;
+     21 Ağu denetimi düzeltti.) */
+  .adugum { opacity: var(--fp);
+    transform: translateY(calc((1 - var(--fp)) * 10px))
+      scale(calc(.96 + .04 * var(--fp))); }
+  /* beyin: kaynak .fbrain kapalı opacity 0 + scale(.9) → açık 1/1 (1356-1359) */
+  .ajan-kart { opacity: var(--fp); transform: scale(calc(.9 + .1 * var(--fp))); }
+  /* tel yakma katmanı: kaynak .fwire gri .13 → .lit kızıl .55 (1331-1332);
+     gri taban .tel sabit durur, kızıl kopya eşikle açılır */
+  .sus-tel .tel-yak, .sus-tel-m .tel-yak { fill: none; stroke: rgba(239,35,60,.55);
+    stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: var(--fp); }
+  @media (prefers-reduced-motion: reduce) { .akis3 { animation: none; } }
+  /* Teller SÜS (.sus- sözleşmesi): içerik üç kolonda eksiksiz; mobilde
+     ve reduced-motion'da süs söner, kimse bilgi kaybetmez. */
+  /* overflow:visible kaynak fsvg künyesi (1330) — uç daireleri ve +3px
+     taşma payı şerit dışına çizilebilir. */
+  .sus-tel { width: 100%; margin-top: 34px; height: calc(100% - 34px);
+    overflow: visible; }
+  .sus-tel .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
+    vector-effect: non-scaling-stroke; }
+  .sus-tel .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
+    vector-effect: non-scaling-stroke; opacity: .9;
+    stroke-dasharray: .07 .93; stroke-dashoffset: 1.07;
+    animation: ak-iz 3.4s linear infinite; }
+  /* Dört tel aynı anda atmasın — sıra hissi; sağ şerit yarım vuruş geç
+     (paket ajandan çıkıyormuş gibi). */
+  .sus-tel .iz1 { animation-delay: .85s; }
+  .sus-tel .iz2 { animation-delay: 1.7s; }
+  .sus-tel .iz3 { animation-delay: 2.55s; }
+  .sus-tel.sag .tel-iz { animation-delay: .42s; }
+  .sus-tel.sag .iz1 { animation-delay: 1.27s; }
+  .sus-tel.sag .iz2 { animation-delay: 2.12s; }
+  .sus-tel.sag .iz3 { animation-delay: 2.97s; }
+  @keyframes ak-iz { to { stroke-dashoffset: .07; } }
+  /* Mobil teller: dikey yelpaze (eski flowKur'un dikey modunun yerlisi).
+     Masaustunde gizli; mobilde kolonlarin arasina girer. */
+  .sus-tel-m { display: none; }
+  @media (max-width: 700px) {
+    .akis3 { grid-template-columns: 1fr; gap: 10px; }
+    .sus-tel { display: none; }
+    .sus-tel-m { display: block; width: min(100%, 340px);
+      margin: 0 auto; height: 56px; overflow: visible; }
+    /* fjoin düğüm daireleri: kaynak YALNIZ mobil telde basıyordu
+       (10570-10581, r 2.6/3.2; fill/opacity 1383). Kaynaktaki
+       drop-shadow parlaması H14 gereği mobilde YOK (belgeli sapma). */
+    .sus-tel-m .fjoin { fill: var(--red); opacity: .9; }
+    .sus-tel-m .tel { fill: none; stroke: var(--line2); stroke-width: 1.2;
+      vector-effect: non-scaling-stroke; }
+    .sus-tel-m .tel-iz { fill: none; stroke: var(--red-soft); stroke-width: 1.6;
+      vector-effect: non-scaling-stroke; opacity: .9;
+      stroke-dasharray: .12 .88; stroke-dashoffset: 1.12;
+      animation: ak-iz-m 2.6s linear infinite; }
+    .sus-tel-m .iz1 { animation-delay: .65s; }
+    .sus-tel-m .iz2 { animation-delay: 1.3s; }
+    .sus-tel-m .iz3 { animation-delay: 1.95s; }
+    .sus-tel-m.sag .tel-iz { animation-delay: .32s; }
+    .sus-tel-m.sag .iz1 { animation-delay: .97s; }
+    .sus-tel-m.sag .iz2 { animation-delay: 1.62s; }
+    .sus-tel-m.sag .iz3 { animation-delay: 2.27s; }
+  }
+  @keyframes ak-iz-m { to { stroke-dashoffset: .12; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation: none; opacity: 0; }
+  }
+  /* kaynak mobil çizelgesi (1403-1418, kırılım 900 birebir): düğüm ve
+     ikon büyür, beyin dolgusu daralır, "Aktif" rozeti görünür olur */
+  @media (max-width: 900px) {
+    .adugum { padding: 15px; border-radius: 16px; gap: 12px; }
+    .adugum .ni { width: 42px; height: 42px; border-radius: 12px; }
+    .adugum .ni :global(svg) { width: 18px; height: 18px; }
+    .nt b { font-size: .95rem; white-space: normal; }
+    .nt span { font-size: .72rem; }
+    .nd { width: 8px; height: 8px; }
+    .ajan-kart { padding: 18px 16px 16px; border-radius: 18px; }
+    /* .ajan-ad öneki: taban display:none dosyada SONRA geldiğinden
+       özgüllükle kazanılır (ölçümle yakalandı) */
+    .ajan-ad .fbadge { display: inline-flex; align-items: center; gap: 6px; margin-left: auto;
+      font-family:var(--f-tek); font-size: 9px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--red-soft);
+      border: 1px solid rgba(239, 35, 60, .4); border-radius: 999px;
+      padding: 4px 9px; background: rgba(239, 35, 60, .08); }
+    .fbadge i { width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+      font-style: normal; }
+    .ajan-kart li { padding: 11px 12px; font-size: .84rem; border-radius: 12px; gap: 11px; }
+    .fsi { width: 18px; height: 18px; }
+    .fsi :global(svg) { width: 10px; height: 10px; }
+    .ajan-kart li em { font-size: 10px; }
+  }
+
+  .akbas { color: var(--tx3); font-size: .78rem; font-family:var(--f-tek);
+    letter-spacing: .08em; margin-bottom: 8px; }
+  /* ---- DÜĞÜM KOMPOZİSYONU — kaynak .fnode 1336-1354 birebir.
+     HOT DALGASI: kaynakta rAF tick'i 1.5 adım/sn ile düğümleri sırayla
+     'hot' yapıyordu (10622-10625; çıkış +2 faz). Eşlenik: --hp custom
+     property dalgası (period 4/1.5=2.667s, pencere .667s), renkler
+     color-mix ile taban↔hot arası karışır (kaynak .6s transition'ının
+     rampası keyframe'de). Desteksiz tarayıcı --hp=0 taban hâli görür.
+     Gölgeli hot vurguları H14 gereği yalnız masaüstü bloğunda. */
+  @property --hp { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @keyframes hp-dalga { 0% { --hp: 0; } 2% { --hp: 1; } 20% { --hp: 1; }
+    27%, 100% { --hp: 0; } }
+  .adugum { display: flex; align-items: center; gap: 11px; padding: 12px 14px;
+    margin-bottom: 11px; border-radius: 14px;
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .5) calc(var(--hp, 0) * 100%), var(--line));
+    background: color-mix(in srgb, #161010 calc(var(--hp, 0) * 100%), #101010);
+    animation: hp-dalga 2.667s linear infinite;
+    animation-delay: calc(var(--hi, 0) * .667s); }
+  .adugum .ni { width: 32px; height: 32px; border-radius: 9px; display: grid;
+    place-items: center; flex-shrink: 0;
+    background: color-mix(in srgb, var(--red-dim, rgba(239, 35, 60, .15)) calc(var(--hp, 0) * 100%), rgba(255, 255, 255, .05));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .45) calc(var(--hp, 0) * 100%), var(--line));
+    color: color-mix(in srgb, var(--red-soft) calc(var(--hp, 0) * 100%), var(--tx3)); }
+  /* :global — Ikon.astro'nun svg'si bu bileşenin scope damgasını
+     taşımaz; düz seçici eşleşmez (gerçek Chrome ölçümüyle yakalandı) */
+  .adugum .ni :global(svg) { width: 15px; height: 15px; }
+  .nt { flex: 1; min-width: 0; }
+  .nt b { display: block; font-size: .83rem; font-weight: 600; letter-spacing: -.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt span { font-size: .68rem; color: var(--tx4); font-family:var(--f-tek);
+    letter-spacing: .08em; }
+  .nd { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: color-mix(in srgb, var(--red) calc(var(--hp, 0) * 100%), var(--line2)); }
+
+  /* ---- BEYİN — kaynak .fbrain 1356-1381 birebir (Manrope→gövde,
+     JetBrains→ui-monospace: F1 sözleşmesi). */
+  .ajan-kart { border: 1px solid rgba(239, 35, 60, .34); border-radius: 20px;
+    background: linear-gradient(180deg, rgba(239, 35, 60, .1), rgba(255, 255, 255, .02));
+    padding: 20px; }
+  .ajan-ad { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+  .bi { width: 42px; height: 42px; border-radius: 12px; display: grid;
+    place-items: center; background: var(--red); color: #fff; flex-shrink: 0; }
+  .bi :global(svg) { width: 20px; height: 20px; }
+  .bt { min-width: 0; }
+  .bt b { display: block; font-size: 1rem; font-weight: 700; letter-spacing: -.03em; }
+  .bt span { font-family:var(--f-tek); font-size: 9.5px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
+  /* rozet kaynakta YALNIZ MOBİL (1384: taban gizli, 1410: ≤900 açık);
+     noktası kaynakta ping2 TANIMSIZ keyframe'deydi → SABİT basılır;
+     glow'u H14 gereği yok (kaynakta vardı, belgeli sapma). */
+  .fbadge { display: none; }
+
+  /* ---- ADIM SATIRLARI — kaynak .fstep 1370-1381; tik ✓ karakteri
+     değil kaynağın IC.check SVG'si (F1c). DALGA: kaynak tick'i 2.2
+     adım/sn, döngü n+2=7 birim (10626-10627) → --fsp 0→7 (3.18s),
+     satır i eşiği (i+1); rampa ×1.5 ≈ kaynağın .4s transition'ı.
+     --fsp initial 7: desteksiz tarayıcı + reduced TAMAMLANMIŞ görür. */
+  @property --fsp { syntax: '<number>'; inherits: true; initial-value: 7; }
+  @keyframes fsp-dalga { 0% { --fsp: 0; } 100% { --fsp: 7; } }
+  .ajan-kart ol { list-style: none; margin: 0; padding: 0; display: flex;
+    flex-direction: column; gap: 7px;
+    animation: fsp-dalga 3.18s linear infinite; }
+  .ajan-kart li { --on: clamp(0, (var(--fsp, 7) - 1 - var(--fi, 0)) * 1.5, 1);
+    display: flex; align-items: center; gap: 10px; padding: 8px 11px;
+    border-radius: 10px; font-size: .76rem;
+    background: color-mix(in srgb, rgba(239, 35, 60, .08) calc(var(--on) * 100%), rgba(255, 255, 255, .03));
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .3) calc(var(--on) * 100%), transparent);
+    color: color-mix(in srgb, var(--tx) calc(var(--on) * 100%), var(--tx3)); }
+  .fsi { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center; font-style: normal;
+    border: 1px solid color-mix(in srgb, var(--red) calc(var(--on) * 100%), var(--line2));
+    background: color-mix(in srgb, var(--red-dim, rgba(239, 35, 60, .15)) calc(var(--on) * 100%), transparent); }
+  .fsi :global(svg) { width: 9px; height: 9px; color: var(--red-soft);
+    opacity: var(--on); }
+  .ajan-kart li span { min-width: 0; }
+  .ajan-kart li em { margin-left: auto; font-style: normal;
+    font-family:var(--f-tek); font-size: 9px;
+    color: color-mix(in srgb, var(--red-soft) calc(var(--on) * 100%), var(--tx4)); }
+
+  /* gölgeli vurgular yalnız masaüstü (H14): hot kutu/nokta glow'u,
+     beyin ikonunun brainPulse'u (1362-1365 birebir) */
+  @media (min-width: 901px) {
+    .adugum { box-shadow: 0 0 26px -8px color-mix(in srgb, var(--red-glow, rgba(239, 35, 60, .5)) calc(var(--hp, 0) * 100%), transparent); }
+    .nd { box-shadow: 0 0 9px color-mix(in srgb, var(--red-glow, rgba(239, 35, 60, .5)) calc(var(--hp, 0) * 100%), transparent); }
+    .bi { box-shadow: 0 0 24px -4px var(--red-glow, rgba(239, 35, 60, .5));
+      animation: brainPulse 2.6s ease-in-out infinite; }
+    @keyframes brainPulse { 0%, 100% { box-shadow: 0 0 24px -4px rgba(239, 35, 60, .5); }
+      50% { box-shadow: 0 0 40px 0 rgba(239, 35, 60, .8); } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .adugum, .ajan-kart ol, .bi { animation: none; }
+  }
+
+  /* ===== DOĞRU MODEL KARTI (mf*) — KAYNAĞIN STİLİ =====
+     Kök index.html 2559-2620'den; aile tokenleri anayasa istisna 1,
+     düğme kabuk düğmesi (.dugme), animasyon `sus-` öneki + view() scrub. */
+  .mfst { margin-top: clamp(26px, 3.4vw, 52px); border: 1px solid var(--line);
+    border-radius: 20px; overflow: hidden;
+    background: linear-gradient(165deg, rgba(239, 35, 60, .055), rgba(255, 255, 255, .015)); }
+  .mfhd { padding: clamp(22px, 2.8vw, 40px) clamp(20px, 2.6vw, 40px) clamp(16px, 2vw, 26px);
+    border-bottom: 1px solid var(--line); }
+  .mfk { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-tek);
+    font-size: clamp(9px, .76vw, 10.6px); letter-spacing: .16em; text-transform: uppercase;
+    color: var(--red-soft); margin-bottom: clamp(10px, 1.2vw, 16px); }
+  .mfk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+    box-shadow: 0 0 10px var(--red-glow); }
+  .mfhd h2 { margin: 0; font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(1.5rem, 3.4vw, 2.7rem); line-height: 1.08; color: #fff; text-wrap: balance; }
+  .mfhd h2 :global(em) { font-style: normal; color: var(--red-soft); }
+  .mfhd p { margin: clamp(10px, 1.2vw, 16px) 0 0; max-width: 62ch; color: var(--tx2);
+    font-size: clamp(.94rem, 1.1vw, 1.08rem); line-height: 1.62; }
+  .mfsteps { display: grid; grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--line); }
+  .mfstep { position: relative; padding: clamp(18px, 2.2vw, 30px) clamp(18px, 2.2vw, 32px);
+    border-right: 1px solid var(--line); }
+  .mfstep:last-child { border-right: 0; }
+  /* çizgi ÖĞE olarak: kaynak ::before'du, animasyon sözde öğede durunca
+     azaltma listesi geride kalıyor (H11 dersi) — blok.css ile aynı çözüm */
+  .sus-mfcizgi { position: absolute; left: 0; top: 0; height: 2px; width: 100%;
+    transform-origin: left; background: linear-gradient(90deg, var(--red), transparent); }
+  .mfsn { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .mfsn b { font-family: var(--f-tek); font-size: clamp(10px, .82vw, 11.6px);
+    color: var(--red-soft); letter-spacing: .12em; }
+  .mfsn span { font-weight: 700; letter-spacing: -.02em;
+    font-size: clamp(1.02rem, 1.4vw, 1.32rem); color: #fff; }
+  .mfstep p { margin: 0; color: var(--tx2); font-size: clamp(.86rem, .95vw, .98rem);
+    line-height: 1.55; }
+  .mfgain { padding: clamp(18px, 2.2vw, 30px) clamp(20px, 2.6vw, 40px);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.4vw, 20px);
+    border-bottom: 1px solid var(--line); }
+  .sus-mfg { display: flex; flex-direction: column; gap: 6px; }
+  .sus-mfg i { font-style: normal; color: var(--tx4);
+    font-size: clamp(.78rem, .86vw, .9rem); line-height: 1.35; }
+  .sus-mfg b { display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 600;
+    font-size: clamp(.88rem, .98vw, 1.02rem); line-height: 1.3; }
+  .sus-mfg b::before { content: ''; width: 7px; height: 7px; border-radius: 2px; flex: none;
+    background: var(--red); box-shadow: 0 0 10px var(--red-glow); }
+  .mfend { padding: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 40px); display: flex;
+    align-items: center; gap: clamp(14px, 2vw, 28px); flex-wrap: wrap; }
+  .mfend p { margin: 0; flex: 1; min-width: min(100%, 320px); font-weight: 700;
+    letter-spacing: -.025em; font-size: clamp(1.14rem, 2.1vw, 1.72rem); line-height: 1.22;
+    color: #fff; text-wrap: balance; }
+  .mfend p :global(em) { font-style: normal; color: var(--red-soft); }
+  .mfend .dugme { flex: none; }
+  @media (max-width: 760px) {
+    .mfsteps { grid-template-columns: 1fr; }
+    .mfstep { border-right: 0; border-bottom: 1px solid var(--line); }
+    .mfstep:last-child { border-bottom: 0; }
+    .mfgain { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== BİR GÜN (gn*) — KAYNAĞIN RAYI =====
+     Kök index.html 2848-2905. Ray, nokta ve saat sütunu birebir; kaynağın
+     `.in` zincirli gecikmesi yerine view() scrub. */
+  .gnsec { margin-top: clamp(26px, 3.4vw, 52px); }
+  .gnhd { max-width: 58ch; margin-bottom: clamp(20px, 2.4vw, 34px); }
+  .gnk { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-tek);
+    font-size: clamp(9px, .76vw, 10.6px); letter-spacing: .16em; text-transform: uppercase;
+    color: var(--red-soft); margin-bottom: 11px; }
+  .gnk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+    box-shadow: 0 0 10px var(--red-glow); }
+  .gnhd h2 { margin: 0; font-weight: 700; letter-spacing: -.035em;
+    font-size: clamp(1.5rem, 3.4vw, 2.7rem); line-height: 1.08; color: #fff; }
+  .gnhd p { margin: clamp(10px, 1.2vw, 16px) 0 0; color: var(--tx2);
+    font-size: clamp(.92rem, 1.06vw, 1.05rem); line-height: 1.6; }
+  .gnline { position: relative; padding-left: clamp(74px, 9vw, 132px); }
+  .gnrail { position: absolute; left: clamp(52px, 6.4vw, 94px); top: 6px; bottom: 34px;
+    width: 2px; background: rgba(255, 255, 255, .09); border-radius: 2px; overflow: hidden; }
+  .sus-gnrail { display: block; width: 100%; height: 100%; border-radius: 2px;
+    transform-origin: top; background: linear-gradient(180deg, var(--red), var(--red-soft)); }
+  .gnrow { position: relative; display: flex; gap: clamp(14px, 1.8vw, 26px);
+    padding-bottom: clamp(20px, 2.4vw, 34px); }
+  .sus-gnrow::before { content: ''; position: absolute;
+    left: calc(clamp(52px, 6.4vw, 94px) - clamp(74px, 9vw, 132px) - 5px); top: 7px;
+    width: 12px; height: 12px; border-radius: 50%; background: #0a0a0b;
+    border: 2px solid var(--red); box-shadow: 0 0 14px -2px var(--red-glow); }
+  .sus-gnrow.last::before { background: var(--red); }
+  .gnt { position: absolute; left: calc(0px - clamp(74px, 9vw, 132px)); top: 3px;
+    width: clamp(52px, 6.4vw, 94px); text-align: right; padding-right: clamp(14px, 1.7vw, 24px);
+    font-family: var(--f-tek); font-size: clamp(11px, 1.02vw, 13.4px); font-weight: 600;
+    color: var(--red-soft); font-variant-numeric: tabular-nums; white-space: nowrap;
+    letter-spacing: -.01em; }
+  .gnc { flex: 1; min-width: 0; }
+  .gnc b { display: block; color: #fff; font-weight: 700; letter-spacing: -.025em;
+    font-size: clamp(1.02rem, 1.5vw, 1.34rem); line-height: 1.22; text-wrap: balance; }
+  .gnc p { margin: 7px 0 0; color: var(--tx2); font-size: clamp(.88rem, .98vw, 1.02rem);
+    line-height: 1.6; max-width: 62ch; }
+  .gnrow.last .gnc b { color: var(--red-soft); }
+  @media (max-width: 640px) {
+    .gnline { padding-left: 0; }
+    .gnrail { display: none; }
+    .gnrow { flex-direction: column; gap: 5px; padding-left: 16px;
+      border-left: 2px solid rgba(255, 255, 255, .09); }
+    .sus-gnrow::before { left: -7px; }
+    .gnt { position: static; width: auto; text-align: left; padding-right: 0; }
+  }
+
+  /* ---- SÜRÜCÜ: KAYDIRMA (view() scrub). Desteklemeyende ve azaltmada
+     yukarıdaki AÇIK hâl geçerli — içerik üç hâlde de eksiksiz. ---- */
+  @supports (animation-timeline: view()) {
+    .sus-mfcizgi { transform: scaleX(0); animation: oto-cizgi linear both;
+      animation-timeline: view(); animation-range: entry 20% entry 90%; }
+    .sus-mfg { opacity: 0; transform: translateY(10px); animation: oto-gel linear both;
+      animation-timeline: view(); animation-range: entry 10% entry 60%; }
+    .sus-gnrail { transform: scaleY(0); animation: oto-ray linear both;
+      animation-timeline: view(); animation-range: entry 5% entry 95%; }
+    .sus-gnrow { opacity: 0; transform: translateY(14px); animation: oto-gel linear both;
+      animation-timeline: view(); animation-range: entry 10% entry 60%; }
+    .sus-gnrow::before { border-color: rgba(255, 255, 255, .2); box-shadow: none;
+      animation: oto-nokta linear both;
+      animation-timeline: view(); animation-range: entry 20% entry 70%; }
+  }
+  @keyframes oto-cizgi { to { transform: scaleX(1); } }
+  @keyframes oto-ray { to { transform: scaleY(1); } }
+  @keyframes oto-gel { to { opacity: 1; transform: none; } }
+  @keyframes oto-nokta { to { border-color: var(--red); box-shadow: 0 0 14px -2px var(--red-glow); } }
+  /* H11 dersi: animasyon sözde öğeye taşınınca DURDURAN liste de taşınır */
+  @media (prefers-reduced-motion: reduce) {
+    .sus-mfcizgi, .sus-mfg, .sus-gnrail, .sus-gnrow, .sus-gnrow::before { animation: none; }
+    .sus-mfcizgi, .sus-gnrail { transform: none; }
+    .sus-mfg, .sus-gnrow { opacity: 1; transform: none; }
+    .sus-gnrow::before { border-color: var(--red); box-shadow: 0 0 14px -2px var(--red-glow); }
+  }
+
+  /* ==== SIZINTI — kaynak kompozisyonu (21 Ağu, D2b). Kutu .szstage
+     2804-2807 (max-height pin kilidi içindi — pin'siz ALINMADI, D2c;
+     gölge H14 masaüstü). Fontlar F1: Manrope→gövde 700, JetBrains→
+     ui-monospace. ==== */
+  /* PIN (sokum turu): ray 100vh + 220vh (kaynak +=innerHeight*2.2), sahne
+     yapisik, ust bosluk 22px; kaynak max-height (2806) kilit icindi, geri
+     geldi. Ray adli view cizelgesi tasir; sahne onu surer. */
+  .sz-ray { position: relative; height: 320vh; view-timeline: --sz block; }
+  .szstage { position: sticky; top: 22px; max-height: calc(100vh - 44px);
+    border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: linear-gradient(168deg, #131316, #0b0b0d); }
+  .sus-sizinti { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  .szhd { padding: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 40px) clamp(12px, 1.6vw, 22px);
+    border-bottom: 1px solid var(--line); display: flex; align-items: flex-end;
+    justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .szhd h2 { margin: 0; font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(1.24rem, 2.5vw, 2.1rem); line-height: 1.1; color: #fff;
+    text-wrap: balance; }
+  /* :global — set:html içeriği scope damgası taşımaz (akış dersi) */
+  .szhd h2 :global(em) { font-style: normal; color: var(--red-soft); }
+  .szk { display: inline-flex; align-items: center; gap: 8px;
+    font-family:var(--f-tek); font-size: clamp(9px, .76vw, 10.6px);
+    letter-spacing: .16em; text-transform: uppercase; color: var(--red-soft);
+    margin: 0 0 10px; }
+  .szk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  .szbudget { flex: none; display: flex; flex-direction: column; gap: 3px; text-align: right; }
+  .szbudget b { font-weight: 700; color: #fff; font-size: clamp(.98rem, 1.3vw, 1.24rem);
+    letter-spacing: -.02em; }
+  .szbudget i { font-style: normal; color: var(--tx4); font-family:var(--f-tek);
+    font-size: clamp(8.6px, .74vw, 10.2px); letter-spacing: .12em; text-transform: uppercase; }
+  /* çipler — kaynak .szch 2827-2835; on renkleri (kızıl kenar + beyaz
+     metin) scrub'dan color-mix'le */
+  .szchans { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    padding: clamp(14px, 1.8vw, 24px) clamp(20px, 2.6vw, 40px) 0; margin: 0; }
+  .cip { padding: 7px 15px; border-radius: 999px; background: rgba(255, 255, 255, .04);
+    font-size: clamp(10.4px, .9vw, 12.2px); font-weight: 500;
+    border: 1px solid color-mix(in srgb, rgba(239, 35, 60, .34) calc(var(--sp, 1) * 100%), var(--line2));
+    color: color-mix(in srgb, #fff calc(var(--sp, 1) * 100%), var(--tx3)); }
+  /* huni sahnesi — kaynak .szwrap 2837-2838; SVG'yi ADA çizer (kaynak
+     canvas formülleri), SSR boş */
+  .szwrap { position: relative; flex: 0 0 auto;
+    height: clamp(250px, calc(100vh - 470px), 560px); }
+  .sus-huni { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .sus-huni :global(.hgov) { opacity: clamp(0, var(--szt, 1) * 10, 1); }
+  .sus-huni :global(.duvar-kenar) { fill: none; stroke: rgba(255, 255, 255, .13);
+    stroke-width: 1.2; }
+  .sus-huni :global(.bag), .sus-huni :global(.knokta), .sus-huni :global(.kglow) {
+    --kp: clamp(0, (var(--szt, 1) - var(--sm, 2)) * 18, 1); }
+  /* bağ: kesikli [3,4], beyaz .2 → tıpalanınca kızıl .55 (10722);
+     uzunluk scrub'ı kaynakta lineTo kısmıydı — burada scaleX (origin
+     kavşak, ada basar; bilinçli mekanizma eşlemesi, kesik deseni
+     .10p'lik pencerede esner) */
+  .sus-huni :global(.bag) { fill: none; stroke-width: 1; stroke-dasharray: 3 4;
+    stroke: color-mix(in srgb, rgba(239, 35, 60, .55) calc(var(--kp) * 100%), rgba(255, 255, 255, .2));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .22 - var(--bk, 0) * .05) * 10, 1)); }
+  .sus-huni :global(.knokta) { fill: rgba(255, 255, 255, .24); }
+  .sus-huni :global(.kglow) { fill: var(--red); opacity: var(--kp); }
+  /* çıkan küme: nokta i eşiği --ti=(i-6)/34; --ck iki pencereli çıkış
+     eğrisi (10746) .szstage'de */
+  .sus-huni :global(.kume circle) {
+    opacity: calc(var(--ta, .6) * clamp(0, (var(--ck, 1) - var(--ti, 0)) * 40, 1)); }
+  /* yan kartlar — kaynak .szside/.szleak/.szfix 2842-2867 birebir */
+  .szside { position: absolute; top: 0; bottom: 0; width: min(30%, 270px); display: flex;
+    flex-direction: column; justify-content: center; gap: clamp(26px, 4vw, 64px);
+    pointer-events: none; padding: 6% 0; }
+  .szside.left { left: clamp(12px, 1.8vw, 26px); align-items: flex-start; text-align: left; }
+  .szside.right { right: clamp(12px, 1.8vw, 26px); align-items: flex-end; text-align: right; }
+  .szleak { display: flex; flex-direction: column; gap: 7px; }
+  .szlt { display: flex; flex-direction: column; gap: 3px; }
+  .szlt b { font-weight: 700; letter-spacing: -.02em; font-size: clamp(12.6px, 1.26vw, 17px);
+    line-height: 1.2; color: color-mix(in srgb, var(--tx3) calc(var(--mp, 0) * 100%), #fff);
+    text-decoration: line-through; text-decoration-thickness: 2px;
+    text-decoration-color: rgba(239, 35, 60, calc(var(--mp, 0) * .7)); }
+  .szlt i { font-style: normal; color: var(--tx4); font-size: clamp(10.2px, .9vw, 12px);
+    line-height: 1.35; }
+  .szfix { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px;
+    border-radius: 999px; background: rgba(239, 35, 60, .12);
+    border: 1px solid rgba(239, 35, 60, .4); color: var(--red-soft);
+    font-family:var(--f-tek); font-size: clamp(9.2px, .8vw, 10.8px);
+    letter-spacing: .04em; white-space: nowrap;
+    opacity: var(--mp, 0); transform: scale(calc(.9 + .1 * var(--mp, 0))); }
+  .szfix s { width: 12px; height: 12px; border-radius: 50%; background: var(--red);
+    flex: none; position: relative; text-decoration: none; }
+  .szfix s::after { content: ''; position: absolute; left: 3.4px; top: 5px; width: 3.6px;
+    height: 1.8px; border-left: 1.4px solid #fff; border-bottom: 1.4px solid #fff;
+    transform: rotate(-45deg); }
+  /* "kalan müşteri" + beat rozeti — kaynak 2887-2898; beat penceresi
+     p .435-.522 (10792), rampa ×22 ≈ kaynağın .4s geçişi */
+  .szout { position: absolute; left: 50%; bottom: clamp(8px, 1.2vw, 18px);
+    transform: translateX(-50%); font-family:var(--f-tek);
+    font-size: clamp(9px, .8vw, 10.8px); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--tx3); opacity: clamp(0, (var(--szt, 1) - .30) * 20, 1); }
+  .szbeat { position: absolute; left: 50%; top: 50%;
+    --bp: calc(clamp(0, (var(--szt, 1) - .435) * 22, 1) * clamp(0, (.522 - var(--szt, 1)) * 22, 1));
+    transform: translate(-50%, -50%) scale(calc(.96 + .04 * var(--bp)));
+    padding: 12px 26px; border-radius: 999px; background: rgba(10, 10, 11, .9);
+    border: 1px solid rgba(239, 35, 60, .45); font-weight: 700; letter-spacing: -.02em;
+    font-size: clamp(1rem, 1.5vw, 1.34rem); color: #fff; white-space: nowrap; z-index: 3;
+    opacity: var(--bp); }
+  /* aşamalar — kaynak .szstages/.szst/.szsb 2870-2885 birebir:
+     huninin ÜSTÜNDE dikey overlay, mono başlık + altında oran çubuğu */
+  .szstages { position: absolute; left: 50%; top: 0; bottom: 0;
+    transform: translateX(-50%); width: min(38%, 300px); display: flex;
+    flex-direction: column; justify-content: flex-start; pointer-events: none;
+    padding-top: 6%; }
+  .szst { display: flex; flex-direction: column; align-items: center; gap: 5px;
+    height: 24%; justify-content: flex-start;
+    opacity: var(--sp, 1); transform: translateY(calc((1 - var(--sp, 1)) * 6px)); }
+  .szst b { font-family:var(--f-tek); font-size: clamp(9px, .8vw, 10.8px);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--tx3);
+    font-weight: 500; }
+  .szsb { width: min(70%, 150px); height: 4px; border-radius: 3px;
+    background: rgba(255, 255, 255, .08); overflow: hidden; }
+  .szsb i { display: block; position: relative; height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .42), rgba(255, 255, 255, .16));
+    width: calc(var(--sp, 1) * var(--w, 60%)); }
+  /* done kızıllaşması: kaynak .szstage.done .szsb i (2885), eşik p>.84 */
+  .szsb i::after { content: ''; position: absolute; inset: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--red), var(--red-soft));
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1); }
+  /* alt şerit — kaynak .szfoot/.szbars/.szbar/.szarrow/.szend
+     2908-2931 birebir (çubuk dolumu width yerine scaleX: düzen
+     tetiklemez, oranlar aynı — bilinçli mekanizma eşlemesi) */
+  .szfoot { border-top: 1px solid var(--line);
+    padding: clamp(16px, 2vw, 28px) clamp(20px, 2.6vw, 40px);
+    /* 4 Eyl (olc-tasma, EN): `1fr auto` — auto sutun EN metninde 653 px'e
+       buyuyup cubuk sutununu 35 px'e sikistiriyordu, etiketler tasiyordu.
+       Ikinci sutun kapanis cumlesinin kendi tavani (300 px) ile sinirli. */
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    gap: clamp(16px, 2.4vw, 36px); align-items: center; }
+  .szbars { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+  .szcap { font-family:var(--f-tek); font-size: clamp(8.4px, .72vw, 10px);
+    letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); }
+  .cubuk { display: grid; grid-template-columns: clamp(46px, 5vw, 64px) 1fr;
+    gap: 12px; align-items: center; margin: 0; }
+  .cubuk i { font-style: normal; color: var(--tx3); font-size: clamp(9.6px, .84vw, 11.4px); }
+  .bar { position: relative; height: 10px; border-radius: 5px;
+    background: rgba(255, 255, 255, .06); overflow: hidden; }
+  .bar::after { content: ''; position: absolute; inset: 0; border-radius: 5px;
+    transform-origin: left; }
+  .bar.once::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, .12));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .28) / .15, 1)); }
+  /* Sonra çubuğu kaynakta %46'da durur (10795: ×46) — genişlik oranı
+     kabın .46'sı, dolum scaleX'i kendi içinde tam */
+  .bar.sonra::after { width: 46%;
+    background: linear-gradient(90deg, var(--red), var(--red-soft));
+    transform: scaleX(clamp(0, (var(--szt, 1) - .66) / .24, 1)); }
+  .szarrow { display: flex; align-items: center; gap: 8px; color: var(--red-soft);
+    font-size: clamp(9.6px, .84vw, 11.4px);
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1); }
+  .szarrow svg { width: 15px; height: 15px; flex: none; }
+  .szend { flex: none; max-width: min(100%, 300px); font-weight: 700;
+    letter-spacing: -.025em; font-size: clamp(1.02rem, 1.6vw, 1.4rem); line-height: 1.22;
+    color: #fff; text-wrap: balance; margin: 0;
+    opacity: clamp(0, (var(--szt, 1) - .84) * 18, 1);
+    transform: translateY(calc((1 - clamp(0, (var(--szt, 1) - .84) * 18, 1)) * 8px)); }
+  .szend :global(em) { font-style: normal; color: var(--red-soft); }
+
+  /* SIZINTI SCRUB SÜRÜCÜSÜ (A3-D2) — kaynak: ST PIN+scrub .5, +=2.2vh
+     (kök 12467-12478) + szDraw DOM eşikleri (10785-10795, markup'ta
+     --se/--sm olarak BİREBİR). Sürücü anonim view() --szt (akışla aynı
+     desen); PIN bu adımda bilinçli yok (markup yorumunda gerekçe) —
+     aralık cover 5%→90%: pin'in 2.2vh ilerleme payının akan eşleniği.
+     TABAN=TAMAMLANMIŞ (--szt initial 1): desteksiz + reduced tam hâli
+     görür (kaynak RDC'de P=1 render, 10806 — birebir; tamamlanmış
+     hâlde damlalar SÖNÜK çünkü mühürler kapalı, anlatı bu).
+     Kapalı/açık görseller kaynak değerleri: çip 0+7px→1 (szch 2829),
+     kart 0+10px→1 (szleak 2848), mühürde başlık üstü çizili kızıl
+     (sealed 2855; çizgi hep var, RENGİ saydam→kızıl — calc'lanabilir
+     tek yol) + çözüm rozeti 0+scale(.9)→1 (szfix 2860). Çubuk dolumu
+     kaynakta width yazımıydı (2917) — burada ::after scaleX (düzen
+     tetiklemez; bilinçli mekanizma eşlemesi, oranlar aynı). */
+  @property --szt { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @supports (animation-timeline: view()) {
+    .sz-surus { animation: szt-surus linear both; animation-timeline: --sz;
+      animation-range: contain 0% contain 100%; }
+  }
+  @keyframes szt-surus { from { --szt: 0; } to { --szt: 1; } }
+  .cip, .szleak, .szst {
+    --sp: clamp(0, (var(--szt, 1) - var(--se, 0)) * 20, 1); }
+  .cip { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 7px)); }
+  .szleak { opacity: var(--sp); transform: translateY(calc((1 - var(--sp)) * 10px)); }
+  /* mühür penceresi (tıpa): kart k → .52+.055k; SVG kavşak eşleniği
+     --sm ada tarafından aynı değerlerle basılır */
+  .szleak { --mp: clamp(0, (var(--szt, 1) - var(--sm, 0)) * 18, 1); }
+  /* çıkan küme eğrisi — kaynak 10746 birebir: iki pencereli toplam */
+  .szstage { --ck: calc(clamp(0, (var(--szt, 1) - .08) / .26, 1) * .38
+    + clamp(0, (var(--szt, 1) - .60) / .34, 1) * .62); }
+  @media (prefers-reduced-motion: reduce) { .sz-surus { animation: none; } }
+  /* kaynak sızıntı mobil çizelgesi (2900-2907 + 2933-2937) */
+  @media (max-width: 900px) {
+    /* KUTU BÜYÜDÜ, HUNİ ESNEK OLDU (5 Eyl 2026 — Enes'in bildirdiği hata:
+       "huninin son kısmındaki alttaki yazı görünmüyor").
+       ÖLÇÜLDÜ (kapanış karesi, `.szstage` scrollHeight − clientHeight):
+         390x844 → 35 px taşma · 390x667 → 97 · 360x640 → 144 · 430x932 → 13
+       yani `.szend` ("Yeni bütçe değil, kaçan müşteri geri geldi.") kutunun
+       `overflow:hidden`ı altında kesiliyordu ve EKRAN KISALDIKÇA KÖTÜLEŞİYORDU.
+       SEBEP İKİ KATLI: (1) kutu `max-height:calc(100vh-44px)` ile sınırlı ama
+       `.szwrap` `flex:0 0 auto` + sabit yükseklikti — küçülemiyordu, dolayısıyla
+       fazlalık hep en alttan taşıyordu; (2) sabit yüksekliğin formülü
+       (`100vh - 430px`) huni dışındaki payı 430 px sanıyordu, gerçek pay
+       genişliğe göre 419-438 px.
+       ÇARE: kutu mobilde KESİN yükseklik alır (biraz da büyür: üst boşluk
+       22→12 px, yükseklik 100vh−44 → 100vh−24, yani +20 px) ve huni artık
+       ESNEK — başlık ile alt şerit kendi boylarını korur, kalan yeri huni
+       alır. Sihirli sabit yok; her ekranda kendiliğinden çözülür.
+       ÖLÇÜLDÜ (yamadan sonra): 390x844 · 390x667 · 360x640 · 430x932 · 412x915
+       → taşma 0, `.szend` kutunun 17 px içinde. */
+    .szstage { top: 12px; height: calc(100vh - 24px); max-height: none; }
+    .szhd, .szfoot { flex: none; }
+    .szwrap { flex: 1 1 auto; height: auto; min-height: 150px; }
+    .szside { width: 40%; gap: 18px; padding: 4% 0; }
+    .szlt b { font-size: 12px; }
+    .szlt i { display: none; }
+    .szfix { font-size: 8.8px; padding: 4px 8px; }
+    .szstages { width: 34%; }
+    .szst b { font-size: 8.4px; letter-spacing: .08em; }
+  }
+  @media (max-width: 860px) {
+    .szhd { flex-direction: column; align-items: flex-start; }
+    .szbudget { text-align: left; }
+    .szfoot { grid-template-columns: 1fr; }
+    .szend { max-width: 100%; }
+  }
+  /* gölge H14: kaynak .szstage gölgesi (2807) yalnız masaüstünde */
+  @media (min-width: 901px) {
+    .szstage { box-shadow: 0 30px 80px -50px rgba(0, 0, 0, .9); }
+    .szbeat { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .bar.sonra::after { box-shadow: 0 0 22px -8px var(--red-glow, rgba(239, 35, 60, .5)); }
+    .szk i { box-shadow: 0 0 10px var(--red-glow, rgba(239, 35, 60, .5)); }
+  }
+
+  /* ===== HESAPLAYICI — KAYNAĞIN STİLİ (TUR 1, 4 Eyl 2026) =====
+     Kök index.html 2915-2995'ten birebir; iki bilinçli sapma:
+     (a) 'JetBrains Mono' -> var(--f-tek), Manrope -> devralınan aile
+         (anayasa istisna 1, ölçüler kaynaktan);
+     (b) düğme kaynakta .btn.btn-p, burada kabuk düğmesi .dugme — hizalama
+         kuralı (align-self:flex-start) taşındı. */
+  .hssec { margin-top: clamp(20px, 2.6vw, 38px); }
+  .hsbox { border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+    background: linear-gradient(168deg, rgba(239, 35, 60, .05), rgba(255, 255, 255, .015)); }
+  .hshd { padding: clamp(20px, 2.6vw, 36px) clamp(20px, 2.6vw, 40px) clamp(14px, 1.8vw, 24px);
+    border-bottom: 1px solid var(--line); }
+  .hsk { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-tek);
+    font-size: clamp(9px, .76vw, 10.6px); letter-spacing: .16em; text-transform: uppercase;
+    color: var(--red-soft); margin-bottom: 10px; }
+  .hsk i { width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+    box-shadow: 0 0 10px var(--red-glow); }
+  .hshd h2 { margin: 0; font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(1.24rem, 2.5vw, 2.1rem); line-height: 1.12; color: #fff; text-wrap: balance; }
+  .hshd h2 :global(em) { font-style: normal; color: var(--red-soft); }
+  .hshd p { margin: clamp(9px, 1.1vw, 15px) 0 0; max-width: 60ch; color: var(--tx2);
+    font-size: clamp(.9rem, 1.02vw, 1.02rem); line-height: 1.58; }
+  .hsgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .hsinputs { padding: clamp(18px, 2.2vw, 32px) clamp(20px, 2.6vw, 40px);
+    border-right: 1px solid var(--line); display: flex; flex-direction: column;
+    gap: clamp(13px, 1.5vw, 19px); }
+  .hsrow { display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
+  .hslab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .hslab b { color: var(--tx2); font-weight: 500; font-size: clamp(.85rem, .95vw, .98rem); }
+  .hslab em { font-style: normal; font-family: var(--f-tek); font-weight: 700;
+    color: #fff; font-size: clamp(.98rem, 1.2vw, 1.18rem); font-variant-numeric: tabular-nums; }
+  .hsrow.vol .hslab b { color: #fff; font-weight: 650; }
+  .hsrow.vol .hslab em { color: var(--red-soft); font-size: clamp(1.2rem, 1.7vw, 1.62rem); }
+  .hssep { font-family: var(--f-tek); font-size: clamp(8.6px, .74vw, 10.2px);
+    letter-spacing: .13em; text-transform: uppercase; color: var(--tx4);
+    padding-top: clamp(4px, .6vw, 8px); border-top: 1px solid var(--line); }
+  .hsrow input[type=range] { -webkit-appearance: none; appearance: none; width: 100%;
+    height: 5px; border-radius: 4px; background: rgba(255, 255, 255, .1); outline: none;
+    cursor: pointer; }
+  .hsrow input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; border-radius: 50%; background: #fff; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .55), 0 0 0 0 rgba(239, 35, 60, .35);
+    transition: box-shadow .25s var(--e), transform .25s var(--e); }
+  .hsrow input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border: 0;
+    border-radius: 50%; background: #fff; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .55); }
+  .hsrow input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.1); }
+  .hsrow input[type=range]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .55), 0 0 0 6px rgba(239, 35, 60, .3); }
+  .hsrow.vol input[type=range]::-webkit-slider-thumb { background: var(--red);
+    box-shadow: 0 2px 14px -2px var(--red-glow); }
+  .hsrow.vol input[type=range]::-moz-range-thumb { background: var(--red); }
+  .hsout { padding: clamp(18px, 2.2vw, 32px) clamp(20px, 2.6vw, 40px);
+    display: flex; flex-direction: column; gap: clamp(12px, 1.5vw, 20px); }
+  .hsflow { display: flex; flex-direction: column; gap: 7px; list-style: none;
+    margin: 0; padding: 0; }
+  .hsstep { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+  .hsstep i { font-style: normal; color: var(--tx3); font-size: clamp(.78rem, .86vw, .9rem); }
+  .hsstep b { font-family: var(--f-tek); color: #fff; font-weight: 600;
+    font-size: clamp(.88rem, 1vw, 1.04rem); font-variant-numeric: tabular-nums; }
+  .hsbar { grid-column: 1 / -1; height: 6px; border-radius: 4px;
+    background: rgba(255, 255, 255, .06); overflow: hidden; }
+  .hsbar u { display: block; height: 100%; border-radius: 4px; text-decoration: none;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, .14));
+    transition: width .35s var(--e); }
+  .hsstep.last i { color: var(--red-soft); }
+  .hsstep.last b { color: var(--red-soft); font-size: clamp(1rem, 1.15vw, 1.2rem); }
+  .hsstep.last .hsbar u { background: linear-gradient(90deg, var(--red), var(--red-soft));
+    box-shadow: 0 0 20px -8px var(--red-glow); }
+  .hsres { display: flex; align-items: flex-end; gap: clamp(16px, 2.4vw, 34px); flex-wrap: wrap;
+    padding-top: clamp(12px, 1.5vw, 20px); border-top: 1px solid var(--line); }
+  .hsbig, .hssm { display: flex; flex-direction: column; gap: 2px; }
+  .hsbig span, .hssm span { font-family: var(--f-tek); font-size: clamp(8.6px, .74vw, 10.2px);
+    letter-spacing: .13em; text-transform: uppercase; color: var(--tx4); }
+  .hsbig b { font-weight: 800; letter-spacing: -.035em;
+    font-size: clamp(2.4rem, 5.4vw, 4.2rem); line-height: 1; color: var(--red-soft);
+    font-variant-numeric: tabular-nums; }
+  .hssm b { font-family: var(--f-tek); font-weight: 700; color: #fff;
+    font-size: clamp(1.1rem, 1.7vw, 1.6rem); font-variant-numeric: tabular-nums; }
+  .hsnote { margin: 0; color: var(--tx3); font-size: clamp(.82rem, .9vw, .94rem);
+    line-height: 1.55; max-width: 52ch; }
+  .hsout .dugme { align-self: flex-start; }
+  /* ₺ satırı: paranın büyük rakam olması bilinçli — kayıptan kaçınma
+     adetle değil parayla çalışır. Rakam kızıl, üst çizgi kesikli. */
+  .hsres.hspara { border-top: 1px dashed rgba(239, 35, 60, .4); }
+  .hsres.hspara .hsbig b { color: var(--red); }
+  .hsrow.val .hslab em { color: #fff; font-size: clamp(1.05rem, 1.35vw, 1.3rem); }
+  .hsrow.val input[type=range]::-webkit-slider-thumb { background: #fff; }
+  @media (max-width: 860px) {
+    .hsgrid { grid-template-columns: 1fr; }
+    .hsinputs { border-right: 0; border-bottom: 1px solid var(--line); }
+    .hsbig b { font-size: clamp(2.6rem, 14vw, 3.4rem); }
+  }
+  /* --- #flow GORUNURLUK KAPISI: `animation` KISAYOLU play-state'i
+     sifirlar, bu blok o kurallardan SONRA gelmeli (ayni ders: bloktan
+     once dururken .adugum/.ajan-kart/.bi dongude kaliyordu) --- */
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"; 5 Eyl'un --flow view cizelgesi + sonlu tekrar
+     SOKULDU): tel paketleri (ak-iz 3.4s / ak-iz-m 2.6s), dugum dalgasi
+     (hp-dalga 2.667s), ajan satirlari (fsp-dalga 3.18s) ve beyin nabzi
+     (brainPulse 2.6s) kendi zaman gecikmeleriyle SONSUZ doner — yalniz
+     .akis3 kadrajdayken (.akoynar, IO esik .25), cikinca paused.
+     Kaynagin #flow'u da boyleydi: IO(.04) start/stop + rAF tick
+     (kok 9786-9788); burada rAF yok, CSS play-state. */
+  .akis3 { --akps: paused; }
+  .akis3.akoynar { --akps: running; }
+  .adugum, .ajan-kart ol, .bi,
+  .sus-tel .tel-iz, .sus-tel-m .tel-iz { animation-play-state: var(--akps, paused); }
+</style>
+
+<script>
+  /* AKIS KAPISI (Enes, 3 Eyl 2026): .akis3 kadraja girince .akoynar,
+     cikinca kalkar — kaynagin flowKur IO'su (kok 9786-9787, esik .04)
+     ile ayni is; esik .25 (SAAkis/HizmetGovde ile bir). Kaydirma
+     dinleyicisi yok (H12), rAF yok; IO yoksa surekli oynasin (sus). */
+  const akis3 = document.querySelector('.akis3');
+  if (akis3) {
+    if ('IntersectionObserver' in window)
+      new IntersectionObserver((es) => {
+        for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
+      }, { threshold: 0.25 }).observe(akis3);
+    else akis3.classList.add('akoynar');
+  }
+</script>

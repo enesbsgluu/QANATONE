@@ -1,0 +1,82 @@
+{
+ "_": "yeni/film/karehizi-seek.cjs — aday setlerde kare dogru seek; kirmizi once",
+ "olcum": "2026-08-31T23:25:35.465Z",
+ "sonuc": {
+  "referans 24-g8": {
+   "dogru": "31/31",
+   "tam": true,
+   "seek_ms_medyan": 74,
+   "seek_ms_p95": 97,
+   "yapisma": []
+  },
+  "referans 24-g8 s3": {
+   "dogru": "31/31",
+   "tam": true,
+   "seek_ms_medyan": 79,
+   "seek_ms_p95": 96,
+   "yapisma": []
+  },
+  "24g16 s34": {
+   "dogru": "31/31",
+   "tam": true,
+   "seek_ms_medyan": 74,
+   "seek_ms_p95": 106,
+   "yapisma": []
+  },
+  "24g16 s3": {
+   "dogru": "31/31",
+   "tam": true,
+   "seek_ms_medyan": 74,
+   "seek_ms_p95": 89,
+   "yapisma": []
+  },
+  "24g16 s16": {
+   "dogru": "31/31",
+   "tam": true,
+   "seek_ms_medyan": 80,
+   "seek_ms_p95": 89,
+   "yapisma": []
+  },
+  "12g8 s34": {
+   "dogru": "34/34",
+   "tam": true,
+   "seek_ms_medyan": 79,
+   "seek_ms_p95": 97,
+   "yapisma": []
+  },
+  "12g8 s3": {
+   "dogru": "34/34",
+   "tam": true,
+   "seek_ms_medyan": 78,
+   "seek_ms_p95": 82,
+   "yapisma": []
+  },
+  "12g8 s16": {
+   "dogru": "34/34",
+   "tam": true,
+   "seek_ms_medyan": 76,
+   "seek_ms_p95": 85,
+   "yapisma": []
+  }
+ },
+ "kirmizi": {
+  "dogru": "2/31",
+  "tam": false,
+  "seek_ms_medyan": 74,
+  "seek_ms_p95": 89,
+  "yapisma": [
+   "1→0",
+   "3→2",
+   "5→4",
+   "7→6",
+   "9→8",
+   "11→10",
+   "13→12",
+   "15→14",
+   "17→16",
+   "19→18"
+  ],
+  "yakalandi": true
+ },
+ "hukum": "GECTI"
+}

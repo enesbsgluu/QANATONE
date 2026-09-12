@@ -1,0 +1,204 @@
+import { defineConfig } from 'astro/config';
+
+import { fileURLToPath } from 'node:url';
+import react from '@astrojs/react';
+
+/* PROLOG ANAHTARI BURADA DEGIL — denendi ve OLCUMLE ELENDI (6 Eyl 2026).
+   `vite.define` ile `import.meta.env.PROLOG_ACIK` sabiti gomulup sayfada
+   olu dal uretildi; Astro sayfanin CSS'ini TREE-SHAKE'ten ONCE modul
+   grafiginden topladigi icin `film.<hash>.css` (8.011 B) kapaliyken de
+   sayfaya BAGLI kaldi (css farki 0 B). Calisan yol: ITHALIN METNINI
+   uretmek — `yeni/kabuk-derle.cjs` her derlemede `PrologYuvasi.astro`
+   yazar. Bu not, ayni yolun ikinci kez denenmemesi icin duruyor. */
+
+/* KUNYE TARAYICIYA GITMIYOR (24 Agu). Prolog JSON'lari hem VERI hem
+   KUNYE tasiyor: her blogun `_` alani o sayinin NEDEN o oldugunu
+   yaziyor ve bu bilerek boyle - sayi ile gerekcesi ayni dosyada durur,
+   ikisi birlikte degisir. Ama `_`yi calisma zamaninda okuyan HICBIR
+   sey yok; parcaya girdigi yer yalnizca ziyaretcinin indirdigi bayt.
+   OLCULDU: sahne.json minified 18.811 B, `_` soyulunca 5.152 B - yani
+   %73'u proz. amblem.json'da 22.522 -> 19.891 B. Kunyeye her yeni blok
+   eklendiginde halka parcasi buyuyordu ve 24 KB tavanini asti.
+   Cozum kunyeyi kisaltmak DEGIL - belgeyi bayt ugruna budamak bu
+   projede yanlis takas. Kunye kaynakta tam kaliyor, derlemede
+   soyuluyor. Denetim iki tarafi da tutuyor: kaynakta `_` bulunmali,
+   cikti parcasinda BULUNMAMALI. */
+const kunyeyiSoy = () => ({
+  name: 'qanatone-kunye-soy',
+  enforce: 'pre',
+  transform(kod, kimlik) {
+    /* 2 Eyl 2026 (R23): sokum sonrasi tek aday src/prolog/amblem.json
+       (nav logosu kaynagi, R19). Bugun onu ithal eden yok; desen, biri
+       ithal ederse kunye prozunun pakete sizmamasi icin duruyor. */
+    if (!/[\\/]src[\\/]prolog[\\/][^\\/]+\.json$/.test(kimlik)) return null;
+    const soy = (o) => Array.isArray(o)
+      ? o.map(soy)
+      : (o && typeof o === 'object'
+          ? Object.fromEntries(Object.entries(o)
+              .filter(([k]) => !k.startsWith('_'))   /* 24 Agu: `_` ile BASLAYAN her anahtar kunyedir */
+              .map(([k, v]) => [k, soy(v)]))
+          : o);
+    return { code: JSON.stringify(soy(JSON.parse(kod))), map: null };
+  },
+});
+
+/* QANATONE yeni kabuk — Faz 0 (Astro kararı belgesi, 18 Ağu 2026).
+   Mevcut site aynen yaşar; bu proje dist altına basar ve /yeni/*
+   adresinden yayına çıkar. Kök adrese alma Faz 4'ün işi.
+   Veri kaynağı TEK: kökteki content.json (panelin ürünü) Content
+   Collections'a beslenir — iki üreteç doğurmama ilkesi burada da geçerli. */
+export default defineConfig({
+  /* KESME · ADIM 1 (6 Eyl 2026, Faz 4). Uc satir ve kesmenin KALBI bu:
+       site   netlify.app       -> qanatone.com   (alan adi bagli)
+       base   '/yeni'           -> '/'            (kabuk kok adrese cikti)
+       outDir '../dist'    -> '../dist'      (eski site artik uretilmez)
+     `import.meta.env.BASE_URL` okuyan her yer KENDILIGINDEN duzelir;
+     sabit yazilmis `/yeni/...` yollari adim 3'te elle degisti.
+     DIKKAT: Astro outDir'i derleme basinda TEMIZLER — yani bu satirla
+     birlikte eski sitenin dist ciktisi da silinir. Karar Enes'in
+     (6 Eyl): "Eski site TAMAMEN kalkiyor, arsiv yok."
+     GERI ALMA: `git revert` bu commit'i alir, `node build.js` eski
+     siteyi yeniden uretir. */
+  /* BIRINCIL ALAN ADI: www (Enes karari, 6 Eyl 2026).
+     Gerekce KAYDA GECIYOR, cunku bu bir tercih degil ZORUNLULUK:
+     harici DNS apex icin CNAME tasiyamaz, o yuzden apex TEK bir yuk
+     dengeleyici adresine sabitlenir ve CDN yonlendirmesinden
+     yararlanamaz. DNS Natro tarafinda BIRAKILDI cunku e-posta
+     kayitlari orada duruyor. Bu kararin bedeli: birincil alan adi
+     bir ALT ALAN ADI oluyor. Apex 301 ile wwwye duser (Netlify).
+     Buradaki deger canonical + sitemap + og:url + JSON-LD + Link
+     basliklarinin HEPSINI besler; degistirilirse 65 sayfa yeniden
+     uretilmeli ve LINK BASLIKLARI: 64 sayfa · 128 yol · 174 alternate · _headers 44065 B tekrar kosulmali.
+     Bekci: kesme-supurme.cjs — canonical SUNULAN KONAKLA ayni mi. */
+  site: 'https://www.qanatone.com',
+  base: '/',
+  output: 'static',
+  outDir: '../dist',
+
+  /* CSS SATIR ICINE (19 Agu, hero turunda olculdu): Astro'nun 'auto'
+     esigi ana sayfanin stilini (16 KB ham) disarida birakiyordu ve
+     Lighthouse engelleyici zinciri FCP/LCP'ye 1.200 ms yaziyordu —
+     6 KB'lik iki dosya icin iki tur. 'always' ile sifir engelleyici
+     istek kaliyor; bedeli sayfa basina ~2 KB gzip fazladan HTML ve
+     CSS'in sayfalar arasi onbelleklenememesi. Olcum ikisini de gordu,
+     tur maliyeti agir basti.
+
+     19 AGU · KARAR YENIDEN OLCULDU VE KORUNDU. Sebep: ana sayfanin gzip
+     HTML'i 26,9 KB'a cikti ve TCP ilk tikanma penceresini asmanin bedeli
+     olculmustu (bir tam RTT, S-A turu). Uc varyant ayni agactan derlenip
+     ayri portlardan, kosum duzeyinde donusumlu olculdu:
+       always : HTML 126,8 KB ham / 26,9 KB gzip · dis CSS yok
+       auto   : HTML  73,7 KB ham / 15,9 KB gzip · dis CSS 53,2 KB (11,4 gzip)
+       never  : auto ile BIREBIR AYNI cikti (CSS her halukarda esigi asiyor)
+     Lighthouse mobil, 6 tur ortancasi:
+       always -> LCP 1.924 ms · never -> LCP 2.042 ms  (+118 ms)
+     HTML'i esigin altina indirmek bir RTT KAZANDIRIYOR ama engelleyici
+     CSS istegi bir RTT + 11,4 KB transfer GERI ALIYOR; net sonuc satir
+     icinin lehine.
+     Sayfalar arasi taraf da olculdu (soguk ana sayfa + uc ic sayfa,
+     4x CPU, 150 ms RTT): satir icinde ic sayfalar 12/12/10 KB iniyor,
+     dis CSS'te 14/6/4 KB — sayfa basina ~6 KB kazanc. Gercek ama kucuk;
+     LCP'nin olculdugu GIRIS sayfasi satir icini istiyor.
+     SONUC: bayt tavaninin kaldiraci "CSS'i disari almak" DEGIL, "daha az
+     CSS yazmak". H18 tavani (28 KB) bu yuzden duruyor. */
+  /* GECE ZINCIRI TUR 3 (2 Eyl 2026) — ORTAK VARLIK AYRISTIRMA: 'always' ->
+     'auto'. Olculdu (once): satir ici oran ort %65, ikinci sayfa agdan
+     43-90 KB (yerel sunucu _headers'i uyguluyor). 'auto': 4 KB altindaki
+     sayfaya ozgu stil satir ici kalir (kritik), ortak/buyuk stil hash'li
+     _astro/*.css dosyasina cikar ve immutable onbellekten gelir. Sonuc
+     ve LCP kiyasi olc-varlik-once/sonra.json + gece raporu. */
+  build: { inlineStylesheets: 'auto' },
+
+  trailingSlash: 'ignore',
+
+  /* Faz 1 / J1: ic baglantilara prefetch — Astro'nun kucuk betigi,
+     sayfa basina JS tavaninin icinde; olcusu yeni/denetim.js'te. */
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+
+  integrations: [
+    react(),
+    /* AJAN HATTI (5 Eyl 2026) — `.md` esleri, llms.txt, agents.md ve
+       agent-permissions.json derlemenin SONUNDA, CIKTIDAN turetilir.
+       NEDEN ENTEGRASYON, NEDEN ELLE URETEC DEGIL: elle kosan bir uretec
+       (bkz. link-basliklari.cjs) tazeligini ayri bir kuralla tutmak
+       zorunda kaliyor (L1). Kanca derlemenin parcasi oldugu icin o borc
+       hic dogmuyor: derleme neyse cikti odur. */
+    {
+      name: 'qanatone-ajan-hatti',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { uret } = await import('./ajan-hatti.mjs');
+          const o = uret(fileURLToPath(dir));
+          logger.info(`ajan hatti: ${o.md} .md esi · ${o.sayfa} sayfa`);
+        },
+      },
+    },
+    /* LINK BASLIKLARI ARTIK ZINCIRDE (9 Eyl 2026 — MIMARI ONARIM).
+       ONCEDEN ELLE KOSUYORDU ve bedeli OLCULDU: content.json'a panelden
+       TEK BIR PROJE eklenince derleme yesil, ama denetim UC KURALDAN
+       IKISINI kirmiziya cevirdi —
+         L1  "_headers Link blogu BAYAT: eksik/farkli 4 girdi"
+         T3  "html yolunda md alternatifi yok: /projeler/<yeni>/"
+       Yani Enes panelden proje/yazi/hizmet EKLEDIGI anda deploy DUSUYORDU;
+       ekleme yayina cikmiyordu bile. Silme de ayni: silinen sayfanin
+       Link satiri _headers'ta kaliyor ve olu adresi ilan etmeye devam
+       ediyordu.
+
+       COZUM DEPONUN KENDI KARARIYDI, yeni bir sey degil: ajan hattinin
+       basindaki not zaten "elle kosan bir uretec (bkz. link-basliklari.cjs)
+       tazeligini ayri bir kuralla tutmak zorunda kaliyor (L1); kanca
+       derlemenin parcasi oldugu icin o borc hic dogmuyor" diyor. Uretec
+       simdi o kancaya alindi ve borc kapandi.
+
+       SIRA SART: AJAN HATTINDAN SONRA. Uretec her sayfanin `.md` esini
+       DISKTE arar (`varMi`); ajan hatti onlari bu kancada uretiyor, once
+       kosarsa hicbir es bulunmaz ve uretec 3 ile cikar.
+
+       IKI YERE YAZILIR: kaynak `public/_headers` (uretecin kendi isi) ve
+       `dist/_headers`. Ikincisi sart cunku Astro public/'i dist'e
+       derlemenin BASINDA kopyalar — kanca calistiginda kopya coktan
+       alinmis olur; yalniz kaynagi guncellemek dist'i BAYAT birakirdi
+       (ve L1 tam olarak bunu kirmiziya cevirirdi). */
+    {
+      name: 'qanatone-link-basliklari',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { execFileSync } = await import('node:child_process');
+          const { copyFileSync } = await import('node:fs');
+          const { join, dirname } = await import('node:path');
+          const kok = dirname(fileURLToPath(import.meta.url));
+          const cikti = execFileSync(process.execPath,
+            [join(kok, 'link-basliklari.cjs')], { encoding: 'utf8', cwd: kok });
+          copyFileSync(join(kok, 'public', '_headers'),
+            join(fileURLToPath(dir), '_headers'));
+          logger.info(cikti.trim().split(String.fromCharCode(10)).pop());
+        },
+      },
+    },
+    /* INDEXNOW (6 Eyl 2026 — KESME-PLANI adim 9). Ayni gerekce: kanca
+       derlemenin parcasi, adres kumesi CIKTIDAKI sitemap'ten turer.
+       AJAN HATTINDAN SONRA kosar; sirasi onemli degil (sitemap'i ikisi de
+       yalnizca okur) ama bildirim agi bekledigi icin en sona konuldu. */
+    {
+      name: 'qanatone-indexnow',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const { bildir } = await import('./indexnow.mjs');
+          await bildir(fileURLToPath(dir), logger);
+        },
+      },
+    },
+  ],
+
+  /* 2 Eyl 2026 (R23 sokumu): prolog-ada manualChunks ve isci (worker)
+     hatti kalkti — ada betigi ve isci paketi kaynaktan sokuldu, kod
+     tabaninda worker kalmadi. */
+  /* HAREKET ACMA DUGMESI (11 Eyl 2026): hareket azaltma bloklarindaki her
+     secici `hareket-ac` bayragina baglanir — gerekce ve kurallar
+     hareket-ac.mjs'te; bekci denetim HA1. Astro bilesen stilleri de bu
+     hattan gecer (Vite CSS/PostCSS). */
+  vite: {
+    plugins: [kunyeyiSoy()],
+    css: { postcss: { plugins: [(await import('./hareket-ac.mjs')).default()] } },
+  }
+});

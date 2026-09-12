@@ -1,0 +1,182 @@
+---
+/* ============================================================
+   >>> KESME ADAYI · PROLOG CALISINCA KALDIRILACAK <<<
+   Enes'in karari (21 Agu, CODE-TALIMATI-PROLOG-1 "Ayrica"):
+   dort bolum kaldirilacak ama SIMDI DEGIL — once prolog calissin,
+   kesme ondan sonra tek islemde yapilsin. Bu blok o gunun listesi:
+     katman (SKKatman) · akis (SAAkis) · sektor+pano (SSESektor) ·
+     kanal izgarasi (SSZSozler)
+   ISARET SILINMEZ. Kaldirma karari Enes'in; kaldiran commit bu dort
+   dosyayi birlikte alir ve `KESME-PLANI.md` 3b'yi kapatir.
+   Bekcisi: yeni/denetim.cjs R13 (dort isaretin de yerinde oldugunu
+   olcer — biri sessizce dusunce kirmizi doner).
+   BU BOLUM: akis — 27 ak* keyframe tasiyan en buyuk sahne
+   ============================================================ */
+/* S-A · AKIŞ — göçün beşinci sahnesi, kaynağın en ağır bölümü.
+   Kaynak: kök index.html · markup 4803-4818 · CSS 2653-4290 (~927 satır,
+   27 `ak*` keyframe) · üreteç `__akisRender` 7064 · `akDemo` 6917 ·
+   `akLiveKur` 7092 · `akisScrollKur` 7099.
+
+   BU TURDA NE TAŞINDI: sahnenin İSKELETİ — beş hizmet kartı + "tüm
+   hizmetler" kartı, yatay şerit, içerik ve bağlantılar. Sekiz mini demo
+   sahnesi (27 keyframe) BU TURDA TAŞINMADI; gerekçesi ve listesi
+   stil/akis.css başında, kararı giydirme turunun.
+
+   EN BÜYÜK KAZANÇ İÇERİKTE: eski tarafta bu bölümün markup'ı tek satırdı
+   (`<div class="aktrack" id="akTrack"></div>`) ve kartların tamamını
+   `__akisRender` basıyordu — yani JS koşmayan bot BU BÖLÜMDE HİÇBİR ŞEY
+   görmüyordu: beş hizmetin adı da, anlatımı da, hizmet sayfalarına giden
+   beş bağlantı da yoktu. Artık derlemede HTML'e pişiyor (madde 1).
+
+   Ada JS'i: YOK. Yatay şerit yerli kaydırma + `scroll-snap`; klavye için
+   şerit odaklanabilir. Eski taraftaki sürükleme ve ok düğmeleri bu turda
+   gelmedi (aşağıda 4. sapma). */
+import '../stil/akis.css';
+import Ikon from '../parcalar/Ikon.astro';
+import AkisDemo from '../parcalar/AkisDemo.astro';
+import { icerik, T, suz, sl } from '../icerik';
+import { ton } from '../ton';
+
+interface Props { dil?: 'tr' | 'en' }
+const { dil = 'tr' } = Astro.props;
+const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
+const g = (k: string): string => T(s[k], dil);
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const en = dil === 'en';
+/* TUR 9 (3 Eyl 2026): dil oneki — EN sayfa TR hizmet sayfalarina bagliyordu
+   (dil sizintisi, bekci H26). Nav/HizmetDizin ile ayni kalip. */
+const on = en ? '/en' : '';
+
+/* Şeritte kaç kart duracağı ve HANGİLERİ: kaynağın kuralı aynen —
+   hizmet sırasının ilk beşi, sıra panelden değiştirilebilir (kaynak
+   yorumu 7049). Dokuzunun tamamı burada dururken bölüm sayfanın en ağır
+   metin bloğuydu. */
+const AKIS_KART = 5;
+/* Kartta hizmet metninin YALNIZ ilk cümlesi durur (kaynak `ilkCumle`
+   7058): tamamı zaten hizmet sayfasında; kartta dört cümle okutmak aynı
+   metni ana sayfada üçüncü kez basmak demekti. Nokta + boşluk + büyük
+   harf aranır, "3,1×" gibi ondalıklarda kesmesin diye. */
+const ilkCumle = (t: string): string => {
+  const m = String(t || '').match(/^[\s\S]*?[.!?](?=\s+[A-ZÇĞİÖŞÜ])/);
+  return m ? m[0] : String(t || '');
+};
+/* Kart tonu — kaynak `HUE` (6889): ortak modülden (ton.ts), hizmet
+   detay demosu aynı diziden okur (kart ↔ detay ton tutarlılığı). */
+const kartlar = (icerik.services || []).slice(0, AKIS_KART);
+/* Demo anahtari — kaynagin kurali (akKind 6908): slug eslemesi + panelden
+   yeni hizmet gelirse aile yedegi. Ana sayfa seridinin besi. */
+const AKMAP: Record<string, string> = { 'google-ads': 'ads', 'meta-ads': 'social',
+  'ai-ajan': 'agent', 'seo': 'serp', 'geo': 'chat' };
+const demoK = (h: any): string => {
+  if (AKMAP[h.slug]) return AKMAP[h.slug];
+  if (h.fam === 'funnel') return 'ads';
+  if (h.fam === 'flow') return 'agent';
+  if (h.fam === 'climb') return h.det && h.det.ai ? 'chat' : 'serp';
+  return 'serp';
+};
+---
+{/* SADAKAT (sokum turu): kaynak `#akis` (kok index.html 4643-4660) .shead
+    KULLANMIYOR — baslik blogu `.akht` (kuralsiz), etiket `.mono` (12px,
+    cizgisiz), h2 UA olcusunde (1.5em = 24,75 px, olculdu), p govde
+    varsayilani (16,5 px, beyaz). Bu yuzden .kunye/.s1-buyuk/.s1-alt
+    BURADA YOK: uclu ortak olcegi (66 px h2) basardi. Kurallar akis.css. */}
+<section class="sa-sahne" id="akis" data-sahne="a">
+  <div class="sa-ic">
+    <div class="sa-bas">
+      <div class="sa-metin">
+        <span class="sa-etiket">{g('akk')}</span>
+        <h2 set:html={suz(g('akh'), ['em', 'b', 'br', 'span.thin'])} />
+        <p>{g('akp')}</p>
+      </div>
+      {/* OK DUGMELERI (sokum turu, 4 Eyl): kaynak 4651-4654 (.aknav) —
+          serit yerli kaydirma, dugmeler scrollBy; fare surukleme adada. */}
+      <div class="sa-nav">
+        {/* EN etiketi kaynaktan: aria-label="Previous" (kok /en). "Back" sapmaydi — ANAYASA, 3/4 Eyl 2026 */}
+        <button type="button" id="akPrev" aria-label={en ? 'Previous' : 'Geri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button type="button" id="akNext" aria-label={en ? 'Next' : 'İleri'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  {/* Şerit: yerli yatay kaydırma. `tabindex` klavyeyle kaydırılabilsin
+      diye (ada JS'i olmadan erişilebilirliğin karşılığı budur). */}
+  <div class="sa-ray" tabindex="0" role="group"
+    aria-label={en ? 'Services, scrollable list' : 'Hizmetler, yana kaydırılır liste'}>
+    {kartlar.map((h: any, i: number) => (
+      <a class="sa-kart" href={sl(`${B}${on}/hizmetler/${h.slug}`)} style={ton(i)}>
+        {/* Gorsel alan artik CALISAN mini demo (giydirme); ikon kucijlup
+            basligin yanina gecti — kaynagin kendi dili (6898). Demo
+            aria-hidden: ayni bilgi kartin yazisinda ve hizmet sayfasinda. */}
+        <span class="sa-gorsel" aria-hidden="true"><AkisDemo k={demoK(h)} dil={dil} /></span>
+        <span class="sa-yazi">
+          <h3><Ikon ad={h.icon} sinif="sa-ikon-k" />{T(h.title, dil)}<Ikon ad="arrow" sinif="sa-ok" /></h3>
+          <p>{ilkCumle(T(h.text, dil))}</p>
+        </span>
+      </a>
+    ))}
+    {/* Kalan hizmetler kaybolmasın: şeridin sonunda arşive giden kart.
+        Kök sitenin /hizmetler ızgarası — yeni kabukta henüz o rota yok,
+        deste sahnesindeki /projeler kararının aynısı. */}
+    {/* Dizin artık adada — rota turu 1. sayfa; H16 bekçiliyor. */}
+    <a class="sa-kart sa-tum" href={sl(`${B}${on}/hizmetler`)}>
+      <span class="sa-yazi">
+        <h3>{en ? 'All services' : 'Tüm hizmetler'}<Ikon ad="arrow" sinif="sa-ok" /></h3>
+        <p>{en ? 'Nine services, one line. See the whole list.'
+               : 'Dokuz hizmet, tek hat. Listenin tamamını gör.'}</p>
+      </span>
+    </a>
+  </div>
+</section>
+
+<script>
+  /* ADA (giydirme) — Anayasa S-A recetesi: demolar YALNIZ gorunurken
+     oynar; durdurma animation-play-state ile (animation-name degistirme
+     YOK), anahtar kart KOKUNDE (--akps degiskeni, .akd * evrenseli yok).
+     Acilista sinif YAZILMAZ (S-K dersi: acilis yazimi LCP itmisti) —
+     kartlar paused dogar, IO gorunenleri oynatir. content-visibility
+     kullanilmiyor (sart c). Ada butcesi <=0,7 KB. */
+  /* OK DUGMELERI + FARE SURUKLEMESI (sokum turu, 4 Eyl) — kaynak
+     akisScrollKur 6863-6888 birebir: adim = kart genisligi + bosluk,
+     6 px esigiyle tiklama yutma, .drag sinifi (snap kapali, grabbing). */
+  const ray = document.querySelector<HTMLElement>('.sa-ray');
+  if (ray) {
+    /* H12: duzen OKUNMAZ — adim, kartin CSS olcusunden innerWidth ile
+       turetilir; snap zaten hizalar. OLCULER KAYNAKTAN (3 Eyl, akis
+       ajani kart genisligini kaynaga cekti; kok index.html 2520/2525/
+       2551 = akis.css 110/120/152): kart clamp(272px,23vw,336px), <=640
+       min(280px,76vw); bosluk clamp(16px,2vw,24px). Kaynak JS (6866)
+       gercek genisligi okuyup +20 SABIT ekliyordu — burada bosluk CSS
+       gap'in kendisi (kart+gap = gercek adim), sapma bilincli. */
+    const adim = () => { const w = innerWidth; return (w > 640 ? Math.min(336, Math.max(272, w * .23)) : Math.min(280, w * .76)) + Math.min(24, Math.max(16, w * .02)); };
+    document.getElementById('akPrev')?.addEventListener('click', () => ray.scrollBy({ left: -adim(), behavior: 'smooth' }));
+    document.getElementById('akNext')?.addEventListener('click', () => ray.scrollBy({ left: adim(), behavior: 'smooth' }));
+    /* H12: scrollLeft OKUNMAZ/YAZILMAZ — surukleme artimli scrollBy ile
+       (son isaretci konumundan fark); okuma yok, dinleyici pointermove. */
+    let down = false, sx = 0, lx = 0, moved = 0;
+    ray.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; down = true; moved = 0; sx = lx = e.clientX; ray.classList.add('drag'); });
+    addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > moved) moved = Math.abs(dx); ray.scrollBy(lx - e.clientX, 0); lx = e.clientX; }, { passive: true });
+    addEventListener('pointerup', () => { down = false; ray.classList.remove('drag'); });
+    ray.addEventListener('click', (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
+  }
+  /* SURUCU KURALI (Enes, 3 Eyl 2026 — CLAUDE.md "Surec demolari
+     gorunurlukte canli"; onceki 5 Eyl "kaydirmaya baglanir" kurali
+     KALKTI, ViewTimeline sur() SOKULDU): demo kaydirdikca ilerlemez;
+     kart kadraja girince kendi ritminde SONSUZ doner, cikinca durur —
+     kaynagin #akis.aklive deseni (kok index.html 3757 `.akd *
+     {animation-play-state:running}` + 6853-6857 IO toggle). Burada
+     anahtar kart kokunde: .sa-kart{--akps:paused} / .sa-kart.akoynar
+     {--akps:running} (akis.css 169-170); keyframe sureleri kaynak
+     degerleri (akis.css: 5.6s/5.4s/6s/4.8s/2.6s infinite). Esik .25:
+     kartin ceyregi gorununce oynar. Kaydirma dinleyicisi yok (H12),
+     rAF yok; reduced-motion CSS'te animation:none (H11). */
+  const kartlar = document.querySelectorAll('.sa-kart');
+  if (kartlar.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) e.target.classList.toggle('akoynar', e.isIntersecting);
+    }, { threshold: 0.25 });
+    kartlar.forEach((k) => io.observe(k));
+  } else {
+    /* IO yoksa: surekli oynasin — icerik zaten statik, bu yalniz sus. */
+    kartlar.forEach((k) => k.classList.add('akoynar'));
+  }
+</script>

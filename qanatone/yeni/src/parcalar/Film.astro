@@ -1,0 +1,792 @@
+---
+/* FILM · SCROLL-SCRUB ADASI — ISKELET (27 Agu 2026).
+   39 klip tek zaman cizelgesine dikilir; kaydirma filmi oynatir
+   (DEVIR-SPESIFIKASYONU §3, Secenek B: klipler ayri yuklenir, sinirda el
+   degisimi — HIGGSFIELD motorunun multi-leg kurgusu, §5 esleme).
+   Secenek A (tek mp4) BILEREK secilmedi: motor sozlesmesinin poster/klip
+   basina degismezleri ve seri on-yukleme yalniz B'de anlamli; montaj-
+   duzenek E7/E11 tek filmin yavas hatta sarmaya uygun olmadigini olctu.
+
+   BU TURDA YOK (bilerek): hikaye metni · giris Q sahnesi · final devri.
+   Motor nav/dugme/ipucu/baslik kurmaz (sert degismez #6) — sayfanin isi.
+
+   SAYILAR DOM'A KUNYEDEN INER: sure/kare/bas `sahneler.ts` -> ffprobe.
+   Tarayiciya kanon.json inmez; motor data-* okur.
+
+   IKI YOL, AYNI MARKUP:
+     JS + hareket acik  -> `<html class="fl-js">`, motor `import()` ile
+                          iner, sahneler ust uste yapisik kare, yalniz
+                          etkin + iki komsu yerlesik.
+     hareket azaltma / JS yok -> motor HIC inmez, hicbir video fetch
+                          edilmez (sert degismez: reduced-motion'da sifir
+                          video); 39 poster duz sutun olarak okunur.
+   `<video>` etiketlerinde src YOK: kaynak yalniz motor tarafindan Blob
+   olarak verilir. Bu, V1'in ("veri derlemede piser") ruhuyla uyumlu:
+   sayfa kendiliginden hicbir sey cekmez.
+
+   POSTER <img>: yalniz ilk sahne eager (ilk boya), obur 38'i lazy — ve
+   JS yolunda `display:none` sarmal icinde oldukları icin HIC INMEZ
+   (prolog katmanlarinin dersi: gizli tembel gorsel istek atmaz). */
+import '../stil/film.css';
+import { SAHNELER, FPS, TOPLAM_SN, PX_SN, SERTLIK, SONUM, TAVAN, AKIS, MOMENT, HIZALA } from '../film/sahneler';
+/* DEVIR KUNYESI (31 Agu 2026, v3): son karedeki ekran dortgeni + son kare
+   BUYUME HIZI. ELLE YAZILMIYOR — `film/ekran-kose.cjs` iz modunun (f20db52)
+   k119/k120 KOSE olcumunden turetiliyor. Kutu olcumu (ekran-dikdortgen.json)
+   artik kullanilmiyor: oz-dogrulamasi kendisi "AYRISMADI" diyordu, kose
+   olcumu ise dortgenin dikdortgenligini de (ic acilar 90 +- 0,3) kanitladi.
+   Oran olarak tasinir: video `object-fit: cover` ile olceklendigi icin
+   tasinabilir olan sey piksel degil orandir. */
+import KOSE from '../../film/ekran-kose.json';
+
+/* k119 + k120 yoksa DERLEME KIRMIZI: kunye olcumsuz kalamaz. (ekran-kose.cjs
+   tek-kare modunda kosulursa dosyada `kare: 120` kalmaz — sessiz eskime
+   yerine derleme burada durur.) */
+const kareBul = (n: number) => (KOSE as any).kareler.find((k: any) => k.kare === n && k.kose);
+const K120 = kareBul(120), K119 = kareBul(119);
+if (!K120 || !K119) throw new Error('ekran-kose.json k119/k120 yok — devir künyesi ölçümsüz kalamaz (node yeni/film/ekran-kose.cjs iz modu, f20db52)');
+/* dort koseden eksen-hizali dortgen: olcum ic acilari 90 +- 0,3 verdi,
+   kose ciftlerinin ortalamasi dortgenin kendisidir (alt kenar +-4 px
+   gurultulu, ortalama onu da yumusatir). */
+const eksen = (k: any) => {
+  const K = k.kose;
+  return {
+    sol: (K.solUst[0] + K.solAlt[0]) / 2, sag: (K.sagUst[0] + K.sagAlt[0]) / 2,
+    ust: (K.solUst[1] + K.sagUst[1]) / 2, alt: (K.solAlt[1] + K.sagAlt[1]) / 2,
+  };
+};
+const e120 = eksen(K120), e119 = eksen(K119);
+const DEVIR = {
+  sol: e120.sol / K120.W, ust: e120.ust / K120.H,
+  gen: (e120.sag - e120.sol) / K120.W, yuk: (e120.alt - e120.ust) / K120.H,
+  /* SON KARE HIZI: dortgen son karede hala buyuyor (k119->k120 genislik
+     farki ~0,5 px/kare). 1x okumada olcek hizi (1/s) olarak tasinir;
+     surucu bunu varis temposuyla carpar (hiz surekliligi). */
+  hiz: ((e120.sag - e120.sol) - (e119.sag - e119.sol)) * FPS / (e120.sag - e120.sol),
+};
+
+/* PROLOG ANA SAYFAYA (3 Eyl 2026, ANAYASA istisna 4 'Prolog. Yeni'):
+   sayfa='ana' -> film ana sayfanin ONUNDE; devir tamamlaninca (TV acilisi
+   bitince) film katmani SOKULUR ve site normal akisa gecer (atlama yolunun
+   sokumuyle ayni: sok + siniflar + scrollTo(0,0)). sayfa='film' -> /film
+   olcum zemini, davranis DEGISMEDI (govde sabit katman, tubes). */
+interface Props { dil?: 'tr' | 'en'; sayfa?: 'film' | 'ana' }
+const { dil = 'tr', sayfa = 'film' } = Astro.props;
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* TUR 5 v2 · ANLATI METNI (2 Eyl 2026 gece, Enes yeniden yazdi —
+   v1'in alti cumlesi 113 saniyeye cok seyrek dusuyordu ve teklif duz
+   soylenmiyordu). 21 metin blogu (18 vurus; 1/5/13 cift cumleli tek
+   vurus) + 6 perde kunyesi, iki dil. Metin kaynagi:
+   PROLOG-ANLATI-METNI.md (BIREBIR — #20 kilitli). PENCERELER ELLE
+   SECILMEDI: vurus-harita.py, kamera-fark olcumunden DP ile; harita ve
+   gerekceler yeni/film/TUR5-METIN-HARITASI.md. Gorunurlugu MOTOR surer
+   (kaydirma konumuna bagli — geri sarilirsa geri gelir); kunyeler de
+   ayni mekanizma (fl-soz sinifini paylasir), perde araligi boyunca
+   surekli. RAKAM KAPISI KAPANDI (Enes, 1 Eyl dogrulamasi + 3 Eyl
+   metin duzeltmesi): 33 km ve 300 m Gonabad'dan; "50 m'de kuyu"
+   UYDURMA KESINLIKTI -> "yuzlerce dikey kuyu"; "3000 yil" yuvarlamaydi
+   -> "iki bin bes yuz"; derinlestirme iddiasi dogrulanamadi -> "bakimi
+   birakilirsa dolar"; #20 pompa cumlesi yeniden yazildi. Kaynak satiri
+   .fl-kaynak (son perde). Ayrinti: PROLOG-ANLATI-METNI.md "RAKAMLAR". */
+const SOZLER = [
+  { bas: 0.30, son: 3.90, tr: 'Su dağın altında. Şehir çölün ortasında. Arada otuz üç kilometre kaya.', en: 'The water is under the mountain. The city is in the middle of the desert. Thirty-three kilometres of rock between them.' },
+  { bas: 5.30, son: 8.90, tr: 'Bunu geçmenin iki yolu var.', en: 'There are two ways to cross that.' },
+  { bas: 20.38, son: 23.98, tr: 'Pompa çalıştığı sürece su verir. Durduğu anda keser.', en: 'A pump gives water while it runs. It stops the moment it stops.' },
+  { bas: 25.38, son: 28.98, tr: 'Kanal bir kez kazılır. Sonra kendi kendine akar.', en: 'A channel is dug once. After that it flows on its own.' },
+  { bas: 40.13, son: 43.73, tr: 'Kanalı seçenler işe tek bir kuyuyla başladı. Üç yüz metre, yalnızca suyun nerede olduğunu bulmak için.', en: 'The ones who chose the channel began with a single well. Three hundred metres, only to find where the water was.' },
+  { bas: 54.59, son: 58.19, tr: 'Gerisi tek bir sayıdır. Her kilometrede bir metre iniş.', en: 'The rest comes down to one number. One metre of drop for every kilometre.' },
+  { bas: 70.34, son: 73.94, tr: 'Fazlası kanalı aşındırır. Azı suyu durdurur.', en: 'Too much and the channel erodes. Too little and the water stops.' },
+  { bas: 76.09, son: 79.69, tr: 'Otuz üç kilometre boyunca yüzlerce dikey kuyu açılır.', en: 'Across thirty-three kilometres, hundreds of vertical shafts are sunk.' },
+  { bas: 84.84, son: 88.44, tr: 'Kazı, ancak ölçülebildiği yerde ilerler.', en: 'Digging only advances where it can be measured.' },
+  { bas: 92.14, son: 95.74, tr: 'İki bin beş yüz yıl geçti. Problem yerinde duruyor.', en: 'Two and a half thousand years on, the problem is unchanged.' },
+  { bas: 99.64, son: 103.24, tr: 'Kanal hâlâ kanal. Değişen, içinden akan şey.', en: 'The channel is still a channel. What runs through it is not.' },
+  { bas: 104.64, son: 108.24, tr: 'Su değil. Talep.', en: 'Not water. Demand.' },
+  { bas: 118.14, son: 121.74, tr: 'Müşterin bir yerde arıyor. Sen başka yerdesin. Arası kazılmamış.', en: 'Your customer is looking somewhere. You are somewhere else. Nothing has been dug between you.' },
+  { bas: 131.89, son: 135.49, tr: 'Qanat kazan hiçbir uygarlıkta su eksik değildi.', en: 'No civilisation that dug qanats was short of water.' },
+  { bas: 192.64, son: 196.24, tr: 'Kanal kazıldığı gün bitmez. Şehir büyüdükçe uzatılır, bakımı bırakılırsa dolar.', en: 'A channel is not finished the day it is dug. It is extended as the city grows; left untended, it silts up.' },
+  { bas: 200.89, son: 204.49, tr: 'Bırakılanı çöl geri alır.', en: 'What is abandoned, the desert takes back.' },
+  { bas: 228.73, son: 233.13, tr: 'Her şehir bir kanalın ucunda kurulmuştur.', en: 'Every city was built at the end of a channel.' },
+  { bas: 234.23, son: 238.63, tr: 'Seninki de bir kanalın ucunda. Ya kazılmıştır ya kazılmamıştır.', en: 'So was yours. It has either been dug or it has not.' },
+  { bas: 241.23, son: 245.63, tr: 'Biz o kanalı kazıyoruz. Aramada, yapay zekâ cevaplarında, reklamda, kendi sitende.', en: 'We dig it. In search, in AI answers, in ads, on your own site.' },
+  { bas: 246.73, son: 251.13, tr: 'Pompayı da kurarız. Ama kanalın nereye kazıldığını bilmeden kurulan pompa boşa çeker.', en: 'We will run the pump too. But a pump set without knowing where the channel runs draws on nothing.' },
+  { bas: 252.23, son: 256.63, tr: 'Talebin nereden geldiğini ölçmüyoruz. Biliyoruz ve yaratıyoruz.', en: "We don't measure where demand comes from. We know, and we create it." },
+];
+/* IS B (3 Eyl 2026, Enes): VI PERDESININ RAYI YEREL YAVASLAR — film
+   ayni hizda akar ama ayni film-sn icin 1,4 kat kaydirma gerekir.
+   k SECIMI OLCUMLE: tur kapisi (<=120 sn) k<=1,5'e sinirlar (ek yol
+   (k-1)*28,2sn*450px / ~1035px-s tur temposu); 900 px/s okunurluk
+   kapisi k=1,4 + 4,4 sn pencereyle saglaniyor (olc-soz vi_okunurluk).
+   Ray yuksekligi sanal sureyle buyur (--fl-sn); motor parcali haritayi
+   data-yavas'tan okur (bas,son,k — film-sn). */
+const YAVAS = { bas: 228.43, son: TOPLAM_SN, k: 1.4 };
+const RAY_SN = +(TOPLAM_SN + (YAVAS.k - 1) * (YAVAS.son - YAVAS.bas)).toFixed(3);
+
+/* ALTYAZI TEMASI (4 Eyl 2026, Enes onayli yapi — referans altyazi-son.html):
+   perde kunyesi ARTIK AYRI SUREKLI KATMAN DEGIL, her blogun ilk satiri
+   (sol ustteki surekli kunye KALKTI). Araliklar yalniz blogun hangi
+   perdeye dustugunu secmek icin durur; kunye blokla gelir, blokla gider.
+   Blok yapisi (yukaridan asagi, ortalanmis): kunye · kizil cizgi · satirlar
+   (her satir kendi overflow:hidden maskesinde) — stil film.css. */
+const KUNYELER = [
+  { bas: 0.30, son: 13.08, tr: 'I · KAYNAK · 0 km · yüzeyden 300 m', en: 'I · THE SOURCE · 0 km · 300 m below' },
+  { bas: 13.38, son: 53.29, tr: 'II · İKİ YOL · 0 km · 300 m', en: 'II · TWO WAYS · 0 km · 300 m' },
+  { bas: 53.59, son: 88.59, tr: 'III · EĞİM · 8 km · 210 m · 1:1000', en: 'III · THE GRADIENT · 8 km · 210 m · 1:1000' },
+  { bas: 88.89, son: 121.84, tr: 'IV · KANAL', en: 'IV · THE CHANNEL' },
+  { bas: 122.14, son: 228.43, tr: 'V · ÖLÇEK · 33 km', en: 'V · SCALE · 33 km' },
+  { bas: 228.73, son: 256.64, tr: 'VI · KENT · 33 km · yüzey', en: 'VI · THE CITY · 33 km · surface' },
+];
+const kunyeBul = (z: { bas: number }) => {
+  const k = KUNYELER.find((p) => z.bas >= p.bas - 0.01 && z.bas <= p.son);
+  if (!k) throw new Error(`blok ${z.bas} hicbir perdeye dusmuyor — kunyesiz blok olamaz`);
+  return k;
+};
+/* SATIRLAMA: satir cumledir. Cok cumleli blok EN DENGELI noktadan iki
+   satira bolunur (karakter farki en az); tek cumle tek satir (dar
+   ekranda kendi maskesinin icinde sarar). Metin BIREBIR kalir — bolme
+   yalniz cumle sinirinda, PROLOG-ANLATI-METNI.md kaynagi degismez.
+   Kelime kelime DEGIL (talimat: kelime basina oge + bulaniklik elendi). */
+const satirla = (m: string): string[] => {
+  const c = (m.match(/[^.!?]+[.!?]+(?=\s|$)/g) || [m]).map((s) => s.trim()).filter(Boolean);
+  if (c.length < 2) return [m];
+  let enIyi = 1, fark = Infinity;
+  for (let i = 1; i < c.length; i++) {
+    const f = Math.abs(c.slice(0, i).join(' ').length - c.slice(i).join(' ').length);
+    if (f < fark) { fark = f; enIyi = i; }
+  }
+  return [c.slice(0, enIyi).join(' '), c.slice(enIyi).join(' ')];
+};
+---
+{/* KLAVYE ODAGI FILM DISINA KACIYORDU (TUR 2, 4 Eyl 2026 — OLCULMUS KOK).
+    Film onundeyken belge 122.000 px uzun ve `#fl-govde` DISINDA kalan kabuk
+    katmanlari (atlama bagi, nav, lead bolumu, footer) hala tab sirasindaydi:
+    video odaktayken Tab, 121.364 px asagidaki `a.flogo`yu secip tarayiciyi
+    oraya kaydirtiyor ve o dev belgenin duzenini zorluyordu. Olculdu (Chrome,
+    filmin bas/orta/son noktasi, uc kosum medyani): keydown 232 / 304 / 264 ms
+    — isleme 79-134 ms + sunum 118-265 ms. Dun raporlanan "film etkinken INP
+    256-304 ms, `video.fl-video` keydown" TAM BU olaydi; sebep motorun isi
+    degil, odagin filmin disina kacmasiydi. `#fl-govde` zaten visibility:hidden
+    ile sirada degil — sorun onun KARDESLERI.
+    NEDEN BURADA, MODULDE DEGIL: modul `/film` sayfasinda da iniyor ve ayni
+    kod orada J1 tavanini 158 B asti (11.422 > 11.264). Bu satir ici betik
+    YALNIZ ana sayfaya basiliyor, yani bedeli filmin tavanina yazilmiyor.
+    Geri alma da burada: modul sokum yollarinin UCUNDE de `fl-js` sinifini
+    dusuruyor (siteyeGec · gec · motor inmedi), MutationObserver onu gorup
+    inert'i kaldiriyor — tek bayrak, uc yol, ayri kod yok.
+    `.fl-gec` film katmaninda oldugu icin klavyeyle erisilebilir KALIR (FM2). */}
+{/* ERKEN KARAR (3 Eyl 2026, performans turu): fl-js / fl-ana / atlandi /
+    hareket-azaltma karari ILK YERLESIMDEN ONCE, satir ici. Modul betigi
+    (asagida) ayni karari yeniden verir (idempotent); bu betik yalniz JS'siz
+    yerlesimin (39 poster sutunu) bir kare bile boyanmasini onler — olculdu:
+    modul gec gelince onceki yerlesim boyaniyor, ana sayfada 0,54 CLS ve
+    oturumda-atlanmis ziyaretcide poster sutunu flasi. Yorumsuz, ~330 B (J1).
+    YALNIZ ANA SAYFADA: /film olcum zemininin J1 tavani (11.264 B) 252 B ile
+    asiliyordu; /film'de kabuk/#bg yok, kayma da yok — modul karari yeter. */}
+{sayfa === 'ana' && <script is:inline set:html={`(function(){try{var H=document.documentElement;if(sessionStorage.getItem('qanat-prolog-atlandi')==='1'){H.dataset.film='atlandi';return}if(matchMedia('(prefers-reduced-motion:reduce)').matches){H.dataset.film='hareket-azaltma';return}if(matchMedia('(max-width:900px),(pointer:coarse)').matches){H.dataset.film='mobil';return}H.classList.add('fl-js','fl-ana');var Q='.atla,#nvAc,nav,.sil-lead,body>footer',I=function(a){document.querySelectorAll(Q).forEach(function(e){e.toggleAttribute('inert',a)})};document.addEventListener('DOMContentLoaded',function(){I(true);new MutationObserver(function(){if(!H.classList.contains('fl-js'))I(false)}).observe(H,{attributes:true,attributeFilter:['class']})})}catch(e){}})()`} />}
+<section class="fl" aria-label={dil === 'en' ? 'Film' : 'Film'} data-kok={B} data-sayfa={sayfa}
+  data-fps={FPS} data-pxsn={PX_SN} data-toplam={TOPLAM_SN} data-sert={SERTLIK} data-sonum={SONUM} data-tavan={TAVAN} data-akis={AKIS} data-moment={MOMENT} data-hizala={HIZALA}
+  data-devir={`${DEVIR.sol.toFixed(6)},${DEVIR.ust.toFixed(6)},${DEVIR.gen.toFixed(6)},${DEVIR.yuk.toFixed(6)},${DEVIR.hiz.toFixed(7)}`}
+  data-yavas={`${YAVAS.bas},${YAVAS.son},${YAVAS.k}`}
+  style={`--fl-sn:${RAY_SN};--fl-pxsn:${PX_SN}`}>
+  <div class="fl-ray">
+    <div class="fl-yapis">
+      {/* KUMANDA: tek dugme `.fl-gec` (PROLOGU GEC — filmi tumden atlar,
+          motoru soker, oturum boyu atlanmis kalir; her zaman gorunur).
+          `.fl-atla` YETIS DUGMESI KALKTI (Enes, 1 Eyl): hiz tavani
+          gerisinde kalinca cikan "+N sn" rozeti gereksiz duruyordu.
+          Motorun `atla()` API'si ve `fl-geride` olayi motor yuzeyinde
+          DURUYOR (olcum duzenekleri kullanir) — kalkan yalniz UI.
+          Motor UI kurmaz (sert degismez #6) — dugme sayfanin. */}
+      {/* IBARE (Enes, 1 Eyl — davranis degisti): film BOYUNCA sayfanin
+          alt ortasinda DURUR, bastan vardir (finalde-belirme + oturumda
+          bir kez + ilk-girdide sonme mekanizmasi KALKTI — o kurgu ibareyi
+          canlida hic gosterememisti). Yalniz devir baslayinca sonumlenerek
+          kaybolur (CSS: html.fl-devir .fl-ipucu). Metin 14px (gec ile
+          esit); OK GERI GELDI, SADECE KIRMIZI (Enes, 3. duzeltme) ve
+          metinle BERABER yanip soner — 3,6 s halka ritmi (film.css). */}
+      <p class="fl-ipucu"><span>{dil === 'en' ? 'SCROLL' : 'KAYDIR'}</span><svg viewBox="0 0 12 7" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+      <div class="fl-kumanda">
+        {/* DONEN CIZGI (Enes, 31 Agu gece): kaynak eski site .void .ring —
+            fl-halka ayni dil, degerler bekcide (film-halka.test.mjs) */}
+        <a class="fl-gec" href="#fl-son"><i class="sus-halka duz" aria-hidden="true"></i><span>{dil === 'en' ? 'Skip prologue' : 'Prologu geç'}</span></a>
+      </div>
+      {/* ALTYAZI TEMASI (4 Eyl): motor bloklari `.fl-soz-gor` sinifiyla
+          surer (motor DEGISMEDI — sinif konteynere yazilir, parcalar CSS'le
+          gelir). Alt perde `.fl-perde` tek eleman: blok varken :has()
+          ile opak. Motorsuz/azaltma yolunda CSS hepsini onsoz blogu
+          olarak basar (metin kaybolmaz). */}
+      <div class="fl-sozler">
+        <i class="fl-perde" aria-hidden="true"></i>
+        {SOZLER.map((z) => { const k = kunyeBul(z); return (
+          <p class="fl-soz" data-bas={z.bas} data-son={z.son}>
+            <span class="fl-kunye">{dil === 'en' ? k.en : k.tr}</span>
+            <i class="fl-cizgi" aria-hidden="true"></i>
+            {satirla(dil === 'en' ? z.en : z.tr).map((s) => (
+              <span class="fl-satir"><span>{s}</span></span>
+            ))}
+          </p>
+        ); })}
+        {/* rakam kaynagi (uydurma rakam yasagi): kucuk, surekli degil —
+            son perdeyle gorunur; motorsuz yolda blok sonunda okunur */}
+        <p class="fl-soz fl-kaynak" data-bas={228.73} data-son={256.64}>
+          {dil === 'en' ? 'Figures: UNESCO World Heritage — The Persian Qanat (2016)' : 'Rakamlar: UNESCO Dünya Mirası — The Persian Qanat (2016)'}
+        </p>
+      </div>
+      {SAHNELER.map((s, j) => (
+        <div class={`fl-sahne${j === 0 ? ' fl-etkin' : (j === 1 ? ' fl-komsu' : '')}`}
+          data-n={s.n} data-sure={s.sure} data-kare={s.kare} data-bas={s.bas}
+          data-clip={s.clip} data-poster={s.poster}
+          data-mclip={s.mobileClip} data-mposter={s.mobilePoster}>
+          <picture>
+            <source media="(max-width: 900px)" type="image/webp" srcset={`${B}/${s.mobilePoster}`}
+              width={s.mgen} height={s.myuk} />
+            <img class="fl-poster" src={`${B}/${s.poster}`} width={s.gen} height={s.yuk}
+              alt="" aria-hidden="true" decoding="async"
+              loading={j === 0 ? 'eager' : 'lazy'}
+              fetchpriority={j === 0 ? 'high' : undefined} />
+          </picture>
+          <video class="fl-video" muted playsinline disableremoteplayback preload="none"
+            width={s.gen} height={s.yuk} aria-hidden="true" tabindex="-1"></video>
+          {s.acilis && (
+            <video class="fl-video fl-acilis" muted playsinline disableremoteplayback preload="none"
+              width={s.gen} height={s.yuk} aria-hidden="true" tabindex="-1"
+              data-acilis={s.acilis.clip} data-macilis={s.acilis.mobileClip} data-asn={s.acilis.sn}></video>
+          )}
+        </div>
+      ))}
+    </div>
+    {/* RAY SONU: "prologu gec" baginin hedefi. Ray'in en dibinde durur;
+        buraya inen kaydirma filmi bitirmis demektir. */}
+    <div id="fl-son" class="fl-son" tabindex="-1"></div>
+  </div>
+  {/* EFEKT A · TV ACMA katmanlari (Enes, 31 Agu aksam). Paneller (z 4)
+      coken filmin ALTINDA kalan alani orter, kizil cizgi (z 6) coken
+      goruntunun USTUNDE parlar. Transformlu yapis'in DISINDA dururlar
+      (fixed'in atasi transformlu olamaz). */}
+  <div class="fl-tv" aria-hidden="true"><i class="fl-tv-ust"></i><i class="fl-tv-alt"></i></div>
+  <div class="fl-tv-cizgi" aria-hidden="true"></div>
+</section>
+
+<script>
+  /* ADA — sayfaya inen tek betik. Motor (`src/film/motor.ts`) dinamik
+     ithal: J1 tavaninin disinda, kendi tavani denetimde FM ailesi.
+     Hareket azaltmada motor HIC inmez -> sifir video fetch.
+
+     PROLOGU GEC — OTURUMDA BIR KEZ (31 Agu 2026, PROLOG-ISKELET 5. adim).
+     Yazili davranis, uc madde:
+       1. Kullanici `.fl-gec` bagina basarsa: motorun `sok()`u cagrilir
+          (blob'lar revoke, dinleyiciler cozulur, DONGU DURUR), oturum
+          bayragi yazilir, `<html data-film="atlandi">` isaretlenir ve
+          bag kendi isini yapip ray sonuna (#fl-son) gider.
+       2. AYNI OTURUMDA sayfa yeniden acilirsa motor HIC INDIRILMEZ ve
+          film katmani hic kurulmaz: sifir video fetch, sifir poster,
+          sifir kare. Prolog bir kez atlandiysa oturum boyu atlanmistir.
+       3. Bayrak `sessionStorage` — sekme kapaninca dusen kapsam; kalici
+          tercih degil (perde `qanat-splash-seen` ile ayni ev deseni).
+     NEDEN SOKUM SART: `sok()` cagrilmazsa gorunmeyen film icin rAF
+     donmeye devam eder — sessiz pil sizintisi. Motor tarafinda da
+     `durdu` kapisi eklendi (motor.ts), yoksa `kare` kendini yeniden
+     kuruyordu. */
+  const bolum = document.querySelector<HTMLElement>('.fl');
+  /* J1 kirpmasi: minifier property zincirini kisaltamaz; takma ad ~600 B kazandirdi (olculdu) */
+  const KOKE = document.documentElement;
+  const AN = () => performance.now();
+  const azalt = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const ANAHTAR = 'qanat-prolog-atlandi';
+  /* ANA SAYFA PROLOGU: bolum data-sayfa='ana' ise devir sonunda siteye gecilir
+     (siteyeGec) ve kabuk navi film boyunca gizli (film.css html.fl-ana). */
+  const ANA = bolum?.dataset.sayfa === 'ana';
+  let atlandi = false;
+  try { atlandi = sessionStorage.getItem(ANAHTAR) === '1'; } catch {}
+
+  if (bolum && atlandi) {
+    /* 2. madde: oturumda zaten atlanmis — hicbir sey kurulmaz. */
+    KOKE.dataset.film = 'atlandi';
+  } else if (bolum && KOKE.dataset.film === 'mobil') {
+    /* MOBILDE PROLOG YOK (Enes, 3/4 Eyl gece zinciri): ana sayfa telefonda
+       dogrudan siteyi gosterir — kaydirma-scrub filmi kucuk ekranda ve
+       dokunmatikte tasinmaz (kabuk sus katmanlariyla ayni kapi
+       `(pointer:coarse),(max-width:900px)`). KARAR TEK YERDE: yukaridaki
+       erken satir ici betik `data-film="mobil"` yazar, modul onu gorunce
+       hicbir sey kurmaz — ayni karar iki kez verilmez, /film'in J1 tavani
+       da bu yuzden asilmaz (olculdu: iki karar 11.297 B, tek karar 11.264
+       tavanin altinda). CSS ayrica ayni kapiyi tutar (film.css). */
+  } else if (bolum && !azalt) {
+    KOKE.classList.add('fl-js');
+    if (ANA) KOKE.classList.add('fl-ana');
+    /* ?boz=soz — ALTYAZI olcum duzeneginin kirmizi kontrolu (olc-soz):
+       gecikme 0 + cizgi orijini sol + maske acik (film.css). Urun yolunda etkisiz. */
+    if (new URLSearchParams(location.search).get('boz') === 'soz') bolum.classList.add('fl-boz-soz');
+    /* YETIS DUGMESI KALKTI (1 Eyl, Enes) — `fl-geride` olayini dinleyen
+       kalmadi; olay motor yuzeyinde duruyor (olcum kullanir). */
+    /* PROLOG ADASI KALKTI (1-2 Eyl gece, Enes): giris sahnesi (PRDag +
+       amblemin nav'a yukselmesi) sayfadan sokuldu, ada cagrisi da
+       onunla gitti — sayfa direkt video girisiyle baslar. */
+    /* MOTOR PERDENIN CIZIMINDEN SONRA (4 Eyl 2026, Enes: "yukleme
+       animasyonu da kasiyor, hic kasmamasi lazim; farkli adalarda
+       olmalari ve birbirinin butcelerini yemiyor olmalari gerekiyor").
+       OLCULDU: ilk 1,5 sn'de sayfa 16.203 KB / 54 istek cekiyor —
+       sahne3.mp4 6.152 KB (t=788), sahne2 5.170 KB (t=691), sahne1
+       3.579 KB (t=612). Uzun kareler t=452/710/1002 (225/233/283 ms) ve
+       LoAF onlari "betiksiz" isaretliyor: JS degil, cozme/boyama. Perde
+       ise izlerini `stroke-dashoffset` ile ciziyor — kompozitore CIKMAZ,
+       ayni ana is parcaciginda boyanir. Iki is ayni yerde yarisiyordu.
+       CARE: perde varken motor CIZIM FAZI BITENE kadar beklet. Perdenin
+       iz cizimi ~1,5 sn'de biter (perde.css: gecikme .16 + i*.06, sure
+       .85); perde artik 3,4 sn'de supuruluyor, yani motora orten ~1,8
+       sn'lik on pisme suresi kaliyor. Perde yoksa (donen ziyaretci,
+       azaltilmis hareket, kapatma anahtari) BEKLEME YOK. */
+    /* 1,6 SN'LIK BEKLEME KALKTI (4 Eyl 2026, ikinci tur). Perde ile filmin
+       on pismesini ayirmak icin konmustu; ama asil yuku motorun ACILIS
+       PENCERESI uretiyordu (uc klip birden, 15 MB). Pencere 0'a cekilince
+       (motor.ts, `onPencere`) ilk 1,5 saniyenin yuku 16.203 KB -> 679 KB'a
+       dustu ve bekleme gereksizlesti. USTELIK ZARARLIYDI: iki gecikme ust
+       uste binince acilis klibi de geciyordu ve ilk kaydirmada video
+       hazir olmuyordu (olculdu: ilk iki adimda readyState 1). Motor artik
+       hemen basliyor, ama YALNIZ ETKIN KLIBI cekiyor. */
+    import('../film/motor').then((m) => {
+      const sok = m.baslat(bolum);
+      /* PROLOGU GEC: bag JS'siz de calisir (#fl-son'a gider). JS varsa
+         once zinciri sokeriz, sonra tarayici bagi kendi isler. */
+    /* ---- NAV KOREOGRAFISI + DEVIR v3 (31 Agu 2026, Enes) ----
+       YAKLASIM DEGISTI: sayfa ekrana KUCULTULMUYOR, VIDEO ekrana
+       YAKINLASTIRILIYOR. `.fl-yapis` ekran dortgeninin merkezine
+       transform-origin verilerek olceklenir; dortgen goruntu alaninin
+       tami tamina kendisi oldugu anda gercek sayfa FADE_MS'lik capraz
+       gecisle videonun USTUNDE netlesir. SAYFA HIC OLCEKLENMEZ (kapi:
+       devir aninda sayfa olcegi tam 1,0) — govdeye transform yazan kod
+       ve CSS kalmadi.
+
+       OLCEK SABIT SAYI DEGIL: hedef olcek her acilista (ve resize'da)
+       goruntu alani oranindan hesaplanir — DAIMA COVER: dortgen dort
+       kenari da ortecek en kucuk olcekte durur; kapanan eksen tam
+       oturur, oteki tasar, bosluk kalmaz. Tasma olcum yuzeyine yazilir.
+
+       MIKRO ORTALAMA: dortgen merkezi kare merkezinden 0,5 / 5,9 px
+       kayik (f20db52). Saf olcek bu kaykligi kapanan eksende iki katina
+       tasiyip kapinin (fark < 2 px) ustune cikarirdi (1,6 oraninda dikey
+       ~10 px). Olcekle orantili kucuk kaydirma (ucta <= 6 px) dortgeni
+       devir aninda goruntu alanina TAM ortalar.
+
+       HIZ SUREKLILIGI: video SON karesinde hala buyuyor (kunye: k119->
+       k120 ~0,5 px/kare, data-devir 5. sayi = 1x'te olcek hizi 1/s).
+       Video son karesine oturdugu anda buyumeyi yay devralir: baslangic
+       hizi = kunye hizi x varis temposu (motor hizT; akisla ~0,08x,
+       okumayla ~1x). Kritik sonumlu yay hedef olcege varirken hiz sifira
+       iner — "sonra sonumlenerek sifira inecek". Iki hiz da olcum
+       yuzeyine yazilir (kapi: fark yazilir).
+
+       AYNI KARE SARTI: nav inisi devir tetigiyle ayni rAF tikinde
+       (devirKare icinde navBak) — ayri dinleyici yok.
+
+       DUZEN OKUMASI KARE BASINA DEGIL: geometri bir kez (ve resize'da)
+       olculur; dongude yalniz scrollY ve __fl okunur. getComputedStyle
+       yalniz fade basinda BIR kez (kayit icin). */
+    const ipucu = bolum.querySelector<HTMLElement>('.fl-ipucu');
+    const govde = document.getElementById('fl-govde');
+    const yapis = bolum.querySelector<HTMLElement>('.fl-yapis')!;
+    /* IBARE SONMESI OLCUMU (kapi: devirde sonme ani ms cinsinden):
+       fl-devir sinifi ibareyi CSS gecisiyle sondurur; gecisin bitisi
+       gercek olaydan okunur, sure varsayilmaz. */
+    ipucu?.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'opacity' && KAYIT.ibareSonduMs === null && KOKE.classList.contains('fl-devir')) KAYIT.ibareSonduMs = AN();
+    });
+
+    /* kunye: sol,ust,gen,yuk (oran) + son kare buyume hizi (1/s, 1x) —
+       Film.astro frontmatter'i ekran-kose.json k119/k120'den turetir. */
+    const dk = (bolum.dataset.devir || '0,0,1,1,0').split(',').map(Number);
+    const DK = { sol: dk[0], ust: dk[1], gen: dk[2], yuk: dk[3], hiz: dk[4] };
+    /* Devir yayi sertligi — 60 SECILDI (Enes, 31 Agu aksam, gozle;
+       adaylar 25/60/120 denendi). k=60 kritik sonumde oturma ~0,75 s,
+       tepe kenar hizi filmin kendi dolly zarfinin icinde. ?dsert= kolu
+       deneme icin durur. */
+    const DSERT = (() => { const u = new URLSearchParams(location.search).get('dsert'); return u !== null && Number(u) > 0 && Number(u) <= 1000 ? Number(u) : 60; })();
+    const FADE_MS = 140;                       /* SADE yol (hareket azaltma): duz capraz gecis */
+    const KAPANMA_PX = 2;                      /* kapi esigi: kapanan eksende fark < 2 px */
+    /* EFEKT A — TV ACMA (Enes, 31 Agu aksam; ?gecis=patlama KALKTI, flas
+       patlama gibi okunmuyordu): video son karesine oturup dortgen
+       goruntu alanini ortunce goruntu dikeyde parlak KIZIL CIZGIYE coker
+       (cizgi filmin kizil cizgisi: #ef233c/#ff4d63 paleti), cizgi kisa
+       bir an parlar, sonra dikeyde acilarak site belirir. Hedef 250-350:
+       130 cokus + 50 parlama + 130 acilis = 310 ms. Hareket azaltmada
+       sade sonumleme (FADE_MS capraz gecis, flas yok). */
+    const TV_PARLA_MS = 50, TV_AC_MS = 130;
+    /* BOZ=1 — OLCUM DUZENEGININ KIRMIZI KONTROLU (kapi: "kontrol once
+       kasten kirmiziya dondurulur"). Cokusu 4 katina uzatir (sure kapisi
+       kirmizi) ve gec tepesinde 60 ms ana is parcacigini kilitler (dusen
+       kare kapisi kirmizi). Urun yolunda hicbir etkisi yok. */
+    const BOZ = new URLSearchParams(location.search).get('boz') === '1';
+    const TV_COK_MS = BOZ ? 520 : 130;
+    const tvEl = bolum.querySelector<HTMLElement>('.fl-tv');
+    const cizgiEl = bolum.querySelector<HTMLElement>('.fl-tv-cizgi');
+    /* DARALTMA (3 Eyl gece): tv siniflari KOKTEN elemente indi
+       (tvg/tvp/tva) — kok sinifi her eklemede TUM belgede stil yeniden
+       hesabi kosturuyordu (olculdu: dusenler uc kosumda ayni sinif-
+       ekleme anlarinda [@0/@149/@202]); elementte yalniz iki kucuk
+       alt agac. CSS karsiliklari film.css'te. */
+    const tvSinif = (ad: string, ac: boolean) => {
+      if (tvEl) tvEl.classList.toggle(ad, ac);
+      if (cizgiEl) cizgiEl.classList.toggle(ad, ac);
+    };
+    const azaltMi = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    let vw = 0, vh = 0, vidO = 16 / 9, devirBas = 0;
+    interface DevirGeo { qg: number; qh: number; cx: number; cy: number; S: number; kapanan: 'yatay' | 'dikey'; txSon: number; tySon: number }
+    let G: DevirGeo | null = null;
+    const olcDevir = () => {
+      vw = innerWidth; vh = innerHeight;
+      const v = bolum.querySelector<HTMLElement>('.fl-sahne:last-of-type video');
+      vidO = (Number(v?.getAttribute('width')) || 1920) / (Number(v?.getAttribute('height')) || 1080);
+      const f = (window as any).__fl;
+      devirBas = f ? f.konum(f.toplam) : 0;
+      /* `cover` cizimi -> dortgenin ekran pikseli -> hedef olcek */
+      const cizG = vw / vh > vidO ? vw : vh * vidO;
+      const cizH = vw / vh > vidO ? vw / vidO : vh;
+      const ox = (vw - cizG) / 2, oy = (vh - cizH) / 2;
+      const qg = DK.gen * cizG, qh = DK.yuk * cizH;
+      const cx = ox + (DK.sol + DK.gen / 2) * cizG, cy = oy + (DK.ust + DK.yuk / 2) * cizH;
+      const Sx = vw / qg, Sy = vh / qh;
+      G = { qg, qh, cx, cy, S: Math.max(Sx, Sy), kapanan: Sx >= Sy ? 'yatay' : 'dikey', txSon: vw / 2 - cx, tySon: vh / 2 - cy };
+      yapis.style.transformOrigin = `${cx.toFixed(2)}px ${cy.toFixed(2)}px`;
+    };
+
+    /* ---- devir yayi: motorla ayni disiplin (sabit 4 ms adim + harman) ---- */
+    let s = 1, sv = 0, sOnce = 1, birikimD = 0, sonMs = 0;
+    let aktif = false, fadeAcik = false, devirRaf = 0, navKalkti = false;
+    let tvFaz = 0, tvT0 = 0;   /* EFEKT A fazi: 0 yok · 1 cokus · 2 parlama · 3 acilis */
+    /* olcum yuzeyi kaydi — yalniz devir penceresinde dolar */
+    const KAYIT: {
+      v0: null | { video_1x: number; tempo: number; video: number; bizim: number; fark: number };
+      basMs: number | null; fadeBasMs: number | null; tamMs: number | null;
+      eskiYuklendiMs: number | null;
+      fadeGeo: null | Record<string, unknown>; kareler: number[]; iz: [number, number, number][];
+      /* EFEKT A fazlari (tv acma) + kapanis yolu ('tv' | 'sade') */
+      tv: { basMs: number | null; parlaMs: number | null; acMs: number | null; sonMs: number | null };
+      kapanisYolu: string | null;
+      /* EFEKT B (prologu gec): yol 'isinlanma' | 'sade', nokta bilgi icin */
+      gec: null | { basMs: number; tepeMs: number | null; sonMs: number | null; yol: string; kareler: number[] };
+      ibareSonduMs: number | null;   /* devirde ibarenin sonme ani (transitionend) */
+    } = { v0: null, basMs: null, fadeBasMs: null, tamMs: null, eskiYuklendiMs: null, fadeGeo: null, kareler: [], iz: [],
+      tv: { basMs: null, parlaMs: null, acMs: null, sonMs: null }, kapanisYolu: null, gec: null, ibareSonduMs: null };
+
+    /* NAV: prolog sokulunce (1-2 Eyl gece, Enes) koreografi eski
+       davranisa dondu — kaydirma baslar baslamaz nav cekilir; devirde
+       kalkik kalir (govdenin kendi navi var — cift nav olurdu). */
+    /* NAV KOREOGRAFISI BURADAN CIKTI (4 Eyl 2026, Enes: "farkli adalarda
+       olmalari ve birbirinin butcelerini yemiyor olmalari gerekiyor").
+       `fl-nav-kalk` sinifinin TEK SAHIBI artik `/varlik/nav.js`.
+       Sebep olculdu: koreografiyi burada genisletmek film sayfasini
+       J1 tavaninin ustune cikardi (11.351 B > 11.264 B). */
+    const navBak = () => {};
+    /* TUTUNMA (CSS fl-tutun): scrollY ray sonundaysa yapis sabitlenir —
+       savurmada scrollY sonu gecip film geride kalinca yapis kacmasin.
+       Scroll dinleyicisinde ESZAMANLI cagrilir (rAF bekleyen surumde
+       kacis bir kare gorunurdu). */
+    let tutundu = false, hazirlandi = false;
+    const tutunBak = () => {
+      const tut = devirBas > 0 && scrollY >= devirBas - 1;
+      if (tut !== tutundu) { tutundu = tut; KOKE.classList.toggle('fl-tutun', tut); }
+      /* ON HAZIRLIK: govdenin ilk boyamasi devir karesine binmesin
+         (olculdu: 44-70 ms sistematik takilma). Ray sonuna 1,5 ekran
+         kala hazirlanir, 3 ekran uzaklasinca birakilir (histerezis). */
+      const haz = devirBas > 0 && scrollY >= devirBas - 1.5 * vh;
+      if (haz !== hazirlandi && (haz || scrollY < devirBas - 3 * vh)) {
+        hazirlandi = haz;
+        KOKE.classList.toggle('fl-hazirla', haz);
+        /* GOMULU ESKI GIRIS (gece TUR 2): iframe SOKULDU — hero
+           gorselleri lazy; govde hazirlikta gorunur olunca kendiliginden
+           inerler. Burada is kalmadi; tubes devir tamamlaninca baslar. */
+      }
+    };
+    /* dortgenin o olcekteki ekran kenarlari (mikro ortalama dahil) */
+    const kenarlar = (ss: number) => {
+      const g = G!;
+      const u = g.S > 1 ? Math.min(1, (ss - 1) / (g.S - 1)) : 1;
+      const mx = g.cx + g.txSon * u, my = g.cy + g.tySon * u;
+      return { sol: mx - g.qg * ss / 2, sag: mx + g.qg * ss / 2, ust: my - g.qh * ss / 2, alt: my + g.qh * ss / 2, u };
+    };
+    /* eski girisi canlandirma: huzmelerin (tubes) dogusu. TV yolunda
+       efektin SONUNA ertelenir — olculdu: kurulum parlama karesine
+       binince efekt penceresinde 1-2 dusen kare uretiyordu. Kurulum
+       AYARI kokten cekilip data-tubes'ta (EskiGiris.astro); DPR kapagi
+       1,25 kaynaktaki gerekceyle ayni (giris kasmasinin GPU ayagi).
+       Basarisizlik sessiz — huzme dekor. */
+    let tubesApp: unknown = null;
+    /* ANA SAYFA: devir tamamlaninca (TV acilisi bitti ya da sade yol) film
+       sokulur, site akisa gecer. Sabit .fl-govde katmani sitenin TEPESINI
+       gosteriyordu; scrollTo(0,0) + static ayni pikselleri verir (goze
+       gorunmez takas). Oturum bayragi: prolog bir kez izlendiyse ayni
+       oturumda tekrar kurulmaz (FM2 'oturumda bir kez'). Sokum 50 ms sonra
+       (gecYap dersi: 39 blob revoke + duzen tek karede 25 ms'i asiyor). */
+    let siteGecti = false;
+    const siteyeGec = () => {
+      if (siteGecti) return; siteGecti = true;
+      try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
+      KOKE.classList.remove('fl-js', 'fl-ana', 'fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk', 'fl-hazirla');
+      tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
+      delete KOKE.dataset.devir;
+      KOKE.dataset.film = 'bitti';
+      scrollTo(0, 0);
+      setTimeout(sok, 50);
+    };
+    const eskiCanlandir = () => {
+      if (ANA) { siteyeGec(); return; }
+      const eski = document.getElementById('fl-eski');
+      const cv = eski?.shadowRoot?.getElementById('tubes') as HTMLCanvasElement | null;
+      if (!eski || !cv || tubesApp) return;
+      try {
+        const ayar = new Function('return ' + (eski as HTMLElement).dataset.tubes)();
+        /* COZUNURLUK KAPAGI: `devicePixelRatio` OYUNU DEGIL, kutuphanenin
+           kendi kolu (8 Eyl 2026). Gerekce ve olcum kabuk/tup.js'te: eski
+           kapak tubes'un kendi `minPixelRatio = 2`si yuzunden HIC
+           calismiyordu, ustelik dpr'yi sayfa genelinde kalici donduruyordu.
+           Ayni kalip iki yerde duruyordu, ikisi de ayni sekilde duzeltildi. */
+        /* yol degiskende: Vite derlemede cozmeye kalkmasin (kok varligi) */
+        const tubesYol = '/js/tubes.min.js';
+        import(/* @vite-ignore */ tubesYol).then((m: any) => {
+          try { tubesApp = m.default(cv, ayar); if (tubesApp) { cv.classList.add('on'); KAYIT.eskiYuklendiMs = AN(); } } catch {}
+          try {
+            const t = (tubesApp as any)?.three;
+            if (t && typeof t.resize === 'function') { t.minPixelRatio = 1.25; t.maxPixelRatio = 1.25; t.resize(); }
+          } catch {}
+        }).catch(() => {});
+      } catch {}
+    };
+    const tamYap = () => {
+      if (!fadeAcik || KOKE.dataset.devir === 'tam') return;
+      KOKE.dataset.devir = 'tam';
+      if (KAYIT.tamMs === null) KAYIT.tamMs = AN();
+      if (!tvFaz) eskiCanlandir();            /* sade yol; tv yolu faz3 sonunda */
+    };
+    /* capraz gecis FILM katmaninin fade-out'u (film.css katman duzeni) —
+       bitis o katmanin transitionend'inden dinlenir */
+    yapis.addEventListener('transitionend', (e) => { if (e.propertyName === 'opacity') tamYap(); });
+
+    const devirKare = () => {
+      devirRaf = 0;
+      const f = (window as any).__fl;
+      if (!f || !G) return;
+      const simdi = AN();
+      const dt = sonMs ? Math.min(100, simdi - sonMs) : 16.7;
+      sonMs = simdi;
+      /* video SON karesini gosteriyor mu (kareNo tavani: toplam - 1/fps) */
+      const sonda = f.toplam - f.gosterilenT < 1 / f.fps;
+      const uzak = f.toplam - f.gosterilenT > 2 / f.fps;      /* histerezis */
+      if (!aktif && sonda) {
+        /* DEVIR TETIGI: videonun icindeki buyume bu karede bitti; buyumeyi
+           yay devralir. Ayni tikte nav geri iner (navBak asagida). */
+        aktif = true;
+        const tempo = Math.max(0, Math.min(3, f.hizT || 0));
+        sv = DK.hiz * tempo;
+        KAYIT.basMs = simdi; KAYIT.kareler.length = 0; KAYIT.iz.length = 0;
+        /* onceki devrin (geri sarilmis) efekt kayitlari kalmasin — olculdu:
+           isinmali kosumda tv.sonMs eski devirden kalinca sure negatif cikti */
+        KAYIT.tv.basMs = KAYIT.tv.parlaMs = KAYIT.tv.acMs = KAYIT.tv.sonMs = null;
+        KAYIT.kapanisYolu = null; KAYIT.ibareSonduMs = null;
+        KAYIT.v0 = { video_1x: DK.hiz, tempo: +tempo.toFixed(4), video: +(DK.hiz * tempo).toFixed(7), bizim: +sv.toFixed(7), fark: 0 };
+        KOKE.classList.add('fl-devir');
+      }
+      if (aktif) {
+        if (uzak && fadeAcik && !tvFaz) {
+          /* GERI: kullanici filmi geri sardi — sayfa cozulur, film gorunur.
+             TV efekti SURERKEN girilmez (310 ms'lik koreografi bolunmez;
+             bitince ayni dal calisir). */
+          fadeAcik = false;
+          KOKE.classList.remove('fl-devir-net');
+          tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
+          delete KOKE.dataset.devir;
+          KAYIT.fadeBasMs = null; KAYIT.tamMs = null;
+        }
+        if (uzak && !tvFaz && yapis.style.opacity !== '') yapis.style.opacity = '';   /* ortme kiricinin kalintisi */
+        const hedefS = uzak && !tvFaz ? 1 : G.S;
+        const k = DSERT, c = 2 * Math.sqrt(k);
+        birikimD = Math.min(0.1, birikimD + dt / 1000);
+        while (birikimD >= 0.004) {
+          birikimD -= 0.004; sOnce = s;
+          const a = -k * (s - hedefS) - c * sv;
+          sv += a * 0.004; s += sv * 0.004;
+          if (s < 1) { s = 1; if (sv < 0) sv = 0; }
+        }
+        const cizS = Math.max(1, sOnce + (s - sOnce) * (birikimD / 0.004));
+        const kn = kenarlar(cizS);
+        /* ---- EFEKT A · TV ACMA koreografisi (tek yazici: transform hep
+           buradan cikar; cokus normal yazimin YERINE gecer) ---- */
+        if (tvFaz === 1) {
+          const kk = Math.min(1, (simdi - tvT0) / TV_COK_MS);
+          const sy = Math.max(0.004, cizS * (1 - kk * kk));      /* ease-in cokus */
+          yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)}, ${sy.toFixed(5)})`;
+          if (kk >= 1) {
+            tvFaz = 2; tvT0 = simdi; KAYIT.tv.parlaMs = simdi;
+            tvSinif('tvp', true);
+            KOKE.classList.add('fl-devir-net');
+            tamYap();                                            /* film gizli; cizgi sahnede */
+          }
+        } else if (tvFaz === 2) {
+          if (simdi - tvT0 >= TV_PARLA_MS) {
+            tvFaz = 3; tvT0 = simdi; KAYIT.tv.acMs = simdi;
+            tvSinif('tva', true);  /* paneller acilir, site belirir */
+          }
+        } else if (tvFaz === 3) {
+          if (simdi - tvT0 >= TV_AC_MS + 10) {   /* +10: transition bitisi; +40 tamponu sureyi 350 sinirina dayiyordu (olculdu) */
+            tvFaz = 0; KAYIT.tv.sonMs = simdi;
+            tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
+            setTimeout(eskiCanlandir, 40);     /* huzme kurulumu efekt penceresinin disinda */
+          }
+        } else {
+          yapis.style.transform = `translate3d(${(G.txSon * kn.u).toFixed(2)}px, ${(G.tySon * kn.u).toFixed(2)}px, 0) scale(${cizS.toFixed(5)})`;
+        }
+        /* kayit penceresi: devir basindan EFEKT sonuna kadar (tv yolunda
+           tamMs efektin ortasinda duser; pencere efektle biter) */
+        const kayitBitti = KAYIT.tamMs !== null && (KAYIT.tv.basMs === null || KAYIT.tv.sonMs !== null);
+        if (!kayitBitti && KAYIT.kareler.length < 900) { KAYIT.kareler.push(simdi); KAYIT.iz.push([+simdi.toFixed(1), +cizS.toFixed(6), +(AN() - simdi).toFixed(1)]); }
+        /* CAPRAZ GECIS: dortgen goruntu alanini ortunce (en buyuk bosluk
+           < KAPANMA_PX) gercek sayfa ustte netlesir. Kapanan eksen mikro
+           ortalamayla iki kenardan birden kapanir; oteki eksen coktan
+           tasmistir (S = max secimi), yani bosluk kalmamistir. */
+        const bosluk = Math.max(kn.sol, vw - kn.sag, kn.ust, vh - kn.alt);
+        /* ORTME KIRICI (olculdu: film tam opakken kompozitor alttaki
+           govdeyi HIC boyamiyor — occlusion; ilk boyama fade karesine
+           binip 40-78 ms yiyordu). Fade'e yaklasirken film opakligi
+           gorunmez bicimde 0,996'ya iner: ortme kalkar, govde erken
+           boyanir. Satir-ici deger fade aninda silinir ki sinifin 0'a
+           gecisi (transition) devralsin. */
+        if (!fadeAcik && hedefS === G.S && bosluk < KAPANMA_PX * 8 && yapis.style.opacity === '') yapis.style.opacity = '0.996';
+        if (!fadeAcik && hedefS === G.S && bosluk < KAPANMA_PX) {
+          fadeAcik = true;
+          yapis.style.opacity = '';
+          KAYIT.fadeBasMs = simdi;
+          KAYIT.fadeGeo = {
+            s: +cizS.toFixed(5), hedefS: +G.S.toFixed(5), kapanan: G.kapanan,
+            bosluk_px: { sol: +kn.sol.toFixed(2), sag: +(vw - kn.sag).toFixed(2), ust: +kn.ust.toFixed(2), alt: +(vh - kn.alt).toFixed(2) },
+            sayfa_transform: 'okunmadi',
+          };
+          /* getComputedStyle sicak kareden cikti (dusen kare olcumu):
+             fade aninin sayfa olcegi bir sonraki gorev diliminde okunur. */
+          const fg = KAYIT.fadeGeo;
+          setTimeout(() => { fg.sayfa_transform = govde ? getComputedStyle(govde).transform : 'yok'; }, 0);
+          if (!azaltMi() && tvEl) {
+            /* EFEKT A: cokus baslar; paneller aninda sahnede (film hala
+               her seyi ortuyor — gorunmez degisim), cizgi cokusle belirir */
+            KAYIT.kapanisYolu = 'tv';
+            tvFaz = 1; tvT0 = simdi; KAYIT.tv.basMs = simdi;
+            tvSinif('tvg', true);
+          } else {
+            /* SADE yol (hareket azaltma): flassiz duz sonumleme */
+            KAYIT.kapanisYolu = 'sade';
+            KOKE.classList.add('fl-devir-net');
+            setTimeout(tamYap, FADE_MS + 80);          /* transitionend yedegi */
+          }
+        }
+        /* oturma: hedefte ve durgun */
+        if (Math.abs(s - hedefS) < 0.0004 && Math.abs(sv) < 0.004) {
+          s = hedefS; sv = 0;
+          if (hedefS === 1) {
+            /* cozulme: transform kalkar, katmanlar normale doner */
+            aktif = false; fadeAcik = false;
+            yapis.style.transform = ''; yapis.style.opacity = '';
+            KOKE.classList.remove('fl-devir', 'fl-devir-net');
+            delete KOKE.dataset.devir;
+            birikimD = 0;
+          }
+        }
+      }
+      navBak();
+      tutunBak();
+      /* dongu surme karari: devir oturup TAMAMLANDIYSA durur (pil);
+         geri sarma scroll olayindan yeniden kurulur. Sona yakinken
+         donmeye devam eder — tetik kaydirmasiz da gelebilir (yay/akis).
+         TV efekti surerken durmaz (koreografi bu donguden surulur). */
+      const oturduTam = aktif && s === G.S && sv === 0 && KAYIT.tamMs !== null && tvFaz === 0;
+      if (!oturduTam && (aktif || (devirBas > 0 && scrollY > devirBas - 2 * vh))) devirTik();
+      else sonMs = 0;
+    };
+    const devirTik = () => { if (!devirRaf) devirRaf = requestAnimationFrame(devirKare); };
+
+    /* IBARE ARTIK HEP EKRANDA (1 Eyl, Enes): finalde-belirme + oturumda
+       bir kez + ilk-girdide sonme + 250 ms yoklama mekanizmasi TUMDEN
+       KALKTI — o kurgu ibareyi canlida hic gosterememisti ("ibare
+       yazisini goremiyorum"). Ibare bastan gorunur, yalniz devirde
+       soner (CSS). DEVIR IZLEYICISININ yoklamasi da gereksizlesti:
+       tetik kaydirmasiz gelebilir (yay/akis) ama akis scrollBy yapar,
+       scroll olayi devirTik'i zaten durtuyor; yayla varis ise scroll
+       durduktan sonra en cok ~1 sn surer ve son scroll olayinda kurulan
+       rAF dongusu (sona-yakin kosulu) o pencereyi zaten tasiyor. */
+    olcDevir();
+    /* film bitti/atlandi (data-film yazildi): dinleyiciler bos doner — site
+       kaydirmasi filmden is almaz (H12 ruhu; siteyeGec/gecYap sonrasi). */
+    addEventListener('scroll', () => { if (KOKE.dataset.film) return; navBak(); tutunBak(); devirTik(); }, { passive: true });
+    addEventListener('resize', () => { if (KOKE.dataset.film) return; olcDevir(); tutunBak(); devirTik(); }, { passive: true });
+    navBak(); tutunBak(); devirTik();
+    /* OLCUM YUZEYI (olc-devir.cjs okur): kunye + geometri + yay durumu +
+       devir penceresi kaydi (v0, fade/tam anlari, rAF zamanlari, olcek izi). */
+    (window as any).__devir = {
+      kunye: DK, sert: DSERT, fadeMs: FADE_MS, kapanmaPx: KAPANMA_PX,
+      geo: () => G, s: () => s, hiz: () => sv, aktif: () => aktif,
+      kayit: KAYIT, bas: () => devirBas, olc: olcDevir,
+    };
+
+      /* ---- EFEKT B · ISINLANMA (prologu gec; Enes, 31 Agu aksam) ----
+         Efekt katmani videonun konumundan BAGIMSIZ: filmin basinda,
+         ortasinda, sonunda ayni calisir — cunku ortu sayfanin ustune
+         cizilir, sayfa dokuya cizilmez. Asil gecis isi (gecYap) efektin
+         TEPESINDE kosulur: ekran tamamen ortuluyken takas gorunmez.
+         Cizim ayri parcada (src/film/gecis.ts, motor emsali: J1 disi,
+         bosta isitilir); modul inmemisse ya da hareket azaltma acikken
+         SADE yol: flassiz duz sonumleme (ayni ortu, yalniz opaklik). */
+      let gecisModul: { isinla: (o: { tepe: () => void; bitti: () => void; kareler?: number[] }) => void } | null = null;
+      const bosta = (window as any).requestIdleCallback || ((f: () => void) => setTimeout(f, 300));
+      bosta(() => { import('../film/gecis').then((m) => { gecisModul = m; (m as any).hazirla?.(); }).catch(() => {}); });
+      const gecYap = () => {
+        try { sessionStorage.setItem(ANAHTAR, '1'); } catch {}
+        /* MOTOR SOKUMU SONRAKI DILIMDE (olculdu: sok'un 39 blob/revoke'u
+           + yeniden duzen tek karede 25 ms'i asiyordu). Gorsel takas bu
+           karede; sokum ortu HALA tam kapaliyken (~50 ms sonra, sonus
+           150 ms'te basliyor) kosulur — izleyici iki isi de gormez. */
+        setTimeout(sok, 50);
+        KOKE.classList.remove('fl-js');
+        /* devir ortasinda basilirsa devir/efekt kalintilari da sokulur */
+        KOKE.classList.remove('fl-devir', 'fl-devir-net', 'fl-tutun', 'fl-nav-kalk',
+          'fl-hazirla', 'fl-ana');            /* fl-ana: ana sayfada kabuk navi geri gelsin */
+        tvSinif('tvg', false); tvSinif('tva', false); tvSinif('tvp', false);
+        delete KOKE.dataset.devir;
+        KOKE.dataset.film = 'atlandi';
+        scrollTo(0, 0);                          /* isinlanma sitenin basina */
+      };
+      const sadeGec = (tepe: () => void, bitti: () => void) => {
+        const ortu = document.createElement('div');
+        ortu.style.cssText = 'position:fixed;inset:0;z-index:70;background:#050505;opacity:0;transition:opacity .12s ease';
+        document.body.appendChild(ortu);
+        requestAnimationFrame(() => { ortu.style.opacity = '1'; });
+        setTimeout(() => {
+          tepe();
+          ortu.style.opacity = '0';
+          setTimeout(() => { ortu.remove(); bitti(); }, 140);
+        }, 140);
+      };
+      let gecKostu = false;
+      const gec = bolum.querySelector<HTMLAnchorElement>('.fl-gec');
+      gec?.addEventListener('click', (e) => {
+        e.preventDefault();                      /* capa isini efekt ustlenir (JS'siz yol capayla kalir) */
+        if (gecKostu) return;
+        gecKostu = true;
+        const kayitG = { basMs: AN(), tepeMs: null as number | null, sonMs: null as number | null, yol: '', kareler: [] as number[], execler: [] as number[] };
+        KAYIT.gec = kayitG;
+        const tepe = () => {
+          kayitG.tepeMs = AN();
+          /* BOZ: kirmizi kontrol — tepe karesinde ana is parcacigi 60 ms
+             kilitlenir, dusen kare kapisi kirmiziya donmek ZORUNDA */
+          if (BOZ) { const t0 = AN(); while (AN() - t0 < 60) { /* kasti */ } }
+          gecYap();
+        };
+        const bitti = () => { kayitG.sonMs = AN(); };
+        if (!azaltMi() && gecisModul) { kayitG.yol = 'isinlanma'; gecisModul.isinla({ tepe, bitti, kareler: kayitG.kareler, execler: kayitG.execler } as any); }
+        else { kayitG.yol = 'sade'; sadeGec(tepe, bitti); }
+      });
+    }).catch((e) => {
+      KOKE.classList.remove('fl-js');
+      KOKE.dataset.film = 'motor-inmedi';
+      console.warn('[film] motor inmedi', e);
+    });
+  } else if (bolum) {
+    KOKE.dataset.film = 'hareket-azaltma';
+  }
+</script>

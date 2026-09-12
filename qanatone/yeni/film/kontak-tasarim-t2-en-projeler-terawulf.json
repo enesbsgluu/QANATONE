@@ -1,0 +1,158 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-03T01:29:25.647Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 6.49,
+   "farkliPiksel": 84143,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 6035 px, tum farkin %7)",
+   "md5": {
+    "once": "58600a20d6f24a12229a2ddd43122a7b",
+    "sonra": "f187996b45693fdb914cc5a178aa9b46"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 50,
+   "farkYuzde": 5.58,
+   "farkliPiksel": 72283,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 7/8 sutun 2/8 (x 180-360, y 675-788; hucrede 8730 px, tum farkin %12)",
+   "md5": {
+    "once": "cb20e97e6c5ee27743dd568e2a4e91dc",
+    "sonra": "788da735cd179d86fe4288ab32d2ed69"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1183,
+     "sonra": 1193
+    },
+    "gercek": {
+     "once": 1183,
+     "sonra": 1193
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-once-50.png",
+    "sonra": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-sonra-50.png",
+    "yanyana": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-yanyana-50.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/en/projeler/terawulf/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 3265,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "58600a20d6f24a12229a2ddd43122a7b",
+    "png": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 50,
+    "hedef": 1183,
+    "gercek": 1183,
+    "sapma": 0,
+    "md5": "cb20e97e6c5ee27743dd568e2a4e91dc",
+    "png": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-once-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/en/projeler/terawulf/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 0,
+   "sonsuzSifirlanan": 0,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 3286,
+  "dugmeSayisi": 1,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "f187996b45693fdb914cc5a178aa9b46",
+    "png": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   },
+   {
+    "konum": 50,
+    "hedef": 1193,
+    "gercek": 1193,
+    "sapma": 0,
+    "md5": "788da735cd179d86fe4288ab32d2ed69",
+    "png": "yeni/film/kontak-tur9/t2-en-projeler-terawulf-sonra-50.png",
+    "raf": "raf",
+    "animasyonSonradan": 0
+   }
+  ]
+ }
+}

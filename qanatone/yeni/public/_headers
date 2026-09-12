@@ -1,0 +1,1011 @@
+# QANATONE — güvenlik başlıkları (Netlify bu dosyayı kendiliğinden okur)
+# ---------------------------------------------------------------------------
+# KESME · ADIM 5 (6 Eyl 2026). Bu dosya kökteki eski `_headers`in yerine
+# geçti ve KAYNAK ARTIK BURASI. Sebep: eski dosyayı `build.js` dist'e
+# KOPYALIYORDU; build.js zincirden çıkınca kopya da düşerdi ve başlıklar
+# sessizce kaybolurdu. Astro `public/` içeriğini olduğu gibi dist'e taşır,
+# yani kopyalayan bir adıma gerek kalmıyor — bir üreteç eksildi.
+# `/yeni/` önekli desenler kök desenlerine indi; eski siteye ait
+# `/shell.html` bölümü DÜŞTÜ (o site artık üretilmiyor).
+#
+# X-Frame-Options SAMEORIGIN: siteyi başka bir alan adı iframe'e alamaz.
+#   Yönetim paneli (admin.html) siteyi kendi iframe'inde gösteriyor, o aynı
+#   kaynakta olduğu için SAMEORIGIN yeterli. Bu başlık aynı zamanda
+#   postMessage saldırısının en kolay yolunu kapatır.
+# nosniff: tarayıcı içerik türünü tahmin etmeye çalışmaz.
+# Referrer-Policy: dış sitelere tam adres sızmaz.
+# Permissions-Policy: kullanmadığımız donanım izinleri kapalı.
+#
+# CSP şimdilik YALNIZCA RAPOR modunda. Önce tarayıcı konsolunda ihlalleri
+# izle; liste oturunca başlığın adını Content-Security-Policy yapıp raporu
+# kaldır.
+# ---------------------------------------------------------------------------
+
+# AJAN HATTI · MARKDOWN ESLERI (5 Eyl 2026)
+# Her sayfanin yaninda `.md` esi var (`/hizmetler/seo.md`), derlemede
+# CIKTIDAN turetiliyor (yeni/ajan-hatti.mjs). Tur ACIKCA yaziliyor:
+# sunucunun varsayilanina guvenmek "olcmedigin rakami yazma" kuralina
+# girer — ajan `text/markdown` bekliyor, `text/plain` gelirse pazarlik
+# calismaz. Onbellek HTML ile ayni: es, esi oldugu sayfayla birlikte
+# tazelenmeli.
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+/.well-known/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+
+/agents.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/.well-known/agent-permissions.json
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex
+
+# AJAN KESIF YUZEYLERI (9 Eyl 2026). Ucu de GERCEK bir uca isaret eder:
+# katalog ve ARD `diagnose` API'sini duyurur, yetenek dizini onun SKILL.md
+# dosyasini. Arkasinda uc olmayan kayit YAZILMADI (OAuth/MCP/A2A kalemleri
+# bilerek disarida — bkz. tur notu).
+# `api-catalog` UZANTISIZ ve RFC 9727 `application/linkset+json` ister;
+# tip buradan verilmezse Netlify onu `application/octet-stream` sunar ve
+# tarayici kalemi gecmez.
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/openapi.json
+  Content-Type: application/openapi+json
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+# ARD olcutu CORS'u ACIKCA sart kosuyor: kayit defterleri tarayicidan okur.
+/.well-known/ai-catalog.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+# SIRA ONEMLI — `_headers`ta SONRA gelen kural kazanir (kayitli tuzak:
+# genel kural bir keresinde .js kuralini ezmisti). Genel `agent-skills/*`
+# ONCE, `index.json` SONRA: yoksa dizin dosyasi `text/markdown` sunulurdu.
+/.well-known/agent-skills/*
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/agent-skills/index.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
+# AJAN PROTOKOL KARTLARI (9 Eyl 2026). Ikisi de GERCEK bir sunucuyu
+# gosterir: mcp.json -> /mcp (MCP Streamable HTTP), agent-card.json ->
+# /a2a (A2A JSON-RPC). Sunucular netlify/functions/{mcp,a2a}.js, ortak
+# cekirdek ajan-uc.js; olcumu `diagnose` yapar ve KOTA ORTAKTIR.
+# CORS ACIK: kayit defterleri ve tarayici ici ajan istemcileri karti
+# tarayicidan okur (ARD/agent-skills kararinin aynisi).
+/.well-known/mcp.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+/.well-known/agent-card.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+  Cache-Control: public,max-age=0,must-revalidate
+
+# Yönetim paneli: indekslenmesin. (Erişim koruması Basic Auth'ta —
+# /admin.html panel fonksiyonuna yönleniyor, bkz. _redirects.)
+/admin.html
+  X-Robots-Tag: noindex
+
+/404.html
+  X-Robots-Tag: noindex
+
+# DÖNÜŞÜM UCU — meta etiketi zaten noindex (Temel `indeks={false}`); başlık
+# ikinci kilit: bir gün meta düşse bile arama sonucuna girmesin.
+/tesekkur
+  X-Robots-Tag: noindex
+
+/en/tesekkur
+  X-Robots-Tag: noindex
+
+# ÖLÇÜM ZEMİNLERİ — ürün sayfası değil.
+/film
+  X-Robots-Tag: noindex
+/en/film
+  X-Robots-Tag: noindex
+/deneme-react
+  X-Robots-Tag: noindex
+
+# Astro varlıkları içerik-hash'li — sonsuz önbellek güvenli: içerik
+# değişince ad değişir, eski ad zaten hiçbir sayfadan çağrılmaz.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# PENCERE POLİTİKASI (1 Eyl 2026, ölçüldü): film klipleri ve kabuk modülü
+# `/varlik/` altında. SÜRE 1 GÜN, immutable DEĞİL — bilerek: adlar
+# içerik-hash'li değil (sahne34.mp4, kabuk.js), yeniden üretim aynı ada
+# yazar; immutable bassak istemci bir yıl bayat kalırdı.
+# Önbelleksiz bırakmanın bedeli ölçülmüştü: prolog geri sarıldığında
+# pencere dışına atılan klip TAM GÖVDEYLE yeniden iniyordu — tam turda
+# 39 klip / 238 MiB yerine 75 istek / 456 MiB.
+# BETIK DOSYALARI AYRILDI (4 Eyl 2026 — BEDELI ODENDI).
+# `/varlik/*.js` adlari icerik-hash'li DEGIL (kabuk.js, tup.js, nav.js) ve
+# 1 gunluk max-age ile servis ediliyordu. Sonuc: 4 Eyl'de kabuk.js icine
+# giren WebGL tup katmani ziyaretcinin tarayicisina onbelleklendi ve
+# ARDINDAN GELEN BUTUN DUZELTMELER 24 SAAT BOYUNCA ULASMADI. Enes canli
+# sitede kasmayi bildirmeye devam etti, olcumler ise duzelmis surumu
+# olctugu icin "gecti" diyordu — yanlis yesilin en pahali cesidi: olcum
+# dogru, OLCULEN SURUM yanlis.
+# Kabuk betikleri ~11 KB; her istekte dogrulama (304) neredeyse bedava,
+# bayat kabuk ise sitenin davranisini gunlerce yanlis tutuyor.
+# Medya (mp4/webp) 1 gunde kalir — orada bayatlik zararsiz, bayt agir.
+# SIRA ONEMLI (7 Eyl 2026 — KURAL YAZILIYDI AMA CALISMIYORDU).
+# Netlify `_headers`te birden fazla kural eslesirse hepsi uygulanir ve
+# AYNI BASLIK icin SONRA gelen kazanir. `/varlik/*.js` ONCE, `/varlik/*`
+# SONRA yazilmisti; genel kural ozel olani eziyordu ve kabuk.js canlida
+# `max-age=86400` ile servis ediliyordu (curl ile olculdu).
+# Yani yukaridaki 4 Eyl kaydinin anlattigi hata AYNEN tekrar etti: Enes
+# "imleci kapat hala calismiyor" derken ben canlida "calisiyor" olcuyordum
+# — ben dosyayi TAZE indiriyordum, tarayicisi 24 saatlik ONBELLEKTEN
+# okuyordu. Olcum dogru, olculen surum yanlis.
+# Genel kural once, ozel kural sonra: boylece `.js` icin max-age=0 kazanir.
+/varlik/*
+  Cache-Control: public, max-age=86400
+
+/varlik/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Font ve görsel adları hash'siz: 1 gün, immutable DEĞİL (klip
+# politikasıyla aynı gerekçe).
+/font/*
+  Cache-Control: public, max-age=86400
+
+/img/*
+  Cache-Control: public, max-age=86400
+
+# /js/ — kok sitenin hash'siz saticı kitapliklari (tubes.min.js 775 KB).
+# KURAL 7 Eyl 2026'da EKLENDI, sebebi olculdu: tup adasi kutuphaneyi
+# prolog sururken `rel=prefetch` ile isitiyor, kurulum aninda ise
+# `import()` ediyor. Kural yokken dosya `/*` altinda kaliyor ve Netlify
+# varsayilaniyla her istekte yeniden dogrulaniyordu — yani isitma bir tur
+# kazandiriyor ama yine de bir gidis-donus birakiyordu. Font ve gorsel
+# ile AYNI politika: hash'siz oldugu icin 1 gun, `immutable` DEGIL.
+/js/*
+  Cache-Control: public, max-age=86400
+
+/*
+  # Content Signals — robots.txt'teki satırın başlık eşi
+  Content-Signal: search=yes, ai-input=yes, ai-train=no
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+  Content-Security-Policy-Report-Only: default-src 'self'; base-uri 'self'; object-src 'none'; media-src 'self' blob:; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src https:; form-action 'self'
+
+# ============================================================================
+# LINK BASLIKLARI — yeni/link-basliklari.cjs URETIR, elle dokunulmaz.
+# Her sayfa icin canonical + hreflang alternate (sayfanin kendi
+# <head>'inden okunur); iki yol bicimi (egik cizgili ve cizgisiz) —
+# Netlify ikisini de dogrudan sunar. Tazelik: KONTROL=1.
+# ============================================================================
+# LINK-BASLIKLARI-BAS
+/bulten/donusum-oranlari-sektor-sektor/
+  Link: <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; type="text/markdown"
+/bulten/donusum-oranlari-sektor-sektor.md
+  Link: <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor/>; rel="canonical", <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="x-default"
+/bulten/google-ads-maliyetleri-2026/
+  Link: <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; type="text/markdown"
+/bulten/google-ads-maliyetleri-2026.md
+  Link: <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026/>; rel="canonical", <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="x-default"
+/bulten/
+  Link: <https://www.qanatone.com/bulten.md>; rel="alternate"; type="text/markdown"
+/bulten.md
+  Link: <https://www.qanatone.com/bulten/>; rel="canonical", <https://www.qanatone.com/bulten.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten.md>; rel="alternate"; hreflang="x-default"
+/bulten/konu/arama/
+  Link: <https://www.qanatone.com/bulten/konu/arama.md>; rel="alternate"; type="text/markdown"
+/bulten/konu/arama.md
+  Link: <https://www.qanatone.com/bulten/konu/arama/>; rel="canonical", <https://www.qanatone.com/bulten/konu/arama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/arama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/arama.md>; rel="alternate"; hreflang="x-default"
+/bulten/konu/reklam/
+  Link: <https://www.qanatone.com/bulten/konu/reklam.md>; rel="alternate"; type="text/markdown"
+/bulten/konu/reklam.md
+  Link: <https://www.qanatone.com/bulten/konu/reklam/>; rel="canonical", <https://www.qanatone.com/bulten/konu/reklam.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/reklam.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/reklam.md>; rel="alternate"; hreflang="x-default"
+/bulten/konu/sektor/
+  Link: <https://www.qanatone.com/bulten/konu/sektor.md>; rel="alternate"; type="text/markdown"
+/bulten/konu/sektor.md
+  Link: <https://www.qanatone.com/bulten/konu/sektor/>; rel="canonical", <https://www.qanatone.com/bulten/konu/sektor.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/sektor.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/sektor.md>; rel="alternate"; hreflang="x-default"
+/bulten/konu/talep/
+  Link: <https://www.qanatone.com/bulten/konu/talep.md>; rel="alternate"; type="text/markdown"
+/bulten/konu/talep.md
+  Link: <https://www.qanatone.com/bulten/konu/talep/>; rel="canonical", <https://www.qanatone.com/bulten/konu/talep.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/talep.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/talep.md>; rel="alternate"; hreflang="x-default"
+/bulten/saglik-turizmi-hasta-basina-gelir/
+  Link: <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; type="text/markdown"
+/bulten/saglik-turizmi-hasta-basina-gelir.md
+  Link: <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir/>; rel="canonical", <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="x-default"
+/bulten/talebe-bes-dakikada-donmek/
+  Link: <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; type="text/markdown"
+/bulten/talebe-bes-dakikada-donmek.md
+  Link: <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek/>; rel="canonical", <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="x-default"
+/bulten/yapay-zeka-trafigi-tiklama-degil/
+  Link: <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; type="text/markdown"
+/bulten/yapay-zeka-trafigi-tiklama-degil.md
+  Link: <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil/>; rel="canonical", <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="x-default"
+/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/
+  Link: <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; type="text/markdown"
+/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md
+  Link: <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/>; rel="canonical", <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/donusum-oranlari-sektor-sektor/
+  Link: <https://www.qanatone.com/en/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; type="text/markdown"
+/en/bulten/donusum-oranlari-sektor-sektor.md
+  Link: <https://www.qanatone.com/en/bulten/donusum-oranlari-sektor-sektor/>; rel="canonical", <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/donusum-oranlari-sektor-sektor.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/google-ads-maliyetleri-2026/
+  Link: <https://www.qanatone.com/en/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; type="text/markdown"
+/en/bulten/google-ads-maliyetleri-2026.md
+  Link: <https://www.qanatone.com/en/bulten/google-ads-maliyetleri-2026/>; rel="canonical", <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/google-ads-maliyetleri-2026.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/
+  Link: <https://www.qanatone.com/en/bulten.md>; rel="alternate"; type="text/markdown"
+/en/bulten.md
+  Link: <https://www.qanatone.com/en/bulten/>; rel="canonical", <https://www.qanatone.com/bulten.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/konu/arama/
+  Link: <https://www.qanatone.com/en/bulten/konu/arama.md>; rel="alternate"; type="text/markdown"
+/en/bulten/konu/arama.md
+  Link: <https://www.qanatone.com/en/bulten/konu/arama/>; rel="canonical", <https://www.qanatone.com/bulten/konu/arama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/arama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/arama.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/konu/reklam/
+  Link: <https://www.qanatone.com/en/bulten/konu/reklam.md>; rel="alternate"; type="text/markdown"
+/en/bulten/konu/reklam.md
+  Link: <https://www.qanatone.com/en/bulten/konu/reklam/>; rel="canonical", <https://www.qanatone.com/bulten/konu/reklam.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/reklam.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/reklam.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/konu/sektor/
+  Link: <https://www.qanatone.com/en/bulten/konu/sektor.md>; rel="alternate"; type="text/markdown"
+/en/bulten/konu/sektor.md
+  Link: <https://www.qanatone.com/en/bulten/konu/sektor/>; rel="canonical", <https://www.qanatone.com/bulten/konu/sektor.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/sektor.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/sektor.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/konu/talep/
+  Link: <https://www.qanatone.com/en/bulten/konu/talep.md>; rel="alternate"; type="text/markdown"
+/en/bulten/konu/talep.md
+  Link: <https://www.qanatone.com/en/bulten/konu/talep/>; rel="canonical", <https://www.qanatone.com/bulten/konu/talep.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/konu/talep.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/konu/talep.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/saglik-turizmi-hasta-basina-gelir/
+  Link: <https://www.qanatone.com/en/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; type="text/markdown"
+/en/bulten/saglik-turizmi-hasta-basina-gelir.md
+  Link: <https://www.qanatone.com/en/bulten/saglik-turizmi-hasta-basina-gelir/>; rel="canonical", <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/saglik-turizmi-hasta-basina-gelir.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/talebe-bes-dakikada-donmek/
+  Link: <https://www.qanatone.com/en/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; type="text/markdown"
+/en/bulten/talebe-bes-dakikada-donmek.md
+  Link: <https://www.qanatone.com/en/bulten/talebe-bes-dakikada-donmek/>; rel="canonical", <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/talebe-bes-dakikada-donmek.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/yapay-zeka-trafigi-tiklama-degil/
+  Link: <https://www.qanatone.com/en/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; type="text/markdown"
+/en/bulten/yapay-zeka-trafigi-tiklama-degil.md
+  Link: <https://www.qanatone.com/en/bulten/yapay-zeka-trafigi-tiklama-degil/>; rel="canonical", <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/yapay-zeka-trafigi-tiklama-degil.md>; rel="alternate"; hreflang="x-default"
+/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/
+  Link: <https://www.qanatone.com/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; type="text/markdown"
+/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md
+  Link: <https://www.qanatone.com/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/>; rel="canonical", <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu.md>; rel="alternate"; hreflang="x-default"
+/en/haber/a16z-machine-age-fonu/
+  Link: <https://www.qanatone.com/en/haber/a16z-machine-age-fonu.md>; rel="alternate"; type="text/markdown"
+/en/haber/a16z-machine-age-fonu.md
+  Link: <https://www.qanatone.com/en/haber/a16z-machine-age-fonu/>; rel="canonical", <https://www.qanatone.com/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="x-default"
+/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari/
+  Link: <https://www.qanatone.com/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; type="text/markdown"
+/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md
+  Link: <https://www.qanatone.com/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari/>; rel="canonical", <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="x-default"
+/en/haber/ajan-odemeleri-ittifaki/
+  Link: <https://www.qanatone.com/en/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; type="text/markdown"
+/en/haber/ajan-odemeleri-ittifaki.md
+  Link: <https://www.qanatone.com/en/haber/ajan-odemeleri-ittifaki/>; rel="canonical", <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="x-default"
+/en/haber/amd-veri-merkezi-anthropic-2-gigavat/
+  Link: <https://www.qanatone.com/en/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; type="text/markdown"
+/en/haber/amd-veri-merkezi-anthropic-2-gigavat.md
+  Link: <https://www.qanatone.com/en/haber/amd-veri-merkezi-anthropic-2-gigavat/>; rel="canonical", <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="x-default"
+/en/haber/ant-falcon-kur-tahmini-bankalar/
+  Link: <https://www.qanatone.com/en/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; type="text/markdown"
+/en/haber/ant-falcon-kur-tahmini-bankalar.md
+  Link: <https://www.qanatone.com/en/haber/ant-falcon-kur-tahmini-bankalar/>; rel="canonical", <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/apple-siri-ai-iphone-18-pro/
+  Link: <https://www.qanatone.com/en/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; type="text/markdown"
+/en/haber/apple-siri-ai-iphone-18-pro.md
+  Link: <https://www.qanatone.com/en/haber/apple-siri-ai-iphone-18-pro/>; rel="canonical", <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="x-default"
+/en/haber/broadcom-yapay-zeka-cip-geliri/
+  Link: <https://www.qanatone.com/en/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; type="text/markdown"
+/en/haber/broadcom-yapay-zeka-cip-geliri.md
+  Link: <https://www.qanatone.com/en/haber/broadcom-yapay-zeka-cip-geliri/>; rel="canonical", <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="x-default"
+/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama/
+  Link: <https://www.qanatone.com/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; type="text/markdown"
+/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md
+  Link: <https://www.qanatone.com/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama/>; rel="canonical", <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="x-default"
+/en/haber/chatgpt-reklamlari-1-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/chatgpt-reklamlari-1-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/chatgpt-reklamlari-1-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/claude-fable-5-1-mythos-5-1/
+  Link: <https://www.qanatone.com/en/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; type="text/markdown"
+/en/haber/claude-fable-5-1-mythos-5-1.md
+  Link: <https://www.qanatone.com/en/haber/claude-fable-5-1-mythos-5-1/>; rel="canonical", <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="x-default"
+/en/haber/claude-opus-5/
+  Link: <https://www.qanatone.com/en/haber/claude-opus-5.md>; rel="alternate"; type="text/markdown"
+/en/haber/claude-opus-5.md
+  Link: <https://www.qanatone.com/en/haber/claude-opus-5/>; rel="canonical", <https://www.qanatone.com/haber/claude-opus-5.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/claude-opus-5.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/claude-opus-5.md>; rel="alternate"; hreflang="x-default"
+/en/haber/coinbase-x402-ajan-odemeleri/
+  Link: <https://www.qanatone.com/en/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; type="text/markdown"
+/en/haber/coinbase-x402-ajan-odemeleri.md
+  Link: <https://www.qanatone.com/en/haber/coinbase-x402-ajan-odemeleri/>; rel="canonical", <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="x-default"
+/en/haber/databricks-190-milyar-degerleme/
+  Link: <https://www.qanatone.com/en/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; type="text/markdown"
+/en/haber/databricks-190-milyar-degerleme.md
+  Link: <https://www.qanatone.com/en/haber/databricks-190-milyar-degerleme/>; rel="canonical", <https://www.qanatone.com/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="x-default"
+/en/haber/deepseek-v4-pro-yogun-saat-fiyati/
+  Link: <https://www.qanatone.com/en/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; type="text/markdown"
+/en/haber/deepseek-v4-pro-yogun-saat-fiyati.md
+  Link: <https://www.qanatone.com/en/haber/deepseek-v4-pro-yogun-saat-fiyati/>; rel="canonical", <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="x-default"
+/en/haber/emerald-ai-esnek-veri-merkezi/
+  Link: <https://www.qanatone.com/en/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; type="text/markdown"
+/en/haber/emerald-ai-esnek-veri-merkezi.md
+  Link: <https://www.qanatone.com/en/haber/emerald-ai-esnek-veri-merkezi/>; rel="canonical", <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz/
+  Link: <https://www.qanatone.com/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; type="text/markdown"
+/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md
+  Link: <https://www.qanatone.com/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz/>; rel="canonical", <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="x-default"
+/en/haber/firmus-2-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/firmus-2-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/firmus-2-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/firmus-2-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/gemini-3-7-flash/
+  Link: <https://www.qanatone.com/en/haber/gemini-3-7-flash.md>; rel="alternate"; type="text/markdown"
+/en/haber/gemini-3-7-flash.md
+  Link: <https://www.qanatone.com/en/haber/gemini-3-7-flash/>; rel="canonical", <https://www.qanatone.com/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="x-default"
+/en/haber/gemini-chrome-android-auto-browse/
+  Link: <https://www.qanatone.com/en/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; type="text/markdown"
+/en/haber/gemini-chrome-android-auto-browse.md
+  Link: <https://www.qanatone.com/en/haber/gemini-chrome-android-auto-browse/>; rel="canonical", <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="x-default"
+/en/haber/gemini-uygulamasi-1-milyar-kullanici/
+  Link: <https://www.qanatone.com/en/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; type="text/markdown"
+/en/haber/gemini-uygulamasi-1-milyar-kullanici.md
+  Link: <https://www.qanatone.com/en/haber/gemini-uygulamasi-1-milyar-kullanici/>; rel="canonical", <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="x-default"
+/en/haber/georgia-power-openai-3-2-gigavat/
+  Link: <https://www.qanatone.com/en/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; type="text/markdown"
+/en/haber/georgia-power-openai-3-2-gigavat.md
+  Link: <https://www.qanatone.com/en/haber/georgia-power-openai-3-2-gigavat/>; rel="canonical", <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="x-default"
+/en/haber/gitex-ai-turkiye-istanbul/
+  Link: <https://www.qanatone.com/en/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; type="text/markdown"
+/en/haber/gitex-ai-turkiye-istanbul.md
+  Link: <https://www.qanatone.com/en/haber/gitex-ai-turkiye-istanbul/>; rel="canonical", <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="x-default"
+/en/haber/google-ads-genis-eslesme-ai-max/
+  Link: <https://www.qanatone.com/en/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; type="text/markdown"
+/en/haber/google-ads-genis-eslesme-ai-max.md
+  Link: <https://www.qanatone.com/en/haber/google-ads-genis-eslesme-ai-max/>; rel="canonical", <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="x-default"
+/en/haber/google-chat-ask-gemini/
+  Link: <https://www.qanatone.com/en/haber/google-chat-ask-gemini.md>; rel="alternate"; type="text/markdown"
+/en/haber/google-chat-ask-gemini.md
+  Link: <https://www.qanatone.com/en/haber/google-chat-ask-gemini/>; rel="canonical", <https://www.qanatone.com/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="x-default"
+/en/haber/gpt-5-6-sol-luna-guncellemesi/
+  Link: <https://www.qanatone.com/en/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; type="text/markdown"
+/en/haber/gpt-5-6-sol-luna-guncellemesi.md
+  Link: <https://www.qanatone.com/en/haber/gpt-5-6-sol-luna-guncellemesi/>; rel="canonical", <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/
+  Link: <https://www.qanatone.com/en/haber.md>; rel="alternate"; type="text/markdown"
+/en/haber.md
+  Link: <https://www.qanatone.com/en/haber/>; rel="canonical", <https://www.qanatone.com/haber.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber.md>; rel="alternate"; hreflang="x-default"
+/en/haber/instinct-2-5-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/instinct-2-5-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/instinct-2-5-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/kimi-k3-acik-agirlik/
+  Link: <https://www.qanatone.com/en/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; type="text/markdown"
+/en/haber/kimi-k3-acik-agirlik.md
+  Link: <https://www.qanatone.com/en/haber/kimi-k3-acik-agirlik/>; rel="canonical", <https://www.qanatone.com/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/altyapi/
+  Link: <https://www.qanatone.com/en/haber/konu/altyapi.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/altyapi.md
+  Link: <https://www.qanatone.com/en/haber/konu/altyapi/>; rel="canonical", <https://www.qanatone.com/haber/konu/altyapi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/altyapi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/altyapi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/arama/
+  Link: <https://www.qanatone.com/en/haber/konu/arama.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/arama.md
+  Link: <https://www.qanatone.com/en/haber/konu/arama/>; rel="canonical", <https://www.qanatone.com/haber/konu/arama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/arama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/arama.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/model/
+  Link: <https://www.qanatone.com/en/haber/konu/model.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/model.md
+  Link: <https://www.qanatone.com/en/haber/konu/model/>; rel="canonical", <https://www.qanatone.com/haber/konu/model.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/model.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/model.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/model/sayfa/2/
+  Link: <https://www.qanatone.com/en/haber/konu/model/sayfa/2.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/model/sayfa/2.md
+  Link: <https://www.qanatone.com/en/haber/konu/model/sayfa/2/>; rel="canonical", <https://www.qanatone.com/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/odeme/
+  Link: <https://www.qanatone.com/en/haber/konu/odeme.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/odeme.md
+  Link: <https://www.qanatone.com/en/haber/konu/odeme/>; rel="canonical", <https://www.qanatone.com/haber/konu/odeme.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/odeme.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/odeme.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/politika/
+  Link: <https://www.qanatone.com/en/haber/konu/politika.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/politika.md
+  Link: <https://www.qanatone.com/en/haber/konu/politika/>; rel="canonical", <https://www.qanatone.com/haber/konu/politika.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/politika.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/politika.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/reklam/
+  Link: <https://www.qanatone.com/en/haber/konu/reklam.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/reklam.md
+  Link: <https://www.qanatone.com/en/haber/konu/reklam/>; rel="canonical", <https://www.qanatone.com/haber/konu/reklam.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/reklam.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/reklam.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/talep/
+  Link: <https://www.qanatone.com/en/haber/konu/talep.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/talep.md
+  Link: <https://www.qanatone.com/en/haber/konu/talep/>; rel="canonical", <https://www.qanatone.com/haber/konu/talep.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/talep.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/talep.md>; rel="alternate"; hreflang="x-default"
+/en/haber/konu/yatirim/
+  Link: <https://www.qanatone.com/en/haber/konu/yatirim.md>; rel="alternate"; type="text/markdown"
+/en/haber/konu/yatirim.md
+  Link: <https://www.qanatone.com/en/haber/konu/yatirim/>; rel="canonical", <https://www.qanatone.com/haber/konu/yatirim.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/yatirim.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/yatirim.md>; rel="alternate"; hreflang="x-default"
+/en/haber/lovable-13-3-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/lovable-13-3-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/lovable-13-3-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/meta-business-agent-ucretli/
+  Link: <https://www.qanatone.com/en/haber/meta-business-agent-ucretli.md>; rel="alternate"; type="text/markdown"
+/en/haber/meta-business-agent-ucretli.md
+  Link: <https://www.qanatone.com/en/haber/meta-business-agent-ucretli/>; rel="canonical", <https://www.qanatone.com/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="x-default"
+/en/haber/meta-muse-code-kodlama-ajani/
+  Link: <https://www.qanatone.com/en/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; type="text/markdown"
+/en/haber/meta-muse-code-kodlama-ajani.md
+  Link: <https://www.qanatone.com/en/haber/meta-muse-code-kodlama-ajani/>; rel="canonical", <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="x-default"
+/en/haber/mistral-3-milyar-euro-tur/
+  Link: <https://www.qanatone.com/en/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; type="text/markdown"
+/en/haber/mistral-3-milyar-euro-tur.md
+  Link: <https://www.qanatone.com/en/haber/mistral-3-milyar-euro-tur/>; rel="canonical", <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="x-default"
+/en/haber/moss-rillet-finans-ekipleri-yapay-zeka/
+  Link: <https://www.qanatone.com/en/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; type="text/markdown"
+/en/haber/moss-rillet-finans-ekipleri-yapay-zeka.md
+  Link: <https://www.qanatone.com/en/haber/moss-rillet-finans-ekipleri-yapay-zeka/>; rel="canonical", <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="x-default"
+/en/haber/nvidia-96-milyar-dolar-ceyrek/
+  Link: <https://www.qanatone.com/en/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; type="text/markdown"
+/en/haber/nvidia-96-milyar-dolar-ceyrek.md
+  Link: <https://www.qanatone.com/en/haber/nvidia-96-milyar-dolar-ceyrek/>; rel="canonical", <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="x-default"
+/en/haber/openai-atlas-tarayici-kapandi/
+  Link: <https://www.qanatone.com/en/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; type="text/markdown"
+/en/haber/openai-atlas-tarayici-kapandi.md
+  Link: <https://www.qanatone.com/en/haber/openai-atlas-tarayici-kapandi/>; rel="canonical", <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/openai-halka-arz-2027/
+  Link: <https://www.qanatone.com/en/haber/openai-halka-arz-2027.md>; rel="alternate"; type="text/markdown"
+/en/haber/openai-halka-arz-2027.md
+  Link: <https://www.qanatone.com/en/haber/openai-halka-arz-2027/>; rel="canonical", <https://www.qanatone.com/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="x-default"
+/en/haber/pixel-11-tensor-g6-gemini-nano/
+  Link: <https://www.qanatone.com/en/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; type="text/markdown"
+/en/haber/pixel-11-tensor-g6-gemini-nano.md
+  Link: <https://www.qanatone.com/en/haber/pixel-11-tensor-g6-gemini-nano/>; rel="canonical", <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="x-default"
+/en/haber/qwen3-8-max-2-4-trilyon/
+  Link: <https://www.qanatone.com/en/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; type="text/markdown"
+/en/haber/qwen3-8-max-2-4-trilyon.md
+  Link: <https://www.qanatone.com/en/haber/qwen3-8-max-2-4-trilyon/>; rel="canonical", <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="x-default"
+/en/haber/revolut-research-pragma/
+  Link: <https://www.qanatone.com/en/haber/revolut-research-pragma.md>; rel="alternate"; type="text/markdown"
+/en/haber/revolut-research-pragma.md
+  Link: <https://www.qanatone.com/en/haber/revolut-research-pragma/>; rel="canonical", <https://www.qanatone.com/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="x-default"
+/en/haber/salesforce-agentforce-1-5-milyar/
+  Link: <https://www.qanatone.com/en/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; type="text/markdown"
+/en/haber/salesforce-agentforce-1-5-milyar.md
+  Link: <https://www.qanatone.com/en/haber/salesforce-agentforce-1-5-milyar/>; rel="canonical", <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/sayfa/2/
+  Link: <https://www.qanatone.com/en/haber/sayfa/2.md>; rel="alternate"; type="text/markdown"
+/en/haber/sayfa/2.md
+  Link: <https://www.qanatone.com/en/haber/sayfa/2/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/2.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/2.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/2.md>; rel="alternate"; hreflang="x-default"
+/en/haber/sayfa/3/
+  Link: <https://www.qanatone.com/en/haber/sayfa/3.md>; rel="alternate"; type="text/markdown"
+/en/haber/sayfa/3.md
+  Link: <https://www.qanatone.com/en/haber/sayfa/3/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/3.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/3.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/3.md>; rel="alternate"; hreflang="x-default"
+/en/haber/sayfa/4/
+  Link: <https://www.qanatone.com/en/haber/sayfa/4.md>; rel="alternate"; type="text/markdown"
+/en/haber/sayfa/4.md
+  Link: <https://www.qanatone.com/en/haber/sayfa/4/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/4.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/4.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/4.md>; rel="alternate"; hreflang="x-default"
+/en/haber/sayfa/5/
+  Link: <https://www.qanatone.com/en/haber/sayfa/5.md>; rel="alternate"; type="text/markdown"
+/en/haber/sayfa/5.md
+  Link: <https://www.qanatone.com/en/haber/sayfa/5/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/5.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/5.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/5.md>; rel="alternate"; hreflang="x-default"
+/en/haber/shopify-yapay-zeka-siparisleri/
+  Link: <https://www.qanatone.com/en/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; type="text/markdown"
+/en/haber/shopify-yapay-zeka-siparisleri.md
+  Link: <https://www.qanatone.com/en/haber/shopify-yapay-zeka-siparisleri/>; rel="canonical", <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="x-default"
+/en/haber/spacex-cursor-60-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/spacex-cursor-60-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/spacex-cursor-60-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/stability-ai-76-milyon-dolar/
+  Link: <https://www.qanatone.com/en/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/stability-ai-76-milyon-dolar.md
+  Link: <https://www.qanatone.com/en/haber/stability-ai-76-milyon-dolar/>; rel="canonical", <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/stripe-openrouter-satin-alma/
+  Link: <https://www.qanatone.com/en/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; type="text/markdown"
+/en/haber/stripe-openrouter-satin-alma.md
+  Link: <https://www.qanatone.com/en/haber/stripe-openrouter-satin-alma/>; rel="canonical", <https://www.qanatone.com/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="x-default"
+/en/haber/tsmc-agustos-rekor-gelir/
+  Link: <https://www.qanatone.com/en/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; type="text/markdown"
+/en/haber/tsmc-agustos-rekor-gelir.md
+  Link: <https://www.qanatone.com/en/haber/tsmc-agustos-rekor-gelir/>; rel="canonical", <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="x-default"
+/en/haber/turkiye-yapay-zeka-eylem-plani/
+  Link: <https://www.qanatone.com/en/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; type="text/markdown"
+/en/haber/turkiye-yapay-zeka-eylem-plani.md
+  Link: <https://www.qanatone.com/en/haber/turkiye-yapay-zeka-eylem-plani/>; rel="canonical", <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="x-default"
+/en/haber/veri-merkezi-elektrik-talebi/
+  Link: <https://www.qanatone.com/en/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; type="text/markdown"
+/en/haber/veri-merkezi-elektrik-talebi.md
+  Link: <https://www.qanatone.com/en/haber/veri-merkezi-elektrik-talebi/>; rel="canonical", <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/visa-biocatch-2-4-milyar-dolar/
+  Link: <https://www.qanatone.com/en/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/visa-biocatch-2-4-milyar-dolar.md
+  Link: <https://www.qanatone.com/en/haber/visa-biocatch-2-4-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/visa-mastercard-ant-ajan-kimligi/
+  Link: <https://www.qanatone.com/en/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; type="text/markdown"
+/en/haber/visa-mastercard-ant-ajan-kimligi.md
+  Link: <https://www.qanatone.com/en/haber/visa-mastercard-ant-ajan-kimligi/>; rel="canonical", <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="x-default"
+/en/haber/wispr-280-milyon-dolar/
+  Link: <https://www.qanatone.com/en/haber/wispr-280-milyon-dolar.md>; rel="alternate"; type="text/markdown"
+/en/haber/wispr-280-milyon-dolar.md
+  Link: <https://www.qanatone.com/en/haber/wispr-280-milyon-dolar/>; rel="canonical", <https://www.qanatone.com/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="x-default"
+/en/haber/xai-grok-4-6-grok-bot/
+  Link: <https://www.qanatone.com/en/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; type="text/markdown"
+/en/haber/xai-grok-4-6-grok-bot.md
+  Link: <https://www.qanatone.com/en/haber/xai-grok-4-6-grok-bot/>; rel="canonical", <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/ai-ajan/
+  Link: <https://www.qanatone.com/en/hizmetler/ai-ajan.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/ai-ajan.md
+  Link: <https://www.qanatone.com/en/hizmetler/ai-ajan/>; rel="canonical", <https://www.qanatone.com/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/finans/
+  Link: <https://www.qanatone.com/en/hizmetler/finans.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/finans.md
+  Link: <https://www.qanatone.com/en/hizmetler/finans/>; rel="canonical", <https://www.qanatone.com/hizmetler/finans.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/finans.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/finans.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/geo/
+  Link: <https://www.qanatone.com/en/hizmetler/geo.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/geo.md
+  Link: <https://www.qanatone.com/en/hizmetler/geo/>; rel="canonical", <https://www.qanatone.com/hizmetler/geo.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/geo.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/geo.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/google-ads/
+  Link: <https://www.qanatone.com/en/hizmetler/google-ads.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/google-ads.md
+  Link: <https://www.qanatone.com/en/hizmetler/google-ads/>; rel="canonical", <https://www.qanatone.com/hizmetler/google-ads.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/google-ads.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/google-ads.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/
+  Link: <https://www.qanatone.com/en/hizmetler.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler.md
+  Link: <https://www.qanatone.com/en/hizmetler/>; rel="canonical", <https://www.qanatone.com/hizmetler.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/meta-ads/
+  Link: <https://www.qanatone.com/en/hizmetler/meta-ads.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/meta-ads.md
+  Link: <https://www.qanatone.com/en/hizmetler/meta-ads/>; rel="canonical", <https://www.qanatone.com/hizmetler/meta-ads.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/meta-ads.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/meta-ads.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/otomasyon/
+  Link: <https://www.qanatone.com/en/hizmetler/otomasyon.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/otomasyon.md
+  Link: <https://www.qanatone.com/en/hizmetler/otomasyon/>; rel="canonical", <https://www.qanatone.com/hizmetler/otomasyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/otomasyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/otomasyon.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/seo/
+  Link: <https://www.qanatone.com/en/hizmetler/seo.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/seo.md
+  Link: <https://www.qanatone.com/en/hizmetler/seo/>; rel="canonical", <https://www.qanatone.com/hizmetler/seo.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/seo.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/seo.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/web-sitesi-araclar/
+  Link: <https://www.qanatone.com/en/hizmetler/web-sitesi-araclar.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/web-sitesi-araclar.md
+  Link: <https://www.qanatone.com/en/hizmetler/web-sitesi-araclar/>; rel="canonical", <https://www.qanatone.com/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="x-default"
+/en/hizmetler/web-tasarim/
+  Link: <https://www.qanatone.com/en/hizmetler/web-tasarim.md>; rel="alternate"; type="text/markdown"
+/en/hizmetler/web-tasarim.md
+  Link: <https://www.qanatone.com/en/hizmetler/web-tasarim/>; rel="canonical", <https://www.qanatone.com/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="x-default"
+/en/
+  Link: <https://www.qanatone.com/en.md>; rel="alternate"; type="text/markdown"
+/en.md
+  Link: <https://www.qanatone.com/en/>; rel="canonical", <https://www.qanatone.com/index.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/index.md>; rel="alternate"; hreflang="x-default"
+/en/nedir/buyuk-dil-modelleri-nedir/
+  Link: <https://www.qanatone.com/en/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; type="text/markdown"
+/en/nedir/buyuk-dil-modelleri-nedir.md
+  Link: <https://www.qanatone.com/en/nedir/buyuk-dil-modelleri-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="x-default"
+/en/nedir/
+  Link: <https://www.qanatone.com/en/nedir.md>; rel="alternate"; type="text/markdown"
+/en/nedir.md
+  Link: <https://www.qanatone.com/en/nedir/>; rel="canonical", <https://www.qanatone.com/nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir.md>; rel="alternate"; hreflang="x-default"
+/en/nedir/rag-nedir/
+  Link: <https://www.qanatone.com/en/nedir/rag-nedir.md>; rel="alternate"; type="text/markdown"
+/en/nedir/rag-nedir.md
+  Link: <https://www.qanatone.com/en/nedir/rag-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/rag-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/rag-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/rag-nedir.md>; rel="alternate"; hreflang="x-default"
+/en/nedir/yapay-zeka-nedir/
+  Link: <https://www.qanatone.com/en/nedir/yapay-zeka-nedir.md>; rel="alternate"; type="text/markdown"
+/en/nedir/yapay-zeka-nedir.md
+  Link: <https://www.qanatone.com/en/nedir/yapay-zeka-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="x-default"
+/en/otomasyon/
+  Link: <https://www.qanatone.com/en/otomasyon.md>; rel="alternate"; type="text/markdown"
+/en/otomasyon.md
+  Link: <https://www.qanatone.com/en/otomasyon/>; rel="canonical", <https://www.qanatone.com/otomasyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/otomasyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/otomasyon.md>; rel="alternate"; hreflang="x-default"
+/en/projeler/bab-ic-mimarlik/
+  Link: <https://www.qanatone.com/en/projeler/bab-ic-mimarlik.md>; rel="alternate"; type="text/markdown"
+/en/projeler/bab-ic-mimarlik.md
+  Link: <https://www.qanatone.com/en/projeler/bab-ic-mimarlik/>; rel="canonical", <https://www.qanatone.com/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="x-default"
+/en/projeler/charles-schwab/
+  Link: <https://www.qanatone.com/en/projeler/charles-schwab.md>; rel="alternate"; type="text/markdown"
+/en/projeler/charles-schwab.md
+  Link: <https://www.qanatone.com/en/projeler/charles-schwab/>; rel="canonical", <https://www.qanatone.com/projeler/charles-schwab.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/charles-schwab.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/charles-schwab.md>; rel="alternate"; hreflang="x-default"
+/en/projeler/cmblu-energy/
+  Link: <https://www.qanatone.com/en/projeler/cmblu-energy.md>; rel="alternate"; type="text/markdown"
+/en/projeler/cmblu-energy.md
+  Link: <https://www.qanatone.com/en/projeler/cmblu-energy/>; rel="canonical", <https://www.qanatone.com/projeler/cmblu-energy.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/cmblu-energy.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/cmblu-energy.md>; rel="alternate"; hreflang="x-default"
+/en/projeler/
+  Link: <https://www.qanatone.com/en/projeler.md>; rel="alternate"; type="text/markdown"
+/en/projeler.md
+  Link: <https://www.qanatone.com/en/projeler/>; rel="canonical", <https://www.qanatone.com/projeler.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler.md>; rel="alternate"; hreflang="x-default"
+/en/projeler/skyclinics/
+  Link: <https://www.qanatone.com/en/projeler/skyclinics.md>; rel="alternate"; type="text/markdown"
+/en/projeler/skyclinics.md
+  Link: <https://www.qanatone.com/en/projeler/skyclinics/>; rel="canonical", <https://www.qanatone.com/projeler/skyclinics.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/skyclinics.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/skyclinics.md>; rel="alternate"; hreflang="x-default"
+/en/sektor/eticaret/
+  Link: <https://www.qanatone.com/en/sektor/eticaret.md>; rel="alternate"; type="text/markdown"
+/en/sektor/eticaret.md
+  Link: <https://www.qanatone.com/en/sektor/eticaret/>; rel="canonical", <https://www.qanatone.com/sektor/eticaret.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/eticaret.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/eticaret.md>; rel="alternate"; hreflang="x-default"
+/en/sektor/finans/
+  Link: <https://www.qanatone.com/en/sektor/finans.md>; rel="alternate"; type="text/markdown"
+/en/sektor/finans.md
+  Link: <https://www.qanatone.com/en/sektor/finans/>; rel="canonical", <https://www.qanatone.com/sektor/finans.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/finans.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/finans.md>; rel="alternate"; hreflang="x-default"
+/en/sektor/saglik/
+  Link: <https://www.qanatone.com/en/sektor/saglik.md>; rel="alternate"; type="text/markdown"
+/en/sektor/saglik.md
+  Link: <https://www.qanatone.com/en/sektor/saglik/>; rel="canonical", <https://www.qanatone.com/sektor/saglik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/saglik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/saglik.md>; rel="alternate"; hreflang="x-default"
+/en/sss/
+  Link: <https://www.qanatone.com/en/sss.md>; rel="alternate"; type="text/markdown"
+/en/sss.md
+  Link: <https://www.qanatone.com/en/sss/>; rel="canonical", <https://www.qanatone.com/sss.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sss.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sss.md>; rel="alternate"; hreflang="x-default"
+/en/surec/
+  Link: <https://www.qanatone.com/en/surec.md>; rel="alternate"; type="text/markdown"
+/en/surec.md
+  Link: <https://www.qanatone.com/en/surec/>; rel="canonical", <https://www.qanatone.com/surec.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/surec.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/surec.md>; rel="alternate"; hreflang="x-default"
+/haber/a16z-machine-age-fonu/
+  Link: <https://www.qanatone.com/haber/a16z-machine-age-fonu.md>; rel="alternate"; type="text/markdown"
+/haber/a16z-machine-age-fonu.md
+  Link: <https://www.qanatone.com/haber/a16z-machine-age-fonu/>; rel="canonical", <https://www.qanatone.com/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/a16z-machine-age-fonu.md>; rel="alternate"; hreflang="x-default"
+/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari/
+  Link: <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; type="text/markdown"
+/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md
+  Link: <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari/>; rel="canonical", <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ab-yapay-zeka-yasasi-seffaflik-kurallari.md>; rel="alternate"; hreflang="x-default"
+/haber/ajan-odemeleri-ittifaki/
+  Link: <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; type="text/markdown"
+/haber/ajan-odemeleri-ittifaki.md
+  Link: <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki/>; rel="canonical", <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ajan-odemeleri-ittifaki.md>; rel="alternate"; hreflang="x-default"
+/haber/amd-veri-merkezi-anthropic-2-gigavat/
+  Link: <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; type="text/markdown"
+/haber/amd-veri-merkezi-anthropic-2-gigavat.md
+  Link: <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat/>; rel="canonical", <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/amd-veri-merkezi-anthropic-2-gigavat.md>; rel="alternate"; hreflang="x-default"
+/haber/ant-falcon-kur-tahmini-bankalar/
+  Link: <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; type="text/markdown"
+/haber/ant-falcon-kur-tahmini-bankalar.md
+  Link: <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar/>; rel="canonical", <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/ant-falcon-kur-tahmini-bankalar.md>; rel="alternate"; hreflang="x-default"
+/haber/apple-siri-ai-iphone-18-pro/
+  Link: <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; type="text/markdown"
+/haber/apple-siri-ai-iphone-18-pro.md
+  Link: <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro/>; rel="canonical", <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/apple-siri-ai-iphone-18-pro.md>; rel="alternate"; hreflang="x-default"
+/haber/broadcom-yapay-zeka-cip-geliri/
+  Link: <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; type="text/markdown"
+/haber/broadcom-yapay-zeka-cip-geliri.md
+  Link: <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri/>; rel="canonical", <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/broadcom-yapay-zeka-cip-geliri.md>; rel="alternate"; hreflang="x-default"
+/haber/buyuk-teknoloji-725-milyar-dolar-harcama/
+  Link: <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; type="text/markdown"
+/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md
+  Link: <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama/>; rel="canonical", <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/buyuk-teknoloji-725-milyar-dolar-harcama.md>; rel="alternate"; hreflang="x-default"
+/haber/chatgpt-reklamlari-1-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/chatgpt-reklamlari-1-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/chatgpt-reklamlari-1-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/claude-fable-5-1-mythos-5-1/
+  Link: <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; type="text/markdown"
+/haber/claude-fable-5-1-mythos-5-1.md
+  Link: <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1/>; rel="canonical", <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/claude-fable-5-1-mythos-5-1.md>; rel="alternate"; hreflang="x-default"
+/haber/claude-opus-5/
+  Link: <https://www.qanatone.com/haber/claude-opus-5.md>; rel="alternate"; type="text/markdown"
+/haber/claude-opus-5.md
+  Link: <https://www.qanatone.com/haber/claude-opus-5/>; rel="canonical", <https://www.qanatone.com/haber/claude-opus-5.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/claude-opus-5.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/claude-opus-5.md>; rel="alternate"; hreflang="x-default"
+/haber/coinbase-x402-ajan-odemeleri/
+  Link: <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; type="text/markdown"
+/haber/coinbase-x402-ajan-odemeleri.md
+  Link: <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri/>; rel="canonical", <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/coinbase-x402-ajan-odemeleri.md>; rel="alternate"; hreflang="x-default"
+/haber/databricks-190-milyar-degerleme/
+  Link: <https://www.qanatone.com/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; type="text/markdown"
+/haber/databricks-190-milyar-degerleme.md
+  Link: <https://www.qanatone.com/haber/databricks-190-milyar-degerleme/>; rel="canonical", <https://www.qanatone.com/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/databricks-190-milyar-degerleme.md>; rel="alternate"; hreflang="x-default"
+/haber/deepseek-v4-pro-yogun-saat-fiyati/
+  Link: <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; type="text/markdown"
+/haber/deepseek-v4-pro-yogun-saat-fiyati.md
+  Link: <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati/>; rel="canonical", <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/deepseek-v4-pro-yogun-saat-fiyati.md>; rel="alternate"; hreflang="x-default"
+/haber/emerald-ai-esnek-veri-merkezi/
+  Link: <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; type="text/markdown"
+/haber/emerald-ai-esnek-veri-merkezi.md
+  Link: <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi/>; rel="canonical", <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/emerald-ai-esnek-veri-merkezi.md>; rel="alternate"; hreflang="x-default"
+/haber/fda-uretken-yapay-zeka-tibbi-cihaz/
+  Link: <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; type="text/markdown"
+/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md
+  Link: <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz/>; rel="canonical", <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/fda-uretken-yapay-zeka-tibbi-cihaz.md>; rel="alternate"; hreflang="x-default"
+/haber/firmus-2-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/firmus-2-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/firmus-2-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/firmus-2-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/firmus-2-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/gemini-3-7-flash/
+  Link: <https://www.qanatone.com/haber/gemini-3-7-flash.md>; rel="alternate"; type="text/markdown"
+/haber/gemini-3-7-flash.md
+  Link: <https://www.qanatone.com/haber/gemini-3-7-flash/>; rel="canonical", <https://www.qanatone.com/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-3-7-flash.md>; rel="alternate"; hreflang="x-default"
+/haber/gemini-chrome-android-auto-browse/
+  Link: <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; type="text/markdown"
+/haber/gemini-chrome-android-auto-browse.md
+  Link: <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse/>; rel="canonical", <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-chrome-android-auto-browse.md>; rel="alternate"; hreflang="x-default"
+/haber/gemini-uygulamasi-1-milyar-kullanici/
+  Link: <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; type="text/markdown"
+/haber/gemini-uygulamasi-1-milyar-kullanici.md
+  Link: <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici/>; rel="canonical", <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gemini-uygulamasi-1-milyar-kullanici.md>; rel="alternate"; hreflang="x-default"
+/haber/georgia-power-openai-3-2-gigavat/
+  Link: <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; type="text/markdown"
+/haber/georgia-power-openai-3-2-gigavat.md
+  Link: <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat/>; rel="canonical", <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/georgia-power-openai-3-2-gigavat.md>; rel="alternate"; hreflang="x-default"
+/haber/gitex-ai-turkiye-istanbul/
+  Link: <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; type="text/markdown"
+/haber/gitex-ai-turkiye-istanbul.md
+  Link: <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul/>; rel="canonical", <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gitex-ai-turkiye-istanbul.md>; rel="alternate"; hreflang="x-default"
+/haber/google-ads-genis-eslesme-ai-max/
+  Link: <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; type="text/markdown"
+/haber/google-ads-genis-eslesme-ai-max.md
+  Link: <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max/>; rel="canonical", <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/google-ads-genis-eslesme-ai-max.md>; rel="alternate"; hreflang="x-default"
+/haber/google-chat-ask-gemini/
+  Link: <https://www.qanatone.com/haber/google-chat-ask-gemini.md>; rel="alternate"; type="text/markdown"
+/haber/google-chat-ask-gemini.md
+  Link: <https://www.qanatone.com/haber/google-chat-ask-gemini/>; rel="canonical", <https://www.qanatone.com/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/google-chat-ask-gemini.md>; rel="alternate"; hreflang="x-default"
+/haber/gpt-5-6-sol-luna-guncellemesi/
+  Link: <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; type="text/markdown"
+/haber/gpt-5-6-sol-luna-guncellemesi.md
+  Link: <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi/>; rel="canonical", <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/gpt-5-6-sol-luna-guncellemesi.md>; rel="alternate"; hreflang="x-default"
+/haber/
+  Link: <https://www.qanatone.com/haber.md>; rel="alternate"; type="text/markdown"
+/haber.md
+  Link: <https://www.qanatone.com/haber/>; rel="canonical", <https://www.qanatone.com/haber.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber.md>; rel="alternate"; hreflang="x-default"
+/haber/instinct-2-5-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/instinct-2-5-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/instinct-2-5-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/kimi-k3-acik-agirlik/
+  Link: <https://www.qanatone.com/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; type="text/markdown"
+/haber/kimi-k3-acik-agirlik.md
+  Link: <https://www.qanatone.com/haber/kimi-k3-acik-agirlik/>; rel="canonical", <https://www.qanatone.com/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/kimi-k3-acik-agirlik.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/altyapi/
+  Link: <https://www.qanatone.com/haber/konu/altyapi.md>; rel="alternate"; type="text/markdown"
+/haber/konu/altyapi.md
+  Link: <https://www.qanatone.com/haber/konu/altyapi/>; rel="canonical", <https://www.qanatone.com/haber/konu/altyapi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/altyapi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/altyapi.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/arama/
+  Link: <https://www.qanatone.com/haber/konu/arama.md>; rel="alternate"; type="text/markdown"
+/haber/konu/arama.md
+  Link: <https://www.qanatone.com/haber/konu/arama/>; rel="canonical", <https://www.qanatone.com/haber/konu/arama.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/arama.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/arama.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/model/
+  Link: <https://www.qanatone.com/haber/konu/model.md>; rel="alternate"; type="text/markdown"
+/haber/konu/model.md
+  Link: <https://www.qanatone.com/haber/konu/model/>; rel="canonical", <https://www.qanatone.com/haber/konu/model.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/model.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/model.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/model/sayfa/2/
+  Link: <https://www.qanatone.com/haber/konu/model/sayfa/2.md>; rel="alternate"; type="text/markdown"
+/haber/konu/model/sayfa/2.md
+  Link: <https://www.qanatone.com/haber/konu/model/sayfa/2/>; rel="canonical", <https://www.qanatone.com/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/model/sayfa/2.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/odeme/
+  Link: <https://www.qanatone.com/haber/konu/odeme.md>; rel="alternate"; type="text/markdown"
+/haber/konu/odeme.md
+  Link: <https://www.qanatone.com/haber/konu/odeme/>; rel="canonical", <https://www.qanatone.com/haber/konu/odeme.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/odeme.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/odeme.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/politika/
+  Link: <https://www.qanatone.com/haber/konu/politika.md>; rel="alternate"; type="text/markdown"
+/haber/konu/politika.md
+  Link: <https://www.qanatone.com/haber/konu/politika/>; rel="canonical", <https://www.qanatone.com/haber/konu/politika.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/politika.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/politika.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/reklam/
+  Link: <https://www.qanatone.com/haber/konu/reklam.md>; rel="alternate"; type="text/markdown"
+/haber/konu/reklam.md
+  Link: <https://www.qanatone.com/haber/konu/reklam/>; rel="canonical", <https://www.qanatone.com/haber/konu/reklam.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/reklam.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/reklam.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/talep/
+  Link: <https://www.qanatone.com/haber/konu/talep.md>; rel="alternate"; type="text/markdown"
+/haber/konu/talep.md
+  Link: <https://www.qanatone.com/haber/konu/talep/>; rel="canonical", <https://www.qanatone.com/haber/konu/talep.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/talep.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/talep.md>; rel="alternate"; hreflang="x-default"
+/haber/konu/yatirim/
+  Link: <https://www.qanatone.com/haber/konu/yatirim.md>; rel="alternate"; type="text/markdown"
+/haber/konu/yatirim.md
+  Link: <https://www.qanatone.com/haber/konu/yatirim/>; rel="canonical", <https://www.qanatone.com/haber/konu/yatirim.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/konu/yatirim.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/konu/yatirim.md>; rel="alternate"; hreflang="x-default"
+/haber/lovable-13-3-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/lovable-13-3-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/lovable-13-3-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/meta-business-agent-ucretli/
+  Link: <https://www.qanatone.com/haber/meta-business-agent-ucretli.md>; rel="alternate"; type="text/markdown"
+/haber/meta-business-agent-ucretli.md
+  Link: <https://www.qanatone.com/haber/meta-business-agent-ucretli/>; rel="canonical", <https://www.qanatone.com/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/meta-business-agent-ucretli.md>; rel="alternate"; hreflang="x-default"
+/haber/meta-muse-code-kodlama-ajani/
+  Link: <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; type="text/markdown"
+/haber/meta-muse-code-kodlama-ajani.md
+  Link: <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani/>; rel="canonical", <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/meta-muse-code-kodlama-ajani.md>; rel="alternate"; hreflang="x-default"
+/haber/mistral-3-milyar-euro-tur/
+  Link: <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; type="text/markdown"
+/haber/mistral-3-milyar-euro-tur.md
+  Link: <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur/>; rel="canonical", <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/mistral-3-milyar-euro-tur.md>; rel="alternate"; hreflang="x-default"
+/haber/moss-rillet-finans-ekipleri-yapay-zeka/
+  Link: <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; type="text/markdown"
+/haber/moss-rillet-finans-ekipleri-yapay-zeka.md
+  Link: <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka/>; rel="canonical", <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/moss-rillet-finans-ekipleri-yapay-zeka.md>; rel="alternate"; hreflang="x-default"
+/haber/nvidia-96-milyar-dolar-ceyrek/
+  Link: <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; type="text/markdown"
+/haber/nvidia-96-milyar-dolar-ceyrek.md
+  Link: <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek/>; rel="canonical", <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/nvidia-96-milyar-dolar-ceyrek.md>; rel="alternate"; hreflang="x-default"
+/haber/openai-atlas-tarayici-kapandi/
+  Link: <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; type="text/markdown"
+/haber/openai-atlas-tarayici-kapandi.md
+  Link: <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi/>; rel="canonical", <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/openai-atlas-tarayici-kapandi.md>; rel="alternate"; hreflang="x-default"
+/haber/openai-halka-arz-2027/
+  Link: <https://www.qanatone.com/haber/openai-halka-arz-2027.md>; rel="alternate"; type="text/markdown"
+/haber/openai-halka-arz-2027.md
+  Link: <https://www.qanatone.com/haber/openai-halka-arz-2027/>; rel="canonical", <https://www.qanatone.com/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/openai-halka-arz-2027.md>; rel="alternate"; hreflang="x-default"
+/haber/pixel-11-tensor-g6-gemini-nano/
+  Link: <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; type="text/markdown"
+/haber/pixel-11-tensor-g6-gemini-nano.md
+  Link: <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano/>; rel="canonical", <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/pixel-11-tensor-g6-gemini-nano.md>; rel="alternate"; hreflang="x-default"
+/haber/qwen3-8-max-2-4-trilyon/
+  Link: <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; type="text/markdown"
+/haber/qwen3-8-max-2-4-trilyon.md
+  Link: <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon/>; rel="canonical", <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/qwen3-8-max-2-4-trilyon.md>; rel="alternate"; hreflang="x-default"
+/haber/revolut-research-pragma/
+  Link: <https://www.qanatone.com/haber/revolut-research-pragma.md>; rel="alternate"; type="text/markdown"
+/haber/revolut-research-pragma.md
+  Link: <https://www.qanatone.com/haber/revolut-research-pragma/>; rel="canonical", <https://www.qanatone.com/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/revolut-research-pragma.md>; rel="alternate"; hreflang="x-default"
+/haber/salesforce-agentforce-1-5-milyar/
+  Link: <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; type="text/markdown"
+/haber/salesforce-agentforce-1-5-milyar.md
+  Link: <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar/>; rel="canonical", <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/salesforce-agentforce-1-5-milyar.md>; rel="alternate"; hreflang="x-default"
+/haber/sayfa/2/
+  Link: <https://www.qanatone.com/haber/sayfa/2.md>; rel="alternate"; type="text/markdown"
+/haber/sayfa/2.md
+  Link: <https://www.qanatone.com/haber/sayfa/2/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/2.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/2.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/2.md>; rel="alternate"; hreflang="x-default"
+/haber/sayfa/3/
+  Link: <https://www.qanatone.com/haber/sayfa/3.md>; rel="alternate"; type="text/markdown"
+/haber/sayfa/3.md
+  Link: <https://www.qanatone.com/haber/sayfa/3/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/3.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/3.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/3.md>; rel="alternate"; hreflang="x-default"
+/haber/sayfa/4/
+  Link: <https://www.qanatone.com/haber/sayfa/4.md>; rel="alternate"; type="text/markdown"
+/haber/sayfa/4.md
+  Link: <https://www.qanatone.com/haber/sayfa/4/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/4.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/4.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/4.md>; rel="alternate"; hreflang="x-default"
+/haber/sayfa/5/
+  Link: <https://www.qanatone.com/haber/sayfa/5.md>; rel="alternate"; type="text/markdown"
+/haber/sayfa/5.md
+  Link: <https://www.qanatone.com/haber/sayfa/5/>; rel="canonical", <https://www.qanatone.com/haber/sayfa/5.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/sayfa/5.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/sayfa/5.md>; rel="alternate"; hreflang="x-default"
+/haber/shopify-yapay-zeka-siparisleri/
+  Link: <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; type="text/markdown"
+/haber/shopify-yapay-zeka-siparisleri.md
+  Link: <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri/>; rel="canonical", <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/shopify-yapay-zeka-siparisleri.md>; rel="alternate"; hreflang="x-default"
+/haber/spacex-cursor-60-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/spacex-cursor-60-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/spacex-cursor-60-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/stability-ai-76-milyon-dolar/
+  Link: <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/stability-ai-76-milyon-dolar.md
+  Link: <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar/>; rel="canonical", <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/stability-ai-76-milyon-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/stripe-openrouter-satin-alma/
+  Link: <https://www.qanatone.com/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; type="text/markdown"
+/haber/stripe-openrouter-satin-alma.md
+  Link: <https://www.qanatone.com/haber/stripe-openrouter-satin-alma/>; rel="canonical", <https://www.qanatone.com/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/stripe-openrouter-satin-alma.md>; rel="alternate"; hreflang="x-default"
+/haber/tsmc-agustos-rekor-gelir/
+  Link: <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; type="text/markdown"
+/haber/tsmc-agustos-rekor-gelir.md
+  Link: <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir/>; rel="canonical", <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/tsmc-agustos-rekor-gelir.md>; rel="alternate"; hreflang="x-default"
+/haber/turkiye-yapay-zeka-eylem-plani/
+  Link: <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; type="text/markdown"
+/haber/turkiye-yapay-zeka-eylem-plani.md
+  Link: <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani/>; rel="canonical", <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/turkiye-yapay-zeka-eylem-plani.md>; rel="alternate"; hreflang="x-default"
+/haber/veri-merkezi-elektrik-talebi/
+  Link: <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; type="text/markdown"
+/haber/veri-merkezi-elektrik-talebi.md
+  Link: <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi/>; rel="canonical", <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/veri-merkezi-elektrik-talebi.md>; rel="alternate"; hreflang="x-default"
+/haber/visa-biocatch-2-4-milyar-dolar/
+  Link: <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/visa-biocatch-2-4-milyar-dolar.md
+  Link: <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar/>; rel="canonical", <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/visa-biocatch-2-4-milyar-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/visa-mastercard-ant-ajan-kimligi/
+  Link: <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; type="text/markdown"
+/haber/visa-mastercard-ant-ajan-kimligi.md
+  Link: <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi/>; rel="canonical", <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/visa-mastercard-ant-ajan-kimligi.md>; rel="alternate"; hreflang="x-default"
+/haber/wispr-280-milyon-dolar/
+  Link: <https://www.qanatone.com/haber/wispr-280-milyon-dolar.md>; rel="alternate"; type="text/markdown"
+/haber/wispr-280-milyon-dolar.md
+  Link: <https://www.qanatone.com/haber/wispr-280-milyon-dolar/>; rel="canonical", <https://www.qanatone.com/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/wispr-280-milyon-dolar.md>; rel="alternate"; hreflang="x-default"
+/haber/xai-grok-4-6-grok-bot/
+  Link: <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; type="text/markdown"
+/haber/xai-grok-4-6-grok-bot.md
+  Link: <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot/>; rel="canonical", <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/haber/xai-grok-4-6-grok-bot.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/ai-ajan/
+  Link: <https://www.qanatone.com/hizmetler/ai-ajan.md>; rel="alternate"; type="text/markdown"
+/hizmetler/ai-ajan.md
+  Link: <https://www.qanatone.com/hizmetler/ai-ajan/>; rel="canonical", <https://www.qanatone.com/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/ai-ajan.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/finans/
+  Link: <https://www.qanatone.com/hizmetler/finans.md>; rel="alternate"; type="text/markdown"
+/hizmetler/finans.md
+  Link: <https://www.qanatone.com/hizmetler/finans/>; rel="canonical", <https://www.qanatone.com/hizmetler/finans.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/finans.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/finans.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/geo/
+  Link: <https://www.qanatone.com/hizmetler/geo.md>; rel="alternate"; type="text/markdown"
+/hizmetler/geo.md
+  Link: <https://www.qanatone.com/hizmetler/geo/>; rel="canonical", <https://www.qanatone.com/hizmetler/geo.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/geo.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/geo.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/google-ads/
+  Link: <https://www.qanatone.com/hizmetler/google-ads.md>; rel="alternate"; type="text/markdown"
+/hizmetler/google-ads.md
+  Link: <https://www.qanatone.com/hizmetler/google-ads/>; rel="canonical", <https://www.qanatone.com/hizmetler/google-ads.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/google-ads.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/google-ads.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/
+  Link: <https://www.qanatone.com/hizmetler.md>; rel="alternate"; type="text/markdown"
+/hizmetler.md
+  Link: <https://www.qanatone.com/hizmetler/>; rel="canonical", <https://www.qanatone.com/hizmetler.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/meta-ads/
+  Link: <https://www.qanatone.com/hizmetler/meta-ads.md>; rel="alternate"; type="text/markdown"
+/hizmetler/meta-ads.md
+  Link: <https://www.qanatone.com/hizmetler/meta-ads/>; rel="canonical", <https://www.qanatone.com/hizmetler/meta-ads.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/meta-ads.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/meta-ads.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/otomasyon/
+  Link: <https://www.qanatone.com/hizmetler/otomasyon.md>; rel="alternate"; type="text/markdown"
+/hizmetler/otomasyon.md
+  Link: <https://www.qanatone.com/hizmetler/otomasyon/>; rel="canonical", <https://www.qanatone.com/hizmetler/otomasyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/otomasyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/otomasyon.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/seo/
+  Link: <https://www.qanatone.com/hizmetler/seo.md>; rel="alternate"; type="text/markdown"
+/hizmetler/seo.md
+  Link: <https://www.qanatone.com/hizmetler/seo/>; rel="canonical", <https://www.qanatone.com/hizmetler/seo.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/seo.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/seo.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/web-sitesi-araclar/
+  Link: <https://www.qanatone.com/hizmetler/web-sitesi-araclar.md>; rel="alternate"; type="text/markdown"
+/hizmetler/web-sitesi-araclar.md
+  Link: <https://www.qanatone.com/hizmetler/web-sitesi-araclar/>; rel="canonical", <https://www.qanatone.com/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/web-sitesi-araclar.md>; rel="alternate"; hreflang="x-default"
+/hizmetler/web-tasarim/
+  Link: <https://www.qanatone.com/hizmetler/web-tasarim.md>; rel="alternate"; type="text/markdown"
+/hizmetler/web-tasarim.md
+  Link: <https://www.qanatone.com/hizmetler/web-tasarim/>; rel="canonical", <https://www.qanatone.com/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/hizmetler/web-tasarim.md>; rel="alternate"; hreflang="x-default"
+/hukuki/
+  Link: <https://www.qanatone.com/hukuki.md>; rel="alternate"; type="text/markdown"
+/hukuki.md
+  Link: <https://www.qanatone.com/hukuki/>; rel="canonical"
+/
+  Link: <https://www.qanatone.com/index.md>; rel="alternate"; type="text/markdown"
+/index.html
+  Link: <https://www.qanatone.com/index.md>; rel="alternate"; type="text/markdown"
+/index.md
+  Link: <https://www.qanatone.com/>; rel="canonical", <https://www.qanatone.com/index.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/index.md>; rel="alternate"; hreflang="x-default"
+/nedir/buyuk-dil-modelleri-nedir/
+  Link: <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; type="text/markdown"
+/nedir/buyuk-dil-modelleri-nedir.md
+  Link: <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/buyuk-dil-modelleri-nedir.md>; rel="alternate"; hreflang="x-default"
+/nedir/
+  Link: <https://www.qanatone.com/nedir.md>; rel="alternate"; type="text/markdown"
+/nedir.md
+  Link: <https://www.qanatone.com/nedir/>; rel="canonical", <https://www.qanatone.com/nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir.md>; rel="alternate"; hreflang="x-default"
+/nedir/rag-nedir/
+  Link: <https://www.qanatone.com/nedir/rag-nedir.md>; rel="alternate"; type="text/markdown"
+/nedir/rag-nedir.md
+  Link: <https://www.qanatone.com/nedir/rag-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/rag-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/rag-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/rag-nedir.md>; rel="alternate"; hreflang="x-default"
+/nedir/yapay-zeka-nedir/
+  Link: <https://www.qanatone.com/nedir/yapay-zeka-nedir.md>; rel="alternate"; type="text/markdown"
+/nedir/yapay-zeka-nedir.md
+  Link: <https://www.qanatone.com/nedir/yapay-zeka-nedir/>; rel="canonical", <https://www.qanatone.com/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/nedir/yapay-zeka-nedir.md>; rel="alternate"; hreflang="x-default"
+/otomasyon/
+  Link: <https://www.qanatone.com/otomasyon.md>; rel="alternate"; type="text/markdown"
+/otomasyon.md
+  Link: <https://www.qanatone.com/otomasyon/>; rel="canonical", <https://www.qanatone.com/otomasyon.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/otomasyon.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/otomasyon.md>; rel="alternate"; hreflang="x-default"
+/projeler/bab-ic-mimarlik/
+  Link: <https://www.qanatone.com/projeler/bab-ic-mimarlik.md>; rel="alternate"; type="text/markdown"
+/projeler/bab-ic-mimarlik.md
+  Link: <https://www.qanatone.com/projeler/bab-ic-mimarlik/>; rel="canonical", <https://www.qanatone.com/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/bab-ic-mimarlik.md>; rel="alternate"; hreflang="x-default"
+/projeler/charles-schwab/
+  Link: <https://www.qanatone.com/projeler/charles-schwab.md>; rel="alternate"; type="text/markdown"
+/projeler/charles-schwab.md
+  Link: <https://www.qanatone.com/projeler/charles-schwab/>; rel="canonical", <https://www.qanatone.com/projeler/charles-schwab.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/charles-schwab.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/charles-schwab.md>; rel="alternate"; hreflang="x-default"
+/projeler/cmblu-energy/
+  Link: <https://www.qanatone.com/projeler/cmblu-energy.md>; rel="alternate"; type="text/markdown"
+/projeler/cmblu-energy.md
+  Link: <https://www.qanatone.com/projeler/cmblu-energy/>; rel="canonical", <https://www.qanatone.com/projeler/cmblu-energy.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/cmblu-energy.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/cmblu-energy.md>; rel="alternate"; hreflang="x-default"
+/projeler/
+  Link: <https://www.qanatone.com/projeler.md>; rel="alternate"; type="text/markdown"
+/projeler.md
+  Link: <https://www.qanatone.com/projeler/>; rel="canonical", <https://www.qanatone.com/projeler.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler.md>; rel="alternate"; hreflang="x-default"
+/projeler/skyclinics/
+  Link: <https://www.qanatone.com/projeler/skyclinics.md>; rel="alternate"; type="text/markdown"
+/projeler/skyclinics.md
+  Link: <https://www.qanatone.com/projeler/skyclinics/>; rel="canonical", <https://www.qanatone.com/projeler/skyclinics.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/projeler/skyclinics.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/projeler/skyclinics.md>; rel="alternate"; hreflang="x-default"
+/sektor/eticaret/
+  Link: <https://www.qanatone.com/sektor/eticaret.md>; rel="alternate"; type="text/markdown"
+/sektor/eticaret.md
+  Link: <https://www.qanatone.com/sektor/eticaret/>; rel="canonical", <https://www.qanatone.com/sektor/eticaret.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/eticaret.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/eticaret.md>; rel="alternate"; hreflang="x-default"
+/sektor/finans/
+  Link: <https://www.qanatone.com/sektor/finans.md>; rel="alternate"; type="text/markdown"
+/sektor/finans.md
+  Link: <https://www.qanatone.com/sektor/finans/>; rel="canonical", <https://www.qanatone.com/sektor/finans.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/finans.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/finans.md>; rel="alternate"; hreflang="x-default"
+/sektor/saglik/
+  Link: <https://www.qanatone.com/sektor/saglik.md>; rel="alternate"; type="text/markdown"
+/sektor/saglik.md
+  Link: <https://www.qanatone.com/sektor/saglik/>; rel="canonical", <https://www.qanatone.com/sektor/saglik.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sektor/saglik.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sektor/saglik.md>; rel="alternate"; hreflang="x-default"
+/sss/
+  Link: <https://www.qanatone.com/sss.md>; rel="alternate"; type="text/markdown"
+/sss.md
+  Link: <https://www.qanatone.com/sss/>; rel="canonical", <https://www.qanatone.com/sss.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/sss.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/sss.md>; rel="alternate"; hreflang="x-default"
+/surec/
+  Link: <https://www.qanatone.com/surec.md>; rel="alternate"; type="text/markdown"
+/surec.md
+  Link: <https://www.qanatone.com/surec/>; rel="canonical", <https://www.qanatone.com/surec.md>; rel="alternate"; hreflang="tr", <https://www.qanatone.com/en/surec.md>; rel="alternate"; hreflang="en", <https://www.qanatone.com/surec.md>; rel="alternate"; hreflang="x-default"
+# LINK-BASLIKLARI-SON

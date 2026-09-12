@@ -1,0 +1,133 @@
+---
+/* ANA SAYFA — göç sırası: hero → şerit → (kayıp → mekanizma) → deste →
+   (süreç → sektör → araç → çağrı). Hero, şerit ve deste eski siteden
+   taşındı; geri kalanı Faz 2'nin anlatısı, sahne sahne göç ediyor.
+   Hareket bütçesi ve görünürlük sözleşmesi yeni/denetim.cjs H ailesinde.
+
+   DESTE NEDEN 3. DEĞİL 4. SIRADA: kanonik dizi `hero · ticker ·
+   projeler · ...` diyor, yani deste şeridin hemen ardına düşerdi. ÖLÇÜM
+   başka söyledi: oraya alınınca altı kart görseli ilk yükün lazy
+   eşiğinin İÇİNE giriyor ve S-T turunda ölçülen 152 KB transfer
+   yukarı çıkıyor (sahne kapısının "ilk ekran bütçesi" şartı). Deste
+   Faz 2'nin "kanıt" sahnesinin (S4Kanit) yerini aldı: aynı iş, aynı
+   künye numarası, eşiğin dışında. Sıralamanın son hâli Enes'in kararı;
+   kesmede (Faz 4) kanonik diziye alınırsa bedeli bu ~44 KB'dir.
+
+   S-K KATMAN NUMARASIZ: kanonik dizide destenin hemen ardından gelir ve
+   burada da öyle duruyor. Faz 2 sahnelerinin numaralı künyesini almadı
+   çünkü hiçbirinin YERİNE geçmiyor — net yeni içerik. Numara verilseydi
+   S5-S8'in dördü birden kayardı; kaynağın kendi künyesi de numarasız
+   ("MİMARİ"). Künye ritminin son hâli giydirme turunun işi. */
+import '../stil/ana.css';
+import Temel from '../layouts/Temel.astro';
+import SHHero from '../sahneler/SHHero.astro';
+import STSerit from '../sahneler/STSerit.astro';
+import SPDeste from '../sahneler/SPDeste.astro';
+import SKKatman from '../sahneler/SKKatman.astro';
+import SAAkis from '../sahneler/SAAkis.astro';
+import SSESektor from '../sahneler/SSESektor.astro';
+import STETespit from '../sahneler/STETespit.astro';
+import SSZSozler from '../sahneler/SSZSozler.astro';
+import SSBSozBandi from '../sahneler/SSBSozBandi.astro';
+import SKUKurucu from '../sahneler/SKUKurucu.astro';
+import SILIletisim from '../sahneler/SILIletisim.astro';
+import PrologYuvasi from '../parcalar/PrologYuvasi.astro';
+import { KOK, icerik, sl } from '../icerik';
+import { anaSema } from '../sema.mjs';
+
+/* ŞEMA PARİTESİ (madde 5, tur kapanışında ölçülüp kapatıldı): eski ana
+   sayfa @graph'ı Organization + WebSite + WebPage taşıyor, yeni sayfada
+   HİÇ yoktu — fark kırmızıdır. Üçlü artık derlemede pişiyor; gövde
+   src/sema.mjs'te (kural 107: #org kimliği her sayfada birebir aynı). */
+const BASLIK = 'QANATONE — Talebi yakalayan sistem';
+const ACIKLAMA = 'Talep var, yakalayan yok. QANATONE gelen talebi yakalayan sistemi kurar: SEO, GEO, reklam ve yapay zekâ otomasyonu tek ölçüm altında.';
+const sema = anaSema(icerik, { url: sl(`${KOK}/`), ad: BASLIK, aciklama: ACIKLAMA, dil: 'tr' });
+
+/* PROLOG ANAHTARI — `theme.motion.prolog` (Enes, 6 Eyl 2026: "panelde tek
+   tuşla açıp kapatabileyim; kapalı hâli açık hâliyle aynı yüklenme
+   değerlerinde OLMAMALI").
+   VARSAYILAN AÇIK ve anahtar YOKSA da açık (`!== 0`): panelin eski bir
+   içeriği yayınlaması prologu sessizce düşürmesin.
+   Karar DERLEME ANINDA verilir, çalışma anında değil — istenen şey buydu:
+   kapalıyken film bölümü, film.css ve motorun satır içi betiği sayfaya
+   HİÇ girmez, yani bayt da kare bedeli de gerçekten düşer. Çalışma anında
+   gizlemek (display:none) aynı yükü taşırdı.
+   Denetim bunu zaten biliyor: J1/H18/H24 tavanları `<section class="fl"`
+   izine bakıp prologluysa yükseliyor — prolog kapanınca tavan kendiliğinden
+   SIKILAŞIR, bedava geçiş olmaz. */
+/* İTHALİN KENDİSİ ÜRETİLİR — `PrologYuvasi.astro`'yu her derlemede
+   `yeni/kabuk-derle.cjs` yazar (astro build'den önce koşar): prolog açıkken
+   Film'i ithal eder, kapalıyken HİÇBİR ŞEY ithal etmez.
+   NEDEN BÖYLE, ÖLÇÜLDÜ: üç yol denendi ve üçü de `film.<hash>.css`
+   (8.011 B) bağlantısını kaldıramadı — statik ithal + koşullu render,
+   dinamik ithal + koşullu render, derleme sabitiyle ölü dal. Astro sayfanın
+   CSS'ini modül grafiğinden topluyor; grafikte duran ithal, render edilmese
+   de CSS'i sayfaya bağlatıyor.
+   Sayfanın kendi okuması yalnız SARMALIN SINIFI için — o çalışma zamanı
+   okuması modül grafiğine dokunmaz. Kaynak yine tek: content.json. */
+const prologAcik = ((icerik.theme as any)?.motion?.prolog) !== 0;
+---
+<Temel lead={false} dil="tr" baslik={BASLIK} aciklama={ACIKLAMA} sema={sema}
+  canonical={sl(`${KOK}/`)} heleftr={sl(`${KOK}/`)} helefen={sl(`${KOK}/en`)}>
+  {/* ON YUKLEME: yalniz GOVDE fontu. LCP elemani hero'nun lede'si
+      (Lighthouse ile olculdu) ve o Nunito ile boyanir. Nunito
+      `font-display:optional` — engelleme suresi ~100 ms: bu pencerede
+      gelirse kullanilir, gelmezse o yukleme sistem fontuyla biter.
+      On yukleme tam bu pencereyi kazandirir; onsuz lede FCP'den 375 ms
+      sonra boyandi (olculdu).
+      Playfair ve JetBrains yuzleri LCP icin degil CLS icin on yuklenir:
+      `swap` ile gelen her yuz ilk boyadan SONRA gelirse metni yeniden
+      diziyor. Lighthouse iki kaynagi da adiyla gosterdi — once h1'in
+      `<b>yok.</b>` dugumu (Playfair, 0,0015), o kapaninca rozet satiri
+      (JetBrains, 0,0004). Ikisi on yuklenince CLS 0. `swap` karari
+      duruyor (Anayasa madde 4); on yukleme takasi ilk boyadan ONCE
+      bitirir, kurali degistirmez.
+      TR altkumeleri (~7 KB) on YUKLENMEZ: gec gelirse yalniz bes glif
+      etkilenir ve olcumde kayma uretmediler. */}
+  {/* Uncut latin on yuklemesi 4 Eyl'de KABUGA tasindi (Temel.astro) — her
+      sayfa icin gecerli oldu; burada tekrarlanmaz. Playfair YALNIZ ana
+      sayfa hero'sunun yuzudur, o yuzden burada kalir. */}
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/font/playfair-display-500-latin.woff2" />
+  <link slot="bas" rel="preload" as="font" type="font/woff2" crossorigin
+    href="/font/playfair-display-500i-latin.woff2" />
+  {/* PERDE — yalnız ana sayfada (bilinçli sapma): oturumda bir kez
+      görünen bir marka selamını her sayfaya ~1 KB gzip taşımak J1/H18
+      bütçesini 33 sayfaya yayar; girişlerin ezici çoğunluğu ana sayfa.
+      İç sayfaya doğrudan giren perde görmez — karar Enes'te. */}
+  {/* PERDE artik KABUKTA (Temel.astro, 4 Eyl sokum turu): eski sitede 58
+      sayfanin hepsindeydi; film sayfasi haric her sayfada. */}
+  {/* PROLOG · 1. DURAK (21 Ağu talimatı, HAT 2). Gövdenin ÖNÜNE bir
+      sahne; gövde arkada normal akışta hazır durur ve h1 hero'da
+      kalır — bot prologu değil gövdeyi görür. 2. durak (logo
+      hizalanması) Enes'in hükmünden sonra. */}
+  {/* PROLOG (3 Eyl 2026, ANAYASA istisna 4 — 'Yeni, eskide yoktu'): film ana
+      sayfanin ONUNDE; govde .fl-govde sarmalinda (film.css: JS + hareket
+      acikken sabit katman, devir bitince static). Atlama / oturumda bir kez /
+      hareket azaltma: Film.astro + film.css. Bot ve JS'siz yol govdeyi gorur. */}
+  <PrologYuvasi dil="tr" />
+  {/* Sarmalın SINIFI ve ID'si de anahtara bağlı: prolog kapalıyken
+      `.fl-govde` kancası kalırsa geride film.css'i olmayan ölü bir kanca
+      kalır. Sarmalın KENDİSİ duruyor (koşullu açılıp kapanan etiket gövdeyi
+      ikiye kopyalamayı gerektirirdi); sınıfsız hâli düz bir blok, başka
+      hiçbir stil `.fl-govde`ye dokunmuyor — ölçüldü, yalnız film.css. */}
+  <div class:list={[prologAcik && 'fl-govde']} id={prologAcik ? 'fl-govde' : undefined}>
+  <div class="ana">
+    {/* SADAKAT (3 Eyl 2026, Enes): ESKİ KÖK SİTE BİREBİR, yeni mimari. Sıra
+        kök index.html'in kendisi: hero → şerit → projeler → katman → akış →
+        sektör → tespit → kanal ızgarası → söz bandı → kurucu → iletişim(+lead).
+        Eskide olmayan anlatı sahneleri (S2/S3/S5/S6) yok. Bekçi R13. */}
+    <SHHero />
+    <STSerit />
+    <SPDeste />
+    <SKKatman />
+    <SAAkis />
+    <SSESektor />
+    <STETespit />
+    <SSZSozler />
+    <SSBSozBandi />
+    <SKUKurucu />
+    <SILIletisim />
+  </div>
+  </div>
+</Temel>

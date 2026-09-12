@@ -1,0 +1,571 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-03T10:20:08.819Z",
+ "tarayici": "chrome Chrome/152.0.7977.65",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 724,
+  "lcpEl": "p.lede",
+  "cls": 0.3037,
+  "clsKaynak": [
+   {
+    "t": 2397,
+    "v": 0.3037,
+    "el": "div.bkgrid",
+    "kaynak": [
+     {
+      "el": "div.bkgrid",
+      "once": [
+       112,
+       532,
+       1200,
+       368
+      ],
+      "sonra": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "el": "section.giris",
+      "once": [
+       112,
+       167,
+       1200,
+       164
+      ],
+      "sonra": [
+       112,
+       887,
+       1200,
+       13
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars bitcursor"
+   }
+  ],
+  "inp": 32,
+  "inpHedef": "div pointerdown",
+  "etkilesim": 7,
+  "loaf": 4,
+  "loafToplam": 795,
+  "loafEnUzun": 407,
+  "loafKaynak": [
+   {
+    "t": 313,
+    "sure": 407,
+    "engel": 0,
+    "betik": 406,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": []
+   },
+   {
+    "t": 98,
+    "sure": 145,
+    "engel": 72,
+    "betik": 145,
+    "stilDuzen": 0,
+    "render": 0,
+    "kaynak": []
+   },
+   {
+    "t": 5555,
+    "sure": 122,
+    "engel": 0,
+    "betik": 121,
+    "stilDuzen": 1,
+    "render": 1,
+    "kaynak": []
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 236,
+   "lcpEl": "p.lede",
+   "cls": 0.0105,
+   "clsKaynak": [
+    {
+     "t": 211,
+     "v": 0.0105,
+     "el": "div.bkgrid",
+     "kaynak": [
+      {
+       "el": "div.bkgrid",
+       "once": [
+        112,
+        562,
+        1200,
+        338
+       ],
+       "sonra": [
+        112,
+        532,
+        1200,
+        368
+       ]
+      },
+      {
+       "el": "div.bkf",
+       "once": [
+        112,
+        416,
+        1200,
+        109
+       ],
+       "sonra": [
+        112,
+        387,
+        1200,
+        109
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "label.bkc pointerdown",
+   "etkilesim": 11,
+   "loaf": 4,
+   "loafToplam": 325,
+   "loafEnUzun": 140,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 140,
+     "engel": 78,
+     "betik": 140,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    },
+    {
+     "t": 2656,
+     "sure": 64,
+     "engel": 0,
+     "betik": 63,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    },
+    {
+     "t": 246,
+     "sure": 62,
+     "engel": 0,
+     "betik": 61,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 204,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [
+    {
+     "t": 223,
+     "v": 0,
+     "el": "span",
+     "kaynak": [
+      {
+       "el": "span",
+       "once": [
+        486,
+        270,
+        93,
+        23
+       ],
+       "sonra": [
+        491,
+        270,
+        92,
+        23
+       ]
+      },
+      {
+       "el": "span",
+       "once": [
+        402,
+        270,
+        71,
+        23
+       ],
+       "sonra": [
+        407,
+        270,
+        71,
+        23
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 182,
+   "loafEnUzun": 128,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 128,
+     "engel": 65,
+     "betik": 128,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    },
+    {
+     "t": 3025,
+     "sure": 54,
+     "engel": 0,
+     "betik": 53,
+     "stilDuzen": 0,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/donusum-oranlari-sektor-sektor/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 220,
+   "lcpEl": "h1",
+   "cls": 0.016,
+   "clsKaynak": [
+    {
+     "t": 218,
+     "v": 0.016,
+     "el": "div.govde",
+     "kaynak": [
+      {
+       "el": "div.govde",
+       "once": [
+        312,
+        429,
+        801,
+        471
+       ],
+       "sonra": [
+        312,
+        402,
+        800,
+        498
+       ]
+      },
+      {
+       "el": "span",
+       "once": [
+        486,
+        270,
+        78,
+        23
+       ],
+       "sonra": [
+        492,
+        270,
+        78,
+        23
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 131,
+   "loafEnUzun": 131,
+   "loafKaynak": [
+    {
+     "t": 29,
+     "sure": 131,
+     "engel": 68,
+     "betik": 131,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/google-ads-maliyetleri-2026/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 216,
+   "lcpEl": "h1",
+   "cls": 0.0205,
+   "clsKaynak": [
+    {
+     "t": 219,
+     "v": 0.0205,
+     "el": "div.govde",
+     "kaynak": [
+      {
+       "el": "div.govde",
+       "once": [
+        312,
+        429,
+        800,
+        471
+       ],
+       "sonra": [
+        312,
+        402,
+        800,
+        498
+       ]
+      },
+      {
+       "el": "span",
+       "once": [
+        487,
+        270,
+        129,
+        23
+       ],
+       "sonra": [
+        492,
+        270,
+        131,
+        23
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 3,
+   "loafToplam": 239,
+   "loafEnUzun": 132,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 132,
+     "engel": 70,
+     "betik": 131,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    },
+    {
+     "t": 4084,
+     "sure": 55,
+     "engel": 0,
+     "betik": 54,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    },
+    {
+     "t": 340,
+     "sure": 52,
+     "engel": 0,
+     "betik": 51,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 208,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 6,
+   "loaf": 2,
+   "loafToplam": 176,
+   "loafEnUzun": 125,
+   "loafKaynak": [
+    {
+     "t": 28,
+     "sure": 125,
+     "engel": 64,
+     "betik": 124,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    },
+    {
+     "t": 324,
+     "sure": 51,
+     "engel": 0,
+     "betik": 50,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/talebe-bes-dakikada-donmek/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 236,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 5,
+   "loaf": 1,
+   "loafToplam": 155,
+   "loafEnUzun": 155,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 155,
+     "engel": 91,
+     "betik": 154,
+     "stilDuzen": 0,
+     "render": 1,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 212,
+   "lcpEl": "h1",
+   "cls": 0.0064,
+   "clsKaynak": [
+    {
+     "t": 214,
+     "v": 0.0064,
+     "el": "div.govde",
+     "kaynak": [
+      {
+       "el": "div.govde",
+       "once": [
+        312,
+        429,
+        801,
+        471
+       ],
+       "sonra": [
+        312,
+        402,
+        800,
+        498
+       ]
+      },
+      {
+       "el": "span",
+       "once": [
+        486,
+        270,
+        157,
+        23
+       ],
+       "sonra": [
+        492,
+        270,
+        156,
+        23
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 4,
+   "loaf": 1,
+   "loafToplam": 126,
+   "loafEnUzun": 126,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 126,
+     "engel": 65,
+     "betik": 126,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    }
+   ],
+   "yol": "/yeni/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}

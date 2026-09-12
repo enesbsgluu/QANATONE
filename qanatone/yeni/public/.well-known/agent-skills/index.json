@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentskills.io/schemas/discovery/v0.2.0.json",
+  "version": "0.2.0",
+  "publisher": {
+    "name": "QANATONE",
+    "url": "https://www.qanatone.com/"
+  },
+  "skills": [
+    {
+      "name": "site-tespit",
+      "type": "text/markdown",
+      "description": "Bir web sitesinin teknik sağlığını ve ajan hazırlığını gerçek isteklerle ölçer; kalem kalem durum ve 0-100 puan döndürür. Kimlik gerekmez, kota IP başınadır.",
+      "url": "https://www.qanatone.com/.well-known/agent-skills/site-tespit/SKILL.md",
+      "sha256": "a1b5523b2937a48dcfefa171e0458a8cea0b221aa2ec827739713ff356641d40"
+    }
+  ]
+}

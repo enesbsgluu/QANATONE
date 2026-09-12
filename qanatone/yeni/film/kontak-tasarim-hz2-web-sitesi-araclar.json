@@ -1,0 +1,209 @@
+{
+ "_": "yeni/film/kontak-tasarim.cjs — ONCE/SONRA dist agaclari ayni sayfa+konum+genislikte piksel farki. Hukum verilmez; yan yana kare + fark listesi.",
+ "olcum": "2026-09-02T23:51:17.472Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "headless": "new",
+ "sayfa": "/yeni/",
+ "genislik": 1440,
+ "yukseklik": 900,
+ "esik": 16,
+ "boz": false,
+ "gizlenen": [
+  "#stars",
+  "#noise",
+  ".kb-bit",
+  ".kb-tip",
+  "#tubes",
+  "#bit",
+  "#bittip"
+ ],
+ "ozKontrol": "gecti (her agacta konumlar md5 olarak farkli)",
+ "bayat": [],
+ "konum": [
+  {
+   "konum": 0,
+   "farkYuzde": 6.51,
+   "farkliPiksel": 84363,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 3/8 sutun 2/8 (x 180-360, y 225-338; hucrede 8012 px, tum farkin %9)",
+   "md5": {
+    "once": "41f120fbdb163894c196816957962111",
+    "sonra": "55c5c325adbd30e076c9990465705be4"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 0,
+     "sonra": 0
+    },
+    "gercek": {
+     "once": 0,
+     "sonra": 0
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-0.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-0.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-yanyana-0.png"
+   }
+  },
+  {
+   "konum": 20,
+   "farkYuzde": 3.45,
+   "farkliPiksel": 44698,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 4/8 sutun 2/8 (x 180-360, y 338-450; hucrede 5559 px, tum farkin %12)",
+   "md5": {
+    "once": "e0890586c73f09ea0de9a1e844dec51a",
+    "sonra": "bfabb56f3a5d2f897fbcbc0c2396fb3b"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 684,
+     "sonra": 677
+    },
+    "gercek": {
+     "once": 684,
+     "sonra": 677
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-20.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-20.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-yanyana-20.png"
+   }
+  },
+  {
+   "konum": 40,
+   "farkYuzde": 7.17,
+   "farkliPiksel": 92947,
+   "toplamPiksel": 1296000,
+   "bolge": "satir 7/8 sutun 2/8 (x 180-360, y 675-788; hucrede 5725 px, tum farkin %6)",
+   "md5": {
+    "once": "442f3b4d4e8e6bb74a58c18c0d8803b0",
+    "sonra": "9ea0d685e9f3d188a9b0f4afa6b30c92"
+   },
+   "scrollY": {
+    "hedef": {
+     "once": 1369,
+     "sonra": 1354
+    },
+    "gercek": {
+     "once": 1369,
+     "sonra": 1354
+    }
+   },
+   "sapma": 0,
+   "raf": {
+    "once": "raf",
+    "sonra": "raf"
+   },
+   "png": {
+    "once": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-40.png",
+    "sonra": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-40.png",
+    "yanyana": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-yanyana-40.png"
+   }
+  }
+ ],
+ "once": {
+  "url": "http://127.0.0.1:8790/hizmetler/web-sitesi-araclar/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 2,
+   "sonsuzSifirlanan": 2,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4322,
+  "dugmeSayisi": 0,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "41f120fbdb163894c196816957962111",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": 20,
+    "hedef": 684,
+    "gercek": 684,
+    "sapma": 0,
+    "md5": "e0890586c73f09ea0de9a1e844dec51a",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-20.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   },
+   {
+    "konum": 40,
+    "hedef": 1369,
+    "gercek": 1369,
+    "sapma": 0,
+    "md5": "442f3b4d4e8e6bb74a58c18c0d8803b0",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-once-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 2
+   }
+  ]
+ },
+ "sonra": {
+  "url": "http://127.0.0.1:8790/yeni/hizmetler/web-sitesi-araclar/",
+  "durum": 200,
+  "yukleme": "networkidle0",
+  "rafOlu": false,
+  "dondurulan": {
+   "animasyon": 1,
+   "sonsuzSifirlanan": 1,
+   "sonluBitirilen": 0,
+   "video": 0
+  },
+  "scrollHeight": 4285,
+  "dugmeSayisi": 3,
+  "kareler": [
+   {
+    "konum": 0,
+    "hedef": 0,
+    "gercek": 0,
+    "sapma": 0,
+    "md5": "55c5c325adbd30e076c9990465705be4",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-0.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 20,
+    "hedef": 677,
+    "gercek": 677,
+    "sapma": 0,
+    "md5": "bfabb56f3a5d2f897fbcbc0c2396fb3b",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-20.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   },
+   {
+    "konum": 40,
+    "hedef": 1354,
+    "gercek": 1354,
+    "sapma": 0,
+    "md5": "9ea0d685e9f3d188a9b0f4afa6b30c92",
+    "png": "yeni/film/kontak-tur9/hz2-web-sitesi-araclar-sonra-40.png",
+    "raf": "raf",
+    "animasyonSonradan": 1
+   }
+  ]
+ }
+}

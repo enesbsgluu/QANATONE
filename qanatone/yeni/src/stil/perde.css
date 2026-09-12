@@ -1,0 +1,144 @@
+/* ============================================================
+   PERDE (#boot) — son ada.
+   Kaynak: kök index.html · CSS 84-196 · markup 4416-4436.
+
+   Adlandırma: TÜM sınıflar `sus-` önekli — perde baştan sona SÜS
+   (aria-hidden, içerik taşımıyor). H1 hareket bütçesinde `sus-` zaten
+   tanınır; H2/H5 içerik kuralları süse uygulanmaz (süs sönük doğabilir,
+   içerik doğamaz — kuralın kendi ayrımı).
+
+   MEKANİZMA — tamamı saf CSS, her cihazda TEK zaman çizelgesi:
+   eski taraf masaüstünde WAAPI + getTotalLength, mobilde ayrı bir CSS
+   bloğu koşturuyordu (900px'te iki motor). Zorunlu bekletme taşınmayınca
+   uzun masaüstü çizelgesinin sebebi kalmadı; eski MOBİL çizelgesi
+   (0,72 sn'de oturan) tek çizelge olarak her yerde geçerli.
+   Süpürme kırpma değil KAYDIRMA (translateY) — kaynağın kendi ölçülmüş
+   dersi: clip-path her karede tam ekran yeniden boyamaydı.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) SVG ANAKART İZLERİ GELDİ (giydirme, a8b1d6a) — dokuz yol kaynaktan
+      birebir kopya (kök 4418-4428), `getTotalLength` yerine
+      `pathLength="1"`. Sapma değil kaynağa dönüş; tek fark sinyal
+      gecikmeleri (aşağıda, adıyla) ve .sig parlamasının H14 gereği
+      yalnız masaüstünde olması (kaynakta koşulsuzdu). Bu maddenin eski
+      hâli "izler bu turda gelmedi" diyordu — 21 Ağu denetimi belge
+      hatasını düzeltti.
+   2) İLERLEME ÇUBUĞU (`.bbar` + rAF tick döngüsü) TAŞINMADI. Çubuk
+      zorunlu bekletmenin arayüzüydü ("yüzde uydurulmuyor, gerçek yükleme
+      sinyali"); bekletme taşınmayınca gösterecek gerçek bir ilerleme
+      kalmadı — sabit süreli sahte bir dolum basmak kaynağın kendi
+      ilkesine aykırı olurdu. rAF döngüsü de onunla birlikte gitti.
+   3) HAREKET AZALTMADA PERDE HİÇ DOĞMUYOR (kapı kaldırıyor). Eskisi
+      gösterip yalın solduruyordu; süs olduğu için hiç göstermemek hem
+      daha ucuz hem tercihe daha saygılı. CSS'te çifte emniyet var.
+   4) `will-change:transform` taşınmadı (hero'dan beri aynı gerekçe:
+      tek seferlik transform animasyonunu tarayıcı kendisi katmanlar).
+   5) Manrope taşınmadı (madde 4) — marka kilidi gövde ailesinin 800
+      ağırlığıyla (Nunito Sans değişken, 300-800 aralığı yüklü).
+   6) Tarama çizgisinin `box-shadow` ışıması KALDIRILDI (gradient'in
+      kendisi kaynakla birebir, "sadeleşen" bir şey yok — 21 Ağu belge
+      düzeltmesi): tam ekran fixed katmanın çocuğunda gölge taşımamak
+      H14'ün ruhu (süs önekli olduğu için kural taramıyor ama sebep
+      duruyor). Kaynaktaki iki katmanlı glow (kök 108) EKSİK kalem
+      olarak künyede.
+   ============================================================ */
+
+/* Varsayılan GİZLİ: görünürlük kararını kapı betiği ilk boyamadan önce
+   verir (`html.prd`). Betik koşmazsa perde hiç görünmez — JS'siz
+   ziyaretçi perdeyle hiç tanışmaz, içerik zaten önünde. */
+html:not(.prd) .sus-perde{display:none}
+
+/* ZEMİN İKİ KATMAN — ANA SAYFA AĞIRLIK TURUNUN ÖLÇÜMÜ (21 Ağu).
+   Perdenin tam ekran radial-gradient'i İLK BOYAMAYI geciktiriyordu.
+   Ölçüm (412 px · 4x CPU · 1,6 Mbps · 150 ms RTT, aynı düzenek):
+     perde olduğu gibi        FP 1.464 ms
+     zemin DÜZ RENK yapılınca  FP 1.088 ms   (−376 ms)
+     perde görünmez            FP 1.028 ms
+     animasyonlar kapalı       FP 1.060 ms
+   Yani gecikmenin neredeyse tamamı tek bir bildirimden geliyordu.
+   Çözüm vinyeti atmak DEĞİL, SİRASINI DEĞİŞTİRMEK: ilk boyama düz
+   renkle çıkar (kompozitörün en ucuz işi), vinyet bir kare sonra
+   opaklıkla biner. Göz farkı görmez — perde zaten 2 sn duruyor. */
+.sus-perde{position:fixed;inset:0;z-index:999;display:grid;place-items:center;
+  overflow:clip;pointer-events:none;background:#070708}
+.sus-perde::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 45%,#160609 0%,#070708 55%,#040405 100%);
+  opacity:0;animation:prd-vinyet .34s var(--e) .1s forwards}
+/* z-index -1 ŞART: vinyet perdenin ZEMİNİdır, içeriğin üstü değil.
+   0'da bırakılınca harfleri ve izleri örtüyordu (kare yakaladı). */
+@keyframes prd-vinyet{to{opacity:1}}
+.sus-perde-kabuk{position:absolute;inset:0}
+
+/* ---- anakart izleri (giydirme): çizilme pathLength=1 ile, ölçüm yok.
+   Sinyal parlaması (drop-shadow) H14 gereği yalnız masaüstünde —
+   mobilde sinyal filtresiz akar, hareket kısılmaz. RM'de perde zaten
+   tümden display:none (aşağıda). */
+.sus-perde-iz{position:absolute;left:50%;top:50%;z-index:1;
+  width:min(680px,94vw);transform:translate(-50%,-50%);
+  opacity:.9;overflow:visible;pointer-events:none}
+.sus-perde-iz .tr{stroke:rgba(239,35,60,.28);stroke-width:1;fill:none;
+  stroke-dasharray:1;stroke-dashoffset:-1;
+  animation:prd-iz .85s var(--e2) forwards;
+  animation-delay:calc(.16s + var(--i) * .06s)}
+.sus-perde-iz .pd{fill:rgba(239,35,60,.5);opacity:0;
+  animation:prd-gorun .35s forwards;
+  animation-delay:calc(.06s + var(--i) * .05s)}
+.sus-perde-iz .sig{stroke:var(--red-soft);stroke-width:1.4;fill:none;
+  stroke-dasharray:.066 .934;opacity:0;
+  animation:prd-gorun .4s 1s forwards,prd-sig 2.8s linear 1s infinite}
+.sus-perde-iz .sig.s2{animation-delay:1.35s,1.35s}
+.sus-perde-iz .sig.s3{animation-delay:1.7s,1.7s}
+@keyframes prd-iz{to{stroke-dashoffset:0}}
+@keyframes prd-sig{to{stroke-dashoffset:-1}}
+@media(min-width:901px){
+  .sus-perde-iz .sig{filter:drop-shadow(0 0 4px rgba(239,35,60,.8))}
+}
+
+/* süpüren kenar çizgisi: perdenin alt kenarına yapışık, perdeyle yükselir */
+.sus-perde-cizgi{position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,transparent,#ff4d63 18%,#ffb3bd 50%,#ff4d63 82%,transparent);
+  opacity:0}
+
+/* köşe braketleri */
+.sus-perde-kose{position:absolute;width:28px;height:28px;
+  border:1px solid rgba(239,35,60,.42);opacity:0;
+  animation:prd-gorun .35s .05s var(--e) forwards}
+.sus-perde-kose.a{left:22px;top:22px;border-right:0;border-bottom:0}
+.sus-perde-kose.b{right:22px;top:22px;border-left:0;border-bottom:0}
+.sus-perde-kose.c{left:22px;bottom:22px;border-right:0;border-top:0}
+.sus-perde-kose.d{right:22px;bottom:22px;border-left:0;border-top:0}
+
+/* marka kilidi: QANAT kırmızı, ONE beyaz — harfler yukarıdan dökülür */
+.sus-perde-soz{position:relative;display:flex;gap:.1em;
+  font-family:var(--f-govde);font-weight:700;
+  font-size:clamp(1.35rem,4.4vw,2rem);color:#fff}
+.sus-perde-soz span:nth-child(-n+5){color:var(--red-soft);
+  text-shadow:0 0 16px rgba(239,35,60,.55)}
+.sus-perde-soz span{opacity:0;transform:translateY(-46px);
+  animation:prd-harf .42s var(--e2) both;
+  animation-delay:calc(.08s + var(--i) * .05s)}
+
+/* ---- çıkış: harfler önden uçar, perde alttan yukarı süpürülür,
+   tarama çizgisi kenarı önden götürür ---- */
+.sus-perde.out{animation:prd-supur .55s .12s var(--e2) forwards}
+.sus-perde.out .sus-perde-cizgi{animation:prd-cizgi .55s .1s forwards}
+.sus-perde.out .sus-perde-soz span{animation:prd-harf-cik .28s var(--e2) forwards;
+  animation-delay:calc(var(--i) * .02s)}
+
+@keyframes prd-gorun{to{opacity:1}}
+@keyframes prd-harf{
+  0%{opacity:0;transform:translateY(-46px)}
+  62%{opacity:1;transform:translateY(5px)}
+  100%{opacity:1;transform:none}}
+@keyframes prd-harf-cik{to{opacity:0;transform:translateY(-74px)}}
+@keyframes prd-supur{to{transform:translateY(-102%)}}
+@keyframes prd-cizgi{0%{opacity:0}25%{opacity:1}85%{opacity:1}100%{opacity:0}}
+
+/* çifte emniyet: kapı zaten kaldırıyor; betik bir şekilde koşamazsa da
+   hareket azaltma isteyen kullanıcı perde görmez */
+@media (prefers-reduced-motion: reduce){
+  .sus-perde{display:none}
+  /* perde zaten hiç doğmuyor; H11 aynası yine de açık yazılır —
+     "durduran seçici hareketi verenin aynısı" sözleşmesi. */
+  .sus-perde-iz .tr,.sus-perde-iz .pd,.sus-perde-iz .sig{animation:none}
+}

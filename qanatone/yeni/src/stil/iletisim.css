@@ -1,0 +1,210 @@
+/* ============================================================
+   S-IL · İLETİŞİM / ÇAĞRI + LEAD FORMU
+   Kaynak: kök index.html · CTA 5347-5359 · form 5415-5474 ·
+   CSS `.cta/.ldbox/.ldf/.fld/.chk/.hp` (2400 civarı).
+
+   Adlandırma: .sil-* içerik · .sus-* süs.
+
+   BU ADADA ALINAN SAPMALAR (madde 6):
+   1) HONEYPOT GİZLEME BİÇİMİ: kaynakta `.hp{position:absolute;left:-9999px}`
+      idi. Burada da ekran dışına alınıyor ama `aria-hidden` YOK ve
+      `tabindex="-1"` korunuyor — Netlify'ın honeypot'u alanın GÖNDERİMDE
+      dolu gelmesine bakar; alanı erişilebilirlik ağacından silmek
+      gerekmiyor, klavye sırasından çıkarmak yetiyor.
+   2) `#ctaCheck` düğmesi ("Demo talep et") eskiden JS ile forma
+      kaydırıyordu; burada `href="#lead"` — yerli çapa, JS yok.
+   3) WhatsApp bağlantısı derlemede pişiyor. Kaynakta numarayı JS
+      yazıyordu (`#waMain` href="#" doğuyordu), yani JS koşmayan
+      ziyaretçi ölü bir düğme görüyordu. Artık bağlantı HTML'de doğuyor.
+   4) Gönderim sonrası WhatsApp'a düşme metinleri (iki dilli sözlük)
+      sadeleşti: tek cümle + bağlantı. Kaynaktaki dört ayrı durum metni
+      (send/bad/okh/okp/offh/offp) yerine üç durum var; "bad" hâli
+      artık tarayıcının kendi doğrulamasına bırakıldı (required + type),
+      çünkü kaynak da aynı alanları `required` ile işaretliyordu.
+   ============================================================ */
+
+/* SADAKAT (3 Eyl 2026): kaynak `.cta` (2133-2137) + `.ctarow` + `#lead`
+   / `.ldbox` / `.ldt` / `.ldf` / `.fld` / `.chk` (2288-2311) birebir.
+   Kaynakta CTA'nin etiketi YOK; iletisim + lead iki ayri bolumdu (cta 150
+   dolgu, lead 0 ust / clamp(50,7vw,90) alt) — burada tek sahne, araligi
+   .sil-cagri alt marjini tasir. */
+.sil-ic{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+/* kaynak: .cta (2160) 150/150 + ayri #lead bolumu (2315) 0/90 — burada tek bolum:
+   ust 150 (.cta), alt 90 (#lead); .cta alt dolgusu 150 .sil-kutu ust bosluguna gecer.
+   (3 Eyl olcumu: bolum boyu 1302 = eski .cta 570 + #lead; paddingBottom 90 dogru) */
+/* ÜST BOŞLUK `.ana` KAPSAMINDAN ÇIKTI (5 Eyl 2026 — Enes'in bildirdiği
+   hata). Kural yalnız ana sayfada geçerliydi; /hizmetler de aynı iletişim
+   sahnesini basıyor ama `.ana` taşımıyor, dolayısıyla üst dolgusu 0 idi.
+   ÖLÇÜLDÜ (390 px): "Başlamaya hazır mısın?" başlığının üstündeki boşluk
+   ana sayfada 80 px, /hizmetler'de 49 px — başlık son hizmet kutusuna
+   yapışıyordu. Kural artık sahnenin kendisine ait; iki sayfa da aynı
+   çizelgeyi kullanır. (Öbür sayfalarda lead formu `.sil-lead` ile basılır,
+   o kural değişmedi: kaynaktaki 0 üst / clamp(50,7vw,90) alt.)
+   ÖZGÜLLÜK NOTU: seçici `.sil-sahne` yazılırsa `.ana section`
+   (0,1,1) onu YENER ve ana sayfada üst boşluk 80 → 66 px'e düşer
+   (ölçüldü). `data-sahne` niteliği seçiciyi (0,2,0) yapar; öznitelik
+   zaten markup'ta duruyor. */
+.sil-sahne[data-sahne='il']{padding:clamp(80px,11vw,150px) 0 clamp(50px,7vw,90px)}
+/* kabuk lead bolumu (Temel.astro): kaynak #lead{padding:0 0 clamp(50px,7vw,90px)} (2315) */
+.sil-lead{padding:0 0 clamp(50px,7vw,90px)}
+
+/* ---- çağrı (kaynak .cta) ---- */
+.sil-cagri{text-align:center;margin:0 auto clamp(80px,11vw,150px)}
+.sil-cagri h2{font-size:clamp(2.4rem,7vw,5.4rem);line-height:1.04;
+  letter-spacing:-.055em;margin-bottom:22px}
+.sil-cagri h2 em{font-style:normal;color:var(--red)}
+.sil-cagri>p{font-size:clamp(1rem,1.6vw,1.2rem);color:var(--tx3);font-weight:300;
+  max-width:52ch;margin:0 auto 38px;line-height:1.7}
+.sil-dugmeler{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:0}
+.sil-dugmeler svg{width:15px;height:15px}
+/* kaynak .btn-g (319-320) */
+.sil-ikincil{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:var(--hap-y1) var(--hap-x1);border-radius:999px;font-size:.92rem;font-weight:600;
+  letter-spacing:-.01em;white-space:nowrap;border:1px solid var(--line2);color:var(--tx);
+  text-decoration:none;background:rgba(255,255,255,.045);transition:.3s var(--e)}
+.sil-ikincil:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28)}
+
+/* ---- form kutusu (kaynak .ldbox) ---- */
+.sil-kutu{display:grid;gap:clamp(26px,4vw,60px);
+  border:1px solid var(--line);border-radius:34px;padding:clamp(26px,4vw,54px);scroll-margin-top:24px;
+  background:radial-gradient(88% 100% at 0% 0%,rgba(239,35,60,.10),transparent 62%),
+             linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.006))}
+.sil-yazi .kunye{margin-bottom:0;display:inline}.sil-yazi .kunye::before{display:none} /* kaynak .ldt .mono: 12px (olculdu), satir ici (kutu 16px), cizgisiz, marjsiz (5192) — inline-flex 20px kutu veriyordu (3 Eyl) */
+.sil-yazi h3{font-size:clamp(1.55rem,3vw,2.4rem);line-height:1.04;
+  letter-spacing:-.04em;margin:14px 0 14px}
+.sil-yazi h3 em{font-style:normal;color:var(--red)}
+.sil-yazi>p:not(.kunye){color:var(--tx3);font-size:.92rem;line-height:1.72;font-weight:300;max-width:40ch}
+
+.sil-form{display:grid;gap:14px}
+.sil-alan{display:block}
+.sil-alan>span{display:block;font-family:var(--f-tek);font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tx4);margin-bottom:7px}
+.sil-alan input,.sil-alan textarea{width:100%;background:rgba(0,0,0,.45);
+  border:1px solid var(--line2);border-radius:12px;padding:13px 15px;
+  color:var(--tx);font:inherit;font-size:.94rem;
+  transition:border-color .26s var(--e),box-shadow .26s var(--e)}
+.sil-alan input::placeholder,.sil-alan textarea::placeholder{color:var(--tx4)}
+.sil-alan textarea{resize:vertical;min-height:82px;line-height:1.55}
+/* kaynak odak: kizil kenarlik + 3px parilti; kuresel :focus-visible halkasi (E6) ustune eklenir */
+.sil-alan input:focus-visible,.sil-alan textarea:focus-visible{
+  border-color:var(--red);outline:2px solid var(--red);outline-offset:1px}
+/* kaynagin 3px odak piriltisi yalniz masaustunde: H14 mobil tabanda golge yasak (madde 7) */
+@media(min-width:901px){
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{box-shadow:0 0 0 3px rgba(239,35,60,.15)}
+}
+.sil-onay{display:flex;gap:10px;align-items:flex-start;
+  color:var(--tx3);font-size:.79rem;line-height:1.55;margin-top:2px;cursor:pointer}
+.sil-onay input{flex:none;margin-top:3px;width:15px;height:15px;accent-color:var(--red)}
+.sil-form .dugme{justify-self:start;margin-top:4px} /* kaynak .ldf>button (2309) */
+.sil-form .dugme svg{width:16px;height:16px}
+.sil-durum{min-height:1.2em;color:var(--red-soft);font-size:.88rem}
+
+/* ============================================================
+   B5 · FORM DURUM KATMANI (9 Eyl 2026) — SIFIR YENI JS
+   ------------------------------------------------------------
+   Form zaten calisiyordu; eksik olan sey GERI BILDIRIMDI. Dort
+   soruya cevap veriyor, dordu de saf CSS:
+     "doldurdum mu?"   :not(:placeholder-shown)
+     "dogru mu?"       :user-invalid / :user-valid
+     "gonderebilir miyim?"  form:has(:invalid) -> dugme
+     "ne yazmaliyim?"  ipucu METINDE durur, gorunurlugu acilir
+
+   NEDEN `:user-invalid`, `:invalid` DEGIL: `:invalid` sayfa acilir
+   acilmaz bos zorunlu alanlarin HEPSINI kirmiziya boyar — ziyaretci
+   daha tek harf yazmadan hata gormus olur. `:user-invalid` yalniz
+   kullanici o alanla ETKILESTIKTEN sonra ateslenir. Fark, formun
+   "yardim eden" ile "azarlayan" hali arasindaki fark.
+
+   HAREKET: yalniz transition (transform+opacity). @keyframes YOK,
+   dolayisiyla H1 onek defterine yeni kayit gerekmiyor; yine de
+   azaltilmis hareket AYNI OZGULLUKTE kapatiliyor (H11).
+   GOLGE: yalniz masaustu kapisinda (H14 madde 7).
+   ============================================================ */
+
+/* --- alan: dolu / odakli / hatali --- */
+.sil-alan{position:relative}
+.sil-alan input,.sil-alan textarea{
+  transition:border-color .26s var(--e),box-shadow .26s var(--e),
+             background-color .26s var(--e),transform .18s var(--e)}
+/* DOLU: kenarlik canlanir, ust etiket soluklugunu birakir. */
+.sil-alan input:not(:placeholder-shown),
+.sil-alan textarea:not(:placeholder-shown){
+  background:rgba(0,0,0,.62);border-color:var(--line)}
+.sil-alan:has(input:not(:placeholder-shown))>span,
+.sil-alan:has(textarea:not(:placeholder-shown))>span{color:var(--tx3)}
+/* ODAK: etiket PARLAK NOTRE doner, kizila DEGIL.
+   Ilk yazimda odak da kizildi ve yan yana kare bunu yakaladi: odaktaki
+   telefon alani ile hatali e-posta alani AYNI GORUNUYORDU. Iki ayri
+   durumun tek renge dusmesi, rengin tasidigi bilgiyi sifirlar.
+   Artik: odak = parlak notr etiket + kizil odak halkasi (tarayici
+   sozlesmesi), hata = kizil etiket + kizil kenarlik + kizil ipucu. */
+.sil-alan:has(input:focus-visible)>span,
+.sil-alan:has(textarea:focus-visible)>span{color:var(--tx)}
+.sil-alan:has(input:user-invalid)>span,
+.sil-alan:has(textarea:user-invalid)>span{color:var(--red-soft)}
+
+/* --- ipucu: HEP GORUNUR, yalniz ROL degistirir ---
+   ILK YAZIMDA `opacity:0` ile gizlenip `:user-invalid`de aciliyordu ve
+   DENETIM H2 BUNU KIRMIZIYA CEVIRDI: "icerik gorunur dogar". Kural hakli
+   cikti, tasarim degisti — kural gevsetilmedi, muafiyet de yazilmadi.
+   Ustelik boylesi DAHA IYI: yardim metnini hatadan SONRA gostermek gec
+   kalmis bir uyaridir; once gosterilirse hata hic dogmaz. Hata halinde
+   metin ayni kalir, yalniz sessiz griden kizila doner. */
+.sil-ipucu{display:block;margin-top:7px;
+  color:var(--tx4);font-size:.78rem;line-height:1.45;
+  transition:color .22s var(--e)}
+.sil-alan:has(input:user-invalid) .sil-ipucu,
+.sil-alan:has(textarea:user-invalid) .sil-ipucu{color:var(--red-soft)}
+.sil-alan input:user-invalid,.sil-alan textarea:user-invalid{
+  border-color:var(--red);background:rgba(239,35,60,.05)}
+
+/* --- gecerli alan: sessiz onay, kizil disi bir isaret degil, kizilin
+       kendisi (palet tek renk; yesil eklemek kimligi bozardi) --- */
+.sil-alan:has(input:user-valid:not(:placeholder-shown))>span::after,
+.sil-alan:has(textarea:user-valid:not(:placeholder-shown))>span::after{
+  content:'✓';margin-left:7px;color:var(--red);letter-spacing:0}
+/* `:not(:placeholder-shown)` SART: mesaj alani ZORUNLU DEGIL, dolayisiyla
+   BOS haliyle de `:user-valid` olur ve icinden Tab ile gecen ziyaretci
+   BOS bir alanda onay isareti gorurdu. Isaret "gecerli" degil "DOLU ve
+   gecerli" demeli — yan yana kare bunu yakaladi. */
+
+/* --- KVKK onayi: ayri ipucu YOK (etiketin kendisi zaten aciklama);
+       onaylanmamissa etiket kizila doner, o yeter. --- */
+.sil-onay:has(input:user-invalid)>span{color:var(--red-soft)}
+
+/* --- DUGME FORMUN DURUMUNU GOSTERIR ---
+   Devre disi BIRAKILMAZ: `disabled` bir dugme ekran okuyucuya "burada
+   yapacak bir sey yok" der ve odagi da alamaz. Gorsel olarak beklemede
+   durur, tiklanir; tiklaninca tarayicinin kendi dogrulama balonu
+   eksik alani gosterir — yardim eden davranis budur. */
+.sil-form:has(:invalid) .dugme{opacity:.62}
+.sil-form:not(:has(:invalid)) .dugme{opacity:1}
+
+/* --- mesaj alani kendi buyur (JS'siz) --- */
+.sil-alan textarea{field-sizing:content;max-height:14em}
+
+@media(min-width:901px){
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{transform:translateY(-1px)}
+  .sil-form:not(:has(:invalid)) .dugme{box-shadow:0 0 0 3px rgba(239,35,60,.14)}
+}
+@media(prefers-reduced-motion:reduce){
+  .sil-alan input,.sil-alan textarea,.sil-ipucu{transition:none}
+  .sil-alan input:focus-visible,.sil-alan textarea:focus-visible{transform:none}
+}
+.sil-durum a{color:var(--tx);text-decoration:underline}
+
+/* Honeypot: gerçek kullanıcı görmez, klavye sırasına girmez, bot doldurur. */
+.sus-tuzak{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+@media(min-width:861px){
+  .sil-kutu{grid-template-columns:1fr 1fr;align-items:start}
+}
+
+@media (hover:hover) and (pointer:fine){
+  .sil-ikincil{transition:border-color .3s var(--e),background-color .3s var(--e)}
+  .sil-ikincil:hover{border-color:var(--red);background:rgba(239,35,60,.1)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sil-ikincil{transition:none}
+}

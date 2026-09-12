@@ -1,0 +1,19 @@
+{
+  "name": "qanatone",
+  "private": true,
+  "version": "1.0.0",
+  "description": "QANATONE — Astro kabugu (yeni/) + panel ucu + holding araclari",
+  "scripts": {
+    "build": "npm --prefix yeni run build",
+    "test": "node yeni/denetim.cjs",
+    "test:yayinla": "node test/yayinla.test.js",
+    "test:holding": "node holding/test/omurga.test.js",
+    "test:faz1": "node holding/test/faz1.test.js",
+    "test:denetci": "node holding/test/denetci.test.js",
+    "test:doa": "node holding/test/doa.test.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.13",
+    "jsdom": "^24.0.0"
+  }
+}

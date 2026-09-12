@@ -1,0 +1,43 @@
+{
+ "_": "yeni/film/ekran-dikdortgen.cjs — devrin oturacagi ekran dikdortgeni, durak8 SON karesinden. Kenarlar isiklilik profilinin turev tepesinden (esik secimi yok).",
+ "olcum": "2026-08-31T14:22:19.895Z",
+ "kare": "film/kesit-dikis/durak8-last.png",
+ "kare_olcusu": {
+  "gen": 1920,
+  "yuk": 1080
+ },
+ "dikdortgen_px": {
+  "sol": 176,
+  "ust": 83,
+  "sag": 1744,
+  "alt": 1005,
+  "gen": 1569,
+  "yuk": 923
+ },
+ "oran": {
+  "sol": 0.09167,
+  "ust": 0.07685,
+  "gen": 0.81719,
+  "yuk": 0.85463
+ },
+ "en_boy": 1.6999,
+ "kasa_kalinligi_px": {
+  "ust": 13,
+  "alt": 0,
+  "sol": 0,
+  "sag": 0
+ },
+ "yontem": {
+  "olcut": "yerel gradyan yogunlugu |dx|+|dy|",
+  "gradyan_esigi": 2,
+  "doluluk_orani": 0.1,
+  "bosluk_toleransi": 55,
+  "neden": "isiklilik ayirmiyor: cerceve 0,1 · arka plan 2,5 · ekranin koyu bolgeleri 4"
+ },
+ "dogrulama": {
+  "ic_isiklilik": 26.38,
+  "dis_isiklilik_halka": 11.06,
+  "fark": 15.32,
+  "hukum": "AYRISMADI — sayi guvenilmez"
+ }
+}

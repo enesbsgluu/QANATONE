@@ -1,0 +1,91 @@
+---
+/* PERDE (#boot) — göçün SON adası (Anayasa: "EN SON İŞ, izole ada").
+   Kaynak: kök index.html · CSS 84-196 · markup 4416-4436 · kapı 4437 ·
+   denetleyici 4468-4614.
+
+   ANAYASA'NIN DÖRT ŞARTI VE BURADAKİ KARŞILIKLARI:
+   1. "İçeriği hiçbir koşulda bekletmez" — perde `pointer-events:none`,
+      kaydırma kilidi YOK (eski `html.booting{overflow:hidden}` taşınmadı),
+      içerik arkada boyalı ve etkileşimli duruyor; perde üstünden geçiyor.
+   2. "Dokunma/kaydırma iptal eder" — pointerdown/wheel/touchstart/keydown
+      dördü de perdeyi ANINDA süpürür (once+passive; kaydırma dinleyicisi
+      DEĞİL, H12 ile çelişmez ve tekrar tetiklenmez).
+   3. "Oturumda bir kez" — sessionStorage `qanat-splash-seen`; eski
+      kapatma anahtarı `qanat-splash === '0'` da aynen sürüyor.
+   4. "Lighthouse kapısı perde AÇIKKEN geçilir" — ölçüm bu commit'te,
+      koşum düzeyinde dönüşümlü (Lighthouse her koşumda taze profil
+      kullandığı için perde her ölçümde görünür).
+
+   TAŞINMAYAN İKİ MALİYET (Anayasa adıyla sayıyor):
+   · 2,7 sn zorunlu bekletme — perde artık yüklemeyi MASKELEMİYOR
+     (arkada bekleyen bir şey yok, sayfa statik ve boyalı); marka selamı
+     ~2 sn'de kendi kendine biter, etkileşimle daha da erken.
+   · iz başına `getTotalLength` — SVG anakart izleri GELDİ (giydirme,
+     a8b1d6a; dokuz yol kaynak 4418-4428'den birebir) ama ölçümsüz:
+     `pathLength="1"` özniteliğiyle, yerleşim okuması sıfır. (Bu satır
+     eskiden "izler hiç gelmedi" diyordu — 21 Ağu belge düzeltmesi.)
+
+   KAPI BETİĞİ `is:inline` VE MARKUP'IN HEMEN ARDINDA — eski kaynağın
+   ölçülmüş dersi (4438): perde varsayılan gizli doğar (`html:not(.prd)`),
+   görünürlük kararını parser'ı bloke eden bu minik betik İLK BOYAMADAN
+   ÖNCE verir. Ada JS'i toplamı ~0,6 KB; kütüphane yok, rAF yok,
+   ilerleme döngüsü yok. */
+import '../stil/perde.css';
+const HARFLER = 'QANATONE'.split('');
+---
+<div class="sus-perde" id="perde" aria-hidden="true">
+  <span class="sus-perde-kabuk"></span>
+  {/* ANAKART İZLERİ (giydirme, 20 Ağu) — kaynağın bcirc SVG'si (4418).
+      Çizilme pathLength="1" ile: getTotalLength YOK (H12), yerleşim
+      okuması sıfır — perde kararının kendi reçetesi. Teller kenar
+      pedlerinden merkeze çizilir (offset -1→0, eski yönün aynısı);
+      sinyaller izler oturunca akar (dash oranı kaynağın 24/364'ü).
+      Sinyal gecikmeleri sıkıştırıldı (1,05/1,65/2,25 → 1,0/1,35/1,7):
+      yeni perde ~2,2 sn'de süpürülüyor, eski üçüncü sinyal hiç
+      görünmeyecekti. */}
+  <svg class="sus-perde-iz" viewBox="0 0 680 380" aria-hidden="true">
+    <path class="tr" pathLength="1" style="--i:0" d="M182,148 H118 V94 H60" /><circle class="pd" style="--i:0" cx="60" cy="94" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:1" d="M180,190 H38" /><circle class="pd" style="--i:1" cx="38" cy="190" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:2" d="M184,238 H104 V296 H68" /><circle class="pd" style="--i:2" cx="68" cy="296" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:3" d="M498,146 H562 V90 H618" /><circle class="pd" style="--i:3" cx="618" cy="90" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:4" d="M500,190 H642" /><circle class="pd" style="--i:4" cx="642" cy="190" r="2.6" />
+    <path class="tr" pathLength="1" style="--i:5" d="M496,244 H574 V302 H610" /><circle class="pd" style="--i:5" cx="610" cy="302" r="2.6" />
+    <path class="sig" pathLength="1" d="M180,190 H38" />
+    <path class="sig s2" pathLength="1" d="M498,146 H562 V90 H618" />
+    <path class="sig s3" pathLength="1" d="M184,238 H104 V296 H68" />
+  </svg>
+  <span class="sus-perde-cizgi"></span>
+  <span class="sus-perde-kose a"></span><span class="sus-perde-kose b"></span>
+  <span class="sus-perde-kose c"></span><span class="sus-perde-kose d"></span>
+  <div class="sus-perde-soz">
+    {HARFLER.map((h, i) => <span style={`--i:${i}`}>{h}</span>)}
+  </div>
+</div>
+
+{/* KAPI + DENETLEYİCİ — tek betik, kütüphanesiz, YORUMSUZ (is:inline
+    betiğin her baytı çıktıya gider; J1 bunu bir kez 4 baytla ısırdı).
+    Akış: (1) kapatma anahtarı / oturumda görülmüş / hareket azaltma →
+    perde DOM'dan kalkar, hiç doğmaz. (2) değilse `prd` sınıfı görünür
+    yapar (parser-blocking: ilk boyamadan önce, titreme yok) ve oturum
+    işaretlenir. (3) 1,3 sn'de kendiliğinden ya da İLK dokunma/tekerlek/
+    dokunuş/tuşla ANINDA `.out` süpürmesi; 0,9 sn sonra DOM'dan kalkar.
+    (4) güvenlik: ne olursa olsun 4 sn'de koşulsuz kaldırma. */}
+<script is:inline>
+(function(){
+  var el=document.getElementById('perde'),R=document.documentElement,k=0,g=0;
+  if(!el)return;
+  try{k=localStorage.getItem('qanat-splash')==='0';
+      g=sessionStorage.getItem('qanat-splash-seen')==='1';}catch(e){}
+  if(k||g||matchMedia('(prefers-reduced-motion:reduce)').matches){
+    el.parentNode.removeChild(el);return;}
+  R.classList.add('prd');
+  try{sessionStorage.setItem('qanat-splash-seen','1');}catch(e){}
+  var bitti=0;
+  function kaldir(){if(el.parentNode)el.parentNode.removeChild(el);}
+  function cik(){if(bitti)return;bitti=1;el.classList.add('out');setTimeout(kaldir,900);}
+  setTimeout(cik,3400);
+  ['pointerdown','wheel','touchstart','keydown'].forEach(function(t){
+    addEventListener(t,cik,{once:true,passive:true});});
+  setTimeout(kaldir,6000);
+})();
+</script>

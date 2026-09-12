@@ -1,0 +1,3237 @@
+{
+ "_": "yeni/film/olc-chrome.cjs — LCP/CLS/INP/LoAF sayfa sayfa (yerel sunucu, gercek girdi). LCP yerelden: mutlak degil siralama.",
+ "olcum": "2026-09-04T11:14:31.217Z",
+ "tarayici": "brave Chrome/152.0.7977.76",
+ "kirmizi_kontrol": {
+  "yakalandi": true,
+  "lcp": 1960,
+  "lcpEl": "p.sh-lede",
+  "cls": 0.5053,
+  "clsKaynak": [
+   {
+    "t": 3573,
+    "v": 0.5053,
+    "el": "#fl-govde",
+    "kaynak": [
+     {
+      "el": "#fl-govde",
+      "once": [
+       0,
+       0,
+       1425,
+       900
+      ],
+      "sonra": [
+       0,
+       720,
+       1425,
+       180
+      ]
+     }
+    ],
+    "gorunum": [
+     1440,
+     900
+    ],
+    "sinif": "t-nostars"
+   }
+  ],
+  "inp": 152,
+  "inpHedef": "a.sh-void keyup",
+  "etkilesim": 10,
+  "loaf": 7,
+  "loafToplam": 968,
+  "loafEnUzun": 292,
+  "loafKaynak": [
+   {
+    "t": 1660,
+    "sure": 292,
+    "engel": 0,
+    "betik": 290,
+    "stilDuzen": 1,
+    "render": 2,
+    "kaynak": []
+   },
+   {
+    "t": 1371,
+    "sure": 235,
+    "engel": 0,
+    "betik": 230,
+    "stilDuzen": 1,
+    "render": 5,
+    "kaynak": []
+   },
+   {
+    "t": 3450,
+    "sure": 123,
+    "engel": 73,
+    "betik": 121,
+    "stilDuzen": 2,
+    "render": 2,
+    "kaynak": [
+     {
+      "src": "",
+      "fn": "",
+      "cagiran": "TimerHandler:setTimeout",
+      "sure": 121
+     }
+    ]
+   }
+  ]
+ },
+ "sayfa": [
+  {
+   "lcp": 268,
+   "lcpEl": "p.sh-lede",
+   "cls": 0.0012,
+   "clsKaynak": [
+    {
+     "t": 186,
+     "v": 0.0012,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      },
+      {
+       "el": "svg",
+       "once": [
+        638,
+        46,
+        13,
+        13
+       ],
+       "sonra": [
+        630,
+        46,
+        13,
+        13
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    },
+    {
+     "t": 297,
+     "v": 0,
+     "el": "span",
+     "kaynak": [
+      {
+       "el": "span",
+       "once": [
+        596,
+        749,
+        138,
+        20
+       ],
+       "sonra": [
+        599,
+        749,
+        138,
+        20
+       ]
+      },
+      {
+       "el": "b",
+       "once": [
+        767,
+        749,
+        135,
+        20
+       ],
+       "sonra": [
+        770,
+        749,
+        135,
+        20
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "section.sh-sahne pointerdown",
+   "etkilesim": 10,
+   "loaf": 2,
+   "loafToplam": 166,
+   "loafEnUzun": 114,
+   "loafKaynak": [
+    {
+     "t": 19,
+     "sure": 114,
+     "engel": 25,
+     "betik": 49,
+     "stilDuzen": 64,
+     "render": 65,
+     "kaynak": []
+    },
+    {
+     "t": 136,
+     "sure": 52,
+     "engel": 0,
+     "betik": 18,
+     "stilDuzen": 1,
+     "render": 34,
+     "kaynak": []
+    }
+   ],
+   "yol": "/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 216,
+   "lcpEl": "p.lede",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 56,
+   "inpHedef": "#bkf-0 keydown",
+   "etkilesim": 11,
+   "loaf": 1,
+   "loafToplam": 146,
+   "loafEnUzun": 146,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 146,
+     "engel": 72,
+     "betik": 28,
+     "stilDuzen": 118,
+     "render": 118,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 156,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "p pointerdown",
+   "etkilesim": 8,
+   "loaf": 3,
+   "loafToplam": 200,
+   "loafEnUzun": 74,
+   "loafKaynak": [
+    {
+     "t": 3041,
+     "sure": 74,
+     "engel": 0,
+     "betik": 74,
+     "stilDuzen": 0,
+     "render": 0,
+     "kaynak": []
+    },
+    {
+     "t": 88,
+     "sure": 68,
+     "engel": 10,
+     "betik": 15,
+     "stilDuzen": 0,
+     "render": 53,
+     "kaynak": []
+    },
+    {
+     "t": 29,
+     "sure": 58,
+     "engel": 0,
+     "betik": 28,
+     "stilDuzen": 30,
+     "render": 30,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/donusum-oranlari-sektor-sektor/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 212,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 140,
+   "loafEnUzun": 140,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 140,
+     "engel": 68,
+     "betik": 27,
+     "stilDuzen": 114,
+     "render": 114,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/google-ads-maliyetleri-2026/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 224,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 181,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 6,
+   "loaf": 2,
+   "loafToplam": 155,
+   "loafEnUzun": 104,
+   "loafKaynak": [
+    {
+     "t": 78,
+     "sure": 104,
+     "engel": 53,
+     "betik": 6,
+     "stilDuzen": 0,
+     "render": 98,
+     "kaynak": []
+    },
+    {
+     "t": 27,
+     "sure": 51,
+     "engel": 0,
+     "betik": 25,
+     "stilDuzen": 26,
+     "render": 26,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 220,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 148,
+   "loafEnUzun": 148,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 148,
+     "engel": 71,
+     "betik": 31,
+     "stilDuzen": 117,
+     "render": 117,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/talebe-bes-dakikada-donmek/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 236,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 194,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 6,
+   "loaf": 3,
+   "loafToplam": 218,
+   "loafEnUzun": 112,
+   "loafKaynak": [
+    {
+     "t": 83,
+     "sure": 112,
+     "engel": 61,
+     "betik": 7,
+     "stilDuzen": 0,
+     "render": 105,
+     "kaynak": []
+    },
+    {
+     "t": 4326,
+     "sure": 55,
+     "engel": 3,
+     "betik": 54,
+     "stilDuzen": 0,
+     "render": 1,
+     "kaynak": [
+      {
+       "src": "kabuk.js",
+       "fn": "",
+       "cagiran": "IntersectionObserverCallback",
+       "sure": 52
+      }
+     ]
+    },
+    {
+     "t": 31,
+     "sure": 51,
+     "engel": 0,
+     "betik": 24,
+     "stilDuzen": 27,
+     "render": 27,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 204,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 140,
+   "loafEnUzun": 140,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 140,
+     "engel": 68,
+     "betik": 27,
+     "stilDuzen": 113,
+     "render": 113,
+     "kaynak": []
+    }
+   ],
+   "yol": "/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 292,
+   "lcpEl": "i",
+   "cls": 0.0012,
+   "clsKaynak": [
+    {
+     "t": 207,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      },
+      {
+       "el": "svg",
+       "once": [
+        610,
+        46,
+        13,
+        13
+       ],
+       "sonra": [
+        602,
+        46,
+        13,
+        13
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    },
+    {
+     "t": 322,
+     "v": 0,
+     "el": "b",
+     "kaynak": [
+      {
+       "el": "b",
+       "once": [
+        755,
+        749,
+        157,
+        20
+       ],
+       "sonra": [
+        759,
+        749,
+        157,
+        20
+       ]
+      },
+      {
+       "el": "span",
+       "once": [
+        585,
+        749,
+        138,
+        20
+       ],
+       "sonra": [
+        588,
+        749,
+        138,
+        20
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "section.sh-sahne pointerdown",
+   "etkilesim": 10,
+   "loaf": 3,
+   "loafToplam": 190,
+   "loafEnUzun": 70,
+   "loafKaynak": [
+    {
+     "t": 138,
+     "sure": 70,
+     "engel": 13,
+     "betik": 17,
+     "stilDuzen": 1,
+     "render": 53,
+     "kaynak": []
+    },
+    {
+     "t": 32,
+     "sure": 65,
+     "engel": 0,
+     "betik": 37,
+     "stilDuzen": 28,
+     "render": 28,
+     "kaynak": []
+    },
+    {
+     "t": 7620,
+     "sure": 55,
+     "engel": 0,
+     "betik": 54,
+     "stilDuzen": 1,
+     "render": 2,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 188,
+   "lcpEl": "p.lede",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 11,
+   "loaf": 1,
+   "loafToplam": 114,
+   "loafEnUzun": 114,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 114,
+     "engel": 41,
+     "betik": 27,
+     "stilDuzen": 87,
+     "render": 87,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 152,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 125,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 54,
+   "loafEnUzun": 54,
+   "loafKaynak": [
+    {
+     "t": 71,
+     "sure": 54,
+     "engel": 4,
+     "betik": 3,
+     "stilDuzen": 0,
+     "render": 51,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/donusum-oranlari-sektor-sektor/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 148,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 6,
+   "loaf": 1,
+   "loafToplam": 71,
+   "loafEnUzun": 71,
+   "loafKaynak": [
+    {
+     "t": 78,
+     "sure": 71,
+     "engel": 20,
+     "betik": 5,
+     "stilDuzen": 0,
+     "render": 66,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/google-ads-maliyetleri-2026/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 147,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 119,
+   "loafEnUzun": 68,
+   "loafKaynak": [
+    {
+     "t": 79,
+     "sure": 68,
+     "engel": 18,
+     "betik": 6,
+     "stilDuzen": 0,
+     "render": 61,
+     "kaynak": []
+    },
+    {
+     "t": 28,
+     "sure": 51,
+     "engel": 0,
+     "betik": 26,
+     "stilDuzen": 24,
+     "render": 24,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/saglik-turizmi-hasta-basina-gelir/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 6,
+   "loaf": 1,
+   "loafToplam": 108,
+   "loafEnUzun": 108,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 108,
+     "engel": 34,
+     "betik": 29,
+     "stilDuzen": 79,
+     "render": 79,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/talebe-bes-dakikada-donmek/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 102,
+   "loafEnUzun": 102,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 102,
+     "engel": 32,
+     "betik": 26,
+     "stilDuzen": 77,
+     "render": 77,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/yapay-zeka-trafigi-tiklama-degil/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 192,
+   "lcpEl": "p",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 114,
+   "loafEnUzun": 114,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 114,
+     "engel": 40,
+     "betik": 29,
+     "stilDuzen": 85,
+     "render": 85,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/bulten/yapay-zekadan-gelen-ziyaretci-donusuyor-mu/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 107,
+   "loafEnUzun": 107,
+   "loafKaynak": [
+    {
+     "t": 24,
+     "sure": 107,
+     "engel": 36,
+     "betik": 27,
+     "stilDuzen": 80,
+     "render": 80,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 216,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 3331,
+     "v": 0,
+     "el": "i.flpk",
+     "kaynak": [
+      {
+       "el": "i.flpk",
+       "once": [
+        1066,
+        265,
+        52,
+        52
+       ],
+       "sonra": [
+        1085,
+        265,
+        52,
+        52
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 89,
+   "loafEnUzun": 89,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 89,
+     "engel": 38,
+     "betik": 7,
+     "stilDuzen": 2,
+     "render": 81,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/ai-ajan/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 280,
+   "lcpEl": "h1",
+   "cls": 0.0017,
+   "clsKaynak": [
+    {
+     "t": 8020,
+     "v": 0.0017,
+     "el": "span.mkrk",
+     "kaynak": [
+      {
+       "el": "span.mkrk",
+       "once": [
+        765,
+        465,
+        521,
+        51
+       ],
+       "sonra": [
+        765,
+        524,
+        521,
+        51
+       ]
+      },
+      {
+       "el": "span.mkrk",
+       "once": [
+        765,
+        524,
+        521,
+        51
+       ],
+       "sonra": [
+        765,
+        465,
+        521,
+        51
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 6,
+   "loafToplam": 526,
+   "loafEnUzun": 145,
+   "loafKaynak": [
+    {
+     "t": 85,
+     "sure": 145,
+     "engel": 94,
+     "betik": 9,
+     "stilDuzen": 9,
+     "render": 135,
+     "kaynak": []
+    },
+    {
+     "t": 7522,
+     "sure": 105,
+     "engel": 0,
+     "betik": 93,
+     "stilDuzen": 11,
+     "render": 12,
+     "kaynak": []
+    },
+    {
+     "t": 6107,
+     "sure": 100,
+     "engel": 45,
+     "betik": 5,
+     "stilDuzen": 94,
+     "render": 94,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/finans/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 163,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 138,
+   "loafEnUzun": 82,
+   "loafKaynak": [
+    {
+     "t": 86,
+     "sure": 82,
+     "engel": 31,
+     "betik": 6,
+     "stilDuzen": 4,
+     "render": 75,
+     "kaynak": []
+    },
+    {
+     "t": 29,
+     "sure": 56,
+     "engel": 0,
+     "betik": 31,
+     "stilDuzen": 25,
+     "render": 25,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/geo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 111,
+   "loafEnUzun": 111,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 111,
+     "engel": 35,
+     "betik": 30,
+     "stilDuzen": 80,
+     "render": 80,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/google-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 111,
+   "loafEnUzun": 111,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 111,
+     "engel": 36,
+     "betik": 30,
+     "stilDuzen": 80,
+     "render": 80,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/meta-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 184,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 3340,
+     "v": 0.0003,
+     "el": "i.flpk",
+     "kaynak": [
+      {
+       "el": "i.flpk",
+       "once": [
+        951,
+        278,
+        52,
+        52
+       ],
+       "sonra": [
+        1064,
+        278,
+        52,
+        52
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 3,
+   "loafToplam": 185,
+   "loafEnUzun": 72,
+   "loafKaynak": [
+    {
+     "t": 80,
+     "sure": 72,
+     "engel": 21,
+     "betik": 6,
+     "stilDuzen": 1,
+     "render": 66,
+     "kaynak": []
+    },
+    {
+     "t": 3075,
+     "sure": 60,
+     "engel": 0,
+     "betik": 53,
+     "stilDuzen": 7,
+     "render": 7,
+     "kaynak": []
+    },
+    {
+     "t": 25,
+     "sure": 53,
+     "engel": 0,
+     "betik": 28,
+     "stilDuzen": 25,
+     "render": 25,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 244,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 191,
+   "loafEnUzun": 139,
+   "loafKaynak": [
+    {
+     "t": 29,
+     "sure": 139,
+     "engel": 61,
+     "betik": 33,
+     "stilDuzen": 106,
+     "render": 106,
+     "kaynak": []
+    },
+    {
+     "t": 192,
+     "sure": 52,
+     "engel": 0,
+     "betik": 51,
+     "stilDuzen": 0,
+     "render": 2,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/seo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 248,
+   "lcpEl": "h1",
+   "cls": 0.0033,
+   "clsKaynak": [
+    {
+     "t": 3393,
+     "v": 0.0007,
+     "el": "b.tlprice",
+     "kaynak": [
+      {
+       "el": "b.tlprice",
+       "once": [
+        1245,
+        600,
+        35,
+        38
+       ],
+       "sonra": [
+        1181,
+        580,
+        100,
+        38
+       ]
+      },
+      {
+       "el": "b.tlknob",
+       "once": [
+        124,
+        560,
+        41,
+        41
+       ],
+       "sonra": [
+        261,
+        540,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    },
+    {
+     "t": 3410,
+     "v": 0.0004,
+     "el": "b.tlknob",
+     "kaynak": [
+      {
+       "el": "b.tlknob",
+       "once": [
+        261,
+        540,
+        41,
+        41
+       ],
+       "sonra": [
+        498,
+        520,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    },
+    {
+     "t": 3427,
+     "v": 0.001,
+     "el": "b.tlprice",
+     "kaynak": [
+      {
+       "el": "b.tlprice",
+       "once": [
+        1181,
+        560,
+        100,
+        38
+       ],
+       "sonra": [
+        1166,
+        541,
+        115,
+        38
+       ]
+      },
+      {
+       "el": "b.tlknob",
+       "once": [
+        498,
+        520,
+        41,
+        41
+       ],
+       "sonra": [
+        683,
+        501,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 157,
+   "loafEnUzun": 157,
+   "loafKaynak": [
+    {
+     "t": 30,
+     "sure": 157,
+     "engel": 80,
+     "betik": 34,
+     "stilDuzen": 123,
+     "render": 123,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/web-sitesi-araclar/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 204,
+   "lcpEl": "img bab-ic-mimarlik-m.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 117,
+   "loafEnUzun": 117,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 117,
+     "engel": 40,
+     "betik": 32,
+     "stilDuzen": 85,
+     "render": 85,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/hizmetler/web-tasarim/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 320,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 48,
+   "inpHedef": "#icerik keydown",
+   "etkilesim": 10,
+   "loaf": 2,
+   "loafToplam": 312,
+   "loafEnUzun": 262,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 262,
+     "engel": 75,
+     "betik": 142,
+     "stilDuzen": 120,
+     "render": 120,
+     "kaynak": []
+    },
+    {
+     "t": 5331,
+     "sure": 50,
+     "engel": 0,
+     "betik": 43,
+     "stilDuzen": 1,
+     "render": 8,
+     "kaynak": [
+      {
+       "src": "sizinti.js",
+       "fn": "q",
+       "cagiran": "FrameRequestCallback",
+       "sure": 6
+      }
+     ]
+    }
+   ],
+   "yol": "/en/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 236,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 158,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 2,
+   "loafToplam": 129,
+   "loafEnUzun": 77,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 77,
+     "engel": 25,
+     "betik": 9,
+     "stilDuzen": 0,
+     "render": 68,
+     "kaynak": []
+    },
+    {
+     "t": 27,
+     "sure": 52,
+     "engel": 0,
+     "betik": 30,
+     "stilDuzen": 22,
+     "render": 22,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "img bab-ic-mimarlik.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 154,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 127,
+   "loafEnUzun": 74,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 74,
+     "engel": 22,
+     "betik": 5,
+     "stilDuzen": 0,
+     "render": 68,
+     "kaynak": []
+    },
+    {
+     "t": 27,
+     "sure": 53,
+     "engel": 0,
+     "betik": 29,
+     "stilDuzen": 23,
+     "render": 23,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/bab-ic-mimarlik/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "img charles-schwab.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 155,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 128,
+   "loafEnUzun": 77,
+   "loafKaynak": [
+    {
+     "t": 79,
+     "sure": 77,
+     "engel": 26,
+     "betik": 5,
+     "stilDuzen": 0,
+     "render": 71,
+     "kaynak": []
+    },
+    {
+     "t": 27,
+     "sure": 51,
+     "engel": 0,
+     "betik": 29,
+     "stilDuzen": 22,
+     "render": 22,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/charles-schwab/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 164,
+   "lcpEl": "img cmblu-energy.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 97,
+   "loafEnUzun": 97,
+   "loafKaynak": [
+    {
+     "t": 24,
+     "sure": 97,
+     "engel": 23,
+     "betik": 29,
+     "stilDuzen": 68,
+     "render": 68,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/cmblu-energy/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "img kononenko-group.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 103,
+   "loafEnUzun": 103,
+   "loafKaynak": [
+    {
+     "t": 30,
+     "sure": 103,
+     "engel": 28,
+     "betik": 29,
+     "stilDuzen": 73,
+     "render": 73,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/kononenko-group/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 176,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 150,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 71,
+   "loafEnUzun": 71,
+   "loafKaynak": [
+    {
+     "t": 80,
+     "sure": 71,
+     "engel": 20,
+     "betik": 5,
+     "stilDuzen": 0,
+     "render": 66,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/mercedes-benz/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "img skyclinics.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 149,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "img pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 120,
+   "loafEnUzun": 67,
+   "loafKaynak": [
+    {
+     "t": 83,
+     "sure": 67,
+     "engel": 17,
+     "betik": 4,
+     "stilDuzen": 0,
+     "render": 62,
+     "kaynak": []
+    },
+    {
+     "t": 29,
+     "sure": 53,
+     "engel": 0,
+     "betik": 30,
+     "stilDuzen": 22,
+     "render": 22,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/skyclinics/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 172,
+   "lcpEl": "img terawulf.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 100,
+   "loafEnUzun": 100,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 100,
+     "engel": 27,
+     "betik": 27,
+     "stilDuzen": 73,
+     "render": 73,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/projeler/terawulf/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 164,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 95,
+   "loafEnUzun": 95,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 95,
+     "engel": 24,
+     "betik": 26,
+     "stilDuzen": 69,
+     "render": 69,
+     "kaynak": []
+    }
+   ],
+   "yol": "/en/sss/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 184,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 2,
+   "loafToplam": 158,
+   "loafEnUzun": 103,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 103,
+     "engel": 30,
+     "betik": 27,
+     "stilDuzen": 76,
+     "render": 76,
+     "kaynak": []
+    },
+    {
+     "t": 3259,
+     "sure": 55,
+     "engel": 4,
+     "betik": 55,
+     "stilDuzen": 0,
+     "render": 1,
+     "kaynak": [
+      {
+       "src": "kabuk.js",
+       "fn": "",
+       "cagiran": "IntersectionObserverCallback",
+       "sure": 53
+      }
+     ]
+    }
+   ],
+   "yol": "/en/surec/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "img qanatone.avif",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 126,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "a.dugme keyup",
+   "etkilesim": 10,
+   "loaf": 0,
+   "loafToplam": 0,
+   "loafEnUzun": 0,
+   "loafKaynak": [],
+   "yol": "/en/tesekkur/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 212,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 6,
+   "loaf": 1,
+   "loafToplam": 140,
+   "loafEnUzun": 140,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 140,
+     "engel": 67,
+     "betik": 28,
+     "stilDuzen": 112,
+     "render": 112,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 260,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 6,
+   "loaf": 1,
+   "loafToplam": 183,
+   "loafEnUzun": 183,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 183,
+     "engel": 104,
+     "betik": 33,
+     "stilDuzen": 150,
+     "render": 150,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/ai-ajan/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 244,
+   "lcpEl": "h1",
+   "cls": 0.0017,
+   "clsKaynak": [
+    {
+     "t": 7791,
+     "v": 0.0017,
+     "el": "span.mkrk",
+     "kaynak": [
+      {
+       "el": "span.mkrk",
+       "once": [
+        765,
+        465,
+        521,
+        51
+       ],
+       "sonra": [
+        765,
+        524,
+        521,
+        51
+       ]
+      },
+      {
+       "el": "span.mkrk",
+       "once": [
+        765,
+        524,
+        521,
+        51
+       ],
+       "sonra": [
+        765,
+        465,
+        521,
+        51
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerup",
+   "etkilesim": 7,
+   "loaf": 4,
+   "loafToplam": 279,
+   "loafEnUzun": 113,
+   "loafKaynak": [
+    {
+     "t": 84,
+     "sure": 113,
+     "engel": 58,
+     "betik": 15,
+     "stilDuzen": 9,
+     "render": 98,
+     "kaynak": []
+    },
+    {
+     "t": 5934,
+     "sure": 61,
+     "engel": 5,
+     "betik": 7,
+     "stilDuzen": 54,
+     "render": 54,
+     "kaynak": []
+    },
+    {
+     "t": 219,
+     "sure": 53,
+     "engel": 0,
+     "betik": 43,
+     "stilDuzen": 7,
+     "render": 10,
+     "kaynak": [
+      {
+       "src": "",
+       "fn": "",
+       "cagiran": "http://127.0.0.1:8790/hizmetler/finans/",
+       "sure": 19
+      },
+      {
+       "src": "",
+       "fn": "",
+       "cagiran": "Promise.resolve",
+       "sure": 9
+      }
+     ]
+    }
+   ],
+   "yol": "/hizmetler/finans/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 240,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 200,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 6,
+   "loaf": 2,
+   "loafToplam": 178,
+   "loafEnUzun": 124,
+   "loafKaynak": [
+    {
+     "t": 80,
+     "sure": 124,
+     "engel": 73,
+     "betik": 7,
+     "stilDuzen": 3,
+     "render": 117,
+     "kaynak": []
+    },
+    {
+     "t": 25,
+     "sure": 54,
+     "engel": 0,
+     "betik": 27,
+     "stilDuzen": 27,
+     "render": 27,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/geo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 220,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 151,
+   "loafEnUzun": 151,
+   "loafKaynak": [
+    {
+     "t": 27,
+     "sure": 151,
+     "engel": 77,
+     "betik": 28,
+     "stilDuzen": 123,
+     "render": 123,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/google-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 232,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 163,
+   "loafEnUzun": 163,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 163,
+     "engel": 88,
+     "betik": 30,
+     "stilDuzen": 133,
+     "render": 133,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/meta-ads/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 236,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 167,
+   "loafEnUzun": 167,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 167,
+     "engel": 92,
+     "betik": 29,
+     "stilDuzen": 138,
+     "render": 138,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 248,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 2,
+   "loafToplam": 220,
+   "loafEnUzun": 169,
+   "loafKaynak": [
+    {
+     "t": 21,
+     "sure": 169,
+     "engel": 95,
+     "betik": 29,
+     "stilDuzen": 140,
+     "render": 140,
+     "kaynak": []
+    },
+    {
+     "t": 5313,
+     "sure": 51,
+     "engel": 0,
+     "betik": 50,
+     "stilDuzen": 1,
+     "render": 1,
+     "kaynak": [
+      {
+       "src": "kabuk.js",
+       "fn": "",
+       "cagiran": "IntersectionObserverCallback",
+       "sure": 47
+      }
+     ]
+    }
+   ],
+   "yol": "/hizmetler/seo/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "h1",
+   "cls": 0.0038,
+   "clsKaynak": [
+    {
+     "t": 3361,
+     "v": 0.001,
+     "el": "b.tlprice",
+     "kaynak": [
+      {
+       "el": "b.tlprice",
+       "once": [
+        1245,
+        594,
+        35,
+        38
+       ],
+       "sonra": [
+        1181,
+        576,
+        100,
+        38
+       ]
+      },
+      {
+       "el": "b.tlknob",
+       "once": [
+        124,
+        554,
+        41,
+        41
+       ],
+       "sonra": [
+        312,
+        536,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    },
+    {
+     "t": 3396,
+     "v": 0.0013,
+     "el": "b.tlprice",
+     "kaynak": [
+      {
+       "el": "b.tlprice",
+       "once": [
+        1181,
+        576,
+        100,
+        38
+       ],
+       "sonra": [
+        1166,
+        554,
+        115,
+        38
+       ]
+      },
+      {
+       "el": "b.tlknob",
+       "once": [
+        312,
+        536,
+        41,
+        41
+       ],
+       "sonra": [
+        554,
+        514,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    },
+    {
+     "t": 3442,
+     "v": 0.0009,
+     "el": "b.tlknob",
+     "kaynak": [
+      {
+       "el": "b.tlknob",
+       "once": [
+        554,
+        514,
+        41,
+        41
+       ],
+       "sonra": [
+        1051,
+        446,
+        41,
+        41
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd bitcursor"
+    }
+   ],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 2,
+   "loafToplam": 136,
+   "loafEnUzun": 81,
+   "loafKaynak": [
+    {
+     "t": 83,
+     "sure": 81,
+     "engel": 26,
+     "betik": 10,
+     "stilDuzen": 5,
+     "render": 70,
+     "kaynak": []
+    },
+    {
+     "t": 27,
+     "sure": 55,
+     "engel": 0,
+     "betik": 27,
+     "stilDuzen": 28,
+     "render": 28,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/web-sitesi-araclar/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 284,
+   "lcpEl": "img bab-ic-mimarlik-m.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 158,
+   "loafEnUzun": 158,
+   "loafKaynak": [
+    {
+     "t": 28,
+     "sure": 158,
+     "engel": 84,
+     "betik": 29,
+     "stilDuzen": 130,
+     "render": 130,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hizmetler/web-tasarim/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 196,
+   "lcpEl": "p",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 125,
+   "loafEnUzun": 125,
+   "loafKaynak": [
+    {
+     "t": 29,
+     "sure": 125,
+     "engel": 52,
+     "betik": 27,
+     "stilDuzen": 98,
+     "render": 98,
+     "kaynak": []
+    }
+   ],
+   "yol": "/hukuki/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 212,
+   "lcpEl": "h1",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 170,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "span.bt pointerdown",
+   "etkilesim": 10,
+   "loaf": 2,
+   "loafToplam": 146,
+   "loafEnUzun": 93,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 93,
+     "engel": 39,
+     "betik": 11,
+     "stilDuzen": 3,
+     "render": 82,
+     "kaynak": []
+    },
+    {
+     "t": 26,
+     "sure": 53,
+     "engel": 0,
+     "betik": 23,
+     "stilDuzen": 30,
+     "render": 30,
+     "kaynak": []
+    }
+   ],
+   "yol": "/otomasyon/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 196,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 138,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 80,
+   "inpHedef": "label.mc pointerup",
+   "etkilesim": 12,
+   "loaf": 2,
+   "loafToplam": 113,
+   "loafEnUzun": 58,
+   "loafKaynak": [
+    {
+     "t": 81,
+     "sure": 58,
+     "engel": 4,
+     "betik": 9,
+     "stilDuzen": 0,
+     "render": 49,
+     "kaynak": []
+    },
+    {
+     "t": 25,
+     "sure": 55,
+     "engel": 0,
+     "betik": 28,
+     "stilDuzen": 27,
+     "render": 27,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 196,
+   "lcpEl": "img bab-ic-mimarlik.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 40,
+   "inpHedef": "body pointerup",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 135,
+   "loafEnUzun": 135,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 135,
+     "engel": 63,
+     "betik": 27,
+     "stilDuzen": 108,
+     "render": 108,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/bab-ic-mimarlik/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 216,
+   "lcpEl": "img charles-schwab.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 147,
+   "loafEnUzun": 147,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 147,
+     "engel": 72,
+     "betik": 31,
+     "stilDuzen": 116,
+     "render": 117,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/charles-schwab/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 164,
+   "lcpEl": "img cmblu-energy.webp",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 130,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 40,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 55,
+   "loafEnUzun": 55,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 55,
+     "engel": 0,
+     "betik": 30,
+     "stilDuzen": 26,
+     "render": 26,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/cmblu-energy/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 196,
+   "lcpEl": "img kononenko-group.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 136,
+   "loafEnUzun": 136,
+   "loafKaynak": [
+    {
+     "t": 22,
+     "sure": 136,
+     "engel": 63,
+     "betik": 28,
+     "stilDuzen": 108,
+     "render": 108,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/kononenko-group/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 208,
+   "lcpEl": "img mercedes-benz.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 8,
+   "loaf": 1,
+   "loafToplam": 141,
+   "loafEnUzun": 141,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 141,
+     "engel": 67,
+     "betik": 28,
+     "stilDuzen": 112,
+     "render": 113,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/mercedes-benz/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "img skyclinics.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 128,
+   "loafEnUzun": 128,
+   "loafKaynak": [
+    {
+     "t": 25,
+     "sure": 128,
+     "engel": 56,
+     "betik": 26,
+     "stilDuzen": 102,
+     "render": 102,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/skyclinics/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 208,
+   "lcpEl": "img terawulf.webp",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 24,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 7,
+   "loaf": 1,
+   "loafToplam": 138,
+   "loafEnUzun": 138,
+   "loafKaynak": [
+    {
+     "t": 26,
+     "sure": 138,
+     "engel": 66,
+     "betik": 27,
+     "stilDuzen": 111,
+     "render": 111,
+     "kaynak": []
+    }
+   ],
+   "yol": "/projeler/terawulf/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 180,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 118,
+   "loafEnUzun": 118,
+   "loafKaynak": [
+    {
+     "t": 23,
+     "sure": 118,
+     "engel": 49,
+     "betik": 24,
+     "stilDuzen": 94,
+     "render": 94,
+     "kaynak": []
+    }
+   ],
+   "yol": "/sss/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 208,
+   "lcpEl": "h1",
+   "cls": 0,
+   "clsKaynak": [],
+   "inp": 32,
+   "inpHedef": "body pointerdown",
+   "etkilesim": 9,
+   "loaf": 1,
+   "loafToplam": 142,
+   "loafEnUzun": 142,
+   "loafKaynak": [
+    {
+     "t": 24,
+     "sure": 142,
+     "engel": 72,
+     "betik": 25,
+     "stilDuzen": 117,
+     "render": 117,
+     "kaynak": []
+    }
+   ],
+   "yol": "/surec/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  },
+  {
+   "lcp": 200,
+   "lcpEl": "img qanatone.avif",
+   "cls": 0.0011,
+   "clsKaynak": [
+    {
+     "t": 135,
+     "v": 0.0011,
+     "el": "svg",
+     "kaynak": [
+      {
+       "el": "svg",
+       "once": [
+        380,
+        260,
+        680,
+        380
+       ],
+       "sonra": [
+        372,
+        260,
+        680,
+        380
+       ]
+      }
+     ],
+     "gorunum": [
+      1440,
+      900
+     ],
+     "sinif": "t-nostars prd"
+    }
+   ],
+   "inp": 48,
+   "inpHedef": "a.dugme keyup",
+   "etkilesim": 10,
+   "loaf": 1,
+   "loafToplam": 61,
+   "loafEnUzun": 61,
+   "loafKaynak": [
+    {
+     "t": 74,
+     "sure": 61,
+     "engel": 10,
+     "betik": 3,
+     "stilDuzen": 0,
+     "render": 58,
+     "kaynak": []
+    }
+   ],
+   "yol": "/tesekkur/",
+   "kapi": {
+    "lcp": true,
+    "cls": true,
+    "inp": true
+   },
+   "gecti": true
+  }
+ ]
+}
