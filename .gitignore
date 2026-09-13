@@ -1,2 +1,9 @@
 # Local Netlify folder
 .netlify
+
+# Independent local repositories; QANATONE is the only deployable project
+# tracked by this repository. Keeping these out prevents accidental gitlinks
+# that make Netlify fail before the build phase.
+/agent-reach/
+/ui-ux-pro-max-skill/
+/qanatone/.gitmodules
