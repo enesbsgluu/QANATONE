@@ -70,9 +70,11 @@
   background:radial-gradient(88% 100% at 0% 0%,rgba(239,35,60,.10),transparent 62%),
              linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.006))}
 .sil-yazi .kunye{margin-bottom:0;display:inline}.sil-yazi .kunye::before{display:none} /* kaynak .ldt .mono: 12px (olculdu), satir ici (kutu 16px), cizgisiz, marjsiz (5192) — inline-flex 20px kutu veriyordu (3 Eyl) */
-.sil-yazi h3{font-size:clamp(1.55rem,3vw,2.4rem);line-height:1.04;
+/* 15 Eyl 2026: form kutusu basligi h3 -> h2 (SSS/hukuki'de h1'den sonra h2
+   atlaniyordu, R-H2); boyut ve bosluk burada yazili. */
+.sil-yazi h2{font-size:clamp(1.55rem,3vw,2.4rem);line-height:1.04;
   letter-spacing:-.04em;margin:14px 0 14px}
-.sil-yazi h3 em{font-style:normal;color:var(--red)}
+.sil-yazi h2 em{font-style:normal;color:var(--red)}
 .sil-yazi>p:not(.kunye){color:var(--tx3);font-size:.92rem;line-height:1.72;font-weight:300;max-width:40ch}
 
 .sil-form{display:grid;gap:14px}

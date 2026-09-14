@@ -155,9 +155,9 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   <div class="steps sdgrid">
     {d.pains.map((p: any) => (
       <details class="xc">
-        <summary class="xco step"><h3>{T(p.t, dil)}</h3><p>{T(p.d, dil)}</p></summary>
+        <summary class="xco step"><h2>{T(p.t, dil)}</h2><p>{T(p.d, dil)}</p></summary>
         <div class="xcl">
-          <h4>{T(p.t, dil)}</h4>
+          <h3>{T(p.t, dil)}</h3>
           <span class="xcs">{T(p.d, dil)}</span>
           {String(T(p.x || p.d, dil)).split('\n').map((t: string) => t.trim())
             .filter(Boolean).map((t: string) => <p>{t}</p>)}
@@ -167,7 +167,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('hzg02', 'Nasıl yürütürüz', 'How we run it')}</h3>
+        <h2>{M('hzg02', 'Nasıl yürütürüz', 'How we run it')}</h2>
         {/* Sablon degismeli metin: adim SAYISI icinde. Anahtar hzg14; panelden
             yazilirsa sayi da metnin icinde yazilir (yer tutucu yok — kaynakta da
             cumlenin kendisi sayiyi tasiyordu). */}
@@ -175,22 +175,22 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
               `${d.steps.length} steps — open and read.`)}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('hzg03', 'Nasıl yürütürüz', 'How we run it')}</h4>
+        <h3>{M('hzg03', 'Nasıl yürütürüz', 'How we run it')}</h3>
         <span class="xcs">{M('hzg04', 'Adım adım', 'Step by step')}</span>
         {d.steps.map((a: any) => (
           <div class="xstp"><b>{a.n}</b>
-            <div><h5>{T(a.t, dil)}</h5><p>{T(a.d, dil)}</p></div></div>
+            <div><h4>{T(a.t, dil)}</h4><p>{T(a.d, dil)}</p></div></div>
         ))}
       </div>
     </details>
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('hzg05', 'Eline geçenler', 'What you get')}</h3>
+        <h2>{M('hzg05', 'Eline geçenler', 'What you get')}</h2>
         <p>{M('hzg06', 'Somut teslim listesi — aç, say.', 'The concrete list — open and count.')}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('hzg07', 'Eline geçenler', 'What you get')}</h4>
+        <h3>{M('hzg07', 'Eline geçenler', 'What you get')}</h3>
         <span class="xcs">{M('hzg08', 'Teslimatlar', 'Deliverables')}</span>
         <div class="xdel">
           {(d.del[dil] || d.del.tr).map((t: string) => (
@@ -204,17 +204,17 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 
     <details class="xc">
       <summary class="xco step">
-        <h3>{M('hzg09', 'Hedefler & SSS', 'Targets & FAQ')}</h3>
+        <h2>{M('hzg09', 'Hedefler & SSS', 'Targets & FAQ')}</h2>
         <p>{M('hzg10', 'Rakamlar ve dürüst cevaplar.', 'Numbers and honest answers.')}</p>
       </summary>
       <div class="xcl">
-        <h4>{M('hzg11', 'Peşine düştüğümüz hedefler', 'Targets we chase')}</h4>
+        <h3>{M('hzg11', 'Peşine düştüğümüz hedefler', 'Targets we chase')}</h3>
         <div class="xmet">
           {d.met.map((m: any) => (
             <div><b>{T(m.v, dil)}</b><p>{T(m.l, dil)}</p></div>
           ))}
         </div>
-        <h4 class="xc-ara">{M('hzg12', 'SSS', 'FAQ')}</h4>
+        <h3 class="xc-ara">{M('hzg12', 'SSS', 'FAQ')}</h3>
         {d.faq.map((f: any) => (
           <details class="xsss">
             <summary>{T(f.q, dil)}</summary>
@@ -307,7 +307,10 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   .xco::marker { content: ''; }
   .step { border: 1px solid var(--line); border-radius: 18px; background: var(--card);
     padding: 22px 22px 24px; }
-  .step h3 { font-size: 1.02rem; margin-bottom: 8px; letter-spacing: -.03em; }
+  /* BASLIK BASAMAGI (15 Eyl 2026): kart basliklari bir basamak yukari —
+     h1'den sonra h2 atlaniyordu (R-H2). Secicilerle birlikte tasindi; boyut
+     ve bosluklar kuralin kendisinde yazili, gorunum ayni (olculdu). */
+  .step h2 { font-size: 1.02rem; margin-bottom: 8px; letter-spacing: -.03em; }
   .step p { font-size: .84rem; color: var(--tx3); line-height: 1.62; font-weight: 300;
     margin: 0; }
   .xco:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
@@ -321,7 +324,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   .xc[open] .step { border-radius: 18px 18px 0 0; border-bottom-color: transparent;
     padding-bottom: 14px; }
   /* 4 Eyl tipografi turu: Uncut Sans 1,35rem "Doğrulanamayan" 190 px kartta 21 px tasiyordu (olc-tasma) — uzun tek kelime kirilir */
-  .xcl h4 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; overflow-wrap: anywhere; hyphens: auto; }
+  .xcl h3 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; overflow-wrap: anywhere; hyphens: auto; }
   .xcl .xcs { display: block; font-family: var(--f-tek); font-size: 12px;
     letter-spacing: .18em; text-transform: uppercase; color: var(--red-soft);
     margin-bottom: 18px; }
@@ -331,7 +334,7 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
   .xstp { display: flex; gap: 14px; margin-bottom: 16px; }
   .xstp b { font-family: var(--f-tek); font-size: 12px; color: var(--red-soft);
     flex: none; padding-top: 3px; }
-  .xstp h5 { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; margin-bottom: 4px; }
+  .xstp h4 { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; margin-bottom: 4px; }
   .xstp p { font-size: .88rem; color: var(--tx2); line-height: 1.65; margin: 0; }
 
   .xdel { display: flex; flex-direction: column; gap: 9px; }

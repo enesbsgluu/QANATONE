@@ -146,7 +146,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
           </div>
           <div class="ste-kunye">
             <span class="ste-host" id="steHost"></span>
-            <h3 id="steHuküm"></h3>
+            <h3 id="steHuküm">{en ? 'Result' : 'Sonuç'}</h3>
             <p id="steOzet"></p>
             <p class="ste-meta" id="steMeta"></p>
           </div>
@@ -204,7 +204,7 @@ const harfle = (m: string): { html: string; n: number; duz: string } => {
             </button>
           </form>
           <p class="ste-pop-rozet" id="stePopRozet"></p>
-          <h4 class="ste-pop-ad" id="stePopAd"></h4>
+          <h4 class="ste-pop-ad" id="stePopAd">{en ? 'Check item' : 'Kontrol kalemi'}</h4>
           <dl class="ste-pop-olcum">
             <div id="stePopDegerSatir"><dt>{en ? 'Measured' : 'Ölçülen'}</dt><dd id="stePopDeger"></dd></div>
             <div id="stePopOlcutSatir"><dt>{en ? 'Criterion' : 'Ölçüt'}</dt><dd id="stePopOlcut"></dd></div>

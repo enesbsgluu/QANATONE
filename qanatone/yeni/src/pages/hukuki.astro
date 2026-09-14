@@ -11,10 +11,24 @@ const dil: Dil = 'tr';
 const s = (icerik.strings && icerik.strings[dil]) || {};
 const m = (k: string, tr: string, en: string): string =>
   T((s as any)[k], dil) || (dil === 'en' ? en : tr);
+/* BASLIK BASAMAGI (15 Eyl 2026, R-H2): panelin KVKK HTML'i `<h3>` ile
+   basliyor, sayfada h1'den sonra h2 atlaniyordu. Icerik DUZENLENMEZ —
+   panel metni yeniden kaydederse h3 geri gelirdi; basamak basimda kaydirilir
+   (govdenin en ust basligi h2 olur, alttakiler ayni oranda). Gorunum eski
+   h3'unki: boyut 1rem, alt bosluk 6 px, ust bosluk 0 (`.govde h2`nin 34 px'i
+   burada gecerli degil) — olculdu. */
+const hamGovde = String(icerik.legal?.kvkk || '');
+const enUst = Math.min(7, ...[...hamGovde.matchAll(/<h([1-6])\b/gi)].map((x) => +x[1]));
+const kay = enUst <= 6 ? enUst - 2 : 0;
+const govde = kay > 0 ? hamGovde.replace(/<(\/?)h([1-6])\b/gi, (_, s, n) => `<${s}h${Math.max(2, +n - kay)}`) : hamGovde;
 ---
 <Temel dil="tr" baslik="Hukuki metinler — QANATONE"
   aciklama="QANATONE aydınlatma metni (KVKK): formlar aracılığıyla paylaşılan bilgilerin nasıl işlendiği."
   canonical={canon} etiket="HUKUKİ">
   <h1>{m('hkh', 'Hukuki metinler', 'Legal texts')}</h1>
-  <div class="govde" set:html={icerik.legal?.kvkk || ''} />
+  <div class="govde hk-govde" set:html={govde} />
 </Temel>
+
+<style>
+  .hk-govde :global(h2) { font-size: 1rem; margin: 0 0 6px; }
+</style>

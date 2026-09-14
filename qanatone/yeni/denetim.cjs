@@ -1787,37 +1787,42 @@ const psiMobilSorgu = (h) => {
    kartlari ve abone kutusu <h2> oldu — kutu ve stil once/sonra olculdu.
    OLCUT: /bulten, /haber, /nedir, /sektor altindaki (TR+EN) HER sayfada
    hicbir baslik bir ustundekinden birden fazla basamak derine inmez
-   (betik, sablon, yorum ayiklanarak); en az bir sayfa olculmus olmali. */
+   (betik, sablon, yorum ayiklanarak); en az bir sayfa olculmus olmali.
+   GENISLEDI (15 Eyl 2026, Enes: "kalan 24 sayfayi da duzelt"): kapsam
+   BUTUN sayfalar — hizmet detayi (grid kartlari + bloklar h3 idi, h1'den
+   sonra h2 atlaniyordu), projeler (kartlar h3), SSS/hukuki (form kutusu
+   h3). Ayni turda Seoptimer'in "metni olmayan baslik" maddesi: tespit
+   aracinin sonuc ve pencere basliklari JS doldurana kadar BOS doguyordu;
+   olcut artik metinsiz baslik da tasimaz. Prototip dizini haric. */
 {
-  const kusur = [];
+  const kusur = [], bos = [];
   let n = 0;
   const temiz = (h) => h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<template[\s\S]*?<\/template>/g, '')
     .replace(/<!--[\s\S]*?-->/g, '');
-  for (const kok of ['bulten', 'haber', 'nedir', 'sektor'].flatMap((b) => [b, 'en/' + b])) {
-    const d = path.join(KOK, kok);
-    if (!fs.existsSync(d)) continue;
-    (function gez(x) {
-      for (const f of fs.readdirSync(x, { withFileTypes: true })) {
-        const p = path.join(x, f.name);
-        if (f.isDirectory()) { gez(p); continue; }
-        if (f.name !== 'index.html') continue;
-        n++;
-        const g = temiz(fs.readFileSync(p, 'utf8'));
-        let onc = 0;
-        for (const m of g.slice(g.indexOf('<body')).matchAll(/<h([1-6])\b/g)) {
-          const l = +m[1];
-          if (onc && l > onc + 1) {
-            kusur.push(path.relative(KOK, p).split(path.sep).join('/').replace(/index\.html$/, '') + ' h' + onc + '>h' + l);
-            break;
-          }
-          onc = l;
-        }
+  (function gez(x) {
+    for (const f of fs.readdirSync(x, { withFileTypes: true })) {
+      const p = path.join(x, f.name);
+      if (f.isDirectory()) { if (!/^(_astro|varlik|img|font|prototip|ab-)/.test(f.name)) gez(p); continue; }
+      if (f.name !== 'index.html') continue;
+      n++;
+      const g = temiz(fs.readFileSync(p, 'utf8'));
+      const govde = g.slice(g.indexOf('<body'));
+      const ad = path.relative(KOK, p).split(path.sep).join('/').replace(/index\.html$/, '') || '/';
+      let onc = 0;
+      for (const m of govde.matchAll(/<h([1-6])\b/g)) {
+        const l = +m[1];
+        if (onc && l > onc + 1) { kusur.push(ad + ' h' + onc + '>h' + l); break; }
+        onc = l;
       }
-    })(d);
-  }
-  ol('R-H2 · bolum sayfalarinda baslik basamagi atlanmaz (bulten/haber/nedir/sektor, TR+EN)',
-     kusur.length === 0 && n > 0,
-     kusur.length ? kusur.length + ' sayfa · ' + kusur.slice(0, 3).join(' | ') : n + ' sayfa sirali');
+      for (const m of govde.matchAll(/<(h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/g))
+        if (!m[2].replace(/<[^>]+>/g, '').replace(/&[a-z#0-9]+;/g, '').trim()) { bos.push(ad + ' <' + m[1] + '>'); break; }
+    }
+  })(KOK);
+  ol('R-H2 · baslik basamagi atlanmaz + metinsiz baslik yok (butun sayfalar, TR+EN)',
+     kusur.length === 0 && bos.length === 0 && n > 0,
+     (kusur.length ? kusur.length + ' sayfa basamak atliyor · ' + kusur.slice(0, 2).join(' | ') + ' ' : '')
+     + (bos.length ? bos.length + ' sayfada metinsiz baslik · ' + bos.slice(0, 2).join(' | ') : '')
+     || n + ' sayfa sirali · metinsiz baslik 0');
 }
 
 /* T10 · "DIGER YAZILAR" SERIDI TAVANLI (9 Eyl 2026 — Enes: "seridi

@@ -24,7 +24,7 @@ const satirlar = (K.dept || []).map((x: any) => ({
   <div class="kdbox" id="kdBox">
     <div class="kdhd">
       <span class="kdk"><i></i>{tx(K.k)}</span>
-      <h3 set:html={suz(tx(K.h), ['em', 'br'])} />
+      <h2 set:html={suz(tx(K.h), ['em', 'br'])} />
       <p>{tx(K.p)}</p>
     </div>
     <div class="kdbar"><span class="kdpath">{K.yol || 'kadro/'}</span><em>· {tx(K.ipucu)}</em><b>{n} {en ? 'AGENTS' : 'AJAN'}</b></div>
