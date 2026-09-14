@@ -298,6 +298,23 @@ const olay = (govde, method) => ({
         title: mevcutK[0].kayit.title, lede: { tr: 'a', en: 'b' } } }] }, 'ayni');
   }
 
+  /* ---- 12) GITHUB HATASI GEREKCEYE CEVRILIR (14 Eyl 2026) ----
+     Anahtarin suresi dolunca panel "commit basarisiz" diyordu. Durum kodu
+     yonergeye cevrilmeli; hata mesaji (token tasiyabilir) yanita girmemeli. */
+  {
+    process.env.PANEL_PAROLA_HASH = HASH;
+    process.env.GITHUB_TOKEN = 'sahte-test-jetonu-7-aga-cikmiyor-gercek-degil-777';
+    for (const [kod, beklenen] of [['401', 'GITHUB_TOKEN yenilen'], ['403', 'yazma izni'], ['500', 'commit basarisiz']]) {
+      const h = handlerOlustur(async () => {
+        throw new Error('github /git/ref/heads/main -> ' + kod + ' token=' + process.env.GITHUB_TOKEN); });
+      const r = await h(olay({ parola: DOGRU_PAROLA, content: { settings: {} } }));
+      const j = JSON.parse(r.body || '{}');
+      ol('github ' + kod + ' -> gerekce, token yok',
+         r.statusCode === 502 && String(j.reason).includes(beklenen) && !r.body.includes(process.env.GITHUB_TOKEN),
+         String(j.reason).slice(0, 60));
+    }
+  }
+
   delete process.env.PANEL_PAROLA_HASH;
   delete process.env.GITHUB_TOKEN;
 

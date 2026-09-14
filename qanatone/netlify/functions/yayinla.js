@@ -417,8 +417,21 @@ function handlerOlustur(adaptor) {
           : 'panel: ' + dosyalar.length + ' dosya güncellendi'
       });
     } catch (e) {
-      console.log(simdi(), 'yayinla: commit basarisiz');
-      return { statusCode: 502, body: JSON.stringify({ ok: false, reason: 'commit basarisiz' }) };
+      /* GITHUB DURUMU GEREKCEYE (14 Eyl 2026). 13 Eyl'de panelin GitHub
+         anahtarinin (ince taneli PAT) suresi doldu; panel yalniz "commit
+         basarisiz" diyordu, ne yapilacagini soyleyen yoktu. githubCommit
+         mesajindaki durum kodu (' -> 401') Turkce yonergeye cevrilir.
+         Mesajin KENDISI yanita konmaz — icinde ne oldugu bilinmez. */
+      const kod = (/-> (\d{3})/.exec(String(e && e.message)) || [])[1];
+      const neden = kod === '401'
+        ? 'GitHub anahtari reddedildi (suresi dolmus olabilir): Netlify > Environment variables > GITHUB_TOKEN yenilenip site yeniden deploy edilmeli'
+        : kod === '403' || kod === '404'
+          ? 'GitHub anahtarinin bu depoya yazma izni yok: anahtarda QANATONE deposu ve Contents (Read and write) secili olmali'
+          : kod === '409' || kod === '422'
+            ? 'GitHub ayni anda baska bir degisiklik aldi: birkac saniye sonra yeniden yayinla'
+            : 'commit basarisiz';
+      console.log(simdi(), 'yayinla: commit basarisiz', kod ? '(' + kod + ')' : '');
+      return { statusCode: 502, body: JSON.stringify({ ok: false, reason: neden }) };
     }
 
     console.log(simdi(), 'yayinla: kabul edildi, commit atildi ·', dosyalar.length, 'dosya');
