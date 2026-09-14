@@ -171,7 +171,7 @@ const tarihYaz = (d: string) => {
         <i></i><span><time datetime={p.date}>{tarihYaz(p.date)}</time></span>
         {p.read && <><i></i><span>{p.read}{M('bld03', ' dk okuma', ' min read')}</span></>}
       </span>
-      <h3>{T(p.title, dil)}</h3>
+      <h2>{T(p.title, dil)}</h2>
       <p>{T(p.lede, dil)}</p>
       <span class="go">{M('bld04', 'Oku', 'Read')}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
@@ -210,7 +210,7 @@ const tarihYaz = (d: string) => {
     HTML'den tanır; aynı `name="bulletin"` formunu üç bölümde birden
     basmak aynı kayda üç kapı açardı. Bülten dışı bölümlerde kapalı. */}
 {FORM && <div class="abone">
-  <h3>{m('bks1', 'Yeni yazı çıkınca haberin olsun')}</h3>
+  <h2>{m('bks1', 'Yeni yazı çıkınca haberin olsun')}</h2>
   <p>{m('bks2', 'Ayda birkaç yazı. Spam yok, satış maili yok, tek tıkla çıkabilirsin.')}</p>
   <form name="bulletin" method="POST" data-netlify="true" netlify-honeypot="website">
     <input type="hidden" name="form-name" value="bulletin" />
@@ -265,7 +265,9 @@ const tarihYaz = (d: string) => {
     font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
   .bkc .m b { color: var(--red-soft); font-weight: 500; }
   .bkc .m i { width: 3px; height: 3px; border-radius: 50%; background: var(--tx4); font-style: normal; }
-  .bkc h3 { font-family: var(--f-baslik); font-weight: 400;
+  /* BASLIK BASAMAGI (15 Eyl 2026): kart basligi <h3> -> <h2> (h1'den sonra h2
+     atlaniyordu, R-H2). Global h2 alt boslugu 18 px — eski h3'unki 6 px acikca yazilir. */
+  .bkc h2 { margin: 0 0 6px; font-family: var(--f-baslik); font-weight: 400;
     font-size: clamp(1.14rem, 1.7vw, 1.38rem); line-height: 1.24; letter-spacing: -.01em; }
   .bkc p { font-size: .88rem; line-height: 1.68; color: var(--tx3); font-weight: 300; }
   .bkc .go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px;
@@ -304,7 +306,7 @@ const tarihYaz = (d: string) => {
   @media (prefers-reduced-motion: reduce) { .bksf a { transition: none; } }
 
   .abone { border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 34px; }
-  .abone h3 { font-size: 1rem; margin: 0 0 4px; }
+  .abone h2 { font-size: 1rem; margin: 0 0 4px; }
   .abone > p { color: var(--tx2); font-size: .9rem; margin: 0 0 12px; }
   .abone form { display: flex; flex-wrap: wrap; gap: 10px; }
   .abone input[type="email"] { flex: 1 1 220px; min-width: 0; padding: 10px 12px;

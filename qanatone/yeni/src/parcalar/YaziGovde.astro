@@ -78,14 +78,14 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
     </ul>
   </div>}
   {digerleri.length > 0 && <div class="nrail" id="bdRail">
-    <div class="nrhead"><span class="k">{dil === 'en' ? 'More articles' : 'Diğer yazılar'}</span></div>
+    <div class="nrhead"><h2 class="k">{dil === 'en' ? 'More articles' : 'Diğer yazılar'}</h2></div>
     <div class="nrbody">
       <button class="nrbtn prev" id="railPrev" type="button" aria-label={dil === 'en' ? 'Previous' : 'Geri'} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
       <div class="nrtrack" id="railTrack">
         {digerleri.map((x: any) => (
           <a class="nrcard" href={sl(`${B}${on}${DIZIN}/${x.slug}`)}>
             <span class="m">{T(x.tag, dil)}</span>
-            <h4>{T(x.title, dil)}</h4>
+            <h3>{T(x.title, dil)}</h3>
             <span class="d">{kisaTarih(x.date)} · {x.read || 3}{dil === 'en' ? ' min' : ' dk'}</span>
           </a>
         ))}
@@ -116,7 +116,11 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
   .pgback svg { width: 14px; height: 14px; }
   /* "diger yazilar" seridi — kaynak .nrail/.nrcard/.nrbtn 2284-2310 birebir, aile token */
   .nrail { margin-top: clamp(30px, 4vw, 50px); padding-top: 24px; border-top: 1px solid var(--line); }
-  .nrhead .k { font-family: var(--f-tek); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--tx4); }
+  /* BASLIK BASAMAGI (15 Eyl 2026): serit etiketi <span> -> <h2>, kartlar <h4> -> <h3>;
+     once govdenin son h2'sinden sonra h3 atlaniyordu (R-H2). Etiket satir ici
+     kalir ve agirlik/satir yuksekligini ebeveynden alir — kutusu span'inkiyle ayni. */
+  .nrhead .k { display: inline; margin: 0; font-weight: inherit; line-height: inherit;
+    font-family: var(--f-tek); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--tx4); }
   .nrbody { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 12px; }
   .nrtrack { flex: 1; min-width: 0; display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth;
     scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 0; }
@@ -126,7 +130,7 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
     color: var(--tx); text-decoration: none; transition: border-color .3s var(--e); }
   .nrcard:hover { border-color: rgba(239,35,60,.45); }
   .nrcard .m { font-family: var(--f-tek); font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--red-soft); }
-  .nrcard h4 { font-weight: 500; font-size: 1rem; line-height: 1.35; margin: 0; }
+  .nrcard h3 { font-weight: 500; font-size: 1rem; line-height: 1.35; margin: 0; }
   .nrcard span.d { font-family: var(--f-tek); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx4); }
   .nrbtn { flex: none; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;
     border-radius: 50%; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--tx2); }

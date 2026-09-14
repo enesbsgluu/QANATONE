@@ -87,7 +87,7 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
         <i></i><span><time datetime={p.date}>{tarihYaz(p.date)}</time></span>
         {p.read && <><i></i><span>{p.read}{dil === 'en' ? ' min read' : ' dk okuma'}</span></>}
       </span>
-      <h3>{T(p.title, dil)}</h3>
+      <h2>{T(p.title, dil)}</h2>
       <p>{T(p.lede, dil)}</p>
       <span class="go">{dil === 'en' ? 'Read' : 'Oku'}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
@@ -126,7 +126,8 @@ const ok = '<path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>';
     font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx4); }
   .bkc .m b { color: var(--red-soft); font-weight: 500; }
   .bkc .m i { width: 3px; height: 3px; border-radius: 50%; background: var(--tx4); font-style: normal; }
-  .bkc h3 { font-family: var(--f-baslik); font-weight: 400;
+  /* 15 Eyl 2026: kart basligi <h2> (BolumDizin ile ayni gerekce, R-H2). */
+  .bkc h2 { margin: 0 0 6px; font-family: var(--f-baslik); font-weight: 400;
     font-size: clamp(1.14rem, 1.7vw, 1.38rem); line-height: 1.24; letter-spacing: -.01em; }
   .bkc p { font-size: .88rem; line-height: 1.68; color: var(--tx3); font-weight: 300; }
   .bkc .go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px;

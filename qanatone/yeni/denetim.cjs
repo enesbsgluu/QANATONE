@@ -1778,6 +1778,48 @@ const psiMobilSorgu = (h) => {
      kusur.join(' | ') || ('golge 0 · ust dolgu ' + dolgu + ' px ≥ kalkis ' + Math.abs(+kalk) + ' px'));
 }
 
+/* R-H2 · BOLUM SAYFALARINDA BASLIK BASAMAGI (Enes, 15 Eyl 2026 — "bulten
+   baslik sirasini da duzelt"). NEDEN: yazi sayfasinda "diger yazilar"
+   kartlari <h4>'tu, govdenin son <h2>'sinden sonra h3 atlaniyordu (haber +
+   bulten + nedir, 116 sayfa); liste sayfalarinda kartlar <h3>'tu, <h1>'den
+   hemen sonra h2 atlaniyordu (dizin, konu ve sayfa arsivleri, sektor
+   kesiti; 70 sayfa). Serit etiketi <h2>, serit kartlari <h3>; liste
+   kartlari ve abone kutusu <h2> oldu — kutu ve stil once/sonra olculdu.
+   OLCUT: /bulten, /haber, /nedir, /sektor altindaki (TR+EN) HER sayfada
+   hicbir baslik bir ustundekinden birden fazla basamak derine inmez
+   (betik, sablon, yorum ayiklanarak); en az bir sayfa olculmus olmali. */
+{
+  const kusur = [];
+  let n = 0;
+  const temiz = (h) => h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<template[\s\S]*?<\/template>/g, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
+  for (const kok of ['bulten', 'haber', 'nedir', 'sektor'].flatMap((b) => [b, 'en/' + b])) {
+    const d = path.join(KOK, kok);
+    if (!fs.existsSync(d)) continue;
+    (function gez(x) {
+      for (const f of fs.readdirSync(x, { withFileTypes: true })) {
+        const p = path.join(x, f.name);
+        if (f.isDirectory()) { gez(p); continue; }
+        if (f.name !== 'index.html') continue;
+        n++;
+        const g = temiz(fs.readFileSync(p, 'utf8'));
+        let onc = 0;
+        for (const m of g.slice(g.indexOf('<body')).matchAll(/<h([1-6])\b/g)) {
+          const l = +m[1];
+          if (onc && l > onc + 1) {
+            kusur.push(path.relative(KOK, p).split(path.sep).join('/').replace(/index\.html$/, '') + ' h' + onc + '>h' + l);
+            break;
+          }
+          onc = l;
+        }
+      }
+    })(d);
+  }
+  ol('R-H2 · bolum sayfalarinda baslik basamagi atlanmaz (bulten/haber/nedir/sektor, TR+EN)',
+     kusur.length === 0 && n > 0,
+     kusur.length ? kusur.length + ' sayfa · ' + kusur.slice(0, 3).join(' | ') : n + ' sayfa sirali');
+}
+
 /* T10 · "DIGER YAZILAR" SERIDI TAVANLI (9 Eyl 2026 — Enes: "seridi
    duzelt tavani 8 kart yap").
    NEDEN YAZILDI: serit ONCEDEN TAVANSIZDI (`tum.length - 1`) ve bu, 10 ->
