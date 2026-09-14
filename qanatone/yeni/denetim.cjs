@@ -2448,10 +2448,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       if (!eksik.has(ch)) eksik.set(ch, rel(p));
     }
   }
+  /* 14 Eyl 2026 — SINYAL AYRIMI (P2'deki gibi; gevsetme degil). Alt kumede
+     olmayan karakter YALNIZ panel iceriginden geliyorsa (content.json +
+     kayit dosyalari) deploy'u DURDURMAZ: tarayici o glifi yedek fonttan
+     cizer, metin dogru okunur. Enes emoji ya da ok yazinca yayin
+     dusmemeli (panel senaryosunda olculdu: tek "→" deploy'u dusuruyordu).
+     Kaynaktan (bilesen/sablon) gelen eksik karakter HALA kirmizi — onu
+     duzeltmek bizim isimiz. Icerik karakterleri bilgi satirinda adiyla
+     durur; font-uret.py'ye eklemek ayri (bayt) karari. */
+  const icerikKr = new Set([...JSON.stringify(icerikTam())]);
+  const kodEksik = [...eksik].filter(([c]) => !icerikKr.has(c));
+  const icerikEksik = [...eksik].filter(([c]) => icerikKr.has(c));
+  const kod = ([c, s]) => `U+${c.codePointAt(0).toString(16).toUpperCase()}` + (s ? `(${s})` : '');
   ol('F1c · sayfadaki her karakterin alt kümede karşılığı var',
-     menziller.length > 0 && eksik.size === 0,
-     eksik.size ? [...eksik].slice(0, 4).map(([c, s]) => `U+${c.codePointAt(0).toString(16).toUpperCase()}(${s})`).join(' ')
-                : `${menziller.length} menzil`);
+     menziller.length > 0 && kodEksik.length === 0,
+     (kodEksik.length ? kodEksik.slice(0, 4).map(kod).join(' ') : `${menziller.length} menzil`)
+       + (icerikEksik.length ? ` (bilgi: panel iceriginden ${icerikEksik.length} karakter yedek fontta: `
+         + icerikEksik.slice(0, 6).map(([c]) => kod([c])).join(' ') + ')' : ''));
 }
 
 /* ---- F1d · GOVDE FONTU HER SAYFADA ON YUKLENIR + OLCU ESLENMIS YEDEK

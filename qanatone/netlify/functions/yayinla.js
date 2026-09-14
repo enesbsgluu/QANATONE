@@ -265,7 +265,16 @@ function icerikSozlesmesi(content, kayitlar, mevcut) {
     const kim = '"' + (ad || s) + '" projesi';
     if (!ad) sorun.push(kim + ': ad bos');
     if (!ikiDil(p.tag)) sorun.push(kim + ': etiket TR ve EN dolu olmali');
+    else if (metin(p.tag, 'tr') === metin(p.tag, 'en')) sorun.push(kim + ': etiket TR ve EN ayni — EN\'yi Ingilizce yaz (sayfa basligi kopya olur)');
     if (!ikiDil(p.text)) sorun.push(kim + ': kisa anlatim TR ve EN dolu olmali');
+    else if (metin(p.text, 'tr') === metin(p.text, 'en')) sorun.push(kim + ': kisa anlatim TR ve EN ayni');
+    /* sayfa basligi (ad · etiket) ve aciklamasi (kisa anlatim) projeler arasi benzersiz (S4) */
+    for (const d of ['tr', 'en']) for (const [ne, deger] of [['baslik', ad + ' · ' + metin(p.tag, d)], ['kisa anlatim', metin(p.text, d)]]) {
+      const k = 'p|' + d + '|' + ne + '|' + deger.toLowerCase();
+      if (!metin(p.tag, d) || !metin(p.text, d)) continue;
+      if (gorulen.has(k)) sorun.push(kim + ': ' + d.toUpperCase() + ' ' + ne + ' baska bir projeyle ayni');
+      gorulen.add(k);
+    }
   }
   const yazilan = (kayitlar || []).filter((k) => k && k.kayit && typeof k.kayit === 'object' && !k.kayit[OZET_ISARETI]);
   for (const k of yazilan) {
@@ -275,20 +284,26 @@ function icerikSozlesmesi(content, kayitlar, mevcut) {
   const baslik = new Map();
   const kimlik = (k) => k.klasor + '/' + k.slug;
   const yazilanId = new Set(yazilan.map(kimlik));
+  /* sayfa basligi yaziBas() (icerik.ts) ile 60 karakterde kisalir; tekrar da
+     KISALMIS halde aranir — ayni onekli iki uzun baslik kisalinca carpisir (S4) */
+  const kisa = (t) => { if (t.length <= 60) return t; const q = t.slice(0, 60); return q.slice(0, Math.max(q.lastIndexOf(' '), 30)).trimEnd() + '…'; };
+  const bk = (v, d) => kisa(metin(v, d)).toLowerCase();
   for (const [id, r] of (mevcut || new Map()))
-    if (!yazilanId.has(id)) for (const d of ['tr', 'en']) if (metin(r.title, d)) baslik.set(d + '|' + metin(r.title, d).toLowerCase(), id);
+    if (!yazilanId.has(id)) for (const d of ['tr', 'en']) if (bk(r.title, d)) baslik.set(d + '|' + bk(r.title, d), id);
   for (const k of yazilan) {
     const r = k.kayit, ad = metin(r.title, 'tr') || k.slug, kim = '"' + ad + '" yazisi';
     if (!k.slug) { sorun.push('basligi ve adresi bos bir yazi var'); continue; }
     if (!ikiDil(r.title)) sorun.push(kim + ': baslik TR ve EN dolu olmali');
+    else if (bk(r.title, 'tr') === bk(r.title, 'en')) sorun.push(kim + ': baslik TR ve EN ayni — EN\'yi Ingilizce yaz');
     if (!ikiDil(r.lede)) sorun.push(kim + ': giris cumlesi TR ve EN dolu olmali');
+    else if (metin(r.lede, 'tr') === metin(r.lede, 'en')) sorun.push(kim + ': giris cumlesi TR ve EN ayni');
     for (const d of ['tr', 'en']) {
-      const t = metin(r.title, d).toLowerCase();
+      const t = bk(r.title, d);
       if (!t) continue;
       /* yalniz bu yayinin DEGISTIRDIGI baslik sorulur: onceden duran bir
          durum ilgisiz bir duzenlemeyi kilitlemesin (duran hal zaten derlendi) */
       const once = mevcut && mevcut.get(kimlik(k));
-      if (once && metin(once.title, d).toLowerCase() === t) { baslik.set(d + '|' + t, kimlik(k)); continue; }
+      if (once && bk(once.title, d) === t) { baslik.set(d + '|' + t, kimlik(k)); continue; }
       const var_ = baslik.get(d + '|' + t);
       if (var_ && var_ !== kimlik(k)) sorun.push(kim + ': ayni ' + d.toUpperCase() + ' baslik baska bir yazida da var');
       else baslik.set(d + '|' + t, kimlik(k));

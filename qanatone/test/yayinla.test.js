@@ -222,9 +222,9 @@ const olay = (govde, method) => ({
     const r = await handler(olay({
       parola: DOGRU_PAROLA,
       content: { projects: ['a', 'b'].map(s => ({ slug: s, name: 'İş ' + s, tag: { tr: 'Etiket', en: 'Tag' },
-        text: { tr: 'Metin', en: 'Text' }, image: url })), founder: { photo: url } },
+        text: { tr: 'Metin ' + s, en: 'Text ' + s }, image: url })), founder: { photo: url } },
       kayitlar: [{ klasor: 'icerik/yazilar', slug: 'gorselli', kayit: { slug: 'gorselli',
-        title: { tr: 'Görselli deneme', en: 'Image test' }, lede: { tr: 'g', en: 'g' }, image: url } }]
+        title: { tr: 'Görselli deneme', en: 'Image test' }, lede: { tr: 'Görsel girişi', en: 'Image lede' }, image: url } }]
     }));
     const d = cagrilar.length === 1 ? cagrilar[0].dosyalar : [];
     const g = d.filter(x => /\/img\/yuklenen\//.test(x.yol));
@@ -273,7 +273,7 @@ const olay = (govde, method) => ({
     ol('sozlesme: MEVCUT icerik (content.json + tum kayitlar) geciyor', s0.length === 0,
        s0.slice(0, 2).join(' | ') || (gercek.projects.length + ' proje · ' + mevcutK.length + ' kayit'));
     ol('sozlesme: Turkce slug turetilir', sluglastir('Kötü Slug Ç — İş') === 'kotu-slug-c-is', sluglastir('Kötü Slug Ç — İş'));
-    const tam = (ad) => ({ name: ad, tag: { tr: 'Etiket', en: 'Tag' }, text: { tr: 'Metin', en: 'Text' } });
+    const tam = (ad) => ({ name: ad, tag: { tr: 'Etiket', en: 'Tag' }, text: { tr: 'Metin ' + ad, en: 'Text ' + ad } });
     const c1 = { projects: [Object.assign(tam('Yeni İş'), { slug: 'Yeni İş' }), Object.assign(tam('Yeni İş 2'), { slug: 'yeni-is' })] };
     const s1 = icerikSozlesmesi(c1, [], new Map());
     ol('sozlesme: bicimsiz ve cakisan proje slug\'i duzeltilir',
@@ -287,6 +287,10 @@ const olay = (govde, method) => ({
     };
     await red('EN etiketi bos proje', { content: { projects: [{ name: 'Tek Dil', slug: 'tek-dil',
       tag: { tr: 'Etiket' }, text: { tr: 'a', en: 'b' } }] } }, 'Tek Dil');
+    await red('TR ve EN etiketi ayni proje', { content: { projects: [{ name: 'Ayni Dil', slug: 'ayni-dil',
+      tag: { tr: 'SEO', en: 'SEO' }, text: { tr: 'Metin', en: 'Text' } }] } }, 'ayni');
+    await red('iki projede ayni kisa anlatim', { content: { projects: ['Bir', 'Iki'].map(ad => ({ name: ad, slug: ad.toLowerCase(),
+      tag: { tr: 'Etiket ' + ad, en: 'Tag ' + ad }, text: { tr: 'Aynı metin', en: 'Same text' } })) } }, 'baska bir projeyle');
     await red('EN basligi bos yazi', { content: { settings: {} }, kayitlar: [{ klasor: 'icerik/haber', slug: 'kisa',
       kayit: { slug: 'kisa', title: { tr: 'Kısa' }, lede: { tr: 'a', en: 'b' } } }] }, 'Kısa');
     if (mevcutK[0]) await red('baska yazinin basligini tasiyan yazi', { content: { settings: {} },
