@@ -16,7 +16,9 @@ export async function getStaticPaths() {
 const { p } = Astro.props;
 const canon = sl(`${KOK}/en/nedir/${p.slug}`);
 const { baslik, aciklama } = yaziBas(p, 'en');
-const sema = yaziSema(icerik, p, { url: canon, dil: 'en' });
+/* 15 Eyl 2026: arguman sirasi duzeldi (sayfa, yazi) — once TERSti ve Article
+   basligi bos, @id "undefined#article" basiliyordu. Breadcrumb bolumu buradan. */
+const sema = yaziSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en', dizin: '/nedir', bolumAd: 'Explainers' }, p);
 ---
 <Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
   heleftr={sl(`${KOK}/nedir/${p.slug}`)} helefen={sl(`${KOK}/en/nedir/${p.slug}`)} sema={sema}

@@ -169,9 +169,9 @@ const olay = (govde, method) => ({
     const r = await handler(olay({
       parola: DOGRU_PAROLA,
       content: { settings: {} },
-      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'yeni-yazi', kayit: { slug: 'yeni-yazi', date: '2026-09-09',
+      kayitlar: [{ klasor: 'icerik/haber', slug: 'yeni-yazi', kayit: { slug: 'yeni-yazi', date: '2026-09-09',
         title: { tr: 'Yeni yazı denemesi', en: 'New post test' }, lede: { tr: 'Giriş', en: 'Lede' } } }],
-      silinen: [{ klasor: 'icerik/yazilar', slug: 'eski-yazi' }]
+      silinen: [{ klasor: 'icerik/haber', slug: 'eski-yazi' }]
     }));
     ol('kayıt + silme: 200', r.statusCode === 200, String(r.statusCode));
     ol('kayıt + silme: TEK commit çağrısı', cagrilar.length === 1, String(cagrilar.length));
@@ -179,7 +179,7 @@ const olay = (govde, method) => ({
     ol('kayıt + silme: üç dosya (content + 1 yazı + 1 silme)', d.length === 3, String(d.length));
     const yeniYazi = d.find(x => /yeni-yazi\.json$/.test(x.yol));
     ol('kayıt yolu temel dizinden türüyor',
-       !!yeniYazi && yeniYazi.yol === 'qanatone/icerik/yazilar/yeni-yazi.json', yeniYazi && yeniYazi.yol);
+       !!yeniYazi && yeniYazi.yol === 'qanatone/icerik/haber/yeni-yazi.json', yeniYazi && yeniYazi.yol);
     const silme = d.find(x => /eski-yazi\.json$/.test(x.yol));
     ol('silme, içerik null ile bildiriliyor', !!silme && silme.icerik === null, '');
   }
@@ -193,9 +193,9 @@ const olay = (govde, method) => ({
     const kotu = [
       ['sözleşmede olmayan klasör', { klasor: 'netlify/functions', slug: 'panel' }],
       ['üst dizine çıkan klasör', { klasor: '../..', slug: 'netlify' }],
-      ['yol ayracı taşıyan slug', { klasor: 'icerik/yazilar', slug: '../../netlify.toml' }],
-      ['boş slug', { klasor: 'icerik/yazilar', slug: '' }],
-      ['büyük harfli slug', { klasor: 'icerik/yazilar', slug: 'Buyuk-Harf' }]
+      ['yol ayracı taşıyan slug', { klasor: 'icerik/haber', slug: '../../netlify.toml' }],
+      ['boş slug', { klasor: 'icerik/haber', slug: '' }],
+      ['büyük harfli slug', { klasor: 'icerik/haber', slug: 'Buyuk-Harf' }]
     ];
     for (const [ad, k] of kotu) {
       const { adaptor, cagrilar } = sahteAdaptorKur();
@@ -223,7 +223,7 @@ const olay = (govde, method) => ({
       parola: DOGRU_PAROLA,
       content: { projects: ['a', 'b'].map(s => ({ slug: s, name: 'İş ' + s, tag: { tr: 'Etiket', en: 'Tag' },
         text: { tr: 'Metin ' + s, en: 'Text ' + s }, image: url })), founder: { photo: url } },
-      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'gorselli', kayit: { slug: 'gorselli',
+      kayitlar: [{ klasor: 'icerik/haber', slug: 'gorselli', kayit: { slug: 'gorselli',
         title: { tr: 'Görselli deneme', en: 'Image test' }, lede: { tr: 'Görsel girişi', en: 'Image lede' }, image: url } }]
     }));
     const d = cagrilar.length === 1 ? cagrilar[0].dosyalar : [];
@@ -263,7 +263,7 @@ const olay = (govde, method) => ({
     const kok = path.join(__dirname, '..');
     const gercek = JSON.parse(fs.readFileSync(path.join(kok, 'content.json'), 'utf8'));
     const mevcutK = [];
-    for (const kl of ['yazilar', 'nedir', 'haber']) {
+    for (const kl of ['nedir', 'haber']) {
       const d = path.join(kok, 'icerik', kl);
       if (!fs.existsSync(d)) continue;
       for (const a of fs.readdirSync(d).filter(x => x.endsWith('.json')))

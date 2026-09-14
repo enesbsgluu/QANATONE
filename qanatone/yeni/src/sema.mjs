@@ -164,7 +164,7 @@ export function bultenDizinSema(icerik, sayfa, kayitlar, bas) {
         /* DIZIN YOLU BOLUMDEN: `/bulten` sabiti burada duruyordu ve
            nedir/haber yazilarini bultenin altina gosterirdi — sema ile
            gercek adresin ayrismasi, sessiz ve pahali bir kusur. */
-        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}${sayfa.dizin || '/bulten'}/${p.slug}`),
+        url: sl(`${KOK}${dil === 'en' ? '/en' : ''}${sayfa.dizin}/${p.slug}`),
         datePublished: p.date,
         publisher: { '@id': KOK + '/#org' },
       },
@@ -303,8 +303,10 @@ export function yaziSema(icerik, sayfa, yazi) {
     '@type': 'BreadcrumbList', '@id': sayfa.url + '#crumb',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'QANATONE', item: KOK + '/' },
-      { '@type': 'ListItem', position: 2, name: dil === 'en' ? 'Bulletin' : 'Bülten',
-        item: sl(`${KOK}${dil === 'en' ? '/en' : ''}/bulten`) },
+      /* BOLUM CAGIRANDAN (15 Eyl 2026): burada `Bulten` + `/bulten` sabiti vardi ve
+         haber/nedir yazilarinin breadcrumb'i da bultene gidiyordu. */
+      { '@type': 'ListItem', position: 2, name: sayfa.bolumAd,
+        item: sl(`${KOK}${dil === 'en' ? '/en' : ''}${sayfa.dizin}`) },
       { '@type': 'ListItem', position: 3, name: T(yazi.title) },
     ],
   });

@@ -53,7 +53,6 @@ const enYol = essiz ? sl(`${B}/en`) : sl(`${B}/en${cip === '/' ? '' : cip}`);
 
 /* .here: kaynak kuralı (11718) — yalnız düz bağlantılar işaret alır */
 const anaMi = cip === '/';
-const bultenMi = cip.startsWith('/bulten');
 const haberMi = cip.startsWith('/haber');
 const haber = SAYFA.find((s) => s.yol === '/haber');
 
@@ -110,7 +109,6 @@ const E = (c: [string, string] | string[]) => en ? c[1] : c[0];
           <a class="nv-df" href={sl(`${B}${on}/projeler`)}>{en ? 'All projects' : 'Tüm projeler'} <Ikon ad="arrow" /></a>
         </div>
       </div>
-      <a href={sl(`${B}${on}/bulten`)} class:list={[bultenMi && 'here']}>{m('nav6', 'Bülten', 'Newsletter')}</a>
       {/* HABERLER (Enes, 10 Eyl 2026: "bültende hiçbir haber göremiyorum").
           Bölüm açıldı ama bağlantı yalnız mobil menüde ve alt bilgideydi —
           masaüstünden gelen bulamıyordu. Kayıt `SAYFA`dan okunur: bölüm boşsa

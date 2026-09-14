@@ -141,7 +141,11 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   Modül kendi ölçümünü kurarsa `/film` sayfasının JS tavanı aşılır.
   **Perde de telefonda yok (Enes, 14 Eyl, PageSpeed):** ölçüt aynı sorgu,
   `src/mobil-kapi.mjs`; perde kapısı ve ilk posterin boş kaynağı onu okur
-  (H23b, P1). Aynı turda gtag `load` sonrası boşta yüklenir (T9b).
+  (H23b, FP1). Aynı turda gtag `load` sonrası boşta yüklenir (T9b).
+- **Tek yazı bölümü Haberler (Enes, 15 Eyl 2026):** "bülten ve haberler aynı
+  işi görüyor, tek başlık yeterli". Bülten koleksiyonu ve rotaları kalktı, altı
+  yazı `icerik/haber`'e taşındı, abone formu Haberler'de; `/bulten/*` ve
+  `/en/bulten/*` `_redirects`'te 301 → `/haber/…`. Eski adres hedefleri BH1'de.
 - **Yazı ailesi (anayasa istisna 1):** Uncut Sans her alan; tek istisna ana
   sayfa hero başlığı. Kaynakta Playfair olan bir başlığı taşırken aile
   `--f-baslik` tokenine bağlanır, ölçüler (boy, ağırlık, satır aralığı)

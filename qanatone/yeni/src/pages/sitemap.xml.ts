@@ -34,7 +34,6 @@ export const GET: APIRoute = async () => {
   const kol: Record<string, any[]> = {
     hizmetler: (await getCollection('hizmetler')).map(e => e.data),
     projeler: (await getCollection('projeler')).map(e => e.data),
-    yazilar: (await getCollection('yazilar')).map(e => e.data),
     nedir: (await getCollection('nedir')).map(e => e.data),
     haberler: (await getCollection('haberler')).map(e => e.data),
   };

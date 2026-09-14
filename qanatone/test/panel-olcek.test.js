@@ -61,7 +61,7 @@ yaz('content.json', fs.readFileSync(path.join(KOK, 'content.json')));
 yaz(SOZ_YOL, fs.readFileSync(path.join(KOK, SOZ_YOL)));
 const sozlesme = JSON.parse(fs.readFileSync(path.join(KOK, SOZ_YOL), 'utf8'));
 const DOSYA_KOL = sozlesme.koleksiyon.filter((k) => k.depo === 'dosya');
-const yazilar = DOSYA_KOL.find((k) => k.kaynak === 'posts');
+const yazilar = DOSYA_KOL.find((k) => k.kaynak === 'news');
 for (const K of DOSYA_KOL) fs.mkdirSync(path.join(GECICI, K.klasor), { recursive: true });
 
 const gercekKlasor = path.join(KOK, yazilar.klasor);
@@ -201,11 +201,11 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
 
   ol('B7 · acilis kayitlari CEKMIYOR (dizin 1 · kayit 0 · kayitlar 0)',
      say.dizin === 1 && say.kayit === 0 && say.kayitlar === 0, JSON.stringify(say));
-  const ozetSay = ev('C.posts.filter(ozetMi).length');
-  ol('B7 · acilista her kayit ozet', ozetSay === N && ev('C.posts.length') === N, ozetSay + '/' + N);
+  const ozetSay = ev('C.news.filter(ozetMi).length');
+  ol('B7 · acilista her kayit ozet', ozetSay === N && ev('C.news.length') === N, ozetSay + '/' + N);
   ol('ozet isareti panelde ve yayin ucunda ayni', ev('OZET') === ISARET, ev('OZET') + ' = ' + ISARET);
 
-  win.show('bulten');
+  win.show('haberb');
   const ed = doc.querySelector('#ed');
   const kartSay = ed.querySelectorAll('.item').length;
   const alanSay = ed.querySelectorAll('.item [data-p], .item [data-src], .item .kg').length;
@@ -217,27 +217,27 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
      kartSay + ' kart · ' + alanSay + ' alan · ' + html + ' B (' + Math.round(html / N) + ' B/kart)');
 
   const ac = async (i) => {
-    const b = ed.querySelector(`[data-ac="posts|${i}"]`);
+    const b = ed.querySelector(`[data-ac="news|${i}"]`);
     b.click();
     for (let k = 0; k < 300 && !(b.closest('.item') || {}).querySelector?.('.kg'); k++) await bekle(10);
-    return ed.querySelector(`[data-ac="posts|${i}"]`).closest('.item');
+    return ed.querySelector(`[data-ac="news|${i}"]`).closest('.item');
   };
 
-  const slug3 = ev('C.posts[3].slug');
+  const slug3 = ev('C.news[3].slug');
   const kart3 = await ac(3);
   const disk3 = JSON.parse(dosyadan(slug3));
-  const birebir = ev('JSON.stringify(C.posts[3])') === JSON.stringify(disk3);
+  const birebir = ev('JSON.stringify(C.news[3])') === JSON.stringify(disk3);
   ol('B6/B7 · acilan kayit tek istekle geliyor, diskle birebir, yalniz o kart ciziliyor',
      say.kayit === 1 && birebir && ed.querySelectorAll('.kg').length === 1 && !!kart3.querySelector('[data-src]'),
      'kayit istegi ' + say.kayit + ' · acik kart ' + ed.querySelectorAll('.kg').length + (birebir ? ' · birebir' : ' · FARKLI'));
 
-  ed.querySelector('[data-ac="posts|3"]').click();
+  ed.querySelector('[data-ac="news|3"]').click();
   const kapandi = !kart3.querySelector('.kg');
   await ac(3);
   ol('B6 · kapat-ac yeniden istek atmiyor', kapandi && say.kayit === 1 && !!kart3.querySelector('.kg'),
      (kapandi ? 'kapandi' : 'KAPANMADI') + ' · kayit istegi ' + say.kayit);
 
-  const baslik = kart3.querySelector('[data-p="posts.3.title.tr"]');
+  const baslik = kart3.querySelector('[data-p="news.3.title.tr"]');
   baslik.value = 'Olcek duzenlemesi';
   baslik.dispatchEvent(new win.Event('input', { bubbles: true }));
   const f1 = win.kayitFarki();
@@ -247,9 +247,9 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
        && JSON.stringify((d1.kayit || {}).body) === JSON.stringify(disk3.body) && !(ISARET in (d1.kayit || {})),
      f1.degisen.length + ' degisen · ' + f1.silinen.length + ' silinen');
 
-  ed.querySelector('[data-mv="posts|5|1"]').click();
-  const slug7 = ev('C.posts[7].slug');
-  ed.querySelector('[data-del="posts|7"]').click();
+  ed.querySelector('[data-mv="news|5|1"]').click();
+  const slug7 = ev('C.news[7].slug');
+  ed.querySelector('[data-del="news|7"]').click();
   const f2 = win.kayitFarki();
   ol('acilmamis kaydi tasimak/silmek · ozet yayina girmiyor, silme dogru slugla',
      f2.degisen.length === 1 && f2.silinen.length === 1 && f2.silinen[0].slug === slug7
@@ -257,7 +257,7 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
      f2.degisen.length + ' degisen · silinen ' + ((f2.silinen[0] || {}).slug || '—'));
 
   /* IKINCI KILIT: panel ozeti gondermez, gonderse de yayin ucu reddeder. */
-  const ozetKayit = JSON.parse(ev('JSON.stringify(C.posts[1])'));
+  const ozetKayit = JSON.parse(ev('JSON.stringify(C.news[1])'));
   const icerikGercek = JSON.parse(fs.readFileSync(path.join(GECICI, 'content.json'), 'utf8'));
   const yazimOnce = yazilanlar.length;
   const rz = await yayinFn({ httpMethod: 'POST', body: JSON.stringify({ parola, content: icerikGercek,
@@ -286,13 +286,13 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
        && !giden.some((d) => d.icerik && d.icerik.includes('"' + ISARET + '"')),
      durum() + ' · ' + giden.map((d) => path.basename(d.yol) + (d.icerik === null ? '(sil)' : '')).join(', '));
 
-  win.show('bulten');
+  win.show('haberb');
   const istekOnce = say.kayit;
-  const slug10 = ev('C.posts[10].slug');
+  const slug10 = ev('C.news[10].slug');
   await ac(10);
   ol('yayindan sonra acilmamis kayit SUNUCUDAN geliyor (TEMEL`e ozet yazilmadi)',
-     say.kayit === istekOnce + 1 && ev('ozetMi(C.posts[10])') === false
-       && ev('JSON.stringify(C.posts[10])') === JSON.stringify(JSON.parse(dosyadan(slug10))),
+     say.kayit === istekOnce + 1 && ev('ozetMi(C.news[10])') === false
+       && ev('JSON.stringify(C.news[10])') === JSON.stringify(JSON.parse(dosyadan(slug10))),
      'kayit istegi ' + istekOnce + '→' + say.kayit);
   const f3 = win.kayitFarki();
   ol('yayindan sonra fark sifir', f3.degisen.length === 0 && f3.silinen.length === 0,
@@ -303,17 +303,17 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
      ikinci yayin onu yeniden yaratirdi. */
   doc.querySelector('#bReset').click();
   const f4 = win.kayitFarki();
-  const hayalet = ev('C.posts.some(x=>x.slug===' + JSON.stringify(slug7) + ')');
+  const hayalet = ev('C.news.some(x=>x.slug===' + JSON.stringify(slug7) + ')');
   ol('varsayilana don (yayindan sonra) · fark sifir, silinen geri gelmiyor',
-     f4.degisen.length === 0 && f4.silinen.length === 0 && !hayalet && ev('C.posts.length') === N - 1,
-     f4.degisen.length + ' / ' + f4.silinen.length + ' · ' + ev('C.posts.length') + ' kayit' + (hayalet ? ' · HAYALET' : ''));
+     f4.degisen.length === 0 && f4.silinen.length === 0 && !hayalet && ev('C.news.length') === N - 1,
+     f4.degisen.length + ' / ' + f4.silinen.length + ' · ' + ev('C.news.length') + ' kayit' + (hayalet ? ' · HAYALET' : ''));
 
   const topluOnce = say.kayitlar;
   doc.querySelector('#bExport').click();
   for (let i = 0; i < 300 && !P1.disa(); i++) await bekle(10);
   let ex = null;
   try { ex = JSON.parse(P1.disa()); } catch (e) {}
-  const exP = (ex && ex.posts) || [];
+  const exP = (ex && ex.news) || [];
   const exOzet = exP.filter((x) => x && x[ISARET]).length;
   const exGovde = exP.filter((x) => x && x.body && Array.isArray(x.body.tr)).length;
   ol('disa aktarma · eskisi gibi TAM (her kayit govdeli, ozet yok)',
@@ -348,7 +348,7 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
   const bayatKayit = [11, 12, 13].map((i) => {
     const k = JSON.parse(dosyadan(sluglar[i]));
     k.sources = [{ n: 'Eski kaynak', u: 'https://eski.example/x' }];
-    return { kaynak: 'posts', klasor: yazilar.klasor, slug: sluglar[i], kayit: k };
+    return { kaynak: 'news', klasor: yazilar.klasor, slug: sluglar[i], kayit: k };
   });
   const P3 = await panelAc(JSON.stringify({ icerik: bayatIcerik, degisen: bayatKayit, silinen: [] }));
   const f6 = P3.win.kayitFarki();
@@ -358,12 +358,12 @@ const yayinFn = yayinla.handlerOlustur(async ({ dosyalar }) => {
        && P3.ev('cur') === 'taslak' && P3.doc.querySelectorAll('#ed [data-cz]').length === 8,
      P3.ev('CATISMA.length') + ' catisma · fark ' + f6.degisen.length + ' kayit / ' + icFark + ' alan · acilan sekme ' + P3.ev('cur'));
 
-  P3.win.show('bulten');
+  P3.win.show('haberb');
   const ed3 = P3.doc.querySelector('#ed');
-  ed3.querySelector('[data-ac="posts|0"]').click();
+  ed3.querySelector('[data-ac="news|0"]').click();
   for (let k = 0; k < 300 && !ed3.querySelector('.kg'); k++) await bekle(10);
-  const slug0 = P3.ev('C.posts[0].slug');
-  const b3 = ed3.querySelector('[data-p="posts.0.title.tr"]');
+  const slug0 = P3.ev('C.news[0].slug');
+  const b3 = ed3.querySelector('[data-p="news.0.title.tr"]');
   b3.value += ' D';
   b3.dispatchEvent(new P3.win.Event('input', { bubbles: true }));
   P3.win.set('settings.email', 'olcek@ornek.test');

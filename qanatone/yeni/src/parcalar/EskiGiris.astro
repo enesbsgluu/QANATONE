@@ -54,9 +54,13 @@ const tubesM = /app=F\(cv,(\{[\s\S]*?\})\);/.exec(ham);
 if (!stilM || !navM || !heroM || !tubesM)
   throw new Error('EskiGiris: kök index.html bölümleri çekilemedi (style/nav/hero/tubes) — kaynak değişti mi?');
 
+/* BULTEN KALKTI (15 Eyl 2026): eski kok menusu `/bulten`e bagliyordu; bolum
+   Haberler'e katildi ve adres 301. Donmus menunun bagi yonlendirmeye degil
+   dogrudan hedefe gider (H16 + BH1). Gorunen metin kok dosyadaki gibi kalir. */
 const yolDuzelt = (h: string) => h
   .replace(/(src|srcset)="img\//g, '$1="/img/')
-  .replace(/(href)="(?!https?:|\/|#)/g, '$1="/');
+  .replace(/(href)="(?!https?:|\/|#)/g, '$1="/')
+  .replace(/href="\/bulten"/g, 'href="/haber/"');
 const markup = yolDuzelt(navM[0] + heroM[0])
   .replace(/ fetchpriority="high"/g, ' fetchpriority="low"')
   /* G1: gomudeki HER gorsel tembel isaretli olsun (gizli govdede istek

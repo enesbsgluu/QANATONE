@@ -12,7 +12,9 @@
 import { getCollection } from 'astro:content';
 import sayfalarVeri from './veri/sayfalar.json';
 
-const KOL: any = (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === 'yazilar');
+/* 15 Eyl 2026: bulten kalkti — tek sayfali bolum `haberler`. Sayfa boyu
+   bolumler arasi ORTAK (12); asagidaki `bolum*` yardimcilari bolume gore calisir. */
+const KOL: any = (sayfalarVeri as any).koleksiyon.find((k: any) => k.ad === 'haberler');
 
 export const SAYFA_BOYU: number = KOL.sayfa_boyu;
 export const SAYFA_YOLU: string = KOL.sayfa_yolu;
@@ -23,7 +25,7 @@ export const toplamSayfaHesap = (adet: number): number =>
 
 /** Arsivdeki yazi sayisina gore toplam dizin sayfasi. */
 export async function toplamSayfa(): Promise<number> {
-  return toplamSayfaHesap((await getCollection('yazilar')).length);
+  return toplamSayfaHesap((await getCollection('haberler')).length);
 }
 
 /** `/bulten` (n=1) ya da `/bulten/sayfa/N` — KOK'suz, dil oneksiz. */
@@ -47,12 +49,12 @@ export async function sayfaYollari() {
    2026'da BOSALDI ve GERCEK sektor bagina verildi (alti sektor).
    Ayrinti: src/konular.ts. */
 export async function konuListesi(): Promise<string[]> {
-  const yazilar = (await getCollection('yazilar')).map((e) => e.data as any);
+  const yazilar = (await getCollection('haberler')).map((e) => e.data as any);
   return [...new Set(yazilar.map((p) => String(p.topic || '')))].filter(Boolean);
 }
 
 export async function konuSayilari(): Promise<Record<string, number>> {
-  const yazilar = (await getCollection('yazilar')).map((e) => e.data as any);
+  const yazilar = (await getCollection('haberler')).map((e) => e.data as any);
   const s: Record<string, number> = {};
   for (const p of yazilar) { const k = String(p.topic || ''); if (k) s[k] = (s[k] || 0) + 1; }
   return s;

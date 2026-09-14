@@ -68,4 +68,12 @@
 
 # 8 · TANINMAYAN ADRES: gercek 404. Yumusak 404 uretmemek icin sart.
 # SPLAT KURALI SONDA KALMALI.
+# BULTEN -> HABERLER (15 Eyl 2026, Enes: "tek baslik yeterli"). Alti yazi, konu
+# arsivleri, sayfalar, .md esleri ve RSS ayni yolla haberde; 301 degeri ve dis
+# baglari tasir. Bekcisi BH1 (her hedef dist'te VAR mi).
+/bulten  /haber/  301!
+/bulten/*  /haber/:splat  301!
+/en/bulten  /en/haber/  301!
+/en/bulten/*  /en/haber/:splat  301!
+
 /*  /404.html  404

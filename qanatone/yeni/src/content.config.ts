@@ -27,10 +27,6 @@ const hizmetler = defineCollection({
    bulunamazsa derleme duser.
    HIZMETLER ve PROJELER AYRILMADI: sayilari sabit (9 ve 7), olcekle
    buyumuyorlar; panelde de butun olarak duzenleniyorlar. */
-const yazilar = defineCollection({
-  loader: glob({ pattern: '*.json', base: '../icerik/yazilar' })
-});
-
 const projeler = defineCollection({
   loader: file('../content.json', {
     parser: t => JSON.parse(t).projects.map((p: any) => ({ id: p.slug, ...p }))
@@ -57,4 +53,6 @@ const haberler = defineCollection({
   loader: glob({ pattern: '*.json', base: '../icerik/haber' })
 });
 
-export const collections = { hizmetler, yazilar, projeler, nedir, haberler };
+/* 15 Eyl 2026: `yazilar` (bulten) koleksiyonu KALKTI — yazilari `haberler`e
+   tasindi, adresleri 301 (Enes: "tek baslik yeterli"). */
+export const collections = { hizmetler, projeler, nedir, haberler };

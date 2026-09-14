@@ -85,7 +85,6 @@ for (const kol of DOSYA_KOL) {
 /* Sekme kimligi -> koleksiyon anahtari. Panelin kendi P tablosundaki
    adlar; degisirse kapi kirmizi doner (dogru davranis: alan tasindi). */
 const BOLUM = [
-  ['bulten', 'posts', 'yazilar'],
   ['nedirb', 'explainers', 'nedir'],
   ['haberb', 'news', 'haberler']
 ];
@@ -142,7 +141,7 @@ const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
      sekme BOS ciziliyordu: kapi "0 alan / 6 kayit" diye YANLIS KIRMIZI
      verdi. Beklenen sey verinin kendisi. */
   const kayitSay = () => {
-    try { win.show('bulten'); } catch (e) { return 0; }
+    try { win.show('haberb'); } catch (e) { return 0; }
     return doc.querySelectorAll('#ed .item').length;
   };
   for (let i = 0; i < 200 && !(typeof win.show === 'function' && kayitSay()); i++) await bekle(25);

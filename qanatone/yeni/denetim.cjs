@@ -472,7 +472,7 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      hepsi 301 donuyordu, sitemap'in 58 loc'u 200'ken. Kural kapsami
      "sayfalar + o turda akla gelen iki dosya" degil, ADRES BASAN HER
      CIKTI olmali. Haber beslemesi (11 Eyl 2026, H3) dogdugu turda girdi. */
-  for (const ad of ['sitemap.xml', '_headers', path.join('bulten', 'rss.xml'), path.join('haber', 'rss.xml')]) {
+  for (const ad of ['sitemap.xml', '_headers', path.join('haber', 'rss.xml')]) {
     const y = path.join(KOK, ad);
     if (!fs.existsSync(y)) continue;
     const g = fs.readFileSync(y, 'utf8');
@@ -1606,7 +1606,7 @@ const psiMobilSorgu = (h) => {
 {
   const kusur = [];
   let olculen = 0;
-  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'bulten/index.html']) {
+  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'haber/index.html']) {
     const h = psiOku(rel);
     if (h === null) { kusur.push('yok: ' + rel); continue; }
     if (/<script\b[^>]*\bsrc="[^"]*googletagmanager/.test(h)) kusur.push(rel + ': dis etiket dogrudan basilmis');
@@ -1694,7 +1694,7 @@ const psiMobilSorgu = (h) => {
   const kusur = [];
   const temiz = (h) => h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<template[\s\S]*?<\/template>/g, '')
     .replace(/<!--[\s\S]*?-->/g, '');
-  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'bulten/index.html']) {
+  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'haber/index.html']) {
     const h = psiOku(rel);
     if (h === null) { kusur.push('yok: ' + rel); continue; }
     const ftr = (temiz(h).match(/<footer\b[\s\S]*?<\/footer>/) || [''])[0];
@@ -1825,6 +1825,73 @@ const psiMobilSorgu = (h) => {
      || n + ' sayfa sirali · metinsiz baslik 0');
 }
 
+/* BH1 · BULTEN KALKTI, ADRESLERI YASIYOR (Enes, 15 Eyl 2026: "bulten ve haberler
+   ayni isi goruyor, tek baslik yeterli; haberler basligiyla devam, bulteni
+   kaldiralim"). Alti bulten yazisi haberlere tasindi; eski adresler dis baglar
+   ve arama motoru degeri icin 301 ile haberlere gider.
+   OLCUT: (a) dist'te bulten dizini yok (TR+EN); (b) _redirects'te dort kural
+   301! ve 404 yakalayicisindan ONCE; (c) her eski adresin HEDEFI dist'te VAR:
+   dizin, alti yazi ve .md esleri, dort konu arsivi (TR+EN), RSS (TR); (d) hicbir
+   sayfa /bulten'e ic bag vermez, sitemap /bulten tasimaz. Liste bu turun gocu —
+   sabit, cunku kalkan koleksiyon artik kaynaktan okunamaz.
+   AYNI TURDA — SEMA (e): haber ve nedir yazilari yaziSema'yi TERS arguman
+   sirasiyla cagiriyordu: Article @id "undefined#article", baslik bos, tarih yok;
+   breadcrumb her yazida "Bulten › /bulten" (106 sayfa, 15 Eyl olculdu). Olcut:
+   her yazi sayfasinda Article @id = canonical#article, headline ve
+   datePublished dolu, breadcrumb'in 2. basamagi yazinin KENDI bolum dizini. */
+{
+  const kusur = [];
+  const ESKI_YAZI = ['donusum-oranlari-sektor-sektor', 'google-ads-maliyetleri-2026', 'saglik-turizmi-hasta-basina-gelir',
+    'talebe-bes-dakikada-donmek', 'yapay-zeka-trafigi-tiklama-degil', 'yapay-zekadan-gelen-ziyaretci-donusuyor-mu'];
+  const ESKI_KONU = ['reklam', 'sektor', 'talep', 'arama'];
+  const vardir = (rel) => fs.existsSync(path.join(KOK, rel));
+  for (const on of ['', 'en/']) {
+    if (vardir(on + 'bulten')) kusur.push(on + 'bulten/ hala uretiliyor');
+    const hedef = [on + 'haber/index.html', ...ESKI_YAZI.map((y) => on + 'haber/' + y + '/index.html'),
+      ...ESKI_YAZI.map((y) => on + 'haber/' + y + '.md'), ...ESKI_KONU.map((k) => on + 'haber/konu/' + k + '/index.html')];
+    if (!on) hedef.push('haber/rss.xml');
+    for (const h of hedef) if (!vardir(h)) kusur.push('301 hedefi yok: /' + h.replace(/index\.html$/, ''));
+  }
+  const red = (vardir('_redirects') ? fs.readFileSync(path.join(KOK, '_redirects'), 'utf8') : '')
+    .split(/\r?\n/).map((x) => x.trim()).filter((x) => x && !x.startsWith('#'));
+  const yer = (d) => red.findIndex((x) => d.test(x));
+  const yakalayici = yer(/^\/\*\s+\/404\.html\s+404$/);
+  for (const [ad, d] of [['/bulten', /^\/bulten\s+\/haber\/\s+301!$/], ['/bulten/*', /^\/bulten\/\*\s+\/haber\/:splat\s+301!$/],
+    ['/en/bulten', /^\/en\/bulten\s+\/en\/haber\/\s+301!$/], ['/en/bulten/*', /^\/en\/bulten\/\*\s+\/en\/haber\/:splat\s+301!$/]]) {
+    const i = yer(d);
+    if (i < 0) kusur.push('_redirects: ' + ad + ' 301 kurali yok');
+    else if (yakalayici >= 0 && i > yakalayici) kusur.push('_redirects: ' + ad + ' 404 yakalayicidan SONRA');
+  }
+  if (vardir('sitemap.xml') && /\/bulten[\/<]/.test(fs.readFileSync(path.join(KOK, 'sitemap.xml'), 'utf8'))) kusur.push('sitemap /bulten tasiyor');
+  let yaziSay = 0, bag = 0;
+  (function gez(x) {
+    for (const f of fs.readdirSync(x, { withFileTypes: true })) {
+      const p = path.join(x, f.name);
+      if (f.isDirectory()) { if (!/^(_astro|varlik|img|font|ab-)/.test(f.name)) gez(p); continue; }
+      if (f.name !== 'index.html') continue;
+      const h = fs.readFileSync(p, 'utf8');
+      const ad = path.relative(KOK, p).split(path.sep).join('/');
+      if (/href="(https:\/\/www\.qanatone\.com)?(\/en)?\/bulten[\/"]/.test(h)) { bag++; if (bag <= 2) kusur.push(ad + ': /bulten ic bagi'); }
+      const y = ad.match(/^(en\/)?(haber|nedir)\/([^/]+)\/index\.html$/);
+      if (!y || y[3] === 'konu' || y[3] === 'sayfa') continue;
+      yaziSay++;
+      const m = h.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/);
+      let g = null; try { g = m && JSON.parse(m[1]); } catch (e) { g = null; }
+      const L = g ? (g['@graph'] || [g]) : [];
+      const a = L.find((z) => z['@type'] === 'Article'), b = L.find((z) => z['@type'] === 'BreadcrumbList');
+      const can = (h.match(/<link rel="canonical" href="([^"]+)"/) || [])[1] || '';
+      if (!a || a['@id'] !== can + '#article' || !a.headline || !a.datePublished) kusur.push(ad + ': Article semasi eksik (' + (a ? a['@id'] : 'yok') + ')');
+      const b2 = b && b.itemListElement && b.itemListElement[1];
+      const bekDizin = KONAK + (y[1] ? '/en' : '') + '/' + y[2] + '/';
+      if (!b2 || b2.item !== bekDizin || !b2.name) kusur.push(ad + ': breadcrumb 2. basamak ' + (b2 ? b2.item : 'yok'));
+    }
+  })(KOK);
+  if (bag > 2) kusur.push('... toplam ' + bag + ' sayfada /bulten ic bagi');
+  ol('BH1 · bulten kalkti: 301 hedefleri var + ic bag/sitemap yok + haber/nedir yazi semasi dolu',
+     kusur.length === 0 && yaziSay > 0,
+     kusur.length ? kusur.length + ' kusur · ' + kusur.slice(0, 3).join(' | ') : '4 yonlendirme · ' + yaziSay + ' yazi sayfasinda Article + breadcrumb dogru');
+}
+
 /* T10 · "DIGER YAZILAR" SERIDI TAVANLI (9 Eyl 2026 — Enes: "seridi
    duzelt tavani 8 kart yap").
    NEDEN YAZILDI: serit ONCEDEN TAVANSIZDI (`tum.length - 1`) ve bu, 10 ->
@@ -1884,13 +1951,13 @@ const psiMobilSorgu = (h) => {
 
   if (TAVAN !== null && !kusur.length) {
     const icerik = icerikTam();
-    const adet = Array.isArray(icerik.posts) ? icerik.posts.length : 0;
+    const adet = Array.isArray(icerik.news) ? icerik.news.length : 0;
     const beklenen = Math.min(TAVAN, Math.max(0, adet - 1));
 
     /* Serit yalniz `digerleri.length > 0` iken basiliyor — tek gonderili
        sitede kart aranmaz, kural konusuz kalir. */
     const sayfalar = [];
-    for (const on of ['bulten', path.join('en', 'bulten')]) {
+    for (const on of ['haber', path.join('en', 'haber')]) {
       const d = path.join(KOK, on);
       let girdiler;
       try { girdiler = fs.readdirSync(d, { withFileTypes: true }); } catch (e) { continue; }
@@ -1900,7 +1967,7 @@ const psiMobilSorgu = (h) => {
         if (fs.existsSync(p)) sayfalar.push(p);
       }
     }
-    if (!sayfalar.length) kusur.push('ciktida hic gonderi sayfasi bulunamadi (' + KOK + '/bulten)');
+    if (!sayfalar.length) kusur.push('ciktida hic gonderi sayfasi bulunamadi (' + KOK + '/haber)');
 
     for (const p of sayfalar) {
       const h = oku(p);
@@ -1953,20 +2020,20 @@ const psiMobilSorgu = (h) => {
   const oku2 = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch (e) { return null; } };
   const c = icerikTam();
   const K = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
-    .koleksiyon.find((k) => k.ad === 'yazilar');
+    .koleksiyon.find((k) => k.ad === 'haberler');
 
   if (!K || !K.sayfa_boyu || !K.sayfa_yolu) {
-    kusur.push('sayfalar.json`da yazilar icin sayfa_boyu/sayfa_yolu yok — sayfalama sozlesmesi kayip');
+    kusur.push('sayfalar.json`da haberler icin sayfa_boyu/sayfa_yolu yok — sayfalama sozlesmesi kayip');
   } else {
-    const adet = (c.posts || []).length;
+    const adet = (c.news || []).length;
     const boy = K.sayfa_boyu;
     const toplam = Math.max(1, Math.ceil(adet / boy));
 
     for (const on of ['', '/en']) {
-      const kokDizin = path.join(KOK, on.replace(/^\//, ''), 'bulten');
+      const kokDizin = path.join(KOK, on.replace(/^\//, ''), 'haber');
       /* 1 · /sayfa/1 olmamali */
       if (fs.existsSync(path.join(kokDizin, 'sayfa', '1', 'index.html')))
-        kusur.push((on || '/tr') + ': /bulten/sayfa/1 URETILMIS — kopya icerik');
+        kusur.push((on || '/tr') + ': /haber/sayfa/1 URETILMIS — kopya icerik');
 
       for (let n = 1; n <= toplam; n++) {
         const p = n === 1 ? path.join(kokDizin, 'index.html')
@@ -1993,7 +2060,7 @@ const psiMobilSorgu = (h) => {
 
         /* 3 · kendine kanonik */
         const can = (h.match(/<link rel="canonical" href="([^"]+)"/) || [])[1] || '';
-        const bekCan = n === 1 ? on + '/bulten' : on + K.sayfa_yolu.replace('{n}', String(n));
+        const bekCan = n === 1 ? on + '/haber' : on + K.sayfa_yolu.replace('{n}', String(n));
         if (can.replace(/\/$/, '').replace(/^https?:\/\/[^/]+/, '') !== bekCan.replace(/\/$/, ''))
           kusur.push((on || '/tr') + ':sayfa' + n + ': canonical ' + can + ' (beklenen …' + bekCan + ')');
 
@@ -2025,7 +2092,7 @@ const psiMobilSorgu = (h) => {
      kusur.length === 0,
      kusur.length ? kusur.slice(0, 3).join(' | ')
        : (K && K.sayfa_boyu
-           ? `${(c.posts || []).length} yazi · ${K.sayfa_boyu}/sayfa · ${Math.max(1, Math.ceil((c.posts || []).length / K.sayfa_boyu))} sayfa x 2 dil`
+           ? `${(c.news || []).length} yazi · ${K.sayfa_boyu}/sayfa · ${Math.max(1, Math.ceil((c.news || []).length / K.sayfa_boyu))} sayfa x 2 dil`
            : '-'));
 }
 
@@ -2102,7 +2169,7 @@ const psiMobilSorgu = (h) => {
      DISINDAKI hicbir bolumun adresini tasimaz (haber bultene, bulten
      habere, nedir ikisine de girmez). Besleme yoksa burada atlanir;
      yoklugunu R8 yakar. */
-  for (const [dosya, sahip] of [[path.join('bulten', 'rss.xml'), 'yazilar'], [path.join('haber', 'rss.xml'), 'haberler']]) {
+  for (const [dosya, sahip] of [[path.join('haber', 'rss.xml'), 'haberler']]) {
     const rss = oku2(path.join(KOK, dosya));
     if (!rss) continue;
     for (const k of S.koleksiyon) {
@@ -2781,7 +2848,7 @@ const psiMobilSorgu = (h) => {
     if (t.length < 10 || t.length > 75) kusur.push(r + ':title(' + t.length + ')');
     if (d.length < 50 || d.length > 165) kusur.push(r + ':desc(' + d.length + ')');
     if (!/<link rel="canonical" href="https:\/\//.test(h)) kusur.push(r + ':canonical');
-    if (/^(en\/)?(hizmet|hizmetler|bulten|projeler|sss|surec|otomasyon)\//.test(r)) {
+    if (/^(en\/)?(hizmet|hizmetler|haber|projeler|sss|surec|otomasyon)\//.test(r)) {
       if (!/hreflang="tr"/.test(h) || !/hreflang="en"/.test(h) || !/hreflang="x-default"/.test(h))
         kusur.push(r + ':hreflang');
       const ld = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -3127,10 +3194,10 @@ const psiMobilSorgu = (h) => {
      yeni->eski, `sayfa_boyu`luk dilim) turer; uretec kayarsa kural
      yakalar. Sayi `sayfalar.json`dan okunur, burada yazmaz. */
   const SK = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8'))
-    .koleksiyon.find((k) => k.ad === 'yazilar');
+    .koleksiyon.find((k) => k.ad === 'haberler');
   const BOY = SK.sayfa_boyu || Infinity;
-  const sirali = (c.posts || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
-  const sayfaDosyasi = (dil, n) => path.join(KOK, dil === 'en' ? 'en/bulten' : 'bulten',
+  const sirali = (c.news || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const sayfaDosyasi = (dil, n) => path.join(KOK, dil === 'en' ? 'en/haber' : 'haber',
     n <= 1 ? 'index.html' : path.join('sayfa', String(n), 'index.html'));
 
   const kusur = [];
@@ -3155,11 +3222,11 @@ const psiMobilSorgu = (h) => {
       if (!duz.includes(coz(D(y.title, dil)))) kusur.push(`${dil}:${y.slug}:ad(s${n})`);
       if (!duz.includes(coz(D(y.lede, dil)))) kusur.push(`${dil}:${y.slug}:lede(s${n})`);
       if (!ham.includes(`datetime="${y.date}"`)) kusur.push(`${dil}:${y.slug}:tarih(s${n})`);
-      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/bulten/${y.slug}`))
+      if (!ham.includes(`${dil === 'en' ? '/en' : ''}/haber/${y.slug}`))
         kusur.push(`${dil}:${y.slug}:bağlantı(s${n})`);
     });
   }
-  ol('R4 · bülten dizini: her yazı ad+lede+tarih+bağlantı ham HTML\'de + statik abone formu',
+  ol('R4 · haber dizini (bülten 15 Eyl\'de katıldı): her yazı ad+lede+tarih+bağlantı ham HTML\'de + statik abone formu',
      kusur.length === 0, kusur.slice(0, 4).join(' '));
 }
 
@@ -3378,14 +3445,14 @@ const psiMobilSorgu = (h) => {
      bossa bag YOK (kosullu bolum: bos bolumun beslemesi duyurulmaz). */
   {
     const c = icerikTam();
-    const rssKaynak = fs.readFileSync(path.join(__dirname, 'src', 'pages', 'bulten', 'rss.xml.ts'), 'utf8')
+    const rssKaynak = fs.readFileSync(path.join(__dirname, 'src', 'pages', 'haber', 'rss.xml.ts'), 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, ' ');
     const tavanM = rssKaynak.match(/RSS_TAVAN\s*=\s*(\d+)/);
     if (!tavanM) kusur.push('rss.xml.ts icinde RSS_TAVAN bulunamadi (yorum sayilmaz)');
     const TAVAN = tavanM ? parseInt(tavanM[1], 10) : 0;
     const KOL8 = JSON.parse(fs.readFileSync(path.join(__dirname, 'src', 'veri', 'sayfalar.json'), 'utf8')).koleksiyon;
     const kaynakMetni = sayfalar.map((p) => oku(p));
-    for (const ad of ['yazilar', 'haberler']) {
+    for (const ad of ['haberler']) {
       const K = KOL8.find((k) => k.ad === ad);
       if (!K) { kusur.push('sayfalar.json koleksiyonu yok: ' + ad); continue; }
       const etiket = K.dizin.slice(1) + '/rss.xml';
@@ -3411,7 +3478,7 @@ const psiMobilSorgu = (h) => {
       if (bagli !== bekBag) kusur.push(`${etiket}-kesif-bagi:${bagli}/${bekBag} sayfa`);
     }
   }
-  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + bulten/haber beslemesi = en yeni min(RSS_TAVAN) (sirali) + kesif bagi her sayfada',
+  ol('R8 · sitemap loc seti = canonical seti + dosya yolu = canonical yolu + haber beslemesi = en yeni min(RSS_TAVAN) (sirali) + kesif bagi her sayfada',
      kusur.length === 0, kusur.slice(0, 3).join(' | '));
 }
 
@@ -5576,7 +5643,7 @@ const psiMobilSorgu = (h) => {
   let sayi = 0;
   /* KESME (6 Eyl 2026) — `/en/film` KAPSAM DISI, gerekcesiyle: o sayfa
      olcum zemini ve govdesi ESKI SITENIN GIRISI (EskiGiris.astro, Shadow
-     DOM'a gomulu birebir markup). Icindeki `/`, `/#lead`, `/bulten`
+     DOM'a gomulu birebir markup). Icindeki `/`, `/#lead`, `/haber/` (15 Eyl'e kadar `/bulten`)
      baglantilari eski sitenin kendi nav'i — yeni kabugun dil kurali
      onlara islemez, cevrilmeleri de istenmiyor (birebir tasima karari).
      Kesmeden once bu baglantilar `/yeni` oneki tasimadigi icin kural

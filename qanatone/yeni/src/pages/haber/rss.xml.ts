@@ -12,12 +12,13 @@
    Google beslemeyi Search Console'da sitemap olarak da kabul ediyor —
    yeni haberi sitemap'ten önce fark ettiren yüzey bu.
 
-   TAVAN TEK YERDE: sayı bülten üretecinden ithal edilir, burada tekrar
-   yazılmaz (R8 onu oradan okuyor; iki yerde duran sayı kayar). */
+   TAVAN TEK YERDE: 15 Eyl 2026'da bülten beslemesi kalktı (bölüm haberlere
+   katıldı), sayı artık BURADA durur; R8 onu bu dosyadan okur. */
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { KOK, T, sl } from '../../icerik';
-import { RSS_TAVAN } from '../bulten/rss.xml';
+/* RSS TAVANI 50 (Enes, 9 Eyl 2026). */
+export const RSS_TAVAN = 50;
 
 export const GET: APIRoute = async () => {
   /* ESIT TARIHTE SLUG ARTAN: haberler gunde birden cok cikiyor (olculdu:
