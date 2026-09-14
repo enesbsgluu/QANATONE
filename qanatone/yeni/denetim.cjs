@@ -1146,6 +1146,41 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
        : `${KOSULAN.length} dosya · ${ozet} · test/ taranmis (${varOlan.length} aday)`);
 }
 
+/* H30 · LOGO ISARETI TEK KAYNAKTA (14 Eyl 2026).
+   Bir projenin "logo mu fotograf mi" oldugu IKI dosyada yaziyor:
+   content.json `projects[].imgc` (panelin urunu; gorsel-uret.cjs ve H15
+   onu okur) ve src/veri/proje-gorselleri.json `logo` (gorsel-uret.cjs
+   imgc'den TURETIR; /projeler karti onu okur). Ikisi sessizce ayristi:
+   8 Eyl'de imgc "olu anahtar" sanilip content.json'dan silindi (nobetci
+   yalniz dist'e bakiyordu, derleme aninda okunan anahtari goremedi).
+   Kunye BAB'i logo saymaya devam etti, H15 fotograf saydi; BAB 7.
+   siradaydi, hata uc gun uyudu. 11 Eyl'de Enes uc fotografli projeyi
+   silince BAB destenin ilk dordune girdi, H15 "gorsel-uret.cjs kosmali"
+   diyerek deploy'u dusurdu; o tavsiyeye uyan arac BAB'in logosunu
+   fotografa cevirdi (13 Eyl, 6e09b7c). Bu kural ayrismayi ILK GUN
+   yakalar ve duzeltmenin YONUNU soyler. */
+{
+  const c3 = icerikTam();
+  const pg = JSON.parse(fs.readFileSync(
+    path.join(__dirname, 'src', 'veri', 'proje-gorselleri.json'), 'utf8'));
+  const kusur = [];
+  let n = 0;
+  for (const p of (c3.projects || [])) {
+    const g = pg.find((x) => x.slug === p.slug);
+    if (!g) continue; /* kunyesiz proje G2/H15'in isi */
+    n++;
+    if (p.imgc && !fs.existsSync(path.join(__dirname, '..', p.imgc)))
+      kusur.push(p.slug + ': imgc dosyasi diskte yok (' + p.imgc + ')');
+    if (!!g.logo !== !!p.imgc)
+      kusur.push(g.logo
+        ? p.slug + ': kunye LOGO, content.json imgc YOK — imgc dusmus, geri yaz (gorsel-uret.cjs KOSMA: logoyu fotografa cevirir)'
+        : p.slug + ': content.json imgc VAR, kunye FOTOGRAF — gorsel-uret.cjs kosmali');
+  }
+  ol('H30 · logo isareti iki dosyada ayni (content.json imgc = proje-gorselleri logo)',
+     kusur.length === 0 && n > 0,
+     kusur.slice(0, 3).join(' | ') || `${n} proje karsilastirildi`);
+}
+
 /* T7 · AJAN PROTOKOL ZINCIRI — KART = ROTA = SUNUCU (9 Eyl 2026).
    MCP ve A2A sunuculari kuruldu; `/.well-known/mcp.json` ve
    `/.well-known/agent-card.json` artik GERCEK bir uca isaret ediyor.
@@ -3909,9 +3944,23 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
       const kusur = [];
       if (!onek || kunye.length === 0)
         kusur.push('kunye SIRASI content.json ile ayristi (gorsel-uret.cjs kosmadi?)');
-      if (kunyesiz.length)
-        kusur.push('destedeki ' + kunyesiz.length + ' isin kunyede gorseli YOK ('
-          + kunyesiz.map((f) => f.slug).join(',') + ') — gorsel-uret.cjs kosmali');
+      if (kunyesiz.length) {
+        /* 14 Eyl 2026: tavsiye YONLU. Kunye (proje-gorselleri) isi LOGO
+           sayiyorsa eksik olan gorsel degil content.json'daki imgc'dir;
+           gorsel-uret.cjs kosmak o logoyu fotografa cevirir (13 Eyl'de
+           tam bu oldu). Ayrinti H30. */
+        const pgH = JSON.parse(fs.readFileSync(
+          path.join(__dirname, 'src', 'veri', 'proje-gorselleri.json'), 'utf8'));
+        const logoMu = (s) => !!(pgH.find((x) => x.slug === s) || {}).logo;
+        const logolar = kunyesiz.filter((f) => logoMu(f.slug)).map((f) => f.slug);
+        const digerleri = kunyesiz.filter((f) => !logoMu(f.slug)).map((f) => f.slug);
+        if (logolar.length)
+          kusur.push('destede logo is (' + logolar.join(',')
+            + '): content.json imgc DUSMUS — geri yaz, gorsel-uret.cjs KOSMA (H30)');
+        if (digerleri.length)
+          kusur.push('destedeki ' + digerleri.length + ' isin kunyede gorseli YOK ('
+            + digerleri.join(',') + ') — gorsel-uret.cjs kosmali');
+      }
       const metin = coz(deste);
       for (const x of beklenen)
         for (const [ad, deger] of [['ad', x.name], ['yil', String(x.year)],

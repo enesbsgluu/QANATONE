@@ -108,7 +108,13 @@ for (const y of kaynak) {
 const OLU = new Set([
   /* 1. tur (temizlendi, content.json'dan silindi) */
   'settings.assistant', 'settings.demoWa',
-  'projects.#.imgk6', 'projects.#.imgk', 'projects.#.imgc',
+  'projects.#.imgk6', 'projects.#.imgk',
+  /* `projects.#.imgc` BU LISTEDEN CIKTI (14 Eyl 2026). Nobetci yalniz
+     dist'e bakiyordu; imgc DERLEME ANINDA okunuyor (gorsel-uret.cjs logo
+     karari, denetim H15 fotografli is sayimi) ve dist'te hic gorunmez.
+     Olu sanilip silinmesi 11 Eyl'de deploy'u dusurdu; bekcisi H30.
+     Dersi: dist'e bakan nobetci, ureteclerin ve denetimin okudugu
+     anahtari goremez — listeye eklemeden once yeni/*.cjs'te de ara. */
   /* 2. tur — nobetciyle olculdu, uretimde 0 dosya. Iceride DURUYORLAR ama
      hicbir sayfaya girmiyorlar; panele alan acmak yanlis yesil olurdu.
      Temizlenmeleri ya da kullanima baglanmalari icerik karari (Enes). */
