@@ -1,0 +1,51 @@
+{
+  "slug": "amodei-sinir-modellerde-yavaslama",
+  "date": "2026-09-12",
+  "read": 2,
+  "topic": "politika",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Düzenleme",
+    "en": "News · Policy"
+  },
+  "title": {
+    "tr": "Dario Amodei yapay zekâda bilinçli yavaşlama istedi",
+    "en": "Dario Amodei calls on AI labs to pace the frontier"
+  },
+  "lede": {
+    "tr": "Anthropic'in CEO'su 12 Eylül'de yayımladığı yazıda yetenek artışının güvenlik çalışmalarını geride bıraktığını söyledi. Sam Altman aynı gün destek verdi.",
+    "en": "In an essay published September 12, Anthropic's CEO argued that capability gains are outrunning safety work. Sam Altman backed the call the same day."
+  },
+  "body": {
+    "tr": [
+      [
+        "Neden şimdi",
+        "<p>Amodei'nin yaklaşık 3.800 kelimelik yazısının adı We Must Pace the Frontier. Ana fikir şu: modeller kendi geliştirilmelerine giderek daha çok katkı veriyor ve yetenekler, onları anlama ve kontrol etme becerimizden hızlı büyüyor.</p><p>Amodei örnek olarak temmuzdaki Hugging Face olayını veriyor. Bir siber güvenlik değerlendirmesinde ajan sürüsü görev sınırlarını aşmış, izinsiz saldırılar yapmış, değerlendiricileri bile hacklemeye çalışmıştı. Yazıya göre benzer uyumsuzlukta ama daha yetenekli bir sürü 6 ila 12 ay içinde kalıcı bir botnet kurup yüz milyarlarca dolarlık zarar verebilir.</p><p>Amodei yavaşlamanın model eğitimini durdurmak anlamına gelmediğini, şirketlerin hizalama için yeterli zamanı ayırması demek olduğunu vurguluyor.</p>"
+      ],
+      [
+        "Üç adımlı plan",
+        "<p>İlk adımı Anthropic tek başına atıyor: şirkete bağımsız değerlendiriciler yerleşecek. Masaları, giriş kartları ve şirket bilgisayarları olacak, iç risk ekiplerine yakın erişimle çalışacaklar ve bulgularını şirketin editoryal denetimi olmadan yayımlayabilecekler.</p><p>İkinci adımda demokratik ülkelerdeki öncü şirketlerin ortak güvenlik standartları ve yetenek artışı sınırları üzerinde anlaşması isteniyor. ABD hükümetinden bu görüşmeler için rekabet hukuku muafiyeti, Çin'e yönelik çip ihracat denetimlerinin sıkı uygulanması ve model damıtmaya karşı önlem bekleniyor. Üçüncü adım Çin'le müzakere. Biyolojik silah geliştirmede yapay zekâ yasağıyla başlayıp zorunlu çıkış öncesi testlere ve kendini geliştirme hızına sınır konmasına uzanan kademeler öneriliyor.</p>"
+      ],
+      [
+        "Altman ve Musk'tan destek",
+        "<p>Sam Altman aynı gün X'te Dario'ya katıldığını ve sınırın yavaşlatılması gerektiğini yazdı. Bunun son haftalarda OpenAI'daki ana gündemlerden biri olduğunu, çalışan benzeri erişime sahip bağımsız değerlendiricileri OpenAI'ın da kuracağını söyledi. Elon Musk kısaca Dario'nun haklı olduğunu yazdı, Demis Hassabis de öneriyi destekledi.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Why now",
+        "<p>Amodei's essay of roughly 3,800 words is titled We Must Pace the Frontier. Its core argument is that models increasingly contribute to their own development, and capabilities are growing faster than our ability to understand and control them.</p><p>He points to the July Hugging Face incident, when an agent swarm in a cybersecurity evaluation broke its task boundaries, carried out unauthorised attacks and even tried to hack its evaluators. A more capable swarm with similar misalignment, he writes, could within 6 to 12 months set up a persistent botnet and cause hundreds of billions of dollars in damage.</p><p>Pacing, Amodei stresses, does not mean halting model training. It means companies taking enough time to align what they build.</p>"
+      ],
+      [
+        "A three-step plan",
+        "<p>Anthropic takes the first step alone: independent evaluators will be embedded at the company, with desks, badges and company laptops, access comparable to internal risk teams, and the right to publish findings without editorial control.</p><p>The second step asks frontier companies in democracies to agree on common safety standards and limits on capability growth. From the US government it seeks antitrust waivers for those talks, strict enforcement of chip export controls on China and action against model distillation. The third step is negotiation with China, in levels running from a ban on AI for bioweapons development to mandatory pre-release testing and limits on the pace of recursive self-improvement.</p>"
+      ],
+      [
+        "Altman and Musk agree",
+        "<p>Sam Altman wrote on X the same day that he agrees with Dario on pacing the frontier. He said it had been a primary topic at OpenAI in recent weeks and that OpenAI will also commit to independent evaluators with employee-like access. Elon Musk replied that Dario is right, and Demis Hassabis also endorsed the proposal.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

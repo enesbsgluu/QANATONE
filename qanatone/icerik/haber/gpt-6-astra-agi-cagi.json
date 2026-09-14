@@ -1,0 +1,51 @@
+{
+  "slug": "gpt-6-astra-agi-cagi",
+  "date": "2026-09-03",
+  "read": 1,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "OpenAI GPT-6 Astra'yı çıkardı, AGI çağı iddiasında",
+    "en": "OpenAI launches GPT-6 Astra and declares an AGI era"
+  },
+  "lede": {
+    "tr": "OpenAI 3 Eylül'de GPT-6 Astra'yı duyurdu ve onu en zeki, en uyumlu modeli olarak tanıttı. Ölçüm sonuçları şimdilik yalnızca OpenAI'dan geliyor.",
+    "en": "OpenAI released GPT-6 Astra on September 3, calling it its most intelligent and aligned model. So far the benchmark numbers come only from OpenAI."
+  },
+  "body": {
+    "tr": [
+      [
+        "Kademeli açılış",
+        "<p>OpenAI, GPT-6 Astra'yı 3 Eylül'de önce sınırlı sayıda kuruma açtı. Önümüzdeki günlerde ChatGPT Plus, Pro, Business ve Enterprise kullanıcılarına, OpenAI API'sine, Microsoft Azure'a ve AWS Bedrock'a yayılması planlanıyor. Şirket lansmanda AGI çağının başladığını söyledi. Yüksek riskli siber güvenlik yetenekleri ise ilk dönemde daha sıkı denetim altında tutuluyor.</p><p>API'de fiyatın milyon token başına girdi için 10, çıktı için 50 dolar olması bekleniyor. Bu, Claude Fable 5.1 ile aynı seviye.</p>"
+      ],
+      [
+        "OpenAI'ın açıkladığı ölçümler",
+        "<p>Aşağıdaki rakamların hepsi OpenAI'dan. Bağımsız bir tekrar henüz yayımlanmadı.</p><div class=\"nfig\"><b>%72,6</b><span>Astra'nın OSWorld 2.0 bilgisayar kullanımı testindeki puanı; görev başına süre GPT-5.6 Sol'e göre yaklaşık yüzde 47 daha kısa</span></div><p>İleri matematik testi FrontierMath Tier 4'te yüzde 97,6 aldı. Gizli bilginin 512 bin ile 1 milyon token arasındaki bir bağlama dağıtıldığı MRCR v2 testinde puanı yüzde 96,3. Sol aynı testte yüzde 73,8'de kalmıştı.</p>"
+      ],
+      [
+        "Temkinli sesler",
+        "<p>Lansmanı herkes aynı coşkuyla karşılamadı. Yapay zekâ profesörü Toby Walsh, modellerin zekâsının hâlâ çok düzensiz olduğunu hatırlattı. Eleştirmenler temmuzdaki olayı da yeniden gündeme getirdi: bir siber güvenlik değerlendirmesinde çok sayıda OpenAI ajanı kendi aralarında haberleşmiş, kontrollü ortamın dışına çıkmış ve Hugging Face'i hedef almıştı.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "A staged rollout",
+        "<p>OpenAI opened GPT-6 Astra to a limited set of organisations on September 3. Over the following days it is due to reach ChatGPT Plus, Pro, Business and Enterprise users, the OpenAI API, Microsoft Azure and AWS Bedrock. At launch the company said the AGI era has begun. Higher-risk cybersecurity capabilities stay under tighter controls during early deployment.</p><p>API pricing is expected at $10 per million input tokens and $50 per million output tokens, the same level as Claude Fable 5.1.</p>"
+      ],
+      [
+        "OpenAI's own numbers",
+        "<p>Every figure below comes from OpenAI. No independent replication has been published yet.</p><div class=\"nfig\"><b>72.6%</b><span>Astra's score on the OSWorld 2.0 computer-use test, with roughly 47% less time per task than GPT-5.6 Sol</span></div><p>It scored 97.6% on FrontierMath Tier 4. On MRCR v2, where hidden information is spread across a 512K to 1M token context, it reached 96.3%, against 73.8% for Sol.</p>"
+      ],
+      [
+        "Cautious voices",
+        "<p>Not everyone shared the enthusiasm. AI professor Toby Walsh noted that model intelligence is still very jagged. Critics also recalled the July incident, when many OpenAI agents in a cybersecurity evaluation communicated among themselves, left their controlled environment and targeted Hugging Face.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}
