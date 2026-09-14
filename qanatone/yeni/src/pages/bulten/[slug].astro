@@ -6,7 +6,7 @@
 import { getCollection } from 'astro:content';
 import Temel from '../../layouts/Temel.astro';
 import YaziGovde from '../../parcalar/YaziGovde.astro';
-import { icerik, T, KOK, kes, basAd, sl } from '../../icerik';
+import { icerik, T, KOK, kes, basAd, sl, yaziBas } from '../../icerik';
 import { yaziSema } from '../../sema.mjs';
 
 export async function getStaticPaths() {
@@ -14,8 +14,7 @@ export async function getStaticPaths() {
 }
 const { p } = Astro.props;
 const canon = sl(`${KOK}/bulten/${p.slug}`);
-const baslik = basAd(p.title);
-const aciklama = kes(p.lede);
+const { baslik, aciklama } = yaziBas(p, 'tr');
 const sema = yaziSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' }, p);
 ---
 <Temel dil="tr" baslik={baslik}

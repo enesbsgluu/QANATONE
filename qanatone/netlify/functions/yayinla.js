@@ -121,7 +121,7 @@ async function githubCommit({ token, repo, branch, dosyalar, mesaj }) {
     if (d.icerik === null) { agac.push({ path: d.yol, mode: '100644', type: 'blob', sha: null }); continue; }
     const blob = await cagir('/git/blobs', {
       method: 'POST',
-      body: JSON.stringify({ content: d.icerik, encoding: 'utf-8' })
+      body: JSON.stringify({ content: d.icerik, encoding: d.kodlama === 'base64' ? 'base64' : 'utf-8' })
     });
     agac.push({ path: d.yol, mode: '100644', type: 'blob', sha: blob.sha });
   }
@@ -171,6 +171,132 @@ function izinliKlasorler() {
   return null;
 }
 
+/* GORSELLER DOSYAYA (14 Eyl 2026).
+   Panelin gorsel alani dosyayi `data:image/...;base64,` olarak icerige
+   gomuyordu. Derleme hatti ise gorseli DISKTE bir dosya olarak bekliyor
+   (gorsel-uret.cjs varyant uretir, G1/G2 dosyayi arar): gomulu gorsel ya
+   bozuk basiliyor ya deploy'u dusuruyordu. Burada her gomulu gorsel ayri
+   bir dosya olarak commit edilir, icerikte yalniz yolu kalir.
+     · ad icerikten turer (sha1) — ayni gorsel iki kez yuklense tek dosya
+     · bayt imzasi beyan edilen tiple ortusmeli; SVG kabul edilmez (betik
+       tasiyabilir)
+     · `eslesme`: panel yayindan sonra kendi taslagindaki data URL'leri bu
+       yollarla degistirir, gorsel her yayinda yeniden gonderilmez */
+const GORSEL_DIZIN = 'img/yuklenen';
+const GORSEL_TAVAN = 8 * 1024 * 1024;
+const GORSEL_TIP = { png: 'png', jpeg: 'jpg', jpg: 'jpg', webp: 'webp', gif: 'gif', avif: 'avif' };
+function imzaTutar(tip, b) {
+  const h = (i, s) => b.slice(i, i + s.length).toString('latin1') === s;
+  if (tip === 'png') return h(0, '\x89PNG');
+  if (tip === 'jpg') return b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
+  if (tip === 'webp') return h(0, 'RIFF') && h(8, 'WEBP');
+  if (tip === 'gif') return h(0, 'GIF8');
+  if (tip === 'avif') return h(4, 'ftyp');
+  return false;
+}
+const gorselAnahtari = (v) => v.length + '|' + v.slice(v.length >> 1, (v.length >> 1) + 24) + '|' + v.slice(-24);
+function gorselleriCikar({ content, kayitlar }) {
+  const dosyalar = [], eslesme = {}, yazilan = new Set();
+  let hata = null;
+  const cevir = (v) => {
+    const m = /^data:image\/([a-z0-9.+-]+);base64,([A-Za-z0-9+/]+=*)$/i.exec(v);
+    const tip = m && GORSEL_TIP[m[1].toLowerCase()];
+    if (!tip) { hata = hata || 'desteklenmeyen gomulu veri (yalniz png/jpg/webp/gif/avif)'; return v; }
+    const b = Buffer.from(m[2], 'base64');
+    if (b.length > GORSEL_TAVAN) { hata = hata || 'gorsel 8 MB sinirini asiyor'; return v; }
+    if (!imzaTutar(tip, b)) { hata = hata || 'gorselin baytlari ' + tip + ' degil'; return v; }
+    const yol = GORSEL_DIZIN + '/' + crypto.createHash('sha1').update(b).digest('hex').slice(0, 16) + '.' + tip;
+    if (!yazilan.has(yol)) { yazilan.add(yol); dosyalar.push({ yol: TEMEL_DIZIN + '/' + yol, icerik: m[2], kodlama: 'base64' }); }
+    eslesme[gorselAnahtari(v)] = yol;
+    return yol;
+  };
+  const gez = (o) => {
+    if (typeof o === 'string') return o.startsWith('data:') ? cevir(o) : o;
+    if (Array.isArray(o)) return o.map(gez);
+    if (o && typeof o === 'object') { const c = {}; for (const k of Object.keys(o)) c[k] = gez(o[k]); return c; }
+    return o;
+  };
+  const yeniIcerik = gez(content);
+  const yeniKayitlar = (kayitlar || []).map((k) => (k && k.kayit ? Object.assign({}, k, { kayit: gez(k.kayit) }) : k));
+  return { content: yeniIcerik, kayitlar: yeniKayitlar, dosyalar, eslesme, hata };
+}
+
+/* ICERIK SOZLESMESI (14 Eyl 2026). Derlemenin DUZELTEMEDIGI icerik
+   eksikleri deploy'u dusuruyordu ve Enes bunu yalniz Netlify'da kirmizi
+   bir satir olarak goruyordu. Burada, commit'ten ONCE, alan adiyla ve
+   Turkce reddedilir; panel gerekceyi gosterir. Derlemenin KENDISININ
+   duzelttigi seyler (uzun baslik, bos giris, egik cizgisiz ic bag) burada
+   sorulmaz — onlar icin yazar kural bilmek zorunda degil.
+     · slug bicimsizse addan/basliktan TURETILIR (Turkce harf cevrilir) — red degil
+     · proje: ad + etiket TR/EN + kisa anlatim TR/EN; kayit: baslik TR/EN +
+       giris TR/EN. EN bossa EN sayfasi TR'nin kopyasi olur (S4) — red
+     · baslik tekrari: iki yazi ayni basligi tasirsa (S4) — red */
+const TR_HARF = { 'ç': 'c', 'ğ': 'g', 'ı': 'i', 'İ': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+                  'Ç': 'c', 'Ğ': 'g', 'Ö': 'o', 'Ş': 's', 'Ü': 'u' };
+const sluglastir = (s) => String(s || '').replace(/[çğıİöşüÇĞÖŞÜ]/g, (h) => TR_HARF[h])
+  .normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80).replace(/-+$/, '');
+const metin = (v, dil) => String(typeof v === 'string' ? v : (v && typeof v[dil] === 'string' ? v[dil] : '')).trim();
+const ikiDil = (v) => !!(v && typeof v === 'object' && metin(v, 'tr') && metin(v, 'en'));
+function mevcutKayitlar() {
+  const kok = [process.env.LAMBDA_TASK_ROOT, process.cwd(), path.join(__dirname, '..', '..')]
+    .filter(Boolean).find((k) => fs.existsSync(path.join(k, 'icerik')));
+  const m = new Map();
+  if (!kok) return m;
+  for (const kl of (izinliKlasorler() || [])) {
+    const d = path.join(kok, kl);
+    if (!fs.existsSync(d)) continue;
+    for (const a of fs.readdirSync(d).filter((x) => x.endsWith('.json'))) {
+      try { m.set(kl + '/' + a.slice(0, -5), JSON.parse(fs.readFileSync(path.join(d, a), 'utf8'))); } catch (e) {}
+    }
+  }
+  return m;
+}
+function icerikSozlesmesi(content, kayitlar, mevcut) {
+  const sorun = [];
+  const gorulen = new Set();
+  for (const p of (Array.isArray(content && content.projects) ? content.projects : [])) {
+    if (!p || typeof p !== 'object') continue;
+    const ad = metin(p.name, 'tr');
+    let s = SLUG_BICIMI.test(String(p.slug || '')) ? p.slug : sluglastir(p.slug || ad);
+    if (!s) { sorun.push('adi ve adresi bos bir proje var'); continue; }
+    for (let n = 2, s0 = s; gorulen.has(s); n++) s = s0 + '-' + n;
+    gorulen.add(s); p.slug = s;
+    const kim = '"' + (ad || s) + '" projesi';
+    if (!ad) sorun.push(kim + ': ad bos');
+    if (!ikiDil(p.tag)) sorun.push(kim + ': etiket TR ve EN dolu olmali');
+    if (!ikiDil(p.text)) sorun.push(kim + ': kisa anlatim TR ve EN dolu olmali');
+  }
+  const yazilan = (kayitlar || []).filter((k) => k && k.kayit && typeof k.kayit === 'object' && !k.kayit[OZET_ISARETI]);
+  for (const k of yazilan) {
+    const s = SLUG_BICIMI.test(String(k.slug || '')) ? k.slug : sluglastir(k.slug || metin(k.kayit.title, 'tr'));
+    k.slug = s; k.kayit.slug = s;
+  }
+  const baslik = new Map();
+  const kimlik = (k) => k.klasor + '/' + k.slug;
+  const yazilanId = new Set(yazilan.map(kimlik));
+  for (const [id, r] of (mevcut || new Map()))
+    if (!yazilanId.has(id)) for (const d of ['tr', 'en']) if (metin(r.title, d)) baslik.set(d + '|' + metin(r.title, d).toLowerCase(), id);
+  for (const k of yazilan) {
+    const r = k.kayit, ad = metin(r.title, 'tr') || k.slug, kim = '"' + ad + '" yazisi';
+    if (!k.slug) { sorun.push('basligi ve adresi bos bir yazi var'); continue; }
+    if (!ikiDil(r.title)) sorun.push(kim + ': baslik TR ve EN dolu olmali');
+    if (!ikiDil(r.lede)) sorun.push(kim + ': giris cumlesi TR ve EN dolu olmali');
+    for (const d of ['tr', 'en']) {
+      const t = metin(r.title, d).toLowerCase();
+      if (!t) continue;
+      /* yalniz bu yayinin DEGISTIRDIGI baslik sorulur: onceden duran bir
+         durum ilgisiz bir duzenlemeyi kilitlemesin (duran hal zaten derlendi) */
+      const once = mevcut && mevcut.get(kimlik(k));
+      if (once && metin(once.title, d).toLowerCase() === t) { baslik.set(d + '|' + t, kimlik(k)); continue; }
+      const var_ = baslik.get(d + '|' + t);
+      if (var_ && var_ !== kimlik(k)) sorun.push(kim + ': ayni ' + d.toUpperCase() + ' baslik baska bir yazida da var');
+      else baslik.set(d + '|' + t, kimlik(k));
+    }
+  }
+  return sorun;
+}
+
 /* Handler'ı bir adaptörle inşa eder — testler sahte adaptörle çağırır,
    Netlify çalışma zamanı gerçek githubCommit ile. */
 function handlerOlustur(adaptor) {
@@ -218,11 +344,25 @@ function handlerOlustur(adaptor) {
        uretiyordu (9 Eyl 2026'da `eed7ba4` tam olarak buydu: bos bir
        yayin, tek fark dosya sonu). Iki taraf da artik satir sonuyla
        yaziyor; kayit dosyalari da oyle. */
+    /* GORSELLER DOSYAYA: gomulu gorseller ayri dosya olur (gorselleriCikar). */
+    const gc = gorselleriCikar({ content: govde.content,
+      kayitlar: Array.isArray(govde.kayitlar) ? govde.kayitlar : [] });
+    if (gc.hata) {
+      console.log(simdi(), 'yayinla: gorsel reddedildi');
+      return { statusCode: 400, body: JSON.stringify({ ok: false, reason: gc.hata }) };
+    }
+    const sorunlar = icerikSozlesmesi(gc.content, gc.kayitlar, mevcutKayitlar());
+    if (sorunlar.length) {
+      console.log(simdi(), 'yayinla: icerik sozlesmesi reddetti ·', sorunlar.length, 'sorun');
+      return { statusCode: 400, body: JSON.stringify({ ok: false, sorunlar,
+        reason: sorunlar.slice(0, 3).join(' · ') + (sorunlar.length > 3 ? ' (+' + (sorunlar.length - 3) + ')' : '') }) };
+    }
     const dosyalar = [{
       yol: DOSYA_YOLU,
-      icerik: JSON.stringify(govde.content, null, 2) + '\n'
+      icerik: JSON.stringify(gc.content, null, 2) + '\n'
     }];
-    const kayitlar = Array.isArray(govde.kayitlar) ? govde.kayitlar : [];
+    for (const d of gc.dosyalar) dosyalar.push(d);
+    const kayitlar = gc.kayitlar;
     const silinen = Array.isArray(govde.silinen) ? govde.silinen : [];
     if (kayitlar.length || silinen.length) {
       const izinli = izinliKlasorler();
@@ -267,11 +407,15 @@ function handlerOlustur(adaptor) {
     }
 
     console.log(simdi(), 'yayinla: kabul edildi, commit atildi ·', dosyalar.length, 'dosya');
-    return { statusCode: 200, body: JSON.stringify({ ok: true, dosya: dosyalar.length }) };
+    return { statusCode: 200, body: JSON.stringify({ ok: true, dosya: dosyalar.length, gorseller: gc.eslesme }) };
   };
 }
 
 exports.handler = handlerOlustur(githubCommit);
+exports.gorselleriCikar = gorselleriCikar;   // test + fuzz: panel ciktisini yayin donusumunden gecirmek
+exports.gorselAnahtari = gorselAnahtari;     // panelin taslak tazeleme anahtariyla ayni mi
+exports.icerikSozlesmesi = icerikSozlesmesi; // test: mevcut icerik sozlesmeden geciyor mu
+exports.sluglastir = sluglastir;
 exports.handlerOlustur = handlerOlustur;   // test: sahte adaptörle çağırmak için
 exports.dogrula = dogrula;                 // test: parola doğrulamasını izole ölçmek için
 exports.githubCommit = githubCommit;

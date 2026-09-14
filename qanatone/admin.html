@@ -522,10 +522,14 @@ function img(path,hint){
   setTimeout(()=>{
     const b=document.getElementById(id);if(!b)return;
     b.querySelector('.up').onclick=()=>b.querySelector('input').click();
-    b.querySelector('input').onchange=e=>{
+    /* 14 Eyl 2026: uzun kenar 2400'e iner, webp'ye doner; yayinda sunucu
+       onu img/yuklenen/'e DOSYA olarak commit eder (yayinla.js). */
+    b.querySelector('input').onchange=async e=>{
       const f=e.target.files[0];if(!f)return;
-      if(f.size>400*1024&&!confirm('Görsel '+Math.round(f.size/1024)+' KB. content.json içine gömülür, sayfayı ağırlaştırır. Devam?'))return;
-      const r=new FileReader();r.onload=()=>{set(path,r.result);show(cur)};r.readAsDataURL(f);
+      try{const i=await createImageBitmap(f),k=Math.min(1,2400/Math.max(i.width,i.height)),c=document.createElement('canvas');
+        c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);
+        let u=c.toDataURL('image/webp',.86);if(!u.startsWith('data:image/webp'))u=c.toDataURL(f.type==='image/png'?'image/png':'image/jpeg',.86);
+        set(path,u);show(cur);}catch(x){alert('Bu görsel açılamadı — JPG, PNG ya da WEBP dene.');}
     };
     const rm=b.querySelector('.rm');if(rm)rm.onclick=()=>{set(path,'');show(cur)};
   });
@@ -936,6 +940,7 @@ proje:{t:'Projeler',n:()=>(get('projects')||[]).length,f:()=>`
     ${fld('Kısa anlatım (TR)',p+'.text.tr',{area:1})}
     ${fld('Kısa anlatım (EN)',p+'.text.en',{area:1})}
     <div class="f"><label>Kapak görseli</label>${img(p+'.image')}</div>
+    <div class="f"><label>Kart logosu <i>— doluysa arşiv kartında fotoğraf yerine logo basılır</i></label>${img(p+'.imgc')}</div>
     <h4 class="sec">Künye</h4>
     <div class="r2">${fld('Kapsam (TR)',p+'.meta.role.tr')}${fld('Kapsam (EN)',p+'.meta.role.en')}</div>
     <div class="r2">${fld('Süre (TR)',p+'.meta.dur.tr')}${fld('Süre (EN)',p+'.meta.dur.en')}</div>
@@ -1271,7 +1276,7 @@ hizmetdet:{t:'Hizmet detayları',n:()=>(get('services')||[]).filter(s=>s&&s.det)
     ${P2('Kart yüzündeki kısa cümle',p+'.pains.'+k+'.d',{area:1})}
     ${fld('Panel metni (TR)',p+'.pains.'+k+'.x.tr',{area:1,big:1})}
     ${fld('Panel metni (EN)',p+'.pains.'+k+'.x.en',{area:1,big:1})}
-    ${img(p+'.pains.'+k+'.img','panelin içinde görünür — boşsa hiç çıkmaz')}</div>`).join('')}
+    </div>`).join('')}
 
   <h4 class="sec">Nasıl yürütürüz (4. kart)</h4>
   ${list(p+'.steps','Adım',(it,k,q)=>`
@@ -1385,6 +1390,11 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
             silinen:f.silinen.map(x=>({klasor:x.klasor,slug:x.slug}))})});
         const j=await res.json().catch(()=>({}));
         if(res.ok&&j.ok){
+          /* GORSEL ESLESMESI (14 Eyl 2026): sunucu gomulu gorseli dosyaya cevirdi (yayinla.js);
+             taslakta da yol dursun, gorsel her yayinda yeniden gonderilmesin. */
+          const G=j.gorseller||{},gA=v=>v.length+'|'+v.slice(v.length>>1,(v.length>>1)+24)+'|'+v.slice(-24),
+            gY=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'){if(v.startsWith('data:image')&&G[gA(v)])o[k]=G[gA(v)]}else gY(v)}};
+          gY(anlik);gY(C);
           /* TEMEL TAZELENIR: yayindaki hal artik bu. Yapilmazsa ikinci
              yayin ayni dosyalari bir daha gonderir ve "degisen" sayisi
              hic sifirlanmaz — kullanici neyin bekledigini goremez. */
@@ -1407,7 +1417,7 @@ yayin:{t:'Yayınlama',n:()=>'',f:()=>`
         }
         else if(res.status===401)du.textContent='parola reddedildi';
         else if(res.status===503)du.textContent='fonksiyon kapalı (sunucu tarafı kurulmamış)';
-        else du.textContent='başarısız (kod '+res.status+')';
+        else du.textContent=j.reason?'yayınlanmadı — '+j.reason:'başarısız (kod '+res.status+')';
       }catch(e){du.textContent='ağ hatası, tekrar dene';}
       finally{pf.value='';by.disabled=false;}
     };

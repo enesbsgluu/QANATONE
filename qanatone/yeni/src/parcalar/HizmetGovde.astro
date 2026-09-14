@@ -21,6 +21,7 @@ import AracSahne from './AracSahne.astro';
 import PlatformSahne from './PlatformSahne.astro';
 import CanliSahne from './CanliSahne.astro';
 import MotorSahne from './MotorSahne.astro';
+import yuklenenOlcu from '../veri/yuklenen-gorseller.json';
 /* SOKUM VE TASIMA TURU (4 Eyl): kaynagin SDT haritasindaki (8211-8231)
    uc blok geri geldi — finans: tradeMfst + deliverStage, ai-ajan:
    kadroStage; det.img gorsel yuvasi. Sira kaynaktan: sahne · vuruslar ·
@@ -131,7 +132,11 @@ const sira = Math.max(0, (icerik.services || []).findIndex((x: any) => x.slug ==
 {d.deliver && <TeslimatBlok deliver={d.deliver} dil={dil} />}
 {/* DETAY GORSELI (kaynak sdImg 8208-8210): det.img varsa tam genislik;
     bugun hicbir hizmet tasimiyor (finans '' ) — yuva duruyor. */}
-{d.img && <div class="sdsec"><img class="sdimg" src={d.img} alt="" loading="lazy" decoding="async" /></div>}
+{/* 14 Eyl 2026: panelden yuklenen gorsel img/yuklenen/'de; olcusu
+    gorsel-uret.cjs'in kunyesinden (G1). Olcusu bilinmeyen gorsel basilmaz —
+    olcusuz <img> deploy'u dusuruyordu, data URL ise HTML'e gomuluyordu. */}
+{(() => { const y = String(d.img || '').replace(/^\//, ''); const o = (yuklenenOlcu as any)[y];
+  return o && <div class="sdsec"><img class="sdimg" src={'/' + y} width={o.w} height={o.h} alt="" loading="lazy" decoding="async" /></div>; })()}
 
 {/* ALTI GENİŞLEYEN KART — kaynağın `sdGrid`i (7586-7606) birebir SIRA:
     üç dert + "Nasıl yürütürüz" + "Eline geçenler" + "Hedefler & SSS".

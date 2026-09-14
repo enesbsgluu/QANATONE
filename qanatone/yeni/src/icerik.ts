@@ -84,6 +84,35 @@ export const basAd = (v: unknown, dil: Dil = 'tr'): string => {
   return m.length <= 60 ? `${m} — QANATONE` : m;
 };
 
+/* KAYIT SAYFASI BASI (14 Eyl 2026). Panelden gelen baslik ve giris cumlesi
+   S1 menziline (title 10-75 · desc 50-165) DERLEMEDE sokulur. Once haber ve
+   nedir sayfalari ham basiyordu, bultendeki basAd da 60'i asan basligi
+   oldugu gibi birakiyordu: uzun baslik ya da bos giris deploy'u dusuruyordu.
+   Baslik sozcuk sinirinda kisalir (etiket taşır: ≤ 72). Giris 50'nin
+   altindaysa govdenin duz metniyle, o da yetmezse baslik + kurum
+   cumlesiyle beslenir — baslik benzersiz oldugu icin aciklama da oyle (S4). */
+const duzMetin = (h: unknown): string => String(h ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+export const yaziBas = (p: any, dil: Dil = 'tr'): { baslik: string; aciklama: string } => {
+  let t = T(p && p.title, dil).trim();
+  if (t.length > 60) { const k = t.slice(0, 60); t = k.slice(0, Math.max(k.lastIndexOf(' '), 30)).trimEnd() + '…'; }
+  let d = T(p && p.lede, dil).trim();
+  if (d.length < 50) {
+    const govde = ((p && p.body && (p.body[dil] || p.body.tr)) || []).map((b: any) => duzMetin(b && b[1])).join(' ');
+    d = (d + ' ' + govde).trim();
+  }
+  if (d.length < 50) d = `${t} — ${d} ${dil === 'en'
+    ? 'QANATONE, performance marketing and AI automation studio.'
+    : 'QANATONE, performans pazarlama ve yapay zekâ otomasyonu stüdyosu.'}`.replace(/ — +Q/, ' — Q');
+  return { baslik: `${t} — QANATONE`, aciklama: kes(d, dil) };
+};
+
+/* GOVDE ICI BAGLANTI (14 Eyl 2026). Panelde yazilan ic bag `/hizmetler`
+   gibi egik cizgisiz gelebilir; site her ic adresi egik cizgiyle bitirir
+   (H29: 301 hopu + kendini-prefetch). Derlemede duzeltilir — yazar bu
+   kurali bilmek zorunda degil. Uzantili yol (/og-tr.jpg) ve kok (/) dokunulmaz. */
+export const icBag = (h: unknown): string => String(h ?? '').replace(/href="(\/[^"#?]*)([?#][^"]*)?"/g,
+  (_m, yol: string, ek?: string) => `href="${yol.endsWith('/') || /\.[a-z0-9]{2,5}$/i.test(yol) ? yol : yol + '/'}${ek || ''}"`);
+
 /* Panelden gelen tek satirlik HTML parcalari icin BEYAZ LISTE suzgeci.
    Once HER SEY kacar, sonra yalniz izin verilen etiketler geri acilir —
    kara liste degil. Anayasa madde 6: "set:html YALNIZ content.json yazi

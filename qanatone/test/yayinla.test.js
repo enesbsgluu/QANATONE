@@ -169,7 +169,8 @@ const olay = (govde, method) => ({
     const r = await handler(olay({
       parola: DOGRU_PAROLA,
       content: { settings: {} },
-      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'yeni-yazi', kayit: { slug: 'yeni-yazi', date: '2026-09-09' } }],
+      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'yeni-yazi', kayit: { slug: 'yeni-yazi', date: '2026-09-09',
+        title: { tr: 'Yeni yazı denemesi', en: 'New post test' }, lede: { tr: 'Giriş', en: 'Lede' } } }],
       silinen: [{ klasor: 'icerik/yazilar', slug: 'eski-yazi' }]
     }));
     ol('kayıt + silme: 200', r.statusCode === 200, String(r.statusCode));
@@ -206,6 +207,91 @@ const olay = (govde, method) => ({
       ol('reddediliyor: ' + ad, r.statusCode === 400 && cagrilar.length === 0,
          r.statusCode + '/' + cagrilar.length);
     }
+  }
+
+  /* ---- 10) GORSELLER DOSYAYA (14 Eyl 2026) ----
+     Panelin gorsel alani data URL uretir; icerige gomulu kalirsa derleme
+     dusuyordu. Yayin ucu onu dosyaya cevirmeli, icerikte yol kalmali. */
+  {
+    process.env.PANEL_PAROLA_HASH = HASH;
+    process.env.GITHUB_TOKEN = 'sahte-test-jetonu-5-aga-cikmiyor-gercek-degil-555';
+    const PNG1 = Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da63f8ffff3f0005fe02fea7d6a9e40000000049454e44ae426082', 'hex');
+    const url = 'data:image/png;base64,' + PNG1.toString('base64');
+    const { adaptor, cagrilar } = sahteAdaptorKur();
+    const handler = handlerOlustur(adaptor);
+    const r = await handler(olay({
+      parola: DOGRU_PAROLA,
+      content: { projects: ['a', 'b'].map(s => ({ slug: s, name: 'İş ' + s, tag: { tr: 'Etiket', en: 'Tag' },
+        text: { tr: 'Metin', en: 'Text' }, image: url })), founder: { photo: url } },
+      kayitlar: [{ klasor: 'icerik/yazilar', slug: 'gorselli', kayit: { slug: 'gorselli',
+        title: { tr: 'Görselli deneme', en: 'Image test' }, lede: { tr: 'g', en: 'g' }, image: url } }]
+    }));
+    const d = cagrilar.length === 1 ? cagrilar[0].dosyalar : [];
+    const g = d.filter(x => /\/img\/yuklenen\//.test(x.yol));
+    ol('gorsel: 200 ve TEK dosya (ayni bayt tek ad)', r.statusCode === 200 && g.length === 1, r.statusCode + '/' + g.length);
+    ol('gorsel: base64 kodlamayla, bayt birebir',
+       !!g[0] && g[0].kodlama === 'base64' && Buffer.from(g[0].icerik, 'base64').equals(PNG1), '');
+    const yol = g[0] ? g[0].yol.replace(/^qanatone\//, '') : '?';
+    const cj = d.find(x => /content\.json$/.test(x.yol));
+    ol('gorsel: content.json\'da data URL yok, 3 alanda yol',
+       !!cj && !/data:image/.test(cj.icerik) && cj.icerik.split(yol).length === 4, yol);
+    const ky = d.find(x => /gorselli\.json$/.test(x.yol));
+    ol('gorsel: kayit dosyasinda da yol', !!ky && ky.icerik.includes(yol) && !/data:/.test(ky.icerik), '');
+    const gv = JSON.parse(r.body || '{}');
+    ol('gorsel: yanit eslesmeyi tasiyor (panel taslagi tazelenir)',
+       !!gv.gorseller && Object.values(gv.gorseller).includes(yol), '');
+    for (const [ad, v] of [
+      ['svg reddedilir', 'data:image/svg+xml;base64,' + Buffer.from('<svg onload="x()"/>').toString('base64')],
+      ['imzasi tutmayan png reddedilir', 'data:image/png;base64,' + Buffer.from('bu bir png degil').toString('base64')],
+      ['gorsel olmayan data reddedilir', 'data:text/html;base64,PGI+eDwvYj4=']]) {
+      const s = sahteAdaptorKur();
+      const r2 = await handlerOlustur(s.adaptor)(olay({ parola: DOGRU_PAROLA, content: { settings: { x: v } } }));
+      ol('gorsel: ' + ad, r2.statusCode === 400 && s.cagrilar.length === 0, r2.statusCode + '/' + s.cagrilar.length);
+    }
+  }
+
+  /* ---- 11) ICERIK SOZLESMESI (14 Eyl 2026) ----
+     Derlemenin duzeltemedigi eksikler (EN alan, baslik tekrari) yayin
+     ucunda Turkce gerekceyle reddedilir; bicimsiz slug turetilir.
+     ILK SART: bugunku icerigin TAMAMI sozlesmeden gecmeli — gecmezse
+     Enes'in her yayini reddedilir. */
+  {
+    process.env.PANEL_PAROLA_HASH = HASH;
+    process.env.GITHUB_TOKEN = 'sahte-test-jetonu-6-aga-cikmiyor-gercek-degil-666';
+    const fs = require('fs'), path = require('path');
+    const { icerikSozlesmesi, sluglastir } = require('../netlify/functions/yayinla.js');
+    const kok = path.join(__dirname, '..');
+    const gercek = JSON.parse(fs.readFileSync(path.join(kok, 'content.json'), 'utf8'));
+    const mevcutK = [];
+    for (const kl of ['yazilar', 'nedir', 'haber']) {
+      const d = path.join(kok, 'icerik', kl);
+      if (!fs.existsSync(d)) continue;
+      for (const a of fs.readdirSync(d).filter(x => x.endsWith('.json')))
+        mevcutK.push({ klasor: 'icerik/' + kl, slug: a.slice(0, -5), kayit: JSON.parse(fs.readFileSync(path.join(d, a), 'utf8')) });
+    }
+    const s0 = icerikSozlesmesi(JSON.parse(JSON.stringify(gercek)), mevcutK, new Map());
+    ol('sozlesme: MEVCUT icerik (content.json + tum kayitlar) geciyor', s0.length === 0,
+       s0.slice(0, 2).join(' | ') || (gercek.projects.length + ' proje · ' + mevcutK.length + ' kayit'));
+    ol('sozlesme: Turkce slug turetilir', sluglastir('Kötü Slug Ç — İş') === 'kotu-slug-c-is', sluglastir('Kötü Slug Ç — İş'));
+    const tam = (ad) => ({ name: ad, tag: { tr: 'Etiket', en: 'Tag' }, text: { tr: 'Metin', en: 'Text' } });
+    const c1 = { projects: [Object.assign(tam('Yeni İş'), { slug: 'Yeni İş' }), Object.assign(tam('Yeni İş 2'), { slug: 'yeni-is' })] };
+    const s1 = icerikSozlesmesi(c1, [], new Map());
+    ol('sozlesme: bicimsiz ve cakisan proje slug\'i duzeltilir',
+       s1.length === 0 && c1.projects[0].slug === 'yeni-is' && c1.projects[1].slug === 'yeni-is-2', c1.projects.map(p => p.slug).join(','));
+    const red = async (ad, govde, beklenen) => {
+      const s = sahteAdaptorKur();
+      const r = await handlerOlustur(s.adaptor)(olay(Object.assign({ parola: DOGRU_PAROLA }, govde)));
+      const j = JSON.parse(r.body || '{}');
+      ol('sozlesme reddi: ' + ad, r.statusCode === 400 && s.cagrilar.length === 0 && String(j.reason || '').includes(beklenen),
+         r.statusCode + ' · ' + String(j.reason || '').slice(0, 70));
+    };
+    await red('EN etiketi bos proje', { content: { projects: [{ name: 'Tek Dil', slug: 'tek-dil',
+      tag: { tr: 'Etiket' }, text: { tr: 'a', en: 'b' } }] } }, 'Tek Dil');
+    await red('EN basligi bos yazi', { content: { settings: {} }, kayitlar: [{ klasor: 'icerik/haber', slug: 'kisa',
+      kayit: { slug: 'kisa', title: { tr: 'Kısa' }, lede: { tr: 'a', en: 'b' } } }] }, 'Kısa');
+    if (mevcutK[0]) await red('baska yazinin basligini tasiyan yazi', { content: { settings: {} },
+      kayitlar: [{ klasor: 'icerik/haber', slug: 'kopya-baslik', kayit: { slug: 'kopya-baslik',
+        title: mevcutK[0].kayit.title, lede: { tr: 'a', en: 'b' } } }] }, 'ayni');
   }
 
   delete process.env.PANEL_PAROLA_HASH;

@@ -65,3 +65,7 @@ yeni/film/karehizi/
 
 # zoom/zemin turu olcum kareleri (800 MB; olcum kaydi json ve commit mesajlarinda)
 yeni/film/_kare-*/
+
+# Panel gorsel hatti (14 Eyl 2026): kaynak img/yuklenen/ IZLENIR (panel commit eder);
+# yeni/public/img/yuklenen/ derlemede gorsel-uret.cjs icerik uretir.
+yeni/public/img/yuklenen/

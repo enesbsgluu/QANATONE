@@ -117,6 +117,8 @@ async function kartlar() {
   let masaToplam = 0, mobilToplam = 0, kaynakToplam = 0;
   for (const p of secim) {
     const giris = path.join(__dirname, '..', p.image);
+    /* kaynagi olmayan is butun derlemeyi dusurmesin — projeGorselleri gibi atla */
+    if (!fs.existsSync(giris)) { console.log('  ! deste kaynagi yok: ' + p.image); continue; }
     const m = await sharp(giris).metadata();
     kaynakToplam += fs.statSync(giris).size;
 
@@ -161,9 +163,15 @@ async function kartlar() {
    olculdu, 480'lik ikinci dosya toplamda daha pahaliya geliyordu. */
 const KURUCU_GEN = 640;
 
+/* 14 Eyl 2026: kaynak ARTIK content.json `founder.photo`. Once sabit
+   img/founder.webp okunuyordu; panelden yeni fotograf yuklenince site
+   eskisini gostermeye devam ediyordu (sessiz kayip). Yol yoksa eski dosya. */
 async function kurucu() {
-  const giris = path.join(__dirname, '..', 'img', 'founder.webp');
-  if (!fs.existsSync(giris)) { console.log('  ! founder.webp yok, atlandi'); return; }
+  const ic = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  const foto = ic.founder && typeof ic.founder.photo === 'string' ? ic.founder.photo : '';
+  const giris = [foto && !foto.startsWith('data:') && path.join(__dirname, '..', foto),
+    path.join(__dirname, '..', 'img', 'founder.webp')].filter(Boolean).find((a) => fs.existsSync(a));
+  if (!giris) { console.log('  ! kurucu fotografi yok, atlandi'); return; }
   const m = await sharp(giris).metadata();
   const cikis = path.join(HEDEF, 'founder.webp');
   const o = await sharp(giris).resize({ width: KURUCU_GEN, withoutEnlargement: true })
@@ -398,11 +406,24 @@ async function ekip() {
   const hedef = path.join(HEDEF, 'ekip');
   const kunye = path.join(__dirname, 'src', 'veri', 'ekip-gorsel.json');
   const olcu = {};
-  if (fs.existsSync(dizin)) {
+  /* 14 Eyl 2026: kaynak dizin + content.json `team[].photo`. Panelden
+     yuklenen fotograf img/yuklenen/<sha>'dadir; eskiden yalniz img/ekip/
+     taraniyordu ve yeni uyenin fotografi sessizce basilmiyordu. Anahtar
+     dosya adi (uzantisiz) — SKUKurucu ayni anahtari fotograf yolundan turetir. */
+  const adaylar = new Map();
+  if (fs.existsSync(dizin))
+    for (const a of fs.readdirSync(dizin).filter((x) => /\.(jpe?g|png|webp)$/i.test(x)))
+      adaylar.set(a.replace(/\.[a-z]+$/i, ''), path.join(dizin, a));
+  const ic = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
+  for (const t of (ic.team || [])) {
+    const f = t && typeof t.photo === 'string' ? t.photo : '';
+    if (!f || f.startsWith('data:') || !fs.existsSync(path.join(__dirname, '..', f))) continue;
+    adaylar.set(path.basename(f).replace(/\.[a-z]+$/i, ''), path.join(__dirname, '..', f));
+  }
+  if (adaylar.size) {
     fs.mkdirSync(hedef, { recursive: true });
-    for (const a of fs.readdirSync(dizin).filter((x) => /\.(jpe?g|png|webp)$/i.test(x)).sort()) {
-      const ad = a.replace(/\.[a-z]+$/i, '');
-      const giris = path.join(dizin, a), cikis = path.join(hedef, ad + '.webp');
+    for (const [ad, giris] of [...adaylar].sort()) {
+      const cikis = path.join(hedef, ad + '.webp');
       const m = await sharp(giris).metadata();
       const o = await sharp(giris).rotate().resize({ width: KURUCU_GEN, withoutEnlargement: true })
         .webp({ quality: 80, effort: 6 }).toFile(cikis);
@@ -414,7 +435,46 @@ async function ekip() {
   fs.writeFileSync(kunye, JSON.stringify(olcu, null, 2) + String.fromCharCode(10));
 }
 
-if (process.argv[2] === 'ekip') ekip().catch((e) => { console.error(e); process.exit(1); });
+/* --- Panelden yuklenen gorseller (14 Eyl 2026) -------------------------
+   yayinla.js gomulu gorseli kok img/yuklenen/<sha>.<uzanti> olarak commit
+   eder. Burada AYNI adla yeni/public/img/yuklenen/'e tasinir (sitede
+   /img/yuklenen/...) ve olculeri veri/yuklenen-gorseller.json'a yazilir:
+   dogrudan <img> basan bilesen (hizmet detayi `det.img`) olcuyu buradan
+   alir (G1). Uzun kenar 2400'u asarsa kucultulur (panel zaten kucultup
+   gonderiyor; bu ikinci emniyet). */
+async function yuklenen() {
+  const dizin = path.join(KAYNAK, 'yuklenen'), hedef = path.join(HEDEF, 'yuklenen');
+  const kunye = path.join(__dirname, 'src', 'veri', 'yuklenen-gorseller.json');
+  const olcu = {};
+  if (fs.existsSync(dizin)) {
+    fs.mkdirSync(hedef, { recursive: true });
+    for (const a of fs.readdirSync(dizin).filter((x) => /\.(jpe?g|png|webp|gif|avif)$/i.test(x)).sort()) {
+      const giris = path.join(dizin, a), cikis = path.join(hedef, a);
+      const m = await sharp(giris).metadata();
+      const don = (m.orientation || 1) >= 5;
+      const w = don ? m.height : m.width, h = don ? m.width : m.height;
+      if (Math.max(w, h) > 2400) {
+        const o = await sharp(giris).rotate().resize({ width: 2400, height: 2400, fit: 'inside' }).toFile(cikis);
+        olcu['img/yuklenen/' + a] = { w: o.width, h: o.height };
+      } else {
+        fs.copyFileSync(giris, cikis);
+        olcu['img/yuklenen/' + a] = { w, h };
+      }
+    }
+  }
+  fs.writeFileSync(kunye, JSON.stringify(olcu, null, 2) + String.fromCharCode(10));
+  console.log('  = yuklenen: ' + Object.keys(olcu).length + ' gorsel');
+}
+
+/* `icerik` kipi — Netlify zincirinde derlemeden ONCE (netlify.toml).
+   Yalniz content.json'a bagli gorseller: deste, kurucu, ekip, projeler,
+   panel yuklemeleri. Statik varliklar (eller, serit logolari, kara
+   izgarasi) depoda hazir durur, burada yeniden uretilmez. */
+const hata = (e) => { console.error(e); process.exit(1); };
+if (process.argv[2] === 'icerik') (async () => {
+  await kartlar(); await kurucu(); await ekip(); await projeGorselleri(); await yuklenen();
+})().catch(hata);
+else if (process.argv[2] === 'ekip') ekip().catch(hata);
 else (async () => {
   for (const is of ISLER) {
     /* masaustu: kaynak dosyalar oldugu gibi tasinir — yeniden kodlama

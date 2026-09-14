@@ -1181,6 +1181,32 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      kusur.slice(0, 3).join(' | ') || `${n} proje karsilastirildi`);
 }
 
+/* H31 · PANEL GORSELLERI DOSYADA (14 Eyl 2026). Panel gorseli once
+   content.json'a data URL olarak gomuyordu; yayinla.js artik onu
+   img/yuklenen/'e dosya olarak commit ediyor, gorsel-uret.cjs icerik de
+   siteye tasiyor. Kural iki ucu birden tutar: icerikte (content.json +
+   kayit dosyalari) gomulu veri KALMAMIS olmali ve icerigin gosterdigi her
+   img/yuklenen yolu kaynakta VE sitede bulunmali. Gomulu veri geri gelirse
+   yayin ucu bozulmustur; kaynakta var sitede yoksa derleme adimi dusmustur. */
+{
+  const c4 = icerikTam();
+  const kusur = [];
+  let n = 0;
+  (function gez(o, yol) {
+    if (typeof o === 'string') {
+      if (o.startsWith('data:')) kusur.push(yol + ': gomulu veri (' + o.slice(0, 22) + '…)');
+      else if (/^\/?img\/yuklenen\//.test(o)) {
+        n++;
+        const g = o.replace(/^\//, '');
+        if (!fs.existsSync(path.join(__dirname, '..', g))) kusur.push(yol + ': kaynakta yok ' + g);
+        else if (!fs.existsSync(path.join(KOK, g))) kusur.push(yol + ': sitede yok /' + g);
+      }
+    } else if (o && typeof o === 'object') for (const k of Object.keys(o)) gez(o[k], yol ? yol + '.' + k : k);
+  })(c4, '');
+  ol('H31 · panel gorselleri dosyada: icerikte gomulu veri yok + her img/yuklenen yolu kaynakta ve sitede',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || `${n} yuklenen yol`);
+}
+
 /* T7 · AJAN PROTOKOL ZINCIRI — KART = ROTA = SUNUCU (9 Eyl 2026).
    MCP ve A2A sunuculari kuruldu; `/.well-known/mcp.json` ve
    `/.well-known/agent-card.json` artik GERCEK bir uca isaret ediyor.

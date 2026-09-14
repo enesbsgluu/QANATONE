@@ -5,7 +5,7 @@
    koleksiyonundan doğar. Şerit tavanı 8 (T10). */
 import Temel from '../../layouts/Temel.astro';
 import YaziGovde from '../../parcalar/YaziGovde.astro';
-import { icerik, T, KOK, sl } from '../../icerik';
+import { icerik, T, KOK, sl, yaziBas } from '../../icerik';
 import { yaziSema } from '../../sema.mjs';
 import { bolumYaziYollari } from '../../sayfalama';
 
@@ -15,8 +15,7 @@ export async function getStaticPaths() {
 
 const { p } = Astro.props;
 const canon = sl(`${KOK}/haber/${p.slug}`);
-const baslik = `${T(p.title, 'tr')} — QANATONE`;
-const aciklama = T(p.lede, 'tr');
+const { baslik, aciklama } = yaziBas(p, 'tr');
 const sema = yaziSema(icerik, p, { url: canon, dil: 'tr' });
 ---
 <Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}

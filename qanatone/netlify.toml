@@ -31,7 +31,13 @@
   #   node yeni/denetim.cjs         kirmizi -> exit 1 -> DEPLOY DUSMEZ
   #   node yeni/surum-yaz.cjs       dist/surum.json (CI gozlemi)
   # GERI ALMA: `git revert` bu commit'i alir; build.js zincire geri doner.
-  command = "npm --prefix yeni ci && node yeni/film/kur-medya.cjs && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
+  # PANEL GORSEL HATTI (14 Eyl 2026): `gorsel-uret.cjs icerik` derlemeden
+  # ONCE kosar. Panelden eklenen proje/ekip/kurucu fotografinin varyantlari
+  # ve kunyeleri (deste, proje, ekip, yuklenen) content.json'dan BURADA
+  # uretilir. Once yalniz elle, yerelde kosuyordu: panelden fotografli is
+  # eklemek H15/G1/G2 ile deploy'u dusuruyor ya da fotograf sessizce
+  # gorunmuyordu. Kunye artik icerikle ayni derlemede dogar.
+  command = "npm --prefix yeni ci && node yeni/film/kur-medya.cjs && node yeni/gorsel-uret.cjs icerik && npm --prefix yeni run build && node yeni/denetim.cjs && node yeni/surum-yaz.cjs"
   publish = "dist"
 
 [build.environment]

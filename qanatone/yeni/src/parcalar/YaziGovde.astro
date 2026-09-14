@@ -2,7 +2,7 @@
 /* Yazı gövdesi — panelin HTML'i (güvenilir kaynak) derleme anında
    basılır; bölümler [başlık, html] çiftleri. */
 import { getCollection } from 'astro:content';
-import { T, type Dil, sl } from '../icerik';
+import { T, type Dil, sl, icBag } from '../icerik';
 import sayfalarVeri from '../veri/sayfalar.json';
 interface Props { p: any; dil: Dil; bolum?: string }
 /* BÖLÜM PROPU (9 Eyl 2026): aynı gövde bülten · nedir · haber için.
@@ -66,7 +66,7 @@ const tarihYazi = `${tarih.getDate()} ${ay[tarih.getMonth()]} ${tarih.getFullYea
   <p class="lede">{T(p.lede, dil)}</p>
   <div class="govde">
     {bolumler.map(([h, html]) => (
-      <><h2>{h}</h2><div set:html={html} /></>
+      <><h2>{h}</h2><div set:html={icBag(html)} /></>
     ))}
   </div>
   {p.sources?.length > 0 && <div class="kaynaklar">
