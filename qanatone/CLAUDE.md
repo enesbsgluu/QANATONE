@@ -139,6 +139,9 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   gösterir. Karar TEK yerde verilir: satır içi erken betik `data-film="mobil"`
   yazar, modül onu görünce hiçbir şey kurmaz, CSS aynı kapıyı ayrıca tutar.
   Modül kendi ölçümünü kurarsa `/film` sayfasının JS tavanı aşılır.
+  **Perde de telefonda yok (Enes, 14 Eyl, PageSpeed):** ölçüt aynı sorgu,
+  `src/mobil-kapi.mjs`; perde kapısı ve ilk posterin boş kaynağı onu okur
+  (H23b, P1). Aynı turda gtag `load` sonrası boşta yüklenir (T9b).
 - **Yazı ailesi (anayasa istisna 1):** Uncut Sans her alan; tek istisna ana
   sayfa hero başlığı. Kaynakta Playfair olan bir başlığı taşırken aile
   `--f-baslik` tokenine bağlanır, ölçüler (boy, ağırlık, satır aralığı)

@@ -12,14 +12,20 @@
       DEĞİL, H12 ile çelişmez ve tekrar tetiklenmez).
    3. "Oturumda bir kez" — sessionStorage `qanat-splash-seen`; eski
       kapatma anahtarı `qanat-splash === '0'` da aynen sürüyor.
-   4. "Lighthouse kapısı perde AÇIKKEN geçilir" — ölçüm bu commit'te,
-      koşum düzeyinde dönüşümlü (Lighthouse her koşumda taze profil
-      kullandığı için perde her ölçümde görünür).
+   4. "Lighthouse kapısı perde AÇIKKEN geçilir" — Lighthouse her koşumda
+      taze profil kullandığı için perde her ölçümde görünür.
+
+   TELEFONDA PERDE YOK (Enes, 14 Eyl 2026 — PageSpeed turu). Uzun izli
+   ölçüm (perdenin kalkışı izin içinde, mobil öykünme, 3 tur ortanca):
+   perdeli SI 4,73 sn · perdesiz 1,50 sn; ana iş 7.561 → 2.382 ms; puan
+   93 → 98; LCP değişmiyor. Birleştirilmemiş dokuz animasyonun dokuzu da
+   perdeydi (`stroke-dashoffset`). Ölçüt prologun kapısıyla AYNI sorgu
+   (`mobil-kapi.mjs`): prolog ile perde telefonda birlikte yok, masaüstünde
+   birlikte var. Masaüstünde perde aynen duruyor.
 
    TAŞINMAYAN İKİ MALİYET (Anayasa adıyla sayıyor):
    · 2,7 sn zorunlu bekletme — perde artık yüklemeyi MASKELEMİYOR
-     (arkada bekleyen bir şey yok, sayfa statik ve boyalı); marka selamı
-     ~2 sn'de kendi kendine biter, etkileşimle daha da erken.
+     (arkada bekleyen bir şey yok, sayfa statik ve boyalı).
    · iz başına `getTotalLength` — SVG anakart izleri GELDİ (giydirme,
      a8b1d6a; dokuz yol kaynak 4418-4428'den birebir) ama ölçümsüz:
      `pathLength="1"` özniteliğiyle, yerleşim okuması sıfır. (Bu satır
@@ -29,9 +35,14 @@
    ölçülmüş dersi (4438): perde varsayılan gizli doğar (`html:not(.prd)`),
    görünürlük kararını parser'ı bloke eden bu minik betik İLK BOYAMADAN
    ÖNCE verir. Ada JS'i toplamı ~0,6 KB; kütüphane yok, rAF yok,
-   ilerleme döngüsü yok. */
+   ilerleme döngüsü yok. Betik `set:html` ile basılır ki mobil sorgu tek
+   kaynaktan gelsin (Film.astro'nun erken kararıyla aynı desen). */
 import '../stil/perde.css';
+import { MOBIL_SORGU } from '../mobil-kapi.mjs';
 const HARFLER = 'QANATONE'.split('');
+/* Tek satir, girintisiz: bu betik her kabuk sayfasina basiliyor ve J1
+   tavani /otomasyon'da birkac bayt payla duruyor. */
+const KAPI = `(function(){var el=document.getElementById('perde'),R=document.documentElement,k=0,g=0;if(!el)return;try{k=localStorage.getItem('qanat-splash')==='0';g=sessionStorage.getItem('qanat-splash-seen')==='1';}catch(e){}if(k||g||matchMedia('(prefers-reduced-motion:reduce)').matches||matchMedia('${MOBIL_SORGU}').matches){el.parentNode.removeChild(el);return;}R.classList.add('prd');try{sessionStorage.setItem('qanat-splash-seen','1');}catch(e){}var bitti=0;function kaldir(){if(el.parentNode)el.parentNode.removeChild(el);}function cik(){if(bitti)return;bitti=1;el.classList.add('out');setTimeout(kaldir,900);}setTimeout(cik,3400);['pointerdown','wheel','touchstart','keydown'].forEach(function(t){addEventListener(t,cik,{once:true,passive:true});});setTimeout(kaldir,6000);})();`;
 ---
 <div class="sus-perde" id="perde" aria-hidden="true">
   <span class="sus-perde-kabuk"></span>
@@ -62,30 +73,14 @@ const HARFLER = 'QANATONE'.split('');
   </div>
 </div>
 
-{/* KAPI + DENETLEYİCİ — tek betik, kütüphanesiz, YORUMSUZ (is:inline
+{/* KAPI + DENETLEYİCİ — tek betik, kütüphanesiz, YORUMSUZ (satır içi
     betiğin her baytı çıktıya gider; J1 bunu bir kez 4 baytla ısırdı).
-    Akış: (1) kapatma anahtarı / oturumda görülmüş / hareket azaltma →
-    perde DOM'dan kalkar, hiç doğmaz. (2) değilse `prd` sınıfı görünür
-    yapar (parser-blocking: ilk boyamadan önce, titreme yok) ve oturum
-    işaretlenir. (3) 1,3 sn'de kendiliğinden ya da İLK dokunma/tekerlek/
-    dokunuş/tuşla ANINDA `.out` süpürmesi; 0,9 sn sonra DOM'dan kalkar.
-    (4) güvenlik: ne olursa olsun 4 sn'de koşulsuz kaldırma. */}
-<script is:inline>
-(function(){
-  var el=document.getElementById('perde'),R=document.documentElement,k=0,g=0;
-  if(!el)return;
-  try{k=localStorage.getItem('qanat-splash')==='0';
-      g=sessionStorage.getItem('qanat-splash-seen')==='1';}catch(e){}
-  if(k||g||matchMedia('(prefers-reduced-motion:reduce)').matches){
-    el.parentNode.removeChild(el);return;}
-  R.classList.add('prd');
-  try{sessionStorage.setItem('qanat-splash-seen','1');}catch(e){}
-  var bitti=0;
-  function kaldir(){if(el.parentNode)el.parentNode.removeChild(el);}
-  function cik(){if(bitti)return;bitti=1;el.classList.add('out');setTimeout(kaldir,900);}
-  setTimeout(cik,3400);
-  ['pointerdown','wheel','touchstart','keydown'].forEach(function(t){
-    addEventListener(t,cik,{once:true,passive:true});});
-  setTimeout(kaldir,6000);
-})();
-</script>
+    Akış: (1) kapatma anahtarı / oturumda görülmüş / hareket azaltma /
+    TELEFON (mobil kapı) → perde DOM'dan kalkar, hiç doğmaz. (2) değilse
+    `prd` sınıfı görünür yapar (parser-blocking: ilk boyamadan önce,
+    titreme yok) ve oturum işaretlenir. (3) 3,4 sn'de kendiliğinden ya da
+    İLK dokunma/tekerlek/dokunuş/tuşla ANINDA `.out` süpürmesi; 0,9 sn
+    sonra DOM'dan kalkar. (4) güvenlik: ne olursa olsun 6 sn'de koşulsuz
+    kaldırma. (Bu blok 14 Eyl'e kadar "1,3 sn / 4 sn" diyordu; kod 3,4 ve
+    6 sn çalışıyordu — belge düzeltmesi.) */}
+<script is:inline set:html={KAPI} />

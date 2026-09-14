@@ -111,7 +111,10 @@
    ilk kart proximity snap ile dolguyu asip kenara oturur (masaustu + mobil
    yan yana kare: eski kart x=0, yeni x=gut). Listede olmayan sapma, eski
    hal geri geldi. */
-.sa-ray{display:flex;gap:clamp(16px,2vw,24px);padding:4px var(--gut) 14px;
+/* UST DOLGU 4 -> 10 px, margin-top -6 px ile dengelendi — kartlarin yeri
+   degismez (14 Eyl 2026). Serit yatay kaydirdigi icin dikeyde de kirpar;
+   hover'da 6 px kalkan kartin ustu 4 px dolguda kesiliyordu. Bekcisi AK1. */
+.sa-ray{display:flex;gap:clamp(16px,2vw,24px);padding:10px var(--gut) 14px;margin-top:-6px;
   overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;cursor:grab}
 .sa-ray::-webkit-scrollbar{display:none}
@@ -124,7 +127,8 @@
 .sa-kart{flex:none;width:clamp(272px,23vw,336px);scroll-snap-align:start;
   display:flex;flex-direction:column;gap:16px;color:inherit;text-decoration:none}
 /* gorsel alan: kaynak .akv (2502-2509) — oran 1/1.02, 20 px kose, cerceve,
-   uclu degrade; container-type demolarin cqw olculeri icin. Golge 901'de. */
+   uclu degrade; container-type demolarin cqw olculeri icin. Dis hale YOK
+   (Enes, 14 Eyl — bkz. 901 blogu). */
 .sa-gorsel{position:relative;container-type:inline-size;aspect-ratio:1/1.02;border-radius:20px;overflow:hidden;
   border:1px solid rgba(255,255,255,.09);
   background:
@@ -161,7 +165,7 @@
    cercevesi aydinlanir, h3 beyaz, ok kizil-yumusak ve sag-yukari kayar ---- */
 @media (hover:hover) and (pointer:fine){
   .sa-kart{transition:transform .45s var(--e)}
-  .sa-gorsel{transition:box-shadow .45s var(--e),border-color .45s var(--e)}
+  .sa-gorsel{transition:border-color .45s var(--e)}
   .sa-yazi h3{transition:color .3s var(--e)}
   .sa-ok{transition:transform .32s var(--e),color .32s var(--e)}
   .sa-kart:hover{transform:translateY(-6px)}
@@ -334,8 +338,11 @@
 @media(min-width:901px){
   /* görsel alanın ton parlaması — kaynak .akv (2694-2697); H14 gereği
      yalnız masaüstünde (kaynakta koşulsuzdu, belgeli sapma) */
-  .sa-gorsel{box-shadow:0 0 44px -18px color-mix(in srgb,var(--tB) 40%,transparent)}
-  .sa-kart:hover .sa-gorsel{box-shadow:0 0 66px -14px color-mix(in srgb,var(--tB) 62%,transparent)}
+  /* KALDIRILDI (Enes, 14 Eyl 2026): "bu kisimda arkaplanda bir sey olmasin,
+     gradyan vs." Bu parlama (44 px, hover'da 66 px %62) kartin ARKASINDA
+     renkli bir alan aciyordu ve serit kutusunda duz bir kenarla kesiliyordu
+     (1440 px hover karesi). Kaynaktaki .akv parlamasi onun sozuyle kalkti;
+     kartin kendi ic degradesi, cercevesi ve kalkisi aynen duruyor. AK1. */
   .akrw.hot{box-shadow:0 0 5cqw -1cqw var(--red-glow)}
   .akwire .akpk{box-shadow:0 0 3cqw var(--red-glow)}
   .akfout b{box-shadow:0 0 2.4cqw var(--red-glow)}

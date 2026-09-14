@@ -1580,6 +1580,204 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
               : 'panel `settings.gtm` bos — etiket hicbir yerde yok, film yuzeyi yine temiz'));
 }
 
+/* PSI TURU (14 Eyl 2026 — Enes: "sana katiliyorum, mimariyi bozmadan
+   ilerle"). PageSpeed mobil maddeleri olculdu, dort karar kod oldu; her
+   biri asagida kendi kuraliyla kilitli. Rapor ve olcumler hafizada
+   (qanatone-psi-analizi). Ortak yardimci: ana sayfanin satir ici
+   betikleri ve prologun erken kararindaki MOBIL sorgu — perde ve poster
+   kararlari o sorguya BAGLANIR, kendi sorgularini yazmaz. */
+const psiOku = (rel) => { try { return fs.readFileSync(path.join(KOK, rel), 'utf8'); } catch (e) { return null; } };
+const psiBetikler = (h) => [...h.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)]
+  .filter((m) => !/application\/ld\+json/.test(m[1])).map((m) => m[2]);
+const psiMobilSorgu = (h) => {
+  const film = psiBetikler(h).find((b) => /dataset\.film='mobil'/.test(b)) || '';
+  return (film.match(/matchMedia\('([^']+)'\)\.matches\)\{H\.dataset\.film='mobil'/) || [])[1] || null;
+};
+
+/* T9b · OLCUM ETIKETI YUKTEN SONRA, BOSTA.
+   NEDEN: gtag.js (171 KB) acilista inip degerlendiriliyordu — TBT'nin
+   tamami (yerel 57 -> 0 ms) ve LCP'nin kotu kuyrugu (ilk kareyi kaciran
+   kosumda 2,3 -> 4,9 sn; gtag'siz en kotu 2,56 sn). Karar: veri kuyrugu
+   hemen kurulur, betik `load` sonrasi bosta eklenir.
+   OLCUT: etiketi tasiyan satir ici betik `load` dinleyicisi ve
+   requestIdleCallback tasir; adresi dogrudan ekleyen cagri (`add('https…`)
+   ve dis `<script src=…googletagmanager>` HICBIR yerde yoktur. Panel
+   `settings.gtm` bossa konusuz (T9 zemini). */
+{
+  const kusur = [];
+  let olculen = 0;
+  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'bulten/index.html']) {
+    const h = psiOku(rel);
+    if (h === null) { kusur.push('yok: ' + rel); continue; }
+    if (/<script\b[^>]*\bsrc="[^"]*googletagmanager/.test(h)) kusur.push(rel + ': dis etiket dogrudan basilmis');
+    for (const b of psiBetikler(h)) {
+      if (!/googletagmanager\.com/.test(b)) continue;
+      olculen++;
+      if (!/addEventListener\(\s*['"]load['"]/.test(b)) kusur.push(rel + ': load dinleyicisi yok');
+      if (!/requestIdleCallback/.test(b)) kusur.push(rel + ': bosta bekleme yok');
+      if (/\badd\(\s*['"]https/.test(b)) kusur.push(rel + ': adres acilista ekleniyor');
+    }
+  }
+  const gtmDolu = String(((icerikTam().settings) || {}).gtm || '').trim() !== '';
+  ol('T9b · olcum etiketi yukten sonra bosta yuklenir (Enes, 14 Eyl — TBT ve LCP kuyrugu)',
+     kusur.length === 0 && (olculen > 0 || !gtmDolu),
+     kusur.length ? kusur.slice(0, 3).join(' | ')
+       : (olculen ? olculen + ' etiket betigi · hepsi load + bosta' : 'panel `settings.gtm` bos — konusuz'));
+}
+
+/* H23b · PERDE TELEFONDA DOGMAZ, prologun mobil kapisiyla AYNI sorgu.
+   NEDEN: uzun izli olcumde perde mobil SI'ye 3,23 sn, ana ise 5,2 sn
+   ekliyordu; puan 93 -> 98, LCP degismiyor. Karar (Enes, 14 Eyl): telefonda
+   perde yok, masaustunde aynen. Ikinci bir olcut dogmasin diye perde
+   kendi sorgusunu YAZMAZ: kaldirma kosulunda filmin erken kararindaki
+   sorgu birebir bulunmali ve `prd` sinifindan ONCE gelmeli. */
+{
+  const kusur = [];
+  for (const rel of ['index.html', 'en/index.html']) {
+    const h = psiOku(rel);
+    if (h === null) { kusur.push('yok: ' + rel); continue; }
+    const sorgu = psiMobilSorgu(h);
+    if (!sorgu) { kusur.push(rel + ': film kapisinda mobil sorgu okunamadi'); continue; }
+    const perde = psiBetikler(h).find((b) => /getElementById\('perde'\)/.test(b));
+    if (!perde) { kusur.push(rel + ': perde kapisi yok'); continue; }
+    const i = perde.indexOf("classList.add('prd')");
+    if (i < 0) { kusur.push(rel + ': prd sinifi yok'); continue; }
+    if (!perde.slice(0, i).includes("matchMedia('" + sorgu + "').matches"))
+      kusur.push(rel + ': perde telefonda doguyor (kaldirma kosulunda ' + sorgu + ' yok)');
+  }
+  ol('H23b · perde telefonda dogmaz — prologun mobil kapisiyla ayni sorgu (Enes, 14 Eyl)',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || 'TR+EN: perde kapisi film sorgusunu tasiyor');
+}
+
+/* FP1 · ANA SAYFA FILM POSTERI TELEFONDA INMEZ.
+   NEDEN: film ana sayfada telefonda hic gosterilmiyor, ama ilk posterin
+   eager + fetchpriority=high istegi yine iniyordu (29 KB, kritik dosyalarla
+   ayni oncelik; kaldirinca LCP -0,08 sn). OLCUT: ilk sahnenin ilk <source>'u
+   filmin mobil sorgusunu ve diskte duran ≤ 100 B'lik bir bos gorseli tasir
+   (data: adresi G2'ye takilir); /film olcum yuzeyinde o bos kaynak YOKTUR
+   (orada film telefonda da oynar). */
+{
+  const kusur = [];
+  const ilkKaynak = (h) => {
+    const m = h.match(/<div class="fl-sahne[^"]*"[^>]*>\s*<picture>\s*(<source\b[^>]*>)/);
+    return m ? m[1] : null;
+  };
+  let bos = null;
+  for (const rel of ['index.html', 'en/index.html']) {
+    const h = psiOku(rel);
+    if (h === null) { kusur.push('yok: ' + rel); continue; }
+    const sorgu = psiMobilSorgu(h), s = ilkKaynak(h);
+    if (!s) { kusur.push(rel + ': ilk sahne kaynagi yok'); continue; }
+    const media = (s.match(/\bmedia="([^"]*)"/) || [])[1];
+    const srcset = (s.match(/\bsrcset="([^"]*)"/) || [])[1] || '';
+    if (!sorgu || media !== sorgu) kusur.push(rel + ': ilk kaynak kapinin sorgusunu tasimiyor (' + media + ')');
+    const dosya = path.join(KOK, srcset.split(/[?#]/)[0].replace(/^\/+/, ''));
+    const boy = /^\//.test(srcset) && fs.existsSync(dosya) && fs.statSync(dosya).isFile() ? fs.statSync(dosya).size : -1;
+    if (boy < 0 || boy > 100) kusur.push(rel + ': telefonda poster iniyor (' + srcset.slice(0, 44) + (boy > 100 ? ' · ' + boy + ' B' : '') + ')');
+    else bos = srcset;
+  }
+  for (const rel of ['film/index.html', 'en/film/index.html']) {
+    const h = psiOku(rel);
+    if (h !== null && bos && h.includes('srcset="' + bos + '"')) kusur.push(rel + ': olcum yuzeyinde bos poster');
+  }
+  ol('FP1 · ana sayfa film posteri telefonda inmez (bos kaynak, film kapisiyla ayni sorgu)',
+     kusur.length === 0, kusur.slice(0, 3).join(' | ') || 'TR+EN bos kaynak ' + bos + ' · /film dokunulmamis');
+}
+
+/* R-H · BASLIK BASAMAGI (PageSpeed "baslik sirasi", 14 Eyl 2026).
+   NEDEN: alt bilgi sutun basliklari <h5>'ti; onlerinde h2-h4 yoktu. <h2>'ye
+   cevrildi, kutu ve hesaplanan stil once/sonra birebir olculdu.
+   OLCUT: kabuk sayfalarinda alt bilgi sutununun ilk ogesi <h2>, alt bilgide
+   h3-h6 yok; ana sayfada (TR+EN) hicbir baslik bir ustundekinden birden
+   fazla basamak derine inmez (betik, sablon, yorum ayiklanarak). */
+{
+  const kusur = [];
+  const temiz = (h) => h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<template[\s\S]*?<\/template>/g, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
+  for (const rel of ['index.html', 'en/index.html', 'hizmetler/index.html', 'bulten/index.html']) {
+    const h = psiOku(rel);
+    if (h === null) { kusur.push('yok: ' + rel); continue; }
+    const ftr = (temiz(h).match(/<footer\b[\s\S]*?<\/footer>/) || [''])[0];
+    const sutun = [...ftr.matchAll(/<div class="fcol">\s*<(h\d)\b/g)].map((m) => m[1]);
+    if (sutun.length < 2 || sutun.some((x) => x !== 'h2')) kusur.push(rel + ': alt bilgi sutun basligi ' + (sutun.join(',') || 'yok'));
+    if (/<h[3-6]\b/.test(ftr)) kusur.push(rel + ': alt bilgide h3-h6');
+  }
+  for (const rel of ['index.html', 'en/index.html']) {
+    const h = psiOku(rel);
+    if (h === null) continue;
+    const g = temiz(h); let onc = 0;
+    for (const m of g.slice(g.indexOf('<body')).matchAll(/<h([1-6])\b/g)) {
+      const l = +m[1];
+      if (onc && l > onc + 1) { kusur.push(rel + ': h' + onc + ' -> h' + l); break; }
+      onc = l;
+    }
+  }
+  ol('R-H · baslik basamagi: alt bilgi h2, ana sayfada basamak atlanmaz', kusur.length === 0,
+     kusur.slice(0, 3).join(' | ') || '4 kabuk sayfasi h2 · TR+EN ana sayfa sirali');
+}
+
+/* RK1 · MEDYA SORGULU KAYNAK OLCULU (PageSpeed "olcusuz resim", 14 Eyl 2026).
+   NEDEN: serit logolari, hero elleri ve kanal gorselleri `<source media>`
+   ile baska dosyaya geciyordu ve o kaynaklar olcu tasimiyordu; secilen
+   kaynagin olcusu yoksa tarayici en-boy ipucunu kaybeder. PageSpeed OpenAI
+   logosunu gosterdi, sinif 25 kaynakti. Olculer kunyeden ya da dosyanin
+   kendisinden (mobil ve masaustu oranlari esit olculdu).
+   OLCUT: butun sayfalarda `<picture>` icindeki her `<source media=…>`
+   width ve height tasir (prototip dizini haric). */
+{
+  const kusur = [];
+  let n = 0, sayfa = 0;
+  (function gez(d) {
+    for (const f of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, f.name);
+      if (f.isDirectory()) { if (!/^(_astro|varlik|img|font|prototip|ab-)/.test(f.name)) gez(p); continue; }
+      if (f.name !== 'index.html') continue;
+      sayfa++;
+      const h = fs.readFileSync(p, 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
+      for (const pic of h.matchAll(/<picture\b[\s\S]*?<\/picture>/g))
+        for (const m of pic[0].matchAll(/<source\b[^>]*>/g)) {
+          if (!/\bmedia=/.test(m[0])) continue;
+          n++;
+          if (!/\bwidth="\d+"/.test(m[0]) || !/\bheight="\d+"/.test(m[0]))
+            kusur.push(path.relative(KOK, p).split(path.sep).join('/') + ': '
+              + ((m[0].match(/srcset="([^"]{0,48})/) || [])[1] || '?'));
+        }
+    }
+  })(KOK);
+  ol('RK1 · medya sorgulu <source> olculu (PageSpeed olcusuz resim)', kusur.length === 0 && n > 0,
+     kusur.length ? kusur.length + ' kaynak · ' + kusur.slice(0, 2).join(' | ') : sayfa + ' sayfa · ' + n + ' kaynak olculu');
+}
+
+/* AK1 · AKIS SERIDI: KARTIN ARKASINDA HALE YOK, KALKAN KART KIRPILMAZ
+   (Enes, 14 Eyl 2026). NEDEN: "Tek kanal sistemi" seridinde gorsel alanin
+   ton parlamasi (masaustu box-shadow 44 px, hover'da 66 px %62) kartin
+   ARKASINDA renkli bir alan aciyordu; serit yatay kaydirdigi icin
+   (overflow-x:auto dikeyde de kirpar) o alan seridin kutusunda duz bir
+   kenarla kesiliyor, 6 px kalkan kartin ustu da 4 px'lik dolguda
+   kirpiliyordu (1440 px hover karesi). Enes: "bu kisimda arkaplanda bir sey
+   olmasin gradyan vs." Kaynaktaki .akv parlamasi onun sozuyle kalkti.
+   OLCUT (dist CSS'i): `.sa-gorsel`e golge yazan kural yok; seridin ust
+   dolgusu kartin hover kalkisindan kucuk degil. */
+{
+  const kusur = [];
+  const D = path.join(KOK, '_astro');
+  const css = fs.readdirSync(D).filter((f) => f.endsWith('.css'))
+    .map((f) => fs.readFileSync(path.join(D, f), 'utf8')).join('\n');
+  let golge = 0;
+  for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!m[1].split(',').some((x) => /\.sa-gorsel\s*$/.test(x.trim()))) continue;
+    if (/box-shadow\s*:\s*(?!none\b)/.test(m[2])) golge++;
+  }
+  if (golge) kusur.push('.sa-gorsel golgesi ' + golge + ' kuralda');
+  const kalk = (css.match(/\.sa-kart:hover\{[^}]*transform:translateY\((-?[\d.]+)px\)/) || [])[1];
+  const dolgu = (css.match(/\.sa-ray\{[^}]*padding:([\d.]+)px/) || [])[1];
+  if (kalk === undefined || dolgu === undefined) kusur.push('olcu okunamadi (kalkis ' + kalk + ' · dolgu ' + dolgu + ')');
+  else if (+dolgu < Math.abs(+kalk)) kusur.push('ust dolgu ' + dolgu + ' px < kalkis ' + Math.abs(+kalk) + ' px');
+  ol('AK1 · akis seridi: kartin arkasinda hale yok, kalkan kart kirpilmaz (Enes, 14 Eyl)',
+     css.includes('.sa-ray') && kusur.length === 0,
+     kusur.join(' | ') || ('golge 0 · ust dolgu ' + dolgu + ' px ≥ kalkis ' + Math.abs(+kalk) + ' px'));
+}
+
 /* T10 · "DIGER YAZILAR" SERIDI TAVANLI (9 Eyl 2026 — Enes: "seridi
    duzelt tavani 8 kart yap").
    NEDEN YAZILDI: serit ONCEDEN TAVANSIZDI (`tum.length - 1`) ve bu, 10 ->

@@ -82,8 +82,10 @@ const sutunlar = [KARTLAR.slice(0, 2), KARTLAR.slice(2, 4), KARTLAR.slice(4, 6)]
                   sozler.css'in ızgara eşikleriyle aynı (900 / 560). */}
               {gr && (
                 <picture class="ssz-gorsel" aria-hidden="true">
-                  <source media="(min-width:901px)" srcset={`${B}/img/kanal/${gr.kod}.webp`} />
-                  <source media="(min-width:561px)" srcset={`${B}/img/kanal/${gr.kod}-g.webp`} />
+                  <source media="(min-width:901px)" srcset={`${B}/img/kanal/${gr.kod}.webp`}
+                    width={gr.w} height={gr.h} />
+                  <source media="(min-width:561px)" srcset={`${B}/img/kanal/${gr.kod}-g.webp`}
+                    width={gr.gw} height={gr.gh} />
                   <img src={`${B}/img/kanal/${gr.kod}-m.webp`} width={gr.mw} height={gr.mh}
                     loading="lazy" decoding="async" alt="" />
                 </picture>

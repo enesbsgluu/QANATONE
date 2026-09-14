@@ -181,7 +181,23 @@ const ogOlcu = ogPanel ? null : { g: 1200, y: 630 };
    (uzantisiz adres) etiket BASILMAZ. */
 const ogTip = (ogImg.match(/\.(jpe?g|png|webp|gif)(?:[?#]|$)/i) || [])[1];
 const ogMime = ogTip ? 'image/' + ogTip.toLowerCase().replace('jpg', 'jpeg') : null;
-const GTM_KOD = gtm ? `(function(){var id=${JSON.stringify(gtm)};window.dataLayer=window.dataLayer||[];var add=function(s){var sc=document.createElement('script');sc.async=true;sc.src=s;document.head.appendChild(sc)};if(/^GTM-/i.test(id)){window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});add('https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(id))}else{add('https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id));window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',id)}})()` : '';
+/* YUKTEN SONRA, BOSTA (Enes, 14 Eyl 2026 — PageSpeed turu). Alan 13 Eyl'den
+   beri dolu. gtag.js (171 KB) sayfa acilirken inip degerlendiriliyordu:
+   TBT'nin tamami oydu (yerel 57 -> 0 ms) ve ilk kareyi kaciran koşumlarda
+   LCP'yi 2,3 sn'den 4,9 sn'ye tasiyordu (gtag'siz en kotu 2,56 sn). Kuyruk
+   ve olay kayitlari HEMEN kurulur (zaman damgalari dogru kalir); yalniz
+   betigin kendisi `load` sonrasi bosta (en gec 3 sn) eklenir. Bedeli:
+   yuklenme bitmeden cikan ziyaret analitige dusmez. Bekcisi T9b.
+   DAL DERLEMEDE SECILIR: kimlik (G-… / GTM-…) derleme aninda belli, betik
+   yalniz kendi dalini tasir — sayfa JS tavani (J1) /otomasyon'da 2 B payla
+   duruyordu, iki dalli surum onu 226 B tasirdi. Kimlik ve adres JSON ile
+   kacirilir (`<` dahil), satir ici betigi kapatamaz. */
+const gtmGtm = /^GTM-/i.test(gtm);
+const gtmAdres = JSON.stringify('https://www.googletagmanager.com/' + (gtmGtm ? 'gtm.js' : 'gtag/js')
+  + '?id=' + encodeURIComponent(gtm));
+const gtmKuyruk = gtmGtm ? `d.push({'gtm.start':Date.now(),event:'gtm.js'})`
+  : `w.gtag=function(){d.push(arguments)};gtag('js',new Date);gtag('config',${JSON.stringify(gtm).replace(/</g, '\\u003c')})`;
+const GTM_KOD = gtm ? `(function(){var w=window,d=w.dataLayer=w.dataLayer||[];${gtmKuyruk};function a(){var s=document.createElement('script');s.async=1;s.src=${gtmAdres};document.head.appendChild(s)}function b(){w.requestIdleCallback?requestIdleCallback(a,{timeout:3e3}):setTimeout(a)}document.readyState=='complete'?b():addEventListener('load',b)})()` : '';
 /* TUR 9 (3 Eyl 2026): footer sayfa listesi TEK KAYNAKTAN (veri/sayfalar.json,
    `footer` sirasi) — onceden burada, Nav'da ve sitemap'te uc ayri kopya. */
 /* KOSULLU BOLUM (9 Eyl 2026): kaynagi bos olan bolum ALT BILGIDE de
@@ -359,11 +375,14 @@ const SAYFALAR: [string, string, string, string][] = (sayfalarVeri as any).stati
           <p>{m('foot1', 'Talebi yakalayan sistemler kuruyoruz: arama görünürlüğü, reklam ve 7/24 çalışan yapay zekâ ajanları.', 'We build systems that catch demand: search visibility, ads and AI agents working 24/7.')}</p>
         </div>
         <div class="fcol">
-          <h5>{m('fc1', 'Sayfalar', 'Pages')}</h5>
+          {/* <h2> (14 Eyl 2026, PageSpeed "baslik sirasi"): sutun basliklari
+              <h5>'ti ve onlerinde h2-h4 basamagi yoktu. Stil .fcol h2'de,
+              kutu ve hesaplanan stil once/sonra olculdu; bekcisi R-H. */}
+          <h2>{m('fc1', 'Sayfalar', 'Pages')}</h2>
           {SAYFALAR.map(([r, k, tr, enV]) => <a href={sl(`${B}${on}${r}`)}>{m(k, tr, enV)}</a>)}
         </div>
         <div class="fcol">
-          <h5>{m('fc2', 'İletişim', 'Contact')}</h5>
+          <h2>{m('fc2', 'İletişim', 'Contact')}</h2>
           {waUrl && <a href={waUrl} target="_blank" rel="noopener">WhatsApp</a>}
           {ayar.email && <a href={`mailto:${ayar.email}`}>{m('fmail', 'E-posta', 'Email')}</a>}
           {/* ANAYASA (3 Eyl): kaynak #footSocial (7152-7155) C.socials'tan
