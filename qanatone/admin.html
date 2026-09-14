@@ -382,7 +382,7 @@ function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',
    ayni gidis-donusu her kosumda tekrar olcer. */
 /*BLOK-METIN-BAS*/
 function satirIciGecerli(ic){
-  return !/[<>]/.test(String(ic).replace(/<\/?(?:b|strong|em)>|<br\s*\/?>/g,''));
+  return !/[<>]/.test(String(ic).replace(/<\/?(?:b|em)>|<br\s*\/?>/g,''));
 }
 function htmlToBloklar(html){
   const h=String(html||'').trim(); if(!h)return [];

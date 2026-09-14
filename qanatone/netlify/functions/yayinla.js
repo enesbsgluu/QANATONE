@@ -231,8 +231,7 @@ function handlerOlustur(adaptor) {
         return { statusCode: 503, body: JSON.stringify({ ok: false, reason: 'kapali' }) };
       }
       for (const k of kayitlar.concat(silinen)) {
-        if (!k || !izinli.includes(String(k.klasor)) || !SLUG_BICIMI.test(String(k.slug || '')) ||
-            (k.kayit && (typeof k.kayit !== 'object' || String(k.kayit.slug || '') !== String(k.slug)))) {
+        if (!k || !izinli.includes(String(k.klasor)) || !SLUG_BICIMI.test(String(k.slug || ''))) {
           console.log(simdi(), 'yayinla: gecersiz kayit yolu reddedildi');
           return { statusCode: 400, body: JSON.stringify({ ok: false, reason: 'gecersiz kayit yolu' }) };
         }

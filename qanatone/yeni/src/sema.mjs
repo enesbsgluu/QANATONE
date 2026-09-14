@@ -15,27 +15,19 @@ import { KOK, OG_KART, sl } from './icerik';
    içe aktarır (şema parite kuralı); Netlify Node 20 `.ts` açamıyor
    (19 Ağu deploy dersi). */
 
-const KURUM_TANIMI_TR = 'QANATONE, talebi yakalayan sistemleri kuran, ölçen ve işletmeye devreden bir performans pazarlama ve yapay zekâ otomasyonu şirketidir. SEO, GEO, Google ve Meta reklamlarını tek bir ölçüm altında toplar; uluslararası ticari veriyi ve alıcı davranışını ölçen davranışsal motoruyla firmaya özel operasyonu bu ölçüme dayandırarak kurar ve ölçekler. İstanbul ve Dubai.';
-const KURUM_TANIMI_EN = 'QANATONE builds systems that catch demand, measure it, and hand it over to the business: search visibility, Google and Meta ads, and AI automation working 24/7. We unify SEO, GEO, and paid channels under one measurement layer and ground firm-specific operations in sector ratios and behavioral economics. Istanbul and Dubai.';
-const KURUM_KONULARI_TR = ['performans pazarlama', 'SEO', 'GEO', 'Google Ads', 'Meta Ads',
+const KURUM_TANIMI = 'QANATONE, talebi yakalayan sistemleri kuran, ölçen ve işletmeye devreden bir performans pazarlama ve yapay zekâ otomasyonu şirketidir. SEO, GEO, Google ve Meta reklamlarını tek bir ölçüm altında toplar; uluslararası ticari veriyi ve alıcı davranışını ölçen davranışsal motoruyla firmaya özel operasyonu bu ölçüme dayandırarak kurar ve ölçekler. İstanbul ve Dubai.';
+const KURUM_KONULARI = ['performans pazarlama', 'SEO', 'GEO', 'Google Ads', 'Meta Ads',
   'influencer pazarlaması', 'pazar ve rakip veri analizi', 'yapay zekâ ajanları',
   'pazarlama otomasyonu', 'uluslararası ticaret verisi',
   'tedarik ve lojistik operasyonu', 'ürün ve pazar geliştirme'];
-const KURUM_KONULARI_EN = ['performance marketing', 'SEO', 'GEO', 'Google Ads', 'Meta Ads',
-  'influencer marketing', 'market and competitor intelligence', 'AI agents',
-  'marketing automation', 'international trade data',
-  'supply chain and logistics operations', 'product and market development'];
 
 /* @param {any} icerik  content.json
  * @param {{url:string, ad:string, aciklama:string, dil?:string}} sayfa
  * @returns {object} JSON-LD @graph */
 export function anaSema(icerik, sayfa) {
   const st = (icerik && icerik.settings) || {};
-  const socialUrls = (icerik.socials || []).map((s) => s && s.url).filter(Boolean);
+  const sosyal = (icerik.socials || []).map((s) => s && s.url).filter(Boolean);
   const tel = String(st.whatsapp || '').replace(/\D/g, '');
-  const dil = sayfa.dil || 'tr';
-  const KURUM_TANIMI = dil === 'en' ? KURUM_TANIMI_EN : KURUM_TANIMI_TR;
-  const KURUM_KONULARI = dil === 'en' ? KURUM_KONULARI_EN : KURUM_KONULARI_TR;
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -46,7 +38,7 @@ export function anaSema(icerik, sayfa) {
         description: String(st.orgDesc || '').trim() || KURUM_TANIMI,
         knowsAbout: (Array.isArray(st.knowsAbout) && st.knowsAbout.length)
           ? st.knowsAbout : KURUM_KONULARI,
-        sameAs: socialUrls,
+        sameAs: sosyal,
         /* ADRES YOK — KARAR (Enes, 6 Eyl 2026), eksiklik degil. LocalBusiness
            (ya da `address: PostalAddress`) yayinlanabilir GERCEK bir adres
            ister; QANATONE'un boyle bir adresi yok, uydurulmuyor. Bunun
@@ -65,13 +57,13 @@ export function anaSema(icerik, sayfa) {
         '@type': 'WebSite', '@id': KOK + '/#site',
         url: KOK + '/', name: 'QANATONE',
         publisher: { '@id': KOK + '/#org' },
-        inLanguage: dil,
+        inLanguage: sayfa.dil || 'tr',
       },
       {
         '@type': 'WebPage', '@id': sayfa.url + '#page',
         url: sayfa.url, name: sayfa.ad, description: sayfa.aciklama,
         isPartOf: { '@id': KOK + '/#site' },
-        inLanguage: dil,
+        inLanguage: sayfa.dil || 'tr',
       },
     ],
   };
