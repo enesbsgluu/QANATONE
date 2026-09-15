@@ -243,7 +243,9 @@ async function odakliKirp(giris, W, H, fx, fy) {
    ustteki logosu gozukmuyor, asagi cekerek hizala"). Kaynagin .60'i gorselin
    ust payini kirpiyordu: 1860x898 kutuya olceklenince dikeyde 72 px (masa)
    / 32 px (mobil) fazla kaliyor, %60'i ustten gidiyor ve logo (x 30-83,
-   y 28-80) kesiliyordu. Yatayda fazla yok, .15 etkisiz — aynen kaldi. */
+   y 28-80) kesiliyordu. Yatayda fazla yok, .15 etkisiz — aynen kaldi.
+   AYNI GUN SONRA: Bab'in kapagi artik LOGO (asagida LOGO KAPAGI); bu odak
+   yalniz imgc kalkarsa, ekran goruntusu kapaga donerse devreye girer. */
 const HERO_ODAK = { 'kononenko-group': [.5, .20], 'bab-ic-mimarlik': [.15, 0] };
 
 /* `filter: grayscale(.3) contrast(1.06)` DOSYAYA PISIYOR — kaynak (1734/
@@ -252,6 +254,16 @@ const HERO_ODAK = { 'kononenko-group': [.5, .20], 'bab-ic-mimarlik': [.15, 0] };
    ("CSS grayscale(1) contrast(1.1) karsiligi ... tuvalde bir kez").
    grayscale(a) matrisi CSS Filter Effects'in kendi tanimi; contrast(c)
    lineer: y = c*x - .5*(c-1)*255. */
+/* Logo kapagi: logo W x H kutunun %82'sine SIGDIRILIR (her yanda %9 pay —
+   arsiv logo kartinin dolgusu), siyah zemine ortalanir. */
+async function logoKapak(giris, W, H) {
+  const { data, info } = await sharp(giris)
+    .resize({ width: Math.round(W * .82), height: Math.round(H * .82), fit: 'inside' })
+    .toBuffer({ resolveWithObject: true });
+  return sharp({ create: { width: W, height: H, channels: 3, background: '#000' } })
+    .composite([{ input: data, left: Math.round((W - info.width) / 2), top: Math.round((H - info.height) / 2) }]);
+}
+
 function griKontrast(pipe, gri, kon) {
   const a = 1 - gri;                       /* CSS: amount 0 => kimlik */
   const L = [.2126, .7152, .0722];
@@ -312,11 +324,22 @@ async function projeGorselleri() {
     /* DETAY HERO'SU (ph): 16/7, odak + gri/kontrast dosyaya pismis */
     const ho = HERO_ODAK[pr.slug] || [ODAK[pr.slug] != null ? ODAK[pr.slug] : .5, .5];
     const hp = path.join(HERO_HEDEF, pr.slug + '.webp');
-    await griKontrast(await odakliKirp(giris, 1600, 700, ho[0], ho[1]), .3, 1.06)
-      .webp({ quality: 78, effort: 6 }).toFile(hp);
     const hpm = path.join(HERO_HEDEF, pr.slug + '-m.webp');
-    await griKontrast(await odakliKirp(giris, 700, 306, ho[0], ho[1]), .3, 1.06)
-      .webp({ quality: 74, effort: 6 }).toFile(hpm);
+    /* LOGO KAPAGI (Enes, 15 Eyl 2026: "anasayfadaki karttaki gorsel dogru,
+       proje icindeki gorsel logosuyla degisecek"). Logo tasiyan projede
+       detay kapagi da logo — arsivdeki logo kartinin muamelesi (contain +
+       #000 zemin + %9 pay, kaynak 1229-1231) 16/7 kutuya: kirpma yok,
+       gri/kontrast yok (logo zaten siyah-beyaz). Ana sayfa destesi bundan
+       ETKILENMEZ: deste karti `image`ten, ayri fonksiyonda (kartlar()). */
+    if (logo && girisK !== giris) {
+      await (await logoKapak(girisK, 1600, 700)).webp({ quality: 82, effort: 6 }).toFile(hp);
+      await (await logoKapak(girisK, 700, 306)).webp({ quality: 82, effort: 6 }).toFile(hpm);
+    } else {
+      await griKontrast(await odakliKirp(giris, 1600, 700, ho[0], ho[1]), .3, 1.06)
+        .webp({ quality: 78, effort: 6 }).toFile(hp);
+      await griKontrast(await odakliKirp(giris, 700, 306, ho[0], ho[1]), .3, 1.06)
+        .webp({ quality: 74, effort: 6 }).toFile(hpm);
+    }
 
     const k = path.join(PRJ_HEDEF_K, pr.slug + '.webp');
     const km = path.join(PRJ_HEDEF_K, pr.slug + '-m.webp');
