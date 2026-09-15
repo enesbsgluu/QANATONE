@@ -1,0 +1,59 @@
+{
+  "slug": "zero-shot-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Prompt · Zero-shot",
+    "en": "Prompting · Zero-shot"
+  },
+  "title": {
+    "tr": "Zero-shot nedir? Örnek vermeden görev tanımlamak",
+    "en": "What is zero-shot prompting?"
+  },
+  "lede": {
+    "tr": "Zero-shot, modele hiç örnek göstermeden yalnız talimatla görev vermektir. Model işi eğitimde öğrendiği genel bilgiyle yapar.",
+    "en": "Zero-shot means giving a model a task with instructions only and no examples. The model relies on what it learned during training."
+  },
+  "body": {
+    "tr": [
+      [
+        "Zero-shot nedir?",
+        "<p>\"Bu metni İngilizceye çevir\" ya da \"bu e-posta şikâyet mi, soru mu?\" dediğinizde modele örnek göstermezsiniz; model görevi tanımdan anlar. Buna zero-shot (sıfır örnek) denir. <a href=\"/nedir/buyuk-dil-modelleri-nedir/\">Büyük dil modellerinin</a> ilk şaşırtan yanlarından biri buydu: özel olarak eğitilmedikleri birçok görevi yalnız açıklamayla yapabiliyorlar.</p>"
+      ],
+      [
+        "Few-shot ile farkı",
+        "<p><a href=\"/nedir/few-shot-nedir/\">Few-shot</a> yaklaşımında prompta çözülmüş örnekler eklenir. Zero-shot daha kısa, daha ucuz ve hazırlığı daha kolaydır. Görev yaygın ve açıksa (özetleme, çeviri, genel sınıflandırma) çoğu zaman yeterlidir. Çıktı biçimi katıysa ya da görev şirketinize özel kurallar içeriyorsa örnek eklemek sonucu belirgin şekilde düzeltir.</p>"
+      ],
+      [
+        "Zero-shot sonucunu iyileştirmek",
+        "<p>Örnek vermeden de çok şey yapılabilir. İlk adım görevi, bağlamı ve çıktının biçimini açıkça tanımlamaktır. Akıl yürütme isteyen sorularda modelden cevaptan önce adım adım düşünmesini istemek doğruluğu artırabilir. 2022'de yayımlanan bir çalışma, soruya yalnız \"Let's think step by step\" (adım adım düşünelim) cümlesini eklemenin matematik sorularındaki başarıyı ciddi biçimde yükselttiğini gösterdi. Yeni nesil akıl yürüten modeller bu adımı zaten kendi içlerinde yapıyor.</p>"
+      ],
+      [
+        "Hangi durumda hangisi?",
+        "<p>Pratik bir kural: önce zero-shot deneyin. Sonuç tutarsızsa ya da biçim bozuluyorsa birkaç örnekle few-shot'a geçin. O da yetmiyor ve aynı dar görev binlerce kez tekrarlanıyorsa <a href=\"/nedir/fine-tuning-nedir/\">fine-tuning</a> düşünün. Hangi yolu seçerseniz seçin, iyi yazılmış bir <a href=\"/nedir/prompt-nedir/\">prompt</a> hepsinin temelidir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is zero-shot prompting?",
+        "<p>When you say \"translate this into English\" or \"is this email a complaint or a question?\", you give the model no examples; it understands the task from the description alone. That is zero-shot prompting. One of the early surprises of <a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">large language models</a> was that they could do many tasks they were never specifically trained for, just from an explanation.</p>"
+      ],
+      [
+        "How it differs from few-shot",
+        "<p><a href=\"/en/nedir/few-shot-nedir/\">Few-shot</a> prompting adds solved examples to the prompt. Zero-shot is shorter, cheaper and easier to prepare. For common, clear tasks such as summarizing, translation or general classification it is often enough. When the output format is strict or the task follows company specific rules, adding examples improves the result noticeably.</p>"
+      ],
+      [
+        "Getting better zero-shot results",
+        "<p>A lot can be done without examples. Start by describing the task, the context and the output format clearly. For questions that need reasoning, asking the model to think step by step before answering can improve accuracy. A 2022 study showed that adding just \"Let's think step by step\" to a question sharply raised success on math problems. Newer reasoning models already do this step internally.</p>"
+      ],
+      [
+        "Which one when?",
+        "<p>A practical rule: try zero-shot first. If results are inconsistent or the format breaks, move to few-shot with a handful of examples. If that is still not enough and the same narrow task repeats thousands of times, consider <a href=\"/en/nedir/fine-tuning-nedir/\">fine-tuning</a>. Whichever you choose, a well written <a href=\"/en/nedir/prompt-nedir/\">prompt</a> is the foundation.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

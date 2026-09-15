@@ -1,0 +1,59 @@
+{
+  "slug": "moe-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · MoE",
+    "en": "Model Type · MoE"
+  },
+  "title": {
+    "tr": "MoE (Mixture of Experts) nedir?",
+    "en": "What is Mixture of Experts (MoE)?"
+  },
+  "lede": {
+    "tr": "MoE, bir modeli birçok uzman alt ağa bölen ve her adımda yalnız ilgili uzmanları çalıştıran mimaridir. Büyük modelleri ucuzlatır.",
+    "en": "MoE splits a model into many expert sub-networks and runs only the relevant ones at each step, making large models cheaper to run."
+  },
+  "body": {
+    "tr": [
+      [
+        "MoE nedir?",
+        "<p>Mixture of Experts (uzmanlar karışımı), bir modelin içini tek büyük bir blok yerine birçok \"uzman\" alt ağa bölen bir mimaridir. Her girdi için bir yönlendirici (router) hangi uzmanların çalışacağına karar verir. Bütün uzmanlar modelin içinde durur ama her adımda yalnız birkaçı çalışır.</p><p>Büyük bir hastaneyi düşünün. Her hasta bütün doktorlara görünmez; danışma, hastayı şikâyetine göre iki üç uzmana yönlendirir. Hastanede yüzlerce doktor olsa da tek bir hasta için harcanan zaman sınırlı kalır.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<p>Dil modellerinde yönlendirme <a href=\"/nedir/token-nedir/\">token</a> düzeyinde yapılır: cümledeki her token için router uzmanlara puan verir ve en uygun birkaçını seçer. Örneğin Mistral'in açık kaynak Mixtral 8x7B modelinde her katmanda sekiz uzman vardır ve her token için bunlardan ikisi çalışır.</p><p>Uzmanlar \"tarih uzmanı\" ya da \"kod uzmanı\" gibi insanın anlayacağı konulara göre ayrılmaz. Hangi tür örüntüde iyi olacaklarını eğitim sırasında kendileri öğrenirler.</p>"
+      ],
+      [
+        "Avantajı ne?",
+        "<p>Modelin toplam kapasitesi (parametre sayısı) çok büyük olabilir ama her token için yapılan hesap yalnız çalışan uzmanlar kadardır. Bu, aynı bütçeyle daha büyük ve daha yetenekli modeller çalıştırmayı mümkün kılar; <a href=\"/nedir/inference-nedir/\">inference</a> daha hızlı ve ucuz olur. DeepSeek, Mistral ve Alibaba'nın Qwen serisindeki birçok model MoE mimarisini kullanıyor. Google da Gemini 1.5'in MoE mimarisine dayandığını açıkladı.</p>"
+      ],
+      [
+        "Dezavantajları",
+        "<p>Çalışmayan uzmanlar da bellekte durmak zorundadır; bu yüzden MoE modelleri hesap açısından ucuz, bellek açısından ağırdır. Eğitimleri de daha zordur: router bazı uzmanlara fazla iş verip diğerlerini boşta bırakabilir, bunu dengelemek için ek teknikler gerekir. Buna rağmen en büyük modellerin önemli bir kısmı bugün bu mimariye yöneliyor.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is MoE?",
+        "<p>Mixture of Experts is an architecture that splits a model into many \"expert\" sub-networks instead of one big block. For each input a router decides which experts should run. All experts live inside the model, but only a few work at each step.</p><p>Think of a large hospital. Patients do not see every doctor; the front desk sends each one to two or three specialists based on their complaint. The hospital may employ hundreds of doctors, yet the time spent on any single patient stays limited.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>In language models routing happens at the <a href=\"/en/nedir/token-nedir/\">token</a> level: for every token the router scores the experts and picks the best few. Mistral's open source Mixtral 8x7B, for example, has eight experts per layer and runs two of them for each token.</p><p>Experts are not divided into human readable topics such as \"history\" or \"code\". They learn during training which kinds of patterns they handle well.</p>"
+      ],
+      [
+        "What is the advantage?",
+        "<p>The model's total capacity (parameter count) can be huge, while the computation for each token covers only the active experts. That makes it possible to run larger, more capable models on the same budget, with faster and cheaper <a href=\"/en/nedir/inference-nedir/\">inference</a>. Many models from DeepSeek, Mistral and Alibaba's Qwen series use MoE, and Google has said Gemini 1.5 is built on an MoE architecture.</p>"
+      ],
+      [
+        "Drawbacks",
+        "<p>Inactive experts still have to sit in memory, so MoE models are cheap in compute but heavy in memory. They are also harder to train: the router can overload some experts and leave others idle, and extra techniques are needed to balance the load. Even so, a large share of the biggest models are moving toward this architecture.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

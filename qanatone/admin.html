@@ -368,7 +368,7 @@ function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',
    uretiliyor ve YALNIZ burada okunuyor.
 
    BLOK BICIMLERI
-     {t:'p',     ic}                  paragraf (satir ici: b, em, br)
+     {t:'p',     ic}                  paragraf (satir ici: b, em, br, a[href /.. https://..])
      {t:'liste', ogeler[]}            madde listesi
      {t:'vurgu', sayi, aciklama}      veri vurgusu (.nfig)
      {t:'ham',   html}                TANINMAYAN — oldugu gibi korunur
@@ -381,8 +381,13 @@ function push(){try{$('#frame').contentWindow.postMessage({type:'qanat-preview',
    icerikten cikarildi, tahminle secilmedi. Bekci: test/blok-metin.test.js
    ayni gidis-donusu her kosumda tekrar olcer. */
 /*BLOK-METIN-BAS*/
+/* 15 Eyl 2026: satir ici IC BAG da taninir — nedir yazilari birbirine
+   bagli (SEO/GEO). Yalniz `/...` ya da `https://...` adresi; baska sema
+   (javascript: vb.) `ham`a duser. satirIciOku ayni kurali uygular:
+   panelde paragraf duzenlenince bag SESSIZCE silinmez. */
+const BAG_ADRES=/^(?:\/|https:\/\/)[^"<>\s]*$/;
 function satirIciGecerli(ic){
-  return !/[<>]/.test(String(ic).replace(/<\/?(?:b|em)>|<br\s*\/?>/g,''));
+  return !/[<>]/.test(String(ic).replace(/<\/?(?:b|em)>|<br\s*\/?>|<a href="(?:\/|https:\/\/)[^"<>\s]*">|<\/a>/g,''));
 }
 function htmlToBloklar(html){
   const h=String(html||'').trim(); if(!h)return [];
@@ -430,6 +435,8 @@ function satirIciOku(kok){
       if(ad==='br'){ cikti+='<br>'; continue; }
       if(ad==='b'||ad==='strong'){ cikti+='<b>'; gez(c); cikti+='</b>'; continue; }
       if(ad==='em'||ad==='i'){ cikti+='<em>'; gez(c); cikti+='</em>'; continue; }
+      if(ad==='a'){ const hr=(c.getAttribute&&c.getAttribute('href'))||'';
+        if(BAG_ADRES.test(hr)){ cikti+='<a href="'+esc(hr)+'">'; gez(c); cikti+='</a>'; continue; } }
       gez(c);                       /* tanimayan etiket: yalniz metni */
     }
   };

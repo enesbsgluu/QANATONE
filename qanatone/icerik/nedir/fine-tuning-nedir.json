@@ -1,0 +1,59 @@
+{
+  "slug": "fine-tuning-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Eğitimi · Fine-tuning",
+    "en": "Model Training · Fine-tuning"
+  },
+  "title": {
+    "tr": "Fine-tuning nedir, ne zaman gerekir?",
+    "en": "What is fine-tuning and when do you need it?"
+  },
+  "lede": {
+    "tr": "Fine-tuning, hazır bir yapay zekâ modelini kendi örneklerinizle eğitip belirli bir işe uyarlamaktır. Her ihtiyaç için gerekmez.",
+    "en": "Fine-tuning means training a ready-made AI model further on your own examples so it fits a specific job. Not every use case needs it."
+  },
+  "body": {
+    "tr": [
+      [
+        "Fine-tuning nedir?",
+        "<p><a href=\"/nedir/buyuk-dil-modelleri-nedir/\">Büyük dil modelleri</a> önce çok geniş bir metin yığınıyla eğitilir. Bu aşamaya ön eğitim (pre-training) denir ve maliyeti çok yüksektir. Fine-tuning (ince ayar), bu genel modeli alıp daha küçük ve özel bir veri setiyle eğitmeye devam etmektir. Model sıfırdan öğrenmez; var olan bilgisinin üzerine yeni bir alışkanlık ekler.</p><p>Genel pratisyen bir hekimin bir alanda uzmanlık eğitimi alması gibi düşünebilirsiniz. Temel bilgi yerinde durur, belirli bir iş daha iyi yapılır hale gelir.</p>"
+      ],
+      [
+        "Nasıl yapılır?",
+        "<p>Önce örnek çiftleri hazırlanır: modele verilecek girdi ve beklenen doğru çıktı. Örneğin bir sigorta şirketi, müşteri e-postalarını ve bunlara verilmiş onaylı cevapları kullanabilir. Model bu örneklerle eğitilir, ardından eğitimde kullanılmamış örneklerle test edilir.</p><p>Günümüzde modelin bütün parametreleri yerine yalnız küçük bir kısmını güncelleyen yöntemler yaygındır; en bilineni LoRA'dır. Bu yöntemler maliyeti ve gereken donanımı ciddi ölçüde düşürür.</p>"
+      ],
+      [
+        "Ne zaman fine-tuning, ne zaman başka yöntem?",
+        "<p>Çoğu işte önce daha ucuz yollar denenmelidir.</p><ul><li>Model görevi yanlış anlıyorsa önce <a href=\"/nedir/prompt-nedir/\">promptu</a> ve verdiğiniz <a href=\"/nedir/few-shot-nedir/\">örnekleri</a> iyileştirin.</li><li>Modelin bilmediği güncel ya da kurumsal bilgi gerekiyorsa <a href=\"/nedir/rag-nedir/\">RAG</a> kullanın; bilgi değiştikçe yeniden eğitim gerekmez.</li><li>Belirli bir üslup, sabit bir çıktı biçimi ya da çok tekrarlanan dar bir görev varsa fine-tuning mantıklıdır.</li></ul><p>İnce ayar yapılmış <a href=\"/nedir/slm-nedir/\">küçük bir model</a>, bu dar işte büyük bir modelden daha hızlı ve ucuz çalışabilir.</p>"
+      ],
+      [
+        "Dikkat edilmesi gerekenler",
+        "<p>Sonucu en çok veri kalitesi belirler: hatalı örnekler hatalı davranış öğretir. Model yeni işe odaklanırken bazı genel yeteneklerini kaybedebilir; literatürde buna catastrophic forgetting (yıkıcı unutma) deniyor. Temel model yeni bir sürüme geçtiğinde ince ayarın genellikle yeniden yapılması gerekir. Eğitim verisindeki kişisel verilerin modele işlenebileceği de unutulmamalıdır; KVKK açısından veri seçimi baştan planlanmalıdır.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is fine-tuning?",
+        "<p><a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">Large language models</a> are first trained on a huge body of text. That stage is called pre-training and it is very expensive. Fine-tuning takes the general model and keeps training it on a smaller, specialised dataset. The model does not start from zero; it adds a new habit on top of what it already knows.</p><p>Think of a general practitioner who trains as a specialist. The basic knowledge stays in place and one kind of work gets better.</p>"
+      ],
+      [
+        "How is it done?",
+        "<p>First you prepare example pairs: an input for the model and the correct output you expect. An insurer might use customer emails and the approved replies to them. The model is trained on these pairs and then tested on examples it did not see during training.</p><p>Today it is common to update only a small part of the model's parameters instead of all of them; the best known method is LoRA. These methods cut cost and hardware needs considerably.</p>"
+      ],
+      [
+        "When to fine-tune and when not to",
+        "<p>In most cases, cheaper options come first.</p><ul><li>If the model misunderstands the task, improve the <a href=\"/en/nedir/prompt-nedir/\">prompt</a> and the <a href=\"/en/nedir/few-shot-nedir/\">examples</a> you give it.</li><li>If the model needs current or company specific knowledge, use <a href=\"/en/nedir/rag-nedir/\">RAG</a>; no retraining is needed when the information changes.</li><li>If you need a particular style, a fixed output format or a narrow task repeated many times, fine-tuning makes sense.</li></ul><p>A fine-tuned <a href=\"/en/nedir/slm-nedir/\">small model</a> can do that narrow job faster and cheaper than a large one.</p>"
+      ],
+      [
+        "Things to watch",
+        "<p>Data quality decides most of the outcome: bad examples teach bad behavior. While focusing on the new task, a model can lose some general abilities, an effect known as catastrophic forgetting. When the base model moves to a new version, the fine-tuning usually has to be redone. Personal data in the training set can end up inside the model, so data selection needs to be planned with privacy law in mind from the start.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

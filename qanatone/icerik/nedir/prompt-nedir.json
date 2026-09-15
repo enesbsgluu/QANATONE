@@ -1,0 +1,67 @@
+{
+  "slug": "prompt-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Prompt · Temel",
+    "en": "Prompting · Basics"
+  },
+  "title": {
+    "tr": "Prompt nedir, iyi bir prompt nasıl yazılır?",
+    "en": "What is a prompt and how do you write a good one?"
+  },
+  "lede": {
+    "tr": "Prompt, yapay zekâ modeline verdiğiniz talimat ve girdidir. Modelin ne yapacağını ve cevabı hangi biçimde vereceğini belirler.",
+    "en": "A prompt is the instruction and input you give an AI model. It decides what the model does, what it knows and what shape the answer takes."
+  },
+  "body": {
+    "tr": [
+      [
+        "Prompt nedir?",
+        "<p>Prompt, bir yapay zekâ modeline yazdığınız her şeydir: soru, talimat, örnek ya da eklediğiniz belge. Model promptu okur ve ona en uygun devamı üretir. Aynı model, iyi ve kötü yazılmış iki prompta çok farklı kalitede cevap verebilir. Promptları tasarlama ve iyileştirme işine prompt mühendisliği (prompt engineering) denir.</p>"
+      ],
+      [
+        "İyi bir promptta ne olur?",
+        "<p>Modelin kafasında sizin durumunuz yoktur; ona ne verirseniz o kadarını bilir. Etkili bir prompt genellikle şu soruları cevaplar:</p><ul><li>Görev tam olarak ne? \"Özetle\" demek yerine \"bu toplantı notunu yöneticiye gidecek beş maddelik bir özete çevir\" demek gibi.</li><li>Bağlam ne? Hedef kitle, şirket, amaç ve kısıtlar.</li><li>Çıktı nasıl görünmeli? Uzunluk, ton, dil, tablo ya da madde listesi.</li><li>Örnek var mı? Beklediğiniz cevaptan bir iki örnek göstermek (<a href=\"/nedir/few-shot-nedir/\">few-shot</a>) çoğu zaman uzun açıklamadan daha iyi sonuç verir.</li></ul>"
+      ],
+      [
+        "Zayıf ve güçlü prompt örneği",
+        "<p>Zayıf prompt: \"Ürünümüz için reklam metni yaz.\"</p><p>Güçlü prompt: \"Ev tipi su arıtma cihazımız için Instagram reklam metni yaz. Hedef kitle, küçük çocuğu olan ve şebeke suyuna güvenmeyen aileler. Tek bir fayda öne çıksın: filtre yılda bir kez değişiyor. Samimi bir dil kullan, 150 karakteri geçme ve farklı açılardan üç versiyon ver.\"</p><p>İkinci prompt modele hedef kitleyi, mesajı ve biçimi söylediği için ilk denemede kullanılabilir bir metin çıkma ihtimali çok daha yüksektir.</p>"
+      ],
+      [
+        "Sık yapılan hatalar",
+        "<p>Tek bir promptta birbirinden farklı beş iş istemek sonucu bulandırır; büyük işleri adımlara bölmek daha iyi çalışır. \"Kısa\", \"profesyonel\" gibi kelimeler herkese başka şey ifade eder, bunları ölçüye çevirmek gerekir: \"en fazla üç cümle\", \"resmi ama sade\". Modelden bilmediği güncel bir bilgiyi istemek de riskli bir alışkanlıktır; model boşluğu akıcı ama yanlış bir cevapla doldurabilir. Bu duruma <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyon</a> denir.</p>"
+      ],
+      [
+        "Prompt ile system prompt farkı",
+        "<p>Kullanıcının her mesajda yazdığı metin prompttur. Uygulamayı kuran geliştiricinin arka planda modele verdiği ve her konuşmada geçerli olan talimatlara ise <a href=\"/nedir/system-prompt-nedir/\">system prompt</a> denir. Modeller iki talimat çeliştiğinde genellikle system prompttaki kurallara öncelik verecek şekilde eğitilir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a prompt?",
+        "<p>A prompt is everything you write to an AI model: a question, an instruction, an example or an attached document. The model reads the prompt and produces the most fitting continuation. The same model can give very different answers to a well written and a badly written prompt. Designing and improving prompts is called prompt engineering.</p>"
+      ],
+      [
+        "What goes into a good prompt?",
+        "<p>The model knows nothing about your situation beyond what you give it. An effective prompt usually answers these questions:</p><ul><li>What exactly is the task? \"Turn these meeting notes into a five point summary for my manager\" works better than \"summarize\".</li><li>What is the context? Audience, company, goal and constraints.</li><li>What should the output look like? Length, tone, language, a table or a list.</li><li>Is there an example? Showing one or two examples of the answer you expect (<a href=\"/en/nedir/few-shot-nedir/\">few-shot</a>) often works better than a long explanation.</li></ul>"
+      ],
+      [
+        "A weak and a strong prompt",
+        "<p>Weak: \"Write an ad for our product.\"</p><p>Strong: \"Write an Instagram ad for our home water filter. The audience is parents of young children who do not trust tap water. Focus on one benefit: the filter is changed only once a year. Keep it friendly, under 150 characters, and give three versions with different angles.\"</p><p>The second prompt tells the model the audience, the message and the format, so the first draft is far more likely to be usable.</p>"
+      ],
+      [
+        "Common mistakes",
+        "<p>Asking for five unrelated things in one prompt muddies the result; splitting big jobs into steps works better. Words like \"short\" or \"professional\" mean different things to different people, so turn them into measurable limits such as \"three sentences at most\". Asking the model for recent facts it cannot know is also risky, because it may fill the gap with a fluent but wrong answer. That is called <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a>.</p>"
+      ],
+      [
+        "Prompt versus system prompt",
+        "<p>The text a user types in each message is the prompt. The standing instructions a developer gives the model behind the scenes, valid in every conversation, are the <a href=\"/en/nedir/system-prompt-nedir/\">system prompt</a>. When the two conflict, models are usually trained to give the system prompt priority.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

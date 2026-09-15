@@ -1,0 +1,59 @@
+{
+  "slug": "guardrail-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Güvenlik · Guardrail",
+    "en": "Safety · Guardrails"
+  },
+  "title": {
+    "tr": "Guardrail nedir? Yapay zekânın güvenlik bariyerleri",
+    "en": "What are guardrails in AI?"
+  },
+  "lede": {
+    "tr": "Guardrail, yapay zekâ sisteminin girdisini ve çıktısını denetleyen kurallardır. Modelin konu dışına çıkmasını ve zarar vermesini önler.",
+    "en": "Guardrails are the rules and filters that check what goes into and comes out of an AI system, keeping it on topic and preventing harm."
+  },
+  "body": {
+    "tr": [
+      [
+        "Guardrail nedir?",
+        "<p>Otoyoldaki bariyerler aracın yoldan çıkmasını engeller. Yapay zekâda guardrail (koruma bariyeri) aynı işi görür: modelin neyi alıp neyi vereceğine sınır koyan kontrollerdir. Modellerin kendi eğitiminden gelen güvenlik davranışları vardır ama bir ürün için yetmez; ürünü kuran şirketin kendi kurallarına göre ek bir katman gerekir.</p><p>Bu katmanın neden gerekli olduğunu gösteren bir örnek: 2024'te Kanada'da bir havayolu şirketi, sohbet asistanının bir müşteriye yanlış anlattığı iade politikasından mahkeme kararıyla sorumlu tutuldu.</p>"
+      ],
+      [
+        "Hangi kontroller yapılır?",
+        "<ul><li>Girdi kontrolleri: kullanıcı mesajında modeli kandırmaya yönelik talimatlar (prompt injection, jailbreak) aranır, TC kimlik ve kart numarası gibi kişisel veriler maskelenir, konu dışı istekler ayıklanır.</li><li>Çıktı kontrolleri: cevabın zararlı, hakaret içeren ya da hukuken riskli olup olmadığına bakılır; fiyat ve stok gibi bilgilerin sistemdeki gerçek veriyle uyuştuğu ve çıktının beklenen biçimde olduğu doğrulanır.</li><li>Eylem kontrolleri: <a href=\"/nedir/ai-agent-nedir/\">ajanın</a> yapabileceği işlemler sınırlanır, ödeme ve silme gibi adımlar insan onayına bağlanır.</li></ul>"
+      ],
+      [
+        "Nasıl uygulanır?",
+        "<p>Guardrail'lar farklı katmanlarda kurulur. En basit katman <a href=\"/nedir/system-prompt-nedir/\">system prompt</a> içindeki kurallardır ama tek başına güvenilir değildir. Daha sağlam yöntemler, model çağrısının önüne ve arkasına konan ayrı kontrollerdir: kelime ve kalıp filtreleri, sınıflandırıcı modeller (Meta'nın Llama Guard modeli gibi) ya da NVIDIA'nın NeMo Guardrails gibi açık kaynak araçlar. Kritik kararlarda son katman insandır.</p>"
+      ],
+      [
+        "Ölçüyü tutturmak",
+        "<p>Guardrail'lar <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyonun</a> ve kötüye kullanımın etkisini sınırlar. Kuralların dozu da önemlidir: çok sıkı bir set, modeli masum sorulara bile cevap veremez hale getirir ve kullanıcıyı kaçırır. İyi bir guardrail seti gerçek konuşmalarla test edilerek ayarlanır ve düzenli olarak gözden geçirilir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What are guardrails?",
+        "<p>Barriers on a motorway keep cars from leaving the road. In AI, guardrails do the same job: they are checks that limit what a model accepts and what it returns. Models come with safety behavior from their own training, but that is not enough for a product; the company building it needs an extra layer based on its own rules.</p><p>An example of why: in 2024 a Canadian airline was held liable by a tribunal for a refund policy its chatbot had described incorrectly to a customer.</p>"
+      ],
+      [
+        "What gets checked?",
+        "<ul><li>Input checks: messages are scanned for attempts to trick the model (prompt injection, jailbreaks), personal data such as ID and card numbers is masked, and off topic requests are filtered.</li><li>Output checks: answers are checked for harmful, abusive or legally risky content, facts such as prices and stock are compared with real system data, and the output format is validated.</li><li>Action checks: what an <a href=\"/en/nedir/ai-agent-nedir/\">agent</a> may do is restricted, and steps such as payments and deletions require human approval.</li></ul>"
+      ],
+      [
+        "How are they implemented?",
+        "<p>Guardrails are built in layers. The simplest layer is rules in the <a href=\"/en/nedir/system-prompt-nedir/\">system prompt</a>, but on its own it is not reliable. Stronger methods are separate checks placed before and after the model call: word and pattern filters, classifier models (such as Meta's Llama Guard) or open source tools like NVIDIA's NeMo Guardrails. For critical decisions the last layer is a person.</p>"
+      ],
+      [
+        "Getting the balance right",
+        "<p>Guardrails limit the damage from <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a> and misuse. The dose matters too: an overly strict set stops the model from answering harmless questions and drives users away. A good set is tuned against real conversations and reviewed regularly.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

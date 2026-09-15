@@ -1,0 +1,59 @@
+{
+  "slug": "system-prompt-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Prompt · System Prompt",
+    "en": "Prompting · System Prompt"
+  },
+  "title": {
+    "tr": "System prompt nedir, prompttan farkı ne?",
+    "en": "What is a system prompt and how is it different?"
+  },
+  "lede": {
+    "tr": "System prompt, yapay zekâ uygulamasının arka planda modele verdiği kalıcı talimatlardır. Asistanın rolünü ve kurallarını belirler.",
+    "en": "A system prompt is the standing set of instructions an AI app gives the model in the background, setting the assistant role and rules."
+  },
+  "body": {
+    "tr": [
+      [
+        "System prompt nedir?",
+        "<p>Bir sohbet uygulamasında siz mesajınızı yazmadan önce model zaten bir metin okumuştur. Uygulamayı yapan ekip bu metinde asistanın kim olduğunu, hangi konularda konuşacağını, hangi dili ve tonu kullanacağını ve neyi yapmayacağını tanımlar. Bu arka plan talimatına system prompt (sistem istemi) denir. Kullanıcı onu genellikle görmez ama her cevabı etkiler.</p>"
+      ],
+      [
+        "Bir system promptta neler yazar?",
+        "<p>Bir e-ticaret sitesinin müşteri destek asistanını düşünelim. System promptunda şunlar bulunabilir:</p><ul><li>Rol: sitenin destek asistanı olduğu.</li><li>Kapsam: yalnız sipariş, iade ve kargo sorularına cevap vermesi, diğer konularda kibarca yönlendirmesi.</li><li>Ton ve biçim: sade Türkçe, en fazla üç cümle.</li><li>Kurallar: fiyat ve stok bilgisini yalnız sistemden gelen veriden vermesi, tahmin etmemesi.</li><li>Devir: müşteri öfkeliyse ya da sorun çözülemiyorsa konuşmayı bir insana aktarması.</li></ul>"
+      ],
+      [
+        "Kullanıcı promptundan farkı",
+        "<p>Kullanıcının mesajı, yani <a href=\"/nedir/prompt-nedir/\">prompt</a>, konuşmadan konuşmaya değişir. System prompt ise bütün konuşmalarda aynı kalır. Modeller iki talimat çeliştiğinde system promptu öncelikli sayacak şekilde eğitilir.</p><p>Bu öncelik mutlak değildir. Kullanıcıların modeli kandırıp kuralları deldirmeye çalışmasına prompt injection ya da jailbreak denir. Bu yüzden kritik kurallar yalnız system prompta bırakılmaz, ayrıca bir <a href=\"/nedir/guardrail-nedir/\">guardrail</a> katmanıyla korunur.</p>"
+      ],
+      [
+        "İyi bir system prompt yazmak",
+        "<p>Kısa ve çelişkisiz olmalıdır, çünkü her kural her istekte <a href=\"/nedir/token-nedir/\">token</a> olarak faturaya ve <a href=\"/nedir/context-window-nedir/\">bağlam penceresine</a> girer. Kuralları gerekçesiyle yazmak (\"fiyat uydurma, çünkü müşteri söylediğin fiyatı talep eder\" gibi) modelin kuralda yazmayan durumlarda da doğru karar vermesini kolaylaştırır. Her değişiklik, gerçek konuşma örnekleri üzerinde denenerek yayına alınmalıdır.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a system prompt?",
+        "<p>In a chat application, the model has already read some text before you type anything. The team behind the app uses that text to define who the assistant is, which topics it covers, which language and tone it uses and what it must not do. This background instruction is the system prompt. Users usually do not see it, but it shapes every answer.</p>"
+      ],
+      [
+        "What goes into a system prompt?",
+        "<p>Take the support assistant of an online shop. Its system prompt might cover:</p><ul><li>Role: it is the shop's support assistant.</li><li>Scope: it answers only order, return and shipping questions and politely redirects everything else.</li><li>Tone and format: plain language, three sentences at most.</li><li>Rules: prices and stock come only from system data, never from guesses.</li><li>Handover: angry customers or unsolved problems go to a human.</li></ul>"
+      ],
+      [
+        "How it differs from the user prompt",
+        "<p>The user's message, the <a href=\"/en/nedir/prompt-nedir/\">prompt</a>, changes with every conversation. The system prompt stays the same across all of them. Models are trained to give the system prompt priority when the two conflict.</p><p>That priority is not absolute. Attempts to trick a model into breaking its rules are called prompt injection or jailbreaking, which is why critical rules are also enforced by a separate <a href=\"/en/nedir/guardrail-nedir/\">guardrail</a> layer.</p>"
+      ],
+      [
+        "Writing a good system prompt",
+        "<p>Keep it short and consistent: every rule is sent as <a href=\"/en/nedir/token-nedir/\">tokens</a> with every request and takes space in the <a href=\"/en/nedir/context-window-nedir/\">context window</a>. Giving the reason behind a rule (\"never invent a price, because the customer will hold us to it\") helps the model handle cases the rule does not spell out. Test every change against real conversations before it goes live.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

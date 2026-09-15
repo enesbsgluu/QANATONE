@@ -85,6 +85,16 @@ ol('liste', JSON.stringify(htmlToBloklar('<ul><li>a</li><li>b</li></ul>')) ===
 ol('vurgu (.nfig)', JSON.stringify(htmlToBloklar('<div class="nfig"><b>4×</b><span>fark</span></div>')) ===
    JSON.stringify([{ t: 'vurgu', sayi: '4×', aciklama: 'fark' }]), '');
 ol('bos govde bos dizi', JSON.stringify(htmlToBloklar('')) === '[]', '');
+/* 15 Eyl 2026: satir ici ic bag (nedir yazilari birbirine bagli) */
+const bagli = '<p>bkz. <a href="/nedir/rag-nedir/">RAG</a> ve <a href="https://ornek.com/x">dis</a></p>';
+ol('paragraf icinde guvenli bag korunur (p, ham degil)',
+   htmlToBloklar(bagli)[0].t === 'p' && bloklarToHtml(htmlToBloklar(bagli)) === bagli, '');
+ol('liste ogesinde guvenli bag korunur',
+   htmlToBloklar('<ul><li><a href="/nedir/x/">x</a> y</li></ul>')[0].t === 'liste', '');
+ol('guvensiz bag semasi (javascript:) -> ham',
+   htmlToBloklar('<p><a href="javascript:alert(1)">a</a></p>')[0].t === 'ham', '');
+ol('niteliksiz/fazla nitelikli bag -> ham',
+   htmlToBloklar('<p><a href="/x/" onclick="y">a</a></p>')[0].t === 'ham', '');
 ol('cok blok sirasi korunur',
    bloklarToHtml(htmlToBloklar('<p>a</p><ul><li>x</li></ul><p>b</p>')) === '<p>a</p><ul><li>x</li></ul><p>b</p>', '');
 
@@ -113,6 +123,12 @@ ol('satir ici: <div> DUSER, metni kalir',
    satirIciOku(E('div', E('div', T('a')), T('b'))) === 'ab', '');
 ol('satir ici: < ve & kacirilir',
    satirIciOku(E('div', T('a < b & c'))) === 'a &lt; b &amp; c', '');
+/* 15 Eyl 2026: bag DUZENLEMEDE korunur, guvensiz adres metne iner */
+const A = (href, ...c) => Object.assign(E('a', ...c), { getAttribute: (n) => (n === 'href' ? href : null) });
+ol('satir ici: guvenli <a href> korunur',
+   satirIciOku(E('div', T('bkz. '), A('/nedir/rag-nedir/', T('RAG')))) === 'bkz. <a href="/nedir/rag-nedir/">RAG</a>', '');
+ol('satir ici: javascript: bagi DUSER, metni kalir',
+   satirIciOku(E('div', A('javascript:alert(1)', T('tikla')))) === 'tikla', '');
 
 /* ---- 5) URETILEN HTML PANELIN OKUDUGU BICIMDE ---- */
 const gidisDonus = bloklarToHtml([{ t: 'p', ic: 'a' }, { t: 'vurgu', sayi: '9', aciklama: 'b' }]);

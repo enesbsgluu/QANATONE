@@ -1,0 +1,59 @@
+{
+  "slug": "vlm-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · VLM",
+    "en": "Model Type · VLM"
+  },
+  "title": {
+    "tr": "VLM (Vision-Language Model) nedir?",
+    "en": "What is a vision-language model (VLM)?"
+  },
+  "lede": {
+    "tr": "VLM, görüntü ve metni birlikte anlayan yapay zekâ modelidir. Bir fotoğrafı açıklayabilir ya da bir faturadaki tutarları okuyabilir.",
+    "en": "A VLM is an AI model that understands images and text together. It can describe a photo or read and interpret the amounts on an invoice."
+  },
+  "body": {
+    "tr": [
+      [
+        "VLM nedir?",
+        "<p>Vision-Language Model (görsel-dil modeli), girdi olarak hem görüntü hem metin alabilen ve çıktı olarak genellikle metin üreten modeldir. Telefonunuzla bir tabelanın fotoğrafını çekip \"burada ne yazıyor, Türkçeye çevir\" dediğinizde ya da bir ürün fotoğrafı yükleyip \"bu hangi model?\" diye sorduğunuzda bir VLM kullanırsınız.</p><p>GPT-4o, Gemini ve Claude gibi güncel asistanların görsel okuyabilen sürümleri bu kategoridedir. LLaVA ve Qwen-VL gibi açık kaynak örnekler de vardır.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<p>Bir VLM'nin genellikle iki ana parçası vardır. Görsel kodlayıcı (vision encoder) resmi küçük parçalara böler ve her parçayı modelin anlayacağı <a href=\"/nedir/embedding-nedir/\">vektörlere</a> çevirir. Bu vektörler metnin <a href=\"/nedir/token-nedir/\">tokenlarıyla</a> aynı diziye konur ve bir <a href=\"/nedir/buyuk-dil-modelleri-nedir/\">dil modeli</a> hepsini birlikte işler. Böylece model \"resmin sol üstündeki grafik\" ile sorudaki bir kelime arasında bağ kurabilir.</p>"
+      ],
+      [
+        "Nerelerde kullanılır?",
+        "<ul><li>Belge okuma: fatura, dekont, kimlik ve el yazısı formlardan bilgi çıkarmak.</li><li>E-ticaret: ürün fotoğrafından açıklama ve etiket üretmek, görselle arama yapmak.</li><li>Müşteri desteği: müşterinin gönderdiği arıza fotoğrafını yorumlamak.</li><li>Erişilebilirlik: görme engelli kullanıcılara ortamı ve görselleri anlatmak.</li><li>Kalite kontrol: üretim hattında kusurlu ürünü görüntüden tespit etmek.</li></ul>"
+      ],
+      [
+        "Sınırları",
+        "<p>VLM'ler de <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyon</a> görebilir: fotoğrafta olmayan bir nesneyi \"görebilir\" ya da küçük yazıları yanlış okuyabilir. Nesneleri saymak ve tam konumlarını söylemek hâlâ zayıf oldukları alanlardandır. Bir nesneyi fotoğraftan piksel düzeyinde kesin olarak ayırmak gereken işlerde <a href=\"/nedir/sam-nedir/\">SAM</a> gibi özel modeller daha uygundur.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a VLM?",
+        "<p>A vision-language model takes both images and text as input and usually produces text as output. When you photograph a sign and ask \"what does this say, translate it into English\", or upload a product photo and ask \"which model is this?\", you are using a VLM.</p><p>The image capable versions of current assistants such as GPT-4o, Gemini and Claude belong to this category, and there are open source examples such as LLaVA and Qwen-VL.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>A VLM usually has two main parts. A vision encoder cuts the image into small patches and turns each patch into <a href=\"/en/nedir/embedding-nedir/\">vectors</a> the model can work with. These vectors are placed in the same sequence as the text <a href=\"/en/nedir/token-nedir/\">tokens</a>, and a <a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">language model</a> processes them together. That lets the model connect \"the chart in the top left corner\" with a word in your question.</p>"
+      ],
+      [
+        "Where are VLMs used?",
+        "<ul><li>Document reading: extracting data from invoices, receipts, IDs and handwritten forms.</li><li>E-commerce: writing descriptions and tags from product photos, searching by image.</li><li>Customer support: interpreting a photo of a fault sent by a customer.</li><li>Accessibility: describing surroundings and images to blind and low vision users.</li><li>Quality control: spotting defective products on a production line from images.</li></ul>"
+      ],
+      [
+        "Limits",
+        "<p>VLMs can <a href=\"/en/nedir/halusinasyon-nedir/\">hallucinate</a> too: they may \"see\" an object that is not in the photo or misread small text. Counting objects and giving their exact positions are still weak spots. For jobs that need an object cut out of an image precisely at pixel level, specialised models such as <a href=\"/en/nedir/sam-nedir/\">SAM</a> are a better fit.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

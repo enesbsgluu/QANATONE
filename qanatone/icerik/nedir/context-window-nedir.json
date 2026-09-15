@@ -1,0 +1,59 @@
+{
+  "slug": "context-window-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Temel Kavram · Context Window",
+    "en": "Core Concept · Context Window"
+  },
+  "title": {
+    "tr": "Context window (bağlam penceresi) nedir?",
+    "en": "What is a context window in AI?"
+  },
+  "lede": {
+    "tr": "Context window, dil modelinin tek seferde dikkate alabildiği toplam metindir. Soru, sohbet geçmişi, belgeler ve cevap aynı sınıra girer.",
+    "en": "The context window is the total text a model can consider at once: your question, the chat history, any documents and the answer."
+  },
+  "body": {
+    "tr": [
+      [
+        "Context window nedir?",
+        "<p>Context window, Türkçesiyle bağlam penceresi, bir dil modelinin tek seferde dikkate alabildiği toplam metin miktarıdır. Bu miktara sizin yazdığınız soru, sohbetin önceki mesajları, modele verilen belgeler ve modelin yazdığı cevap birlikte girer. Ölçü birimi kelime ya da sayfa değil, <a href=\"/nedir/token-nedir/\">token</a> sayısıdır.</p><p>Bir benzetmeyle: model, önüne konan kâğıtları okuyabilen ama masası sınırlı büyüklükte olan biri gibidir. Masaya sığmayan sayfa okunmaz. Pencere dolduğunda uygulama en eski mesajları ya keser ya da özetler; model onları artık görmez.</p>"
+      ],
+      [
+        "Pencere büyüdükçe ne değişir?",
+        "<p>İlk sohbet modellerinin penceresi birkaç bin tokenla sınırlıydı. Bugün yüz binlerce, bazı modellerde milyonu aşan pencereler var. Uzun bir sözleşmeyi, bir kitabı ya da bir yazılım projesinin büyük kısmını tek seferde modele vermek artık mümkün.</p><p>Büyük pencere her sorunu çözmez. Uzun girdilerde modeller metnin başındaki ve sonundaki bilgiyi ortadakinden daha iyi kullanma eğilimindedir; araştırmacılar bu etkiye \"lost in the middle\" (ortada kaybolma) diyor. Pencereyi doldurmak ayrıca ücreti ve cevap süresini artırır, çünkü model her istekte bütün metni yeniden işler.</p>"
+      ],
+      [
+        "Bağlam penceresi hafıza mıdır?",
+        "<p>Hayır, ikisi sık karıştırılır. Pencere, o anki konuşmada modelin gözünün önünde duran metindir ve sohbet kapanınca içindekiler gider. Konuşmalar arasında hatırlama için ayrı bir <a href=\"/nedir/ai-memory-nedir/\">memory (hafıza)</a> katmanı gerekir: bilgiler bir yerde saklanır ve gerektiğinde pencereye geri konur.</p>"
+      ],
+      [
+        "Pencereyi verimli kullanmak",
+        "<p>Pratikte pencereye hangi metni koyduğunuz, pencerenin boyutundan daha çok fark yaratır. Yüzlerce sayfalık bir arşivin tamamını göndermek yerine soruyla ilgili parçaları seçip vermek (<a href=\"/nedir/rag-nedir/\">RAG</a> bunu yapar), uzun sohbetleri ara ara özetlemek ve <a href=\"/nedir/system-prompt-nedir/\">system prompt</a> metnini kısa tutmak hem cevabın kalitesini hem maliyeti iyileştirir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a context window?",
+        "<p>The context window is the total amount of text a language model can consider in a single request. It includes your question, earlier messages in the chat, any documents you give the model and the answer the model writes. It is measured in <a href=\"/en/nedir/token-nedir/\">tokens</a>, not words or pages.</p><p>Think of the model as someone who can read any paper placed on their desk, but the desk has a fixed size. Pages that do not fit are not read. When the window fills up, the application cuts or summarizes the oldest messages and the model no longer sees them.</p>"
+      ],
+      [
+        "What changes as windows grow?",
+        "<p>Early chat models had windows of a few thousand tokens. Today windows reach hundreds of thousands of tokens, and some models go past a million. You can now give a model a long contract, a book or much of a software project in one go.</p><p>A bigger window does not solve everything. With long inputs, models tend to use information at the start and end better than information in the middle, an effect researchers call \"lost in the middle\". Filling the window also raises cost and response time, because the model processes the whole text again on every request.</p>"
+      ],
+      [
+        "Is the context window the same as memory?",
+        "<p>No, although the two are often confused. The window is the text in front of the model during the current conversation, and it is gone when the chat ends. Remembering across conversations needs a separate <a href=\"/en/nedir/ai-memory-nedir/\">memory</a> layer that stores information and puts it back into the window when needed.</p>"
+      ],
+      [
+        "Using the window well",
+        "<p>In practice, what you put in the window matters more than its size. Picking the passages that match the question instead of sending a whole archive (this is what <a href=\"/en/nedir/rag-nedir/\">RAG</a> does), summarizing long chats from time to time and keeping the <a href=\"/en/nedir/system-prompt-nedir/\">system prompt</a> short improve both answer quality and cost.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

@@ -1,0 +1,59 @@
+{
+  "slug": "halusinasyon-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Güvenilirlik · Halüsinasyon",
+    "en": "Reliability · Hallucination"
+  },
+  "title": {
+    "tr": "Yapay zekâ halüsinasyonu nedir, neden olur?",
+    "en": "What is AI hallucination and why does it happen?"
+  },
+  "lede": {
+    "tr": "Halüsinasyon, yapay zekânın yanlış bir bilgiyi kendinden emin bir dille üretmesidir. Uydurma kaynaklar ve yanlış tarihler tipik örnektir.",
+    "en": "AI hallucination is when a model states something false with full confidence. Invented sources and wrong dates are typical examples."
+  },
+  "body": {
+    "tr": [
+      [
+        "Halüsinasyon nedir?",
+        "<p>Bir dil modelinden kaynak istediğinizde var olmayan bir makale adı, olmayan bir kanun maddesi ya da hiç çıkmamış bir ürün özelliği yazabilir. Metin akıcıdır, ton kendinden emindir ama bilgi yanlıştır. Buna halüsinasyon denir. Ortada bir hata mesajı olmadığı için fark etmek zordur.</p><p>2023'te ABD'de bir avukatın, ChatGPT'nin uydurduğu mahkeme kararlarını dilekçesinde kullandığı için yaptırımla karşılaşması bu riskin en çok bilinen örneklerinden biri oldu.</p>"
+      ],
+      [
+        "Neden olur?",
+        "<p><a href=\"/nedir/buyuk-dil-modelleri-nedir/\">Büyük dil modelleri</a> bir bilgi bankasından kayıt çekmez, metnin devamında en olası kelimeleri üretir. Eğitim boyunca cümleyi makul biçimde tamamlamayı öğrenirler; bilgilerinin sınırında durup \"bilmiyorum\" demek bu eğitimin kendiliğinden ortaya çıkan bir sonucu değildir. Soru, modelin eğitimde yeterince görmediği bir konuya ya da eğitimden sonra olan bir olaya dairse model yine akıcı bir cevap kurar.</p><p>Yanlış varsayım içeren sorular riski artırır. Hiç açılmamış bir dava için \"X şirketinin 2019'daki davası neyle sonuçlandı?\" diye sorarsanız, model bir sonuç uydurmaya yatkındır.</p>"
+      ],
+      [
+        "Nasıl azaltılır?",
+        "<ul><li>Modeli doğru bilgiyle besleyin: <a href=\"/nedir/rag-nedir/\">RAG</a> ile cevabın dayanacağı belgeleri prompta koymak en etkili yöntemlerden biridir.</li><li>Cevapta hangi belgeye dayandığını göstermesini isteyin; belgeye bağlanan bir iddia kontrol edilebilir.</li><li>Modele bilmediğinde bunu söyleme izni verin ve bu kuralı <a href=\"/nedir/system-prompt-nedir/\">system prompt</a> içinde açıkça yazın.</li><li>Hukuk, sağlık, finans ve fiyat gibi kritik alanlarda çıktıyı <a href=\"/nedir/guardrail-nedir/\">guardrail</a> kontrolleriyle ya da insan onayıyla doğrulayın.</li></ul><p><a href=\"/nedir/temperature-nedir/\">Temperature</a> değerini düşürmek cevabı tutarlı yapar ama yanlış bilgiyi düzeltmez.</p>"
+      ],
+      [
+        "Tamamen ortadan kalkar mı?",
+        "<p>Bugünkü teknolojiyle hayır. Yeni nesil modeller daha az halüsinasyon görse de oran sıfır değildir. Bu yüzden müşteriyle konuşan ya da karar üreten bir sistem, halüsinasyonun olacağını varsayarak tasarlanır: model yalnız izin verilen bilgiden cevap verir, emin olmadığında konuşmayı bir insana devreder.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is hallucination?",
+        "<p>Ask a language model for sources and it may write the title of a paper that does not exist, a legal clause that was never passed or a product feature that was never released. The text is fluent and the tone confident, but the information is wrong. That is hallucination. There is no error message, which is what makes it hard to spot.</p><p>In 2023 a US lawyer was sanctioned for filing a brief that cited court decisions ChatGPT had invented, one of the best known examples of the risk.</p>"
+      ],
+      [
+        "Why does it happen?",
+        "<p><a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">Large language models</a> do not look records up in a database; they generate the most likely next words. Training teaches them to complete text plausibly, and stopping at the edge of their knowledge to say \"I don't know\" does not come naturally out of that training. When a question touches something rare in the training data or something that happened after training, the model still builds a fluent answer.</p><p>Questions with false premises raise the risk. Ask \"how did company X's 2019 lawsuit end?\" about a lawsuit that never existed and the model is likely to invent an outcome.</p>"
+      ],
+      [
+        "How to reduce it",
+        "<ul><li>Feed the model the right information: putting the source documents into the prompt with <a href=\"/en/nedir/rag-nedir/\">RAG</a> is one of the most effective methods.</li><li>Ask it to show which document each claim comes from, so claims can be checked.</li><li>Allow the model to say when it does not know, and state that rule clearly in the <a href=\"/en/nedir/system-prompt-nedir/\">system prompt</a>.</li><li>In critical areas such as law, health, finance and pricing, verify output with <a href=\"/en/nedir/guardrail-nedir/\">guardrail</a> checks or human approval.</li></ul><p>Lowering <a href=\"/en/nedir/temperature-nedir/\">temperature</a> makes answers consistent but does not fix wrong information.</p>"
+      ],
+      [
+        "Can it be eliminated?",
+        "<p>Not with today's technology. Newer models hallucinate less, but the rate is not zero. Systems that talk to customers or make decisions are therefore designed on the assumption that hallucinations will happen: the model answers only from approved information and hands the conversation to a person when it is unsure.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

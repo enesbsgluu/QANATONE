@@ -1,0 +1,59 @@
+{
+  "slug": "token-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Temel Kavram · Token",
+    "en": "Core Concept · Token"
+  },
+  "title": {
+    "tr": "Token nedir? Yapay zekâ metni nasıl sayar",
+    "en": "What is a token in AI and how is it counted?"
+  },
+  "lede": {
+    "tr": "Token, dil modelinin metni işlerken kullandığı en küçük parçadır. Ücret, hız ve modelin aynı anda okuyabildiği metin tokenla ölçülür.",
+    "en": "A token is the smallest piece of text a language model works with. Pricing, speed and how much it can read at once are measured in tokens."
+  },
+  "body": {
+    "tr": [
+      [
+        "Token nedir?",
+        "<p>Token, bir dil modelinin metni işlerken kullandığı en küçük birimdir. Model cümleyi harf harf ya da kelime kelime okumaz. Metni önce tokenlara böler, her tokenı bir sayıya çevirir ve bütün hesabı bu sayılarla yapar. Bir token bazen tam bir kelime, bazen kelimenin bir parçası, bazen de tek bir noktalama işaretidir.</p><p>Kısa ve sık kullanılan \"ev\" gibi bir kelime tek token olabilir. \"Evlerimizden\" gibi uzun bir kelime ise birkaç parçaya bölünür. Bölmenin nasıl yapılacağı modelin hazırlanması sırasında belirlenir, bu yüzden aynı cümle iki farklı modelde farklı sayıda token tutabilir.</p>"
+      ],
+      [
+        "Metin tokenlara nasıl bölünür?",
+        "<p>Bu işi yapan bileşene tokenizer denir. Yaygın yöntemler, eğitim verisinde sık geçen harf dizilerini tek parça olarak saklar; en bilineni BPE (byte pair encoding). Sık görülen diziler tek token olur, nadir görülenler küçük parçalara ayrılır.</p><p>OpenAI'ın kullanıcılarına verdiği kaba hesaba göre İngilizce metinde bir token ortalama dört karaktere, yani bir kelimenin yaklaşık dörtte üçüne denk gelir. Türkçe sondan eklemeli bir dildir ve tokenizer'lar çoğunlukla İngilizce ağırlıklı veriyle hazırlanır. Bu yüzden aynı içeriği taşıyan Türkçe bir metin genellikle daha fazla token tutar.</p>"
+      ],
+      [
+        "Token sayısı neyi belirler?",
+        "<p>API üzerinden kullanılan modellerin çoğu, modele gönderilen ve modelin ürettiği token sayısına göre ücretlendirilir. Üretilen tokenlar genellikle okunanlardan daha pahalıdır. Uzun bir talimat ve uzun bir cevap faturaya doğrudan yansır.</p><p>Modelin tek seferde dikkate alabildiği metin de token cinsinden sınırlıdır. Bu sınıra <a href=\"/nedir/context-window-nedir/\">bağlam penceresi (context window)</a> denir. Cevap hızı da tokenla ilgilidir: model cevabı token token üretir, uzun bir cevabın ekrana gelmesi bu yüzden daha uzun sürer.</p>"
+      ],
+      [
+        "Token harcamasını azaltmak",
+        "<p>Aynı işi daha az tokenla yaptırmak hem maliyeti hem bekleme süresini düşürür. Kısa ve net bir <a href=\"/nedir/prompt-nedir/\">prompt</a> yazmak, uzun belgelerin yalnız ilgili bölümünü göndermek ve cevabın uzunluğunu açıkça sınırlamak ilk akla gelen yollardır.</p><p>Kurumsal belgelerle çalışan sistemlerde bu seçimi <a href=\"/nedir/rag-nedir/\">RAG</a> yapar: her soruda arşivin tamamı gönderilmez, soruyla ilgili birkaç parça seçilip modele verilir. Böylece hem fatura hem cevap süresi kısalır.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a token?",
+        "<p>A token is the smallest unit a language model uses when it processes text. The model does not read letter by letter or word by word. It first splits the text into tokens, turns each token into a number and does all of its math on those numbers. A token can be a whole word, part of a word or a single punctuation mark.</p><p>A short, common word like \"house\" is usually one token. A long or rare word gets split into several pieces. The splitting rules are fixed when the model is built, so the same sentence can come out as a different number of tokens in two different models.</p>"
+      ],
+      [
+        "How is text split into tokens?",
+        "<p>The component that does this is called a tokenizer. Common methods keep frequent character sequences from the training data as single pieces; the best known is BPE (byte pair encoding). Frequent sequences become one token, rare ones are broken into smaller parts.</p><p>OpenAI's rule of thumb for English is that one token is about four characters, or roughly three quarters of a word. Languages that build long words from many suffixes, such as Turkish, usually need more tokens for the same content, because most tokenizers are built mainly on English text.</p>"
+      ],
+      [
+        "What does the token count decide?",
+        "<p>Most models used through an API are priced by the number of tokens sent in and generated. Generated tokens usually cost more than input tokens, so a long instruction and a long answer both show up on the bill.</p><p>The amount of text a model can consider at once is also limited in tokens. That limit is the <a href=\"/en/nedir/context-window-nedir/\">context window</a>. Speed depends on tokens too: the model writes its answer one token at a time, so a long answer takes longer to appear.</p>"
+      ],
+      [
+        "Spending fewer tokens",
+        "<p>Getting the same job done with fewer tokens lowers both cost and waiting time. Writing a short, clear <a href=\"/en/nedir/prompt-nedir/\">prompt</a>, sending only the relevant part of a long document and setting an explicit length for the answer are the simplest ways to do it.</p><p>Systems that work with company documents handle this with <a href=\"/en/nedir/rag-nedir/\">RAG</a>: instead of sending the whole archive with every question, they pick the few passages that matter and give only those to the model.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

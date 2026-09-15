@@ -1,0 +1,59 @@
+{
+  "slug": "orkestrasyon-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Mimari · Orkestrasyon",
+    "en": "Architecture · Orchestration"
+  },
+  "title": {
+    "tr": "Orkestrasyon nedir? Yapay zekâ sistemlerini bağlamak",
+    "en": "What is orchestration in AI systems?"
+  },
+  "lede": {
+    "tr": "Orkestrasyon, birden fazla model, araç ve adımı bir iş akışında yönetmektir. Hangi işin ne zaman, hangi bileşenle yapılacağını belirler.",
+    "en": "Orchestration coordinates several models, tools and steps in one workflow, deciding which job runs when and with which component."
+  },
+  "body": {
+    "tr": [
+      [
+        "Orkestrasyon nedir?",
+        "<p>Bir orkestrada her müzisyen kendi enstrümanını çalar, şef hepsinin doğru anda girmesini sağlar. Yapay zekâ sistemlerinde de gerçek işler çoğu zaman tek bir model çağrısıyla bitmez. Bir müşteri e-postasını anlamak, müşteriyi CRM'de bulmak, sipariş durumunu sorgulamak, cevabı yazmak ve gerekirse bir insana devretmek ayrı adımlardır. Orkestrasyon bu adımları sıraya koyan, aralarında veri taşıyan ve bir adım başarısız olunca ne yapılacağına karar veren katmandır.</p>"
+      ],
+      [
+        "Neyi koordine eder?",
+        "<ul><li>Modeller: basit sınıflandırma için hızlı ve ucuz bir <a href=\"/nedir/slm-nedir/\">küçük model</a>, karmaşık akıl yürütme için büyük bir model.</li><li>Araçlar: <a href=\"/nedir/function-calling-nedir/\">function calling</a> ile çağrılan API'ler, veritabanları ve arama.</li><li>Bilgi: <a href=\"/nedir/rag-nedir/\">RAG</a> ile getirilen belgeler ve <a href=\"/nedir/ai-memory-nedir/\">hafıza</a>.</li><li>Ajanlar: her biri bir işte uzman birden fazla <a href=\"/nedir/ai-agent-nedir/\">ajan</a>; biri araştırır, biri yazar, biri kontrol eder.</li><li>Kurallar: <a href=\"/nedir/guardrail-nedir/\">guardrail</a> kontrolleri, insan onayı gereken adımlar, hata ve yeniden deneme mantığı.</li></ul>"
+      ],
+      [
+        "Hangi araçlarla yapılır?",
+        "<p>LangChain, LangGraph ve LlamaIndex, dil modeli uygulamaları için yaygın açık kaynak çatılardır. n8n ve Make gibi araçlar ise görsel akış editörleriyle yapay zekâ adımlarını mevcut iş sistemlerine bağlar. Büyük model sağlayıcıları da kendi ajan geliştirme kitlerini sunuyor. Basit akışlar için birkaç satır kod yeterli olabilir; araç seçiminden önce akışın kendisini doğru tasarlamak gerekir.</p>"
+      ],
+      [
+        "Neden önemli?",
+        "<p>İşletmelerde güvenilir sonucu çoğunlukla tek bir güçlü model değil, iyi kurulmuş bir akış verir. Akışta her adım ölçülebilir, hatası bulunabilir ve gerektiğinde değiştirilebilir. Maliyet de düşer, çünkü her adımda işe uygun en ucuz bileşen seçilebilir.</p><p>QANATONE'un çalışma ilkelerinden biri de budur: her şeyi sıfırdan kurmak yerine doğru kanalları ve araçları birbirine bağlamak. <a href=\"/hizmetler/otomasyon/\">Otomasyon</a> projelerimiz bu yaklaşımla kurulur.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is orchestration?",
+        "<p>In an orchestra each musician plays their own instrument and the conductor makes sure everyone comes in at the right moment. Real work in AI systems rarely ends with a single model call. Understanding a customer email, finding the customer in the CRM, checking the order status, writing the reply and handing over to a person if needed are separate steps. Orchestration is the layer that puts those steps in order, passes data between them and decides what happens when a step fails.</p>"
+      ],
+      [
+        "What does it coordinate?",
+        "<ul><li>Models: a fast, cheap <a href=\"/en/nedir/slm-nedir/\">small model</a> for simple classification and a large model for complex reasoning.</li><li>Tools: APIs, databases and search called through <a href=\"/en/nedir/function-calling-nedir/\">function calling</a>.</li><li>Knowledge: documents retrieved with <a href=\"/en/nedir/rag-nedir/\">RAG</a> and <a href=\"/en/nedir/ai-memory-nedir/\">memory</a>.</li><li>Agents: several <a href=\"/en/nedir/ai-agent-nedir/\">agents</a>, each specialised; one researches, one writes, one checks.</li><li>Rules: <a href=\"/en/nedir/guardrail-nedir/\">guardrail</a> checks, steps that need human approval, error handling and retries.</li></ul>"
+      ],
+      [
+        "Which tools are used?",
+        "<p>LangChain, LangGraph and LlamaIndex are widely used open source frameworks for language model applications. Tools such as n8n and Make connect AI steps to existing business systems through visual workflow editors. Major model providers also offer their own agent development kits. Simple flows may need only a few lines of code; designing the flow itself comes before choosing a tool.</p>"
+      ],
+      [
+        "Why does it matter?",
+        "<p>In businesses, reliable results usually come from a well built workflow rather than a single powerful model. In a workflow every step can be measured, debugged and replaced when needed. Costs fall too, because each step can use the cheapest component that does the job.</p><p>This is one of QANATONE's working principles: connecting the right channels and tools instead of building everything from scratch. Our <a href=\"/en/hizmetler/otomasyon/\">automation</a> projects are built this way.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

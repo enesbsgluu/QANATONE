@@ -1,0 +1,59 @@
+{
+  "slug": "embedding-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Mimari · Embedding",
+    "en": "Architecture · Embedding"
+  },
+  "title": {
+    "tr": "Embedding nedir? Anlamı sayıya çevirmek",
+    "en": "What is an embedding? Turning meaning into numbers"
+  },
+  "lede": {
+    "tr": "Embedding, bir metni ya da görseli anlamını koruyan bir sayı listesine çevirmektir. Anlamca yakın içerikler yakın sayılarla temsil edilir.",
+    "en": "An embedding turns text or an image into a list of numbers that keeps its meaning. Similar content gets similar numbers."
+  },
+  "body": {
+    "tr": [
+      [
+        "Embedding nedir?",
+        "<p>Bilgisayar anlamı doğrudan kavrayamaz, sayılarla çalışır. Embedding, bir metni (ya da görseli, sesi) yüzlerce veya binlerce sayıdan oluşan bir listeye, yani bir vektöre çevirir. Bu dönüşümü yapan modele embedding modeli denir. Vektördeki tek tek sayılar insan için bir şey ifade etmez; önemli olan vektörlerin birbirine göre konumudur.</p>"
+      ],
+      [
+        "Anlam nasıl sayıya dönüşür?",
+        "<p>Bunu bir harita gibi düşünebilirsiniz. Embedding modeli her metne çok boyutlu bir uzayda bir konum verir ve anlamca yakın metinler yakın noktalara düşer. \"Kira sözleşmesini feshetmek\" ile \"ev sahibiyle anlaşmayı bitirmek\" ortak kelime taşımasa da yan yana durur. \"Kira\" ile \"banka faizi\" ise birbirinden uzak kalır.</p><p>İki vektörün ne kadar benzediği genellikle kosinüs benzerliği adlı bir ölçüyle hesaplanır. Sonuç 1'e yaklaştıkça iki içerik anlamca birbirine yaklaşır.</p>"
+      ],
+      [
+        "Nerelerde kullanılır?",
+        "<ul><li>Anlamsal arama: kullanıcının yazdığı kelimeler belgede birebir geçmese de doğru belgeyi bulmak.</li><li><a href=\"/nedir/rag-nedir/\">RAG</a>: soruya en uygun belge parçalarını seçip dil modeline vermek.</li><li>Öneri sistemleri: benzer ürünleri ve benzer içerikleri bulmak.</li><li>Kümeleme ve sınıflandırma: binlerce müşteri yorumunu konulara ayırmak, tekrar eden destek taleplerini tespit etmek.</li></ul><p>Yapay zekâ destekli aramalar da içeriği anlam üzerinden eşleştirir. Bir soruya açık ve doğrudan cevap veren sayfalar bu yüzden bu aramalarda daha kolay seçilir; <a href=\"/hizmetler/geo/\">GEO</a> çalışması bu mantığa dayanır.</p>"
+      ],
+      [
+        "Vektörler nerede saklanır?",
+        "<p>Birkaç yüz belge için vektörleri basit bir dosyada tutmak yeter. Sayı milyonlara çıkınca en yakın vektörleri hızla bulmak için <a href=\"/nedir/vektor-veritabani-nedir/\">vektör veritabanı</a> kullanılır.</p><p>Bir uyarı: aynı sistemde sorgular ve belgeler aynı embedding modeliyle vektöre çevrilmelidir. Farklı modellerin ürettiği vektörler farklı haritalarda durur ve birbiriyle karşılaştırılamaz.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is an embedding?",
+        "<p>Computers cannot grasp meaning directly; they work with numbers. An embedding turns a piece of text (or an image or audio clip) into a list of hundreds or thousands of numbers, called a vector. The model that does this is an embedding model. The individual numbers mean nothing to a person. What matters is where vectors sit relative to each other.</p>"
+      ],
+      [
+        "How does meaning become numbers?",
+        "<p>Think of it as a map. The embedding model gives every text a position in a space with many dimensions, and texts with similar meaning land close together. \"Terminating a lease\" and \"ending the agreement with my landlord\" share no words but sit side by side, while \"rent\" and \"bank interest\" stay far apart.</p><p>Similarity between two vectors is usually measured with cosine similarity. The closer the score is to 1, the closer the two pieces of content are in meaning.</p>"
+      ],
+      [
+        "Where are embeddings used?",
+        "<ul><li>Semantic search: finding the right document even when it does not contain the user's exact words.</li><li><a href=\"/en/nedir/rag-nedir/\">RAG</a>: choosing the document passages that best fit a question and handing them to a language model.</li><li>Recommendations: finding similar products and similar content.</li><li>Clustering and classification: grouping thousands of customer reviews by topic or spotting repeated support requests.</li></ul><p>AI powered search also matches content by meaning, which is why pages that answer a question clearly and directly are picked more easily. That is the logic behind <a href=\"/en/hizmetler/geo/\">GEO</a> work.</p>"
+      ],
+      [
+        "Where are vectors stored?",
+        "<p>For a few hundred documents a simple file is enough. Once you reach millions, a <a href=\"/en/nedir/vektor-veritabani-nedir/\">vector database</a> is used to find the nearest vectors quickly.</p><p>One caution: queries and documents in the same system must be embedded with the same model. Vectors from different models live on different maps and cannot be compared.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

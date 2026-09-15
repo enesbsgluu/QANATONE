@@ -1,0 +1,59 @@
+{
+  "slug": "lcm-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · LCM",
+    "en": "Model Type · LCM"
+  },
+  "title": {
+    "tr": "LCM (Large Concept Model) nedir?",
+    "en": "What is a Large Concept Model (LCM)?"
+  },
+  "lede": {
+    "tr": "LCM, metni kelimeler yerine bütün cümleler, yani fikirler düzeyinde işleyen deneysel bir model türüdür. İlk örneğini Meta tanıttı.",
+    "en": "An LCM is an experimental AI model that works with whole sentences, or ideas, instead of individual words. Meta introduced the first one."
+  },
+  "body": {
+    "tr": [
+      [
+        "LCM nedir?",
+        "<p>Bugünkü <a href=\"/nedir/buyuk-dil-modelleri-nedir/\">büyük dil modelleri</a> (LLM) metni <a href=\"/nedir/token-nedir/\">token</a> token üretir; her adımda bir sonraki kelime parçasını tahmin eder. İnsanlar ise konuşurken genellikle önce ne söyleyeceğini fikir olarak kurar, sonra kelimeleri seçer. Large Concept Model (büyük kavram modeli) bu ikinci yola yakın bir yaklaşım dener: tahmin ettiği birim bir kelime parçası değil, bir cümlenin anlamını temsil eden \"kavram\"dır.</p><p>Meta'nın araştırma ekibi bu yaklaşımı Aralık 2024'te yayımladığı bir makaleyle tanıttı.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<ul><li>Metin cümlelere bölünür.</li><li>Her cümle, anlamını taşıyan bir <a href=\"/nedir/embedding-nedir/\">embedding</a> vektörüne çevrilir. Meta bunun için birçok dili aynı anlam uzayında temsil eden SONAR adlı bir sistem kullandı.</li><li>Model, önceki cümlelerin vektörlerine bakarak bir sonraki cümlenin vektörünü tahmin eder.</li><li>Tahmin edilen vektör, istenen dilde yeniden cümleye çevrilir.</li></ul><p>Anlam dilden bağımsız bir biçimde temsil edildiği için aynı model, fikir düzeyinde birçok dilde çalışabilir.</p>"
+      ],
+      [
+        "LLM ile farkı ne?",
+        "<p>Bir benzetme: LLM, yazıyı klavyede harf harf ilerleterek yazan biri gibidir. LCM ise önce paragrafın ana fikirlerini sıralayan, sonra cümleleri kuran bir yazara benzer. Teorik avantajı, uzun metinlerde tutarlılığı ve dilden bağımsız düşünmeyi kolaylaştırmasıdır.</p><p>LCM'ler bugün araştırma aşamasındadır. Yaygın kullanılan sohbet asistanları token tabanlı LLM'lerle çalışmaya devam ediyor.</p>"
+      ],
+      [
+        "Neden izlemeye değer?",
+        "<p>LCM, dil modellerinin kelime tahmininden daha soyut bir düzeyde çalışabileceğini gösteren denemelerden biridir. Kısa vadede işletmelerin doğrudan kullanacağı bir ürün değildir, ama yapay zekâ modellerinin hangi yöne evrilebileceğini anlamak için izlemeye değer bir fikirdir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is an LCM?",
+        "<p>Today's <a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">large language models</a> (LLMs) generate text one <a href=\"/en/nedir/token-nedir/\">token</a> at a time, predicting the next piece of a word at every step. People, when they speak, usually form the idea first and then choose the words. A Large Concept Model tries something closer to that second path: the unit it predicts is a \"concept\" that represents the meaning of a whole sentence.</p><p>Meta's research team introduced the approach in a paper published in December 2024.</p>"
+      ],
+      [
+        "How does it work?",
+        "<ul><li>Text is split into sentences.</li><li>Each sentence is turned into an <a href=\"/en/nedir/embedding-nedir/\">embedding</a> vector that carries its meaning. Meta used a system called SONAR, which represents many languages in the same meaning space.</li><li>The model looks at the vectors of earlier sentences and predicts the vector of the next one.</li><li>The predicted vector is turned back into a sentence in the desired language.</li></ul><p>Because meaning is represented independently of language, the same model can work at the level of ideas across many languages.</p>"
+      ],
+      [
+        "How is it different from an LLM?",
+        "<p>An analogy: an LLM is like someone typing a text one keystroke at a time. An LCM resembles a writer who first lines up the main ideas of a paragraph and then builds the sentences. The theoretical advantage is better coherence over long texts and reasoning that does not depend on a particular language.</p><p>LCMs are still at the research stage. Widely used chat assistants continue to run on token based LLMs.</p>"
+      ],
+      [
+        "Why follow it?",
+        "<p>The LCM is one of the experiments showing that language models may be able to work at a more abstract level than word prediction. It is not something businesses will use directly in the short term, but it is a useful idea to watch for where AI models may be heading.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

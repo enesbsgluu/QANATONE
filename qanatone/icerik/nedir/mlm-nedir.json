@@ -1,0 +1,59 @@
+{
+  "slug": "mlm-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · MLM",
+    "en": "Model Type · MLM"
+  },
+  "title": {
+    "tr": "MLM (Masked Language Model) nedir?",
+    "en": "What is a masked language model (MLM)?"
+  },
+  "lede": {
+    "tr": "MLM, cümledeki gizli kelimeleri tahmin ederek eğitilen dil modelidir. Metin yazmaktan çok metni anlamada güçlüdür; en bilinen örneği BERT.",
+    "en": "An MLM is a language model trained by guessing hidden words. It understands text better than it writes it; BERT is the best known one."
+  },
+  "body": {
+    "tr": [
+      [
+        "MLM nedir?",
+        "<p>Masked Language Model (maskeli dil modeli), eğitim sırasında cümlelerdeki bazı kelimeleri gizleyip modelden bunları tahmin etmesini isteyen bir yöntemle öğrenen modeldir. \"Sabah kahvaltıda [MASKE] ile çay içtik\" cümlesinde model boşluğa \"simit\" ya da \"peynir\" gibi uygun bir kelime koymayı öğrenir.</p><p>Bu tür modellerin en bilineni Google'ın 2018'de tanıttığı BERT'tir. BERT eğitim sırasında kelimelerin yaklaşık yüzde 15'ini gizler.</p>"
+      ],
+      [
+        "GPT tipi modellerden farkı",
+        "<p>ChatGPT'nin arkasındaki GPT tipi modeller metni soldan sağa okur ve bir sonraki kelimeyi tahmin eder; bu yüzden metin üretmede iyidirler. MLM ise gizlenen kelimeyi tahmin ederken cümlenin hem solundaki hem sağındaki kelimelere bakar. Bu çift yönlü okuma, bir kelimenin anlamını bağlamıyla birlikte kavramada avantaj sağlar ama akıcı uzun metin yazmaya uygun değildir.</p><p>GPT tipi model hikâyeyi devam ettiren bir yazara benzer. MLM ise boşluk doldurma sorularını cümlenin tamamını görerek çözen bir okura benzer.</p>"
+      ],
+      [
+        "Nerelerde kullanılır?",
+        "<p>MLM'ler bugün sohbet ekranında değil, arka planda çalışır:</p><ul><li>Arama: sorgu ile belge arasındaki anlam benzerliğini ölçmek. Google, 2019'da BERT'i arama sonuçlarını iyileştirmek için kullanmaya başladığını duyurdu.</li><li><a href=\"/nedir/embedding-nedir/\">Embedding</a> üretmek: <a href=\"/nedir/rag-nedir/\">RAG</a> sistemlerinde kullanılan birçok embedding modeli BERT ailesinden gelir.</li><li>Sınıflandırma: spam tespiti, duygu analizi, müşteri taleplerini konulara ayırma.</li><li>Varlık tanıma: metinden kişi, şirket, tarih ve tutar çıkarmak.</li></ul>"
+      ],
+      [
+        "Hâlâ önemli mi?",
+        "<p>Evet. Büyük üretken modeller gündemi kaplasa da MLM'ler küçük, hızlı ve ucuz oldukları için anlama ve sınıflandırma işlerinde yaygın biçimde kullanılmaya devam ediyor. RoBERTa, DeBERTa ve Türkçe için eğitilmiş BERTurk bu ailenin bilinen üyeleridir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is an MLM?",
+        "<p>A masked language model learns by hiding some words in sentences during training and asking the model to guess them. In \"We had tea and [MASK] for breakfast\", the model learns to fill the gap with a fitting word such as \"toast\" or \"eggs\".</p><p>The best known model of this kind is BERT, introduced by Google in 2018. BERT hides about 15 percent of the words during training.</p>"
+      ],
+      [
+        "How is it different from GPT style models?",
+        "<p>The GPT style models behind ChatGPT read text left to right and predict the next word, which makes them good at generating text. An MLM looks at the words on both the left and the right of the gap when it guesses. That two way reading helps it grasp a word's meaning in context, but it is not suited to writing long, fluent text.</p><p>A GPT style model is like a writer continuing a story. An MLM is like a reader solving fill in the blank questions while seeing the whole sentence.</p>"
+      ],
+      [
+        "Where are MLMs used?",
+        "<p>Today MLMs work behind the scenes rather than in the chat window:</p><ul><li>Search: measuring how closely a query and a document match in meaning. Google announced in 2019 that it had started using BERT to improve search results.</li><li>Producing <a href=\"/en/nedir/embedding-nedir/\">embeddings</a>: many embedding models used in <a href=\"/en/nedir/rag-nedir/\">RAG</a> systems come from the BERT family.</li><li>Classification: spam detection, sentiment analysis, sorting customer requests by topic.</li><li>Entity recognition: pulling people, companies, dates and amounts out of text.</li></ul>"
+      ],
+      [
+        "Do they still matter?",
+        "<p>Yes. Large generative models dominate the headlines, but MLMs are small, fast and cheap, so they remain widely used for understanding and classification. RoBERTa, DeBERTa and BERTurk, trained for Turkish, are well known members of the family.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

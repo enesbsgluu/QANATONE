@@ -1,0 +1,59 @@
+{
+  "slug": "temperature-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Ayarı · Temperature",
+    "en": "Model Settings · Temperature"
+  },
+  "title": {
+    "tr": "Temperature nedir? Modelin yaratıcılık ayarı",
+    "en": "What is temperature in AI models?"
+  },
+  "lede": {
+    "tr": "Temperature, modelin sonraki kelimeyi seçerken ne kadar risk alacağını belirler. Düşük değer tutarlı, yüksek değer çeşitli cevap verir.",
+    "en": "Temperature sets how much risk a model takes when picking the next word. Low values give consistent answers, high values varied ones."
+  },
+  "body": {
+    "tr": [
+      [
+        "Temperature nedir?",
+        "<p>Dil modeli her adımda bir sonraki <a href=\"/nedir/token-nedir/\">token</a> için olası adayların listesini ve her birinin olasılığını hesaplar. Temperature (sıcaklık) bu olasılıkların nasıl kullanılacağını ayarlar. Düşük temperature'da model hemen her zaman en olası adayı seçer. Yüksek temperature'da daha düşük olasılıklı adaylara da şans verir; cevaplar çeşitlenir, bazen şaşırtıcı hale gelir.</p><p>\"Kahvaltıda en çok ... yenir\" cümlesini düşünün. Düşük temperature neredeyse her seferinde \"peynir\" gibi en olası kelimeyi seçer. Yüksek temperature bazen \"simit\", bazen \"menemen\" der.</p>"
+      ],
+      [
+        "Hangi değer ne işe yarar?",
+        "<p>Değer çoğu API'de 0 ile 1 ya da 0 ile 2 arasında ayarlanır. Veri çıkarmak, kod yazmak ve sınıflandırma yapmak gibi tek doğru cevabı olan işlerde düşük değerler kullanılır. Reklam metni, isim önerisi ya da beyin fırtınası gibi çeşitlilik istenen işlerde daha yüksek değerler denenir. Değer çok yükseldiğinde metin tutarlılığını kaybetmeye ve anlamsızlaşmaya başlar.</p>"
+      ],
+      [
+        "Temperature 0 her zaman aynı cevabı verir mi?",
+        "<p>Çoğunlukla verir ama garantisi yoktur. Donanım ve yazılım düzeyindeki küçük hesaplama farkları yüzünden aynı prompt sıfır temperature'da bile zaman zaman farklı çıktı verebilir. Birebir tekrarlanabilirlik gerekiyorsa üretilen çıktıyı kaydedip yeniden kullanmak daha güvenlidir.</p>"
+      ],
+      [
+        "Temperature ve halüsinasyon",
+        "<p>Düşük temperature modeli tutarlı yapar, doğru yapmaz. Model yanlış bir bilgiyi yüksek olasılıklı sanıyorsa sıfır temperature'da da onu tekrarlar. <a href=\"/nedir/halusinasyon-nedir/\">Halüsinasyonu</a> azaltmanın yolu modele doğru bilgiyi vermektir, örneğin <a href=\"/nedir/rag-nedir/\">RAG</a> ile.</p><p>Temperature'a benzeyen bir başka ayar top-p'dir: model yalnız toplam olasılığı belirli bir eşiğe ulaşan en güçlü adaylar arasından seçer. Genellikle ikisinden yalnız biri değiştirilir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is temperature?",
+        "<p>At every step a language model computes a list of candidates for the next <a href=\"/en/nedir/token-nedir/\">token</a> and a probability for each. Temperature adjusts how those probabilities are used. At low temperature the model almost always picks the most likely candidate. At high temperature it gives less likely candidates a chance too, so answers vary and sometimes surprise.</p><p>Take the sentence \"For breakfast most people eat ...\". Low temperature picks \"eggs\" or a similar top choice nearly every time. High temperature sometimes says \"pancakes\", sometimes \"porridge\".</p>"
+      ],
+      [
+        "Which value for which job?",
+        "<p>Most APIs accept values between 0 and 1 or 0 and 2. Jobs with one right answer, such as data extraction, coding and classification, use low values. Jobs that need variety, such as ad copy, name ideas or brainstorming, try higher values. Push the value too high and the text loses coherence.</p>"
+      ],
+      [
+        "Does temperature 0 always give the same answer?",
+        "<p>Usually, but not guaranteed. Small numerical differences in hardware and software mean the same prompt can occasionally produce different output even at zero. If you need exact repeatability, store the output and reuse it.</p>"
+      ],
+      [
+        "Temperature and hallucination",
+        "<p>Low temperature makes a model consistent, not correct. If the model believes a wrong fact is highly likely, it will repeat it at temperature zero as well. The way to reduce <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a> is to give the model the right information, for example with <a href=\"/en/nedir/rag-nedir/\">RAG</a>.</p><p>A related setting is top-p: the model only chooses among the strongest candidates whose combined probability reaches a threshold. Usually only one of the two is adjusted.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

@@ -1,0 +1,59 @@
+{
+  "slug": "ai-memory-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Mimari · Memory",
+    "en": "Architecture · Memory"
+  },
+  "title": {
+    "tr": "Yapay zekâda memory (hafıza) nedir?",
+    "en": "What is memory in AI assistants and agents?"
+  },
+  "lede": {
+    "tr": "Memory, yapay zekâ asistanının önceki konuşmalardan bilgi saklayıp sonra hatırlamasıdır. Bu hafızayı modelin çevresindeki yazılım tutar.",
+    "en": "Memory lets an AI assistant keep information from past conversations and recall it later. The software around the model holds that memory."
+  },
+  "body": {
+    "tr": [
+      [
+        "Model neden kendiliğinden hatırlamaz?",
+        "<p>Bir dil modeli her istekte yalnız o anda kendisine verilen metni görür. Dün yaptığınız konuşma bugün ayrıca verilmezse modelin dünyasında yoktur. Sohbet uygulamalarında modelin hatırladığını hissetmenizin sebebi, uygulamanın önceki mesajları her seferinde yeniden <a href=\"/nedir/context-window-nedir/\">bağlam penceresine</a> koymasıdır. Pencere dolunca en eski mesajlar düşer.</p>"
+      ],
+      [
+        "Kısa ve uzun süreli hafıza",
+        "<p>Kısa süreli hafıza, o anki konuşmanın pencerede duran kısmıdır. Uzun süreli hafıza ise konuşmalar arasında taşınan bilgidir: kullanıcının adı, tercihleri, geçmiş siparişleri, daha önce verilmiş kararlar.</p><p>Uzun süreli hafıza genellikle şöyle çalışır: sistem konuşmadan önemli bilgileri çıkarıp bir veritabanına yazar. Yeni bir konuşmada soruyla ilgili kayıtları arar (çoğu zaman bir <a href=\"/nedir/vektor-veritabani-nedir/\">vektör veritabanı</a> ile) ve bulduklarını modele verir. ChatGPT, Claude ve Gemini gibi asistanlar bu tür bir hafıza özelliğini kullanıcılara sunuyor; kullanıcı neyin hatırlandığını görüp silebiliyor.</p>"
+      ],
+      [
+        "Ajanlarda hafıza",
+        "<p><a href=\"/nedir/ai-agent-nedir/\">Yapay zekâ ajanları</a> birden fazla adımda çalıştığı için hafızaya daha çok ihtiyaç duyar. Hangi adımı tamamladığını, hangi aracın ne sonuç verdiğini ve kullanıcının neyi onayladığını takip etmesi gerekir. Uzun görevlerde ajan, ara sonuçları bir not dosyasına ya da veritabanına yazar ve gerektiğinde geri okur.</p>"
+      ],
+      [
+        "Hafızanın riskleri",
+        "<p>Yanlış kaydedilmiş bir bilgi sonraki bütün konuşmalara taşınır. Kişisel verilerin saklanması KVKK kapsamındadır: neyin, ne kadar süre ve hangi amaçla tutulduğu açık olmalı, kullanıcı silinmesini isteyebilmelidir. İyi tasarlanmış bir hafıza her şeyi kaydetmez, işe yarayanı seçer ve eskiyen bilgiyi günceller.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Why does a model not remember on its own?",
+        "<p>A language model only sees the text it is given in the current request. Yesterday's conversation does not exist for the model unless it is supplied again. Chat apps feel like they remember because they put earlier messages back into the <a href=\"/en/nedir/context-window-nedir/\">context window</a> every time. When the window is full, the oldest messages drop out.</p>"
+      ],
+      [
+        "Short and long term memory",
+        "<p>Short term memory is the part of the current conversation that sits in the window. Long term memory is information carried between conversations: the user's name, preferences, past orders, earlier decisions.</p><p>Long term memory usually works like this: the system extracts important facts from a conversation and writes them to a database. In a new conversation it searches for records related to the question (often with a <a href=\"/en/nedir/vektor-veritabani-nedir/\">vector database</a>) and gives what it finds to the model. Assistants such as ChatGPT, Claude and Gemini offer this kind of memory to users, who can see and delete what is remembered.</p>"
+      ],
+      [
+        "Memory in agents",
+        "<p><a href=\"/en/nedir/ai-agent-nedir/\">AI agents</a> work over many steps, so they need memory even more. They have to track which steps are done, what each tool returned and what the user approved. On long tasks an agent writes intermediate results to a notes file or database and reads them back when needed.</p>"
+      ],
+      [
+        "Risks",
+        "<p>A wrongly stored fact carries over into every later conversation. Storing personal data falls under privacy law: what is kept, for how long and for what purpose must be clear, and users must be able to have it deleted. A well designed memory does not save everything. It keeps what is useful and updates what goes stale.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

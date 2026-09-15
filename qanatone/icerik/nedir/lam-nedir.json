@@ -1,0 +1,59 @@
+{
+  "slug": "lam-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · LAM",
+    "en": "Model Type · LAM"
+  },
+  "title": {
+    "tr": "LAM (Large Action Model) nedir?",
+    "en": "What is a Large Action Model (LAM)?"
+  },
+  "lede": {
+    "tr": "LAM, konuşmakla kalmayıp bilgisayar ve uygulama arayüzlerinde gerçek işlem yapmak üzere tasarlanan yapay zekâ modelidir.",
+    "en": "A LAM is an AI model built to go beyond conversation and take real actions in software and app interfaces."
+  },
+  "body": {
+    "tr": [
+      [
+        "LAM nedir?",
+        "<p>Bir dil modeline \"yarın İzmir'e uçak bileti bul\" dediğinizde size bileti nasıl bulabileceğinizi anlatır. Large Action Model (büyük eylem modeli) ise işi yapmayı hedefler: havayolu sitesini açar, tarihleri seçer, seçenekleri karşılaştırır ve ödeme adımında onayınızı ister. Kısacası LAM, bir niyeti eyleme çevirmek için geliştirilen modeldir.</p><p>Terim, 2024 başında Rabbit şirketinin R1 adlı cihazıyla geniş kitlelere ulaştı. Bugün LAM daha çok bir kategori adı olarak kullanılıyor; Salesforce gibi şirketler de eylem odaklı modellerini bu adla yayımladı.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<p>LAM'ler iki yoldan eylem yapar. Birincisi API'ler üzerinden: model hangi servisin hangi fonksiyonunu çağıracağına karar verir (<a href=\"/nedir/function-calling-nedir/\">function calling</a>). İkincisi arayüz üzerinden: model ekran görüntüsünü görür, düğmeleri ve formları tanır, fareyi ve klavyeyi bir insan gibi kullanır. İkinci yol, API'si olmayan eski sistemlerle de çalışabildiği için değerlidir.</p><p>Anthropic, OpenAI ve Google'ın bilgisayar ve tarayıcı kullanan ajan özellikleri bu yaklaşımın bilinen örnekleridir.</p>"
+      ],
+      [
+        "LAM ile AI agent farkı",
+        "<p>İki kavram iç içedir. <a href=\"/nedir/ai-agent-nedir/\">AI agent</a> bir sistem tasarımıdır: plan yapan, araç kullanan ve sonucu takip eden bir döngü. LAM ise bu döngünün içinde, eylem üretmek için özel olarak eğitilmiş modeldir. Her ajan bir LAM kullanmak zorunda değildir; birçok ajan genel bir dil modeli ve iyi tanımlanmış araçlarla çalışır.</p>"
+      ],
+      [
+        "Sınırları",
+        "<p>Arayüz üzerinden çalışan modeller hâlâ yavaş ve hataya açıktır. Sayfa tasarımı değişince yolunu kaybedebilir, beklenmedik bir açılır pencerede takılabilir. Gerçek para ve veriyle işlem yaptıkları için yetkileri sınırlanmalı, kritik adımlar <a href=\"/nedir/guardrail-nedir/\">guardrail</a> kurallarıyla insan onayına bağlanmalıdır.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a LAM?",
+        "<p>Ask a language model to \"find me a flight to Izmir tomorrow\" and it explains how you could find one. A Large Action Model aims to do the job: it opens the airline's site, picks the dates, compares options and asks for your approval at the payment step. In short, a LAM is a model built to turn an intention into actions.</p><p>The term reached a wide audience in early 2024 with Rabbit's R1 device. Today LAM is used mostly as a category name, and companies such as Salesforce have released action focused models under it.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>LAMs act in two ways. One is through APIs: the model decides which function of which service to call (<a href=\"/en/nedir/function-calling-nedir/\">function calling</a>). The other is through the interface: the model sees a screenshot, recognizes buttons and forms, and uses the mouse and keyboard as a person would. The second way matters because it also works with older systems that have no API.</p><p>The computer and browser using agent features from Anthropic, OpenAI and Google are well known examples of this approach.</p>"
+      ],
+      [
+        "LAM versus AI agent",
+        "<p>The two overlap. An <a href=\"/en/nedir/ai-agent-nedir/\">AI agent</a> is a system design: a loop that plans, uses tools and tracks results. A LAM is a model inside that loop, trained specifically to produce actions. Not every agent needs a LAM; many agents run on a general language model with well defined tools.</p>"
+      ],
+      [
+        "Limits",
+        "<p>Models that work through interfaces are still slow and error prone. They can lose their way when a page layout changes or get stuck on an unexpected pop up. Because they act with real money and data, their permissions must be limited and critical steps tied to human approval through <a href=\"/en/nedir/guardrail-nedir/\">guardrails</a>.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

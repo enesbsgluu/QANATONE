@@ -1,0 +1,59 @@
+{
+  "slug": "inference-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Altyapı · Inference",
+    "en": "Infrastructure · Inference"
+  },
+  "title": {
+    "tr": "Inference nedir? Eğitilmiş modelin çalışması",
+    "en": "What is inference in AI?"
+  },
+  "lede": {
+    "tr": "Inference, eğitilmiş bir yapay zekâ modelinin yeni bir girdiye cevap üretmesidir. Asistana yazdığınız her mesaj bir inference işlemidir.",
+    "en": "Inference is when a trained AI model produces an output for new input. Every message you send to a chat assistant triggers inference."
+  },
+  "body": {
+    "tr": [
+      [
+        "Inference nedir?",
+        "<p>Bir yapay zekâ modelinin hayatı iki aşamadan oluşur. Eğitim (training) aşamasında model büyük veriyle, uzun süre ve yüksek maliyetle öğrenir. Inference (çıkarım) aşamasında ise öğrendiğini kullanır: siz bir soru sorarsınız, model cevap üretir. Eğitim bir kez ya da aralıklarla yapılır; inference her kullanımda tekrarlanır.</p><p>Bir aşçının yıllarca mutfakta eğitim alması training ise, her gün gelen siparişe göre yemek hazırlaması inference'tır.</p>"
+      ],
+      [
+        "Inference sırasında ne olur?",
+        "<p>Dil modellerinde inference iki bölümden oluşur. Önce model gönderdiğiniz metnin tamamını tek seferde işler. Sonra cevabı <a href=\"/nedir/token-nedir/\">token</a> token üretir ve her yeni token için yeniden hesap yapar. Uzun cevapların uzun sürmesinin ve üretilen tokenların okunanlardan pahalı fiyatlanmasının sebebi budur.</p>"
+      ],
+      [
+        "Inference maliyeti neden önemli?",
+        "<p>Bir model bir kez eğitilir ama milyonlarca kez kullanılır. Yaygın kullanılan bir yapay zekâ ürününde toplam inference maliyeti zamanla eğitim maliyetini geçebilir. Bu yüzden şirketler bu aşamayı ucuzlatmaya ciddi yatırım yapıyor.</p><p>Başlıca yöntemler şunlardır: modeli daha düşük sayı hassasiyetiyle çalıştırmak (quantization), büyük bir modelin bilgisini daha küçük bir modele aktarmak (distillation), sık tekrar eden prompt parçalarının hesabını önbellekte tutmak (prompt caching) ve yalnız inference için tasarlanmış özel çipler kullanmak. <a href=\"/nedir/moe-nedir/\">MoE</a> gibi mimariler de her adımda modelin yalnız bir kısmını çalıştırarak maliyeti düşürür.</p>"
+      ],
+      [
+        "İşletme için ne anlama gelir?",
+        "<p>Bir yapay zekâ ürününün aylık faturasının büyük kısmı inference'tan gelir. Her iş için en büyük modeli kullanmak gerekmez: sınıflandırma ve özetleme gibi basit işler <a href=\"/nedir/slm-nedir/\">küçük dil modelleriyle</a> çok daha ucuza yapılabilir. Cevabın ne kadar hızlı geldiği de inference'ın konusudur; bu konuyu <a href=\"/nedir/latency-nedir/\">latency</a> yazısında ayrıca anlattık.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is inference?",
+        "<p>An AI model's life has two stages. In training, the model learns from large amounts of data over a long time and at high cost. In inference, it uses what it learned: you ask something and the model produces an answer. Training happens once or at intervals; inference happens every time the model is used.</p><p>If a chef's years of training in the kitchen are training, cooking each order that comes in is inference.</p>"
+      ],
+      [
+        "What happens during inference?",
+        "<p>For language models inference has two parts. First the model processes all of the text you sent in one pass. Then it generates the answer one <a href=\"/en/nedir/token-nedir/\">token</a> at a time, computing again for each new token. That is why long answers take longer and why output tokens are priced higher than input tokens.</p>"
+      ],
+      [
+        "Why does inference cost matter?",
+        "<p>A model is trained once but used millions of times. For a widely used AI product, total inference cost can eventually exceed the cost of training, which is why companies invest heavily in making it cheaper.</p><p>The main techniques are running the model at lower numerical precision (quantization), transferring a large model's knowledge into a smaller one (distillation), caching the computation for prompt parts that repeat (prompt caching) and using chips designed specifically for inference. Architectures such as <a href=\"/en/nedir/moe-nedir/\">MoE</a> also cut cost by running only part of the model at each step.</p>"
+      ],
+      [
+        "What it means for a business",
+        "<p>Most of an AI product's monthly bill comes from inference. Not every job needs the largest model: simple tasks such as classification and summarizing can be done far more cheaply with <a href=\"/en/nedir/slm-nedir/\">small language models</a>. How fast answers arrive is also an inference question, covered separately in the article on <a href=\"/en/nedir/latency-nedir/\">latency</a>.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

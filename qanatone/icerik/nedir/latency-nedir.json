@@ -1,0 +1,59 @@
+{
+  "slug": "latency-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Performans · Latency",
+    "en": "Performance · Latency"
+  },
+  "title": {
+    "tr": "Latency nedir? Yapay zekâda gecikme ve hız",
+    "en": "What is latency in AI applications?"
+  },
+  "lede": {
+    "tr": "Latency, bir isteği gönderdiğiniz an ile cevabın gelmesi arasında geçen süredir. Yapay zekâ ürünlerinde kullanıcı deneyimini belirler.",
+    "en": "Latency is the time between sending a request and getting the answer. In AI products it shapes the user experience directly."
+  },
+  "body": {
+    "tr": [
+      [
+        "Latency nedir?",
+        "<p>Latency (gecikme), bir sisteme istek gönderdiğiniz an ile cevabın size ulaştığı an arasındaki süredir. Web sitelerinde sayfanın açılma süresi olarak bilinir. Dil modellerinde cevap parça parça geldiği için gecikme iki ayrı ölçüyle takip edilir.</p>"
+      ],
+      [
+        "Yapay zekâda gecikme nasıl ölçülür?",
+        "<ul><li>İlk token süresi (time to first token, TTFT): isteği gönderdikten sonra ekrana ilk kelimenin gelmesine kadar geçen süre. Kullanıcının \"sistem çalışıyor\" hissini bu belirler.</li><li>Üretim hızı: modelin saniyede ürettiği <a href=\"/nedir/token-nedir/\">token</a> sayısı. Cevabın tamamının ne kadar sürede biteceğini bu belirler.</li></ul><p>Toplam süre kabaca ilk token süresine, cevap uzunluğunun üretim hızına bölümünün eklenmesiyle bulunur. Uzun bir rapor isteyen kullanıcı, kısa bir cevap isteyene göre doğal olarak daha uzun bekler.</p>"
+      ],
+      [
+        "Gecikmeyi neler artırır?",
+        "<p>Büyük modeller küçüklere göre daha yavaş çalışır. Uzun belgeler ilk token süresini uzatır, uzun cevaplar toplam süreyi uzatır. Akıl yürüten modeller cevap vermeden önce bir süre \"düşünür\". Sunucunun o anki yoğunluğu ve kullanıcıyla sunucu arasındaki mesafe de süreye eklenir. <a href=\"/nedir/ai-agent-nedir/\">Ajan</a> sistemlerinde her araç çağrısı ayrı bir bekleme demektir ve çok adımlı görevlerde bu beklemeler üst üste biner.</p>"
+      ],
+      [
+        "Gecikme nasıl düşürülür?",
+        "<p>Cevabı akış (streaming) halinde göstermek, yani kelimeleri üretildikçe ekrana basmak, algılanan bekleme süresini ciddi ölçüde kısaltır. Basit işlerde <a href=\"/nedir/slm-nedir/\">daha küçük bir model</a> kullanmak, promptu kısaltmak, sık tekrar eden promptlar için önbellek (prompt caching) kullanmak ve birbirinden bağımsız adımları paralel çalıştırmak diğer yollardır. Sesli asistanlar ve canlı sohbet gibi gerçek zamanlı ürünlerde gecikme, doğruluk kadar önemsenen bir ölçüdür.</p><p>Maliyet tarafı için <a href=\"/nedir/inference-nedir/\">inference</a> yazısına bakabilirsiniz.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is latency?",
+        "<p>Latency is the time between sending a request to a system and receiving the response. On websites it is known as page load time. Language models deliver their answers in pieces, so latency is tracked with two separate measures.</p>"
+      ],
+      [
+        "How is AI latency measured?",
+        "<ul><li>Time to first token (TTFT): how long until the first word appears after you send the request. It decides whether the system feels responsive.</li><li>Generation speed: how many <a href=\"/en/nedir/token-nedir/\">tokens</a> the model produces per second. It decides how long the full answer takes.</li></ul><p>Total time is roughly the time to first token plus the answer length divided by generation speed. A user asking for a long report naturally waits longer than one asking a short question.</p>"
+      ],
+      [
+        "What increases latency?",
+        "<p>Large models run slower than small ones. Long documents stretch the time to first token and long answers stretch the total. Reasoning models spend time thinking before they answer. Server load and the distance between user and server add to the wait. In <a href=\"/en/nedir/ai-agent-nedir/\">agent</a> systems every tool call is another wait, and on multi step tasks those waits stack up.</p>"
+      ],
+      [
+        "How to reduce latency",
+        "<p>Streaming the answer, printing words as they are generated, cuts the perceived wait considerably. Using a <a href=\"/en/nedir/slm-nedir/\">smaller model</a> for simple tasks, shortening prompts, caching prompts that repeat and running independent steps in parallel also help. In real time products such as voice assistants and live chat, latency is treated as seriously as accuracy.</p><p>For the cost side, see the article on <a href=\"/en/nedir/inference-nedir/\">inference</a>.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

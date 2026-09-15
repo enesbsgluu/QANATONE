@@ -1,0 +1,59 @@
+{
+  "slug": "slm-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · SLM",
+    "en": "Model Type · SLM"
+  },
+  "title": {
+    "tr": "SLM (küçük dil modeli) nedir?",
+    "en": "What is a small language model (SLM)?"
+  },
+  "lede": {
+    "tr": "SLM, büyük modellere göre çok daha küçük, telefonda ya da dizüstü bilgisayarda çalışabilen dil modelidir. Dar işlerde hızlı ve ucuzdur.",
+    "en": "An SLM is a much smaller language model that can run even on a phone or laptop. It is fast and cheap for focused tasks."
+  },
+  "body": {
+    "tr": [
+      [
+        "SLM nedir?",
+        "<p>Small Language Model (küçük dil modeli), <a href=\"/nedir/buyuk-dil-modelleri-nedir/\">büyük dil modellerinin</a> (LLM) hafif kardeşidir. Kesin bir sınır olmasa da genellikle birkaç yüz milyon ile birkaç milyar parametre arasındaki modeller bu adla anılır; en büyük modeller ise yüz milyarlarca parametreye ulaşır. Microsoft'un Phi, Google'ın Gemma ve Meta'nın Llama ailesinin küçük sürümleri bilinen örneklerdir.</p>"
+      ],
+      [
+        "Küçük olmanın avantajı ne?",
+        "<p>Küçük bir model daha az bellek ve daha az hesap ister. Bu sayede bulut yerine telefonda, dizüstü bilgisayarda ya da şirketin kendi sunucusunda çalışabilir. Veriler dışarı çıkmadığı için gizlilik gereksinimlerini karşılamak kolaylaşır. <a href=\"/nedir/inference-nedir/\">Inference</a> maliyeti düşer, cevap daha hızlı gelir ve <a href=\"/nedir/latency-nedir/\">gecikme</a> azalır. Bazı küçük modeller internet bağlantısı olmadan da çalışabilir.</p>"
+      ],
+      [
+        "Neyi iyi, neyi kötü yapar?",
+        "<p>SLM'ler dar ve iyi tanımlanmış işlerde güçlüdür: e-postaları sınıflandırmak, metin özetlemek, formlardan bilgi çıkarmak ve basit sohbetler. Belirli bir işe <a href=\"/nedir/fine-tuning-nedir/\">fine-tuning</a> ile uyarlandıklarında o işte büyük modellere yaklaşabilirler.</p><p>Geniş genel bilgi, çok adımlı akıl yürütme ve uzun, karmaşık belgeler ise hâlâ büyük modellerin alanıdır. Küçük modeller bu tür görevlerde daha çok hata yapar ve <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyona</a> daha yatkındır.</p>"
+      ],
+      [
+        "İşletmeler nasıl kullanıyor?",
+        "<p>Yaygın bir yöntem, işleri zorluğuna göre dağıtmaktır: gelen taleplerin çoğunu hızlı ve ucuz bir SLM karşılar, zor olanlar büyük modele gider. Bu yönlendirme <a href=\"/nedir/orkestrasyon-nedir/\">orkestrasyon</a> katmanında yapılır. Böylece kalite korunurken toplam maliyet düşer.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is an SLM?",
+        "<p>A small language model is the lightweight sibling of <a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">large language models</a> (LLMs). There is no strict cutoff, but models from a few hundred million to a few billion parameters usually go by this name, while the largest models reach hundreds of billions. Microsoft's Phi, Google's Gemma and the small versions of Meta's Llama family are well known examples.</p>"
+      ],
+      [
+        "Why small?",
+        "<p>A small model needs less memory and less computation. That means it can run on a phone, a laptop or a company's own server instead of the cloud. Data stays in house, which makes privacy requirements easier to meet. <a href=\"/en/nedir/inference-nedir/\">Inference</a> costs drop, answers come back faster and <a href=\"/en/nedir/latency-nedir/\">latency</a> falls. Some small models can even work without an internet connection.</p>"
+      ],
+      [
+        "What are they good and bad at?",
+        "<p>SLMs are strong at narrow, well defined tasks: classifying email, summarizing text, extracting data from forms and simple conversations. Adapted to a specific job with <a href=\"/en/nedir/fine-tuning-nedir/\">fine-tuning</a>, they can come close to large models on that job.</p><p>Broad general knowledge, multi step reasoning and long, complex documents remain the territory of large models. Small models make more mistakes on such tasks and are more prone to <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a>.</p>"
+      ],
+      [
+        "How businesses use them",
+        "<p>A common approach is to route work by difficulty: a fast, cheap SLM handles most incoming requests and the hard ones go to a large model. That routing happens in the <a href=\"/en/nedir/orkestrasyon-nedir/\">orchestration</a> layer, keeping quality up while total cost goes down.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

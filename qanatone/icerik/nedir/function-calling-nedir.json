@@ -1,0 +1,59 @@
+{
+  "slug": "function-calling-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Uygulama · Function Calling",
+    "en": "Applications · Function Calling"
+  },
+  "title": {
+    "tr": "Function calling nedir? Modelin araç kullanması",
+    "en": "What is function calling in AI?"
+  },
+  "lede": {
+    "tr": "Function calling, dil modelinin bir yazılım fonksiyonunu çağırmak için düzenli bir istek üretmesidir. Böylece takvim ve API kullanır.",
+    "en": "Function calling lets a language model produce a structured request to run a software function, so it can use calendars, databases and APIs."
+  },
+  "body": {
+    "tr": [
+      [
+        "Function calling nedir?",
+        "<p>Bir dil modeli tek başına yalnız metin üretir. Hava durumunu bilemez, takvime toplantı ekleyemez, siparişin kargoda olup olmadığına bakamaz. Function calling (fonksiyon çağırma; tool use da denir) bu kapıyı açar. Geliştirici modele kullanabileceği fonksiyonların listesini ve her birinin ne işe yaradığını verir. Model gerektiğinde bunlardan birini seçer ve hangi değerlerle çalıştırılacağını düzenli bir biçimde, genellikle JSON olarak yazar.</p>"
+      ],
+      [
+        "Adım adım bir örnek",
+        "<ul><li>Kullanıcı yazar: \"Yarın saat 15.00'e Ayşe Hanım'la toplantı koy.\"</li><li>Uygulama modele daha önce \"toplanti_olustur\" adlı bir fonksiyon tanıtmıştır; parametreleri tarih, saat ve katılımcıdır.</li><li>Model düz metin cevap yerine bir çağrı üretir: toplanti_olustur, tarih yarın, saat 15.00, katılımcı Ayşe Hanım.</li><li>Uygulama fonksiyonu çalıştırır, takvime kaydı ekler ve sonucu modele geri verir.</li><li>Model kullanıcıya toplantının oluşturulduğunu söyler.</li></ul><p>Fonksiyonu çalıştıran uygulamanın kendisidir; model yalnız neyin hangi değerlerle çağrılacağına karar verir. Yetki ve güvenlik kontrolleri bu yüzden uygulama tarafında kurulur.</p>"
+      ],
+      [
+        "Neden önemli?",
+        "<p><a href=\"/nedir/ai-agent-nedir/\">Yapay zekâ ajanlarının</a> dış dünyayla bağı bu mekanizmaya dayanır. Stok, fiyat ve kur gibi güncel bilgiye erişmek, sipariş ve randevu gibi işlemleri yapmak ve hesaplamayı güvenilir bir koda bırakmak function calling ile mümkün olur. <a href=\"/hizmetler/otomasyon/\">Otomasyon</a> projelerinde modelin CRM, takvim ve e-posta sistemlerine bağlanması da bu yolla yapılır.</p><p>Farklı uygulamaların araçlarını modellere standart bir yolla bağlamak için Anthropic'in 2024 sonunda tanıttığı Model Context Protocol (MCP) gibi açık standartlar da yaygınlaşıyor.</p>"
+      ],
+      [
+        "Dikkat edilmesi gerekenler",
+        "<p>Model yanlış fonksiyonu seçebilir ya da bir parametreyi yanlış doldurabilir; uygulama gelen çağrıyı çalıştırmadan önce doğrulamalıdır. Silme, ödeme ve toplu e-posta gibi geri alınamaz işlemler kullanıcı onayı olmadan yapılmamalıdır. Fonksiyon açıklamalarının net yazılması, modelin doğru aracı seçmesinde <a href=\"/nedir/prompt-nedir/\">prompt</a> kadar etkilidir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is function calling?",
+        "<p>On its own a language model only produces text. It cannot know the weather, add a meeting to a calendar or check whether an order has shipped. Function calling, also called tool use, opens that door. The developer gives the model a list of functions it may use and a description of each. When needed, the model picks one and writes the values to run it with in a structured form, usually JSON.</p>"
+      ],
+      [
+        "A step by step example",
+        "<ul><li>The user writes: \"Set up a meeting with Ms. Aylin tomorrow at 3 pm.\"</li><li>The app has already told the model about a function called create_meeting, with date, time and attendee as parameters.</li><li>Instead of a plain text reply, the model produces a call: create_meeting, date tomorrow, time 15:00, attendee Ms. Aylin.</li><li>The app runs the function, adds the entry to the calendar and returns the result to the model.</li><li>The model tells the user the meeting has been created.</li></ul><p>The application runs the function; the model only decides what to call and with which values. That is why permissions and safety checks are enforced in the application.</p>"
+      ],
+      [
+        "Why does it matter?",
+        "<p>This mechanism is how <a href=\"/en/nedir/ai-agent-nedir/\">AI agents</a> reach the outside world. Accessing live data such as stock, prices and exchange rates, taking actions such as orders and bookings, and handing calculations to reliable code all go through function calling. In <a href=\"/en/hizmetler/otomasyon/\">automation</a> projects, connecting the model to CRM, calendar and email systems works the same way.</p><p>Open standards such as the Model Context Protocol (MCP), introduced by Anthropic in late 2024, are spreading as a common way to connect tools from different applications to models.</p>"
+      ],
+      [
+        "Things to watch",
+        "<p>A model can pick the wrong function or fill a parameter incorrectly, so the application must validate each call before running it. Irreversible actions such as deletions, payments and bulk emails should never run without user approval. Clear function descriptions matter as much as the <a href=\"/en/nedir/prompt-nedir/\">prompt</a> in helping the model choose the right tool.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

@@ -1,0 +1,59 @@
+{
+  "slug": "few-shot-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Prompt · Few-shot",
+    "en": "Prompting · Few-shot"
+  },
+  "title": {
+    "tr": "Few-shot prompting nedir? Örnekle öğretmek",
+    "en": "What is few-shot prompting?"
+  },
+  "lede": {
+    "tr": "Few-shot prompting, prompta birkaç çözülmüş örnek eklemektir. Model kalıbı örneklerden yakalar ve aynı biçimde cevap verir.",
+    "en": "Few-shot prompting means adding a few worked examples to your prompt. The model picks up the pattern and answers in the same way."
+  },
+  "body": {
+    "tr": [
+      [
+        "Few-shot nedir?",
+        "<p>Birine yeni bir iş öğretirken uzun uzun anlatmak yerine çoğu zaman iki üç örnek gösterirsiniz. Few-shot prompting aynı fikre dayanır: <a href=\"/nedir/prompt-nedir/\">prompta</a> görevin çözülmüş birkaç örneğini koyarsınız, model kalıbı örneklerden çıkarır. Tek örnek verilirse one-shot, hiç örnek verilmezse <a href=\"/nedir/zero-shot-nedir/\">zero-shot</a> denir.</p><p>Dil modellerinin yeniden eğitilmeden, yalnız prompttaki örneklerden yeni bir görevi öğrenebilmesine in-context learning (bağlam içi öğrenme) denir. Bu yetenek 2020'de yayımlanan GPT-3 makalesiyle geniş kitlelerin gündemine girdi; makalenin başlığı da \"Language Models are Few-Shot Learners\" idi.</p>"
+      ],
+      [
+        "Bir örnek",
+        "<p>Görev: müşteri yorumlarını olumlu, olumsuz ya da nötr diye etiketlemek. Prompt şöyle kurulabilir:</p><ul><li>Yorum: \"Kargo bir günde geldi, paket özenliydi.\" Etiket: olumlu</li><li>Yorum: \"Ürün fotoğraftakinden küçük çıktı.\" Etiket: olumsuz</li><li>Yorum: \"Siparişi verdim, henüz kullanmadım.\" Etiket: nötr</li><li>Yorum: \"Rengi güzel ama kumaşı ilk yıkamada soldu.\" Etiket: ?</li></ul><p>Model son yoruma, örneklerde gördüğü biçimde tek kelimelik bir etiket yazar. Aynı soruyu örneksiz sorsaydınız uzun bir açıklama da gelebilirdi.</p>"
+      ],
+      [
+        "Ne zaman işe yarar?",
+        "<p>Çıktının biçimi önemliyse (belirli bir JSON yapısı, sabit bir etiket listesi ya da markanıza özel bir üslup) few-shot çoğu zaman en ucuz ve hızlı çözümdür. Sınırda kalan durumları örneklere katmak, yukarıdaki \"rengi güzel ama\" yorumunda olduğu gibi, modele kararsız kaldığı yerde nasıl davranacağını gösterir.</p>"
+      ],
+      [
+        "Dikkat edilecekler",
+        "<p>Örnekler çeşitli olmalıdır; hepsi olumlu yorumsa model olumluya kayar. Modeller örneklerin sırasından da etkilenir ve son örnek cevabı özellikle etkiler. Her örnek <a href=\"/nedir/token-nedir/\">token</a> harcar. Onlarca örnek gerekmeye başladıysa aynı iş için <a href=\"/nedir/fine-tuning-nedir/\">fine-tuning</a> daha ekonomik hale gelebilir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is few-shot prompting?",
+        "<p>When you teach someone a new task, you often show two or three examples instead of explaining at length. Few-shot prompting works the same way: you put a few solved examples of the task into the <a href=\"/en/nedir/prompt-nedir/\">prompt</a> and the model infers the pattern. With a single example it is called one-shot; with none, <a href=\"/en/nedir/zero-shot-nedir/\">zero-shot</a>.</p><p>A model's ability to pick up a new task from examples in the prompt, without retraining, is called in-context learning. It became widely known with the GPT-3 paper in 2020, titled \"Language Models are Few-Shot Learners\".</p>"
+      ],
+      [
+        "An example",
+        "<p>Task: label customer reviews as positive, negative or neutral. The prompt could look like this:</p><ul><li>Review: \"Arrived in a day, nicely packed.\" Label: positive</li><li>Review: \"Smaller than in the photo.\" Label: negative</li><li>Review: \"Ordered it, have not used it yet.\" Label: neutral</li><li>Review: \"Lovely color, but it faded after the first wash.\" Label: ?</li></ul><p>The model answers the last review with a one word label in the same format. Without the examples it might have written a paragraph.</p>"
+      ],
+      [
+        "When does it help?",
+        "<p>When the output format matters (a specific JSON structure, a fixed set of labels or your brand's tone), few-shot is often the cheapest and fastest fix. Including borderline cases, like the \"lovely color, but\" review above, shows the model how to decide where it would otherwise hesitate.</p>"
+      ],
+      [
+        "Things to watch",
+        "<p>Keep the examples varied; if they are all positive, the model leans positive. Models are also sensitive to the order of examples, and the last one has an outsized effect. Every example costs <a href=\"/en/nedir/token-nedir/\">tokens</a>. If you find yourself needing dozens of examples, <a href=\"/en/nedir/fine-tuning-nedir/\">fine-tuning</a> may become the cheaper option.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

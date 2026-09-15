@@ -1,7 +1,7 @@
 {
   "slug": "rag-nedir",
   "date": "2026-09-12",
-  "read": 4,
+  "read": 2,
   "topic": "teknoloji",
   "sector": "",
   "image": "",
@@ -10,53 +10,58 @@
     "en": "Architecture · RAG"
   },
   "title": {
-    "tr": "RAG (Retrieval-Augmented Generation) nedir, neden gereklidir?",
-    "en": "What is RAG and why is it needed?"
+    "tr": "RAG nedir? Yapay zekâya kendi belgelerini okutmak",
+    "en": "What is RAG (retrieval-augmented generation)?"
   },
   "lede": {
-    "tr": "RAG, LLM bilgi kesiti ve halüsinasyonunu çözer: vektör veritabanından ilgili belgeleri çekip bağlama enjekte eder. Model \"elindeki belgeden\" cevap verir.",
-    "en": "RAG solves LLM knowledge cutoff and hallucination by retrieving relevant docs from a vector DB and injecting them into context before generation."
+    "tr": "RAG, dil modelinin cevap vermeden önce ilgili belgeleri bulup okumasıdır. Böylece model cevabını önüne konan güncel bilgiye dayandırır.",
+    "en": "RAG lets a language model find and read the relevant documents before it answers, so the answer rests on current information you control."
   },
   "body": {
     "tr": [
       [
-        "Sorun: LLM'ler neden yanlış cevap verir?",
-        "<p>LLM'lerin bilgi, eğitim verisindeki istatistiksel örüntülerde saklıdır. Eğitim sonrası dünya değişirse (yeni ürünler, yasalar, fiyatlar) model bunu bilmez. Ayrıca olasılıksal doğaları, meşru görünen ama yanlış metin üretebilir (halüsinasyon). Kurumsal veriler (içerik, kontratlar, kod) eğitimde yoktur.</p>"
+        "RAG nedir?",
+        "<p>RAG, İngilizce retrieval-augmented generation ifadesinin kısaltmasıdır; Türkçede \"bilgi getirmeyle desteklenen üretim\" diye çevrilebilir. Bir dil modelinin bildikleri eğitim verisiyle sınırlıdır. Eğitimden sonra çıkan bir yönetmeliği, şirketinizin iç prosedürünü ya da bugünkü stok durumunu bilemez. RAG bu açığı kapatır: soru geldiğinde önce ilgili belgeler bulunur, sonra model cevabı bu belgelere bakarak yazar.</p><p>Kapalı kitap ve açık kitap sınavı arasındaki farkı düşünün. RAG kullanmayan model hafızasından cevap veren öğrencidir; RAG kullanan model ise önünde ilgili sayfalar açık duran öğrencidir.</p>"
       ],
       [
-        "RAG nasıl çalışır?",
-        "<p><b>1. İndeksleme (offline):</b> Belgeler parçalara (chunk) bölünür, her parça embedding modeliyle vektöre dönüştürülür, vektör veritabanına (Pinecone, Weaviate, Qdrant, pgvector) kaydedilir.</p><p><b>2. Sorgu anında (online):</b> Kullanıcı sorusu embedding'e dönüştürülür, vektör veritabanında en yakın k parçası (top-k) aranır, bulunan parçalar prompt'a eklenir.</p><p><b>3. Üretim:</b> LLM, ek bağlamla cevap üretir. Kaynak gösterimi (citation) eklenebilir.</p>"
+        "Nasıl çalışır?",
+        "<ul><li>Hazırlık: belgeler (PDF'ler, web sayfaları, destek kayıtları) küçük parçalara bölünür, her parça <a href=\"/nedir/embedding-nedir/\">embedding</a> ile vektöre çevrilir ve bir <a href=\"/nedir/vektor-veritabani-nedir/\">vektör veritabanına</a> yazılır.</li><li>Arama: kullanıcının sorusu da vektöre çevrilir ve soruya anlamca en yakın parçalar bulunur.</li><li>Cevap: bulunan parçalar soruyla birlikte modele verilir. Model cevabı bu parçalara dayanarak yazar ve istenirse hangi belgeden aldığını gösterir.</li></ul>"
       ],
       [
-        "Ne zaman kullanmalı?",
-        "<ul><li>Özel/kurumsal veriyle cevap vermeliyseniz (içerik, HR, hukuk, kod).</li><li>Güncel bilgi gerekiyorsa (haber, fiyat, stok).</li><li>Kaynak gösterimi / denetlenebilirlik zorunluysa.</li></ul><p>Basit bilgi sorgulamalarında (ör. \"Paris başkenti neresidir?\") RAG gereksizdir — model zaten bilir.</p>"
+        "Neden kullanılır?",
+        "<p>RAG sayesinde model, eğitim verisinde hiç olmayan kurumsal bilgiyle çalışabilir. Belgeler güncellendiği anda cevaplar da güncellenir; modeli yeniden eğitmek gerekmez. Cevap bir belgeye dayandığı için kontrol edilebilir ve <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyon</a> riski azalır. Azalır ama sıfırlanmaz: arama yanlış parçayı getirirse model de yanlış cevap verebilir.</p>"
       ],
       [
-        "Pratik ipuçları",
-        "<p>Chunk boyutu ve overlap kritik: çok küçük olursa bağlam kaybolur, çok büyük olursa gürültü ve token maliyeti artar. Hybrid search (vektör + BM25) sıklıkla pure vector'ı geçer. Reranker (cross-encoder) top-k'yı yeniden sıralayıp recall artırır. Değerlendirme için: retrieval recall@k, generation faithfulness, answer relevance metrikleri izlenir.</p>"
+        "RAG mi, fine-tuning mi?",
+        "<p>Sık sorulan bir soru. Modelin bilgiye ihtiyacı varsa (ürünler, fiyatlar, politikalar) RAG genellikle doğru araçtır, çünkü bilgi değiştikçe yalnız belgeleri güncellersiniz. Modelin davranışını değiştirmek istiyorsanız (belirli bir yazım üslubu ya da sabit bir çıktı biçimi) <a href=\"/nedir/fine-tuning-nedir/\">fine-tuning</a> daha uygun olabilir. Birçok sistem ikisini birlikte kullanır.</p>"
+      ],
+      [
+        "İyi bir RAG sistemi için",
+        "<p>Kalitenin büyük kısmı arama adımında belirlenir. Belgeleri çok küçük parçalara bölmek bağlamı koparır, çok büyük parçalar ise gereksiz metinle <a href=\"/nedir/context-window-nedir/\">bağlam penceresini</a> doldurur. Vektör aramasını anahtar kelime aramasıyla birleştirmek (hibrit arama) ve bulunan sonuçları ikinci bir modelle yeniden sıralamak (reranking) isabeti belirgin şekilde artırır. Sistemi gerçek kullanıcı sorularıyla düzenli test etmek, hangi soruda yanlış belgenin geldiğini görmenin en güvenilir yoludur.</p><p>Kendi belgelerinizle çalışan bir asistan, <a href=\"/hizmetler/ai-ajan/\">yapay zekâ ajanı</a> kurulumlarının da temel parçasıdır.</p>"
       ]
     ],
     "en": [
       [
-        "The problem: why do LLMs get it wrong?",
-        "<p>LLM knowledge is frozen in training-time statistical patterns. Post-training world changes (new products, laws, prices) are invisible. Their probabilistic nature also produces plausible but false text (hallucination). Proprietary data (docs, contracts, code) was never in training.</p>"
+        "What is RAG?",
+        "<p>RAG stands for retrieval-augmented generation. What a language model knows is limited to its training data. It cannot know a regulation published after training, your company's internal procedures or today's stock levels. RAG closes that gap: when a question comes in, the relevant documents are found first, and the model writes its answer by reading them.</p><p>Think of a closed book exam versus an open book exam. A model without RAG answers from memory; a model with RAG has the right pages open in front of it.</p>"
       ],
       [
-        "How RAG works",
-        "<p><b>1. Indexing (offline):</b> Documents split into chunks, each embedded via an embedding model, stored in a vector DB (Pinecone, Weaviate, Qdrant, pgvector).</p><p><b>2. Query time (online):</b> User question embedded, top-k nearest chunks retrieved from vector DB, injected into prompt.</p><p><b>3. Generation:</b> LLM answers with augmented context. Citations can be added.</p>"
+        "How does it work?",
+        "<ul><li>Preparation: documents (PDFs, web pages, support records) are split into small chunks, each chunk is turned into an <a href=\"/en/nedir/embedding-nedir/\">embedding</a> vector and stored in a <a href=\"/en/nedir/vektor-veritabani-nedir/\">vector database</a>.</li><li>Retrieval: the user's question is embedded too, and the chunks closest in meaning are found.</li><li>Generation: the retrieved chunks are given to the model along with the question. The model answers from them and can show which document each part came from.</li></ul>"
       ],
       [
-        "When to use it",
-        "<ul><li>You must answer from proprietary data (internal docs, HR, legal, code).</li><li>Current information is required (news, prices, inventory).</li><li>Citation / auditability is mandatory.</li></ul><p>RAG is overkill for general knowledge queries (e.g., \"capital of France?\") — the model already knows.</p>"
+        "Why use it?",
+        "<p>With RAG a model can work with company knowledge that was never in its training data. When documents change, answers change with them, without retraining. Because each answer rests on a document, it can be checked, and the risk of <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a> goes down. It goes down but does not disappear: if retrieval brings back the wrong passage, the answer can still be wrong.</p>"
       ],
       [
-        "Practical tips",
-        "<p>Chunk size and overlap are critical: too small loses context, too large adds noise and token cost. Hybrid search (vector + BM25) often beats pure vector. A reranker (cross-encoder) re-orders top-k to boost recall. Track: retrieval recall@k, generation faithfulness, answer relevance.</p>"
+        "RAG or fine-tuning?",
+        "<p>If the model needs knowledge (products, prices, policies), RAG is usually the right tool, because you only update documents as things change. If you want to change the model's behavior (a specific writing style or a fixed output format), <a href=\"/en/nedir/fine-tuning-nedir/\">fine-tuning</a> may fit better. Many systems use both.</p>"
+      ],
+      [
+        "Building a good RAG system",
+        "<p>Most of the quality is decided at the retrieval step. Chunks that are too small lose context, chunks that are too large fill the <a href=\"/en/nedir/context-window-nedir/\">context window</a> with noise. Combining vector search with keyword search (hybrid search) and re-ranking the results with a second model noticeably improve accuracy. Testing the system regularly with real user questions is the most reliable way to see where the wrong document comes back.</p><p>An assistant that works from your own documents is also a core part of an <a href=\"/en/hizmetler/ai-ajan/\">AI agent</a> setup.</p>"
       ]
     ]
   },
-  "sources": [
-    "https://arxiv.org/abs/2005.11401",
-    "https://www.pinecone.io/learn/retrieval-augmented-generation/"
-  ]
+  "sources": []
 }

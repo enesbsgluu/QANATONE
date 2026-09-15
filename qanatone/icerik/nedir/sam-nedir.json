@@ -1,0 +1,59 @@
+{
+  "slug": "sam-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Model Türü · SAM",
+    "en": "Model Type · SAM"
+  },
+  "title": {
+    "tr": "SAM (Segment Anything Model) nedir?",
+    "en": "What is the Segment Anything Model (SAM)?"
+  },
+  "lede": {
+    "tr": "SAM, bir görüntüdeki herhangi bir nesneyi tek tıkla piksel düzeyinde ayırabilen, Meta tarafından geliştirilen segmentasyon modelidir.",
+    "en": "SAM is an image segmentation model from Meta that can cut out any object in an image at pixel level with a single click."
+  },
+  "body": {
+    "tr": [
+      [
+        "SAM nedir?",
+        "<p>Segment Anything Model, Meta'nın 2023'te tanıttığı bir bilgisayarlı görü modelidir. Segmentasyon, bir görüntüde bir nesnenin tam olarak hangi piksellerden oluştuğunu belirlemektir. Nesnenin etrafına kabaca bir kutu çizmekle yetinilmez, sınırı kesin olarak çıkarılır.</p><p>SAM'e bir noktaya tıklayarak ya da bir kutu çizerek ne istediğinizi gösterirsiniz; model o nesnenin maskesini çıkarır. Bir fotoğrafta köpeğin üzerine tıkladığınızda köpeğin kulağından kuyruğuna kadar bütün pikselleri seçilir.</p>"
+      ],
+      [
+        "Neden önemli?",
+        "<p>SAM'den önce segmentasyon modelleri genellikle belirli nesne türleri için ayrı ayrı eğitilirdi: bir model yalnız araçları, bir diğeri yalnız tıbbi görüntüdeki belirli dokuları ayırırdı. SAM, daha önce görmediği nesne türlerinde de ek eğitim gerektirmeden çalışabilen genel bir model olarak tasarlandı.</p><p>Meta bunun için 11 milyon görüntü üzerinde 1 milyardan fazla maske içeren SA-1B veri setini oluşturdu ve modeli açık kaynak olarak yayımladı. 2024'te çıkan SAM 2 aynı yeteneği videoya taşıdı: bir karede seçilen nesne video boyunca takip edilir.</p>"
+      ],
+      [
+        "Nerelerde kullanılır?",
+        "<ul><li>Fotoğraf ve video düzenleme: arka plan silme ve tek tıkla nesne seçme.</li><li>E-ticaret: ürün fotoğraflarını arka plandan temiz biçimde ayırmak.</li><li>Tıp: görüntülerde organ ve lezyon sınırlarını işaretlemeyi hızlandırmak (uzman kontrolüyle).</li><li>Tarım ve uydu görüntüleri: tarlaları, binaları ve su alanlarını ayırmak.</li><li>Veri etiketleme: yeni yapay zekâ modellerini eğitmek için gereken etiketli görselleri çok daha hızlı hazırlamak.</li></ul>"
+      ],
+      [
+        "SAM ile VLM farkı",
+        "<p><a href=\"/nedir/vlm-nedir/\">VLM</a> bir görüntüyü anlar ve kelimelerle anlatır: \"masada kırmızı bir fincan var\". SAM ise nesnenin ne olduğunu söylemez, nerede başlayıp nerede bittiğini piksel piksel gösterir. İkisi birlikte güçlü sonuç verir: VLM neyin arandığını anlar, SAM onu görüntüden kesip çıkarır.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is SAM?",
+        "<p>The Segment Anything Model is a computer vision model Meta introduced in 2023. Segmentation means determining exactly which pixels in an image belong to an object. A rough box around the object is not enough; its exact outline is extracted.</p><p>You show SAM what you want by clicking a point or drawing a box, and the model returns a mask for that object. Click on a dog in a photo and every pixel from its ears to its tail is selected.</p>"
+      ],
+      [
+        "Why does it matter?",
+        "<p>Before SAM, segmentation models were usually trained separately for specific kinds of objects: one model for cars, another for certain tissues in medical scans. SAM was designed as a general model that also works on object types it has never seen, without extra training.</p><p>To build it, Meta created the SA-1B dataset with more than a billion masks across 11 million images and released the model as open source. SAM 2, released in 2024, brought the same ability to video: an object selected in one frame is tracked through the clip.</p>"
+      ],
+      [
+        "Where is it used?",
+        "<ul><li>Photo and video editing: background removal and one click object selection.</li><li>E-commerce: cleanly separating product photos from their background.</li><li>Medicine: speeding up the outlining of organs and lesions in scans, under expert review.</li><li>Agriculture and satellite imagery: separating fields, buildings and water.</li><li>Data labeling: preparing the labeled images needed to train new AI models far faster.</li></ul>"
+      ],
+      [
+        "SAM versus VLM",
+        "<p>A <a href=\"/en/nedir/vlm-nedir/\">VLM</a> understands an image and describes it in words: \"there is a red cup on the table\". SAM does not say what the object is; it shows, pixel by pixel, where it starts and ends. Together they are powerful: the VLM understands what is being looked for and SAM cuts it out of the image.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

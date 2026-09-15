@@ -1,0 +1,59 @@
+{
+  "slug": "vektor-veritabani-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Mimari · Vektör Veritabanı",
+    "en": "Architecture · Vector Database"
+  },
+  "title": {
+    "tr": "Vektör veritabanı (vector database) nedir?",
+    "en": "What is a vector database?"
+  },
+  "lede": {
+    "tr": "Vektör veritabanı, embedding vektörlerini saklar ve bir soruya anlamca en yakın kayıtları hızla bulur. RAG sistemlerinin temelidir.",
+    "en": "A vector database stores embedding vectors and quickly finds the records closest in meaning to a query. It is the backbone of RAG systems."
+  },
+  "body": {
+    "tr": [
+      [
+        "Vektör veritabanı nedir?",
+        "<p>Klasik veritabanları \"müşteri numarası 1042 olan kaydı getir\" gibi kesin eşleşmelerde çok iyidir. Anlam üzerinden arama başka bir iştir: \"iade süresi ne kadar?\" sorusu için içinde \"cayma hakkı 14 gün\" yazan paragrafı bulmak gerekir, oysa iki cümle ortak kelime taşımaz.</p><p>Vektör veritabanı bu işi yapar. Metinlerin <a href=\"/nedir/embedding-nedir/\">embedding</a> vektörlerini saklar ve bir sorgu vektörüne en yakın vektörleri getirir.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<ul><li>Belgeler parçalara bölünür ve her parça bir embedding modeliyle vektöre çevrilir.</li><li>Vektörler; metnin kendisi, kaynağı ve tarihi gibi ek bilgilerle (metadata) birlikte veritabanına yazılır.</li><li>Bir soru geldiğinde o da vektöre çevrilir ve veritabanı en yakın kayıtları döndürür.</li></ul><p>Milyonlarca vektörü tek tek karşılaştırmak yavaş olacağı için bu sistemler yaklaşık en yakın komşu (ANN) arama algoritmaları kullanır. En yaygınlarından HNSW, vektörleri katmanlı bir ağ gibi birbirine bağlar ve aramayı birkaç adımda doğru bölgeye daraltır. Karşılığında sonuç yüzde yüz kesin değildir, çok iyi bir yaklaşıktır.</p>"
+      ],
+      [
+        "Hangi seçenekler var?",
+        "<p>Pinecone, Weaviate, Qdrant ve Milvus vektör aramaya özel geliştirilmiş sistemlerdir. Zaten PostgreSQL kullanan ekipler pgvector eklentisiyle vektörleri mevcut veritabanında tutabilir; Elasticsearch ve OpenSearch da vektör aramayı destekler. Küçük ve orta ölçekli projelerde ayrı bir sistem kurmadan mevcut veritabanına vektör eklemek çoğu zaman yeterlidir.</p><p>En iyi sonuç sık sık vektör aramasını klasik anahtar kelime aramasıyla birleştiren hibrit aramadan gelir. Ürün kodu ya da kişi adı gibi kesin ifadeleri anahtar kelime araması daha iyi yakalar.</p>"
+      ],
+      [
+        "Ne işe yarar?",
+        "<p>En yaygın kullanımı <a href=\"/nedir/rag-nedir/\">RAG</a> sistemleridir: şirket belgeleriyle cevap veren asistanlar, ürün kataloğunda anlamsal arama ve benzer destek taleplerini bulma bunlara örnektir. Yapay zekâ ajanlarının <a href=\"/nedir/ai-memory-nedir/\">uzun süreli hafızası</a> da çoğunlukla bir vektör veritabanında tutulur.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a vector database?",
+        "<p>Traditional databases are excellent at exact matches such as \"fetch customer 1042\". Searching by meaning is a different job: to answer \"how long do I have to return this?\" you need the paragraph that says \"you may withdraw within 14 days\", even though the two share no words.</p><p>A vector database does that job. It stores the <a href=\"/en/nedir/embedding-nedir/\">embedding</a> vectors of your texts and returns the vectors closest to a query vector.</p>"
+      ],
+      [
+        "How does it work?",
+        "<ul><li>Documents are split into chunks and each chunk is turned into a vector by an embedding model.</li><li>The vectors are stored together with the text itself and extra fields such as source and date (metadata).</li><li>When a question arrives it is embedded too, and the database returns the nearest records.</li></ul><p>Comparing millions of vectors one by one would be slow, so these systems use approximate nearest neighbor (ANN) algorithms. One of the most common, HNSW, links vectors into a layered graph and narrows the search to the right region in a few hops. The trade off is that results are a very good approximation rather than perfectly exact.</p>"
+      ],
+      [
+        "What are the options?",
+        "<p>Pinecone, Weaviate, Qdrant and Milvus are built specifically for vector search. Teams already on PostgreSQL can keep vectors in their existing database with the pgvector extension, and Elasticsearch and OpenSearch support vector search as well. For small and mid sized projects, adding vectors to the database you already run is often enough.</p><p>The best results frequently come from hybrid search, which combines vector search with classic keyword search. Keyword search is better at exact strings such as product codes or names.</p>"
+      ],
+      [
+        "What is it used for?",
+        "<p>The most common use is <a href=\"/en/nedir/rag-nedir/\">RAG</a>: assistants that answer from company documents, semantic search in product catalogs and finding similar support tickets. The <a href=\"/en/nedir/ai-memory-nedir/\">long term memory</a> of AI agents usually lives in a vector database too.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

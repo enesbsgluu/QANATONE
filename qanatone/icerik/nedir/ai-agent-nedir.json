@@ -1,0 +1,59 @@
+{
+  "slug": "ai-agent-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Uygulama · AI Agent",
+    "en": "Applications · AI Agent"
+  },
+  "title": {
+    "tr": "AI agent (yapay zekâ ajanı) nedir?",
+    "en": "What is an AI agent?"
+  },
+  "lede": {
+    "tr": "AI agent, bir hedefe ulaşmak için kendi başına adım planlayan, araç kullanan ve sonuca göre yön değiştiren yapay zekâ sistemidir.",
+    "en": "An AI agent is an AI system that plans its own steps, uses tools and changes course based on results in order to reach a goal."
+  },
+  "body": {
+    "tr": [
+      [
+        "AI agent nedir?",
+        "<p>Bir sohbet asistanı sorunuza cevap verir. Bir ajan ise sizin yerinize bir iş yapar. \"Geçen ayın faturalarını topla, ödenmemiş olanlar için müşterilere hatırlatma e-postası hazırla\" dediğinizde ajan muhasebe sistemine bağlanır, faturaları çeker, ödenmemişleri ayırır, e-postaları yazar ve onayınıza sunar. Arada bir adım başarısız olursa başka bir yol dener.</p>"
+      ],
+      [
+        "Nasıl çalışır?",
+        "<p>Bir ajanın merkezinde bir <a href=\"/nedir/buyuk-dil-modelleri-nedir/\">dil modeli</a> ve bir döngü vardır:</p><ul><li>Plan: model hedefi alt adımlara böler.</li><li>Eylem: bir araç çağırır. Bu bir API, veritabanı, web tarayıcısı ya da e-posta sistemi olabilir; çağrı <a href=\"/nedir/function-calling-nedir/\">function calling</a> ile yapılır.</li><li>Gözlem: aracın döndürdüğü sonucu okur.</li><li>Karar: hedefe ulaşılıp ulaşılmadığına ve sonraki adıma karar verir.</li></ul><p>Döngü, iş bitene ya da ajan insan onayına ihtiyaç duyana kadar sürer. Ajan bu süre boyunca ne yaptığını <a href=\"/nedir/ai-memory-nedir/\">hafızasında</a> tutar.</p>"
+      ],
+      [
+        "Nerelerde kullanılır?",
+        "<p>Bugün en yaygın örnekler; müşteri taleplerini karşılayıp randevu oluşturan ya da doğru ekibe yönlendiren asistanlar, gelen e-postaları sınıflandırıp CRM kaydı açan sistemler, kod yazıp testleri çalıştıran kodlama ajanları ve web üzerinde araştırma yapıp rapor hazırlayan araştırma ajanlarıdır. Birden fazla ajanın birlikte çalıştığı yapıların yönetimine <a href=\"/nedir/orkestrasyon-nedir/\">orkestrasyon</a> denir.</p><p>QANATONE'un kurduğu <a href=\"/hizmetler/ai-ajan/\">yapay zekâ ajanları</a> da bu türdendir: gelen talebi günün her saatinde karşılar, eler ve doğru kişiye yönlendirir.</p>"
+      ],
+      [
+        "Riskler ve sınırlar",
+        "<p>Ajan gerçek sistemlerde işlem yaptığı için hatası da gerçek sonuç doğurur: yanlış kişiye giden bir e-posta ya da yanlış tutarla kesilen bir fatura gibi. Bu yüzden ajanlara yalnız ihtiyaç duydukları yetki verilir, para ve müşteri iletişimi gibi kritik adımlar insan onayına bağlanır ve her eylem kayıt altına alınır. Bu kuralların hepsi <a href=\"/nedir/guardrail-nedir/\">guardrail</a> katmanının parçasıdır. Uzun ve belirsiz görevlerde ajanların hâlâ yolunu kaybedebildiğini de hesaba katmak gerekir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is an AI agent?",
+        "<p>A chat assistant answers your question. An agent does a job for you. Say \"collect last month's invoices and draft reminder emails for the unpaid ones\", and an agent connects to the accounting system, pulls the invoices, separates the unpaid ones, writes the emails and presents them for your approval. If a step fails, it tries another way.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>At the center of an agent sit a <a href=\"/en/nedir/buyuk-dil-modelleri-nedir/\">language model</a> and a loop:</p><ul><li>Plan: the model breaks the goal into steps.</li><li>Act: it calls a tool, such as an API, a database, a web browser or an email system, using <a href=\"/en/nedir/function-calling-nedir/\">function calling</a>.</li><li>Observe: it reads what the tool returned.</li><li>Decide: it checks whether the goal is reached and picks the next step.</li></ul><p>The loop runs until the job is done or the agent needs human approval, and the agent keeps track of what it has done in its <a href=\"/en/nedir/ai-memory-nedir/\">memory</a>.</p>"
+      ],
+      [
+        "Where are agents used?",
+        "<p>Common examples today are assistants that handle customer requests and book appointments or route them to the right team, systems that classify incoming email and open CRM records, coding agents that write code and run tests, and research agents that search the web and prepare reports. Coordinating several agents that work together is called <a href=\"/en/nedir/orkestrasyon-nedir/\">orchestration</a>.</p><p>The <a href=\"/en/hizmetler/ai-ajan/\">AI agents</a> QANATONE builds are of this kind: they answer incoming demand around the clock, qualify it and route it to the right person.</p>"
+      ],
+      [
+        "Risks and limits",
+        "<p>Because an agent acts in real systems, its mistakes have real consequences, such as an email sent to the wrong person or an invoice issued for the wrong amount. Agents therefore get only the permissions they need, critical steps like payments and customer messages require human approval, and every action is logged. All of this is part of the <a href=\"/en/nedir/guardrail-nedir/\">guardrail</a> layer. Agents can also still lose their way on long, open ended tasks.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}
