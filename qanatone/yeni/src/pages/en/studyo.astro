@@ -1,0 +1,17 @@
+---
+/* Studio (EN) — aynı gövde parçası, dil='en'. Gerekçe StudyoGovde başında. */
+import Temel from '../../layouts/Temel.astro';
+import StudyoGovde from '../../parcalar/StudyoGovde.astro';
+import { icerik, KOK, sl } from '../../icerik';
+import { anaSema } from '../../sema.mjs';
+
+const canon = sl(`${KOK}/en/studyo`);
+const baslik = 'Studio — QANATONE';
+const aciklama = 'How we work, in one place: AI agents that answer demand, the client journey end to end, and honest answers on pricing, timing and contracts.';
+const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'en' });
+---
+<Temel dil="en" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={sl(`${KOK}/studyo`)} helefen={canon} sema={sema}
+  etiket="Studio" genis>
+  <StudyoGovde dil="en" />
+</Temel>

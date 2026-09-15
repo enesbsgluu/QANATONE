@@ -107,6 +107,21 @@
    "parca": "parcalar/SssGovde.astro"
   },
   {
+   "yol": "/studyo",
+   "anahtar": "nav7",
+   "tr": "Stüdyo",
+   "en": "Studio",
+   "dil": [
+    "tr",
+    "en"
+   ],
+   "mobil": 4,
+   "footer": 3,
+   "sitemap": "0.8",
+   "parca": "parcalar/StudyoGovde.astro",
+   "_": "STUDYO DIZINI (Enes, 15 Eyl 2026 — istisna, kaynakta yoktu). Google site baglantisi yalniz adresi olan sayfaya cikar; Studyo acilir menusu adressizdi. Anahtar `nav7` BILINCLI PAYLASILIYOR: Nav.astro'daki acilir baslik da 'Studyo', ikisi ayni seyin adi — panelde degisince ikisi birlikte degisir (T12 cakisma kolu metinler ayni oldugu surece yesil). Kendi `studyo` alani YOK: acilir menunun icinde kendini kalem olarak listelemez, oraya 'Tumunu gor' bagi olarak girer."
+  },
+  {
    "yol": "/nedir",
    "anahtar": "nav9",
    "tr": "Nedir",
@@ -119,6 +134,7 @@
    "footer": 7,
    "sitemap": "0.8",
    "kosullu": "explainers",
+   "_ust_menu": "15 Eyl 2026 (Enes: 'mobilde var, masaustunde yok'): masaustu ust menude de var — Nav.astro, Haberler'in yaninda. J5'in 'Nedir ust menuye cikmaz' hukmu dondu.",
    "_": "TANIM/ACIKLAMA bolumu (Enes, 9 Eyl 2026): 'konularin ne oldugunu ve nasil calistiklarini acikladigimiz yazilar'. EVERGREEN - bultenin tarihli akisina ve RSS'ine karismaz. GEO tarafinin en guclu yuzeyi: tanim iceriGi dil modelleri tarafindan alintilanir.",
    "_anahtar": "ANAHTAR CAKISMASI (9 Eyl 2026, yakalandi): once `nav7` verilmisti ama o anahtar ZATEN KULLANIMDA - Nav.astro:110 menudeki 'Studyo' acilir basligi onu tasiyor. Iki yuzey ayni panel anahtarini paylassaydi Enes 'Nedir' etiketini duzeltirken menudeki 'Studyo' yazisini degistirirdi (ya da tersi) ve belirti ancak sayfaya bakinca gorunurdu. Serbest sirali anahtar: nav9. Yeni bolum eklerken metin-harita.cjs ciktisindaki nav* listesine BAKILMALI - sayfalar.json tek basina bos anahtari bilmiyor."
   },

@@ -1,0 +1,20 @@
+---
+/* Stüdyo (TR) — Enes, 15 Eyl 2026 (istisna: kaynakta sayfa değil açılır
+   menüydü; gerekçe StudyoGovde başında). Başlık kısa tutuldu çünkü Google
+   site bağlantısının etiketi başlıktan türer; açıklama sayfanın üç
+   kalemini adıyla sayar — bağlantının altında görünen cümle bu. */
+import Temel from '../layouts/Temel.astro';
+import StudyoGovde from '../parcalar/StudyoGovde.astro';
+import { icerik, KOK, sl } from '../icerik';
+import { anaSema } from '../sema.mjs';
+
+const canon = sl(`${KOK}/studyo`);
+const baslik = 'Stüdyo — QANATONE';
+const aciklama = 'Nasıl çalıştığımız tek yerde: talebi karşılayan yapay zekâ ajanları, baştan sona müşteri yolculuğu ve fiyat, süre, sözleşme hakkında dürüst cevaplar.';
+const sema = anaSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
+---
+<Temel dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
+  heleftr={canon} helefen={sl(`${KOK}/en/studyo`)} sema={sema}
+  etiket="Stüdyo" genis>
+  <StudyoGovde dil="tr" />
+</Temel>

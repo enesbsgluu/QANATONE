@@ -1,0 +1,134 @@
+---
+/* Stüdyo dizini gövdesi — TR ve EN aynı parçayı kullanır.
+
+   İSTİSNA (Enes, 15 Eyl 2026: "aç, çünkü o kısım dikkat çeken bir kısım").
+   Kaynakta bu sayfa YOKTU; Stüdyo yalnız bir açılır menüydü. Neden açıldı:
+   Google site bağlantısı (sitelink) yalnız adresi olan sayfaya çıkar,
+   adressiz bir menü başlığı aramada görünemez.
+
+   GÖRSEL DİL YENİ DEĞİL: hizmetler dizininin kart ailesi (HizmetDizin —
+   kaynak `.card` 1150-1168, `.shead` 365-374, `.pgback` 2516-2520) aynı
+   ölçülerle. Tek sapma ızgara: kaynak dört sütun + ≤1000 iki sütun
+   dokuz kalem içindi; burada üç kalem var, üç sütun → ≤1000 tek sütun
+   (iki sütunda üçüncü kart tek başına kalırdı). Kart giriş animasyonu
+   YOK — yalnız kaynağın hover'ı; ada JS'i 0.
+
+   İÇERİK TEK KAYNAKTAN: kalemler, sıraları, ikonları ve açıklamaları
+   Nav'ın Stüdyo menüsüyle AYNI kayıttan (`veri/sayfalar.json` `studyo`
+   alanı). Kalem adı panel anahtarından (mobil menüyle aynı `m(anahtar)`
+   deseni); bu dosyanın kendi metinleri `std*` anahtarlarında. */
+import { icerik, T, type Dil, sl } from '../icerik';
+import sayfalarVeri from '../veri/sayfalar.json';
+import Ikon from './Ikon.astro';
+interface Props { dil: Dil }
+const { dil } = Astro.props;
+const en = dil === 'en';
+const M = (k: string, tr: string, enV: string) =>
+  T(((icerik.strings || {})[dil] || {})[k], dil) || (en ? enV : tr);
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const on = en ? '/en' : '';
+/* Kalem adı kaydın kendi panel anahtarından (mobil menü/alt bilgiyle aynı
+   `strings.<dil>.<anahtar>`). Büyük M yardımcısıyla çağrılmaz: P2 onu yalnız
+   SABİT anahtarla kabul eder (imza karışırsa sessizce yanlış dil basar). */
+const kalemAdi = (s: any): string =>
+  T(((icerik.strings || {})[dil] || {})[s.anahtar], dil) || (en ? s.en : s.tr);
+const kalemler = ((sayfalarVeri as any).statik as any[])
+  .filter((s) => s.studyo).sort((a, b) => a.studyo.sira - b.studyo.sira);
+---
+<a class="pgback" href={sl(`${B}${on}/`)}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  <span>{M('std01', 'Ana sayfa', 'Home')}</span>
+</a>
+
+<section class="giris">
+  <span class="mono">{M('std02', 'Stüdyo', 'Studio')}</span>
+  <h1><span>{M('std03', 'Nasıl çalıştığımız,', 'How we work,')}</span><br
+    /><span class="thin">{M('std04', 'tek yerde.', 'in one place.')}</span
+    ><span class="cnt">({kalemler.length})</span></h1>
+  <p class="lede">{M('std05', 'Talebi karşılayan yapay zekâ ajanları, müşteri yolculuğunun her aşaması ve en çok sorulan soruların cevapları. Birlikte çalışmaya başlamadan önce bilmen gerekenler burada.',
+    'The AI agents that answer demand, every stage of the client journey and answers to the questions we hear most. What to know before we start working together.')}</p>
+</section>
+
+<ol class="bento">
+  {kalemler.map((s: any, i: number) => (
+    <li>
+      <a class="card" href={sl(`${B}${on}${s.yol}`)}>
+        <span class="num">{String(i + 1).padStart(2, '0')}</span>
+        <span class="ic"><Ikon ad={s.studyo.ikon} /></span>
+        <h2>{kalemAdi(s)}</h2>
+        <p>{en ? s.studyo.d[1] : s.studyo.d[0]}</p>
+        <span class="svgo">{M('std06', 'İncele', 'Explore')}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+        </span>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  /* ---- BAŞ: HizmetDizin ile aynı (kaynak 365-374, 2516-2519) ---- */
+  .pgback { display: inline-flex; align-items: center; gap: 9px; font-size: .82rem;
+    color: var(--tx4); margin-bottom: 26px; text-decoration: none; }
+  .pgback svg { width: 14px; height: 14px; }
+  .giris { max-width: 920px; margin-bottom: clamp(40px, 5vw, 66px); }
+  .giris .mono { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    font-family: var(--f-tek); font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--tx3); }
+  .giris .mono::before { content: ''; width: 26px; height: 1px; background: var(--red); }
+  .giris h1 { font-size: clamp(2.3rem, 5.6vw, 4.15rem); margin-bottom: 18px; }
+  .giris h1 .thin { font-weight: 300; color: var(--tx3); }
+  .cnt { font-family: var(--f-tek); font-size: .9rem; color: var(--tx4);
+    vertical-align: super; margin-left: 10px; letter-spacing: 0; }
+  .giris .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--tx2);
+    font-weight: 400; line-height: 1.7; max-width: 62ch; }
+
+  /* ---- IZGARA: üç kalem, üç sütun (sapma — başlığa bak) ---- */
+  .bento { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px; }
+  .bento > li { display: grid; }
+  @media (max-width: 1000px) { .bento { grid-template-columns: 1fr; } }
+
+  /* ---- KART: kaynağın `.card`ı (1150-1168), HizmetDizin ile aynı ---- */
+  .card { position: relative; display: block; color: inherit; text-decoration: none;
+    border: 1px solid var(--line); border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.008));
+    padding: clamp(24px, 2.8vw, 36px); overflow: hidden; }
+  .card::after { content: ''; position: absolute; inset: 0; opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(70% 60% at 80% 0%, rgba(239,35,60,.14), transparent 70%); }
+  .card .ic { width: 46px; height: 46px; border-radius: 13px; display: grid;
+    place-items: center; background: rgba(255,255,255,.05);
+    border: 1px solid var(--line); color: var(--red); margin-bottom: 20px; }
+  .card .ic :global(svg) { width: 20px; height: 20px; }
+  .card h2 { font-size: clamp(1.14rem, 1.9vw, 1.5rem); margin-bottom: 11px;
+    letter-spacing: -.035em; }
+  .card p { font-size: .93rem; color: var(--tx3); line-height: 1.68; font-weight: 300; }
+  .card .num { position: absolute; top: 24px; right: 26px; font-family: var(--f-tek);
+    font-size: 10px; letter-spacing: .16em; color: var(--tx4);
+    border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; }
+  .svgo { display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
+    font-family: var(--f-tek); font-size: 12px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--red-soft); }
+  .svgo svg { width: 12px; height: 12px; }
+
+  /* ---- HOVER: yalnız gerçek imleçte ---- */
+  @media (hover: hover) and (pointer: fine) {
+    .card { transition: border-color .42s var(--e), transform .42s var(--e); }
+    .card::after { transition: opacity .5s var(--e); }
+    .card .ic { transition: background .4s var(--e), border-color .4s var(--e); }
+    .svgo svg { transition: transform .3s var(--e); }
+    .card:hover { border-color: rgba(255,255,255,.2); transform: translateY(-3px); }
+    .card:hover::after { opacity: 1; }
+    .card:hover .ic { background: var(--red-dim); border-color: rgba(239,35,60,.34); }
+    .card:hover .svgo svg { transform: translateX(4px); }
+  }
+  .card:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transform: none; transition: none; }
+    .card::after, .card .ic, .svgo svg { transition: none; }
+  }
+</style>

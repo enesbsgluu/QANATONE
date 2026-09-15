@@ -146,6 +146,10 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   işi görüyor, tek başlık yeterli". Bülten koleksiyonu ve rotaları kalktı, altı
   yazı `icerik/haber`'e taşındı, abone formu Haberler'de; `/bulten/*` ve
   `/en/bulten/*` `_redirects`'te 301 → `/haber/…`. Eski adres hedefleri BH1'de.
+- **Stüdyo sayfası + Nedir üst menüde (Enes, 15 Eyl 2026 — istisna):** `/studyo`
+  kaynakta yoktu (Stüdyo yalnız açılır menüydü); Google site bağlantısı adresi olan
+  sayfaya çıktığı için açıldı, görsel dili hizmetler dizininin kart ailesi. Nedir
+  masaüstü menüde (J5 hükmü döndü). Ana sayfa destesi panel anahtarıyla (`deste-kurali.cjs`).
 - **Yazı ailesi (anayasa istisna 1):** Uncut Sans her alan; tek istisna ana
   sayfa hero başlığı. Kaynakta Playfair olan bir başlığı taşırken aile
   `--f-baslik` tokenine bağlanır, ölçüler (boy, ağırlık, satır aralığı)

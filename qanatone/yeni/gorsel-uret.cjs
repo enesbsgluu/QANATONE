@@ -239,7 +239,12 @@ async function odakliKirp(giris, W, H, fx, fy) {
 /* HERO ODAGI: genel liste (ODAK) + detay hero'suna OZEL iki override
    (kaynak 1232-1233). Kaynak `#pdHero[data-pj=...]` ile genel kurali
    eziyor; burada da ayni oncelikle uygulaniyor. */
-const HERO_ODAK = { 'kononenko-group': [.5, .20], 'bab-ic-mimarlik': [.15, .60] };
+/* Bab dikey odagi .60 -> 0 (Enes, 15 Eyl 2026: "gorsel yukari tasmis, sol
+   ustteki logosu gozukmuyor, asagi cekerek hizala"). Kaynagin .60'i gorselin
+   ust payini kirpiyordu: 1860x898 kutuya olceklenince dikeyde 72 px (masa)
+   / 32 px (mobil) fazla kaliyor, %60'i ustten gidiyor ve logo (x 30-83,
+   y 28-80) kesiliyordu. Yatayda fazla yok, .15 etkisiz — aynen kaldi. */
+const HERO_ODAK = { 'kononenko-group': [.5, .20], 'bab-ic-mimarlik': [.15, 0] };
 
 /* `filter: grayscale(.3) contrast(1.06)` DOSYAYA PISIYOR — kaynak (1734/
    2263) bunu CSS'te yapiyor ama H14 mobil baglamda `filter`i reddediyor
