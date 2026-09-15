@@ -27,8 +27,9 @@ const s = (icerik.strings && (icerik.strings[dil] || icerik.strings.tr)) || {};
 const g = (k: string): string => T(s[k], dil);
 /* Kaynaktaki kural: `founder` tek kişi ama liste olarak işleniyor —
    kaynağın sınıfı `.kteam`, yani bu bölüm kaynakta da bir EKİP listesiydi.
-   EKİP (Enes, 10 Eyl 2026): `content.json team` [{name, role, photo}].
-   Açıklama yok, "isim ve unvan yeterli": gövdede yalnız fotoğraf.
+   EKİP (Enes, 10 Eyl 2026): `content.json team` [{name, role, photo, bio}].
+   15 Eyl 2026 (Enes): üyelere kısa uzmanlık açıklaması (`bio`) eklendi;
+   kurucununkiyle aynı yoldan (suz) basılır, boşsa gövdede yalnız fotoğraf.
    Fotoğraf `gorsel-uret.cjs ekip` üretir (kaynak kök img/ekip/, çıktı
    /img/ekip/<ad>.webp + veri/ekip-gorsel.json ölçüleri); ölçüsü olmayan
    üyenin fotoğrafı basılmaz — kırık görsel yerine boşluk. */

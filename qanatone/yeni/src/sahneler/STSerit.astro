@@ -12,7 +12,10 @@
    Ölçüler `src/veri/serit-logolari.json`'dan gelir; o dosyayı
    gorsel-uret.cjs görsellerle BİRLİKTE üretir, elle yazılmaz.
 
-   Ada JS'i: YOK. Hareket saf CSS. */
+   Ada JS'i: YOK. Hareket saf CSS.
+
+   15 Eyl 2026 (Enes): "Powered by" etiketi ve turun sonundaki kızıl
+   dalga kalktı — şerit yalnız logolardan oluşur (serit.css sapma 5). */
 import '../stil/serit.css';
 import logolar from '../veri/serit-logolari.json';
 
@@ -31,7 +34,6 @@ const TURLAR = [0, 1, 2];
     <div class="st-ray"><div class="st-akis">
       {TURLAR.map((t) => (
         <div class="st-tur" aria-hidden={t > 0 ? 'true' : undefined}>
-          <span class="st-etiket">Powered by</span>
           {logolar.map((l: { ad: string; etiket: string; w: number; h: number }) => (
             <span class="st-logo">
               <picture>
@@ -43,10 +45,6 @@ const TURLAR = [0, 1, 2];
               </picture>
             </span>
           ))}
-          <svg class="sus-dalga" viewBox="0 0 120 40" fill="none" aria-hidden="true">
-            <path d="M2 20 Q30 2 60 20 T118 20" stroke="currentColor"
-              stroke-width="2.4" stroke-linecap="round" />
-          </svg>
         </div>
       ))}
     </div></div>

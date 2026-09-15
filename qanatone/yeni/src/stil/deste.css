@@ -133,6 +133,10 @@
 [data-pj="mercedes-benz"] img{object-position:4% 50%}
 [data-pj="skyclinics"] img{object-position:10% 50%}
 [data-pj="cmblu-energy"] img{object-position:12% 50%}
+/* Bab destede (15 Eyl 2026). Kaynakta destede değildi, odağı yoktu; görsel
+   sitenin ekran görüntüsü ve metin bloğu x=95/1860'ta (%5,1) başlıyor —
+   ortadan kırpınca başlık iki yandan kesiliyordu (1440 px'te ölçüldü). */
+[data-pj="bab-ic-mimarlik"] img{object-position:5% 50%}
 [data-pj="terawulf"] img{object-position:70% 50%}
 /* Yıl rozeti. ZEMİN MOBİLDE DAHA KOYU (.86), masaüstünde kaynaktaki
    .66 + buzlu cam. Gerekçe ölçülmüş değil GÖRÜLMÜŞ: gerçek Chrome'da

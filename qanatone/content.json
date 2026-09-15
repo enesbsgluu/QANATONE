@@ -4256,53 +4256,46 @@
       "slug": "cmblu-energy",
       "image": "img/pj-cmblu-energy.webp",
       "tag": {
-        "tr": "Enerji · Web tasarım",
-        "en": "Energy · Web design"
+        "tr": "Enerji · Yapay zekâ otomasyonu",
+        "en": "Energy · AI automation"
       },
       "text": {
-        "tr": "Büyük ölçekli enerji depolama teknolojisini şebeke operatörüne ve kullanıcıya anlaşılır kılan kurumsal site.",
-        "en": "A corporate site that makes large-scale energy storage legible to grid operators and investors."
+        "tr": "Enerji depolama sistemlerinin servis ve bakım süreçlerini tek bir dijital operasyon merkezinde toplayan, yapay zekâ destekli otomasyon.",
+        "en": "AI-powered service and maintenance automation that brings energy storage field service into a single digital operations hub."
       },
       "meta": {
         "role": {
-          "tr": "Web tasarım",
-          "en": "Web design"
+          "tr": "Yapay zekâ destekli servis ve bakım otomasyonu",
+          "en": "AI-powered service & maintenance automation"
         },
         "ch": {
-          "tr": "Kurumsal site",
-          "en": "Corporate site"
+          "tr": "Servis talepleri, iş emirleri, teknik doküman",
+          "en": "Service requests, work orders, technical documentation"
         }
       },
       "blocks": {
         "tr": [
           [
-            "Sorun",
-            "<p>Derin bir mühendislik hikâyesi vardı ama teknik dil, karar vericiye ulaşmadan yoruyordu.</p>"
-          ],
-          [
             "Yaklaşım",
-            "<p>Teknolojiyi katman katman açan bir anlatı kurduk: önce sorun, sonra çözümün ilkesi, en sonda derinlik. Her katman kendi ziyaretçisine konuşuyor.</p>"
+            "<p>QANATONE olarak CMBlu Energy için geliştirdiğimiz AI destekli servis ve bakım otomasyonu, enerji depolama sistemlerinin teknik servis süreçlerini daha verimli, merkezi ve yönetilebilir hale getirdi. Platform; servis taleplerinin otomatik sınıflandırılması ve ilgili ekiplere yönlendirilmesi, teknik dokümanlara akıllı erişim, bakım görevlerinin planlanması ve iş emirlerinin takibi gibi süreçleri tek bir dijital operasyon merkezi altında birleştirdi.</p>"
           ],
           [
             "Sonuç",
-            "<p>Site hem mühendisin hem yatırımcının aynı sayfada ilerleyebildiği bir zemin oldu.</p>"
+            "<p>Yapay zekâ destekli teknik asistan sayesinde mühendislerin ihtiyaç duyduğu bilgiye daha hızlı ulaşmasını sağlayan çözümümüz, servis geçmişinin düzenli tutulmasına, tekrarlanan sorunların analiz edilmesine ve yöneticilerin operasyonel performansı daha etkin takip etmesine olanak sundu. Böylece CMBlu Energy'nin servis ve bakım operasyonları için daha bağlantılı, verimli ve ölçeklenebilir bir çalışma altyapısı oluşturduk.</p>"
           ]
         ],
         "en": [
           [
-            "The problem",
-            "<p>A deep engineering story buried in technical language.</p>"
-          ],
-          [
             "The approach",
-            "<p>A layered narrative: problem, principle, depth.</p>"
+            "<p>The AI-powered service and maintenance automation QANATONE built for CMBlu Energy made the technical service processes behind its energy storage systems more efficient, centralised and manageable. The platform brings automatic classification of service requests and routing to the right teams, smart access to technical documentation, maintenance planning and work order tracking together in a single digital operations hub.</p>"
           ],
           [
             "The result",
-            "<p>Engineers and investors move through the same page.</p>"
+            "<p>An AI-powered technical assistant gets engineers to the information they need faster. The solution keeps service history organised, makes recurring issues easier to analyse and lets managers track operational performance more effectively. The result is a more connected, efficient and scalable working infrastructure for CMBlu Energy's service and maintenance operations.</p>"
           ]
         ]
-      }
+      },
+      "deste": 0
     },
     {
       "name": "Bab İç Mimarlık",
@@ -4488,8 +4481,8 @@
       "en": "Founder — SEO, ads and AI automation"
     },
     "bio": {
-      "tr": "<p>Girişimciliğe kripto para sektöründe başladım; kriptografi ve yazılım o günden beri ilgi alanım. Kurduğum dört girişim gizlilik anlaşmasıyla devredildi, süreç boyunca <b>4M$+ bütçe</b> yönettim.</p><p>Yaratıcı reklam süreçlerini teknolojiyi yakından izleyerek geliştirdim. 2023'ten beri odağım yapay zekâ: Shopify, Amazon, Etsy, Gumroad ve TikTok Shop üzerinde kendi e-ticaret operasyonlarımı yürütüyorum ve bu operasyonlarda öğrendiğim her şeyi yapay zekâyla ölçekleme yöntemlerine dönüştürüyorum.</p><p>QANATONE bu birikimin tek çatı altında toplanmış hâli: talebi yakalayan sistemleri kurar, ölçer ve işletmeye devrederiz. Ajansların anonim kaldığı bir sektörde ismiyle duran biri olmayı tercih ediyorum.</p>",
-      "en": "<p>I started out in the crypto sector; cryptography and software have been my field ever since. Four ventures I founded were transferred under confidentiality agreements, and along the way I managed <b>$4M+ in budgets</b>.</p><p>I built my creative advertising practice by tracking technology closely. Since 2023 my focus has been artificial intelligence: I run my own e-commerce operations across Shopify, Amazon, Etsy, Gumroad and TikTok Shop, and turn everything those operations teach me into methods for scaling with AI.</p><p>QANATONE is that experience under one roof: we build the systems that capture demand, measure them, and hand them over to the business. In an industry where agencies stay anonymous, I would rather stand behind my own name.</p>"
+      "tr": "<p>Girişimciliğe kripto para sektöründe başladım; kriptografi ve yazılım o günden beri ilgi alanım.</p><p>Yaratıcı reklam süreçlerini teknolojiyi yakından izleyerek geliştirdim. 2023'ten beri odağım yapay zekâ: Shopify, Amazon, Etsy, Gumroad ve TikTok Shop üzerinde kendi e-ticaret operasyonlarımı yürütüyorum ve bu operasyonlarda öğrendiğim her şeyi yapay zekâyla ölçekleme yöntemlerine dönüştürüyorum.</p><p>QANATONE bu birikimin tek çatı altında toplanmış hâli: talebi yakalayan sistemleri kurar, ölçer ve işletmeye devrederiz. Ajansların anonim kaldığı bir sektörde ismiyle duran biri olmayı tercih ediyorum.</p>",
+      "en": "<p>I started out in the crypto sector; cryptography and software have been my field ever since.</p><p>I built my creative advertising practice by tracking technology closely. Since 2023 my focus has been artificial intelligence: I run my own e-commerce operations across Shopify, Amazon, Etsy, Gumroad and TikTok Shop, and turn everything those operations teach me into methods for scaling with AI.</p><p>QANATONE is that experience under one roof: we build the systems that capture demand, measure them, and hand them over to the business. In an industry where agencies stay anonymous, I would rather stand behind my own name.</p>"
     },
     "links": [
       {
@@ -4502,18 +4495,26 @@
     {
       "name": "Naveen Nair",
       "role": {
-        "tr": "Yazılım Geliştirici",
-        "en": "Software Developer"
+        "tr": "Backend Uzmanı",
+        "en": "Backend Engineer"
       },
-      "photo": "img/ekip/naveen-nair.webp"
+      "photo": "img/ekip/naveen-nair.webp",
+      "bio": {
+        "tr": "<p>Sunucu tarafı mimarisi, API tasarımı ve veritabanları üzerine çalışıyor. Otomasyon hatlarının ve yapay zekâ entegrasyonlarının arkasındaki servisleri kuruyor; verinin sistemler arasında güvenli, hızlı ve ölçeklenebilir biçimde akmasını sağlıyor.</p>",
+        "en": "<p>Works on server-side architecture, API design and databases. Builds the services behind our automation pipelines and AI integrations, keeping data moving between systems securely, quickly and at scale.</p>"
+      }
     },
     {
       "name": "Haochen Liu",
       "role": {
-        "tr": "Yazılım Geliştirici",
-        "en": "Software Developer"
+        "tr": "Full Stack Geliştirici",
+        "en": "Full-Stack Developer"
       },
-      "photo": "img/ekip/haochen-liu.webp"
+      "photo": "img/ekip/haochen-liu.webp",
+      "bio": {
+        "tr": "<p>Arayüzden sunucuya, bir ürünün bütün katmanlarında çalışıyor. Web uygulamalarını, yönetim panellerini ve entegrasyonları uçtan uca geliştiriyor; tasarımı çalışan ve bakımı kolay koda dönüştürüyor.</p>",
+        "en": "<p>Works across every layer of a product, from interface to server. Builds web applications, admin panels and integrations end to end, turning designs into working, maintainable code.</p>"
+      }
     }
   ],
   "socials": [

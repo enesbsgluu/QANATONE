@@ -100,6 +100,7 @@ async function logolar() {
    Kunye `src/veri/deste-gorselleri.json`: hangi projeler destede ve
    olculeri ne. Bilesen onu okur, olcuyu ELLE yazmaz; denetimdeki H15
    kunye ile content.json'i karsilastirir, panel degisirse kirmizi doner.  */
+const { desteUygun } = require('./deste-kurali.cjs');
 const DESTE_ADET = 6;                      /* destede kac is duruyor */
 const MASA_GEN = 1030, MASA_YUK = 480;     /* masaustu alt sinirlar */
 const MOBIL_GEN = 640, MOBIL_ORAN = 9 / 16;
@@ -109,10 +110,11 @@ const KART_KUNYE = path.join(__dirname, 'src', 'veri', 'deste-gorselleri.json');
 async function kartlar() {
   fs.mkdirSync(KART_HEDEF, { recursive: true });
   const icerik = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content.json'), 'utf8'));
-  /* Deste kurali TEK yerde: fotografi olan isler, kaynak sirasiyla, ilk
-     DESTE_ADET tanesi. `imgc` (logo) tasiyan is destede degil — logo kart
-     penceresini dolduramaz, arsivde yasar. */
-  const secim = (icerik.projects || []).filter(p => p.image && !p.imgc).slice(0, DESTE_ADET);
+  /* Deste kurali TEK yerde: `deste-kurali.cjs` (15 Eyl 2026) — uygun isler,
+     kaynak sirasiyla, ilk DESTE_ADET tanesi. Eskiden burada `!p.imgc`
+     yaziyordu (logo tasiyan is destede degildi); kural artik panelin
+     "Ana sayfa destesinde goster" anahtarina bakiyor. */
+  const secim = (icerik.projects || []).filter(desteUygun).slice(0, DESTE_ADET);
   const kunye = [];
   let masaToplam = 0, mobilToplam = 0, kaynakToplam = 0;
   for (const p of secim) {

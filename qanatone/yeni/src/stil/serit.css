@@ -23,6 +23,12 @@
    4) Ölü `.tkw` sınıfları (büyük kelime şeridi) taşınmadı: eski CSS'te
       duruyordu ama hiçbir JS onları basmıyordu — ölçüldü, kaynakta
       karşılığı yok.
+   5) "Powered by" etiketi (.st-etiket) ve turun sonundaki kızıl dalga
+      (.sus-dalga) KALKTI (Enes, 15 Eyl 2026). Kaynakta ikisi de vardı;
+      Enes'in saydığı fazlalık. Şerit yalnız logolardan oluşur. Satırın en
+      yüksek öğesi dalga (masaüstü) / etiketti (mobil); bölüm ölçüldü:
+      1440 px 94,13 → 84,94 · 390 px 92 → 86. Üst kenar yerinde (kol hizası
+      değişmez), altındaki bölümler o kadar yukarı gelir.
    ============================================================ */
 
 /* `.ana` ile nitelenir: ana.css'teki `.ana section{padding:11vh 0}`
@@ -203,14 +209,8 @@
   gap:clamp(30px,4.4vw,74px);padding-right:clamp(30px,4.4vw,74px)}
 @keyframes st-akis{to{transform:translateX(calc(-100% / 3))}}
 
-.st-etiket{flex:none;font-family:var(--f-tek);font-size:10px;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--red-soft);
-  padding:9px 18px;border:1px solid rgba(239,35,60,.32);border-radius:999px;
-  background:rgba(239,35,60,.06);line-height:1}
 .st-logo{flex:none;display:flex;align-items:center}
 .st-logo img{height:clamp(24px,3vw,34px);width:auto;display:block;opacity:.92}
-.sus-dalga{flex-shrink:0;width:clamp(60px,9vw,130px);height:auto;
-  color:var(--red);opacity:.85}
 
 @media(max-width:760px){.st-ray{padding-left:4vw}}
 

@@ -4249,7 +4249,10 @@ const psiMobilSorgu = (h) => {
          kesilmis hali olmali (deste kurali: fotografi olan ilk N is).
          Uzunlugu kunyeden alip ayni diziyi kesmek dairesel olurdu —
          her kunye kendini dogrulardi; olculen sey SIRA ve KIMLIK. */
-      const fotograflilar = (c2.projects || []).filter(x => x.image && !x.imgc);
+      /* 15 Eyl 2026: kosul `deste-kurali.cjs`ten — uretecle AYNI fonksiyon.
+         Ad tarihsel ("fotografli"): artik "desteye uygun isler" demek. */
+      const { desteUygun } = require('./deste-kurali.cjs');
+      const fotograflilar = (c2.projects || []).filter(desteUygun);
       /* ANA SAYFA DESTESI DORT KART (kaynak `const DESTE_PROJE=4`, kok 6975).
          Kural once kunye uzunlugunu (alti) bekliyordu; deste kaynaga donunce
          iki is ana sayfada basilmaz oldu. KURAL GEVSEMEDI, ikiye ayrildi:
@@ -4295,23 +4298,25 @@ const psiMobilSorgu = (h) => {
       const kusur = [];
       if (!onek || kunye.length === 0)
         kusur.push('kunye SIRASI content.json ile ayristi (gorsel-uret.cjs kosmadi?)');
-      if (kunyesiz.length) {
-        /* 14 Eyl 2026: tavsiye YONLU. Kunye (proje-gorselleri) isi LOGO
-           sayiyorsa eksik olan gorsel degil content.json'daki imgc'dir;
-           gorsel-uret.cjs kosmak o logoyu fotografa cevirir (13 Eyl'de
-           tam bu oldu). Ayrinti H30. */
-        const pgH = JSON.parse(fs.readFileSync(
-          path.join(__dirname, 'src', 'veri', 'proje-gorselleri.json'), 'utf8'));
-        const logoMu = (s) => !!(pgH.find((x) => x.slug === s) || {}).logo;
-        const logolar = kunyesiz.filter((f) => logoMu(f.slug)).map((f) => f.slug);
-        const digerleri = kunyesiz.filter((f) => !logoMu(f.slug)).map((f) => f.slug);
-        if (logolar.length)
-          kusur.push('destede logo is (' + logolar.join(',')
-            + '): content.json imgc DUSMUS — geri yaz, gorsel-uret.cjs KOSMA (H30)');
-        if (digerleri.length)
-          kusur.push('destedeki ' + digerleri.length + ' isin kunyede gorseli YOK ('
-            + digerleri.join(',') + ') — gorsel-uret.cjs kosmali');
-      }
+      /* 15 Eyl 2026: LOGO KOLU KALKTI. 14 Eyl'de burada "kunye isi LOGO
+         sayiyorsa content.json imgc dusmus" tavsiyesi vardi — o gun imgc
+         isi desteden cikariyordu, imgc'si dusen logo is desteye sizardi.
+         Artik imgc desteyi belirlemiyor (deste-kurali.cjs); logo/fotograf
+         tutarliligi H30'un sorusu. Burada tek teshis kaldi. */
+      if (kunyesiz.length)
+        kusur.push('destedeki ' + kunyesiz.length + ' isin kunyede gorseli YOK ('
+          + kunyesiz.map((f) => f.slug).join(',') + ') — gorsel-uret.cjs kosmali');
+      /* KAPSAM IKI YONLU (15 Eyl 2026). Asagidaki dongu beklenen isin
+         destede VAR oldugunu soruyor, FAZLADAN basilan karti gormuyordu:
+         bayat kunye, panelde destesi kapatilan isi kart olarak basmaya
+         devam eder ve kural yesil kalirdi. Basilan kartlarin sirasi
+         beklenen sirayla BIREBIR ayni olmali. Betik bloklari once atilir
+         (sablon metni eslesmesin). */
+      const basilan = [...deste.replace(/<script[\s\S]*?<\/script>/g, '')
+        .matchAll(/\bdata-pj="([^"]+)"/g)].map((m) => m[1]);
+      if (basilan.join(',') !== beklenen.map((x) => x.slug).join(','))
+        kusur.push('deste kartlari [' + basilan.join(',') + '] beklenen ['
+          + beklenen.map((x) => x.slug).join(',') + '] ile ayni degil');
       const metin = coz(deste);
       for (const x of beklenen)
         for (const [ad, deger] of [['ad', x.name], ['yil', String(x.year)],
@@ -4322,10 +4327,14 @@ const psiMobilSorgu = (h) => {
       let arsivMetin = '';
       if (fs.existsSync(arsivYol)) arsivMetin = coz(oku(arsivYol));
       else kusur.push('arsiv:/projeler yok');
-      for (const x of fotograflilar)
+      /* 15 Eyl 2026: arsiv kolu destenin kosuluna BAGLI DEGIL — destesi
+         kapatilan is (deste: 0) arsivde durmaya devam eder; arsiv TUM
+         projeleri tasir (ProjeDizin koleksiyonun tamamini basar). */
+      const arsivIsleri = (c2.projects || []).filter((x) => x && x.name);
+      for (const x of arsivIsleri)
         for (const [ad, deger] of [['ad', x.name], ['etiket', T2(x.tag)]])
           if (arsivMetin && !arsivMetin.includes(String(deger))) kusur.push(`arsiv:${x.slug}:${ad}-yok`);
-      ol(`H15 · deste icerigi ham HTML'de tam (ana ${beklenen.length} is x ad/yil/etiket/anlatim · arsiv ${fotograflilar.length} is)`,
+      ol(`H15 · deste icerigi ham HTML'de tam (ana ${beklenen.length} is x ad/yil/etiket/anlatim · arsiv ${arsivIsleri.length} is)`,
          kusur.length === 0, kusur.slice(0, 3).join(' '));
     }
 

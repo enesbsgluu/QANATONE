@@ -10,7 +10,9 @@ import { dizinSema } from '../sema.mjs';
 
 const canon = sl(`${KOK}/hizmetler`);
 const baslik = 'Hizmetler — QANATONE';
-const aciklama = 'SEO, GEO, Google & Meta Ads, AI ajanları ve otomasyon.';
+/* 15 Eyl 2026: açıklama EN eşiyle hizalandı (eskisi 53 karakterdi). Google
+   site bağlantısının altında bu cümleyi gösterir. */
+const aciklama = `SEO, GEO, Google ve Meta reklamları, yapay zekâ ajanları, otomasyon, web tasarımı ve çalışan araçlar: her biri tek bir sorunu çözen ${(icerik.services || []).length} hizmet.`;
 const sema = dizinSema(icerik, { url: canon, ad: baslik, aciklama, dil: 'tr' });
 ---
 <Temel lead={false} dil="tr" baslik={baslik} aciklama={aciklama} canonical={canon}
