@@ -11,10 +11,10 @@
 
    ONCEKI KURAL `image && !imgc` idi: kart logosu (`imgc`) tasiyan is
    destede yer almiyordu. Enes (15 Eyl 2026): "CMBlu Energy'yi kartlardan
-   cikar, yerine Bab Ic Mimarlik gelsin". Deste karti gorseli her zaman
-   `image`ten uretilir, logo kullanilmaz (logo yalniz arsiv kartinda,
-   ProjeDizin); Bab'in `image`i sitesinin ekran goruntusu. "Hangi is
-   destede" sorusu artik logonun varligina degil kendi alanina bakiyor. */
+   cikar, yerine Bab Ic Mimarlik gelsin". "Hangi is destede" sorusu artik
+   logonun varligina degil kendi alanina bakiyor. Kart GORSELI ayri soru:
+   `imgc` (kart logosu) varsa logo (deste + arsiv), yoksa `image`; proje
+   sayfasinin kapagi her zaman `image` (Enes, ayni gun). */
 const kapali = (v) => v === 0 || v === '0' || v === false;
 const desteUygun = (p) => !!(p && p.image) && !kapali(p.deste);
 module.exports = { desteUygun };

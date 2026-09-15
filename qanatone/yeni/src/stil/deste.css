@@ -133,10 +133,12 @@
 [data-pj="mercedes-benz"] img{object-position:4% 50%}
 [data-pj="skyclinics"] img{object-position:10% 50%}
 [data-pj="cmblu-energy"] img{object-position:12% 50%}
-/* Bab destede (15 Eyl 2026). Kaynakta destede değildi, odağı yoktu; görsel
-   sitenin ekran görüntüsü ve metin bloğu x=95/1860'ta (%5,1) başlıyor —
-   ortadan kırpınca başlık iki yandan kesiliyordu (1440 px'te ölçüldü). */
-[data-pj="bab-ic-mimarlik"] img{object-position:5% 50%}
+/* LOGO KARTI (Enes, 15 Eyl 2026): kart logosu (`imgc`) taşıyan işin deste
+   kartı logodur — arşiv logo kartının muamelesi birebir (ProjeDizin
+   `.mv[data-logo]`, kaynak 1229-1231): contain + saf siyah zemin + %9
+   dolgu, pencere oranı ne olursa olsun logo tam ve ortalı. İşaret künyeden
+   (`logo: true`, gorsel-uret.cjs). */
+.sp-gorsel[data-logo] img{object-fit:contain;background:#000;padding:9%;box-sizing:border-box}
 [data-pj="terawulf"] img{object-position:70% 50%}
 /* Yıl rozeti. ZEMİN MOBİLDE DAHA KOYU (.86), masaüstünde kaynaktaki
    .66 + buzlu cam. Gerekçe ölçülmüş değil GÖRÜLMÜŞ: gerçek Chrome'da

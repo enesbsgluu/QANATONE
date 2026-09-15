@@ -940,8 +940,8 @@ proje:{t:'Projeler',n:()=>(get('projects')||[]).length,f:()=>`
     ${fld('Kısa anlatım (TR)',p+'.text.tr',{area:1})}
     ${fld('Kısa anlatım (EN)',p+'.text.en',{area:1})}
     <div class="f"><label>Kapak görseli</label>${img(p+'.image')}</div>
-    <div class="f"><label>Kart logosu <i>— doluysa arşiv kartında ve proje sayfasının kapağında fotoğraf yerine logo basılır (ana sayfa destesi kapak görselini kullanır)</i></label>${img(p+'.imgc')}</div>
-    <div class="sws">${sw('Ana sayfa destesinde göster',p+'.deste')}</div><p class="hint" style="margin:-6px 0 12px">Anahtarı açık ve kapak görseli olan ilk dört proje ana sayfa destesinde görünür; kart görseli kapaktan üretilir. Kapalı proje yalnız <span class="mono">/projeler</span> arşivinde ve kendi sayfasında durur.</p>
+    <div class="f"><label>Kart logosu <i>— doluysa ana sayfa destesinde ve arşiv kartında fotoğraf yerine logo basılır; proje sayfasının kapağı kapak görselidir</i></label>${img(p+'.imgc')}</div>
+    <div class="sws">${sw('Ana sayfa destesinde göster',p+'.deste')}</div><p class="hint" style="margin:-6px 0 12px">Anahtarı açık ve kapak görseli olan ilk dört proje ana sayfa destesinde görünür; kart görseli kart logosu varsa logo, yoksa kapaktır. Kapalı proje yalnız <span class="mono">/projeler</span> arşivinde ve kendi sayfasında durur.</p>
     <h4 class="sec">Künye</h4>
     <div class="r2">${fld('Kapsam (TR)',p+'.meta.role.tr')}${fld('Kapsam (EN)',p+'.meta.role.en')}</div>
     <div class="r2">${fld('Süre (TR)',p+'.meta.dur.tr')}${fld('Süre (EN)',p+'.meta.dur.en')}</div>
