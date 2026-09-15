@@ -19,10 +19,10 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
 
 ## Oturum ritüeli
 
-1. Açılışta `DEVIR.md`'ye bak — paketin fiziksel durumu orada, elle yazılmaz,
-   `build.js` üretir.
-2. Gerçek işe girmeden `node build.js` koştur, denetim suite'inin
-   **sıfır kalanla** bittiğini gör. Kırık zeminde iş yapılmaz.
+1. `DEVIR.md` DONMUŞTUR: onu üreten `build.js` 15 Eyl 2026'da silindi (depo
+   temizliği). Güncel durum git log + denetim çıktısındadır.
+2. Gerçek işe girmeden `npm --prefix yeni run build` + `node yeni/denetim.cjs`
+   koştur, denetimin **sıfır kalanla** bittiğini gör. Kırık zeminde iş yapılmaz.
 3. Oturum sonunda: suite temiz → commit → push. `DEVIR.md` her derlemede
    kendini günceller, elleme.
 4. **Her commit mesajının sonuna `[skip ci]` (Enes, 21 Ağu)** — Netlify
@@ -40,7 +40,9 @@ Dosya düzenini, bağımlılıkları, sayfa listesini buraya yazma; depo söylü
   `node yeni/denetim.cjs` **sıfır kalan** ile bittiğinde biter.
   (10 Eyl 2026: eskiden burada `node build.js` yazıyordu. O betik eski kök
   siteyi üretiyordu, 6 Eyl'de zincirden çıktı ve **çalıştırılırsa `dist`i
-  siler** — ölçüt artık yalnız yeni kabuk denetimidir.)
+  siler** — ölçüt artık yalnız yeni kabuk denetimidir. 15 Eyl 2026'da dosya
+  silindi; kök `index.html` ise KALDI: denetim ve testler eski sitenin
+  kaynağı olarak onu okuyor.)
 - **Her düzeltme `yeni/denetim.cjs`'te kalıcı bir kurala dönüşür.** Kural
   yazarken ham metin regex'i değil DOM üzerinden ölç — `<script>` içindeki
   şablon elementmiş gibi eşleşir, yanlış yeşil verir. Yanlış yeşil, yanlış

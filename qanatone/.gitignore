@@ -66,6 +66,15 @@ yeni/film/karehizi/
 # zoom/zemin turu olcum kareleri (800 MB; olcum kaydi json ve commit mesajlarinda)
 yeni/film/_kare-*/
 
+# DEPO TEMIZLIGI (15 Eyl 2026): olcum turlarinin kanit kareleri (kontak-*/,
+# PNG/JPG) ve tani kayitlari depoya GIRMEZ; hukum JSON'larda ve commit
+# mesajlarinda durur. O gun 1.000'i asan atifsiz artik (~275 MB) silindi;
+# geri donus git gecmisinden (temizlik commit'inden onceki surum).
+yeni/film/kontak-*/
+yeni/film/**/*.png
+yeni/film/**/*.jpg
+yeni/film/_tani-cihaz*.jsonl
+
 # Panel gorsel hatti (14 Eyl 2026): kaynak img/yuklenen/ IZLENIR (panel commit eder);
 # yeni/public/img/yuklenen/ derlemede gorsel-uret.cjs icerik uretir.
 yeni/public/img/yuklenen/
