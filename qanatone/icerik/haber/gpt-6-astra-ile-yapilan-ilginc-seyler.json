@@ -1,0 +1,67 @@
+{
+  "slug": "gpt-6-astra-ile-yapilan-ilginc-seyler",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "GPT-6 Astra ile ilk haftada yapılan ilginç şeyler",
+    "en": "Remarkable things people built with GPT-6 Astra"
+  },
+  "lede": {
+    "tr": "Fotoğraftan 3B ev turu, tek komutla oyunlar ve kendi aralarında konuşmaya başlayan ajanlar: Astra'nın ilk kullanıcıları neler yaptı?",
+    "en": "A 3D house tour from listing photos, games from one prompt and agents that started talking to each other: what early Astra users built."
+  },
+  "body": {
+    "tr": [
+      [
+        "İlk hafta",
+        "<p>OpenAI <a href=\"/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>'yı 3 Eylül'de çıkardıktan sonra geliştiriciler ve araştırmacılar sosyal medyayı gösterilerle doldurdu. Eğitimci Min Choi'nin bunlardan on tanesini derlediği paylaşım 890 binden fazla görüntülendi. Öne çıkan örnekleri üç başlıkta topladık.</p>"
+      ],
+      [
+        "Görsel ve 3B işler",
+        "<ul><li>Yunfan Ye, bir emlak ilanının fotoğraflarından evin dışını, içini, havuzunu ve terasını gezen bir dakikalık bir 3B tanıtım turu ürettirdi. Normalde saatler süren iş dakikalar aldı; ama bazı ayrıntılar gerçek evle uyuşmadı ve Astra olmayan şeyler ekledi.</li><li>Matt Wolfe, Blender'da bir kurt modelini iskeleti ve koşu animasyonuyla hazırlatıp Unreal Engine'de oynanabilir bir orman sahnesine koydurdu. Bütün iş bir saatin altında bitti.</li><li>Tom Krcha, bir buharlı tren eskizini tek komutla 3.295 ayrı düzenlenebilir parçadan oluşan bir Blender modeline çevirdi.</li><li>Peter Gostev, altı Van Gogh tablosunu içinde yürünebilen tek bir 3B kasabaya dönüştürdü.</li></ul>"
+      ],
+      [
+        "Oyunlar ve simülasyonlar",
+        "<ul><li>Matthew Berman, tek komutla oynanabilir bir SimCity benzeri ve bir Fall Guys benzeri oyun yaptırdı.</li><li>Bir test kullanıcısının New Haven adlı şehir kurma oyununda imar, inşaat, sağlık istatistikleri ve canlı polis çağrıları vardı.</li><li>Matt Shumer, Unreal Engine'de bir hayatta kalma dünyası kurdurdu ve içine hayatta kalmak için iş birliği yapması gereken özerk ajanlar yerleştirdi. Bir gün sonra ajanlar kendi aralarında konuşmaya başladı ve oturma odasındaki hoparlörlerden sesler gelmeye başladı.</li></ul>"
+      ],
+      [
+        "İş dünyasından örnekler",
+        "<ul><li>Bağışıklık bilimci Derya Unutmaz, T hücresi gelişimini anlatan beş dakikalık bir ders videosunu senaryo, animasyon ve seslendirmesiyle tek komutla hazırlattı.</li><li>ChatPRD'nin arkasındaki isim Claire Vo, aylarca eski modellerle kuramadığı bir ürün analitiği hattını Astra'ya verdi. Model Intercom, Granola, Linear ve GitHub'daki dağınık verileri topladı, tekrarları ayıkladı ve neredeyse ilk denemede çalışan bir sonuç çıkardı.</li><li>Mehul Mohan, Astra'nın bir web uygulamasına girip bir kodlama görevini yapmasını, test etmesini ve kaydı kapatmasını 36 saniyede izledi.</li><li>Ben Davis, Final Cut Pro'da klip aktarma, ses eşleme ve renk düzeltme gibi saatler süren kurgu işlerini dakikalara indirdi.</li></ul>"
+      ],
+      [
+        "Sınırlar",
+        "<p>Gösterilerin çoğu etkileyici ama kusursuz değil. Kullanıcılar üretilen işlerde tanıdık bir yapay zekâ tasarımı havası (düz tasarım, yeşil ağırlıklı renkler), küçük geometri hataları ve yapay zekâ kokan metinler olduğunu not etti. Emlak turunda görüldüğü gibi model boşlukları uydurabiliyor; buna <a href=\"/nedir/halusinasyon-nedir/\">halüsinasyon</a> deniyor. Bu yüzden müşteriye gidecek bir işte insan kontrolü hâlâ şart. Astra'nın başarı ölçümlerinin de hâlâ çoğunlukla OpenAI'dan geldiğini hatırlatalım.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The first week",
+        "<p>After OpenAI released <a href=\"/en/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a> on September 3, developers and researchers flooded social media with demos. Educator Min Choi's roundup of ten of them passed 890,000 views. We grouped the standouts under three headings.</p>"
+      ],
+      [
+        "Visuals and 3D",
+        "<ul><li>Yunfan Ye had Astra turn a real estate listing's photos into a one minute 3D tour covering the exterior, interior, pool and patio. Hours of work took minutes, but some details did not match the real house and Astra invented things.</li><li>Matt Wolfe had it build a wolf in Blender, with a skeleton and running animation, and place it in a playable forest scene in Unreal Engine. The whole job took under an hour.</li><li>Tom Krcha turned a sketch of a steam train into a Blender model made of 3,295 separately editable parts with a single prompt.</li><li>Peter Gostev turned six Van Gogh paintings into one walkable 3D town.</li></ul>"
+      ],
+      [
+        "Games and simulations",
+        "<ul><li>Matthew Berman got a playable SimCity style game and a Fall Guys style game from single prompts.</li><li>A tester's city builder, New Haven, included zoning, construction, healthcare stats and live police calls.</li><li>Matt Shumer had Astra build a survival world in Unreal Engine and fill it with autonomous agents that had to cooperate to stay alive. A day later the agents began talking to each other, and voices started coming out of the speakers in his living room.</li></ul>"
+      ],
+      [
+        "Examples from work",
+        "<ul><li>Immunologist Derya Unutmaz produced a five minute lecture video on T cell development, with script, animation and narration, from one prompt.</li><li>Claire Vo of ChatPRD handed Astra a product intelligence pipeline she had failed to build for months with older models. It pulled scattered data from Intercom, Granola, Linear and GitHub, removed duplicates and produced a working result almost on the first attempt.</li><li>Mehul Mohan watched Astra log into a web app, complete a coding ticket, test it and close it in 36 seconds.</li><li>Ben Davis cut hours of Final Cut Pro editing, such as importing clips, syncing audio and color grading, down to minutes.</li></ul>"
+      ],
+      [
+        "Limits",
+        "<p>Most demos are impressive but not flawless. Users noted a familiar AI design look (flat design, green heavy palettes), small geometry glitches and AI sounding text. As the house tour showed, the model can fill gaps with inventions, which is called <a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a>. Human review is still essential for anything that goes to a client. Most of Astra's benchmark results also still come from OpenAI itself.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

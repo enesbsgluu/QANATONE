@@ -1,0 +1,59 @@
+{
+  "slug": "cerez-nedir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "pazarlama",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Web · Çerez",
+    "en": "Web · Cookies"
+  },
+  "title": {
+    "tr": "Çerez (cookie) nedir? Web sitelerinde çerez ve KVKK",
+    "en": "What is a cookie on a website?"
+  },
+  "lede": {
+    "tr": "Çerez, web sitesinin tarayıcınıza bıraktığı küçük bir dosyadır. Oturumu açık tutar, tercihleri hatırlar; bazıları için açık rıza gerekir.",
+    "en": "A cookie is a small text file a website stores in your browser. It keeps you logged in and remembers preferences; some need your consent."
+  },
+  "body": {
+    "tr": [
+      [
+        "Çerez nedir?",
+        "<p>Bir web sitesine girdiğinizde site, tarayıcınıza küçük bir metin dosyası bırakabilir. Buna çerez (İngilizcesiyle cookie) denir. Bir sonraki ziyarette tarayıcı bu dosyayı siteye geri gönderir ve site sizi tanır. Sepete eklediğiniz ürünün sayfa değiştirince kaybolmaması, her tıklamada yeniden giriş yapmak zorunda kalmamanız ve dil tercihinizin hatırlanması çerezler sayesindedir.</p>"
+      ],
+      [
+        "Çerez türleri",
+        "<p>Çerezler iki açıdan sınıflanır. Kimin koyduğuna göre: ziyaret ettiğiniz sitenin kendi çerezleri birinci taraf, sitedeki reklam ya da ölçüm araçlarının bıraktığı çerezler üçüncü taraf çerezidir. Amacına göre ise dört gruba ayrılırlar:</p><ul><li>Zorunlu çerezler: oturum, sepet ve güvenlik gibi sitenin çalışması için şart olanlar.</li><li>İşlevsel çerezler: dil ve bölge gibi tercihleri hatırlayanlar.</li><li>Performans ve analitik çerezler: ziyaretçilerin siteyi nasıl kullandığını ölçenler.</li><li>Reklam ve pazarlama çerezleri: ilgi alanına göre reklam göstermek ve kampanyaları ölçmek için kullanılanlar.</li></ul>"
+      ],
+      [
+        "Türkiye'de kurallar: KVKK çerez rehberi",
+        "<p>Kişisel Verileri Koruma Kurumu (KVKK), Haziran 2022'de yayımladığı Çerez Uygulamaları Hakkında Rehber'de bir çerezin açık rıza alınmadan kullanılabilmesi için iki istisna tanımladı: çerezin tek amacının iletişimin teknik olarak sağlanması ya da kullanıcının açıkça istediği bir hizmet için kesinlikle gerekli olması. Bu kriterlere uymayan çerezler, yani analitik, reklam ve sosyal medya takip çerezlerinin çoğu, önceden alınmış açık rıza gerektirir.</p><p>Uygulamada bunun anlamı şu: pazarlama kategorileri varsayılan olarak kapalı gelmeli, \"Tümünü kabul et\", \"Tümünü reddet\" ve \"Tercihleri yönet\" seçenekleri eşit görünmeli, içeriğe erişim çerezleri kabul etme şartına bağlanmamalı ve rıza, verildiği kadar kolay geri alınabilmeli. Yurt dışındaki hizmetlere veri gönderen çerezler ayrıca yurt dışına veri aktarımı kurallarına tabidir.</p>"
+      ],
+      [
+        "Site sahibi olarak ne yapmalı?",
+        "<ul><li>Sitenizdeki bütün çerezlerin envanterini çıkarın: adı, amacı, süresi ve birinci mi üçüncü taraf mı olduğu.</li><li>Her çerezi zorunlu ya da rıza gerektiren olarak sınıflandırın.</li><li>Anlaşılır bir çerez politikası yayımlayın ve rıza bannerını yukarıdaki kurallara göre kurun.</li><li>Rıza verilmeden analitik ve reklam etiketlerini yüklemeyin; bu, sitenizin hızına da yarar.</li></ul><p>Tarayıcılar üçüncü taraf çerezlere karşı giderek sıkılaşıyor; Safari ve Firefox bunları varsayılan olarak engelliyor. Ölçümü yalnız üçüncü taraf çerezlere dayandırmak her yıl daha az güvenilir hale geliyor.</p><p>Bu yazı genel bilgilendirme amaçlıdır; kendi siteniz için hukuki destek almanızı öneririz.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What is a cookie?",
+        "<p>When you visit a website, the site can store a small text file in your browser. That file is a cookie. On your next visit the browser sends it back and the site recognizes you. Cookies are why the item in your cart does not disappear when you change pages, why you do not have to log in on every click and why your language choice is remembered.</p>"
+      ],
+      [
+        "Types of cookies",
+        "<p>Cookies are grouped in two ways. By who sets them: cookies from the site you are visiting are first party, while cookies set by ad or analytics tools on that site are third party. By purpose, they fall into four groups:</p><ul><li>Strictly necessary cookies: those the site needs to work, such as session, cart and security.</li><li>Functional cookies: those that remember preferences such as language and region.</li><li>Performance and analytics cookies: those that measure how visitors use the site.</li><li>Advertising and marketing cookies: those used to show interest based ads and measure campaigns.</li></ul>"
+      ],
+      [
+        "Consent rules",
+        "<p>In the EU, cookie rules come from the ePrivacy Directive and the GDPR. In Turkey, the Personal Data Protection Authority (KVKK) published a Cookie Practices Guide in June 2022. Both follow the same logic: cookies that are strictly necessary for communication or for a service the user asked for can be used without consent, while most analytics, advertising and social media tracking cookies need prior, explicit consent.</p><p>In practice this means marketing categories should be off by default, \"accept all\", \"reject all\" and \"manage preferences\" should be presented equally, access to content should not depend on accepting cookies, and consent should be as easy to withdraw as to give. Cookies that send data to services abroad also fall under international data transfer rules.</p>"
+      ],
+      [
+        "What should site owners do?",
+        "<ul><li>List every cookie on your site: name, purpose, lifetime and whether it is first or third party.</li><li>Classify each one as necessary or consent based.</li><li>Publish a clear cookie policy and set up your consent banner according to the rules above.</li><li>Do not load analytics and ad tags before consent; this also helps your site speed.</li></ul><p>Browsers are getting stricter about third party cookies; Safari and Firefox block them by default. Relying only on third party cookies for measurement becomes less reliable every year.</p><p>This article is general information; we recommend legal advice for your own site.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

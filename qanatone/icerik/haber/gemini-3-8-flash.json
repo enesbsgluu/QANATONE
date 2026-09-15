@@ -1,0 +1,59 @@
+{
+  "slug": "gemini-3-8-flash",
+  "date": "2026-09-02",
+  "read": 1,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "Google, Gemini 3.8 Flash ve siber güvenlik modelini çıkardı",
+    "en": "Google releases Gemini 3.8 Flash and a cybersecurity model"
+  },
+  "lede": {
+    "tr": "Google Flash serisini güncelledi: 3.8 Flash kodlama ve ajan görevlerinde gelişti. 3.8 Flash Cyber yalnız güvenilir savunuculara açık.",
+    "en": "Google updated its Flash line: 3.8 Flash improves at coding and agent tasks, and 3.8 Flash Cyber is limited to trusted defenders."
+  },
+  "body": {
+    "tr": [
+      [
+        "Ne değişti?",
+        "<p>Google 2 Eylül'de Gemini 3.8 Flash'ı duyurdu ve onu en akıllı iş gücü modeli olarak tanımladı. Şirkete göre model, 3.7 Flash'a kıyasla yazılım mühendisliği, ajan görevleri ve uzmanlık gerektiren çok adımlı akıl yürütmede belirgin biçimde gelişti. 3.8 Flash, kısa aralıklarla gelen Flash güncellemelerinin sonuncusu; 3.7 Flash 13 Ağustos'ta genel kullanıma açılmıştı.</p>"
+      ],
+      [
+        "Nerede, kaça?",
+        "<p>3.8 Flash; Gemini uygulamasında Google AI Pro ve Ultra abonelerine, Google Arama'daki AI Mode'a ve Google E-Tablolar'daki Gemini'ye açıldı. API fiyatı 3.7 Flash ile aynı tanıtım seviyesinde kaldı: milyon <a href=\"/nedir/token-nedir/\">token</a> başına girdi için 0,75, çıktı için 3,75 dolar.</p>"
+      ],
+      [
+        "Siber güvenlik sürümü",
+        "<p>Google aynı gün Gemini 3.8 Flash Cyber'ı da tanıttı. Şirketin en yetenekli siber güvenlik modeli olarak sunulan bu sürüm, güvenlik açıklarını bulmada ve otomatik yama üretmede öne çıkıyor. Kötüye kullanım riski nedeniyle yalnız yeni Fairwind Programı'na kabul edilen güvenilir savunma ekiplerine açık. Bu yaklaşım, OpenAI'ın <a href=\"/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>'nın yüksek riskli siber yeteneklerini ilk dönemde sıkı denetimde tutmasıyla aynı yönde.</p>"
+      ],
+      [
+        "Neden önemli?",
+        "<p>Flash serisi Google'ın hızlı ve ucuz modellerinden oluşuyor. Sınıflandırma, özetleme ve müşteri mesajlarına ilk cevap gibi günlük işlerin büyük kısmı bu tür modellerle yürütülüyor. Fiyat aynı kalıp yetenek arttıkça, aynı bütçeyle daha zor işler bu katmana kayabiliyor. Bunun maliyete etkisini <a href=\"/nedir/inference-nedir/\">inference</a> yazımızda anlattık.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What changed?",
+        "<p>Google announced Gemini 3.8 Flash on September 2, describing it as its most intelligent workhorse model. According to Google, it improves significantly on 3.7 Flash in software engineering, agentic tasks and multi step reasoning in specialized domains. It is the latest in a run of quick Flash updates; 3.7 Flash became generally available on August 13.</p>"
+      ],
+      [
+        "Where and at what price?",
+        "<p>3.8 Flash went live in the Gemini app for Google AI Pro and Ultra subscribers, in AI Mode in Google Search and in Gemini in Google Sheets. API pricing stayed at the same introductory level as 3.7 Flash: $0.75 per million input <a href=\"/en/nedir/token-nedir/\">tokens</a> and $3.75 per million output tokens.</p>"
+      ],
+      [
+        "The cybersecurity version",
+        "<p>On the same day Google introduced Gemini 3.8 Flash Cyber, presented as its most capable cybersecurity model, strong at finding vulnerabilities and generating patches automatically. Because of misuse risk it is available only to trusted defenders admitted to the new Fairwind Program. The approach mirrors OpenAI keeping <a href=\"/en/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>'s high risk cyber abilities under tight control at launch.</p>"
+      ],
+      [
+        "Why it matters",
+        "<p>The Flash series is Google's line of fast, cheap models. Much everyday work, such as classification, summarizing and first replies to customer messages, runs on models like these. When capability rises while price stays the same, harder jobs can move into this tier on the same budget. Our <a href=\"/en/nedir/inference-nedir/\">inference</a> explainer covers why that matters for cost.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

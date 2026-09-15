@@ -1,0 +1,67 @@
+{
+  "slug": "meta-muse-kisisel-yapay-zeka-ajani",
+  "date": "2026-09-08",
+  "read": 2,
+  "topic": "model",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Modeller",
+    "en": "News · Models"
+  },
+  "title": {
+    "tr": "Meta kişisel yapay zekâ ajanı Muse'u çıkardı",
+    "en": "Meta launches Muse, a personal AI agent for everyone"
+  },
+  "lede": {
+    "tr": "Meta'nın ajanı Muse bilet alıyor, randevu ayarlıyor, alışveriş yapıyor. Şimdilik yalnız ABD'de; ücretsiz ve ücretli planları var.",
+    "en": "Muse books tickets, schedules appointments, fills in forms and shops for you. US only for now, with free, $20 and $100 plans."
+  },
+  "body": {
+    "tr": [
+      [
+        "Ne yapıyor?",
+        "<p>Meta 8 Eylül'de Muse'u tanıttı ve onu \"herkes için kişisel yapay zekâ ajanı\" olarak sundu. Muse sinema bileti alabiliyor, randevu ayarlayabiliyor, e-posta gönderebiliyor, seyahat rezervasyonu yapabiliyor, form doldurabiliyor ve kullanıcı adına alışveriş yapabiliyor. Meta'nın örnekleri arasında bir arabayı daha iyi fiyata satmak, faturaları düşürmek için pazarlık etmek ve antrenman planını güncellemek de var. Uygulama kapandıktan sonra da çalışmayı sürdürüyor; bir şey değiştiğinde ya da onay gerektiğinde kullanıcıya dönüyor.</p><p>Muse'un arkasında Meta'nın en yetenekli modeli olarak tanıttığı Muse Spark var. Aynı model ailesi, ağustosta çıkan kodlama ajanı <a href=\"/haber/meta-muse-code-kodlama-ajani/\">Muse Code</a> ürününde de kullanılıyordu.</p>"
+      ],
+      [
+        "Nasıl çalışıyor?",
+        "<p>Her kullanıcının Muse'u, Meta'nın Muse Secure VM adını verdiği, bulutta ayrı ve kendi tarayıcısı olan bir sanal bilgisayarda çalışıyor. Aynı makinede ama sistem düzeyinde ayrı tutulan Sentinel adlı ikinci bir ajan, internete giden her eylemi onaylıyor. Meta'ya göre Muse kullanıcının şifrelerini ve ödeme yöntemlerini göremiyor; ödemeler Stripe'ın Link hizmetiyle yapılıyor, Shop Pay desteği de yolda. E-posta gönderme ve satın alma gibi hassas adımlar kullanıcı onayı istiyor ve her eylem kayıt altına alınıyor.</p><p>Muse konuşmalar arasında <a href=\"/nedir/ai-memory-nedir/\">hafıza</a> tutuyor: beslenme tercihlerinizi ya da kaydettiğiniz tarifleri hatırlıyor, sorulmadan öneri getirebiliyor. Kullanıcı öğrendiği belirli bir bilgiyi sildirebiliyor. Meta, konuşmaların reklam sistemlerine gitmediğini ve kullanıcının eğitim verisinden çıkabileceğini söylüyor.</p>"
+      ],
+      [
+        "Fiyat ve erişim",
+        "<p>Muse şimdilik yalnız ABD'de; iOS, Android, WhatsApp ve muse.ai adresi üzerinden kullanılabiliyor. Meta'nın yapay zekâ gözlükleri için destek \"yakında\" olarak duyuruldu. Ücretsiz planda kalan kullanım bir sayaçla gösteriliyor. Daha fazla kullanım için ayda 20 dolarlık Power ve 100 dolarlık Maximum planları var; Meta kullanıcıların çoğunun ücretsiz planda kalmasını bekliyor.</p>"
+      ],
+      [
+        "Güven sorusu",
+        "<p>Lansmanın en çok tartışılan yanı güven oldu. TechCrunch, Meta'nın gizlilik geçmişini hatırlattı: şirket 2019'da ABD Federal Ticaret Komisyonu (FTC) ile gizlilik ihlalleri nedeniyle 5 milyar dolarlık bir uzlaşmaya varmış, Cambridge Analytica skandalıyla da uzun süre anılmıştı. E-postanıza, takviminize ve ödeme araçlarınıza erişen bir ajan söz konusu olduğunda bu geçmiş, teknik güvenceler kadar konuşulacak gibi görünüyor.</p>"
+      ],
+      [
+        "İşletmeler için anlamı",
+        "<p>Muse gibi ajanlar yaygınlaştıkça rezervasyonu, siparişi ve formu dolduran her zaman bir insan olmayacak. Bilgisi açık, fiyatı ve müsaitliği net, formu sade olan işletmeler ajanların işini kolaylaştırır. Karmaşık ya da eksik bilgili bir site ise ajanın başka bir seçeneğe geçmesine yol açabilir. Bu sistemlerin nasıl çalıştığını <a href=\"/nedir/ai-agent-nedir/\">AI agent</a> yazımızda anlattık.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What does it do?",
+        "<p>Meta introduced Muse on September 8 and pitched it as \"a personal AI agent for everyone\". Muse can buy movie tickets, schedule appointments, send email, book travel, fill in forms and shop on the user's behalf. Meta's examples also include selling a car for a better price, negotiating lower bills and adjusting a training plan. It keeps working after the app is closed and comes back when something changes or it needs approval.</p><p>Muse runs on Muse Spark, which Meta calls its most capable model. The same model family powered <a href=\"/en/haber/meta-muse-code-kodlama-ajani/\">Muse Code</a>, the coding agent released in August.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>Each user's Muse runs on a separate virtual computer in the cloud with its own browser, which Meta calls the Muse Secure VM. A second agent called Sentinel runs on the same machine but is kept apart at the system level, and it approves every action that goes out to the internet. According to Meta, Muse cannot see users' passwords or payment methods; payments go through Stripe's Link, with Shop Pay support coming. Sensitive steps such as sending email or buying something require user approval, and every action is logged.</p><p>Muse keeps <a href=\"/en/nedir/ai-memory-nedir/\">memory</a> across conversations: it remembers dietary preferences or saved recipes and can make suggestions unprompted. Users can have specific learned details deleted. Meta says conversations are not shared with its ad systems and that users can opt out of training.</p>"
+      ],
+      [
+        "Pricing and availability",
+        "<p>Muse is US only for now, available on iOS, Android, WhatsApp and muse.ai. Support for Meta's AI glasses is listed as coming soon. The free tier shows remaining usage with a meter. For more usage there are Power at $20 a month and Maximum at $100 a month; Meta expects most people to stay on the free tier.</p>"
+      ],
+      [
+        "The trust question",
+        "<p>Trust was the most debated part of the launch. TechCrunch recalled Meta's privacy record: in 2019 the company reached a $5 billion settlement with the US Federal Trade Commission over privacy violations, and it was long associated with the Cambridge Analytica scandal. For an agent with access to your email, calendar and payment tools, that history looks set to be discussed as much as the technical safeguards.</p>"
+      ],
+      [
+        "What it means for businesses",
+        "<p>As agents like Muse spread, the one making the booking, placing the order or filling in the form will not always be a person. Businesses with clear information, transparent prices and availability, and simple forms make an agent's job easy. A confusing site with missing details may push the agent toward another option. Our <a href=\"/en/nedir/ai-agent-nedir/\">AI agent</a> explainer covers how these systems work.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

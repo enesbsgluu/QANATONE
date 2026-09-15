@@ -1,0 +1,59 @@
+{
+  "slug": "en-iyi-yapay-zeka",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "teknoloji",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Rehber · Yapay Zekâ Araçları",
+    "en": "Guide · AI Tools"
+  },
+  "title": {
+    "tr": "En iyi yapay zekâ hangisi? Doğru aracı seçme rehberi",
+    "en": "Which is the best AI? A guide to choosing the right tool"
+  },
+  "lede": {
+    "tr": "Tek bir en iyi yapay zekâ yok; işe göre değişiyor. Yazı, araştırma, kod ve görsel için hangi araçlara bakmalı, nasıl karar vermeli?",
+    "en": "There is no single best AI; it depends on the job. Which tools to look at for writing, research, code and images, and how to decide."
+  },
+  "body": {
+    "tr": [
+      [
+        "Kısa cevap",
+        "<p>\"En iyi yapay zekâ\" sorusunun tek bir cevabı yok. Önde gelen şirketler birkaç haftada bir yeni model çıkarıyor ve sıralama sık değişiyor. Yalnız Eylül 2026'nın ilk günlerinde OpenAI <a href=\"/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>'yı, Anthropic <a href=\"/haber/claude-fable-5-1-mythos-5-1/\">Claude Fable 5.1</a> modelini, Google da <a href=\"/haber/gemini-3-8-flash/\">Gemini 3.8 Flash</a>'ı duyurdu. Bu yüzden asıl soru, sizin işiniz için hangisinin en iyi olduğu.</p>"
+      ],
+      [
+        "İşe göre seçim",
+        "<ul><li>Genel sohbet, yazı ve günlük işler: ChatGPT, Google Gemini ve Anthropic'in Claude'u en yaygın genel amaçlı asistanlar. Üçü de metin yazma, özetleme, çeviri ve fikir üretmede güçlü; farkları üslupta ve bağlandıkları ekosistemde.</li><li>Araştırma ve güncel bilgi: web'de arayıp cevabı kaynak bağlantılarıyla veren araçlar (Perplexity, ChatGPT'nin arama özelliği, Gemini) güncel konular için daha güvenilir.</li><li>Kod: Claude, GPT ve Gemini modelleri kodlamada öne çıkıyor; terminalde ya da kod editöründe çalışan kodlama ajanları bu işi daha da hızlandırıyor.</li><li>Görsel ve video: görsel üretimde Midjourney ve büyük asistanların kendi görsel araçları, videoda Google'ın Veo'su gibi modeller öne çıkıyor.</li><li>Ekosisteminize göre: Gemini Google Workspace'e, Copilot Microsoft 365'e, Meta AI ise WhatsApp ve Instagram'a gömülü. Zaten kullandığınız araçla gelen asistan çoğu zaman en az zahmetli seçenektir.</li></ul>"
+      ],
+      [
+        "Nasıl karar verilir?",
+        "<p>Karşılaştırma tablolarından daha güvenilir bir yöntem var: kendi işinizden üç gerçek görev seçin (bir müşteri e-postası, bir rapor özeti, bir sosyal medya metni gibi) ve aynı görevi iki üç araca verin. Türkçe metin kalitesine, uydurma bilgi (<a href=\"/nedir/halusinasyon-nedir/\">halüsinasyon</a>) üretip üretmediğine ve cevabın ne kadar düzeltme gerektirdiğine bakın. Bir hafta kullandıktan sonra hangisine geri döndüğünüz çoğu zaman en dürüst cevaptır.</p>"
+      ],
+      [
+        "Şirket verisiyle çalışacaksanız",
+        "<p>Müşteri bilgisi, sözleşme ya da finansal veri gibi hassas içerikleri ücretsiz tüketici sürümlerine yapıştırmadan önce veri politikalarını okuyun. Kurumsal planlar genellikle verilerin model eğitiminde kullanılmayacağını taahhüt eder ve yönetici kontrolleri sunar. KVKK açısından da kişisel verinin yurt dışındaki bir hizmete gönderilmesi ayrıca değerlendirilmelidir. Ücretsiz seçenekler için <a href=\"/nedir/ucretsiz-yapay-zeka/\">ücretsiz yapay zekâ</a> rehberimize bakabilirsiniz.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The short answer",
+        "<p>There is no single answer to \"which AI is best\". Leading companies ship new models every few weeks and the rankings change often. In the first days of September 2026 alone, OpenAI announced <a href=\"/en/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>, Anthropic released <a href=\"/en/haber/claude-fable-5-1-mythos-5-1/\">Claude Fable 5.1</a> and Google launched <a href=\"/en/haber/gemini-3-8-flash/\">Gemini 3.8 Flash</a>. The real question is which one is best for your work.</p>"
+      ],
+      [
+        "Choosing by task",
+        "<ul><li>General chat, writing and everyday tasks: ChatGPT, Google Gemini and Anthropic's Claude are the most widely used general assistants. All three are strong at writing, summarizing, translation and ideas; they differ in style and in the ecosystem they connect to.</li><li>Research and current information: tools that search the web and link to the pages they drew on (Perplexity, ChatGPT search, Gemini) are more reliable for current topics.</li><li>Code: Claude, GPT and Gemini models stand out for coding, and coding agents that work in the terminal or editor speed this up further.</li><li>Images and video: Midjourney and the big assistants' own image tools lead for images, and models such as Google's Veo for video.</li><li>By ecosystem: Gemini is built into Google Workspace, Copilot into Microsoft 365 and Meta AI into WhatsApp and Instagram. The assistant that comes with tools you already use is often the path of least effort.</li></ul>"
+      ],
+      [
+        "How to decide",
+        "<p>There is a more reliable method than comparison tables: pick three real tasks from your own work (a customer email, a report summary, a social post) and give the same task to two or three tools. Check the quality of the writing, whether it invents facts (<a href=\"/en/nedir/halusinasyon-nedir/\">hallucination</a>) and how much editing the answer needs. After a week, the one you keep going back to is usually the honest answer.</p>"
+      ],
+      [
+        "If you work with company data",
+        "<p>Read the data policies before pasting sensitive content such as customer details, contracts or financial data into free consumer versions. Business plans usually commit not to use your data for model training and offer admin controls. Sending personal data to a service abroad also needs a separate privacy assessment. For free options, see our guide to <a href=\"/en/nedir/ucretsiz-yapay-zeka/\">free AI tools</a>.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

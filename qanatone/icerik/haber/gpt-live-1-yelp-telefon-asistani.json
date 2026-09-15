@@ -1,0 +1,59 @@
+{
+  "slug": "gpt-live-1-yelp-telefon-asistani",
+  "date": "2026-09-10",
+  "read": 1,
+  "topic": "talep",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Talep",
+    "en": "News · Leads"
+  },
+  "title": {
+    "tr": "Sözünüzü kesebileceğiniz ses modeli: GPT-Live-1 API'de",
+    "en": "GPT-Live-1: a voice model you can interrupt, now in the API"
+  },
+  "lede": {
+    "tr": "OpenAI'ın dinlerken konuşabilen ses modeli geliştiricilere açıldı. Yelp, restoran ve servis işletmelerinin telefonlarında kullanıyor.",
+    "en": "OpenAI's voice model that listens while it speaks is now in the API. Yelp uses it to answer calls for restaurants and service firms."
+  },
+  "body": {
+    "tr": [
+      [
+        "Ne oldu?",
+        "<p>OpenAI, tam çift yönlü (full-duplex) ses modeli GPT-Live-1'i 10 Eylül'de API üzerinden geliştiricilere açtı. Model konuşurken dinlemeye devam ediyor: arayan kişi sözünü kesebiliyor, cümlenin ortasında bir ayrıntı ekleyebiliyor ya da konuyu değiştirebiliyor ve konuşma dağılmıyor. Doğal duraklamaları ve üst üste binen konuşmayı da idare edebiliyor. API fiyatının dakika başına 0,05 dolar olduğu bildirildi.</p>"
+      ],
+      [
+        "Yelp ne yapıyor?",
+        "<p>Yelp aynı hafta GPT-Live-1'i iki ürününe eklediğini duyurdu. Yelp Host, restoranlar için telefonda rezervasyon ve sipariş alan bir ses ajanı; Ekim 2025'te çıktı ve Haziran 2026'ya kadar restoranlar için 1 milyondan fazla aramayı karşıladı. Temmuzda yıllık 2,4 milyon arama hızına ulaştı. Hatch ise ev hizmetleri sunan işletmeler için bir iletişim platformu; Yelp onu Ocak 2026'da satın almıştı.</p><p>Yelp'e göre yeni modelle arka plan gürültüsü, yan konuşmalar ve sözün kesilmesi daha iyi yönetiliyor. Model arayanın tonundaki heyecanı, sabırsızlığı ya da hayal kırıklığını algılayabiliyor ve konuşma diline göre otomatik olarak dil değiştirebiliyor. Şirket, aramaların daha büyük kısmının insana aktarılmadan çözüldüğünü ve arama sonrası dökümlerin daha doğru olduğunu söylüyor, ama bunlar için rakam vermedi. Yelp Host'un fiyatı, 30 güne kadar ücretsiz denemenin ardından ayda 249 dolar.</p>"
+      ],
+      [
+        "Nasıl çalışıyor?",
+        "<p>GPT-Live-1 konuşmanın ses katmanını üstleniyor; rezervasyon, menü ve müsaitlik gibi bilgiler ise Yelp'in her işletmeye özel verisinden geliyor. Yani model sesi ve konuşmanın akışını yönetirken, doğru bilgiyi arkadaki sistem sağlıyor. Bu, telefonda da <a href=\"/nedir/rag-nedir/\">RAG</a> ve <a href=\"/nedir/function-calling-nedir/\">function calling</a> mantığının kullanıldığı anlamına geliyor.</p>"
+      ],
+      [
+        "Neden önemli?",
+        "<p>Küçük işletmelerde kaçan talebin önemli bir kısmı cevapsız kalan telefonlardan geliyor: yoğun saatte, mesai dışında ya da personel başka bir işle meşgulken. Sözü kesilince bozulmayan, bekletmeyen bir ses asistanı, bu aramaların rezervasyona ya da randevuya dönmesini sağlayabiliyor. Gecikme bu ürünlerde kritik; neden önemli olduğunu <a href=\"/nedir/latency-nedir/\">latency</a> yazımızda anlattık.</p><p>QANATONE'un kurduğu <a href=\"/hizmetler/ai-ajan/\">yapay zekâ ajanları</a> da aynı sorunu çözüyor: gelen talebi günün her saatinde karşılayıp doğru kişiye yönlendiriyor.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "What happened?",
+        "<p>OpenAI opened its full-duplex voice model GPT-Live-1 to developers through the API on September 10. The model keeps listening while it speaks: callers can interrupt, add a detail mid sentence or change direction without the conversation falling apart. It also handles natural pauses and overlapping speech. API pricing was reported at $0.05 per minute.</p>"
+      ],
+      [
+        "What is Yelp doing?",
+        "<p>The same week, Yelp announced it had added GPT-Live-1 to two products. Yelp Host is a voice agent that takes phone reservations and orders for restaurants; it launched in October 2025 and had handled more than 1 million calls for restaurants by June 2026, reaching an annual run rate of 2.4 million calls in July. Hatch is a communication platform for home service businesses, which Yelp acquired in January 2026.</p><p>According to Yelp, the new model handles background noise, side conversations and interruptions better. It can pick up excitement, impatience or frustration in a caller's tone and switch languages automatically. The company says more calls are resolved without a transfer to a person and that post call transcripts are more accurate, but it gave no figures. Yelp Host costs $249 a month after a free trial of up to 30 days.</p>"
+      ],
+      [
+        "How does it work?",
+        "<p>GPT-Live-1 handles the voice layer of the call, while details such as reservations, menus and availability come from Yelp's data for each business. The model manages the voice and the flow of the conversation, and the system behind it supplies the right facts. It is the logic of <a href=\"/en/nedir/rag-nedir/\">RAG</a> and <a href=\"/en/nedir/function-calling-nedir/\">function calling</a>, applied to the phone.</p>"
+      ],
+      [
+        "Why it matters",
+        "<p>For small businesses, much lost demand comes from unanswered calls: at peak hours, after hours or when staff are busy with something else. A voice assistant that does not break when interrupted and does not put callers on hold can turn those calls into bookings and appointments. Latency is critical in these products; our <a href=\"/en/nedir/latency-nedir/\">latency</a> explainer covers why.</p><p>The <a href=\"/en/hizmetler/ai-ajan/\">AI agents</a> QANATONE builds solve the same problem: they answer incoming demand around the clock and route it to the right person.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

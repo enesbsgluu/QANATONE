@@ -1,0 +1,59 @@
+{
+  "slug": "sinek-beyni-doom-oynuyor",
+  "date": "2026-09-11",
+  "read": 1,
+  "topic": "bilim",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Haber · Bilim",
+    "en": "News · Science"
+  },
+  "title": {
+    "tr": "Google'ın haritaladığı sinek beyni Doom oynuyor",
+    "en": "A mapped fruit fly brain is now playing Doom"
+  },
+  "lede": {
+    "tr": "Google ve HHMI Janelia bir erkek meyve sineğinin sinir sistemini haritaladı. Bir yazılımcı bu haritayı Doom oyununa bağladı.",
+    "en": "Google and HHMI Janelia mapped the nervous system of a male fruit fly. A developer then wired the map to Doom."
+  },
+  "body": {
+    "tr": [
+      [
+        "Harita",
+        "<p>Google Research ile Howard Hughes Tıp Enstitüsü'nün (HHMI) Janelia Araştırma Kampüsü, 3 Eylül'de yetişkin bir erkek meyve sineğinin beynini ve merkezi sinir sistemini eksiksiz haritaladıklarını duyurdu. MaleCNS v1.0 adlı veri seti 166 binden fazla nöron ve 125 milyon sinaptik bağlantı içeriyor. Bu, nöron sayısına göre bugüne kadarki en büyük beyin haritası.</p><p>Ekip sinir sistemini milyonlarca ince kesite ayırdı, her kesiti elektron mikroskobuyla görüntüledi ve iki boyutlu görüntülerden üç boyutlu nöron modellerini yapay zekâ yardımıyla oluşturdu. Sonuçları bilim insanları doğrulayıp etiketledi. Böyle bir bağlantı haritasına konektom (connectome) deniyor.</p>"
+      ],
+      [
+        "Doom nereden çıktı?",
+        "<p>Haritanın yayımlanmasından birkaç gün sonra yazılım mühendisi Alex Wormuth, DOOMFLY adını verdiği bir proje paylaştı. Oyunun her karesi simüle edilen beyindeki duyu nöronlarını uyarıyor, nöronların etkinliği oyun tuşlarına çevriliyor. Karakter hasar aldığında iki dopamin hücresine (PPL101) bir uyarı gidiyor ve bu, sistemin öğrenme sinyali olarak kullanılıyor. Proje internetten canlı yayınlandı.</p><p>Sonuç şimdilik mütevazı: haberler yazıldığında simüle sinek oyunu 6 binden fazla kez denemiş ama bir kez bile bitirememişti.</p>"
+      ],
+      [
+        "Mario, Minecraft ve ötesi",
+        "<p>Harita herkese açık olunca başkaları da denemeye başladı. Geliştirici Jessica Paquette, simüle sineği Super Mario 64'e bağladı; Mario zıplıyor ve duvarlara çarpıyor. Paquette kodun tamamını <a href=\"/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a> ile yazdığını söyledi. Bir başka kullanıcı 166.700 nöronun tamamını Minecraft içinde çalıştırdı, Beat Saber denemeleri de paylaşıldı.</p>"
+      ],
+      [
+        "Bu ne anlama geliyor?",
+        "<p>Bu projeler bir sineğin oyun oynamayı öğrendiğini göstermiyor. Konektom bir kablo şemasına benzer: nöronların birbirine nasıl bağlandığını gösterir, ama canlı bir beyinde bu bağlantıların nasıl ve ne güçte çalıştığını tek başına anlatmaz. Oyun deneyleri daha çok, açık bilimsel verinin ne kadar hızlı ve yaratıcı biçimde kullanılabildiğini gösteriyor.</p><p>Asıl bilimsel hedef, sinir sistemlerinin dünyayı nasıl algıladığını, uyarılara nasıl tepki verdiğini ve hasarlı sinir yollarının bir gün nasıl onarılabileceğini anlamak. Google, insan beynindeki yaklaşık 86 milyar nöronu aynı ayrıntıyla haritalamanın henüz mümkün olmadığını da not ediyor.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "The map",
+        "<p>On September 3, Google Research and the Howard Hughes Medical Institute's Janelia Research Campus announced a complete map of the brain and central nervous system of an adult male fruit fly. The dataset, MaleCNS v1.0, contains more than 166,000 neurons and 125 million synaptic connections, making it the largest brain map by neuron count to date.</p><p>The team cut the nervous system into millions of thin sections, imaged each one with an electron microscope and used AI to build 3D neuron models from the 2D images. Scientists then checked and annotated the results. A wiring map like this is called a connectome.</p>"
+      ],
+      [
+        "Where did Doom come in?",
+        "<p>A few days after the release, software engineer Alex Wormuth shared a project called DOOMFLY. Each frame of the game stimulates sensory neurons in the simulated brain, and neural activity is mapped to game controls. When the character takes damage, a stimulus goes to two dopamine cells (PPL101), which the system uses as a learning signal. The project was livestreamed online.</p><p>Results are modest so far: at the time of reporting, the simulated fly had tried the game more than 6,000 times without finishing it once.</p>"
+      ],
+      [
+        "Mario, Minecraft and more",
+        "<p>With the map open to everyone, others joined in. Developer Jessica Paquette connected the simulated fly to Super Mario 64; Mario jumps and bumps into walls. Paquette said all of the code was written with <a href=\"/en/haber/gpt-6-astra-agi-cagi/\">GPT-6 Astra</a>. Another user ran all 166,700 neurons inside Minecraft, and Beat Saber experiments were shared too.</p>"
+      ],
+      [
+        "What does it mean?",
+        "<p>These projects do not show that a fly has learned to play games. A connectome is like a wiring diagram: it shows how neurons connect, but on its own it does not tell you how and how strongly those connections work in a living brain. The game experiments mostly show how quickly and creatively open scientific data can be put to use.</p><p>The real scientific goal is to understand how nervous systems perceive the world, respond to stimuli and how damaged neural pathways might one day be repaired. Google notes that mapping the roughly 86 billion neurons of a human brain in the same detail is not yet possible.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}

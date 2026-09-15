@@ -1,0 +1,59 @@
+{
+  "slug": "mobil-uyumlu-site-nasil-yapilir",
+  "date": "2026-09-15",
+  "read": 2,
+  "topic": "pazarlama",
+  "sector": "",
+  "image": "",
+  "tag": {
+    "tr": "Web · Mobil Uyum",
+    "en": "Web · Mobile Friendly"
+  },
+  "title": {
+    "tr": "Mobil uyumlu web sitesi nasıl yapılır?",
+    "en": "How to make a website mobile friendly"
+  },
+  "lede": {
+    "tr": "Google siteleri artık mobil sürümlerine göre dizine ekliyor. Mobil uyumlu bir site için gerekenleri ve nasıl test edeceğinizi anlattık.",
+    "en": "Google now indexes sites based on their mobile version. Here is what a mobile friendly site needs and how to test yours, step by step."
+  },
+  "body": {
+    "tr": [
+      [
+        "Neden önemli?",
+        "<p>Türkiye'de internet kullanımının merkezinde telefon var. DataReportal'ın Digital 2026 raporuna göre 2025 sonunda ülkede 81,9 milyon mobil bağlantı aktifti; bu, nüfusun yüzde 93,3'üne denk geliyor. IAB Türkiye'nin 2024 verilerine göre dijital reklamların yüzde 79,4'ü mobil cihazlarda gösterildi.</p><p>Google da 5 Temmuz 2024'te mobil öncelikli dizine eklemeye geçişi tamamladı: siteler artık mobil Googlebot ile taranıyor ve sıralamada mobil sürüm esas alınıyor. Mobilde eksik ya da bozuk olan içerik, Google'ın gözünde yok sayılabilir.</p>"
+      ],
+      [
+        "Mobil uyumlu sitenin temel kuralları",
+        "<ul><li>Duyarlı (responsive) tasarım: tek bir site, ekran genişliğine göre kendini düzenler. Ayrı bir mobil site kurmak yerine önerilen yöntem budur.</li><li>Viewport etiketi: sayfanın başında genişliği cihaza göre ayarlayan meta etiketi olmalıdır; yoksa telefon masaüstü sayfasını küçültüp gösterir.</li><li>Okunur yazı: gövde metni yakınlaştırmadan okunabilmelidir. 16 piksel yaygın bir başlangıç değeridir.</li><li>Parmakla basılabilir hedefler: düğme ve bağlantılar birbirine çok yakın olmamalıdır. Google'ın ölçüm araçları 48x48 piksel civarını önerir.</li><li>Yatay kaydırma olmamalı: hiçbir öğe ekran genişliğini aşmamalıdır.</li><li>Rahatsız eden açılır pencerelerden kaçının: içeriği tamamen örten pop-up'lar mobilde kullanıcıyı kaçırır ve Google tarafından olumsuz değerlendirilir.</li></ul>"
+      ],
+      [
+        "Hız da mobil uyumun parçası",
+        "<p>Mobil bağlantılar masaüstüne göre daha değişkendir. Google'ın Core Web Vitals ölçütleri iyi bir deneyimin eşiklerini tanımlar: sayfadaki en büyük içeriğin yüklenmesi (LCP) 2,5 saniyenin, etkileşime tepki süresi (INP) 200 milisaniyenin, düzen kayması (CLS) 0,1'in altında olmalıdır. Görselleri doğru boyutta ve WebP ya da AVIF gibi modern biçimlerde sunmak, kullanılmayan JavaScript'i azaltmak ve yazı tiplerini hafif tutmak en büyük kazançları getirir.</p>"
+      ],
+      [
+        "Nasıl test edilir?",
+        "<p>Google'ın eski Mobile-Friendly Test aracı 2023 sonunda kaldırıldı. Bugün PageSpeed Insights ve Chrome'daki Lighthouse, hem mobil uyumluluk hem hız için en pratik başlangıç noktasıdır. Search Console'daki Core Web Vitals raporu ise gerçek kullanıcı verisini gösterir.</p><p>Hiçbir araç sitenizi gerçek bir telefonda gezmenin yerini tutmaz: formu doldurun, menüyü açın, ödeme adımına kadar gidin. Mobilde hızlı ve rahat çalışan bir site, <a href=\"/hizmetler/web-tasarim/\">web tasarım</a> hizmetimizin temel ölçütlerinden biridir.</p>"
+      ]
+    ],
+    "en": [
+      [
+        "Why it matters",
+        "<p>Most people now reach the web through their phones. In Turkey, for example, DataReportal's Digital 2026 report counted 81.9 million active mobile connections at the end of 2025, equal to 93.3 percent of the population, and IAB Turkey's 2024 figures show 79.4 percent of digital ads were served on mobile.</p><p>Google completed its switch to mobile first indexing on July 5, 2024: sites are now crawled with the mobile Googlebot and the mobile version is what counts for ranking. Content that is missing or broken on mobile may effectively not exist for Google.</p>"
+      ],
+      [
+        "The basic rules",
+        "<ul><li>Responsive design: one site that rearranges itself to fit the screen width. This is the recommended approach rather than a separate mobile site.</li><li>Viewport tag: the page head needs the meta tag that sets width to the device; without it, phones shrink the desktop page.</li><li>Readable text: body text should be readable without zooming. 16 pixels is a common starting point.</li><li>Tappable targets: buttons and links should not sit too close together. Google's tools recommend around 48x48 pixels.</li><li>No horizontal scrolling: no element should be wider than the screen.</li><li>Avoid intrusive pop ups: overlays that cover the content drive mobile users away and are judged negatively by Google.</li></ul>"
+      ],
+      [
+        "Speed is part of mobile friendliness",
+        "<p>Mobile connections vary more than desktop ones. Google's Core Web Vitals define the thresholds for a good experience: the largest content element should load (LCP) within 2.5 seconds, interaction response (INP) should stay under 200 milliseconds and layout shift (CLS) under 0.1. Serving images at the right size in modern formats such as WebP or AVIF, cutting unused JavaScript and keeping fonts light bring the biggest gains.</p>"
+      ],
+      [
+        "How to test it",
+        "<p>Google retired its old Mobile-Friendly Test tool at the end of 2023. Today PageSpeed Insights and Lighthouse in Chrome are the most practical starting points for both mobile usability and speed. The Core Web Vitals report in Search Console shows real user data.</p><p>No tool replaces browsing your site on a real phone: fill in the form, open the menu, go all the way to checkout. A site that is fast and comfortable on mobile is one of the core standards of our <a href=\"/en/hizmetler/web-tasarim/\">web design</a> service.</p>"
+      ]
+    ]
+  },
+  "sources": []
+}
