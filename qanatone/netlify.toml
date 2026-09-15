@@ -62,6 +62,12 @@
   # paketten degil GitHub API'den okumali. Bugun 6 dosya.
   included_files = ["admin.html", "content.json", "icerik/**", "yeni/src/veri/sayfalar.json"]
 
+# NOBETCI (15 Eyl 2026): saatte bir sayfa + fonksiyon + yayin + GitHub
+# anahtari kontrolu. Durum Blobs'ta, panelde bant, WhatsApp denemesi.
+# Gerekce ve sinirlar netlify/functions/nobetci.js basinda.
+[functions."nobetci"]
+  schedule = "@hourly"
+
 # YEREL SUNUM (netlify dev, 21 Agu). Astro'nun kendi dev sunucusu DEGIL:
 # burada sunulan sey URETIM CIKTISININ ta kendisi (dist/), yani telefondan
 # bakilan hal yayina gidecek hal. Kok site ve /yeni/* ayni adreste, panel

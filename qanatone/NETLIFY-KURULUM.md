@@ -25,8 +25,13 @@ kaynak ve çıktı artık asla aynı yerde durmuyor.)
 | `PANEL_PAROLA_HASH` | hem panelin kapısı (`/admin.html`) hem "Yayınla" düğmesi — `tuz:hash` (scrypt) | **evet**; yoksa panel de yayın da 503 ile kapalı durur |
 | `GITHUB_TOKEN` | `yayinla` fonksiyonunun `content.json`'ı commit etmek için kullandığı GitHub PAT (yalnız bu repoya Contents yazma izni yeterli) | `PANEL_PAROLA_HASH` ile birlikte |
 | `INDEXNOW_KEY` | Bing/Yandex/Naver/Seznam/Yep'e anında bildirim | hayır ama tavsiye |
-| `WA_TOKEN` `WA_PHONE_ID` `WA_TO` | form → WhatsApp | form bildirimi isteniyorsa |
+| `WA_TOKEN` `WA_PHONE_ID` `WA_TO` | form → WhatsApp; nöbetçi uyarıları da aynı kanaldan denenir | form bildirimi isteniyorsa |
 | `WA_TEMPLATE` `WA_LANG` | onaylı şablon kullanılacaksa | hayır |
+| `WA_UYARI_TEMPLATE` | nöbetçi uyarısı için onaylı şablon (tek gövde parametresi `{{1}}`); yoksa serbest metin denenir | hayır ama tavsiye (aşağıda) |
+
+`GITHUB_TOKEN` nöbetçi tarafından da kullanılır: `main`'in son commit'lerini
+okur ve GitHub'ın yanıt başlığından anahtarın bitiş tarihini alır. Ek izin
+gerekmez (Contents okuma zaten var).
 
 **`PANEL_PAROLA_HASH` nasıl üretilir:** yerelde
 `node netlify/parola-hash.js` çalıştır, parolayı yaz/yapıştır, çıkan
@@ -176,3 +181,59 @@ Panel gövdesi fonksiyon paketine `netlify.toml`'daki
 `[functions] included_files = ["admin.html"]` satırıyla giriyor.
 Paketleme bozulursa fonksiyon **503** döner (yarım sayfa dönmez) ve
 log'a `govde paketde bulunamadi (included_files?)` yazar.
+
+---
+
+# Nöbetçi: izleme ve uyarı (15 Eyl 2026)
+
+`netlify/functions/nobetci.js` saatte bir kendiliğinden çalışır
+(`netlify.toml` → `[functions."nobetci"] schedule = "@hourly"`). Adresi
+dışarıdan çağrılamaz; Netlify zamanlanmış fonksiyonları yalnız kendi
+zamanlayıcısıyla çalıştırır. Yalnız yayındaki (production) sürümde koşar.
+Beklemeden denemek için: Netlify → Logs → Functions → `nobetci` →
+**Run now**. Süre sınırı 30 sn; bütün istekler aynı anda atılır, ölçüm
+~1,5 sn sürer.
+
+**Ne kontrol eder**
+
+| Kontrol | Sorun sayılan |
+|---|---|
+| `/`, `/haber/`, `/nedir/`, `/hizmetler/`, `/surum.json` | 200 dışında her cevap, zaman aşımı (12 sn) |
+| panel, yayinla, mcp, a2a, imza dizini | beklenen cevap dışında her şey (panel şifresiz 401, yayın/mcp/a2a GET'e 405, imza dizini 200) |
+| yayın | `main`'e itilen son işaretsiz commit 30 dakikadır canlıda değil (`/surum.json` ile kıyaslanır) |
+| GitHub anahtarı | bitişe ≤14 gün uyarı, ≤3 gün ya da reddedildiyse (401/403) kritik |
+
+`diagnose` bilerek kontrol edilmez: kişi başı kotası var ve her çağrı dış
+siteye istek atar.
+
+**Nerede görünür**
+
+1. **Panelin üstünde bant.** `/admin.html`'e girince sorun varsa kırmızı
+   (kritik) ya da koyu sarı (uyarı) bir şerit çıkar. Sorun yoksa şerit yoktur.
+   Nöbetçi 3 saattir ölçüm yapmadıysa bunu da yazar.
+2. **WhatsApp.** Yeni sorun hemen, süren kritik sorun 6 saatte bir, süren
+   uyarı günde bir, düzelen sorun bir kez bildirilir. Gönderim başarısız
+   olursa nedeni panel bandında yazar.
+3. **Netlify log'u:** Logs → Functions → `nobetci`. Her koşum tek satır
+   özet yazar.
+
+**WhatsApp'ın sınırı:** Meta serbest metni yalnız o numaradan son 24 saat
+içinde mesaj geldiyse iletir. Güvenilir uyarı için Meta Business
+Manager'da tek parametreli bir şablon onaylat (gövde örneği:
+`QANATONE nöbetçi: {{1}}`, kategori "Utility") ve adını
+`WA_UYARI_TEMPLATE` olarak gir.
+
+**Nöbetçinin göremediği:** Netlify'ın kendisi çökerse ya da zamanlayıcı
+durursa nöbetçi de çalışmaz, dolayısıyla uyarı gönderemez. Bunu dışarıdan
+bir izleme kapatır (ücretsiz, 5 dakika kurulum):
+
+- **UptimeRobot** (uptimerobot.com) → Add New Monitor → tür *Keyword*,
+  adres `https://www.qanatone.com/surum.json`, anahtar kelime `commit`,
+  aralık 5 dakika, uyarı kanalı e-posta. Site ya da CDN düşerse haberin olur.
+- **Netlify derleme bildirimi:** Site configuration → Notifications →
+  Emails → *Deploy failed* → kendi e-postan. Derleme denetimde kırmızı
+  kalıp yayın çıkmazsa hemen e-posta gelir (nöbetçi bunu 30 dakika sonra
+  görür).
+
+Kurallar `netlify/ortak/nobetci-kural.js`'te, testi `test/nobetci.test.js`
+(denetim T5 zincirinde koşar).

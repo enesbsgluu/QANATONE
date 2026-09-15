@@ -35,6 +35,7 @@
 const fs = require('fs');
 const path = require('path');
 const { dogrula, SLUG_BICIMI } = require('./yayinla.js');
+const { bantHtml, bantEkle } = require('../ortak/nobetci-kural.js');
 
 const ALAN = 'Basic realm="QANATONE panel", charset="UTF-8"';
 const SABIT_GECIKME_MS = 300;
@@ -252,12 +253,28 @@ exports.handler = async function handler(event) {
   }
 
   console.log(simdi(), 'panel: giris kabul edildi');
+  /* NOBETCI BANDI (15 Eyl 2026): nobetci.js'in son durumu sorunluysa ya da
+     bayatsa panelin ustune bant. admin.html DOSYASINA degil sunulan govdeye
+     eklenir — dosyanin boyut tavanina (denetim) dokunmaz. Blobs okunamazsa
+     bant yok, panel acilmaya devam eder. */
+  const govde = bantEkle(fs.readFileSync(yol, 'utf8'), await nobetciBandi(event));
   return {
     statusCode: 200,
     headers: Object.assign({}, H, { 'content-type': 'text/html; charset=utf-8' }),
-    body: fs.readFileSync(yol, 'utf8')
+    body: govde
   };
 };
+
+async function nobetciBandi(event) {
+  try {
+    const b = require('@netlify/blobs');
+    if (event && typeof b.connectLambda === 'function') b.connectLambda(event);
+    const d = await b.getStore({ name: 'nobetci' }).get('durum', { type: 'json' });
+    return bantHtml(d, Date.now());
+  } catch (e) {
+    return '';
+  }
+}
 
 exports.parolaCoz = parolaCoz;     /* test: biçim çözümünü izole ölçmek için */
 exports.panelYolu = panelYolu;

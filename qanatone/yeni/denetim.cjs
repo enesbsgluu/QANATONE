@@ -1112,7 +1112,8 @@ console.log(`\nQANATONE yeni kabuk denetimi — ${sayfalar.length} sayfa` +
      handler'larini gecici bir koke karsi kosar ve ozetin hicbir yoldan
      (tasima, silme, yayin, varsayilana don, disa aktarma, taslak)
      yayina sizmadigini olcer. */
-  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js', 'kaynak-alani.test.js', 'panel-olcek.test.js'];
+  const KOSULAN = ['yayinla.test.js', 'blok-metin.test.js', 'kaynak-alani.test.js', 'panel-olcek.test.js',
+    'nobetci.test.js'];
   const kusur = [];
   let ozet = '';
 

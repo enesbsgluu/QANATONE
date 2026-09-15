@@ -21,6 +21,8 @@
    fonksiyon sessizce geçer; form kaydı yine de Netlify'da durur.
    --------------------------------------------------------------------- */
 
+const { waGonder } = require('../ortak/whatsapp.js');
+
 exports.handler = async (event) => {
   let d = {};
   try {
@@ -84,17 +86,9 @@ exports.handler = async (event) => {
         }}
     : { messaging_product: 'whatsapp', to: TO, type: 'text', text: { body: line } };
 
-  try {
-    const r = await fetch(
-      'https://graph.facebook.com/v20.0/' + PHONE_ID + '/messages',
-      { method: 'POST',
-        headers: { Authorization: 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload) }
-    );
-    if (!r.ok) console.error('WhatsApp gonderilemedi:', r.status, await r.text());
-  } catch (e) {
-    console.error('WhatsApp istegi basarisiz:', e && e.message);
-  }
+  /* 15 Eyl 2026: istek ortak gondericide (nobetci de kullaniyor). */
+  const s = await waGonder(payload);
+  if (!s.ok) console.error('WhatsApp gonderilemedi:', s.durum || '', s.neden || '');
 
   return { statusCode: 200, body: 'ok' };
 };
